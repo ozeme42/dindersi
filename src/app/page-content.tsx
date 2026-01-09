@@ -77,7 +77,7 @@ const MagnificentLightBackground = () => (
     </div>
 );
 
-// --- YENİLENMİŞ FOOTER (MOBİL UYGULAMA DAHİL) ---
+// --- FOOTER ---
 const SiteFooter = () => {
   return (
     <footer className="w-full border-t border-slate-200 bg-white/90 backdrop-blur-md py-3 mt-auto relative z-20">
@@ -136,7 +136,16 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     const { toast } = useToast();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+    // GÜVENLİK KONTROLÜ 1: Eğer öğrenciyse, useEffect çalışmadan önce bile UI render etme.
+    if (user.role === 'student' && process.env.NEXT_PUBLIC_STATIC_BUILD !== 'true') {
+        // Bu return null, "Geri" tuşuna basıldığında bile öğretmen panelinin
+        // milisaniyelik görünmesini engeller.
+        return null;
+    }
+
     useEffect(() => {
+        // Bu useEffect, PageContent tarafındaki yönlendirme kaçarsa diye
+        // son bir güvenlik önlemidir.
         if (user.role === 'student' && process.env.NEXT_PUBLIC_STATIC_BUILD !== 'true') {
             router.replace('/student');
         }
@@ -296,14 +305,8 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
         return activeClassData.courses.find(c => c.id === activeCourseId);
     }, [activeClassData, activeCourseId]);
 
-    // --- GÜNCELLENMİŞ VE ORTALANMIŞ GRID YAPILANDIRMASI ---
     const getResponsiveGridConfig = (unitCount: number) => {
-        // Base wrapper: mx-auto ile her zaman ortala ve flex justify-center kullan
         const baseWrapper = "w-full px-4 md:px-6 mx-auto flex justify-center";
-        
-        // Grid ayarları:
-        // justify-center: Grid içindeki elemanları ortalar (eğer tam dolmazsa)
-        // grid-cols: İçerik sayısına tam uyan kolon sayısı vererek boşlukları optimize ediyoruz.
         
         if (unitCount === 1) return { 
             wrapper: `${baseWrapper} max-w-2xl`, 
@@ -322,12 +325,9 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
         
         if (unitCount === 4) return { 
             wrapper: `${baseWrapper} max-w-[90rem]`, 
-            // lg ekranlarda 2x2, xl ve üstü için 4 yan yana
             grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 w-full" 
         };
         
-        // 5 ve üzeri (Akıllı Tahta / Geniş Ekran Modu)
-        // xl:grid-cols-5 diyerek 5. ünitenin aşağı düşmesini engelliyoruz.
         return { 
             wrapper: `${baseWrapper} max-w-[110rem]`, 
             grid: "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full justify-center" 
@@ -476,7 +476,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                             </div>
                         </div>
 
-                        {/* İÇERİK GRID ALANI - GÜNCELLENMİŞ VE ORTALANMIŞ */}
+                        {/* İÇERİK GRID ALANI */}
                         <div className={cn("mt-16 transition-all duration-700", gridConfig.wrapper)}>
                             {activeCourseData && (
                                 <div className={cn("grid gap-5 xl:gap-6 gap-y-12 animate-in zoom-in-95 duration-1000 place-content-center", gridConfig.grid)}>
@@ -555,7 +555,26 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
 export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     const { user, loading } = useAuth();
+    const router = useRouter();
+
     if (loading) return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="h-10 w-10 animate-spin text-indigo-500" /></div>;
+    
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') return <LoggedOutPage classGroups={classGroups || []} />;
-    return user ? <LoggedInDashboard user={user} /> : <LoggedOutPage classGroups={classGroups || []} />;
+    
+    if (user) {
+        // GÜVENLİK DÜZELTMESİ:
+        // Eğer kullanıcı öğrenci ise LoggedInDashboard BİLEŞENİNİ ASLA RENDER ETME.
+        // Doğrudan yükleniyor ikonuna dön ve öğrenci sayfasına yönlendir.
+        if (user.role === 'student') {
+             // Burada router.replace kullanarak history stack'i temizliyoruz,
+             // böylece "Geri" tuşu öğretmen paneline dönemez.
+             router.replace('/student');
+             return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="h-10 w-10 animate-spin text-indigo-500" /></div>;
+        }
+        
+        // Sadece öğrenci değilse Dashboard'u göster
+        return <LoggedInDashboard user={user} />;
+    }
+    
+    return <LoggedOutPage classGroups={classGroups || []} />;
 }
