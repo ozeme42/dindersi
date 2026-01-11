@@ -15,12 +15,11 @@ import {
   where, 
   getDocs, 
   getCountFromServer,
+  limit 
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { Question } from '@/lib/types';
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
-
-const MAX_BOXES = 30;
 
 export async function getKutuAcQuestionsAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
