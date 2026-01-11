@@ -1,3 +1,4 @@
+
 'use client';
 
 import { SmartboardBireyselClientPage } from '../bireysel/client-page';

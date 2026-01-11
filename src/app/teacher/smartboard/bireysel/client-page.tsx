@@ -32,14 +32,14 @@ const steps = [
   { id: 5, name: "Başlat", icon: <PartyPopper className="h-5 w-5" /> },
 ];
 
-export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, gameIconName }: { gameConfig: any, gamePath: string, gameName: string, gameIconName: "Megaphone" | "Package" | "Wind" | "Gamepad2" | "UserCog" | "Lightbulb" | "Zap" | "Swords" | "BrainCircuit" }) {
+export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, gameIconName }: { gameConfig: any, gamePath: string, gameName: string, gameIconName: "Megaphone" | "Package" | "Wind" | "Gamepad2" | "UserCog" | "Lightbulb" | "Zap" | "Swords" | "BrainCircuit" | "Trophy" }) {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isDataLoading, setIsDataLoading] = useState(false);
   
   const GameIcon = useMemo(() => {
-    const icons = { Megaphone, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Swords, BrainCircuit };
+    const icons = { Megaphone, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Swords, BrainCircuit, Trophy };
     return icons[gameIconName] || Gamepad2;
   }, [gameIconName]);
   
@@ -148,13 +148,28 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
     }
   };
 
-  const handleNext = () => currentStep < steps.length && setCurrentStep(currentStep + 1);
+  const handleNext = () => {
+    if (currentStep < steps.length) {
+        // "Anlat Bakalım" oyunu için Ayarlar adımını atla
+        if (gamePath === 'anlat-bakalim' && currentStep === 3) {
+            setCurrentStep(5);
+        } else {
+            setCurrentStep(currentStep + 1);
+        }
+    }
+  };
+
   const handleBack = () => {
     if (currentStep > 1) {
-        if (currentStep === 2) setSelection(s => ({...s, courseId: '', courseName: ''}));
-        if (currentStep === 3) setSelection(s => ({...s, unitId: '', unitName: ''}));
-        if (currentStep === 4) setSelection(s => ({...s, topicId: '', topicName: ''}));
-        setCurrentStep(currentStep - 1);
+        // "Anlat Bakalım" oyunu için özel geri dönüş mantığı
+        if (gamePath === 'anlat-bakalim' && currentStep === 5) {
+            setCurrentStep(3);
+        } else {
+            if (currentStep === 2) setSelection(s => ({...s, courseId: '', courseName: ''}));
+            if (currentStep === 3) setSelection(s => ({...s, unitId: '', unitName: ''}));
+            if (currentStep === 4) setSelection(s => ({...s, topicId: '', topicName: ''}));
+            setCurrentStep(currentStep - 1);
+        }
     }
   };
 
@@ -173,7 +188,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
   const handleSelectUnit = async (unitId: string, unitName: string) => {
     setSelection(prev => ({ ...prev, unitId, unitName, topicId: '', topicName: '' }));
     if (unitId === 'all') {
-      setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Üniteler' }));
+      setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
       setTopics([]);
     } else {
       setIsDataLoading(true);
@@ -215,13 +230,16 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
     if (isLoading && currentStep > 0) {
         return <div className="flex h-64 items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-400"/></div>
     }
+    
+    const loadingProp = isDataLoading;
+
     switch(currentStep) {
         case 1:
             return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading} subtitleKey={user?.role === 'teacher' || user?.role === 'superadmin' ? 'className' : undefined}/>;
         case 2:
-            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={isDataLoading} />;
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={loadingProp} />;
         case 3:
-            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={isDataLoading}/>;
+            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={loadingProp} />;
         case 4:
             return (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
@@ -229,7 +247,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-white"><Users className="text-cyan-400 h-5 w-5"/> Oyuncular</CardTitle>
                             <CardDescription className="text-slate-400 text-sm">
-                               Yarışmaya katılacak misafir oyuncuları seç. Yeni misafirleri <Link href="/teacher/smartboard/ayarlar" className="underline hover:text-cyan-400">misafir yönetim sayfasından</Link> ekleyebilirsin.
+                               Yarışmaya katılacak misafir oyuncuları seç. Yeni misafirleri <Link href="/teacher/smartboard/ayarlar" className="underline hover:text-cyan-400">yönetim sayfasından</Link> ekleyebilirsin.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -300,9 +318,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                          <div className="space-y-2 text-sm text-slate-300">
                              <div className="flex justify-between border-b border-white/5 pb-2"><span>Ders:</span> <span className="text-white font-medium">{selection.courseName}</span></div>
                              <div className="flex justify-between border-b border-white/5 pb-2"><span>Ünite:</span> <span className="text-white font-medium">{selection.unitName}</span></div>
-                             <div className="flex justify-between border-b border-white/5 pb-2"><span>Konu:</span> <span className="text-white font-medium">{selection.topicName}</span></div>
-                             <div className="flex justify-between border-b border-white/5 pb-2"><span>Soru Sayısı:</span> <span className="text-white font-medium">{settings.questionCount}</span></div>
-                             <div className="flex justify-between"><span>Süre:</span> <span className="text-white font-medium">{settings.questionTimer > 0 ? `${settings.questionTimer} sn` : 'Yok'}</span></div>
+                             <div className="flex justify-between"><span>Konu:</span> <span className="text-white font-medium">{selection.topicName}</span></div>
                          </div>
                          
                          <div className="bg-slate-950 p-4 rounded-xl border border-white/5">
@@ -315,7 +331,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                          </div>
                     </CardContent>
                     <CardFooter>
-                         <Button asChild className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-lg font-bold">
+                        <Button asChild className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-lg font-bold">
                             <Link href={getGameUrl()}>
                                 <PartyPopper className="mr-2 h-5 w-5" /> Yarışmayı Başlat
                             </Link>
@@ -354,6 +370,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
               ></div>
 
               {steps.map((step) => {
+                  if (gamePath === 'anlat-bakalim' && step.id === 4) return null; // Anlat Bakalım için Ayarlar adımını gizle
                   const isActive = currentStep === step.id;
                   const isCompleted = currentStep > step.id;
                   return (
@@ -396,7 +413,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                     (currentStep === 1 && !selection.courseId) ||
                     (currentStep === 2 && !selection.unitId) ||
                     (currentStep === 3 && !selection.topicId) ||
-                    (currentStep === 4 && (inGameGuests.length + 1) === 0)
+                    (currentStep === 4 && gamePath !== 'anlat-bakalim' && (inGameGuests.length + 1) === 0)
                 } className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20 px-8">
                     İleri <ArrowRight className="ml-2 h-4 w-4" />
                 </Button> 
