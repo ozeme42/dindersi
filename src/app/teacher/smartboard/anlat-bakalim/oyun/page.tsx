@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Loader2, Repeat, Home, CheckCircle2, XCircle, User, ArrowRight, Trophy, Timer, Play, Pause, SkipForward } from "lucide-react";
+import { Loader2, Repeat, Home, CheckCircle2, XCircle, User, ArrowRight, Trophy, Timer, Play, Pause, SkipForward, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { getAnlatBakalimWords } from '../actions';
 import type { AnlatBakalimWord } from '../actions';
@@ -18,17 +18,17 @@ function AnlatBakalimGameComponent() {
     const [words, setWords] = useState<string[]>([]);
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const searchParams = useSearchParams();
-    const { toast } = useToast();
     
-    const [gameState, setGameState] = useState<'loading' | 'error' | 'ready' | 'playing' | 'round_summary' | 'finished'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'error' | 'setup' | 'ready' | 'playing' | 'round_summary' | 'finished'>('loading');
     const [activeTeam, setActiveTeam] = useState<'A' | 'B'>('A'); // A: Mavi, B: Kırmızı
     
     const [scores, setScores] = useState({ A: 0, B: 0 });
     const [roundScore, setRoundScore] = useState(0); // O anki turun skoru
     const [timeLeft, setTimeLeft] = useState(60); // Tur süresi (saniye)
-    const [error, setError] = useState<string|null>(null);
     
     const [showConfetti, setShowConfetti] = useState(false);
+    const [isLoading, setIsLoading] = useState(true); // EKSİK STATE EKLENDİ
+    const [error, setError] = useState<string|null>(null); // EKSİK STATE EKLENDİ
     
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -47,7 +47,7 @@ function AnlatBakalimGameComponent() {
                 setGameState('error');
             } else {
                 setWords([...result.words].sort(() => Math.random() - 0.5));
-                setGameState('ready');
+                setGameState('setup'); // setup ekranı ile başla
             }
             setIsLoading(false);
         };
@@ -98,7 +98,6 @@ function AnlatBakalimGameComponent() {
         setRoundScore(0);
         setTimeLeft(60);
         
-        // Kelimeleri yeniden karıştır (veya kaldığı yerden devam ettir)
         setWords(prev => [...prev].sort(() => Math.random() - 0.5));
         setCurrentWordIndex(0);
         
@@ -107,7 +106,6 @@ function AnlatBakalimGameComponent() {
 
     // Oyunu Başlat (Geri Sayım Sonrası)
     const startGame = () => {
-        playSound('correct');
         setGameState('playing');
     };
 
@@ -137,28 +135,65 @@ function AnlatBakalimGameComponent() {
         setScores({ A: 0, B: 0 });
         setRoundScore(0);
         setActiveTeam('A');
-        setGameState('ready');
+        setGameState('setup');
         setTimeLeft(60);
     };
+
+    // --- RENDER ---
 
     if (isLoading) {
         return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-orange-500" /></div>;
     }
 
-    if (error) {
-         return (
-            <div className="h-screen w-screen flex items-center justify-center p-4 bg-slate-900 text-center">
-                <div className="bg-red-900/50 p-8 rounded-2xl border border-red-500/50">
-                    <h2 className="text-2xl text-red-400 font-bold mb-4">Oyun Başlatılamadı</h2>
-                    <p className="text-red-200">{error}</p>
-                    <Link href="/teacher/smartboard/anlat-bakalim">
-                        <Button className="mt-6" variant="outline">Kuruluma Geri Dön</Button>
-                    </Link>
-                </div>
+    if (gameState === 'error') {
+        return (
+           <div className="h-screen w-screen flex items-center justify-center p-4 bg-slate-900 text-center">
+               <div className="bg-red-900/50 p-8 rounded-2xl border border-red-500/50">
+                   <h2 className="text-2xl text-red-400 font-bold mb-4">Oyun Başlatılamadı</h2>
+                   <p className="text-red-200">{error}</p>
+                   <Link href="/teacher/smartboard/anlat-bakalim">
+                       <Button className="mt-6" variant="outline">Kuruluma Geri Dön</Button>
+                   </Link>
+               </div>
+           </div>
+       );
+    }
+    
+    // 1. SETUP EKRANI (Başlangıç)
+    if (gameState === 'setup') {
+        return (
+            <div className="h-screen w-screen bg-slate-900 flex items-center justify-center p-4">
+                <Card className="w-full max-w-2xl bg-slate-800 border-slate-700 text-white shadow-2xl">
+                    <CardHeader className="text-center pb-2">
+                        <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
+                        <CardTitle className="text-4xl font-black tracking-tight">ANLAT BAKALIM</CardTitle>
+                        <CardDescription className="text-slate-400 text-lg mt-2">
+                            Yasaklı kelime yok! Takım arkadaşların anlatacak, sen bileceksin. <br/>
+                            60 saniyede en çok kelimeyi bilen kazanır.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex justify-center py-8">
+                        <div className="flex gap-8 text-center">
+                            <div className="bg-blue-900/50 p-6 rounded-2xl border-2 border-blue-500/30">
+                                <User className="w-12 h-12 text-blue-400 mx-auto mb-2" />
+                                <div className="text-xl font-bold text-blue-200">MAVİ TAKIM</div>
+                            </div>
+                            <div className="bg-red-900/50 p-6 rounded-2xl border-2 border-red-500/30">
+                                <User className="w-12 h-12 text-red-400 mx-auto mb-2" />
+                                <div className="text-xl font-bold text-red-200">KIRMIZI TAKIM</div>
+                            </div>
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-center pb-8">
+                        <Button onClick={() => setGameState('ready')} size="lg" className="text-2xl h-16 px-12 bg-green-600 hover:bg-green-500 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform">
+                            OYUNA BAŞLA <ArrowRight className="ml-3 w-8 h-8" />
+                        </Button>
+                    </CardFooter>
+                </Card>
             </div>
         );
     }
-    
+
     // 2. READY EKRANI (Takım Hazırlığı)
     if (gameState === 'ready') {
         const isBlue = activeTeam === 'A';
@@ -329,9 +364,11 @@ function AnlatBakalimGameComponent() {
                         <Button onClick={resetGame} size="lg" className="h-16 px-10 text-xl bg-indigo-600 hover:bg-indigo-500">
                             <Repeat className="mr-2" /> Yeniden Oyna
                         </Button>
-                        <Button asChild variant="outline" size="lg" className="h-16 px-10 text-xl border-slate-700 text-slate-300">
-                            <Link href="/teacher/smartboard"><Home className="mr-2" /> Ana Menü</Link>
-                        </Button>
+                        <Link href="/teacher/smartboard">
+                            <Button variant="outline" size="lg" className="h-16 px-10 text-xl border-slate-700 text-slate-300">
+                                <Home className="mr-2" /> Ana Menü
+                            </Button>
+                        </Link>
                     </CardFooter>
                 </Card>
             </div>
