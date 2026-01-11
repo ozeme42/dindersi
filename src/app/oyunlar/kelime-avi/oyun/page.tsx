@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getKelimeAviAction, submitKelimeAviScoreAction } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Search, Ghost, ZoomIn, ZoomOut, RotateCw, ArrowLeft, Trophy, XOctagon, ChevronDown, ChevronUp, Settings2, Plus, Minus, Type, Scan, GripHorizontal, MousePointerClick } from 'lucide-react';
+import { Loader2, Search, ZoomIn, ZoomOut, RotateCw, ArrowLeft, Trophy, XOctagon, ChevronDown, ChevronUp, Settings2, Plus, Minus, Type, Scan, GripHorizontal, MousePointerClick, CheckCircle, RotateCcw, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -12,6 +12,8 @@ import { GameEndScreen } from '@/components/game-end-screen';
 import { playSound } from '@/lib/audio-service';
 import { GENERIC_TURKISH_WORDS } from '@/lib/generic-words';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { db } from '@/lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 // --- ORTAK ARKA PLAN ---
 const MagnificentLightBackground = () => (
@@ -183,9 +185,7 @@ const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) 
         // TOUCH EVENTLERİ (Akıllı Tahta için)
         const handleTouchMove = (e: TouchEvent) => {
             if (!isDragging) return;
-            // Sürükleme sırasında sayfanın kaymasını engelle
             if (e.cancelable) e.preventDefault();
-            
             const touch = e.touches[0];
             setPosition({ x: touch.clientX - dragStartPos.current.x, y: touch.clientY - dragStartPos.current.y });
         };
@@ -194,7 +194,6 @@ const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) 
         if (isDragging) {
             window.addEventListener('mousemove', handleMouseMove);
             window.addEventListener('mouseup', handleMouseUp);
-            // passive: false, preventDefault kullanabilmek için gerekli
             window.addEventListener('touchmove', handleTouchMove, { passive: false });
             window.addEventListener('touchend', handleTouchEnd);
         }
@@ -206,7 +205,6 @@ const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) 
         };
     }, [isDragging]);
 
-    // Ortak başlatma fonksiyonu
     const handleDragStart = (clientX: number, clientY: number) => {
         setIsDragging(true);
         dragStartPos.current = { x: clientX - position.x, y: clientY - position.y };
@@ -300,6 +298,12 @@ function WordSearchGame() {
     const [fontSize, setFontSize] = useState(1); 
     const [gridScale, setGridScale] = useState(1.0);
 
+    // GÖREV MODU PARAMETRELERİ
+    const mode = searchParams.get('mode');
+    const topicId = searchParams.get('topicId');
+    // Threshold artık kullanılmıyor ama kod güvenliği için kalsın
+    const isMission = mode === 'mission';
+
     const gameContext = `Kelime Avı - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
 
     const fetchGameData = useCallback(async () => {
@@ -330,6 +334,47 @@ function WordSearchGame() {
         setIsScoreSaved(false);
         setGameState('playing');
         fetchGameData();
+    };
+
+    // YENİ BAŞARI KONTROLÜ
+    const isAllWordsFound = wordsToFind.length > 0 && foundWords.size === wordsToFind.length;
+
+    // PUAN KAYDETME FONKSİYONU
+    const saveScore = async () => {
+        if (!user || isSaving || isScoreSaved) return;
+        setIsSaving(true);
+
+        try {
+            if (isMission && topicId) {
+                // --- GÖREV MODU KAYDI ---
+                // Sadece tüm kelimeler bulunduysa kaydet
+                await addDoc(collection(db, 'scoreEvents'), {
+                    userId: user.uid,
+                    points: score,
+                    context: topicId, // Görev sayfası bu ID'ye bakarak kilidi açacak
+                    gameType: 'kelime-avi', // Görev tipi
+                    timestamp: serverTimestamp(),
+                    isMission: true,
+                    completed: isAllWordsFound // Ek bilgi
+                });
+
+                if (isAllWordsFound) {
+                    toast({ title: "Görev Başarılı!", description: "Bir sonraki görevin kilidi açıldı.", className: "bg-green-600 text-white" });
+                } else {
+                    toast({ title: "Görev Tamamlanamadı", description: "Tüm kelimeleri bulmalısın.", variant: "destructive" });
+                }
+            } else {
+                // --- NORMAL (ARCADE) MOD KAYDI ---
+                await submitKelimeAviScoreAction(user!.uid, score, gameContext);
+            }
+            
+            setIsScoreSaved(true);
+        } catch (err) {
+            console.error(err);
+            toast({ title: "Hata", description: "Puan kaydedilemedi.", variant: "destructive" });
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const handleSelectCell = (cell: Cell) => {
@@ -376,6 +421,7 @@ function WordSearchGame() {
                         <div className="flex items-center gap-3 overflow-hidden">
                              <div className="h-9 w-9 sm:h-10 sm:w-10 bg-teal-100 text-teal-600 flex items-center justify-center shrink-0 rounded-xl shadow-sm border border-teal-200"><Search className="h-5 w-5" /></div>
                             <h1 className="text-sm sm:text-lg font-black text-slate-800 truncate">Kelime Avı</h1>
+                            {isMission && <span className="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold border border-indigo-200">GÖREV MODU</span>}
                         </div>
                         <div className="flex items-center gap-2">
                             <div className="bg-white border border-slate-200 rounded-xl px-2 py-1 sm:px-3 sm:py-1.5 flex items-center gap-2 shadow-sm">
@@ -397,21 +443,74 @@ function WordSearchGame() {
                 </div>
             </main>
             <EditorToolbar fontSize={fontSize} setFontSize={setFontSize} gridScale={gridScale} setGridScale={setGridScale} />
+            
+            {/* --- BİTİŞ EKRANI (GÖREV MODU İÇİN ÖZEL) --- */}
             {gameState === 'finished' && (
-                <GameEndScreen 
-                    score={score} 
-                    onSave={async () => {
-                        setIsSaving(true);
-                        const res = await submitKelimeAviScoreAction(user!.uid, score, gameContext);
-                        if (res.success) setIsScoreSaved(true);
-                        setIsSaving(false);
-                        router.push('/');
-                    }} 
-                    isSaving={isSaving} 
-                    scoreSaved={isScoreSaved} 
-                    onRestart={handleRestart} 
-                    backUrl="/" 
-                />
+                isMission ? (
+                    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
+                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
+                            
+                            <div className="mb-6 flex justify-center">
+                                {isAllWordsFound ? (
+                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
+                                        <Trophy className="h-16 w-16 text-green-600" />
+                                    </div>
+                                ) : (
+                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
+                                        <XOctagon className="h-16 w-16 text-red-500" />
+                                    </div>
+                                )}
+                            </div>
+
+                            <h2 className="text-3xl font-black text-slate-800 mb-2">
+                                {isAllWordsFound ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ"}
+                            </h2>
+                            
+                            <p className="text-slate-500 mb-6 font-medium">
+                                {isAllWordsFound 
+                                    ? `Tebrikler! Tüm kelimeleri buldun.` 
+                                    : `Maalesef tüm kelimeleri bulamadın.`}
+                            </p>
+
+                            <div className="space-y-3">
+                                {/* Sadece tüm kelimeler bulunduysa kaydetme butonu göster */}
+                                {!isScoreSaved && isAllWordsFound && (
+                                    <Button onClick={saveScore} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
+                                    </Button>
+                                )}
+                                
+                                {isScoreSaved && isAllWordsFound && (
+                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
+                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                                    </Button>
+                                )}
+
+                                {/* Başarısız olunduysa veya zaten kaydedildiyse tekrar dene */}
+                                {(!isAllWordsFound || isScoreSaved) && (
+                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 text-lg font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">
+                                        <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
+                                    </Button>
+                                )}
+                                
+                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
+                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    // NORMAL (ARCADE) MOD BİTİŞ EKRANI
+                    <GameEndScreen 
+                        score={score} 
+                        onSave={saveScore} 
+                        isSaving={isSaving} 
+                        scoreSaved={isScoreSaved} 
+                        onRestart={handleRestart} 
+                        backUrl="/" 
+                    />
+                )
             )}
         </div>
     );

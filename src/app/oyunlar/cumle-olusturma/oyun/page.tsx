@@ -4,13 +4,16 @@ import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getCumleOlusturmaAction, submitCumleOlusturmaScoreAction, type ScrambledSentenceData } from '@/app/oyunlar/cumle-olusturma/actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, CheckCircle2, Trophy, Sparkles, RefreshCcw, MousePointerClick, XOctagon } from 'lucide-react';
+import { Loader2, ArrowRight, CheckCircle2, Trophy, Sparkles, RefreshCcw, MousePointerClick, XOctagon, CheckCircle, RotateCcw, Home, Ghost } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { playSound } from '@/lib/audio-service';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { db } from '@/lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import Confetti from 'react-dom-confetti';
 
 // Kelime Kartı Bileşeni
 const WordButton = ({ 
@@ -32,22 +35,17 @@ const WordButton = ({
             disabled={disabled}
             className={cn(
                 "relative group px-6 py-4 md:px-8 md:py-5 rounded-2xl font-black text-xl md:text-3xl transition-all duration-200 border-b-[6px] md:border-b-[8px] active:border-b-0 active:translate-y-2 outline-none select-none touch-manipulation",
-                // Titreme Animasyonu (Hata durumunda)
                 isShaking && "animate-shake bg-red-500 border-red-700 !text-white",
-                // Normal Durum
                 !isShaking && colorClass,
-                // Devre Dışı (Yerleştirilmiş)
                 disabled && "opacity-0 pointer-events-none scale-0 overflow-hidden w-0 h-0 p-0 m-0 border-0"
             )}
         >
             <span className="relative z-10 drop-shadow-md">{word}</span>
-            {/* Parlama Efekti */}
             <div className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
         </button>
     );
 };
 
-// Renk Paleti
 const WORD_COLORS = [
     'bg-indigo-500 border-indigo-700 text-white',
     'bg-pink-500 border-pink-700 text-white',
@@ -91,6 +89,12 @@ function SentenceClickGame() {
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
     const [isLevelComplete, setIsLevelComplete] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
+
+    // GÖREV MODU PARAMETRELERİ
+    const mode = searchParams.get('mode');
+    const topicId = searchParams.get('topicId');
+    const isMission = mode === 'mission';
 
     const gameContext = `Cümle Kurma - ${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
 
@@ -176,23 +180,61 @@ function SentenceClickGame() {
             setCurrentSentenceIndex(prev => prev + 1);
         } else {
             setGameState('finished');
+            setShowConfetti(true);
         }
     };
 
+    // GÖREV BAŞARILI MI? (Tüm cümleler tamamlandı mı?)
+    // Eğer oyun 'finished' state'ine geldiyse, tüm cümleler bitmiş demektir.
+    const isAllSentencesCompleted = gameState === 'finished';
+
     const handleSaveAndExit = async () => {
         if (isSaving || isScoreSaved || !user) {
-            router.push('/oyunlar/cumle-olusturma');
-            return;
+             if(isMission && isAllSentencesCompleted && !isScoreSaved) {
+                 // devam et
+            } else {
+                router.push(isMission ? '/student/gorevler' : '/oyunlar/cumle-olusturma');
+                return;
+            }
         }
+        
         setIsSaving(true);
-        const result = await submitCumleOlusturmaScoreAction(user.uid, score, gameContext);
-        if (result.success) {
+        try {
+            if (isMission && topicId) {
+                // --- GÖREV MODU KAYDI ---
+                await addDoc(collection(db, 'scoreEvents'), {
+                    userId: user.uid,
+                    points: score,
+                    context: topicId,
+                    gameType: 'cumle-olusturma', // GÖREV TİPİ
+                    timestamp: serverTimestamp(),
+                    isMission: true,
+                    completed: isAllSentencesCompleted
+                });
+
+                if (isAllSentencesCompleted) {
+                    toast({ title: "Görev Başarılı!", description: "Tüm cümleleri tamamladın.", className: "bg-green-600 text-white" });
+                } else {
+                    // Teorik olarak buraya düşmez çünkü bitiş ekranı sadece finished state'de çıkar
+                    toast({ title: "Görev Tamamlanamadı", description: "Tüm cümleleri bitirmelisin.", variant: "destructive" });
+                }
+            } else {
+                // --- NORMAL MOD KAYDI ---
+                const result = await submitCumleOlusturmaScoreAction(user.uid, score, gameContext);
+                if (result.success) {
+                    toast({ title: 'Kaydedildi!', description: 'Puanın başarıyla işlendi.' });
+                } else {
+                    toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+                }
+            }
+            
             setIsScoreSaved(true);
-            toast({ title: 'Kaydedildi!', description: 'Puanın başarıyla işlendi.' });
-        } else {
-            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+        } catch (e) {
+            console.error(e);
+            toast({ title: 'Hata', description: "Puan kaydedilemedi.", variant: 'destructive' });
+        } finally {
+            setIsSaving(false);
         }
-        setIsSaving(false);
     }
 
     const handleGameRestart = () => {
@@ -201,13 +243,61 @@ function SentenceClickGame() {
         setGameState('playing');
         setIsLevelComplete(false);
         setIsScoreSaved(false);
+        setShowConfetti(false);
         setSentences(prev => [...prev].sort(() => Math.random() - 0.5));
     }
 
     if (isLoading) return <div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-400" /><span className="ml-4 text-xl text-white font-bold animate-pulse">Hazırlanıyor...</span></div>;
-    if (error) return <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-red-400 p-8 text-2xl font-bold">{error}</div>;
+    
+    if (error) return (
+        <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-red-400 p-8 text-center">
+            <div>
+                <h2 className="text-2xl font-bold mb-4">Hata</h2>
+                <p>{error}</p>
+                <Button asChild className="mt-4" variant="secondary"><a href={isMission ? '/student/gorevler' : '/oyunlar/cumle-olusturma'}>Geri Dön</a></Button>
+            </div>
+        </div>
+    );
 
     if (gameState === 'finished') {
+        if (isMission) {
+            return (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
+                        <Confetti active={showConfetti} config={{ angle: 90, spread: 360, startVelocity: 40, elementCount: 100, decay: 0.9 }} />
+                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
+                            
+                            <div className="mb-6 flex justify-center">
+                                <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
+                                    <Trophy className="h-16 w-16 text-green-600" />
+                                </div>
+                            </div>
+
+                            <h2 className="text-3xl font-black text-slate-800 mb-2">GÖREV BAŞARILI!</h2>
+                            <p className="text-slate-500 mb-6 font-medium">Tebrikler! Tüm cümleleri başarıyla kurdun.</p>
+
+                            <div className="space-y-3">
+                                {!isScoreSaved && (
+                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
+                                    </Button>
+                                )}
+                                
+                                {isScoreSaved && (
+                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
+                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                                    </Button>
+                                )}
+                                
+                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
+                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+            );
+        }
+
         return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} scoreSaved={isScoreSaved} onRestart={handleGameRestart} backUrl="/oyunlar/cumle-olusturma" />;
     }
 
@@ -216,7 +306,6 @@ function SentenceClickGame() {
     return (
         <div ref={mainContentRef} className="flex flex-col min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-white p-4 md:p-6 overflow-hidden relative selection:bg-cyan-500/30">
             
-            {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0 opacity-30">
                 <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse delay-1000" />
@@ -237,7 +326,10 @@ function SentenceClickGame() {
                             </div>
                             <div className="min-w-0">
                                 <h1 className="text-lg md:text-2xl font-black text-white truncate">Cümle Kurma</h1>
-                                <p className="text-slate-400 text-xs md:text-sm hidden md:block truncate">Kelimeye tıkla, yerine yerleşsin!</p>
+                                <div className="flex items-center gap-2">
+                                    <p className="text-slate-400 text-xs md:text-sm hidden md:block truncate">Kelimeye tıkla, yerine yerleşsin!</p>
+                                    {isMission && <span className="px-1.5 py-0.5 rounded bg-indigo-900 text-indigo-300 text-[10px] font-bold border border-indigo-700">GÖREV</span>}
+                                </div>
                             </div>
                         </div>
 
@@ -347,7 +439,6 @@ function SentenceClickGame() {
                 </div>
             </div>
             
-            {/* CSS Animation for Shake */}
             <style jsx global>{`
                 @keyframes shake {
                     0%, 100% { transform: translateX(0); }

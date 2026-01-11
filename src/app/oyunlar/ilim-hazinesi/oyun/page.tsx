@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, Suspense, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Lightbulb, RefreshCw, ChevronRight, Star, Loader2, AlertTriangle, PartyPopper, Repeat, ArrowLeft, Sparkles, Trophy, XOctagon } from 'lucide-react';
+import { Lightbulb, RefreshCw, ChevronRight, Star, Loader2, AlertTriangle, PartyPopper, Repeat, ArrowLeft, Sparkles, Trophy, XOctagon, CheckCircle, RotateCcw, Home, Lock } from 'lucide-react';
 import { getIlimHazinesiAction, submitIlimHazinesiScoreAction, type IlimHazinesiLevel } from '../actions';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,9 @@ import { useToast } from '@/hooks/use-toast';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { playSound } from '@/lib/audio-service';
 import { GameEndScreen } from '@/components/game-end-screen';
+import { db } from '@/lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import Confetti from 'react-dom-confetti';
 
 // Harf Renk Paleti
 const LETTER_COLORS = [
@@ -25,6 +28,8 @@ const LETTER_COLORS = [
     'bg-pink-500 border-pink-700 text-white hover:bg-pink-400',
     'bg-lime-500 border-lime-700 text-slate-900 hover:bg-lime-400',
 ];
+
+const LEVEL_REWARD = 20000; // Her bölüm ödülü
 
 function GameComponent() {
     const router = useRouter();
@@ -47,7 +52,12 @@ function GameComponent() {
     const [isFinished, setIsFinished] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
 
+    // GÖREV MODU PARAMETRELERİ
+    const mode = searchParams.get('mode');
+    const topicId = searchParams.get('topicId');
+    const isMission = mode === 'mission';
 
     const wheelRef = useRef<HTMLDivElement>(null);
     
@@ -110,11 +120,11 @@ function GameComponent() {
 
     const useHint = () => {
         if (!currentLevel) return;
-        if (score >= 50) {
-            setScore(s => s - 50);
+        if (score >= 500) { // İpucu bedeli arttı çünkü ödül çok yüksek
+            setScore(s => s - 500);
             toast({ title: 'İpucu', description: `Kelimenin ilk harfi: ${currentLevel.mainWord.replace(/\s/g, '')[0]}` });
         } else {
-            toast({ title: 'Yetersiz Puan', description: 'İpucu için 50 puan gerekli.', variant: "destructive" });
+            toast({ title: 'Yetersiz Puan', description: 'İpucu için 500 puan gerekli.', variant: "destructive" });
         }
     };
 
@@ -170,8 +180,8 @@ function GameComponent() {
 
         if (formedWord === targetWord) {
             playSound('correct');
-            const pointsEarned = targetWord.length * 5;
-            setScore(prev => prev + pointsEarned);
+            // Bölüm tamamlanınca büyük ödül
+            setScore(prev => prev + LEVEL_REWARD);
             
             setTimeout(() => setShowInfo(true), 300);
         } else {
@@ -181,20 +191,54 @@ function GameComponent() {
         }
     };
     
+    // TÜM BÖLÜMLER BİTTİ Mİ?
+    const isAllLevelsCompleted = isFinished;
+
     const handleSaveAndExit = async () => {
         if (!user || score === 0 || isSaving || isScoreSaved) {
-            router.push(backUrl);
-            return;
+            if(isMission && isAllLevelsCompleted && !isScoreSaved) {
+                 // devam et
+            } else {
+                router.push(isMission ? '/student/gorevler' : backUrl);
+                return;
+            }
         }
+        
         setIsSaving(true);
-        const result = await submitIlimHazinesiScoreAction(user.uid, score, gameContext);
-        if (result.success) {
-            toast({ title: "Başarılı!", description: "Puanın kaydedildi." });
+        try {
+            if (isMission && topicId) {
+                // --- GÖREV MODU KAYDI ---
+                await addDoc(collection(db, 'scoreEvents'), {
+                    userId: user.uid,
+                    points: score,
+                    context: topicId,
+                    gameType: 'ilim-hazinesi', // GÖREV TİPİ
+                    timestamp: serverTimestamp(),
+                    isMission: true,
+                    completed: isAllLevelsCompleted
+                });
+
+                if (isAllLevelsCompleted) {
+                    toast({ title: "Görev Başarılı!", description: "Tebrikler, tüm hazineleri topladın.", className: "bg-green-600 text-white" });
+                } else {
+                    toast({ title: "Görev Tamamlanamadı", description: "Henüz tüm bölümleri bitirmedin.", variant: "destructive" });
+                }
+            } else {
+                // --- NORMAL MOD KAYDI ---
+                const result = await submitIlimHazinesiScoreAction(user.uid, score, gameContext);
+                if (result.success) {
+                    toast({ title: "Başarılı!", description: "Puanın kaydedildi." });
+                } else {
+                    toast({ title: "Hata", description: result.error, variant: "destructive" });
+                }
+            }
             setIsScoreSaved(true);
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        } catch (err) {
+            console.error(err);
+            toast({ title: "Hata", description: "Bir bağlantı hatası oluştu.", variant: "destructive" });
+        } finally {
+            setIsSaving(false);
         }
-        setIsSaving(false);
     }
 
     const nextLevel = () => {
@@ -202,6 +246,8 @@ function GameComponent() {
             setLevelIndex(prev => prev + 1);
         } else {
             setIsFinished(true);
+            setShowConfetti(true);
+            playSound('win');
         }
     };
 
@@ -211,7 +257,7 @@ function GameComponent() {
         setIsFinished(false);
         setIsScoreSaved(false);
         setIsSaving(false);
-        // Re-shuffle levels for a new game
+        setShowConfetti(false);
         setLevels(prev => [...prev].sort(() => Math.random() - 0.5));
     };
 
@@ -229,7 +275,7 @@ function GameComponent() {
                     <AlertTitle className="text-xl text-white font-bold mb-2">Hata</AlertTitle>
                     <AlertDescription className="text-slate-400 mb-6">{error}</AlertDescription>
                      <Button asChild variant="secondary" className="w-full bg-slate-800 text-white hover:bg-slate-700 border-white/10">
-                        <Link href={backUrl}>Geri Dön</Link>
+                        <Link href={isMission ? '/student/gorevler' : backUrl}>Geri Dön</Link>
                     </Button>
                 </Alert>
             </div>
@@ -237,6 +283,48 @@ function GameComponent() {
     }
     
     if (isFinished) {
+        if(isMission) {
+             return (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
+                        <Confetti active={showConfetti} config={{ angle: 90, spread: 360, startVelocity: 40, elementCount: 100, decay: 0.9 }} />
+                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
+                            
+                            <div className="mb-6 flex justify-center">
+                                <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
+                                    <Trophy className="h-16 w-16 text-green-600" />
+                                </div>
+                            </div>
+
+                            <h2 className="text-3xl font-black text-slate-800 mb-2">
+                                GÖREV BAŞARILI!
+                            </h2>
+                            
+                            <p className="text-slate-500 mb-2 font-medium">Tebrikler! Tüm hazineleri topladın.</p>
+                            <p className="text-2xl font-black text-emerald-600 mb-6">+{score.toLocaleString()} PUAN</p>
+
+                            <div className="space-y-3">
+                                {!isScoreSaved && (
+                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
+                                    </Button>
+                                )}
+                                
+                                {isScoreSaved && (
+                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
+                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                                    </Button>
+                                )}
+                                
+                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
+                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+            );
+        }
+
         return (
             <GameEndScreen 
                 score={score}
@@ -289,17 +377,9 @@ function GameComponent() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                         <Button 
-                            onClick={() => setIsFinished(true)}
-                            variant="ghost"
-                            className="h-8 px-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-[10px] md:text-xs border border-red-500/10 flex"
-                        >
-                            <XOctagon className="h-3 w-3 mr-1" />
-                            Bitir
-                        </Button>
                         <div className="flex items-center gap-1.5 bg-slate-950/50 border border-yellow-500/20 px-2.5 py-1 rounded-lg">
                             <Trophy className="h-3.5 w-3.5 text-yellow-400" />
-                            <span className="font-mono font-bold text-white text-sm">{score}</span>
+                            <span className="font-mono font-bold text-white text-sm">{score.toLocaleString()}</span>
                         </div>
                         <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 border-white/10 text-slate-300 hover:text-white h-8 w-8 rounded-lg" />
                     </div>
@@ -426,6 +506,7 @@ function GameComponent() {
                             
                             <h2 className="text-lg font-bold text-emerald-400 mb-2 uppercase tracking-widest">DOĞRU BİLDİNİZ!</h2>
                             <h3 className="text-4xl md:text-5xl font-black text-white mb-8 drop-shadow-lg">{currentLevel.mainWord}</h3>
+                            <p className="text-emerald-300 font-bold mb-4">+ {LEVEL_REWARD.toLocaleString()} PUAN</p>
                             
                             <div className="bg-black/40 p-6 rounded-2xl border border-white/10 mb-8 text-slate-200 text-lg md:text-xl leading-relaxed font-medium">
                                 {currentLevel.info}

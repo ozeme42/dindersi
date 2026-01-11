@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, Suspense, useMemo, useRef } from 'rea
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getAdamAsmacaAction, submitAdamAsmacaScoreAction, type HangmanData } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Skull, Trophy, Lightbulb, Ghost, XOctagon, ArrowLeft, RotateCcw, Keyboard as KeyboardIcon, HelpCircle } from 'lucide-react';
+import { Loader2, Skull, Trophy, Lightbulb, Ghost, XOctagon, ArrowLeft, RotateCcw, CheckCircle, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { playSound } from '@/lib/audio-service';
@@ -12,6 +12,8 @@ import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { GameEndScreen } from '@/components/game-end-screen';
+import { db } from '@/lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 const HANGMAN_STAGES = 6;
 const ALPHABET = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ'.split('');
@@ -86,6 +88,12 @@ function HangmanGame() {
     const [gameShake, setGameShake] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
+
+    // GÖREV MODU PARAMETRELERİ
+    const mode = searchParams.get('mode');
+    const topicId = searchParams.get('topicId');
+    const threshold = parseInt(searchParams.get('threshold') || '500'); // Varsayılan 500
+    const isMission = mode === 'mission';
 
     // Fullscreen ref
     const mainContentRef = useRef<HTMLDivElement>(null);
@@ -219,20 +227,46 @@ function HangmanGame() {
     // Kaydetme İşlemi
     const handleFinishAndSave = async () => {
         if (!user || isSaving || isScoreSaved) {
-            router.push(backUrl); 
-            return;
+            // Görev modunda ve puan yeterliyse direkt devam etsin
+            if(isMission && totalScore >= threshold && !isScoreSaved) {
+                 // devam et
+            } else {
+                router.push(isMission ? '/student/gorevler' : backUrl);
+                return;
+            }
         }
 
         setIsSaving(true);
         try {
-            const result = await submitAdamAsmacaScoreAction(user.uid, totalScore, contextString);
-            if (result.success) {
-                toast({ title: "Başarılı", description: "Puanınız başarıyla kaydedildi." });
-                setIsScoreSaved(true);
+            if (isMission && topicId) {
+                // --- GÖREV MODU KAYDI ---
+                await addDoc(collection(db, 'scoreEvents'), {
+                    userId: user.uid,
+                    points: totalScore,
+                    context: topicId,
+                    gameType: 'adam-asmaca', // GÖREV TİPİ
+                    timestamp: serverTimestamp(),
+                    isMission: true,
+                    completed: totalScore >= threshold
+                });
+
+                if (totalScore >= threshold) {
+                    toast({ title: "Görev Başarılı!", description: "Tebrikler, barajı geçtin.", className: "bg-green-600 text-white" });
+                } else {
+                    toast({ title: "Görev Tamamlanamadı", description: `En az ${threshold} puan gerekli.`, variant: "destructive" });
+                }
             } else {
-                toast({ title: "Hata", description: result.error, variant: "destructive" });
+                // --- NORMAL MOD KAYDI ---
+                const result = await submitAdamAsmacaScoreAction(user.uid, totalScore, contextString);
+                if (result.success) {
+                    toast({ title: "Başarılı", description: "Puanınız başarıyla kaydedildi." });
+                } else {
+                    toast({ title: "Hata", description: result.error, variant: "destructive" });
+                }
             }
+            setIsScoreSaved(true);
         } catch (err) {
+            console.error(err);
             toast({ title: "Hata", description: "Bir bağlantı hatası oluştu.", variant: "destructive" });
         } finally {
              setIsSaving(false);
@@ -267,7 +301,7 @@ function HangmanGame() {
                     <h3 className="text-2xl font-black text-slate-900">Oyun Başlatılamadı</h3>
                     <p className="text-slate-500 font-medium">{error}</p>
                      <Button asChild className="w-full bg-slate-900 text-white hover:bg-slate-800 rounded-xl h-14 font-bold text-lg shadow-lg hover:scale-[1.02] transition-transform">
-                        <Link href={backUrl}><ArrowLeft className="mr-2 h-5 w-5" /> Geri Dön</Link>
+                        <Link href={isMission ? '/student/gorevler' : backUrl}><ArrowLeft className="mr-2 h-5 w-5" /> Geri Dön</Link>
                     </Button>
                 </div>
             </div>
@@ -275,6 +309,62 @@ function HangmanGame() {
     }
     
     if (gameState === 'finished') {
+        if(isMission) {
+             return (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
+                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
+                            
+                            <div className="mb-6 flex justify-center">
+                                {totalScore >= threshold ? (
+                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
+                                        <Trophy className="h-16 w-16 text-green-600" />
+                                    </div>
+                                ) : (
+                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
+                                        <XOctagon className="h-16 w-16 text-red-500" />
+                                    </div>
+                                )}
+                            </div>
+
+                            <h2 className="text-3xl font-black text-slate-800 mb-2">
+                                {totalScore >= threshold ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ"}
+                            </h2>
+                            
+                            <p className="text-slate-500 mb-6 font-medium">
+                                {totalScore >= threshold 
+                                    ? `Harika! ${totalScore} puanla barajı geçtin.` 
+                                    : `Maalesef ${totalScore} puan aldın. Geçmek için ${threshold} puan gerekli.`}
+                            </p>
+
+                            <div className="space-y-3">
+                                {!isScoreSaved && (
+                                    <Button onClick={handleFinishAndSave} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
+                                    </Button>
+                                )}
+                                
+                                {isScoreSaved && totalScore >= threshold && (
+                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
+                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                                    </Button>
+                                )}
+
+                                {(!isScoreSaved || totalScore < threshold) && (
+                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 text-lg font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">
+                                        <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
+                                    </Button>
+                                )}
+                                
+                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
+                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+            );
+        }
+
         return (
             <GameEndScreen 
                 score={totalScore}
@@ -350,14 +440,13 @@ function HangmanGame() {
                     {/* SOL TARAF: Çizim ve İpucu Kartı */}
                     <div className="lg:col-span-5 flex flex-col gap-6 order-1">
                         
-                        {/* Çizim Alanı Kapsayıcısı - DÜZELTİLDİ */}
+                        {/* Çizim Alanı Kapsayıcısı */}
                         <div className="relative group perspective-1000">
                             <div className="absolute -inset-1 bg-gradient-to-br from-rose-400 to-orange-400 rounded-[2.5rem] opacity-20 blur-lg group-hover:opacity-30 transition duration-1000"></div>
                             
-                            {/* Kart İçeriği: Flex yapısı kullanıldı, Absolute yerine */}
                             <div className="relative bg-white/80 backdrop-blur-xl border border-white p-4 rounded-[2.5rem] shadow-2xl overflow-visible flex flex-col">
                                 
-                                {/* HATA ROZETİ (Üstte, kesilme yok) */}
+                                {/* HATA ROZETİ */}
                                 <div className="flex justify-between items-center px-4 pt-2 pb-0 z-20">
                                     <div className="flex items-center gap-2 bg-rose-50 text-rose-600 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest border border-rose-100 shadow-sm">
                                         <Skull className="w-3 h-3" /> Hata: {wrongGuesses}/{HANGMAN_STAGES}

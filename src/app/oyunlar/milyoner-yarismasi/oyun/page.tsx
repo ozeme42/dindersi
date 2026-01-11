@@ -1,10 +1,9 @@
-
 'use client';
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { Phone, Users, X, Loader2, Star, LifeBuoy, Heart, Ghost, Trophy } from 'lucide-react';
+import { Phone, Users, X, Loader2, Star, LifeBuoy, Heart, Ghost, Trophy, CheckCircle, RotateCcw, Home } from 'lucide-react';
 import { playSound, stopSound } from '@/lib/audio-service';
 import { cn } from '@/lib/utils';
 import Confetti from 'react-dom-confetti';
@@ -12,6 +11,8 @@ import { addScore, checkAndAwardMillionaireBadge, getMillionaireQuestions } from
 import type { Question } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { db } from '@/lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 const MONEY_LEVELS = [
   "100", "200", "300", "400", "500", "600", "700", "800", "900", "1.000"
@@ -48,7 +49,14 @@ function MilyonerGame() {
   const [eliminatedOptions, setEliminatedOptions] = useState<string[]>([]);
   const [modalContent, setModalContent] = useState<any>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isScoreSaved, setIsScoreSaved] = useState(false);
   
+  // GÖREV MODU PARAMETRELERİ
+  const mode = searchParams.get('mode');
+  const topicId = searchParams.get('topicId');
+  const isMission = mode === 'mission';
+
   const gameContext = `Kim 1000 Puan İster? - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
 
   const fetchGameData = useCallback(async () => {
@@ -86,6 +94,7 @@ function MilyonerGame() {
       setModalContent(null);
       setLifelines({ fifty: true, phone: true, audience: true });
       setShowConfetti(false);
+      setIsScoreSaved(false);
       fetchGameData();
   }, [fetchGameData]);
 
@@ -96,12 +105,39 @@ function MilyonerGame() {
     setModalContent(null);
   }, []);
 
-  const handleEndGame = useCallback(async (endState: 'lost' | 'withdraw', prize: number) => {
+  const handleEndGame = useCallback(async (endState: 'lost' | 'withdraw' | 'won', prize: number) => {
     setGameState(endState);
-    if (user && prize > 0) {
-      await addScore(user.uid, prize, gameContext);
+    if(endState === 'won') setShowConfetti(true);
+
+    if (user) {
+        setIsSaving(true);
+        // Görev modunda kazanmak şart
+        const isWin = endState === 'won';
+
+        try {
+            if(isMission && topicId) {
+                 await addDoc(collection(db, 'scoreEvents'), {
+                    userId: user.uid,
+                    points: prize,
+                    context: topicId,
+                    gameType: 'milyoner-yarismasi', // GÖREV TİPİ
+                    timestamp: serverTimestamp(),
+                    isMission: true,
+                    completed: isWin
+                });
+            } else if (prize > 0) {
+                // Normal mod
+                await addScore(user.uid, prize, gameContext);
+                if(isWin) await checkAndAwardMillionaireBadge(user.uid);
+            }
+            setIsScoreSaved(true);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setIsSaving(false);
+        }
     }
-  }, [user, gameContext]);
+  }, [user, gameContext, isMission, topicId]);
 
   const checkAnswer = useCallback((answer: string) => {
     const currentQ = questions[qIndex];
@@ -114,23 +150,19 @@ function MilyonerGame() {
           setQIndex(prev => prev + 1);
           resetQuestion();
         } else {
-          setGameState('won');
-          setShowConfetti(true);
-          if (user) {
-            const finalPrize = parseInt(MONEY_LEVELS[qIndex].replace(/\./g, ''));
-            await addScore(user.uid, finalPrize, gameContext);
-            await checkAndAwardMillionaireBadge(user.uid);
-          }
+          // KAZANDI (SON SORU)
+          const finalPrize = 1000;
+          handleEndGame('won', finalPrize);
         }
       }, 2000);
     } else {
       playSound('incorrect');
       setTimeout(() => {
-        const prize = 0; // Baraj sistemi şimdilik yok
+        const prize = 0; 
         handleEndGame('lost', prize);
       }, 2000);
     }
-  }, [qIndex, questions, resetQuestion, user, handleEndGame, gameContext]);
+  }, [qIndex, questions, resetQuestion, handleEndGame]);
 
   const handleOptionSelect = useCallback((option: string) => {
     if (revealState !== 'none' || eliminatedOptions.includes(option)) return;
@@ -208,7 +240,7 @@ function MilyonerGame() {
     setLifelines(prev => ({ ...prev, audience: false }));
   };
   
-   const goHome = () => router.push('/student');
+   const goHome = () => router.push(isMission ? '/student/gorevler' : '/student');
 
   if (isLoading || userLoading) {
     return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
@@ -222,7 +254,7 @@ function MilyonerGame() {
                 <h3 className="text-xl font-bold text-red-100">Oyun Başlatılamadı</h3>
                 <p className="text-red-200/70">{error}</p>
                  <Button asChild variant="secondary" className="w-full">
-                    <Link href="/oyunlar/milyoner-yarismasi">Geri Dön</Link>
+                    <Link href={isMission ? '/student/gorevler' : "/oyunlar/milyoner-yarismasi"}>Geri Dön</Link>
                 </Button>
             </div>
         </div>
@@ -235,6 +267,57 @@ function MilyonerGame() {
     else if (gameState === 'withdraw') prize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
     else prize = 0; 
 
+    // GÖREV MODU BİTİŞ EKRANI
+    if (isMission) {
+        const isWin = gameState === 'won';
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center text-center p-4 bg-[#000022] relative">
+               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a5c_0%,_#000022_100%)] -z-10"></div>
+               <Confetti active={isWin} config={confettiConfig} />
+               
+               <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 max-w-md w-full">
+                   <div className="flex justify-center mb-6">
+                       {isWin ? (
+                           <div className="p-4 bg-green-500/20 rounded-full border border-green-500 animate-bounce">
+                               <Trophy className="h-16 w-16 text-green-400" />
+                           </div>
+                       ) : (
+                           <div className="p-4 bg-red-500/20 rounded-full border border-red-500">
+                               <Ghost className="h-16 w-16 text-red-400" />
+                           </div>
+                       )}
+                   </div>
+                   
+                   <h1 className={`text-3xl font-black mb-2 ${isWin ? 'text-green-400' : 'text-red-400'}`}>
+                       {isWin ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ"}
+                   </h1>
+                   <p className="text-gray-300 mb-6 font-medium">
+                       {isWin ? "Tebrikler! Büyük ödülü kazandın ve görevi tamamladın." : "Maalesef 1.000 puan hedefine ulaşamadın."}
+                   </p>
+                   
+                   <div className="space-y-3">
+                       {isWin && (
+                           <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700">
+                               <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                           </Button>
+                       )}
+                       
+                       {!isWin && (
+                           <Button onClick={resetGame} variant="outline" className="w-full h-12 text-lg font-bold border-white/20 text-white hover:bg-white/10">
+                               <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
+                           </Button>
+                       )}
+                       
+                       <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-gray-400 hover:text-white">
+                           <Home className="mr-2 h-4 w-4"/> Ana Menü
+                       </Button>
+                   </div>
+               </div>
+            </div>
+        );
+    }
+
+    // NORMAL MOD BİTİŞ EKRANI
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-4 bg-[#000022] relative">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a5c_0%,_#000022_100%)] -z-10"></div>
@@ -294,6 +377,9 @@ function MilyonerGame() {
                   ÇEKİL
               </button>
           )}
+          
+          {isMission && <span className="px-3 py-1 bg-indigo-900 border border-indigo-500 rounded-full text-xs font-bold text-indigo-300">GÖREV MODU</span>}
+
           <div className="flex gap-4">
             <button onClick={useFiftyFifty} disabled={!lifelines.fifty} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="%50">
                 <span className="text-sm">50:50</span>
@@ -395,5 +481,3 @@ function MilyonerOyunPage() {
 
 // We are now exporting the wrapped component as the default.
 export default MilyonerOyunPage;
-
-    

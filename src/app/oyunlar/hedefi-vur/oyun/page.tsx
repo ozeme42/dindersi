@@ -4,12 +4,14 @@ import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getHitTheTargetAction, submitHitTheTargetScoreAction, type HitTheTargetRound } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Trophy, Home, Repeat, Save, Timer, Target, Zap, Sparkles, Crosshair } from 'lucide-react';
+import { Loader2, Trophy, Home, Repeat, Save, Timer, Target, Zap, Sparkles, Crosshair, XOctagon, CheckCircle, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { playSound, stopSound } from '@/lib/audio-service';
 import { useToast } from '@/hooks/use-toast';
+import { db } from '@/lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 // --- TİPLER ---
 type TargetInfo = {
@@ -93,9 +95,16 @@ function HitTheTargetGame() {
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'round_end' | 'finished'>('loading');
     const [isPaused, setIsPaused] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
     
     const [clickEffect, setClickEffect] = useState<{x: number, y: number, id: number} | null>(null);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+    // GÖREV MODU PARAMETRELERİ
+    const mode = searchParams.get('mode');
+    const topicId = searchParams.get('topicId');
+    const threshold = parseInt(searchParams.get('threshold') || '500'); // Varsayılan 500
+    const isMission = mode === 'mission';
 
     const gameContext = `Hedefi Vur - ${searchParams.get('topicName') || 'Genel'}`;
 
@@ -237,7 +246,6 @@ function HitTheTargetGame() {
     const handleHit = (target: TargetInfo, e: React.MouseEvent | React.TouchEvent) => {
         if (target.isHit || isPaused) return;
         
-        // Touch/Mouse koordinat düzeltmesi
         let clientX, clientY;
         if ('touches' in e) {
             clientX = e.touches[0].clientX;
@@ -271,17 +279,46 @@ function HitTheTargetGame() {
     };
 
     const handleSaveAndExit = async () => {
-        if (!user || score <= 0 || isSaving) {
-            router.push('/oyunlar/hedefi-vur');
+        if (!user || score <= 0 || isSaving || isScoreSaved) {
+            router.push(isMission ? '/student/gorevler' : '/oyunlar/hedefi-vur');
             return;
         }
+        
         setIsSaving(true);
-        const result = await submitHitTheTargetScoreAction(user.uid, score, gameContext);
-        if (result.success) {
-            toast({ title: 'Başarılı!', description: 'Skorun başarıyla kaydedildi.' });
-            router.push('/oyunlar/hedefi-vur');
-        } else {
-            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+
+        try {
+            if (isMission && topicId) {
+                // --- GÖREV MODU KAYDI ---
+                await addDoc(collection(db, 'scoreEvents'), {
+                    userId: user.uid,
+                    points: score,
+                    context: topicId,
+                    gameType: 'hedefi-vur', // GÖREV TİPİ
+                    timestamp: serverTimestamp(),
+                    isMission: true,
+                    completed: score >= threshold
+                });
+
+                if (score >= threshold) {
+                    toast({ title: "Görev Başarılı!", description: "Tebrikler, barajı geçtin.", className: "bg-green-600 text-white" });
+                } else {
+                    toast({ title: "Görev Tamamlanamadı", description: `En az ${threshold} puan gerekli.`, variant: "destructive" });
+                }
+            } else {
+                // --- NORMAL MOD KAYDI ---
+                const result = await submitHitTheTargetScoreAction(user.uid, score, gameContext);
+                if (result.success) {
+                    toast({ title: 'Başarılı!', description: 'Skorun başarıyla kaydedildi.' });
+                } else {
+                    toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+                }
+            }
+            
+            setIsScoreSaved(true);
+        } catch (e) {
+            console.error(e);
+            toast({ title: 'Hata', description: "Puan kaydedilemedi.", variant: 'destructive' });
+        } finally {
             setIsSaving(false);
         }
     };
@@ -296,15 +333,48 @@ function HitTheTargetGame() {
             <div className="h-[100dvh] w-full bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
                 <GameBackground />
                 <div className="relative z-10 w-full max-w-md text-center space-y-6 animate-in zoom-in-95 duration-500">
-                    <Trophy className="w-32 h-32 text-yellow-400 mx-auto drop-shadow-[0_0_25px_rgba(250,204,21,0.6)] animate-bounce" />
-                    <div>
-                        <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400">GÖREV TAMAM!</h1>
-                        <p className="text-slate-400 text-lg">Toplam Skorun</p>
+                    
+                    <div className="flex justify-center mb-6">
+                        {score >= threshold ? (
+                            <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
+                                <Trophy className="h-16 w-16 text-green-600" />
+                            </div>
+                        ) : (
+                            <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
+                                <XOctagon className="h-16 w-16 text-red-500" />
+                            </div>
+                        )}
                     </div>
+
+                    <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400">
+                        {isMission ? (score >= threshold ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ") : "OYUN BİTTİ!"}
+                    </h1>
+                    
                     <div className="text-6xl font-black text-white">{score}</div>
-                    <Button onClick={handleSaveAndExit} size="lg" disabled={isSaving} className="w-full h-14 text-lg font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600">
-                        {isSaving ? <Loader2 className="mr-2 animate-spin" /> : <Save className="mr-2" />} KAYDET VE ÇIK
-                    </Button>
+                    
+                    <div className="space-y-3">
+                        {!isScoreSaved && (
+                            <Button onClick={handleSaveAndExit} size="lg" disabled={isSaving} className="w-full h-14 text-lg font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600">
+                                {isSaving ? <Loader2 className="mr-2 animate-spin" /> : <Save className="mr-2" />} KAYDET VE ÇIK
+                            </Button>
+                        )}
+
+                        {isScoreSaved && score >= threshold && isMission && (
+                            <Button onClick={() => router.push('/student/gorevler')} className="w-full h-14 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
+                                <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                            </Button>
+                        )}
+
+                        {(!isScoreSaved || score < threshold) && (
+                            <Button onClick={() => window.location.reload()} variant="outline" className="w-full h-14 text-lg font-bold border-2 border-slate-700 text-slate-300 hover:bg-slate-800">
+                                <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
+                            </Button>
+                        )}
+                        
+                        <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-200">
+                            <Home className="mr-2 h-4 w-4"/> Ana Menü
+                        </Button>
+                    </div>
                 </div>
             </div>
         );
@@ -330,7 +400,7 @@ function HitTheTargetGame() {
                 {/* Soru Paneli (Daha Kompakt) */}
                 <div className="bg-slate-900/80 backdrop-blur-xl border border-sky-500/30 px-4 py-3 rounded-2xl text-center shadow-lg shrink-0 mb-2">
                     <div className="flex items-center justify-center gap-2 mb-1 text-sky-400 font-bold tracking-widest text-[10px] uppercase">
-                        <Target className="w-3 h-3" /> HEDEFİ BUL
+                        <Target className="w-3 h-3" /> HEDEFİ BUL {isMission && <span className="text-white ml-2 bg-indigo-600 px-2 rounded-full">GÖREV: {threshold} PUAN</span>}
                     </div>
                     <p className="text-lg md:text-3xl font-black text-white leading-tight drop-shadow-md line-clamp-2">
                         {currentRound?.definition}

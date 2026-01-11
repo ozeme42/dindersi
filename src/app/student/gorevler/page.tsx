@@ -3,7 +3,7 @@
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
-import { BookOpen, Loader2, ArrowLeft, Menu, Map, ChevronLeft, GraduationCap } from "lucide-react";
+import { BookOpen, Loader2, ArrowLeft, Menu, Map, ChevronLeft, GraduationCap, Gift, Trophy, CheckCircle2, Sparkles } from "lucide-react";
 import type { Course, Topic, Unit, UserProgress, LessonStep } from "@/lib/types";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { doc, getDoc, collection, onSnapshot, writeBatch, serverTimestamp, increment } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { CourseSidebar } from "@/components/course-sidebar";
+import { Badge } from "@/components/ui/badge";
 
 type LocalProgress = {
     answers: { [stepIndex: number]: any };
@@ -21,6 +22,9 @@ type LocalProgress = {
 
 const EMPTY_TEST_COUNTS = {};
 const MemoizedSidebar = React.memo(CourseSidebar);
+
+// --- SABİTLER ---
+const TOPIC_REWARD = 10000; // Konu Başı Ödül
 
 // --- ARKA PLAN EFEKTLERİ ---
 const MissionBackground = () => (
@@ -57,7 +61,7 @@ function PageContent() {
     
     const isTeacher = user?.role === 'teacher' || user?.role === 'superadmin';
 
-    // --- YENİ: Sıralı ve Düzleştirilmiş Konu Listesi ---
+    // --- Sıralı ve Düzleştirilmiş Konu Listesi ---
     const allTopicsInOrder = useMemo(() => {
         if (!course) return [];
         return (course.units || [])
@@ -150,15 +154,15 @@ function PageContent() {
         return (completedTopics[topicId]?.completionCount || 0) > 0;
     }, [completedTopics]);
 
-    // --- YENİ: Geliştirilmiş Kilit Açma Mantığı ---
+    // --- Kilit Açma Mantığı ---
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         if (isTeacher) return true;
         if (allTopicsInOrder.length === 0) return false;
 
         const topicIndex = allTopicsInOrder.findIndex(t => t.id === topicId);
         
-        if (topicIndex === -1) return false; // Konu listede yoksa kilitlidir.
-        if (topicIndex === 0) return true; // Zincirin ilk halkası her zaman açıktır.
+        if (topicIndex === -1) return false; 
+        if (topicIndex === 0) return true; 
 
         const previousTopic = allTopicsInOrder[topicIndex - 1];
         if (!previousTopic) return true; 
@@ -166,7 +170,7 @@ function PageContent() {
         return isTopicCompleted(previousTopic.id);
     }, [allTopicsInOrder, isTopicCompleted, isTeacher]);
 
-     // --- YENİ: Aktif Konuyu Belirleme Mantığı ---
+     // --- Aktif Konuyu Belirleme Mantığı ---
     useEffect(() => {
         if (isLoading || allTopicsInOrder.length === 0 || activeContent) return;
 
@@ -240,14 +244,18 @@ function PageContent() {
         let toastDescription = "Tebrikler, bu bölümü başarıyla bitirdin!";
         let totalScore = 0;
     
-        if (currentCompletionCount < 2) {
-            completionBonus = isUnitFlow ? score + 50 : score;
+        // İLK DEFA MI TAMAMLANIYOR?
+        if (currentCompletionCount === 0) {
+            completionBonus = TOPIC_REWARD; // 10.000 Puan
             totalScore = score + completionBonus;
-            toastTitle = currentCompletionCount === 0 ? "Harika! Bölüm Bitti!" : "Bölüm Tekrarı!";
-            toastDescription = `Adımlardan ${score} ve bonustan ${completionBonus} puan kazandın. Toplam: ${totalScore} Puan!`;
+            toastTitle = "BÖLÜM ÖDÜLÜ!";
+            toastDescription = `Tebrikler! ${TOPIC_REWARD.toLocaleString()} XP Bölüm ödülünü ve ${score} aktivite puanını kazandın.`;
+        } else if (currentCompletionCount < 5) { // Tekrarlar için küçük teşvik
+            totalScore = score;
+            toastDescription = `Bölümü tekrar ederek ${score} puan kazandın.`;
         } else {
             totalScore = 0;
-            toastDescription = "Bu bölümü daha önce tamamladığın için tekrar puan kazanmadın.";
+            toastDescription = "Bu bölümü çok kez tamamladın, artık puan kazandırmıyor.";
         }
     
         if (user.role !== 'student') {
@@ -333,7 +341,6 @@ function PageContent() {
 
             const question = step.questions[questionIndex];
             const isCorrect = selectedAnswer === question.isTrue;
-            // if (isCorrect) playSound('correct'); else playSound('incorrect'); // Optional sound
 
             const newAnswersForStep = { ...currentAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect } };
             const newAnswers = { ...prevProgress.answers, [stepIndex]: newAnswersForStep };
@@ -448,15 +455,36 @@ function PageContent() {
                             
                             <div className="flex items-center gap-2 overflow-hidden px-2">
                                 <GraduationCap className="w-4 h-4 text-cyan-400 shrink-0" />
-                                <p className="font-bold text-sm text-white truncate">
+                                <p className="font-bold text-sm text-white truncate max-w-[120px]">
                                     {activeContentData?.data.title}
                                 </p>
+                                {/* Mobil Ödül Rozeti */}
+                                {activeContentData && !isTopicCompleted(activeContentData.data.id) && (
+                                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-[9px] px-1 h-5 animate-pulse">
+                                        <Gift className="w-3 h-3 mr-0.5" /> 10K
+                                    </Badge>
+                                )}
                             </div>
                             
                             <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800/50 text-slate-300 h-9 w-9 rounded-lg hover:bg-slate-700 hover:text-white transition-colors" />
                         </div>
                     )}
                     
+                    {/* DESKTOP/TABLET ÖDÜL BANNER'I (İçerik alanının üstünde sabit) */}
+                    {activeContentData && !isTopicCompleted(activeContentData.data.id) && (
+                        <div className="w-full bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 border-b border-amber-500/30 p-3 flex justify-center items-center gap-3 text-amber-300 font-bold animate-in slide-in-from-top-2 shrink-0 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
+                            <div className="bg-amber-500/20 p-1.5 rounded-full animate-bounce">
+                                <Gift className="w-5 h-5 text-amber-400" />
+                            </div>
+                            <span className="tracking-wide text-sm md:text-base">
+                                Bu bölümü tamamla, <span className="text-white bg-amber-500/40 px-2 py-0.5 rounded-md border border-amber-500/50 shadow-sm mx-1">{TOPIC_REWARD.toLocaleString()} XP</span> kazan!
+                            </span>
+                            <div className="bg-amber-500/20 p-1.5 rounded-full animate-bounce delay-75">
+                                <Sparkles className="w-5 h-5 text-amber-400" />
+                            </div>
+                        </div>
+                    )}
+
                     <div className="flex-grow overflow-y-auto relative h-full scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
                         {activeContentData ? (
                             <div className="w-full h-full">

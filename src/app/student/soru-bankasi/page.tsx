@@ -1,23 +1,23 @@
-
-
 'use client';
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, getDoc, query, orderBy, where } from "firebase/firestore";
-import type { Course, SchoolClass, UserProgress, TestResult } from "@/lib/types";
+import { collection, getDocs, doc, getDoc, query, orderBy } from "firebase/firestore";
+import type { Course, SchoolClass, UserProgress } from "@/lib/types";
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Sparkles, Target, Book, ArrowLeft } from "lucide-react";
+import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Target, ArrowLeft, X, Loader2, Trophy, BrainCircuit } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 // --- TİP TANIMLARI ---
 type EnrichedCourse = Course & {
+    className?: string; // Sınıf adı eklendi
     lessonProgress?: number;
     questionBankProgress?: number;
     topicsCount?: number;
@@ -26,99 +26,123 @@ type EnrichedCourse = Course & {
     totalQuestionBankTests?: number;
 };
 
-type ClassGroup = { 
-    name: string; 
-    courses: EnrichedCourse[] 
-};
+// --- ARKA PLAN EFEKTLERİ ---
+const CyberBackground = () => (
+    <div className="fixed inset-0 pointer-events-none z-0 bg-[#020617] overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" style={{ opacity: 0.05 }}/>
+        <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse-slow" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-500/10 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
+    </div>
+);
 
 // --- ÖZEL İLERLEME ÇUBUĞU (NEON EFEKTLİ) ---
 const CyberProgress = ({ value, colorClass, label, subLabel, icon: Icon }: { value: number, colorClass: string, label: string, subLabel: string, icon: any }) => (
-    <div className="space-y-2">
+    <div className="space-y-2 group/progress">
         <div className="flex justify-between items-end">
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 group-hover/progress:text-slate-300 transition-colors">
                 <Icon className="w-3.5 h-3.5 opacity-70" />
                 {label}
             </div>
             <span className={cn("text-xs font-black", colorClass.replace('bg-', 'text-'))}>{value}%</span>
         </div>
-        <div className="h-2.5 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative">
+        <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative shadow-inner">
             <div 
-                className={cn("h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_currentColor] relative", colorClass)} 
+                className={cn("h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_currentColor] relative", colorClass)} 
                 style={{ width: `${value}%` }} 
             >
                 {/* Işıltı Efekti */}
                 <div className="absolute top-0 right-0 bottom-0 w-1 bg-white/50 blur-[1px]" />
             </div>
         </div>
-        <p className="text-[10px] text-slate-500 text-right font-mono font-medium tracking-tight">{subLabel}</p>
+        <p className="text-[10px] text-slate-500 text-right font-mono font-medium tracking-tight group-hover/progress:text-slate-400 transition-colors">{subLabel}</p>
     </div>
 );
 
-// --- DERS KARTI BİLEŞENİ (GÜNCELLENMİŞ) ---
-const CourseCardWithProgress = ({ course }: { course: CourseWithAllProgress }) => (
-    <div className="group relative flex flex-col rounded-[2rem] bg-slate-900/60 border border-white/10 backdrop-blur-xl overflow-hidden hover:border-cyan-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-900/20">
+// --- DERS KARTI BİLEŞENİ ---
+const CourseCardWithProgress = ({ course }: { course: EnrichedCourse }) => (
+    <div className="group relative h-full">
+        {/* Hover Glow Effect */}
+        <div className="absolute -inset-0.5 bg-gradient-to-br from-cyan-500 to-violet-600 rounded-[2.5rem] opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
         
-        {/* Arka Plan Efekti */}
-        <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-cyan-500/20 transition-colors duration-500" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/2" />
-
-        <div className="p-6 flex-grow space-y-6 relative z-10">
-            {/* Başlık ve İkon */}
-            <div className="flex items-start gap-5">
-                <div className="p-3.5 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-white/10 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 shrink-0 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <BookOpen className="h-7 w-7 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+        <Card className="relative h-full bg-[#0f172a] border-slate-800 group-hover:translate-y-[-6px] transition-transform duration-300 rounded-[2.2rem] overflow-hidden flex flex-col shadow-2xl">
+            
+            {/* Header: İkon ve Sınıf */}
+            <div className="h-32 bg-gradient-to-br from-slate-900 via-slate-900 to-[#0f172a] flex items-center justify-between p-6 relative overflow-hidden border-b border-white/5">
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+                
+                <div className="w-16 h-16 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg group-hover:scale-110 transition-transform duration-500 relative z-10">
+                    <BrainCircuit className="h-8 w-8 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
                 </div>
+
+                <div className="flex flex-col items-end gap-1 relative z-10">
+                    <Badge variant="outline" className="bg-slate-950/50 backdrop-blur border-slate-700 text-slate-400 text-[10px]">
+                        <GraduationCap className="w-3 h-3 mr-1" />
+                        {course.className}
+                    </Badge>
+                </div>
+            </div>
+
+            <div className="p-6 flex-1 flex flex-col gap-6">
+                {/* Başlık */}
                 <div>
-                    <h3 className="text-xl font-black text-white leading-tight group-hover:text-cyan-300 transition-colors drop-shadow-md line-clamp-2">
+                    <h3 className="text-2xl font-black text-white group-hover:text-cyan-300 transition-colors line-clamp-2 leading-tight">
                         {course.title}
                     </h3>
-                    <div className="flex items-center gap-2 mt-2">
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-800/50 border border-white/5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                            <GraduationCap className="w-3 h-3" />
-                            {course.className}
-                        </span>
-                    </div>
+                </div>
+
+                {/* İlerleme Barları */}
+                <div className="space-y-4 bg-slate-950/50 p-4 rounded-2xl border border-white/5">
+                    <CyberProgress 
+                        value={course.questionBankProgress || 0} 
+                        colorClass="bg-amber-500" 
+                        label="Soru Bankası"
+                        subLabel={`${course.passedTests || 0}/${course.totalQuestionBankTests || 0} Test Başarılı`}
+                        icon={Target}
+                    />
+                    <CyberProgress 
+                        value={course.lessonProgress || 0} 
+                        colorClass="bg-cyan-500" 
+                        label="Konu Anlatımı"
+                        subLabel={`${course.completedTopicsCount || 0}/${course.topicsCount || 0} Konu Tamamlandı`}
+                        icon={BookOpen}
+                    />
+                </div>
+
+                {/* Butonlar */}
+                <div className="mt-auto grid grid-cols-2 gap-3">
+                     <Button asChild variant="outline" className="w-full bg-slate-900 border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 hover:border-slate-600 h-12 rounded-xl text-xs font-bold uppercase tracking-wider">
+                        <Link href={`/student/ders/${course.id}`}>
+                            <PlayCircle className="h-4 w-4 mr-2" /> Ders
+                        </Link>
+                    </Button>
+                    
+                    <Button asChild className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 h-12 rounded-xl shadow-lg shadow-violet-900/40 text-xs font-bold uppercase tracking-wider relative overflow-hidden group/btn">
+                        <Link href={`/student/soru-bankasi/${course.id}`}>
+                            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
+                            <ClipboardCheck className="h-4 w-4 mr-2 relative z-10" /> 
+                            <span className="relative z-10">Test Çöz</span>
+                        </Link>
+                    </Button>
                 </div>
             </div>
+        </Card>
+    </div>
+);
 
-            {/* İlerleme Barları */}
-            <div className="space-y-5 bg-slate-950/30 p-5 rounded-2xl border border-white/5 shadow-inner">
-                <CyberProgress 
-                    value={course.lessonProgress || 0} 
-                    colorClass="bg-cyan-500" 
-                    label="Konu Anlatımı"
-                    subLabel={`${course.completedTopicsCount || 0}/${course.topicsCount || 0} Konu Tamamlandı`}
-                    icon={BookOpen}
-                />
-                <CyberProgress 
-                    value={course.questionBankProgress || 0} 
-                    colorClass="bg-amber-500" 
-                    label="Soru Bankası"
-                    subLabel={`${course.passedTests || 0}/${course.totalQuestionBankTests || 0} Test Başarılı`}
-                    icon={Target}
-                />
-            </div>
+// --- YÜKLEME SKELETON ---
+const LoadingSkeleton = () => (
+    <div className="rounded-[2.2rem] bg-[#0f172a] border border-slate-800 p-6 space-y-6 h-[400px] flex flex-col">
+        <div className="flex items-center gap-4">
+            <Skeleton className="h-16 w-16 rounded-2xl bg-slate-800" />
+            <Skeleton className="h-6 w-32 bg-slate-800" />
         </div>
-
-        {/* Aksiyon Butonları */}
-        <div className="p-5 pt-0 mt-auto grid grid-cols-2 gap-3 relative z-10">
-            {/* DERS BUTONU */}
-            <Button asChild variant="outline" className="w-full bg-slate-800/80 text-slate-200 border-white/10 hover:bg-slate-700 hover:text-white hover:border-white/20 h-auto py-3.5 flex flex-col gap-1 rounded-xl transition-all active:scale-95 group/btn1">
-                <Link href={`/student/ders/${course.id}`}>
-                    <PlayCircle className="h-5 w-5 mb-0.5 text-cyan-400 group-hover/btn1:scale-110 transition-transform" />
-                    <span className="text-[10px] font-extrabold tracking-widest uppercase">DERS ÇALIŞ</span>
-                </Link>
-            </Button>
-            
-            {/* TEST BUTONU */}
-            <Button asChild className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white border-0 h-auto py-3.5 flex flex-col gap-1 rounded-xl shadow-lg shadow-indigo-900/30 transition-all hover:scale-[1.02] active:scale-95 group/btn2 relative overflow-hidden">
-                <Link href={`/student/soru-bankasi/${course.id}`}>
-                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn2:translate-y-0 transition-transform duration-300" />
-                    <ClipboardCheck className="h-5 w-5 mb-0.5 relative z-10" />
-                    <span className="text-[10px] font-extrabold tracking-widest uppercase relative z-10">TEST ÇÖZ</span>
-                </Link>
-            </Button>
+        <div className="space-y-4 flex-1">
+            <Skeleton className="h-4 w-full bg-slate-800 rounded-full" />
+            <Skeleton className="h-20 w-full bg-slate-800 rounded-2xl" />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+            <Skeleton className="h-12 rounded-xl bg-slate-800" />
+            <Skeleton className="h-12 rounded-xl bg-slate-800" />
         </div>
     </div>
 );
@@ -126,7 +150,7 @@ const CourseCardWithProgress = ({ course }: { course: CourseWithAllProgress }) =
 // --- ANA SAYFA BİLEŞENİ ---
 export default function SoruBankasiPage() {
     const { user } = useAuth();
-    const [courses, setCourses] = useState<CourseWithAllProgress[]>([]);
+    const [courses, setCourses] = useState<EnrichedCourse[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -155,7 +179,7 @@ export default function SoruBankasiPage() {
                 filteredCourses = allCourses.filter(course => 
                     !course.isTeacherOnly && (
                         (studentClass && course.classId === studentClass.id) || 
-                        !course.classId                                       
+                        !course.classId                                     
                     )
                 );
 
@@ -218,51 +242,28 @@ export default function SoruBankasiPage() {
 
     return (
         <div className="min-h-screen bg-[#0f172a] pb-24 md:pb-12 overflow-x-hidden relative selection:bg-cyan-500/30">
-            
-            {/* Arka Plan Işıkları */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[100px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-cyan-600/10 rounded-full blur-[100px] animate-pulse delay-1000" />
-            </div>
+            <CyberBackground />
 
             <div className="relative z-10 max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
                 
                 {/* Başlık Alanı */}
-                <div className="mb-10 md:mb-14 relative flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                        <Button asChild variant="ghost" size="icon" className="md:hidden">
-                            <Link href="/student"><ArrowLeft className="h-5 w-5"/></Link>
-                        </Button>
-                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-xl">
-                            Dersler <span className="text-slate-600">&</span> Soru Bankası
+                <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+                    <div className="text-center md:text-left">
+                        <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight drop-shadow-2xl mb-2">
+                            SORU <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">BANKASI</span>
                         </h1>
+                        <p className="text-slate-400 text-sm md:text-lg font-medium">Bilgilerini test et, rozetleri topla ve ustalığını kanıtla.</p>
                     </div>
-                     <Button asChild variant="outline" className="hidden md:flex border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900/50 backdrop-blur-md">
-                        <Link href="/student">
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Öğrenci Paneline Dön
-                        </Link>
+                    
+                    <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white bg-white/5 backdrop-blur-sm px-6 h-12 rounded-xl">
+                        <Link href="/student"><ArrowLeft className="mr-2 h-4 w-4"/> Panele Dön</Link>
                     </Button>
                 </div>
                 
-                {/* Yükleniyor veya İçerik */}
+                {/* İçerik */}
                 {isLoading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="rounded-[2rem] border border-white/5 bg-slate-900/50 p-6 space-y-6 animate-pulse">
-                                <div className="flex items-center gap-4">
-                                    <Skeleton className="h-14 w-14 rounded-2xl bg-slate-800" />
-                                    <div className="space-y-2">
-                                        <Skeleton className="h-6 w-32 bg-slate-800" />
-                                        <Skeleton className="h-3 w-20 bg-slate-800" />
-                                    </div>
-                                </div>
-                                <Skeleton className="h-32 w-full rounded-2xl bg-slate-800" />
-                                <div className="grid grid-cols-2 gap-3">
-                                    <Skeleton className="h-14 rounded-xl bg-slate-800" />
-                                    <Skeleton className="h-14 rounded-xl bg-slate-800" />
-                                </div>
-                            </div>
-                        ))}
+                        {Array.from({ length: 3 }).map((_, i) => <LoadingSkeleton key={i} />)}
                     </div>
                 ) : courses.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -275,9 +276,9 @@ export default function SoruBankasiPage() {
                         <div className="bg-slate-800/50 p-6 rounded-full mb-6 ring-4 ring-slate-800/30">
                              <BookOpen className="h-12 w-12 text-slate-500" />
                         </div>
-                        <h3 className="text-xl font-bold text-white mb-2">Henüz Ders Yok</h3>
+                        <h3 className="text-xl font-bold text-white mb-2">Henüz İçerik Yok</h3>
                         <p className="text-slate-400 max-w-sm">
-                            Şu anda sana atanmış bir ders veya içerik bulunmuyor. Öğretmeninle iletişime geçebilirsin.
+                            Şu anda sana atanmış bir ders veya test bulunmuyor.
                         </p>
                     </div>
                 )}

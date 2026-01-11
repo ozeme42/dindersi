@@ -71,9 +71,13 @@ function HardestWorkersToday() {
 // --- STANDART BUTON KARTI ---
 const DashboardCardButton = ({ href, icon, title, subtitle, colorClass, badge }: { href: string, icon: React.ReactNode, title: string, subtitle?: string, colorClass: string, badge?: number }) => {
      const colors: {[key: string]: string} = {
-        "sky": "from-sky-500 to-blue-600 border-sky-600 shadow-sky-900/40", "rose": "from-rose-500 to-pink-600 border-rose-600 shadow-rose-900/40",
-        "orange": "from-orange-500 to-amber-600 border-orange-600 shadow-orange-900/40", "indigo": "from-indigo-500 to-violet-600 border-indigo-600 shadow-indigo-900/40",
-        "emerald": "from-emerald-500 to-green-600 border-emerald-600 shadow-emerald-900/40", "violet": "from-violet-500 to-purple-600 border-violet-600 shadow-violet-900/40",
+        "sky": "from-sky-500 to-blue-600 border-sky-600 shadow-sky-900/40", 
+        "rose": "from-rose-500 to-pink-600 border-rose-600 shadow-rose-900/40",
+        "orange": "from-orange-500 to-amber-600 border-orange-600 shadow-orange-900/40", 
+        "indigo": "from-indigo-500 to-violet-600 border-indigo-600 shadow-indigo-900/40",
+        "emerald": "from-emerald-500 to-green-600 border-emerald-600 shadow-emerald-900/40", 
+        "violet": "from-violet-500 to-purple-600 border-violet-600 shadow-violet-900/40",
+        "teal": "from-teal-500 to-cyan-600 border-teal-600 shadow-teal-900/40", // Yeni renk eklendi
      }
      return (
         <Button asChild className={cn("relative w-full h-auto flex flex-col md:flex-row items-center justify-center md:justify-start gap-3 p-4 rounded-2xl transition-all duration-300 group overflow-hidden border-b-[6px] active:border-b-0 active:translate-y-[6px] bg-gradient-to-br text-white shadow-xl", colors[colorClass])}>
@@ -96,16 +100,12 @@ export default function StudentDashboard() {
   const [isChecking, setIsChecking] = useState(false);
   const [canSpinWheel, setCanSpinWheel] = useState(false);
   
-  // localStreak: Veritabanındaki değeri anlık yansıtmak için.
-  // Kullanıcı giriş yaptığında `forceStreakCheck` çalışır, eğer gün kaçırıldıysa 0 döner ve burayı günceller.
   const [localStreak, setLocalStreak] = useState(0);
 
   const checkStreak = useCallback(async () => {
     if (!user || isChecking) return;
     setIsChecking(true);
     try {
-        // Backend'deki bu fonksiyon son aktivite tarihine bakar.
-        // Eğer son yapılan tarih dün değilse (örneğin 2 gün önceyse), seriyi sıfırlar ve 0 döner.
         const res = await forceStreakCheck(user.uid);
         setCanSpinWheel(res.canSpinWheel);
         
@@ -121,9 +121,7 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     if (user) {
-        // Sayfa ilk yüklendiğinde kullanıcının mevcut bildiği serisini koyuyoruz
         setLocalStreak(user.currentStreak || 0);
-        // Hemen ardından kontrol fonksiyonunu çalıştırıyoruz (Sıfırlanması gerekiyorsa burada sıfırlanacak)
         checkStreak();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -202,7 +200,6 @@ export default function StudentDashboard() {
   const progressToDailyGoal = Math.min((stats.todayScore / dailyGoal) * 100, 100);
   const isGoalReached = stats.todayScore >= dailyGoal;
   
-  // localStreak kullanıyoruz. Eğer backend seri bozuldu derse burası 0 olur.
   const currentStreak = localStreak;
   const daysToNextSpin = 7 - (currentStreak % 7);
   
@@ -239,7 +236,6 @@ export default function StudentDashboard() {
                                     <span className="flex items-center gap-2"><Backpack className="h-4 w-4 text-indigo-400" />{user?.class || 'Sınıfsız'}</span>
                                     {user?.schoolName && <><span className="text-slate-600">•</span><span className="flex items-center gap-2"><School className="h-4 w-4 text-cyan-400" />{user.schoolName}</span></>}
                                     
-                                    {/* MOBİL DÜZENLEME: md:inline ile sadece tablette/pcde göster */}
                                     <span className="hidden md:inline text-slate-600">•</span>
                                     <span className="hidden md:inline text-indigo-300">{stats.totalCourses} Ders</span>
                                 </div>
@@ -390,21 +386,24 @@ export default function StudentDashboard() {
                 </div>
             </div>
          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Link href="/student/soru-bankasi" className="group block h-full"><div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-sky-900 to-blue-900 border border-sky-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col"><div className="flex justify-between items-start mb-6"><div className="p-4 bg-sky-500/20 rounded-2xl border border-sky-400/30"><Map className="h-8 w-8 text-sky-300" /></div></div><h2 className="text-3xl font-black text-white mb-2">Macera <span className="text-sky-400">Haritası</span></h2><p className="text-sky-100/70 font-medium mb-8">Soruları çöz ve ilerle.</p><div className="mt-auto flex items-center gap-2 text-white font-bold text-lg">Hemen Başla <ArrowRight className="h-5 w-5" /></div></div></Link>
-              <Link href="/leaderboard" className="group block h-full"><div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-orange-900 border border-amber-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col"><div className="flex justify-between items-start mb-6"><div className="p-4 bg-amber-500/20 rounded-2xl border border-amber-400/30"><Trophy className="h-8 w-8 text-amber-300" /></div></div><h2 className="text-3xl font-black text-white mb-2">Şöhret <span className="text-amber-400">Salonu</span></h2><div className="mt-auto grid grid-cols-3 gap-3"><div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.generalRank}</span><span className="text-[10px] text-amber-200/60 uppercase">Genel</span></div><div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.classRank}</span><span className="text-[10px] text-amber-200/60 uppercase">Sınıf</span></div><div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.branchRank}</span><span className="text-[10px] text-amber-200/60 uppercase">Şube</span></div></div></div></Link>
-          </div>
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <Link href="/student/soru-bankasi" className="group block h-full"><div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-sky-900 to-blue-900 border border-sky-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col"><div className="flex justify-between items-start mb-6"><div className="p-4 bg-sky-500/20 rounded-2xl border border-sky-400/30"><Map className="h-8 w-8 text-sky-300" /></div></div><h2 className="text-3xl font-black text-white mb-2">Macera <span className="text-sky-400">Haritası</span></h2><p className="text-sky-100/70 font-medium mb-8">Soruları çöz ve ilerle.</p><div className="mt-auto flex items-center gap-2 text-white font-bold text-lg">Hemen Başla <ArrowRight className="h-5 w-5" /></div></div></Link>
+             <Link href="/leaderboard" className="group block h-full"><div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-orange-900 border border-amber-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col"><div className="flex justify-between items-start mb-6"><div className="p-4 bg-amber-500/20 rounded-2xl border border-amber-400/30"><Trophy className="h-8 w-8 text-amber-300" /></div></div><h2 className="text-3xl font-black text-white mb-2">Şöhret <span className="text-amber-400">Salonu</span></h2><div className="mt-auto grid grid-cols-3 gap-3"><div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.generalRank}</span><span className="text-[10px] text-amber-200/60 uppercase">Genel</span></div><div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.classRank}</span><span className="text-[10px] text-amber-200/60 uppercase">Sınıf</span></div><div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.branchRank}</span><span className="text-[10px] text-amber-200/60 uppercase">Şube</span></div></div></div></Link>
+         </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                {/* YENİ EKLENEN GÖREV YOLCULUĞU BUTONU */}
+                <DashboardCardButton href="/student/gorevler" icon={<Map />} title="Görev Yolculuğu" subtitle="Müfredat Bazlı" colorClass="teal" />
+
                <DashboardCardButton href="/oyunlar" icon={<Gamepad2 />} title="Etkinlikler" subtitle="Arcade" colorClass="sky" />
                <DashboardCardButton href="/student/yarismalar" icon={<Swords />} title="Arena" subtitle="Çok Oyunculu" colorClass="rose" />
                <DashboardCardButton href="/student/yazilacaklar" icon={<Columns />} title="Panolar" subtitle="Notlar" colorClass="orange" />
                <DashboardCardButton href="/student/ozetler" icon={<LayoutTemplate />} title="Özetler" subtitle="Ders Notları" colorClass="indigo" />
                <DashboardCardButton href="/student/shop" icon={<ShoppingCart />} title="Mağaza" subtitle="Puan Harca" colorClass="emerald" />
                <DashboardCardButton href="/student/deneme" icon={<FileCog />} title="Denemeler" subtitle="Sınav Merkezi" colorClass="violet" badge={examStats.pending} />
-          </div>
-          
-          <HardestWorkersToday />
+         </div>
+         
+         <HardestWorkersToday />
       </div>
       
       <style jsx global>{`

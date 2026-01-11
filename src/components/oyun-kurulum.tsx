@@ -3,15 +3,14 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    Sparkles, Loader2, Gamepad2, Search, XCircle, BookOpen
+    Sparkles, Loader2, Gamepad2, Search, XCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
-import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
-
+import type { Course, Unit, Topic } from "@/lib/types";
 
 // --- TİP TANIMLARI ---
 type EnrichedCourse = Course & {
@@ -25,7 +24,6 @@ type ClassGroup = {
     courses: EnrichedCourse[] 
 };
 
-
 const ICONS = [Book, Sparkles, Book, Gamepad2];
 const getGradient = (index: number) => {
     const gradients = [
@@ -38,12 +36,6 @@ const getGradient = (index: number) => {
     return gradients[index % gradients.length];
 };
 
-const defaultSteps = [
-  { id: 1, name: "Ders", icon: Book },
-  { id: 2, name: "Ünite", icon: Library },
-  { id: 3, name: "Konu", icon: ListTodo },
-];
-
 // --- UI COMPONENTS ---
 
 const GlassPanel = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -51,7 +43,6 @@ const GlassPanel = ({ children, className }: { children: React.ReactNode, classN
         "backdrop-blur-xl bg-[#0f172a]/80 border border-white/10 rounded-2xl md:rounded-[2.5rem] shadow-2xl overflow-hidden relative transition-all duration-300",
         className
     )}>
-        {/* Dekoratif üst çizgi */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 opacity-50"></div>
         {children}
     </div>
@@ -85,7 +76,6 @@ const SelectionCard = ({
     onClick, 
     delay = 0, 
     color = "from-slate-700 to-slate-800",
-    isActive = false,
     hasContent = true,
 }: { 
     title: string, 
@@ -107,16 +97,12 @@ const SelectionCard = ({
         )}
         style={{ animationDelay: `${delay}ms` }}
     >
-        {/* Arkaplan Gradyanı (Border Effect) */}
         <div className={cn(
             "absolute inset-0 opacity-40 group-hover:opacity-100 transition-opacity bg-gradient-to-br", 
             color
         )}></div>
         
-        {/* Kart İçeriği */}
         <div className="relative h-full w-full bg-[#1e293b] rounded-[15px] p-4 md:p-5 flex items-center gap-4 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/95 transition-colors">
-            
-            {/* İkon Kutusu */}
             <div className={cn(
                 "h-12 w-12 md:h-14 md:w-14 rounded-xl flex items-center justify-center shadow-lg shrink-0 bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300 border border-white/10",
                 color
@@ -124,7 +110,6 @@ const SelectionCard = ({
                 <Icon className="h-6 w-6 md:h-7 md:w-7 drop-shadow-md" />
             </div>
             
-            {/* Metin Alanı */}
             <div className="flex-grow min-w-0 flex flex-col justify-center">
                 {subtitle && (
                     <div className="inline-flex self-start items-center px-2 py-0.5 rounded-full bg-white/5 border border-white/10 mb-1.5">
@@ -137,14 +122,12 @@ const SelectionCard = ({
                  {!hasContent && <span className="text-[10px] text-red-400/70 font-semibold mt-1">İçerik Yok</span>}
             </div>
             
-            {/* Sağ Ok - Masaüstünde hover ile belirginleşir */}
             <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all shrink-0 ml-auto opacity-50 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0">
                 <ArrowRight className="h-4 w-4" />
             </div>
         </div>
     </button>
 );
-
 
 // --- MAIN PAGE COMPONENT ---
 
@@ -174,6 +157,7 @@ export function OyunKurulum({
     const searchParams = useSearchParams();
     const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
+    const [isRedirecting, setIsRedirecting] = useState(false); // Yönlendirme durumu
     
     const PageIcon = PageIconProp || gameIcon || Gamepad2;
   
@@ -187,7 +171,10 @@ export function OyunKurulum({
     const pageTitle = initialPageTitle || gameName || searchParams.get('gameName') || "Etkinlik Kurulumu";
     const finalGamePath = gamePath || searchParams.get('gamePath') || "";
   
+    // SEÇİM STATE'İ (Sınıf bilgisi eklendi)
     const [selection, setSelection] = useState({
+      classId: "",
+      className: "",
       courseId: "",
       courseName: "",
       courseColor: "from-slate-700 to-slate-800", 
@@ -195,6 +182,30 @@ export function OyunKurulum({
       unitName: "",
       topicName: ""
     });
+
+    // --- ÖNEMLİ: EĞER GÖREV MODUYSA DİREKT YÖNLENDİR ---
+    useEffect(() => {
+        const topicIdParam = searchParams.get('topicId');
+        const modeParam = searchParams.get('mode');
+
+        // Eğer Görev Modundaysak (mode=mission) ve topicId belliyse, kurulum ekranını pas geç
+        if (dataType === 'games' && topicIdParam && modeParam === 'mission') {
+            setIsRedirecting(true);
+            
+            // Mevcut parametreleri al (threshold, taskId vb. kaybolmasın)
+            const params = new URLSearchParams(searchParams.toString());
+            
+            // Eğer gameName yoksa ekle (Görsel için)
+            if(!params.get('gameName')) params.set('gameName', pageTitle);
+            
+            // isStatic bilgisini de ekle
+            params.set('isStatic', String(isStatic));
+
+            // Direkt oyun istemcisine yönlendir
+            const finalUrl = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
+            router.replace(finalUrl);
+        }
+    }, [searchParams, finalGamePath, dataType, pageTitle, isStatic, router]);
     
     const stepsToDisplay = useMemo(() => {
       const allSteps = [
@@ -208,19 +219,22 @@ export function OyunKurulum({
     const getBackUrl = () => {
       if (targetPath?.startsWith('student')) return '/student';
       if(targetPath === 'oyunlar') return '/oyunlar';
-      return '/'; // Fallback for static or public pages
+      return '/'; 
     };
     
     const handleBack = () => {
       if (currentStep > 1) {
           setCurrentStep(currentStep - 1);
-          setSearchQuery(""); // Geri gidince aramayı temizle
+          setSearchQuery("");
       } else {
           router.push(getBackUrl());
       }
     };
   
     const fetchCurriculumData = useCallback(async () => {
+      // Eğer yönlendirme yapılıyorsa veri çekmeye gerek yok
+      if (isRedirecting) return;
+
       setIsLoading(true);
       try {
           const userId = isStatic ? undefined : user?.uid;
@@ -238,7 +252,7 @@ export function OyunKurulum({
                   ...course,
                   icon: ICONS[(groupIndex + courseIndex) % ICONS.length],
                   color: getGradient(groupIndex + courseIndex),
-                  className: group.name,
+                  className: group.name, // Sınıf adı burada geliyor
               }))
           }));
           
@@ -249,15 +263,20 @@ export function OyunKurulum({
       } finally {
           setIsLoading(false);
       }
-    }, [user?.uid, dataType, isStatic]);
+    }, [user?.uid, dataType, isStatic, isRedirecting]);
   
     useEffect(() => {
-      fetchCurriculumData();
-    }, [fetchCurriculumData]);
+      if (!isRedirecting) {
+          fetchCurriculumData();
+      }
+    }, [fetchCurriculumData, isRedirecting]);
   
+    // --- ADIM 1: DERS SEÇİMİ ---
     const handleSelectCourse = (course: EnrichedCourse) => {
       setSelection({ 
           ...selection, 
+          classId: course.classId || "", // Course objesinde classId varsa al
+          className: course.className || "", 
           courseId: course.id, 
           courseName: course.title, 
           courseColor: course.color || "from-slate-700 to-slate-800",
@@ -276,8 +295,6 @@ export function OyunKurulum({
                });
           }
 
-          // --- DÜZELTME: ÜNİTELERİ NUMARALARA GÖRE SIRALA ---
-          // 'numeric: true' özelliği ile "1. Ünite", "10. Ünite" gibi başlıkları doğru sıralar.
           const sortedUnits = (unitsWithContent || []).sort((a, b) => 
             (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })
           );
@@ -288,13 +305,17 @@ export function OyunKurulum({
       }, 300);
     };
   
+    // --- ADIM 2: ÜNİTE SEÇİMİ ---
     const handleSelectUnit = (unit: Unit) => {
       setSelection({ ...selection, unitId: unit.id, unitName: unit.title, topicName: '' });
       
+      // Tüm Üniteler (Oyunlar için)
       if (dataType === 'games' && unit.id === 'all') {
           const params = new URLSearchParams({
               gameName: pageTitle,
               gamePath: finalGamePath,
+              classId: selection.classId,
+              className: selection.className,
               courseId: selection.courseId,
               courseName: selection.courseName,
               unitId: 'all',
@@ -308,6 +329,7 @@ export function OyunKurulum({
           return;
       }
   
+      // Özetler için direkt yönlendirme (Eğer konu yoksa)
       if (dataType === 'ozetler' && (unit as any).hasUnitOzet && (!unit.topics || unit.topics.every(t => !(t as any).hasOzetContent))) {
           const pathPrefix = isStatic ? '' : '/student';
           const url = `${pathPrefix}/ozetler/${selection.courseId}/${unit.id}`;
@@ -332,8 +354,6 @@ export function OyunKurulum({
               }
           }
           
-          // --- DÜZELTME: KONULARI NUMARALARA GÖRE SIRALA ---
-          // Burada da aynı şekilde 'numeric: true' kullanıyoruz.
           setTopics(topicsWithContent.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })));
           
           setIsLoading(false);
@@ -341,6 +361,7 @@ export function OyunKurulum({
       }, 300);
     };
     
+    // --- ADIM 3: KONU SEÇİMİ VE YÖNLENDİRME ---
     const handleSelectTopic = (topicId: string, topicName: string) => {
         setSelection({...selection, topicName});
         
@@ -351,10 +372,12 @@ export function OyunKurulum({
             finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
         } else if (dataType === 'ozetler') {
             finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
-        } else { // games
+        } else { // dataType === 'games'
             const params = new URLSearchParams({
               gameName: pageTitle,
               gamePath: finalGamePath,
+              classId: selection.classId, 
+              className: selection.className, 
               courseId: selection.courseId,
               courseName: selection.courseName,
               unitId: selection.unitId,
@@ -366,9 +389,9 @@ export function OyunKurulum({
             finalUrl = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
         }
         
+        // DİREKT YÖNLENDİRME
         router.push(finalUrl);
     };
-  
   
     // --- FILTERING LOGIC ---
     const filterItems = (items: any[]) => {
@@ -428,7 +451,7 @@ export function OyunKurulum({
                                   subtitle="Genel Tekrar"
                                   icon={Sparkles}
                                   color="from-yellow-600 to-amber-500"
-                                  onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
+                                  onClick={() => handleSelectUnit({ id: 'all', title: 'Tüm Üniteler' } as Unit)}
                                   delay={0}
                               />
                           )}
@@ -488,6 +511,24 @@ export function OyunKurulum({
             default:
               return null;
         }
+    }
+
+    // --- YÖNLENDİRME EKRANI (Loader) ---
+    if (isRedirecting) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-[#0f172a] text-white">
+                <div className="flex flex-col items-center gap-6">
+                    <div className="relative">
+                        <Loader2 className="h-16 w-16 text-cyan-500 animate-spin" />
+                        <div className="absolute inset-0 bg-cyan-500/30 blur-2xl rounded-full"></div>
+                    </div>
+                    <div className="text-center space-y-2">
+                        <h2 className="text-2xl font-black tracking-tight">Oyun Başlatılıyor</h2>
+                        <p className="text-slate-400">Görev yolculuğuna hazırlanıyorsun...</p>
+                    </div>
+                </div>
+            </div>
+        );
     }
   
     return (

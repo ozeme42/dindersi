@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, Suspense, useCallback, useMemo } from 'react';
@@ -6,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { getConceptHuntAction, submitConceptHuntScoreAction } from '../actions';
 import type { Anagram } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
-import { Loader2, ArrowLeft, Save, Trophy, Repeat, Home, Ghost, Zap, Crosshair, XOctagon } from 'lucide-react';
+import { Loader2, ArrowLeft, Save, Trophy, Repeat, Home, Ghost, Zap, Crosshair, XOctagon, CheckCircle, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { GameEndScreen } from '@/components/game-end-screen';
@@ -14,7 +13,9 @@ import { playSound } from '@/lib/audio-service';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
-
+import { db } from '@/lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import Confetti from 'react-dom-confetti';
 
 // --- RENK PALETİ ---
 const LETTER_COLORS = [
@@ -46,7 +47,7 @@ const GameHUD = ({ score, current, total, onFinish }: { score: number, current: 
                         className="absolute top-0 left-0 h-full bg-gradient-to-r from-teal-500 to-cyan-400 transition-all duration-700 ease-out shadow-[0_0_15px_rgba(45,212,191,0.5)]"
                         style={{ width: `${progress}%` }}
                     />
-                     <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center justify-center">
                         <span className="text-[10px] font-bold text-slate-300 drop-shadow-md">{current + 1} / {total}</span>
                     </div>
                 </div>
@@ -57,7 +58,7 @@ const GameHUD = ({ score, current, total, onFinish }: { score: number, current: 
                             {score}
                         </span>
                     </div>
-                     <Button size="sm" variant="destructive" className="rounded-full font-bold h-10 w-10 p-0" onClick={onFinish} title="Oyunu Bitir">
+                      <Button size="sm" variant="destructive" className="rounded-full font-bold h-10 w-10 p-0" onClick={onFinish} title="Oyunu Bitir">
                         <XOctagon className="h-5 w-5" />
                     </Button>
                 </div>
@@ -86,11 +87,18 @@ function KavramAviGame() {
     const [score, setScore] = useState(0);
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
     const [isSaving, setIsSaving] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
     
     // Animasyon State'i
     const [isCorrect, setIsCorrect] = useState(false);
     const [shakeId, setShakeId] = useState<number | null>(null);
     const [gameShake, setGameShake] = useState(false);
+
+    // GÖREV MODU PARAMETRELERİ
+    const mode = searchParams.get('mode');
+    const topicId = searchParams.get('topicId');
+    const isMission = mode === 'mission';
 
     const gameContext = useMemo(() => `Kavram Avı - ${searchParams.get('courseName') || ''} > ${searchParams.get('topicName') || ''}`, [searchParams]);
 
@@ -199,24 +207,59 @@ function KavramAviGame() {
         } else {
             setGameState('finished');
             playSound('win');
+            setShowConfetti(true);
         }
     };
 
+    // GÖREV BAŞARILI MI? (Oyun 'finished' state'ine geldiyse tüm kelimeler bitmiştir)
+    const isAllConceptsFound = gameState === 'finished';
+
     // Kaydet ve Çık
     const handleSaveAndExit = async () => {
-        if (!user || score === 0 || isSaving) {
-            router.push(backUrl);
-            return;
+        if (!user || score === 0 || isSaving || isScoreSaved) {
+             if(isMission && isAllConceptsFound && !isScoreSaved) {
+                 // devam et
+            } else {
+                router.push(isMission ? '/student/gorevler' : backUrl);
+                return;
+            }
         }
+        
         setIsSaving(true);
-        const result = await submitConceptHuntScoreAction(user.uid, score, gameContext);
-        if (result.success) {
-            toast({ title: "Başarılı!", description: "Puanın kaydedildi." });
-            router.push(backUrl);
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        try {
+            if (isMission && topicId) {
+                // --- GÖREV MODU KAYDI ---
+                await addDoc(collection(db, 'scoreEvents'), {
+                    userId: user.uid,
+                    points: score,
+                    context: topicId,
+                    gameType: 'kavram-avi', // GÖREV TİPİ
+                    timestamp: serverTimestamp(),
+                    isMission: true,
+                    completed: isAllConceptsFound
+                });
+
+                if (isAllConceptsFound) {
+                    toast({ title: "Görev Başarılı!", description: "Tüm kavramları buldun.", className: "bg-green-600 text-white" });
+                } else {
+                    toast({ title: "Görev Tamamlanamadı", description: "Tüm kavramları bitirmelisin.", variant: "destructive" });
+                }
+            } else {
+                // --- NORMAL MOD KAYDI ---
+                const result = await submitConceptHuntScoreAction(user.uid, score, gameContext);
+                if (result.success) {
+                    toast({ title: "Başarılı!", description: "Puanın kaydedildi." });
+                } else {
+                    toast({ title: "Hata", description: result.error, variant: "destructive" });
+                }
+            }
+            setIsScoreSaved(true);
+        } catch (e) {
+            console.error(e);
+            toast({ title: "Hata", description: "Puan kaydedilemedi.", variant: "destructive" });
+        } finally {
+            setIsSaving(false);
         }
-        setIsSaving(false);
     }
 
     // --- RENDER ---
@@ -229,14 +272,52 @@ function KavramAviGame() {
                 <AlertTitle className="text-red-400">Oyun Başlatılamadı</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
                 <Button asChild variant="outline" className="mt-4 border-red-800 text-red-300 hover:bg-red-900/50">
-                    <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
+                    <Link href={isMission ? '/student/gorevler' : backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
                 </Button>
             </Alert>
         </div>
     );
 
     if (gameState === 'finished') {
-        return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} onRestart={() => window.location.reload()} backUrl={backUrl} />;
+        if(isMission) {
+             return (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
+                        <Confetti active={showConfetti} config={{ angle: 90, spread: 360, startVelocity: 40, elementCount: 100, decay: 0.9 }} />
+                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
+                            
+                            <div className="mb-6 flex justify-center">
+                                <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
+                                    <Trophy className="h-16 w-16 text-green-600" />
+                                </div>
+                            </div>
+
+                            <h2 className="text-3xl font-black text-slate-800 mb-2">GÖREV BAŞARILI!</h2>
+                            <p className="text-slate-500 mb-6 font-medium">Tebrikler! Tüm kavramları doğru buldun.</p>
+
+                            <div className="space-y-3">
+                                {!isScoreSaved && (
+                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
+                                    </Button>
+                                )}
+                                
+                                {isScoreSaved && (
+                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
+                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                                    </Button>
+                                )}
+                                
+                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
+                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+            );
+        }
+
+        return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} scoreSaved={isScoreSaved} onRestart={() => window.location.reload()} backUrl={backUrl} />;
     }
 
     return (

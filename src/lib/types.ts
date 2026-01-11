@@ -422,3 +422,31 @@ export type Announcement = {
   category: 'general' | 'exam';
   createdAt: any; // Can be a Timestamp or string after serialization
 };
+
+export type GameTask = {
+    id: string;
+    title: string;
+    gameType: string; // Örn: 'kelime-avi', 'milyoner-yarismasi'
+    minSuccessRate: number; // Örn: 50 (Yüzde)
+    description: string;
+    xpReward?: number; // Görev başına ufak ödül
+  };
+  
+  export type TopicMission = {
+    id: string;
+    title: string;
+    description: string;
+    order: number; // Listeleme sırası
+    color: string; // Kart rengi (örn: 'from-blue-600 to-indigo-600')
+    tasks: GameTask[]; // İçindeki oyunlar
+    totalRewardMultiplier: number; // Bölüm sonu çarpanı (örn: 5)
+    isPublished?: boolean;
+  };
+  
+  export type UserMissionProgress = {
+    userId: string;
+    completedTaskIds: string[]; // Biten görev ID'leri
+    scores: { [taskId: string]: number }; // Her görevden alınan puan
+    completedTopicIds: string[]; // Tamamen biten konular
+    lastUpdated?: any;
+  };

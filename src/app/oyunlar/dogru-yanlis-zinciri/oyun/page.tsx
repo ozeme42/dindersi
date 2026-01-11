@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
@@ -8,16 +7,18 @@ import type { Question } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Save, Home, Repeat, CheckCircle, XCircle, Link2, Ghost, XOctagon, Timer, PlusCircle, MinusCircle } from 'lucide-react';
+import { Loader2, ArrowLeft, Ghost, XOctagon, PlusCircle, MinusCircle, CheckCircle, RotateCcw, Home, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
 import { Progress } from '@/components/ui/progress';
 import { GameEndScreen } from '@/components/game-end-screen';
+import { db } from '@/lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
-const INITIAL_TIME = 15; // Başlangıç süresi
-const CORRECT_BONUS = 5; // Doğru cevap bonusu (saniye)
-const WRONG_PENALTY = 5; // Yanlış cevap cezası (saniye)
+const INITIAL_TIME = 15; 
+const CORRECT_BONUS = 5; 
+const WRONG_PENALTY = 5; 
 
 function TrueFalseChainGame() {
     const { user } = useAuth();
@@ -27,7 +28,7 @@ function TrueFalseChainGame() {
     const feedbackTimer = useRef<NodeJS.Timeout>();
 
     const [questions, setQuestions] = useState<Question[]>([]);
-    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished' | 'error'>('loading');
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
@@ -36,6 +37,11 @@ function TrueFalseChainGame() {
     const [isScoreSaved, setIsScoreSaved] = useState(false);
     const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
 
+    // GÖREV MODU PARAMETRELERİ
+    const mode = searchParams.get('mode');
+    const topicId = searchParams.get('topicId');
+    const threshold = parseInt(searchParams.get('threshold') || '500'); // Varsayılan 500
+    const isMission = mode === 'mission';
 
     const gameContext = `Doğru/Yanlış Zinciri - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
     const backUrl = '/oyunlar/dogru-yanlis-zinciri';
@@ -58,11 +64,8 @@ function TrueFalseChainGame() {
         }
     }, [searchParams]);
 
-    useEffect(() => {
-        fetchGameData();
-    }, [fetchGameData]);
+    useEffect(() => { fetchGameData(); }, [fetchGameData]);
     
-    // Timer Logic
     useEffect(() => {
         let timer: NodeJS.Timeout;
         if (gameState === 'playing' && timeLeft > 0) {
@@ -82,7 +85,7 @@ function TrueFalseChainGame() {
 
         if (isCorrect) {
             playSound('correct');
-            const pointsToAdd = 25; // Sabit puan
+            const pointsToAdd = 25; 
             setScore(prev => prev + pointsToAdd);
             setTimeLeft(prev => prev + CORRECT_BONUS);
             setFeedback('correct');
@@ -105,18 +108,47 @@ function TrueFalseChainGame() {
     
     const handleSaveAndExit = async () => {
         if (isSaving || isScoreSaved || !user || score <= 0) {
-            router.push(backUrl);
+            router.push(isMission ? '/student/gorevler' : backUrl);
             return;
         }
+        
         setIsSaving(true);
-        const result = await submitDogruYanlisZinciriScoreAction(user.uid, score, gameContext);
-        if (result.success) {
+
+        try {
+            if (isMission && topicId) {
+                // --- GÖREV MODU KAYDI ---
+                await addDoc(collection(db, 'scoreEvents'), {
+                    userId: user.uid,
+                    points: score,
+                    context: topicId,
+                    gameType: 'dogru-yanlis-zinciri', // GÖREV TİPİ
+                    timestamp: serverTimestamp(),
+                    isMission: true,
+                    completed: score >= threshold
+                });
+
+                if (score >= threshold) {
+                    toast({ title: "Görev Başarılı!", description: "Tebrikler, barajı geçtin.", className: "bg-green-600 text-white" });
+                } else {
+                    toast({ title: "Görev Tamamlanamadı", description: `En az ${threshold} puan gerekli.`, variant: "destructive" });
+                }
+            } else {
+                // --- NORMAL MOD KAYDI ---
+                const result = await submitDogruYanlisZinciriScoreAction(user.uid, score, gameContext);
+                if (result.success) {
+                    toast({ title: 'Başarılı!', description: 'Puanınız kaydedildi.' });
+                } else {
+                    toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+                }
+            }
+            
             setIsScoreSaved(true);
-            toast({ title: 'Başarılı!', description: 'Puanınız kaydedildi.' });
-        } else {
-            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+        } catch (error) {
+            console.error(error);
+            toast({ title: 'Hata', description: "Puan kaydedilemedi.", variant: 'destructive' });
+        } finally {
+            setIsSaving(false);
         }
-        setIsSaving(false);
     };
 
     const handleRestart = () => {
@@ -132,7 +164,7 @@ function TrueFalseChainGame() {
         return <div className="flex h-screen w-full items-center justify-center bg-slate-900"><Loader2 className="h-12 w-12 animate-spin text-green-500" /></div>;
     }
     
-    if (error) {
+    if (gameState === 'error') {
         return (
              <div className="flex h-screen w-full items-center justify-center p-4 bg-slate-950">
                  <div className="text-center space-y-4 max-w-md bg-red-950/50 p-6 rounded-3xl border border-red-500/30">
@@ -140,28 +172,87 @@ function TrueFalseChainGame() {
                     <h3 className="text-xl font-bold text-red-100">Oyun Başlatılamadı</h3>
                     <p className="text-red-200/70">{error}</p>
                      <Button asChild variant="secondary" className="w-full">
-                        <Link href={backUrl}>Geri Dön</Link>
+                        <Link href={isMission ? '/student/gorevler' : backUrl}>Geri Dön</Link>
                     </Button>
                 </div>
             </div>
         );
     }
     
+    // --- BİTİŞ EKRANI ---
     if (gameState === 'finished') {
         return (
-             <GameEndScreen 
-                score={score}
-                onSave={handleSaveAndExit}
-                isSaving={isSaving}
-                scoreSaved={isScoreSaved}
-                onRestart={handleRestart}
-                backUrl={backUrl}
-            />
+            <div className="relative flex items-center justify-center h-screen bg-slate-900">
+                {isMission ? (
+                    // --- GÖREV MODU İÇİN ÖZEL BİTİŞ EKRANI ---
+                    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
+                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
+                            
+                            <div className="mb-6 flex justify-center">
+                                {score >= threshold ? (
+                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
+                                        <Trophy className="h-16 w-16 text-green-600" />
+                                    </div>
+                                ) : (
+                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
+                                        <XOctagon className="h-16 w-16 text-red-500" />
+                                    </div>
+                                )}
+                            </div>
+
+                            <h2 className="text-3xl font-black text-slate-800 mb-2">
+                                {score >= threshold ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ"}
+                            </h2>
+                            
+                            <p className="text-slate-500 mb-6 font-medium">
+                                {score >= threshold 
+                                    ? `Harika! ${score} puanla barajı geçtin.` 
+                                    : `Maalesef ${score} puan aldın. Geçmek için ${threshold} puan gerekli.`}
+                            </p>
+
+                            <div className="space-y-3">
+                                {!isScoreSaved && (
+                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
+                                    </Button>
+                                )}
+                                
+                                {isScoreSaved && score >= threshold && (
+                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
+                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                                    </Button>
+                                )}
+
+                                {(isScoreSaved || score < threshold) && (
+                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 text-lg font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">
+                                        <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
+                                    </Button>
+                                )}
+                                
+                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
+                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    // NORMAL MOD
+                    <GameEndScreen 
+                        score={score} 
+                        onSave={handleSaveAndExit}
+                        isSaving={isSaving}
+                        scoreSaved={isScoreSaved}
+                        onRestart={handleRestart}
+                        backUrl={backUrl}
+                    />
+                )}
+            </div>
         );
     }
 
     const currentQuestion = questions[currentQuestionIndex];
-    const timeProgress = (timeLeft / 60) * 100; // Assuming max time could go up to 60 for progress bar visualization
+    const timeProgress = (timeLeft / 60) * 100;
 
     return (
         <div className="flex flex-col min-h-screen bg-green-950 text-white p-4 items-center justify-center relative overflow-hidden pb-24 md:pb-4">
