@@ -25,11 +25,12 @@ import { QUESTION_TYPES, DIFFICULTY_LEVELS } from "@/lib/game-config";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const steps = [
-  { id: 1, name: "Ders", icon: <Book className="h-5 w-5" /> },
-  { id: 2, name: "Ünite", icon: <Library className="h-5 w-5" /> },
-  { id: 3, name: "Konu", icon: <ListTodo className="h-5 w-5" /> },
-  { id: 4, name: "Ayarlar", icon: <Settings className="h-5 w-5" /> },
-  { id: 5, name: "Başlat", icon: <PartyPopper className="h-5 w-5" /> },
+  { id: 1, name: "Sınıf", icon: <Users className="h-5 w-5" /> },
+  { id: 2, name: "Ders", icon: <Book className="h-5 w-5" /> },
+  { id: 3, name: "Ünite", icon: <Library className="h-5 w-5" /> },
+  { id: 4, name: "Konu", icon: <ListTodo className="h-5 w-5" /> },
+  { id: 5, name: "Ayarlar", icon: <Settings className="h-5 w-5" /> },
+  { id: 6, name: "Başlat", icon: <PartyPopper className="h-5 w-5" /> },
 ];
 
 export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, gameIconName }: { gameConfig: any, gamePath: string, gameName: string, gameIconName: "Megaphone" | "Package" | "Wind" | "Gamepad2" | "UserCog" | "Lightbulb" | "Zap" | "Swords" | "BrainCircuit" | "Trophy" }) {
@@ -43,6 +44,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
     return icons[gameIconName] || Gamepad2;
   }, [gameIconName]);
   
+  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   
   const [courses, setCourses] = useState<Course[]>([]);
@@ -50,6 +52,8 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
   const [topics, setTopics] = useState<Topic[]>([]);
   
   const [selection, setSelection] = useState({
+    classId: "",
+    className: "",
     courseId: "",
     courseName: "",
     unitId: "",
@@ -85,46 +89,15 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
       
       await fetchPlayers();
 
-      if (!user) {
-        setIsLoading(false);
-        return;
-      }
-      
       try {
-        const studentClassName = user.class?.split(' - ')[0];
-
-        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
-        const classesSnapshot = await getDocs(classesQuery);
-        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        
-        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-
-        let finalCourses: Course[] = [];
-
-        if (user.role === 'teacher' || user.role === 'superadmin') {
-            finalCourses = allCourses.map(course => {
-                const courseClass = allClasses.find(c => c.id === course.classId);
-                return {
-                    ...course,
-                    className: courseClass?.name || 'Genel'
-                };
-            });
-        } else {
-            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-            const studentClassId = studentClass?.id;
-            
-            if (studentClassId) { 
-                 finalCourses = allCourses.filter(course => 
-                    course.classId === studentClassId || !course.classId
-                );
-            } else { 
-                finalCourses = allCourses.filter(course => !course.classId);
-            }
-        }
-        setCourses(finalCourses);
+        const [coursesSnapshot, classesSnapshot] = await Promise.all([
+          getDocs(query(collection(db, "courses"), orderBy("title"))),
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
+        ]);
+        setAllCourses(coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
+        setAllClasses(classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
       } catch (error) {
-        console.error("Error fetching filtered courses:", error);
+        console.error("Error fetching initial data: ", error);
       } finally {
         setIsLoading(false);
       }
@@ -150,28 +123,40 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
 
   const handleNext = () => {
     if (currentStep < steps.length) {
-        // "Anlat Bakalım" oyunu için Ayarlar adımını atla
-        if (gamePath === 'anlat-bakalim' && currentStep === 3) {
-            setCurrentStep(5);
+        if (gamePath === 'anlat-bakalim' && currentStep === 4) {
+            setCurrentStep(6); // Skip settings
         } else {
             setCurrentStep(currentStep + 1);
         }
     }
   };
-
   const handleBack = () => {
     if (currentStep > 1) {
-        // "Anlat Bakalım" oyunu için özel geri dönüş mantığı
-        if (gamePath === 'anlat-bakalim' && currentStep === 5) {
-            setCurrentStep(3);
+        if (gamePath === 'anlat-bakalim' && currentStep === 6) {
+            setCurrentStep(4);
         } else {
-            if (currentStep === 2) setSelection(s => ({...s, courseId: '', courseName: ''}));
-            if (currentStep === 3) setSelection(s => ({...s, unitId: '', unitName: ''}));
-            if (currentStep === 4) setSelection(s => ({...s, topicId: '', topicName: ''}));
+            if (currentStep === 2) setSelection(s => ({...s, classId: '', className: ''}));
+            if (currentStep === 3) setSelection(s => ({...s, courseId: '', courseName: ''}));
+            if (currentStep === 4) setSelection(s => ({...s, unitId: '', unitName: ''}));
+            if (currentStep === 5) setSelection(s => ({...s, topicId: '', topicName: ''}));
             setCurrentStep(currentStep - 1);
         }
     }
   };
+
+  const handleSelectClass = async (classId: string, className: string) => {
+    setSelection(prev => ({ ...prev, classId, className, courseId: '', courseName: '', unitId: '', unitName: '', topicId: '' }));
+    
+    const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
+    const isFirstClass = classId === firstClassId;
+    const applicableCourses = allCourses.filter(course => course.isSummerSchool !== true && (course.classId === classId || (!course.classId && isFirstClass)));
+    setCourses(applicableCourses);
+    setUnits([]);
+    setTopics([]);
+    
+    handleNext();
+  };
+
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' }));
@@ -227,20 +212,20 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
   }
   
   const renderContent = () => {
-    if (isLoading && currentStep > 0) {
-        return <div className="flex h-64 items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-400"/></div>
-    }
+    if (isLoading && currentStep > 0) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-400"/></div>
     
     const loadingProp = isDataLoading;
 
     switch(currentStep) {
         case 1:
-            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading} subtitleKey={user?.role === 'teacher' || user?.role === 'superadmin' ? 'className' : undefined}/>;
+            return <SelectionGrid items={allClasses} selectedId={selection.classId} onSelect={handleSelectClass} titleKey="name" isLoading={isLoading} />;
         case 2:
-            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={loadingProp} />;
+            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={loadingProp}/>;
         case 3:
-            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={loadingProp} />;
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={loadingProp} />
         case 4:
+            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={loadingProp} />
+        case 5:
             return (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
                     <Card className="bg-slate-900 border-white/10 shadow-lg">
@@ -303,7 +288,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                     </Card>
                 </div>
             )
-        case 5:
+        case 6:
             const allPlayers = [user?.displayName, ...inGameGuests].filter(Boolean);
             return (
               <div className="w-full max-w-lg mx-auto">
@@ -348,7 +333,6 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden flex flex-col">
         
-        {/* Arka Plan */}
         <div className="fixed inset-0 pointer-events-none z-0">
             <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px]" />
             <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[150px]" />
@@ -359,10 +343,9 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
           <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg">{gameName} Kurulumu</h1>
           <p className="text-slate-400 mt-1">Yarışmanı oluşturmak için adımları takip et.</p>
         </div>
-
-        {/* Stepper */}
+        
         <div className="flex justify-center items-center mb-8 px-4">
-          <div className="relative flex items-center justify-between w-full max-w-2xl">
+          <div className="relative flex items-center justify-between w-full max-w-4xl">
               <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
               <div 
                   className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 -z-10 rounded-full transition-all duration-500 ease-out"
@@ -370,7 +353,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
               ></div>
 
               {steps.map((step) => {
-                  if (gamePath === 'anlat-bakalim' && step.id === 4) return null; // Anlat Bakalım için Ayarlar adımını gizle
+                  if (gamePath === 'anlat-bakalim' && step.id === 5) return null;
                   const isActive = currentStep === step.id;
                   const isCompleted = currentStep > step.id;
                   return (
@@ -410,10 +393,11 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
 
             {currentStep < steps.length && (
                 <Button onClick={handleNext} disabled={
-                    (currentStep === 1 && !selection.courseId) ||
-                    (currentStep === 2 && !selection.unitId) ||
-                    (currentStep === 3 && !selection.topicId) ||
-                    (currentStep === 4 && gamePath !== 'anlat-bakalim' && (inGameGuests.length + 1) === 0)
+                    (currentStep === 1 && !selection.classId) || 
+                    (currentStep === 2 && !selection.courseId) ||
+                    (currentStep === 3 && !selection.unitId) ||
+                    (currentStep === 4 && !selection.topicId) ||
+                    (currentStep === 5 && gamePath !== 'anlat-bakalim' && (inGameGuests.length + (user ? 1 : 0)) === 0)
                 } className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20 px-8">
                     İleri <ArrowRight className="ml-2 h-4 w-4" />
                 </Button> 
