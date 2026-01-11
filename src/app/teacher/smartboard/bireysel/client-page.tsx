@@ -1,23 +1,26 @@
+
 'use client';
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Settings, PartyPopper, Loader2, Users, MonitorPlay } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Settings, PartyPopper, Loader2, Users, MonitorPlay, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Swords, BrainCircuit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
+import { useAuth } from "@/context/auth-context";
 import { SelectionGrid } from "@/components/selection-grid";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { QUESTION_TYPES, DIFFICULTY_LEVELS } from "@/lib/game-config";
-import { useAuth } from "@/context/auth-context";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const steps = [
   { id: 1, name: "Sınıf", icon: <Users className="h-5 w-5" /> },
@@ -28,9 +31,20 @@ const steps = [
   { id: 6, name: "Başlat", icon: <Check className="h-5 w-5" /> },
 ];
 
-export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }) {
+const ICONS = {
+    Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Swords, BrainCircuit
+} as const;
+
+type IconName = keyof typeof ICONS;
+
+
+export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, gameIconName }: { gameConfig: any, gamePath: string, gameName: string, gameIconName: IconName }) {
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDataLoading, setIsDataLoading] = useState(false);
+
+  const GameIcon = ICONS[gameIconName] || Gamepad2;
   
   const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
@@ -98,7 +112,7 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
     
     const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
     const isFirstClass = classId === firstClassId;
-    const applicableCourses = allCourses.filter(course => course.classId === classId || (!course.classId && isFirstClass));
+    const applicableCourses = allCourses.filter(course => course.isSummerSchool !== true && (course.classId === classId || (!course.classId && isFirstClass)));
     setCourses(applicableCourses);
     setUnits([]);
     setTopics([]);
@@ -108,13 +122,13 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' }));
-    setIsLoading(true);
+    setIsDataLoading(true);
     const unitsRef = collection(db, `courses/${courseId}/units`);
     const q = query(unitsRef, orderBy("title"));
     const unitsSnapshot = await getDocs(q);
     setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
     setTopics([]);
-    setIsLoading(false);
+    setIsDataLoading(false);
     handleNext();
   };
 
@@ -124,12 +138,12 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
       setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
       setTopics([]);
     } else {
-      setIsLoading(true);
+      setIsDataLoading(true);
       const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
       const q = query(topicsRef, orderBy("title"));
       const topicsSnapshot = await getDocs(q);
       setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-      setIsLoading(false);
+      setIsDataLoading(false);
     }
     handleNext();
   };
@@ -157,15 +171,16 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
         points: JSON.stringify(settings.points),
         penalty: JSON.stringify(settings.penalty),
     });
-    return `/teacher/smartboard/bireysel/oyun?${params.toString()}`;
+    return `/teacher/smartboard/${gamePath}/oyun?${params.toString()}`;
   }
   
   const renderContent = () => {
      if(isLoading) return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>
+     if(isDataLoading) return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>
      
      switch(currentStep) {
         case 1:
-            return <SelectionGrid items={allClasses} selectedId={selection.classId} onSelect={handleSelectClass} titleKey="name" isLoading={isLoading}/>;
+            return <SelectionGrid items={allClasses} selectedId={selection.classId} onSelect={handleSelectClass} titleKey="name" isLoading={isLoading} />;
         case 2:
             return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading}/>;
         case 3:
@@ -274,178 +289,120 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
             );
         case 6:
             return (
-              <div className="w-full max-w-4xl mx-auto space-y-8">
-                 
-                 {/* Özet Kartı */}
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                     <div className="bg-slate-800/50 p-4 rounded-xl border border-white/5 text-center">
-                         <span className="text-xs text-slate-400 uppercase font-bold mb-1 block">Sınıf</span>
-                         <span className="text-lg font-bold text-white">{selection.className}</span>
-                     </div>
-                     <div className="bg-slate-800/50 p-4 rounded-xl border border-white/5 text-center">
-                         <span className="text-xs text-slate-400 uppercase font-bold mb-1 block">Ders</span>
-                         <span className="text-lg font-bold text-white truncate px-2">{selection.courseName}</span>
-                     </div>
-                     <div className="bg-slate-800/50 p-4 rounded-xl border border-white/5 text-center lg:col-span-2">
-                         <span className="text-xs text-slate-400 uppercase font-bold mb-1 block">Konu</span>
-                         <span className="text-lg font-bold text-white truncate px-2">{selection.topicName}</span>
-                     </div>
-                 </div>
-                 
-                 <div className="bg-slate-900/40 p-6 rounded-2xl border border-white/5">
-                     <h3 className="text-white font-bold mb-4 flex items-center gap-2 text-lg border-b border-white/5 pb-2">
-                        <Settings className="w-5 h-5 text-indigo-400" /> Oyun Ayarları
-                     </h3>
-                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6 text-sm">
-                        <div>
-                            <span className="text-slate-400 block mb-1">Soru Sayısı</span>
-                            <span className="text-white font-bold text-lg">{settings.questionCount}</span>
-                        </div>
-                        <div>
-                            <span className="text-slate-400 block mb-1">Süre</span>
-                            <span className="text-white font-bold text-lg">{settings.questionTimer > 0 ? `${settings.questionTimer} sn` : 'Kapalı'}</span>
-                        </div>
-                         <div>
-                            <span className="text-slate-400 block mb-1">Hedef Puan</span>
-                            <span className="text-white font-bold text-lg">{settings.finishScore > 0 ? settings.finishScore : 'Yok'}</span>
-                        </div>
-                        <div className="col-span-2 md:col-span-3">
-                             <span className="text-slate-400 block mb-1">Zorluk & Tipler</span>
-                             <div className="flex flex-wrap gap-2 mt-1">
-                                 {settings.difficulty.map(d => <span key={d} className="px-2 py-1 bg-red-500/20 text-red-300 rounded text-xs border border-red-500/30">{d}</span>)}
-                                 {settings.questionTypes.map(t => <span key={t} className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs border border-blue-500/30">{QUESTION_TYPES.find(qt => qt.id === t)?.name}</span>)}
-                             </div>
-                        </div>
-                     </div>
-                 </div>
-
-                 <div className="pt-4 flex justify-center">
-                      <Button asChild size="lg" className="w-full md:w-2/3 h-20 text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-[0_0_40px_rgba(16,185,129,0.3)] rounded-2xl transition-all hover:scale-105 active:scale-95 group">
-                        <Link href={getGameUrl()}>
-                            <PartyPopper className="mr-4 h-8 w-8 group-hover:rotate-12 transition-transform" /> YARIŞMAYI BAŞLAT
-                        </Link>
-                      </Button>
-                 </div>
-
-              </div>
-            );
-        default:
-            return null;
-     }
- }
-  
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 sm:p-6 md:p-8 relative overflow-hidden font-sans">
-      
-       {/* Arka Plan Efektleri */}
-       <div className="fixed inset-0 pointer-events-none z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-900/20 rounded-full blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[120px]" />
-      </div>
-
-      <div className="relative z-10 w-full max-w-6xl space-y-8 flex flex-col h-full flex-grow">
-        
-        {/* Başlık Alanı */}
-        <div className="text-center space-y-4 py-4">
-            <div className="inline-flex items-center justify-center p-4 bg-indigo-500/10 rounded-full mb-2 border border-indigo-500/20 shadow-lg shadow-indigo-500/10">
-                <MonitorPlay className="h-10 w-10 text-indigo-400"/>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-black text-white drop-shadow-xl tracking-tight">
-                BİREYSEL YARIŞMA
-            </h1>
-            <p className="text-slate-400 text-lg font-medium">Hızlı, eğlenceli ve rekabetçi bir yarışma başlatın.</p>
-        </div>
-
-        {/* Stepper (Adım Göstergesi) */}
-        <div className="flex justify-center items-center px-4 w-full">
-            <div className="relative flex items-center justify-between w-full max-w-4xl">
-                {/* Bağlantı Çizgisi */}
-                <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
-                <div 
-                    className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 -z-10 rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
-                ></div>
-
-                {steps.map((step, index) => {
-                    const isCompleted = currentStep > step.id;
-                    const isActive = currentStep === step.id;
-                    
-                    return (
-                        <div key={step.id} className="flex flex-col items-center gap-3 group cursor-default">
-                            <div className={cn(
-                                "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 shadow-lg",
-                                isActive 
-                                    ? "bg-slate-900 border-indigo-500 text-indigo-400 scale-110 shadow-indigo-500/50" 
-                                    : isCompleted 
-                                        ? "bg-purple-600 border-purple-600 text-white scale-100" 
-                                        : "bg-slate-900 border-slate-800 text-slate-600"
-                            )}>
-                                {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
-                            </div>
-                            <span className={cn(
-                                "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
-                                isActive ? "text-indigo-400" : isCompleted ? "text-purple-500" : "text-slate-600"
-                            )}>
-                                {step.name}
-                            </span>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-
-        {/* Ana İçerik Kartı */}
-        <div className="mt-8 flex-grow flex flex-col">
-             <div className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col flex-grow min-h-[500px]">
-                <div className="p-6 md:p-8 border-b border-white/5 bg-slate-900/50 flex items-center justify-between">
-                     <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                        <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-lg">
-                            {currentStep}
-                        </span>
-                        {steps.find(s => s.id === currentStep)?.name}
-                     </h2>
-                     {isLoading && <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />}
-                </div>
-
-                <div className="flex-grow p-6 md:p-10 flex items-center justify-center bg-slate-950/30 overflow-y-auto">
-                     {renderContent()}
-                </div>
-
-                <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
-                    {currentStep === 1 ? (
-                        <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10 h-14 px-8 rounded-xl text-lg">
-                            <Link href="/teacher/smartboard">
-                                <ArrowLeft className="mr-2 h-5 w-5" /> Menüye Dön
+              <div className="w-full max-w-lg mx-auto">
+                 <Card className="bg-slate-900 border-white/10 overflow-hidden shadow-2xl">
+                    <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-1"></div>
+                    <CardHeader className="text-center pb-2">
+                         <PartyPopper className="h-12 w-12 text-yellow-400 mx-auto mb-2 drop-shadow-md"/>
+                         <CardTitle className="text-2xl text-white">Yarışma Özeti</CardTitle>
+                         <CardDescription className="text-slate-400">Her şey hazır, mücadele başlasın!</CardDescription>
+                    </CardHeader>
+                     <CardContent className="space-y-6 pt-4">
+                         <div className="space-y-2 text-sm text-slate-300">
+                             <div className="flex justify-between border-b border-white/5 pb-2"><span>Sınıf:</span> <span className="text-white font-medium">{selection.className}</span></div>
+                             <div className="flex justify-between border-b border-white/5 pb-2"><span>Ders:</span> <span className="text-white font-medium">{selection.courseName}</span></div>
+                             <div className="flex justify-between border-b border-white/5 pb-2"><span>Ünite:</span> <span className="text-white font-medium">{selection.unitName}</span></div>
+                             <div className="flex justify-between"><span>Konu:</span> <span className="text-white font-medium">{selection.topicName}</span></div>
+                         </div>
+                     </CardContent>
+                     <CardFooter>
+                        <Button asChild className="w-full h-16 text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                            <Link href={getGameUrl()}>
+                                <PartyPopper className="mr-3 h-6 w-6"/> Yarışmayı Başlat
                             </Link>
                         </Button>
-                    ) : (
-                        <Button 
-                            variant="outline" 
-                            onClick={handleBack}
-                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-14 px-8 rounded-xl text-lg bg-transparent"
-                        >
-                            <ArrowLeft className="mr-2 h-5 w-5" /> Geri
-                        </Button>
-                    )}
-                    
-                    {currentStep < steps.length && (
-                         <Button 
-                            onClick={handleNext} 
-                            disabled={
-                                (currentStep === 1 && !selection.classId) || 
-                                (currentStep === 2 && !selection.courseId) ||
-                                (currentStep === 3 && !selection.unitId) ||
-                                (currentStep === 4 && !selection.topicId)
-                            }
-                            className="bg-indigo-600 hover:bg-indigo-500 text-white h-14 px-8 rounded-xl text-lg shadow-lg shadow-indigo-900/20 transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
-                        >
-                            İleri <ArrowRight className="ml-2 h-5 w-5" />
-                        </Button>
-                    )}
-                </div>
-            </div>
+                     </CardFooter>
+                 </Card>
+              </div>
+            );
+        default: return null;
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden flex flex-col">
+        
+        {/* Arka Plan */}
+        <div className="fixed inset-0 pointer-events-none z-0">
+            <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
+            <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
         </div>
 
+      <div className="max-w-5xl mx-auto w-full relative z-10 flex-grow flex flex-col">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg flex items-center justify-center gap-3">
+              <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
+                  <GameIcon className="h-8 w-8 text-purple-400" />
+              </div>
+              {gameName} Kurulumu
+          </h1>
+          <p className="text-slate-400 mt-1">Yarışmayı başlatmak için adımları takip edin.</p>
+        </div>
+        
+         {/* Stepper */}
+        <div className="flex justify-center items-center mb-8 px-4">
+          <div className="relative flex items-center justify-between w-full max-w-4xl">
+              <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
+              <div 
+                  className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-500 -z-10 rounded-full transition-all duration-500 ease-out"
+                  style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+              ></div>
+
+              {steps.map((step, index) => {
+                  const isActive = currentStep >= step.id;
+                  const isCurrent = currentStep === step.id;
+                  return (
+                    <div key={step.id} className="flex flex-col items-center gap-3 group cursor-default">
+                        <div className={cn(
+                          "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 shadow-lg",
+                          isCurrent 
+                              ? "bg-slate-900 border-purple-500 text-purple-400 scale-110 shadow-purple-500/50" 
+                              : isActive 
+                                  ? "bg-indigo-600 border-indigo-600 text-white scale-100" 
+                                  : "bg-slate-900 border-slate-800 text-slate-600"
+                        )}>
+                          {isActive && !isCurrent ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
+                        </div>
+                        <span className={cn(
+                            "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
+                            isCurrent ? "text-purple-400" : isActive ? "text-indigo-500" : "text-slate-600"
+                        )}>
+                            {step.name}
+                        </span>
+                    </div>
+                  )
+              })}
+          </div>
+        </div>
+
+        <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex-grow flex flex-col overflow-hidden">
+          <CardHeader className="border-b border-white/5 pb-4">
+            <CardTitle className="text-xl text-white">{steps.find(s => s.id === currentStep)?.name}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow flex justify-center items-start p-6 overflow-y-auto min-h-[400px]">
+             {renderContent()}
+          </CardContent>
+          <CardFooter className="flex justify-between p-6 border-t border-white/5 bg-slate-900/50">
+            {currentStep === 1 ? (
+                <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10">
+                    <Link href="/teacher/smartboard"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
+                </Button>
+            ) : (
+                <Button variant="ghost" onClick={handleBack} className="text-slate-400 hover:text-white hover:bg-white/10"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
+            )}
+
+            {currentStep < steps.length && (
+                <Button onClick={handleNext} disabled={
+                    (currentStep === 1 && !selection.classId) || 
+                    (currentStep === 2 && !selection.courseId) ||
+                    (currentStep === 3 && !selection.unitId) ||
+                    (currentStep === 4 && !selection.topicId)
+                } className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20 px-8">
+                    İleri <ArrowRight className="ml-2 h-4 w-4" />
+                </Button> 
+            )}
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
