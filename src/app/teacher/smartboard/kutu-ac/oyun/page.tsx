@@ -1,9 +1,9 @@
 
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
+import { useState, useEffect, useCallback, Suspense, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { getTornadoGameQuestions } from '@/app/teacher/smartboard/tornado/actions'; // Use the same action
+import { getKutuAcQuestionsAction } from '../actions';
 import type { Question } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft, Package, Users, Trophy, Crown, Zap, XOctagon, CheckCheck } from 'lucide-react';
@@ -11,15 +11,25 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { QuestionDialog } from '@/components/question-dialog';
+import { GameEndScreen } from '@/components/game-end-screen';
+import { Badge } from "@/components/ui/badge";
 
-// Define the content of special boxes
-const ozelKutular: KutuIcerik[] = [
-    { type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#a0aec0', ikon: '⚪' },
-    { type: 'odul', mesaj: '⭐ +15 Puan!', puan: 15, renk: '#ecc94b', ikon: '⭐' },
-    { type: 'odul', mesaj: '🌟 +25 Puan!', puan: 25, renk: '#ecc94b', ikon: '🌟' },
-    { type: 'ceza', mesaj: '❗ -10 Puan!', puan: -10, renk: '#f56565', ikon: '❗' },
-    { type: 'ceza', mesaj: '💥 -20 Puan!', puan: -20, renk: '#f56565', ikon: '💥' },
-    { type: 'ekstra', mesaj: '🔄 Tekrar Oyna!', efekt: 'TEKRAR_OYNA', renk: '#4fd1c5', ikon: '🔄' },
+// Soruları karıştıran yardımcı fonksiyon
+const shuffleArray = <T,>(array: T[]): T[] => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+};
+
+// Takım Renk ve İsim Ayarları
+const TEAMS = [
+    { name: 'A Takımı', short: 'A', color: 'text-red-400', border: 'border-red-500', bg: 'bg-red-500/20', from: 'from-red-600', to: 'to-orange-600', shadow: 'shadow-red-500/40' },
+    { name: 'B Takımı', short: 'B', color: 'text-blue-400', border: 'border-blue-500', bg: 'bg-blue-500/20', from: 'from-blue-600', to: 'to-cyan-600', shadow: 'shadow-blue-500/40' },
+    { name: 'C Takımı', short: 'C', color: 'text-emerald-400', border: 'border-emerald-500', bg: 'bg-emerald-500/20', from: 'from-emerald-600', to: 'to-green-600', shadow: 'shadow-emerald-500/40' },
+    { name: 'D Takımı', short: 'D', color: 'text-yellow-400', border: 'border-yellow-500', bg: 'bg-yellow-500/20', from: 'from-yellow-600', to: 'to-amber-600', shadow: 'shadow-yellow-500/40' },
 ];
 
 type KutuIcerik =
@@ -33,31 +43,42 @@ type Player = {
     id: number;
     name: string;
     score: number;
-    teamConfig?: { color: string; from: string; to: string; };
+    teamConfig?: typeof TEAMS[0];
 };
 
 function KutuAcGame() {
-    const searchParams = useSearchParams();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { toast } = useToast();
     
+    // Oyun Durumları
     const [players, setPlayers] = useState<Player[]>([]);
     const [activePlayerIndex, setActivePlayerIndex] = useState(0);
     const [kutuIcerikleri, setKutuIcerikleri] = useState<KutuIcerik[]>([]);
     const [openedBoxes, setOpenedBoxes] = useState<Set<number>>(new Set());
     const [openedQuestion, setOpenedQuestion] = useState<{ number: number; question: Question } | null>(null);
-    
+
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isFinished, setIsFinished] = useState(false);
     
     const [mesaj, setMesaj] = useState<{metin: string, renk: string} | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const teamCount = parseInt(searchParams.get('teamCount') || '1', 10);
     const backUrl = "/teacher/smartboard/kutu-ac";
 
-    const fetchAndSetupGame = useCallback(async () => {
+    const ozelKutular: KutuIcerik[] = [
+        { type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#a0aec0', ikon: '⚪' },
+        { type: 'odul', mesaj: '⭐ +15 Puan!', puan: 15, renk: '#ecc94b', ikon: '⭐' },
+        { type: 'odul', mesaj: '🌟 +25 Puan!', puan: 25, renk: '#ecc94b', ikon: '🌟' },
+        { type: 'ceza', mesaj: '❗ -10 Puan!', puan: -10, renk: '#f56565', ikon: '❗' },
+        { type: 'ceza', mesaj: '💥 -20 Puan!', puan: -20, renk: '#f56565', ikon: '💥' },
+        { type: 'ekstra', mesaj: '🔄 Tekrar Oyna!', efekt: 'TEKRAR_OYNA', renk: '#4fd1c5', ikon: '🔄' },
+    ];
+
+    const fetchQuestions = useCallback(async () => {
         setIsLoading(true);
         setError(null);
         
@@ -65,8 +86,9 @@ function KutuAcGame() {
             courseId: searchParams.get('courseId') || undefined,
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
+            // NO questionCount limit here to fetch all
         };
-        const result = await getTornadoGameQuestions(params);
+        const result = await getKutuAcQuestionsAction(params);
 
         if (result.error || result.questions.length === 0) {
             setError(result.error || "Bu konu için soru bulunamadı.");
@@ -75,40 +97,31 @@ function KutuAcGame() {
         }
 
         const sorular: KutuIcerik[] = result.questions.map(q => ({ type: 'soru', data: q }));
-        const ozelKutuSayisi = Math.floor(sorular.length / 3);
+        const ozelKutuSayisi = Math.floor(sorular.length / 4); // %25 oranında özel kutu
         const specialBoxesToAdd = [...ozelKutular].sort(() => 0.5 - Math.random()).slice(0, ozelKutuSayisi);
         
         let icerikHavuzu: KutuIcerik[] = [...sorular, ...specialBoxesToAdd];
-        setKutuIcerikleri(icerikHavuzu.sort(() => Math.random() - 0.5));
+        setKutuIcerikleri(shuffleArray(icerikHavuzu));
         
-        // Setup players
-        const teamConfigs = [
-            { color: 'text-blue-400', from: 'from-blue-600', to: 'to-cyan-600' },
-            { color: 'text-red-400', from: 'from-red-600', to: 'to-orange-600' },
-            { color: 'text-emerald-400', from: 'from-emerald-600', to: 'to-green-600' },
-            { color: 'text-yellow-400', from: 'from-yellow-600', to: 'to-amber-600' },
-        ];
         const newPlayers: Player[] = Array.from({ length: teamCount }, (_, i) => ({
             id: i + 1,
             name: teamCount === 1 ? 'Oyuncu' : `${String.fromCharCode(65 + i)} Takımı`,
             score: 0,
-            teamConfig: teamConfigs[i % teamConfigs.length]
+            teamConfig: TEAMS[i % TEAMS.length]
         }));
         setPlayers(newPlayers);
-
-        // Reset game state
+        
         setActivePlayerIndex(0);
         setOpenedBoxes(new Set());
         setOpenedQuestion(null);
         setIsFinished(false);
         setMesaj(null);
         setIsLoading(false);
-
     }, [searchParams, teamCount]);
 
     useEffect(() => {
-        fetchAndSetupGame();
-    }, [fetchAndSetupGame]);
+        fetchQuestions();
+    }, [fetchQuestions]);
 
     const handleNextTurn = useCallback((repeatTurn = false) => {
         if (repeatTurn) {
@@ -116,13 +129,12 @@ function KutuAcGame() {
         } else {
             setActivePlayerIndex(prev => (prev + 1) % players.length);
         }
-        setIsLoading(false); // Enable box clicks again
-    }, [activePlayerIndex, players.length, toast]);
+        setIsProcessing(false);
+    }, [activePlayerIndex, players, toast]);
 
     const applySpecialBoxEffect = useCallback((content: KutuIcerik) => {
-        const activePlayer = players[activePlayerIndex];
         setMesaj({ metin: content.mesaj, renk: content.renk });
-
+        
         if ('puan' in content && content.puan !== 0) {
             setPlayers(prev => prev.map((p, index) => 
                 index === activePlayerIndex ? { ...p, score: Math.max(0, p.score + content.puan) } : p
@@ -134,16 +146,16 @@ function KutuAcGame() {
             handleNextTurn('efekt' in content && content.efekt === 'TEKRAR_OYNA');
         }, 1500);
     }, [players, activePlayerIndex, handleNextTurn]);
-    
+
     const handleBoxClick = (boxIndex: number) => {
-        if (isLoading || openedBoxes.has(boxIndex)) return;
+        if (isProcessing || openedBoxes.has(boxIndex + 1)) return;
         
-        setIsLoading(true); // Disable clicks
+        setIsProcessing(true);
         const content = kutuIcerikleri[boxIndex];
-        setOpenedBoxes(prev => new Set(prev).add(boxIndex));
+        setOpenedBoxes(prev => new Set(prev).add(boxIndex + 1));
 
         if (content.type === 'soru') {
-            setOpenedQuestion({ number: boxIndex, question: content.data });
+            setOpenedQuestion({ number: boxIndex + 1, question: content.data });
         } else {
             applySpecialBoxEffect(content);
         }
@@ -158,30 +170,21 @@ function KutuAcGame() {
         }
         handleNextTurn();
     };
-    
+
     useEffect(() => {
-        if (!isLoading && kutuIcerikleri.length > 0 && openedBoxes.size === kutuIcerikleri.length) {
+        if (!isLoading && kutuIcerikleri.length > 0 && openedBoxes.size >= kutuIcerikleri.length) {
             setIsFinished(true);
         }
     }, [openedBoxes, kutuIcerikleri, isLoading]);
-
-
-    // --- RENDER ---
-    if (isLoading && !openedQuestion) return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>;
+    
+    if (isLoading) return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>;
     if (error) return <div className="text-center p-8 text-red-400">{error}</div>;
 
     const activePlayer = players[activePlayerIndex];
     const timerDuration = openedQuestion?.question.type === 'Doğru/Yanlış' ? 10 : 20;
 
     return (
-         <div ref={mainContentRef} className="flex flex-col h-screen bg-slate-950 text-white overflow-hidden p-4 gap-4 relative">
-             {/* Arka Plan */}
-             <div className="absolute inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px]" />
-            </div>
-
-             {/* Header */}
+        <div ref={mainContentRef} className="flex flex-col h-screen bg-slate-950 text-white overflow-hidden p-4 gap-4 relative">
              <header className="flex-shrink-0 flex items-center justify-between z-10 bg-slate-900/60 backdrop-blur-md border border-white/5 p-3 rounded-2xl">
                  <div className="flex items-center gap-3">
                      <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg"><Package className="h-5 w-5"/></div>
@@ -194,9 +197,7 @@ function KutuAcGame() {
                  </div>
              </header>
 
-             {/* Ana İçerik */}
              <main className="flex-grow grid lg:grid-cols-4 gap-4 min-h-0">
-                 {/* Player Scores */}
                  <div className="lg:col-span-1 grid grid-cols-2 lg:grid-cols-1 gap-4 auto-rows-fr">
                      {players.map((p, i) => {
                          const isActive = i === activePlayerIndex;
@@ -210,30 +211,27 @@ function KutuAcGame() {
                      })}
                  </div>
 
-                 {/* Game Grid */}
                  <div className="lg:col-span-3 bg-black/30 p-4 rounded-xl border border-white/5">
-                     <div className="grid grid-cols-6 gap-3 h-full">
-                         {kutuIcerikleri.map((_, i) => (
-                             <button
-                                key={i}
-                                onClick={() => handleBoxClick(i)}
-                                disabled={openedBoxes.has(i) || isLoading}
-                                className={cn(
-                                    "aspect-square rounded-lg flex items-center justify-center text-2xl font-black text-white transition-all duration-300 transform",
-                                    openedBoxes.has(i) 
-                                        ? "bg-slate-800/50 text-slate-600 border border-slate-700 cursor-not-allowed scale-95" 
-                                        : "bg-gradient-to-br from-indigo-500 to-purple-600 border-b-4 border-indigo-800 hover:-translate-y-1 active:translate-y-0 active:border-b-0 shadow-lg"
-                                )}
-                             >
-                                 {openedBoxes.has(i) ? <CheckCheck className="h-8 w-8 text-green-500/50" /> : i + 1}
-                             </button>
-                         ))}
+                     <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 h-full">
+                         {kutuIcerikleri.map((_, i) => {
+                             const kutucukNo = i + 1;
+                             const isOpened = openedBoxes.has(kutucukNo);
+                             return (
+                                 <button
+                                    key={kutucukNo}
+                                    onClick={() => handleBoxClick(i)}
+                                    disabled={isOpened || isLoading}
+                                    className={cn("aspect-square rounded-lg flex items-center justify-center text-2xl font-black text-white transition-all duration-300 transform", isOpened ? "bg-slate-800/50 text-slate-600 border border-slate-700 cursor-not-allowed scale-95" : "bg-gradient-to-br from-indigo-500 to-purple-600 border-b-4 border-indigo-800 hover:-translate-y-1 active:translate-y-0 active:border-b-0 shadow-lg")}
+                                >
+                                    {isOpened ? <CheckCheck className="h-8 w-8 text-green-500/50" /> : kutucukNo}
+                                </button>
+                             )
+                         })}
                      </div>
                  </div>
              </main>
-             
-            {/* Mesaj Dialogu */}
-             {mesaj && (
+
+            {mesaj && (
                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in">
                      <div className="text-center p-8 rounded-2xl" style={{ backgroundColor: `${mesaj.renk}80` }}>
                          <div className="text-8xl" dangerouslySetInnerHTML={{ __html: mesaj.ikon }} />
@@ -242,34 +240,33 @@ function KutuAcGame() {
                  </div>
             )}
             
-            {/* Soru Dialogu */}
             {openedQuestion && (
                 <QuestionDialog
-                    isFullscreen={isFullscreen}
+                    isFullscreen={false}
                     isOpen={!!openedQuestion}
                     onClose={() => { setOpenedQuestion(null); handleNextTurn(); }}
                     questionData={openedQuestion}
                     onAnswer={handleAnswerQuestion}
-                    timerDuration={timerDuration}
+                    timerDuration={15}
                     pointsConfig={{ default: { points: 10 }}}
                     showCorrectAnswerOnWrong={true}
                 />
             )}
             
-            {/* Oyun Bitiş Ekranı */}
             {isFinished && (
                 <GameEndScreen
-                    score={players.length === 1 ? players[0].score : Math.max(...players.map(p => p.score))}
-                    onRestart={fetchAndSetupGame}
+                    score={Math.max(...players.map(p => p.score))}
+                    onRestart={fetchQuestions}
                     backUrl={backUrl}
-                    onSave={() => {}} // Not applicable for teacher-led game
-                    isSaving={false} // Not applicable
+                    onSave={() => {}}
+                    isSaving={false}
+                    scoreSaved={true}
                 />
             )}
         </div>
     );
 }
 
-export default function KutuAcOyunPageWrapper() {
+export default function SmartboardKutuAcOyunPageWrapper() {
     return <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-slate-950"><Loader2 className="w-16 h-16 animate-spin text-purple-500"/></div>}><KutuAcGame/></Suspense>
 }

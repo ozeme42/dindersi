@@ -35,20 +35,13 @@ export async function getTornadoGameQuestions(
         
         const result = await getQuestionsFromBank(params);
         
-        if (result.error) {
-             return { questions: [], error: result.error };
+        if (result.error || result.questions.length === 0) {
+             return { questions: [], error: result.error || "Bu konu için soru bulunamadı." };
         }
         
-        // Shuffle options for each question to ensure randomness in the game
-        const questionsWithShuffledOptions = (result.questions as Question[]).map(question => {
-            if ((question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
-                const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
-                return { ...question, options: shuffledOptions };
-            }
-            return question;
-        });
+        const shuffledQuestions = [...result.questions].sort(() => Math.random() - 0.5);
 
-        return { questions: questionsWithShuffledOptions };
+        return { questions: shuffledQuestions as Question[] };
         
     } catch (e: any) {
         console.error("Error getting Tornado questions:", e);
