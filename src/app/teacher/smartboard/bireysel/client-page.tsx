@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -6,16 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Settings, PartyPopper, Loader2, Users, UserPlus, Trophy, User, Megaphone, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Swords, BrainCircuit } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Settings, PartyPopper, Loader2, Users, UserPlus, Trophy, User, Megaphone, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Swords, BrainCircuit, Puzzle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { useAuth } from "@/context/auth-context";
 import { SelectionGrid } from "@/components/selection-grid";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { getGuestPlayers, saveGuestPlayers } from "@/app/teacher/smartboard/ayarlar/actions";
 import { Slider } from "@/components/ui/slider";
@@ -33,14 +29,14 @@ const steps = [
   { id: 6, name: "Başlat", icon: <PartyPopper className="h-5 w-5" /> },
 ];
 
-export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, gameIconName }: { gameConfig: any, gamePath: string, gameName: string, gameIconName: "Megaphone" | "Package" | "Wind" | "Gamepad2" | "UserCog" | "Lightbulb" | "Zap" | "Swords" | "BrainCircuit" | "Trophy" }) {
+export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, gameIconName }: { gameConfig: any, gamePath: string, gameName: string, gameIconName: "Megaphone" | "Package" | "Wind" | "Gamepad2" | "UserCog" | "Lightbulb" | "Zap" | "Swords" | "BrainCircuit" | "Trophy" | "Puzzle" }) {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isDataLoading, setIsDataLoading] = useState(false);
   
   const GameIcon = useMemo(() => {
-    const icons = { Megaphone, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Swords, BrainCircuit, Trophy };
+    const icons = { Megaphone, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Swords, BrainCircuit, Trophy, Puzzle };
     return icons[gameIconName] || Gamepad2;
   }, [gameIconName]);
   
@@ -130,6 +126,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
         }
     }
   };
+  
   const handleBack = () => {
     if (currentStep > 1) {
         if (gamePath === 'anlat-bakalim' && currentStep === 6) {
@@ -156,7 +153,6 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
     
     handleNext();
   };
-
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' }));
@@ -262,15 +258,6 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                                     )}
                                 </div>
                             </ScrollArea>
-                             <form onSubmit={handleAddGuestPlayer} className="flex gap-2">
-                                <Input
-                                    placeholder="Yeni misafir adı..."
-                                    value={newGuestName}
-                                    onChange={(e) => setNewGuestName(e.target.value)}
-                                    className="bg-slate-950 border-white/10 text-white h-9 text-xs"
-                                />
-                                <Button type="submit" size="icon" className="h-9 w-9 bg-purple-600 hover:bg-purple-500 text-white"><UserPlus className="h-4 w-4" /></Button>
-                            </form>
                         </CardContent>
                     </Card>
                     <Card className="bg-slate-900 border-white/10 shadow-lg">
@@ -307,7 +294,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                          </div>
                          
                          <div className="bg-slate-950 p-4 rounded-xl border border-white/5">
-                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">YARIŞMACILAR</p>
+                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">YARIŞMACILAR ({allPlayers.length})</p>
                              <div className="flex flex-wrap gap-2">
                                  {allPlayers.map((p, i) => (
                                      <span key={i} className="px-2 py-1 bg-white/10 rounded text-xs text-white border border-white/10">{p}</span>
@@ -318,7 +305,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                     <CardFooter>
                         <Button asChild className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-lg font-bold">
                             <Link href={getGameUrl()}>
-                                <PartyPopper className="mr-2 h-5 w-5" /> Yarışmayı Başlat
+                                <PartyPopper className="mr-2 h-5 w-5"/> Yarışmayı Başlat
                             </Link>
                         </Button>
                     </CardFooter>
@@ -408,3 +395,49 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
     </div>
   );
 }
+
+```
+- tsconfig.json:
+```json
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+```

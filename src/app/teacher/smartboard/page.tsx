@@ -1,11 +1,10 @@
-
 'use client';
 
 import Link from 'next/link';
 import React, { type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
-  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Megaphone 
+  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Megaphone, Puzzle 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -133,6 +132,14 @@ export default function SmartboardPage() {
             icon: <Megaphone />,
             colorClass: "bg-orange-600 border-orange-800 hover:bg-orange-500",
         },
+         {
+            key: 'anagram_duvari',
+            href: "/teacher/smartboard/anagram-duvari",
+            title: "Anagram Duvarı",
+            description: "Karışık harflerden doğru kelimeleri bulun.",
+            icon: <Puzzle />,
+            colorClass: "bg-pink-600 border-pink-800 hover:bg-pink-500",
+        },
     ];
     
     // Sunum & Araç Modları
@@ -201,7 +208,7 @@ export default function SmartboardPage() {
                 <p className="text-slate-400 text-lg md:text-xl font-medium max-w-2xl mx-auto">Sınıf içi etkileşimi artırmak için bir mod seçin.</p>
             </div>
             
-            <div className="w-full max-w-[1400px] space-y-10 relative z-10">
+            <div className="w-full max-w-[1600px] space-y-10 relative z-10">
                 
                 {/* Yarışmalar Bölümü */}
                 <section>
@@ -214,7 +221,7 @@ export default function SmartboardPage() {
                         <div className="h-px w-10 bg-gradient-to-l from-transparent to-indigo-500"></div>
                     </h2>
                     {/* GÜNCELLEME: Grid gap azaltıldı (gap-8 -> gap-5) */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
                         {yarışmalar.map(({ key, ...buttonProps }) => (
                             // GÜNCELLEME: Min yükseklik 380px -> 240px'e düşürüldü
                             <div key={key} className="aspect-[4/5] min-h-[240px]">
@@ -233,7 +240,7 @@ export default function SmartboardPage() {
                         </span>
                         <div className="h-px w-10 bg-gradient-to-l from-transparent to-rose-500"></div>
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
                         {sunumlar.map(({ key, ...buttonProps }) => (
                             <div key={key} className="aspect-[4/5] min-h-[240px]">
                                 <SmartboardCard {...buttonProps} />
