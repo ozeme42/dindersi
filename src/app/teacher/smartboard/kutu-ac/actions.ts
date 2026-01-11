@@ -22,7 +22,7 @@ import type { Question } from '@/lib/types';
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
 
 export async function getKutuAcQuestionsAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { courseId, unitId, topicId, questionCount }: { courseId?: string; unitId?: string; topicId?: string; questionCount?: number }
 ): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
@@ -30,7 +30,7 @@ export async function getKutuAcQuestionsAction(
             courseId,
             unitId,
             topicId,
-            // questionCount limit is removed to fetch all questions
+            questionCount: questionCount, // Use the passed count
             difficulty: ['Kolay', 'Orta', 'Zor'],
             questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış'],
         };
@@ -92,4 +92,3 @@ export async function submitKutuAcScoreAction(userId: string | null, score: numb
         return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
     }
 }
-

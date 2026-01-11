@@ -2,19 +2,17 @@
 'use client';
 
 import { Suspense } from 'react';
-import { Loader2, Package } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { SmartboardBireyselClientPage } from '../bireysel/client-page';
 import { DEFAULT_GAME_SETTINGS } from '@/lib/game-config';
 
-// Bu sayfa artık standart akıllı tahta kurulumunu kullanacak.
-// Gerekli oyun adı, ikonu ve yolu prop olarak geçirilecek.
 function SmartboardKutuAcSetupPage() {
     return (
         <SmartboardBireyselClientPage 
             gameName="Kutu Aç"
             gamePath="kutu-ac"
             gameIconName="Package"
-            gameConfig={DEFAULT_GAME_SETTINGS.teacherBireysel} // Şimdilik bireysel ayarları kullanabiliriz.
+            gameConfig={DEFAULT_GAME_SETTINGS.teacherBireysel}
         />
     );
 }

@@ -152,7 +152,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
     setSelection(prev => ({...prev, topicId, topicName}));
     handleNext();
   };
-
+  
   const getGameUrl = () => {
     const params = new URLSearchParams({
         courseId: selection.courseId,
@@ -175,18 +175,19 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
   }
   
   const renderContent = () => {
-     if(isLoading) return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>
-     if(isDataLoading) return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>
-     
-     switch(currentStep) {
+    if (isLoading && currentStep > 0) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>
+    
+    const loadingProp = isDataLoading;
+
+    switch(currentStep) {
         case 1:
             return <SelectionGrid items={allClasses} selectedId={selection.classId} onSelect={handleSelectClass} titleKey="name" isLoading={isLoading} />;
         case 2:
-            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading}/>;
+            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={loadingProp}/>;
         case 3:
-            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={isLoading}/>;
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={loadingProp} />
         case 4:
-            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={isLoading}/>;
+            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={loadingProp} />
         case 5:
             const handleDifficultyChange = (type: string) => {
                 setSettings(prev => {
@@ -301,7 +302,6 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                          <div className="space-y-2 text-sm text-slate-300">
                              <div className="flex justify-between border-b border-white/5 pb-2"><span>Sınıf:</span> <span className="text-white font-medium">{selection.className}</span></div>
                              <div className="flex justify-between border-b border-white/5 pb-2"><span>Ders:</span> <span className="text-white font-medium">{selection.courseName}</span></div>
-                             <div className="flex justify-between border-b border-white/5 pb-2"><span>Ünite:</span> <span className="text-white font-medium">{selection.unitName}</span></div>
                              <div className="flex justify-between"><span>Konu:</span> <span className="text-white font-medium">{selection.topicName}</span></div>
                          </div>
                      </CardContent>
@@ -311,7 +311,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
                                 <PartyPopper className="mr-3 h-6 w-6"/> Yarışmayı Başlat
                             </Link>
                         </Button>
-                     </CardFooter>
+                    </CardFooter>
                  </Card>
               </div>
             );
@@ -320,15 +320,15 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden flex flex-col">
-        
-        {/* Arka Plan */}
-        <div className="fixed inset-0 pointer-events-none z-0">
-            <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
-            <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
-        </div>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 sm:p-6 md:p-8 relative overflow-hidden font-sans">
+      
+       {/* Arka Plan Efektleri */}
+       <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
+      </div>
 
-      <div className="max-w-5xl mx-auto w-full relative z-10 flex-grow flex flex-col">
+      <div className="relative z-10 w-full max-w-6xl space-y-8 flex flex-col h-full flex-grow">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg flex items-center justify-center gap-3">
               <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
@@ -339,9 +339,9 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
           <p className="text-slate-400 mt-1">Yarışmayı başlatmak için adımları takip edin.</p>
         </div>
         
-         {/* Stepper */}
-        <div className="flex justify-center items-center mb-8 px-4">
-          <div className="relative flex items-center justify-between w-full max-w-4xl">
+        {/* Stepper */}
+        <div className="flex justify-center items-center px-4 w-full mb-8">
+          <div className="relative flex items-center justify-between w-full max-w-5xl">
               <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
               <div 
                   className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-500 -z-10 rounded-full transition-all duration-500 ease-out"
@@ -349,23 +349,23 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
               ></div>
 
               {steps.map((step, index) => {
-                  const isActive = currentStep >= step.id;
-                  const isCurrent = currentStep === step.id;
+                  const isActive = currentStep === step.id;
+                  const isCompleted = currentStep > step.id;
                   return (
                     <div key={step.id} className="flex flex-col items-center gap-3 group cursor-default">
                         <div className={cn(
                           "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 shadow-lg",
-                          isCurrent 
+                          isActive 
                               ? "bg-slate-900 border-purple-500 text-purple-400 scale-110 shadow-purple-500/50" 
-                              : isActive 
+                              : isCompleted 
                                   ? "bg-indigo-600 border-indigo-600 text-white scale-100" 
                                   : "bg-slate-900 border-slate-800 text-slate-600"
                         )}>
-                          {isActive && !isCurrent ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
+                          {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
                         </div>
                         <span className={cn(
                             "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
-                            isCurrent ? "text-purple-400" : isActive ? "text-indigo-500" : "text-slate-600"
+                            isActive ? "text-purple-400" : isCompleted ? "text-indigo-500" : "text-slate-600"
                         )}>
                             {step.name}
                         </span>
@@ -393,7 +393,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gamePath, gameName, g
 
             {currentStep < steps.length && (
                 <Button onClick={handleNext} disabled={
-                    (currentStep === 1 && !selection.classId) || 
+                    (currentStep === 1 && !selection.classId) ||
                     (currentStep === 2 && !selection.courseId) ||
                     (currentStep === 3 && !selection.unitId) ||
                     (currentStep === 4 && !selection.topicId)
