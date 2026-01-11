@@ -80,7 +80,7 @@ export default function SmartboardPage() {
         {
             key: 'smartboard_duello',
             href: "/teacher/smartboard/duello",
-            title: "Düello",
+            title: "Tırmanma Yarışı",
             description: "İki öğrenciyi veya takımı doğrudan karşılaştırın.",
             icon: <Swords />,
             colorClass: "bg-red-600 border-red-800 hover:bg-red-500",
@@ -92,6 +92,14 @@ export default function SmartboardPage() {
             description: "Hızlı tempolu bilgi ve refleks yarışması.",
             icon: <BrainCircuit />,
             colorClass: "bg-fuchsia-600 border-fuchsia-800 hover:bg-fuchsia-500",
+        },
+        {
+            key: 'hizli_buton',
+            href: "/teacher/smartboard/hizli-buton",
+            title: "Hızlı Buton",
+            description: "Butona ilk basan sözlü cevap hakkı kazanır.",
+            icon: <Zap />,
+            colorClass: "bg-sky-600 border-sky-800 hover:bg-sky-500",
         },
         {
             key: 'fetih_oyunu',
