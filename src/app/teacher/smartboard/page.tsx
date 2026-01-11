@@ -5,7 +5,7 @@ import Link from 'next/link';
 import React, { type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
-  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap 
+  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Megaphone 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -124,6 +124,14 @@ export default function SmartboardPage() {
             description: "Kutuları açarak puan topla ve lider ol.",
             icon: <Package />,
             colorClass: "bg-purple-600 border-purple-800 hover:bg-purple-500",
+        },
+        {
+            key: 'anlat_bakalim',
+            href: "/teacher/smartboard/anlat-bakalim",
+            title: "Anlat Bakalım",
+            description: "Yasaklı kelime olmadan takımına kelimeyi anlat.",
+            icon: <Megaphone />,
+            colorClass: "bg-orange-600 border-orange-800 hover:bg-orange-500",
         },
     ];
     

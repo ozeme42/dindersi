@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Loader2, Repeat, Home, CheckCircle2, XCircle, User, ArrowRight, ArrowLeft, Trophy, Timer, Hand } from "lucide-react";
+import { Loader2, Repeat, Home, CheckCircle2, XCircle, User, ArrowRight, ArrowLeft, Trophy, Hand, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { getHizliButonQuestions } from '../actions';
 import type { HizliButonQuestion } from '../actions';
@@ -38,7 +38,8 @@ function SpeedBuzzerGameComponent() {
     const [p2Lock, setP2Lock] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
     
-    const [timeLeft, setTimeLeft] = useState(20); // Sözlü cevap için süreyi biraz artırabiliriz
+    // SÜRE AYARI: 15 Saniye
+    const [timeLeft, setTimeLeft] = useState(15);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     const fetchGameData = useCallback(async () => {
@@ -87,7 +88,7 @@ function SpeedBuzzerGameComponent() {
         }));
         setP1Lock(false);
         setP2Lock(false);
-        setTimeLeft(20);
+        setTimeLeft(15); // Her soru başında süre 15'e döner
 
     }, [currentQ, state.currentQIndex, questions.length]);
     
@@ -108,7 +109,7 @@ function SpeedBuzzerGameComponent() {
         if (state.roundEnded) return;
         
         playSound('timeUp');
-        // Süre bitti, kimse bilemedi
+        // Süre bitti, kimse bilemedi, cevabı göster
         setP1Lock(true);
         setP2Lock(true);
         setState(s => ({ ...s, roundEnded: true, showNextButton: true, correctAnswer: currentQ?.a || null }));
@@ -140,7 +141,7 @@ function SpeedBuzzerGameComponent() {
         const isP1 = player === 'p1';
         if ((isP1 && p1Lock) || (!isP1 && p2Lock)) return;
 
-        playSound('timeUp');
+        playSound('timeUp'); // Butona basılınca ses
         setState(s => ({ ...s, buzzerOwner: player }));
     };
 
@@ -150,30 +151,33 @@ function SpeedBuzzerGameComponent() {
 
         const isP1 = player === 'p1';
 
+        // İster doğru ister yanlış olsun, cevap gösterilecek ve tur bitecek.
+        let newP1Score = state.p1Score;
+        let newP2Score = state.p2Score;
+
         if (isCorrect) {
             playSound('correct');
-            setState(prevState => ({
-                ...prevState,
-                p1Score: isP1 ? prevState.p1Score + 10 : prevState.p1Score,
-                p2Score: !isP1 ? prevState.p2Score + 10 : prevState.p2Score,
-                roundEnded: true,
-                showNextButton: true,
-                winner: player,
-                buzzerOwner: null 
-            }));
+            // Puan ekle
+            if (isP1) newP1Score += 10;
+            else newP2Score += 10;
+            
             setShowConfetti(true);
             setTimeout(() => setShowConfetti(false), 2000);
         } else {
             playSound('incorrect');
-            if (isP1) setP1Lock(true);
-            else setP2Lock(true);
-
-            setState(s => ({ ...s, buzzerOwner: null }));
-            
-            if ((isP1 && p2Lock) || (!isP1 && p1Lock)) {
-                 setState(s => ({ ...s, roundEnded: true, showNextButton: true, correctAnswer: currentQ?.a || null }));
-            }
+            // Yanlış cevapta puan değişmez (veya ceza eklenebilir), ama tur biter.
         }
+
+        // HER İKİ DURUMDA DA: Turu bitir, cevabı göster.
+        setState(prevState => ({
+            ...prevState,
+            p1Score: newP1Score,
+            p2Score: newP2Score,
+            roundEnded: true,
+            showNextButton: true,
+            winner: isCorrect ? player : null, // Sadece doğruysa kazanan belirlenir
+            buzzerOwner: null // Modalı kapat
+        }));
     };
 
     const nextQuestion = () => {
@@ -257,10 +261,6 @@ function SpeedBuzzerGameComponent() {
                 }
                 .animate-pop { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
                 @keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
-                .shake { animation: shake 0.5s; }
-                @keyframes shake {
-                0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); }
-            }
             `}</style>
             
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100]">
@@ -289,35 +289,58 @@ function SpeedBuzzerGameComponent() {
 
             {/* ORTA EKRAN */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] flex flex-col items-center justify-center gap-6 w-full pointer-events-none">
+                
+                {/* 1. DURUM: BİRİSİ BUTONA BASTI (MODERATÖR EKRANI) */}
                 {state.buzzerOwner ? (
                     <div className="bg-slate-900/95 border-2 border-white/20 p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-6 animate-pop pointer-events-auto backdrop-blur-xl min-w-[500px]">
                         <div className={`text-3xl font-bold ${state.buzzerOwner === 'p1' ? 'text-blue-400' : 'text-red-400'}`}>
                             {state.buzzerOwner === 'p1' ? 'MAVİ TAKIM' : 'KIRMIZI TAKIM'} CEVAPLIYOR...
                         </div>
-                        <div className="h-px w-full bg-white/10"></div>
-                        <div className="text-center">
-                            <p className="text-slate-400 text-sm mb-2">DOĞRU CEVAP:</p>
-                            <p className="text-2xl text-white font-bold">{currentQ.a}</p>
+                        
+                        {/* Cevap burada gizli, sadece soru işareti var */}
+                        <div className="py-4">
+                            <HelpCircle className="w-16 h-16 text-slate-500 animate-pulse" />
                         </div>
+
+                        <div className="text-slate-300 text-sm">Öğrenci cevabı verdikten sonra seçiniz:</div>
+
                         <div className="flex gap-4 w-full">
-                            <Button onClick={() => handleVerdict(true)} className="flex-1 h-16 bg-green-600 hover:bg-green-500 text-xl font-bold"><CheckCircle2 className="mr-2 h-6 w-6"/> DOĞRU</Button>
-                            <Button onClick={() => handleVerdict(false)} className="flex-1 h-16 bg-red-600 hover:bg-red-500 text-xl font-bold"><XCircle className="mr-2 h-6 w-6"/> YANLIŞ</Button>
+                            <Button onClick={() => handleVerdict(true)} className="flex-1 h-20 bg-green-600 hover:bg-green-500 text-xl font-bold shadow-lg transform active:scale-95 transition-all">
+                                <CheckCircle2 className="mr-2 h-8 w-8"/> DOĞRU
+                            </Button>
+                            <Button onClick={() => handleVerdict(false)} className="flex-1 h-20 bg-red-600 hover:bg-red-500 text-xl font-bold shadow-lg transform active:scale-95 transition-all">
+                                <XCircle className="mr-2 h-8 w-8"/> YANLIŞ
+                            </Button>
                         </div>
                     </div>
                 ) : state.roundEnded ? (
-                     <div className="flex flex-col items-center gap-6 animate-pop pointer-events-auto">
-                        <div className="bg-slate-800 p-6 rounded-2xl border border-white/10 text-center shadow-2xl">
-                            <p className="text-slate-400 mb-1">DOĞRU CEVAP</p>
-                            <p className="text-3xl font-bold text-green-400">{currentQ.a}</p>
+                    /* 2. DURUM: TUR BİTTİ (CEVAP GÖSTERME) */
+                     <div className="flex flex-col items-center gap-6 animate-pop pointer-events-auto w-full max-w-2xl">
+                        <div className="bg-slate-800/90 backdrop-blur-md p-8 rounded-2xl border-2 border-white/20 text-center shadow-2xl w-full relative overflow-hidden">
+                             {/* Arkaplan efekti */}
+                            <div className={`absolute inset-0 opacity-10 ${state.winner ? 'bg-green-500' : 'bg-slate-500'}`}></div>
+                            
+                            <p className="text-slate-400 mb-2 uppercase tracking-widest font-bold">DOĞRU CEVAP</p>
+                            <p className="text-4xl font-black text-white leading-tight drop-shadow-md">{currentQ.a}</p>
                         </div>
-                        <Button onClick={nextQuestion} className="h-20 px-12 text-2xl font-black bg-white text-slate-900 hover:bg-slate-200 shadow-xl">
-                            SONRAKİ <ArrowRight className="ml-3 h-8 w-8" />
+                        <Button onClick={nextQuestion} className="h-24 px-16 text-3xl font-black bg-white text-slate-900 hover:bg-slate-200 shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:scale-105 transition-all rounded-full">
+                            SONRAKİ <ArrowRight className="ml-4 h-10 w-10" />
                         </Button>
                     </div>
                 ) : (
-                    <div className="w-full max-w-xl mx-auto">
-                         <div className="bg-white/5 p-6 rounded-2xl min-h-[120px] flex items-center justify-center backdrop-blur-sm border border-white/5 shadow-xl">
-                            <p className="text-3xl font-semibold text-center text-white leading-relaxed">{currentQ.q}</p>
+                    /* 3. DURUM: OYUN ESNASI (SORU VE SAYAÇ) */
+                    <div className="flex flex-col items-center gap-8 w-full max-w-2xl">
+                         {/* Soru Kartı */}
+                         <div className="bg-white/10 p-8 rounded-3xl min-h-[160px] flex items-center justify-center backdrop-blur-md border border-white/10 shadow-2xl w-full">
+                            <p className="text-3xl font-bold text-center text-white leading-snug drop-shadow-md">{currentQ.q}</p>
+                        </div>
+
+                        {/* Sayaç */}
+                        <div className={cn(
+                            "bg-slate-900 text-slate-100 font-black text-6xl w-32 h-32 rounded-full flex items-center justify-center border-8 border-slate-700 shadow-2xl transform transition-all",
+                            timeLeft <= 5 ? 'border-red-500 text-red-500 animate-pulse scale-110' : ''
+                        )}>
+                            {timeLeft}
                         </div>
                     </div>
                 )}

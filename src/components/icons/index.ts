@@ -65,3 +65,4 @@ export * from './letter-y-badge';
 export * from './letter-z-badge';
 export * from './bronze-flame-badge';
 export * from './silver-flame-badge';
+export * from './megaphone-badge';
