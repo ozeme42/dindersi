@@ -1,16 +1,17 @@
 
-import { getGameSettings } from "@/app/teacher/game-settings/actions";
-import { SmartboardBireyselClientPage } from "@/app/teacher/smartboard/bireysel/client-page";
+'use client';
 
-export const dynamic = 'force-dynamic';
+import { OyunKurulum } from '@/components/oyun-kurulum';
+import { Package } from 'lucide-react';
 
-export default async function SmartboardKutuAcSetupPage() {
-    const settings = await getGameSettings();
-    
-    return <SmartboardBireyselClientPage 
-                gameConfig={settings.teacherBireysel} 
-                gamePath="kutu-ac"
-                gameName="Kutu Aç"
-                gameIconName="Package"
-            />;
+export default function SmartboardKutuAcSetupPage() {
+    return (
+        <OyunKurulum 
+            pageTitle="Kutu Aç Kurulum"
+            gameIcon={Package}
+            targetPath="teacher/smartboard/kutu-ac"
+            dataType="games" // Bu, genel oyun kurulum mantığını kullanır
+            isStatic={false} // Akıllı tahta için dinamik veri çeker
+        />
+    );
 }

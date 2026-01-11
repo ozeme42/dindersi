@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -19,7 +20,7 @@ import type { Question } from '@/lib/types';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export async function getTornadoGameQuestions(
-    { courseId, unitId, topicId, questionCount = 30 }: { courseId?: string; unitId?: string; topicId?: string; questionCount?: number; }
+    { courseId, unitId, topicId, questionCount }: { courseId?: string; unitId?: string; topicId?: string; questionCount?: number; }
 ): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
@@ -27,7 +28,7 @@ export async function getTornadoGameQuestions(
             courseId,
             unitId,
             topicId,
-            questionCount,
+            questionCount, // Pass count if provided, otherwise it's undefined
             difficulty: ['Kolay', 'Orta', 'Zor'],
             questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış'],
         };
@@ -69,7 +70,9 @@ export async function submitTornadoScoreAction(userId: string | null, score: num
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= 10) {
             return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
@@ -85,6 +88,7 @@ export async function submitTornadoScoreAction(userId: string | null, score: num
             timestamp: serverTimestamp(),
             gameType: 'Tornado',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();
