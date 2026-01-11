@@ -1,14 +1,10 @@
 'use client';
 
-import { Suspense } from 'react';
-import { Loader2 } from 'lucide-react';
-import { SmartboardBireyselClientPage } from '../bireysel/client-page';
+import { SmartboardBireyselClientPage } from '../bireysel/client-page'; // Yol doğruysa burası kalabilir, hata verirse ../../bireysel... diye dene
 import { DEFAULT_GAME_SETTINGS } from '@/lib/game-config';
+import { Puzzle } from 'lucide-react';
 
-function AnagramDuvariSetupPage() {
-    // Anagram Duvarı için bireysel yarışma ayarlarını kullanabiliriz,
-    // çünkü kurulum akışı (sınıf, ders, ünite, konu seçimi) aynıdır.
-    // Ayarlar adımını atlama mantığı client-page içinde hallediliyor.
+export default function AnagramDuvariSetupPage() {
     const gameConfig = DEFAULT_GAME_SETTINGS.teacherBireysel;
 
     return (
@@ -18,13 +14,5 @@ function AnagramDuvariSetupPage() {
             gameName="Anagram Duvarı"
             gameIconName="Puzzle"
         />
-    );
-}
-
-export default function AnagramDuvariSuspense() {
-    return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
-            <AnagramDuvariSetupPage />
-        </Suspense>
     );
 }

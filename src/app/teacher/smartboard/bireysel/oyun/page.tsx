@@ -1,167 +1,130 @@
 'use client';
 
-import { useState, useEffect, Suspense, useMemo, useCallback } from "react";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { 
-    UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, 
-    BrainCircuit, Check, Trash2, Users, Shuffle, PartyPopper, Star, 
-    Award, Trophy, UserPlus, MonitorPlay, Save, LogOut 
+    ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, 
+    Check, Trash2, Users, Shuffle, PartyPopper, 
+    Trophy, MonitorPlay, Save, Plus, Award,
+    UserPlus, X, User, Settings2, Sparkles, Flag, Lock, Grid2X2
 } from "lucide-react";
 import Link from "next/link";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { getQuestionsFromBank } from "@/lib/quiz-actions";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { getQuestionsFromBank, type GetQuizOutput } from "@/lib/quiz-actions";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import type { SchoolClass, UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
+import type { SchoolClass, UserProfile, GetQuizInput } from "@/lib/types";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { playSound } from "@/lib/audio-service";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
 import { QuestionDialog } from "@/components/question-dialog";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { addStudentToClass } from "@/app/teacher/students/actions";
-import { useAuth } from "@/context/auth-context";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const SUMMER_SCHOOL_CLASS_NAME = "Yaz Okulu Havuzu";
 
-type GameQuestion = GetQuizOutput['questions'][0];
-
-type GameCompetitor = {
-    uid: string;
-    displayName: string;
-    avatar?: string;
-    score: number;
-};
-
-// --- RENK TEMALARI ---
-const CARD_THEMES = [
-    { name: 'blue', border: 'border-blue-500', activeBorder: 'border-blue-300', shadow: 'shadow-blue-500/30', bg: 'bg-blue-500/10', text: 'text-blue-400', line: 'bg-blue-500', scoreBg: 'bg-blue-950/50' },
-    { name: 'emerald', border: 'border-emerald-500', activeBorder: 'border-emerald-300', shadow: 'shadow-emerald-500/30', bg: 'bg-emerald-500/10', text: 'text-emerald-400', line: 'bg-emerald-500', scoreBg: 'bg-emerald-950/50' },
-    { name: 'violet', border: 'border-violet-500', activeBorder: 'border-violet-300', shadow: 'shadow-violet-500/30', bg: 'bg-violet-500/10', text: 'text-violet-400', line: 'bg-violet-500', scoreBg: 'bg-violet-950/50' },
-    { name: 'amber', border: 'border-amber-500', activeBorder: 'border-amber-300', shadow: 'shadow-amber-500/30', bg: 'bg-amber-500/10', text: 'text-amber-400', line: 'bg-amber-500', scoreBg: 'bg-amber-950/50' },
-    { name: 'rose', border: 'border-rose-500', activeBorder: 'border-rose-300', shadow: 'shadow-rose-500/30', bg: 'bg-rose-500/10', text: 'text-rose-400', line: 'bg-rose-500', scoreBg: 'bg-rose-950/50' },
-    { name: 'cyan', border: 'border-cyan-500', activeBorder: 'border-cyan-300', shadow: 'shadow-cyan-500/30', bg: 'bg-cyan-500/10', text: 'text-cyan-400', line: 'bg-cyan-500', scoreBg: 'bg-cyan-950/50' },
-    { name: 'fuchsia', border: 'border-fuchsia-500', activeBorder: 'border-fuchsia-300', shadow: 'shadow-fuchsia-500/30', bg: 'bg-fuchsia-500/10', text: 'text-fuchsia-400', line: 'bg-fuchsia-500', scoreBg: 'bg-fuchsia-950/50' },
-    { name: 'lime', border: 'border-lime-500', activeBorder: 'border-lime-300', shadow: 'shadow-lime-500/30', bg: 'bg-lime-500/10', text: 'text-lime-400', line: 'bg-lime-500', scoreBg: 'bg-lime-950/50' },
+// Renk Paleti (Öğrencilere rastgele atamak için)
+const PLAYER_COLORS = [
+    { bg: "bg-red-500/20 hover:bg-red-500/30", border: "border-red-500", ring: "ring-red-500", text: "text-red-400" },
+    { bg: "bg-orange-500/20 hover:bg-orange-500/30", border: "border-orange-500", ring: "ring-orange-500", text: "text-orange-400" },
+    { bg: "bg-amber-500/20 hover:bg-amber-500/30", border: "border-amber-500", ring: "ring-amber-500", text: "text-amber-400" },
+    { bg: "bg-yellow-500/20 hover:bg-yellow-500/30", border: "border-yellow-500", ring: "ring-yellow-500", text: "text-yellow-400" },
+    { bg: "bg-lime-500/20 hover:bg-lime-500/30", border: "border-lime-500", ring: "ring-lime-500", text: "text-lime-400" },
+    { bg: "bg-green-500/20 hover:bg-green-500/30", border: "border-green-500", ring: "ring-green-500", text: "text-green-400" },
+    { bg: "bg-emerald-500/20 hover:bg-emerald-500/30", border: "border-emerald-500", ring: "ring-emerald-500", text: "text-emerald-400" },
+    { bg: "bg-teal-500/20 hover:bg-teal-500/30", border: "border-teal-500", ring: "ring-teal-500", text: "text-teal-400" },
+    { bg: "bg-cyan-500/20 hover:bg-cyan-500/30", border: "border-cyan-500", ring: "ring-cyan-500", text: "text-cyan-400" },
+    { bg: "bg-sky-500/20 hover:bg-sky-500/30", border: "border-sky-500", ring: "ring-sky-500", text: "text-sky-400" },
+    { bg: "bg-blue-500/20 hover:bg-blue-500/30", border: "border-blue-500", ring: "ring-blue-500", text: "text-blue-400" },
+    { bg: "bg-indigo-500/20 hover:bg-indigo-500/30", border: "border-indigo-500", ring: "ring-indigo-500", text: "text-indigo-400" },
+    { bg: "bg-violet-500/20 hover:bg-violet-500/30", border: "border-violet-500", ring: "ring-violet-500", text: "text-violet-400" },
+    { bg: "bg-purple-500/20 hover:bg-purple-500/30", border: "border-purple-500", ring: "ring-purple-500", text: "text-purple-400" },
+    { bg: "bg-fuchsia-500/20 hover:bg-fuchsia-500/30", border: "border-fuchsia-500", ring: "ring-fuchsia-500", text: "text-fuchsia-400" },
+    { bg: "bg-pink-500/20 hover:bg-pink-500/30", border: "border-pink-500", ring: "ring-pink-500", text: "text-pink-400" },
+    { bg: "bg-rose-500/20 hover:bg-rose-500/30", border: "border-rose-500", ring: "ring-rose-500", text: "text-rose-400" },
 ];
 
-// --- YARDIMCI BİLEŞENLER ---
+type GameQuestion = GetQuizOutput['questions'][0];
+type GameCompetitor = UserProfile & { score: number; colorIndex: number };
 
-const RankIcon = ({ rank }: { rank: number }) => {
-    if (rank === 0) return <Crown className="h-6 w-6 text-yellow-400 fill-yellow-400/20 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)] animate-pulse" />;
-    if (rank === 1) return <Award className="h-6 w-6 text-slate-300 fill-slate-300/20" />;
-    if (rank === 2) return <Award className="h-6 w-6 text-amber-600 fill-amber-600/20" />;
-    return <span className="text-lg font-bold text-slate-500 w-6 text-center">#{rank + 1}</span>;
-};
+// --- BİLEŞENLER ---
 
-// Yarışmacı Kartı (RENKLİ & KOMPAKT & 4 SÜTUN UYUMLU)
-const TeamScoreCard = ({ competitor, isActive, rank, onClick, onRemove }: { competitor: GameCompetitor, isActive: boolean, rank: number, onClick: () => void, onRemove: (e: React.MouseEvent) => void }) => {
-    
-    // Sıraya göre renk temasını seç
-    const theme = CARD_THEMES[rank % CARD_THEMES.length];
+// Büyük Öğrenci Kartı (Ana Ekranda)
+const BigStudentCard = ({ competitor, rank, onClick }: { competitor: GameCompetitor, rank: number, onClick: () => void }) => {
+    const color = PLAYER_COLORS[competitor.colorIndex % PLAYER_COLORS.length];
+    const getInitials = (name?: string) => name ? name.trim().charAt(0).toLocaleUpperCase('tr-TR') : '?';
 
     return (
         <div 
             onClick={onClick}
             className={cn(
-                "relative group cursor-pointer transition-all duration-200 transform rounded-xl border-2 overflow-hidden h-16 flex items-center pr-3",
-                // Varsayılan: Hafif renkli arka plan
-                "backdrop-blur-sm shadow-sm",
-                isActive 
-                    ? cn("bg-slate-800 scale-[1.02] z-10 shadow-lg", theme.activeBorder, theme.shadow) 
-                    : cn("bg-slate-900/60 hover:bg-slate-800 hover:-translate-y-1", theme.border.replace('border-', 'border-opacity-30 hover:border-opacity-100 border-'))
+                "relative group cursor-pointer transition-all duration-300 transform rounded-2xl border-2 flex flex-col items-center justify-center p-4 h-full aspect-[4/5] shadow-lg hover:scale-105 active:scale-95",
+                color.bg, color.border,
+                rank < 3 ? "shadow-[0_0_15px_rgba(0,0,0,0.5)]" : ""
             )}
         >
-            {/* Sol Kenar Çizgisi (Neon) */}
-            <div className={cn(
-                "absolute left-0 top-0 bottom-0 w-2 transition-all duration-300", 
-                theme.line
-            )} />
+            {/* Sıralama Rozeti */}
+            <div className="absolute top-3 left-3">
+                {rank === 0 ? <Crown className="h-8 w-8 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]"/> : 
+                 rank === 1 ? <Award className="h-7 w-7 text-slate-200 drop-shadow-md"/> :
+                 rank === 2 ? <Award className="h-7 w-7 text-amber-600 drop-shadow-md"/> : 
+                 <div className="h-6 w-6 rounded-full bg-black/30 flex items-center justify-center text-xs font-bold text-white/70">#{rank + 1}</div>}
+            </div>
 
-            <div className="flex items-center gap-3 pl-5 w-full">
-                {/* Sıralama */}
-                <div className="flex-shrink-0 flex justify-center items-center w-8">
-                    <RankIcon rank={rank} />
-                </div>
+            <Avatar className={cn("h-20 w-20 md:h-24 md:w-24 border-4 mb-4 transition-all shadow-xl", color.border)}>
+                <AvatarImage src={competitor.avatar || ''} className="object-cover" />
+                <AvatarFallback className={cn("text-2xl font-black text-white", color.bg.replace('/20', ''))}>{getInitials(competitor.displayName)}</AvatarFallback>
+            </Avatar>
 
-                {/* Avatar */}
-                <Avatar className={cn("h-10 w-10 border-2 transition-colors", isActive ? theme.activeBorder : "border-slate-700")}>
-                    <AvatarImage src={competitor.avatar || ''} />
-                    <AvatarFallback className="bg-slate-800 text-slate-300 font-bold text-xs">{competitor.displayName?.charAt(0)}</AvatarFallback>
-                </Avatar>
-
-                {/* İsim */}
-                <div className="truncate flex-1 min-w-0">
-                    <p className={cn(
-                        "font-bold text-base truncate transition-colors", 
-                        isActive ? "text-white" : "text-slate-200 group-hover:text-white"
-                    )}>
-                        {competitor.displayName}
-                    </p>
-                </div>
-
-                {/* Puan */}
-                <div className={cn(
-                    "text-right px-3 py-1 rounded-lg min-w-[3.5rem] transition-colors", 
-                    isActive ? theme.scoreBg : "bg-black/20"
-                )}>
-                    <span className={cn(
-                        "block text-xl font-black tabular-nums", 
-                        isActive ? theme.text : "text-white"
-                    )}>
+            <div className="text-center w-full">
+                <h3 className={cn("text-lg md:text-xl font-black uppercase tracking-tight leading-tight line-clamp-2 px-1 text-white drop-shadow-sm")}>
+                    {competitor.displayName}
+                </h3>
+                <div className="mt-3 flex items-center justify-center">
+                    <span className="text-4xl md:text-5xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                         {competitor.score}
                     </span>
                 </div>
+                <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mt-1">PUAN</p>
             </div>
-
-            {/* Silme Butonu (Sadece Hoverda) */}
-            <Button 
-                variant="ghost" 
-                size="icon" 
-                className="absolute top-1 right-1 h-6 w-6 text-slate-500 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity z-20"
-                onClick={onRemove}
-            >
-                <Trash2 className="h-3 w-3" />
-            </Button>
+            
+            {/* Hover Efekti */}
+            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none" />
         </div>
     );
 };
 
-// Öğrenci Listesi Öğesi
-const StudentListItem = ({ student, onAddToGame, isAdded }: { student: UserProfile, onAddToGame: (student: UserProfile) => void, isAdded: boolean }) => (
-    <div className={cn(
-        "flex items-center justify-between p-2 px-3 rounded-lg border transition-all duration-200 group cursor-pointer h-12", 
-        isAdded 
-            ? "bg-slate-900/20 border-slate-800/50 opacity-40 cursor-not-allowed grayscale" 
-            : "bg-slate-900/60 border-white/5 hover:border-emerald-500/50 hover:bg-emerald-900/10 hover:shadow-emerald-900/20 hover:shadow-md"
-    )} onClick={() => !isAdded && onAddToGame(student)}>
-        <div className="flex items-center gap-3 overflow-hidden">
-             <Avatar className="h-8 w-8 border border-slate-700 group-hover:border-emerald-400 transition-colors">
-                 <AvatarImage src={student.avatar || ''} />
-                <AvatarFallback className="bg-slate-800 text-slate-300 font-bold text-[10px]">{student.displayName?.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <span className={cn("truncate font-medium text-sm", isAdded ? "text-slate-600 line-through" : "text-slate-300 group-hover:text-white")}>
-                {student.displayName}
-            </span>
-        </div>
-        {!isAdded && <UserPlus className="h-4 w-4 text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"/>}
-        {isAdded && <Check className="h-4 w-4 text-slate-600" />}
+// Kurulum Listesindeki Öğrenci
+const SetupStudentItem = ({ student, isSelected, onClick }: { student: UserProfile, isSelected: boolean, onClick: () => void }) => (
+    <div 
+        onClick={onClick}
+        className={cn(
+            "flex items-center gap-3 p-2 rounded-lg border transition-all cursor-pointer select-none",
+            isSelected 
+                ? "bg-slate-900/50 border-transparent opacity-40 grayscale" 
+                : "bg-slate-800/50 border-white/5 hover:border-cyan-500/50 hover:bg-cyan-500/10"
+        )}
+    >
+        <Avatar className="h-8 w-8 border border-white/10"><AvatarImage src={student.avatar} /><AvatarFallback className="text-[10px] bg-slate-900">{student.displayName?.charAt(0)}</AvatarFallback></Avatar>
+        <span className="text-sm font-medium truncate flex-1">{student.displayName}</span>
+        {isSelected && <Check className="h-4 w-4 text-emerald-500" />}
+        {!isSelected && <Plus className="h-4 w-4 text-cyan-500 opacity-0 group-hover:opacity-100" />}
     </div>
 );
 
 // Yeni Öğrenci Ekleme Dialogu
-function AddStudentDialog({ isOpen, onOpenChange, onAdd, isSaving, poolClassName }: { isOpen: boolean, onOpenChange: (open: boolean) => void, onAdd: (name: string, className: string) => void, isSaving: boolean, poolClassName: string }) {
+function AddStudentDialog({ isOpen, onOpenChange, onAdd, isSaving }: { isOpen: boolean, onOpenChange: (open: boolean) => void, onAdd: (name: string) => void, isSaving: boolean }) {
     const [displayName, setDisplayName] = useState('');
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); onAdd(displayName, poolClassName); setDisplayName(''); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); onAdd(displayName); setDisplayName(''); }
     return (
         <Dialog open={isOpen} onOpenChange={(open) => { if (!open) { setDisplayName('') }; onOpenChange(open); }}>
             <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-md">
@@ -175,415 +138,457 @@ function AddStudentDialog({ isOpen, onOpenChange, onAdd, isSaving, poolClassName
     )
 }
 
-function CompetitionLoadingSkeleton() {
-    return (
-      <div className="h-screen w-full bg-slate-950 flex flex-col p-6 gap-6">
-        <div className="flex justify-between items-center">
-            <div className="h-10 w-64 bg-slate-800/50 rounded-xl animate-pulse" />
-            <div className="h-10 w-32 bg-slate-800/50 rounded-xl animate-pulse" />
-        </div>
-        <div className="flex-1 grid grid-cols-12 gap-6">
-            <div className="col-span-12 h-2/3 bg-slate-900/30 rounded-3xl animate-pulse border border-white/5" />
-            <div className="col-span-12 h-1/3 bg-slate-900/30 rounded-3xl animate-pulse border border-white/5" />
-        </div>
-      </div>
-    );
-}
-
-// --- ANA COMPONENT ---
-
-function CompetitionComponent() {
-    const { user } = useAuth();
+function IndividualCompetitionComponent() {
     const searchParams = useSearchParams();
     const { toast } = useToast();
+    
+    // --- STATE ---
+    const [gamePhase, setGamePhase] = useState<'setup' | 'playing' | 'finished'>('setup');
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [isSubmittingScores, setIsSubmittingScores] = useState(false);
-    const [scoresHaveBeenSaved, setScoresHaveBeenSaved] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    
+    // Setup Phase
+    const [studentPool, setStudentPool] = useState<UserProfile[]>([]);
+    const [selectedStudents, setSelectedStudents] = useState<UserProfile[]>([]);
+    const [currentClass, setCurrentClass] = useState<SchoolClass | null>(null);
+    const [selectedBranch, setSelectedBranch] = useState<string>('all');
+    
+    // Game Phase
+    const [questions, setQuestions] = useState<GameQuestion[]>([]);
+    const [competitors, setCompetitors] = useState<GameCompetitor[]>([]);
+    const [activeCompetitorId, setActiveCompetitorId] = useState<string | null>(null); // Seçili öğrenci ID'si
+    const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
+    const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: GameQuestion } | null>(null);
+    const [winner, setWinner] = useState<GameCompetitor | null>(null);
+
+    // Dialogs
     const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
     const [isAddingStudent, setIsAddingStudent] = useState(false);
 
-    useEffect(() => {
-        const handleFullscreenChange = () => { setIsFullscreen(!!document.fullscreenElement); };
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    }, []);
-
-    const finishScore = parseInt(searchParams.get('finishScore') || '0');
-    const questionTimer = parseInt(searchParams.get('questionTimer') || '0');
-    
     // Configs
-    const pointsConfig = useMemo(() => { const p = searchParams.get('points'); try { return p ? JSON.parse(p) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }}; } catch { return { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }}; } }, [searchParams]);
-    const penaltyConfig = useMemo(() => { const p = searchParams.get('penalty'); try { return p ? JSON.parse(p) : { mcq: { Kolay: 5, Orta: 8, Zor: 10 }, tf: { Kolay: 3, Orta: 5, Zor: 8 }, fitb: { Kolay: 5, Orta: 8, Zor: 10 }}; } catch { return { mcq: { Kolay: 5, Orta: 8, Zor: 10 }, tf: { Kolay: 3, Orta: 5, Zor: 8 }, fitb: { Kolay: 5, Orta: 8, Zor: 10 }}; } }, [searchParams]);
-
-    // Data States
-    const [questions, setQuestions] = useState<GameQuestion[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    // Student pool
-    const [studentPool, setStudentPool] = useState<UserProfile[]>([]);
-    const [currentClass, setCurrentClass] = useState<SchoolClass | null>(null);
-    const [isPoolLoading, setIsPoolLoading] = useState(true);
-    const [selectedBranch, setSelectedBranch] = useState<string>('all');
+    const questionTimer = parseInt(searchParams.get('questionTimer') || '30');
+    const finishScore = parseInt(searchParams.get('finishScore') || '100');
     
-    // Game States
-    const [inGameCompetitors, setInGameCompetitors] = useState<GameCompetitor[]>([]);
-    const [activeCompetitorId, setActiveCompetitorId] = useState<string | null>(null);
-    const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
-    const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: GameQuestion } | null>(null);
-    const [currentView, setCurrentView] = useState<'leaderboard' | 'questions'>('leaderboard');
-    const [gameState, setGameState] = useState<'playing' | 'finished'>('playing');
-    const [winner, setWinner] = useState<GameCompetitor | null>(null);
-    
-    // Veri Çekme
-    const fetchGameData = useCallback(async () => {
-        setIsLoading(true); setIsPoolLoading(true); setError(null);
-        try {
-            const params: GetQuizInput = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-                questionCount: parseInt(searchParams.get('questionCount') || '20'),
-                difficulty: searchParams.get('difficulty')?.split(','),
-                questionTypes: searchParams.get('questionTypes')?.split(','),
-                isStatic: searchParams.get('isStatic') === 'true'
-            };
-            const questionResult = await getQuestionsFromBank(params as any);
-            if (questionResult.error) setError(questionResult.error);
-            else if (questionResult.questions && questionResult.questions.length > 0) setQuestions(questionResult.questions as GameQuestion[]);
-            else setError("Soru bulunamadı.");
-
-            const classId = searchParams.get('classId');
-            if (classId) {
-                const classDoc = await getDoc(doc(db, "classes", classId));
-                if (classDoc.exists()) {
-                    const classData = { id: classDoc.id, ...classDoc.data() } as SchoolClass;
-                    setCurrentClass(classData);
-                    const studentsQuery = query(collection(db, "users"), where("class", ">=", classData.name), where("class", "<", classData.name + '\uf8ff'), where("role", "==", "guest"));
-                    const studentsSnapshot = await getDocs(studentsQuery);
-                    setStudentPool(studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
-                } else setError("Sınıf bilgisi bulunamadı.");
-            } else {
-                 const studentsQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME), where("role", "==", "guest"));
-                 const studentsSnapshot = await getDocs(studentsQuery);
-                 setStudentPool(studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
+    useEffect(() => {
+        const initData = async () => {
+            setIsLoading(true);
+            try {
+                // 1. Soruları Getir
+                const params: GetQuizInput = {
+                    courseId: searchParams.get('courseId') || undefined,
+                    unitId: searchParams.get('unitId') || undefined,
+                    topicId: searchParams.get('topicId') || undefined,
+                    questionCount: 100, 
+                    difficulty: ['Kolay', 'Orta', 'Zor'],
+                    questionTypes: ['mcq', 'tf', 'fitb'],
+                };
+                const qResult = await getQuestionsFromBank(params);
+                if (qResult.questions) setQuestions(qResult.questions as GameQuestion[]);
+                
+                // 2. Sınıf ve Havuzu Getir
+                const classId = searchParams.get('classId');
+                if (classId) {
+                    const classDoc = await getDoc(doc(db, "classes", classId));
+                    if (classDoc.exists()) {
+                        const cData = { id: classDoc.id, ...classDoc.data() } as SchoolClass;
+                        setCurrentClass(cData);
+                        const sQuery = query(collection(db, "users"), where("class", ">=", cData.name), where("class", "<", cData.name + '\uf8ff'), where("role", "==", "guest"));
+                        const sSnap = await getDocs(sQuery);
+                        const students = sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile));
+                        setStudentPool(students);
+                    }
+                } else {
+                    const sQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME), where("role", "==", "guest"));
+                    const sSnap = await getDocs(sQuery);
+                    setStudentPool(sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile)));
+                }
+            } catch (err: any) {
+                setError("Veriler yüklenirken hata oluştu.");
+            } finally {
+                setIsLoading(false);
             }
-        } catch (err: any) { setError("Hata oluştu."); } finally { setIsLoading(false); setIsPoolLoading(false); }
+        };
+        initData();
+        
+        const handleFS = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handleFS);
+        return () => document.removeEventListener('fullscreenchange', handleFS);
     }, [searchParams]);
 
-    useEffect(() => { fetchGameData(); }, [fetchGameData]);
-    
-    // Aksiyonlar
-    const handleSaveScores = useCallback(async (andFinish: boolean = false) => {
-        if (scoresHaveBeenSaved || inGameCompetitors.length === 0) { if (andFinish && gameState !== 'finished') setGameState('finished'); return; }
-        setIsSubmittingScores(true);
-        const scoreUpdates = inGameCompetitors.map(c => ({ userId: c.uid, points: c.score, gameType: 'smartboard_bireysel' as const, context: `${searchParams.get('courseName') || 'Genel'} - ${searchParams.get('topicName') || 'Genel'}` }));
-        if (scoreUpdates.every(u => u.points === 0)) { toast({ title: "Skor Yok", description: "Kaydedilecek puan bulunmuyor." }); } 
-        else { 
-            const result = await updateMultipleStudentScores(scoreUpdates);
-            if (result.success) { toast({ title: "Başarılı", description: "Skorlar kaydedildi." }); setScoresHaveBeenSaved(true); } 
-            else { toast({ title: "Hata", description: result.error, variant: "destructive" }); setIsSubmittingScores(false); return; }
-        }
-        if (andFinish) {
-            const finalSorted = [...inGameCompetitors].sort((a,b) => b.score - a.score);
-            if (finalSorted.length > 0) setWinner(finalSorted[0]);
-            setGameState('finished');
-        }
-        setIsSubmittingScores(false);
-    }, [scoresHaveBeenSaved, inGameCompetitors, searchParams, toast, gameState]);
+    // --- SETUP FONKSİYONLARI ---
 
-    const handleAddStudent = async (displayName: string, className: string) => {
-        if (!displayName.trim()) return; setIsAddingStudent(true);
-        const result = await addStudentToClass(displayName, className);
-        if (result.success && result.newUser) { toast({ title: "Başarılı", description: `${displayName} eklendi.` }); setStudentPool(prev => [...prev, result.newUser!]); setIsAddStudentOpen(false); } 
-        else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
+    const filteredPool = useMemo(() => {
+        if (!currentClass) return studentPool;
+        if (selectedBranch === 'all') return studentPool;
+        const target = `${currentClass.name} - ${selectedBranch}`;
+        return studentPool.filter(s => s.class === target || s.class?.startsWith(target + " ("));
+    }, [studentPool, currentClass, selectedBranch]);
+
+    const addToSelection = (student: UserProfile) => {
+        if (!selectedStudents.find(s => s.uid === student.uid)) {
+            setSelectedStudents(prev => [...prev, student]);
+        }
+    };
+
+    const addAllFiltered = () => {
+        const newStudents = filteredPool.filter(fp => !selectedStudents.some(ss => ss.uid === fp.uid));
+        setSelectedStudents(prev => [...prev, ...newStudents]);
+    };
+
+    const removeFromSelection = (uid: string) => {
+        setSelectedStudents(prev => prev.filter(s => s.uid !== uid));
+    };
+
+    const handleAddGuest = async (name: string) => {
+        if (!name.trim()) return;
+        setIsAddingStudent(true);
+        const className = currentClass ? `${currentClass.name} - ${selectedBranch === 'all' ? 'A' : selectedBranch} (Havuz)` : SUMMER_SCHOOL_CLASS_NAME;
+        const res = await addStudentToClass(name, className);
+        if (res.success && res.newUser) {
+            setStudentPool(prev => [...prev, res.newUser!]);
+            addToSelection(res.newUser!);
+            setIsAddStudentOpen(false);
+            toast({ title: "Eklendi", description: `${name} havuza eklendi.` });
+        }
         setIsAddingStudent(false);
     };
 
-    const studentsInBranch = useMemo(() => {
-        if (!currentClass) return studentPool;
-        if (selectedBranch === 'all') return studentPool.filter(s => s.class?.startsWith(currentClass.name));
-        const branchClassName = `${currentClass.name} - ${selectedBranch}`;
-        const poolClassName = `${branchClassName} (Havuz)`;
-        return studentPool.filter(s => s.class === branchClassName || s.class === poolClassName);
-    }, [studentPool, currentClass, selectedBranch]);
-
-    const addCompetitorToGame = (competitor: UserProfile) => { 
-        if(!inGameCompetitors.some(c => c.uid === competitor.uid)) { setInGameCompetitors(prev => [...prev, { uid: competitor.uid, displayName: competitor.displayName, avatar: competitor.avatar, score: 0 }]); } 
+    const startGame = () => {
+        if (selectedStudents.length === 0) {
+            toast({ title: "Uyarı", description: "En az 1 yarışmacı seçmelisiniz.", variant: "destructive" });
+            return;
+        }
+        // Yarışmacıları oluştur (Puanları 0 başlar, renkler atanır)
+        const gameComps: GameCompetitor[] = selectedStudents.map((s, idx) => ({ 
+            ...s, 
+            score: 0,
+            colorIndex: idx // Herkese unique renk indexi ver
+        }));
+        setCompetitors(gameComps);
+        setGamePhase('playing');
+        playSound('start');
     };
-    const removeCompetitorFromGame = (competitorId: string) => { setInGameCompetitors(prev => prev.filter(c => c.uid !== competitorId)); if (activeCompetitorId === competitorId) setActiveCompetitorId(null); };
-    const addAllFromPoolToGame = () => { const newC = studentsInBranch.filter(p => !inGameCompetitors.some(igc => igc.uid === p.uid)).map(p => ({ uid: p.uid, displayName: p.displayName, avatar: p.avatar, score: 0 })); setInGameCompetitors(prev => [...prev, ...newC]); };
-    const removeAllFromGame = () => { setInGameCompetitors([]); setActiveCompetitorId(null); };
-    const handleBranchSelect = (branch: string) => setSelectedBranch(branch);
+
+    // --- GAMEPLAY FONKSİYONLARI ---
+
+    // Skor Tablosu (Puan sırasına göre)
+    const sortedCompetitors = useMemo(() => [...competitors].sort((a,b) => b.score - a.score), [competitors]);
     
-    // OYUN AKIŞI YÖNETİMİ
-    const handleCompetitorClick = (competitorId: string) => {
-        setActiveCompetitorId(competitorId);
-        setCurrentView('questions'); // Görünümü değiştir
+    // Aktif Öğrenci Bilgisi
+    const activeCompetitor = useMemo(() => competitors.find(c => c.uid === activeCompetitorId), [competitors, activeCompetitorId]);
+
+    const handleRandomStudent = () => {
+        if (competitors.length === 0) return;
+        const random = competitors[Math.floor(Math.random() * competitors.length)];
+        setActiveCompetitorId(random.uid);
+        toast({ title: "Seçildi", description: `Sıra: ${random.displayName}` });
     };
 
-    const handleOpenQuestion = (number: number, question: GameQuestion) => { 
-        if (!activeCompetitorId) { toast({ title: 'Hata', description: 'Yarışmacı seçili değil!', variant: 'destructive'}); return; } 
-        setOpenedQuestion({ number, question }); 
-    };
+    const handleAnswer = (qNum: number, isCorrect: boolean, scoreChange: number) => {
+        if (!activeCompetitorId) return;
 
-    const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
-        if (!activeCompetitorId || gameState === 'finished') return;
         let winnerFound: GameCompetitor | null = null;
-        const updatedCompetitors = inGameCompetitors.map(c => {
+        const newCompetitors = competitors.map(c => {
             if (c.uid === activeCompetitorId) {
                 const newScore = Math.max(0, c.score + scoreChange);
-                const updatedCompetitor = { ...c, score: newScore };
-                if (finishScore > 0 && newScore >= finishScore) { winnerFound = updatedCompetitor; }
-                return updatedCompetitor;
+                if (finishScore > 0 && newScore >= finishScore) winnerFound = { ...c, score: newScore };
+                return { ...c, score: newScore };
             }
             return c;
         });
-        setInGameCompetitors(updatedCompetitors);
-        setAnsweredQuestions([...answeredQuestions, questionNumber]);
+
+        setCompetitors(newCompetitors);
+        setAnsweredQuestions([...answeredQuestions, qNum]);
         setOpenedQuestion(null);
-        setCurrentView('leaderboard');
-        setActiveCompetitorId(null);
-        if (winnerFound) { setWinner(winnerFound); setGameState('finished'); }
-    };
-    
-    useEffect(() => { if (gameState === 'playing' && questions.length > 0 && answeredQuestions.length === questions.length) { handleSaveScores(true); } }, [gameState, answeredQuestions.length, questions.length, handleSaveScores]);
-    const startNewGame = () => { window.location.reload(); };
-    const handleSelectRandomQuestion = () => {
-        if (!activeCompetitorId) { toast({ title: 'Hata', description: 'Lütfen bir yarışmacı seçin!', variant: 'destructive'}); return; }
-        const unansweredIndices = questions.map((_, i) => i).filter(i => !answeredQuestions.includes(i + 1));
-        if (unansweredIndices.length === 0) { toast({ title: "Tebrikler!", description: "Tüm soruları cevapladınız." }); return; }
-        const randomIndex = unansweredIndices[Math.floor(Math.random() * unansweredIndices.length)];
-        const questionNumber = randomIndex + 1;
-        const question = questions[randomIndex];
-        setOpenedQuestion({ number: questionNumber, question });
+        setActiveCompetitorId(null); // Cevaptan sonra seçimi kaldır ve soru ekranını kapat
+
+        if (winnerFound) {
+            setWinner(winnerFound);
+            setGamePhase('finished');
+            playSound('win');
+        }
     };
 
-    const sortedCompetitors = useMemo(() => [...inGameCompetitors].sort((a, b) => b.score - a.score), [inGameCompetitors]);
+    const handleFinish = () => {
+        const sorted = [...competitors].sort((a,b) => b.score - a.score);
+        setWinner(sorted[0]);
+        setGamePhase('finished');
+        playSound('win');
+    };
 
-    if (isLoading) return <CompetitionLoadingSkeleton />;
+    useEffect(() => {
+        if (gamePhase === 'playing' && questions.length > 0 && answeredQuestions.length === questions.length) {
+            handleFinish();
+        }
+    }, [answeredQuestions, questions, gamePhase]);
 
-    if (error) {
+
+    if (isLoading) return <div className="h-screen flex items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>;
+    if (error) return <div className="h-screen flex items-center justify-center text-red-400 bg-slate-950">{error}</div>;
+
+    // --- 1. EKRAN: KURULUM ---
+    if (gamePhase === 'setup') {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-slate-950 p-6">
-                <Alert variant="destructive" className="max-w-lg bg-red-950/50 border-red-900 text-red-200">
-                    <AlertTriangle className="h-5 w-5 text-red-400" />
-                    <AlertTitle>Hata!</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                    <Button asChild variant="outline" className="mt-4 border-red-800 text-red-300 hover:bg-red-900/50"><Link href="/teacher/smartboard/bireysel"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link></Button>
-                </Alert>
+            <div className="min-h-screen bg-slate-950 text-white p-6 font-sans">
+                <div className="max-w-7xl mx-auto flex items-center justify-between mb-8">
+                    <div>
+                        <h1 className="text-3xl font-black tracking-tight text-white flex items-center gap-3">
+                            <Settings2 className="h-8 w-8 text-cyan-400" /> BİREYSEL YARIŞMA
+                        </h1>
+                        <p className="text-slate-400 mt-1">Sınıftan öğrencileri seç ve bireysel yarıştır.</p>
+                    </div>
+                    <Button asChild variant="outline" className="border-white/10 text-slate-300">
+                        <Link href="/teacher/smartboard/bireysel"><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
+                    </Button>
+                </div>
+
+                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 h-[calc(100vh-140px)]">
+                    
+                    {/* SOL: HAVUZ */}
+                    <Card className="bg-slate-900/50 border-white/10 flex flex-col overflow-hidden">
+                        <CardHeader className="pb-3 border-b border-white/5 bg-slate-900">
+                            <CardTitle className="text-lg flex justify-between items-center">
+                                <span>Sınıf Listesi</span>
+                                <span className="text-xs font-normal text-slate-400 bg-slate-800 px-2 py-1 rounded">{filteredPool.length} Öğrenci</span>
+                            </CardTitle>
+                            <div className="flex gap-2 mt-2">
+                                {currentClass && (
+                                    <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+                                        <SelectTrigger className="h-9 bg-slate-950 border-white/10 text-xs w-28"><SelectValue /></SelectTrigger>
+                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                            <SelectItem value="all">Tüm</SelectItem>
+                                            {currentClass.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                                <Button size="sm" variant="secondary" className="h-9 text-xs flex-1" onClick={addAllFiltered} disabled={filteredPool.length === 0}>
+                                    <Users className="mr-2 h-3 w-3" /> Tümünü Ekle
+                                </Button>
+                                <Button size="icon" className="h-9 w-9 bg-cyan-600 hover:bg-cyan-500" onClick={() => setIsAddStudentOpen(true)}>
+                                    <UserPlus className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="p-2 flex-1 overflow-hidden">
+                            <ScrollArea className="h-full pr-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    {filteredPool.map(s => {
+                                        const isSelected = selectedStudents.some(ss => ss.uid === s.uid);
+                                        return <SetupStudentItem key={s.uid} student={s} isSelected={isSelected} onClick={() => !isSelected && addToSelection(s)} />
+                                    })}
+                                </div>
+                            </ScrollArea>
+                        </CardContent>
+                    </Card>
+
+                    {/* SAĞ: SEÇİLENLER */}
+                    <Card className="bg-slate-900/50 border-white/10 flex flex-col overflow-hidden shadow-2xl">
+                        <CardHeader className="pb-3 border-b border-white/5 bg-slate-900">
+                            <CardTitle className="text-lg flex justify-between items-center text-cyan-300">
+                                <span>Yarışacaklar</span>
+                                <span className="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded text-xs">{selectedStudents.length}</span>
+                            </CardTitle>
+                            <div className="flex justify-end mt-2">
+                                <Button variant="ghost" size="sm" onClick={() => setSelectedStudents([])} disabled={selectedStudents.length === 0} className="h-8 text-xs text-red-400 hover:bg-red-950/30">
+                                    <Trash2 className="mr-2 h-3 w-3" /> Temizle
+                                </Button>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="p-2 flex-1 overflow-hidden bg-cyan-900/5">
+                            <ScrollArea className="h-full pr-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    {selectedStudents.length > 0 ? selectedStudents.map(s => (
+                                        <div key={s.uid} className="flex items-center justify-between p-2 rounded-lg bg-slate-800 border border-cyan-500/20 group">
+                                            <div className="flex items-center gap-3">
+                                                <Avatar className="h-8 w-8"><AvatarImage src={s.avatar} /><AvatarFallback className="text-[10px] bg-slate-900">{s.displayName?.charAt(0)}</AvatarFallback></Avatar>
+                                                <span className="text-sm font-bold text-white truncate max-w-[120px]">{s.displayName}</span>
+                                            </div>
+                                            <Button size="icon" variant="ghost" className="h-7 w-7 text-slate-500 hover:text-red-400" onClick={() => removeFromSelection(s.uid)}>
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    )) : (
+                                        <div className="col-span-2 h-40 flex flex-col items-center justify-center text-slate-500 text-sm">
+                                            <UserPlus className="h-8 w-8 mb-2 opacity-50" />
+                                            Soldan öğrenci seçin.
+                                        </div>
+                                    )}
+                                </div>
+                            </ScrollArea>
+                        </CardContent>
+                        <CardFooter className="bg-slate-900 p-4 border-t border-white/5">
+                            <Button 
+                                size="lg" 
+                                className="w-full h-14 text-xl font-black bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-900/20 rounded-xl"
+                                disabled={selectedStudents.length === 0}
+                                onClick={startGame}
+                            >
+                                <Sparkles className="mr-2 h-6 w-6" /> OYUNU BAŞLAT
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                </div>
+
+                <AddStudentDialog 
+                    isOpen={isAddStudentOpen} 
+                    onOpenChange={setIsAddStudentOpen} 
+                    onAdd={handleAddGuest} 
+                    isSaving={isAddingStudent} 
+                />
             </div>
         );
     }
 
-    if (gameState === 'finished') {
+    // --- 2. EKRAN: OYUN ---
+    if (gamePhase === 'playing') {
         return (
-            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden font-sans">
-                <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/20 via-slate-950 to-slate-950" />
-                <Card className="w-full max-w-4xl bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500" />
-                    <CardHeader className="text-center pt-12 pb-6"><Trophy className="h-20 w-20 text-yellow-400 mx-auto mb-4 animate-bounce" /><CardTitle className="text-5xl font-black text-white">Yarışma Tamamlandı!</CardTitle></CardHeader>
-                    <CardContent className="px-8 pb-10 text-center">
-                        {winner && <h3 className="text-3xl font-black text-white mb-6">Kazanan: {winner.displayName}</h3>}
-                         <Button onClick={startNewGame} className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold h-14 px-8 rounded-xl">Tekrar Oyna</Button>
+            <div className={cn("min-h-screen bg-slate-950 text-white p-4 flex flex-col overflow-hidden font-sans", isFullscreen ? "p-0" : "")}>
+                {/* Üst Bar */}
+                <header className="shrink-0 h-16 flex items-center justify-between bg-slate-900/80 backdrop-blur border-b border-white/10 px-6 rounded-2xl shadow-lg mb-4">
+                    <div className="flex items-center gap-4">
+                        <div className="p-2 bg-cyan-600 rounded-lg"><User className="text-white h-5 w-5" /></div>
+                        <div>
+                            <h1 className="text-lg font-black uppercase tracking-tight">Bireysel Yarışma</h1>
+                            <p className="text-[10px] text-slate-400">{searchParams.get('courseName')} • {searchParams.get('topicName')}</p>
+                        </div>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                        <Button size="sm" variant="secondary" onClick={handleRandomStudent} className="bg-slate-800 text-cyan-400 hover:bg-slate-700">
+                            <Shuffle className="mr-2 h-4 w-4" /> Rastgele
+                        </Button>
+                        <Button size="sm" onClick={handleFinish} className="bg-white text-slate-900 hover:bg-slate-200 font-bold">
+                            <Flag className="mr-2 h-4 w-4"/> Bitir
+                        </Button>
+                        <FullscreenToggle className="bg-slate-800 text-white border-0" />
+                    </div>
+                </header>
+
+                {/* Ana İçerik: Öğrenci Grid */}
+                <div className="flex-1 bg-slate-900/30 rounded-2xl border border-white/5 p-6 overflow-y-auto custom-scrollbar min-h-0 relative">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        {sortedCompetitors.map((comp, idx) => (
+                            <BigStudentCard 
+                                key={comp.uid} 
+                                competitor={comp} 
+                                rank={idx} 
+                                onClick={() => setActiveCompetitorId(comp.uid)}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Soru Seçim Modalı (Öğrenci Seçildiğinde Açılır) */}
+                <Dialog open={!!activeCompetitorId && !openedQuestion} onOpenChange={(open) => !open && setActiveCompetitorId(null)}>
+                    <DialogContent className="bg-slate-900 border-white/10 text-white max-w-5xl h-[80vh] flex flex-col p-0 overflow-hidden">
+                        
+                        <div className="p-6 border-b border-white/10 bg-slate-950 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                {activeCompetitor && (
+                                    <Avatar className={cn("h-12 w-12 border-2", PLAYER_COLORS[activeCompetitor.colorIndex % PLAYER_COLORS.length].border)}>
+                                        <AvatarImage src={activeCompetitor.avatar} />
+                                        <AvatarFallback className="bg-slate-800">{activeCompetitor.displayName.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                )}
+                                <div>
+                                    <h2 className="text-xl font-bold text-white">{activeCompetitor?.displayName}</h2>
+                                    <p className="text-xs text-slate-400">Soru seçimi yapıyor...</p>
+                                </div>
+                            </div>
+                            <Button variant="ghost" onClick={() => setActiveCompetitorId(null)} className="text-slate-400 hover:text-white"><X className="h-6 w-6"/></Button>
+                        </div>
+
+                        <ScrollArea className="flex-1 p-6 bg-slate-900/50">
+                            <div className="grid grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
+                                {questions.map((q, i) => {
+                                    const qNum = i + 1;
+                                    const isAnswered = answeredQuestions.includes(qNum);
+                                    return (
+                                        <button
+                                            key={qNum}
+                                            disabled={isAnswered}
+                                            onClick={() => setOpenedQuestion({ number: qNum, question: q })}
+                                            className={cn(
+                                                "aspect-square rounded-xl flex items-center justify-center text-xl font-bold shadow-lg transition-all duration-200 border-b-4 active:border-b-0 active:translate-y-1 relative group overflow-hidden",
+                                                isAnswered 
+                                                    ? "bg-slate-800 text-slate-600 border-slate-800 cursor-not-allowed" 
+                                                    : "bg-slate-700 text-white border-slate-900 hover:bg-cyan-600 hover:border-cyan-800"
+                                            )}
+                                        >
+                                            {isAnswered ? <Check className="opacity-20"/> : qNum}
+                                            {!isAnswered && <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />}
+                                        </button>
+                                    )
+                                })}
+                            </div>
+                        </ScrollArea>
+                    </DialogContent>
+                </Dialog>
+
+                {/* Soru Ekranı */}
+                {openedQuestion && (
+                    <QuestionDialog
+                        isOpen={!!openedQuestion}
+                        onClose={() => { setOpenedQuestion(null); setActiveCompetitorId(null); }} // Soru kapanınca seçimi sıfırla
+                        questionData={openedQuestion}
+                        onAnswer={handleAnswer}
+                        timerDuration={questionTimer}
+                        pointsConfig={{ mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 } }} 
+                        penaltyConfig={{ mcq: { Kolay: 5, Orta: 5, Zor: 5 }, tf: { Kolay: 10, Orta: 10, Zor: 10 }, fitb: { Kolay: 5, Orta: 5, Zor: 5 } }}
+                        isFullscreen={isFullscreen}
+                        activeStudentName={activeCompetitor?.displayName}
+                    />
+                )}
+            </div>
+        );
+    }
+
+    // --- 3. EKRAN: BİTİŞ ---
+    if (gamePhase === 'finished') {
+        return (
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 text-center">
+                <Card className="max-w-2xl w-full bg-slate-900 border-white/10 shadow-2xl overflow-hidden">
+                    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2" />
+                    <CardHeader className="pt-12 pb-6">
+                        <Trophy className="h-24 w-24 mx-auto text-yellow-400 mb-6 animate-bounce" />
+                        <CardTitle className="text-5xl font-black text-white uppercase">KAZANAN</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pb-12">
+                        {winner ? (
+                            <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-2xl p-8 inline-block">
+                                <Avatar className="h-20 w-20 mx-auto mb-4 border-2 border-cyan-400">
+                                    <AvatarImage src={winner.avatar} />
+                                    <AvatarFallback className="text-xl bg-slate-900">{winner.displayName?.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <h2 className="text-4xl font-black text-cyan-400 mb-2">{winner.displayName}</h2>
+                                <p className="text-2xl text-white font-bold">{winner.score} PUAN</p>
+                            </div>
+                        ) : (
+                            <h2 className="text-4xl font-black text-slate-300">OYUN BİTTİ!</h2>
+                        )}
+                        <p className="mt-8 text-slate-400">Tüm sorular cevaplandı.</p>
                     </CardContent>
-                    <CardFooter className="bg-slate-900 border-t border-white/5 p-6 flex justify-center gap-4">
-                        <Button asChild size="lg" variant="outline" className="border-white/10 text-slate-300 hover:text-white h-14 px-8 rounded-xl"><Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5" /> Çıkış</Link></Button>
+                    <CardFooter className="bg-slate-950 p-8 flex justify-center gap-4">
+                        <Button size="lg" className="h-14 px-8 text-lg font-bold bg-white text-slate-900 hover:bg-slate-200" onClick={() => window.location.reload()}>
+                            <Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna
+                        </Button>
+                        <Button asChild size="lg" variant="outline" className="h-14 px-8 text-lg border-white/10 text-slate-300 hover:text-white">
+                            <Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Çıkış</Link>
+                        </Button>
                     </CardFooter>
                 </Card>
             </div>
-        )
+        );
     }
-    
-    // --- OYUN EKRANI ---
-    return (
-        <div className={cn("flex flex-col h-screen bg-slate-950 text-white overflow-hidden relative selection:bg-cyan-500/30 font-sans", isFullscreen ? "" : "p-2 md:p-4")}>
-             
-             {/* Arka Plan */}
-             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px]" />
-            </div>
 
-            {/* Üst Bar */}
-            <header className={cn("flex-shrink-0 flex items-center justify-between z-20 mb-2 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-2 shadow-lg", isFullscreen && "rounded-none border-x-0 border-t-0 mb-0")}>
-                <div className="flex items-center gap-4">
-                    <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg"><MonitorPlay className="h-5 w-5 text-white"/></div>
-                    <div>
-                        <h1 className="text-lg font-black tracking-tight text-white uppercase leading-none">{currentView === 'leaderboard' ? 'Bireysel Yarışma' : 'Soru Seçimi'}</h1>
-                        <p className="text-[10px] text-slate-400 font-medium mt-0.5">{currentView === 'questions' && activeCompetitorId ? `Sıra: ${inGameCompetitors.find(c => c.uid === activeCompetitorId)?.displayName}` : `${searchParams.get('courseName')} • ${searchParams.get('topicName')}`}</p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                     {currentView === 'questions' && <Button variant="outline" size="sm" onClick={() => { setCurrentView('leaderboard'); setActiveCompetitorId(null); }} className="border-white/10 text-slate-300 hover:text-white h-8 text-xs"><ArrowLeft className="mr-1 h-3 w-3"/> Geri</Button>}
-                     <Button size="sm" className={cn("font-bold transition-all h-8 px-3 rounded-lg text-xs", scoresHaveBeenSaved ? "bg-green-600 hover:bg-green-700" : "bg-white text-slate-900 hover:bg-slate-200")} onClick={() => handleSaveScores(true)} disabled={isSubmittingScores || scoresHaveBeenSaved || inGameCompetitors.length === 0}>
-                        {isSubmittingScores ? <Loader2 className="mr-1 h-3 w-3 animate-spin"/> : scoresHaveBeenSaved ? <Check className="mr-1 h-3 w-3"/> : <Save className="mr-1 h-3 w-3"/>}
-                        {scoresHaveBeenSaved ? "Kaydedildi" : "Bitir"}
-                    </Button>
-                    <FullscreenToggle className="bg-slate-800 text-slate-300 hover:text-white border-0 h-8 w-8 rounded-lg" />
-                    {!isFullscreen && <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-lg h-8 w-8"><Link href="/teacher/smartboard/bireysel"><ArrowLeft className="h-4 w-4" /></Link></Button>}
-                </div>
-            </header>
-
-            {/* Ana İçerik */}
-            <main className="flex-1 flex flex-col overflow-hidden relative z-10 h-full">
-                
-                {/* 1. SAHNE: LİDERLİK TABLOSU + ÖĞRENCİ HAVUZU (ALT ALTA) */}
-                {currentView === 'leaderboard' && (
-                    <div className="flex flex-col gap-2 h-full animate-in fade-in zoom-in-95 duration-300">
-                        
-                        {/* Üst Kısım: Liderlik Tablosu (Büyük Alan) */}
-                        <div className="flex-1 bg-slate-900/40 backdrop-blur-md border border-white/5 rounded-2xl p-1 overflow-hidden flex flex-col shadow-inner min-h-0 relative">
-                             {/* Buradaki wrapper div, scroll'un çalışması için önemli */}
-                             <div className="absolute inset-0 overflow-y-auto custom-scrollbar p-2">
-                                {inGameCompetitors.length > 0 ? (
-                                    // YENİ GRID: Maksimum 4 sütun
-                                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                                        {sortedCompetitors.map((player, index) => (
-                                            <TeamScoreCard 
-                                                key={player.uid} 
-                                                competitor={player} 
-                                                isActive={false} 
-                                                rank={index}
-                                                onClick={() => handleCompetitorClick(player.uid)}
-                                                onRemove={(e) => { e.stopPropagation(); removeCompetitorFromGame(player.uid); }}
-                                            />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="h-full flex flex-col items-center justify-center text-slate-500 text-center">
-                                        <div className="bg-slate-900/50 p-6 rounded-full mb-4 border border-white/5"><Users className="h-12 w-12 opacity-30" /></div>
-                                        <p className="text-lg font-medium">Henüz yarışmacı yok.</p>
-                                        <p className="opacity-60 text-sm">Aşağıdaki havuzdan öğrenci seçerek başlayın.</p>
-                                    </div>
-                                )}
-                             </div>
-                        </div>
-
-                        {/* Alt Kısım: Öğrenci Havuzu (Alt Panel - Kompakt) */}
-                        <div className="h-[180px] shrink-0 bg-slate-950/80 backdrop-blur-xl border-t border-white/10 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.3)] z-30 rounded-t-2xl">
-                             <div className="px-4 py-2 border-b border-white/5 bg-slate-900/50 flex items-center justify-between shrink-0 h-12">
-                                 <div className="flex items-center gap-3">
-                                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                                        <Users className="w-3 h-3 text-cyan-400"/> Havuz
-                                    </span>
-                                    {currentClass && (
-                                        <Select value={selectedBranch} onValueChange={handleBranchSelect}>
-                                            <SelectTrigger className="h-7 w-32 bg-slate-900 border-white/10 text-xs text-white rounded-md"><SelectValue placeholder="Şube..." /></SelectTrigger>
-                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                                <SelectItem value="all">Tüm Şubeler</SelectItem>
-                                                {currentClass.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                            </SelectContent>
-                                        </Select>
-                                    )}
-                                 </div>
-                                 <div className="flex gap-2">
-                                     <Button variant="secondary" size="sm" className="h-7 text-xs bg-slate-800 hover:bg-slate-700 text-white" onClick={addAllFromPoolToGame} disabled={studentsInBranch.every(s => inGameCompetitors.some(c => c.uid === s.uid))}>
-                                        Tümünü Ekle
-                                    </Button>
-                                    <Button size="sm" className="h-7 px-3 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold" onClick={() => setIsAddStudentOpen(true)}>
-                                        <UserPlus className="mr-1 h-3 w-3" /> Yeni
-                                    </Button>
-                                 </div>
-                            </div>
-
-                            <div className="flex-1 overflow-y-auto custom-scrollbar p-2 bg-slate-900/20">
-                                {isPoolLoading ? <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin text-cyan-500"/></div> :
-                                 studentsInBranch.length > 0 ? (
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
-                                        {studentsInBranch.map(s => (
-                                            <StudentListItem key={s.uid} student={s} onAddToGame={addCompetitorToGame} isAdded={inGameCompetitors.some(c => c.uid === s.uid)} />
-                                        ))}
-                                    </div>
-                                 ) : (
-                                    <p className="text-center text-xs text-slate-500 p-4 font-medium">Bu şubede görüntülenecek öğrenci bulunamadı.</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* 2. SAHNE: SORU EKRANI (TAM EKRAN) */}
-                {currentView === 'questions' && activeCompetitorId && (
-                     <div className="flex-1 bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-2xl p-6 shadow-inner overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-300 h-full">
-                        <div className="text-center mb-6 shrink-0">
-                            <h2 className="text-4xl font-black text-white mb-2 tracking-tight">
-                                Sıra: <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{inGameCompetitors.find(c => c.uid === activeCompetitorId)?.displayName}</span>
-                            </h2>
-                            <p className="text-slate-400 text-lg">Lütfen cevaplamak istediğin soruyu seç.</p>
-                            
-                            <div className="mt-4 flex justify-center">
-                                <Button 
-                                    variant="outline" 
-                                    className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-10 px-6 rounded-xl text-base font-bold"
-                                    onClick={handleSelectRandomQuestion} 
-                                    disabled={!activeCompetitorId}
-                                >
-                                    <Shuffle className="mr-2 h-4 w-4" /> Rastgele Soru Seç
-                                </Button>
-                            </div>
-                        </div>
-                        
-                        <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
-                            <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-3">
-                                {questions.map((q, i) => {
-                                    const questionNumber = i + 1;
-                                    const isAnswered = answeredQuestions.includes(questionNumber);
-                                    
-                                    return (
-                                        <button
-                                            key={i}
-                                            disabled={isAnswered}
-                                            onClick={() => !isAnswered && handleOpenQuestion(questionNumber, q)}
-                                            className={cn(
-                                                "aspect-square rounded-xl flex items-center justify-center text-2xl md:text-3xl font-black transition-all duration-300 relative overflow-hidden group border-2",
-                                                isAnswered 
-                                                    ? "bg-slate-800/40 text-slate-700 border-slate-800/50 cursor-not-allowed grayscale" 
-                                                    : "bg-slate-800 border-slate-700 hover:bg-cyan-600 hover:border-cyan-400 text-white hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:-translate-y-1 active:scale-95"
-                                            )}
-                                        >
-                                            {!isAnswered && <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
-                                            {isAnswered ? <Check className="h-8 w-8 opacity-20" /> : <span className="drop-shadow-md z-10">{questionNumber}</span>}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                     </div>
-                )}
-
-            </main>
-
-            {/* Modallar */}
-            {openedQuestion && (
-                <QuestionDialog
-                    isFullscreen={isFullscreen}
-                    isOpen={!!openedQuestion}
-                    onClose={() => setOpenedQuestion(null)}
-                    questionData={openedQuestion}
-                    onAnswer={handleAnswerQuestion}
-                    timerDuration={questionTimer}
-                    pointsConfig={pointsConfig}
-                    penaltyConfig={penaltyConfig}
-                />
-            )}
-            
-            <AddStudentDialog
-                isOpen={isAddStudentOpen}
-                onOpenChange={setIsAddStudentOpen}
-                onAdd={handleAddStudent}
-                isSaving={isAddingStudent}
-                poolClassName={currentClass?.name ? `${currentClass.name} - ${selectedBranch} (Havuz)` : SUMMER_SCHOOL_CLASS_NAME}
-            />
-        </div>
-    );
+    return null;
 }
 
 export default function SmartboardBireyselOyunPage() {
-    return (
-        <Suspense fallback={<CompetitionLoadingSkeleton />}>
-            <CompetitionComponent />
-        </Suspense>
-    )
+  return (
+    <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>}>
+        <IndividualCompetitionComponent />
+    </Suspense>
+  )
 }

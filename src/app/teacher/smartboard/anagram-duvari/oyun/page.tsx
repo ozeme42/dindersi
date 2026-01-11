@@ -1,16 +1,15 @@
 'use client';
 
-import { useState, useEffect, Suspense, useRef, useCallback } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Loader2, RefreshCw, Eye, Trophy, ArrowLeft, Wand2 } from "lucide-react";
+import { Loader2, RefreshCw, Eye, Trophy, ArrowLeft, Wand2, AlertTriangle, Play, Maximize, Minimize } from "lucide-react";
 import Link from "next/link";
-import { getAnagramWallWords } from '../actions';
+import { getAnagramWallWords } from '../actions'; 
 import { cn } from "@/lib/utils";
 import { playSound } from "@/lib/audio-service";
 import Confetti from 'react-dom-confetti';
 
-// Renk Paleti (Kartlar için rastgele seçilecek)
 const CARD_COLORS = [
     { bg: "bg-red-500", border: "border-red-400", shadow: "shadow-red-900/50" },
     { bg: "bg-orange-500", border: "border-orange-400", shadow: "shadow-orange-900/50" },
@@ -32,24 +31,19 @@ type AnagramCard = {
     original: string;
     scrambled: string;
     isSolved: boolean;
-    rotation: number; // Hafif eğiklik için
+    rotation: number;
     colorIndex: number;
 };
 
-// Kelime Karıştırma Fonksiyonu
 function scrambleWord(word: string): string {
     const arr = word.split('');
     let currentIndex = arr.length, randomIndex;
-
-    // Fisher-Yates Shuffle
     while (currentIndex > 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
         [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
     }
-    
     const scrambled = arr.join('');
-    // Eğer şans eseri aynısı olursa tekrar karıştır
     if (scrambled === word && word.length > 1) return scrambleWord(word);
     return scrambled;
 }
@@ -57,88 +51,154 @@ function scrambleWord(word: string): string {
 function AnagramWallComponent() {
     const searchParams = useSearchParams();
     
+    const [gameState, setGameState] = useState<'loading' | 'error' | 'intro' | 'playing' | 'finished'>('loading');
     const [cards, setCards] = useState<AnagramCard[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [isAllSolved, setIsAllSolved] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
-    // Veri Çekme
     useEffect(() => {
         const fetchWords = async () => {
-            setIsLoading(true);
-            const params = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-            };
-            const result = await getAnagramWallWords(params);
-            
-            if (result.words && result.words.length > 0) {
-                // Maksimum 15-20 kelime alalım ki ekran çok boğulmasın
-                const selectedWords = result.words.slice(0, 18);
+            setGameState('loading');
+            try {
+                const params = {
+                    courseId: searchParams.get('courseId') || undefined,
+                    unitId: searchParams.get('unitId') || undefined,
+                    topicId: searchParams.get('topicId') || undefined,
+                };
+
+                const result = await getAnagramWallWords(params);
                 
-                const gameCards: AnagramCard[] = selectedWords.map((word, index) => ({
-                    id: `word-${index}`,
-                    original: word,
-                    scrambled: scrambleWord(word.toUpperCase()),
-                    isSolved: false,
-                    rotation: Math.random() * 6 - 3, // -3 ile +3 derece arası eğiklik
-                    colorIndex: index % CARD_COLORS.length
-                }));
-                
-                setCards(gameCards.sort(() => Math.random() - 0.5)); // Kartların yerini de karıştır
+                if (result.error) {
+                    setError(result.error);
+                    setGameState('error');
+                } else if (!result.words || result.words.length === 0) {
+                    setError("Bu üniteye ait kavram bulunamadı. Lütfen başka bir konu seçiniz.");
+                    setGameState('error');
+                } else {
+                    const selectedWords = result.words; // Tüm kelimeler
+                    
+                    const gameCards: AnagramCard[] = selectedWords.map((word, index) => ({
+                        id: `word-${index}`,
+                        original: word,
+                        scrambled: scrambleWord(word.toUpperCase()),
+                        isSolved: false,
+                        rotation: Math.random() * 6 - 3,
+                        colorIndex: index % CARD_COLORS.length
+                    }));
+                    // Kartları karıştırıyoruz ama numaralar render sırasında verilecek
+                    setCards(gameCards.sort(() => Math.random() - 0.5));
+                    setGameState('intro');
+                }
+            } catch (err) {
+                setError("Beklenmedik bir hata oluştu.");
+                setGameState('error');
             }
-            setIsLoading(false);
         };
         fetchWords();
     }, [searchParams]);
 
-    // Tümünün çözülüp çözülmediğini kontrol et
     useEffect(() => {
-        if (cards.length > 0 && cards.every(c => c.isSolved)) {
-            setIsAllSolved(true);
-            setShowConfetti(true);
-            playSound('win');
+        if (gameState === 'playing' && cards.length > 0 && cards.every(c => c.isSolved)) {
+            setTimeout(() => {
+                setIsAllSolved(true);
+                setShowConfetti(true);
+                playSound('win');
+                setGameState('finished');
+            }, 1000);
         }
-    }, [cards]);
+    }, [cards, gameState]);
 
-    // Karta Tıklama (Çözme)
+    const startGame = () => {
+        setGameState('playing');
+        playSound('start');
+    };
+
     const handleCardClick = (id: string) => {
         const card = cards.find(c => c.id === id);
         if (!card || card.isSolved) return;
-
         playSound('correct');
-        setCards(prev => prev.map(c => 
-            c.id === id ? { ...c, isSolved: true } : c
-        ));
+        setCards(prev => prev.map(c => c.id === id ? { ...c, isSolved: true } : c));
     };
 
-    // Tümünü Göster (Hoca için kısayol)
     const revealAll = () => {
         setCards(prev => prev.map(c => ({ ...c, isSolved: true })));
     };
 
-    // Yeniden Başlat
     const resetGame = () => {
         setIsAllSolved(false);
         setShowConfetti(false);
-        // Sadece durumlarını sıfırla, tekrar karıştırmak istersek scramble da çalıştırabiliriz
         setCards(prev => prev.map(c => ({
             ...c,
             isSolved: false,
-            scrambled: scrambleWord(c.original) // Yeniden karıştır
-        })).sort(() => Math.random() - 0.5)); // Yerleri de değiştir
+            scrambled: scrambleWord(c.original)
+        })).sort(() => Math.random() - 0.5));
     };
 
-    if (isLoading) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-purple-500" /></div>;
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+            setIsFullscreen(true);
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+                setIsFullscreen(false);
+            }
+        }
+    };
 
-    // Kalan Kelime Sayısı
+    // --- EKRAN DURUMLARI ---
+
+    if (gameState === 'loading') {
+        return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-purple-500" /></div>;
+    }
+
+    if (gameState === 'error') {
+        return (
+            <div className="h-screen w-screen bg-slate-950 flex flex-col items-center justify-center p-4 text-center">
+                <div className="bg-slate-900 p-8 rounded-3xl border border-white/10 shadow-2xl max-w-md">
+                    <div className="bg-red-500/10 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                        <AlertTriangle className="w-10 h-10 text-red-500" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-white mb-2">Hata Oluştu</h2>
+                    <p className="text-slate-400 mb-8">{error}</p>
+                    <Link href="/teacher/smartboard">
+                        <Button size="lg" variant="outline" className="w-full">
+                            <ArrowLeft className="mr-2 w-5 h-5" /> Geri Dön
+                        </Button>
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    if (gameState === 'intro') {
+        return (
+            <div className="h-screen w-screen bg-slate-900 flex items-center justify-center p-4">
+                <div className="bg-slate-800 p-12 rounded-3xl border border-slate-700 text-white shadow-2xl text-center max-w-2xl w-full animate-in zoom-in-95">
+                    <div className="w-24 h-24 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Wand2 className="w-12 h-12 text-purple-400" />
+                    </div>
+                    <h1 className="text-5xl font-black tracking-tight mb-4">ANAGRAM DUVARI</h1>
+                    <p className="text-slate-400 text-xl mb-10">
+                        Seçilen konuda toplam <strong>{cards.length} kavram</strong> bulundu.<br/>
+                        Öğrenciler karışık harfleri çözmeye hazır mı?
+                    </p>
+                    <Button onClick={startGame} size="lg" className="h-20 px-16 text-3xl font-bold rounded-full shadow-[0_0_40px_rgba(168,85,247,0.4)] bg-purple-600 hover:bg-purple-500 hover:scale-105 transition-all">
+                        DUVARI AÇ <Play className="ml-4 w-10 h-10 fill-white" />
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    // Oyun Ekranı
     const solvedCount = cards.filter(c => c.isSolved).length;
     const totalCount = cards.length;
 
     return (
         <div className="min-h-screen w-screen bg-slate-950 text-white flex flex-col relative overflow-hidden">
-            {/* Arkaplan Deseni */}
             <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-10 pointer-events-none"></div>
             
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100]">
@@ -153,12 +213,12 @@ function AnagramWallComponent() {
                             <ArrowLeft className="w-6 h-6" />
                         </Button>
                     </Link>
-                    <h1 className="text-2xl font-black tracking-tight bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+                    <h1 className="text-2xl font-black tracking-tight bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent hidden sm:block">
                         ANAGRAM DUVARI
                     </h1>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 sm:gap-4">
                     <div className="bg-slate-800 px-4 py-2 rounded-lg border border-white/10 flex items-center gap-2">
                         <Trophy className="w-5 h-5 text-yellow-500" />
                         <span className="font-mono font-bold text-xl">
@@ -166,25 +226,24 @@ function AnagramWallComponent() {
                         </span>
                     </div>
 
+                    <Button onClick={toggleFullscreen} variant="outline" size="icon" title="Tam Ekran">
+                        {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
+                    </Button>
+
                     <Button onClick={resetGame} variant="outline" size="icon" title="Yeniden Karıştır">
                         <RefreshCw className="w-5 h-5" />
                     </Button>
-                    <Button onClick={revealAll} variant="outline" size="icon" title="Tümünü Çöz">
-                        <Wand2 className="w-5 h-5" />
+                    <Button onClick={revealAll} variant="outline" size="icon" title="Tümünü Çöz (Öğretmen)">
+                        <Eye className="w-5 h-5" />
                     </Button>
                 </div>
             </div>
 
-            {/* Kart Alanı (Masonry Grid Benzeri Yapı) */}
+            {/* Kart Alanı */}
             <div className="flex-1 p-6 overflow-y-auto">
-                {/* Grid yapısını responsive ve "dolu" görünecek şekilde ayarlıyoruz.
-                   auto-fit: Ekran genişliğine göre sığabildiği kadar kart koyar.
-                   minmax: Kartlar çok küçülmesin diye minimum genişlik veriyoruz.
-                */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr">
                     {cards.map((card, idx) => {
                         const style = CARD_COLORS[card.colorIndex];
-                        
                         return (
                             <div 
                                 key={card.id}
@@ -195,29 +254,33 @@ function AnagramWallComponent() {
                                 )}
                                 style={{ transform: `rotate(${card.isSolved ? 0 : card.rotation}deg)` }}
                             >
-                                {/* Kartın İçeriği (3D Flip Efekti Olabilir veya Basit Dönüşüm) */}
                                 <div className={cn(
-                                    "w-full h-full rounded-2xl shadow-xl border-b-4 flex items-center justify-center p-2 text-center transition-all duration-500",
+                                    "w-full h-full rounded-2xl shadow-xl border-b-4 flex items-center justify-center p-2 text-center transition-all duration-500 relative overflow-hidden",
                                     card.isSolved 
                                         ? "bg-white border-white text-slate-900 shadow-[0_0_30px_rgba(255,255,255,0.4)] transform scale-105" 
                                         : `${style.bg} ${style.border} text-white ${style.shadow} opacity-90 hover:opacity-100`
                                 )}>
+                                    {/* --- DEĞİŞİKLİK BURADA: SIRA NUMARASI (INDEX + 1) --- */}
+                                    <div className={cn(
+                                        "absolute top-2 left-3 font-mono font-bold text-lg pointer-events-none",
+                                        card.isSolved ? "text-slate-400 opacity-60" : "text-white opacity-80 mix-blend-overlay"
+                                    )}>
+                                        {idx + 1}
+                                    </div>
+
                                     <span className={cn(
                                         "font-black tracking-widest break-all leading-none drop-shadow-md",
-                                        // Kelime uzunluğuna göre font boyutu ayarı
                                         card.original.length > 10 ? "text-2xl" : "text-4xl sm:text-5xl"
                                     )}>
                                         {card.isSolved ? card.original : card.scrambled}
                                     </span>
                                     
-                                    {/* Çözülmemişse Üzerinde İpucu İkonu (Hoverda) */}
                                     {!card.isSolved && (
                                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-20 transition-opacity">
                                             <Eye className="w-12 h-12 text-black" />
                                         </div>
                                     )}
 
-                                    {/* Çözüldüyse Tik İkonu */}
                                     {card.isSolved && (
                                         <div className="absolute -top-3 -right-3 bg-green-500 text-white rounded-full p-1 shadow-lg animate-in zoom-in spin-in-180">
                                             <Trophy className="w-5 h-5" />
@@ -230,14 +293,14 @@ function AnagramWallComponent() {
                 </div>
             </div>
 
-            {/* Tebrik Mesajı (Tümü bitince) */}
+            {/* Bitiş Ekranı */}
             {isAllSolved && (
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center animate-in fade-in duration-500">
                     <div className="bg-slate-900 p-10 rounded-3xl border border-white/20 text-center shadow-2xl transform scale-110">
                         <Trophy className="w-32 h-32 text-yellow-400 mx-auto mb-6 animate-bounce" />
                         <h2 className="text-5xl font-black text-white mb-4">TEBRİKLER!</h2>
                         <p className="text-slate-300 text-xl mb-8">Tüm kelimeleri buldunuz.</p>
-                        <Button onClick={resetGame} size="lg" className="h-16 px-12 text-2xl font-bold bg-purple-600 hover:bg-purple-500 rounded-full">
+                        <Button onClick={resetGame} size="lg" className="h-16 px-12 text-2xl font-bold bg-purple-600 hover:bg-purple-500 rounded-full shadow-lg">
                             TEKRAR OYNA
                         </Button>
                     </div>
@@ -247,9 +310,10 @@ function AnagramWallComponent() {
     );
 }
 
-export default function AnagramWallPage() {
+export default function AnagramGamePage() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-purple-500" /></div>}>
             <AnagramWallComponent />
         </Suspense>
-    
+    )
+}
