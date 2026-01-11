@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -5,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Settings, PartyPopper, Loader2, Users, MonitorPlay, Sparkles, Wind, Package, Puzzle, Megaphone } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Settings, PartyPopper, Loader2, Users, MonitorPlay, Sparkles, Wind, Package, Puzzle, Megaphone, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -33,7 +34,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
     gameConfig: any,
     gameName?: string,
     gamePath?: string,
-    gameIconName?: 'Package' | 'Wind' | 'Puzzle' | 'Megaphone' // Desteklenen ikon isimleri
+    gameIconName?: 'Package' | 'Wind' | 'Puzzle' | 'Megaphone' | 'MonitorPlay' // Desteklenen ikon isimleri
 }) {
   const { user } = useAuth();
   const searchParams = useSearchParams();
@@ -138,7 +139,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
   const handleSelectUnit = async (unitId: string, unitName: string) => {
     setSelection(prev => ({ ...prev, unitId, unitName, topicId: '', topicName: '' }));
     if (unitId === 'all') {
-      setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
+      setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Üniteler' }));
       setTopics([]);
     } else {
       setIsDataLoading(true);
@@ -148,12 +149,22 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
       setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
       setIsDataLoading(false);
     }
-    handleNext();
+
+    if (finalGamePath === 'anlat-bakalim') {
+        setCurrentStep(5); // Anlat bakalım için ayarları atla
+    } else {
+        handleNext();
+    }
   };
   
   const handleSelectTopic = (topicId: string, topicName: string) => {
     setSelection(prev => ({...prev, topicId, topicName}));
-    handleNext();
+
+    if (finalGamePath === 'anlat-bakalim') {
+        setCurrentStep(5); // Anlat bakalım için ayarları atla
+    } else {
+        handleNext();
+    }
   };
 
   const getGameUrl = () => {
@@ -166,12 +177,14 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
         topicName: selection.topicName,
         classId: selection.classId,
         className: selection.className,
+        // Bireysel yarışma olduğu için oyuncu bilgisi göndermiyoruz
     });
+    // Her oyunun kendi oyun sayfasına yönlendir
     return `/teacher/smartboard/${finalGamePath}/oyun?${params.toString()}`;
   }
 
   const renderContent = () => {
-    if (isLoading && currentStep > 0) return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>
+    if (isLoading && currentStep > 0) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>
     
     const loadingProp = isDataLoading;
 
@@ -228,9 +241,9 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
       <div className="max-w-5xl mx-auto w-full relative z-10 flex-grow flex flex-col">
         <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center p-3 bg-purple-500/10 rounded-full mb-2 border border-purple-500/20 shadow-lg">
-                <GameIcon className="h-8 w-8 text-purple-400" />
+                <GameIcon className="h-8 w-8 text-purple-400"/>
             </div>
-            <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg">{finalGameName}</h1>
+            <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg">{finalGameName} Kurulumu</h1>
             <p className="text-slate-400 mt-1">Yarışmayı başlatmak için adımları takip edin.</p>
         </div>
         
@@ -244,8 +257,10 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
               ></div>
 
               {steps.map((step) => {
-                  const isActive = currentStep === step.id;
+                  if (finalGamePath === 'anlat-bakalim' && step.id === 5) return null; // Anlat bakalım için ayarları atla
+                  
                   const isCompleted = currentStep > step.id;
+                  const isActive = currentStep === step.id;
                   return (
                     <div key={step.id} className="flex flex-col items-center gap-2 group cursor-default">
                         <div className={cn(
@@ -283,7 +298,7 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
 
             {currentStep < steps.length && (
                 <Button onClick={handleNext} disabled={
-                    (currentStep === 1 && !selection.classId) || 
+                    (currentStep === 1 && !selection.classId) ||
                     (currentStep === 2 && !selection.courseId) ||
                     (currentStep === 3 && !selection.unitId) ||
                     (currentStep === 4 && !selection.topicId)
@@ -297,3 +312,5 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
     </div>
   );
 }
+
+    

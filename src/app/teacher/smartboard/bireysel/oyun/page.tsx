@@ -10,7 +10,7 @@ import {
     ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, 
     Check, Trash2, Users, Shuffle, PartyPopper, 
     Trophy, MonitorPlay, Save, Plus, Award,
-    UserPlus, X, User, Settings2, Sparkles, Flag, Lock, Grid2X2
+    UserPlus, X, User, Settings2, Sparkles, Flag, Lock, Medal
 } from "lucide-react";
 import Link from "next/link";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -26,31 +26,22 @@ import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { QuestionDialog } from "@/components/question-dialog";
 import { addStudentToClass } from "@/app/teacher/students/actions";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const SUMMER_SCHOOL_CLASS_NAME = "Yaz Okulu Havuzu";
 
-// Renk Paleti (Öğrencilere rastgele atamak için)
+// Renk Paleti - Daha belirgin renkler
 const PLAYER_COLORS = [
-    { bg: "bg-red-500/20 hover:bg-red-500/30", border: "border-red-500", ring: "ring-red-500", text: "text-red-400" },
-    { bg: "bg-orange-500/20 hover:bg-orange-500/30", border: "border-orange-500", ring: "ring-orange-500", text: "text-orange-400" },
-    { bg: "bg-amber-500/20 hover:bg-amber-500/30", border: "border-amber-500", ring: "ring-amber-500", text: "text-amber-400" },
-    { bg: "bg-yellow-500/20 hover:bg-yellow-500/30", border: "border-yellow-500", ring: "ring-yellow-500", text: "text-yellow-400" },
-    { bg: "bg-lime-500/20 hover:bg-lime-500/30", border: "border-lime-500", ring: "ring-lime-500", text: "text-lime-400" },
-    { bg: "bg-green-500/20 hover:bg-green-500/30", border: "border-green-500", ring: "ring-green-500", text: "text-green-400" },
-    { bg: "bg-emerald-500/20 hover:bg-emerald-500/30", border: "border-emerald-500", ring: "ring-emerald-500", text: "text-emerald-400" },
-    { bg: "bg-teal-500/20 hover:bg-teal-500/30", border: "border-teal-500", ring: "ring-teal-500", text: "text-teal-400" },
-    { bg: "bg-cyan-500/20 hover:bg-cyan-500/30", border: "border-cyan-500", ring: "ring-cyan-500", text: "text-cyan-400" },
-    { bg: "bg-sky-500/20 hover:bg-sky-500/30", border: "border-sky-500", ring: "ring-sky-500", text: "text-sky-400" },
-    { bg: "bg-blue-500/20 hover:bg-blue-500/30", border: "border-blue-500", ring: "ring-blue-500", text: "text-blue-400" },
-    { bg: "bg-indigo-500/20 hover:bg-indigo-500/30", border: "border-indigo-500", ring: "ring-indigo-500", text: "text-indigo-400" },
-    { bg: "bg-violet-500/20 hover:bg-violet-500/30", border: "border-violet-500", ring: "ring-violet-500", text: "text-violet-400" },
-    { bg: "bg-purple-500/20 hover:bg-purple-500/30", border: "border-purple-500", ring: "ring-purple-500", text: "text-purple-400" },
-    { bg: "bg-fuchsia-500/20 hover:bg-fuchsia-500/30", border: "border-fuchsia-500", ring: "ring-fuchsia-500", text: "text-fuchsia-400" },
-    { bg: "bg-pink-500/20 hover:bg-pink-500/30", border: "border-pink-500", ring: "ring-pink-500", text: "text-pink-400" },
-    { bg: "bg-rose-500/20 hover:bg-rose-500/30", border: "border-rose-500", ring: "ring-rose-500", text: "text-rose-400" },
+    { bg: "bg-blue-500/20 hover:bg-blue-500/30", border: "border-blue-500", text: "text-blue-100", score: "text-blue-400" },
+    { bg: "bg-red-500/20 hover:bg-red-500/30", border: "border-red-500", text: "text-red-100", score: "text-red-400" },
+    { bg: "bg-green-500/20 hover:bg-green-500/30", border: "border-green-500", text: "text-green-100", score: "text-green-400" },
+    { bg: "bg-yellow-500/20 hover:bg-yellow-500/30", border: "border-yellow-500", text: "text-yellow-100", score: "text-yellow-400" },
+    { bg: "bg-purple-500/20 hover:bg-purple-500/30", border: "border-purple-500", text: "text-purple-100", score: "text-purple-400" },
+    { bg: "bg-orange-500/20 hover:bg-orange-500/30", border: "border-orange-500", text: "text-orange-100", score: "text-orange-400" },
+    { bg: "bg-pink-500/20 hover:bg-pink-500/30", border: "border-pink-500", text: "text-pink-100", score: "text-pink-400" },
+    { bg: "bg-teal-500/20 hover:bg-teal-500/30", border: "border-teal-500", text: "text-teal-100", score: "text-teal-400" },
 ];
 
 type GameQuestion = GetQuizOutput['questions'][0];
@@ -58,8 +49,8 @@ type GameCompetitor = UserProfile & { score: number; colorIndex: number };
 
 // --- BİLEŞENLER ---
 
-// Büyük Öğrenci Kartı (Ana Ekranda)
-const BigStudentCard = ({ competitor, rank, onClick }: { competitor: GameCompetitor, rank: number, onClick: () => void }) => {
+// Liderlik Tablosu Kartı (Kompakt ve Bilgilendirici)
+const LeaderboardCard = ({ competitor, rank, onClick }: { competitor: GameCompetitor, rank: number, onClick: () => void }) => {
     const color = PLAYER_COLORS[competitor.colorIndex % PLAYER_COLORS.length];
     const getInitials = (name?: string) => name ? name.trim().charAt(0).toLocaleUpperCase('tr-TR') : '?';
 
@@ -67,38 +58,37 @@ const BigStudentCard = ({ competitor, rank, onClick }: { competitor: GameCompeti
         <div 
             onClick={onClick}
             className={cn(
-                "relative group cursor-pointer transition-all duration-300 transform rounded-2xl border-2 flex flex-col items-center justify-center p-4 h-full aspect-[4/5] shadow-lg hover:scale-105 active:scale-95",
-                color.bg, color.border,
-                rank < 3 ? "shadow-[0_0_15px_rgba(0,0,0,0.5)]" : ""
+                "relative group cursor-pointer transition-all duration-300 transform rounded-lg border-l-4 flex items-center p-3 h-20 shadow-md hover:shadow-xl hover:translate-x-1 active:scale-95 bg-slate-900/50",
+                color.border, color.bg
             )}
         >
-            {/* Sıralama Rozeti */}
-            <div className="absolute top-3 left-3">
-                {rank === 0 ? <Crown className="h-8 w-8 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]"/> : 
-                 rank === 1 ? <Award className="h-7 w-7 text-slate-200 drop-shadow-md"/> :
-                 rank === 2 ? <Award className="h-7 w-7 text-amber-600 drop-shadow-md"/> : 
-                 <div className="h-6 w-6 rounded-full bg-black/30 flex items-center justify-center text-xs font-bold text-white/70">#{rank + 1}</div>}
+            {/* Sol: Sıralama */}
+            <div className="w-12 shrink-0 flex flex-col items-center justify-center border-r border-white/10 pr-3 mr-3">
+                {rank === 0 ? <Crown className="h-8 w-8 text-yellow-400 animate-pulse drop-shadow-md"/> : 
+                 rank === 1 ? <Medal className="h-7 w-7 text-slate-300"/> :
+                 rank === 2 ? <Medal className="h-7 w-7 text-amber-700"/> : 
+                 <span className="text-2xl font-black text-slate-500/50">#{rank + 1}</span>}
             </div>
 
-            <Avatar className={cn("h-20 w-20 md:h-24 md:w-24 border-4 mb-4 transition-all shadow-xl", color.border)}>
-                <AvatarImage src={competitor.avatar || ''} className="object-cover" />
-                <AvatarFallback className={cn("text-2xl font-black text-white", color.bg.replace('/20', ''))}>{getInitials(competitor.displayName)}</AvatarFallback>
-            </Avatar>
-
-            <div className="text-center w-full">
-                <h3 className={cn("text-lg md:text-xl font-black uppercase tracking-tight leading-tight line-clamp-2 px-1 text-white drop-shadow-sm")}>
-                    {competitor.displayName}
-                </h3>
-                <div className="mt-3 flex items-center justify-center">
-                    <span className="text-4xl md:text-5xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                        {competitor.score}
-                    </span>
+            {/* Orta: İsim ve Avatar */}
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+                <Avatar className={cn("h-10 w-10 border-2", color.border)}>
+                    <AvatarImage src={competitor.avatar || ''} />
+                    <AvatarFallback className="bg-slate-950 font-bold text-white text-xs">{getInitials(competitor.displayName)}</AvatarFallback>
+                </Avatar>
+                <div className="truncate">
+                    <h3 className={cn("font-bold text-base md:text-lg truncate leading-tight", color.text)}>
+                        {competitor.displayName}
+                    </h3>
                 </div>
-                <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mt-1">PUAN</p>
             </div>
-            
-            {/* Hover Efekti */}
-            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none" />
+
+            {/* Sağ: Puan */}
+            <div className="shrink-0 pl-3">
+                <div className={cn("text-3xl font-black tabular-nums tracking-tighter drop-shadow-sm", color.score)}>
+                    {competitor.score}
+                </div>
+            </div>
         </div>
     );
 };
@@ -157,7 +147,7 @@ function IndividualCompetitionComponent() {
     // Game Phase
     const [questions, setQuestions] = useState<GameQuestion[]>([]);
     const [competitors, setCompetitors] = useState<GameCompetitor[]>([]);
-    const [activeCompetitorId, setActiveCompetitorId] = useState<string | null>(null); // Seçili öğrenci ID'si
+    const [activeCompetitorId, setActiveCompetitorId] = useState<string | null>(null);
     const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
     const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: GameQuestion } | null>(null);
     const [winner, setWinner] = useState<GameCompetitor | null>(null);
@@ -465,11 +455,11 @@ function IndividualCompetitionComponent() {
                     </div>
                 </header>
 
-                {/* Ana İçerik: Öğrenci Grid */}
-                <div className="flex-1 bg-slate-900/30 rounded-2xl border border-white/5 p-6 overflow-y-auto custom-scrollbar min-h-0 relative">
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                {/* Ana İçerik: Liderlik Tablosu Grid */}
+                <div className="flex-1 bg-slate-900/30 rounded-2xl border border-white/5 p-4 overflow-y-auto custom-scrollbar min-h-0 relative">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                         {sortedCompetitors.map((comp, idx) => (
-                            <BigStudentCard 
+                            <LeaderboardCard 
                                 key={comp.uid} 
                                 competitor={comp} 
                                 rank={idx} 
@@ -488,12 +478,14 @@ function IndividualCompetitionComponent() {
                                 {activeCompetitor && (
                                     <Avatar className={cn("h-12 w-12 border-2", PLAYER_COLORS[activeCompetitor.colorIndex % PLAYER_COLORS.length].border)}>
                                         <AvatarImage src={activeCompetitor.avatar} />
-                                        <AvatarFallback className="bg-slate-800">{activeCompetitor.displayName.charAt(0)}</AvatarFallback>
+                                        <AvatarFallback className="bg-slate-800 font-bold">{activeCompetitor.displayName.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                 )}
                                 <div>
-                                    <h2 className="text-xl font-bold text-white">{activeCompetitor?.displayName}</h2>
-                                    <p className="text-xs text-slate-400">Soru seçimi yapıyor...</p>
+                                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                                        {activeCompetitor?.displayName}
+                                        <span className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400 font-normal">Soru Seçiyor</span>
+                                    </h2>
                                 </div>
                             </div>
                             <Button variant="ghost" onClick={() => setActiveCompetitorId(null)} className="text-slate-400 hover:text-white"><X className="h-6 w-6"/></Button>
@@ -512,7 +504,7 @@ function IndividualCompetitionComponent() {
                                             className={cn(
                                                 "aspect-square rounded-xl flex items-center justify-center text-xl font-bold shadow-lg transition-all duration-200 border-b-4 active:border-b-0 active:translate-y-1 relative group overflow-hidden",
                                                 isAnswered 
-                                                    ? "bg-slate-800 text-slate-600 border-slate-800 cursor-not-allowed" 
+                                                    ? "bg-slate-800 text-slate-600 border-slate-800 cursor-not-allowed opacity-50" 
                                                     : "bg-slate-700 text-white border-slate-900 hover:bg-cyan-600 hover:border-cyan-800"
                                             )}
                                         >
@@ -526,11 +518,11 @@ function IndividualCompetitionComponent() {
                     </DialogContent>
                 </Dialog>
 
-                {/* Soru Ekranı */}
+                {/* Soru Ekranı (Modal) */}
                 {openedQuestion && (
                     <QuestionDialog
                         isOpen={!!openedQuestion}
-                        onClose={() => { setOpenedQuestion(null); setActiveCompetitorId(null); }} // Soru kapanınca seçimi sıfırla
+                        onClose={() => { setOpenedQuestion(null); setActiveCompetitorId(null); }} // Soru bitince her şeyi kapat
                         questionData={openedQuestion}
                         onAnswer={handleAnswer}
                         timerDuration={questionTimer}
