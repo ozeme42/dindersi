@@ -8,11 +8,11 @@ import { Package, Loader2 } from 'lucide-react';
 function KutuAcPage() {
     return (
         <OyunKurulum 
-            pageTitle="Kutu Aç"
+            gameName="Kutu Aç"
             gameIcon={Package}
             gamePath="kutu-ac"
             dataType="games"
-            isStatic={false}
+            isStatic={true}
         />
     );
 }

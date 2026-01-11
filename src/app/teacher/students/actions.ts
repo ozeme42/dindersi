@@ -341,3 +341,40 @@ export async function updateStudentClass(studentId: string, newClassName: string
       return { success: false, error: "Sınıf güncellenirken bir hata oluştu." };
     }
 }
+
+// --- YENİ EKLENEN: PUAN EKLEME/ÇIKARMA FONKSİYONU ---
+export async function addStudentScore(uid: string, scoreToAdd: number, reason: string): Promise<{ success: boolean; error?: string }> {
+    if (!uid) {
+        return { success: false, error: "Öğrenci ID'si bulunamadı." };
+    }
+
+    try {
+        const db = getAdminDb();
+        const userRef = db.collection('users').doc(uid);
+        
+        // Batch işlemi başlat (Atomik işlem için: hem puanı güncelle hem geçmişe yaz)
+        const batch = db.batch();
+
+        // 1. Kullanıcının toplam puanını güncelle (Atomic Increment ile race condition önlenir)
+        batch.update(userRef, {
+            score: FieldValue.increment(scoreToAdd)
+        });
+
+        // 2. Puan geçmişine kayıt at (Loglama)
+        // Kullanıcının altında 'scoreHistory' adında bir sub-collection tutuyoruz.
+        const historyRef = userRef.collection('scoreHistory').doc();
+        batch.set(historyRef, {
+            amount: scoreToAdd,
+            reason: reason,
+            createdAt: FieldValue.serverTimestamp(),
+            type: 'manual_admin'
+        });
+
+        await batch.commit();
+
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error adding score:", error);
+        return { success: false, error: "Puan eklenirken bir hata oluştu." };
+    }
+}

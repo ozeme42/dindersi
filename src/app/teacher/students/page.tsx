@@ -12,10 +12,17 @@ import {
     Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Search, UserCheck, UserCog, PlusCircle, User, ArrowLeft } from "lucide-react";
+import { 
+    FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Search, 
+    UserCheck, UserCog, PlusCircle, ArrowLeft, ChevronLeft, ChevronRight,
+    Star, Plus, Minus
+} from "lucide-react";
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
+import {
+    Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
@@ -29,7 +36,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 // Firebase and Actions
 import { useToast } from "@/hooks/use-toast";
 import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
-import { getStudentData, saveUser, bulkAddStudents, approveStudent, updateStudentClass } from "./actions";
+// NOT: addStudentScore fonksiyonunu actions dosyanızdan import ettiğinizden emin olun
+import { getStudentData, saveUser, bulkAddStudents, approveStudent, addStudentScore } from "./actions";
 
 // Types
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
@@ -41,17 +49,124 @@ import { useAuth } from "@/context/auth-context";
 
 // --- COMPONENTS ---
 
+// Puan Verme Dialog Bileşeni
+function ScoreDialog({ 
+    isOpen, 
+    onOpenChange, 
+    student, 
+    onSave 
+}: { 
+    isOpen: boolean, 
+    onOpenChange: (open: boolean) => void, 
+    student: UserProfile | null, 
+    onSave: (uid: string, score: number, reason: string) => Promise<void> 
+}) {
+    const [score, setScore] = useState<number | string>("");
+    const [reason, setReason] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Dialog her açıldığında state'i sıfırla
+    useEffect(() => {
+        if (isOpen) {
+            setScore("");
+            setReason("");
+            setIsSubmitting(false);
+        }
+    }, [isOpen]);
+
+    const handleSave = async () => {
+        if (!student || !score || !reason.trim()) return;
+        setIsSubmitting(true);
+        await onSave(student.uid, Number(score), reason);
+        setIsSubmitting(false);
+        onOpenChange(false);
+    };
+
+    const predefinedScores = [5, 10, 20, -5, -10];
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2 text-amber-400">
+                        <Star className="h-5 w-5 fill-amber-400" />
+                        Puan İşlemi
+                    </DialogTitle>
+                    <DialogDescription className="text-slate-400">
+                        <span className="font-bold text-white">{student?.displayName}</span> adlı öğrenciye puan verin veya silin.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                    <div className="space-y-2">
+                        <Label>Hızlı Seçim</Label>
+                        <div className="flex flex-wrap gap-2">
+                            {predefinedScores.map((s) => (
+                                <Button
+                                    key={s}
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setScore(s)}
+                                    className={`border-white/10 hover:bg-white/10 ${Number(score) === s ? 'bg-indigo-600 border-indigo-500 text-white hover:bg-indigo-500' : 'text-slate-300'}`}
+                                >
+                                    {s > 0 ? `+${s}` : s}
+                                </Button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="score" className="text-right text-slate-300">
+                            Puan
+                        </Label>
+                        <Input
+                            id="score"
+                            type="number"
+                            value={score}
+                            onChange={(e) => setScore(e.target.value)}
+                            placeholder="Örn: 15"
+                            className="col-span-3 bg-slate-950 border-white/10 text-white focus:border-indigo-500"
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="reason" className="text-right text-slate-300">
+                            Açıklama
+                        </Label>
+                        <Textarea
+                            id="reason"
+                            value={reason}
+                            onChange={(e) => setReason(e.target.value)}
+                            placeholder="Örn: Derse aktif katılım, Ödev eksikliği..."
+                            className="col-span-3 bg-slate-950 border-white/10 text-white focus:border-indigo-500 min-h-[80px]"
+                        />
+                    </div>
+                </div>
+                <DialogFooter>
+                    <Button 
+                        onClick={handleSave} 
+                        disabled={isSubmitting || !score || !reason.trim()}
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold w-full sm:w-auto"
+                    >
+                        {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserCheck className="mr-2 h-4 w-4" />}
+                        Kaydet
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
 function StudentTable({ 
     students, 
     isLoading, 
     onEdit, 
     onDelete, 
-    allClasses 
+    onAddScore
 }: { 
     students: UserProfile[], 
     isLoading: boolean, 
     onEdit: (student: UserProfile) => void,
     onDelete: (studentId: string) => void,
+    onAddScore: (student: UserProfile) => void,
     onClassChange: (studentId: string, newClassName: string) => void,
     allClasses: SchoolClass[],
 }) {
@@ -97,9 +212,17 @@ function StudentTable({
                                      </DropdownMenuTrigger>
                                      <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
                                          <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+                                         
+                                         <DropdownMenuItem onClick={() => onAddScore(student)} className="focus:bg-white/10 focus:text-white cursor-pointer text-amber-400 focus:text-amber-300">
+                                             <Star className="mr-2 h-4 w-4" /> Puan Ver
+                                         </DropdownMenuItem>
+                                         
+                                         <DropdownMenuSeparator className="bg-white/10" />
+
                                          <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                              <FilePenLine className="mr-2 h-4 w-4 text-emerald-400" /> Düzenle
                                          </DropdownMenuItem>
+                                         
                                          <AlertDialog>
                                              <AlertDialogTrigger asChild>
                                                  <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full cursor-pointer">
@@ -138,6 +261,7 @@ function StudentTable({
 }
 
 function PendingStudentTable({ students, onApprove, onDelete }: { students: UserProfile[], onApprove: (uid: string) => void, onDelete: (uid: string) => void }) {
+    // ... (PendingStudentTable kodu aynı kalacak, önceki cevaptan kopyalanabilir)
     return (
         <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
              <Table>
@@ -203,11 +327,11 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
 }
 
 // --- SCHEMA ---
+// (Schema kodu aynı kalacak, önceki cevaptan kopyalanabilir)
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
   email: z.string().optional(),
-  // Rol opsiyonel ve varsayılan 'student'
   role: z.enum(['student', 'teacher', 'superadmin', 'guest']).optional().default('student'),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
@@ -258,12 +382,19 @@ export default function StudentsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
   
+    // Puan Dialog State
+    const [scoreDialogState, setScoreDialogState] = useState<{isOpen: boolean; student: UserProfile | null}>({isOpen: false, student: null});
+
+    // Pagination State
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; 
+
     const { toast } = useToast();
 
+    // ... (fetchAllData ve useEffect kısımları aynı)
     const fetchAllData = useCallback(async () => {
         setIsLoading(true);
         try {
-            // "RangeError" hatasını önlemek için currentUser'ı temizleyip gönderiyoruz
             const sanitizedTeacher = currentUser ? {
                 uid: currentUser.uid,
                 role: currentUser.role,
@@ -300,7 +431,12 @@ export default function StudentsPage() {
             fetchAllData();
         }
     }, [fetchAllData, currentUser?.uid]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [activeClassId, activeBranch, schoolFilter, searchTerm]);
   
+    // ... (handleDeleteUser, handleApproveStudent, handleOpenDialog aynı)
     const handleDeleteUser = async (userId: string) => {
         const originalUsers = [...allStudents];
         setAllStudents(prev => prev.filter(s => s.uid !== userId));
@@ -317,9 +453,7 @@ export default function StudentsPage() {
     const handleApproveStudent = async (uid: string) => {
         const originalStudents = [...allStudents];
         setAllStudents(prev => prev.map(s => s.uid === uid ? { ...s, role: 'student' } : s));
-        
         const result = await approveStudent(uid);
-        
         if (result.success) {
             toast({ title: "Başarılı!", description: "Öğrenci hesabı onaylandı ve aktif hale getirildi." });
             fetchAllData();
@@ -333,12 +467,26 @@ export default function StudentsPage() {
         const defaultUser = { role: role, schoolName: currentUser?.schoolName || '' };
         setDialogState({ isOpen: true, user: user || defaultUser });
     };
-  
+
+    // Yeni Puan Verme Fonksiyonu
+    const handleAddScoreClick = (student: UserProfile) => {
+        setScoreDialogState({ isOpen: true, student });
+    };
+
+    const handleScoreSave = async (uid: string, score: number, reason: string) => {
+        const result = await addStudentScore(uid, score, reason);
+        if (result.success) {
+            toast({ title: "Puan Eklendi", description: `${score} puan başarıyla eklendi.` });
+            await fetchAllData(); // Listeyi güncelle
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+    };
+
+    // ... (handleSaveUser, handleAddSingleStudent, handleBulkAdd aynı)
     const handleSaveUser = async (data: z.infer<typeof UserEditorSchema>) => {
         setIsSaving(true);
-        
         let schoolName: string | undefined;
-
         if(currentUser?.role === 'teacher') {
             schoolName = currentUser.schoolName;
         } else {
@@ -351,9 +499,7 @@ export default function StudentsPage() {
             ? classes.find(c => c.id === data.classId)?.name 
             : undefined;
 
-        // --- GÜVENLİK VE ŞİFRE KONTROLÜ ---
         const roleToSave = currentUser?.role === 'teacher' ? 'student' : data.role;
-        
         let passwordToSave = data.password;
         if (currentUser?.role === 'teacher' && !data.uid) {
             passwordToSave = '123456';
@@ -368,7 +514,6 @@ export default function StudentsPage() {
         };
 
         const result = await saveUser(dataToSave);
-      
         if (result.success) {
             toast({ title: "Başarılı", description: `Kullanıcı ${data.uid ? 'güncellendi' : 'oluşturuldu'}.` });
             await fetchAllData();
@@ -428,8 +573,7 @@ export default function StudentsPage() {
 
     const handleBulkAdd = async (e: React.FormEvent) => {
       e.preventDefault();
-      
-        let schoolNameForBulk: string | undefined;
+      let schoolNameForBulk: string | undefined;
         if (currentUser?.role === 'teacher') {
             schoolNameForBulk = currentUser.schoolName;
         } else {
@@ -439,18 +583,14 @@ export default function StudentsPage() {
                 schoolNameForBulk = schools.find(s => s.id === bulkSchoolId)?.name;
             }
         }
-      
         if (!selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || !schoolNameForBulk) {
             toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube, okul seçin ve öğrenci adları girin.", variant: "destructive"});
             return;
         }
-
         setIsSaving(true);
         const className = `${selectedBulkClassData.name} - ${bulkBranch}`;
         const names = bulkStudentNames.split('\n').map(name => name.trim()).filter(Boolean);
-
         const result = await bulkAddStudents(names, className, schoolNameForBulk, currentUser?.uid);
-
         if (result.success) {
             toast({title: "Başarılı", description: `${result.successCount} öğrenci eklendi.`});
             setBulkStudentNames("");
@@ -465,8 +605,7 @@ export default function StudentsPage() {
     const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
 
     const filteredStudents = useMemo(() => {
-        let list = allStudents.filter(s => ['student', 'guest'].includes(s.role));
-    
+        let list = allStudents.filter(s => s.role === 'student'); 
         if (currentUser?.role === 'superadmin') {
             if(schoolFilter !== 'all') {
                 const selectedSchool = schools.find(s => s.id === schoolFilter);
@@ -482,7 +621,6 @@ export default function StudentsPage() {
                 list = [];
             }
         }
-
         if (activeClassId !== 'all' && selectedClass) {
             if (activeBranch === 'all') {
                 list = list.filter(s => s.class?.startsWith(selectedClass.name));
@@ -490,18 +628,22 @@ export default function StudentsPage() {
                 list = list.filter(s => s.class === `${selectedClass.name} - ${activeBranch}`);
             }
         }
-        
         if (searchTerm) {
             const lowercasedTerm = searchTerm.toLowerCase();
             list = list.filter(s => s.displayName && s.displayName.toLowerCase().includes(lowercasedTerm));
         }
-        
         return list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
     }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm, schoolFilter, schools, currentUser?.role, currentUser?.schoolName]);
   
+    const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+    const paginatedStudents = useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return filteredStudents.slice(startIndex, endIndex);
+    }, [filteredStudents, currentPage]);
+
     const pendingStudents = useMemo(() => {
       let pending = allStudents.filter(s => s.role === 'pending');
-
       if (currentUser?.role === 'teacher' && currentUser.schoolName) {
           const teacherSchoolNormalized = currentUser.schoolName.trim().toLocaleLowerCase('tr');
           pending = pending.filter(s => {
@@ -521,7 +663,7 @@ export default function StudentsPage() {
     }
   
     return (
-        <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+        <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 pb-24 relative overflow-x-hidden">
         
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
@@ -530,7 +672,7 @@ export default function StudentsPage() {
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
                 <div className="flex items-center justify-between border-b border-white/10 pb-8">
-                     <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-4">
                         <Button 
                             onClick={() => router.back()} 
                             variant="ghost" 
@@ -603,12 +745,53 @@ export default function StudentsPage() {
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                <StudentTable students={filteredStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} onClassChange={() => {}} allClasses={classes} />
+                                <StudentTable 
+                                    students={paginatedStudents} 
+                                    isLoading={isLoading} 
+                                    onEdit={handleOpenDialog} 
+                                    onDelete={handleDeleteUser} 
+                                    onAddScore={handleAddScoreClick}
+                                    onClassChange={() => {}} 
+                                    allClasses={classes} 
+                                />
+                                
+                                {/* Sayfalama Kontrolleri */}
+                                {filteredStudents.length > 0 && (
+                                    <div className="flex items-center justify-between mt-4 border-t border-white/5 pt-4">
+                                        <div className="text-sm text-slate-400">
+                                            Toplam <span className="text-white font-bold">{filteredStudents.length}</span> öğrenciden <span className="text-white font-bold">{(currentPage - 1) * itemsPerPage + 1}</span> - <span className="text-white font-bold">{Math.min(currentPage * itemsPerPage, filteredStudents.length)}</span> arası gösteriliyor.
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                                disabled={currentPage === 1}
+                                                className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white"
+                                            >
+                                                <ChevronLeft className="h-4 w-4 mr-1" /> Önceki
+                                            </Button>
+                                            <div className="text-sm font-medium text-slate-300 bg-white/5 px-3 py-1.5 rounded-md border border-white/10">
+                                                Sayfa {currentPage} / {totalPages}
+                                            </div>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                                disabled={currentPage === totalPages}
+                                                className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white"
+                                            >
+                                                Sonraki <ChevronRight className="h-4 w-4 ml-1" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
                     </TabsContent>
 
                     <TabsContent value="pending" className="space-y-6 outline-none">
+                        {/* Pending content aynı kalıyor */}
                         <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
                             <CardHeader>
                                 <CardTitle className="text-xl text-white">Onay Bekleyen Öğrenciler</CardTitle>
@@ -621,6 +804,7 @@ export default function StudentsPage() {
                     </TabsContent>
           
                     <TabsContent value="add" className="outline-none">
+                        {/* Add content aynı kalıyor */}
                         <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
                             <CardHeader className="bg-white/5 border-b border-white/5 pb-6">
                                 <div className="flex items-center gap-3 mb-2">
@@ -706,6 +890,7 @@ export default function StudentsPage() {
                 </Tabs>
             </div>
 
+            {/* Düzenleme Dialogu */}
             {dialogState.isOpen && (
                  <UserEditorDialog 
                      isOpen={dialogState.isOpen}
@@ -717,6 +902,16 @@ export default function StudentsPage() {
                      schools={schools}
                  />
               )}
+
+            {/* YENİ: Puan Verme Dialogu */}
+            {scoreDialogState.isOpen && (
+                <ScoreDialog 
+                    isOpen={scoreDialogState.isOpen}
+                    onOpenChange={(open) => setScoreDialogState(prev => ({ ...prev, isOpen: open }))}
+                    student={scoreDialogState.student}
+                    onSave={handleScoreSave}
+                />
+            )}
         </div>
     );
 }
