@@ -3,13 +3,17 @@
 
 import { useState, useEffect, useCallback, Suspense, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { getKutuAcQuestionsAction } from '../actions';
+import { getKutuAcQuestionsAction, submitKutuAcScoreAction } from '../actions';
 import type { Question } from '@/lib/types';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Package, Users, Trophy, Crown, Zap, XOctagon, CheckCheck } from 'lucide-react';
+import { Loader2, ArrowLeft, Package, Users, Trophy, Crown, Target, Sparkles, MonitorPlay, Zap, XOctagon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { useAuth } from '@/context/auth-context';
 import { QuestionDialog } from '@/components/question-dialog';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { Badge } from "@/components/ui/badge";
@@ -86,7 +90,6 @@ function KutuAcGame() {
             courseId: searchParams.get('courseId') || undefined,
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
-            // NO questionCount limit here to fetch all
         };
         const result = await getKutuAcQuestionsAction(params);
 
@@ -161,7 +164,7 @@ function KutuAcGame() {
         }
     };
     
-    const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
+    const handleAnswerQuestion = useCallback((questionNumber: number, isCorrect: boolean, scoreChange: number) => {
         setOpenedQuestion(null);
         if (isCorrect) {
             setPlayers(prev => prev.map((p, index) => 
@@ -169,7 +172,7 @@ function KutuAcGame() {
             ));
         }
         handleNextTurn();
-    };
+    }, [activePlayerIndex, handleNextTurn]);
 
     useEffect(() => {
         if (!isLoading && kutuIcerikleri.length > 0 && openedBoxes.size >= kutuIcerikleri.length) {
@@ -202,7 +205,7 @@ function KutuAcGame() {
                      {players.map((p, i) => {
                          const isActive = i === activePlayerIndex;
                          return (
-                             <div key={p.id} className={cn("relative p-4 rounded-xl border-2 transition-all duration-300 flex flex-col justify-center items-center gap-2", isActive ? `${p.teamConfig?.border} bg-white/5 scale-105 shadow-lg ${p.teamConfig?.shadow}` : "bg-black/20 border-transparent")}>
+                             <div key={p.id} className={cn("relative p-4 rounded-xl border-2 transition-all duration-300 flex flex-col justify-center items-center gap-2", isActive ? `${p.teamConfig?.border} bg-white/5 scale-105 shadow-lg ${p.teamConfig?.shadow} z-10` : "bg-black/20 border-transparent")}>
                                  {isActive && <div className={cn("absolute top-2 right-2 w-3 h-3 rounded-full animate-pulse", p.teamConfig?.color.replace('text-', 'bg-'))}/>}
                                  <h3 className={cn("text-xl font-bold uppercase", isActive ? p.teamConfig?.color : "text-slate-400")}>{p.name}</h3>
                                  <p className="text-5xl font-black text-white">{p.score}</p>
@@ -219,9 +222,15 @@ function KutuAcGame() {
                              return (
                                  <button
                                     key={kutucukNo}
+                                    id={`kutucuk-${kutucukNo}`}
                                     onClick={() => handleBoxClick(i)}
                                     disabled={isOpened || isLoading}
-                                    className={cn("aspect-square rounded-lg flex items-center justify-center text-2xl font-black text-white transition-all duration-300 transform", isOpened ? "bg-slate-800/50 text-slate-600 border border-slate-700 cursor-not-allowed scale-95" : "bg-gradient-to-br from-indigo-500 to-purple-600 border-b-4 border-indigo-800 hover:-translate-y-1 active:translate-y-0 active:border-b-0 shadow-lg")}
+                                    className={cn(
+                                        "aspect-square rounded-lg flex items-center justify-center text-xl sm:text-2xl font-black text-white shadow-lg transition-all duration-300",
+                                        isOpened 
+                                            ? "bg-slate-800/50 text-slate-600 border border-slate-700/50 cursor-not-allowed scale-95" 
+                                            : "bg-gradient-to-br from-indigo-500 to-purple-600 border-b-4 border-indigo-800 hover:-translate-y-1 active:translate-y-0 active:border-b-0 hover:shadow-purple-500/30"
+                                    )}
                                 >
                                     {isOpened ? <CheckCheck className="h-8 w-8 text-green-500/50" /> : kutucukNo}
                                 </button>
@@ -270,3 +279,4 @@ function KutuAcGame() {
 export default function SmartboardKutuAcOyunPageWrapper() {
     return <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-slate-950"><Loader2 className="w-16 h-16 animate-spin text-purple-500"/></div>}><KutuAcGame/></Suspense>
 }
+
