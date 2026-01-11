@@ -1,26 +1,22 @@
 
-"use client";
+import { getGameSettings } from "@/app/teacher/game-settings/actions";
+import { SmartboardBireyselClientPage } from "@/app/teacher/smartboard/bireysel/client-page";
+import { Package } from "lucide-react";
 
-import React, { Suspense } from 'react';
-import { OyunKurulum } from '@/components/oyun-kurulum';
-import { Package, Loader2 } from 'lucide-react';
+export const dynamic = 'force-dynamic';
 
-function KutuAcPage() {
-    return (
-        <OyunKurulum 
-            gameName="Kutu Aç"
-            gameIcon={Package}
-            gamePath="kutu-ac"
-            dataType="games"
-            isStatic={false}
-        />
-    );
-}
-
-export default function KutuAcSuspense() {
-    return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
-            <KutuAcPage />
-        </Suspense>
-    );
+// This page now uses the same setup client page as the "Bireysel Yarışma"
+// to provide a consistent setup flow for class, course, unit, and topic selection.
+// The game-specific logic is handled by passing the correct game path.
+export default async function SmartboardKutuAcSetupPage() {
+    const settings = await getGameSettings();
+    
+    // We can reuse the "teacherBireysel" config as a base, or create a new one.
+    // For simplicity, we'll assume the settings are similar.
+    return <SmartboardBireyselClientPage 
+                gameConfig={settings.teacherBireysel} 
+                gamePath="kutu-ac"
+                gameName="Kutu Aç"
+                gameIcon={Package}
+            />;
 }
