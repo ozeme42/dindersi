@@ -4,10 +4,9 @@ import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
-// --- ACTION IMPORTS (Yolların doğruluğundan emin olun) ---
+// --- ACTION IMPORTS ---
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import { 
-  submitSoruBankasiScore, 
   getCourseForSoruBankasi, 
   getQuestionBankProgress, 
   getQuestionCounts, 
@@ -28,10 +27,11 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Progress } from '@/components/ui/progress';
 import { 
   Loader2, ArrowLeft, CheckCircle2, Lock, PlayCircle, Trophy, 
   ShieldCheck, Shield, ShieldAlert, CheckCheck, XCircle, 
-  BookOpen, ChevronLeft, Star, Bug
+  BookOpen, ChevronLeft, Star, Bug, X, Zap, Target, ArrowRight, Check, Sparkles
 } from 'lucide-react';
 
 // --- SABİTLER ---
@@ -44,41 +44,37 @@ const MissionBackground = () => (
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" style={{ opacity: 0.05 }}/>
         <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse-slow" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
-        <div className="absolute top-[40%] left-[50%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px] mix-blend-screen" />
     </div>
 );
 
-// --- SORU ÇÖZME BİLEŞENİ ---
-function QuestionTest({ topic, difficulty, testIndex, onComplete, onBack }: any) {
+// =================================================================
+// 1. SORU ÇÖZME EKRANI (OVERLAY)
+// =================================================================
+function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack }: any) {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { user } = useAuth();
     
-    // Test Durumları
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    // Oyun Durumu
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState<(string | boolean | null)[]>([]);
     const [isFinished, setIsFinished] = useState(false);
-    const [isSaving, setIsSaving] = useState(false); 
+    const [isSaving, setIsSaving] = useState(false);
     
-    // Puanlama
+    // Puanlama & Efektler
     const [score, setScore] = useState(0);
     const [correctCount, setCorrectCount] = useState(0);
-    
-    // --- AYARLAR ---
-    const PASS_THRESHOLD = 0.7; // %70 Barajı
-    const QUESTION_POINT = 50;  // Her doğru soru 50 Puan
+    const [streak, setStreak] = useState(0); 
 
-    // --- VERİ ÇEKME MOTORU ---
+    const PASS_THRESHOLD = 0.7;
+    const QUESTION_POINT = 50;
+
     useEffect(() => {
         let isMounted = true;
-
         async function fetchQuestions() {
             setIsLoading(true);
-            setError(null);
-
             try {
-                // Tüm soruları çek (500 limitli)
                 const result = await getQuestionsFromBank({ 
                     topicId: topic.id, 
                     difficulty: [], 
@@ -92,8 +88,6 @@ function QuestionTest({ topic, difficulty, testIndex, onComplete, onBack }: any)
                     setError(result.error || "Sorular yüklenemedi.");
                 } else {
                     const allRawQuestions = result.questions as Question[];
-
-                    // Client-Side Filtreleme (Stabilite için)
                     const targetDifficulty = difficulty; 
                     const targetDifficultyEng = difficultyMap[difficulty as keyof typeof difficultyMap]; 
 
@@ -103,10 +97,7 @@ function QuestionTest({ topic, difficulty, testIndex, onComplete, onBack }: any)
                                qDiff === targetDifficultyEng.toLowerCase();
                     });
 
-                    // Alfabetik sıralama (Karışıklığı önlemek için)
                     const sortedQuestions = filteredQuestions.sort((a,b) => (a.text || '').localeCompare(b.text || '', 'tr'));
-                    
-                    // Sayfalama (Pagination)
                     const startIndex = testIndex * 10;
                     const selectedQuestions = sortedQuestions.slice(startIndex, startIndex + 10);
                     
@@ -123,194 +114,235 @@ function QuestionTest({ topic, difficulty, testIndex, onComplete, onBack }: any)
                 if (isMounted) setIsLoading(false);
             }
         }
-
         fetchQuestions();
         return () => { isMounted = false; };
     }, [topic, difficulty, testIndex]);
 
     const handleAnswer = (answer: any) => {
-        if (answers[currentQuestionIndex] !== null && answers[currentQuestionIndex] !== undefined) return;
-        
+        if (answers[currentIndex] !== null && answers[currentIndex] !== undefined) return;
         const newAnswers = [...answers];
-        newAnswers[currentQuestionIndex] = answer;
+        newAnswers[currentIndex] = answer;
         setAnswers(newAnswers);
         
-        const q = questions[currentQuestionIndex];
-        
+        const q = questions[currentIndex];
         let isCorrect = false;
         if (q.type === 'Doğru/Yanlış') {
-            const correctBool = q.correctAnswer === 'Doğru';
-            isCorrect = answer === correctBool;
+            isCorrect = answer === (q.correctAnswer === 'Doğru');
         } else {
             isCorrect = answer === q.correctAnswer;
         }
 
         if (isCorrect) {
             playSound('correct');
-            setScore(s => s + QUESTION_POINT); // +50 Puan
+            const bonus = (streak + 1) % 3 === 0 ? 10 : 0;
+            setScore(s => s + QUESTION_POINT + bonus);
             setCorrectCount(c => c + 1);
+            setStreak(s => s + 1);
         } else {
             playSound('incorrect');
+            setStreak(0);
             if (user?.uid) addQuestionToReviewList(user.uid, q);
         }
     };
 
-    // Test bitirme işlemi (Next veya Close aksiyonu ile)
     const handleFinish = async (action: 'next' | 'close') => {
         if (isSaving) return;
         setIsSaving(true);
         const hasPassed = (correctCount / questions.length) >= PASS_THRESHOLD;
         await onComplete(difficulty, testIndex, score, hasPassed, correctCount, questions.length, action);
-        // Not: isSaving'i false yapmıyoruz çünkü bileşen unmount olacak veya yönlenecek.
     };
 
-    if (isLoading) return <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
+    if (isLoading) return <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-sm"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
     
     if (error) return (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-8 text-center gap-4 bg-slate-950">
-            <div className="p-6 bg-red-500/10 rounded-full mb-4">
-                <Bug className="w-12 h-12 text-red-500" />
-            </div>
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-8 bg-slate-950 text-center gap-4">
+            <div className="p-4 bg-red-500/10 rounded-full"><Bug className="w-12 h-12 text-red-500" /></div>
             <p className="text-white text-lg font-medium">{error}</p>
             <Button onClick={onBack} variant="outline" className="mt-4">Geri Dön</Button>
         </div>
     );
 
-    const currentQuestion = questions[currentQuestionIndex];
-    if (!currentQuestion && !isFinished) return null;
+    const currentQuestion = questions[currentIndex];
+    const progressPercent = ((currentIndex + (answers[currentIndex] !== null ? 1 : 0)) / questions.length) * 100;
 
-    // --- SONUÇ EKRANI ---
     if (isFinished) {
-        const successRate = correctCount / questions.length;
-        const hasPassed = successRate >= PASS_THRESHOLD;
+        const hasPassed = (correctCount / questions.length) >= PASS_THRESHOLD;
+        const successRate = (correctCount / questions.length) * 100;
 
         return (
-            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm animate-in zoom-in-95">
-                <MissionBackground />
-                <Card className="w-full max-w-md bg-slate-900/90 border-white/10 rounded-[2.5rem] shadow-2xl p-8 text-center border-t-indigo-500 relative z-10">
-                    <Trophy className={cn("w-20 h-20 mx-auto mb-4", hasPassed ? "text-yellow-400" : "text-slate-600")} />
-                    
-                    <h2 className="text-3xl font-black text-white mb-2">{hasPassed ? "BAŞARILI!" : "TEKRAR DENE"}</h2>
-                    
-                    <div className="mb-6">
-                         <Badge variant={hasPassed ? "default" : "destructive"} className="text-sm px-3 py-1">
-                            Başarı: %{(successRate * 100).toFixed(0)}
-                         </Badge>
-                         {!hasPassed && (
-                             <p className="text-xs text-slate-500 mt-2">Geçmek için en az %{(PASS_THRESHOLD * 100).toFixed(0)} yapmalısın.</p>
-                         )}
-                    </div>
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#020617] animate-in fade-in duration-300">
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/20 rounded-full blur-[120px]" />
+                </div>
 
-                    <p className="text-slate-400 mb-6 text-lg">
-                        <span className="text-white font-bold">{correctCount}</span> Doğru / <span className="text-white font-bold">{questions.length}</span> Soru
-                    </p>
+                <Card className="w-full max-w-md bg-slate-900/90 border-white/10 shadow-2xl relative z-10 backdrop-blur-xl">
+                    <CardContent className="pt-10 pb-8 px-8 text-center flex flex-col items-center gap-6">
+                        <div className={cn("w-24 h-24 rounded-full flex items-center justify-center mb-2 shadow-2xl ring-4 transition-all duration-500", 
+                            hasPassed ? "bg-gradient-to-br from-yellow-400 to-orange-500 ring-yellow-500/20" : "bg-slate-800 ring-slate-700"
+                        )}>
+                            {hasPassed ? <Trophy className="w-12 h-12 text-white animate-bounce" /> : <Target className="w-12 h-12 text-slate-400" />}
+                        </div>
 
-                    <div className="bg-black/40 rounded-2xl p-4 mb-6 border border-white/5">
-                        <span className="text-xs font-bold text-slate-500 block uppercase mb-1">Kazanılan Puan</span>
-                        <span className="text-4xl font-black text-cyan-400">{score} XP</span>
-                    </div>
+                        <div>
+                            <h2 className="text-3xl font-black text-white mb-2">{hasPassed ? "TEBRİKLER!" : "TEST TAMAMLANDI"}</h2>
+                            <p className={cn("text-lg font-medium", hasPassed ? "text-yellow-400" : "text-slate-400")}>
+                                {hasPassed ? "Harika bir iş çıkardın!" : "Biraz daha çalışmalısın."}
+                            </p>
+                        </div>
 
-                    <div className="flex flex-col gap-3">
-                        {/* Başarılıysa Sıradaki Test butonu çıkar */}
-                        {hasPassed && (
-                            <Button 
-                                onClick={() => handleFinish('next')} 
-                                disabled={isSaving}
-                                className="w-full h-12 rounded-xl text-lg font-bold bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 transition-all hover:scale-[1.02]"
-                            >
-                                {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : "Kaydet ve Sıradaki Test"}
-                            </Button>
-                        )}
+                        <div className="grid grid-cols-2 gap-4 w-full">
+                            <div className="bg-slate-800/50 p-4 rounded-2xl border border-white/5 flex flex-col items-center">
+                                <span className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Başarı</span>
+                                <span className={cn("text-2xl font-black", hasPassed ? "text-green-400" : "text-red-400")}>%{successRate.toFixed(0)}</span>
+                            </div>
+                            <div className="bg-slate-800/50 p-4 rounded-2xl border border-white/5 flex flex-col items-center">
+                                <span className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Puan</span>
+                                <span className="text-2xl font-black text-cyan-400">{score}</span>
+                            </div>
+                        </div>
 
-                        <Button 
-                            onClick={() => handleFinish('close')} 
-                            disabled={isSaving}
-                            variant={hasPassed ? "outline" : "default"}
-                            className={cn(
-                                "w-full h-12 rounded-xl text-lg font-bold shadow-lg transition-all",
-                                !hasPassed 
-                                    ? "bg-indigo-600 hover:bg-indigo-500 text-white" 
-                                    : "bg-transparent border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+                        <div className="w-full space-y-3 mt-2">
+                            {hasPassed && (
+                                <Button 
+                                    onClick={() => handleFinish('next')} 
+                                    disabled={isSaving} 
+                                    className="w-full h-14 text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-lg shadow-green-900/30 rounded-xl transition-all hover:scale-[1.02]"
+                                >
+                                    {isSaving ? <Loader2 className="animate-spin" /> : <span className="flex items-center gap-2">Sıradaki Test <ArrowRight className="w-5 h-5"/></span>}
+                                </Button>
                             )}
-                        >
-                            {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : (hasPassed ? "Listeye Dön" : "Sonucu Kaydet ve Çık")}
-                        </Button>
-                    </div>
+                            
+                            <Button 
+                                onClick={() => handleFinish('close')} 
+                                disabled={isSaving} 
+                                variant="outline" 
+                                className="w-full h-14 text-lg font-bold border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-xl"
+                            >
+                                {isSaving ? <Loader2 className="animate-spin" /> : (hasPassed ? "Listeye Dön" : "Sonucu Kaydet ve Çık")}
+                            </Button>
+                        </div>
+                    </CardContent>
                 </Card>
             </div>
         );
     }
 
-    // --- SORU KARTI ---
     return (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-start p-4 pt-10 bg-slate-950 overflow-y-auto">
-             <MissionBackground />
-            <Card className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl border-white/10 rounded-[2rem] shadow-2xl overflow-hidden relative z-10 flex flex-col min-h-[60vh]">
-                <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
-                    <Button onClick={onBack} variant="ghost" size="sm" className="text-slate-400 hover:text-white"><ArrowLeft className="mr-2 h-4 w-4" /> Vazgeç</Button>
-                    <div className="text-white font-black text-lg">{score} XP</div>
-                </div>
-                <CardContent className="py-10 text-center flex-grow flex flex-col justify-center">
-                    <div className="mb-10 px-4">
-                        <span className="text-sm font-bold text-indigo-400 mb-2 block uppercase tracking-wider">Soru {currentQuestionIndex + 1} / {questions.length}</span>
-                        <p className="text-xl md:text-2xl font-bold text-white leading-relaxed">{currentQuestion?.text}</p>
+        <div className="fixed inset-0 z-[100] flex flex-col bg-[#020617] text-white overflow-hidden">
+            {/* Header */}
+            <div className="flex-shrink-0 px-4 py-4 md:py-6 bg-slate-900/50 backdrop-blur-md border-b border-white/5 relative z-20">
+                <div className="max-w-4xl mx-auto w-full flex items-center justify-between gap-4">
+                    <Button onClick={onBack} size="icon" variant="ghost" className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/10 text-slate-300">
+                        <X className="w-5 h-5" />
+                    </Button>
+
+                    <div className="flex-1 flex flex-col gap-2 max-w-md">
+                        <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            <span>Soru {currentIndex + 1} / {questions.length}</span>
+                            <span className="text-cyan-400 flex items-center gap-1"><Zap className="w-3 h-3 fill-current"/> {score} XP</span>
+                        </div>
+                        <Progress value={progressPercent} className="h-2 bg-slate-800" indicatorClassName="bg-gradient-to-r from-cyan-500 to-blue-600 transition-all duration-500" />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {(currentQuestion?.type === 'Doğru/Yanlış' ? ["Doğru", "Yanlış"] : currentQuestion?.options || []).map((opt) => {
-                            const isSelected = answers[currentQuestionIndex] === (currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt);
-                            const isAnswered = answers[currentQuestionIndex] !== null && answers[currentQuestionIndex] !== undefined;
-                            
-                            let isOptCorrect = false;
-                            if (currentQuestion?.type === 'Doğru/Yanlış') {
-                                isOptCorrect = (opt === 'Doğru') === (currentQuestion.correctAnswer === 'Doğru');
-                            } else {
-                                isOptCorrect = opt === currentQuestion?.correctAnswer;
-                            }
+                    <div className="hidden md:flex items-center justify-center h-10 px-4 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-bold text-sm">
+                        {difficulty}
+                    </div>
+                </div>
+            </div>
 
-                            let btnStyle = "bg-slate-800/50 border-white/5 hover:border-cyan-500/50";
+            {/* Scrollable Content */}
+            <div className="flex-grow overflow-y-auto relative p-4 flex flex-col items-center">
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                    <div className="absolute top-[10%] left-[50%] -translate-x-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[100px]" />
+                </div>
+
+                <div className="w-full max-w-3xl relative z-10 flex flex-col gap-8 justify-start md:justify-center min-h-[50vh] pt-12 md:pt-0 pb-32">
+                    
+                    <div className="text-center space-y-6">
+                        <Badge variant="outline" className="border-indigo-500/30 bg-indigo-500/10 text-indigo-300 py-1.5 px-4 rounded-full text-xs tracking-widest shadow-[0_0_15px_-3px_rgba(99,102,241,0.4)]">
+                            <Sparkles className="w-3 h-3 mr-2 inline-block"/> {topic.title}
+                        </Badge>
+                        <h2 className="text-xl md:text-3xl font-bold leading-relaxed text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-100 to-indigo-300 drop-shadow-2xl">
+                            {currentQuestion?.text}
+                        </h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                        {(currentQuestion?.type === 'Doğru/Yanlış' ? ["Doğru", "Yanlış"] : currentQuestion?.options || []).map((opt, idx) => {
+                            const isSelected = answers[currentIndex] === (currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt);
+                            const isAnswered = answers[currentIndex] !== null && answers[currentIndex] !== undefined;
+                            
+                            let statusClass = "bg-slate-800/40 border-white/5 hover:border-indigo-500/30 hover:bg-slate-800/80 text-slate-300";
+                            let iconStyle = "border-white/10 text-slate-500 bg-white/5";
+                            let iconContent = <span className="text-sm font-bold">{String.fromCharCode(65 + idx)}</span>;
+
                             if (isAnswered) {
-                                if (isOptCorrect) {
-                                    btnStyle = "bg-green-500/20 border-green-500 text-green-400";
-                                } else if (isSelected && !isOptCorrect) {
-                                    btnStyle = "bg-red-500/20 border-red-500 text-red-400";
+                                let isCorrect = false;
+                                if(currentQuestion.type === 'Doğru/Yanlış') isCorrect = (opt === 'Doğru') === (currentQuestion.correctAnswer === 'Doğru');
+                                else isCorrect = opt === currentQuestion.correctAnswer;
+
+                                if (isCorrect) {
+                                    statusClass = "bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-[0_0_30px_-10px_rgba(16,185,129,0.3)] ring-1 ring-emerald-500/50";
+                                    iconStyle = "bg-emerald-500 border-emerald-500 text-black";
+                                    iconContent = <Check className="w-4 h-4" />;
+                                } else if (isSelected && !isCorrect) {
+                                    statusClass = "bg-rose-500/10 border-rose-500 text-rose-400 opacity-90";
+                                    iconStyle = "bg-rose-500 border-rose-500 text-white";
+                                    iconContent = <X className="w-4 h-4" />;
                                 } else {
-                                    btnStyle = "opacity-50 border-transparent";
+                                    statusClass = "opacity-40 grayscale bg-slate-900 border-transparent";
                                 }
+                            } else if (isSelected) {
+                                statusClass = "bg-indigo-600/20 border-indigo-500 text-indigo-300";
                             }
 
                             return (
-                                <Button
-                                    key={opt.toString()}
-                                    variant="outline"
-                                    onClick={() => handleAnswer(currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt)}
+                                <button
+                                    key={idx}
                                     disabled={isAnswered}
+                                    onClick={() => handleAnswer(currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt)}
                                     className={cn(
-                                        "h-auto min-h-[4rem] py-4 rounded-2xl border-2 font-bold text-lg transition-all whitespace-normal",
-                                        btnStyle
+                                        "relative group flex items-center gap-4 p-4 md:p-5 w-full text-left rounded-2xl border-2 transition-all duration-300 active:scale-[0.98]",
+                                        statusClass
                                     )}
                                 >
-                                    {opt.toString()}
-                                </Button>
-                            )
+                                    <div className={cn("w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors", iconStyle)}>
+                                        {iconContent}
+                                    </div>
+                                    <span className="text-base md:text-lg font-medium leading-tight">{opt.toString()}</span>
+                                </button>
+                            );
                         })}
                     </div>
-                </CardContent>
-                <CardFooter className="bg-slate-900/60 p-4 flex justify-end mt-auto">
+                </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex-shrink-0 p-4 bg-slate-900/80 backdrop-blur-xl border-t border-white/5 relative z-20 safe-area-bottom">
+                <div className="max-w-3xl mx-auto flex justify-end">
                     <Button 
-                        onClick={() => currentQuestionIndex < questions.length - 1 ? setCurrentQuestionIndex(prev => prev + 1) : setIsFinished(true)} 
-                        disabled={answers[currentQuestionIndex] === null || answers[currentQuestionIndex] === undefined} 
-                        className="bg-cyan-600 hover:bg-cyan-500 rounded-xl px-8 h-12 font-bold shadow-lg shadow-cyan-500/20"
+                        onClick={() => currentIndex < questions.length - 1 ? setCurrentIndex(prev => prev + 1) : setIsFinished(true)} 
+                        disabled={answers[currentIndex] === null}
+                        size="lg"
+                        className={cn(
+                            "rounded-xl px-8 font-bold text-lg h-14 shadow-lg transition-all w-full md:w-auto",
+                            answers[currentIndex] !== null 
+                                ? "bg-cyan-600 hover:bg-cyan-500 text-white shadow-cyan-500/25 hover:scale-105" 
+                                : "bg-slate-800 text-slate-500"
+                        )}
                     >
-                        {currentQuestionIndex === questions.length - 1 ? "Testi Bitir" : "Sıradaki"}
+                        {currentIndex === questions.length - 1 ? "Sonucu Gör" : "Sonraki Soru"}
+                        <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
-                </CardFooter>
-            </Card>
+                </div>
+            </div>
         </div>
     );
 }
 
-// --- ANA SAYFA BİLEŞENİ ---
+// =================================================================
+// 2. ANA SAYFA BİLEŞENİ
+// =================================================================
 function QuestionBankCoursePageComponent() {
     const params = useParams();
     const { user } = useAuth();
@@ -318,8 +350,6 @@ function QuestionBankCoursePageComponent() {
 
     const [course, setCourse] = useState<Course | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    
-    // Veritabanından gelen ilerleme durumu
     const [topicProgress, setTopicProgress] = useState<QuestionBankProgress>({});
     const [testCounts, setTestCounts] = useState<{ [topicId: string]: { easy: number; medium: number; hard: number; } }>({});
     const [classRank, setClassRank] = useState<{rank: number; total: number} | null>(null);
@@ -339,10 +369,7 @@ function QuestionBankCoursePageComponent() {
                     user.class ? getCourseLeaderboard(courseId, user.class, user.uid) : Promise.resolve(null)
                 ]);
                 if (courseResult.course) setCourse(courseResult.course);
-                
-                // KRİTİK: Veritabanından gelen veriyi state'e yükle (Yenileyince kilitlerin açık kalmasını sağlar)
                 setTopicProgress(progressResult);
-                
                 if (rankResult) setClassRank({ rank: rankResult.rank, total: rankResult.total });
                 
                 const allTopics = courseResult.course?.units?.flatMap(u => u.topics || []) || [];
@@ -363,7 +390,7 @@ function QuestionBankCoursePageComponent() {
         fetchInitialData();
     }, [user, courseId]);
 
-    // --- SIRALAMA MANTIĞI ---
+    // --- SIRALAMA ---
     const sortedUnits = useMemo(() => {
         if (!course?.units) return [];
         const getOrderValue = (item: any) => {
@@ -382,16 +409,13 @@ function QuestionBankCoursePageComponent() {
         });
     }, [course]);
 
-    const allSortedTopics = useMemo(() => {
-        return sortedUnits.flatMap(u => u.topics || []);
-    }, [sortedUnits]);
+    const allSortedTopics = useMemo(() => sortedUnits.flatMap(u => u.topics || []), [sortedUnits]);
 
-    // --- KİLİT MANTIĞI ---
+    // --- KİLİT MANTIKLARI ---
     const isTopicCompleted = useCallback((topicId: string) => {
         const progress = topicProgress[topicId];
         const counts = testCounts[topicId];
         if (!counts) return false;
-        
         const checkLevel = (key: 'easy' | 'medium' | 'hard') => {
             const total = Math.ceil((counts[key] || 0) / 10);
             if (total === 0) return true;
@@ -406,7 +430,7 @@ function QuestionBankCoursePageComponent() {
         return isTopicCompleted(allSortedTopics[idx - 1].id);
     }, [isTopicCompleted, allSortedTopics]);
 
-    // --- TEST TAMAMLAMA & STATE GÜNCELLEME ---
+    // --- TEST TAMAMLAMA ---
     const handleTestComplete = async (
         difficulty: 'Kolay' | 'Orta' | 'Zor', 
         testIndex: number, 
@@ -418,9 +442,35 @@ function QuestionBankCoursePageComponent() {
     ) => {
         if (!user || !activeTest) return;
         
-        const result: TestResult = { status: passed ? 'passed' : 'failed', correct: correctCount, total: totalQuestions, score };
+        let finalScore = score;
+
+        // --- KONU BİTİRME ÖDÜLÜ MANTIĞI ---
+        if (passed) {
+            const counts = testCounts[activeTest.topic.id];
+            const totalTestsNeeded = 
+                Math.ceil((counts?.easy || 0) / 10) + 
+                Math.ceil((counts?.medium || 0) / 10) + 
+                Math.ceil((counts?.hard || 0) / 10);
+
+            let passedCountSoFar = 0;
+            const currentProgress = topicProgress[activeTest.topic.id];
+            if (currentProgress) {
+                ['easy', 'medium', 'hard'].forEach(d => {
+                    const diffKey = d as 'easy' | 'medium' | 'hard';
+                    passedCountSoFar += Object.values(currentProgress[diffKey] || {}).filter(r => r.status === 'passed').length;
+                });
+            }
+
+            // Bu test daha önce geçilmemişse ve bu son test ise
+            const wasAlreadyPassed = currentProgress?.[difficultyMap[difficulty]]?.[testIndex]?.status === 'passed';
+            if (!wasAlreadyPassed && (passedCountSoFar + 1) >= totalTestsNeeded) {
+                finalScore += TOPIC_REWARD;
+                playSound('level-up'); // Ödül sesi
+            }
+        }
+
+        const result: TestResult = { status: passed ? 'passed' : 'failed', correct: correctCount, total: totalQuestions, score: finalScore };
         
-        // 1. Local State Güncelle (UI anında tepki verir)
         setTopicProgress(prev => ({ 
             ...prev, 
             [activeTest.topic.id]: { 
@@ -432,10 +482,8 @@ function QuestionBankCoursePageComponent() {
             } 
         }));
         
-        // 2. Veritabanına Kaydet
         await updateTopicTestProgress(user.uid, courseId, activeTest.topic.id, difficultyMap[difficulty], testIndex, result);
 
-        // 3. Yönlendirme (Sıradaki test veya Liste)
         if (action === 'next' && passed) {
             setActiveTest({
                 topic: activeTest.topic,
@@ -451,8 +499,7 @@ function QuestionBankCoursePageComponent() {
 
     if (activeTest) {
         return (
-            <QuestionTest 
-                // CRITICAL FIX: key değiştiğinde bileşen sıfırlanır, döngü oluşmaz.
+            <QuestionTestOverlay
                 key={`${activeTest.topic.id}-${activeTest.difficulty}-${activeTest.testIndex}`}
                 topic={activeTest.topic} 
                 difficulty={activeTest.difficulty} 
@@ -487,7 +534,7 @@ function QuestionBankCoursePageComponent() {
                 </div>
 
                 {/* --- UNITS & TOPICS GRID --- */}
-                <div className="space-y-16 pb-20">
+                <div className="space-y-16 pb-40">
                     {sortedUnits.map((unit) => (
                         <div key={unit.id} className="relative">
                             <div className="flex items-center gap-3 mb-8 pl-2">
@@ -585,7 +632,7 @@ function QuestionBankCoursePageComponent() {
 
             {/* --- DETAY MODALI --- */}
             <Dialog open={!!selectedTopic} onOpenChange={(open) => !open && setSelectedTopic(null)}>
-                <DialogContent className="bg-[#020617]/95 backdrop-blur-xl border-slate-800 text-white max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 shadow-2xl">
+                <DialogContent className="bg-[#020617]/95 backdrop-blur-xl border-slate-800 text-white max-w-4xl max-h-[85dvh] w-[95vw] overflow-hidden flex flex-col p-0 shadow-2xl rounded-3xl">
                     <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-gradient-to-r from-indigo-900/20 to-purple-900/20 relative overflow-hidden shrink-0">
                          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
                          <DialogTitle className="text-2xl font-black flex items-center gap-3 text-white relative z-10">
@@ -597,7 +644,7 @@ function QuestionBankCoursePageComponent() {
                          <p className="relative z-10 text-slate-400 text-sm mt-1">Seviyeleri sırasıyla tamamla.</p>
                     </DialogHeader>
                     
-                    <ScrollArea className="flex-1 p-6">
+                    <div className="flex-1 overflow-y-auto w-full p-6 pb-40">
                         {selectedTopic && (
                             <div className="grid grid-cols-1 gap-6">
                                 {(['Kolay', 'Orta', 'Zor'] as const).map(level => {
@@ -670,14 +717,13 @@ function QuestionBankCoursePageComponent() {
                                 })}
                             </div>
                         )}
-                    </ScrollArea>
+                    </div>
                 </DialogContent>
             </Dialog>
         </div>
     );
 }
 
-// BU KISIM ÖNEMLİ: Hatanın sebebi buranın eksik olmasıydı.
 export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="animate-spin text-cyan-500" /></div>}>

@@ -86,7 +86,7 @@ export function BottomNavBar() {
         { href: '/student', icon: Home, label: 'Panel' },
         { href: '/student/ders', icon: LayoutGrid, label: 'Derslerim' },
         { href: '/oyunlar', icon: Gamepad2, label: 'Etkinlikler' },
-        { href: '/student/shop', icon: ShoppingCart, label: 'Mağaza' },
+        { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];
 

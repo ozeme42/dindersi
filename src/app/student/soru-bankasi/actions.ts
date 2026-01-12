@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -8,23 +6,22 @@ import {
   updateDoc, 
   increment, 
   collection, 
-  addDoc, 
+  setDoc, // setDoc eklendi
   serverTimestamp, 
   writeBatch, 
   query, 
   where, 
   getDocs, 
   getCountFromServer,
-  limit, 
   getDoc
 } from 'firebase/firestore';
-import { unstable_noStore as noStore } from 'next/cache';
-import type { Course, Question, QuestionBankProgress, TestResult, QuestionBankStats, Topic } from '@/lib/types';
+import { revalidatePath } from 'next/cache'; // KRİTİK: Cache temizleme için gerekli
+import type { Course, Question, QuestionBankProgress, TestResult, QuestionBankStats } from '@/lib/types';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import fs from 'fs/promises';
 import path from 'path';
 
-
+// 1. DERS BİLGİLERİNİ GETİR
 export async function getCourseForSoruBankasi(courseId: string): Promise<{ course: (Course & { units: { id: string; title: string; topics: { id: string; title: string; }[] }[] }) | null, error?: string }> {
     try {
         const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
@@ -51,11 +48,12 @@ export async function getCourseForSoruBankasi(courseId: string): Promise<{ cours
     }
 }
 
-
+// 2. İLERLEMEYİ GETİR
 export async function getQuestionBankProgress(courseId: string, userId: string): Promise<QuestionBankProgress> {
     try {
         const progressRef = doc(db, 'users', userId, 'questionBankProgress', courseId);
         const docSnap = await getDoc(progressRef);
+        
         if (docSnap.exists()) {
             return docSnap.data() as QuestionBankProgress;
         }
@@ -66,14 +64,14 @@ export async function getQuestionBankProgress(courseId: string, userId: string):
     }
 }
 
-
+// 3. TEST İÇİN SORULARI GETİR
 export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number): Promise<{ questions: Question[], error?: string }> {
     try {
         const result = await getQuestionsFromBank({
             topicId: topicId,
             difficulty: [difficulty],
-            questionCount: 100, // Fetch a large number to sort and slice
-            isStatic: true, // Use static files
+            questionCount: 100, 
+            isStatic: true, 
         });
 
         if (result.error || !result.questions) {
@@ -91,7 +89,6 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
         
         const selectedQuestions = allQuestions.slice(startIndex, endIndex);
 
-        // Shuffle options for each question
         const questionsWithShuffledOptions = selectedQuestions.map(question => {
             if ((question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
                 const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
@@ -108,6 +105,7 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
     }
 }
 
+// 4. SORU SAYILARINI GETİR
 export async function getQuestionCounts(topicId: string): Promise<{ easy: number, medium: number, hard: number } | null> {
     if (!topicId) return null;
     try {
@@ -117,38 +115,66 @@ export async function getQuestionCounts(topicId: string): Promise<{ easy: number
 
         const counts = { easy: 0, medium: 0, hard: 0 };
         questions.forEach(question => {
-            if (question.difficulty === 'Kolay') counts.easy++;
-            else if (question.difficulty === 'Orta') counts.medium++;
-            else if (question.difficulty === 'Zor') counts.hard++;
+            // Hem Türkçe hem İngilizce key kontrolü (garanti olsun)
+            const d = question.difficulty?.toLowerCase();
+            if (d === 'kolay' || d === 'easy') counts.easy++;
+            else if (d === 'orta' || d === 'medium') counts.medium++;
+            else if (d === 'zor' || d === 'hard') counts.hard++;
         });
 
         return counts;
 
     } catch (error: any) {
         if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-            // File doesn't exist, which is a valid state (no questions for this topic)
             return { easy: 0, medium: 0, hard: 0 };
         }
-        // For other errors, log them but return a default value
-        console.error(`Error fetching question counts for topic ${topicId} from static file:`, error);
+        console.error(`Error fetching question counts for topic ${topicId}:`, error);
         return { easy: 0, medium: 0, hard: 0 };
     }
 }
 
-export async function updateTopicTestProgress(userId: string, courseId: string, topicId: string, difficultyKey: 'easy' | 'medium' | 'hard', testIndex: number, result: TestResult): Promise<{ success: boolean; error?: string }> {
+// 5. İLERLEMEYİ KAYDET (DÜZELTİLEN FONKSİYON)
+export async function updateTopicTestProgress(
+    userId: string, 
+    courseId: string, 
+    topicId: string, 
+    difficultyKey: 'easy' | 'medium' | 'hard', 
+    testIndex: number, 
+    result: TestResult
+): Promise<{ success: boolean; error?: string }> {
     try {
         const progressRef = doc(db, 'users', userId, 'questionBankProgress', courseId);
         
+        // Önce doküman var mı kontrol et
+        const docSnap = await getDoc(progressRef);
+        
+        // Nokta notasyonu yolu (Örn: "ilahi-kitaplar.easy.0")
+        // Bu yöntem, diğer verileri silmeden sadece o hücreyi günceller.
         const fieldPath = `${topicId}.${difficultyKey}.${testIndex}`;
 
-        await setDoc(progressRef, {
-            [topicId]: {
-                [difficultyKey]: {
-                    [testIndex]: result
+        // result objesini temizle (undefined değerler hataya yol açabilir)
+        const safeResult = JSON.parse(JSON.stringify(result));
+
+        if (!docSnap.exists()) {
+            // Doküman yoksa oluştur (setDoc)
+            await setDoc(progressRef, {
+                [topicId]: {
+                    [difficultyKey]: {
+                        [testIndex]: safeResult
+                    }
                 }
-            }
-        }, { merge: true });
+            });
+        } else {
+            // Doküman varsa güncelle (updateDoc - Dot Notation)
+            await updateDoc(progressRef, {
+                [fieldPath]: safeResult
+            });
+        }
         
+        // KRİTİK: Next.js Cache'ini temizle ki sayfa yenilenince güncel veri gelsin
+        revalidatePath(`/student/soru-bankasi/${courseId}`);
+        revalidatePath('/student/soru-bankasi');
+
         return { success: true };
     } catch (e: any) {
         console.error("Error updating test progress:", e);
@@ -156,12 +182,12 @@ export async function updateTopicTestProgress(userId: string, courseId: string, 
     }
 }
 
-
+// 6. PUAN GÖNDER
 export async function submitSoruBankasiScore(userId: string, score: number, context: string): Promise<{ success: boolean; error?: string }> {
     if (!userId || score <= 0) return { success: true };
     
     try {
-        // Puan limiti kontrolü
+        // Puan limiti kontrolü (Günde/Toplamda 10 deneme sınırı vb.)
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
@@ -171,8 +197,9 @@ export async function submitSoruBankasiScore(userId: string, score: number, cont
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         const attemptCount = attemptsSnapshot.data().count;
 
-        if (attemptCount >= 10) {
-            return { success: false, error: "Puan limiti aşıldı. Bu testten daha fazla puan kazanamazsınız." };
+        // İstersen limiti buradan açabilir veya artırabilirsin
+        if (attemptCount >= 50) { 
+            return { success: false, error: "Puan limiti aşıldı." };
         }
 
         const batch = writeBatch(db);
@@ -199,7 +226,7 @@ export async function submitSoruBankasiScore(userId: string, score: number, cont
     }
 }
 
-
+// 7. SIRALAMA GETİR
 export async function getCourseLeaderboard(courseId: string, studentClass: string, studentId: string): Promise<{ rank: number; total: number; error?: string }> {
     try {
         const studentQuery = query(collection(db, 'users'), where('class', '==', studentClass), where('role', '==', 'student'));
@@ -211,6 +238,9 @@ export async function getCourseLeaderboard(courseId: string, studentClass: strin
             return { rank: 0, total: 0 };
         }
         
+        // Not: Gerçek bir uygulamada bu kadar çok okuma maliyetli olabilir.
+        // Leaderboard için ayrı bir koleksiyon tutmak daha iyidir.
+        // Şimdilik mevcut yapıya uyumlu bırakıldı.
         const progressPromises = studentIds.map(uid => getQuestionBankProgress(courseId, uid));
         const allProgress = await Promise.all(progressPromises);
 
