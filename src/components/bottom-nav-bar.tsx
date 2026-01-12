@@ -85,7 +85,7 @@ export function BottomNavBar() {
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
         { href: '/student/ders', icon: LayoutGrid, label: 'Derslerim' },
-        { href: '/leaderboard', icon: Trophy, label: 'Sıralamalar' },
+        { href: '/oyunlar', icon: Gamepad2, label: 'Etkinlikler' },
         { href: '/student/shop', icon: ShoppingCart, label: 'Mağaza' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];

@@ -1,30 +1,44 @@
 'use client';
 
-import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { getQuestionsFromBank } from '@/lib/quiz-actions';
-import { submitSoruBankasiScore, getCourseForSoruBankasi, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, getCourseLeaderboard } from '@/app/student/soru-bankasi/actions';
-import type { Course, Topic, Question, QuestionBankProgress, TestResult } from '@/lib/types';
-import { useAuth } from '@/context/auth-context';
-import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
+import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
-// UI Components
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Loader2, ArrowLeft, ArrowRight, CheckCircle2, Lock, PlayCircle, Star, ShieldCheck, Shield, ShieldAlert, Repeat, Trophy, Bug, GraduationCap, Gift, Sparkles, CheckCheck, XCircle, Activity, Menu, Map as MapIcon } from 'lucide-react';
+// --- ACTION IMPORTS (Yolların doğruluğundan emin olun) ---
+import { getQuestionsFromBank } from '@/lib/quiz-actions';
+import { 
+  submitSoruBankasiScore, 
+  getCourseForSoruBankasi, 
+  getQuestionBankProgress, 
+  getQuestionCounts, 
+  updateTopicTestProgress, 
+  getCourseLeaderboard 
+} from '@/app/student/soru-bankasi/actions';
 import { addQuestionToReviewList } from '@/app/student/tekrar-et/actions';
-import { playSound } from '@/lib/audio-service';
-import { CourseSidebar } from '@/components/course-sidebar';
-import { FullscreenToggle } from '@/components/fullscreen-toggle';
-import { Badge } from '@/components/ui/badge';
 
+// --- TYPES & UTILS ---
+import type { Course, Topic, Question, QuestionBankProgress, TestResult } from '@/lib/types';
+import { useAuth } from '@/context/auth-context';
+import { cn } from '@/lib/utils';
+import { playSound } from '@/lib/audio-service';
+
+// --- UI COMPONENTS ---
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { 
+  Loader2, ArrowLeft, CheckCircle2, Lock, PlayCircle, Trophy, 
+  ShieldCheck, Shield, ShieldAlert, CheckCheck, XCircle, 
+  BookOpen, ChevronLeft, Star, Bug
+} from 'lucide-react';
+
+// --- SABİTLER ---
 const difficultyMap = { 'Kolay': 'easy', 'Orta': 'medium', 'Zor': 'hard' } as const;
 const TOPIC_REWARD = 30000; 
 
+// --- ARKA PLAN EFEKTİ ---
 const MissionBackground = () => (
     <div className="fixed inset-0 pointer-events-none z-0 bg-[#020617] overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" style={{ opacity: 0.05 }}/>
@@ -34,46 +48,106 @@ const MissionBackground = () => (
     </div>
 );
 
-// --- SORU ÇÖZME EKRANI ---
+// --- SORU ÇÖZME BİLEŞENİ ---
 function QuestionTest({ topic, difficulty, testIndex, onComplete, onBack }: any) {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { user } = useAuth();
+    
+    // Test Durumları
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<(string | boolean | null)[]>([]);
     const [isFinished, setIsFinished] = useState(false);
+    const [isSaving, setIsSaving] = useState(false); 
+    
+    // Puanlama
     const [score, setScore] = useState(0);
     const [correctCount, setCorrectCount] = useState(0);
+    
+    // --- AYARLAR ---
+    const PASS_THRESHOLD = 0.7; // %70 Barajı
+    const QUESTION_POINT = 50;  // Her doğru soru 50 Puan
 
-    const PASS_THRESHOLD = 0.7;
-
+    // --- VERİ ÇEKME MOTORU ---
     useEffect(() => {
+        let isMounted = true;
+
         async function fetchQuestions() {
             setIsLoading(true);
+            setError(null);
+
             try {
-                const result = await getQuestionsFromBank({ topicId: topic.id, difficulty: [], questionCount: 500, isStatic: true });
-                if (result.error || !result.questions) throw new Error("Yüklenemedi");
-                const targetDiff = difficultyMap[difficulty as keyof typeof difficultyMap];
-                const filtered = (result.questions as Question[]).filter(q => q.difficulty?.toLowerCase() === targetDiff);
-                const sliced = filtered.slice(testIndex * 10, (testIndex * 10) + 10);
-                if (sliced.length === 0) setError("Bu zorluk seviyesinde soru bulunamadı.");
-                else setQuestions(sliced);
-            } catch (e) { setError("Sorular yüklenirken bir hata oluştu."); } finally { setIsLoading(false); }
+                // Tüm soruları çek (500 limitli)
+                const result = await getQuestionsFromBank({ 
+                    topicId: topic.id, 
+                    difficulty: [], 
+                    questionCount: 500, 
+                    isStatic: true 
+                });
+                
+                if (!isMounted) return;
+
+                if (result.error || !result.questions) {
+                    setError(result.error || "Sorular yüklenemedi.");
+                } else {
+                    const allRawQuestions = result.questions as Question[];
+
+                    // Client-Side Filtreleme (Stabilite için)
+                    const targetDifficulty = difficulty; 
+                    const targetDifficultyEng = difficultyMap[difficulty as keyof typeof difficultyMap]; 
+
+                    const filteredQuestions = allRawQuestions.filter(q => {
+                        const qDiff = q.difficulty ? q.difficulty.toLowerCase().trim() : '';
+                        return qDiff === targetDifficulty.toLowerCase() || 
+                               qDiff === targetDifficultyEng.toLowerCase();
+                    });
+
+                    // Alfabetik sıralama (Karışıklığı önlemek için)
+                    const sortedQuestions = filteredQuestions.sort((a,b) => (a.text || '').localeCompare(b.text || '', 'tr'));
+                    
+                    // Sayfalama (Pagination)
+                    const startIndex = testIndex * 10;
+                    const selectedQuestions = sortedQuestions.slice(startIndex, startIndex + 10);
+                    
+                    if (selectedQuestions.length === 0) {
+                        setError(`Bu seviyede (${difficulty}) yeterli soru bulunamadı.`);
+                    } else {
+                        setQuestions(selectedQuestions);
+                        setAnswers(new Array(selectedQuestions.length).fill(null));
+                    }
+                }
+            } catch (err: any) {
+                if (isMounted) setError("Bir hata oluştu: " + err.message);
+            } finally {
+                if (isMounted) setIsLoading(false);
+            }
         }
+
         fetchQuestions();
-    }, [topic.id, difficulty, testIndex]);
+        return () => { isMounted = false; };
+    }, [topic, difficulty, testIndex]);
 
     const handleAnswer = (answer: any) => {
         if (answers[currentQuestionIndex] !== null && answers[currentQuestionIndex] !== undefined) return;
+        
         const newAnswers = [...answers];
         newAnswers[currentQuestionIndex] = answer;
         setAnswers(newAnswers);
+        
         const q = questions[currentQuestionIndex];
-        const isCorrect = q.type === 'Doğru/Yanlış' ? answer === (q.correctAnswer === 'Doğru') : answer === q.correctAnswer;
+        
+        let isCorrect = false;
+        if (q.type === 'Doğru/Yanlış') {
+            const correctBool = q.correctAnswer === 'Doğru';
+            isCorrect = answer === correctBool;
+        } else {
+            isCorrect = answer === q.correctAnswer;
+        }
+
         if (isCorrect) {
             playSound('correct');
-            setScore(s => s + 150);
+            setScore(s => s + QUESTION_POINT); // +50 Puan
             setCorrectCount(c => c + 1);
         } else {
             playSound('incorrect');
@@ -81,73 +155,152 @@ function QuestionTest({ topic, difficulty, testIndex, onComplete, onBack }: any)
         }
     };
 
-    if (isLoading) return <div className="flex h-full items-center justify-center min-h-[400px]"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
+    // Test bitirme işlemi (Next veya Close aksiyonu ile)
+    const handleFinish = async (action: 'next' | 'close') => {
+        if (isSaving) return;
+        setIsSaving(true);
+        const hasPassed = (correctCount / questions.length) >= PASS_THRESHOLD;
+        await onComplete(difficulty, testIndex, score, hasPassed, correctCount, questions.length, action);
+        // Not: isSaving'i false yapmıyoruz çünkü bileşen unmount olacak veya yönlenecek.
+    };
+
+    if (isLoading) return <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
     
     if (error) return (
-        <div className="flex flex-col items-center justify-center p-8 text-center gap-4 min-h-[400px]">
-            <XCircle className="w-16 h-16 text-red-500 opacity-50" />
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-8 text-center gap-4 bg-slate-950">
+            <div className="p-6 bg-red-500/10 rounded-full mb-4">
+                <Bug className="w-12 h-12 text-red-500" />
+            </div>
             <p className="text-white text-lg font-medium">{error}</p>
-            <Button onClick={onBack} variant="outline">Geri Dön</Button>
+            <Button onClick={onBack} variant="outline" className="mt-4">Geri Dön</Button>
         </div>
     );
 
-    // Kritik düzeltme: Sorular henüz yüklenmediyse veya index dışındaysa hata vermemesi için
     const currentQuestion = questions[currentQuestionIndex];
     if (!currentQuestion && !isFinished) return null;
 
+    // --- SONUÇ EKRANI ---
     if (isFinished) {
-        const hasPassed = (correctCount / questions.length) >= PASS_THRESHOLD;
+        const successRate = correctCount / questions.length;
+        const hasPassed = successRate >= PASS_THRESHOLD;
+
         return (
-            <div className="flex flex-col items-center justify-center h-full p-4 animate-in zoom-in-95">
-                <Card className="w-full max-w-md bg-slate-900/90 border-white/10 rounded-[2.5rem] shadow-2xl p-8 text-center border-t-indigo-500">
+            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-slate-950/95 backdrop-blur-sm animate-in zoom-in-95">
+                <MissionBackground />
+                <Card className="w-full max-w-md bg-slate-900/90 border-white/10 rounded-[2.5rem] shadow-2xl p-8 text-center border-t-indigo-500 relative z-10">
                     <Trophy className={cn("w-20 h-20 mx-auto mb-4", hasPassed ? "text-yellow-400" : "text-slate-600")} />
-                    <h2 className="text-3xl font-black text-white">{hasPassed ? "BAŞARILI!" : "TEKRAR DENE"}</h2>
-                    <p className="text-slate-400 mb-6">{correctCount} Doğru / {questions.length} Soru</p>
-                    <div className="bg-black/40 rounded-2xl p-4 mb-6">
-                        <span className="text-xs font-bold text-slate-500 block uppercase">Kazanılan Puan</span>
-                        <span className="text-4xl font-black text-cyan-400">{hasPassed ? score : 0} XP</span>
+                    
+                    <h2 className="text-3xl font-black text-white mb-2">{hasPassed ? "BAŞARILI!" : "TEKRAR DENE"}</h2>
+                    
+                    <div className="mb-6">
+                         <Badge variant={hasPassed ? "default" : "destructive"} className="text-sm px-3 py-1">
+                            Başarı: %{(successRate * 100).toFixed(0)}
+                         </Badge>
+                         {!hasPassed && (
+                             <p className="text-xs text-slate-500 mt-2">Geçmek için en az %{(PASS_THRESHOLD * 100).toFixed(0)} yapmalısın.</p>
+                         )}
                     </div>
-                    <Button onClick={() => onComplete(difficulty, testIndex, score, hasPassed, correctCount, questions.length)} className="w-full h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-lg font-bold">Sonucu Kaydet</Button>
+
+                    <p className="text-slate-400 mb-6 text-lg">
+                        <span className="text-white font-bold">{correctCount}</span> Doğru / <span className="text-white font-bold">{questions.length}</span> Soru
+                    </p>
+
+                    <div className="bg-black/40 rounded-2xl p-4 mb-6 border border-white/5">
+                        <span className="text-xs font-bold text-slate-500 block uppercase mb-1">Kazanılan Puan</span>
+                        <span className="text-4xl font-black text-cyan-400">{score} XP</span>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                        {/* Başarılıysa Sıradaki Test butonu çıkar */}
+                        {hasPassed && (
+                            <Button 
+                                onClick={() => handleFinish('next')} 
+                                disabled={isSaving}
+                                className="w-full h-12 rounded-xl text-lg font-bold bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 transition-all hover:scale-[1.02]"
+                            >
+                                {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : "Kaydet ve Sıradaki Test"}
+                            </Button>
+                        )}
+
+                        <Button 
+                            onClick={() => handleFinish('close')} 
+                            disabled={isSaving}
+                            variant={hasPassed ? "outline" : "default"}
+                            className={cn(
+                                "w-full h-12 rounded-xl text-lg font-bold shadow-lg transition-all",
+                                !hasPassed 
+                                    ? "bg-indigo-600 hover:bg-indigo-500 text-white" 
+                                    : "bg-transparent border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+                            )}
+                        >
+                            {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : (hasPassed ? "Listeye Dön" : "Sonucu Kaydet ve Çık")}
+                        </Button>
+                    </div>
                 </Card>
             </div>
         );
     }
 
+    // --- SORU KARTI ---
     return (
-        <div className="flex flex-col items-center justify-start p-4 pt-10 h-full">
-            <Card className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl border-white/10 rounded-[2rem] shadow-2xl overflow-hidden relative">
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-start p-4 pt-10 bg-slate-950 overflow-y-auto">
+             <MissionBackground />
+            <Card className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl border-white/10 rounded-[2rem] shadow-2xl overflow-hidden relative z-10 flex flex-col min-h-[60vh]">
                 <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
                     <Button onClick={onBack} variant="ghost" size="sm" className="text-slate-400 hover:text-white"><ArrowLeft className="mr-2 h-4 w-4" /> Vazgeç</Button>
                     <div className="text-white font-black text-lg">{score} XP</div>
                 </div>
-                <CardContent className="py-10 text-center">
-                    <p className="text-xl md:text-2xl font-bold text-white mb-10 px-4">{currentQuestion?.text}</p>
+                <CardContent className="py-10 text-center flex-grow flex flex-col justify-center">
+                    <div className="mb-10 px-4">
+                        <span className="text-sm font-bold text-indigo-400 mb-2 block uppercase tracking-wider">Soru {currentQuestionIndex + 1} / {questions.length}</span>
+                        <p className="text-xl md:text-2xl font-bold text-white leading-relaxed">{currentQuestion?.text}</p>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {(currentQuestion?.type === 'Doğru/Yanlış' ? ["Doğru", "Yanlış"] : currentQuestion?.options || []).map((opt) => (
-                            <Button
-                                key={opt.toString()}
-                                variant="outline"
-                                onClick={() => handleAnswer(currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt)}
-                                disabled={answers[currentQuestionIndex] !== null}
-                                className={cn(
-                                    "h-16 rounded-2xl border-2 font-bold text-lg transition-all",
-                                    answers[currentQuestionIndex] !== null ? 
-                                    (opt === currentQuestion?.correctAnswer || (currentQuestion?.type === 'Doğru/Yanlış' && (opt === 'Doğru') === (currentQuestion?.correctAnswer === 'Doğru'))
-                                        ? "bg-green-500/20 border-green-500 text-green-400" 
-                                        : (answers[currentQuestionIndex] === (currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt) ? "bg-red-500/20 border-red-500 text-red-400" : "opacity-50"))
-                                    : "bg-slate-800/50 border-white/5 hover:border-cyan-500/50"
-                                )}
-                            >
-                                {opt.toString()}
-                            </Button>
-                        ))}
+                        {(currentQuestion?.type === 'Doğru/Yanlış' ? ["Doğru", "Yanlış"] : currentQuestion?.options || []).map((opt) => {
+                            const isSelected = answers[currentQuestionIndex] === (currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt);
+                            const isAnswered = answers[currentQuestionIndex] !== null && answers[currentQuestionIndex] !== undefined;
+                            
+                            let isOptCorrect = false;
+                            if (currentQuestion?.type === 'Doğru/Yanlış') {
+                                isOptCorrect = (opt === 'Doğru') === (currentQuestion.correctAnswer === 'Doğru');
+                            } else {
+                                isOptCorrect = opt === currentQuestion?.correctAnswer;
+                            }
+
+                            let btnStyle = "bg-slate-800/50 border-white/5 hover:border-cyan-500/50";
+                            if (isAnswered) {
+                                if (isOptCorrect) {
+                                    btnStyle = "bg-green-500/20 border-green-500 text-green-400";
+                                } else if (isSelected && !isOptCorrect) {
+                                    btnStyle = "bg-red-500/20 border-red-500 text-red-400";
+                                } else {
+                                    btnStyle = "opacity-50 border-transparent";
+                                }
+                            }
+
+                            return (
+                                <Button
+                                    key={opt.toString()}
+                                    variant="outline"
+                                    onClick={() => handleAnswer(currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt)}
+                                    disabled={isAnswered}
+                                    className={cn(
+                                        "h-auto min-h-[4rem] py-4 rounded-2xl border-2 font-bold text-lg transition-all whitespace-normal",
+                                        btnStyle
+                                    )}
+                                >
+                                    {opt.toString()}
+                                </Button>
+                            )
+                        })}
                     </div>
                 </CardContent>
-                <CardFooter className="bg-slate-900/60 p-4 flex justify-end">
+                <CardFooter className="bg-slate-900/60 p-4 flex justify-end mt-auto">
                     <Button 
                         onClick={() => currentQuestionIndex < questions.length - 1 ? setCurrentQuestionIndex(prev => prev + 1) : setIsFinished(true)} 
                         disabled={answers[currentQuestionIndex] === null || answers[currentQuestionIndex] === undefined} 
-                        className="bg-cyan-600 hover:bg-cyan-500 rounded-xl px-8 h-12 font-bold"
+                        className="bg-cyan-600 hover:bg-cyan-500 rounded-xl px-8 h-12 font-bold shadow-lg shadow-cyan-500/20"
                     >
                         {currentQuestionIndex === questions.length - 1 ? "Testi Bitir" : "Sıradaki"}
                     </Button>
@@ -157,37 +310,24 @@ function QuestionTest({ topic, difficulty, testIndex, onComplete, onBack }: any)
     );
 }
 
-// --- ANA BİLEŞEN ---
+// --- ANA SAYFA BİLEŞENİ ---
 function QuestionBankCoursePageComponent() {
     const params = useParams();
     const { user } = useAuth();
     const courseId = params.courseId as string;
-    const mainContentRef = useRef<HTMLDivElement>(null);
 
     const [course, setCourse] = useState<Course | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [isCountsLoading, setIsCountsLoading] = useState(true);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+    
+    // Veritabanından gelen ilerleme durumu
     const [topicProgress, setTopicProgress] = useState<QuestionBankProgress>({});
     const [testCounts, setTestCounts] = useState<{ [topicId: string]: { easy: number; medium: number; hard: number; } }>({});
     const [classRank, setClassRank] = useState<{rank: number; total: number} | null>(null);
 
-    const [activeTopic, setActiveTopic] = useState<Topic | null>(null);
+    const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
     const [activeTest, setActiveTest] = useState<{ topic: Topic, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number } | null>(null);
 
-    const isTopicCompleted = useCallback((topicId: string) => {
-        const progress = topicProgress[topicId];
-        const counts = testCounts[topicId];
-        if (!counts) return false;
-        const checkLevel = (key: 'easy' | 'medium' | 'hard') => {
-            const total = Math.ceil((counts[key] || 0) / 10);
-            if (total === 0) return true;
-            return Object.values(progress?.[key] || {}).filter(res => res.status === 'passed').length >= total;
-        }
-        return checkLevel('easy') && checkLevel('medium') && checkLevel('hard');
-    }, [topicProgress, testCounts]);
-
+    // --- VERİ ÇEKME ---
     useEffect(() => {
         if (!user?.uid || !courseId) return;
         const fetchInitialData = async () => {
@@ -199,165 +339,349 @@ function QuestionBankCoursePageComponent() {
                     user.class ? getCourseLeaderboard(courseId, user.class, user.uid) : Promise.resolve(null)
                 ]);
                 if (courseResult.course) setCourse(courseResult.course);
+                
+                // KRİTİK: Veritabanından gelen veriyi state'e yükle (Yenileyince kilitlerin açık kalmasını sağlar)
                 setTopicProgress(progressResult);
+                
                 if (rankResult) setClassRank({ rank: rankResult.rank, total: rankResult.total });
                 
                 const allTopics = courseResult.course?.units?.flatMap(u => u.topics || []) || [];
                 const counts = await Promise.all(allTopics.map(t => getQuestionCounts(t.id)));
+                
                 const newCounts: any = {};
-                allTopics.forEach((t, i) => newCounts[t.id] = counts[i]);
+                allTopics.forEach((t, i) => {
+                    if (counts[i] && (counts[i].easy > 0 || counts[i].medium > 0 || counts[i].hard > 0)) {
+                         newCounts[t.id] = counts[i];
+                    } else {
+                         newCounts[t.id] = { easy: 50, medium: 50, hard: 50 };
+                    }
+                });
+                
                 setTestCounts(newCounts);
-            } catch (e: any) { console.error(e); } finally { setIsLoading(false); setIsCountsLoading(false); }
+            } catch (e: any) { console.error(e); } finally { setIsLoading(false); }
         };
         fetchInitialData();
     }, [user, courseId]);
 
-    useEffect(() => {
-        if (isLoading || isCountsLoading || !course || activeTopic) return;
-        const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-        const nextTopic = allTopics.find(t => {
-            const currentIndex = allTopics.findIndex(x => x.id === t.id);
-            const prevTopic = currentIndex > 0 ? allTopics[currentIndex - 1] : null;
-            const isUnlocked = !prevTopic || isTopicCompleted(prevTopic.id);
-            return isUnlocked && !isTopicCompleted(t.id);
+    // --- SIRALAMA MANTIĞI ---
+    const sortedUnits = useMemo(() => {
+        if (!course?.units) return [];
+        const getOrderValue = (item: any) => {
+            if (typeof item.order === 'number' && item.order !== 0) return item.order;
+            if (item.order && !isNaN(Number(item.order)) && Number(item.order) !== 0) return Number(item.order);
+            const match = item.title?.match(/^(\d+)/); 
+            if (match) return parseInt(match[1], 10);
+            return 9999;
+        };
+        const unitsCopy = [...course.units];
+        unitsCopy.sort((a, b) => getOrderValue(a) - getOrderValue(b));
+        return unitsCopy.map(unit => {
+            const topicsCopy = [...(unit.topics || [])];
+            topicsCopy.sort((a, b) => getOrderValue(a) - getOrderValue(b));
+            return { ...unit, topics: topicsCopy };
         });
-        setActiveTopic(nextTopic || allTopics[0] || null);
-    }, [isLoading, isCountsLoading, course, isTopicCompleted, activeTopic]);
+    }, [course]);
+
+    const allSortedTopics = useMemo(() => {
+        return sortedUnits.flatMap(u => u.topics || []);
+    }, [sortedUnits]);
+
+    // --- KİLİT MANTIĞI ---
+    const isTopicCompleted = useCallback((topicId: string) => {
+        const progress = topicProgress[topicId];
+        const counts = testCounts[topicId];
+        if (!counts) return false;
+        
+        const checkLevel = (key: 'easy' | 'medium' | 'hard') => {
+            const total = Math.ceil((counts[key] || 0) / 10);
+            if (total === 0) return true;
+            return Object.values(progress?.[key] || {}).filter(res => res.status === 'passed').length >= total;
+        }
+        return checkLevel('easy') && checkLevel('medium') && checkLevel('hard');
+    }, [topicProgress, testCounts]);
 
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
-        if (!user || user.role !== 'student') return true;
-        const allTopics = (course?.units || []).flatMap(u => u.topics || []);
-        const idx = allTopics.findIndex(t => t.id === topicId);
-        if (idx <= 0) return true;
-        return isTopicCompleted(allTopics[idx - 1].id);
-    }, [course, isTopicCompleted, user]);
+        const idx = allSortedTopics.findIndex(t => t.id === topicId);
+        if (idx <= 0) return true; 
+        return isTopicCompleted(allSortedTopics[idx - 1].id);
+    }, [isTopicCompleted, allSortedTopics]);
 
-    const handleTestComplete = useCallback(async (difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number, score: number, passed: boolean, correctCount: number, totalQuestions: number) => {
+    // --- TEST TAMAMLAMA & STATE GÜNCELLEME ---
+    const handleTestComplete = async (
+        difficulty: 'Kolay' | 'Orta' | 'Zor', 
+        testIndex: number, 
+        score: number, 
+        passed: boolean, 
+        correctCount: number, 
+        totalQuestions: number,
+        action: 'next' | 'close' = 'close'
+    ) => {
         if (!user || !activeTest) return;
+        
         const result: TestResult = { status: passed ? 'passed' : 'failed', correct: correctCount, total: totalQuestions, score };
-        setTopicProgress(prev => ({ ...prev, [activeTest.topic.id]: { ...(prev[activeTest.topic.id] || {}), [difficultyMap[difficulty]]: { ...(prev[activeTest.topic.id]?.[difficultyMap[difficulty]] || {}), [testIndex]: result } } }));
-        setActiveTest(null);
+        
+        // 1. Local State Güncelle (UI anında tepki verir)
+        setTopicProgress(prev => ({ 
+            ...prev, 
+            [activeTest.topic.id]: { 
+                ...(prev[activeTest.topic.id] || {}), 
+                [difficultyMap[difficulty]]: { 
+                    ...(prev[activeTest.topic.id]?.[difficultyMap[difficulty]] || {}), 
+                    [testIndex]: result 
+                } 
+            } 
+        }));
+        
+        // 2. Veritabanına Kaydet
         await updateTopicTestProgress(user.uid, courseId, activeTest.topic.id, difficultyMap[difficulty], testIndex, result);
-        if (score > 0) await submitSoruBankasiScore(user.uid, score, `${course?.title} - ${activeTest.topic.title}`);
-    }, [user, courseId, activeTest, course?.title]);
 
-    const courseStats = useMemo(() => {
-        let score = 0, passed = 0, total = 0;
-        Object.keys(testCounts).forEach(id => {
-            const c = testCounts[id]; total += Math.ceil((c.easy||0)/10) + Math.ceil((c.medium||0)/10) + Math.ceil((c.hard||0)/10);
-            const p = topicProgress[id]; if(p) ['easy','medium','hard'].forEach(k => Object.values((p as any)[k] || {}).forEach((r: any) => { if(r.status==='passed') passed++; score += r.score; }));
-        });
-        return { score, passed, total, percent: total > 0 ? Math.round((passed/total)*100) : 0 };
-    }, [testCounts, topicProgress]);
-
-    const mainContent = () => {
-        if (activeTest) return <QuestionTest topic={activeTest.topic} difficulty={activeTest.difficulty} testIndex={activeTest.testIndex} onComplete={handleTestComplete} onBack={() => setActiveTest(null)} />;
-        if (!activeTopic) return <div className="h-full flex items-center justify-center text-slate-500">Konu yükleniyor...</div>;
-
-        return (
-            <ScrollArea className="h-full">
-                <div className="p-4 md:p-10 space-y-8 pb-40">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-slate-900/60 p-8 rounded-[3rem] border border-white/10 backdrop-blur-xl relative overflow-hidden group">
-                        <div className="text-center md:text-left relative z-10">
-                            <h2 className="text-2xl md:text-4xl font-black text-white mb-2 tracking-tight">{activeTopic.title}</h2>
-                            <p className="text-slate-400 font-medium">Bölüm ödülü: <span className="text-yellow-400">{TOPIC_REWARD.toLocaleString()} XP</span></p>
-                        </div>
-                        <div className="bg-yellow-500/20 text-yellow-400 px-6 py-3 rounded-2xl border border-yellow-500/30 font-black text-xl shadow-lg">
-                            <Trophy className="w-6 h-6 inline mr-2" /> {TOPIC_REWARD.toLocaleString()} XP
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-8">
-                        {(['Kolay', 'Orta', 'Zor'] as const).map(level => {
-                            const levelKey = difficultyMap[level];
-                            const counts = testCounts[activeTopic.id]?.[levelKey] || 0;
-                            if (counts === 0) return null;
-                            const numTests = Math.ceil(counts / 10);
-                            
-                            const isLevelUnlocked = () => {
-                                if (level === 'Kolay') return true;
-                                const prevDiff = level === 'Orta' ? 'easy' : 'medium';
-                                const totalPrev = Math.ceil((testCounts[activeTopic.id]?.[prevDiff] || 0) / 10);
-                                const passedPrev = Object.values(topicProgress[activeTopic.id]?.[prevDiff] || {}).filter(r => r.status === 'passed').length;
-                                return passedPrev >= totalPrev;
-                            }
-                            const levelLocked = !isLevelUnlocked();
-
-                            return (
-                                <div key={level} className={cn("rounded-[2.5rem] border p-6 transition-all duration-500", levelLocked ? "bg-slate-900/30 border-white/5 grayscale opacity-50" : "bg-slate-900/80 border-white/10 shadow-2xl")}>
-                                    <div className="flex items-center gap-4 mb-6">
-                                        <div className={cn("p-3 rounded-xl", level === 'Kolay' ? "bg-emerald-500/20 text-emerald-400" : level === 'Orta' ? "bg-amber-500/20 text-amber-400" : "bg-red-500/20 text-red-400")}>
-                                            {level === 'Kolay' ? <ShieldCheck /> : level === 'Orta' ? <Shield /> : <ShieldAlert />}
-                                        </div>
-                                        <h3 className="text-xl font-black text-white">{level} Seviye</h3>
-                                    </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                                        {Array.from({ length: numTests }).map((_, i) => {
-                                            const res = topicProgress[activeTopic.id]?.[levelKey]?.[i];
-                                            const tLocked = levelLocked || (i > 0 && topicProgress[activeTopic.id]?.[levelKey]?.[i-1]?.status !== 'passed');
-                                            return (
-                                                <Button key={i} disabled={tLocked} onClick={() => setActiveTest({ topic: activeTopic, difficulty: level, testIndex: i })} className={cn("h-14 rounded-2xl border-2 font-bold relative overflow-hidden transition-all", res?.status === 'passed' ? "bg-emerald-500/20 border-emerald-500 text-emerald-400" : tLocked ? "bg-slate-950 border-white/5 text-slate-700" : "bg-slate-800 border-white/10 text-white hover:border-cyan-500")}>
-                                                    {tLocked ? <Lock className="w-4 h-4" /> : res?.status === 'passed' ? <CheckCheck className="w-5 h-5" /> : `Test ${i+1}`}
-                                                </Button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </ScrollArea>
-        );
+        // 3. Yönlendirme (Sıradaki test veya Liste)
+        if (action === 'next' && passed) {
+            setActiveTest({
+                topic: activeTest.topic,
+                difficulty: difficulty,
+                testIndex: testIndex + 1
+            });
+        } else {
+            setActiveTest(null);
+        }
     };
 
     if (isLoading) return <div className="flex h-screen items-center justify-center bg-slate-950 text-white"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
 
+    if (activeTest) {
+        return (
+            <QuestionTest 
+                // CRITICAL FIX: key değiştiğinde bileşen sıfırlanır, döngü oluşmaz.
+                key={`${activeTest.topic.id}-${activeTest.difficulty}-${activeTest.testIndex}`}
+                topic={activeTest.topic} 
+                difficulty={activeTest.difficulty} 
+                testIndex={activeTest.testIndex} 
+                onComplete={handleTestComplete} 
+                onBack={() => setActiveTest(null)} 
+            />
+        );
+    }
+
     return (
-        <div ref={mainContentRef} className="flex flex-col h-[100dvh] bg-slate-950 overflow-hidden relative selection:bg-cyan-500/30">
+        <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8 relative font-sans overflow-x-hidden">
             <MissionBackground />
             
-            <div className="z-50 border-b border-white/5 bg-slate-900/60 backdrop-blur-xl p-3 md:p-4 shrink-0">
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-                            <SheetTrigger asChild>
-                                <Button variant="ghost" size="icon" className="text-white bg-white/5 rounded-lg">
-                                    <Menu className="h-6 w-6" />
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent side="left" className="p-0 bg-slate-950 border-white/5 w-80">
-                                <SheetHeader className="p-4 border-b border-white/5 text-left">
-                                    <SheetTitle className="text-white flex items-center gap-2 font-black uppercase text-sm tracking-widest"><MapIcon className="text-indigo-400 w-4 h-4" /> Görev Haritası</SheetTitle>
-                                </SheetHeader>
-                                <CourseSidebar course={course as Course} activeTopic={activeTopic} onSelectTopic={(t) => { setActiveTopic(t); setIsSidebarOpen(false); }} isTopicUnlocked={isTopicUnlocked} isTopicCompleted={isTopicCompleted} topicProgress={topicProgress} testCounts={testCounts} />
-                            </SheetContent>
-                        </Sheet>
-                        <div className="min-w-0">
-                            <h1 className="text-sm md:text-xl font-black text-white truncate leading-tight uppercase tracking-tight">{course?.title}</h1>
-                            <span className="text-slate-500 text-[9px] font-bold uppercase tracking-widest block md:inline">SIRALAMA #{classRank?.rank || 0}</span>
-                        </div>
+            <div className="relative z-10 max-w-6xl mx-auto">
+                <div className="flex items-center gap-4 mb-8">
+                    <Button variant="ghost" asChild className="hover:bg-white/10 text-slate-300">
+                        <Link href="/student/soru-bankasi"><ChevronLeft className="mr-2 h-5 w-5"/> Derslere Dön</Link>
+                    </Button>
+                    <div className="flex-1">
+                        <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 tracking-tight">
+                             {course?.title || "Ders Yükleniyor"}
+                        </h2>
+                        {classRank && (
+                             <div className="flex items-center gap-2 mt-1">
+                                <Badge variant="outline" className="border-yellow-500/30 text-yellow-400 bg-yellow-500/10 text-[10px] tracking-widest uppercase">
+                                    <Trophy className="w-3 h-3 mr-1" /> Sınıf Sıralaması: #{classRank.rank}
+                                </Badge>
+                             </div>
+                        )}
                     </div>
-                    <div className="flex items-center gap-4">
-                        <div className="flex flex-col items-end">
-                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Ders Puanı</span>
-                            <span className="text-base md:text-xl font-black text-yellow-400 leading-none">{courseStats.score.toLocaleString()} XP</span>
+                </div>
+
+                {/* --- UNITS & TOPICS GRID --- */}
+                <div className="space-y-16 pb-20">
+                    {sortedUnits.map((unit) => (
+                        <div key={unit.id} className="relative">
+                            <div className="flex items-center gap-3 mb-8 pl-2">
+                                <div className="h-8 w-1.5 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"/>
+                                <h3 className="text-2xl font-black text-white uppercase tracking-wider">{unit.title}</h3>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {unit.topics.map((topic) => {
+                                    const unlocked = isTopicUnlocked(topic.id);
+                                    const completed = isTopicCompleted(topic.id);
+                                    const counts = testCounts[topic.id];
+                                    const totalQuestions = counts ? (counts.easy + counts.medium + counts.hard) : 150; 
+                                    const unitTopicIndex = unit.topics.indexOf(topic) + 1;
+
+                                    return (
+                                        <button 
+                                            key={topic.id}
+                                            onClick={() => unlocked && setSelectedTopic(topic)}
+                                            disabled={!unlocked}
+                                            className={cn(
+                                                "group relative text-left h-full transition-all duration-300",
+                                                unlocked ? "opacity-100 hover:-translate-y-2" : "opacity-60 cursor-not-allowed grayscale"
+                                            )}
+                                        >
+                                            {!unlocked && (
+                                                <div className="absolute inset-0 z-20 bg-slate-950/50 backdrop-blur-[1px] rounded-[1.8rem] flex items-center justify-center border-2 border-slate-800">
+                                                    <div className="bg-slate-900/90 p-3 rounded-full border border-slate-700 shadow-xl">
+                                                        <Lock className="w-6 h-6 text-slate-500" />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {unlocked && <div className="absolute -inset-0.5 bg-gradient-to-br from-indigo-500/40 to-purple-600/40 rounded-[2rem] opacity-0 group-hover:opacity-100 blur transition duration-500" />}
+
+                                            <Card className={cn(
+                                                "relative h-full border-slate-800 transition-all duration-300 rounded-[1.8rem] overflow-hidden flex flex-col",
+                                                unlocked ? "bg-[#0f172a]/90 backdrop-blur-sm hover:border-indigo-500/50" : "bg-slate-900"
+                                            )}>
+                                                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                                    <BookOpen className="w-24 h-24 text-white -rotate-12" />
+                                                </div>
+
+                                                <CardContent className="p-6 flex flex-col h-full relative z-10">
+                                                    <div className="flex items-start justify-between mb-4">
+                                                        <div className={cn(
+                                                            "h-8 px-3 rounded-lg flex items-center justify-center font-bold text-xs transition-colors border",
+                                                            completed 
+                                                                ? "bg-green-500/20 text-green-400 border-green-500/30" 
+                                                                : "bg-slate-800 text-slate-400 border-slate-700"
+                                                        )}>
+                                                                {completed ? <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3"/> TAMAMLANDI</span> : `KONU ${unitTopicIndex}`}
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/30 px-2 py-1 rounded text-[10px] font-bold text-yellow-400">
+                                                             <Star className="w-3 h-3 fill-current" />
+                                                             <span>{TOPIC_REWARD.toLocaleString()} XP</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <h4 className={cn("font-black text-xl mb-3 line-clamp-2 leading-tight transition-colors", unlocked ? "text-white group-hover:text-indigo-300" : "text-slate-500")}>
+                                                        {topic.title}
+                                                    </h4>
+                                                    
+                                                    <p className="text-xs text-slate-500 font-medium mb-4">
+                                                        Toplam {totalQuestions} Soru
+                                                    </p>
+
+                                                    <div className="mt-auto pt-4">
+                                                        <div className={cn(
+                                                            "w-full h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all",
+                                                            unlocked 
+                                                                ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg group-hover:shadow-indigo-500/25" 
+                                                                : "bg-slate-800 text-slate-600"
+                                                        )}>
+                                                                {unlocked ? (
+                                                                    <span className="flex items-center gap-2">
+                                                                        {completed ? "Tekrar Çöz" : "Teste Başla"} <PlayCircle className="w-3.5 h-3.5" />
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className="flex items-center gap-2">
+                                                                        <Lock className="w-3.5 h-3.5" /> Kilitli
+                                                                    </span>
+                                                                )}
+                                                        </div>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
-                        <FullscreenToggle elementRef={mainContentRef} className="bg-white/5 border-white/10 text-slate-300 h-9 w-9 rounded-lg" />
-                    </div>
+                    ))}
                 </div>
             </div>
 
-            <div className="flex-grow flex overflow-hidden relative z-10">
-                <aside className="hidden lg:block w-80 lg:w-96 border-r border-white/5 bg-slate-900/40 backdrop-blur-md">
-                    <CourseSidebar course={course as Course} activeTopic={activeTopic} onSelectTopic={setActiveTopic} isTopicUnlocked={isTopicUnlocked} isTopicCompleted={isTopicCompleted} topicProgress={topicProgress} testCounts={testCounts} />
-                </aside>
-                <main className="flex-1 overflow-hidden relative">{mainContent()}</main>
-            </div>
+            {/* --- DETAY MODALI --- */}
+            <Dialog open={!!selectedTopic} onOpenChange={(open) => !open && setSelectedTopic(null)}>
+                <DialogContent className="bg-[#020617]/95 backdrop-blur-xl border-slate-800 text-white max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 shadow-2xl">
+                    <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-gradient-to-r from-indigo-900/20 to-purple-900/20 relative overflow-hidden shrink-0">
+                         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+                         <DialogTitle className="text-2xl font-black flex items-center gap-3 text-white relative z-10">
+                            <div className="p-2 bg-indigo-500/20 rounded-lg border border-indigo-500/30">
+                                <BookOpen className="h-6 w-6 text-indigo-400"/>
+                            </div>
+                            {selectedTopic?.title}
+                         </DialogTitle>
+                         <p className="relative z-10 text-slate-400 text-sm mt-1">Seviyeleri sırasıyla tamamla.</p>
+                    </DialogHeader>
+                    
+                    <ScrollArea className="flex-1 p-6">
+                        {selectedTopic && (
+                            <div className="grid grid-cols-1 gap-6">
+                                {(['Kolay', 'Orta', 'Zor'] as const).map(level => {
+                                    const levelKey = difficultyMap[level];
+                                    const counts = testCounts[selectedTopic.id]?.[levelKey] || 0;
+                                    const safeCounts = counts > 0 ? counts : 50;
+                                    const numTests = Math.ceil(safeCounts / 10);
+                                    
+                                    const isLevelUnlocked = () => {
+                                        if (level === 'Kolay') return true;
+                                        const prevDiff = level === 'Orta' ? 'easy' : 'medium';
+                                        
+                                        const prevCounts = testCounts[selectedTopic.id]?.[prevDiff] || 0;
+                                        const safePrevCounts = prevCounts > 0 ? prevCounts : 50;
+                                        const totalPrev = Math.ceil(safePrevCounts / 10);
+                                        
+                                        const passedPrev = Object.values(topicProgress[selectedTopic.id]?.[prevDiff] || {}).filter(r => r.status === 'passed').length;
+                                        return passedPrev >= totalPrev;
+                                    }
+                                    const levelLocked = !isLevelUnlocked();
+
+                                    return (
+                                        <div key={level} className={cn(
+                                            "rounded-[2rem] border p-6 transition-all duration-500 relative overflow-hidden",
+                                            levelLocked ? "bg-slate-900/30 border-white/5 grayscale opacity-60" : "bg-slate-900/60 border-white/10"
+                                        )}>
+                                            <div className="flex items-center gap-4 mb-6 relative z-10">
+                                                <div className={cn("p-3 rounded-xl shadow-lg", 
+                                                    level === 'Kolay' ? "bg-emerald-500/20 text-emerald-400" : 
+                                                    level === 'Orta' ? "bg-amber-500/20 text-amber-400" : 
+                                                    "bg-red-500/20 text-red-400"
+                                                )}>
+                                                    {level === 'Kolay' ? <ShieldCheck className="w-6 h-6"/> : level === 'Orta' ? <Shield className="w-6 h-6"/> : <ShieldAlert className="w-6 h-6"/>}
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-xl font-black text-white">{level} Seviye</h3>
+                                                    <p className="text-xs text-slate-400 font-medium">{levelLocked ? "Önceki seviyeyi tamamla" : `${numTests} Test Mevcut`}</p>
+                                                </div>
+                                                {levelLocked && <Lock className="ml-auto w-6 h-6 text-slate-600" />}
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 relative z-10">
+                                                {Array.from({ length: numTests }).map((_, i) => {
+                                                    const res = topicProgress[selectedTopic.id]?.[levelKey]?.[i];
+                                                    const tLocked = levelLocked || (i > 0 && topicProgress[selectedTopic.id]?.[levelKey]?.[i-1]?.status !== 'passed');
+                                                    
+                                                    return (
+                                                        <Button 
+                                                            key={i} 
+                                                            disabled={tLocked} 
+                                                            onClick={() => {
+                                                                setActiveTest({ topic: selectedTopic, difficulty: level, testIndex: i });
+                                                            }}
+                                                            className={cn(
+                                                                "h-14 rounded-xl border-2 font-bold relative overflow-hidden transition-all",
+                                                                res?.status === 'passed' 
+                                                                    ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20" 
+                                                                    : tLocked 
+                                                                        ? "bg-slate-950 border-white/5 text-slate-700" 
+                                                                        : "bg-slate-800 border-white/10 text-white hover:border-cyan-500 hover:bg-slate-700"
+                                                            )}
+                                                        >
+                                                                {tLocked ? <Lock className="w-4 h-4" /> : res?.status === 'passed' ? <span className="flex items-center gap-1"><CheckCheck className="w-4 h-4"/> #{i+1}</span> : `Test ${i+1}`}
+                                                        </Button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </ScrollArea>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
 
+// BU KISIM ÖNEMLİ: Hatanın sebebi buranın eksik olmasıydı.
 export default function Page() {
-    return <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="animate-spin text-cyan-500" /></div>}><QuestionBankCoursePageComponent /></Suspense>;
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="animate-spin text-cyan-500" /></div>}>
+            <QuestionBankCoursePageComponent />
+        </Suspense>
+    );
 }
