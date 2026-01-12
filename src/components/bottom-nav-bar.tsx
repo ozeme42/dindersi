@@ -84,9 +84,9 @@ export function BottomNavBar() {
 
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
-        { href: '/student/ders', icon: LayoutGrid, label: 'Derslerim' },
         { href: '/oyunlar', icon: Gamepad2, label: 'Etkinlikler' },
         { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
+        { href: '/student/shop', icon: ShoppingCart, label: 'Mağaza' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];
 
@@ -94,7 +94,7 @@ export function BottomNavBar() {
         { href: '/', icon: Home, label: 'Panel' },
         { href: '/teacher/students', icon: Users, label: 'Öğrenciler' },
         { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
-        { href: '/teacher/scales', icon: Scale, label: 'Ölçekler' },
+        { href: '/oyunlar', icon: Gamepad2, label: 'Oyunlar' },
         { href: '/teacher/smartboard', icon: MonitorPlay, label: 'Tahta' },
     ];
     

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { 
     Trophy, Star, Gamepad2, ShoppingCart, Columns, LayoutTemplate, 
     FileCog, Crown, Award, Target, Sparkles, Map, Swords, Backpack,
-    Loader2, ArrowRight, Flame, Gift, Timer, School
+    Loader2, ArrowRight, Flame, Gift, Timer, School, Compass // Compass eklendi
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
@@ -77,7 +77,7 @@ const DashboardCardButton = ({ href, icon, title, subtitle, colorClass, badge }:
         "indigo": "from-indigo-500 to-violet-600 border-indigo-600 shadow-indigo-900/40",
         "emerald": "from-emerald-500 to-green-600 border-emerald-600 shadow-emerald-900/40", 
         "violet": "from-violet-500 to-purple-600 border-violet-600 shadow-violet-900/40",
-        "teal": "from-teal-500 to-cyan-600 border-teal-600 shadow-teal-900/40", // Yeni renk eklendi
+        "teal": "from-teal-500 to-cyan-600 border-teal-600 shadow-teal-900/40",
      }
      return (
         <Button asChild className={cn("relative w-full h-auto flex flex-col md:flex-row items-center justify-center md:justify-start gap-3 p-4 rounded-2xl transition-all duration-300 group overflow-hidden border-b-[6px] active:border-b-0 active:translate-y-[6px] bg-gradient-to-br text-white shadow-xl", colors[colorClass])}>
@@ -386,15 +386,72 @@ export default function StudentDashboard() {
                 </div>
             </div>
          
+         {/* MACERA ve ŞÖHRET KARTLARI */}
          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-             <Link href="/student/soru-bankasi" className="group block h-full"><div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-sky-900 to-blue-900 border border-sky-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col"><div className="flex justify-between items-start mb-6"><div className="p-4 bg-sky-500/20 rounded-2xl border border-sky-400/30"><Map className="h-8 w-8 text-sky-300" /></div></div><h2 className="text-3xl font-black text-white mb-2">Macera <span className="text-sky-400">Haritası</span></h2><p className="text-sky-100/70 font-medium mb-8">Soruları çöz ve ilerle.</p><div className="mt-auto flex items-center gap-2 text-white font-bold text-lg">Hemen Başla <ArrowRight className="h-5 w-5" /></div></div></Link>
-             <Link href="/leaderboard" className="group block h-full"><div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-orange-900 border border-amber-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col"><div className="flex justify-between items-start mb-6"><div className="p-4 bg-amber-500/20 rounded-2xl border border-amber-400/30"><Trophy className="h-8 w-8 text-amber-300" /></div></div><h2 className="text-3xl font-black text-white mb-2">Şöhret <span className="text-amber-400">Salonu</span></h2><div className="mt-auto grid grid-cols-3 gap-3"><div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.generalRank}</span><span className="text-[10px] text-amber-200/60 uppercase">Genel</span></div><div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.classRank}</span><span className="text-[10px] text-amber-200/60 uppercase">Sınıf</span></div><div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.branchRank}</span><span className="text-[10px] text-amber-200/60 uppercase">Şube</span></div></div></div></Link>
+             <Link href="/student/soru-bankasi" className="group block h-full">
+                <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-sky-900 to-blue-900 border border-sky-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col transition-transform duration-300">
+                    <div className="flex justify-between items-start mb-6">
+                        <div className="p-4 bg-sky-500/20 rounded-2xl border border-sky-400/30">
+                            <Map className="h-8 w-8 text-sky-300" />
+                        </div>
+                    </div>
+                    <h2 className="text-3xl font-black text-white mb-2">Macera <span className="text-sky-400">Haritası</span></h2>
+                    <p className="text-sky-100/70 font-medium mb-8">Soruları çöz ve ilerle.</p>
+                    <div className="mt-auto flex items-center gap-2 text-white font-bold text-lg">
+                        Hemen Başla <ArrowRight className="h-5 w-5" />
+                    </div>
+                </div>
+             </Link>
+             
+             <Link href="/leaderboard" className="group block h-full">
+                <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-orange-900 border border-amber-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col transition-transform duration-300">
+                    <div className="flex justify-between items-start mb-6">
+                        <div className="p-4 bg-amber-500/20 rounded-2xl border border-amber-400/30">
+                            <Trophy className="h-8 w-8 text-amber-300" />
+                        </div>
+                    </div>
+                    <h2 className="text-3xl font-black text-white mb-2">Şöhret <span className="text-amber-400">Salonu</span></h2>
+                    <div className="mt-auto grid grid-cols-3 gap-3">
+                        <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
+                            <span className="text-2xl font-black text-white">#{stats.generalRank}</span>
+                            <span className="text-[10px] text-amber-200/60 uppercase">Genel</span>
+                        </div>
+                        <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
+                            <span className="text-2xl font-black text-white">#{stats.classRank}</span>
+                            <span className="text-[10px] text-amber-200/60 uppercase">Sınıf</span>
+                        </div>
+                        <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
+                            <span className="text-2xl font-black text-white">#{stats.branchRank}</span>
+                            <span className="text-[10px] text-amber-200/60 uppercase">Şube</span>
+                        </div>
+                    </div>
+                </div>
+             </Link>
          </div>
 
-         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                {/* YENİ EKLENEN GÖREV YOLCULUĞU BUTONU */}
-                <DashboardCardButton href="/student/gorevler" icon={<Map />} title="Görev Yolculuğu" subtitle="Müfredat Bazlı" colorClass="teal" />
+         {/* Yeni Görev Yolculuğu Kartı (Full Width & Under Adventure/Fame) */}
+         <Link href="/student/gorevler" className="group block w-full mt-6">
+            <div className="relative w-full rounded-3xl overflow-hidden bg-gradient-to-br from-fuchsia-900 to-purple-900 border border-fuchsia-500/30 shadow-2xl hover:scale-[1.01] transition-transform duration-300 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                {/* Sol Taraf: İkon ve Yazı */}
+                <div className="flex items-center gap-6">
+                    <div className="p-5 bg-fuchsia-500/20 rounded-2xl border border-fuchsia-400/30 shrink-0">
+                        <Compass className="h-10 w-10 text-fuchsia-300" />
+                    </div>
+                    <div>
+                        <h2 className="text-3xl font-black text-white mb-1">Görev <span className="text-fuchsia-400">Yolculuğu</span></h2>
+                        <p className="text-fuchsia-100/70 font-medium">Oyunlaştırılmış müfredat ile seviye atla.</p>
+                    </div>
+                </div>
+                
+                {/* Sağ Taraf: CTA Buton */}
+                <div className="flex items-center gap-2 text-white font-bold text-lg bg-fuchsia-600/20 px-6 py-3 rounded-xl border border-fuchsia-500/50 group-hover:bg-fuchsia-600/40 transition-colors">
+                    Yolculuğa Çık <ArrowRight className="h-5 w-5" />
+                </div>
+            </div>
+         </Link>
 
+         {/* KÜÇÜK BUTONLAR (GRID) */}
+         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                <DashboardCardButton href="/oyunlar" icon={<Gamepad2 />} title="Etkinlikler" subtitle="Arcade" colorClass="sky" />
                <DashboardCardButton href="/student/yarismalar" icon={<Swords />} title="Arena" subtitle="Çok Oyunculu" colorClass="rose" />
                <DashboardCardButton href="/student/yazilacaklar" icon={<Columns />} title="Panolar" subtitle="Notlar" colorClass="orange" />
