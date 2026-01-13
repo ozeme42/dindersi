@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -20,7 +19,9 @@ import { unstable_noStore as noStore } from 'next/cache';
 import type { Question } from '@/lib/types';
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
 
-const MAX_BOXES = 30;
+// --- DEĞİŞİKLİK BURADA ---
+// Eskiden 30 ile sınırlıydı. Şimdi 500 yaparak konudaki "TÜM" soruların gelmesini sağlıyoruz.
+const MAX_BOXES = 500; 
 
 export async function getKutuAcQuestionsAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
@@ -31,7 +32,7 @@ export async function getKutuAcQuestionsAction(
             courseId,
             unitId,
             topicId,
-            questionCount: MAX_BOXES,
+            questionCount: MAX_BOXES, // Buraya artık 500 gidiyor
             difficulty: ['Kolay', 'Orta', 'Zor'],
             questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış'],
         };

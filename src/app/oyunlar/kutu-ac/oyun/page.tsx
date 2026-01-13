@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getKutuAcQuestionsAction, submitKutuAcScoreAction } from '../actions';
 import type { Question } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Package, Users, Trophy, Crown, Target, Sparkles, MonitorPlay, Zap, XOctagon } from 'lucide-react';
+import { Loader2, ArrowLeft, Package, Trophy, Crown, Target, Sparkles, MonitorPlay, Zap, XOctagon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
@@ -15,7 +15,6 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { useAuth } from '@/context/auth-context';
 import { QuestionDialog } from '@/components/question-dialog';
 import { GameEndScreen } from '@/components/game-end-screen';
-import { Badge } from "@/components/ui/badge";
 
 // Soruları karıştıran yardımcı fonksiyon
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -65,7 +64,7 @@ function KutuAcGame() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const mainContentRef = useRef<HTMLDivElement>(null);
 
-    const backUrl = "/"; // Her zaman ana sayfaya dönecek
+    const backUrl = "/"; 
 
     const gameContext = `Kutu Aç - ${searchParams.get('topicName') || 'Genel'}`;
 
@@ -84,9 +83,13 @@ function KutuAcGame() {
             topicId: searchParams.get('topicId') || undefined,
         };
         const result = await getKutuAcQuestionsAction(params);
+        
         if (result.error || result.questions.length === 0) {
             setError(result.error || "Bu konu için soru bulunamadı.");
         } else {
+            // --- TÜM SORULARI AL ---
+            // Herhangi bir .slice() veya limit koymuyoruz.
+            // Sadece karıştırıp (shuffle) state'e atıyoruz.
             setQuestions(shuffleArray(result.questions));
         }
         setIsLoading(false);
@@ -331,7 +334,6 @@ function KutuAcGame() {
     const activeTeamConfig = activePlayer?.teamConfig || TEAMS[0];
 
     return (
-        // DÜZELTME: mainContentRef artık padding içermiyor. Tam ekran için temiz bir kapsayıcı.
         <div 
             ref={mainContentRef}
             className="relative w-full h-full min-h-screen bg-slate-950 font-sans text-slate-100 flex flex-col overflow-hidden transition-all"
@@ -346,8 +348,7 @@ function KutuAcGame() {
                 <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
             </div>
 
-            {/* İçerik Kapsayıcısı: Padding buraya taşındı. */}
-            {/* Bu sayede QuestionDialog bu div'in dışında kalıp tam ekranı kaplayabilir */}
+            {/* İçerik Kapsayıcısı */}
             <div className={cn(
                 "relative z-10 flex flex-col w-full h-full mx-auto",
                 isFullscreen ? "p-4" : "p-2 sm:p-4"
@@ -477,7 +478,7 @@ function KutuAcGame() {
                 </div>
             </div>
 
-            {/* SORU PENCERESİ: Padding dışına alındı, direkt mainContentRef'e bağlı */}
+            {/* SORU PENCERESİ */}
             {openedQuestion && (
                 <QuestionDialog
                     isFullscreen={isFullscreen}
@@ -486,7 +487,7 @@ function KutuAcGame() {
                     questionData={openedQuestion}
                     onAnswer={handleAnswerQuestion}
                     timerDuration={timerDuration}
-                    pointsConfig={{ default: { points: 10 }}}
+                    pointsConfig={{ default: { points: 10 }}} // 10 Puan
                     showCorrectAnswerOnWrong={true}
                 />
             )}

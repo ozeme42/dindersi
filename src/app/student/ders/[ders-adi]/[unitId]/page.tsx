@@ -22,6 +22,10 @@ type LocalProgress = {
 const EMPTY_TEST_COUNTS = {};
 const MemoizedSidebar = React.memo(CourseSidebar);
 
+// --- BURASI PUAN AYARI ---
+// Her doğru soru için kaç puan verileceğini buradan değiştirebilirsin.
+const POINTS_PER_QUESTION = 100; 
+
 // --- ARKA PLAN EFEKTLERİ ---
 const MissionBackground = () => (
     <div className="fixed inset-0 pointer-events-none z-0 bg-[#020617] overflow-hidden">
@@ -125,7 +129,6 @@ function PageContent() {
                 return;
             }
 
-            // Düzgün sıralama için üniteleri ve konuları sırala
             courseData.units?.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
             courseData.units?.forEach(unit => {
                 unit.topics?.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
@@ -150,15 +153,14 @@ function PageContent() {
         return (completedTopics[topicId]?.completionCount || 0) > 0;
     }, [completedTopics]);
 
-    // --- YENİ: Geliştirilmiş Kilit Açma Mantığı ---
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         if (isTeacher) return true;
         if (allTopicsInOrder.length === 0) return false;
 
         const topicIndex = allTopicsInOrder.findIndex(t => t.id === topicId);
         
-        if (topicIndex === -1) return false; // Konu listede yoksa kilitlidir.
-        if (topicIndex === 0) return true; // Zincirin ilk halkası her zaman açıktır.
+        if (topicIndex === -1) return false; 
+        if (topicIndex === 0) return true;
 
         const previousTopic = allTopicsInOrder[topicIndex - 1];
         if (!previousTopic) return true; 
@@ -166,7 +168,6 @@ function PageContent() {
         return isTopicCompleted(previousTopic.id);
     }, [allTopicsInOrder, isTopicCompleted, isTeacher]);
 
-     // --- YENİ: Aktif Konuyu Belirleme Mantığı ---
     useEffect(() => {
         if (isLoading || allTopicsInOrder.length === 0 || activeContent) return;
 
@@ -183,7 +184,6 @@ function PageContent() {
             }
         }
         
-        // Kaldığı yerden devam et
         const firstUncompletedUnlockedTopic = allTopicsInOrder.find(t => isTopicUnlocked(t.id) && !isTopicCompleted(t.id));
 
         if (firstUncompletedUnlockedTopic) {
@@ -240,11 +240,13 @@ function PageContent() {
         let toastDescription = "Tebrikler, bu bölümü başarıyla bitirdin!";
         let totalScore = 0;
     
+        // --- PUANLAMA MANTIĞI: SKOR + BONUS (2 KATI) ---
         if (currentCompletionCount < 2) {
-            completionBonus = isUnitFlow ? score + 50 : score;
+            completionBonus = score; // Bonusu ham puan kadar yapıyoruz (x2 olması için)
             totalScore = score + completionBonus;
+            
             toastTitle = currentCompletionCount === 0 ? "Harika! Bölüm Bitti!" : "Bölüm Tekrarı!";
-            toastDescription = `Adımlardan ${score} ve bonustan ${completionBonus} puan kazandın. Toplam: ${totalScore} Puan!`;
+            toastDescription = `Sorulardan ${score} ve Bonustan ${completionBonus} puan kazandın. Toplam: ${totalScore} Puan!`;
         } else {
             totalScore = 0;
             toastDescription = "Bu bölümü daha önce tamamladığın için tekrar puan kazanmadın.";
@@ -319,6 +321,7 @@ function PageContent() {
         setView('map');
     };
     
+    // --- ÇOKTAN SEÇMELİ / TEK SORULAR İÇİN PUANLAMA (DÜZELTİLDİ: 100 PUAN) ---
     const handleLocalMultiAnswer = useCallback((stepIndex: number, questionIndex: number, selectedAnswer: boolean) => {
         if (!activeContentData) return;
         const contentId = activeContentData.data.id;
@@ -326,25 +329,34 @@ function PageContent() {
         setLocalProgressMap(prevMap => {
             const prevProgress = prevMap[contentId] || { answers: {}, score: 0 };
             const currentAnswers = prevProgress.answers[stepIndex] || {};
+            
             if (currentAnswers[questionIndex] !== undefined) return prevMap;
             
             const step = activeContentData.data.steps?.[stepIndex];
-            if (!step || step.type !== 'trueFalseList') return prevMap;
+            if (!step) return prevMap;
 
-            const question = step.questions[questionIndex];
-            const isCorrect = selectedAnswer === question.isTrue;
-            // if (isCorrect) playSound('correct'); else playSound('incorrect'); // Optional sound
+            const question = step.questions?.[questionIndex];
+            // Doğru cevap kontrolü
+            const isCorrect = question ? (selectedAnswer === question.isTrue) : (selectedAnswer === true);
+            
+            // BURADA HER DOĞRU CEVAP İÇİN 100 PUAN EKLENİYOR
+            const scoreToAdd = isCorrect ? POINTS_PER_QUESTION : 0;
 
             const newAnswersForStep = { ...currentAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect } };
             const newAnswers = { ...prevProgress.answers, [stepIndex]: newAnswersForStep };
 
             return {
                 ...prevMap,
-                [contentId]: { ...prevProgress, answers: newAnswers }
+                [contentId]: { 
+                    ...prevProgress, 
+                    score: prevProgress.score + scoreToAdd, // Puan eklendi
+                    answers: newAnswers 
+                }
             };
         });
     }, [activeContentData]);
      
+    // --- TRUE/FALSE LİSTE SORULARI İÇİN PUANLAMA (DÜZELTİLDİ: 100 PUAN) ---
     const handleLocalAllTfAnswered = useCallback((stepIndex?: number) => {
         if (!activeContentData) return;
         const contentId = activeContentData.data.id;
@@ -357,11 +369,12 @@ function PageContent() {
             if (targetStepIndex === -1) return prevMap;
             
             const answersForStep = prevProgress.answers[targetStepIndex];
-            
             if (!answersForStep || answersForStep.completed) return prevMap;
 
             const correctCount = Object.values(answersForStep).filter((a: any) => a.isCorrect).length;
-            const points = correctCount * 20;
+            
+            // BURADA HER DOĞRU İÇİN 100 PUAN HESAPLANIYOR
+            const points = correctCount * POINTS_PER_QUESTION;
 
             const newAnswers = { ...prevProgress.answers, [targetStepIndex]: { ...answersForStep, completed: true } };
             
@@ -395,7 +408,7 @@ function PageContent() {
 
             <div className={cn("flex flex-col md:flex-row flex-grow overflow-hidden relative z-10", isFullscreen ? "h-screen" : "")}>
                 
-                {/* --- SIDEBAR (Sol Menü) --- */}
+                {/* --- SIDEBAR --- */}
                 <div className={cn(
                     "md:w-80 lg:w-96 flex-shrink-0 border-r border-white/5 bg-slate-900/50 backdrop-blur-md flex flex-col relative overflow-hidden transition-all duration-300",
                     view === 'content' ? 'hidden md:flex h-full' : 'flex h-full w-full',
@@ -427,13 +440,13 @@ function PageContent() {
                     />
                 </div>
                 
-                {/* --- MAIN CONTENT (Sağ Alan) --- */}
+                {/* --- MAIN CONTENT --- */}
                 <main ref={mainContentRef} className={cn(
                     "flex-1 overflow-hidden relative flex flex-col bg-slate-950/30 backdrop-blur-sm",
                     view === 'map' ? 'hidden md:flex' : 'flex'
                 )}>
                     
-                    {/* MOBİL BAŞLIK ÇUBUĞU */}
+                    {/* MOBİL BAŞLIK */}
                     {!isFullscreen && view === 'content' && (
                         <div className="md:hidden flex items-center justify-between p-3 bg-slate-900/90 backdrop-blur-xl border-b border-white/10 z-20 shrink-0 shadow-lg">
                             <Button 
