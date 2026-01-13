@@ -12,7 +12,12 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { cn } from "@/lib/utils";
 import { playSound, stopSound } from '@/lib/audio-service';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import Confetti from 'react-dom-confetti';
+
+// --- SABİTLER ---
+const MAX_ATTEMPTS_PER_TOPIC = 10;
 
 function KavramYarismaGame() {
     const { user } = useAuth();
@@ -50,12 +55,14 @@ function KavramYarismaGame() {
     const baseQuestionsRef = useRef<ConceptQuizQuestion[]>([]);
     const [error, setError] = useState<string | null>(null);
 
-    const gameContext = `Kavram Yarışması (${gameMode === 'team' ? 'VS' : 'Tekli'}) - ${searchParams.get('topicName') || 'Genel'}`;
+    const topicName = searchParams.get('topicName') || 'Genel';
+    const topicId = searchParams.get('topicId');
+    const gameContext = `Kavram Yarışması (${gameMode === 'team' ? 'VS' : 'Tekli'}) - ${topicName}`;
 
-    // --- PUANLAMA MANTIĞI ---
-    // Single Mod: Süre ile çarpılır (Max 75, Min 5)
-    // Team Mod: handleAnswer içinde sabit 1 atanır, buradaki değer kullanılmaz.
-    const currentPotentialScore = Math.max(5, timeLeft * 5);
+    // --- PUANLAMA MANTIĞI (GÜNCELLENDİ) ---
+    // Single Mod: Kalan süre kadar puan (Max 15, Min 1)
+    // Team Mod: handleAnswer içinde sabit 1 atanır.
+    const currentPotentialScore = Math.max(1, timeLeft); // <-- BURASI DEĞİŞTİ: Saniye başı 1 puan
 
     // --- ALGORİTMA: SORU VE ŞIK DÜZENLEME ---
     const prepareQuestions = (baseQs: ConceptQuizQuestion[]): ConceptQuizQuestion[] => {
@@ -202,8 +209,8 @@ function KavramYarismaGame() {
             stopSound('timer');
             playSound('correct');
             
-            // --- PUANLAMA DEĞİŞİKLİĞİ ---
-            // Takım Modu: Sabit 1 Puan (Süre etkisiz)
+            // --- PUANLAMA ---
+            // Takım Modu: Sabit 1 Puan
             // Tekli Mod: Süreye bağlı (currentPotentialScore)
             const points = gameMode === 'team' ? 1 : currentPotentialScore;
             
@@ -229,7 +236,7 @@ function KavramYarismaGame() {
             setTimeout(() => document.getElementById(zoneId)?.classList.remove('shake'), 500);
             
             if (side === 'single') {
-                const penalty = 20;
+                const penalty = 5; // Yanlış cevap cezası da düşürüldü (opsiyonel)
                 setScoreLeft(prev => Math.max(0, prev - penalty));
                 setScoreDelta(`-${penalty}`);
                 setTimeout(() => setScoreDelta(null), 1500);
@@ -290,15 +297,47 @@ function KavramYarismaGame() {
         }
         
         setIsSaving(true);
-        const result = await submitConceptQuizScoreAction(user.uid, totalScore, gameContext);
-        if (result.success) {
-            setScoreSaved(true);
-            toast({ title: 'Başarılı!', description: `${totalScore} puan profiline eklendi.` });
-            router.push('/oyunlar/kavram-yarismasi');
-        } else {
-            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+
+        try {
+            // --- SINIR KONTROLÜ (MAX 10 KEZ) ---
+            const q = query(
+                collection(db, 'scoreEvents'),
+                where('userId', '==', user.uid),
+                where('gameType', '==', 'kavram-yarismasi')
+            );
+            
+            const snapshot = await getDocs(q);
+            // Context (oyun adı) içinde konu ismi geçiyorsa veya topicId varsa say.
+            const attemptsCount = snapshot.docs.filter(doc => {
+                const data = doc.data();
+                return data.context === topicId || (data.context && typeof data.context === 'string' && data.context.includes(topicName));
+            }).length;
+
+            if (attemptsCount >= MAX_ATTEMPTS_PER_TOPIC) {
+                toast({ 
+                    title: 'Sınır Aşıldı', 
+                    description: `Bu konudan en fazla ${MAX_ATTEMPTS_PER_TOPIC} kez puan alabilirsin. Puanın kaydedilmedi.`, 
+                    variant: 'destructive' 
+                });
+                setIsSaving(false);
+                return;
+            }
+            // -----------------------------------
+
+            const result = await submitConceptQuizScoreAction(user.uid, totalScore, gameContext);
+            if (result.success) {
+                setScoreSaved(true);
+                toast({ title: 'Başarılı!', description: `${totalScore} puan profiline eklendi.` });
+                router.push('/oyunlar/kavram-yarismasi');
+            } else {
+                toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+            }
+        } catch (error) {
+            console.error("Kayıt hatası:", error);
+            toast({ title: 'Hata', description: "Puan kaydedilirken bir sorun oluştu.", variant: 'destructive' });
+        } finally {
+            setIsSaving(false);
         }
-        setIsSaving(false);
     };
 
     // --- BİLEŞENLER ---
@@ -424,7 +463,7 @@ function KavramYarismaGame() {
                         <CardDescription className="text-slate-300 text-xl mt-2">{winnerDesc}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6 pt-6">
-                         <div className="flex justify-center gap-8">
+                          <div className="flex justify-center gap-8">
                             <div className="text-center p-4 rounded-2xl bg-slate-800/50 border border-white/5 min-w-[120px]">
                                 <p className={`text-sm font-bold mb-1 ${isTeam ? 'text-blue-400' : 'text-indigo-400'}`}>{isTeam ? 'MAVİ' : 'PUAN'}</p>
                                 <p className="text-5xl font-black text-white">{scoreLeft}</p>

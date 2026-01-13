@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getHitTheTargetAction, submitHitTheTargetScoreAction, type HitTheTargetRound } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Trophy, Home, Save, Timer, Target, Zap, Sparkles, Crosshair, XOctagon, CheckCircle, RotateCcw, Play, AlertTriangle, Pause } from 'lucide-react';
+import { Loader2, Trophy, Home, Save, Timer, Target, Zap, Sparkles, XOctagon, CheckCircle, RotateCcw, Play, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { playSound, stopSound } from '@/lib/audio-service';
@@ -47,11 +47,9 @@ const GameBackground = () => (
     </div>
 );
 
-// --- KOMPAKT HUD (DÜZELTİLDİ: Absolute kaldırıldı, Relative yapıldı) ---
+// --- KOMPAKT HUD ---
 const GameHUD = ({ score, time, round, totalRounds, onFinish, containerRef }: { score: number, time: number, round: number, totalRounds: number, onFinish: () => void, containerRef: any }) => {
     return (
-        // DÜZELTME: 'absolute top-0 left-0 right-0' KALDIRILDI -> 'relative' EKLENDİ.
-        // Artık akışta yer kaplayacak ve sorunun üzerine binmeyecek.
         <div className="w-full z-50 p-2 pointer-events-none shrink-0 relative bg-slate-950/50 backdrop-blur-sm border-b border-white/5">
             <div className="max-w-4xl mx-auto flex justify-between items-center pointer-events-auto bg-slate-900/80 backdrop-blur-md rounded-full border border-white/10 p-1.5 pl-4 pr-1.5 shadow-xl ring-1 ring-black/20">
                 
@@ -193,7 +191,6 @@ function HitTheTargetGame() {
     const [showConfetti, setShowConfetti] = useState(false);
     
     const [clickEffect, setClickEffect] = useState<{x: number, y: number, id: number} | null>(null);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
     const mode = searchParams.get('mode');
     const topicId = searchParams.get('topicId');
@@ -212,13 +209,23 @@ function HitTheTargetGame() {
         const offsetX = area.width * 0.1;
         const offsetY = area.height * 0.1;
 
+        // 1. Doğru cevabı temizle ve hazırla
         const correctTarget = round.target.trim();
-        let distractors = round.words.map(w => w.trim()).filter(w => w !== correctTarget);
+        
+        // 2. Yanlış cevapları havuzdan al (Doğru cevabı hariç tutarak)
+        let distractors = round.words
+            .map(w => w.trim())
+            .filter(w => w !== correctTarget && w.length > 0);
 
+        // 3. Yanlış cevapları karıştır ve sınırla
         distractors.sort(() => Math.random() - 0.5);
         const maxDistractors = 6;
         const selectedDistractors = distractors.slice(0, maxDistractors);
+        
+        // 4. KRİTİK ADIM: Doğru cevabı havuza KESİN olarak ekle
         let finalPool = [correctTarget, ...selectedDistractors];
+        
+        // 5. Havuzu karıştır (böylece doğru cevap hep ilk sırada gelmez)
         finalPool.sort(() => Math.random() - 0.5);
 
         const isMobile = window.innerWidth < 768;
@@ -227,14 +234,14 @@ function HitTheTargetGame() {
         const newTargets = finalPool.map((word, i) => ({
             id: i,
             text: word,
-            isCorrect: word === correctTarget,
+            isCorrect: word === correctTarget, 
             x: Math.random() * safeWidth + offsetX,
             y: Math.random() * safeHeight + offsetY,
             vx: (Math.random() - 0.5) * (isMobile ? 1.5 : 2.5), 
             vy: (Math.random() - 0.5) * (isMobile ? 1.5 : 2.5),
             isHit: false,
             colorClass: TARGET_COLORS[i % TARGET_COLORS.length],
-            size: word === correctTarget ? baseSize + 10 : baseSize
+            size: word === correctTarget ? baseSize + 10 : baseSize 
         }));
         
         setTargets(newTargets);
@@ -286,13 +293,6 @@ function HitTheTargetGame() {
         }, 1500);
     }, [currentRoundIndex, rounds, generateTargets, score]);
     
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if(gameAreaRef.current) {
-            const rect = gameAreaRef.current.getBoundingClientRect();
-            setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-        }
-    };
-
     const handleManualPause = () => {
         setIsPaused(true);
         setShowPauseMenu(true);
@@ -530,7 +530,7 @@ function HitTheTargetGame() {
     return (
         <div 
             ref={mainContainerRef}
-            className="h-[100dvh] bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col select-none touch-none cursor-none"
+            className="h-[100dvh] bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col select-none touch-none"
         >
             <GameBackground />
             
@@ -554,15 +554,9 @@ function HitTheTargetGame() {
                 />
             )}
 
-            {/* Custom Crosshair */}
-            <div className="fixed pointer-events-none z-[100] hidden lg:block mix-blend-difference" style={{ left: mousePos.x, top: mousePos.y, transform: 'translate(-50%, -50%)' }}>
-                <Crosshair className="w-8 h-8 text-white opacity-80" />
-            </div>
-
             <main className="flex-grow flex flex-col p-2 md:p-4 relative z-10 w-full h-full max-w-6xl mx-auto">
                 
                 {/* Soru Paneli */}
-                {/* DÜZELTME: HUD artık relative olduğu için üst padding'e gerek yok */}
                 <div className="bg-slate-900/80 backdrop-blur-xl border border-sky-500/30 px-4 py-3 rounded-2xl text-center shadow-lg shrink-0 mb-2 transition-all duration-300">
                     <div className="flex items-center justify-center gap-2 mb-1 text-sky-400 font-bold tracking-widest text-[10px] uppercase">
                         <Target className="w-3 h-3" /> HEDEFİ BUL {isMission && <span className="text-white ml-2 bg-indigo-600 px-2 rounded-full shadow-sm">GÖREV</span>}
@@ -575,8 +569,7 @@ function HitTheTargetGame() {
                 {/* Oyun Alanı */}
                 <div 
                     ref={gameAreaRef} 
-                    onMouseMove={handleMouseMove}
-                    className="relative flex-grow w-full bg-slate-900/20 border-2 border-white/5 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-[2px] cursor-none"
+                    className="relative flex-grow w-full bg-slate-900/20 border-2 border-white/5 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-[2px] cursor-crosshair"
                 >
                     {targets.map(target => (
                         !target.isHit && (
