@@ -4,12 +4,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { 
     Trophy, Star, Gamepad2, ShoppingCart, Columns, LayoutTemplate, 
     FileCog, Crown, Award, Target, Sparkles, Map, Swords, Backpack,
-    Loader2, ArrowRight, Flame, Gift, Timer, School, Compass // Compass eklendi
+    Loader2, ArrowRight, Flame, Gift, Timer, School, Compass 
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, where, orderBy, Timestamp } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy, Timestamp, onSnapshot, doc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass } from "@/lib/types";
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
@@ -95,12 +95,35 @@ export default function StudentDashboard() {
   const { user } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({ score: 0, totalCourses: 0, generalRank: 0, classRank: 0, branchRank: 0, todayScore: 0 });
+  
+  // PUAN İÇİN AYRI STATE (Çakışmayı önlemek için)
+  const [liveScore, setLiveScore] = useState(0);
+  
+  // Diğer istatistikler için state
+  const [stats, setStats] = useState({ totalCourses: 0, generalRank: 0, classRank: 0, branchRank: 0, todayScore: 0 });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
+  
   const [isChecking, setIsChecking] = useState(false);
   const [canSpinWheel, setCanSpinWheel] = useState(false);
-  
   const [localStreak, setLocalStreak] = useState(0);
+
+  // --- 1. CANLI PUAN DİNLEYİCİSİ (Kesin Kaynak) ---
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    // İlk başta Auth'dan gelen veriyi koyalım (geçici olarak)
+    setLiveScore(user.score || 0);
+
+    // Sonra veritabanını dinlemeye başlayalım
+    const unsubscribe = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+        if (docSnap.exists()) {
+            const userData = docSnap.data();
+            setLiveScore(userData.score || 0);
+        }
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   const checkStreak = useCallback(async () => {
     if (!user || isChecking) return;
@@ -124,10 +147,10 @@ export default function StudentDashboard() {
         setLocalStreak(user.currentStreak || 0);
         checkStreak();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]); 
+  }, [user, checkStreak]); 
 
 
+  // --- 2. DİĞER VERİLERİ ÇEK (Puanı Elleme!) ---
   useEffect(() => {
     async function fetchData() {
       if (!user?.uid) { setIsLoading(false); return; };
@@ -160,7 +183,9 @@ export default function StudentDashboard() {
         }, 0);
 
         const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
-        const userScore = user.score || 0;
+        
+        // Sıralama hesaplarken canlı puanı kullanamayız (çünkü diğerlerini dinlemiyoruz), 
+        // bu yüzden snapshot'tan gelen veriyi kullanıyoruz.
         const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
         const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
 
@@ -184,7 +209,15 @@ export default function StudentDashboard() {
             )
         );
 
-        setStats({ score: userScore, totalCourses: studentVisibleCourses.length, generalRank, classRank, branchRank, todayScore: todayTotalScore });
+        // Burada score alanını GÜNCELLEMİYORUZ. Sadece diğer istatistikleri set ediyoruz.
+        setStats({ 
+            totalCourses: studentVisibleCourses.length, 
+            generalRank, 
+            classRank, 
+            branchRank, 
+            todayScore: todayTotalScore 
+        });
+
       } catch (error) { console.error(error); } finally { setIsLoading(false); }
     }
     fetchData();
@@ -193,8 +226,9 @@ export default function StudentDashboard() {
   if (isLoading) return <div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>;
 
   // --- HESAPLAMALAR ---
-  const level = Math.floor(stats.score / 1000) + 1;
-  const progressToNextLevel = ((stats.score % 1000) / 1000) * 100;
+  // Buradaki 'liveScore' artık veritabanındaki en güncel puandır.
+  const level = Math.floor(liveScore / 1000) + 1;
+  const progressToNextLevel = ((liveScore % 1000) / 1000) * 100;
   
   const dailyGoal = 500;
   const progressToDailyGoal = Math.min((stats.todayScore / dailyGoal) * 100, 100);
@@ -257,7 +291,7 @@ export default function StudentDashboard() {
                                             <span className="text-[10px] font-bold text-amber-200/80 uppercase tracking-widest">TOPLAM XP</span>
                                         </div>
                                         <div className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-amber-200 tabular-nums tracking-tight">
-                                            {stats.score.toLocaleString()}
+                                            {liveScore.toLocaleString()}
                                         </div>
                                     </div>
 

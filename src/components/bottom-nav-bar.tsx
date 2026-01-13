@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { 
   Home, Trophy, User, PenSquare, Users, MonitorPlay, 
-  ClipboardList, ShoppingCart, DollarSign, LayoutGrid, Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, LogOut, Swords, Library, FileText, ChevronRight, ArrowRight, Scale
+  ClipboardList, ShoppingCart, DollarSign, LayoutGrid, Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, LogOut, Swords, Library, FileText, ChevronRight, ArrowRight, Scale, BookOpen
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
@@ -84,18 +84,18 @@ export function BottomNavBar() {
 
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
+        { href: '/student/gorevler', icon: BookOpen, label: 'Çalışmalar' },
         { href: '/oyunlar', icon: Gamepad2, label: 'Etkinlikler' },
         { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
-        { href: '/student/shop', icon: ShoppingCart, label: 'Mağaza' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];
 
     const teacherLinks = [
         { href: '/', icon: Home, label: 'Panel' },
         { href: '/teacher/students', icon: Users, label: 'Öğrenciler' },
-        { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
         { href: '/oyunlar', icon: Gamepad2, label: 'Oyunlar' },
         { href: '/teacher/smartboard', icon: MonitorPlay, label: 'Tahta' },
+        { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
     ];
     
     const links = user.role === 'teacher' || user.role === 'superadmin' ? teacherLinks : studentLinks;

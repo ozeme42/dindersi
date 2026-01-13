@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getCumleOlusturmaAction, submitCumleOlusturmaScoreAction, type ScrambledSentenceData } from '@/app/oyunlar/cumle-olusturma/actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, CheckCircle2, Trophy, Sparkles, RefreshCcw, MousePointerClick, XOctagon, CheckCircle, RotateCcw, Home, Ghost } from 'lucide-react';
+import { Loader2, ArrowRight, CheckCircle2, Trophy, Sparkles, RefreshCcw, MousePointerClick, XOctagon, CheckCircle, RotateCcw, Home, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -155,11 +155,13 @@ function SentenceClickGame() {
             setPlacedWords(prev => [...prev, clickedWord]);
             setPoolWords(prev => prev.filter(w => w.id !== id));
             
+            // HER KELİME 10 PUAN
+            setScore(prev => prev + 10);
+
             if (nextWordIndex + 1 === targetWords.length) {
                 setTimeout(() => {
                     setIsLevelComplete(true);
                     playSound('correct');
-                    setScore(prev => prev + 50);
                 }, 300);
             }
         } else {
@@ -172,7 +174,7 @@ function SentenceClickGame() {
     const handleRestartCurrent = () => {
         setPlacedWords([]);
         setPoolWords(originalPoolBackup);
-        setScore(prev => Math.max(0, prev - 10)); 
+        setScore(prev => Math.max(0, prev - 10)); // Hata cezası
     };
 
     const nextSentence = () => {
@@ -184,18 +186,14 @@ function SentenceClickGame() {
         }
     };
 
-    // GÖREV BAŞARILI MI? (Tüm cümleler tamamlandı mı?)
-    // Eğer oyun 'finished' state'ine geldiyse, tüm cümleler bitmiş demektir.
-    const isAllSentencesCompleted = gameState === 'finished';
+    // --- BAŞARI KONTROLÜ ---
+    // Görevin "Tamamlandı" sayılması için tüm cümlelerin bitmesi gerek.
+    const isAllSentencesCompleted = gameState === 'finished' && isLevelComplete && currentSentenceIndex === sentences.length - 1;
 
     const handleSaveAndExit = async () => {
         if (isSaving || isScoreSaved || !user) {
-             if(isMission && isAllSentencesCompleted && !isScoreSaved) {
-                 // devam et
-            } else {
-                router.push(isMission ? '/student/gorevler' : '/oyunlar/cumle-olusturma');
-                return;
-            }
+            router.push(isMission ? '/student/gorevler' : '/oyunlar/cumle-olusturma');
+            return;
         }
         
         setIsSaving(true);
@@ -204,28 +202,23 @@ function SentenceClickGame() {
                 // --- GÖREV MODU KAYDI ---
                 await addDoc(collection(db, 'scoreEvents'), {
                     userId: user.uid,
-                    points: score,
+                    points: score, // Kazanılan puanı kaydediyoruz (başarısız olsa bile)
                     context: topicId,
-                    gameType: 'cumle-olusturma', // GÖREV TİPİ
+                    gameType: 'cumle-olusturma',
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: isAllSentencesCompleted
+                    completed: isAllSentencesCompleted // Sadece hepsi bittiyse TRUE
                 });
 
                 if (isAllSentencesCompleted) {
-                    toast({ title: "Görev Başarılı!", description: "Tüm cümleleri tamamladın.", className: "bg-green-600 text-white" });
+                    toast({ title: "Görev Başarılı!", description: "Harika iş çıkardın!", className: "bg-green-600 text-white" });
                 } else {
-                    // Teorik olarak buraya düşmez çünkü bitiş ekranı sadece finished state'de çıkar
-                    toast({ title: "Görev Tamamlanamadı", description: "Tüm cümleleri bitirmelisin.", variant: "destructive" });
+                    toast({ title: "Puan Kaydedildi", description: "Ancak görev tamamlanmadı.", className: "bg-yellow-600 text-white" });
                 }
             } else {
                 // --- NORMAL MOD KAYDI ---
-                const result = await submitCumleOlusturmaScoreAction(user.uid, score, gameContext);
-                if (result.success) {
-                    toast({ title: 'Kaydedildi!', description: 'Puanın başarıyla işlendi.' });
-                } else {
-                    toast({ title: 'Hata', description: result.error, variant: 'destructive' });
-                }
+                await submitCumleOlusturmaScoreAction(user.uid, score, gameContext);
+                toast({ title: 'Kaydedildi!', description: 'Puanın başarıyla işlendi.' });
             }
             
             setIsScoreSaved(true);
@@ -268,24 +261,45 @@ function SentenceClickGame() {
                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
                             
                             <div className="mb-6 flex justify-center">
-                                <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
-                                    <Trophy className="h-16 w-16 text-green-600" />
-                                </div>
+                                {isAllSentencesCompleted ? (
+                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
+                                        <Trophy className="h-16 w-16 text-green-600" />
+                                    </div>
+                                ) : (
+                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
+                                        <XOctagon className="h-16 w-16 text-red-500" />
+                                    </div>
+                                )}
                             </div>
 
-                            <h2 className="text-3xl font-black text-slate-800 mb-2">GÖREV BAŞARILI!</h2>
-                            <p className="text-slate-500 mb-6 font-medium">Tebrikler! Tüm cümleleri başarıyla kurdun.</p>
+                            <h2 className="text-3xl font-black text-slate-800 mb-2">
+                                {isAllSentencesCompleted ? "GÖREV BAŞARILI!" : "GÖREV TAMAMLANMADI"}
+                            </h2>
+                            <p className="text-slate-500 mb-6 font-medium">
+                                {isAllSentencesCompleted 
+                                    ? `Tebrikler! ${score} puan topladın ve görevi bitirdin.` 
+                                    : `Toplam ${score} puan topladın ama tüm cümleleri bitirmedin.`}
+                            </p>
 
                             <div className="space-y-3">
-                                {!isScoreSaved && (
-                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
-                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
+                                {/* PUAN VARSA KAYDET BUTONU HER ZAMAN GÖZÜKÜR */}
+                                {!isScoreSaved && score > 0 && (
+                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className={cn("w-full h-12 text-lg font-bold shadow-lg", isAllSentencesCompleted ? "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200" : "bg-amber-600 hover:bg-amber-700 shadow-amber-200")}>
+                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : (isAllSentencesCompleted ? "Kaydet ve Devam Et" : "Puanı Al ve Çık")}
                                     </Button>
                                 )}
                                 
-                                {isScoreSaved && (
+                                {/* BAŞARILIYSA VE KAYDEDİLDİYSE GÖREVLERE DÖN */}
+                                {isScoreSaved && isAllSentencesCompleted && (
                                     <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
                                         <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                                    </Button>
+                                )}
+
+                                {/* BAŞARISIZSA TEKRAR DENE */}
+                                {(!isAllSentencesCompleted || isScoreSaved) && (
+                                    <Button onClick={handleGameRestart} variant="outline" className="w-full h-12 text-lg font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">
+                                        <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
                                     </Button>
                                 )}
                                 
@@ -305,15 +319,13 @@ function SentenceClickGame() {
 
     return (
         <div ref={mainContentRef} className="flex flex-col min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-white p-4 md:p-6 overflow-hidden relative selection:bg-cyan-500/30">
-            
             <div className="fixed inset-0 pointer-events-none z-0 opacity-30">
                 <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse delay-1000" />
             </div>
 
             <div className="w-full max-w-6xl mx-auto z-10 flex flex-col gap-6 h-full">
-                
-                {/* --- HUD (Üst Panel) --- */}
+                {/* HUD */}
                 <div className="bg-slate-900/60 backdrop-blur-md p-4 rounded-3xl border border-white/10 shadow-xl relative overflow-hidden shrink-0">
                     <div className="absolute bottom-0 left-0 h-1.5 bg-slate-800 w-full">
                         <div className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-1000" style={{ width: `${progressPercentage}%` }} />
@@ -328,14 +340,12 @@ function SentenceClickGame() {
                                 <h1 className="text-lg md:text-2xl font-black text-white truncate">Cümle Kurma</h1>
                                 <div className="flex items-center gap-2">
                                     <p className="text-slate-400 text-xs md:text-sm hidden md:block truncate">Kelimeye tıkla, yerine yerleşsin!</p>
-                                    {isMission && <span className="px-1.5 py-0.5 rounded bg-indigo-900 text-indigo-300 text-[10px] font-bold border border-indigo-700">GÖREV</span>}
+                                    {isMission && <span className="px-1.5 py-0.5 rounded bg-indigo-900 text-indigo-300 text-[10px] font-bold border border-indigo-700 uppercase">Görev</span>}
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex items-center gap-2 md:gap-3 shrink-0">
-                            
-                            {/* --- BİTİR TUŞU --- */}
                             <Button 
                                 onClick={() => setGameState('finished')}
                                 variant="ghost"
@@ -347,7 +357,7 @@ function SentenceClickGame() {
 
                             <div className="flex items-center gap-2 bg-slate-950/50 px-3 py-1.5 rounded-xl border border-yellow-500/30">
                                 <Trophy className="h-5 w-5 text-yellow-400" />
-                                <span className="font-black text-xl text-yellow-400">{score}</span>
+                                <span className="font-black text-xl text-yellow-400 tabular-nums">{score}</span>
                             </div>
                             <div className="text-lg font-bold bg-slate-800/80 px-3 py-1.5 rounded-xl border border-white/10 text-slate-300 hidden sm:block">
                                 {currentSentenceIndex + 1}/{sentences.length}
@@ -357,10 +367,8 @@ function SentenceClickGame() {
                     </div>
                 </div>
 
-                {/* --- OYUN ALANI --- */}
+                {/* OYUN ALANI */}
                 <div className="flex-grow flex flex-col gap-6 md:gap-8 justify-center pb-24 md:pb-8">
-                    
-                    {/* 1. Cümle Yerleştirme Alanı (Hedef) */}
                     <div className={cn(
                         "relative w-full min-h-[140px] md:min-h-[220px] bg-slate-900/50 backdrop-blur-sm rounded-3xl border-4 border-dashed transition-all duration-500 p-6 md:p-10 flex flex-wrap gap-3 md:gap-4 items-center justify-center content-center shadow-inner",
                         isLevelComplete 
@@ -375,16 +383,12 @@ function SentenceClickGame() {
                         )}
 
                         {placedWords.map((word, index) => (
-                            <div 
-                                key={index} 
-                                className="px-4 py-2 md:px-6 md:py-3 bg-white text-slate-900 rounded-xl font-bold text-xl md:text-3xl shadow-lg animate-in zoom-in duration-300 border-b-4 border-slate-300"
-                            >
+                            <div key={index} className="px-4 py-2 md:px-6 md:py-3 bg-white text-slate-900 rounded-xl font-bold text-xl md:text-3xl shadow-lg animate-in zoom-in duration-300 border-b-4 border-slate-300">
                                 {word}
                             </div>
                         ))}
                     </div>
 
-                    {/* Ara Mesaj / Kontroller */}
                     {isLevelComplete && (
                         <div className="animate-in slide-in-from-bottom-4 zoom-in duration-300 flex justify-center">
                             <div className="bg-slate-900/90 border border-green-500/30 p-4 md:p-6 rounded-2xl shadow-2xl flex flex-col md:flex-row items-center gap-4 md:gap-8">
@@ -397,39 +401,24 @@ function SentenceClickGame() {
                                         <p className="text-slate-400 text-sm">Doğru sıralama.</p>
                                     </div>
                                 </div>
-                                <Button 
-                                    onClick={nextSentence} 
-                                    className="w-full md:w-auto h-12 md:h-14 text-lg font-bold px-8 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-lg shadow-green-900/40"
-                                >
+                                <Button onClick={nextSentence} className="w-full md:w-auto h-12 md:h-14 text-lg font-bold px-8 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-lg shadow-green-900/40">
                                     {currentSentenceIndex === sentences.length - 1 ? "Sonuçlar" : "Devam Et"} <ArrowRight className="ml-2 h-5 w-5" />
                                 </Button>
                             </div>
                         </div>
                     )}
 
-                    {/* 2. Kelime Havuzu (Kaynak) */}
                     {!isLevelComplete && (
                         <div className="bg-slate-950/40 p-4 md:p-8 rounded-3xl border border-white/5">
                             <div className="flex flex-wrap gap-3 md:gap-5 justify-center">
                                 {poolWords.map((item) => (
-                                    <WordButton 
-                                        key={item.id}
-                                        word={item.word}
-                                        colorClass={item.color}
-                                        isShaking={shakingWordId === item.id}
-                                        onClick={() => handleWordClick(item.id, item.word)}
-                                    />
+                                    <WordButton key={item.id} word={item.word} colorClass={item.color} isShaking={shakingWordId === item.id} onClick={() => handleWordClick(item.id, item.word)} />
                                 ))}
                             </div>
                             
-                            {/* Sıfırla Butonu (Hata yapılırsa) */}
                             {placedWords.length > 0 && (
                                 <div className="mt-8 flex justify-center">
-                                    <Button 
-                                        variant="ghost" 
-                                        onClick={handleRestartCurrent}
-                                        className="text-slate-500 hover:text-white hover:bg-white/10 gap-2"
-                                    >
+                                    <Button variant="ghost" onClick={handleRestartCurrent} className="text-slate-500 hover:text-white hover:bg-white/10 gap-2">
                                         <RefreshCcw className="h-4 w-4" /> Cümleyi Sıfırla
                                     </Button>
                                 </div>
@@ -438,7 +427,6 @@ function SentenceClickGame() {
                     )}
                 </div>
             </div>
-            
             <style jsx global>{`
                 @keyframes shake {
                     0%, 100% { transform: translateX(0); }
@@ -454,9 +442,5 @@ function SentenceClickGame() {
 }
 
 export default function Page() {
-    return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-900"><Loader2 className="h-16 w-16 animate-spin text-white" /></div>}>
-            <SentenceClickGame />
-        </Suspense>
-    );
+    return <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-900"><Loader2 className="h-16 w-16 animate-spin text-white" /></div>}><SentenceClickGame /></Suspense>;
 }

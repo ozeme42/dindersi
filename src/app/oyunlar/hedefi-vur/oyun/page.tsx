@@ -4,14 +4,16 @@ import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getHitTheTargetAction, submitHitTheTargetScoreAction, type HitTheTargetRound } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Trophy, Home, Repeat, Save, Timer, Target, Zap, Sparkles, Crosshair, XOctagon, CheckCircle, RotateCcw } from 'lucide-react';
-import Link from 'next/link';
+import { Loader2, Trophy, Home, Save, Timer, Target, Zap, Sparkles, Crosshair, XOctagon, CheckCircle, RotateCcw, Play, AlertTriangle, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { playSound, stopSound } from '@/lib/audio-service';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { GameEndScreen } from '@/components/game-end-screen';
+import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import Confetti from 'react-dom-confetti';
 
 // --- TİPLER ---
 type TargetInfo = {
@@ -45,28 +47,116 @@ const GameBackground = () => (
     </div>
 );
 
-const GameHUD = ({ score, time, round, totalRounds }: { score: number, time: number, round: number, totalRounds: number }) => {
+// --- KOMPAKT HUD (DÜZELTİLDİ: Absolute kaldırıldı, Relative yapıldı) ---
+const GameHUD = ({ score, time, round, totalRounds, onFinish, containerRef }: { score: number, time: number, round: number, totalRounds: number, onFinish: () => void, containerRef: any }) => {
     return (
-        <div className="w-full z-50 p-2 md:p-4 pointer-events-none shrink-0">
-            <div className="max-w-6xl mx-auto flex justify-between items-center pointer-events-auto bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 p-2 shadow-lg">
-                <div className="flex items-center gap-2 md:gap-4">
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                        <Trophy className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" />
-                        <span className="text-lg md:text-xl font-black text-white font-mono">{score}</span>
+        // DÜZELTME: 'absolute top-0 left-0 right-0' KALDIRILDI -> 'relative' EKLENDİ.
+        // Artık akışta yer kaplayacak ve sorunun üzerine binmeyecek.
+        <div className="w-full z-50 p-2 pointer-events-none shrink-0 relative bg-slate-950/50 backdrop-blur-sm border-b border-white/5">
+            <div className="max-w-4xl mx-auto flex justify-between items-center pointer-events-auto bg-slate-900/80 backdrop-blur-md rounded-full border border-white/10 p-1.5 pl-4 pr-1.5 shadow-xl ring-1 ring-black/20">
+                
+                {/* SOL: Puan ve Süre */}
+                <div className="flex items-center gap-3 md:gap-6">
+                    {/* Puan */}
+                    <div className="flex items-center gap-1.5">
+                        <Trophy className="w-4 h-4 text-yellow-400" />
+                        <span className="text-lg font-black text-white font-mono leading-none pt-0.5">{score}</span>
                     </div>
                     
+                    {/* Süre */}
                     <div className={cn(
-                        "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all duration-300",
-                        time <= 5 ? "bg-red-500/20 border-red-500/50 animate-pulse" : "bg-slate-800/50 border-slate-700"
+                        "flex items-center gap-1.5 transition-colors duration-300",
+                        time <= 5 ? "text-red-400 animate-pulse" : "text-sky-400"
                     )}>
-                        <Timer className={cn("w-4 h-4 md:w-5 md:h-5", time <= 5 ? "text-red-400" : "text-sky-400")} />
-                        <span className={cn("text-lg md:text-xl font-black font-mono", time <= 5 ? "text-red-400" : "text-white")}>{time}s</span>
+                        <Timer className="w-4 h-4" />
+                        <span className="text-lg font-black font-mono leading-none pt-0.5">{time}s</span>
                     </div>
                 </div>
                 
-                <div className="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-xl">
-                    <span className="text-[10px] md:text-xs text-slate-400 font-bold uppercase mr-1">TUR</span>
-                    <span className="text-lg md:text-xl font-black text-white font-mono">{round}/{totalRounds}</span>
+                {/* SAĞ: Tur, Tam Ekran, Bitir */}
+                <div className="flex items-center gap-1.5">
+                    <div className="px-3 py-1 bg-white/5 rounded-full border border-white/5 hidden sm:flex">
+                        <span className="text-[10px] text-slate-400 font-bold uppercase mr-1 pt-0.5">TUR</span>
+                        <span className="text-sm font-black text-white font-mono">{round}/{totalRounds}</span>
+                    </div>
+
+                    <FullscreenToggle elementRef={containerRef} className="h-8 w-8 rounded-full bg-transparent hover:bg-white/10 text-slate-400 hover:text-white" />
+
+                    <Button 
+                        onClick={onFinish} 
+                        size="icon"
+                        className="h-8 w-8 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 transition-all"
+                        title="Oyunu Bitir"
+                    >
+                        <XOctagon className="h-4 w-4 fill-current" />
+                    </Button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- ÇIKIŞ ONAY MODALI (Pause Menu) ---
+const PauseMenu = ({ 
+    score, 
+    threshold, 
+    isMission, 
+    onResume, 
+    onQuit 
+}: { 
+    score: number, 
+    threshold: number, 
+    isMission: boolean, 
+    onResume: () => void, 
+    onQuit: () => void 
+}) => {
+    const progress = Math.min(100, Math.max(0, (score / threshold) * 100));
+    const isPassed = score >= threshold;
+
+    return (
+        <div className="absolute inset-0 z-[60] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="bg-slate-900 border border-white/10 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 to-purple-500"></div>
+                
+                <h2 className="text-2xl font-black text-white text-center mb-6 flex items-center justify-center gap-2">
+                    <Pause className="w-6 h-6 text-sky-400"/> OYUN DURAKLATILDI
+                </h2>
+
+                {isMission && (
+                    <div className="bg-slate-800/50 rounded-2xl p-4 mb-6 border border-white/5">
+                        <div className="flex justify-between items-center mb-2">
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">GÖREV DURUMU</span>
+                            <span className={cn("text-xs font-bold px-2 py-0.5 rounded", isPassed ? "bg-green-500/20 text-green-400" : "bg-amber-500/20 text-amber-400")}>
+                                {isPassed ? "BAŞARILI" : "DEVAM EDİYOR"}
+                            </span>
+                        </div>
+                        
+                        <div className="flex justify-between items-end mb-2">
+                            <span className="text-2xl font-black text-white">{score}</span>
+                            <span className="text-sm font-medium text-slate-500 mb-1">/ {threshold} Puan Gerekli</span>
+                        </div>
+
+                        <div className="h-3 w-full bg-slate-700 rounded-full overflow-hidden">
+                            <div 
+                                className={cn("h-full transition-all duration-500", isPassed ? "bg-green-500" : "bg-amber-500")} 
+                                style={{ width: `${progress}%` }}
+                            />
+                        </div>
+                        {!isPassed && (
+                            <p className="text-xs text-slate-400 mt-2 text-center">
+                                Görevi tamamlamak için <span className="text-white font-bold">{threshold - score}</span> puan daha toplamalısın.
+                            </p>
+                        )}
+                    </div>
+                )}
+
+                <div className="space-y-3">
+                    <Button onClick={onResume} className="w-full h-12 text-lg font-bold bg-white text-slate-900 hover:bg-slate-200 rounded-xl">
+                        <Play className="w-5 h-5 mr-2 fill-current"/> DEVAM ET
+                    </Button>
+                    <Button onClick={onQuit} variant="outline" className="w-full h-12 text-slate-400 border-slate-700 hover:bg-slate-800 hover:text-white rounded-xl">
+                        <XOctagon className="w-5 h-5 mr-2"/> OYUNU BİTİR
+                    </Button>
                 </div>
             </div>
         </div>
@@ -80,7 +170,9 @@ function HitTheTargetGame() {
     const router = useRouter();
     const { user } = useAuth();
     const { toast } = useToast();
+    
     const gameAreaRef = useRef<HTMLDivElement>(null);
+    const mainContainerRef = useRef<HTMLDivElement>(null);
     const requestRef = useRef<number>();
     
     const [rounds, setRounds] = useState<HitTheTargetRound[]>([]);
@@ -92,21 +184,24 @@ function HitTheTargetGame() {
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(30);
     
-    const [gameState, setGameState] = useState<'loading' | 'playing' | 'round_end' | 'finished'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'playing' | 'paused' | 'round_end' | 'finished'>('loading');
     const [isPaused, setIsPaused] = useState(true);
+    const [showPauseMenu, setShowPauseMenu] = useState(false);
+
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
     
     const [clickEffect, setClickEffect] = useState<{x: number, y: number, id: number} | null>(null);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-    // GÖREV MODU PARAMETRELERİ
     const mode = searchParams.get('mode');
     const topicId = searchParams.get('topicId');
-    const threshold = parseInt(searchParams.get('threshold') || '500'); // Varsayılan 500
+    const threshold = parseInt(searchParams.get('threshold') || '500');
     const isMission = mode === 'mission';
 
     const gameContext = `Hedefi Vur - ${searchParams.get('topicName') || 'Genel'}`;
+    const backUrl = isMission ? '/student/gorevler' : '/oyunlar/hedefi-vur';
 
     const generateTargets = useCallback((round: HitTheTargetRound) => {
         if (!round || !gameAreaRef.current) return;
@@ -117,27 +212,29 @@ function HitTheTargetGame() {
         const offsetX = area.width * 0.1;
         const offsetY = area.height * 0.1;
 
-        let pool = [...round.words];
-        if (!pool.includes(round.target)) {
-            pool[0] = round.target;
-        }
-        pool.sort(() => Math.random() - 0.5);
+        const correctTarget = round.target.trim();
+        let distractors = round.words.map(w => w.trim()).filter(w => w !== correctTarget);
 
-        // Mobilde hedefler biraz daha küçük olsun
+        distractors.sort(() => Math.random() - 0.5);
+        const maxDistractors = 6;
+        const selectedDistractors = distractors.slice(0, maxDistractors);
+        let finalPool = [correctTarget, ...selectedDistractors];
+        finalPool.sort(() => Math.random() - 0.5);
+
         const isMobile = window.innerWidth < 768;
         const baseSize = isMobile ? 80 : 110;
 
-        const newTargets = pool.map((word, i) => ({
+        const newTargets = finalPool.map((word, i) => ({
             id: i,
             text: word,
-            isCorrect: word === round.target,
+            isCorrect: word === correctTarget,
             x: Math.random() * safeWidth + offsetX,
             y: Math.random() * safeHeight + offsetY,
             vx: (Math.random() - 0.5) * (isMobile ? 1.5 : 2.5), 
             vy: (Math.random() - 0.5) * (isMobile ? 1.5 : 2.5),
             isHit: false,
             colorClass: TARGET_COLORS[i % TARGET_COLORS.length],
-            size: word === round.target ? baseSize + 10 : baseSize // Doğru cevap biraz daha büyük olabilir
+            size: word === correctTarget ? baseSize + 10 : baseSize
         }));
         
         setTargets(newTargets);
@@ -156,7 +253,9 @@ function HitTheTargetGame() {
             if (result.error || !result.data || result.data.length === 0) {
                 setError(result.error || "Bu konu için uygun oyun verisi bulunamadı.");
             } else {
-                setRounds(result.data);
+                let extendedRounds = [...result.data, ...result.data, ...result.data];
+                extendedRounds = extendedRounds.sort(() => Math.random() - 0.5);
+                setRounds(extendedRounds);
                 setGameState('playing');
             }
             setIsLoading(false);
@@ -179,9 +278,13 @@ function HitTheTargetGame() {
             } else {
                 setGameState('finished');
                 playSound('win');
+                const maxPossibleScore = rounds.length * 5;
+                if (score >= maxPossibleScore / 2) {
+                    setShowConfetti(true);
+                }
             }
         }, 1500);
-    }, [currentRoundIndex, rounds, generateTargets]);
+    }, [currentRoundIndex, rounds, generateTargets, score]);
     
     const handleMouseMove = (e: React.MouseEvent) => {
         if(gameAreaRef.current) {
@@ -190,8 +293,23 @@ function HitTheTargetGame() {
         }
     };
 
+    const handleManualPause = () => {
+        setIsPaused(true);
+        setShowPauseMenu(true);
+    };
+
+    const handleResume = () => {
+        setShowPauseMenu(false);
+        setIsPaused(false);
+    };
+
+    const handleManualQuit = () => {
+        setShowPauseMenu(false);
+        setGameState('finished');
+    };
+
     useEffect(() => {
-        if (gameState !== 'playing' || isPaused) return;
+        if (gameState !== 'playing' || isPaused || showPauseMenu) return;
 
         const timerInterval = setInterval(() => {
             setTimeLeft(prev => {
@@ -234,7 +352,7 @@ function HitTheTargetGame() {
             if (requestRef.current) cancelAnimationFrame(requestRef.current);
             stopSound('timer');
         };
-    }, [gameState, isPaused, handleRoundEnd]);
+    }, [gameState, isPaused, showPauseMenu, handleRoundEnd]);
 
     useEffect(() => {
         if (gameState === 'playing' && rounds.length > 0 && targets.length === 0 && gameAreaRef.current) {
@@ -244,7 +362,7 @@ function HitTheTargetGame() {
     }, [gameState, rounds, targets.length, generateTargets]);
 
     const handleHit = (target: TargetInfo, e: React.MouseEvent | React.TouchEvent) => {
-        if (target.isHit || isPaused) return;
+        if (target.isHit || isPaused || showPauseMenu) return;
         
         let clientX, clientY;
         if ('touches' in e) {
@@ -270,17 +388,22 @@ function HitTheTargetGame() {
 
         if (target.isCorrect) {
             playSound('correct'); 
-            setScore(prev => prev + 50 + Math.ceil(timeLeft)); 
+            setScore(prev => prev + 5); 
             handleRoundEnd(true);
         } else {
             playSound('incorrect'); 
-            setScore(prev => Math.max(0, prev - 20)); 
+            setScore(prev => Math.max(0, prev - 2)); 
         }
     };
 
+    const maxScore = rounds.length * 5;
+    const successThreshold = Math.ceil(maxScore / 2);
+    const isSuccess = score >= successThreshold;
+    const finalScoreToSave = Math.ceil(score / 2);
+
     const handleSaveAndExit = async () => {
         if (!user || score <= 0 || isSaving || isScoreSaved) {
-            router.push(isMission ? '/student/gorevler' : '/oyunlar/hedefi-vur');
+            router.push(backUrl);
             return;
         }
         
@@ -288,27 +411,25 @@ function HitTheTargetGame() {
 
         try {
             if (isMission && topicId) {
-                // --- GÖREV MODU KAYDI ---
                 await addDoc(collection(db, 'scoreEvents'), {
                     userId: user.uid,
-                    points: score,
+                    points: finalScoreToSave,
                     context: topicId,
-                    gameType: 'hedefi-vur', // GÖREV TİPİ
+                    gameType: 'hedefi-vur',
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: score >= threshold
+                    completed: isSuccess
                 });
 
-                if (score >= threshold) {
-                    toast({ title: "Görev Başarılı!", description: "Tebrikler, barajı geçtin.", className: "bg-green-600 text-white" });
+                if (isSuccess) {
+                    toast({ title: "Görev Başarılı!", description: `Tebrikler! ${finalScoreToSave} XP kazandın.`, className: "bg-green-600 text-white" });
                 } else {
-                    toast({ title: "Görev Tamamlanamadı", description: `En az ${threshold} puan gerekli.`, variant: "destructive" });
+                    toast({ title: "Görev Tamamlanamadı", description: "Başarı oranını %50'nin üzerine çıkarmalısın.", variant: "destructive" });
                 }
             } else {
-                // --- NORMAL MOD KAYDI ---
-                const result = await submitHitTheTargetScoreAction(user.uid, score, gameContext);
+                const result = await submitHitTheTargetScoreAction(user.uid, finalScoreToSave, gameContext);
                 if (result.success) {
-                    toast({ title: 'Başarılı!', description: 'Skorun başarıyla kaydedildi.' });
+                    toast({ title: 'Başarılı!', description: `Skorun (${finalScoreToSave} puan) başarıyla kaydedildi.` });
                 } else {
                     toast({ title: 'Hata', description: result.error, variant: 'destructive' });
                 }
@@ -323,72 +444,115 @@ function HitTheTargetGame() {
         }
     };
 
-    // --- RENDER ---
+    const handleRestart = () => {
+        setScore(0);
+        setCurrentRoundIndex(0);
+        setGameState('loading');
+        setIsScoreSaved(false);
+        setShowConfetti(false);
+        window.location.reload(); 
+    };
 
     if (isLoading) return <div className="flex h-[100dvh] w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-sky-500" /></div>;
     if (error) return <div className="flex h-[100dvh] w-full items-center justify-center p-4 bg-slate-950 text-white">{error}</div>;
 
     if (gameState === 'finished') {
+        if(isMission) {
+             return (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
+                        <Confetti active={showConfetti} config={{ angle: 90, spread: 360, startVelocity: 40, elementCount: 100, decay: 0.9 }} />
+                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
+                            
+                            <div className="mb-6 flex justify-center">
+                                {isSuccess ? (
+                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
+                                        <Trophy className="h-16 w-16 text-green-600" />
+                                    </div>
+                                ) : (
+                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
+                                        <XOctagon className="h-16 w-16 text-red-500" />
+                                    </div>
+                                )}
+                            </div>
+
+                            <h2 className="text-3xl font-black text-slate-800 mb-2">
+                                {isSuccess ? "GÖREV BAŞARILI!" : "GÖREV TAMAMLANMADI"}
+                            </h2>
+                            
+                            <p className="text-slate-500 mb-2 font-medium">
+                                {isSuccess ? "Tebrikler! Barajı geçtin." : "Maalesef barajı geçemedin."}
+                            </p>
+                            <p className="text-2xl font-black text-emerald-600 mb-6">{finalScoreToSave} PUAN</p>
+
+                            <div className="space-y-3">
+                                {!isScoreSaved && (
+                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
+                                    </Button>
+                                )}
+                                
+                                {isScoreSaved && (
+                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
+                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
+                                    </Button>
+                                )}
+                                
+                                {(!isSuccess || isScoreSaved) && (
+                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 font-bold">
+                                        <RotateCcw className="mr-2 h-4 w-4"/> Tekrar Dene
+                                    </Button>
+                                )}
+
+                                <Button onClick={() => router.push(user ? '/student' : '/')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
+                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+            );
+        }
+
         return (
-            <div className="h-[100dvh] w-full bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-                <GameBackground />
-                <div className="relative z-10 w-full max-w-md text-center space-y-6 animate-in zoom-in-95 duration-500">
-                    
-                    <div className="flex justify-center mb-6">
-                        {score >= threshold ? (
-                            <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
-                                <Trophy className="h-16 w-16 text-green-600" />
-                            </div>
-                        ) : (
-                            <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
-                                <XOctagon className="h-16 w-16 text-red-500" />
-                            </div>
-                        )}
-                    </div>
-
-                    <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400">
-                        {isMission ? (score >= threshold ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ") : "OYUN BİTTİ!"}
-                    </h1>
-                    
-                    <div className="text-6xl font-black text-white">{score}</div>
-                    
-                    <div className="space-y-3">
-                        {!isScoreSaved && (
-                            <Button onClick={handleSaveAndExit} size="lg" disabled={isSaving} className="w-full h-14 text-lg font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600">
-                                {isSaving ? <Loader2 className="mr-2 animate-spin" /> : <Save className="mr-2" />} KAYDET VE ÇIK
-                            </Button>
-                        )}
-
-                        {isScoreSaved && score >= threshold && isMission && (
-                            <Button onClick={() => router.push('/student/gorevler')} className="w-full h-14 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
-                                <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
-                            </Button>
-                        )}
-
-                        {(!isScoreSaved || score < threshold) && (
-                            <Button onClick={() => window.location.reload()} variant="outline" className="w-full h-14 text-lg font-bold border-2 border-slate-700 text-slate-300 hover:bg-slate-800">
-                                <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
-                            </Button>
-                        )}
-                        
-                        <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-200">
-                            <Home className="mr-2 h-4 w-4"/> Ana Menü
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            <GameEndScreen 
+                score={finalScoreToSave}
+                onSave={user ? handleSaveAndExit : undefined}
+                isSaving={isSaving}
+                scoreSaved={isScoreSaved}
+                onRestart={handleRestart}
+                backUrl={user ? backUrl : '/'}
+            />
         );
     }
 
     const currentRound = rounds[currentRoundIndex];
 
     return (
-        // DİKKAT: h-[100dvh] ile mobil tarayıcıda tam ekran yüksekliği sabitlendi.
-        <div className="h-[100dvh] bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col select-none touch-none cursor-none">
+        <div 
+            ref={mainContainerRef}
+            className="h-[100dvh] bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col select-none touch-none cursor-none"
+        >
             <GameBackground />
             
-            {/* HUD */}
-            <GameHUD score={score} time={timeLeft} round={currentRoundIndex + 1} totalRounds={rounds.length} />
+            <GameHUD 
+                score={score} 
+                time={timeLeft} 
+                round={currentRoundIndex + 1} 
+                totalRounds={rounds.length} 
+                onFinish={() => setGameState('finished')}
+                containerRef={mainContainerRef}
+            />
+
+            {/* PAUSE MENU MODAL */}
+            {showPauseMenu && (
+                <PauseMenu 
+                    score={score}
+                    threshold={successThreshold}
+                    isMission={isMission}
+                    onResume={handleResume}
+                    onQuit={handleManualQuit}
+                />
+            )}
 
             {/* Custom Crosshair */}
             <div className="fixed pointer-events-none z-[100] hidden lg:block mix-blend-difference" style={{ left: mousePos.x, top: mousePos.y, transform: 'translate(-50%, -50%)' }}>
@@ -397,21 +561,22 @@ function HitTheTargetGame() {
 
             <main className="flex-grow flex flex-col p-2 md:p-4 relative z-10 w-full h-full max-w-6xl mx-auto">
                 
-                {/* Soru Paneli (Daha Kompakt) */}
-                <div className="bg-slate-900/80 backdrop-blur-xl border border-sky-500/30 px-4 py-3 rounded-2xl text-center shadow-lg shrink-0 mb-2">
+                {/* Soru Paneli */}
+                {/* DÜZELTME: HUD artık relative olduğu için üst padding'e gerek yok */}
+                <div className="bg-slate-900/80 backdrop-blur-xl border border-sky-500/30 px-4 py-3 rounded-2xl text-center shadow-lg shrink-0 mb-2 transition-all duration-300">
                     <div className="flex items-center justify-center gap-2 mb-1 text-sky-400 font-bold tracking-widest text-[10px] uppercase">
-                        <Target className="w-3 h-3" /> HEDEFİ BUL {isMission && <span className="text-white ml-2 bg-indigo-600 px-2 rounded-full">GÖREV: {threshold} PUAN</span>}
+                        <Target className="w-3 h-3" /> HEDEFİ BUL {isMission && <span className="text-white ml-2 bg-indigo-600 px-2 rounded-full shadow-sm">GÖREV</span>}
                     </div>
-                    <p className="text-lg md:text-3xl font-black text-white leading-tight drop-shadow-md line-clamp-2">
+                    <p className="text-lg md:text-2xl lg:text-3xl font-black text-white leading-tight drop-shadow-md line-clamp-2">
                         {currentRound?.definition}
                     </p>
                 </div>
 
-                {/* Oyun Alanı (Kalan tüm alanı kapla) */}
+                {/* Oyun Alanı */}
                 <div 
                     ref={gameAreaRef} 
                     onMouseMove={handleMouseMove}
-                    className="relative flex-grow w-full bg-slate-900/20 border-2 border-white/5 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-[2px]"
+                    className="relative flex-grow w-full bg-slate-900/20 border-2 border-white/5 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-[2px] cursor-none"
                 >
                     {targets.map(target => (
                         !target.isHit && (
@@ -428,16 +593,14 @@ function HitTheTargetGame() {
                                     transform: `translate(${target.x}px, ${target.y}px)`,
                                     fontSize: target.size / 5 
                                 }}
-                                // onClick yerine onPointerDown kullanıyoruz, mobilde daha hızlı tepki için
                                 onPointerDown={(e) => handleHit(target, e)}
                             >
                                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/30 to-transparent pointer-events-none" />
-                                <span className="relative z-10 drop-shadow-md px-1 leading-tight">{target.text}</span>
+                                <span className="relative z-10 drop-shadow-md px-1 leading-tight pointer-events-none">{target.text}</span>
                             </div>
                         )
                     ))}
 
-                    {/* Patlama Efekti */}
                     {clickEffect && (
                         <div className="absolute pointer-events-none z-50" style={{ left: clickEffect.x, top: clickEffect.y }}>
                             <div className="absolute -translate-x-1/2 -translate-y-1/2">

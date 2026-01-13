@@ -1,11 +1,23 @@
+'use server';
+
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, where, orderBy, doc, getDoc } from "firebase/firestore";
+import { 
+  collection, 
+  getDocs, 
+  query, 
+  where, 
+  orderBy, 
+  doc, 
+  getDoc, 
+  runTransaction, 
+  serverTimestamp, 
+  increment 
+} from "firebase/firestore";
 import type { Course, Unit, Topic, UserProgress } from "@/lib/types";
 
 // 1. Öğrencinin sınıfına ait dersleri ve içeriklerini getir
 export async function getStudentCurriculum(classId: string) {
   try {
-    // Sınıfa ait dersleri çek
     const q = query(
       collection(db, "courses"), 
       where("classId", "==", classId),
@@ -18,7 +30,6 @@ export async function getStudentCurriculum(classId: string) {
     for (const courseDoc of coursesSnap.docs) {
       const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
       
-      // Üniteleri çek
       const unitsRef = collection(db, `courses/${courseDoc.id}/units`);
       const unitsSnap = await getDocs(query(unitsRef, orderBy("title", "asc")));
       
@@ -26,7 +37,6 @@ export async function getStudentCurriculum(classId: string) {
       for (const unitDoc of unitsSnap.docs) {
         const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
         
-        // Konuları çek
         const topicsRef = collection(db, `courses/${courseDoc.id}/units/${unitDoc.id}/topics`);
         const topicsSnap = await getDocs(query(topicsRef, orderBy("title", "asc")));
         const topics = topicsSnap.docs.map(t => ({ id: t.id, ...t.data() } as Topic));
@@ -44,7 +54,7 @@ export async function getStudentCurriculum(classId: string) {
   }
 }
 
-// 2. EKSİK OLAN FONKSİYON: Öğrencinin genel konu ilerlemesini getir (Kilitleri açmak için)
+// 2. Öğrencinin genel konu ilerlemesini getir
 export async function getUserTopicProgress(userId: string) {
   try {
     const docRef = doc(db, "userProgress", userId);
@@ -60,7 +70,7 @@ export async function getUserTopicProgress(userId: string) {
   }
 }
 
-// 3. Belirli bir konudaki oyun skorlarını getir (Modal içindeki oyun kilitleri için)
+// 3. Belirli bir konudaki oyun skorlarını getir
 export async function getUserTopicGameScores(userId: string, topicId: string) {
     try {
         const q = query(
@@ -74,7 +84,6 @@ export async function getUserTopicGameScores(userId: string, topicId: string) {
         
         snapshot.docs.forEach(doc => {
             const data = doc.data();
-            // Eğer oyun tamamlandıysa (completed: true) veya puanı varsa en yüksek olanı al
             if (!scores[data.gameType] || data.points > scores[data.gameType]) {
                 scores[data.gameType] = data.points;
             }
@@ -85,4 +94,67 @@ export async function getUserTopicGameScores(userId: string, topicId: string) {
         console.error("Skorlar çekilemedi", error);
         return {};
     }
+}
+
+// 4. Bölüm Sonu Ödülünü Al, Puanı İşle ve KONUYU TAMAMLANDI SAY (DÜZELTİLEN KISIM)
+export async function claimTopicRewardAction(userId: string, topicId: string, reward: number, topicTitle: string) {
+  try {
+    // 1. Kontrol: Bu ödül daha önce alınmış mı?
+    const eventsRef = collection(db, 'scoreEvents');
+    const q = query(
+      eventsRef,
+      where('userId', '==', userId),
+      where('context', '==', topicId),
+      where('gameType', '==', 'topic-completion-reward')
+    );
+    
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      return { success: false, error: "Bu ödülü zaten aldınız." };
+    }
+
+    // 2. Transaction ile tüm işlemleri yap
+    await runTransaction(db, async (transaction) => {
+      // Referanslar
+      const userRef = doc(db, 'users', userId);
+      const userProgressRef = doc(db, 'userProgress', userId); // İlerleme tablosu
+      const newEventRef = doc(collection(db, 'scoreEvents'));
+
+      const userDoc = await transaction.get(userRef);
+      if (!userDoc.exists()) throw new Error("Kullanıcı bulunamadı.");
+
+      // A: Kullanıcıya puanı ekle
+      transaction.update(userRef, {
+        score: increment(reward)
+      });
+
+      // B: ScoreEvents'e kayıt at (Log)
+      transaction.set(newEventRef, {
+        userId,
+        points: reward,
+        context: topicId,
+        gameType: 'topic-completion-reward',
+        timestamp: serverTimestamp(),
+        isMission: true,
+        description: `${topicTitle} Konu Tamamlama Ödülü`,
+        completed: true
+      });
+
+      // C: KRİTİK KISIM - Konuyu 'Tamamlandı' olarak işaretle
+      // Bu sayede bir sonraki konunun kilidi açılacak.
+      transaction.set(userProgressRef, {
+        [topicId]: {
+            completionCount: increment(1), // Tamamlanma sayısını artır
+            completed: true,
+            lastCompletedAt: serverTimestamp()
+        }
+      }, { merge: true }); // Diğer konuların verisini silmemek için merge: true
+    });
+
+    return { success: true };
+
+  } catch (error) {
+    console.error("Ödül alma hatası:", error);
+    return { success: false, error: "Ödül alınırken bir hata oluştu." };
+  }
 }

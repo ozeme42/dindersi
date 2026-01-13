@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getKelimeAviAction, submitKelimeAviScoreAction } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Search, ZoomIn, ZoomOut, RotateCw, ArrowLeft, Trophy, XOctagon, ChevronDown, ChevronUp, Settings2, Plus, Minus, Type, Scan, GripHorizontal, MousePointerClick, CheckCircle, RotateCcw, Home } from 'lucide-react';
+import { Loader2, Search, Trophy, XOctagon, ChevronDown, ChevronUp, Settings2, Plus, Minus, Type, Scan, GripHorizontal, MousePointerClick, CheckCircle, RotateCcw, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -14,6 +14,7 @@ import { GENERIC_TURKISH_WORDS } from '@/lib/generic-words';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { db } from '@/lib/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import Confetti from 'react-dom-confetti';
 
 // --- ORTAK ARKA PLAN ---
 const MagnificentLightBackground = () => (
@@ -175,14 +176,12 @@ const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) 
     const dragStartPos = useRef({ x: 0, y: 0 });
 
     useEffect(() => {
-        // MOUSE EVENTLERİ
         const handleMouseMove = (e: MouseEvent) => {
             if (!isDragging) return;
             setPosition({ x: e.clientX - dragStartPos.current.x, y: e.clientY - dragStartPos.current.y });
         };
         const handleMouseUp = () => setIsDragging(false);
 
-        // TOUCH EVENTLERİ (Akıllı Tahta için)
         const handleTouchMove = (e: TouchEvent) => {
             if (!isDragging) return;
             if (e.cancelable) e.preventDefault();
@@ -298,10 +297,8 @@ function WordSearchGame() {
     const [fontSize, setFontSize] = useState(1); 
     const [gridScale, setGridScale] = useState(1.0);
 
-    // GÖREV MODU PARAMETRELERİ
     const mode = searchParams.get('mode');
     const topicId = searchParams.get('topicId');
-    // Threshold artık kullanılmıyor ama kod güvenliği için kalsın
     const isMission = mode === 'mission';
 
     const gameContext = `Kelime Avı - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
@@ -336,10 +333,10 @@ function WordSearchGame() {
         fetchGameData();
     };
 
-    // YENİ BAŞARI KONTROLÜ
+    // --- BAŞARI KONTROLÜ ---
+    // Görevin başarılı sayılması için tüm kelimeler bulunmalıdır.
     const isAllWordsFound = wordsToFind.length > 0 && foundWords.size === wordsToFind.length;
 
-    // PUAN KAYDETME FONKSİYONU
     const saveScore = async () => {
         if (!user || isSaving || isScoreSaved) return;
         setIsSaving(true);
@@ -347,24 +344,23 @@ function WordSearchGame() {
         try {
             if (isMission && topicId) {
                 // --- GÖREV MODU KAYDI ---
-                // Sadece tüm kelimeler bulunduysa kaydet
                 await addDoc(collection(db, 'scoreEvents'), {
                     userId: user.uid,
-                    points: score,
-                    context: topicId, // Görev sayfası bu ID'ye bakarak kilidi açacak
-                    gameType: 'kelime-avi', // Görev tipi
+                    points: score, // Kazanılan puanı kaydet (başarısız olsa bile)
+                    context: topicId, 
+                    gameType: 'kelime-avi', 
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: isAllWordsFound // Ek bilgi
+                    completed: isAllWordsFound // Sadece hepsi bulunduysa TRUE
                 });
 
                 if (isAllWordsFound) {
-                    toast({ title: "Görev Başarılı!", description: "Bir sonraki görevin kilidi açıldı.", className: "bg-green-600 text-white" });
+                    toast({ title: "Görev Başarılı!", description: "Tüm kelimeleri buldun.", className: "bg-green-600 text-white" });
                 } else {
-                    toast({ title: "Görev Tamamlanamadı", description: "Tüm kelimeleri bulmalısın.", variant: "destructive" });
+                    toast({ title: "Puan Kaydedildi", description: "Ancak görev tamamlanmadı.", className: "bg-yellow-600 text-white" });
                 }
             } else {
-                // --- NORMAL (ARCADE) MOD KAYDI ---
+                // --- NORMAL MOD ---
                 await submitKelimeAviScoreAction(user!.uid, score, gameContext);
             }
             
@@ -399,7 +395,10 @@ function WordSearchGame() {
                     playSound('correct');
                     setFoundWords(prev => new Set(prev).add(found));
                     setFoundPaths(prev => [...prev, line]);
-                    setScore(prev => prev + found.length * 10);
+                    
+                    // --- PUANLAMA DEĞİŞİKLİĞİ ---
+                    // Her kelime 10 puan
+                    setScore(prev => prev + 10);
                 }
             }
             setSelection([]);
@@ -444,7 +443,7 @@ function WordSearchGame() {
             </main>
             <EditorToolbar fontSize={fontSize} setFontSize={setFontSize} gridScale={gridScale} setGridScale={setGridScale} />
             
-            {/* --- BİTİŞ EKRANI (GÖREV MODU İÇİN ÖZEL) --- */}
+            {/* --- BİTİŞ EKRANI --- */}
             {gameState === 'finished' && (
                 isMission ? (
                     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
@@ -474,20 +473,21 @@ function WordSearchGame() {
                             </p>
 
                             <div className="space-y-3">
-                                {/* Sadece tüm kelimeler bulunduysa kaydetme butonu göster */}
-                                {!isScoreSaved && isAllWordsFound && (
-                                    <Button onClick={saveScore} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
-                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
+                                {/* PUAN VARSA KAYDET BUTONU GÖRÜNÜR (BAŞARISIZ OLSA BİLE) */}
+                                {!isScoreSaved && score > 0 && (
+                                    <Button onClick={saveScore} disabled={isSaving} className={cn("w-full h-12 text-lg font-bold shadow-lg", isAllWordsFound ? "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200" : "bg-amber-600 hover:bg-amber-700 shadow-amber-200")}>
+                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : (isAllWordsFound ? "Kaydet ve Devam Et" : "Puanı Al ve Çık")}
                                     </Button>
                                 )}
                                 
+                                {/* BAŞARILIYSA VE KAYDEDİLDİYSE GÖREVLERE DÖN */}
                                 {isScoreSaved && isAllWordsFound && (
                                     <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
                                         <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
                                     </Button>
                                 )}
 
-                                {/* Başarısız olunduysa veya zaten kaydedildiyse tekrar dene */}
+                                {/* BAŞARISIZSA TEKRAR DENE */}
                                 {(!isAllWordsFound || isScoreSaved) && (
                                     <Button onClick={handleRestart} variant="outline" className="w-full h-12 text-lg font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">
                                         <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene

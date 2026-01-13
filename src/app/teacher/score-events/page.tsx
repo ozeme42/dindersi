@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -22,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, DollarSign, Trash2, ArrowLeft, ArrowRight, X, Home } from 'lucide-react';
+import { Loader2, DollarSign, Trash2, ArrowLeft, ArrowRight, X, Home, CheckCircle2, AlertCircle, FileText } from 'lucide-react';
 import { getScoreEvents, deleteScoreEvents } from './actions';
 import type { ScoreEvent } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
@@ -41,19 +39,81 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { Timestamp } from 'firebase/firestore';
 import Link from 'next/link';
+import { collectionGroup, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
-
+// Veri Tipi
 type EnrichedScoreEvent = ScoreEvent & { 
     userName?: string;
     attemptNumber?: number;
+    completed?: boolean;
 };
 
 type SerializableTimestamp = {
     _seconds: number;
     _nanoseconds: number;
 } | null;
+
+// --- KONU ADI BULUCU (ID'den İsme Çevirir) ---
+const TopicResolver = ({ context }: { context: string | any }) => {
+    const [display, setDisplay] = useState<{ title: string, sub?: string }>({ title: "Yükleniyor..." });
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        // Eğer context bir ID ise (boşluksuz ve uzunsa)
+        if (typeof context === 'string' && !context.includes(' ') && context.length > 15) {
+            const fetchTopicInfo = async () => {
+                setLoading(true);
+                try {
+                    // 1. Veritabanında 'topics' içinde bu ID'ye sahip bir kayıt var mı ara
+                    const q = query(collectionGroup(db, 'topics'), where('id', '==', context));
+                    const snap = await getDocs(q);
+                    
+                    if (!snap.empty) {
+                        const data = snap.docs[0].data();
+                        setDisplay({
+                            title: data.title || "İsimsiz Konu",
+                            sub: data.unitName ? `${data.unitName}` : undefined
+                        });
+                    } else {
+                        // Bulunamazsa ID'yi göster ama başına uyarı koy
+                        setDisplay({ title: "Konu Bulunamadı", sub: `ID: ${context}` });
+                    }
+                } catch (e) {
+                    console.error(e);
+                    // Hata durumunda (İndeks yoksa vb.)
+                    setDisplay({ title: "Veri Hatası", sub: `ID: ${context}` });
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchTopicInfo();
+        } else {
+            // Normal Metin (Arcade Modu)
+            setDisplay({ title: typeof context === 'string' ? context : JSON.stringify(context) });
+        }
+    }, [context]);
+
+    if (loading) return <span className="text-xs text-indigo-400 animate-pulse">Aranıyor...</span>;
+
+    // ID Durumu (Bulunamadıysa veya ID ise)
+    if (display.sub) {
+        return (
+            <div className="flex flex-col">
+                <span className={cn("font-semibold text-sm", display.title === "Konu Bulunamadı" ? "text-red-400" : "text-white")}>
+                    {display.title}
+                </span>
+                <span className="text-[10px] text-slate-500 font-mono flex items-center gap-1">
+                    <FileText className="w-3 h-3"/> {display.sub}
+                </span>
+            </div>
+        );
+    }
+
+    // Normal Metin Durumu
+    return <span className="text-sm font-medium text-slate-300">{display.title}</span>;
+};
 
 export default function ScoreEventsPage() {
     const [events, setEvents] = useState<EnrichedScoreEvent[]>([]);
@@ -64,7 +124,6 @@ export default function ScoreEventsPage() {
     const [showOnlyExcessiveAttempts, setShowOnlyExcessiveAttempts] = useState(false);
     const { toast } = useToast();
     
-    // Pagination State
     const [pageCursors, setPageCursors] = useState<(SerializableTimestamp | undefined)[]>([undefined]);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
@@ -82,7 +141,6 @@ export default function ScoreEventsPage() {
         if (result.success && result.data) {
             setEvents(result.data);
             if (direction === 'next' && result.lastVisible) {
-                // If there's a next page, add its starting cursor to history
                 if(pageIndex + 1 >= pageCursors.length) {
                    setPageCursors(prev => [...prev, result.lastVisible]);
                 }
@@ -91,12 +149,11 @@ export default function ScoreEventsPage() {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsLoading(false);
-    }, [searchTerm, showOnlyExcessiveAttempts, toast]); // pageCursors removed from dependencies
+    }, [searchTerm, showOnlyExcessiveAttempts, toast]); 
     
      useEffect(() => {
-        // Debounce search/filter changes
         const handler = setTimeout(() => {
-            setPageCursors([undefined]); // Reset pagination on search
+            setPageCursors([undefined]); 
             setCurrentPageIndex(0);
             fetchData(0);
         }, 500); 
@@ -125,9 +182,9 @@ export default function ScoreEventsPage() {
         setIsDeleting(true);
         const result = await deleteScoreEvents(Array.from(selectedEventIds));
         if (result.success) {
-            toast({ title: 'Başarılı!', description: 'Seçilen puan hareketleri silindi ve öğrenci skorları güncellendi.' });
+            toast({ title: 'Başarılı!', description: 'Seçilen kayıtlar silindi.' });
             setSelectedEventIds(new Set());
-            fetchData(currentPageIndex); // Refetch current page
+            fetchData(currentPageIndex); 
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
         }
@@ -153,17 +210,13 @@ export default function ScoreEventsPage() {
     const isAllOnPageSelected = events.length > 0 && selectedEventIds.size === events.length && events.every(e => selectedEventIds.has(e.id));
     
     const isLastPage = useMemo(() => {
-        // When we are at the last page, the pageCursors array will have one more item (for the next page)
-        // than the current page index. If the number of items on the current page is less than the page size,
-        // it means there are no more items to fetch.
-        const itemsPerPage = 25; // This should match the limit in the server action
+        const itemsPerPage = 25; 
         return events.length < itemsPerPage;
     }, [events]);
 
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-             {/* Arka Plan */}
              <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
@@ -199,7 +252,7 @@ export default function ScoreEventsPage() {
                                         <AlertDialogHeader>
                                             <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
                                             <AlertDialogDescription className="text-slate-400">
-                                                Bu işlem geri alınamaz. Seçilen {selectedEventIds.size} puan kaydı kalıcı olarak silinecektir. Bu işlem öğrencilerin toplam puanlarını etkileyecektir.
+                                                Bu işlem geri alınamaz. Seçilen kayıtlar kalıcı olarak silinecektir.
                                             </AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
@@ -222,7 +275,7 @@ export default function ScoreEventsPage() {
                                 className={cn("border-white/10 text-slate-300 hover:text-white hover:bg-white/5", showOnlyExcessiveAttempts ? "bg-purple-600 hover:bg-purple-500 text-white" : "bg-slate-950 text-slate-300")}
                                 onClick={() => setShowOnlyExcessiveAttempts(!showOnlyExcessiveAttempts)}
                             >
-                                <X className="h-4 w-4 mr-2"/> Fazla Denemeleri Göster (&gt;10)
+                                <X className="h-4 w-4 mr-2"/> Fazla Denemeler (&gt;10)
                             </Button>
                         </div>
                     </CardHeader>
@@ -236,21 +289,21 @@ export default function ScoreEventsPage() {
                                             <Checkbox
                                                 checked={isAllOnPageSelected}
                                                 onCheckedChange={(checked) => handleSelectAllOnPage(checked as boolean)}
-                                                aria-label="Tümünü seç"
                                                 className="border-white/20 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500"
                                             />
                                         </TableHead>
                                         <TableHead className="text-slate-300">Öğrenci</TableHead>
                                         <TableHead className="text-slate-300">Puan</TableHead>
+                                        <TableHead className="text-slate-300">Durum</TableHead>
                                         <TableHead className="text-slate-300">Etkinlik</TableHead>
-                                        <TableHead className="text-slate-300 min-w-[300px]">Açıklama</TableHead>
+                                        <TableHead className="text-slate-300 min-w-[300px]">Konu / Açıklama</TableHead>
                                         <TableHead className="text-right text-slate-300">Tarih</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {isLoading ? (
                                         <TableRow>
-                                            <TableCell colSpan={6} className="h-48 text-center text-indigo-400">
+                                            <TableCell colSpan={7} className="h-48 text-center text-indigo-400">
                                                 <Loader2 className="h-8 w-8 animate-spin mx-auto" />
                                                 <span className='mt-2 block'>Kayıtlar yükleniyor...</span>
                                             </TableCell>
@@ -262,7 +315,6 @@ export default function ScoreEventsPage() {
                                                     <Checkbox
                                                         checked={selectedEventIds.has(event.id)}
                                                         onCheckedChange={() => handleSelect(event.id)}
-                                                        aria-label="Kaydı seç"
                                                         className="border-white/20 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500"
                                                     />
                                                 </TableCell>
@@ -270,19 +322,38 @@ export default function ScoreEventsPage() {
                                                 <TableCell className={`font-bold text-lg ${event.points >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                                                     {event.points > 0 ? `+${event.points}` : event.points}
                                                 </TableCell>
+                                                
+                                                {/* DURUM */}
+                                                <TableCell>
+                                                    {event.completed === true ? (
+                                                        <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20">
+                                                            <CheckCircle2 className="w-3 h-3 mr-1" /> Başarılı
+                                                        </Badge>
+                                                    ) : event.completed === false ? (
+                                                        <Badge variant="outline" className="bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20">
+                                                            <AlertCircle className="w-3 h-3 mr-1" /> Başarısız
+                                                        </Badge>
+                                                    ) : (
+                                                        <span className="text-slate-600 text-xs">-</span>
+                                                    )}
+                                                </TableCell>
+
                                                 <TableCell>
                                                     <Badge variant="outline" className='bg-slate-800 text-slate-400 border-white/10 font-bold'>
                                                         {event.gameType}
                                                     </Badge>
                                                 </TableCell>
-                                                <TableCell className="text-slate-500">
-                                                    {typeof event.context === 'string' ? event.context : JSON.stringify(event.context)}
+                                                
+                                                {/* KONU ÇÖZÜCÜ (ID -> İsim) */}
+                                                <TableCell className="text-slate-400">
+                                                    <TopicResolver context={event.context} />
                                                     {event.attemptNumber && (
-                                                        <span className={cn("text-xs ml-2 font-semibold", (event.attemptNumber || 0) > 10 ? "text-red-400 animate-pulse" : "text-slate-500")}>
-                                                            ({event.attemptNumber}. deneme)
+                                                        <span className={cn("text-xs ml-2 font-semibold", (event.attemptNumber || 0) > 10 ? "text-red-400 animate-pulse" : "text-slate-600")}>
+                                                                ({event.attemptNumber}. deneme)
                                                         </span>
                                                     )}
                                                 </TableCell>
+                                                
                                                 <TableCell className="text-right text-xs text-slate-500">
                                                     {format(new Date(event.timestamp), 'dd.MM.yyyy HH:mm', { locale: tr })}
                                                 </TableCell>
@@ -290,7 +361,7 @@ export default function ScoreEventsPage() {
                                          ))
                                     ) : (
                                         <TableRow>
-                                            <TableCell colSpan={6} className="h-24 text-center text-slate-500 italic">
+                                            <TableCell colSpan={7} className="h-24 text-center text-slate-500 italic">
                                                 Hiç puan hareketi bulunamadı.
                                             </TableCell>
                                         </TableRow>

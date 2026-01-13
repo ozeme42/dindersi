@@ -7,7 +7,7 @@ import type { Question } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Ghost, XOctagon, PlusCircle, MinusCircle, CheckCircle, RotateCcw, Home, Trophy } from 'lucide-react';
+import { Loader2, ArrowLeft, Ghost, XOctagon, PlusCircle, MinusCircle, CheckCircle, RotateCcw, Home, Trophy, Save, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
@@ -15,10 +15,13 @@ import { Progress } from '@/components/ui/progress';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { db } from '@/lib/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import Confetti from 'react-dom-confetti';
 
 const INITIAL_TIME = 15; 
 const CORRECT_BONUS = 5; 
-const WRONG_PENALTY = 5; 
+// Puanlama: Doğru 5, Yanlış -2
+const POINTS_CORRECT = 5;
+const POINTS_WRONG = 2; // Ceza puanı
 
 function TrueFalseChainGame() {
     const { user } = useAuth();
@@ -36,11 +39,11 @@ function TrueFalseChainGame() {
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
     const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
+    const [showConfetti, setShowConfetti] = useState(false);
 
     // GÖREV MODU PARAMETRELERİ
     const mode = searchParams.get('mode');
     const topicId = searchParams.get('topicId');
-    const threshold = parseInt(searchParams.get('threshold') || '500'); // Varsayılan 500
     const isMission = mode === 'mission';
 
     const gameContext = `Doğru/Yanlış Zinciri - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
@@ -85,13 +88,13 @@ function TrueFalseChainGame() {
 
         if (isCorrect) {
             playSound('correct');
-            const pointsToAdd = 25; 
-            setScore(prev => prev + pointsToAdd);
+            setScore(prev => prev + POINTS_CORRECT); // +5 Puan
             setTimeLeft(prev => prev + CORRECT_BONUS);
             setFeedback('correct');
         } else {
             playSound('incorrect');
-            setTimeLeft(prev => Math.max(0, prev - WRONG_PENALTY));
+            setTimeLeft(prev => Math.max(0, prev - 5)); // Yanlışta süre cezası da var
+            setScore(prev => Math.max(0, prev - POINTS_WRONG)); // -2 Puan (Ceza)
             setFeedback('wrong');
         }
         
@@ -106,10 +109,27 @@ function TrueFalseChainGame() {
         }, 800);
     };
     
+    // --- BAŞARI KONTROLÜ (%70) ---
+    const maxPossibleScore = questions.length * POINTS_CORRECT;
+    const successThreshold = Math.ceil(maxPossibleScore * 0.7);
+    const isSuccess = score >= successThreshold;
+
+    useEffect(() => {
+        if (gameState === 'finished' && isSuccess) {
+            setShowConfetti(true);
+            playSound('win');
+        }
+    }, [gameState, isSuccess]);
+
     const handleSaveAndExit = async () => {
-        if (isSaving || isScoreSaved || !user || score <= 0) {
-            router.push(isMission ? '/student/gorevler' : backUrl);
-            return;
+        if (!user || isSaving || isScoreSaved) {
+             router.push(isMission ? '/student/gorevler' : backUrl);
+             return;
+        }
+        
+        if (score <= 0) {
+             router.push(isMission ? '/student/gorevler' : backUrl);
+             return;
         }
         
         setIsSaving(true);
@@ -121,16 +141,16 @@ function TrueFalseChainGame() {
                     userId: user.uid,
                     points: score,
                     context: topicId,
-                    gameType: 'dogru-yanlis-zinciri', // GÖREV TİPİ
+                    gameType: 'dogru-yanlis-zinciri',
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: score >= threshold
+                    completed: isSuccess // %70 Barajı
                 });
 
-                if (score >= threshold) {
-                    toast({ title: "Görev Başarılı!", description: "Tebrikler, barajı geçtin.", className: "bg-green-600 text-white" });
+                if (isSuccess) {
+                    toast({ title: "Görev Başarılı!", description: `Tebrikler! %70 barajını geçtin (${score} Puan).`, className: "bg-green-600 text-white" });
                 } else {
-                    toast({ title: "Görev Tamamlanamadı", description: `En az ${threshold} puan gerekli.`, variant: "destructive" });
+                    toast({ title: "Görev Tamamlanamadı", description: `Başarı için en az ${successThreshold} puan gerekli.`, variant: "destructive" });
                 }
             } else {
                 // --- NORMAL MOD KAYDI ---
@@ -157,6 +177,7 @@ function TrueFalseChainGame() {
         setTimeLeft(INITIAL_TIME);
         setGameState('loading');
         setIsScoreSaved(false);
+        setShowConfetti(false);
         fetchGameData();
     };
 
@@ -179,18 +200,16 @@ function TrueFalseChainGame() {
         );
     }
     
-    // --- BİTİŞ EKRANI ---
     if (gameState === 'finished') {
-        return (
-            <div className="relative flex items-center justify-center h-screen bg-slate-900">
-                {isMission ? (
-                    // --- GÖREV MODU İÇİN ÖZEL BİTİŞ EKRANI ---
-                    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
+        if(isMission) {
+             return (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
+                        <Confetti active={showConfetti} config={{ angle: 90, spread: 360, startVelocity: 40, elementCount: 100, decay: 0.9 }} />
                         <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
                             
                             <div className="mb-6 flex justify-center">
-                                {score >= threshold ? (
+                                {isSuccess ? (
                                     <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
                                         <Trophy className="h-16 w-16 text-green-600" />
                                     </div>
@@ -202,52 +221,53 @@ function TrueFalseChainGame() {
                             </div>
 
                             <h2 className="text-3xl font-black text-slate-800 mb-2">
-                                {score >= threshold ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ"}
+                                {isSuccess ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ"}
                             </h2>
                             
                             <p className="text-slate-500 mb-6 font-medium">
-                                {score >= threshold 
-                                    ? `Harika! ${score} puanla barajı geçtin.` 
-                                    : `Maalesef ${score} puan aldın. Geçmek için ${threshold} puan gerekli.`}
+                                {isSuccess 
+                                    ? `Tebrikler! ${score} puanla %70 barajını geçtin.` 
+                                    : `Maalesef ${score} puan aldın. Geçmek için ${successThreshold} puan gerekli.`}
                             </p>
 
                             <div className="space-y-3">
-                                {!isScoreSaved && (
+                                {/* Puan varsa ve kaydedilmemişse Kaydet Butonu */}
+                                {!isScoreSaved && score > 0 && (
                                     <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
                                         {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
                                     </Button>
                                 )}
                                 
-                                {isScoreSaved && score >= threshold && (
+                                {isScoreSaved && (
                                     <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
                                         <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
                                     </Button>
                                 )}
-
-                                {(isScoreSaved || score < threshold) && (
-                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 text-lg font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">
-                                        <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
+                                
+                                {(!isSuccess || isScoreSaved) && (
+                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 font-bold">
+                                        <RotateCcw className="mr-2 h-4 w-4"/> Tekrar Dene
                                     </Button>
                                 )}
-                                
+
                                 <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
                                     <Home className="mr-2 h-4 w-4"/> Ana Menü
                                 </Button>
                             </div>
                         </div>
                     </div>
-                ) : (
-                    // NORMAL MOD
-                    <GameEndScreen 
-                        score={score} 
-                        onSave={handleSaveAndExit}
-                        isSaving={isSaving}
-                        scoreSaved={isScoreSaved}
-                        onRestart={handleRestart}
-                        backUrl={backUrl}
-                    />
-                )}
-            </div>
+            );
+        }
+
+        return (
+            <GameEndScreen 
+                score={score} 
+                onSave={handleSaveAndExit} 
+                isSaving={isSaving} 
+                scoreSaved={isScoreSaved} 
+                onRestart={handleRestart} 
+                backUrl={backUrl} 
+            />
         );
     }
 
@@ -265,7 +285,7 @@ function TrueFalseChainGame() {
                     <div className={cn("relative text-3xl md:text-4xl font-black text-white font-mono", feedback && 'animate-tada')}>
                         {timeLeft}s
                         {feedback === 'correct' && <div className="absolute -top-4 -right-8 text-green-400 text-lg font-bold flex items-center gap-1 animate-in slide-in-from-bottom fade-in"><PlusCircle className="h-4 w-4"/> +{CORRECT_BONUS}</div>}
-                        {feedback === 'wrong' && <div className="absolute -top-4 -right-8 text-red-400 text-lg font-bold flex items-center gap-1 animate-in slide-in-from-bottom fade-in"><MinusCircle className="h-4 w-4"/> -{WRONG_PENALTY}</div>}
+                        {feedback === 'wrong' && <div className="absolute -top-4 -right-8 text-red-400 text-lg font-bold flex items-center gap-1 animate-in slide-in-from-bottom fade-in"><MinusCircle className="h-4 w-4"/> -5</div>}
                     </div>
 
                     <div className="text-sm md:text-lg font-semibold">Soru: {currentQuestionIndex + 1} / {questions.length}</div>
