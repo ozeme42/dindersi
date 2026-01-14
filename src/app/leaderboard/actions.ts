@@ -204,7 +204,7 @@ export async function getLiveLeaderboard(period: 'daily' | 'weekly' | 'all-time'
 }
 
 
-export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[], daily: HallOfFamePeriod[], weekly: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }> {
+export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }> {
     noStore();
 
     // Fetch archived seasons
@@ -218,84 +218,13 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
         } as HallOfFamePeriod;
     });
 
-    // Award daily prizes if needed
-    await awardDailyPrizes();
-
     // Fetch dynamic periods
     const usersSnapshot = await getDocs(query(collection(db, 'users'), where("role", "==", "student")));
     const allStudents = usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
     const studentsMap = new Map(allStudents.map(s => [s.uid, s]));
     
-    const dailyWinners: HallOfFamePeriod[] = [];
-    const dailyPrizesQuery = query(collection(db, 'dailyPrizes'), orderBy('timestamp', 'desc'), limit(7));
-    const dailyPrizesSnapshot = await getDocs(dailyPrizesQuery);
-
-    for (const doc of dailyPrizesSnapshot.docs) {
-        const data = doc.data();
-        const winnersData = data.winners || [];
-        
-        const winnerUids = winnersData.map((winner: any) => winner.userId);
-        if (winnerUids.length === 0) continue;
-
-        const winnersProfiles = allStudents.filter(s => winnerUids.includes(s.uid));
-        const leaderboard: LeaderboardEntry[] = winnersProfiles.map((profile) => {
-             const winnerData = winnersData.find((w:any) => w.userId === profile.uid);
-             return {
-                 ...profile,
-                 score: winnerData.score || 0
-             }
-        }).sort((a, b) => b.score - a.score);
-        
-        if(leaderboard.length > 0) {
-            dailyWinners.push({
-                periodName: format(data.timestamp.toDate(), 'dd MMMM yyyy', { locale: tr }),
-                winners: leaderboard,
-            });
-        }
-    }
-
     const now = new Date();
     const startDate = subMonths(now, 6);
-    
-    const weeklyWinners: HallOfFamePeriod[] = [];
-    const weeks = eachWeekOfInterval({ start: startDate, end: now }, { weekStartsOn: 1 });
-    
-    for (const week of weeks) {
-        const weekStart = startOfWeek(week, { weekStartsOn: 1 });
-        const weekEnd = endOfWeek(week, { weekStartsOn: 1 });
-        if (weekStart > now) continue;
-
-        const weeklyEventsQuery = query(
-            collection(db, 'scoreEvents'),
-            where("timestamp", ">=", Timestamp.fromDate(weekStart)),
-            where("timestamp", "<=", Timestamp.fromDate(weekEnd))
-        );
-        const eventsSnapshot = await getDocs(weeklyEventsQuery);
-
-        const scoresByStudent = new Map<string, number>();
-        eventsSnapshot.forEach(eventDoc => {
-            const event = eventDoc.data();
-            if (event.gameType?.startsWith('smartboard_') || event.gameType === 'Derece Puanı') return;
-            const currentScore = scoresByStudent.get(event.userId) || 0;
-            scoresByStudent.set(event.userId, currentScore + event.points);
-        });
-        
-        if (scoresByStudent.size === 0) continue;
-
-        const leaderboard = Array.from(scoresByStudent.entries())
-            .map(([uid, score]) => ({ student: studentsMap.get(uid), score }))
-            .filter((entry): entry is { student: UserProfile; score: number } => !!entry.student && entry.score > 0)
-            .sort((a, b) => b.score - a.score)
-            .slice(0, 3)
-            .map(entry => ({...entry.student, score: entry.score }));
-        
-        if (leaderboard.length > 0) {
-            weeklyWinners.push({
-                periodName: `${format(weekStart, 'd MMM', {locale: tr})} - ${format(weekEnd, 'd MMM yyyy', {locale: tr})}`,
-                winners: leaderboard,
-            });
-        }
-    }
     
     const monthlyWinners: HallOfFamePeriod[] = [];
     const months = eachMonthOfInterval({ start: startDate, end: now });
@@ -338,8 +267,6 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
     
     const result = {
         seasons,
-        daily: dailyWinners,
-        weekly: weeklyWinners.reverse(),
         monthly: monthlyWinners.reverse(),
     };
 

@@ -219,7 +219,7 @@ const GroupLeaderboardRow = ({ item, index, onClick, type }: { item: any, index:
 
 // 1. GÜNCEL SIRALAMA (VARSAYILAN: TÜM ZAMANLAR)
 function CurrentLeaderboardTab() {
-    const [filter, setFilter] = useState<'monthly' | 'all-time'>('all-time');
+    const [filter, setFilter] = useState<'daily' | 'weekly' | 'all-time'>('all-time');
     const [search, setSearch] = useState("");
     const [leaderboard, setLeaderboard] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -259,7 +259,8 @@ function CurrentLeaderboardTab() {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-center bg-slate-900/50 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl">
                 <div className="flex bg-black/20 p-1 rounded-xl w-full sm:w-auto">
-                    <button onClick={() => setFilter('monthly')} className={cn("flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all", filter === 'monthly' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" : "text-slate-400 hover:text-white hover:bg-white/5")}>Bu Ay</button>
+                    <button onClick={() => setFilter('daily')} className={cn("flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all", filter === 'daily' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" : "text-slate-400 hover:text-white hover:bg-white/5")}>Bugün</button>
+                    <button onClick={() => setFilter('weekly')} className={cn("flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all", filter === 'weekly' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" : "text-slate-400 hover:text-white hover:bg-white/5")}>Bu Hafta</button>
                     <button onClick={() => setFilter('all-time')} className={cn("flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all", filter === 'all-time' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" : "text-slate-400 hover:text-white hover:bg-white/5")}>Tüm Zamanlar</button>
                 </div>
                 <div className="relative w-full sm:w-72">
@@ -528,10 +529,10 @@ function ClassLeaderboardTab() {
 
 // 3. ŞEREF KÜRSÜSÜ
 function HallOfFameTab() {
-    const [history, setHistory] = useState<{ seasons: HallOfFamePeriod[], daily: HallOfFamePeriod[], weekly: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }>({ seasons: [], daily: [], weekly: [], monthly: [] });
+    const [history, setHistory] = useState<{ seasons: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }>({ seasons: [], monthly: [] });
     const [isLoading, setIsLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentPeriodType, setCurrentPeriodType] = useState<'seasons' | 'monthly' | 'weekly' | 'daily'>('seasons');
+    const [currentPeriodType, setCurrentPeriodType] = useState<'seasons' | 'monthly'>('seasons');
     const [animating, setAnimating] = useState(false);
     
     // PAGINATION STATE FOR ARCHIVE LIST
@@ -540,15 +541,11 @@ function HallOfFameTab() {
     const fetchData = useCallback(() => {
         setIsLoading(true);
         getHallOfFameData().then(data => {
-            setHistory(data);
+            setHistory(data as any);
             if (data.seasons && data.seasons.length > 0) {
                  setCurrentPeriodType('seasons');
             } else if (data.monthly && data.monthly.length > 0) {
                 setCurrentPeriodType('monthly');
-            } else if (data.weekly && data.weekly.length > 0) {
-                setCurrentPeriodType('weekly');
-            } else {
-                 setCurrentPeriodType('daily');
             }
             setCurrentIndex(0);
             setIsLoading(false);
@@ -583,7 +580,7 @@ function HallOfFameTab() {
         }
     };
     
-    const changePeriodType = (type: 'seasons' | 'monthly' | 'weekly' | 'daily') => {
+    const changePeriodType = (type: 'seasons' | 'monthly') => {
         if (type !== currentPeriodType) {
             setCurrentPeriodType(type);
             setCurrentIndex(0);
@@ -606,8 +603,6 @@ function HallOfFameTab() {
         switch(currentPeriodType) {
             case 'seasons': return 'Sezon Şampiyonları';
             case 'monthly': return 'Aylık Şeref Kürsüsü';
-            case 'weekly': return 'Haftalık Şeref Kürsüsü';
-            case 'daily': return 'Günlük Şeref Kürsüsü';
             default: return 'Şeref Kürsüsü';
         }
     }
@@ -622,8 +617,6 @@ function HallOfFameTab() {
                  <div className="flex bg-black/20 p-1 rounded-xl w-full sm:w-auto mt-4">
                     <button onClick={() => changePeriodType('seasons')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'seasons' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.seasons.length === 0}>Sezon</button>
                     <button onClick={() => changePeriodType('monthly')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'monthly' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.monthly.length === 0}>Aylık</button>
-                    <button onClick={() => changePeriodType('weekly')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'weekly' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.weekly.length === 0}>Haftalık</button>
-                    <button onClick={() => changePeriodType('daily')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'daily' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.daily.length === 0}>Günlük</button>
                 </div>
             </div>
 
