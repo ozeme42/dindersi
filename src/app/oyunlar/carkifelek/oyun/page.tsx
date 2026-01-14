@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef, useMemo, Suspense } from 'react';
@@ -115,6 +116,7 @@ export function CarkifelekGameClient() {
                 courseId: searchParams.get('courseId') || undefined,
                 unitId: searchParams.get('unitId') || undefined,
                 topicId: searchParams.get('topicId') || undefined,
+                isStatic: searchParams.get('isStatic') === 'true',
             };
             const { questions, error } = await getCarkifelekQuestions(params);
             if (error || !questions) {
@@ -133,9 +135,8 @@ export function CarkifelekGameClient() {
     const spinWheel = () => {
         if (gameState !== 'idle') return;
         setGameState('spinning');
-        playSound('correct'); // Spin sesi olarak kullanabiliriz veya yeni ses eklenebilir
+        playSound('pop'); 
 
-        // Rastgele dönüş açısı (En az 5 tam tur + rastgele dilim)
         const randomDeg = Math.floor(1800 + Math.random() * 360);
         const newRotation = rotation + randomDeg;
         setRotation(newRotation);
@@ -147,10 +148,8 @@ export function CarkifelekGameClient() {
 
     const handleSpinEnd = (finalRotation: number) => {
         const normalizedDeg = finalRotation % 360;
-        const effectiveAngle = (360 - normalizedDeg + (DEG_PER_SLICE / 2)) % 360; 
         
-        let sliceIndex = Math.floor(normalizedDeg / DEG_PER_SLICE);
-        sliceIndex = (TOTAL_SLICES - Math.floor(normalizedDeg / DEG_PER_SLICE)) % TOTAL_SLICES;
+        let sliceIndex = (TOTAL_SLICES - Math.floor(normalizedDeg / DEG_PER_SLICE)) % TOTAL_SLICES;
         
         const winningSlice = SLICES[sliceIndex];
         setCurrentSlice(winningSlice);
@@ -335,7 +334,7 @@ export function CarkifelekGameClient() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {currentQuestion.options?.map((opt, idx) => {
-                                    let btnStyle = "bg-slate-800 border-slate-700 text-slate-300 hover:bg-blue-700";
+                                    let btnStyle = "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700";
                                     if (feedback) {
                                         if (opt === currentQuestion.correctAnswer) btnStyle = "bg-emerald-600 border-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.5)]";
                                         else btnStyle = "bg-slate-800/50 border-transparent text-slate-600 opacity-50";
@@ -358,7 +357,7 @@ export function CarkifelekGameClient() {
                             </div>
 
                             {feedback && (
-                                <div className="absolute -bottom-8 left-0 right-0 text-center animate-in slide-in-from-bottom-4">
+                                <div className="absolute -bottom-16 left-0 right-0 text-center animate-in slide-in-from-bottom-4">
                                     <span className={cn("text-xl font-black px-8 py-2 rounded-full shadow-lg inline-flex items-center gap-2", feedback === 'correct' ? "bg-emerald-500 text-white" : "bg-red-500 text-white")}>
                                         {feedback === 'correct' ? <CheckCircle2 /> : <X />}
                                         {feedback === 'correct' ? 'DOĞRU!' : 'YANLIŞ!'}

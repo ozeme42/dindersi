@@ -4,7 +4,7 @@
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import type { Question, GetQuizInput } from "@/lib/types";
-import { getQuestionsFromBank } from "@/lib/quiz-actions";
+import { getQuestionsFromBank, getStaticGameData } from "@/lib/quiz-actions";
 import { unstable_noStore as noStore } from 'next/cache';
 
 export type CarkifelekQuestions = {
@@ -15,21 +15,22 @@ export type CarkifelekQuestions = {
 export async function getCarkifelekQuestions(params: GetQuizInput): Promise<{ questions: CarkifelekQuestions | null; error?: string }> {
     noStore();
     try {
+        const fetchFunction = params.isStatic ? getStaticGameData : (p: GetQuizInput) => getQuestionsFromBank(p).then(r => r.questions);
+
         const easyParams: GetQuizInput = { ...params, difficulty: ['Kolay'], questionTypes: ['mcq'], questionCount: 20 };
         const hardParams: GetQuizInput = { ...params, difficulty: ['Zor'], questionTypes: ['mcq'], questionCount: 20 };
 
-        const [easyResult, hardResult] = await Promise.all([
-            getQuestionsFromBank(easyParams),
-            getQuestionsFromBank(hardParams)
-        ]);
+        // Cast to Question[] as we know the type we're fetching
+        const easyResult = (await fetchFunction(easyParams)) as Question[];
+        const hardResult = (await fetchFunction(hardParams)) as Question[];
 
-        if (easyResult.error || hardResult.error || easyResult.questions.length < 1 || hardResult.questions.length < 1) {
+        if (easyResult.length < 1 || hardResult.length < 1) {
             return { questions: null, error: "Bu konu için yeterli sayıda kolay ve zor soru bulunamadı." };
         }
 
         const data: CarkifelekQuestions = {
-            easy: easyResult.questions as Question[],
-            hard: hardResult.questions as Question[],
+            easy: easyResult,
+            hard: hardResult,
         };
 
         return { questions: JSON.parse(JSON.stringify(data)) };
