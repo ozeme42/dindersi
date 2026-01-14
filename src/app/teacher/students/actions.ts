@@ -4,7 +4,7 @@ import type { UserProfile, SchoolClass, School } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { FieldValue, Timestamp } from "firebase-admin/firestore";
+import { FieldValue } from "firebase-admin/firestore";
 
 // --- YARDIMCI FONKSİYON: RECURSIVE (DERİNLEMESİNE) SERIALIZER ---
 const deepSerialize = (data: any): any => {
@@ -35,7 +35,7 @@ const deepSerialize = (data: any): any => {
     return data;
 };
 
-// --- VERİ ÇEKME İŞLEMLERİ (Sadece Admin SDK ile) ---
+// --- VERİ ÇEKME İŞLEMLERİ ---
 
 export async function getStudentData(teacher?: UserProfile): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
   noStore();
@@ -108,7 +108,7 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
   }
 }
 
-// --- YAZMA İŞLEMLERİ (Admin SDK) ---
+// --- YAZMA İŞLEMLERİ ---
 
 type SaveUserData = {
     uid?: string;
@@ -212,8 +212,6 @@ export async function bulkAddStudents(names: string[], className: string, school
         if (!finalDisplayName) continue;
 
         const email = `${normalizeNameToEmailLocalPart(finalDisplayName)}@degerleroyunu.com`;
-        
-        // --- DEĞİŞİKLİK: TOPLU EKLEMEDE ŞİFRE 123456 ---
         const password = '123456'; 
 
         try {
@@ -269,7 +267,7 @@ export async function bulkAddStudents(names: string[], className: string, school
         console.error("Bulk add failures:", failedCreations);
         return { 
             success: false, 
-            error: `${failedCreations.length} öğrenci oluşturulamadı. Lütfen isimleri kontrol edin (örn: daha önce eklenmiş olabilirler).`,
+            error: `${failedCreations.length} öğrenci oluşturulamadı. Lütfen isimleri kontrol edin.`,
             successCount: successfulCreations.length 
         };
     }
@@ -342,7 +340,7 @@ export async function updateStudentClass(studentId: string, newClassName: string
     }
 }
 
-// --- YENİ EKLENEN: PUAN EKLEME/ÇIKARMA FONKSİYONU ---
+// --- DÜZELTİLMİŞ PUAN EKLEME FONKSİYONU (KORUNDU) ---
 export async function addStudentScore(uid: string, scoreToAdd: number, reason: string): Promise<{ success: boolean; error?: string }> {
     if (!uid) {
         return { success: false, error: "Öğrenci ID'si bulunamadı." };
@@ -352,22 +350,24 @@ export async function addStudentScore(uid: string, scoreToAdd: number, reason: s
         const db = getAdminDb();
         const userRef = db.collection('users').doc(uid);
         
-        // Batch işlemi başlat (Atomik işlem için: hem puanı güncelle hem geçmişe yaz)
         const batch = db.batch();
 
-        // 1. Kullanıcının toplam puanını güncelle (Atomic Increment ile race condition önlenir)
+        // 1. Kullanıcının puanını güncelle
         batch.update(userRef, {
             score: FieldValue.increment(scoreToAdd)
         });
 
-        // 2. Puan geçmişine kayıt at (Loglama)
-        // Kullanıcının altında 'scoreHistory' adında bir sub-collection tutuyoruz.
-        const historyRef = userRef.collection('scoreHistory').doc();
-        batch.set(historyRef, {
-            amount: scoreToAdd,
-            reason: reason,
-            createdAt: FieldValue.serverTimestamp(),
-            type: 'manual_admin'
+        // 2. Global 'scoreEvents' tablosuna yaz
+        const globalEventRef = db.collection('scoreEvents').doc();
+        
+        batch.set(globalEventRef, {
+            userId: uid,
+            points: scoreToAdd,
+            gameType: scoreToAdd >= 0 ? 'manual_reward' : 'manual_penalty', 
+            context: reason, 
+            completed: true, 
+            timestamp: FieldValue.serverTimestamp(),
+            createdAt: FieldValue.serverTimestamp()
         });
 
         await batch.commit();

@@ -1,33 +1,25 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { 
-  User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, 
-  Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, 
-  ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine, 
-  GraduationCap, School as SchoolIcon, LayoutDashboard, Database, Save, 
-  HardDriveDownload, Search, Plus, Building2, ArrowRightLeft, CheckSquare, Trophy
+  User, Loader2, Book, FileQuestion, List, FileJson, 
+  ClipboardList, DollarSign, Shield, Home, UserPlus, Trash2, 
+  ArrowLeft, ArrowRight, UserCog, MoreHorizontal, FilePenLine, 
+  GraduationCap, School as SchoolIcon, LayoutDashboard, Save, 
+  HardDriveDownload, Search, Plus, Building2, ArrowRightLeft, CheckSquare, AlertTriangle
 } from "lucide-react";
 
-// Server Actions
-import { getStudentData } from "@/app/teacher/students/actions";
+import { getStudentData, saveUser } from "@/app/teacher/students/actions";
 import { 
   exportAllData, deleteBulkUsers,
   saveSchool, deleteSchool, bulkUpdateStudentSchool,
   exportStaticAdvanced
 } from "./actions";
-import { archiveAndResetScores, saveLeaderboardSettings, getLeaderboardSettings } from '@/app/teacher/actions';
-
 
 import { getExamCreationData } from "../exams/actions";
-import { saveUser } from "@/app/teacher/students/actions";
-
-// Types & Zod
 import type { UserProfile, SchoolClass, Course, Unit, Topic, School } from "@/lib/types";
 import { z } from "zod";
 
-// UI Components
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -88,23 +80,15 @@ const UserEditorSchema = z.object({
   schoolId: z.string().nullable().optional(),
   newSchoolName: z.string().optional(),
   score: z.coerce.number().optional().default(0),
-}).refine(data => {
-    if (!data.uid && (!data.password || data.password.length < 6)) return false;
-    if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) return false;
-    if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) return false;
-    return true;
-}, {
-    message: "Şifre/Okul adı kontrolü başarısız.",
-    path: ["password"],
-});
+}).refine(() => true);
 
-// Okul Schema
 const SchoolEditorSchema = z.object({
     id: z.string().optional(),
     name: z.string().min(3, "Okul adı en az 3 karakter olmalıdır."),
 });
 
-// --- ISTATISTIK KARTI BILEŞENI ---
+// --- UI BİLEŞENLERİ ---
+
 function StatCard({ title, value, icon: Icon, colorClass }: { title: string, value: number, icon: any, colorClass: string }) {
     return (
         <Card className="bg-slate-900/50 border-white/10 backdrop-blur-sm overflow-hidden relative">
@@ -121,119 +105,7 @@ function StatCard({ title, value, icon: Icon, colorClass }: { title: string, val
     )
 }
 
-function LeaderboardSettingsCard() {
-    const { toast } = useToast();
-    const [settings, setSettings] = useState({ seasonName: '' });
-    const [isLoading, setIsLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
-    const [isResetting, setIsResetting] = useState(false);
-    const [resetStep, setResetStep] = useState(0);
-
-    const fetchSettings = useCallback(async () => {
-        setIsLoading(true);
-        const data = await getLeaderboardSettings();
-        setSettings(data);
-        setIsLoading(false);
-    }, []);
-
-    useEffect(() => {
-        fetchSettings();
-    }, [fetchSettings]);
-
-    const handleSave = async () => {
-        setIsSaving(true);
-        const result = await saveLeaderboardSettings(settings);
-        if (result.success) {
-            toast({ title: "Başarılı", description: "Liderlik tablosu ayarları kaydedildi." });
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsSaving(false);
-    };
-
-    const handleSeasonFinale = async () => {
-        setIsResetting(true);
-        const result = await archiveAndResetScores(settings.seasonName);
-        if (result.success) {
-            toast({ title: "Sezon Finali Başarılı!", description: "Tüm puanlar arşivlendi ve sıfırlandı. Yeni sezon başlıyor!" });
-            await fetchSettings();
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsResetting(false);
-        setResetStep(0);
-    }
-
-    if (isLoading) {
-        return <div className="flex justify-center items-center h-48"><Loader2 className="animate-spin h-8 w-8 text-indigo-400" /></div>
-    }
-
-    return (
-        <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl h-full flex flex-col">
-            <CardHeader>
-                <CardTitle className="text-xl text-white flex items-center gap-2"><Trophy className="h-5 w-5 text-yellow-400"/> Liderlik Tablosu Ayarları</CardTitle>
-                <CardDescription>Mevcut sezon adını ve diğer ayarları yönetin.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4 flex-grow">
-                <div className="space-y-2">
-                    <Label htmlFor="seasonName" className="text-slate-300">Mevcut Sezon Adı</Label>
-                    <Input 
-                        id="seasonName"
-                        value={settings.seasonName}
-                        onChange={(e) => setSettings({ ...settings, seasonName: e.target.value })}
-                        className="bg-slate-950 border-white/10 text-white h-11"
-                    />
-                </div>
-            </CardContent>
-            <CardFooter className="flex-col gap-4 border-t border-white/5 pt-4">
-                 <Button onClick={handleSave} disabled={isSaving} className="w-full bg-indigo-600 hover:bg-indigo-500 text-white">
-                    {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4"/>}
-                    Ayarları Kaydet
-                 </Button>
-                
-                 <AlertDialog open={resetStep > 0} onOpenChange={(open) => !open && setResetStep(0)}>
-                    <AlertDialogTrigger asChild>
-                        <Button variant="destructive" className="w-full bg-red-800 hover:bg-red-700">
-                            <Shield className="mr-2 h-4 w-4"/> Sezon Finali Yap
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                       {resetStep === 1 ? (
-                            <>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle className="text-amber-400">Son Onay</AlertDialogTitle>
-                                    <AlertDialogDescription className="text-slate-400">
-                                        "{settings.seasonName}" sezonu arşivlenecek ve **TÜM** genel öğrenci puanları sıfırlanacak. Bu işlem geri alınamaz.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel onClick={() => setResetStep(0)} className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleSeasonFinale} disabled={isResetting} className="bg-red-600 hover:bg-red-700 text-white">
-                                        {isResetting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : "Evet, Arşivle ve Sıfırla"}
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </>
-                       ) : (
-                             <AlertDialogHeader>
-                                <AlertDialogTitle>Sezon Finali</AlertDialogTitle>
-                                <AlertDialogDescription className="text-slate-400">
-                                   Bu işlem, mevcut liderlik tablosunu "{settings.seasonName}" adıyla arşivleyecek ve tüm öğrencilerin genel puanlarını sıfırlayacaktır.
-                                </AlertDialogDescription>
-                                <AlertDialogFooter className="pt-4">
-                                     <AlertDialogCancel onClick={() => setResetStep(0)} className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
-                                    <Button onClick={() => setResetStep(1)} className="bg-indigo-600 hover:bg-indigo-500 text-white">
-                                        Devam Et <ArrowRight className="ml-2 h-4 w-4" />
-                                    </Button>
-                                </AlertDialogFooter>
-                             </AlertDialogHeader>
-                       )}
-                    </AlertDialogContent>
-                </AlertDialog>
-            </CardFooter>
-        </Card>
-    );
-}
-
+// --- ANA SAYFA ---
 export default function SuperAdminPage() {
   const { toast } = useToast();
   
@@ -252,12 +124,7 @@ export default function SuperAdminPage() {
       classId: 'all', courseId: 'all', unitId: 'all', topicId: 'all',
   });
   const [exportTypes, setExportTypes] = useState({
-      manifest: true,
-      ozet: true,
-      flow: true,
-      questions: true,
-      activities: true,
-      notes: true
+      manifest: true, ozet: true, flow: true, questions: true, activities: true, notes: true
   });
   
   const [filters, setFilters] = useState<{classId: string, courseId: string, unitId: string, topicId: string}>({
@@ -342,7 +209,7 @@ export default function SuperAdminPage() {
   const totalStudentPages = Math.ceil(filteredStudents.length / itemsPerPage);
   const totalTeacherPages = Math.ceil(filteredTeachers.length / itemsPerPage);
 
-  // --- HANDLERS: USER ---
+  // --- HANDLERS ---
   const handleOpenDialog = (user: Partial<UserProfile> | null = null, role: 'student' | 'teacher') => {
       const defaultUser = { role };
       setDialogState({ isOpen: true, user: user || defaultUser });
@@ -397,23 +264,19 @@ export default function SuperAdminPage() {
     setIsDeleting(false);
   };
 
-  // --- HANDLER: BULK SCHOOL UPDATE ---
   const handleBulkSchoolUpdate = async () => {
       if (!selectedTargetSchoolId) {
           toast({ title: "Hata", description: "Lütfen bir okul seçiniz.", variant: "destructive" });
           return;
       }
-      
       const targetSchool = schools.find(s => s.id === selectedTargetSchoolId);
       if (!targetSchool) return;
-
       setIsBulkUpdating(true);
       const result = await bulkUpdateStudentSchool(
           Array.from(selectedUserIds),
           targetSchool.id,
           targetSchool.name
       );
-
       if (result.success) {
           toast({ title: "Başarılı", description: `${result.count} öğrencinin okulu güncellendi.` });
           await fetchAllData();
@@ -426,8 +289,6 @@ export default function SuperAdminPage() {
       setIsBulkUpdating(false);
   };
 
-
-  // --- HANDLERS: SCHOOL ---
   const handleOpenSchoolDialog = (school: School | null = null) => {
       setSchoolNameInput(school ? school.name : "");
       setSchoolDialogState({ isOpen: true, school });
@@ -440,13 +301,11 @@ export default function SuperAdminPage() {
           toast({ title: "Hata", description: error.errors[0].message, variant: "destructive" });
           return;
       }
-
       setIsSavingSchool(true);
       const result = await saveSchool({
           id: schoolDialogState.school?.id,
           name: schoolNameInput
       });
-
       if (result.success) {
           toast({ title: "Başarılı", description: `Okul ${schoolDialogState.school ? 'güncellendi' : 'eklendi'}.` });
           await fetchAllData();
@@ -463,9 +322,7 @@ export default function SuperAdminPage() {
           toast({ title: "Silinemez", description: "Bu okula kayıtlı kullanıcılar var. Önce kullanıcıları silin veya taşıyın.", variant: "destructive" });
           return;
       }
-
       if(!confirm("Bu okulu silmek istediğinize emin misiniz?")) return;
-
       const result = await deleteSchool(schoolId);
       if (result.success) {
           toast({ title: "Başarılı", description: "Okul silindi." });
@@ -475,7 +332,6 @@ export default function SuperAdminPage() {
       }
   };
 
-  // --- HANDLERS: EXPORT ---
   const handleDownload = async (dataType: 'users' | 'curriculum' | 'questions' | 'examQuestions' | 'assignments' | 'scoreEvents' | 'activity-items' | 'yazilacaklar', baseFilename: string) => {
     setIsDownloading(dataType);
     let filenameParts = [];
@@ -484,7 +340,6 @@ export default function SuperAdminPage() {
         filenameParts.push(slugify(className));
     }
     const filename = `${filenameParts.join('_')}_${baseFilename}.json`;
-    
     try {
       const data = await exportAllData(dataType, filters);
       downloadJson(data, filename);
@@ -500,7 +355,6 @@ export default function SuperAdminPage() {
           toast({ title: "Hata", description: "En az bir veri tipi seçmelisiniz.", variant: "destructive" });
           return;
       }
-
       setIsExportingAdvanced(true);
       try {
           const result = await exportStaticAdvanced(staticFilters, Object.keys(exportTypes).filter(k => exportTypes[k as keyof typeof exportTypes]));
@@ -533,17 +387,14 @@ export default function SuperAdminPage() {
     return unit ? unit.topics : [];
   }, [availableUnits, staticFilters.unitId]);
 
-
-  const dataSections = [
-    { type: 'users', title: "Kullanıcılar", icon: <User className="mr-2 h-4 w-4"/>, filename: "kullanicilar", desc: "Tüm öğrenci ve öğretmen verileri" },
-    { type: 'curriculum', title: "Müfredat", icon: <Book className="mr-2 h-4 w-4"/>, filename: "mufredat", desc: "Ders, ünite ve konu yapıları" },
-    { type: 'questions', title: "Soru Bankası", icon: <FileQuestion className="mr-2 h-4 w-4"/>, filename: "soru_bankasi", desc: "Sisteme kayıtlı tüm sorular" },
-    { type: 'examQuestions', title: "Deneme Soruları", icon: <Shield className="mr-2 h-4 w-4"/>, filename: "deneme_sorulari", desc: "Oluşturulan sınavlar" },
-    { type: 'assignments', title: "Ödevler", icon: <ClipboardList className="mr-2 h-4 w-4"/>, filename: "odevler", desc: "Aktif ve geçmiş ödevler" },
-    { type: 'scoreEvents', title: "Puanlar", icon: <DollarSign className="mr-2 h-4 w-4"/>, filename: "puan_hareketleri", desc: "Puan geçmişi ve hareketleri" },
-    { type: 'activity-items', title: "Etkinlikler", icon: <List className="mr-2 h-4 w-4"/>, filename: "etkinlik_verileri", desc: "Oyun ve etkinlik içerikleri" },
-    { type: 'yazilacaklar', title: "Yazılacaklar", icon: <FileJson className="mr-2 h-4 w-4"/>, filename: "yazilacaklar", desc: "Bekleyen işlemler listesi" },
-  ];
+  const handleSelectUser = (userId: string) => {
+    setSelectedUserIds(prev => {
+        const newSet = new Set(prev);
+        if (newSet.has(userId)) newSet.delete(userId);
+        else newSet.add(userId);
+        return newSet;
+    });
+  };
 
   if (isLoading) {
       return (
@@ -555,15 +406,6 @@ export default function SuperAdminPage() {
           </div>
       );
   }
-
-  const handleSelectUser = (userId: string) => {
-    setSelectedUserIds(prev => {
-        const newSet = new Set(prev);
-        if (newSet.has(userId)) newSet.delete(userId);
-        else newSet.add(userId);
-        return newSet;
-    });
-  };
 
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 lg:p-8 relative overflow-hidden">
@@ -609,8 +451,7 @@ export default function SuperAdminPage() {
                 
                 <TabsContent value="management" className="space-y-6">
                     <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl">
-                         {/* ... (Bu kısımlar değişmedi, aynen korundu) ... */}
-                        <CardHeader className="border-b border-white/5 pb-4">
+                         <CardHeader className="border-b border-white/5 pb-4">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div>
                                     <CardTitle className="text-xl text-white flex items-center gap-2"><UserCog className="h-5 w-5 text-indigo-400"/> Veri Yönetim Merkezi</CardTitle>
@@ -842,9 +683,8 @@ export default function SuperAdminPage() {
                 </TabsContent>
                 
                 <TabsContent value="tools" className="space-y-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <LeaderboardSettingsCard />
-                        <Card className="lg:col-span-2 bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl h-full">
+                    <div className="grid grid-cols-1 gap-6">
+                        <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl h-full">
                             <CardHeader>
                                 <CardTitle className="text-xl text-white flex items-center gap-2"><HardDriveDownload className="h-5 w-5 text-emerald-400"/> Statik Site Oluşturma</CardTitle>
                                 <CardDescription>Filtreleyerek belirli içerikler için dosya oluşturun.</CardDescription>
@@ -983,7 +823,7 @@ export default function SuperAdminPage() {
                         <div className="grid gap-2">
                             <Label htmlFor="bulk-school" className="text-white">Yeni Okul</Label>
                              <Select value={selectedTargetSchoolId} onValueChange={setSelectedTargetSchoolId}>
-                                <SelectTrigger className="bg-slate-950 border-white/10 h-10"><SelectValue placeholder="Okul Seçiniz" /></SelectTrigger>
+                                <SelectTrigger className="bg-slate-900 border-white/10 h-10"><SelectValue placeholder="Okul Seçiniz" /></SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
                                     {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                                 </SelectContent>

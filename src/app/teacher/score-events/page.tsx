@@ -2,20 +2,10 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-    CardFooter,
+    Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from '@/components/ui/checkbox';
@@ -27,23 +17,18 @@ import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { collectionGroup, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import {
+    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 
-// Veri Tipi
+// --- TİP TANIMLARI ---
 type EnrichedScoreEvent = ScoreEvent & { 
     userName?: string;
     attemptNumber?: number;
@@ -55,21 +40,18 @@ type SerializableTimestamp = {
     _nanoseconds: number;
 } | null;
 
-// --- KONU ADI BULUCU (ID'den İsme Çevirir) ---
+// --- KONU ÇÖZÜCÜ BİLEŞENİ ---
 const TopicResolver = ({ context }: { context: string | any }) => {
     const [display, setDisplay] = useState<{ title: string, sub?: string }>({ title: "Yükleniyor..." });
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // Eğer context bir ID ise (boşluksuz ve uzunsa)
         if (typeof context === 'string' && !context.includes(' ') && context.length > 15) {
             const fetchTopicInfo = async () => {
                 setLoading(true);
                 try {
-                    // 1. Veritabanında 'topics' içinde bu ID'ye sahip bir kayıt var mı ara
                     const q = query(collectionGroup(db, 'topics'), where('id', '==', context));
                     const snap = await getDocs(q);
-                    
                     if (!snap.empty) {
                         const data = snap.docs[0].data();
                         setDisplay({
@@ -77,12 +59,10 @@ const TopicResolver = ({ context }: { context: string | any }) => {
                             sub: data.unitName ? `${data.unitName}` : undefined
                         });
                     } else {
-                        // Bulunamazsa ID'yi göster ama başına uyarı koy
                         setDisplay({ title: "Konu Bulunamadı", sub: `ID: ${context}` });
                     }
                 } catch (e) {
                     console.error(e);
-                    // Hata durumunda (İndeks yoksa vb.)
                     setDisplay({ title: "Veri Hatası", sub: `ID: ${context}` });
                 } finally {
                     setLoading(false);
@@ -90,14 +70,12 @@ const TopicResolver = ({ context }: { context: string | any }) => {
             };
             fetchTopicInfo();
         } else {
-            // Normal Metin (Arcade Modu)
             setDisplay({ title: typeof context === 'string' ? context : JSON.stringify(context) });
         }
     }, [context]);
 
     if (loading) return <span className="text-xs text-indigo-400 animate-pulse">Aranıyor...</span>;
 
-    // ID Durumu (Bulunamadıysa veya ID ise)
     if (display.sub) {
         return (
             <div className="flex flex-col">
@@ -110,57 +88,100 @@ const TopicResolver = ({ context }: { context: string | any }) => {
             </div>
         );
     }
-
-    // Normal Metin Durumu
     return <span className="text-sm font-medium text-slate-300">{display.title}</span>;
 };
 
+// --- ANA SAYFA BİLEŞENİ ---
 export default function ScoreEventsPage() {
     const [events, setEvents] = useState<EnrichedScoreEvent[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
     const [selectedEventIds, setSelectedEventIds] = useState<Set<string>>(new Set());
+    
+    // Filtreler
     const [searchTerm, setSearchTerm] = useState('');
     const [showOnlyExcessiveAttempts, setShowOnlyExcessiveAttempts] = useState(false);
+    const [filterGameType, setFilterGameType] = useState<string>('all');
+    
     const { toast } = useToast();
     
-    const [pageCursors, setPageCursors] = useState<(SerializableTimestamp | undefined)[]>([undefined]);
+    // Pagination: Sayfa başlangıç noktalarını tutan dizi
+    // pageCursors[0] = null (İlk sayfa)
+    // pageCursors[1] = 1. sayfanın sonundaki eleman (2. sayfanın başı)
+    const [pageCursors, setPageCursors] = useState<(SerializableTimestamp | undefined | null)[]>([null]);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-    const fetchData = useCallback(async (pageIndex: number, direction: 'next' | 'prev' = 'next') => {
+    // --- VERİ ÇEKME (DÜZELTİLDİ) ---
+    // Artık cursor'ı state'den değil, doğrudan parametreden alıyor.
+    const fetchData = async (cursorToUse: SerializableTimestamp | null, targetPageIndex: number) => {
         setIsLoading(true);
-        const cursor = pageCursors[pageIndex];
+        console.log(`Sayfa ${targetPageIndex + 1} yükleniyor. Cursor:`, cursorToUse ? "Mevcut" : "NULL (İlk Sayfa)");
 
         const result = await getScoreEvents({ 
-            cursor,
-            direction,
+            cursor: cursorToUse, 
+            direction: 'next',
             searchTerm, 
             showOnlyExcessiveAttempts,
+            filterGameType
         });
 
         if (result.success && result.data) {
             setEvents(result.data);
-            if (direction === 'next' && result.lastVisible) {
-                if(pageIndex + 1 >= pageCursors.length) {
-                   setPageCursors(prev => [...prev, result.lastVisible]);
-                }
+            
+            // Eğer bir sonraki sayfa için veri varsa, cursor dizisine ekle
+            if (result.lastVisible) {
+                setPageCursors(prev => {
+                    const newCursors = [...prev];
+                    // Hedef sayfanın son elemanını (lastVisible), BİR SONRAKİ sayfanın (targetPageIndex + 1) anahtarı yap
+                    newCursors[targetPageIndex + 1] = result.lastVisible;
+                    return newCursors;
+                });
+            } else {
+                // Eğer lastVisible yoksa, demek ki son sayfadayız veya veri bitti.
+                // Sonraki sayfa cursor'ını temizle ki "Sonraki" butonu aktif olmasın (opsiyonel)
             }
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsLoading(false);
-    }, [searchTerm, showOnlyExcessiveAttempts, toast]); 
-    
-     useEffect(() => {
+    };
+
+    // --- FİLTRE DEĞİŞİMİ RESETLEME ---
+    useEffect(() => {
         const handler = setTimeout(() => {
-            setPageCursors([undefined]); 
+            console.log("Filtre değişti, resetleniyor...");
+            setPageCursors([null]); 
             setCurrentPageIndex(0);
-            fetchData(0);
+            fetchData(null, 0); // İlk sayfayı çek
         }, 500); 
         return () => clearTimeout(handler);
-    }, [searchTerm, showOnlyExcessiveAttempts, fetchData]);
+    }, [searchTerm, showOnlyExcessiveAttempts, filterGameType]);
 
+    // --- SAYFA DEĞİŞTİRME HANDLERLARI ---
+    const handleNextPage = () => {
+        const nextIndex = currentPageIndex + 1;
+        // Eğer bir sonraki sayfanın anahtarı (cursor) elimizde varsa ilerle
+        const nextCursor = pageCursors[nextIndex];
+        
+        if (nextCursor !== undefined) {
+            setCurrentPageIndex(nextIndex);
+            fetchData(nextCursor, nextIndex);
+        } else {
+            console.warn("Sonraki sayfa için cursor bulunamadı!");
+        }
+    };
 
+    const handlePrevPage = () => {
+        if (currentPageIndex > 0) {
+            const prevIndex = currentPageIndex - 1;
+            const prevCursor = pageCursors[prevIndex]; // Önceki sayfanın başlangıç cursor'ı
+            
+            setCurrentPageIndex(prevIndex);
+            fetchData(prevCursor, prevIndex);
+        }
+    };
+
+    // --- SEÇİM VE SİLME ---
     const handleSelect = (id: string) => {
         setSelectedEventIds(prev => {
             const newSet = new Set(prev);
@@ -171,11 +192,8 @@ export default function ScoreEventsPage() {
     };
 
     const handleSelectAllOnPage = (isChecked: boolean) => {
-        if (isChecked) {
-            setSelectedEventIds(new Set(events.map(e => e.id)));
-        } else {
-            setSelectedEventIds(new Set());
-        }
+        if (isChecked) setSelectedEventIds(new Set(events.map(e => e.id)));
+        else setSelectedEventIds(new Set());
     };
 
     const handleDeleteSelected = async () => {
@@ -184,36 +202,21 @@ export default function ScoreEventsPage() {
         if (result.success) {
             toast({ title: 'Başarılı!', description: 'Seçilen kayıtlar silindi.' });
             setSelectedEventIds(new Set());
-            fetchData(currentPageIndex); 
+            // Mevcut sayfayı yenile
+            fetchData(pageCursors[currentPageIndex] || null, currentPageIndex);
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
         }
         setIsDeleting(false);
     };
 
-    const handleNextPage = () => {
-        if(currentPageIndex < pageCursors.length - 1) {
-            const nextPageIndex = currentPageIndex + 1;
-            fetchData(nextPageIndex, 'next');
-            setCurrentPageIndex(nextPageIndex);
-        }
-    };
-
-    const handlePrevPage = () => {
-        if (currentPageIndex > 0) {
-            const prevPageIndex = currentPageIndex - 1;
-            fetchData(prevPageIndex, 'prev');
-            setCurrentPageIndex(prevPageIndex);
-        }
-    };
-    
     const isAllOnPageSelected = events.length > 0 && selectedEventIds.size === events.length && events.every(e => selectedEventIds.has(e.id));
     
+    // Son sayfa kontrolü
     const isLastPage = useMemo(() => {
         const itemsPerPage = 25; 
         return events.length < itemsPerPage;
     }, [events]);
-
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
@@ -270,6 +273,20 @@ export default function ScoreEventsPage() {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="flex-grow bg-slate-950 border-white/10 text-white focus:border-purple-500/50 placeholder:text-slate-500"
                             />
+                            
+                            {/* OYUN TÜRÜ FİLTRESİ */}
+                            <Select value={filterGameType} onValueChange={setFilterGameType}>
+                                <SelectTrigger className="w-[180px] bg-slate-950 border-white/10 text-slate-300">
+                                    <SelectValue placeholder="Etkinlik Türü" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-slate-300">
+                                    <SelectItem value="all">Tümü</SelectItem>
+                                    <SelectItem value="manual_reward">Öğretmen Puanı (Ödül)</SelectItem> 
+                                    <SelectItem value="manual_penalty">Öğretmen Puanı (Ceza)</SelectItem>
+                                    <SelectItem value="Kelime Oyunu">Kelime Oyunu</SelectItem>
+                                </SelectContent>
+                             </Select>
+
                             <Button 
                                 variant={showOnlyExcessiveAttempts ? "default" : "outline"}
                                 className={cn("border-white/10 text-slate-300 hover:text-white hover:bg-white/5", showOnlyExcessiveAttempts ? "bg-purple-600 hover:bg-purple-500 text-white" : "bg-slate-950 text-slate-300")}
@@ -358,7 +375,7 @@ export default function ScoreEventsPage() {
                                                     {format(new Date(event.timestamp), 'dd.MM.yyyy HH:mm', { locale: tr })}
                                                 </TableCell>
                                             </TableRow>
-                                         ))
+                                     ))
                                     ) : (
                                         <TableRow>
                                             <TableCell colSpan={7} className="h-24 text-center text-slate-500 italic">

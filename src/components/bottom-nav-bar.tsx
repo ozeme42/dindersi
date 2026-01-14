@@ -94,7 +94,7 @@ export function BottomNavBar() {
         { href: '/', icon: Home, label: 'Panel' },
         { href: '/teacher/students', icon: Users, label: 'Öğrenciler' },
         { href: '/oyunlar', icon: Gamepad2, label: 'Oyunlar' },
-        { href: '/teacher/smartboard', icon: MonitorPlay, label: 'Tahta' },
+        { href: '/teacher/scales', icon: Scale, label: 'Ölçekler' },
         { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
     ];
     

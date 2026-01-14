@@ -32,7 +32,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox"; // Eğer shadcn checkbox kurulu değilse, aşağıda manuel input kullanıldı.
 
 // Firebase and Actions
 import { useToast } from "@/hooks/use-toast";
@@ -49,7 +48,7 @@ import { useAuth } from "@/context/auth-context";
 
 // --- COMPONENTS ---
 
-// Puan Verme Dialog Bileşeni (Aynı kalıyor)
+// Puan Verme Dialog Bileşeni
 function ScoreDialog({ 
     isOpen, 
     onOpenChange, 
@@ -150,7 +149,7 @@ function ScoreDialog({
     );
 }
 
-// StudentTable - Checkbox özelliği eklendi
+// StudentTable
 function StudentTable({ 
     students, 
     isLoading, 
@@ -283,7 +282,7 @@ function StudentTable({
     );
 }
 
-// PendingStudentTable (Değişmedi, sadece kopyalıyoruz)
+// PendingStudentTable
 function PendingStudentTable({ students, onApprove, onDelete }: { students: UserProfile[], onApprove: (uid: string) => void, onDelete: (uid: string) => void }) {
     return (
         <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
@@ -736,12 +735,9 @@ export default function StudentsPage() {
 
     const handleSelectAll = (checked: boolean) => {
         if (checked) {
-            // Sadece şu anki sayfadaki (veya filtrelenmiş tüm) öğrencileri seç
-            // Güvenlik için sadece şu an görüntülenenleri seçiyoruz
             const idsToSelect = paginatedStudents.map(s => s.uid);
             setSelectedStudentIds(prev => Array.from(new Set([...prev, ...idsToSelect])));
         } else {
-            // Şu anki sayfadakileri seçimden çıkar
             const idsToDeselect = paginatedStudents.map(s => s.uid);
             setSelectedStudentIds(prev => prev.filter(id => !idsToDeselect.includes(id)));
         }
@@ -818,13 +814,13 @@ export default function StudentsPage() {
                                     )}
                                     <div className={currentUser?.role === 'teacher' ? 'md:col-span-1' : ''}>
                                         <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
-                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
                                             <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                                         </Select>
                                     </div>
                                     <div className={currentUser?.role === 'teacher' ? 'md:col-span-1' : ''}>
                                         <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
-                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
                                             <SelectContent className="bg-slate-900 border-white/10 text-white">
                                                 <SelectItem value="all">Tüm Şubeler</SelectItem>
                                                 {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
@@ -838,7 +834,6 @@ export default function StudentsPage() {
                                 </div>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                {/* YENİ: Toplu İşlem Barı */}
                                 {selectedStudentIds.length > 0 && (
                                     <div className="flex items-center justify-between bg-indigo-500/10 border border-indigo-500/30 p-4 rounded-xl animate-in fade-in slide-in-from-top-2">
                                         <div className="flex items-center gap-2 text-indigo-200">
@@ -886,7 +881,6 @@ export default function StudentsPage() {
                                     onSelectAll={handleSelectAll}
                                 />
                                 
-                                {/* Sayfalama Kontrolleri */}
                                 {filteredStudents.length > 0 && (
                                     <div className="flex items-center justify-between mt-4 border-t border-white/5 pt-4">
                                         <div className="text-sm text-slate-400">
@@ -922,7 +916,6 @@ export default function StudentsPage() {
                     </TabsContent>
 
                     <TabsContent value="pending" className="space-y-6 outline-none">
-                        {/* Pending content aynı kalıyor */}
                         <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
                             <CardHeader>
                                 <CardTitle className="text-xl text-white">Onay Bekleyen Öğrenciler</CardTitle>
@@ -935,7 +928,6 @@ export default function StudentsPage() {
                     </TabsContent>
           
                     <TabsContent value="add" className="outline-none">
-                        {/* Add content aynı kalıyor */}
                         <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
                             <CardHeader className="bg-white/5 border-b border-white/5 pb-6">
                                 <div className="flex items-center gap-3 mb-2">
@@ -963,14 +955,14 @@ export default function StudentsPage() {
                                     <div className="space-y-1">
                                         <Label className="text-slate-300">Sınıf</Label>
                                         <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
-                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
                                             <SelectContent className="bg-slate-900 border-white/10 text-white">{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                                         </Select>
                                     </div>
                                     <div className="space-y-1">
                                         <Label className="text-slate-300">Şube</Label>
                                         <Select value={bulkBranch} onValueChange={setBulkBranch} disabled={!selectedBulkClassData}>
-                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
                                             <SelectContent className="bg-slate-900 border-white/10 text-white">
                                                 {selectedBulkClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                                             </SelectContent>
@@ -992,13 +984,13 @@ export default function StudentsPage() {
                                     <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
                                         <TabsContent value="single" className="mt-0">
                                             <form onSubmit={handleAddSingleStudent} className="flex gap-4 items-end">
-                                              <div className="flex-1 space-y-2">
-                                                <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
-                                                <Input placeholder="Örn: Savaşçı 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
-                                              </div>
-                                              <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !newStudentName.trim()}>
-                                                  {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
-                                              </Button>
+                                                <div className="flex-1 space-y-2">
+                                                  <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
+                                                  <Input placeholder="Örn: Savaşçı 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
+                                                </div>
+                                                <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !newStudentName.trim()}>
+                                                    {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
+                                                </Button>
                                             </form>
                                         </TabsContent>
 
