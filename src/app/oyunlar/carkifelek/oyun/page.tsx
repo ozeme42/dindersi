@@ -1,10 +1,9 @@
-
 'use client';
 
 import { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
-import { getCarkifelekQuestions, submitCarkifelekScoreAction } from './actions';
+import { getCarkifelekQuestions, submitCarkifelekScoreAction } from '../actions';
 import type { Question } from "@/lib/types";
 import { Loader2, ArrowLeft, Trophy, AlertCircle, Sparkles, Skull, HelpCircle, X, CheckCircle2, Zap } from "lucide-react";
 import { Button } from '@/components/ui/button';
