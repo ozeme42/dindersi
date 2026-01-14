@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -6,7 +7,7 @@ import {
   Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, 
   ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine, 
   GraduationCap, School as SchoolIcon, LayoutDashboard, Database, Save, 
-  HardDriveDownload, Search, Plus, Building2, ArrowRightLeft, CheckSquare
+  HardDriveDownload, Search, Plus, Building2, ArrowRightLeft, CheckSquare, Trophy
 } from "lucide-react";
 
 // Server Actions
@@ -14,8 +15,10 @@ import { getStudentData } from "@/app/teacher/students/actions";
 import { 
   exportAllData, deleteBulkUsers,
   saveSchool, deleteSchool, bulkUpdateStudentSchool,
-  exportStaticAdvanced // YENİ EKLENEN FONKSİYON
+  exportStaticAdvanced
 } from "./actions";
+import { archiveAndResetScores, saveLeaderboardSettings, getLeaderboardSettings } from '@/app/teacher/actions';
+
 
 import { getExamCreationData } from "../exams/actions";
 import { saveUser } from "@/app/teacher/students/actions";
@@ -118,6 +121,119 @@ function StatCard({ title, value, icon: Icon, colorClass }: { title: string, val
     )
 }
 
+function LeaderboardSettingsCard() {
+    const { toast } = useToast();
+    const [settings, setSettings] = useState({ seasonName: '' });
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isResetting, setIsResetting] = useState(false);
+    const [resetStep, setResetStep] = useState(0);
+
+    const fetchSettings = useCallback(async () => {
+        setIsLoading(true);
+        const data = await getLeaderboardSettings();
+        setSettings(data);
+        setIsLoading(false);
+    }, []);
+
+    useEffect(() => {
+        fetchSettings();
+    }, [fetchSettings]);
+
+    const handleSave = async () => {
+        setIsSaving(true);
+        const result = await saveLeaderboardSettings(settings);
+        if (result.success) {
+            toast({ title: "Başarılı", description: "Liderlik tablosu ayarları kaydedildi." });
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+        setIsSaving(false);
+    };
+
+    const handleSeasonFinale = async () => {
+        setIsResetting(true);
+        const result = await archiveAndResetScores(settings.seasonName);
+        if (result.success) {
+            toast({ title: "Sezon Finali Başarılı!", description: "Tüm puanlar arşivlendi ve sıfırlandı. Yeni sezon başlıyor!" });
+            await fetchSettings();
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+        setIsResetting(false);
+        setResetStep(0);
+    }
+
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-48"><Loader2 className="animate-spin h-8 w-8 text-indigo-400" /></div>
+    }
+
+    return (
+        <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl h-full flex flex-col">
+            <CardHeader>
+                <CardTitle className="text-xl text-white flex items-center gap-2"><Trophy className="h-5 w-5 text-yellow-400"/> Liderlik Tablosu Ayarları</CardTitle>
+                <CardDescription>Mevcut sezon adını ve diğer ayarları yönetin.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 flex-grow">
+                <div className="space-y-2">
+                    <Label htmlFor="seasonName" className="text-slate-300">Mevcut Sezon Adı</Label>
+                    <Input 
+                        id="seasonName"
+                        value={settings.seasonName}
+                        onChange={(e) => setSettings({ ...settings, seasonName: e.target.value })}
+                        className="bg-slate-950 border-white/10 text-white h-11"
+                    />
+                </div>
+            </CardContent>
+            <CardFooter className="flex-col gap-4 border-t border-white/5 pt-4">
+                 <Button onClick={handleSave} disabled={isSaving} className="w-full bg-indigo-600 hover:bg-indigo-500 text-white">
+                    {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4"/>}
+                    Ayarları Kaydet
+                 </Button>
+                
+                 <AlertDialog open={resetStep > 0} onOpenChange={(open) => !open && setResetStep(0)}>
+                    <AlertDialogTrigger asChild>
+                        <Button variant="destructive" className="w-full bg-red-800 hover:bg-red-700">
+                            <Shield className="mr-2 h-4 w-4"/> Sezon Finali Yap
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                       {resetStep === 1 ? (
+                            <>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle className="text-amber-400">Son Onay</AlertDialogTitle>
+                                    <AlertDialogDescription className="text-slate-400">
+                                        "{settings.seasonName}" sezonu arşivlenecek ve **TÜM** genel öğrenci puanları sıfırlanacak. Bu işlem geri alınamaz.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel onClick={() => setResetStep(0)} className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleSeasonFinale} disabled={isResetting} className="bg-red-600 hover:bg-red-700 text-white">
+                                        {isResetting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : "Evet, Arşivle ve Sıfırla"}
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </>
+                       ) : (
+                             <AlertDialogHeader>
+                                <AlertDialogTitle>Sezon Finali</AlertDialogTitle>
+                                <AlertDialogDescription className="text-slate-400">
+                                   Bu işlem, mevcut liderlik tablosunu "{settings.seasonName}" adıyla arşivleyecek ve tüm öğrencilerin genel puanlarını sıfırlayacaktır.
+                                </AlertDialogDescription>
+                                <AlertDialogFooter className="pt-4">
+                                     <AlertDialogCancel onClick={() => setResetStep(0)} className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                    <Button onClick={() => setResetStep(1)} className="bg-indigo-600 hover:bg-indigo-500 text-white">
+                                        Devam Et <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                </AlertDialogFooter>
+                             </AlertDialogHeader>
+                       )}
+                    </AlertDialogContent>
+                </AlertDialog>
+            </CardFooter>
+        </Card>
+    );
+}
+
 export default function SuperAdminPage() {
   const { toast } = useToast();
   
@@ -131,7 +247,6 @@ export default function SuperAdminPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState<string | null>(null);
   
-  // --- YENİ STATİK EXPORT STATE'LERİ ---
   const [isExportingAdvanced, setIsExportingAdvanced] = useState(false);
   const [staticFilters, setStaticFilters] = useState<{classId: string, courseId: string, unitId: string, topicId: string}>({
       classId: 'all', courseId: 'all', unitId: 'all', topicId: 'all',
@@ -145,28 +260,23 @@ export default function SuperAdminPage() {
       notes: true
   });
   
-  // Genel filtreler (Data export için)
   const [filters, setFilters] = useState<{classId: string, courseId: string, unitId: string, topicId: string}>({
       classId: 'all', courseId: 'all', unitId: 'all', topicId: 'all',
   });
   
-  // User Management States
   const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedUserIds, setSelectedUserIds] = useState<Set<string>>(new Set());
 
-  // Bulk School Change States
   const [bulkSchoolDialog, setBulkSchoolDialog] = useState(false);
   const [selectedTargetSchoolId, setSelectedTargetSchoolId] = useState<string>("");
   const [isBulkUpdating, setIsBulkUpdating] = useState(false);
 
-  // School Management States
   const [schoolDialogState, setSchoolDialogState] = useState<{isOpen: boolean; school: School | null}>({isOpen: false, school: null});
   const [schoolNameInput, setSchoolNameInput] = useState("");
   const [isSavingSchool, setIsSavingSchool] = useState(false);
 
-  // Pagination & Search
   const [studentsCurrentPage, setStudentsCurrentPage] = useState(1);
   const [teachersCurrentPage, setTeachersCurrentPage] = useState(1);
   const itemsPerPage = 8;
@@ -263,6 +373,7 @@ export default function SuperAdminPage() {
     if (result.success) {
         toast({ title: "Başarılı", description: "Kullanıcı silindi." });
         await fetchAllData();
+        setSelectedUserIds(prev => { const newSet = new Set(prev); newSet.delete(userId); return newSet; });
     } else {
           toast({ title: "Hata", description: result.error, variant: "destructive" });
           setUsers(originalUsers);
@@ -307,7 +418,7 @@ export default function SuperAdminPage() {
           toast({ title: "Başarılı", description: `${result.count} öğrencinin okulu güncellendi.` });
           await fetchAllData();
           setBulkSchoolDialog(false);
-          setSelectedUserIds(new Set()); // Seçimleri temizle
+          setSelectedUserIds(new Set());
           setSelectedTargetSchoolId("");
       } else {
           toast({ title: "Hata", description: result.error, variant: "destructive" });
@@ -338,7 +449,7 @@ export default function SuperAdminPage() {
 
       if (result.success) {
           toast({ title: "Başarılı", description: `Okul ${schoolDialogState.school ? 'güncellendi' : 'eklendi'}.` });
-          await fetchAllData(); // Verileri yenile
+          await fetchAllData();
           setSchoolDialogState({ isOpen: false, school: null });
       } else {
           toast({ title: "Hata", description: result.error, variant: "destructive" });
@@ -347,7 +458,6 @@ export default function SuperAdminPage() {
   };
 
   const handleDeleteSchool = async (schoolId: string) => {
-      // Okula bağlı kullanıcı kontrolü (Client side simple check)
       const hasUsers = users.some(u => u.schoolName === schools.find(s => s.id === schoolId)?.name);
       if (hasUsers) {
           toast({ title: "Silinemez", description: "Bu okula kayıtlı kullanıcılar var. Önce kullanıcıları silin veya taşıyın.", variant: "destructive" });
@@ -385,9 +495,7 @@ export default function SuperAdminPage() {
     }
   };
   
-  // YENİ GELİŞMİŞ EXPORT HANDLER
   const handleAdvancedExport = async () => {
-      // En az bir tip seçili olmalı
       if (!Object.values(exportTypes).some(v => v)) {
           toast({ title: "Hata", description: "En az bir veri tipi seçmelisiniz.", variant: "destructive" });
           return;
@@ -408,7 +516,6 @@ export default function SuperAdminPage() {
       }
   };
 
-  // --- CASCADING SELECT LOGIC FOR STATIC EXPORT ---
   const availableCourses = useMemo(() => {
     if (staticFilters.classId === 'all') return allCourses;
     return allCourses.filter(c => c.classId === staticFilters.classId);
@@ -500,7 +607,6 @@ export default function SuperAdminPage() {
                     <TabsTrigger value="tools" className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-white">Sistem Araçları</TabsTrigger>
                 </TabsList>
                 
-                {/* MANAGEMENT TAB - (User Table etc.) */}
                 <TabsContent value="management" className="space-y-6">
                     <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl">
                          {/* ... (Bu kısımlar değişmedi, aynen korundu) ... */}
@@ -735,54 +841,20 @@ export default function SuperAdminPage() {
                     </Card>
                 </TabsContent>
                 
-                {/* TOOLS TAB */}
                 <TabsContent value="tools" className="space-y-6">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        {/* BACKUP SECTION */}
-                        <div className="lg:col-span-2 space-y-6">
-                            <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl h-full">
-                                <CardHeader>
-                                    <CardTitle className="text-xl text-white flex items-center gap-2"><Database className="h-5 w-5 text-blue-400"/> Veri Yedekleme & Dışa Aktarma</CardTitle>
-                                    <CardDescription>Veritabanı koleksiyonlarını JSON formatında indirin.</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        {dataSections.map(section => (
-                                            <Button 
-                                                key={section.type} 
-                                                variant="outline" 
-                                                onClick={() => handleDownload(section.type as any, section.filename)} 
-                                                disabled={!!isDownloading} 
-                                                className="h-auto py-4 justify-start bg-slate-950/50 border-white/10 hover:bg-slate-800 hover:border-indigo-500/50 text-slate-300 group flex flex-col items-start gap-1"
-                                            >
-                                                <div className="flex items-center w-full">
-                                                    <div className="p-2 bg-slate-900 rounded-lg group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-colors">
-                                                        {isDownloading === section.type ? <Loader2 className="h-5 w-5 animate-spin"/> : section.icon}
-                                                    </div>
-                                                    <span className="ml-3 font-semibold text-white">{section.title}</span>
-                                                    <Download className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity text-slate-500" />
-                                                </div>
-                                                <span className="text-xs text-slate-500 pl-[3.25rem] text-left">{section.desc}</span>
-                                            </Button>
-                                        ))}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-
-                        {/* ADVANCED STATIC SITE EXPORT */}
-                        <div className="space-y-6">
-                            <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl h-full">
-                                <CardHeader>
-                                    <CardTitle className="text-xl text-white flex items-center gap-2"><HardDriveDownload className="h-5 w-5 text-emerald-400"/> Statik Site Oluşturma</CardTitle>
-                                    <CardDescription>Filtreleyerek belirli içerikler için dosya oluşturun.</CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    <div className="p-4 rounded-xl bg-slate-950/50 border border-white/5 space-y-4">
-                                        <div className="space-y-3">
-                                            <Label className="text-xs text-slate-400 uppercase font-semibold tracking-wider">Filtreleme</Label>
-                                            
-                                            {/* Cascading Selects */}
+                        <LeaderboardSettingsCard />
+                        <Card className="lg:col-span-2 bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl h-full">
+                            <CardHeader>
+                                <CardTitle className="text-xl text-white flex items-center gap-2"><HardDriveDownload className="h-5 w-5 text-emerald-400"/> Statik Site Oluşturma</CardTitle>
+                                <CardDescription>Filtreleyerek belirli içerikler için dosya oluşturun.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="p-4 rounded-xl bg-slate-950/50 border border-white/5 space-y-4">
+                                    <div className="space-y-3">
+                                        <Label className="text-xs text-slate-400 uppercase font-semibold tracking-wider">Filtreleme</Label>
+                                        
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                                             <Select value={staticFilters.classId} onValueChange={(val) => setStaticFilters(prev => ({ ...prev, classId: val, courseId: 'all', unitId: 'all', topicId: 'all' }))}>
                                                 <SelectTrigger className="bg-slate-900 border-white/10 text-white h-9"><SelectValue placeholder="Sınıf Seç" /></SelectTrigger>
                                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -791,7 +863,7 @@ export default function SuperAdminPage() {
                                                 </SelectContent>
                                             </Select>
 
-                                            <Select value={staticFilters.courseId} onValueChange={(val) => setStaticFilters(prev => ({ ...prev, courseId: val, unitId: 'all', topicId: 'all' }))} disabled={staticFilters.classId === 'all' && availableCourses.length === 0}>
+                                            <Select value={staticFilters.courseId} onValueChange={(val) => setStaticFilters(prev => ({ ...prev, courseId: val, unitId: 'all', topicId: 'all' }))}>
                                                 <SelectTrigger className="bg-slate-900 border-white/10 text-white h-9"><SelectValue placeholder="Ders Seç" /></SelectTrigger>
                                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
                                                     <SelectItem value="all">Tüm Dersler</SelectItem>
@@ -815,63 +887,61 @@ export default function SuperAdminPage() {
                                                 </SelectContent>
                                             </Select>
                                         </div>
+                                    </div>
 
-                                        <Separator className="bg-white/10" />
+                                    <Separator className="bg-white/10" />
 
-                                        <div className="space-y-3">
-                                             <Label className="text-xs text-slate-400 uppercase font-semibold tracking-wider">Veri Tipleri</Label>
-                                             <div className="grid grid-cols-2 gap-2">
-                                                 {[
-                                                     { id: 'manifest', label: 'Manifest' },
-                                                     { id: 'ozet', label: 'Özetler (.html)' },
-                                                     { id: 'flow', label: 'Ders Akışı' },
-                                                     { id: 'questions', label: 'Soru Bankası' },
-                                                     { id: 'activities', label: 'Etkinlik Verileri' },
-                                                     { id: 'notes', label: 'Notlar/Yazılacaklar' },
-                                                 ].map((type) => (
-                                                     <div key={type.id} className="flex items-center space-x-2">
-                                                         <Checkbox 
-                                                             id={`exp-${type.id}`} 
-                                                             checked={(exportTypes as any)[type.id]} 
-                                                             onCheckedChange={(checked) => setExportTypes(prev => ({...prev, [type.id]: checked}))}
-                                                             className="border-white/30 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
-                                                         />
-                                                         <label htmlFor={`exp-${type.id}`} className="text-sm text-slate-300 cursor-pointer select-none">{type.label}</label>
-                                                     </div>
-                                                 ))}
-                                             </div>
-                                        </div>
-
-                                        <Button onClick={handleAdvancedExport} disabled={isExportingAdvanced} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20 mt-4">
-                                            {isExportingAdvanced ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <CheckSquare className="mr-2 h-4 w-4"/>}
-                                            Dosyaları Oluştur
-                                        </Button>
+                                    <div className="space-y-3">
+                                         <Label className="text-xs text-slate-400 uppercase font-semibold tracking-wider">Veri Tipleri</Label>
+                                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                             {[
+                                                 { id: 'manifest', label: 'Manifest' },
+                                                 { id: 'ozet', label: 'Özetler (.html)' },
+                                                 { id: 'flow', label: 'Ders Akışı' },
+                                                 { id: 'questions', label: 'Soru Bankası' },
+                                                 { id: 'activities', label: 'Etkinlik Verileri' },
+                                                 { id: 'notes', label: 'Notlar/Yazılacaklar' },
+                                             ].map((type) => (
+                                                 <div key={type.id} className="flex items-center space-x-2">
+                                                     <Checkbox 
+                                                         id={`exp-${type.id}`} 
+                                                         checked={(exportTypes as any)[type.id]} 
+                                                         onCheckedChange={(checked) => setExportTypes(prev => ({...prev, [type.id]: checked}))}
+                                                         className="border-white/30 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                                                     />
+                                                     <label htmlFor={`exp-${type.id}`} className="text-sm text-slate-300 cursor-pointer select-none">{type.label}</label>
+                                                 </div>
+                                             ))}
+                                         </div>
                                     </div>
                                     
-                                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-                                        <p className="text-xs text-blue-200 flex gap-2"><AlertTriangle className="h-3 w-3 shrink-0"/> Public/Curriculum klasörüne yazar.</p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
+                                    <Button onClick={handleAdvancedExport} disabled={isExportingAdvanced} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20 mt-4">
+                                        {isExportingAdvanced ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <CheckSquare className="mr-2 h-4 w-4"/>}
+                                        Dosyaları Oluştur
+                                    </Button>
+                                </div>
+                                
+                                <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+                                    <p className="text-xs text-blue-200 flex gap-2"><AlertTriangle className="h-3 w-3 shrink-0"/> Public/Curriculum klasörüne yazar.</p>
+                                </div>
+                            </CardContent>
+                        </Card>
                     </div>
                 </TabsContent>
             </Tabs>
 
-            {/* USER EDITOR DIALOG */}
             {dialogState.isOpen && (
-                <UserEditorDialog 
-                    isOpen={dialogState.isOpen}
-                    onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
-                    user={dialogState.user}
-                    onSave={handleSaveUser}
-                    isSaving={isSaving}
-                    classes={allClasses}
-                    schools={schools}
-                />
-            )}
+                 <UserEditorDialog 
+                     isOpen={dialogState.isOpen}
+                     onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
+                     user={dialogState.user}
+                     onSave={handleSaveUser}
+                     isSaving={isSaving}
+                     classes={allClasses}
+                     schools={schools}
+                 />
+              )}
 
-            {/* SCHOOL EDITOR DIALOG */}
             <Dialog open={schoolDialogState.isOpen} onOpenChange={(isOpen) => setSchoolDialogState({ ...schoolDialogState, isOpen })}>
                 <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-[425px]">
                     <DialogHeader>
@@ -901,7 +971,6 @@ export default function SuperAdminPage() {
                 </DialogContent>
             </Dialog>
 
-            {/* TOPLU OKUL DEĞİŞTİRME DIALOG */}
             <Dialog open={bulkSchoolDialog} onOpenChange={setBulkSchoolDialog}>
                 <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-[425px]">
                     <DialogHeader>
@@ -924,13 +993,11 @@ export default function SuperAdminPage() {
                     <DialogFooter>
                         <Button variant="ghost" onClick={() => setBulkSchoolDialog(false)}>İptal</Button>
                         <Button type="submit" onClick={handleBulkSchoolUpdate} disabled={isBulkUpdating} className="bg-indigo-600 hover:bg-indigo-500 text-white">
-                            {isBulkUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>}
-                            Değişiklikleri Kaydet
+                             {isBulkUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : null} Güncelle
                         </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-
         </main>
     </div>
   );

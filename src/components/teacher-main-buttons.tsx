@@ -52,7 +52,6 @@ export function TeacherMainButtons() {
     const [isResetting, setIsResetting] = useState(false);
     const { toast } = useToast();
     
-    // Yeni state'ler
     const [seasonName, setSeasonName] = useState(`Sezon Finali - ${new Date().toLocaleDateString('tr-TR')}`);
     const [confirmationStep, setConfirmationStep] = useState(1);
 
@@ -61,91 +60,14 @@ export function TeacherMainButtons() {
         { key: 'dersAkisi', href: '/teacher/ders-akisi', title: 'Ders Akışı', description: 'Derslerin ve konuların akışını görselleştirin ve yönetin.', icon: <Workflow />, colorClass: 'bg-teal-600 border-teal-800 hover:bg-teal-500' },
         { key: 'oyunlar', href: '/oyunlar', title: 'Etkinlikler', description: 'Tüm oyun ve etkinlikleri görüntüleyin.', icon: <Gamepad2 />, colorClass: 'bg-rose-600 border-rose-800 hover:bg-rose-500' },
     ];
-
-    const handleSeasonFinale = async () => {
-        setIsResetting(true);
-        const result = await archiveAndResetScores(seasonName);
-        if (result.success) {
-            toast({ title: "Sezon Finali Başarılı!", description: "Tüm puanlar arşivlendi ve sıfırlandı. Yeni sezon başlıyor!" });
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsResetting(false);
-        setIsSeasonFinaleDialogOpen(false);
-        setConfirmationStep(1); // Diyalogu sıfırla
-    }
-
+    
     return (
-        <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {mainButtons.map(({ key, ...buttonProps }) =>
-                    <div key={key} className="aspect-[4/5] min-h-[380px]">
-                        <FeatureButton {...buttonProps} />
-                    </div>
-                )}
-            </div>
-            
-            {user?.role === 'superadmin' && (
-                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                     <div className="lg:col-start-2">
-                          <AlertDialog open={isSeasonFinaleDialogOpen} onOpenChange={setIsSeasonFinaleDialogOpen}>
-                            <AlertDialogTrigger asChild>
-                                <button className="block group h-full w-full">
-                                    <div className="h-full w-full rounded-2xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border border-red-500 bg-red-950/40 hover:bg-red-950/80 group-hover:-translate-y-1 backdrop-blur-md shadow-sm">
-                                        <div className="p-3 rounded-xl mb-3 transition-colors bg-gradient-to-br from-red-500 to-pink-600 shadow-lg group-hover:shadow-red-500/20">
-                                            <Shield className="h-6 w-6 text-white" />
-                                        </div>
-                                        <h3 className="font-bold text-sm text-red-100 group-hover:text-white transition-colors">Sezon Finali Yap</h3>
-                                    </div>
-                                </button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                                {confirmationStep === 1 ? (
-                                    <>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle className="text-amber-400">Arşivlenecek Sezona İsim Ver</AlertDialogTitle>
-                                            <AlertDialogDescription className="text-slate-400">
-                                                Mevcut liderlik tablosu bu isimle arşivlenecektir.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <div className="py-4">
-                                            <Label htmlFor="season-name" className="text-slate-300">Sezon Adı</Label>
-                                            <Input 
-                                                id="season-name"
-                                                value={seasonName}
-                                                onChange={(e) => setSeasonName(e.target.value)}
-                                                className="bg-slate-950 border-white/10 text-white mt-2"
-                                            />
-                                        </div>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel onClick={() => setConfirmationStep(1)} className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
-                                            <Button onClick={() => setConfirmationStep(2)} disabled={!seasonName.trim()} className="bg-indigo-600 hover:bg-indigo-500 text-white">
-                                                Devam Et <ArrowRight className="ml-2 h-4 w-4" />
-                                            </Button>
-                                        </AlertDialogFooter>
-                                    </>
-                                ) : (
-                                    <>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
-                                            <AlertDialogDescription className="text-slate-400">
-                                                "{seasonName}" sezonu arşivlenecek ve **TÜM** öğrencilerin genel puanları sıfırlanacaktır. Bu işlem geri alınamaz.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <Button variant="ghost" onClick={() => setConfirmationStep(1)} className="text-slate-400 hover:text-white hover:bg-white/5">Geri</Button>
-                                            <AlertDialogAction onClick={handleSeasonFinale} disabled={isResetting} className="bg-red-600 hover:bg-red-700 text-white">
-                                                {isResetting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                                Evet, Arşivle ve Sıfırla
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </>
-                                )}
-                            </AlertDialogContent>
-                        </AlertDialog>
-                     </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {mainButtons.map(({ key, ...buttonProps }) =>
+                <div key={key} className="aspect-[4/5] min-h-[380px]">
+                    <FeatureButton {...buttonProps} />
                 </div>
             )}
-        </>
+        </div>
     );
 }

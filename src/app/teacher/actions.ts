@@ -16,6 +16,7 @@ import {
     getCountFromServer,
     writeBatch,
     serverTimestamp,
+    setDoc,
 } from 'firebase/firestore';
 import type { UserProfile, Course, Unit, Topic, ScoreEvent, SchoolClass, QuestionBankStats } from '@/lib/types';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -161,7 +162,6 @@ export async function archiveAndResetScores(seasonName: string): Promise<{ succe
             };
         });
         
-        // Arşivi oluştur
         const archiveRef = adminDb.collection('archivedSeasons').doc();
         await archiveRef.set({
             seasonName: seasonName || `Sezon Finali - ${new Date().toLocaleDateString('tr-TR')}`,
@@ -169,7 +169,6 @@ export async function archiveAndResetScores(seasonName: string): Promise<{ succe
             leaderboard: topStudents,
         });
 
-        // Tüm öğrencilerin puanlarını sıfırla
         const allStudentsSnap = await studentQuery.get();
         const batch = adminDb.batch();
         allStudentsSnap.docs.forEach(doc => {
@@ -177,9 +176,36 @@ export async function archiveAndResetScores(seasonName: string): Promise<{ succe
         });
         await batch.commit();
 
+        await setDoc(doc(db, 'settings', 'leaderboard'), { seasonName: "Yeni Sezon" });
+
         return { success: true };
     } catch (error: any) {
         console.error('Error archiving and resetting scores:', error);
         return { success: false, error: 'İşlem sırasında bir sunucu hatası oluştu.' };
+    }
+}
+
+// --- NEW LEADERBOARD SETTINGS ACTIONS ---
+export async function getLeaderboardSettings(): Promise<{ seasonName: string }> {
+    noStore();
+    try {
+        const docRef = doc(db, 'settings', 'leaderboard');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return docSnap.data() as { seasonName: string };
+        }
+        return { seasonName: "Genel Liderlik Tablosu" };
+    } catch (error) {
+        return { seasonName: "Genel Liderlik Tablosu" };
+    }
+}
+
+export async function saveLeaderboardSettings(settings: { seasonName: string }): Promise<{ success: boolean; error?: string }> {
+    try {
+        const docRef = doc(db, 'settings', 'leaderboard');
+        await setDoc(docRef, settings, { merge: true });
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: "Ayarlar kaydedilemedi." };
     }
 }

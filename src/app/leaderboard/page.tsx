@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/auth-context";
 import Link from 'next/link';
 import { getHallOfFameData, getLiveLeaderboard, HallOfFamePeriod } from './actions';
+import { getLeaderboardSettings } from '@/app/teacher/actions';
 import type { UserProfile } from "@/lib/types";
 import { UserAvatar } from "@/components/user-avatar";
 import { Badge } from "@/components/ui/badge";
@@ -217,37 +218,30 @@ const GroupLeaderboardRow = ({ item, index, onClick, type }: { item: any, index:
 
 // --- TAB BİLEŞENLERİ ---
 
-// 1. GÜNCEL SIRALAMA (VARSAYILAN: TÜM ZAMANLAR)
 function CurrentLeaderboardTab() {
-    const [filter, setFilter] = useState<'daily' | 'weekly' | 'all-time'>('all-time');
     const [search, setSearch] = useState("");
     const [leaderboard, setLeaderboard] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     
-    // PAGINATION STATE
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         setIsLoading(true);
-        getLiveLeaderboard(filter)
+        getLiveLeaderboard()
             .then(data => setLeaderboard(data))
             .catch(err => console.error(err))
             .finally(() => setIsLoading(false));
-    }, [filter]);
+    }, []);
 
-    // Arama veya Filtre değişirse sayfayı 1 yap
     useEffect(() => {
         setCurrentPage(1);
-    }, [search, filter]);
+    }, [search]);
 
     const filteredUsers = useMemo(() => {
         if (!search) return leaderboard;
         return leaderboard.filter(u => u.displayName.toLowerCase().includes(search.toLowerCase()));
     }, [search, leaderboard]);
 
-    // Sayfalama Hesabı
-    // Not: Arama yoksa ilk 3 kişi podyumda gösterilir, liste 4. kişiden başlar.
-    // Arama varsa podyum gizlenir, liste 1. kişiden başlar.
     const listData = useMemo(() => {
         return search ? filteredUsers : filteredUsers.slice(3);
     }, [filteredUsers, search]);
@@ -257,16 +251,9 @@ function CurrentLeaderboardTab() {
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center bg-slate-900/50 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl">
-                <div className="flex bg-black/20 p-1 rounded-xl w-full sm:w-auto">
-                    <button onClick={() => setFilter('daily')} className={cn("flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all", filter === 'daily' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" : "text-slate-400 hover:text-white hover:bg-white/5")}>Bugün</button>
-                    <button onClick={() => setFilter('weekly')} className={cn("flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all", filter === 'weekly' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" : "text-slate-400 hover:text-white hover:bg-white/5")}>Bu Hafta</button>
-                    <button onClick={() => setFilter('all-time')} className={cn("flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all", filter === 'all-time' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" : "text-slate-400 hover:text-white hover:bg-white/5")}>Tüm Zamanlar</button>
-                </div>
-                <div className="relative w-full sm:w-72">
-                    <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                    <input type="text" placeholder="Öğrenci ara..." className="w-full bg-black/20 border border-white/5 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500/50 focus:bg-black/40 transition-all placeholder:text-slate-600" value={search} onChange={(e) => setSearch(e.target.value)} />
-                </div>
+            <div className="relative w-full sm:w-96 mx-auto">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <input type="text" placeholder="Öğrenci ara..." className="w-full bg-black/20 border border-white/5 rounded-full pl-12 pr-4 py-3 text-base text-white focus:outline-none focus:border-indigo-500/50 focus:bg-black/40 transition-all placeholder:text-slate-600 shadow-xl" value={search} onChange={(e) => setSearch(e.target.value)} />
             </div>
 
             {isLoading ? (
@@ -281,9 +268,6 @@ function CurrentLeaderboardTab() {
                         <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest px-2 mb-2"><List className="h-3 w-3" /> Sıralama Listesi</div>
                         
                         {paginatedList.map((user, index) => {
-                            // Gerçek sıralama indeksi hesaplama
-                            // Eğer arama varsa: (page-1)*20 + index
-                            // Arama yoksa (ilk 3 podyumda): (page-1)*20 + index + 3
                             const realIndex = (currentPage - 1) * ITEMS_PER_PAGE + index + (search ? 0 : 3);
                             return <LeaderboardRow user={user} index={realIndex} key={user.uid} />
                         })}
@@ -300,19 +284,17 @@ function CurrentLeaderboardTab() {
     );
 }
 
-// 2. SINIF & OKUL LİGLERİ
 function ClassLeaderboardTab() {
     const [navStack, setNavStack] = useState<{ id: string, name: string, type: string }[]>([]);
     const [allUsers, setAllUsers] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [viewMode, setViewMode] = useState<'groups' | 'students'>('groups');
     
-    // PAGINATION STATE
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         setIsLoading(true);
-        getLiveLeaderboard('all-time').then(data => {
+        getLiveLeaderboard().then(data => {
             setAllUsers(data);
             setIsLoading(false);
         });
@@ -323,7 +305,6 @@ function ClassLeaderboardTab() {
         setCurrentPage(1); // Reset page on navigation
     }, [navStack.length]);
 
-    // View mode değişince de sayfa 1'e dönsün
     useEffect(() => {
         setCurrentPage(1);
     }, [viewMode]);
@@ -342,7 +323,7 @@ function ClassLeaderboardTab() {
             const selectedGrade = navStack[1].name;
             filteredUsers = filteredUsers.filter(u => {
                 const classStr = u.class || "Bilinmeyen";
-                const grade = classStr.includes('-') ? classStr.split('-')[0].trim() + ". Sınıf" : classStr;
+                const grade = classStr.includes('-') ? classStr.split('-')[0].trim() + ". Sınıflar" : classStr;
                 return grade === selectedGrade;
             });
         }
@@ -369,7 +350,7 @@ function ClassLeaderboardTab() {
             const map = new Map();
             filteredUsers.forEach(u => {
                 const classStr = u.class || "Bilinmeyen";
-                const key = classStr.includes('-') ? classStr.split('-')[0].trim() + ". Sınıf" : classStr;
+                const key = classStr.includes('-') ? classStr.split('-')[0].trim() + ". Sınıflar" : classStr;
                 if(!map.has(key)) map.set(key, { name: key, score: 0, count: 0 });
                 map.get(key).score += (u.score || 0);
                 map.get(key).count += 1;
@@ -412,7 +393,6 @@ function ClassLeaderboardTab() {
         : navStack.length === 2 ? navStack[1].name
         : navStack[2].name;
 
-    // Determine what to render based on viewMode and Drill-down level
     const dataToRender = (navStack.length === 3 || viewMode === 'students') ? students : groups;
     const totalPages = Math.ceil(dataToRender.length / ITEMS_PER_PAGE);
     const paginatedData = dataToRender.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
@@ -482,7 +462,6 @@ function ClassLeaderboardTab() {
                 <div className="flex justify-center items-center h-64"><Loader2 className="h-10 w-10 animate-spin text-purple-400" /></div>
             ) : (
                 <div className="space-y-3">
-                    {/* ÖĞRENCİ LİSTESİ GÖRÜNÜMÜ */}
                     { (navStack.length === 3 || viewMode === 'students') ? (
                         paginatedData.length > 0 ? (
                             paginatedData.map((user: any, index) => {
@@ -495,7 +474,6 @@ function ClassLeaderboardTab() {
                             </div>
                         )
                     ) : (
-                        /* GRUP LİSTESİ (OKUL/SINIF/ŞUBE) */
                         paginatedData.length > 0 ? (
                             paginatedData.map((item: any, index) => {
                                 const realIndex = (currentPage - 1) * ITEMS_PER_PAGE + index;
@@ -527,7 +505,6 @@ function ClassLeaderboardTab() {
     );
 }
 
-// 3. ŞEREF KÜRSÜSÜ
 function HallOfFameTab() {
     const [history, setHistory] = useState<{ seasons: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }>({ seasons: [], monthly: [] });
     const [isLoading, setIsLoading] = useState(true);
@@ -535,7 +512,6 @@ function HallOfFameTab() {
     const [currentPeriodType, setCurrentPeriodType] = useState<'seasons' | 'monthly'>('seasons');
     const [animating, setAnimating] = useState(false);
     
-    // PAGINATION STATE FOR ARCHIVE LIST
     const [currentPage, setCurrentPage] = useState(1);
 
     const fetchData = useCallback(() => {
@@ -563,7 +539,7 @@ function HallOfFameTab() {
             setAnimating(true);
             setTimeout(() => {
                 setCurrentIndex(prev => prev + 1);
-                setCurrentPage(1); // Reset page on period change
+                setCurrentPage(1);
                 setAnimating(false);
             }, 300);
         }
@@ -574,7 +550,7 @@ function HallOfFameTab() {
             setAnimating(true);
             setTimeout(() => {
                 setCurrentIndex(prev => prev - 1);
-                setCurrentPage(1); // Reset page on period change
+                setCurrentPage(1);
                 setAnimating(false);
             }, 300);
         }
@@ -594,8 +570,7 @@ function HallOfFameTab() {
     const currentPeriod = activeHistory[currentIndex];
     const winners = currentPeriod?.winners || [];
     
-    // Pagination for Hall of Fame
-    const listData = winners.slice(3); // Top 3 are in podium
+    const listData = winners.slice(3);
     const totalPages = Math.ceil(listData.length / ITEMS_PER_PAGE);
     const paginatedList = listData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
     
@@ -615,7 +590,7 @@ function HallOfFameTab() {
                     <span className="text-xs font-bold text-amber-200 uppercase tracking-widest">{getPeriodTitle()}</span>
                 </div>
                  <div className="flex bg-black/20 p-1 rounded-xl w-full sm:w-auto mt-4">
-                    <button onClick={() => changePeriodType('seasons')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'seasons' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.seasons.length === 0}>Sezon</button>
+                    <button onClick={() => changePeriodType('seasons')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'seasons' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.seasons.length === 0}>Sezon Finalleri</button>
                     <button onClick={() => changePeriodType('monthly')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'monthly' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.monthly.length === 0}>Aylık</button>
                 </div>
             </div>
@@ -672,12 +647,18 @@ function HallOfFameTab() {
     );
 }
 
-
-// --- ANA SAYFA ---
-
 export default function LeaderboardPage() {
     const [activeTab, setActiveTab] = useState("current");
     const { user, loading } = useAuth();
+    const [seasonName, setSeasonName] = useState("Liderlik Tablosu");
+
+    useEffect(() => {
+        getLeaderboardSettings().then(settings => {
+            if (settings.seasonName) {
+                setSeasonName(settings.seasonName);
+            }
+        });
+    }, []);
 
     if (loading) {
         return (
@@ -689,7 +670,6 @@ export default function LeaderboardPage() {
     
     return (
         <div className="flex flex-col min-h-screen bg-[#0f0720] text-white font-sans selection:bg-indigo-500/30">
-            {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[120px]" />
@@ -713,11 +693,10 @@ export default function LeaderboardPage() {
             </header>
 
             <main className="flex-1 container mx-auto px-4 py-8 relative z-10 pb-24 md:pb-8">
-                {/* HERO BÖLÜMÜ */}
                 <div className="text-center mb-10 space-y-4">
                     <div className="inline-flex items-center justify-center p-2 bg-gradient-to-r from-amber-500/10 to-purple-500/10 rounded-full border border-white/5 mb-2">
                         <Trophy className="h-5 w-5 text-amber-400 mr-2" />
-                        <span className="text-xs font-bold text-amber-200 uppercase tracking-widest">En İyiler Listesi</span>
+                        <span className="text-xs font-bold text-amber-200 uppercase tracking-widest">{seasonName}</span>
                     </div>
                     <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tight text-white drop-shadow-2xl">
                         Şampiyonlar <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Arenası</span>
@@ -727,7 +706,6 @@ export default function LeaderboardPage() {
                     </p>
                 </div>
 
-                {/* ANA SEKMELER */}
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-5xl mx-auto">
                     <div className="flex justify-center mb-10">
                         <TabsList className="bg-slate-900/80 p-1.5 rounded-2xl border border-white/10 h-auto gap-2 shadow-2xl backdrop-blur-md">
@@ -772,5 +750,3 @@ export default function LeaderboardPage() {
         </div>
     );
 }
-
-    

@@ -50,156 +50,22 @@ export type HallOfFamePeriod = {
     winners: LeaderboardEntry[];
 };
 
-// Function to award daily prizes using a transaction to prevent race conditions.
-async function awardDailyPrizes() {
-    const yesterday = subDays(new Date(), 1);
-    const dateString = format(yesterday, 'yyyy-MM-dd');
-    const prizeLogRef = doc(db, 'dailyPrizes', dateString);
 
-    try {
-        await runTransaction(db, async (transaction) => {
-            const prizeLogSnap = await transaction.get(prizeLogRef);
-            if (prizeLogSnap.exists()) {
-                // Prizes for this day have already been awarded.
-                return;
-            }
-            
-            const startDate = startOfDay(yesterday);
-            const endDate = endOfDay(yesterday);
-
-            const scoreEventsQuery = query(
-                collection(db, 'scoreEvents'),
-                where('timestamp', '>=', Timestamp.fromDate(startDate)),
-                where('timestamp', '<=', Timestamp.fromDate(endDate))
-            );
-            
-            // This must be read outside the transaction for this query type.
-            const eventsSnapshot = await getDocs(scoreEventsQuery);
-            const scoresByStudent = new Map<string, number>();
-            
-            eventsSnapshot.forEach(doc => {
-                const event = doc.data();
-                 if (!event.gameType?.startsWith('smartboard_') && event.gameType !== 'Derece Puanı' && event.gameType !== 'Manuel Puan') {
-                    const currentScore = scoresByStudent.get(event.userId) || 0;
-                    scoresByStudent.set(event.userId, currentScore + event.points);
-                 }
-            });
-
-            if (scoresByStudent.size === 0) {
-                // Log it so we don't check again.
-                transaction.set(prizeLogRef, { awarded: true, timestamp: Timestamp.fromDate(endDate), winners: [] });
-                return;
-            }
-            
-            const leaderboard = Array.from(scoresByStudent.entries())
-                .map(([uid, score]) => ({ uid, score }))
-                .sort((a, b) => b.score - a.score);
-            
-            const prizeAmounts = [1000, 750, 500];
-            const winnersToLog: { userId: string; rank: number; prize: number; score: number; }[] = [];
-
-            for (let i = 0; i < Math.min(leaderboard.length, 3); i++) {
-                const winner = leaderboard[i];
-                if (winner.score <= 0) continue;
-
-                const prize = prizeAmounts[i];
-                
-                const userRef = doc(db, 'users', winner.uid);
-                // Perform the score update within the transaction
-                transaction.update(userRef, { score: increment(prize) });
-
-                const eventRef = doc(collection(db, 'scoreEvents'));
-                // Log the prize event within the transaction
-                transaction.set(eventRef, {
-                    userId: winner.uid,
-                    points: prize,
-                    timestamp: Timestamp.fromDate(endDate),
-                    gameType: 'Derece Puanı',
-                    context: `${format(yesterday, 'dd MMMM yyyy')} Günü ${i + 1}.lik Ödülü`,
-                });
-                winnersToLog.push({ userId: winner.uid, rank: i + 1, prize, score: winner.score });
-            }
-            
-            // Finalize the transaction by setting the log document
-            transaction.set(prizeLogRef, { awarded: true, timestamp: Timestamp.fromDate(endDate), winners: winnersToLog.sort((a,b) => b.score - a.score) });
-        });
-    } catch (error) {
-        console.error("Error in awardDailyPrizes transaction:", error);
-    }
-}
-
-export async function getLiveLeaderboard(period: 'daily' | 'weekly' | 'all-time' = 'daily'): Promise<LeaderboardEntry[]> {
+export async function getLiveLeaderboard(): Promise<LeaderboardEntry[]> {
     noStore();
 
-    if (period === 'all-time') {
-        const usersQuery = query(
-            collection(db, 'users'), 
-            where('role', '==', 'student'), 
-            orderBy('score', 'desc'), 
-            limit(100)
-        );
-        const usersSnapshot = await getDocs(usersQuery);
-        const leaderboard = usersSnapshot.docs.map(doc => ({
-            ...doc.data(),
-            uid: doc.id,
-            score: doc.data().score || 0
-        } as LeaderboardEntry));
-        return JSON.parse(JSON.stringify(leaderboard));
-    }
-
-    let startDate: Date;
-    const now = new Date();
-
-    if (period === 'daily') {
-        startDate = startOfToday();
-    } else { // weekly
-        startDate = startOfWeek(now, { weekStartsOn: 1 });
-    }
-
-    const eventsQuery = query(
-        collection(db, 'scoreEvents'),
-        where('timestamp', '>=', Timestamp.fromDate(startDate)),
-        where('timestamp', '<=', Timestamp.fromDate(now))
+    const usersQuery = query(
+        collection(db, 'users'), 
+        where('role', '==', 'student'), 
+        orderBy('score', 'desc'), 
+        limit(100)
     );
-
-    const eventsSnapshot = await getDocs(eventsQuery);
-    const scoresByStudent = new Map<string, number>();
-
-    eventsSnapshot.forEach(doc => {
-        const event = doc.data();
-        if (event.gameType?.startsWith('smartboard_') || event.gameType === 'Derece Puanı' || event.gameType === 'Manuel Puan') return;
-        const currentScore = scoresByStudent.get(event.userId) || 0;
-        scoresByStudent.set(event.userId, currentScore + event.points);
-    });
-
-    if (scoresByStudent.size === 0) return [];
-    
-    const userIds = Array.from(scoresByStudent.keys());
-    const studentProfiles: UserProfile[] = [];
-    
-    // Chunk userIds to avoid Firestore 'in' query limit of 30
-    for (let i = 0; i < userIds.length; i += 30) {
-        const chunk = userIds.slice(i, i + 30);
-        if (chunk.length === 0) continue;
-        const usersQuery = query(collection(db, 'users'), where(documentId(), 'in', chunk));
-        const usersSnapshot = await getDocs(usersQuery);
-        usersSnapshot.forEach(doc => {
-            const userData = doc.data();
-            // Ensure we only add students to the leaderboard
-            if (userData.role === 'student') {
-                studentProfiles.push({ uid: doc.id, ...userData } as UserProfile);
-            }
-        });
-    }
-    
-    const leaderboard = studentProfiles
-        .map(student => ({
-            ...student,
-            score: scoresByStudent.get(student.uid) || 0,
-        }))
-        .filter(entry => entry.score > 0)
-        .sort((a, b) => b.score - a.score);
-
+    const usersSnapshot = await getDocs(usersQuery);
+    const leaderboard = usersSnapshot.docs.map(doc => ({
+        ...doc.data(),
+        uid: doc.id,
+        score: doc.data().score || 0
+    } as LeaderboardEntry));
     return JSON.parse(JSON.stringify(leaderboard));
 }
 
@@ -432,5 +298,3 @@ export async function deleteAnnouncement(id: string): Promise<{ success: boolean
         return { success: false, error: "Duyuru silinemedi." };
     }
 }
-
-    
