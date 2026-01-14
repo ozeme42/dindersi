@@ -80,7 +80,7 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
         const data = doc.data();
         return {
             periodName: data.seasonName,
-            winners: data.leaderboard.slice(0, 3) // Sadece ilk 3 kişiyi alıyoruz
+            winners: data.leaderboard.slice(0, 10) // Değişiklik: İlk 10 kişiyi alıyoruz
         } as HallOfFamePeriod;
     });
 

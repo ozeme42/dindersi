@@ -609,7 +609,7 @@ function HallOfFameTab() {
 
                         <div className="text-center">
                             <div className="text-[10px] font-bold text-amber-500/80 tracking-[0.2em] uppercase mb-1">
-                                {currentIndex === 0 ? "SON ŞAMPİYONLAR" : "GEÇMİŞ DÖNEM"}
+                                {currentPeriodType === 'monthly' ? "DÖNEM" : (currentIndex === 0 ? "SON ŞAMPİYONLAR" : "GEÇMİŞ SEZON")}
                             </div>
                             <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2 justify-center">
                                 <Calendar className="h-5 w-5 text-amber-500" />
@@ -623,7 +623,7 @@ function HallOfFameTab() {
                     </div>
 
                     <div className={cn("w-full transition-all duration-300", animating ? "opacity-0 translate-y-4 blur-md" : "opacity-100 translate-y-0 blur-0")}>
-                        {currentPage === 1 && <Podium winners={winners}/>}
+                        {currentPage === 1 && <Podium winners={winners.slice(0, 3)} />}
                         
                         {paginatedList.length > 0 && (
                             <div className="max-w-3xl mx-auto mt-8 space-y-3 px-4">
