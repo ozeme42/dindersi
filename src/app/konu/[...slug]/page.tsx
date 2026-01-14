@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { 
     Loader2, ArrowLeft, BookOpen, Columns, Gamepad2, 
@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from 'next/link';
 import type { YazilacaklarContent } from '@/lib/types';
+import { useAuth } from '@/context/auth-context';
 
 // --- ORTAK ARKA PLAN ---
 const MagnificentLightBackground = () => (
@@ -137,15 +138,12 @@ const SummaryTab = ({ topicId, title }: { topicId: string, title: string }) => {
 // =================================================================================================
 const NotesTab = ({ topicId, topicTitle }: { topicId: string, topicTitle: string }) => {
     const [content, setContent] = useState<YazilacaklarContent | null>(null);
-    // Varsayılan olarak küçük başlat (SSR/Hydration için), useEffect ile masaüstüyse büyüt.
     const [fontSize, setFontSize] = useState(1.0); 
     const [isDownloading, setIsDownloading] = useState(false);
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
-    // Cihaz boyutuna göre başlangıç fontunu ayarla
     useEffect(() => {
-        // Eğer ekran 768px'den büyükse (Masaüstü/Tablet Yatay) 1.8 yap, değilse 1.0 kalsın
         if (window.innerWidth >= 768) {
             setFontSize(1.8);
         }
@@ -184,7 +182,6 @@ const NotesTab = ({ topicId, topicTitle }: { topicId: string, topicTitle: string
             element.style.padding = '40px';
             element.style.fontFamily = 'Arial, sans-serif';
             element.style.backgroundColor = 'white';
-            // PDF içeriği aynı...
             let html = `
                 <div style="text-align:center; border-bottom:3px solid #6366f1; padding-bottom:15px; margin-bottom:25px;">
                     <h1 style="color:#1e1b4b; margin:0; font-size: 28px;">${topicTitle}</h1>
@@ -294,7 +291,9 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
     };
 
     const activityTypes = [
-        { href: '/oyunlar/yazi-tura', label: 'Yazı Tura', icon: Coins, color: 'amber' },
+        // --- DEĞİŞİKLİK BURADA: İSİM VE İKON ---
+        { href: '/oyunlar/yazi-tura', label: 'Gol Kralı', icon: Trophy, color: 'amber' },
+        // -------------------------------------
         { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, color: 'pink' },
         { href: '/oyunlar/kelime-avi', label: 'Kelime Avı', icon: Search, color: 'teal' },
         { href: '/oyunlar/kutu-ac', label: 'Kutu Aç', icon: Package, color: 'indigo' },
@@ -382,7 +381,7 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
                 </div>
             </div>
 
-            {/* BÖLÜM 1: BİREYSEL ALIŞTIRMALAR (YUKARI ALINDI) */}
+            {/* BÖLÜM 1: BİREYSEL ALIŞTIRMALAR */}
             <div className="space-y-6">
                 <div className="flex items-center gap-3 border-b-2 border-slate-200 pb-2">
                     <Crown className="w-8 h-8 text-indigo-500" />
@@ -395,7 +394,7 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
                 </div>
             </div>
 
-            {/* BÖLÜM 2: SINIF İÇİ MÜCADELE (VS MODU) (AŞAĞI ALINDI) */}
+            {/* BÖLÜM 2: SINIF İÇİ MÜCADELE (VS MODU) */}
             <div className="space-y-6">
                 <div className="flex items-center gap-3 border-b-2 border-slate-200 pb-2">
                     <Swords className="w-8 h-8 text-rose-500" />

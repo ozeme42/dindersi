@@ -12,7 +12,6 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 
 // --- RENK PALETİ VE EFEKTLER ---
-// Her oyun türü için özel gradient ve gölge tanımları
 const colorStyles: Record<string, { bg: string, border: string, shadow: string, icon: string, glow: string }> = {
     purple: { bg: "from-purple-600/20 to-purple-900/40", border: "border-purple-500/30", shadow: "group-hover:shadow-purple-500/40", icon: "text-purple-400", glow: "bg-purple-500" },
     amber:  { bg: "from-amber-500/20 to-amber-900/40", border: "border-amber-500/30", shadow: "group-hover:shadow-amber-500/40", icon: "text-amber-400", glow: "bg-amber-500" },
@@ -37,7 +36,8 @@ const colorStyles: Record<string, { bg: string, border: string, shadow: string, 
 
 const activityTypes = [
   { href: '/oyunlar/milyoner-yarismasi', label: 'Kim 1000 Puan İster?', icon: Trophy, color: 'purple', badge: 'POPÜLER' },
-  { href: '/oyunlar/yazi-tura', label: 'Yazı Tura', icon: Coins, color: 'amber' },
+  { href: '/oyunlar/yazi-tura', label: 'Gol Kralı', icon: Trophy, color: 'amber', badge: 'YENİ' }, 
+  { href: '/oyunlar/carkifelek', label: 'Çarkıfelek', icon: Star, color: 'fuchsia', badge: 'YENİ' },
   { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, color: 'pink' },
   { href: '/oyunlar/kelime-avi', label: 'Kelime Avı', icon: Search, color: 'teal' },
   { href: '/oyunlar/kutu-ac', label: 'Kutu Aç', icon: Package, color: 'indigo' },

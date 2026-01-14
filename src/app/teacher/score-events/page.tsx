@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, DollarSign, Trash2, ArrowLeft, ArrowRight, X, Home, CheckCircle2, AlertCircle, FileText } from 'lucide-react';
+import { Loader2, DollarSign, Trash2, ArrowLeft, ArrowRight, X, Home, CheckCircle2, AlertCircle, FileText, Search } from 'lucide-react';
 import { getScoreEvents, deleteScoreEvents } from './actions';
 import type { ScoreEvent } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
@@ -100,81 +100,89 @@ export default function ScoreEventsPage() {
     
     // Filtreler
     const [searchTerm, setSearchTerm] = useState('');
+    // Arama için debounce (gecikme) state'i
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+    
     const [showOnlyExcessiveAttempts, setShowOnlyExcessiveAttempts] = useState(false);
     const [filterGameType, setFilterGameType] = useState<string>('all');
     
     const { toast } = useToast();
     
-    // Pagination: Sayfa başlangıç noktalarını tutan dizi
-    // pageCursors[0] = null (İlk sayfa)
-    // pageCursors[1] = 1. sayfanın sonundaki eleman (2. sayfanın başı)
+    // Pagination
     const [pageCursors, setPageCursors] = useState<(SerializableTimestamp | undefined | null)[]>([null]);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-    // --- VERİ ÇEKME (DÜZELTİLDİ) ---
-    // Artık cursor'ı state'den değil, doğrudan parametreden alıyor.
-    const fetchData = async (cursorToUse: SerializableTimestamp | null, targetPageIndex: number) => {
-        setIsLoading(true);
-        console.log(`Sayfa ${targetPageIndex + 1} yükleniyor. Cursor:`, cursorToUse ? "Mevcut" : "NULL (İlk Sayfa)");
-
-        const result = await getScoreEvents({ 
-            cursor: cursorToUse, 
-            direction: 'next',
-            searchTerm, 
-            showOnlyExcessiveAttempts,
-            filterGameType
-        });
-
-        if (result.success && result.data) {
-            setEvents(result.data);
-            
-            // Eğer bir sonraki sayfa için veri varsa, cursor dizisine ekle
-            if (result.lastVisible) {
-                setPageCursors(prev => {
-                    const newCursors = [...prev];
-                    // Hedef sayfanın son elemanını (lastVisible), BİR SONRAKİ sayfanın (targetPageIndex + 1) anahtarı yap
-                    newCursors[targetPageIndex + 1] = result.lastVisible;
-                    return newCursors;
-                });
-            } else {
-                // Eğer lastVisible yoksa, demek ki son sayfadayız veya veri bitti.
-                // Sonraki sayfa cursor'ını temizle ki "Sonraki" butonu aktif olmasın (opsiyonel)
-            }
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsLoading(false);
-    };
-
-    // --- FİLTRE DEĞİŞİMİ RESETLEME ---
+    // --- DEBOUNCE EFFECT (Arama performansını artırır) ---
     useEffect(() => {
         const handler = setTimeout(() => {
-            console.log("Filtre değişti, resetleniyor...");
-            setPageCursors([null]); 
-            setCurrentPageIndex(0);
-            fetchData(null, 0); // İlk sayfayı çek
-        }, 500); 
-        return () => clearTimeout(handler);
-    }, [searchTerm, showOnlyExcessiveAttempts, filterGameType]);
+            setDebouncedSearchTerm(searchTerm);
+        }, 500); // 500ms bekle
 
-    // --- SAYFA DEĞİŞTİRME HANDLERLARI ---
+        return () => clearTimeout(handler);
+    }, [searchTerm]);
+
+    // --- VERİ ÇEKME FONKSİYONU ---
+    // useCallback ile sarmalandı ki useEffect bağımlılıklarında sorun çıkmasın
+    const fetchData = useCallback(async (cursorToUse: SerializableTimestamp | null, targetPageIndex: number) => {
+        setIsLoading(true);
+        try {
+            const result = await getScoreEvents({ 
+                cursor: cursorToUse, 
+                direction: 'next',
+                searchTerm: debouncedSearchTerm, // Debounced değeri kullan
+                showOnlyExcessiveAttempts,
+                filterGameType
+            });
+    
+            if (result.success && result.data) {
+                setEvents(result.data);
+                
+                // Cursor yönetimi
+                if (result.lastVisible) {
+                    setPageCursors(prev => {
+                        const newCursors = [...prev];
+                        // Sadece ileri giderken cursor ekle
+                        if (targetPageIndex + 1 >= newCursors.length) {
+                             newCursors[targetPageIndex + 1] = result.lastVisible;
+                        }
+                        return newCursors;
+                    });
+                }
+            } else {
+                toast({ title: "Hata", description: result.error || "Veri alınamadı", variant: "destructive" });
+                setEvents([]); // Hata durumunda listeyi temizle
+            }
+        } catch (error) {
+            console.error("Fetch error:", error);
+            toast({ title: "Kritik Hata", description: "Veri çekilirken bir sorun oluştu.", variant: "destructive" });
+        } finally {
+            setIsLoading(false);
+        }
+    }, [debouncedSearchTerm, showOnlyExcessiveAttempts, filterGameType, toast]);
+
+    // --- FİLTRE DEĞİŞİMİNDE TETİKLEME ---
+    // Arama terimi, checkbox veya select değiştiğinde ilk sayfaya dön ve veriyi çek
+    useEffect(() => {
+        setPageCursors([null]); // Cursorları sıfırla
+        setCurrentPageIndex(0); // İlk sayfaya dön
+        fetchData(null, 0); // Veriyi çek
+    }, [debouncedSearchTerm, showOnlyExcessiveAttempts, filterGameType, fetchData]);
+
+    // --- SAYFA DEĞİŞTİRME ---
     const handleNextPage = () => {
         const nextIndex = currentPageIndex + 1;
-        // Eğer bir sonraki sayfanın anahtarı (cursor) elimizde varsa ilerle
         const nextCursor = pageCursors[nextIndex];
         
         if (nextCursor !== undefined) {
             setCurrentPageIndex(nextIndex);
             fetchData(nextCursor, nextIndex);
-        } else {
-            console.warn("Sonraki sayfa için cursor bulunamadı!");
         }
     };
 
     const handlePrevPage = () => {
         if (currentPageIndex > 0) {
             const prevIndex = currentPageIndex - 1;
-            const prevCursor = pageCursors[prevIndex]; // Önceki sayfanın başlangıç cursor'ı
+            const prevCursor = pageCursors[prevIndex];
             
             setCurrentPageIndex(prevIndex);
             fetchData(prevCursor, prevIndex);
@@ -212,9 +220,9 @@ export default function ScoreEventsPage() {
 
     const isAllOnPageSelected = events.length > 0 && selectedEventIds.size === events.length && events.every(e => selectedEventIds.has(e.id));
     
-    // Son sayfa kontrolü
+    // Son sayfa kontrolü (Basit mantık: Gelen veri sayısı limitin altındaysa son sayfadır)
     const isLastPage = useMemo(() => {
-        const itemsPerPage = 25; 
+        const itemsPerPage = 20; // actions.ts'deki limit ile aynı olmalı
         return events.length < itemsPerPage;
     }, [events]);
 
@@ -247,8 +255,8 @@ export default function ScoreEventsPage() {
                                  <AlertDialog>
                                     <AlertDialogTrigger asChild>
                                         <Button variant="destructive" disabled={isDeleting} className="bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900/20">
-                                             {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Trash2 className="mr-2 h-4 w-4" />}
-                                             {selectedEventIds.size} Kaydı Sil
+                                              {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Trash2 className="mr-2 h-4 w-4" />}
+                                              {selectedEventIds.size} Kaydı Sil
                                         </Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
@@ -267,12 +275,15 @@ export default function ScoreEventsPage() {
                             )}
                         </div>
                         <div className="pt-4 flex flex-col sm:flex-row gap-4">
-                             <Input 
-                                placeholder="Öğrenci adı, etkinlik türü veya açıklamaya göre ara..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="flex-grow bg-slate-950 border-white/10 text-white focus:border-purple-500/50 placeholder:text-slate-500"
-                            />
+                            <div className="relative flex-grow">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                                <Input 
+                                    placeholder="Öğrenci adı ile ara..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="pl-9 bg-slate-950 border-white/10 text-white focus:border-purple-500/50 placeholder:text-slate-500"
+                                />
+                            </div>
                             
                             {/* OYUN TÜRÜ FİLTRESİ */}
                             <Select value={filterGameType} onValueChange={setFilterGameType}>
@@ -284,6 +295,8 @@ export default function ScoreEventsPage() {
                                     <SelectItem value="manual_reward">Öğretmen Puanı (Ödül)</SelectItem> 
                                     <SelectItem value="manual_penalty">Öğretmen Puanı (Ceza)</SelectItem>
                                     <SelectItem value="Kelime Oyunu">Kelime Oyunu</SelectItem>
+                                    <SelectItem value="daily_bonus">Günlük Bonus</SelectItem>
+                                    <SelectItem value="holiday_reward">Tatil Ödülü</SelectItem>
                                 </SelectContent>
                              </Select>
 
@@ -335,7 +348,7 @@ export default function ScoreEventsPage() {
                                                         className="border-white/20 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500"
                                                     />
                                                 </TableCell>
-                                                <TableCell className="font-medium text-white group-hover:text-purple-400 transition-colors">{event.userName}</TableCell>
+                                                <TableCell className="font-medium text-white group-hover:text-purple-400 transition-colors">{event.userName || 'Bilinmeyen Kullanıcı'}</TableCell>
                                                 <TableCell className={`font-bold text-lg ${event.points >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                                                     {event.points > 0 ? `+${event.points}` : event.points}
                                                 </TableCell>
@@ -375,7 +388,7 @@ export default function ScoreEventsPage() {
                                                     {format(new Date(event.timestamp), 'dd.MM.yyyy HH:mm', { locale: tr })}
                                                 </TableCell>
                                             </TableRow>
-                                     ))
+                                      ))
                                     ) : (
                                         <TableRow>
                                             <TableCell colSpan={7} className="h-24 text-center text-slate-500 italic">

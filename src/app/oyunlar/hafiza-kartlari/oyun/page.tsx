@@ -75,17 +75,17 @@ function MemoryGame() {
             const secondCard = pairs[secondIndex];
 
             if (firstCard.pairId === secondCard.pairId) {
-                // Correct match
+                // --- DOĞRU EŞLEŞME: +5 PUAN ---
                 playSound('correct');
-                setScore(prev => prev + 50);
+                setScore(prev => prev + 5); 
                 setMatchedIds(prev => new Set(prev).add(firstCard.id).add(secondCard.id));
                 setFlippedIndices([]);
                 setIsChecking(false);
             } else {
-                // Incorrect match
+                // --- YANLIŞ EŞLEŞME: PUAN DÜŞME YOK ---
                 setTimeout(() => {
-                    playSound('flip'); // Flip back sound
-                    setScore(prev => Math.max(0, prev - 5));
+                    playSound('flip'); 
+                    // Puan düşme kodu kaldırıldı.
                     setFlippedIndices([]);
                     setIsChecking(false);
                 }, 1000);

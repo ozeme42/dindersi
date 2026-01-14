@@ -1,0 +1,493 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Esmâ-i Hüsnâ kavramını tanımlayabileceksiniz.",
+      "Allah'ın (c.c.) güzel isimlerinden Rahman, Rahîm, Âlim, Basîr, Semi' ve Kadîr'in anlamlarını açıklayabileceksiniz.",
+      "Allah'ın (c.c.) güzel isimleri hakkında Kur'an-ı Kerim ve Hz. Muhammed'in (s.a.v.) hadislerinden bilgi edinebileceksiniz.",
+      "Esmâ-i Hüsnâ'yı öğrenmenin önemini ifade edebileceksiniz.",
+      "Allah'a (c.c.) güzel isimleriyle dua etmenin ve O'nu anmanın gerekliliğini açıklayabileceksiniz.",
+      "\"Bismillâhirrahmânirrahîm\" ifadesinin anlamını ve günlük hayattaki yerini açıklayabileceksiniz.",
+      "Allah'ın (c.c.) ilminin sonsuzluğunu ve her şeyi kuşattığını örneklerle açıklayabileceksiniz.",
+      "Allah'ın (c.c.) her şeyi gördüğünü (Basîr) ve her şeyi işittiğini (Semi') açıklayabileceksiniz.",
+      "Allah'ın (c.c.) her şeye gücünün yettiğini (Kadîr) açıklayabileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Esmâü'l-Hüsnâ'nın Anlamı ve Önemi",
+    "content": "<ul><ul><li>Esmâü'l-Hüsnâ, Yüce Allah'ı en iyi şekilde tanımamıza yardımcı olan güzel isimlerdir.</li><li>Arapçada 'en güzel isimler' anlamına gelir.</li><li>Kur'an-ı Kerim ve Hz. Muhammed'in hadisleri bu isimler hakkında güvenilir bilgiler sunar.</li><li>Esmâü'l-Hüsnâ'yı öğrenmek, Allah'ın yüceliğini, merhametini ve adaletini daha iyi anlamamızı sağlar.</li><li>Müslümanlar, Allah'ı güzel isimleriyle anar ve O'na bu isimlerle dua ederler.</li></ul></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Rahman ve Rahîm: Allah'ın Sonsuz Merhameti",
+    "content": "<ul><ul><li>Rahman, yaratılmış bütün varlıklara şefkat gösteren, ayrım gözetmeksizin merhamet eden ve sürekli nimetler verendir.</li><li>Rahîm, yarattığı varlıklara karşılık beklemeden nimetler veren, onları koruyan, esirgeyen, bağışlayan ve özellikle ahirette inanan kullarına şefkat edip ödüllendirendir.</li><li>Bu iki isim Kur'an-ı Kerim'de genellikle birlikte kullanılır ve günlük yaşantımızda sıklıkla kullandığımız 'Bismillâhirrahmânirrahîm' ifadesinin içinde yer alır.</li></ul></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Âlim, Basîr ve Semi': Allah'ın Bilmesi, Görmesi ve İşitmesi",
+    "content": "<ul><ul><li>Âlim, Allah'ın gizli ve açık her şeyi sonsuz bir ilimle bilmesidir. O'nun ilmi zaman ve mekânla sınırlı değildir.</li><li>Basîr, Allah'ın her şeyi eksiksiz görmesidir; O'nun görmek için göze ihtiyacı yoktur.</li><li>Semi', Allah'ın her şeyi hakkıyla işitmesidir; O'nun duymak için kulağa ihtiyacı yoktur.</li><li>Kâinatta O'nun bilgisi, görmesi ve işitmesi dışında hiçbir şey gerçekleşmez.</li></ul></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Kadîr: Allah'ın Sınırsız Gücü",
+    "content": "<ul><ul><li>Kadîr, Yüce Allah'ın her şeye gücünün yetmesi ve istediği her şeyi kolaylıkla gerçekleştirebilmesidir.</li><li>İnsan, sınırlı bir güce sahipken, Allah'ın gücünün sınırı yoktur ve sonsuzdur.</li><li>Milyonlarca ışık yılı uzaktaki yıldızlar, gözle göremediğimiz canlılar ve tüm varlıklar O'nun tek bir emriyle var olmuştur.</li><li>O'nun sonsuz kudretiyle bütün varlıklar hareket eder ve hiçbir güç O'nun iradesini engelleyemez.</li></ul></ul>"
+  },
+  {
+    "type": "flashcard",
+    "title": "Veri Bankası Bilgi Kartları",
+    "cards": [
+      {
+        "term": "Esmâyıhüsnâ",
+        "definition": "Allah'ın en güzel isimleri."
+      },
+      {
+        "term": "(sav)",
+        "definition": "Sallallahu aleyhi ve sellem: Allah (cc) ona salat ve selam eylesin demektir."
+      },
+      {
+        "term": "Semî'",
+        "definition": "Her şeyi işiten Allah'ın ismi nedir?"
+      },
+      {
+        "term": "Rahman",
+        "definition": "Bütün yaratılmışlara şefkat gösteren, merhamet eden, sürekli nimetler veren, rahmeti sonsuz olan Allah'ın ismi nedir?"
+      },
+      {
+        "term": "Kadîr",
+        "definition": "Her şeye gücü yeten Allah'ın ismi nedir?"
+      },
+      {
+        "term": "Rahîm",
+        "definition": "Yarattığı bütün varlıklara karşılık beklemeden nimetler veren, koruyan, esirgeyen, bağışlayan ve merhamet eden, ahirette inanan kullarına şefkat eden ve onları ödüllendiren Allah'ın ismi nedir?"
+      },
+      {
+        "term": "Rahîm",
+        "definition": "İyilik yapanlara ahirette özel ikramlarda bulunan, bağışlayan."
+      },
+      {
+        "term": "Besmele",
+        "definition": "Bir işe başlarken Allah'ın adıyla başlamak için söylenen ifade."
+      },
+      {
+        "term": "Basîr",
+        "definition": "Her şeyi gören Allah'ın ismi nedir?"
+      },
+      {
+        "term": "Âlim",
+        "definition": "Gizli ve açık ne varsa her şeyi bilen Allah'ın ismi nedir?"
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Veri Bankası Anagram Kartları",
+    "cards": [
+      {
+        "definition": "İpucu: Bu kelime \"Kudret\"",
+        "scrambledWord": "UKEDRT",
+        "correctAnswer": "Kudret"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Basir\"",
+        "scrambledWord": "AİSRB",
+        "correctAnswer": "Basir"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Rahman\"",
+        "scrambledWord": "NRAHAM",
+        "correctAnswer": "Rahman"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Kadir\"",
+        "scrambledWord": "RAİDK",
+        "correctAnswer": "Kadir"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Rahîm\"",
+        "scrambledWord": "MHAÎR",
+        "correctAnswer": "Rahîm"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Besmele\"",
+        "scrambledWord": "BELEMSE",
+        "correctAnswer": "Besmele"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Esmayıhüsna\"",
+        "scrambledWord": "HÜAIYAMSSNE",
+        "correctAnswer": "Esmayıhüsna"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Âlim\"",
+        "scrambledWord": "ÂLMİ",
+        "correctAnswer": "Âlim"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Kadîr\"",
+        "scrambledWord": "KDÎRA",
+        "correctAnswer": "Kadîr"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Semi\"",
+        "scrambledWord": "EİSM",
+        "correctAnswer": "Semi"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Merhamet\"",
+        "scrambledWord": "MERATEHM",
+        "correctAnswer": "Merhamet"
+      }
+    ]
+  },
+  {
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAG98F35eu0/ZrT57cJww-Kq4PZlx7YaBg/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>"
+  },
+  {
+    "type": "anagramGame",
+    "title": "Kelime Dehası",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "cards": [
+      {
+        "definition": "Allah'ın en güzel isimleri.",
+        "correctAnswer": "ESMÂYIHÜSNÂ",
+        "scrambledWord": "YSÜÂÂHMSNEI"
+      },
+      {
+        "definition": "Her şeyi işiten Allah'ın ismi nedir?",
+        "correctAnswer": "SEMÎ",
+        "scrambledWord": "EÎSM"
+      },
+      {
+        "definition": "Bütün yaratılmışlara şefkat gösteren, merhamet eden, sürekli nimetler veren, rahmeti sonsuz olan Allah'ın ismi nedir?",
+        "correctAnswer": "RAHMAN",
+        "scrambledWord": "RMNAAH"
+      },
+      {
+        "definition": "Her şeye gücü yeten Allah'ın ismi nedir?",
+        "correctAnswer": "KADÎR",
+        "scrambledWord": "KÎADR"
+      },
+      {
+        "definition": "Yarattığı bütün varlıklara karşılık beklemeden nimetler veren, koruyan, esirgeyen, bağışlayan ve merhamet eden, ahirette inanan kullarına şefkat eden ve onları ödüllendiren Allah'ın ismi nedir?",
+        "correctAnswer": "RAHÎM",
+        "scrambledWord": "MARHÎ"
+      },
+      {
+        "definition": "İyilik yapanlara ahirette özel ikramlarda bulunan, bağışlayan.",
+        "correctAnswer": "RAHÎM",
+        "scrambledWord": "MÎARH"
+      },
+      {
+        "definition": "Bir işe başlarken Allah'ın adıyla başlamak için söylenen ifade.",
+        "correctAnswer": "BESMELE",
+        "scrambledWord": "MESEBEL"
+      },
+      {
+        "definition": "Her şeyi gören Allah'ın ismi nedir?",
+        "correctAnswer": "BASÎR",
+        "scrambledWord": "SRABÎ"
+      },
+      {
+        "definition": "Gizli ve açık ne varsa her şeyi bilen Allah'ın ismi nedir?",
+        "correctAnswer": "ÂLİM",
+        "scrambledWord": "MLİÂ"
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Besmele, Rahman ve Rahîm isimlerini içerir ve günlük hayatta sıkça kullanılır.",
+    "scrambledSentence": "Rahîm ve Besmele, Rahman sıkça isimlerini hayatta ve içerir günlük kullanılır."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Esmayıhüsna, Allah'ın gücünü, mükemmelliğini ve benzersizliğini anlatan isimlerdir.",
+    "scrambledSentence": "gücünü, mükemmelliğini isimlerdir. Allah'ın Esmayıhüsna, anlatan ve benzersizliğini"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "En güzel isimler Allah’ındır, bu güzel isimlerle O’na dua edin.",
+    "scrambledSentence": "En güzel bu edin. isimler Allah’ındır, dua güzel O’na isimlerle"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Esmâ-i Hüsnâ, Allah'ın (c.c.) gücünü, mükemmelliğini ve benzersizliğini anlatan isimlerdir.",
+    "isTrue": true
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Rahman ismi, Allah'ın (c.c.) sadece ahirette inanan kullarına özel merhametini ifade ederken, Rahîm ismi dünyadaki tüm varlıklara şefkatini gösterir.",
+    "isTrue": false
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Âlim ismi, Allah'ın (c.c.) ilminin sınırlı olduğunu ve sadece görünenleri bildiğini belirtir.",
+    "isTrue": false
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Yüce Allah, Basîr olması sebebiyle her şeyi görür ancak Semi olması için kulağa ihtiyaç duyar.",
+    "isTrue": false
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Kadir ismi, Allah'ın (c.c.) sonsuz kudretini ve sınırsız gücünü ifade eder; O, istediği her şeyi kolaylıkla gerçekleştirir.",
+    "isTrue": true
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Allah'ın (c.c) güzel isimlerine ne ad verilir?",
+    "options": [
+      "Esma-ül Hüsna",
+      "Esmalar",
+      "İsim-i Azam",
+      "Hüsna-i Şerif"
+    ],
+    "correctAnswer": "Esma-ül Hüsna"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "\"Yaratılmış bütün varlıklara şefkat gösteren, fark gözetmeksizin insanlara merhamet eden, sürekli nimetler veren, rahmeti sonsuz olan\" anlamlarına gelen Allah'ın güzel ismi hangisidir?",
+    "options": [
+      "Semi",
+      "Rahman",
+      "Basir",
+      "Rahîm"
+    ],
+    "correctAnswer": "Rahman"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Aşağıdakilerden hangisi \"Allah'ın her şeyi bilmesi\" anlamına gelen ismidir?",
+    "options": [
+      "Basir",
+      "Kadir",
+      "Âlim",
+      "Semi"
+    ],
+    "correctAnswer": "Âlim"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "\"Yarattığı bütün varlıklara karşılık beklemeden nimetler veren, onları koruyan, esirgeyen, bağışlayan ve onlara merhamet eden Allah’ın, ahirette kendisine inanan kullarına şefkat etmesi ve onları ödüllendirmesi\" hangi ismin açıklamasıdır?",
+    "options": [
+      "Kadir",
+      "Rahman",
+      "Rahîm",
+      "Âlim"
+    ],
+    "correctAnswer": "Rahîm"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "\"Allah, kendisinden başka ilah olmayandır. En güzel isimler O’na mahsustur.\" ayeti hangi konuya dikkat çekmektedir?",
+    "options": [
+      "Rahman isminin üstünlüğüne",
+      "Allah'ın birliğine",
+      "Esma-ül Hüsna'nın Allah'a ait olduğuna",
+      "Besmele çekmenin önemine"
+    ],
+    "correctAnswer": "Esma-ül Hüsna'nın Allah'a ait olduğuna"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "\"Bismillâhirrahmânirrahîm\" ifadesinde geçen Allah'ın güzel isimleri hangileridir?",
+    "options": [
+      "Semi ve Basir",
+      "Rahman ve Rahîm",
+      "Âlim ve Semi",
+      "Basir ve Kadir"
+    ],
+    "correctAnswer": "Rahman ve Rahîm"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Allah'ın her şeye gücünün yetmesini ifade eden ismi hangisidir?",
+    "options": [
+      "Kadir",
+      "Basir",
+      "Semi",
+      "Âlim"
+    ],
+    "correctAnswer": "Kadir"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Aşağıdaki isimlerden hangisi Allah'ın \"her şeyi duyan\" olduğunu ifade eder?",
+    "options": [
+      "Semi",
+      "Âlim",
+      "Kadir",
+      "Basir"
+    ],
+    "correctAnswer": "Semi"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "\"Yaratan bilmez olur mu? O, bütün inceliklerin farkındadır ve her şeyden haberdardır.\" (Mülk 67/14.) ayetinde Allah'ın hangi ismi vurgulanmaktadır?",
+    "options": [
+      "Kadir",
+      "Rahman",
+      "Basir",
+      "Âlim"
+    ],
+    "correctAnswer": "Âlim"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Esma-ül Hüsna hakkında güvenilir bilgilere nereden ulaşılır?",
+    "options": [
+      "Eski medeniyetlerin yazıtlarından",
+      "İncil'den ve Tevrat'tan",
+      "Kur'an-ı Kerim ve Hz. Muhammed'in (sav) hadislerinden",
+      "Toplumun geleneklerinden"
+    ],
+    "correctAnswer": "Kur'an-ı Kerim ve Hz. Muhammed'in (sav) hadislerinden"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yüce Allah'ın, O'nu en iyi şekilde tanımamıza ve anlamamıza yardımcı olacak güzel isimlerine ___ denir.",
+    "options": [
+      "Sıfatullah",
+      "Esmayıhüsna",
+      "Zatullah",
+      "Kudretullah"
+    ],
+    "correctAnswer": "Esmayıhüsna"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yaratılmış bütün varlıklara şefkat gösteren, fark gözetmeksizin insanlara merhamet eden, sürekli nimetler veren ve rahmeti sonsuz olan Allah'ın ismi ___'dır.",
+    "options": [
+      "Rahîm",
+      "Kadir",
+      "Rahman",
+      "Âlim"
+    ],
+    "correctAnswer": "Rahman"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yarattığı bütün varlıklara karşılık beklemeden nimetler veren ve ahirette inanan kullarına özel ikramlarda bulunan Allah'ın ismi ___'dir.",
+    "options": [
+      "Rahman",
+      "Âlim",
+      "Kadir",
+      "Rahîm"
+    ],
+    "correctAnswer": "Rahîm"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Müslümanlar, yemek yerken, ders çalışırken veya bir işe başlarken \"Bismillâhirrahmânirrahîm\" diyerek ___ çekerler.",
+    "options": [
+      "Tekbir",
+      "Salavat",
+      "Besmele",
+      "Hamd"
+    ],
+    "correctAnswer": "Besmele"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Allah'ın gizli ve açık, her şeyi en ince ayrıntısına kadar bilmesini ifade eden ismi ___'dir.",
+    "options": [
+      "Kadir",
+      "Basir",
+      "Semi",
+      "Âlim"
+    ],
+    "correctAnswer": "Âlim"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yüce Allah'ın her şeyi, hiçbir şeye ihtiyaç duymadan görmesini ifade eden ismi ___'dir.",
+    "options": [
+      "Semi",
+      "Kadir",
+      "Basir",
+      "Âlim"
+    ],
+    "correctAnswer": "Basir"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yüce Allah'ın bütün sesleri, en kısık fısıltıları bile duymasını ifade eden ismi ___'dir.",
+    "options": [
+      "Basir",
+      "Âlim",
+      "Kadir",
+      "Semi"
+    ],
+    "correctAnswer": "Semi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Allah'ın sonsuz kudretini ve sınırsız gücünü, her şeye gücünün yetmesini ifade eden ismi ___'dir.",
+    "options": [
+      "Âlim",
+      "Basir",
+      "Kadir",
+      "Semi"
+    ],
+    "correctAnswer": "Kadir"
+  },
+  {
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Esma-i Hüsna: Allah'ın Güzel İsimleri</title>\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <script src=\"https://unpkg.com/lucide@latest\"></script>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;800&display=swap');\n\n        body {\n            font-family: 'Nunito', sans-serif;\n            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);\n            color: #1e293b;\n        }\n\n        .font-cali {\n            font-family: 'Amiri', serif;\n        }\n\n        .card-flip {\n            transition: transform 0.6s;\n            transform-style: preserve-3d;\n        }\n        \n        .card-active {\n            transform: rotateY(180deg);\n        }\n\n        .glass-panel {\n            background: rgba(255, 255, 255, 0.7);\n            backdrop-filter: blur(12px);\n            border: 1px solid rgba(255, 255, 255, 0.5);\n            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);\n        }\n\n        /* Leaf Animation */\n        @keyframes floatDown {\n            0% { transform: translateY(0) rotate(0deg); opacity: 1; }\n            25% { transform: translateY(50px) rotate(15deg); }\n            50% { transform: translateY(100px) rotate(-15deg); }\n            75% { transform: translateY(150px) rotate(10deg); }\n            100% { transform: translateY(300px) rotate(45deg); opacity: 0; }\n        }\n        .falling-leaf {\n            animation: floatDown 3s ease-in forwards;\n        }\n\n        /* Pulse Animation for Besmele */\n        @keyframes gentle-pulse {\n            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }\n            70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }\n            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }\n        }\n        .pulse-btn {\n            animation: gentle-pulse 2s infinite;\n        }\n    </style>\n</head>\n<body class=\"min-h-screen flex flex-col text-lg\">\n\n    <!-- Header -->\n    <header class=\"bg-emerald-700 text-white p-6 md:p-8 shadow-lg relative overflow-hidden\">\n        <div class=\"absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]\"></div>\n        <div class=\"container mx-auto flex justify-between items-center relative z-10\">\n            <div>\n                <h1 class=\"text-4xl md:text-6xl font-cali font-bold\">Esma-i Hüsna</h1>\n                <p class=\"text-emerald-200 text-lg md:text-2xl mt-2\">\"En güzel isimler O'nundur...\" (İsra 17/110)</p>\n            </div>\n            <button onclick=\"App.goHome()\" class=\"bg-white/10 hover:bg-white/20 p-4 rounded-full transition\">\n                <i data-lucide=\"home\" class=\"w-8 h-8 md:w-10 md:h-10\"></i>\n            </button>\n        </div>\n    </header>\n\n    <!-- Main Content -->\n    <main class=\"flex-grow container mx-auto p-4 md:p-10 flex items-center justify-center\">\n\n        <!-- MENU SCREEN -->\n        <div id=\"screen-menu\" class=\"w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 fade-in\">\n            <!-- Game 1 -->\n            <button onclick=\"App.loadScreen('matching')\" class=\"glass-panel p-8 rounded-3xl flex flex-col items-center justify-center gap-6 group hover:-translate-y-2 transition-all duration-300 h-96 border-b-8 border-emerald-500\">\n                <div class=\"w-24 h-24 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors\">\n                    <i data-lucide=\"grid\" class=\"w-12 h-12\"></i>\n                </div>\n                <div class=\"text-center\">\n                    <h3 class=\"text-3xl font-bold text-gray-800\">İsimleri Eşleştir</h3>\n                    <p class=\"text-xl text-gray-500 mt-3\">Rahman, Rahim, Basir ve diğerlerini tanı.</p>\n                </div>\n            </button>\n\n            <!-- Game 2 -->\n            <button onclick=\"App.loadScreen('leaf')\" class=\"glass-panel p-8 rounded-3xl flex flex-col items-center justify-center gap-6 group hover:-translate-y-2 transition-all duration-300 h-96 border-b-8 border-amber-500\">\n                <div class=\"w-24 h-24 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors\">\n                    <i data-lucide=\"leaf\" class=\"w-12 h-12\"></i>\n                </div>\n                <div class=\"text-center\">\n                    <h3 class=\"text-3xl font-bold text-gray-800\">Yaprağın Sırrı</h3>\n                    <p class=\"text-xl text-gray-500 mt-3\">Allah'ın (cc) Âlim isminin tecellisi.</p>\n                </div>\n            </button>\n\n            <!-- Game 3 -->\n            <button onclick=\"App.loadScreen('besmele')\" class=\"glass-panel p-8 rounded-3xl flex flex-col items-center justify-center gap-6 group hover:-translate-y-2 transition-all duration-300 h-96 border-b-8 border-blue-500\">\n                <div class=\"w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors\">\n                    <i data-lucide=\"heart-handshake\" class=\"w-12 h-12\"></i>\n                </div>\n                <div class=\"text-center\">\n                    <h3 class=\"text-3xl font-bold text-gray-800\">Besmele Günlüğü</h3>\n                    <p class=\"text-xl text-gray-500 mt-3\">Rahman ve Rahim ile güne başla.</p>\n                </div>\n            </button>\n\n             <!-- Game 4 -->\n             <button onclick=\"App.loadScreen('limits')\" class=\"glass-panel p-8 rounded-3xl flex flex-col items-center justify-center gap-6 group hover:-translate-y-2 transition-all duration-300 h-96 border-b-8 border-purple-500\">\n                <div class=\"w-24 h-24 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors\">\n                    <i data-lucide=\"eye\" class=\"w-12 h-12\"></i>\n                </div>\n                <div class=\"text-center\">\n                    <h3 class=\"text-3xl font-bold text-gray-800\">Sınırların Ötesi</h3>\n                    <p class=\"text-xl text-gray-500 mt-3\">Semi, Basir ve Kadir isimleri üzerine düşün.</p>\n                </div>\n            </button>\n        </div>\n\n        <!-- MODULE 1: MATCHING GAME -->\n        <div id=\"screen-matching\" class=\"hidden w-full max-w-7xl\">\n            <div class=\"bg-white p-10 rounded-3xl shadow-2xl\">\n                <div class=\"flex justify-between items-center mb-8\">\n                    <h2 class=\"text-4xl md:text-5xl font-bold text-emerald-800\">Esma-i Hüsna Eşleştirme</h2>\n                    <div class=\"text-emerald-600 font-bold bg-emerald-100 px-6 py-2 text-2xl rounded-full\">Puan: <span id=\"match-score\">0</span></div>\n                </div>\n                \n                <p class=\"text-2xl text-gray-600 mb-10 text-center\">İsimlerin anlamlarını bulabilir misin? Karta tıkla ve eşini bul.</p>\n\n                <div id=\"game-grid\" class=\"grid grid-cols-2 md:grid-cols-4 gap-6\">\n                    <!-- Cards injected by JS -->\n                </div>\n                \n                <div id=\"match-success\" class=\"hidden mt-8 p-6 bg-green-100 text-green-800 rounded-2xl text-center font-bold text-3xl animate-bounce\">\n                    Tebrikler! Allah'ın güzel isimlerini öğrendin.\n                </div>\n            </div>\n        </div>\n\n        <!-- MODULE 2: LEAF STORY (ALIM) -->\n        <div id=\"screen-leaf\" class=\"hidden w-full max-w-7xl\">\n            <div class=\"bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[700px]\">\n                \n                <!-- Animation Area -->\n                <div class=\"w-full md:w-1/2 bg-sky-100 relative overflow-hidden p-6 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-gray-200\">\n                    <!-- Tree Branch -->\n                    <div class=\"absolute top-0 right-0 w-64 h-8 bg-amber-800 rounded-bl-full z-10\"></div>\n                    <div class=\"absolute top-8 right-20 w-4 h-32 bg-amber-800 z-10\"></div>\n                    \n                    <!-- The Leaf -->\n                    <div id=\"leaf-obj\" class=\"relative z-20 transition-all duration-1000\">\n                        <i data-lucide=\"leaf\" class=\"w-48 h-48 text-green-500 fill-green-500 transition-colors duration-1000\" id=\"leaf-icon\"></i>\n                        <!-- Zoom effect for cells -->\n                        <div id=\"leaf-zoom\" class=\"absolute top-0 left-0 w-full h-full flex items-center justify-center opacity-0 transition-opacity duration-500\">\n                            <div class=\"w-40 h-40 bg-white/90 rounded-full border-4 border-green-600 flex items-center justify-center text-xl font-bold text-center p-2\">\n                                Hücreler Şişiyor\n                            </div>\n                        </div>\n                    </div>\n\n                    <!-- Ground -->\n                    <div class=\"absolute bottom-0 w-full h-20 bg-amber-700/80 flex items-center justify-center text-white text-xl z-10\">Toprak</div>\n                </div>\n\n                <!-- Story Text & Controls -->\n                <div class=\"w-full md:w-1/2 p-12 flex flex-col justify-between\">\n                    <div>\n                        <h2 class=\"text-5xl font-bold text-amber-700 mb-4\">Âlim: Her Şeyi Bilen</h2>\n                        <div class=\"h-2 w-32 bg-amber-300 mb-8\"></div>\n                        \n                        <div id=\"leaf-story-text\" class=\"text-3xl text-gray-700 leading-relaxed min-h-[200px]\">\n                            \"O, bütün inceliklerin farkındadır ve her şeyden haberdardır.\"\n                        </div>\n                    </div>\n\n                    <div class=\"space-y-6\">\n                        <div class=\"flex justify-between text-xl text-gray-500 italic\">\n                            <span>Adım <span id=\"leaf-step\">0</span>/4</span>\n                        </div>\n                        <button onclick=\"LeafStory.next()\" id=\"leaf-btn\" class=\"w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-6 text-2xl rounded-2xl transition flex items-center justify-center gap-3\">\n                            <span>Başlat</span> <i data-lucide=\"arrow-right\" class=\"w-8 h-8\"></i>\n                        </button>\n                    </div>\n\n                    <div class=\"mt-8 p-6 bg-amber-50 rounded-xl border-l-8 border-amber-500 text-xl italic text-gray-600\">\n                        \"...Allah'ın bilgisi olmadan ne bir yaprak düşer ne de yerin karanlıklarında bir tane saklı kalır...\" (En'am 59)\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <!-- MODULE 3: BESMELE DIARY -->\n        <div id=\"screen-besmele\" class=\"hidden w-full max-w-6xl\">\n            <div class=\"bg-white p-10 md:p-16 rounded-3xl shadow-2xl text-center\">\n                <h2 class=\"text-5xl md:text-6xl font-cali font-bold text-emerald-800 mb-4\">Bismillâhirrahmânirrahîm</h2>\n                <p class=\"text-2xl text-gray-500 mb-12\">Günlük hayatımızda Rahman ve Rahim olan Allah'ı anmak.</p>\n\n                <div class=\"grid grid-cols-1 md:grid-cols-2 gap-8 text-left\">\n                    <button onclick=\"BesmeleApp.action(this, 'Yemek')\" class=\"p-8 border-2 border-gray-200 rounded-3xl hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-6 group\">\n                        <div class=\"w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition shrink-0\">\n                            <i data-lucide=\"utensils\" class=\"w-10 h-10\"></i>\n                        </div>\n                        <div>\n                            <span class=\"block font-bold text-2xl text-gray-700 mb-1\">Yemeğe Başlarken</span>\n                            <span class=\"text-lg text-gray-400 status-text\">Henüz söylenmedi</span>\n                        </div>\n                    </button>\n\n                    <button onclick=\"BesmeleApp.action(this, 'Ders')\" class=\"p-8 border-2 border-gray-200 rounded-3xl hover:bg-purple-50 hover:border-purple-300 transition flex items-center gap-6 group\">\n                        <div class=\"w-20 h-20 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center group-hover:scale-110 transition shrink-0\">\n                            <i data-lucide=\"book-open\" class=\"w-10 h-10\"></i>\n                        </div>\n                        <div>\n                            <span class=\"block font-bold text-2xl text-gray-700 mb-1\">Ders Çalışırken</span>\n                            <span class=\"text-lg text-gray-400 status-text\">Henüz söylenmedi</span>\n                        </div>\n                    </button>\n\n                    <button onclick=\"BesmeleApp.action(this, 'Ev')\" class=\"p-8 border-2 border-gray-200 rounded-3xl hover:bg-orange-50 hover:border-orange-300 transition flex items-center gap-6 group\">\n                        <div class=\"w-20 h-20 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center group-hover:scale-110 transition shrink-0\">\n                            <i data-lucide=\"home\" class=\"w-10 h-10\"></i>\n                        </div>\n                        <div>\n                            <span class=\"block font-bold text-2xl text-gray-700 mb-1\">Eve Girerken</span>\n                            <span class=\"text-lg text-gray-400 status-text\">Henüz söylenmedi</span>\n                        </div>\n                    </button>\n\n                    <button onclick=\"BesmeleApp.action(this, 'Uyku')\" class=\"p-8 border-2 border-gray-200 rounded-3xl hover:bg-indigo-50 hover:border-indigo-300 transition flex items-center gap-6 group\">\n                        <div class=\"w-20 h-20 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center group-hover:scale-110 transition shrink-0\">\n                            <i data-lucide=\"moon\" class=\"w-10 h-10\"></i>\n                        </div>\n                        <div>\n                            <span class=\"block font-bold text-2xl text-gray-700 mb-1\">Uykuya Dalarken</span>\n                            <span class=\"text-lg text-gray-400 status-text\">Henüz söylenmedi</span>\n                        </div>\n                    </button>\n                </div>\n\n                <div id=\"besmele-msg\" class=\"mt-12 min-h-[80px] flex items-center justify-center text-3xl font-bold text-emerald-600 transition-all\">\n                    <!-- Dynamic Message -->\n                </div>\n            </div>\n        </div>\n\n        <!-- MODULE 4: LIMITS (SEMI/BASIR/KADIR) -->\n        <div id=\"screen-limits\" class=\"hidden w-full max-w-7xl\">\n            <div class=\"grid grid-cols-1 md:grid-cols-3 gap-8\">\n                <!-- Card 1: Semi -->\n                <div class=\"bg-white p-10 rounded-3xl shadow-xl border-t-8 border-purple-500\">\n                    <div class=\"flex items-center gap-4 mb-6\">\n                        <i data-lucide=\"ear\" class=\"text-purple-500 w-12 h-12\"></i>\n                        <h3 class=\"text-3xl font-bold\">Semi (İşiten)</h3>\n                    </div>\n                    <div class=\"bg-gray-100 p-6 rounded-2xl mb-6 text-xl text-gray-600 space-y-3\">\n                        <p class=\"font-bold text-gray-800 text-2xl\">İnsan:</p>\n                        <p>Çok düşük veya çok yüksek sesleri (frekansları) duyamaz. Uzaktaki fısıltıyı işitemez.</p>\n                    </div>\n                    <div class=\"bg-purple-50 p-6 rounded-2xl text-xl text-purple-800 space-y-3\">\n                        <p class=\"font-bold text-purple-900 text-2xl\">Allah (cc):</p>\n                        <p>Fısıltıyı da, içten geçen düşünceyi de, karıncanın ayak sesini de işitir. O'nun işitmesi sınırsızdır.</p>\n                    </div>\n                </div>\n\n                <!-- Card 2: Basir -->\n                <div class=\"bg-white p-10 rounded-3xl shadow-xl border-t-8 border-blue-500\">\n                    <div class=\"flex items-center gap-4 mb-6\">\n                        <i data-lucide=\"eye\" class=\"text-blue-500 w-12 h-12\"></i>\n                        <h3 class=\"text-3xl font-bold\">Basir (Gören)</h3>\n                    </div>\n                    <div class=\"bg-gray-100 p-6 rounded-2xl mb-6 text-xl text-gray-600 space-y-3\">\n                        <p class=\"font-bold text-gray-800 text-2xl\">İnsan:</p>\n                        <p>Karanlıkta göremez. Duvarın arkasını göremez. Mikropları çıplak gözle göremez.</p>\n                    </div>\n                    <div class=\"bg-blue-50 p-6 rounded-2xl text-xl text-blue-800 space-y-3\">\n                        <p class=\"font-bold text-blue-900 text-2xl\">Allah (cc):</p>\n                        <p>Gecenin zifiri karanlığında kara taşın üzerindeki kara karıncayı görür. Hiçbir şey O'ndan gizli kalamaz.</p>\n                    </div>\n                </div>\n\n                <!-- Card 3: Kadir -->\n                <div class=\"bg-white p-10 rounded-3xl shadow-xl border-t-8 border-red-500\">\n                    <div class=\"flex items-center gap-4 mb-6\">\n                        <i data-lucide=\"zap\" class=\"text-red-500 w-12 h-12\"></i>\n                        <h3 class=\"text-3xl font-bold\">Kadir (Güç Yetiren)</h3>\n                    </div>\n                    <div class=\"bg-gray-100 p-6 rounded-2xl mb-6 text-xl text-gray-600 space-y-3\">\n                        <p class=\"font-bold text-gray-800 text-2xl\">İnsan:</p>\n                        <p>Gücü sınırlıdır. Yorulur, uyur, hastalanır. Her istediğini yapamaz.</p>\n                    </div>\n                    <div class=\"bg-red-50 p-6 rounded-2xl text-xl text-red-800 space-y-3\">\n                        <p class=\"font-bold text-red-900 text-2xl\">Allah (cc):</p>\n                        <p>Gökleri ve yeri direksiz tutar. \"Ol\" der ve olur. Gücü her şeye yeter, asla yorulmaz.</p>\n                    </div>\n                </div>\n            </div>\n            \n            <div class=\"mt-8 bg-white p-8 rounded-2xl shadow text-center\">\n                <p class=\"text-2xl italic text-gray-600\">\"Sizler hiçbir şey bilmez bir durumdayken Allah sizi analarınızın karnından dışarı çıkardı; şükredesiniz diye size kulaklar, gözler, kalpler verdi.\" (Nahl 78)</p>\n            </div>\n        </div>\n\n    </main>\n\n    <footer class=\"text-center p-6 text-emerald-800 opacity-60 text-lg\">\n        1. Ünite: Allah İnancı - Etkileşimli Öğrenme Materyali\n    </footer>\n\n    <script>\n        // Initialize Icons\n        lucide.createIcons();\n\n        /* --- GLOBAL NAVIGATION --- */\n        const App = {\n            screens: ['menu', 'matching', 'leaf', 'besmele', 'limits'],\n            loadScreen(screenId) {\n                this.screens.forEach(id => {\n                    const el = document.getElementById(`screen-${id}`);\n                    if (el) el.classList.add('hidden');\n                });\n                document.getElementById(`screen-${screenId}`).classList.remove('hidden');\n                \n                // Initialize specific logic\n                if (screenId === 'matching') MatchingGame.init();\n                if (screenId === 'leaf') LeafStory.init();\n                if (screenId === 'besmele') BesmeleApp.init();\n                \n                // Refresh icons\n                setTimeout(() => lucide.createIcons(), 50);\n            },\n            goHome() {\n                this.loadScreen('menu');\n            }\n        };\n\n        /* --- MATCHING GAME LOGIC --- */\n        const MatchingGame = {\n            data: [\n                { id: 1, type: 'name', text: 'Rahman', pair: 1 },\n                { id: 2, type: 'def', text: 'Dünyada herkese merhamet eden', pair: 1 },\n                { id: 3, type: 'name', text: 'Rahim', pair: 2 },\n                { id: 4, type: 'def', text: 'Ahirette müminleri ödüllendiren', pair: 2 },\n                { id: 5, type: 'name', text: 'Âlim', pair: 3 },\n                { id: 6, type: 'def', text: 'Her şeyi, gizli ve açık bilen', pair: 3 },\n                { id: 7, type: 'name', text: 'Basir', pair: 4 },\n                { id: 8, type: 'def', text: 'Her şeyi eksiksiz gören', pair: 4 },\n                { id: 9, type: 'name', text: 'Kadir', pair: 5 },\n                { id: 10, type: 'def', text: 'Her şeye gücü yeten', pair: 5 },\n                { id: 11, type: 'name', text: 'Semi', pair: 6 },\n                { id: 12, type: 'def', text: 'Her şeyi işiten', pair: 6 },\n            ],\n            selected: null,\n            matchedCount: 0,\n            \n            init() {\n                const grid = document.getElementById('game-grid');\n                grid.innerHTML = '';\n                this.matchedCount = 0;\n                document.getElementById('match-score').innerText = '0';\n                document.getElementById('match-success').classList.add('hidden');\n                \n                // Shuffle\n                const shuffled = [...this.data].sort(() => Math.random() - 0.5);\n\n                shuffled.forEach(item => {\n                    const card = document.createElement('div');\n                    card.className = 'bg-emerald-50 border-2 border-emerald-200 h-32 md:h-56 rounded-2xl flex items-center justify-center p-4 text-center cursor-pointer hover:bg-emerald-100 transition duration-300 select-none shadow-md';\n                    \n                    if (item.type === 'name') {\n                        card.innerHTML = `<span class=\"font-bold text-2xl md:text-4xl text-emerald-800 font-cali\">${item.text}</span>`;\n                    } else {\n                        card.innerHTML = `<span class=\"text-base md:text-xl font-semibold text-gray-600 leading-tight\">${item.text}</span>`;\n                    }\n\n                    card.onclick = () => this.handleCardClick(card, item);\n                    grid.appendChild(card);\n                });\n            },\n\n            handleCardClick(card, item) {\n                if (card.classList.contains('bg-green-500') || card === this.selected?.card) return;\n\n                card.classList.add('bg-emerald-300', 'border-emerald-500');\n\n                if (!this.selected) {\n                    this.selected = { card, item };\n                } else {\n                    // Check Match\n                    if (this.selected.item.pair === item.pair) {\n                        // Match found\n                        this.selected.card.classList.remove('bg-emerald-300');\n                        this.selected.card.classList.add('bg-green-500', 'text-white', 'border-green-600', 'scale-95');\n                        card.classList.remove('bg-emerald-300');\n                        card.classList.add('bg-green-500', 'text-white', 'border-green-600', 'scale-95');\n                        \n                        this.matchedCount++;\n                        document.getElementById('match-score').innerText = this.matchedCount * 10;\n                        this.selected = null;\n\n                        if (this.matchedCount === 6) {\n                            document.getElementById('match-success').classList.remove('hidden');\n                        }\n\n                    } else {\n                        // No Match\n                        const tempSelected = this.selected.card;\n                        setTimeout(() => {\n                            tempSelected.classList.remove('bg-emerald-300', 'border-emerald-500');\n                            card.classList.remove('bg-emerald-300', 'border-emerald-500');\n                            tempSelected.classList.add('animate-pulse', 'bg-red-100');\n                            card.classList.add('animate-pulse', 'bg-red-100');\n                            setTimeout(() => {\n                                tempSelected.classList.remove('animate-pulse', 'bg-red-100');\n                                card.classList.remove('animate-pulse', 'bg-red-100');\n                            }, 500);\n                        }, 500);\n                        this.selected = null;\n                    }\n                }\n            }\n        };\n\n        /* --- LEAF STORY LOGIC --- */\n        const LeafStory = {\n            step: 0,\n            steps: [\n                {\n                    text: \"Bir yaprak öylece düşmez. İçinde klorofilleri parçalayan etilen gazı yavaşça yayılır.\",\n                    action: () => {\n                        const icon = document.getElementById('leaf-icon');\n                        icon.classList.remove('text-green-500', 'fill-green-500');\n                        icon.classList.add('text-yellow-400', 'fill-yellow-400');\n                        document.getElementById('leaf-zoom').style.opacity = '1';\n                    }\n                },\n                {\n                    text: \"Küçük hücreler gazı alınca şişer. Sap kısmında gerginlik olur ve bağlar kopar. Âlim olan Allah her hücrenin hareketini bilir.\",\n                    action: () => {\n                        document.getElementById('leaf-zoom').innerText = \"Bağlar Kopuyor\";\n                        document.getElementById('leaf-zoom').classList.add('border-red-500', 'text-red-500');\n                    }\n                },\n                {\n                    text: \"Mantar tabakası yarayı kapatır ki ağaç hasta olmasın. Hiçbir şey başıboş değildir. Ve rüzgar eser...\",\n                    action: () => {\n                        document.getElementById('leaf-zoom').style.opacity = '0';\n                    }\n                },\n                {\n                    text: \"Yaprak toprağa düşer, çürür ve ağaca besin olur. Bu mükemmel döngüyü Allah yaratmıştır.\",\n                    action: () => {\n                        document.getElementById('leaf-obj').classList.add('falling-leaf');\n                        setTimeout(() => {\n                             document.getElementById('leaf-obj').classList.add('hidden');\n                        }, 2900);\n                    }\n                }\n            ],\n\n            init() {\n                this.step = 0;\n                this.resetUI();\n            },\n\n            resetUI() {\n                document.getElementById('leaf-obj').classList.remove('hidden', 'falling-leaf');\n                document.getElementById('leaf-obj').style.transform = 'translateY(0)';\n                const icon = document.getElementById('leaf-icon');\n                icon.className = 'w-48 h-48 text-green-500 fill-green-500 transition-colors duration-1000';\n                document.getElementById('leaf-zoom').style.opacity = '0';\n                document.getElementById('leaf-step').innerText = '0';\n                document.getElementById('leaf-story-text').innerText = \"Bu yeşil yaprağın hikayesini başlatmak için butona bas.\";\n                document.getElementById('leaf-btn').innerHTML = `<span>Başlat</span> <i data-lucide=\"arrow-right\" class=\"w-8 h-8\"></i>`;\n                document.getElementById('leaf-btn').disabled = false;\n                document.getElementById('leaf-btn').classList.remove('opacity-50', 'cursor-not-allowed');\n            },\n\n            next() {\n                if (this.step >= this.steps.length) {\n                    this.init(); // Reset\n                    return;\n                }\n\n                const current = this.steps[this.step];\n                document.getElementById('leaf-story-text').innerText = current.text;\n                document.getElementById('leaf-step').innerText = this.step + 1;\n                current.action();\n\n                this.step++;\n\n                if (this.step >= this.steps.length) {\n                    document.getElementById('leaf-btn').innerHTML = `<span>Tekrar İzle</span> <i data-lucide=\"refresh-cw\" class=\"w-8 h-8\"></i>`;\n                } else {\n                    document.getElementById('leaf-btn').innerHTML = `<span>Devam Et</span> <i data-lucide=\"arrow-right\" class=\"w-8 h-8\"></i>`;\n                }\n            }\n        };\n\n        /* --- BESMELE LOGIC --- */\n        const BesmeleApp = {\n            init() {\n                document.getElementById('besmele-msg').innerText = \"\";\n                document.querySelectorAll('.status-text').forEach(el => {\n                    el.innerText = \"Henüz söylenmedi\";\n                    el.classList.remove('text-green-600');\n                });\n            },\n\n            action(btn, type) {\n                // Animation\n                btn.classList.add('pulse-btn', 'border-green-500', 'bg-green-50');\n                const status = btn.querySelector('.status-text');\n                status.innerText = \"Besmele Çekildi\";\n                status.classList.add('text-green-600');\n                status.classList.remove('text-gray-400');\n\n                // Message\n                const msgBox = document.getElementById('besmele-msg');\n                let message = \"\";\n\n                if (type === 'Yemek') message = \"Rahman olan Allah'ın verdiği nimetlere şükürle başladın.\";\n                if (type === 'Ders') message = \"Âlim olan Allah zihnini açsın ve ilmini artırsın.\";\n                if (type === 'Ev') message = \"Rahim olan Allah evine huzur ve bereket versin.\";\n                if (type === 'Uyku') message = \"Her şeye gücü yeten Allah'a emanet oldun.\";\n\n                msgBox.innerText = message;\n                \n                // Stop pulse after a while\n                setTimeout(() => {\n                    btn.classList.remove('pulse-btn');\n                }, 1000);\n            }\n        };\n\n        // Start at Menu\n        App.loadScreen('menu');\n\n    </script>\n</body>\n</html>"
+  }
+]

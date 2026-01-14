@@ -1,0 +1,377 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "İhlas Suresi'nin Arapça okunuşunu öğreneceksiniz.",
+      "İhlas Suresi'nin Türkçe anlamını kavrayacaksınız.",
+      "İhlas kelimesinin 'samimiyet, doğruluk, temizlik ve saflık' anlamlarını açıklayabileceksiniz.",
+      "Allah'ın (c.c.) hoşnutluğunu gözetme ve ikiyüzlülükten uzak olma kavramlarını 'ihlâs' ile ilişkilendirebileceksiniz.",
+      "İhlas Suresi'nde geçen 'Ehad' ve 'Samed' isimlerinin anlamlarını tanımlayabileceksiniz.",
+      "Allah'ın (c.c.) bir ve tek olduğu (Ehad) ilkesini yorumlayabileceksiniz.",
+      "Allah'ın (c.c.) hiçbir şeye muhtaç olmayıp tüm varlıkların O'na muhtaç olduğunu (Samed) açıklayabileceksiniz.",
+      "İhlas Suresi'nin temel konularını (Allah'ın birliği, eşinin ve benzerinin olmadığı, hiçbir şeye muhtaç olmadığı vb.) listeleyebileceksiniz.",
+      "İhlas Suresi'nin anlamından hareketle çıkarılacak mesajları ifade edebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar",
+    "content": "<ul><li>Rahim</li><li>Şirk</li><li>Rahman</li><li>İhlas Suresi</li><li>Ehad</li><li>İhlas</li><li>Samimiyet</li><li>Tevhid</li><li>Samed</li>"
+  },
+  {
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAG-Ca2FSR8/h3e-pn_qKSy28fuXmEz_oA/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>"
+  },
+  {
+    "type": "content",
+    "title": "İhlas Suresi Nedir?",
+    "content": "<ul><ul><li>İhlas Suresi, Kur'an-ı Kerim'de yer alan kısa surelerden biridir.</li><li>'İhlas' kelimesi 'samimiyet, doğruluk, temizlik ve saflık' gibi anlamlara gelir.</li><li>Aynı zamanda insanın davranışlarında Allah'ın (cc) hoşnutluğunu gözetmesini ve ikiyüzlülükten uzak olmasını ifade eder.</li></ul></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Allah'ın İsimleri: Ehad ve Samed",
+    "content": "<ul><ul><li>İhlas Suresi'nde, Allah'ın (cc) güzel isimlerinden Ehad ve Samed yer alır.</li><li>'Ehad', Allah'ın (cc) bir ve tek olması anlamına gelir.</li><li>'Samed' ise Yüce Allah'ın hiçbir şeye muhtaç olmayıp bütün varlıkların kendisine muhtaç olduğunu ifade eden ismidir.</li></ul></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Allah'ın Birliği ve Benzersizliği",
+    "content": "<ul><ul><li>İhlas Suresi, Allah'ın (cc) birliğini (tevhit) vurgular ve O'nun hiçbir şeye muhtaç olmadığını belirtir.</li><li>Allah (cc) doğurmamış ve doğmamıştır; O'nun hiçbir dengi, eşi veya benzeri yoktur.</li><li>Bu sure, Allah'a (cc) karşı samimiyetin önemini ve O'na şirk koşulmaması gerektiğini öğretir.</li></ul></ul>"
+  },
+  {
+    "type": "flashcard",
+    "title": "Veri Bankası Bilgi Kartları",
+    "cards": [
+      {
+        "term": "Samed",
+        "definition": "Yüce Allah’ın hiçbir şeye muhtaç olmayıp bütün varlıkların kendisine\nmuhtaç olduğunu ifade eden güzel ismidir."
+      },
+      {
+        "term": "Rahim",
+        "definition": "Allah'ın merhamet edici olduğunu ifade eden sıfatıdır."
+      },
+      {
+        "term": "Samimiyet",
+        "definition": "Doğruluk, temizlik ve saflık anlamlarına gelir; iki yüzlülükten uzaktır."
+      },
+      {
+        "term": "Şirk",
+        "definition": "Allah'a ortak koşmak anlamına gelir; İhlas suresi buna karşıdır."
+      },
+      {
+        "term": "İhlas",
+        "definition": "Samimiyet, doğruluk, temizlik ve saflık demektir"
+      },
+      {
+        "term": "Tevhid",
+        "definition": "Allah'ın birliğini vurgulayan temel İslam ilkesidir."
+      },
+      {
+        "term": "İhlas Suresi",
+        "definition": "Kur'an-ı Kerim'de yer alan kısa bir suredir, samimiyeti vurgular."
+      },
+      {
+        "term": "Ehad",
+        "definition": "Allah'ın bir ve tek olduğunu ifade eden isimdir."
+      },
+      {
+        "term": "Rahman",
+        "definition": "Allah'ın merhametinin sonsuz olduğunu ifade eden sıfatıdır."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Veri Bankası Anagram Kartları",
+    "cards": [
+      {
+        "definition": "İpucu: Bu kelime \"Rahim\"",
+        "scrambledWord": "RHAİM",
+        "correctAnswer": "Rahim"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Şirk\"",
+        "scrambledWord": "ŞRKİ",
+        "correctAnswer": "Şirk"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Rahman\"",
+        "scrambledWord": "ARNMHA",
+        "correctAnswer": "Rahman"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"İhlas Suresi\"",
+        "scrambledWord": "RHAİESSLU İS",
+        "correctAnswer": "İhlas Suresi"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Ehad\"",
+        "scrambledWord": "DAEH",
+        "correctAnswer": "Ehad"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"İhlas\"",
+        "scrambledWord": "AİSLH",
+        "correctAnswer": "İhlas"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Samimiyet\"",
+        "scrambledWord": "MİATİYEMS",
+        "correctAnswer": "Samimiyet"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Tevhid\"",
+        "scrambledWord": "TEİHDV",
+        "correctAnswer": "Tevhid"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Samed\"",
+        "scrambledWord": "ESAMD",
+        "correctAnswer": "Samed"
+      }
+    ]
+  },
+  {
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Bir Sure Öğreniyorum: İhlas Suresi</title>\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <script src=\"https://unpkg.com/lucide@latest\"></script>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;700;900&display=swap');\n\n        body {\n            font-family: 'Nunito', sans-serif;\n            background: radial-gradient(circle at top, #10b981 0%, #064e3b 100%);\n            color: #1e293b;\n            min-height: 100vh;\n        }\n\n        .arabic-text {\n            font-family: 'Amiri', serif;\n            line-height: 1.8;\n        }\n\n        .glass-container {\n            background: rgba(255, 255, 255, 0.95);\n            backdrop-filter: blur(20px);\n            border-radius: 2rem;\n            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);\n        }\n\n        .nav-btn {\n            transition: all 0.3s ease;\n        }\n        .nav-btn:hover {\n            transform: translateY(-5px);\n            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);\n        }\n        .nav-btn.active {\n            background-color: #059669;\n            color: white;\n            border-color: #059669;\n        }\n\n        /* Animations */\n        @keyframes slideUp {\n            from { opacity: 0; transform: translateY(30px); }\n            to { opacity: 1; transform: translateY(0); }\n        }\n        .animate-slide-up {\n            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);\n        }\n\n        .word-card {\n            cursor: pointer;\n            transition: all 0.2s;\n            user-select: none;\n        }\n        .word-card:active {\n            transform: scale(0.95);\n        }\n        \n        .correct-anim {\n            animation: bounce 0.5s;\n        }\n        @keyframes bounce {\n            0%, 100% { transform: translateY(0); }\n            50% { transform: translateY(-10px); }\n        }\n    </style>\n</head>\n<body class=\"p-4 md:p-8 flex flex-col items-center\">\n\n    <!-- Header -->\n    <header class=\"w-full max-w-7xl flex justify-between items-center mb-8 text-white\">\n        <div>\n            <h1 class=\"text-4xl md:text-5xl font-bold tracking-tight\">İhlas Suresi</h1>\n            <p class=\"text-emerald-200 text-lg md:text-xl mt-1\">Samimiyet, Tevhit ve Allah'ın Birliği</p>\n        </div>\n        <div class=\"hidden md:block\">\n            <i data-lucide=\"book-open\" class=\"w-16 h-16 text-emerald-200 opacity-80\"></i>\n        </div>\n    </header>\n\n    <!-- Main Container -->\n    <main class=\"glass-container w-full max-w-7xl min-h-[800px] flex flex-col overflow-hidden\">\n        \n        <!-- Navigation -->\n        <nav class=\"flex flex-wrap justify-center gap-4 p-6 border-b border-gray-200 bg-gray-50/50\">\n            <button onclick=\"App.setMode('learn')\" id=\"btn-learn\" class=\"nav-btn active px-8 py-4 rounded-xl border-2 border-emerald-100 bg-white text-emerald-700 font-bold text-xl flex items-center gap-3\">\n                <i data-lucide=\"book-open-check\"></i> Sureyi Öğren\n            </button>\n            <button onclick=\"App.setMode('match')\" id=\"btn-match\" class=\"nav-btn px-8 py-4 rounded-xl border-2 border-emerald-100 bg-white text-emerald-700 font-bold text-xl flex items-center gap-3\">\n                <i data-lucide=\"git-pull-request\"></i> Anlam Eşleştirme\n            </button>\n            <button onclick=\"App.setMode('puzzle')\" id=\"btn-puzzle\" class=\"nav-btn px-8 py-4 rounded-xl border-2 border-emerald-100 bg-white text-emerald-700 font-bold text-xl flex items-center gap-3\">\n                <i data-lucide=\"puzzle\"></i> Kelime Dizmece\n            </button>\n            <button onclick=\"App.setMode('concepts')\" id=\"btn-concepts\" class=\"nav-btn px-8 py-4 rounded-xl border-2 border-emerald-100 bg-white text-emerald-700 font-bold text-xl flex items-center gap-3\">\n                <i data-lucide=\"lightbulb\"></i> Kavramlar\n            </button>\n        </nav>\n\n        <!-- Content Area -->\n        <div id=\"content-area\" class=\"flex-grow p-6 md:p-12 relative\">\n            \n            <!-- MODE: LEARN -->\n            <div id=\"view-learn\" class=\"animate-slide-up h-full flex flex-col items-center\">\n                <div class=\"text-center mb-10\">\n                    <span class=\"inline-block px-6 py-2 bg-emerald-100 text-emerald-800 rounded-full font-bold text-lg mb-4\">Bismillahirrahmanirrahîm</span>\n                    <h2 class=\"text-3xl font-bold text-gray-800\">Rahman ve Rahîm olan Allah'ın adıyla</h2>\n                </div>\n\n                <div class=\"w-full max-w-4xl space-y-8\">\n                    <!-- Verse 1 -->\n                    <div class=\"bg-white border-l-8 border-emerald-500 rounded-r-2xl shadow-sm p-8 hover:shadow-md transition\">\n                        <div class=\"flex flex-col md:flex-row justify-between items-center gap-6\">\n                            <div class=\"text-right w-full md:w-1/2 order-1 md:order-2\">\n                                <p class=\"arabic-text text-5xl md:text-6xl text-gray-800 mb-2\">قُلْ هُوَ اللّٰهُ اَحَدٌۚ</p>\n                            </div>\n                            <div class=\"w-full md:w-1/2 order-2 md:order-1\">\n                                <p class=\"text-xl font-bold text-emerald-700 mb-1\">1. Kul hüvallâhü ehad</p>\n                                <p class=\"text-2xl text-gray-600\">De ki: \"O, Allah’tır, tektir.\"</p>\n                            </div>\n                        </div>\n                    </div>\n\n                    <!-- Verse 2 -->\n                    <div class=\"bg-white border-l-8 border-emerald-500 rounded-r-2xl shadow-sm p-8 hover:shadow-md transition\">\n                        <div class=\"flex flex-col md:flex-row justify-between items-center gap-6\">\n                            <div class=\"text-right w-full md:w-1/2 order-1 md:order-2\">\n                                <p class=\"arabic-text text-5xl md:text-6xl text-gray-800 mb-2\">اَللّٰهُ الصَّمَدُۚ</p>\n                            </div>\n                            <div class=\"w-full md:w-1/2 order-2 md:order-1\">\n                                <p class=\"text-xl font-bold text-emerald-700 mb-1\">2. Allâhüssamed</p>\n                                <p class=\"text-2xl text-gray-600\">Allah Samed’dir. (Hiçbir şeye muhtaç olmayandır.)</p>\n                            </div>\n                        </div>\n                    </div>\n\n                    <!-- Verse 3 -->\n                    <div class=\"bg-white border-l-8 border-emerald-500 rounded-r-2xl shadow-sm p-8 hover:shadow-md transition\">\n                        <div class=\"flex flex-col md:flex-row justify-between items-center gap-6\">\n                            <div class=\"text-right w-full md:w-1/2 order-1 md:order-2\">\n                                <p class=\"arabic-text text-5xl md:text-6xl text-gray-800 mb-2\">لَمْ يَلِدْ وَلَمْ يُولَدْۙ</p>\n                            </div>\n                            <div class=\"w-full md:w-1/2 order-2 md:order-1\">\n                                <p class=\"text-xl font-bold text-emerald-700 mb-1\">3. Lem yelid ve lem yûled</p>\n                                <p class=\"text-2xl text-gray-600\">O, doğurmamış ve doğmamıştır.</p>\n                            </div>\n                        </div>\n                    </div>\n\n                    <!-- Verse 4 -->\n                    <div class=\"bg-white border-l-8 border-emerald-500 rounded-r-2xl shadow-sm p-8 hover:shadow-md transition\">\n                        <div class=\"flex flex-col md:flex-row justify-between items-center gap-6\">\n                            <div class=\"text-right w-full md:w-1/2 order-1 md:order-2\">\n                                <p class=\"arabic-text text-5xl md:text-6xl text-gray-800 mb-2\">وَلَمْ يَكُنْ لَهُ كُفُوًا اَحَدٌ</p>\n                            </div>\n                            <div class=\"w-full md:w-1/2 order-2 md:order-1\">\n                                <p class=\"text-xl font-bold text-emerald-700 mb-1\">4. Ve lem yeküllehû küfüven ehad</p>\n                                <p class=\"text-2xl text-gray-600\">O’nun hiçbir dengi (eşi, benzeri) yoktur.</p>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <!-- MODE: MATCHING (Etkinlik-10) -->\n            <div id=\"view-match\" class=\"hidden animate-slide-up h-full flex-col items-center\">\n                <h2 class=\"text-3xl font-bold text-center mb-2\">Anlamını Bul (Etkinlik-10)</h2>\n                <p class=\"text-gray-500 mb-10 text-center text-xl\">Sol taraftaki ayet okunuşunu sağ taraftaki doğru anlamıyla eşleştir.</p>\n\n                <div class=\"grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-6 w-full max-w-5xl\" id=\"matching-grid\">\n                    <!-- Left Side (Reading) -->\n                    <div class=\"flex flex-col gap-4\" id=\"match-left\">\n                        <!-- Filled by JS -->\n                    </div>\n\n                    <!-- Right Side (Meaning) -->\n                    <div class=\"flex flex-col gap-4\" id=\"match-right\">\n                        <!-- Filled by JS -->\n                    </div>\n                </div>\n                <div id=\"match-feedback\" class=\"mt-8 text-2xl font-bold text-emerald-600 h-8\"></div>\n            </div>\n\n            <!-- MODE: PUZZLE (Etkinlik-11) -->\n            <div id=\"view-puzzle\" class=\"hidden animate-slide-up h-full flex-col items-center\">\n                <h2 class=\"text-3xl font-bold text-center mb-2\">Kelime Dizmece (Etkinlik-11)</h2>\n                <p class=\"text-gray-500 mb-8 text-center text-xl\">Aşağıdaki kelimelere tıklayarak ayetin anlamını doğru sırayla oluştur.</p>\n\n                <!-- Progress -->\n                <div class=\"flex gap-2 mb-8\">\n                    <div id=\"puz-dot-0\" class=\"w-4 h-4 rounded-full bg-gray-300\"></div>\n                    <div id=\"puz-dot-1\" class=\"w-4 h-4 rounded-full bg-gray-300\"></div>\n                    <div id=\"puz-dot-2\" class=\"w-4 h-4 rounded-full bg-gray-300\"></div>\n                    <div id=\"puz-dot-3\" class=\"w-4 h-4 rounded-full bg-gray-300\"></div>\n                    <div id=\"puz-dot-4\" class=\"w-4 h-4 rounded-full bg-gray-300\"></div>\n                </div>\n\n                <div class=\"w-full max-w-4xl bg-white p-8 rounded-3xl shadow-lg border-2 border-emerald-100\">\n                    <div class=\"text-center mb-6\">\n                        <span class=\"text-emerald-600 font-bold text-xl block mb-2\">Sıradaki Ayet:</span>\n                        <h3 id=\"puzzle-question\" class=\"text-3xl md:text-4xl font-bold text-gray-800\">Kul hüvallâhü ehad</h3>\n                    </div>\n\n                    <!-- Drop Zone -->\n                    <div id=\"puzzle-answer-zone\" class=\"min-h-[100px] bg-gray-100 rounded-2xl border-2 border-dashed border-gray-300 p-4 flex flex-wrap gap-3 justify-center items-center mb-8\">\n                        <span id=\"puzzle-placeholder\" class=\"text-gray-400 italic\">Kelimeleri buraya ekle...</span>\n                    </div>\n\n                    <!-- Source Zone -->\n                    <div id=\"puzzle-source-zone\" class=\"flex flex-wrap gap-4 justify-center\">\n                        <!-- Words injected here -->\n                    </div>\n\n                    <div class=\"mt-8 flex justify-center\">\n                        <button onclick=\"PuzzleGame.check()\" class=\"bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-3 rounded-xl font-bold text-xl shadow-lg hover:shadow-xl transition transform active:scale-95\">\n                            Kontrol Et\n                        </button>\n                    </div>\n                    <div id=\"puzzle-feedback\" class=\"text-center mt-4 text-xl font-bold h-8\"></div>\n                </div>\n            </div>\n\n            <!-- MODE: CONCEPTS -->\n            <div id=\"view-concepts\" class=\"hidden animate-slide-up h-full flex-col items-center justify-center\">\n                <h2 class=\"text-4xl font-bold text-center mb-12\">İhlas Suresi Kavramları</h2>\n                \n                <div class=\"grid grid-cols-1 md:grid-cols-3 gap-8 w-full\">\n                    <!-- Card 1 -->\n                    <div class=\"bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition border-t-8 border-blue-500 group\">\n                        <div class=\"w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-blue-600 transition\">\n                            <i data-lucide=\"shield-check\" class=\"w-10 h-10 text-blue-600 group-hover:text-white transition\"></i>\n                        </div>\n                        <h3 class=\"text-3xl font-bold text-center mb-4 text-gray-800\">İhlas</h3>\n                        <p class=\"text-gray-600 text-center text-lg leading-relaxed\">\n                            Samimiyet, doğruluk, temizlik. İnsanın davranışlarında sadece Allah'ın (cc) rızasını gözetmesi, ikiyüzlülükten uzak olmasıdır.\n                        </p>\n                    </div>\n\n                    <!-- Card 2 -->\n                    <div class=\"bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition border-t-8 border-emerald-500 group\">\n                        <div class=\"w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-emerald-600 transition\">\n                            <i data-lucide=\"fingerprint\" class=\"w-10 h-10 text-emerald-600 group-hover:text-white transition\"></i>\n                        </div>\n                        <h3 class=\"text-3xl font-bold text-center mb-4 text-gray-800\">Ehad</h3>\n                        <p class=\"text-gray-600 text-center text-lg leading-relaxed\">\n                            Birlik, teklik. Allah'ın (cc) bir ve tek olmasıdır. O'nun eşi, benzeri ve ortağı yoktur. (Tevhit inancı).\n                        </p>\n                    </div>\n\n                    <!-- Card 3 -->\n                    <div class=\"bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition border-t-8 border-amber-500 group\">\n                        <div class=\"w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-amber-600 transition\">\n                            <i data-lucide=\"infinity\" class=\"w-10 h-10 text-amber-600 group-hover:text-white transition\"></i>\n                        </div>\n                        <h3 class=\"text-3xl font-bold text-center mb-4 text-gray-800\">Samed</h3>\n                        <p class=\"text-gray-600 text-center text-lg leading-relaxed\">\n                            Hiçbir şeye muhtaç olmayan, aksine her şeyin kendisine muhtaç olduğu yüce varlık demektir. O yemez, içmez, uyumaz.\n                        </p>\n                    </div>\n                </div>\n            </div>\n\n        </div>\n    </main>\n\n    <script>\n        lucide.createIcons();\n\n        /* --- APPLICATION STATE --- */\n        const App = {\n            currentMode: 'learn',\n            setMode(mode) {\n                // Nav Styles\n                document.querySelectorAll('.nav-btn').forEach(btn => {\n                    btn.classList.remove('active', 'bg-white', 'text-emerald-700', 'border-emerald-100');\n                    btn.classList.add('text-gray-600', 'border-transparent');\n                    \n                    if(btn.id === `btn-${mode}`) {\n                        btn.classList.add('active', 'bg-white', 'text-emerald-700', 'border-emerald-100');\n                        btn.classList.remove('text-gray-600', 'border-transparent');\n                    }\n                });\n\n                // View Toggling\n                ['learn', 'match', 'puzzle', 'concepts'].forEach(v => {\n                    document.getElementById(`view-${v}`).classList.add('hidden');\n                });\n                document.getElementById(`view-${mode}`).classList.remove('hidden');\n                \n                // Initialize specific game logic\n                if(mode === 'match') MatchGame.init();\n                if(mode === 'puzzle') PuzzleGame.init();\n            }\n        };\n\n        /* --- MATCHING GAME LOGIC --- */\n        const MatchGame = {\n            pairs: [\n                { id: 1, left: \"Kul hüvallâhü ehad\", right: \"De ki: O, Allah’tır, tektir.\" },\n                { id: 2, left: \"Allâhüssamed\", right: \"Allah Samed’dir. (Hiçbir şeye muhtaç olmayandır.)\" },\n                { id: 3, left: \"Lem yelid ve lem yûled\", right: \"O, doğurmamış ve doğmamıştır.\" },\n                { id: 4, left: \"Ve lem yeküllehû küfüven ehad\", right: \"O’nun hiçbir dengi (eşi, benzeri) yoktur.\" }\n            ],\n            selectedLeft: null,\n            matchedCount: 0,\n\n            init() {\n                this.matchedCount = 0;\n                this.selectedLeft = null;\n                document.getElementById('match-feedback').innerText = \"\";\n                \n                const leftContainer = document.getElementById('match-left');\n                const rightContainer = document.getElementById('match-right');\n                leftContainer.innerHTML = '';\n                rightContainer.innerHTML = '';\n\n                // Randomize arrays\n                const leftItems = [...this.pairs].sort(() => Math.random() - 0.5);\n                const rightItems = [...this.pairs].sort(() => Math.random() - 0.5);\n\n                leftItems.forEach(item => {\n                    const el = document.createElement('div');\n                    el.className = 'p-6 bg-white border-2 border-emerald-100 rounded-xl cursor-pointer hover:bg-emerald-50 transition text-xl font-bold text-emerald-800 shadow-sm';\n                    el.innerText = item.left;\n                    el.dataset.id = item.id;\n                    el.onclick = () => this.handleLeftClick(el);\n                    leftContainer.appendChild(el);\n                });\n\n                rightItems.forEach(item => {\n                    const el = document.createElement('div');\n                    el.className = 'p-6 bg-white border-2 border-blue-100 rounded-xl cursor-pointer hover:bg-blue-50 transition text-xl text-gray-700 shadow-sm';\n                    el.innerText = item.right;\n                    el.dataset.id = item.id;\n                    el.onclick = () => this.handleRightClick(el);\n                    rightContainer.appendChild(el);\n                });\n            },\n\n            handleLeftClick(el) {\n                if (el.classList.contains('opacity-50')) return; // Already matched\n                \n                // Deselect previous\n                if (this.selectedLeft) {\n                    this.selectedLeft.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-600');\n                    this.selectedLeft.classList.add('bg-white', 'text-emerald-800', 'border-emerald-100');\n                }\n\n                // Select new\n                this.selectedLeft = el;\n                el.classList.remove('bg-white', 'text-emerald-800', 'border-emerald-100');\n                el.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');\n            },\n\n            handleRightClick(el) {\n                if (el.classList.contains('opacity-50')) return;\n                if (!this.selectedLeft) return;\n\n                const leftId = this.selectedLeft.dataset.id;\n                const rightId = el.dataset.id;\n\n                if (leftId === rightId) {\n                    // Match!\n                    this.selectedLeft.classList.add('opacity-50', 'cursor-default');\n                    el.classList.add('opacity-50', 'bg-green-100', 'cursor-default');\n                    this.selectedLeft = null;\n                    this.matchedCount++;\n                    document.getElementById('match-feedback').innerText = \"Doğru eşleşme! Harika.\";\n                    document.getElementById('match-feedback').className = \"mt-8 text-2xl font-bold text-green-600 h-8\";\n                    \n                    if(this.matchedCount === 4) {\n                        document.getElementById('match-feedback').innerText = \"Tebrikler! Hepsini doğru eşleştirdin.\";\n                    }\n                } else {\n                    // Fail\n                    el.classList.add('bg-red-100', 'border-red-300');\n                    document.getElementById('match-feedback').innerText = \"Yanlış eşleşme, tekrar dene.\";\n                    document.getElementById('match-feedback').className = \"mt-8 text-2xl font-bold text-red-500 h-8\";\n                    setTimeout(() => {\n                        el.classList.remove('bg-red-100', 'border-red-300');\n                    }, 800);\n                }\n            }\n        };\n\n        /* --- PUZZLE GAME LOGIC --- */\n        const PuzzleGame = {\n            levels: [\n                {\n                    q: \"Bismillâhirrahmânirrahîm\",\n                    words: [\"Rahman\", \"ve\", \"Rahîm\", \"olan\", \"Allah'ın\", \"adıyla\"],\n                    correct: [\"Rahman\", \"ve\", \"Rahîm\", \"olan\", \"Allah'ın\", \"adıyla\"]\n                },\n                {\n                    q: \"Kul hüvallâhü ehad\",\n                    words: [\"De ki:\", \"O,\", \"Allah'tır,\", \"tektir.\"],\n                    correct: [\"De ki:\", \"O,\", \"Allah'tır,\", \"tektir.\"]\n                },\n                {\n                    q: \"Allâhüssamed\",\n                    words: [\"Allah\", \"Samed'dir.\", \"(Muhtaç\", \"olmayandır).\"],\n                    correct: [\"Allah\", \"Samed'dir.\", \"(Muhtaç\", \"olmayandır).\"]\n                },\n                {\n                    q: \"Lem yelid ve lem yûled\",\n                    words: [\"O,\", \"doğurmamış\", \"ve\", \"doğmamıştır.\"],\n                    correct: [\"O,\", \"doğurmamış\", \"ve\", \"doğmamıştır.\"]\n                },\n                {\n                    q: \"Ve lem yeküllehû küfüven ehad\",\n                    words: [\"O'nun\", \"hiçbir\", \"dengi\", \"yoktur.\"],\n                    correct: [\"O'nun\", \"hiçbir\", \"dengi\", \"yoktur.\"]\n                }\n            ],\n            currentLevel: 0,\n            currentAnswer: [],\n\n            init() {\n                this.currentLevel = 0;\n                this.loadLevel();\n            },\n\n            loadLevel() {\n                const levelData = this.levels[this.currentLevel];\n                document.getElementById('puzzle-question').innerText = levelData.q;\n                document.getElementById('puzzle-feedback').innerText = \"\";\n                document.getElementById('puzzle-placeholder').style.display = 'block';\n                this.currentAnswer = [];\n                \n                // Update dots\n                for(let i=0; i<5; i++) {\n                    const dot = document.getElementById(`puz-dot-${i}`);\n                    if(i < this.currentLevel) dot.className = \"w-4 h-4 rounded-full bg-emerald-500\";\n                    else if(i === this.currentLevel) dot.className = \"w-4 h-4 rounded-full bg-emerald-300 animate-pulse\";\n                    else dot.className = \"w-4 h-4 rounded-full bg-gray-300\";\n                }\n\n                // Clear zones\n                const dropZone = document.getElementById('puzzle-answer-zone');\n                // Keep placeholder, remove buttons\n                Array.from(dropZone.children).forEach(c => {\n                    if(c.id !== 'puzzle-placeholder') c.remove();\n                });\n                \n                const sourceZone = document.getElementById('puzzle-source-zone');\n                sourceZone.innerHTML = '';\n\n                // Shuffle words\n                const shuffled = [...levelData.words].sort(() => Math.random() - 0.5);\n\n                shuffled.forEach(word => {\n                    const btn = document.createElement('button');\n                    btn.className = 'word-card px-6 py-3 bg-white border-2 border-emerald-200 rounded-xl text-xl font-bold text-gray-700 hover:bg-emerald-50 shadow-sm';\n                    btn.innerText = word;\n                    btn.onclick = () => this.addToAnswer(btn, word);\n                    sourceZone.appendChild(btn);\n                });\n            },\n\n            addToAnswer(btn, word) {\n                // Move button to answer zone\n                const dropZone = document.getElementById('puzzle-answer-zone');\n                document.getElementById('puzzle-placeholder').style.display = 'none';\n                \n                // Clone button to place in drop zone\n                const newBtn = btn.cloneNode(true);\n                newBtn.onclick = () => this.removeFromAnswer(newBtn, btn);\n                newBtn.className = 'word-card px-6 py-3 bg-blue-100 border-2 border-blue-300 rounded-xl text-xl font-bold text-blue-800 shadow-sm';\n                \n                dropZone.appendChild(newBtn);\n                btn.classList.add('hidden'); // Hide original\n                \n                this.currentAnswer.push(word);\n            },\n\n            removeFromAnswer(answerBtn, sourceBtn) {\n                answerBtn.remove();\n                sourceBtn.classList.remove('hidden');\n                \n                // Remove word from logic array (find first instance)\n                const word = answerBtn.innerText;\n                const idx = this.currentAnswer.indexOf(word);\n                if(idx > -1) this.currentAnswer.splice(idx, 1);\n\n                if(this.currentAnswer.length === 0) {\n                    document.getElementById('puzzle-placeholder').style.display = 'block';\n                }\n            },\n\n            check() {\n                const correct = JSON.stringify(this.levels[this.currentLevel].correct);\n                const answer = JSON.stringify(this.currentAnswer);\n\n                if (correct === answer) {\n                    document.getElementById('puzzle-feedback').innerText = \"Doğru! Harikasın.\";\n                    document.getElementById('puzzle-feedback').className = \"text-center mt-4 text-xl font-bold h-8 text-emerald-600\";\n                    \n                    setTimeout(() => {\n                        this.currentLevel++;\n                        if (this.currentLevel < this.levels.length) {\n                            this.loadLevel();\n                        } else {\n                            document.getElementById('puzzle-question').innerText = \"Tebrikler! İhlas Suresini tamamladın.\";\n                            document.getElementById('puzzle-source-zone').innerHTML = '<i data-lucide=\"award\" class=\"w-24 h-24 text-yellow-400\"></i>';\n                            document.getElementById('puzzle-answer-zone').innerHTML = '<div class=\"text-2xl text-emerald-800 font-bold\">Artık surenin anlamını biliyorsun!</div>';\n                            lucide.createIcons();\n                        }\n                    }, 1500);\n                } else {\n                    document.getElementById('puzzle-feedback').innerText = \"Sıralama yanlış, tekrar dene.\";\n                    document.getElementById('puzzle-feedback').className = \"text-center mt-4 text-xl font-bold h-8 text-red-500\";\n                }\n            }\n        };\n\n        // Initialize First View\n        App.setMode('learn');\n\n    </script>\n</body>\n</html>"
+  },
+  {
+    "type": "anagramGame",
+    "title": "Kelime Dehası",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "cards": [
+      {
+        "definition": "Yüce Allah’ın hiçbir şeye muhtaç olmayıp bütün varlıkların kendisine\nmuhtaç olduğunu ifade eden güzel ismidir.",
+        "correctAnswer": "SAMED",
+        "scrambledWord": "AEDMS"
+      },
+      {
+        "definition": "Allah'ın merhamet edici olduğunu ifade eden sıfatıdır.",
+        "correctAnswer": "RAHİM",
+        "scrambledWord": "AİHMR"
+      },
+      {
+        "definition": "Doğruluk, temizlik ve saflık anlamlarına gelir; iki yüzlülükten uzaktır.",
+        "correctAnswer": "SAMİMİYET",
+        "scrambledWord": "YAMMİİEST"
+      },
+      {
+        "definition": "Allah'a ortak koşmak anlamına gelir; İhlas suresi buna karşıdır.",
+        "correctAnswer": "ŞİRK",
+        "scrambledWord": "İRŞK"
+      },
+      {
+        "definition": "Samimiyet, doğruluk, temizlik ve saflık demektir",
+        "correctAnswer": "İHLAS",
+        "scrambledWord": "HASLİ"
+      },
+      {
+        "definition": "Allah'ın birliğini vurgulayan temel İslam ilkesidir.",
+        "correctAnswer": "TEVHİD",
+        "scrambledWord": "VTHDİE"
+      },
+      {
+        "definition": "Kur'an-ı Kerim'de yer alan kısa bir suredir, samimiyeti vurgular.",
+        "correctAnswer": "İHLAS SURESİ",
+        "scrambledWord": "İEUSRALSSHİ"
+      },
+      {
+        "definition": "Allah'ın bir ve tek olduğunu ifade eden isimdir.",
+        "correctAnswer": "EHAD",
+        "scrambledWord": "EHAD"
+      },
+      {
+        "definition": "Allah'ın merhametinin sonsuz olduğunu ifade eden sıfatıdır.",
+        "correctAnswer": "RAHMAN",
+        "scrambledWord": "HMAANR"
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "İhlas suresi samimiyeti öğretir.",
+    "scrambledSentence": "öğretir. suresi İhlas samimiyeti"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "İhlas Suresi, Kur'an-ı Kerim'de yer alan kısa surelerden biridir.",
+    "isTrue": true
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "İhlas kelimesi, samimiyet ve doğruluk anlamlarına gelmez.",
+    "isTrue": false
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "İhlas Suresi'nde Allah'ın güzel isimlerinden sadece 'Samed' zikredilmiştir.",
+    "isTrue": false
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Allah'ın (c.c.) 'Ehad' ism-i şerifi, O'nun tek ve biricik olduğunu ifade eder.",
+    "isTrue": true
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Samed kelimesi, Yüce Allah'ın her şeye muhtaç olduğunu belirtir.",
+    "isTrue": false
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Allah (c.c.) doğmamış ve doğurulmamıştır.",
+    "isTrue": true
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "İhlas kelimesinin anlamları arasında aşağıdakilerden hangisi bulunmaz?",
+    "options": [
+      "Samimiyet",
+      "Doğruluk",
+      "Temizlik",
+      "Korku"
+    ],
+    "correctAnswer": "Korku"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "İhlas Suresi'nde geçen \"Ehad\" isminin anlamı nedir?",
+    "options": [
+      "Bağışlayıcı",
+      "Bir ve tek",
+      "Rızık Veren",
+      "Gören"
+    ],
+    "correctAnswer": "Bir ve tek"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "İhlas Suresi'nde geçen \"Samed\" isminin anlamı nedir?",
+    "options": [
+      "Her şeye muhtaç olan",
+      "Hiçbir şeye muhtaç olmayan",
+      "Her şeyi duyan",
+      "Her şeye güç yetiren"
+    ],
+    "correctAnswer": "Hiçbir şeye muhtaç olmayan"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "İhlas Suresi'nde Allah'ın hangi özelliği vurgulanmaz?",
+    "options": [
+      "Doğurmamış ve doğmamıştır",
+      "Hiçbir dengi yoktur",
+      "Yemek yer ve içer",
+      "Bir ve tektir"
+    ],
+    "correctAnswer": "Yemek yer ve içer"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Kur'an-ı Kerim'deki kısa surelerden biri olan İhlas Suresi'nin temel konusu nedir?",
+    "options": [
+      "Meleklerin özellikleri",
+      "Peygamberlerin hayatları",
+      "Allah'ın birliği ve eşsizliği",
+      "Cennet ve cehennem tasviri"
+    ],
+    "correctAnswer": "Allah'ın birliği ve eşsizliği"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "İhlas kelimesi; \"___, doğruluk, temizlik ve saflık\" anlamlarına gelir.",
+    "options": [
+      "samimiyet",
+      "cömertlik",
+      "cesaret",
+      "bilgelik"
+    ],
+    "correctAnswer": "samimiyet"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "İhlas suresinde geçen Ehad, Allah'ın (cc) ___ ve tek olması anlamına gelir.",
+    "options": [
+      "güçlü",
+      "bir",
+      "adil",
+      "sonsuz"
+    ],
+    "correctAnswer": "bir"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Samed ismi, Yüce Allah’ın hiçbir şeye muhtaç olmayıp bütün varlıkların kendisine ___ olduğunu ifade eder.",
+    "options": [
+      "şükür",
+      "saygı",
+      "itaat",
+      "muhtaç"
+    ],
+    "correctAnswer": "muhtaç"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "İhlas suresinin anlamında yer alan \"O, doğurmamış ve ___ doğmamıştır.\" ifadesi Allah'ın yüceliğini vurgular.",
+    "options": [
+      "hiç",
+      "asla",
+      "yeniden",
+      "doğmamıştır"
+    ],
+    "correctAnswer": "doğmamıştır"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "İhlas Suresi, Allah'ın (cc) hiçbir ___ (eşi, benzeri) olmadığını açıkça belirtir.",
+    "options": [
+      "dostu",
+      "kulu",
+      "dengi",
+      "elçisi"
+    ],
+    "correctAnswer": "dengi"
+  }
+]

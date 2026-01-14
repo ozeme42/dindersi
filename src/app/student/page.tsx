@@ -9,9 +9,8 @@ import {
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, where, orderBy, Timestamp, onSnapshot, doc } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy, Timestamp, onSnapshot, doc, getDoc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass } from "@/lib/types";
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 import { forceStreakCheck } from "@/app/student/actions"; 
 
@@ -22,13 +21,85 @@ import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// --- GÜNLÜK LİDERLİK TABLOSU ---
+// --- DÜZELTİLMİŞ: GÜNLÜK LİDERLİK TABLOSU ---
+// Artık Users tablosunu değil, ScoreEvents tablosunu tarayıp hesaplıyor.
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getLiveLeaderboard('daily').then(data => setDailyTop(data.slice(0, 3))).finally(() => setIsLoading(false));
+        const fetchDailyTop = async () => {
+            setIsLoading(true);
+            try {
+                // 1. TAM OLARAK BUGÜNÜN BAŞLANGIÇ VE BİTİŞ ZAMANINI AL
+                const now = new Date();
+                const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+                const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+                // 2. SADECE BUGÜN TARİHLİ SKORLARI ÇEK
+                // (Burada "users" tablosuna değil, "scoreEvents" tablosuna bakıyoruz)
+                const q = query(
+                    collection(db, 'scoreEvents'),
+                    where('timestamp', '>=', Timestamp.fromDate(startOfDay)),
+                    where('timestamp', '<=', Timestamp.fromDate(endOfDay))
+                );
+                
+                const snapshot = await getDocs(q);
+                
+                // 3. PUANLARI HESAPLA
+                const userScores: Record<string, number> = {};
+
+                snapshot.docs.forEach(doc => {
+                    const data = doc.data();
+                    const uid = data.userId;
+                    const points = Number(data.points) || 0;
+
+                    // Akıllı tahta gibi otomatik girişleri veya manuel devasa puanları hariç tutalım
+                    // Eğer 1000'den büyük tek bir puan varsa (örn: sezon bonusu) bunu sayma
+                    if (points > 1000) return; 
+
+                    if(uid) {
+                        // Varsa üzerine ekle, yoksa başlat
+                        userScores[uid] = (userScores[uid] || 0) + points;
+                    }
+                });
+
+                // 4. SIRALAMA YAP (En çoktan aza)
+                const sortedEntries = Object.entries(userScores)
+                    .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
+                    .slice(0, 3); // Sadece ilk 3 kişi
+
+                // 5. KULLANICI İSİMLERİNİ GETİR
+                // (Burada kritik nokta: Kullanıcının toplam puanını DEĞİL, hesapladığımız günlük puanı yazacağız)
+                const topUsers: UserProfile[] = [];
+                
+                for (const [uid, calculatedDailyScore] of sortedEntries) {
+                    // Eğer puan 0 ise listeye alma
+                    if(calculatedDailyScore <= 0) continue;
+
+                    const userDoc = await getDoc(doc(db, 'users', uid));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data() as UserProfile;
+                        
+                        // İŞTE DÜZELTME BURADA:
+                        // userData.score (Toplam Puan) yerine calculatedDailyScore (Günlük Puan) kullanıyoruz.
+                        topUsers.push({ 
+                            ...userData, 
+                            uid, 
+                            score: calculatedDailyScore // <-- BU SATIR HATAYI DÜZELTİR
+                        }); 
+                    }
+                }
+
+                setDailyTop(topUsers);
+            } catch (error) {
+                console.error("Günlük liderlik hatası:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchDailyTop();
     }, []);
     
     const rankIcons: { [key: number]: React.ReactNode } = {
@@ -50,19 +121,26 @@ function HardestWorkersToday() {
                 ) : dailyTop.length > 0 ? (
                     <div className="space-y-3">
                         {dailyTop.map((student, index) => (
-                            <div key={student.uid} className="flex items-center justify-between p-3 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition-colors border border-white/5 group">
+                            <div key={student.uid || index} className="flex items-center justify-between p-3 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition-colors border border-white/5 group">
                                 <div className="flex items-center gap-4">
                                     <div className="h-10 w-10 flex items-center justify-center bg-black/40 rounded-lg border border-white/10">{rankIcons[index]}</div>
                                     <div className="flex items-center gap-3">
                                          <UserAvatar user={student} className="w-10 h-10 border-2 border-white/10"/>
-                                         <div><p className="font-bold text-white text-sm">{student.displayName}</p><p className="text-white/40 text-xs font-mono">Lvl {Math.floor((student.score || 0) / 1000) + 1}</p></div>
+                                         <div>
+                                             <p className="font-bold text-white text-sm">{student.displayName}</p>
+                                             {/* Alt satırda sadece 'Bugün' yazsın, kafa karışmasın */}
+                                             <p className="text-white/40 text-xs font-mono">Bugün</p>
+                                         </div>
                                     </div>
                                 </div>
-                                <div className="bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20"><p className="font-bold text-amber-400 text-sm">{(student.score || 0).toLocaleString()} XP</p></div>
+                                <div className="bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20">
+                                    {/* Burada gösterilen puan hesaplanan günlük puandır */}
+                                    <p className="font-bold text-amber-400 text-sm">+{student.score} XP</p>
+                                </div>
                             </div>
                         ))}
                     </div>
-                ) : ( <div className="text-center py-8"><p className="text-white/40 text-sm">Bugün henüz kimse XP kazanmadı.</p></div> )}
+                ) : ( <div className="text-center py-8"><p className="text-white/40 text-sm">Bugün henüz kimse puan kazanmadı.</p></div> )}
             </div>
         </Card>
     )
@@ -96,7 +174,7 @@ export default function StudentDashboard() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   
-  // PUAN İÇİN AYRI STATE (Çakışmayı önlemek için)
+  // PUAN İÇİN AYRI STATE
   const [liveScore, setLiveScore] = useState(0);
   
   // Diğer istatistikler için state
@@ -107,21 +185,16 @@ export default function StudentDashboard() {
   const [canSpinWheel, setCanSpinWheel] = useState(false);
   const [localStreak, setLocalStreak] = useState(0);
 
-  // --- 1. CANLI PUAN DİNLEYİCİSİ (Kesin Kaynak) ---
+  // --- 1. CANLI PUAN DİNLEYİCİSİ ---
   useEffect(() => {
     if (!user?.uid) return;
-
-    // İlk başta Auth'dan gelen veriyi koyalım (geçici olarak)
     setLiveScore(user.score || 0);
-
-    // Sonra veritabanını dinlemeye başlayalım
     const unsubscribe = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
         if (docSnap.exists()) {
             const userData = docSnap.data();
             setLiveScore(userData.score || 0);
         }
     });
-
     return () => unsubscribe();
   }, [user]);
 
@@ -131,7 +204,6 @@ export default function StudentDashboard() {
     try {
         const res = await forceStreakCheck(user.uid);
         setCanSpinWheel(res.canSpinWheel);
-        
         if (res.currentStreak !== undefined) {
              setLocalStreak(res.currentStreak);
         }
@@ -150,23 +222,31 @@ export default function StudentDashboard() {
   }, [user, checkStreak]); 
 
 
-  // --- 2. DİĞER VERİLERİ ÇEK (Puanı Elleme!) ---
+  // --- 2. DİĞER VERİLERİ ÇEK ---
   useEffect(() => {
     async function fetchData() {
       if (!user?.uid) { setIsLoading(false); return; };
 
       setIsLoading(true);
       try {
-        const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Istanbul' });
-        const startOfDay = new Date(`${todayStr}T00:00:00+03:00`);
-        const endOfDay = new Date(`${todayStr}T23:59:59+03:00`);
+        // --- DÜZELTME: GÜVENLİ TARİH HESAPLAMA ---
+        const now = new Date();
+        // Bugünün başlangıcı (00:00:00)
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        // Bugünün bitişi (23:59:59)
+        const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
 
         const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot, todayScoreSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
           getDocs(query(collection(db, "users"), where("role", "==", "student"))),
           getStudentExams(user.uid),
-          getDocs(query(collection(db, 'scoreEvents'), where('userId', '==', user.uid), where('timestamp', '>=', Timestamp.fromDate(startOfDay)), where('timestamp', '<=', Timestamp.fromDate(endOfDay))))
+          // Sadece bugünün puanlarını çek
+          getDocs(query(collection(db, 'scoreEvents'), 
+            where('userId', '==', user.uid), 
+            where('timestamp', '>=', Timestamp.fromDate(startOfDay)), 
+            where('timestamp', '<=', Timestamp.fromDate(endOfDay))
+          ))
         ]);
         
         if (examsSnapshot.success && examsSnapshot.data) {
@@ -174,9 +254,11 @@ export default function StudentDashboard() {
             setExamStats({ pending, solved: examsSnapshot.data.length - pending });
         }
 
+        // Günlük Puan Hesaplama
         const todayTotalScore = todayScoreSnapshot.docs.reduce((sum, doc) => {
             const data = doc.data();
-            if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı' && data.gameType !== 'Manuel Puan' && data.gameType !== 'Hediye Puan') {
+            // Hariç tutulacak puan tipleri (İsteğe bağlı, tüm puanlar sayılsın derseniz burayı kaldırın)
+            if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı') {
                 return sum + (data.points || 0);
             }
             return sum;
@@ -184,8 +266,7 @@ export default function StudentDashboard() {
 
         const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
         
-        // Sıralama hesaplarken canlı puanı kullanamayız (çünkü diğerlerini dinlemiyoruz), 
-        // bu yüzden snapshot'tan gelen veriyi kullanıyoruz.
+        // Genel Sıralama (Toplam Puan Üzerinden)
         const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
         const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
 
@@ -209,13 +290,12 @@ export default function StudentDashboard() {
             )
         );
 
-        // Burada score alanını GÜNCELLEMİYORUZ. Sadece diğer istatistikleri set ediyoruz.
         setStats({ 
             totalCourses: studentVisibleCourses.length, 
             generalRank, 
             classRank, 
             branchRank, 
-            todayScore: todayTotalScore 
+            todayScore: todayTotalScore // Düzeltilmiş günlük puan
         });
 
       } catch (error) { console.error(error); } finally { setIsLoading(false); }
@@ -226,11 +306,11 @@ export default function StudentDashboard() {
   if (isLoading) return <div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>;
 
   // --- HESAPLAMALAR ---
-  // Buradaki 'liveScore' artık veritabanındaki en güncel puandır.
   const level = Math.floor(liveScore / 1000) + 1;
   const progressToNextLevel = ((liveScore % 1000) / 1000) * 100;
   
   const dailyGoal = 500;
+  // Progress bar'ın 100'ü geçmesini engelle
   const progressToDailyGoal = Math.min((stats.todayScore / dailyGoal) * 100, 100);
   const isGoalReached = stats.todayScore >= dailyGoal;
   
@@ -247,83 +327,83 @@ export default function StudentDashboard() {
            
            {/* Profil Kartı */}
            <div className="relative w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group">
-                <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl z-0"></div>
-                <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-8">
-                    
-                    {/* Avatar */}
-                    <div className="relative shrink-0">
-                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-1.5 bg-gradient-to-br from-amber-300 via-yellow-500 to-orange-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]">
-                             <div className="w-full h-full rounded-full overflow-hidden border-4 border-slate-900 bg-slate-800"><UserAvatar user={user} className="w-full h-full" /></div>
-                        </div>
-                        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-black py-1.5 px-4 rounded-full border border-indigo-500 shadow-lg whitespace-nowrap flex items-center gap-2">
-                             <Sparkles className="h-3 w-3 text-yellow-400 fill-yellow-400"/> SEVİYE {level}
-                        </div>
-                    </div>
+               <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl z-0"></div>
+               <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-8">
+                   
+                   {/* Avatar */}
+                   <div className="relative shrink-0">
+                       <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-1.5 bg-gradient-to-br from-amber-300 via-yellow-500 to-orange-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]">
+                            <div className="w-full h-full rounded-full overflow-hidden border-4 border-slate-900 bg-slate-800"><UserAvatar user={user} className="w-full h-full" /></div>
+                       </div>
+                       <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-black py-1.5 px-4 rounded-full border border-indigo-500 shadow-lg whitespace-nowrap flex items-center gap-2">
+                            <Sparkles className="h-3 w-3 text-yellow-400 fill-yellow-400"/> SEVİYE {level}
+                       </div>
+                   </div>
 
-                    {/* Bilgiler */}
-                    <div className="flex-1 text-center md:text-left w-full">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
-                            {/* Sol Taraf: İsim ve Sınıf */}
-                            <div>
-                                <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md">{user?.displayName}</h1>
-                                <div className="flex items-center flex-wrap justify-center md:justify-start gap-x-3 gap-y-1 mt-3 text-slate-300 font-medium">
-                                    <span className="flex items-center gap-2"><Backpack className="h-4 w-4 text-indigo-400" />{user?.class || 'Sınıfsız'}</span>
-                                    {user?.schoolName && <><span className="text-slate-600">•</span><span className="flex items-center gap-2"><School className="h-4 w-4 text-cyan-400" />{user.schoolName}</span></>}
-                                    
-                                    <span className="hidden md:inline text-slate-600">•</span>
-                                    <span className="hidden md:inline text-indigo-300">{stats.totalCourses} Ders</span>
-                                </div>
-                            </div>
-                            
-                            {/* İstatistik Kutucukları */}
-                            <div className="w-full md:w-auto mt-4 md:mt-0">
-                                <div className="grid grid-cols-2 gap-3 md:flex md:items-center md:gap-4">
-                                    
-                                    {/* XP KARTI */}
-                                    <div className="relative group overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-black/60 p-3 md:p-4 flex flex-col items-center justify-center gap-1 shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]">
-                                        <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-                                            <Trophy className="w-12 h-12 text-amber-500" />
-                                        </div>
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <div className="p-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 shadow-inner">
-                                                <Star className="w-3.5 h-3.5 text-amber-300 fill-amber-300 animate-pulse" />
-                                            </div>
-                                            <span className="text-[10px] font-bold text-amber-200/80 uppercase tracking-widest">TOPLAM XP</span>
-                                        </div>
-                                        <div className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-amber-200 tabular-nums tracking-tight">
-                                            {liveScore.toLocaleString()}
-                                        </div>
-                                    </div>
+                   {/* Bilgiler */}
+                   <div className="flex-1 text-center md:text-left w-full">
+                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+                           {/* Sol Taraf: İsim ve Sınıf */}
+                           <div>
+                               <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md">{user?.displayName}</h1>
+                               <div className="flex items-center flex-wrap justify-center md:justify-start gap-x-3 gap-y-1 mt-3 text-slate-300 font-medium">
+                                   <span className="flex items-center gap-2"><Backpack className="h-4 w-4 text-indigo-400" />{user?.class || 'Sınıfsız'}</span>
+                                   {user?.schoolName && <><span className="text-slate-600">•</span><span className="flex items-center gap-2"><School className="h-4 w-4 text-cyan-400" />{user.schoolName}</span></>}
+                                   
+                                   <span className="hidden md:inline text-slate-600">•</span>
+                                   <span className="hidden md:inline text-indigo-300">{stats.totalCourses} Ders</span>
+                               </div>
+                           </div>
+                           
+                           {/* İstatistik Kutucukları */}
+                           <div className="w-full md:w-auto mt-4 md:mt-0">
+                               <div className="grid grid-cols-2 gap-3 md:flex md:items-center md:gap-4">
+                                   
+                                   {/* XP KARTI */}
+                                   <div className="relative group overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-black/60 p-3 md:p-4 flex flex-col items-center justify-center gap-1 shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]">
+                                       <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                           <Trophy className="w-12 h-12 text-amber-500" />
+                                       </div>
+                                       <div className="flex items-center gap-2 mb-1">
+                                           <div className="p-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 shadow-inner">
+                                               <Star className="w-3.5 h-3.5 text-amber-300 fill-amber-300 animate-pulse" />
+                                           </div>
+                                           <span className="text-[10px] font-bold text-amber-200/80 uppercase tracking-widest">TOPLAM XP</span>
+                                       </div>
+                                       <div className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-amber-200 tabular-nums tracking-tight">
+                                           {liveScore.toLocaleString()}
+                                       </div>
+                                   </div>
 
-                                    {/* SERİ KARTI */}
-                                    <div className="relative group overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-br from-orange-500/10 to-black/60 p-3 md:p-4 flex flex-col items-center justify-center gap-1 shadow-[0_0_20px_rgba(249,115,22,0.15)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(249,115,22,0.3)]">
-                                        <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-                                            <Flame className="w-12 h-12 text-orange-500" />
-                                        </div>
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <div className="p-1.5 rounded-lg bg-orange-500/20 border border-orange-500/40 shadow-inner">
-                                                <Flame className="w-3.5 h-3.5 text-orange-400 fill-orange-500 animate-[bounce_1.5s_infinite]" />
-                                            </div>
-                                            <span className="text-[10px] font-bold text-orange-200/80 uppercase tracking-widest">GÜNLÜK SERİ</span>
-                                        </div>
-                                        <div className="flex items-baseline gap-1">
-                                            <span className="text-lg sm:text-lg md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-orange-200 tabular-nums tracking-tight">
-                                                {currentStreak}
-                                            </span>
-                                            <span className="text-xs font-bold text-orange-400/60 uppercase">Gün</span>
-                                        </div>
-                                    </div>
+                                   {/* SERİ KARTI */}
+                                   <div className="relative group overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-br from-orange-500/10 to-black/60 p-3 md:p-4 flex flex-col items-center justify-center gap-1 shadow-[0_0_20px_rgba(249,115,22,0.15)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(249,115,22,0.3)]">
+                                       <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                           <Flame className="w-12 h-12 text-orange-500" />
+                                       </div>
+                                       <div className="flex items-center gap-2 mb-1">
+                                           <div className="p-1.5 rounded-lg bg-orange-500/20 border border-orange-500/40 shadow-inner">
+                                               <Flame className="w-3.5 h-3.5 text-orange-400 fill-orange-500 animate-[bounce_1.5s_infinite]" />
+                                           </div>
+                                           <span className="text-[10px] font-bold text-orange-200/80 uppercase tracking-widest">GÜNLÜK SERİ</span>
+                                       </div>
+                                       <div className="flex items-baseline gap-1">
+                                           <span className="text-lg sm:text-lg md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-orange-200 tabular-nums tracking-tight">
+                                               {currentStreak}
+                                           </span>
+                                           <span className="text-xs font-bold text-orange-400/60 uppercase">Gün</span>
+                                       </div>
+                                   </div>
 
-                                </div>
-                            </div>
-                        </div>
+                               </div>
+                           </div>
+                       </div>
 
-                        <div className="mt-6">
-                            <div className="flex justify-between text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide"><span>İlerleme</span><span>{Math.floor(progressToNextLevel)}%</span></div>
-                            <div className="h-4 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative"><div className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-1000 ease-out" style={{ width: `${progressToNextLevel}%` }} /></div>
-                        </div>
-                    </div>
-                </div>
+                       <div className="mt-6">
+                           <div className="flex justify-between text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide"><span>İlerleme</span><span>{Math.floor(progressToNextLevel)}%</span></div>
+                           <div className="h-4 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative"><div className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-1000 ease-out" style={{ width: `${progressToNextLevel}%` }} /></div>
+                       </div>
+                   </div>
+               </div>
            </div>
            
            {/* --- GÜNLÜK GÖREV KARTI --- */}
@@ -463,10 +543,9 @@ export default function StudentDashboard() {
              </Link>
          </div>
 
-         {/* Yeni Görev Yolculuğu Kartı (Full Width & Under Adventure/Fame) */}
+         {/* Yeni Görev Yolculuğu Kartı */}
          <Link href="/student/gorevler" className="group block w-full mt-6">
             <div className="relative w-full rounded-3xl overflow-hidden bg-gradient-to-br from-fuchsia-900 to-purple-900 border border-fuchsia-500/30 shadow-2xl hover:scale-[1.01] transition-transform duration-300 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-                {/* Sol Taraf: İkon ve Yazı */}
                 <div className="flex items-center gap-6">
                     <div className="p-5 bg-fuchsia-500/20 rounded-2xl border border-fuchsia-400/30 shrink-0">
                         <Compass className="h-10 w-10 text-fuchsia-300" />
@@ -477,7 +556,6 @@ export default function StudentDashboard() {
                     </div>
                 </div>
                 
-                {/* Sağ Taraf: CTA Buton */}
                 <div className="flex items-center gap-2 text-white font-bold text-lg bg-fuchsia-600/20 px-6 py-3 rounded-xl border border-fuchsia-500/50 group-hover:bg-fuchsia-600/40 transition-colors">
                     Yolculuğa Çık <ArrowRight className="h-5 w-5" />
                 </div>
@@ -494,6 +572,7 @@ export default function StudentDashboard() {
                <DashboardCardButton href="/student/deneme" icon={<FileCog />} title="Denemeler" subtitle="Sınav Merkezi" colorClass="violet" badge={examStats.pending} />
          </div>
          
+         {/* Düzeltilmiş Günlük Liderlik Tablosu */}
          <HardestWorkersToday />
       </div>
       

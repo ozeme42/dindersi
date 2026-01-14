@@ -1,9 +1,8 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, writeBatch, doc, Timestamp, runTransaction, limit, startAfter, QueryDocumentSnapshot, where, endBefore } from "firebase/firestore";
-import type { ScoreEvent, UserProfile } from "@/lib/types";
+import { collection, getDocs, query, orderBy, writeBatch, doc, Timestamp, runTransaction, limit, startAfter, where } from "firebase/firestore";
+import type { ScoreEvent } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
 type EnrichedScoreEvent = ScoreEvent & {
@@ -16,88 +15,117 @@ type SerializableTimestamp = {
     _nanoseconds: number;
 } | null;
 
-
 export async function getScoreEvents(params: {
     cursor?: SerializableTimestamp | null,
     direction?: 'next' | 'prev',
     searchTerm?: string | null,
     showOnlyExcessiveAttempts?: boolean,
-}): Promise<{ success: boolean; data?: EnrichedScoreEvent[]; error?: string, lastVisible?: SerializableTimestamp | null, firstVisible?: SerializableTimestamp | null }> {
+    filterGameType?: string
+}): Promise<{ success: boolean; data?: EnrichedScoreEvent[]; error?: string, lastVisible?: SerializableTimestamp | null }> {
     noStore();
-    const { cursor, direction = 'next', searchTerm, showOnlyExcessiveAttempts } = params;
-    const itemsPerPage = 25;
+    const { cursor, direction = 'next', searchTerm, showOnlyExcessiveAttempts, filterGameType } = params;
+    const itemsPerPage = 20;
 
     try {
+        // Kullanıcı İsimlerini Haritala (Performans için tek sorgu)
         const usersSnapshot = await getDocs(collection(db, 'users'));
         const usersMap = new Map(usersSnapshot.docs.map(doc => [doc.id, doc.data().displayName]));
 
         let queryConstraints = [];
         
+        // --- FİLTRELER (Backend Tarafı) ---
         if (showOnlyExcessiveAttempts) {
              queryConstraints.push(where("attemptNumber", ">", 10));
         }
+
+        if (filterGameType && filterGameType !== 'all') {
+            queryConstraints.push(where("gameType", "==", filterGameType));
+        }
         
+        // --- SORGULAMA MANTIĞI ---
         let finalQuery;
-        if (direction === 'next') {
-            finalQuery = query(collection(db, 'scoreEvents'), orderBy('timestamp', 'desc'), ...queryConstraints, limit(itemsPerPage));
-            if (cursor) {
-                const startAtTimestamp = Timestamp.fromMillis(cursor._seconds * 1000 + cursor._nanoseconds / 1000000);
-                finalQuery = query(finalQuery, startAfter(startAtTimestamp));
-            }
-        } else { // direction === 'prev'
-            finalQuery = query(collection(db, 'scoreEvents'), orderBy('timestamp', 'asc'), ...queryConstraints, limit(itemsPerPage));
-            if (cursor) {
-                const endAtTimestamp = Timestamp.fromMillis(cursor._seconds * 1000 + cursor._nanoseconds / 1000000);
-                finalQuery = query(finalQuery, startAfter(endAtTimestamp)); // Firestore doesn't have `endBefore` with `orderBy desc`, so we reverse logic
-            }
-        }
-        
-        const snapshot = await getDocs(finalQuery);
-        
-        let eventsData = snapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                ...data,
-                id: doc.id,
-                timestamp: (data.timestamp as Timestamp).toDate().toISOString(),
-                userName: usersMap.get(data.userId) || 'Bilinmeyen Kullanıcı',
-            } as EnrichedScoreEvent;
-        });
+        const collectionRef = collection(db, 'scoreEvents');
 
-        // If 'prev', we need to reverse the order back to descending
-        if (direction === 'prev') {
-            eventsData.reverse();
-        }
+        // DURUM 1: ARAMA VARSA (Limit Yok, Tüm Veriyi Çekip Filtrele)
+        if (searchTerm && searchTerm.trim() !== "") {
+            // Arama varken cursor ve pagination backend'de yapılmaz, frontend'e filtrelenmiş tüm liste gönderilir
+            // Veya burada tümünü çekip, filtreleyip, sadece istenen sayfayı döndürürüz.
+            // Performans için 500 kayıtla sınırlayalım (Firestore maliyeti ve hız için)
+            finalQuery = query(collectionRef, orderBy('timestamp', 'desc'), ...queryConstraints, limit(500));
+            
+            const snapshot = await getDocs(finalQuery);
+            let allData = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    ...data,
+                    id: doc.id,
+                    timestamp: (data.timestamp as Timestamp).toDate().toISOString(),
+                    userName: usersMap.get(data.userId) || 'Bilinmeyen Kullanıcı',
+                } as EnrichedScoreEvent;
+            });
 
-        // Apply search term filter after fetching because Firestore doesn't support text search on multiple fields efficiently.
-        if (searchTerm) {
-            const lowercasedTerm = searchTerm.toLowerCase();
-            eventsData = eventsData.filter(event => 
-                event.userName?.toLowerCase().includes(lowercasedTerm) ||
-                event.gameType?.toLowerCase().includes(lowercasedTerm) ||
-                (typeof event.context === 'string' && event.context.toLowerCase().includes(lowercasedTerm))
+            // JS ile Filtreleme
+            const lowerTerm = searchTerm.toLowerCase();
+            const filteredData = allData.filter(event => 
+                event.userName?.toLowerCase().includes(lowerTerm) ||
+                event.gameType?.toLowerCase().includes(lowerTerm) ||
+                (typeof event.context === 'string' && event.context.toLowerCase().includes(lowerTerm))
             );
+
+            // Arama sonuçlarında sayfalama karmaşıklaşacağı için
+            // şimdilik sadece ilk 20 sonucu veya tümünü döndürüyoruz.
+            return {
+                success: true,
+                data: JSON.parse(JSON.stringify(filteredData)),
+                lastVisible: null // Arama modunda sonsuz kaydırmayı kapatıyoruz
+            };
+        } 
+        
+        // DURUM 2: ARAMA YOKSA (Normal Sayfalama)
+        else {
+            if (direction === 'next') {
+                let q = query(collectionRef, orderBy('timestamp', 'desc'), ...queryConstraints);
+                if (cursor) {
+                    const startAtTimestamp = Timestamp.fromMillis(cursor._seconds * 1000 + cursor._nanoseconds / 1000000);
+                    q = query(q, startAfter(startAtTimestamp));
+                }
+                finalQuery = query(q, limit(itemsPerPage));
+            } else { 
+                // Prev direction için logic (Genelde UI'da 'önceki sayfa' verisi cache'den okunur ama server side yapacaksak:)
+                // Firestore'da geriye doğru sayfalama zordur. Genellikle 'endBefore' kullanılır.
+                // Basit çözüm: Cursor yoksa başa dön.
+                finalQuery = query(collectionRef, orderBy('timestamp', 'desc'), ...queryConstraints, limit(itemsPerPage));
+            }
+
+            const snapshot = await getDocs(finalQuery);
+            
+            const data = snapshot.docs.map(doc => {
+                const d = doc.data();
+                return {
+                    ...d,
+                    id: doc.id,
+                    timestamp: (d.timestamp as Timestamp).toDate().toISOString(),
+                    userName: usersMap.get(d.userId) || 'Bilinmeyen Kullanıcı',
+                } as EnrichedScoreEvent;
+            });
+
+            const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+            const lastVisible = lastDoc ? (lastDoc.data().timestamp as Timestamp) : null;
+
+            return {
+                success: true,
+                data: JSON.parse(JSON.stringify(data)),
+                lastVisible: lastVisible ? { _seconds: lastVisible.seconds, _nanoseconds: lastVisible.nanoseconds } : null
+            };
         }
-
-        const firstVisibleDoc = snapshot.docs[0];
-        const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
-        const firstVisibleTimestamp = firstVisibleDoc ? (firstVisibleDoc.data().timestamp as Timestamp) : null;
-        const lastVisibleTimestamp = lastVisibleDoc ? (lastVisibleDoc.data().timestamp as Timestamp) : null;
-
-        return {
-            success: true,
-            data: JSON.parse(JSON.stringify(eventsData)),
-            firstVisible: firstVisibleTimestamp ? { _seconds: firstVisibleTimestamp.seconds, _nanoseconds: firstVisibleTimestamp.nanoseconds } : null,
-            lastVisible: lastVisibleTimestamp ? { _seconds: lastVisibleTimestamp.seconds, _nanoseconds: lastVisibleTimestamp.nanoseconds } : null
-        };
 
     } catch (error: any) {
         console.error("Error fetching score events:", error);
-        return { success: false, error: 'Puan hareketleri alınırken bir veritabanı hatası oluştu.' };
+        return { success: false, error: 'Veri alınamadı: ' + error.message };
     }
 }
 
-
+// ... (deleteScoreEvents fonksiyonu aynı kalacak) ...
 export async function deleteScoreEvents(eventIds: string[]): Promise<{ success: boolean; error?: string }> {
     if (!eventIds || eventIds.length === 0) {
         return { success: false, error: "Silinecek olay seçilmedi." };

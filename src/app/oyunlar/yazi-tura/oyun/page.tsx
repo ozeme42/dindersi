@@ -1,80 +1,97 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useRef, useMemo } from 'react';
-import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { submitYaziTuraScoreAction, getYaziTuraQuestionsAction } from '../actions';
 import type { Question } from "@/lib/types";
-import { Loader2, AlertTriangle, ArrowLeft, Coins, Trophy, Save, RotateCw, CheckCircle2, XCircle, XOctagon } from "lucide-react";
-import { useSearchParams, useRouter } from 'next/navigation';
+import { Loader2, ArrowLeft, Trophy, Target } from "lucide-react";
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { playSound } from '@/lib/audio-service';
-import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { useToast } from '@/hooks/use-toast';
+import { cn } from "@/lib/utils";
+import Confetti from 'react-dom-confetti';
 
-// --- BİLEŞENLER ---
+// --- FUTBOL ANİMASYONLARI ---
+const footballStyles = `
+  @keyframes ball-shoot-left {
+    0% { transform: translateX(-50%) translateY(0) scale(1); bottom: 15%; }
+    100% { transform: translateX(-150%) translateY(-50px) scale(0.5) rotate(-360deg); bottom: 65%; left: 25%; }
+  }
+  @keyframes ball-shoot-right {
+    0% { transform: translateX(-50%) translateY(0) scale(1); bottom: 15%; }
+    100% { transform: translateX(50%) translateY(-50px) scale(0.5) rotate(360deg); bottom: 65%; left: 75%; }
+  }
+  @keyframes ball-shoot-center {
+    0% { transform: translateX(-50%) translateY(0) scale(1); bottom: 15%; }
+    100% { transform: translateX(-50%) translateY(-50px) scale(0.5) rotate(720deg); bottom: 65%; }
+  }
+  @keyframes keeper-dive-left {
+    0% { transform: translateX(-50%) translateY(0); }
+    100% { transform: translateX(-180%) translateY(30px) rotate(-75deg); }
+  }
+  @keyframes keeper-dive-right {
+    0% { transform: translateX(-50%) translateY(0); }
+    100% { transform: translateX(80%) translateY(30px) rotate(75deg); }
+  }
 
-const GameScreen = ({ gameState, children }: { gameState: string, children: React.ReactNode }) => {
-    const isVisible = gameState === 'start' || gameState === 'flipping' || gameState === 'result';
-    if (!isVisible) return null;
-    return (
-        <div className="w-full max-w-md mx-auto bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl p-8 text-center relative overflow-hidden animate-in zoom-in-95 duration-500">
-            {/* Arka Plan Işığı */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-indigo-500/20 rounded-full blur-[60px]" />
-            <div className="relative z-10">
-                {children}
-            </div>
-        </div>
-    );
-};
+  .ball { 
+    width: 60px; height: 60px; 
+    background: white; border-radius: 50%; 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+    background-image: radial-gradient(circle at 30% 30%, #ffffff, #d1d5db 40%, #1f2937 95%); 
+    border: 2px solid #e5e7eb;
+    position: absolute; 
+    bottom: 15%; left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 50;
+    transition: all 0.3s ease;
+  }
+  
+  .ball.ready { cursor: pointer; }
+  .ball.ready:hover { transform: translateX(-50%) scale(1.1); box-shadow: 0 0 25px rgba(255,255,255,0.9); }
+  
+  .shoot-left { animation: ball-shoot-left 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important; }
+  .shoot-right { animation: ball-shoot-right 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important; }
+  .shoot-center { animation: ball-shoot-center 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important; }
 
-const QuestionScreen = ({ gameState, children }: { gameState: string, children: React.ReactNode }) => {
-    const isVisible = gameState === 'question' || gameState === 'feedback';
-    if (!isVisible) return null;
-    return (
-         <div className="w-full max-w-2xl mx-auto bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl p-6 md:p-10 relative animate-in slide-in-from-bottom-8 duration-500">
-            {/* Neon Border Top */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-            {children}
-         </div>
-    );
-}
+  .keeper { 
+    transition: all 0.3s; width: 90px; height: 130px; 
+    position: absolute; bottom: 25%; left: 50%; 
+    transform: translateX(-50%); z-index: 20; 
+  }
+  .dive-left { animation: keeper-dive-left 0.6s ease-out forwards; }
+  .dive-right { animation: keeper-dive-right 0.6s ease-out forwards; }
+`;
 
-// --- ANA OYUN ---
-
-export function YaziTuraClientPage() {
+export function PenaltyGameClient() {
     const { user } = useAuth();
     const { toast } = useToast();
     const searchParams = useSearchParams();
     const router = useRouter();
-    const mainContentRef = useRef<HTMLDivElement>(null);
 
     const [score, setScore] = useState(0);
+    const [goals, setGoals] = useState(0);
+    const [misses, setMisses] = useState(0);
+    
     const [gameState, setGameState] = useState('loading'); 
-    const [coinSide, setCoinSide] = useState<string | null>(null); 
+    
+    const [questionsEasy, setQuestionsEasy] = useState<Question[]>([]);
+    const [questionsHard, setQuestionsHard] = useState<Question[]>([]);
+    
     const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
-    const [rotation, setRotation] = useState(0);
-    const [selectedOption, setSelectedOption] = useState<string | null>(null);
-    const [isCorrect, setIsCorrect] = useState(false);
+    const [selectedTarget, setSelectedTarget] = useState<'left' | 'center' | 'right' | null>(null);
+    const [keeperDirection, setKeeperDirection] = useState<'left' | 'center' | 'right'>('center');
+    const [shotResult, setShotResult] = useState<'goal' | 'save'>('save');
+    
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
-
-    const [questionsYazi, setQuestionsYazi] = useState<Question[]>([]);
-    const [questionsTura, setQuestionsTura] = useState<Question[]>([]);
     const [error, setError] = useState<string | null>(null);
-    
-    const gameContext = `Yazı Tura - ${searchParams.get('topicName') || 'Genel'}`;
-    const topicName = searchParams.get('topicName') || 'Yazı Tura';
+    const [showConfetti, setShowConfetti] = useState(false);
 
-    const backUrl = useMemo(() => {
-        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
-        if (courseId && unitId && topicId) {
-            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
-        }
-        return '/oyunlar/yazi-tura';
-    }, [searchParams]);
+    const gameContext = `Gol Kralı - ${searchParams.get('topicName') || 'Genel'}`;
+    const backUrl = '/oyunlar/yazi-tura'; 
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -89,68 +106,66 @@ export function YaziTuraClientPage() {
                 setError(error || "Sorular yüklenemedi.");
                 setGameState('error');
             } else {
-                setQuestionsYazi(questions.easy);
-                setQuestionsTura(questions.hard);
-                setGameState('start');
+                setQuestionsEasy(questions.easy);
+                setQuestionsHard(questions.hard);
+                setGameState('aiming');
             }
         };
         fetchQuestions();
     }, [searchParams]);
 
+    const handleAim = (direction: 'left' | 'center' | 'right') => {
+        if (gameState !== 'aiming') return;
+        
+        setSelectedTarget(direction);
+        playSound('click');
+        
+        const pool = Math.random() > 0.5 ? questionsEasy : questionsHard;
+        const q = pool[Math.floor(Math.random() * pool.length)];
+        
+        setCurrentQuestion(q);
+        setGameState('question');
+    };
 
-    const flipCoin = () => {
-        setGameState('flipping');
-        setSelectedOption(null);
-        playSound('coin-flip'); 
+    const handleAnswer = (option: string) => {
+        if (!currentQuestion || !selectedTarget) return;
         
-        const isYazi = Math.random() < 0.5;
-        const result = isYazi ? 'yazi' : 'tura';
+        const isCorrect = option === currentQuestion.correctAnswer;
+        const directions: ('left'|'center'|'right')[] = ['left', 'center', 'right'];
         
-        const baseRotation = 1800 + (360 * 5); 
-        const targetRotation = isYazi ? baseRotation : baseRotation + 180;
-        
-        setRotation(prev => prev + targetRotation);
+        if (isCorrect) {
+            const safeDirections = directions.filter(d => d !== selectedTarget);
+            setKeeperDirection(safeDirections[Math.floor(Math.random() * safeDirections.length)]);
+            setShotResult('goal');
+        } else {
+            setKeeperDirection(selectedTarget);
+            setShotResult('save');
+        }
+
+        setGameState('kicking'); 
+        playSound('kick'); 
 
         setTimeout(() => {
-            setCoinSide(result);
+            if (isCorrect) {
+                playSound('goal'); 
+                setScore(prev => prev + 10); // GOL: +10 Puan
+                setGoals(prev => prev + 1);
+                setShowConfetti(true);
+            } else {
+                playSound('miss'); 
+                setMisses(prev => prev + 1);
+                // --- DEĞİŞİKLİK BURADA: -5 PUAN ---
+                setScore(prev => Math.max(0, prev - 5)); // Puan 0'ın altına düşmesin diye Math.max kullandım
+            }
             setGameState('result');
-            pickQuestion(result);
-            playSound('pop'); 
-        }, 2500);
-    };
-
-    const pickQuestion = (side: string) => {
-        const questionPool = side === 'yazi' ? questionsYazi : questionsTura;
-        const randomQ = questionPool[Math.floor(Math.random() * questionPool.length)];
-        
-        if(!randomQ) {
-             toast({title: "Soru Bulunamadı", description: "Yeterli soru yok.", variant: "destructive"});
-             setGameState('start');
-             return;
-        }
-        setCurrentQuestion(randomQ);
-    };
-
-    const handleOptionClick = (option: string) => {
-        if (!currentQuestion) return;
-        setSelectedOption(option);
-        setGameState('feedback');
-        
-        const isCorrectCheck = option === currentQuestion.correctAnswer;
-        setIsCorrect(isCorrectCheck);
-
-        if (isCorrectCheck) {
-            playSound('correct');
-            const points = coinSide === 'yazi' ? 10 : 20;
-            setScore(score + points);
-        } else {
-            playSound('incorrect');
-        }
+        }, 800); 
     };
 
     const nextTurn = () => {
-        setGameState('start');
-        setCoinSide(null);
+        setGameState('aiming');
+        setSelectedTarget(null);
+        setKeeperDirection('center');
+        setShowConfetti(false);
     };
 
     const handleSaveAndExit = async () => {
@@ -162,7 +177,7 @@ export function YaziTuraClientPage() {
         const result = await submitYaziTuraScoreAction(user.uid, score, gameContext);
         if (result.success) {
             setIsScoreSaved(true);
-            toast({ title: 'Başarılı!', description: `${score} puan kazandın ve profiline eklendi.` });
+            toast({ title: 'Maç Bitti!', description: `${score} puan hanene yazıldı.` });
             router.push(backUrl);
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
@@ -170,242 +185,172 @@ export function YaziTuraClientPage() {
         setIsSaving(false);
     };
 
-    const restartGame = () => {
-        setScore(0);
-        setGameState('start');
-        setRotation(0);
-        setCoinSide(null);
-        setIsSaving(false);
-        setIsScoreSaved(false);
-    };
-    
-    // --- RENDER ---
-
-    if (gameState === 'loading') {
-        return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500"/></div>
-    }
-
-    if (error) {
-         return (
-             <div className="flex h-screen items-center justify-center p-4 bg-slate-950">
-                <div className="bg-slate-900 border border-red-500/30 text-white px-8 py-6 rounded-3xl relative max-w-md text-center shadow-2xl">
-                    <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold mb-2">Hata Oluştu</h3>
-                    <p className="text-slate-400 mb-6">{error}</p>
-                    <Button asChild className="w-full bg-slate-800 hover:bg-slate-700 text-white h-12 rounded-xl">
-                        <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
-                    </Button>
-                </div>
-            </div>
-         );
-    }
-
-    if (gameState === 'finished') {
-        return (
-            <GameEndScreen 
-                score={score}
-                onSave={handleSaveAndExit}
-                isSaving={isSaving}
-                scoreSaved={isScoreSaved}
-                onRestart={restartGame}
-                backUrl={backUrl}
-            />
-        );
-    }
+    if (gameState === 'loading') return <div className="flex h-screen items-center justify-center bg-green-900"><Loader2 className="h-20 w-20 animate-spin text-white"/></div>;
+    if (error) return <div className="flex h-screen items-center justify-center bg-black text-red-500 font-bold">{error}</div>;
+    if (gameState === 'finished') return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} scoreSaved={isScoreSaved} onRestart={() => window.location.reload()} backUrl={backUrl} />;
 
     return (
-        <div ref={mainContentRef} className="min-h-screen flex flex-col items-center bg-slate-950 text-white relative overflow-hidden select-none pb-24 md:pb-8">
-             
-             {/* Arka Plan Efektleri */}
-             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] animate-pulse delay-1000" />
+        <div className="min-h-screen bg-green-800 relative overflow-hidden font-sans select-none flex flex-col">
+            <style jsx global>{footballStyles}</style>
+
+            {/* --- STADYUM ARKA PLANI --- */}
+            <div className="absolute inset-0 z-0">
+                <div className="w-full h-full bg-[repeating-linear-gradient(0deg,#2f855a,#2f855a_50px,#276749_50px,#276749_100px)] opacity-50"></div>
+                <div className="absolute top-0 w-full h-1/3 bg-gradient-to-b from-slate-900 to-transparent opacity-80"></div>
+                <div className="absolute bottom-[15%] left-[10%] right-[10%] h-[200px] border-x-4 border-t-4 border-white/40 skew-x-[20deg]"></div>
+                <div className="absolute bottom-[15%] left-[50%] -translate-x-1/2 w-[10px] h-[10px] bg-white rounded-full"></div>
             </div>
 
-            {/* --- HUD --- */}
-            <div className="w-full relative z-20 bg-slate-900/80 backdrop-blur-md border-b border-white/5 p-4">
-                <div className="max-w-4xl mx-auto flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        {/* DEĞİŞİKLİK BURADA: Geri butonu artık oyunu bitiriyor */}
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => setGameState('finished')}
-                            className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl"
-                        >
-                            <ArrowLeft className="h-6 w-6" />
+            {/* --- SKOR TABLOSU --- */}
+            <div className="relative z-20 w-full p-4">
+                <div className="max-w-4xl mx-auto bg-black/80 text-white rounded-xl border-4 border-slate-700 p-4 flex justify-between items-center shadow-2xl">
+                    <div className="flex items-center gap-4">
+                        <Button variant="ghost" className="text-slate-400 hover:text-white" onClick={() => setGameState('finished')}>
+                            <ArrowLeft className="mr-2" /> Soyunma Odası
                         </Button>
-                        <div>
-                            <h1 className="font-bold text-lg text-white leading-tight">{topicName}</h1>
-                            <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Şansını Dene!</span>
+                        <div className="flex flex-col">
+                            <span className="text-xs text-green-400 font-bold uppercase tracking-widest">GOL KRALI</span>
+                            <h1 className="text-2xl font-black italic">{user?.displayName || 'OYUNCU'}</h1>
                         </div>
                     </div>
-
-                    <div className="flex items-center gap-2 md:gap-3">
-                        <Button 
-                            onClick={() => setGameState('finished')}
-                            variant="ghost"
-                            className="h-9 px-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-xs md:text-sm transition-colors border border-red-500/10 hidden sm:flex"
-                        >
-                            <XOctagon className="h-4 w-4 mr-1.5" />
-                            Bitir
-                        </Button>
-
-                        <div className="flex items-center gap-2 bg-slate-950/50 border border-yellow-500/20 px-3 py-1.5 rounded-xl">
-                            <Trophy className="h-4 w-4 text-yellow-400" />
-                            <span className="font-mono font-bold text-white">{score}</span>
+                    
+                    <div className="flex items-center gap-6">
+                        <div className="text-center hidden sm:block">
+                            <div className="text-3xl font-black font-mono text-yellow-400">{goals}</div>
+                            <div className="text-[10px] text-slate-400 uppercase">GOL</div>
                         </div>
-                        <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 border-white/10 text-slate-300 hover:text-white h-9 w-9 rounded-xl" />
+                        <div className="text-center hidden sm:block">
+                            <div className="text-3xl font-black font-mono text-red-400">{misses}</div>
+                            <div className="text-[10px] text-slate-400 uppercase">KAÇAN</div>
+                        </div>
+                        <div className="bg-slate-800 px-6 py-2 rounded-lg border border-slate-600">
+                            <span className="block text-xs text-slate-400">SKOR</span>
+                            <span className="text-3xl font-mono font-black text-white">{score}</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* --- OYUN ALANI --- */}
-            <div className="flex-grow flex flex-col items-center justify-center p-4 w-full relative z-10">
+            <div className="flex-grow relative z-10 flex flex-col justify-end pb-10 w-full h-full min-h-[600px]">
                 
-                <style jsx global>{`
-                    .coin-container { perspective: 1000px; width: 180px; height: 180px; margin: 0 auto; cursor: pointer; }
-                    .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-                    .coin-face { 
-                        position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 50%; 
-                        display: flex; align-items: center; justify-content: center; 
-                        box-shadow: 0 0 30px rgba(234, 179, 8, 0.3), inset 0 0 20px rgba(255,255,255,0.2); 
-                        border: 8px solid #FCD34D; 
-                        background: radial-gradient(circle at 30% 30%, #F59E0B, #B45309);
-                    }
-                    .coin-front { transform: rotateY(0deg); }
-                    .coin-back { transform: rotateY(180deg); }
-                    .coin-text { font-weight: 900; font-size: 2rem; color: #FFFBEB; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-                    .coin-sub { font-size: 0.75rem; font-weight: bold; color: #FEF3C7; text-transform: uppercase; margin-top: 0.25rem; letter-spacing: 0.1em; }
-                `}</style>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <Confetti active={showConfetti} config={{ elementCount: 200, spread: 360, startVelocity: 50 }} />
+                </div>
 
-                <GameScreen gameState={gameState}>
-                    <div className="mb-8 mt-2">
-                        <div className="coin-container" onClick={gameState === 'start' ? flipCoin : undefined}>
-                            <div className="coin" style={{ transform: `rotateY(${rotation}deg)` }}>
-                                <div className="coin-face coin-front flex-col">
-                                    <Coins className="h-10 w-10 text-yellow-100 mb-1 opacity-80" />
-                                    <div className="coin-text">YAZI</div>
-                                    <div className="coin-sub">10 Puan</div>
-                                </div>
-                                <div className="coin-face coin-back flex-col">
-                                    <Trophy className="h-10 w-10 text-yellow-100 mb-1 opacity-80" />
-                                    <div className="coin-text">TURA</div>
-                                    <div className="coin-sub">20 Puan</div>
-                                </div>
+                {/* --- KALE --- */}
+                <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 w-[90%] md:w-[600px] h-[250px] border-x-[12px] border-t-[12px] border-slate-200/90 shadow-2xl perspective-1000 group">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-30"></div>
+                    
+                    {/* HEDEF BÖLGELERİ */}
+                    {gameState === 'aiming' && (
+                        <>
+                            <div onClick={() => handleAim('left')} className="absolute top-0 left-0 w-1/3 h-full cursor-pointer hover:bg-white/10 transition-colors flex items-center justify-center group-hover/left">
+                                <Target className="text-white/50 w-12 h-12 animate-pulse" />
+                            </div>
+                            <div onClick={() => handleAim('center')} className="absolute top-0 left-1/3 w-1/3 h-full cursor-pointer hover:bg-white/10 transition-colors flex items-center justify-center">
+                                <Target className="text-white/50 w-12 h-12 animate-pulse" />
+                            </div>
+                            <div onClick={() => handleAim('right')} className="absolute top-0 right-0 w-1/3 h-full cursor-pointer hover:bg-white/10 transition-colors flex items-center justify-center">
+                                <Target className="text-white/50 w-12 h-12 animate-pulse" />
+                            </div>
+                        </>
+                    )}
+
+                    {/* KALECİ */}
+                    <div className={cn(
+                        "keeper transition-transform duration-500",
+                        gameState === 'kicking' && keeperDirection === 'left' && "dive-left",
+                        gameState === 'kicking' && keeperDirection === 'right' && "dive-right",
+                        gameState === 'aiming' && "animate-bounce" 
+                    )}>
+                        <div className="w-full h-full flex flex-col items-center">
+                            <div className="w-10 h-10 bg-yellow-300 rounded-full border-2 border-black relative"></div>
+                            <div className="w-16 h-20 bg-blue-600 rounded-xl border-2 border-black flex items-center justify-center">
+                                <span className="text-white font-bold text-xs">1</span>
+                            </div> 
+                            <div className="w-full flex justify-between mt-[-5px]">
+                                <div className="w-4 h-12 bg-black rounded-full"></div>
+                                <div className="w-4 h-12 bg-black rounded-full"></div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    {gameState === 'start' && (
-                        <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
-                            <p className="text-slate-400 mb-4">Parayı at, şansına gelen zorlukta soruyu bil!</p>
-                            <button 
-                                onClick={flipCoin} 
-                                className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl font-bold text-xl transition-all transform hover:scale-105 shadow-xl shadow-indigo-500/20 border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1"
-                            >
-                                PARAYI AT <RotateCw className="inline-block ml-2 h-5 w-5" />
-                            </button>
-                        </div>
-                    )}
+                {/* --- TOP --- */}
+                <div className={cn(
+                    "ball",
+                    gameState === 'aiming' && "ready",
+                    gameState === 'kicking' && selectedTarget === 'left' && "shoot-left",
+                    gameState === 'kicking' && selectedTarget === 'right' && "shoot-right",
+                    gameState === 'kicking' && selectedTarget === 'center' && "shoot-center"
+                )}></div>
 
-                    {gameState === 'flipping' && <p className="text-indigo-400 font-bold text-lg animate-pulse mt-4">Şansın dönüyor...</p>}
+                {/* --- MESAJ ALANI --- */}
+                {gameState === 'aiming' && (
+                    <div className="absolute bottom-10 left-0 right-0 text-center animate-bounce">
+                        <span className="bg-black/50 text-white px-6 py-3 rounded-full text-lg font-bold border border-white/20">
+                            Köşeyi Seç ve Şutunu Çek!
+                        </span>
+                    </div>
+                )}
 
-                    {gameState === 'result' && (
-                        <div className="animate-in zoom-in duration-300">
-                            <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500 mb-2 drop-shadow-sm">
-                                {coinSide === 'yazi' ? 'YAZI GELDİ!' : 'TURA GELDİ!'}
+                {/* --- SONUÇ MODALI --- */}
+                {gameState === 'result' && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 animate-in zoom-in duration-300">
+                        <div className={cn("text-center p-8 rounded-3xl shadow-2xl border-4 transform scale-110", 
+                            shotResult === 'goal' ? "bg-green-600 border-white text-white" : "bg-red-600 border-white text-white"
+                        )}>
+                            <h2 className="text-6xl font-black italic uppercase tracking-tighter mb-2 drop-shadow-md">
+                                {shotResult === 'goal' ? 'GOOOOL!' : 'KURTARDI!'}
                             </h2>
-                            <div className={`inline-block px-4 py-1 rounded-full text-sm font-bold mb-6 ${coinSide === 'yazi' ? 'bg-blue-500/20 text-blue-300' : 'bg-pink-500/20 text-pink-300'}`}>
-                                {coinSide === 'yazi' ? 'Kolay Soru (10 Puan)' : 'Zor Soru (20 Puan)'}
-                            </div>
-                            
-                            <button 
-                                onClick={() => setGameState('question')} 
-                                className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold border border-white/10 transition-colors"
-                            >
-                                Soruyu Gör
-                            </button>
+                            <p className="text-xl font-medium opacity-90 mb-6">
+                                {shotResult === 'goal' ? '+10 Puan Kazandın!' : 'Kaleci gole izin vermedi. -5 Puan.'}
+                            </p>
+                            <Button onClick={nextTurn} className="bg-white text-black hover:bg-slate-200 font-bold text-lg px-8 py-6 rounded-xl shadow-lg">
+                                {shotResult === 'goal' ? 'Tekrar Vur' : 'Pes Etme, Tekrar Dene'}
+                            </Button>
                         </div>
-                    )}
-                </GameScreen>
+                    </div>
+                )}
 
-                <QuestionScreen gameState={gameState}>
-                    {currentQuestion && (
-                        <>
-                            <div className="mb-6 text-center">
-                                <span className={`px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg ${coinSide === 'yazi' ? 'bg-indigo-500' : 'bg-pink-500'}`}>
-                                    {coinSide === 'yazi' ? '10 PUANLIK SORU' : '20 PUANLIK SORU'}
-                                </span>
+                {/* --- SORU MODALI --- */}
+                {gameState === 'question' && currentQuestion && (
+                    <div className="absolute inset-0 z-40 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+                        <div className="bg-slate-900 border border-white/20 rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl animate-in slide-in-from-bottom-10">
+                            <div className="flex justify-between items-center mb-6">
+                                <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Penaltı Atışı</span>
+                                <span className="text-slate-400 text-sm">Doğru cevap = GOL</span>
                             </div>
                             
-                            <h3 className="text-xl md:text-3xl font-bold text-white mb-8 text-center leading-relaxed drop-shadow-md">
+                            <h3 className="text-xl md:text-2xl font-bold text-white mb-8 text-center">
                                 {currentQuestion.text}
                             </h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {currentQuestion.options?.map((option, index) => {
-                                    let btnClass = "py-4 px-6 rounded-2xl font-bold text-lg transition-all border-2 relative overflow-hidden group ";
-                                    
-                                    if (gameState === 'question') {
-                                        btnClass += "bg-slate-900/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-indigo-500/50 hover:text-white hover:shadow-lg";
-                                    } else if (gameState === 'feedback') {
-                                        if (option === currentQuestion.correctAnswer) {
-                                            btnClass += "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10";
-                                        } else if (option === selectedOption) {
-                                            btnClass += "bg-red-900/50 border-red-500/50 text-red-400 opacity-80 animate-shake";
-                                        } else {
-                                            btnClass += "bg-slate-900/30 border-transparent text-slate-600 opacity-50";
-                                        }
-                                    }
-
-                                    return (
-                                        <button 
-                                            key={index}
-                                            onClick={() => gameState === 'question' && handleOptionClick(option)}
-                                            disabled={gameState === 'feedback'}
-                                            className={btnClass}
-                                        >
-                                            <span className="relative z-10">{option}</span>
-                                            {gameState === 'feedback' && option === currentQuestion.correctAnswer && (
-                                                <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-emerald-200 animate-in zoom-in" />
-                                            )}
-                                            {gameState === 'feedback' && option === selectedOption && option !== currentQuestion.correctAnswer && (
-                                                <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-red-400 animate-in zoom-in" />
-                                            )}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-
-                            {gameState === 'feedback' && (
-                                <div className="mt-8 text-center animate-in slide-in-from-bottom-4 duration-300">
-                                    <div className={`inline-flex items-center gap-2 px-6 py-2 rounded-full font-bold text-lg mb-4 ${isCorrect ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
-                                        {isCorrect ? <CheckCircle2 className="h-5 w-5"/> : <XCircle className="h-5 w-5"/>}
-                                        {isCorrect ? 'Tebrikler! Doğru Cevap.' : 'Maalesef Yanlış.'}
-                                    </div>
-                                    <br/>
-                                    <button 
-                                        onClick={nextTurn}
-                                        className="px-10 py-4 bg-white text-slate-900 rounded-2xl font-bold hover:bg-indigo-50 shadow-lg shadow-white/10 transition-transform hover:scale-105"
+                                {currentQuestion.options?.map((opt, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => handleAnswer(opt)}
+                                        className="py-4 px-6 bg-slate-800 hover:bg-blue-700 text-slate-200 hover:text-white rounded-xl font-bold text-lg transition-all border border-slate-700 hover:border-blue-500 hover:scale-[1.02] shadow-lg"
                                     >
-                                        Sıradaki Tur
+                                        {opt}
                                     </button>
-                                </div>
-                            )}
-                        </>
-                    )}
-                </QuestionScreen>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
             </div>
         </div>
     );
 }
 
-export default function YaziTuraOyunPage() {
+export default function PenaltyGamePage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>}>
-            <YaziTuraClientPage/>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-green-900"><Loader2 className="h-16 w-16 animate-spin text-white" /></div>}>
+            <PenaltyGameClient/>
         </Suspense>
     )
 }

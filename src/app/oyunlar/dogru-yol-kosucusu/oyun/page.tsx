@@ -126,10 +126,10 @@ function Game() {
   const updateGame = useCallback((time: number) => {
     if (gameState !== 'playing') return;
 
-    // Zorluk Artışı
-    if (scoreRef.current > 500) setSpeed(0.7);
-    if (scoreRef.current > 1000) setSpeed(0.9);
-    if (scoreRef.current > 2000) setSpeed(1.1);
+    // Zorluk Artışı (Puan 5 olduğu için eşikleri düşürdük: 125, 250, 500)
+    if (scoreRef.current > 125) setSpeed(0.7);
+    if (scoreRef.current > 250) setSpeed(0.9);
+    if (scoreRef.current > 500) setSpeed(1.1);
 
     // Engel Üretme (Hıza bağlı sıklık)
     const spawnRate = 2500 / speed; // Hız arttıkça süre azalır
@@ -147,7 +147,10 @@ function Game() {
         // Çarpışma Kontrolü (Oyuncu Y: 80-90 arası varsayalım)
         if (newY > 75 && newY < 90 && !obs.passed) {
           if (playerLane === obs.correctLane) {
-            const pointsToAdd = 20; // Sabit puan
+            
+            // --- GÜNCELLEME BURADA: 5 PUAN ---
+            const pointsToAdd = 5; 
+            
             setScore(s => {
                 scoreRef.current = s + pointsToAdd;
                 return s + pointsToAdd;
@@ -341,5 +344,3 @@ export default function DogruYolKosucusuPage() {
         </Suspense>
     );
 }
-
-    
