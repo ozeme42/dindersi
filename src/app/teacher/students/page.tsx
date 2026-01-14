@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { 
     FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Search, 
     UserCheck, UserCog, PlusCircle, ArrowLeft, ChevronLeft, ChevronRight,
-    Star, Plus, Minus
+    Star, X
 } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator
@@ -32,11 +32,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox"; // Eğer shadcn checkbox kurulu değilse, aşağıda manuel input kullanıldı.
 
 // Firebase and Actions
 import { useToast } from "@/hooks/use-toast";
 import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
-// NOT: addStudentScore fonksiyonunu actions dosyanızdan import ettiğinizden emin olun
 import { getStudentData, saveUser, bulkAddStudents, approveStudent, addStudentScore } from "./actions";
 
 // Types
@@ -49,7 +49,7 @@ import { useAuth } from "@/context/auth-context";
 
 // --- COMPONENTS ---
 
-// Puan Verme Dialog Bileşeni
+// Puan Verme Dialog Bileşeni (Aynı kalıyor)
 function ScoreDialog({ 
     isOpen, 
     onOpenChange, 
@@ -65,7 +65,6 @@ function ScoreDialog({
     const [reason, setReason] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Dialog her açıldığında state'i sıfırla
     useEffect(() => {
         if (isOpen) {
             setScore("");
@@ -93,7 +92,7 @@ function ScoreDialog({
                         Puan İşlemi
                     </DialogTitle>
                     <DialogDescription className="text-slate-400">
-                        <span className="font-bold text-white">{student?.displayName}</span> adlı öğrenciye puan verin veya silin.
+                        <span className="font-bold text-white">{student?.displayName}</span> adlı öğrenciye puan verin.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
@@ -115,9 +114,7 @@ function ScoreDialog({
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="score" className="text-right text-slate-300">
-                            Puan
-                        </Label>
+                        <Label htmlFor="score" className="text-right text-slate-300">Puan</Label>
                         <Input
                             id="score"
                             type="number"
@@ -128,14 +125,12 @@ function ScoreDialog({
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="reason" className="text-right text-slate-300">
-                            Açıklama
-                        </Label>
+                        <Label htmlFor="reason" className="text-right text-slate-300">Açıklama</Label>
                         <Textarea
                             id="reason"
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            placeholder="Örn: Derse aktif katılım, Ödev eksikliği..."
+                            placeholder="Örn: Derse aktif katılım..."
                             className="col-span-3 bg-slate-950 border-white/10 text-white focus:border-indigo-500 min-h-[80px]"
                         />
                     </div>
@@ -155,12 +150,16 @@ function ScoreDialog({
     );
 }
 
+// StudentTable - Checkbox özelliği eklendi
 function StudentTable({ 
     students, 
     isLoading, 
     onEdit, 
     onDelete, 
-    onAddScore
+    onAddScore,
+    selectedIds,
+    onSelect,
+    onSelectAll
 }: { 
     students: UserProfile[], 
     isLoading: boolean, 
@@ -169,7 +168,13 @@ function StudentTable({
     onAddScore: (student: UserProfile) => void,
     onClassChange: (studentId: string, newClassName: string) => void,
     allClasses: SchoolClass[],
+    selectedIds: string[],
+    onSelect: (uid: string) => void,
+    onSelectAll: (checked: boolean) => void
 }) {
+    const isAllSelected = students.length > 0 && students.every(s => selectedIds.includes(s.uid));
+    const isSomeSelected = students.some(s => selectedIds.includes(s.uid)) && !isAllSelected;
+
     if (isLoading) {
         return <div className="flex justify-center items-center h-48"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
     }
@@ -179,6 +184,15 @@ function StudentTable({
             <Table>
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
+                        <TableHead className="w-[40px] pl-4">
+                            <input 
+                                type="checkbox"
+                                className="h-4 w-4 rounded border-white/20 bg-slate-800 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-slate-900 cursor-pointer accent-indigo-500"
+                                checked={isAllSelected}
+                                ref={input => { if (input) input.indeterminate = isSomeSelected; }}
+                                onChange={(e) => onSelectAll(e.target.checked)}
+                            />
+                        </TableHead>
                         <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
                         <TableHead className="text-slate-300 font-bold text-right">Puan</TableHead>
@@ -187,8 +201,17 @@ function StudentTable({
                 </TableHeader>
                 <TableBody>
                     {students.length > 0 ? students.map((student) => {
+                        const isSelected = selectedIds.includes(student.uid);
                         return (
-                        <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
+                        <TableRow key={student.uid} className={`border-white/5 hover:bg-white/5 transition-colors group ${isSelected ? 'bg-indigo-500/10 hover:bg-indigo-500/20' : ''}`}>
+                            <TableCell className="pl-4">
+                                <input 
+                                    type="checkbox"
+                                    className="h-4 w-4 rounded border-white/20 bg-slate-800 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-slate-900 cursor-pointer accent-indigo-500"
+                                    checked={isSelected}
+                                    onChange={() => onSelect(student.uid)}
+                                />
+                            </TableCell>
                             <TableCell>
                                 <div className="flex items-center gap-3">
                                     <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700"/>
@@ -251,7 +274,7 @@ function StudentTable({
                         )
                     }) : (
                         <TableRow>
-                            <TableCell colSpan={4} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={5} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -260,8 +283,8 @@ function StudentTable({
     );
 }
 
+// PendingStudentTable (Değişmedi, sadece kopyalıyoruz)
 function PendingStudentTable({ students, onApprove, onDelete }: { students: UserProfile[], onApprove: (uid: string) => void, onDelete: (uid: string) => void }) {
-    // ... (PendingStudentTable kodu aynı kalacak, önceki cevaptan kopyalanabilir)
     return (
         <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
              <Table>
@@ -315,11 +338,11 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
                                 </AlertDialog>
                             </TableCell>
                         </TableRow>
-                     )) : (
+                      )) : (
                         <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center text-slate-500 italic">Onay bekleyen öğrenci bulunmuyor.</TableCell>
                         </TableRow>
-                     )}
+                      )}
                 </TableBody>
             </Table>
         </div>
@@ -327,7 +350,6 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
 }
 
 // --- SCHEMA ---
-// (Schema kodu aynı kalacak, önceki cevaptan kopyalanabilir)
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
@@ -389,9 +411,12 @@ export default function StudentsPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10; 
 
+    // --- YENİ STATE: TOPLU SİLME ---
+    const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
+    const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+
     const { toast } = useToast();
 
-    // ... (fetchAllData ve useEffect kısımları aynı)
     const fetchAllData = useCallback(async () => {
         setIsLoading(true);
         try {
@@ -434,9 +459,9 @@ export default function StudentsPage() {
 
     useEffect(() => {
         setCurrentPage(1);
+        setSelectedStudentIds([]); // Filtre değişince seçimleri sıfırla
     }, [activeClassId, activeBranch, schoolFilter, searchTerm]);
   
-    // ... (handleDeleteUser, handleApproveStudent, handleOpenDialog aynı)
     const handleDeleteUser = async (userId: string) => {
         const originalUsers = [...allStudents];
         setAllStudents(prev => prev.filter(s => s.uid !== userId));
@@ -444,11 +469,59 @@ export default function StudentsPage() {
         if (result.success) {
             toast({ title: "Başarılı", description: "Kullanıcı silindi." });
             await fetchAllData();
+            // Eğer silinen kullanıcı seçim listesindeyse onu da çıkar
+            setSelectedStudentIds(prev => prev.filter(id => id !== userId));
         } else {
               toast({ title: "Hata", description: "Kullanıcı silinirken bir hata oluştu.", variant: "destructive" });
               setAllStudents(originalUsers);
         }
     }
+
+    // --- YENİ: Toplu Silme Fonksiyonu ---
+    const handleBulkDelete = async () => {
+        if (selectedStudentIds.length === 0) return;
+        
+        setIsBulkDeleting(true);
+        let successCount = 0;
+        let failCount = 0;
+
+        // İyimser UI güncellemesi
+        const originalUsers = [...allStudents];
+        setAllStudents(prev => prev.filter(s => !selectedStudentIds.includes(s.uid)));
+
+        try {
+            // Paralel silme işlemi
+            await Promise.all(selectedStudentIds.map(async (id) => {
+                const result = await deleteUserFromFirestore(id);
+                if (result.success) {
+                    successCount++;
+                } else {
+                    failCount++;
+                }
+            }));
+
+            if (failCount > 0) {
+                 toast({ 
+                     title: "Kısmi Başarı", 
+                     description: `${successCount} kullanıcı silindi, ${failCount} kullanıcı silinemedi.`, 
+                     variant: "destructive" 
+                 });
+                 // Hata durumunda verileri tekrar çekmek en güvenlisi
+                 await fetchAllData();
+            } else {
+                 toast({ title: "Başarılı", description: `${successCount} kullanıcı başarıyla silindi.` });
+            }
+            
+            setSelectedStudentIds([]); // Seçimleri temizle
+
+        } catch (error) {
+            console.error("Bulk delete error", error);
+            toast({ title: "Hata", description: "Toplu silme işleminde bir hata oluştu.", variant: "destructive" });
+            setAllStudents(originalUsers); // Geri al
+        } finally {
+            setIsBulkDeleting(false);
+        }
+    };
   
     const handleApproveStudent = async (uid: string) => {
         const originalStudents = [...allStudents];
@@ -468,7 +541,6 @@ export default function StudentsPage() {
         setDialogState({ isOpen: true, user: user || defaultUser });
     };
 
-    // Yeni Puan Verme Fonksiyonu
     const handleAddScoreClick = (student: UserProfile) => {
         setScoreDialogState({ isOpen: true, student });
     };
@@ -477,13 +549,12 @@ export default function StudentsPage() {
         const result = await addStudentScore(uid, score, reason);
         if (result.success) {
             toast({ title: "Puan Eklendi", description: `${score} puan başarıyla eklendi.` });
-            await fetchAllData(); // Listeyi güncelle
+            await fetchAllData(); 
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
     };
 
-    // ... (handleSaveUser, handleAddSingleStudent, handleBulkAdd aynı)
     const handleSaveUser = async (data: z.infer<typeof UserEditorSchema>) => {
         setIsSaving(true);
         let schoolName: string | undefined;
@@ -654,6 +725,28 @@ export default function StudentsPage() {
       return pending.sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
     }, [allStudents, currentUser?.role, currentUser?.schoolName]);
 
+    // --- YENİ: Seçim İşleyicileri ---
+    const handleSelectUser = (uid: string) => {
+        setSelectedStudentIds(prev => 
+            prev.includes(uid) 
+            ? prev.filter(id => id !== uid) 
+            : [...prev, uid]
+        );
+    };
+
+    const handleSelectAll = (checked: boolean) => {
+        if (checked) {
+            // Sadece şu anki sayfadaki (veya filtrelenmiş tüm) öğrencileri seç
+            // Güvenlik için sadece şu an görüntülenenleri seçiyoruz
+            const idsToSelect = paginatedStudents.map(s => s.uid);
+            setSelectedStudentIds(prev => Array.from(new Set([...prev, ...idsToSelect])));
+        } else {
+            // Şu anki sayfadakileri seçimden çıkar
+            const idsToDeselect = paginatedStudents.map(s => s.uid);
+            setSelectedStudentIds(prev => prev.filter(id => !idsToDeselect.includes(id)));
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="flex h-screen w-full items-center justify-center bg-slate-950">
@@ -687,7 +780,7 @@ export default function StudentsPage() {
                             </div>
                             Öğrenci Yönetimi
                         </h1>
-                     </div>
+                      </div>
                 </div>
 
                 <Tabs defaultValue="list" className="space-y-6">
@@ -744,7 +837,42 @@ export default function StudentsPage() {
                                      </div>
                                 </div>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="space-y-4">
+                                {/* YENİ: Toplu İşlem Barı */}
+                                {selectedStudentIds.length > 0 && (
+                                    <div className="flex items-center justify-between bg-indigo-500/10 border border-indigo-500/30 p-4 rounded-xl animate-in fade-in slide-in-from-top-2">
+                                        <div className="flex items-center gap-2 text-indigo-200">
+                                            <span className="font-bold bg-indigo-500/20 px-2 py-1 rounded-md text-indigo-300">{selectedStudentIds.length}</span>
+                                            <span>öğrenci seçildi</span>
+                                            <Button variant="ghost" size="sm" onClick={() => setSelectedStudentIds([])} className="h-6 w-6 p-0 rounded-full hover:bg-indigo-500/20 ml-2">
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button variant="destructive" size="sm" className="bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-900/20">
+                                                    <Trash2 className="mr-2 h-4 w-4" /> Seçilenleri Sil
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle className="text-red-400">Toplu Silme İşlemi</AlertDialogTitle>
+                                                    <AlertDialogDescription className="text-slate-400">
+                                                        Seçilen <span className="font-bold text-white">{selectedStudentIds.length}</span> öğrenci kalıcı olarak silinecektir. Bu işlem geri alınamaz.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={handleBulkDelete} disabled={isBulkDeleting} className="bg-red-600 hover:bg-red-500 text-white">
+                                                        {isBulkDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Trash2 className="mr-2 h-4 w-4"/>}
+                                                        Evet, Hepsini Sil
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    </div>
+                                )}
+
                                 <StudentTable 
                                     students={paginatedStudents} 
                                     isLoading={isLoading} 
@@ -753,6 +881,9 @@ export default function StudentsPage() {
                                     onAddScore={handleAddScoreClick}
                                     onClassChange={() => {}} 
                                     allClasses={classes} 
+                                    selectedIds={selectedStudentIds}
+                                    onSelect={handleSelectUser}
+                                    onSelectAll={handleSelectAll}
                                 />
                                 
                                 {/* Sayfalama Kontrolleri */}
@@ -862,8 +993,8 @@ export default function StudentsPage() {
                                         <TabsContent value="single" className="mt-0">
                                             <form onSubmit={handleAddSingleStudent} className="flex gap-4 items-end">
                                               <div className="flex-1 space-y-2">
-                                                  <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
-                                                  <Input placeholder="Örn: Savaşçı 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
+                                                <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
+                                                <Input placeholder="Örn: Savaşçı 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
                                               </div>
                                               <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !newStudentName.trim()}>
                                                   {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
@@ -903,7 +1034,7 @@ export default function StudentsPage() {
                  />
               )}
 
-            {/* YENİ: Puan Verme Dialogu */}
+            {/* Puan Verme Dialogu */}
             {scoreDialogState.isOpen && (
                 <ScoreDialog 
                     isOpen={scoreDialogState.isOpen}

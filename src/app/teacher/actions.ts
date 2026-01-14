@@ -13,11 +13,14 @@ import {
     limit,
     doc,
     getDoc,
-    getCountFromServer
+    getCountFromServer,
+    writeBatch,
+    serverTimestamp,
 } from 'firebase/firestore';
 import type { UserProfile, Course, Unit, Topic, ScoreEvent, SchoolClass, QuestionBankStats } from '@/lib/types';
 import { unstable_noStore as noStore } from 'next/cache';
-import { getQuestionBankProgress } from "@/app/student/soru-bankasi/actions";
+import { getCourseQuestionBankStats } from "@/app/student/soru-bankasi/actions";
+import { getAdminDb } from "@/lib/firebase-admin";
 
 type DashboardStats = {
     totalStudents: number;
@@ -137,5 +140,45 @@ export async function getStudentSearchResults(searchTerm: string): Promise<UserP
     } catch (error) {
         console.error("Error searching students:", error);
         return [];
+    }
+}
+
+export async function archiveAndResetScores(): Promise<{ success: boolean; error?: string }> {
+    noStore();
+    const adminDb = getAdminDb();
+    const studentQuery = adminDb.collection('users').where('role', '==', 'student');
+    
+    try {
+        const studentSnap = await studentQuery.orderBy('score', 'desc').get();
+        const topStudents = studentSnap.docs.map(doc => {
+            const data = doc.data();
+            return {
+                uid: doc.id,
+                displayName: data.displayName,
+                class: data.class,
+                score: data.score,
+                avatar: data.avatar || null,
+            };
+        });
+        
+        // Arşivi oluştur
+        const archiveRef = adminDb.collection('archivedSeasons').doc();
+        await archiveRef.set({
+            seasonName: `Sezon Finali - ${new Date().toLocaleDateString('tr-TR')}`,
+            createdAt: serverTimestamp(),
+            leaderboard: topStudents,
+        });
+
+        // Tüm öğrencilerin puanlarını sıfırla
+        const batch = adminDb.batch();
+        studentSnap.docs.forEach(doc => {
+            batch.update(doc.ref, { score: 0 });
+        });
+        await batch.commit();
+
+        return { success: true };
+    } catch (error: any) {
+        console.error('Error archiving and resetting scores:', error);
+        return { success: false, error: 'İşlem sırasında bir sunucu hatası oluştu.' };
     }
 }
