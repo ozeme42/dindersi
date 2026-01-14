@@ -20,6 +20,7 @@ import {
 } from "./ui/alert-dialog";
 import { archiveAndResetScores } from "@/app/teacher/actions";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/auth-context";
 
 const FeatureButton = ({ href, title, description, icon, colorClass }: { href: string, title: string, description: string, icon: ReactNode, colorClass: string }) => {
     return (
@@ -44,6 +45,7 @@ const FeatureButton = ({ href, title, description, icon, colorClass }: { href: s
 };
 
 export function TeacherMainButtons() {
+    const { user } = useAuth(); // Auth hook'unu kullanarak kullanıcı bilgilerini al
     const [isSeasonFinaleDialogOpen, setIsSeasonFinaleDialogOpen] = useState(false);
     const [isResetting, setIsResetting] = useState(false);
     const { toast } = useToast();
@@ -76,38 +78,41 @@ export function TeacherMainButtons() {
                 )}
             </div>
             
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                 <div className="lg:col-start-2">
-                      <AlertDialog open={isSeasonFinaleDialogOpen} onOpenChange={setIsSeasonFinaleDialogOpen}>
-                        <AlertDialogTrigger asChild>
-                            <button className="block group h-full w-full">
-                                <div className="h-full w-full rounded-2xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border border-red-500 bg-red-950/40 hover:bg-red-950/80 group-hover:-translate-y-1 backdrop-blur-md shadow-sm">
-                                    <div className="p-3 rounded-xl mb-3 transition-colors bg-gradient-to-br from-red-500 to-pink-600 shadow-lg group-hover:shadow-red-500/20">
-                                        <Shield className="h-6 w-6 text-white" />
+            {/* Sadece superadmin rolüne sahip kullanıcı bu butonu görebilir */}
+            {user?.role === 'superadmin' && (
+                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                     <div className="lg:col-start-2">
+                          <AlertDialog open={isSeasonFinaleDialogOpen} onOpenChange={setIsSeasonFinaleDialogOpen}>
+                            <AlertDialogTrigger asChild>
+                                <button className="block group h-full w-full">
+                                    <div className="h-full w-full rounded-2xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border border-red-500 bg-red-950/40 hover:bg-red-950/80 group-hover:-translate-y-1 backdrop-blur-md shadow-sm">
+                                        <div className="p-3 rounded-xl mb-3 transition-colors bg-gradient-to-br from-red-500 to-pink-600 shadow-lg group-hover:shadow-red-500/20">
+                                            <Shield className="h-6 w-6 text-white" />
+                                        </div>
+                                        <h3 className="font-bold text-sm text-red-100 group-hover:text-white transition-colors">Sezon Finali Yap</h3>
                                     </div>
-                                    <h3 className="font-bold text-sm text-red-100 group-hover:text-white transition-colors">Sezon Finali Yap</h3>
-                                </div>
-                            </button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                            <AlertDialogHeader>
-                                <AlertDialogTitle className="text-red-400">Genel Puanları Sıfırla ve Arşivle</AlertDialogTitle>
-                                <AlertDialogDescription className="text-slate-400">
-                                    Bu işlem, mevcut liderlik tablosunu "Şampiyonlar Arşivi"ne kaydedecek ve TÜM öğrencilerin genel puanlarını sıfırlayacaktır.
-                                    Bu, yeni bir yarışma sezonu başlatır. Bu işlem geri alınamaz. Emin misiniz?
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleSeasonFinale} disabled={isResetting} className="bg-red-600 hover:bg-red-700 text-white">
-                                    {isResetting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                    Evet, Sezon Finali Yap
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                 </div>
-            </div>
+                                </button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle className="text-red-400">Genel Puanları Sıfırla ve Arşivle</AlertDialogTitle>
+                                    <AlertDialogDescription className="text-slate-400">
+                                        Bu işlem, mevcut liderlik tablosunu "Şampiyonlar Arşivi"ne kaydedecek ve TÜM öğrencilerin genel puanlarını sıfırlayacaktır.
+                                        Bu, yeni bir yarışma sezonu başlatır. Bu işlem geri alınamaz. Emin misiniz?
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleSeasonFinale} disabled={isResetting} className="bg-red-600 hover:bg-red-700 text-white">
+                                        {isResetting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                                        Evet, Sezon Finali Yap
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                     </div>
+                </div>
+            )}
         </>
     );
 }
