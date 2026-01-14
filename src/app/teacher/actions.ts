@@ -19,7 +19,7 @@ import {
 } from 'firebase/firestore';
 import type { UserProfile, Course, Unit, Topic, ScoreEvent, SchoolClass, QuestionBankStats } from '@/lib/types';
 import { unstable_noStore as noStore } from 'next/cache';
-import { getCourseQuestionBankStats } from "@/app/student/soru-bankasi/actions";
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getAdminDb } from "@/lib/firebase-admin";
 
 type DashboardStats = {
@@ -143,13 +143,13 @@ export async function getStudentSearchResults(searchTerm: string): Promise<UserP
     }
 }
 
-export async function archiveAndResetScores(): Promise<{ success: boolean; error?: string }> {
+export async function archiveAndResetScores(seasonName: string): Promise<{ success: boolean; error?: string }> {
     noStore();
     const adminDb = getAdminDb();
     const studentQuery = adminDb.collection('users').where('role', '==', 'student');
     
     try {
-        const studentSnap = await studentQuery.orderBy('score', 'desc').get();
+        const studentSnap = await studentQuery.orderBy('score', 'desc').limit(100).get();
         const topStudents = studentSnap.docs.map(doc => {
             const data = doc.data();
             return {
@@ -164,14 +164,15 @@ export async function archiveAndResetScores(): Promise<{ success: boolean; error
         // Arşivi oluştur
         const archiveRef = adminDb.collection('archivedSeasons').doc();
         await archiveRef.set({
-            seasonName: `Sezon Finali - ${new Date().toLocaleDateString('tr-TR')}`,
+            seasonName: seasonName || `Sezon Finali - ${new Date().toLocaleDateString('tr-TR')}`,
             createdAt: serverTimestamp(),
             leaderboard: topStudents,
         });
 
         // Tüm öğrencilerin puanlarını sıfırla
+        const allStudentsSnap = await studentQuery.get();
         const batch = adminDb.batch();
-        studentSnap.docs.forEach(doc => {
+        allStudentsSnap.docs.forEach(doc => {
             batch.update(doc.ref, { score: 0 });
         });
         await batch.commit();

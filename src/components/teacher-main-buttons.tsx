@@ -21,6 +21,8 @@ import {
 import { archiveAndResetScores } from "@/app/teacher/actions";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 const FeatureButton = ({ href, title, description, icon, colorClass }: { href: string, title: string, description: string, icon: ReactNode, colorClass: string }) => {
     return (
@@ -45,10 +47,14 @@ const FeatureButton = ({ href, title, description, icon, colorClass }: { href: s
 };
 
 export function TeacherMainButtons() {
-    const { user } = useAuth(); // Auth hook'unu kullanarak kullanıcı bilgilerini al
+    const { user } = useAuth();
     const [isSeasonFinaleDialogOpen, setIsSeasonFinaleDialogOpen] = useState(false);
     const [isResetting, setIsResetting] = useState(false);
     const { toast } = useToast();
+    
+    // Yeni state'ler
+    const [seasonName, setSeasonName] = useState(`Sezon Finali - ${new Date().toLocaleDateString('tr-TR')}`);
+    const [confirmationStep, setConfirmationStep] = useState(1);
 
     const mainButtons = [
         { key: 'smartboard', href: '/teacher/smartboard', title: 'Akıllı Tahta', description: 'Sınıfınızla etkileşimli yarışmalar düzenleyin.', icon: <MonitorPlay />, colorClass: 'bg-indigo-600 border-indigo-800 hover:bg-indigo-500' },
@@ -58,7 +64,7 @@ export function TeacherMainButtons() {
 
     const handleSeasonFinale = async () => {
         setIsResetting(true);
-        const result = await archiveAndResetScores();
+        const result = await archiveAndResetScores(seasonName);
         if (result.success) {
             toast({ title: "Sezon Finali Başarılı!", description: "Tüm puanlar arşivlendi ve sıfırlandı. Yeni sezon başlıyor!" });
         } else {
@@ -66,6 +72,7 @@ export function TeacherMainButtons() {
         }
         setIsResetting(false);
         setIsSeasonFinaleDialogOpen(false);
+        setConfirmationStep(1); // Diyalogu sıfırla
     }
 
     return (
@@ -78,7 +85,6 @@ export function TeacherMainButtons() {
                 )}
             </div>
             
-            {/* Sadece superadmin rolüne sahip kullanıcı bu butonu görebilir */}
             {user?.role === 'superadmin' && (
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                      <div className="lg:col-start-2">
@@ -94,20 +100,47 @@ export function TeacherMainButtons() {
                                 </button>
                             </AlertDialogTrigger>
                             <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle className="text-red-400">Genel Puanları Sıfırla ve Arşivle</AlertDialogTitle>
-                                    <AlertDialogDescription className="text-slate-400">
-                                        Bu işlem, mevcut liderlik tablosunu "Şampiyonlar Arşivi"ne kaydedecek ve TÜM öğrencilerin genel puanlarını sıfırlayacaktır.
-                                        Bu, yeni bir yarışma sezonu başlatır. Bu işlem geri alınamaz. Emin misiniz?
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleSeasonFinale} disabled={isResetting} className="bg-red-600 hover:bg-red-700 text-white">
-                                        {isResetting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                        Evet, Sezon Finali Yap
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
+                                {confirmationStep === 1 ? (
+                                    <>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle className="text-amber-400">Arşivlenecek Sezona İsim Ver</AlertDialogTitle>
+                                            <AlertDialogDescription className="text-slate-400">
+                                                Mevcut liderlik tablosu bu isimle arşivlenecektir.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <div className="py-4">
+                                            <Label htmlFor="season-name" className="text-slate-300">Sezon Adı</Label>
+                                            <Input 
+                                                id="season-name"
+                                                value={seasonName}
+                                                onChange={(e) => setSeasonName(e.target.value)}
+                                                className="bg-slate-950 border-white/10 text-white mt-2"
+                                            />
+                                        </div>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel onClick={() => setConfirmationStep(1)} className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                            <Button onClick={() => setConfirmationStep(2)} disabled={!seasonName.trim()} className="bg-indigo-600 hover:bg-indigo-500 text-white">
+                                                Devam Et <ArrowRight className="ml-2 h-4 w-4" />
+                                            </Button>
+                                        </AlertDialogFooter>
+                                    </>
+                                ) : (
+                                    <>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
+                                            <AlertDialogDescription className="text-slate-400">
+                                                "{seasonName}" sezonu arşivlenecek ve **TÜM** öğrencilerin genel puanları sıfırlanacaktır. Bu işlem geri alınamaz.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <Button variant="ghost" onClick={() => setConfirmationStep(1)} className="text-slate-400 hover:text-white hover:bg-white/5">Geri</Button>
+                                            <AlertDialogAction onClick={handleSeasonFinale} disabled={isResetting} className="bg-red-600 hover:bg-red-700 text-white">
+                                                {isResetting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                                                Evet, Arşivle ve Sıfırla
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </>
+                                )}
                             </AlertDialogContent>
                         </AlertDialog>
                      </div>
