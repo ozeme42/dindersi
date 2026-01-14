@@ -291,9 +291,10 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
     };
 
     const activityTypes = [
-        // --- DEĞİŞİKLİK BURADA: İSİM VE İKON ---
         { href: '/oyunlar/yazi-tura', label: 'Gol Kralı', icon: Trophy, color: 'amber' },
-        // -------------------------------------
+        // --- DEĞİŞİKLİK BURADA: ÇARKIFELEK EKLENDİ ---
+        { href: '/oyunlar/carkifelek', label: 'Çarkıfelek', icon: Zap, color: 'purple', badge: 'YENİ' }, 
+        // ---------------------------------------------
         { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, color: 'pink' },
         { href: '/oyunlar/kelime-avi', label: 'Kelime Avı', icon: Search, color: 'teal' },
         { href: '/oyunlar/kutu-ac', label: 'Kutu Aç', icon: Package, color: 'indigo' },
@@ -362,6 +363,15 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
 
                     {/* Parlama Efekti */}
                     <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform -translate-x-full group-hover:translate-x-full" style={{ transitionDuration: '1s' }} />
+                
+                    {/* Rozet (Varsa) */}
+                    {activity.badge && (
+                        <div className="absolute top-0 right-0">
+                            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[9px] font-black px-2 py-1 rounded-bl-xl shadow-lg">
+                                {activity.badge}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </Link>
         );

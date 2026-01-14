@@ -93,9 +93,9 @@ export function BottomNavBar() {
     const teacherLinks = [
         { href: '/', icon: Home, label: 'Panel' },
         { href: '/teacher/students', icon: Users, label: 'Öğrenciler' },
-        { href: '/oyunlar', icon: Gamepad2, label: 'Oyunlar' },
-        { href: '/teacher/scales', icon: Scale, label: 'Ölçekler' },
+        { href: '/oyunlar', icon: Gamepad2, label: 'Etkinlikler' },
         { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
+        { href: '/teacher/scales', icon: Scale, label: 'Ölçekler' },
     ];
     
     const links = user.role === 'teacher' || user.role === 'superadmin' ? teacherLinks : studentLinks;
