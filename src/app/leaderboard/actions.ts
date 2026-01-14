@@ -7,6 +7,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import type { UserProfile, ScoreEvent, Announcement } from "@/lib/types";
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachWeekOfInterval, eachMonthOfInterval, subMonths, startOfDay, endOfDay, subDays, format, startOfToday, endOfToday, subWeeks } from 'date-fns';
 import { tr } from 'date-fns/locale';
+import { getAdminDb } from "@/lib/firebase-admin";
 
 
 type LeaderboardEntry = UserProfile & { score: number };
@@ -203,11 +204,24 @@ export async function getLiveLeaderboard(period: 'daily' | 'weekly' | 'all-time'
 }
 
 
-export async function getHallOfFameData(): Promise<{ daily: HallOfFamePeriod[], weekly: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }> {
+export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[], daily: HallOfFamePeriod[], weekly: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }> {
     noStore();
 
+    // Fetch archived seasons
+    const adminDb = getAdminDb();
+    const seasonsSnap = await adminDb.collection('archivedSeasons').orderBy('createdAt', 'desc').get();
+    const seasons = seasonsSnap.docs.map(doc => {
+        const data = doc.data();
+        return {
+            periodName: data.seasonName,
+            winners: data.leaderboard.slice(0, 3) // Sadece ilk 3 kişiyi alıyoruz
+        } as HallOfFamePeriod;
+    });
+
+    // Award daily prizes if needed
     await awardDailyPrizes();
 
+    // Fetch dynamic periods
     const usersSnapshot = await getDocs(query(collection(db, 'users'), where("role", "==", "student")));
     const allStudents = usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
     const studentsMap = new Map(allStudents.map(s => [s.uid, s]));
@@ -323,6 +337,7 @@ export async function getHallOfFameData(): Promise<{ daily: HallOfFamePeriod[], 
     }
     
     const result = {
+        seasons,
         daily: dailyWinners,
         weekly: weeklyWinners.reverse(),
         monthly: monthlyWinners.reverse(),

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -527,9 +528,10 @@ function ClassLeaderboardTab() {
 
 // 3. ŞEREF KÜRSÜSÜ
 function HallOfFameTab() {
-    const [history, setHistory] = useState<HallOfFamePeriod[]>([]);
+    const [history, setHistory] = useState<{ seasons: HallOfFamePeriod[], daily: HallOfFamePeriod[], weekly: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }>({ seasons: [], daily: [], weekly: [], monthly: [] });
     const [isLoading, setIsLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentPeriodType, setCurrentPeriodType] = useState<'seasons' | 'monthly' | 'weekly' | 'daily'>('seasons');
     const [animating, setAnimating] = useState(false);
     
     // PAGINATION STATE FOR ARCHIVE LIST
@@ -538,7 +540,16 @@ function HallOfFameTab() {
     const fetchData = useCallback(() => {
         setIsLoading(true);
         getHallOfFameData().then(data => {
-            setHistory(data.monthly);
+            setHistory(data);
+            if (data.seasons && data.seasons.length > 0) {
+                 setCurrentPeriodType('seasons');
+            } else if (data.monthly && data.monthly.length > 0) {
+                setCurrentPeriodType('monthly');
+            } else if (data.weekly && data.weekly.length > 0) {
+                setCurrentPeriodType('weekly');
+            } else {
+                 setCurrentPeriodType('daily');
+            }
             setCurrentIndex(0);
             setIsLoading(false);
         });
@@ -547,9 +558,11 @@ function HallOfFameTab() {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
+    
+    const activeHistory = history[currentPeriodType] || [];
 
     const handlePrev = () => {
-        if (currentIndex < history.length - 1) {
+        if (currentIndex < activeHistory.length - 1) {
             setAnimating(true);
             setTimeout(() => {
                 setCurrentIndex(prev => prev + 1);
@@ -569,29 +582,52 @@ function HallOfFameTab() {
             }, 300);
         }
     };
+    
+    const changePeriodType = (type: 'seasons' | 'monthly' | 'weekly' | 'daily') => {
+        if (type !== currentPeriodType) {
+            setCurrentPeriodType(type);
+            setCurrentIndex(0);
+        }
+    }
 
     if (isLoading) {
         return <div className="flex justify-center items-center h-64"><Loader2 className="h-10 w-10 animate-spin text-amber-400" /></div>;
     }
 
-    const currentPeriod = history[currentIndex];
+    const currentPeriod = activeHistory[currentIndex];
     const winners = currentPeriod?.winners || [];
     
     // Pagination for Hall of Fame
     const listData = winners.slice(3); // Top 3 are in podium
     const totalPages = Math.ceil(listData.length / ITEMS_PER_PAGE);
     const paginatedList = listData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+    
+    const getPeriodTitle = () => {
+        switch(currentPeriodType) {
+            case 'seasons': return 'Sezon Şampiyonları';
+            case 'monthly': return 'Aylık Şeref Kürsüsü';
+            case 'weekly': return 'Haftalık Şeref Kürsüsü';
+            case 'daily': return 'Günlük Şeref Kürsüsü';
+            default: return 'Şeref Kürsüsü';
+        }
+    }
 
     return (
         <div className="flex flex-col items-center py-6 min-h-[600px] animate-in fade-in zoom-in-95 duration-500">
             <div className="mb-8 text-center">
                 <div className="inline-flex items-center justify-center p-2 bg-amber-500/10 rounded-full border border-amber-500/20">
                     <Trophy className="h-4 w-4 text-amber-400 mr-2" />
-                    <span className="text-xs font-bold text-amber-200 uppercase tracking-widest">Aylık Şeref Kürsüsü</span>
+                    <span className="text-xs font-bold text-amber-200 uppercase tracking-widest">{getPeriodTitle()}</span>
+                </div>
+                 <div className="flex bg-black/20 p-1 rounded-xl w-full sm:w-auto mt-4">
+                    <button onClick={() => changePeriodType('seasons')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'seasons' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.seasons.length === 0}>Sezon</button>
+                    <button onClick={() => changePeriodType('monthly')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'monthly' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.monthly.length === 0}>Aylık</button>
+                    <button onClick={() => changePeriodType('weekly')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'weekly' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.weekly.length === 0}>Haftalık</button>
+                    <button onClick={() => changePeriodType('daily')} className={cn("flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all", currentPeriodType === 'daily' ? "bg-amber-600 text-white shadow-lg" : "text-slate-400 hover:text-white")} disabled={history.daily.length === 0}>Günlük</button>
                 </div>
             </div>
 
-            {history.length === 0 ? (
+            {activeHistory.length === 0 ? (
                 <div className="text-center py-20 px-10 border-2 border-dashed border-slate-800 rounded-3xl text-slate-500">
                     <Trophy className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     Bu kategori için henüz arşiv kaydı bulunmuyor.
@@ -599,7 +635,7 @@ function HallOfFameTab() {
             ) : (
                 <>
                     <div className="flex items-center justify-between w-full max-w-lg mb-8 bg-gradient-to-r from-slate-900/80 to-slate-800/80 p-2 rounded-2xl border border-white/10 shadow-2xl">
-                        <Button variant="ghost" size="icon" onClick={handlePrev} disabled={currentIndex === history.length - 1} className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-12 w-12">
+                        <Button variant="ghost" size="icon" onClick={handlePrev} disabled={currentIndex === activeHistory.length - 1} className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-12 w-12">
                             <ChevronLeft className="h-6 w-6" />
                         </Button>
 
@@ -642,6 +678,7 @@ function HallOfFameTab() {
         </div>
     );
 }
+
 
 // --- ANA SAYFA ---
 
@@ -742,3 +779,5 @@ export default function LeaderboardPage() {
         </div>
     );
 }
+
+    
