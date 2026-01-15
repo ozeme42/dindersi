@@ -15,12 +15,14 @@ export async function getTeacherExams(teacherId: string): Promise<{ success: boo
     }
 
     try {
+        // --- DÜZELTME: Sorgu basitleştirildi. Sıralama geçici olarak kaldırıldı. ---
+        // Bu, indeks sorunlarını elemek için bir teşhis adımıdır.
         const q = query(
             collection(db, "assignments"),
             where("teacherId", "==", teacherId),
-            where("assignmentType", "==", "deneme"),
-            orderBy("createdAt", "desc")
+            where("assignmentType", "==", "deneme")
         );
+
         const querySnapshot = await getDocs(q);
         const assignments = querySnapshot.docs
             .map(doc => {
@@ -33,7 +35,10 @@ export async function getTeacherExams(teacherId: string): Promise<{ success: boo
                     startDate: data.startDate ? (data.startDate as Timestamp).toDate().toISOString() : undefined,
                     dueDate: data.dueDate ? (data.dueDate as Timestamp).toDate().toISOString() : undefined,
                 } as Assignment
-            });
+            })
+            // Sıralamayı istemci tarafında geçici olarak yapıyoruz.
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
 
         return { success: true, data: JSON.parse(JSON.stringify(assignments)) };
     } catch (error: any) {
