@@ -18,7 +18,7 @@ export async function getTeacherExams(teacherId: string): Promise<{ success: boo
         const q = query(
             collection(db, "assignments"),
             where("teacherId", "==", teacherId),
-            where("assignmentType", "==", "deneme"), // Bu satır düzeltildi, sadece denemeleri getirecek.
+            where("assignmentType", "==", "deneme"),
             orderBy("createdAt", "desc")
         );
         const querySnapshot = await getDocs(q);

@@ -133,7 +133,17 @@
         { "fieldPath": "assignmentType", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "scoreEvents",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "context", "order": "ASCENDING" },
+        { "fieldPath": "gameType", "order": "ASCENDING" },
+        { "fieldPath": "userId", "arrayConfig": "CONTAINS" }
+      ]
     }
   ],
   "fieldOverrides": []
 }
+

@@ -1,8 +1,9 @@
+
 'use server';
 
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, doc, getDoc, documentId, orderBy, Timestamp, writeBatch, serverTimestamp, increment } from "firebase/firestore";
-import type { Assignment, UserProfile, ScoreEvent } from "@/lib/types";
+import type { Assignment, UserProfile, ScoreEvent, Question } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
 export type StudentProgress = {
@@ -65,24 +66,27 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
             const context = `Deneme ID: ${assignment.id}`;
             const eventsByStudent = new Map<string, ScoreEvent>();
 
+            // Get all events for this assignment context first
             const scoreEventsQuery = query(
                 collection(db, 'scoreEvents'),
-                where('userId', 'in', chunk),
-                where('gameType', '==', 'Deneme'),
-                where('context', '==', context)
+                where("context", "==", context),
+                where("gameType", "==", "Deneme")
             );
             
             const scoreEventsSnapshot = await getDocs(scoreEventsQuery);
+
+            // Filter by student chunk client-side
             scoreEventsSnapshot.forEach(doc => {
                 const eventData = doc.data();
-                const event = { 
-                    id: doc.id, 
-                    ...eventData,
-                    timestamp: (eventData.timestamp as Timestamp)?.toDate().toISOString()
-                } as ScoreEvent;
-                eventsByStudent.set(event.userId, event);
+                if (chunk.includes(eventData.userId)) {
+                    const event = { 
+                        id: doc.id, 
+                        ...eventData,
+                        timestamp: (eventData.timestamp as Timestamp)?.toDate().toISOString()
+                    } as ScoreEvent;
+                    eventsByStudent.set(event.userId, event);
+                }
             });
-            
 
             const progressChunk = students.map(student => {
                 const event = eventsByStudent.get(student.uid) || null;
@@ -90,7 +94,7 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
                     student: student,
                     scoreEvent: event
                 };
-            }); // Keep all students, even those who haven't attempted.
+            }); 
             studentProgress.push(...progressChunk);
         }
 
