@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, Suspense } from 'react';
@@ -10,7 +9,7 @@ import {
     Loader2, Save, X, Search, ArrowLeft, FileQuestion, Users, BookOpen, Clock, Calendar as CalendarIcon, FilePenLine, Trophy, Award
 } from 'lucide-react';
 import { createExam, getExamCreationData, updateExam } from '../actions';
-import type { Assignment, UserProfile, Question, SchoolClass, Course, Unit, Topic } from '@/lib/types';
+import type { Assignment, UserProfile, Question, SchoolClass, Course, Unit, Topic } from "@/lib/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -43,8 +42,8 @@ function QuestionSelectionCard({ question, isSelected, onToggle }: { question: Q
         <div 
             className={cn(
                 "group relative flex flex-col p-4 rounded-xl border transition-all cursor-pointer overflow-hidden",
-                "bg-slate-900/40 border-white/5 hover:bg-slate-800/60",
-                isSelected ? "ring-2 ring-indigo-500 bg-indigo-900/10 border-indigo-500/50" : "hover:border-white/10"
+                "bg-slate-900/40 border-white/5 hover:border-white/10",
+                isSelected ? "ring-2 ring-indigo-500 bg-indigo-900/10 border-indigo-500/50" : "hover:bg-slate-800/60"
             )} 
             onClick={onToggle}
         >
@@ -70,7 +69,7 @@ function QuestionSelectionCard({ question, isSelected, onToggle }: { question: Q
     )
 }
 
-export default function CreateExamClientPage() {
+export function CreateExamClientPage() {
     const { user } = useAuth();
     const { toast } = useToast();
     const router = useRouter();
@@ -384,3 +383,13 @@ export default function CreateExamClientPage() {
         </div>
     )
 }
+
+export default function CreateExamPage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>}>
+            <CreateExamClientPage />
+        </Suspense>
+    )
+}
+
+    
