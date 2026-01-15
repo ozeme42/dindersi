@@ -110,24 +110,6 @@
       "collectionGroup": "assignments",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "teacherId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "assignmentType",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createdAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "assignments",
-      "queryScope": "COLLECTION",
-      "fields": [
         { "fieldPath": "assignedTo", "arrayConfig": "CONTAINS" },
         { "fieldPath": "assignmentType", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
@@ -141,6 +123,15 @@
             { "fieldPath": "context", "order": "ASCENDING" },
             { "fieldPath": "userId", "order": "ASCENDING" }
         ]
+    },
+    {
+      "collectionGroup": "assignments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "teacherId", "order": "ASCENDING" },
+        { "fieldPath": "assignmentType", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []
