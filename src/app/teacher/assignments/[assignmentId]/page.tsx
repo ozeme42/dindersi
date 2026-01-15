@@ -235,4 +235,3 @@ function AssignmentDetailPage() {
         </div>
     );
 }
-export default AssignmentDetailPage;

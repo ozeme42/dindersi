@@ -131,7 +131,7 @@ export async function getExamCreationData(): Promise<{
                 const unit = { id: unitDoc.id, ...unitDoc.data() } as (Unit & { topics: Topic[] });
                 const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseData.id}/units/${unit.id}/topics`), orderBy('title')));
                 unit.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
-                return unitData;
+                return unit;
             }));
             return { ...courseData, units: unitsWithTopics };
         }));
@@ -151,6 +151,8 @@ export async function getExamCreationData(): Promise<{
 
         return JSON.parse(JSON.stringify({ classes, courses, students, examQuestions }));
 
-    } catch(e) {
+    } catch(e: any) {
         console.error("Error fetching exam creation data:", e);
-        return { error: 'Veriler alınamadı.', classes: [], courses
+        return { error: 'Veriler alınamadı.', classes: [], courses: [], students: [], examQuestions: [] };
+    }
+}
