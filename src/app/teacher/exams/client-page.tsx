@@ -47,7 +47,8 @@ export function ExamsClientPage() {
         if (!user) return;
         setIsLoading(true);
         setFetchError(null);
-        const result = await getTeacherExams(user.uid);
+        // DÜZELTME: user.role === 'superadmin' kontrolü eklendi ve ikinci parametre olarak gönderildi.
+        const result = await getTeacherExams(user.uid, user.role === 'superadmin');
         if (result.success && result.data) {
             setAssignments(result.data);
         } else if (result.error) {
@@ -187,4 +188,3 @@ export function ExamsClientPage() {
         </div>
     );
 }
-
