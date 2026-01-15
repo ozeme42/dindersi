@@ -1,15 +1,17 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, serverTimestamp, Timestamp, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, serverTimestamp, Timestamp, addDoc, updateDoc, deleteDoc, orderBy } from "firebase/firestore";
 import type { Assignment, UserProfile, ScoreEvent, Question, SchoolClass, Course, Unit, Topic } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
 
 export async function getTeacherExams(teacherId: string): Promise<{ success: boolean; data?: Assignment[]; error?: string }> {
     noStore();
+    if (!teacherId) {
+        return { success: false, error: 'Öğretmen ID\'si bulunamadı.' };
+    }
+
     try {
         const q = query(
             collection(db, "assignments"),
