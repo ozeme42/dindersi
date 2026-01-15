@@ -1,5 +1,3 @@
-
-
 export type UserProfile = {
     uid: string;
     username?: string; // Unique username for login
@@ -291,6 +289,9 @@ export type Assignment = {
   dueDate?: any; // Firestore Timestamp
   createdAt: any; // Firestore Timestamp
   duration?: number; // Total exam duration in minutes
+  successThreshold?: number; // Puan barajı
+  successReward?: number;    // Ödül puanı
+  rewardsDistributed?: boolean; // Ödüller dağıtıldı mı?
 };
 
 export type EvaluationScaleColumn = {
