@@ -1,10 +1,8 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, addDoc, serverTimestamp, doc, deleteDoc, runTransaction, orderBy, updateDoc, Timestamp } from 'firebase/firestore';
-import type { CurriculumData, UserProfile, Course, Unit, Topic, SchoolClass, Assignment, Question } from "@/lib/types";
+import { collection, query, where, getDocs, doc, getDoc, serverTimestamp, Timestamp, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import type { Assignment, UserProfile, ScoreEvent, Question, SchoolClass, Course, Unit, Topic } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
 
@@ -128,9 +126,9 @@ export async function getExamCreationData(): Promise<{
         const courses = await Promise.all(coursesData.map(async (courseData) => {
             const unitsSnapshot = await getDocs(query(collection(db, `courses/${courseData.id}/units`), orderBy("title")));
             const unitsWithTopics = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
-                const unitData = { id: unitDoc.id, ...unitDoc.data() } as (Unit & { topics: Topic[] });
-                const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseData.id}/units/${unitDoc.id}/topics`), orderBy('title')));
-                unitData.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
+                const unit = { id: unitDoc.id, ...unitDoc.data() } as (Unit & { topics: Topic[] });
+                const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseData.id}/units/${unit.id}/topics`), orderBy('title')));
+                unit.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
                 return unitData;
             }));
             return { ...courseData, units: unitsWithTopics };

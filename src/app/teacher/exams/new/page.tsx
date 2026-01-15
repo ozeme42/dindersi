@@ -260,14 +260,14 @@ export function CreateExamClientPage() {
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
                 {/* Header */}
-                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/5 pb-8">
+                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/10 pb-8">
                      <div>
                         <Button asChild variant="ghost" size="sm" className="mb-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg">
                             <Link href="/teacher/exams"><ArrowLeft className="mr-2 h-4 w-4" /> Denemeler Listesine Dön</Link>
                         </Button>
                         <h1 className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
                             <div className="p-2 bg-indigo-500/20 rounded-xl border border-indigo-500/30">
-                                <FilePenLine className="h-8 w-8 text-indigo-400" />
+                                <FileQuestion className="h-8 w-8 text-indigo-400" />
                             </div>
                             {isEditMode ? 'Denemeyi Düzenle' : 'Yeni Deneme Sınavı'}
                         </h1>
