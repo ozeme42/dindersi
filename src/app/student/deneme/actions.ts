@@ -2,11 +2,9 @@
 
 import { db } from "@/lib/firebase";
 import { 
-    collection, query, where, getDocs, orderBy, 
-    Timestamp, doc, getDoc, writeBatch, 
-    serverTimestamp, increment 
+    collection, query, where, getDocs, orderBy, Timestamp, doc, getDoc, writeBatch, serverTimestamp, increment, updateDoc 
 } from "firebase/firestore";
-import type { Assignment, ScoreEvent, Question } from "@/lib/types";
+import type { Assignment, ScoreEvent, Question, UserProfile } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
 // --- TİP TANIMLAMALARI ---
@@ -149,15 +147,16 @@ export async function getDenemeQuestionsAction({ questionIds }: { questionIds: s
 
 /**
  * Sınav sonucunu kaydeder ve Aşamalı Ödül Baremlerine göre Bonus XP verir.
+ * YENİ: Bitiş tarihinden sonra çözüldüyse bonus verilmez.
  */
 export async function submitDenemeScoreAction(
     userId: string | null, 
     score: number, 
     context: string, 
     answers: (string | boolean | null)[],
-    correctCount: number, // Deneme başarı hesaplaması için
-    totalCount: number    // Deneme başarı hesaplaması için
-): Promise<{ success: boolean; awardedBonus?: number; error?: string }> {
+    correctCount: number,
+    totalCount: number
+): Promise<{ success: boolean; awardedBonus?: number; isLate?: boolean; error?: string }> {
     if (!userId) {
         return { success: false, error: "Kullanıcı girişi yapılmamış." };
     }
@@ -165,19 +164,28 @@ export async function submitDenemeScoreAction(
     try {
         const batch = writeBatch(db);
         const assignmentId = context.replace("Deneme ID: ", "");
+        const now = new Date();
         let awardedBonus = 0;
+        let isLate = false;
 
-        // 1. Deneme bilgilerinden baremleri çekelim
+        // 1. Deneme bilgilerini çek
         const assignmentRef = doc(db, 'assignments', assignmentId);
         const assignmentSnap = await getDoc(assignmentRef);
         
         if (assignmentSnap.exists()) {
             const assignmentData = assignmentSnap.data() as Assignment;
             const thresholds = assignmentData.rewardThresholds || [];
+            
+            // Tarih kontrolü (DueDate varsa ve şu anki zaman bitiş tarihinden büyükse)
+            const dueDate = assignmentData.dueDate ? 
+                (assignmentData.dueDate instanceof Timestamp ? assignmentData.dueDate.toDate() : new Date(assignmentData.dueDate)) 
+                : null;
+            
+            isLate = dueDate ? now > dueDate : false;
 
-            if (thresholds.length > 0) {
+            // Sadece süre geçmediyse bonus hesapla
+            if (!isLate && thresholds.length > 0) {
                 const successRate = (correctCount / totalCount) * 100;
-                // Baremleri yüksekten düşüğe dizip öğrencinin girdiği en yüksek baremi bulalım
                 const sortedThresholds = [...thresholds].sort((a, b) => b.rate - a.rate);
                 const earnedThreshold = sortedThresholds.find(t => successRate >= t.rate);
 
@@ -189,7 +197,7 @@ export async function submitDenemeScoreAction(
 
         const totalPoints = score + awardedBonus;
 
-        // 2. Kullanıcının ana puanını güncelle (Normal Skor + Bonus)
+        // 2. Kullanıcının ana puanını güncelle (Normal Skor + Varsa Bonus)
         if (totalPoints > 0) {
             const userRef = doc(db, 'users', userId);
             batch.update(userRef, { score: increment(totalPoints) });
@@ -204,9 +212,10 @@ export async function submitDenemeScoreAction(
             gameType: 'Deneme',
             context: context,
             answers: answers,
+            isLateSubmission: isLate // Geç teslim bilgisi ekleyelim
         });
 
-        // 4. Bonus kazanıldıysa ayrı bir olay olarak kaydet (Tarihçe için)
+        // 4. Bonus kazanıldıysa (ve geç kalınmadıysa) ayrı bir olay kaydet
         if (awardedBonus > 0) {
             const bonusRef = doc(collection(db, 'scoreEvents'));
             batch.set(bonusRef, {
@@ -219,7 +228,7 @@ export async function submitDenemeScoreAction(
         }
 
         await batch.commit();
-        return { success: true, awardedBonus };
+        return { success: true, awardedBonus, isLate };
 
     } catch (error: any) {
         console.error("Error submitting Deneme score:", error);
@@ -229,6 +238,7 @@ export async function submitDenemeScoreAction(
 
 /**
  * Alternatif ödül fonksiyonu (Manuel tetikleme gerekirse)
+ * YENİ: Bitiş tarihi kontrolü eklendi.
  */
 export async function awardDenemeBonus(userId: string, assignmentId: string, correctCount: number, totalQuestions: number) {
     try {
@@ -236,7 +246,19 @@ export async function awardDenemeBonus(userId: string, assignmentId: string, cor
         const assignmentSnap = await getDoc(assignmentRef);
         if (!assignmentSnap.exists()) return { success: false };
         
-        const thresholds = assignmentSnap.data().rewardThresholds || [];
+        const assignmentData = assignmentSnap.data();
+        const thresholds = assignmentData.rewardThresholds || [];
+        const now = new Date();
+
+        // Tarih Kontrolü
+        const dueDate = assignmentData.dueDate ? 
+            (assignmentData.dueDate instanceof Timestamp ? assignmentData.dueDate.toDate() : new Date(assignmentData.dueDate)) 
+            : null;
+        
+        if (dueDate && now > dueDate) {
+            return { success: true, points: 0, isLate: true };
+        }
+
         const successRate = (correctCount / totalQuestions) * 100;
         const sortedThresholds = [...thresholds].sort((a, b) => b.rate - a.rate);
         const earnedThreshold = sortedThresholds.find(t => successRate >= t.rate);

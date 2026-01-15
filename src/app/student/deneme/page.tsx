@@ -106,18 +106,15 @@ function LeaderboardDialog({ assignment }: { assignment: any }) {
 function IntroCard({ assignment }: { assignment: any }) {
   const isSolved = !!assignment.solvedEvent;
   const canStart = !assignment.startDate || !isFuture(new Date(assignment.startDate));
+  const isLate = assignment.dueDate && isPast(new Date(assignment.dueDate));
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
 
-  // Ödül baremlerini yüzdesine göre sıralayalım
   const sortedThresholds = [...(assignment.rewardThresholds || [])].sort((a, b) => a.rate - b.rate);
 
   return (
       <div className="group relative w-full max-w-2xl mx-auto rounded-3xl bg-slate-900/80 border border-white/10 backdrop-blur-md overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 shadow-2xl">
-          
-          {/* Kart Arkasındaki Işık Efekti */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-cyan-500/10 transition-colors" />
 
-          {/* Header Kısmı */}
           <div className="relative p-6 pb-4 border-b border-white/5 flex flex-col sm:flex-row gap-4 justify-between items-start">
              <div className="flex gap-4">
                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
@@ -131,6 +128,10 @@ function IntroCard({ assignment }: { assignment: any }) {
                         {isSolved ? (
                             <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 flex items-center gap-1">
                                 <CheckCircle2 className="h-3 w-3" /> Tamamlandı
+                            </span>
+                        ) : isLate ? (
+                             <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-red-500/20 text-red-400 border border-red-500/20 flex items-center gap-1">
+                                <AlertTriangle className="h-3 w-3" /> Süre Doldu
                             </span>
                         ) : !canStart ? (
                              <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/20 flex items-center gap-1">
@@ -147,10 +148,7 @@ function IntroCard({ assignment }: { assignment: any }) {
              </div>
           </div>
 
-          {/* İçerik */}
           <div className="p-6 pt-4 space-y-6">
-              
-              {/* Bilgi Grid'i */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   <div className="bg-slate-950/50 p-3 rounded-xl border border-white/5 flex flex-col items-center justify-center text-center">
                       <div className="text-slate-500 text-[10px] font-bold uppercase mb-1 flex items-center gap-1"><FileText className="h-3 w-3"/> Soru</div>
@@ -174,8 +172,8 @@ function IntroCard({ assignment }: { assignment: any }) {
                   </div>
               </div>
 
-              {/* --- ÖDÜL SİSTEMİ GÖRÜNÜMÜ --- */}
-              {sortedThresholds.length > 0 && !isSolved && (
+              {/* Ödül baremleri sadece süre geçmediyse gösterilir */}
+              {sortedThresholds.length > 0 && !isSolved && !isLate && (
                 <div className="relative p-4 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/20 overflow-hidden group/reward">
                     <div className="flex items-center gap-2 mb-3">
                         <Zap className="h-4 w-4 text-amber-400 fill-amber-400 animate-pulse" />
@@ -193,33 +191,22 @@ function IntroCard({ assignment }: { assignment: any }) {
                 </div>
               )}
 
-              {/* Alt Aksiyon Alanı */}
               <div className="pt-2">
                 {isSolved ? (
                    <Dialog open={isLeaderboardOpen} onOpenChange={setIsLeaderboardOpen}>
                         <div className="flex flex-col gap-3">
-                             <div 
-                                className="bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-amber-500/20 transition-colors group/rank"
-                                onClick={() => setIsLeaderboardOpen(true)}
-                             >
+                             <div className="bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-amber-500/20 transition-colors group/rank" onClick={() => setIsLeaderboardOpen(true)}>
                                  <div className="flex items-center gap-3">
-                                     <div className="p-2 bg-amber-500/20 rounded-lg text-amber-400">
-                                         <Trophy className="h-5 w-5" />
-                                     </div>
+                                     <div className="p-2 bg-amber-500/20 rounded-lg text-amber-400"><Trophy className="h-5 w-5" /></div>
                                      <div>
                                          <div className="text-xs text-amber-200/70 font-bold uppercase">Sıralaman</div>
-                                         <div className="text-white font-bold text-lg">
-                                             #{assignment.rank} <span className="text-slate-500 text-sm font-normal">/ {assignment.totalParticipants}</span>
-                                         </div>
+                                         <div className="text-white font-bold text-lg">#{assignment.rank} <span className="text-slate-500 text-sm font-normal">/ {assignment.totalParticipants}</span></div>
                                      </div>
                                  </div>
                                  <ArrowRight className="h-5 w-5 text-amber-500 opacity-50 group-hover/rank:opacity-100 group-hover/rank:translate-x-1 transition-all" />
                              </div>
-                             
                              <Button asChild className="w-full bg-slate-800 text-white hover:bg-slate-700 border border-white/10 h-12 rounded-xl font-bold">
-                               <Link href={`/student/deneme/sonuc/${assignment.id}`}>
-                                 Sonuçları İncele <FileText className="ml-2 h-4 w-4 opacity-70"/>
-                               </Link>
+                               <Link href={`/student/deneme/sonuc/${assignment.id}`}>Sonuçları İncele <FileText className="ml-2 h-4 w-4 opacity-70"/></Link>
                              </Button>
                         </div>
                         <LeaderboardDialog assignment={assignment} />
@@ -228,19 +215,12 @@ function IntroCard({ assignment }: { assignment: any }) {
                    <Button asChild size="lg" disabled={!canStart} className={cn(
                        "w-full relative h-14 rounded-xl font-bold text-lg tracking-wide shadow-lg transition-all transform hover:scale-[1.02]",
                        canStart 
-                        ? "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-cyan-400/20" 
+                        ? (isLate ? "bg-slate-700 hover:bg-slate-600 text-white" : "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-cyan-400/20")
                         : "bg-slate-800 text-slate-500 cursor-not-allowed border border-white/5"
                    )}>
                      <Link href={canStart ? `/student/deneme/coz?assignmentId=${assignment.id}&assignmentTitle=${encodeURIComponent(assignment.title)}&questionIds=${assignment.questionIds?.join(',')}&duration=${assignment.duration || assignment.questionIds?.length || 0}` : '#'}>
                          <div className="flex items-center gap-2">
-                             {canStart ? (
-                                 <>SINAVA BAŞLA <Play className="h-5 w-5 fill-current" /></>
-                             ) : (
-                                 <>
-                                    <Clock className="h-5 w-5" /> 
-                                    <span>{format(new Date(assignment.startDate), 'd MMM HH:mm', { locale: tr })}</span>
-                                 </>
-                             )}
+                             {canStart ? (isLate ? <>SINAVI ÇÖZ (BONUS YOK) <ArrowRight className="h-5 w-5" /></> : <>SINAVA BAŞLA <Play className="h-5 w-5 fill-current" /></>) : (<><Clock className="h-5 w-5" /> <span>{format(new Date(assignment.startDate), 'd MMM HH:mm', { locale: tr })}</span></>)}
                          </div>
                      </Link>
                    </Button>
@@ -276,11 +256,7 @@ function DenemeSinaviPage() {
   }, [authLoading, fetchAssignments]);
 
   if (isLoading || authLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-slate-950">
-        <Loader2 className="h-12 w-12 animate-spin text-cyan-500" />
-      </div>
-    );
+    return <div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
   }
 
    if (error) {
@@ -288,7 +264,7 @@ function DenemeSinaviPage() {
             <div className="flex h-screen items-center justify-center p-4 bg-slate-950">
                 <div className="bg-slate-900 p-6 rounded-2xl border border-red-500/30 text-center max-w-md">
                     <AlertTriangle className="h-10 w-10 text-red-500 mx-auto mb-4" />
-                    <h3 className="text-white font-bold text-lg mb-2">Denemeler Yüklenemedi</h3>
+                    <h3 className="text-white font-bold text-lg mb-2">Hata</h3>
                     <p className="text-slate-400">{error}</p>
                 </div>
             </div>
@@ -297,36 +273,27 @@ function DenemeSinaviPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
-        {/* Arka Plan Efektleri */}
         <div className="fixed inset-0 pointer-events-none z-0">
             <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px]" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-cyan-600/10 rounded-full blur-[100px]" />
         </div>
 
         <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-24 md:pb-12 relative z-10">
-          
-          {/* Başlık */}
           <div className="flex flex-col items-center text-center mb-10 md:mb-14">
             <div className="bg-slate-900/50 p-4 rounded-3xl border border-white/5 mb-4 shadow-xl backdrop-blur-sm">
                 <GraduationCap className="h-12 w-12 text-cyan-400" />
             </div>
-            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2">
-                Deneme <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">Sınavları</span>
-            </h1>
-            <p className="text-slate-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-              Öğretmenlerin tarafından sana özel olarak atanmış deneme sınavlarını buradan çözebilir, sıralamanı görebilirsin.
-            </p>
+            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2">Deneme <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">Sınavları</span></h1>
+            <p className="text-slate-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed">Öğretmenlerin tarafından atanan sınavları buradan çözebilir ve ödüller kazanabilirsin.</p>
           </div>
 
            <div className="space-y-6 flex flex-col items-center w-full">
                {assignments.length > 0 ? (
-                   assignments.map(assignment => (
-                       <IntroCard key={assignment.id} assignment={assignment} />
-                   ))
+                   assignments.map(assignment => <IntroCard key={assignment.id} assignment={assignment} />)
                ) : (
                    <div className="text-center py-16 px-6 rounded-3xl bg-slate-900/50 border border-dashed border-white/10 max-w-lg w-full">
                        <FileText className="h-12 w-12 text-slate-600 mx-auto mb-4" />
-                       <p className="text-slate-400 font-medium">Sana atanmış aktif bir deneme sınavı bulunmuyor.</p>
+                       <p className="text-slate-400 font-medium">Aktif bir deneme sınavı bulunmuyor.</p>
                    </div>
                )}
            </div>
@@ -335,6 +302,7 @@ function DenemeSinaviPage() {
   );
 }
 
+// KRİTİK: Next.js App Router sayfanın bir default export içermesini bekler.
 export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>}>

@@ -4,7 +4,7 @@
 
 import React, { type ReactNode, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, MonitorPlay, Workflow, Gamepad2, FileJson, Shield, Loader2 } from 'lucide-react';
+import { ArrowRight, MonitorPlay, Workflow, Gamepad2, FileJson, Shield, Loader2, Scale, Trophy } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { 
