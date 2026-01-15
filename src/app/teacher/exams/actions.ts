@@ -18,7 +18,7 @@ export async function getTeacherExams(teacherId: string): Promise<{ success: boo
         const q = query(
             collection(db, "assignments"),
             where("teacherId", "==", teacherId),
-            // where("assignmentType", "==", "deneme"), // Bu satır geçici olarak kaldırıldı
+            where("assignmentType", "==", "deneme"), // Bu satır düzeltildi, sadece denemeleri getirecek.
             orderBy("createdAt", "desc")
         );
         const querySnapshot = await getDocs(q);
@@ -33,9 +33,7 @@ export async function getTeacherExams(teacherId: string): Promise<{ success: boo
                     startDate: data.startDate ? (data.startDate as Timestamp).toDate().toISOString() : undefined,
                     dueDate: data.dueDate ? (data.dueDate as Timestamp).toDate().toISOString() : undefined,
                 } as Assignment
-            })
-            // Şimdi filtrelemeyi kod içinde yapıyoruz
-            .filter(assignment => assignment.assignmentType === 'deneme' || !assignment.assignmentType);
+            });
 
         return { success: true, data: JSON.parse(JSON.stringify(assignments)) };
     } catch (error: any) {
