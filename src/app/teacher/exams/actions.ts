@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -152,6 +153,4 @@ export async function getExamCreationData(): Promise<{
 
     } catch(e) {
         console.error("Error fetching exam creation data:", e);
-        return { error: 'Veriler alınamadı.', classes: [], courses: [], students: [], examQuestions: [] };
-    }
-}
+        return { error: 'Veriler alınamadı.', classes: [], courses
