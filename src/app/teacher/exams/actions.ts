@@ -153,7 +153,7 @@ export async function getExamCreationData(): Promise<{
 
         return JSON.parse(JSON.stringify({ classes, courses, students, examQuestions }));
 
-    } catch(e: any) {
+    } catch(e) {
         console.error("Error fetching exam creation data:", e);
         return { error: 'Veriler alınamadı.', classes: [], courses: [], students: [], examQuestions: [] };
     }

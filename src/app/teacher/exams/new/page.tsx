@@ -70,7 +70,7 @@ function QuestionSelectionCard({ question, isSelected, onToggle }: { question: Q
     )
 }
 
-function CreateExamClientPage() {
+export function CreateExamClientPage() {
     const { user } = useAuth();
     const { toast } = useToast();
     const router = useRouter();
@@ -357,7 +357,14 @@ function CreateExamClientPage() {
                                     <Label htmlFor="select-all-questions" className="text-sm font-medium text-slate-300">Bu sayfadaki tüm soruları seç ({paginatedQuestions.length})</Label>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                                    {paginatedQuestions.map(q => <QuestionSelectionCard key={q.id} question={q} isSelected={selectedQuestionIds.has(q.id)} onToggle={() => toggleQuestion(q.id)}/>)}
+                                    {paginatedQuestions.length > 0 ? (
+                                    paginatedQuestions.map(q => <QuestionSelectionCard key={q.id} question={q} isSelected={selectedQuestionIds.has(q.id)} onToggle={() => toggleQuestion(q.id)}/>)
+                                    ) : (
+                                        <div className="col-span-full flex flex-col items-center justify-center py-16 text-slate-500 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/50">
+                                            <Search className="h-12 w-12 mb-4 opacity-20" />
+                                            <p className="text-lg font-medium">Bu filtrelerle eşleşen soru bulunamadı.</p>
+                                        </div>
+                                    )}
                                 </div>
                             </CardContent>
                             {totalQuestionPages > 1 && (
@@ -378,67 +385,4 @@ function CreateExamClientPage() {
     )
 }
 ```
-- src/hooks/use-local-storage.ts:
-```ts
-import { useState, useEffect } from 'react';
 
-export function useLocalStorage<T>(key: string, initialValue: T) {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === 'undefined') {
-      return initialValue;
-    }
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.error(error);
-      return initialValue;
-    }
-  });
-
-  const setValue = (value: T | ((val: T) => T)) => {
-    try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  return [storedValue, setValue] as const;
-}
-
-```
-- tsconfig.json:
-```json
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
-}
-```
