@@ -18,21 +18,25 @@ export async function getTeacherExams(teacherId: string): Promise<{ success: boo
         const q = query(
             collection(db, "assignments"),
             where("teacherId", "==", teacherId),
-            where("assignmentType", "==", "deneme"),
+            // where("assignmentType", "==", "deneme"), // Bu satır geçici olarak kaldırıldı
             orderBy("createdAt", "desc")
         );
         const querySnapshot = await getDocs(q);
-        const assignments = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            return { 
-                id: doc.id, 
-                ...data,
-                // Convert Timestamps to ISO strings for client-side safety
-                createdAt: (data.createdAt as Timestamp)?.toDate().toISOString() || new Date().toISOString(),
-                startDate: data.startDate ? (data.startDate as Timestamp).toDate().toISOString() : undefined,
-                dueDate: data.dueDate ? (data.dueDate as Timestamp).toDate().toISOString() : undefined,
-            } as Assignment
-        });
+        const assignments = querySnapshot.docs
+            .map(doc => {
+                const data = doc.data();
+                return { 
+                    id: doc.id, 
+                    ...data,
+                    // Convert Timestamps to ISO strings for client-side safety
+                    createdAt: (data.createdAt as Timestamp)?.toDate().toISOString() || new Date().toISOString(),
+                    startDate: data.startDate ? (data.startDate as Timestamp).toDate().toISOString() : undefined,
+                    dueDate: data.dueDate ? (data.dueDate as Timestamp).toDate().toISOString() : undefined,
+                } as Assignment
+            })
+            // Şimdi filtrelemeyi kod içinde yapıyoruz
+            .filter(assignment => assignment.assignmentType === 'deneme' || !assignment.assignmentType);
+
         return { success: true, data: JSON.parse(JSON.stringify(assignments)) };
     } catch (error: any) {
         console.error("Error fetching exams:", error);
@@ -49,7 +53,7 @@ export async function createExam(data: Omit<Assignment, 'id' | 'createdAt'>): Pr
     try {
         const dataToSave: any = {
             ...data,
-            assignmentType: 'deneme',
+            assignmentType: 'deneme', // Ensure type is set
             createdAt: serverTimestamp(),
         };
 
@@ -77,7 +81,10 @@ export async function createExam(data: Omit<Assignment, 'id' | 'createdAt'>): Pr
 export async function updateExam(assignmentId: string, data: Partial<Omit<Assignment, 'id' | 'createdAt'>>): Promise<{ success: boolean, error?: string }> {
     if (!assignmentId) return { success: false, error: 'Deneme ID\'si eksik.'};
     try {
-        const dataToUpdate: any = { ...data };
+        const dataToUpdate: any = { 
+            ...data,
+            assignmentType: 'deneme', // Also ensure type on update
+        };
 
         // Convert dates to Firestore Timestamps before saving
         if (data.startDate) {

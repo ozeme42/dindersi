@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -13,7 +14,7 @@ import {
 import { getTeacherExams, deleteExam } from './actions';
 import type { Assignment } from '@/lib/types';
 import Link from 'next/link';
-import { format } from 'date-fns';
+import { format, isPast } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import {
     AlertDialog,
@@ -187,4 +188,3 @@ export function ExamsClientPage() {
     );
 }
 
-    
