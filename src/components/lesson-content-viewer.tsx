@@ -10,7 +10,7 @@ import {
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
-    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown
+    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Minimize2, Palette
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -744,6 +744,9 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                             const letterObj = constructedLetters[globalCharIndex];
                             globalCharIndex++;
 
+                            // DÜZELTME: Harf varsa veya cevap gösteriliyorsa kart görünür olmalı
+                            const showCard = letterObj || isAnswerRevealed;
+
                             return (
                                 <div 
                                     key={`${wordIndex}-${charIndex}`} 
@@ -751,8 +754,14 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                     className={cn(
                                         "rounded-lg md:rounded-xl flex items-center justify-center font-black cursor-pointer shadow-md transition-all border-b-2 md:border-b-4",
                                         isTeacher ? "h-20 w-16 text-4xl border-b-8" : "h-10 w-8 text-lg md:h-14 md:w-10 md:text-2xl md:border-b-4 text-sm",
-                                        letterObj 
-                                            ? "bg-white text-indigo-600 border-indigo-200 active:translate-y-1 active:border-b-0"
+                                        showCard
+                                            ? cn(
+                                                "bg-white active:translate-y-1 active:border-b-0",
+                                                // Cevap açıldıysa YEŞİL, değilse İNDİGO
+                                                isAnswerRevealed 
+                                                    ? "bg-emerald-100 text-emerald-600 border-emerald-300" 
+                                                    : "text-indigo-600 border-indigo-200"
+                                              )
                                             : "bg-slate-200/50 border-slate-300 text-transparent border-dashed border-2"
                                     )}
                                 >
@@ -1035,6 +1044,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
     const isTeacher = useTeacherMode();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isPenMode, setIsPenMode] = useState(false);
+    const [isPaletteVisible, setIsPaletteVisible] = useState(true); // YENİ: Palet görünürlük kontrolü
     
     // Araçlar: 'pen', 'highlighter', 'eraser'
     const [tool, setTool] = useState<'pen' | 'highlighter' | 'eraser'>('pen');
@@ -1048,6 +1058,11 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
     
     const [isDrawing, setIsDrawing] = useState(false);
     const lastPos = useRef<{ x: number, y: number } | null>(null);
+
+    // Palet görünürlüğünü resetle
+    useEffect(() => {
+        if (isPenMode) setIsPaletteVisible(true);
+    }, [isPenMode]);
 
     // Canvas Boyutlandırma
     useEffect(() => {
@@ -1249,76 +1264,99 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
             <div className="fixed bottom-32 right-4 z-[101] flex flex-col items-end gap-3">
                 
                 {isPenMode && (
-                    <div className="flex flex-col items-center gap-2 bg-white/95 p-2 rounded-xl border border-slate-200 shadow-xl animate-in slide-in-from-bottom-5 fade-in zoom-in backdrop-blur-sm w-40">
-                        
-                        {/* Renk Seçimi */}
-                        <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-lg mb-1 w-full">
-                            {['#000000', '#ef4444', '#22c55e', '#3b82f6', '#facc15', '#a855f7'].map((c) => (
-                                <button
-                                    key={c}
-                                    onClick={() => { setColor(c); setTool('pen'); }}
-                                    className={cn(
-                                        "w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 mx-auto",
-                                        color === c && tool !== 'eraser' ? "ring-2 ring-offset-1 ring-slate-400 scale-110 border-white" : "border-transparent"
-                                    )}
-                                    style={{ backgroundColor: c }}
-                                />
-                            ))}
-                        </div>
+                    <>
+                        {isPaletteVisible ? (
+                            <div className="flex flex-col items-center gap-2 bg-white/95 p-2 rounded-xl border border-slate-200 shadow-xl animate-in slide-in-from-bottom-5 fade-in zoom-in backdrop-blur-sm w-44">
+                                
+                                {/* Header - Küçültme Butonu */}
+                                <div className="w-full flex justify-between items-center border-b border-slate-200 pb-2 mb-1 px-1">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Araçlar</span>
+                                    <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full hover:bg-slate-100 text-slate-400" onClick={() => setIsPaletteVisible(false)}>
+                                        <Minimize2 className="w-3.5 h-3.5" />
+                                    </Button>
+                                </div>
 
-                        {/* Kalınlık Ayarı */}
-                        <div className="flex gap-2 items-center justify-center w-full pb-2 border-b border-slate-200">
-                             <button onClick={() => setLineWidth(4)} className={cn("w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 4 && "bg-slate-700")}>
-                                <div className="w-1 h-1 bg-white rounded-full" />
-                             </button>
-                             <button onClick={() => setLineWidth(8)} className={cn("w-7 h-7 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 8 && "bg-slate-700")}>
-                                <div className="w-2.5 h-2.5 bg-white rounded-full" />
-                             </button>
-                             <button onClick={() => setLineWidth(16)} className={cn("w-9 h-9 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 16 && "bg-slate-700")}>
-                                <div className="w-4 h-4 bg-white rounded-full" />
-                             </button>
-                        </div>
+                                {/* Renk Seçimi */}
+                                <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-lg mb-1 w-full">
+                                    {['#000000', '#ef4444', '#22c55e', '#3b82f6', '#facc15', '#a855f7'].map((c) => (
+                                        <button
+                                            key={c}
+                                            onClick={() => { setColor(c); setTool('pen'); }}
+                                            className={cn(
+                                                "w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 mx-auto",
+                                                color === c && tool !== 'eraser' ? "ring-2 ring-offset-1 ring-slate-400 scale-110 border-white" : "border-transparent"
+                                            )}
+                                            style={{ backgroundColor: c }}
+                                        />
+                                    ))}
+                                </div>
 
-                        {/* Araçlar */}
-                        <div className="flex flex-col gap-1.5 w-full">
-                             <Button 
-                                variant={tool === 'pen' ? 'default' : 'ghost'} 
-                                size="sm" 
-                                onClick={() => setTool('pen')}
-                                className="w-full justify-start h-8 text-xs"
-                            >
-                                <PenTool className="w-3 h-3 mr-2" /> Kalem
-                             </Button>
-                             <Button 
-                                variant={tool === 'highlighter' ? 'default' : 'ghost'} 
-                                size="sm" 
-                                onClick={() => setTool('highlighter')}
-                                className={cn("w-full justify-start h-8 text-xs", tool === 'highlighter' && "bg-yellow-100 text-yellow-800 hover:bg-yellow-200")}
-                            >
-                                <Highlighter className="w-3 h-3 mr-2" /> Fosforlu
-                             </Button>
-                             <Button 
-                                variant={tool === 'eraser' ? 'default' : 'ghost'} 
-                                size="sm" 
-                                onClick={() => setTool('eraser')}
-                                className="w-full justify-start h-8 text-xs"
-                            >
-                                <Eraser className="w-3 h-3 mr-2" /> Silgi
-                             </Button>
-                        </div>
+                                {/* Kalınlık Ayarı */}
+                                <div className="flex gap-2 items-center justify-center w-full pb-2 border-b border-slate-200">
+                                     <button onClick={() => setLineWidth(4)} className={cn("w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 4 && "bg-slate-700")}>
+                                        <div className="w-1 h-1 bg-white rounded-full" />
+                                     </button>
+                                     <button onClick={() => setLineWidth(8)} className={cn("w-7 h-7 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 8 && "bg-slate-700")}>
+                                        <div className="w-2.5 h-2.5 bg-white rounded-full" />
+                                     </button>
+                                     <button onClick={() => setLineWidth(16)} className={cn("w-9 h-9 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 16 && "bg-slate-700")}>
+                                        <div className="w-4 h-4 bg-white rounded-full" />
+                                     </button>
+                                </div>
 
-                        <div className="h-[1px] w-full bg-slate-200"></div>
+                                {/* Araçlar */}
+                                <div className="flex flex-col gap-1.5 w-full">
+                                     <Button 
+                                        variant={tool === 'pen' ? 'default' : 'ghost'} 
+                                        size="sm" 
+                                        onClick={() => setTool('pen')}
+                                        className="w-full justify-start h-8 text-xs"
+                                    >
+                                        <PenTool className="w-3 h-3 mr-2" /> Kalem
+                                     </Button>
+                                     <Button 
+                                        variant={tool === 'highlighter' ? 'default' : 'ghost'} 
+                                        size="sm" 
+                                        onClick={() => setTool('highlighter')}
+                                        className={cn("w-full justify-start h-8 text-xs", tool === 'highlighter' && "bg-yellow-100 text-yellow-800 hover:bg-yellow-200")}
+                                    >
+                                        <Highlighter className="w-3 h-3 mr-2" /> Fosforlu
+                                     </Button>
+                                     <Button 
+                                        variant={tool === 'eraser' ? 'default' : 'ghost'} 
+                                        size="sm" 
+                                        onClick={() => setTool('eraser')}
+                                        className="w-full justify-start h-8 text-xs"
+                                    >
+                                        <Eraser className="w-3 h-3 mr-2" /> Silgi
+                                     </Button>
+                                </div>
 
-                        {/* Aksiyonlar */}
-                        <div className="flex gap-2 w-full justify-between px-1">
-                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleUndo} title="Geri Al" disabled={history.length === 0}>
-                                <Undo className="w-3 h-3" />
-                            </Button>
-                            <Button variant="destructive" size="icon" className="h-8 w-8" onClick={clearCanvas} title="Temizle">
-                                <Trash2 className="w-3 h-3" />
-                            </Button>
-                        </div>
-                    </div>
+                                <div className="h-[1px] w-full bg-slate-200"></div>
+
+                                {/* Aksiyonlar */}
+                                <div className="flex gap-2 w-full justify-between px-1">
+                                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleUndo} title="Geri Al" disabled={history.length === 0}>
+                                        <Undo className="w-3 h-3" />
+                                    </Button>
+                                    <Button variant="destructive" size="icon" className="h-8 w-8" onClick={clearCanvas} title="Temizle">
+                                        <Trash2 className="w-3 h-3" />
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="animate-in zoom-in slide-in-from-bottom-5 pb-2">
+                                <Button 
+                                    onClick={() => setIsPaletteVisible(true)}
+                                    className="w-10 h-10 rounded-full bg-white text-slate-600 border border-slate-200 shadow-lg hover:bg-slate-50 flex items-center justify-center"
+                                    size="icon"
+                                    title="Araçları Göster"
+                                >
+                                    <Palette className="w-5 h-5" />
+                                </Button>
+                            </div>
+                        )}
+                    </>
                 )}
 
                 {/* Ana Toggle Butonu - KÜÇÜLTÜLDÜ */}
@@ -1711,7 +1749,8 @@ export function LessonContentViewer({
                     const currentAnswers = internalProgress.answers[currentStepIndex] || {};
                     if (!currentAnswers.completed) {
                         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true, score: score } };
-                        setInternalProgress(prev => ({ score: prev.score + (score > 0 ? score : 50), answers: newAnswers }));
+                        // BURADA DEĞİŞİKLİK YAPILDI: Eğer dışarıdan score gelmiyorsa varsayılan olarak 100 ekle
+                        setInternalProgress(prev => ({ score: prev.score + (score > 0 ? score : 100), answers: newAnswers }));
                         toast({ title: "Tebrikler!", description: `Puanın: ${score}`, className: "bg-green-500 border-none text-white" });
                         playSound('win');
                     }
@@ -1794,18 +1833,19 @@ export function LessonContentViewer({
         if (internalProgress.answers[currentStepIndex] !== undefined) return;
         let isCorrect = false;
         let points = 0;
+        // BURADA DEĞİŞİKLİKLER YAPILDI: Tüm puanlar 100'e sabitlendi
         if (currentStep.type === 'mcq' || currentStep.type === 'fitb') {
             isCorrect = answer === (currentStep as McqStep).correctAnswer;
-            points = isCorrect ? 40 : 0;
+            points = isCorrect ? 100 : 0;
         } else if (currentStep.type === 'tf') {
             isCorrect = (answer === "Doğru") === (currentStep as TfStep).isTrue;
-            points = isCorrect ? 20 : 0;
+            points = isCorrect ? 100 : 0;
         } else if (currentStep.type === 'anagram') {
             isCorrect = (answer as string).toLocaleUpperCase('tr-TR') === (currentStep as AnagramStep).correctAnswer.toLocaleUpperCase('tr-TR');
-            points = isCorrect ? 50 : 0;
+            points = isCorrect ? 100 : 0;
         } else if (currentStep.type === 'sentenceScramble') {
              isCorrect = (answer as string) === (currentStep as SentenceScrambleStep).correctSentence;
-             points = isCorrect ? 50 : 0;
+             points = isCorrect ? 100 : 0;
         }
         if (isCorrect) playSound('correct'); else playSound('incorrect');
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { answer, isCorrect } };
@@ -1854,7 +1894,8 @@ export function LessonContentViewer({
         if (!currentStep || currentStep.type !== 'trueFalseList') return;
         const answersForStep = internalProgress.answers[currentStepIndex];
         const correctCount = Object.values(answersForStep || {}).filter((a: any) => a.isCorrect).length;
-        const points = correctCount * 20;
+        // BURADA DEĞİŞİKLİK YAPILDI: Her doğru cevap için 20 yerine 100 puan
+        const points = correctCount * 100;
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { ...answersForStep, completed: true } };
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
     }

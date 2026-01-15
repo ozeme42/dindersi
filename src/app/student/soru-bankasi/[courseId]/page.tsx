@@ -36,7 +36,8 @@ import {
 
 // --- SABİTLER ---
 const difficultyMap = { 'Kolay': 'easy', 'Orta': 'medium', 'Zor': 'hard' } as const;
-const TOPIC_REWARD = 30000; 
+// ÖDÜL BURADA 10.000 OLARAK GÜNCELLENDİ
+const TOPIC_REWARD = 10000; 
 
 // --- ARKA PLAN EFEKTİ ---
 const MissionBackground = () => (
@@ -56,13 +57,11 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
     const [error, setError] = useState<string | null>(null);
     const { user } = useAuth();
     
-    // Oyun Durumu
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState<(string | boolean | null)[]>([]);
     const [isFinished, setIsFinished] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     
-    // Puanlama & Efektler
     const [score, setScore] = useState(0);
     const [correctCount, setCorrectCount] = useState(0);
     const [streak, setStreak] = useState(0); 
@@ -229,7 +228,6 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
 
     return (
         <div className="fixed inset-0 z-[100] flex flex-col bg-[#020617] text-white overflow-hidden">
-            {/* Header */}
             <div className="flex-shrink-0 px-4 py-4 md:py-6 bg-slate-900/50 backdrop-blur-md border-b border-white/5 relative z-20">
                 <div className="max-w-4xl mx-auto w-full flex items-center justify-between gap-4">
                     <Button onClick={onBack} size="icon" variant="ghost" className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/10 text-slate-300">
@@ -250,7 +248,6 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
                 </div>
             </div>
 
-            {/* Scrollable Content */}
             <div className="flex-grow overflow-y-auto relative p-4 flex flex-col items-center">
                 <div className="absolute inset-0 pointer-events-none overflow-hidden">
                     <div className="absolute top-[10%] left-[50%] -translate-x-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[100px]" />
@@ -317,7 +314,6 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
                 </div>
             </div>
 
-            {/* Footer */}
             <div className="flex-shrink-0 p-4 bg-slate-900/80 backdrop-blur-xl border-t border-white/5 relative z-20 safe-area-bottom">
                 <div className="max-w-3xl mx-auto flex justify-end">
                     <Button 
@@ -357,7 +353,6 @@ function QuestionBankCoursePageComponent() {
     const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
     const [activeTest, setActiveTest] = useState<{ topic: Topic, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number } | null>(null);
 
-    // --- VERİ ÇEKME ---
     useEffect(() => {
         if (!user?.uid || !courseId) return;
         const fetchInitialData = async () => {
@@ -390,7 +385,6 @@ function QuestionBankCoursePageComponent() {
         fetchInitialData();
     }, [user, courseId]);
 
-    // --- SIRALAMA ---
     const sortedUnits = useMemo(() => {
         if (!course?.units) return [];
         const getOrderValue = (item: any) => {
@@ -411,7 +405,6 @@ function QuestionBankCoursePageComponent() {
 
     const allSortedTopics = useMemo(() => sortedUnits.flatMap(u => u.topics || []), [sortedUnits]);
 
-    // --- KİLİT MANTIKLARI ---
     const isTopicCompleted = useCallback((topicId: string) => {
         const progress = topicProgress[topicId];
         const counts = testCounts[topicId];
@@ -430,7 +423,6 @@ function QuestionBankCoursePageComponent() {
         return isTopicCompleted(allSortedTopics[idx - 1].id);
     }, [isTopicCompleted, allSortedTopics]);
 
-    // --- TEST TAMAMLAMA ---
     const handleTestComplete = async (
         difficulty: 'Kolay' | 'Orta' | 'Zor', 
         testIndex: number, 
@@ -444,7 +436,6 @@ function QuestionBankCoursePageComponent() {
         
         let finalScore = score;
 
-        // --- KONU BİTİRME ÖDÜLÜ MANTIĞI ---
         if (passed) {
             const counts = testCounts[activeTest.topic.id];
             const totalTestsNeeded = 
@@ -461,11 +452,10 @@ function QuestionBankCoursePageComponent() {
                 });
             }
 
-            // Bu test daha önce geçilmemişse ve bu son test ise
             const wasAlreadyPassed = currentProgress?.[difficultyMap[difficulty]]?.[testIndex]?.status === 'passed';
             if (!wasAlreadyPassed && (passedCountSoFar + 1) >= totalTestsNeeded) {
                 finalScore += TOPIC_REWARD;
-                playSound('level-up'); // Ödül sesi
+                playSound('level-up'); 
             }
         }
 
@@ -533,7 +523,6 @@ function QuestionBankCoursePageComponent() {
                     </div>
                 </div>
 
-                {/* --- UNITS & TOPICS GRID --- */}
                 <div className="space-y-16 pb-40">
                     {sortedUnits.map((unit) => (
                         <div key={unit.id} className="relative">
@@ -588,8 +577,8 @@ function QuestionBankCoursePageComponent() {
                                                                 {completed ? <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3"/> TAMAMLANDI</span> : `KONU ${unitTopicIndex}`}
                                                         </div>
                                                         <div className="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/30 px-2 py-1 rounded text-[10px] font-bold text-yellow-400">
-                                                             <Star className="w-3 h-3 fill-current" />
-                                                             <span>{TOPIC_REWARD.toLocaleString()} XP</span>
+                                                              <Star className="w-3 h-3 fill-current" />
+                                                              <span>{TOPIC_REWARD.toLocaleString()} XP</span>
                                                         </div>
                                                     </div>
 
@@ -630,7 +619,6 @@ function QuestionBankCoursePageComponent() {
                 </div>
             </div>
 
-            {/* --- DETAY MODALI --- */}
             <Dialog open={!!selectedTopic} onOpenChange={(open) => !open && setSelectedTopic(null)}>
                 <DialogContent className="bg-[#020617]/95 backdrop-blur-xl border-slate-800 text-white max-w-4xl max-h-[85dvh] w-[95vw] overflow-hidden flex flex-col p-0 shadow-2xl rounded-3xl">
                     <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-gradient-to-r from-indigo-900/20 to-purple-900/20 relative overflow-hidden shrink-0">

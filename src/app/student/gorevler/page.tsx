@@ -19,7 +19,8 @@ import { useToast } from '@/hooks/use-toast';
 import Confetti from 'react-dom-confetti';
 
 // --- SABİTLER ---
-const TOPIC_REWARD = 30000;
+// PUAN BURADA 10.000 OLARAK GÜNCELLENDİ
+const TOPIC_REWARD = 10000;
 
 // --- YARDIMCI FONKSİYON: FIREBASE VERİSİNİ TEMİZLEME ---
 const serializeFirebaseData = (data: any): any => {
@@ -86,7 +87,7 @@ export default function StudentMissionsPage() {
   const [globalProgress, setGlobalProgress] = useState<UserProgress>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // --- VERİ ÇEKME FONKSİYONU (GÜNCELLENDİ) ---
+  // --- VERİ ÇEKME FONKSİYONU ---
   const refreshData = useCallback(async () => {
     if (!user) return;
     try {
@@ -98,14 +99,11 @@ export default function StudentMissionsPage() {
         }
 
         if (classId) {
-            // 1. Normal İlerlemeyi Çek
             const [coursesDataRaw, progressData] = await Promise.all([
                 getStudentCurriculum(classId),
                 getUserTopicProgress(user.uid) 
             ]);
             
-            // 2. Ödülleri Ayrıca Kontrol Et (Bu kısım yeni eklendi)
-            // Sistem "konu bitti" demese bile, ödül alınmışsa biz bitti sayacağız.
             const rewardsQuery = query(
                 collection(db, 'scoreEvents'),
                 where('userId', '==', user.uid),
@@ -115,10 +113,9 @@ export default function StudentMissionsPage() {
             
             const mergedProgress = { ...(progressData || {}) };
 
-            // Ödülü alınan her konuyu "completed" olarak işaretle
             rewardsSnap.forEach(doc => {
                 const data = doc.data();
-                const topicId = data.context; // context = topicId
+                const topicId = data.context; 
                 if (topicId) {
                     if (!mergedProgress[topicId]) {
                         mergedProgress[topicId] = { completionCount: 0, completed: false };
@@ -185,7 +182,6 @@ export default function StudentMissionsPage() {
             });
             setGameData(newData);
 
-            // Ödülü daha önce almış mı kontrol et
             const rewardQuery = query(
                 collection(db, 'scoreEvents'),
                 where('userId', '==', user.uid),
@@ -195,7 +191,6 @@ export default function StudentMissionsPage() {
             const rewardSnap = await getDocs(rewardQuery);
             if (!rewardSnap.empty) {
                 setRewardClaimed(true);
-                // Ödül varsa listeyi güncelle (UI senkronizasyonu için)
                 setGlobalProgress(prev => {
                   const safeTopicId = String(topic.id);
                   return {
@@ -274,9 +269,7 @@ export default function StudentMissionsPage() {
                   className: "bg-green-600 text-white"
               });
               
-              // Veriyi de arka planda tazele
               refreshData();
-
               setTimeout(() => setSelectedTopic(null), 2500);
 
           } else {
@@ -291,7 +284,6 @@ export default function StudentMissionsPage() {
       }
   };
 
-  // --- İLERLEME KONTROL YARDIMCISI ---
   const isTopicCompleted = (topicId: string) => {
     const progress = globalProgress[String(topicId)] || globalProgress[topicId];
     return progress && (progress.completionCount > 0 || progress.completed === true);
@@ -421,7 +413,6 @@ export default function StudentMissionsPage() {
             <DialogContent className="bg-[#020617]/95 backdrop-blur-xl border-slate-800 text-white max-w-2xl max-h-[90vh] overflow-hidden flex flex-col p-0 shadow-2xl">
                 <DialogDescription className="sr-only">Görev detayları ve oyun listesi</DialogDescription>
                 
-                {/* Konfeti */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
                     <Confetti active={showConfetti} config={{ elementCount: 200, spread: 360, startVelocity: 40 }} />
                 </div>
@@ -450,9 +441,7 @@ export default function StudentMissionsPage() {
                     <div className="space-y-6">
                         {MISSION_STEPS.map((step, index) => {
                             const data = gameData[step.type] || { completed: false, score: 0 };
-                            
                             const isPassed = data.completed;
-
                             let isUnlocked = false;
                             
                             if (index === 0) {
@@ -526,7 +515,6 @@ export default function StudentMissionsPage() {
                         })}
                     </div>
                     
-                    {/* --- BÖLÜM SONU KARTI VE ÖDÜL BUTONU --- */}
                     <div className="mt-8 relative z-10 animate-in slide-in-from-bottom-4 pb-4">
                         <div className={cn(
                             "flex items-center justify-center p-6 rounded-2xl border-2 border-dashed transition-all flex-col",
@@ -550,7 +538,6 @@ export default function StudentMissionsPage() {
                                     : `Tüm görevleri tamamla, ${TOPIC_REWARD.toLocaleString()} XP kazan!`}
                             </p>
 
-                            {/* ÖDÜL ALMA BUTONU */}
                             {MISSION_STEPS.every(s => (gameData[s.type]?.completed)) && (
                                 <Button 
                                     onClick={handleClaimReward}
@@ -569,7 +556,6 @@ export default function StudentMissionsPage() {
                             )}
                         </div>
                     </div>
-
                 </div>
             </DialogContent>
         </Dialog>
@@ -598,7 +584,7 @@ export default function StudentMissionsPage() {
               </p>
           </div>
           <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white bg-white/5 backdrop-blur-sm px-6 h-12 rounded-xl">
-             <a href="/student"><ChevronLeft className="mr-2 h-4 w-4"/> Panele Dön</a>
+              <a href="/student"><ChevronLeft className="mr-2 h-4 w-4"/> Panele Dön</a>
           </Button>
         </div>
 
@@ -606,14 +592,12 @@ export default function StudentMissionsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
             {courses.map((course) => {
                 const totalTopics = course.units.reduce((acc, u) => acc + u.topics.length, 0);
-                
                 let completedTopicsInCourse = 0;
                 course.units.forEach(u => {
                     u.topics.forEach(t => {
                         if (isTopicCompleted(t.id)) completedTopicsInCourse++;
                     });
                 });
-
                 const percent = totalTopics > 0 ? Math.round((completedTopicsInCourse / totalTopics) * 100) : 0;
 
                 return (
@@ -624,13 +608,11 @@ export default function StudentMissionsPage() {
                 >
                     <div className="absolute -inset-0.5 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[2.5rem] opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
                     <Card className="relative h-full bg-[#0f172a] border-slate-800 group-hover:translate-y-[-6px] transition-transform duration-300 rounded-[2.2rem] overflow-hidden flex flex-col shadow-2xl">
-                        
                         <div className="h-40 bg-gradient-to-br from-indigo-900/40 to-slate-900 flex items-center justify-center relative overflow-hidden group-hover:h-36 transition-all duration-300">
                             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
                             <div className="w-24 h-24 bg-indigo-500/10 rounded-3xl flex items-center justify-center backdrop-blur-md border border-white/5 shadow-2xl group-hover:scale-110 transition-transform duration-500">
                                 <BookOpen className="h-12 w-12 text-indigo-300" />
                             </div>
-                            
                             <div className="absolute bottom-4 right-4">
                                 <Badge className="bg-slate-950/80 backdrop-blur border-slate-700 text-slate-300">
                                     {course.units.length} Ünite
@@ -656,7 +638,6 @@ export default function StudentMissionsPage() {
                                         />
                                     </div>
                                 </div>
-
                                 <div className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-base font-bold bg-slate-800 group-hover:bg-indigo-600 text-slate-300 group-hover:text-white transition-all duration-300 shadow-lg">
                                     Maceraya Başla <ArrowRight className="h-5 w-5" />
                                 </div>
