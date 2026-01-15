@@ -1,3 +1,5 @@
+
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -37,7 +39,7 @@ export async function getTeacherExams(teacherId: string): Promise<{ success: boo
          if (error.code === 'failed-precondition') {
              const urlRegex = /(https?:\/\/[^\s]+)/g;
              const url = error.message.match(urlRegex)?.[0] || '#';
-             return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için <a href="${url}" target="_blank" rel="noopener noreferrer" class="underline font-bold">bu linke tıklayarak</a> gerekli indeksi oluşturun.`};
+             return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için <a href="${url}" target="_blank" rel="noopener noreferrer" class="underline font-bold">bu linke tıklayarak</a> gerekli indeksi oluşturun.` };
         }
         return { success: false, error: "Deneme sınavları listesi alınamadı." };
     }

@@ -70,7 +70,7 @@ function QuestionSelectionCard({ question, isSelected, onToggle }: { question: Q
     )
 }
 
-export function CreateExamClientPage() {
+export default function CreateExamClientPage() {
     const { user } = useAuth();
     const { toast } = useToast();
     const router = useRouter();
@@ -384,5 +384,3 @@ export function CreateExamClientPage() {
         </div>
     )
 }
-```
-
