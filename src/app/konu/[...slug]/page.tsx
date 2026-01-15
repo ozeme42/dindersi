@@ -292,9 +292,7 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
 
     const activityTypes = [
         { href: '/oyunlar/yazi-tura', label: 'Gol Kralı', icon: Trophy, color: 'amber' },
-        // --- DEĞİŞİKLİK BURADA: ÇARKIFELEK EKLENDİ ---
         { href: '/oyunlar/carkifelek', label: 'Çarkıfelek', icon: Zap, color: 'purple', badge: 'YENİ' }, 
-        // ---------------------------------------------
         { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, color: 'pink' },
         { href: '/oyunlar/kelime-avi', label: 'Kelime Avı', icon: Search, color: 'teal' },
         { href: '/oyunlar/kutu-ac', label: 'Kutu Aç', icon: Package, color: 'indigo' },
@@ -313,7 +311,8 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
     ];
 
     // Takım oyunlarını ayır
-    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado'];
+    // DEĞİŞİKLİK BURADA: carkifelek eklendi
+    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek'];
     const teamGames = activityTypes.filter(a => teamGameSlugs.includes(a.href.split('/').pop() || ''));
     const soloGames = activityTypes.filter(a => !teamGameSlugs.includes(a.href.split('/').pop() || ''));
 
@@ -455,12 +454,37 @@ export default function TopicPage() {
                             <p className="text-[10px] text-indigo-500 font-black uppercase tracking-widest">{courseName} / {unitName}</p>
                         </div>
                     </div>
-                    {/* MOBİL UYUMLU SEKMELER (GRID LAYOUT) */}
+                    {/* MOBİL UYUMLU RENKLİ SEKMELER */}
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto overflow-x-auto no-scrollbar">
-                        <TabsList className="bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200 h-auto grid grid-cols-3 md:flex gap-2 shadow-inner w-full md:w-auto">
-                            <TabsTrigger value="ozet" className="rounded-xl px-2 md:px-8 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest data-[state=active]:bg-violet-600 data-[state=active]:text-white transition-all flex items-center justify-center gap-1 md:gap-2"><BookOpen className="h-3 w-3 md:h-4 md:w-4"/> Özet</TabsTrigger>
-                            <TabsTrigger value="notlar" className="rounded-xl px-2 md:px-8 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all flex items-center justify-center gap-1 md:gap-2"><Columns className="h-3 w-3 md:h-4 md:w-4"/> Notlar</TabsTrigger>
-                            <TabsTrigger value="etkinlikler" className="rounded-xl px-2 md:px-8 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest data-[state=active]:bg-emerald-600 data-[state=active]:text-white transition-all flex items-center justify-center gap-1 md:gap-2"><Gamepad2 className="h-3 w-3 md:h-4 md:w-4"/> Oyun</TabsTrigger>
+                        <TabsList className="bg-slate-100/80 p-1.5 rounded-full border border-slate-200 h-auto grid grid-cols-3 md:flex gap-2 shadow-inner w-full md:w-auto">
+                            
+                            {/* ÖZET SEKME */}
+                            <TabsTrigger 
+                                value="ozet" 
+                                className="rounded-full px-2 md:px-6 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-violet-500/30 data-[state=active]:bg-gradient-to-r from-violet-600 to-purple-600 hover:bg-white/50"
+                            >
+                                <BookOpen className="h-3 w-3 md:h-4 md:w-4 relative z-10"/> 
+                                <span className="relative z-10">Özet</span>
+                            </TabsTrigger>
+
+                            {/* NOTLAR SEKME */}
+                            <TabsTrigger 
+                                value="notlar" 
+                                className="rounded-full px-2 md:px-6 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/30 data-[state=active]:bg-gradient-to-r from-blue-600 to-cyan-600 hover:bg-white/50"
+                            >
+                                <Columns className="h-3 w-3 md:h-4 md:w-4 relative z-10"/> 
+                                <span className="relative z-10">Notlar</span>
+                            </TabsTrigger>
+
+                            {/* OYUN SEKME */}
+                            <TabsTrigger 
+                                value="etkinlikler" 
+                                className="rounded-full px-2 md:px-6 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/30 data-[state=active]:bg-gradient-to-r from-emerald-500 to-green-500 hover:bg-white/50"
+                            >
+                                <Gamepad2 className="h-3 w-3 md:h-4 md:w-4 relative z-10"/> 
+                                <span className="relative z-10">Oyun</span>
+                            </TabsTrigger>
+                        
                         </TabsList>
                     </Tabs>
                 </div>
