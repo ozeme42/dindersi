@@ -3,20 +3,19 @@
 
 import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { getDenemeQuestionsAction, submitDenemeScoreAction } from '../actions';
+import { getDenemeQuestionsAction, submitDenemeScoreAction } from '../actions'; 
 import type { Question, Assignment } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, ArrowLeft, ClipboardCheck, PartyPopper, CheckCircle2, Bug, Timer, AlertTriangle, Save } from 'lucide-react';
+import { Loader2, ArrowRight, ArrowLeft, ClipboardCheck, PartyPopper, CheckCircle2, Bug, Timer, AlertTriangle, Save, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { isFuture } from 'date-fns';
+import { tr } from 'date-fns/locale';
+import { format } from 'date-fns';
 
 function DenemeGame() {
     const { user } = useAuth();
@@ -32,9 +31,8 @@ function DenemeGame() {
     const [isFinished, setIsFinished] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     
+    const assignmentId = searchParams.get('assignmentId');
     const durationParam = parseInt(searchParams.get('duration') || '0');
-    // Eğer süre 0 ise (süre yoksa) çok uzun bir süre verelim (örn: 5 saat) ya da sayacı gizleyelim.
-    // Şimdilik 0 ise sayacı gizleme mantığı UI'da yapılacak, buraya dummy süre atıyoruz.
     const duration = durationParam > 0 ? durationParam * 60 : 0; 
 
     const [timeLeft, setTimeLeft] = useState(duration);
@@ -55,7 +53,6 @@ function DenemeGame() {
         setIsLoading(true);
         setError(null);
         
-        const assignmentId = searchParams.get('assignmentId');
         const questionIdsParam = searchParams.get('questionIds');
         const questionIds = questionIdsParam ? questionIdsParam.split(',') : [];
 
@@ -76,7 +73,6 @@ function DenemeGame() {
             const assignmentData = assignmentSnap.data() as Assignment;
             if (assignmentData.startDate && isFuture(new Date(assignmentData.startDate))) {
                 setError("Bu deneme henüz başlamadı.");
-                toast({ title: "Henüz Değil!", description: "Bu denemenin başlangıç tarihi henüz gelmedi.", variant: "destructive" });
                 router.push('/student/deneme');
                 return;
             }
@@ -94,14 +90,13 @@ function DenemeGame() {
             setIsLoading(false);
         }
 
-    }, [searchParams, router, toast]);
+    }, [assignmentId, searchParams, router]);
 
     useEffect(() => {
         fetchQuest();
     }, [fetchQuest]);
 
-     useEffect(() => {
-        // Süre varsa sayacı başlat
+    useEffect(() => {
         if (!isLoading && questions.length > 0 && !isFinished && duration > 0) {
             timerRef.current = setInterval(() => {
                 setTimeLeft(prev => {
@@ -115,9 +110,7 @@ function DenemeGame() {
             }, 1000);
         }
         return () => {
-            if (timerRef.current) {
-                clearInterval(timerRef.current);
-            }
+            if (timerRef.current) clearInterval(timerRef.current);
         };
     }, [isLoading, questions, isFinished, duration]);
     
@@ -141,47 +134,64 @@ function DenemeGame() {
         }
     };
 
-
+    // --- ÖDÜL SİSTEMİ ENTEGRASYONU ---
     const handleSaveAndExit = async () => {
-        if (isSubmitting) return;
+        if (isSubmitting || !user || !assignmentId) return;
 
-        if (user?.role !== 'student') {
-            router.push('/student/deneme');
-            return;
-        }
+        setIsSubmitting(true);
 
+        // 1. Doğru Sayısını ve Başarıyı Hesapla
         let correctCount = 0;
         answers.forEach((answer, index) => {
             const question = questions[index];
             if (!question) return;
-            
             let isCorrect = false;
             if (question.type === 'Doğru/Yanlış') {
                 isCorrect = answer === (question.isTrue ?? (question.correctAnswer === 'Doğru'));
             } else {
                 isCorrect = answer === question.correctAnswer;
             }
-            if (isCorrect) {
-                correctCount++;
-            }
+            if (isCorrect) correctCount++;
         });
-        const finalScore = correctCount * 10;
 
-        setIsSubmitting(true);
-        const assignmentId = searchParams.get('assignmentId');
-        if (!assignmentId) {
-            toast({ title: "Hata", description: "Ödev kimliği bulunamadı, skor kaydedilemedi.", variant: "destructive"});
-            setIsSubmitting(false);
-            return;
-        }
-
+        const finalScore = correctCount * 100;
         const context = `Deneme ID: ${assignmentId}`;
-        const result = await submitDenemeScoreAction(user.uid, finalScore, context, answers);
-        if (result.success) {
-            toast({ title: "Başarılı!", description: "Denemen kaydedildi. Sonuçlarını görüntüleyebilirsin." });
-            router.push('/student/deneme');
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive"});
+
+        try {
+            // 2. SUNUCUYA TÜM VERİLERİ GÖNDER (Bonus hesaplaması server-side yapılacak)
+            const result = await submitDenemeScoreAction(
+                user.uid, 
+                finalScore, 
+                context, 
+                answers,
+                correctCount,
+                questions.length
+            );
+            
+            if (result.success) {
+                // 3. EĞER BONUS KAZANILDIYSA KULLANICIYI BİLGİLENDİR
+                if (result.awardedBonus && result.awardedBonus > 0) {
+                    toast({
+                        title: "Efsanevi Başarı! 🏆",
+                        description: `%${Math.round((correctCount/questions.length)*100)} başarı baremini geçerek ekstra ${result.awardedBonus} XP kazandın!`,
+                        variant: "default",
+                        className: "bg-emerald-600 text-white border-none shadow-[0_0_20px_rgba(16,185,129,0.5)]"
+                    });
+                } else {
+                    toast({ 
+                        title: "Sınav Kaydedildi", 
+                        description: "Sonuçlarını denemeler listesinden inceleyebilirsin." 
+                    });
+                }
+                
+                router.push('/student/deneme');
+            } else {
+                toast({ title: "Hata", description: result.error, variant: "destructive"});
+                setIsSubmitting(false);
+            }
+        } catch (err) {
+            console.error("Submit Error:", err);
+            toast({ title: "Hata", description: "Beklenmedik bir sorun oluştu.", variant: "destructive"});
             setIsSubmitting(false);
         }
     };
@@ -190,7 +200,6 @@ function DenemeGame() {
         if (isFinished) {
             handleSaveAndExit();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isFinished]);
 
     const formatTime = (seconds: number) => {
@@ -199,62 +208,15 @@ function DenemeGame() {
         return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     };
 
-    // --- YÜKLENİYOR ---
-    if (isLoading) {
-        return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
-                <Loader2 className="h-12 w-12 animate-spin text-cyan-500" /> 
-                <span className="text-slate-400 font-medium animate-pulse">Sınav Ortamı Hazırlanıyor...</span>
-            </div>
-        );
-    }
+    // --- RENDER MANTIĞI ---
+    if (isLoading) return <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /><span className="text-slate-400 font-medium animate-pulse">Sınav Ortamı Hazırlanıyor...</span></div>;
     
-    // --- HATA ---
-    if (error) {
-        return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
-                <div className="bg-slate-900 border border-red-500/30 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl">
-                    <div className="bg-red-500/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <AlertTriangle className="h-8 w-8 text-red-500" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">Bir Sorun Oluştu</h3>
-                    <p className="text-slate-400 mb-6">{error}</p>
-                    <Button asChild className="w-full bg-slate-800 text-white hover:bg-slate-700">
-                        <Link href="/student/deneme"><ArrowLeft className="mr-2 h-4 w-4"/>Listeye Dön</Link>
-                    </Button>
-                </div>
-            </div>
-        );
-    }
+    if (error) return <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4"><div className="bg-slate-900 border border-red-500/30 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl"><div className="bg-red-500/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"><AlertTriangle className="h-8 w-8 text-red-500" /></div><h3 className="text-xl font-bold text-white mb-2">Bir Sorun Oluştu</h3><p className="text-slate-400 mb-6">{error}</p><Button asChild className="w-full bg-slate-800 text-white hover:bg-slate-700"><Link href="/student/deneme"><ArrowLeft className="mr-2 h-4 w-4"/>Listeye Dön</Link></Button></div></div>;
     
-    // --- BİTİŞ EKRANI ---
-    if (isFinished) {
-        return (
-             <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-                {/* Arka Plan Efekti */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-900/20 via-slate-950 to-slate-950" />
-                
-                <div className="relative z-10 w-full max-w-md text-center bg-slate-900/80 backdrop-blur-xl border border-white/10 p-10 rounded-3xl shadow-2xl">
-                    <div className="mx-auto bg-gradient-to-br from-amber-400 to-orange-500 rounded-full p-1 w-24 h-24 mb-6 shadow-lg shadow-amber-500/20 animate-in zoom-in duration-500">
-                        <div className="bg-slate-900 w-full h-full rounded-full flex items-center justify-center">
-                            <PartyPopper className="h-12 w-12 text-amber-500"/>
-                        </div>
-                    </div>
-                    
-                    <h2 className="text-3xl font-black text-white mb-2 tracking-tight">SINAV TAMAMLANDI!</h2>
-                    <p className="text-slate-400 mb-8">Sonuçların sunucuya iletiliyor, lütfen bekle...</p>
-                    
-                    <div className="flex justify-center">
-                        <Loader2 className="h-8 w-8 animate-spin text-cyan-500"/>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+    if (isFinished) return <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden"><div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-900/20 via-slate-950 to-slate-950" /><div className="relative z-10 w-full max-w-md text-center bg-slate-900/80 backdrop-blur-xl border border-white/10 p-10 rounded-3xl shadow-2xl"><div className="mx-auto bg-gradient-to-br from-amber-400 to-orange-500 rounded-full p-1 w-24 h-24 mb-6 shadow-lg"><div className="bg-slate-900 w-full h-full rounded-full flex items-center justify-center"><PartyPopper className="h-12 w-12 text-amber-500"/></div></div><h2 className="text-3xl font-black text-white mb-2 tracking-tight">SINAV BİTTİ!</h2><p className="text-slate-400 mb-8">Puanların hesaplanıyor ve ödüllerin kontrol ediliyor...</p><div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-cyan-500"/></div></div></div>;
 
     const currentQuestion = questions[currentQuestionIndex];
     if (!currentQuestion) return <div className="text-center p-8 text-white">Soru verisi bozuk.</div>;
-
     const currentAnswer = answers[currentQuestionIndex];
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
     
@@ -286,9 +248,7 @@ function DenemeGame() {
                                 <ClipboardCheck className="text-indigo-400 h-5 w-5 md:h-6 md:w-6" />
                             </div>
                             <div className="flex flex-col min-w-0">
-                                <h1 className="text-sm md:text-lg font-bold text-white truncate">
-                                    {searchParams.get('assignmentTitle') || 'Deneme Sınavı'}
-                                </h1>
+                                <h1 className="text-sm md:text-lg font-bold text-white truncate">{searchParams.get('assignmentTitle') || 'Deneme Sınavı'}</h1>
                                 <div className="flex items-center gap-2 text-xs md:text-sm text-slate-400 font-mono">
                                     <span>SORU {String(currentQuestionIndex + 1).padStart(2, '0')}</span>
                                     <span className="text-slate-600">/</span>
@@ -301,7 +261,7 @@ function DenemeGame() {
                         <div className="flex items-center gap-2 md:gap-4">
                             {duration > 0 && (
                                 <div className={cn(
-                                    "flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border font-mono font-bold text-sm md:text-lg transition-colors shadow-[0_0_15px_rgba(0,0,0,0.3)]",
+                                    "flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border font-mono font-bold text-sm md:text-lg shadow-[0_0_15px_rgba(0,0,0,0.3)]",
                                     isLowTime 
                                         ? "bg-red-500/10 border-red-500/50 text-red-500 animate-pulse" 
                                         : "bg-slate-950/50 border-white/10 text-cyan-400"
@@ -318,7 +278,7 @@ function DenemeGame() {
                 {/* İlerleme Çubuğu (Header Altı) */}
                 <div className="w-full h-1 bg-slate-800">
                     <div 
-                        className="h-full bg-gradient-to-r from-cyan-500 to-indigo-500 shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all duration-500 ease-out"
+                        className="h-full bg-gradient-to-r from-cyan-500 to-indigo-500 shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all duration-500"
                         style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
                     />
                 </div>
@@ -345,7 +305,7 @@ function DenemeGame() {
                     {/* Seçenekler */}
                     <div className={cn(
                         "grid gap-3 md:gap-4",
-                        currentQuestion.options && currentQuestion.options.length > 4 ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
+                        (currentQuestion.options?.length || 0) > 4 ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
                     )}>
                         {currentQuestion.type === 'Doğru/Yanlış' ? (
                             ["Doğru", "Yanlış"].map((option) => {

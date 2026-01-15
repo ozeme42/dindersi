@@ -1,10 +1,7 @@
-
 'use client';
 
 import { Suspense, useState, useEffect, useCallback } from 'react';
-import {
-  Card,
-} from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -20,7 +17,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, Play, Trophy, Calendar, Clock, FileText, AlertTriangle, CheckCircle2, Medal, Timer, GraduationCap } from 'lucide-react';
+import { Loader2, ArrowRight, Play, Trophy, Calendar, Clock, FileText, AlertTriangle, CheckCircle2, Medal, Timer, GraduationCap, Zap, Award } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
 import { getStudentExams } from './actions';
@@ -30,7 +27,7 @@ import { tr } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { UserAvatar } from '@/components/user-avatar';
 
-// --- LİDERLİK TABLOSU (KOYU TEMA) ---
+// --- LİDERLİK TABLOSU ---
 function LeaderboardDialog({ assignment }: { assignment: any }) {
     const [leaderboard, setLeaderboard] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -105,11 +102,14 @@ function LeaderboardDialog({ assignment }: { assignment: any }) {
     );
 }
 
-// --- SINAV KARTI (CYBER TASARIM) ---
+// --- SINAV KARTI ---
 function IntroCard({ assignment }: { assignment: any }) {
   const isSolved = !!assignment.solvedEvent;
   const canStart = !assignment.startDate || !isFuture(new Date(assignment.startDate));
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
+
+  // Ödül baremlerini yüzdesine göre sıralayalım
+  const sortedThresholds = [...(assignment.rewardThresholds || [])].sort((a, b) => a.rate - b.rate);
 
   return (
       <div className="group relative w-full max-w-2xl mx-auto rounded-3xl bg-slate-900/80 border border-white/10 backdrop-blur-md overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 shadow-2xl">
@@ -147,7 +147,7 @@ function IntroCard({ assignment }: { assignment: any }) {
              </div>
           </div>
 
-          {/* İçerik (HUD Tarzı İstatistikler) */}
+          {/* İçerik */}
           <div className="p-6 pt-4 space-y-6">
               
               {/* Bilgi Grid'i */}
@@ -174,6 +174,25 @@ function IntroCard({ assignment }: { assignment: any }) {
                   </div>
               </div>
 
+              {/* --- ÖDÜL SİSTEMİ GÖRÜNÜMÜ --- */}
+              {sortedThresholds.length > 0 && !isSolved && (
+                <div className="relative p-4 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/20 overflow-hidden group/reward">
+                    <div className="flex items-center gap-2 mb-3">
+                        <Zap className="h-4 w-4 text-amber-400 fill-amber-400 animate-pulse" />
+                        <span className="text-xs font-black text-amber-200 uppercase tracking-widest">Başarı Ödülleri</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {sortedThresholds.map((threshold, idx) => (
+                            <div key={idx} className="flex flex-col items-center bg-slate-950/60 border border-white/5 px-4 py-2 rounded-xl transition-all hover:border-amber-500/40">
+                                <span className="text-[10px] font-bold text-slate-500 uppercase leading-none mb-1">%{threshold.rate}</span>
+                                <span className="text-sm font-black text-amber-400">+{threshold.points} XP</span>
+                            </div>
+                        ))}
+                    </div>
+                    <Award className="absolute -right-2 -bottom-2 h-16 w-16 text-amber-500/10 rotate-12 group-hover/reward:scale-110 transition-transform" />
+                </div>
+              )}
+
               {/* Alt Aksiyon Alanı */}
               <div className="pt-2">
                 {isSolved ? (
@@ -199,9 +218,9 @@ function IntroCard({ assignment }: { assignment: any }) {
                              
                              <Button asChild className="w-full bg-slate-800 text-white hover:bg-slate-700 border border-white/10 h-12 rounded-xl font-bold">
                                <Link href={`/student/deneme/sonuc/${assignment.id}`}>
-                                  Sonuçları İncele <FileText className="ml-2 h-4 w-4 opacity-70"/>
+                                 Sonuçları İncele <FileText className="ml-2 h-4 w-4 opacity-70"/>
                                </Link>
-                            </Button>
+                             </Button>
                         </div>
                         <LeaderboardDialog assignment={assignment} />
                    </Dialog>

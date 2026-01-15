@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from "react";
@@ -21,7 +20,11 @@ import {
     AlertTriangle,
     Users,
     Calendar as CalendarIcon,
-    FileQuestion, // EKLENDİ
+    FileQuestion,
+    Trophy,
+    Medal,
+    Zap,
+    Award
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Link from 'next/link';
@@ -35,11 +38,10 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, isFuture } from "date-fns";
 import { tr } from 'date-fns/locale';
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
 
 function ErrorWithLink({ message }: { message: string }) {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -112,68 +114,126 @@ function AssignmentDetailPage() {
 
     const { assignment, studentProgress } = details;
     const totalQuestions = assignment.questionIds?.length || 0;
+    const sortedThresholds = [...(assignment.rewardThresholds || [])].sort((a, b) => a.rate - b.rate);
 
     const getCorrectAnswers = (scoreEvent: ScoreEvent | null) => {
         if (!scoreEvent || !scoreEvent.points || totalQuestions === 0) return 0;
-        // Puanlamanın 10 puan üzerinden olduğunu varsayarak doğru sayısını buluyoruz.
         return Math.round(scoreEvent.points / 10);
     };
     
     const sortedProgress = [...studentProgress].sort((a, b) => {
         const scoreA = a.scoreEvent?.points ?? -1;
         const scoreB = b.scoreEvent?.points ?? -1;
-
-        if (scoreB !== scoreA) {
-            return scoreB - scoreA;
-        }
-        // Skorlar aynıysa isme göre sırala
+        if (scoreB !== scoreA) return scoreB - scoreA;
         return (a.student.displayName || '').localeCompare(b.student.displayName || '', 'tr');
     });
 
-
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-             {/* Arka Plan */}
+        <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden font-sans">
+            {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
-                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
                 <div className="flex items-center justify-between border-b border-white/10 pb-6">
-                    <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10">
+                    <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl">
                         <Link href="/teacher/exams">
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Tüm Denemeler
+                            Denemeler
                         </Link>
                     </Button>
-                    <h1 className="text-2xl font-black text-white uppercase tracking-tight">İlerleme Raporu</h1>
+                    <div className="text-right">
+                        <h1 className="text-2xl font-black text-white uppercase tracking-tight">İlerleme Raporu</h1>
+                        <p className="text-indigo-400 text-xs font-bold">Öğrenci Başarı Analizi</p>
+                    </div>
                 </div>
-                
-                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
-                    <CardHeader className="border-b border-white/5 pb-4">
-                        <CardTitle className="text-3xl font-black text-white flex items-center gap-3">
-                             <div className="p-2 bg-indigo-500/20 rounded-lg border border-indigo-500/30">
-                                <FileQuestion className="h-6 w-6 text-indigo-400" />
+
+                {/* ÜST BİLGİ VE ÖDÜL KARTI */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <Card className="lg:col-span-2 bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
+                        <CardHeader>
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-indigo-500/20 rounded-2xl border border-indigo-500/30">
+                                    <FileQuestion className="h-8 w-8 text-indigo-400" />
+                                </div>
+                                <div>
+                                    <CardTitle className="text-2xl font-black text-white">{assignment.title}</CardTitle>
+                                    <CardDescription className="text-slate-400 font-medium">
+                                        {assignment.className} • {assignment.courseName} • {totalQuestions} Soru
+                                    </CardDescription>
+                                </div>
                             </div>
-                            {assignment.title}
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 py-2">
+                             <div className="bg-slate-950/40 p-4 rounded-2xl border border-white/5">
+                                <p className="text-[10px] font-black text-slate-500 uppercase mb-1">Katılım Oranı</p>
+                                <p className="text-xl font-black text-white">%{Math.round((studentProgress.filter(p => p.scoreEvent).length / assignment.assignedTo.length) * 100) || 0}</p>
+                             </div>
+                             <div className="bg-slate-950/40 p-4 rounded-2xl border border-white/5">
+                                <p className="text-[10px] font-black text-slate-500 uppercase mb-1">Ort. Skor</p>
+                                <p className="text-xl font-black text-cyan-400">
+                                    {Math.round(studentProgress.reduce((acc, curr) => acc + (curr.scoreEvent?.points || 0), 0) / (studentProgress.filter(p => p.scoreEvent).length || 1))}
+                                </p>
+                             </div>
+                             <div className="bg-slate-950/40 p-4 rounded-2xl border border-white/5">
+                                <p className="text-[10px] font-black text-slate-500 uppercase mb-1">En Yüksek</p>
+                                <p className="text-xl font-black text-emerald-400">{Math.max(...studentProgress.map(p => p.scoreEvent?.points || 0), 0)}</p>
+                             </div>
+                             <div className="bg-slate-950/40 p-4 rounded-2xl border border-white/5">
+                                <p className="text-[10px] font-black text-slate-500 uppercase mb-1">Toplam Atanan</p>
+                                <p className="text-xl font-black text-indigo-400">{assignment.assignedTo.length}</p>
+                             </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* ÖDÜL BAREMLERİ KARTI */}
+                    <Card className="bg-slate-900/60 backdrop-blur-xl border border-amber-500/20 shadow-2xl overflow-hidden">
+                        <div className="bg-amber-500/10 p-4 border-b border-amber-500/20 flex items-center gap-2">
+                            <Zap className="h-4 w-4 text-amber-400 fill-amber-400" />
+                            <span className="text-xs font-black text-amber-200 uppercase tracking-widest">Aktif Ödül Sistemi</span>
+                        </div>
+                        <CardContent className="p-4">
+                            {sortedThresholds.length > 0 ? (
+                                <div className="space-y-3">
+                                    {sortedThresholds.map((t, i) => (
+                                        <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-slate-950/50 border border-white/5">
+                                            <div className="flex items-center gap-3">
+                                                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">%{t.rate}</Badge>
+                                                <span className="text-xs font-bold text-slate-300">Başarı Üstü</span>
+                                            </div>
+                                            <span className="text-sm font-black text-emerald-400">+{t.points} XP</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="h-full flex flex-col items-center justify-center py-8 text-center">
+                                    <Award className="h-8 w-8 text-slate-700 mb-2" />
+                                    <p className="text-xs text-slate-500 font-medium">Bu deneme için özel bir ödül tanımlanmamış.</p>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* TABLO KARTI */}
+                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden rounded-[2rem]">
+                    <CardHeader className="bg-slate-800/40 border-b border-white/5">
+                        <CardTitle className="text-lg font-black text-white flex items-center gap-2 uppercase tracking-tighter">
+                            <Users className="h-5 w-5 text-indigo-400" /> Öğrenci Sıralaması
                         </CardTitle>
-                        <CardDescription className="text-slate-400">
-                             {assignment.className} ({assignment.courseName}) | {totalQuestions} Soru | Atanan: {assignment.assignedTo.length} öğrenci.
-                        </CardDescription>
                     </CardHeader>
-                    
                     <CardContent className="p-0">
-                        <div className="border rounded-md overflow-x-auto">
+                        <div className="overflow-x-auto">
                             <Table>
-                                <TableHeader className="bg-slate-800/80">
+                                <TableHeader className="bg-slate-950/50">
                                     <TableRow className="border-white/5 hover:bg-transparent">
-                                        <TableHead className="w-16 text-slate-300 font-bold text-base">Sıra</TableHead>
-                                        <TableHead className="text-slate-300 font-bold text-base">Öğrenci</TableHead>
-                                        <TableHead className="text-slate-300 font-bold text-base">Son Deneme</TableHead>
-                                        <TableHead className="text-slate-300 font-bold text-base">Durum / Doğruluk</TableHead>
-                                        <TableHead className="text-right text-slate-300 font-bold text-base">Skor (Puan)</TableHead>
+                                        <TableHead className="w-16 text-slate-400 font-bold uppercase text-[10px] text-center">Sıra</TableHead>
+                                        <TableHead className="text-slate-400 font-bold uppercase text-[10px]">Öğrenci</TableHead>
+                                        <TableHead className="text-slate-400 font-bold uppercase text-[10px]">Çözüm Tarihi</TableHead>
+                                        <TableHead className="text-slate-400 font-bold uppercase text-[10px]">Doğruluk</TableHead>
+                                        <TableHead className="text-right text-slate-400 font-bold uppercase text-[10px] pr-8">Puan</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -185,45 +245,44 @@ function AssignmentDetailPage() {
                                             
                                             return (
                                                 <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
-                                                    <TableCell className="font-black text-lg text-indigo-400">{index + 1}</TableCell>
+                                                    <TableCell className="text-center">
+                                                        {index === 0 ? <Medal className="h-6 w-6 text-yellow-500 mx-auto" /> :
+                                                         index === 1 ? <Medal className="h-6 w-6 text-slate-400 mx-auto" /> :
+                                                         index === 2 ? <Medal className="h-6 w-6 text-amber-700 mx-auto" /> :
+                                                         <span className="font-black text-slate-600">#{index + 1}</span>}
+                                                    </TableCell>
                                                     <TableCell>
                                                         <div className="flex items-center gap-3">
-                                                            <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700 group-hover:border-purple-400 transition-colors"/>
-                                                            <span className="font-medium text-white">{student.displayName}</span>
+                                                            <UserAvatar user={student} className="h-9 w-9 border border-white/10 group-hover:border-indigo-500 transition-colors"/>
+                                                            <span className="font-bold text-white text-sm">{student.displayName}</span>
                                                         </div>
                                                     </TableCell>
-                                                    <TableCell className="text-slate-400 text-sm">
+                                                    <TableCell className="text-slate-400 text-xs font-medium">
                                                         {hasAttempted ? formatDistanceToNow(new Date(scoreEvent.timestamp), { addSuffix: true, locale: tr }) : "-"}
                                                     </TableCell>
                                                     <TableCell>
                                                         {hasAttempted ? (
-                                                            <Badge 
-                                                                variant="outline" 
-                                                                className={cn(
-                                                                    "font-bold text-sm py-1 border-2",
-                                                                    successRate >= 50 
-                                                                        ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/50' 
-                                                                        : 'bg-red-600/20 text-red-300 border-red-500/50'
-                                                                )}
-                                                            >
-                                                                {successRate >= 50 ? <CheckCircle className="mr-2 h-4 w-4"/> : <XCircle className="mr-2 h-4 w-4"/>}
+                                                            <Badge variant="outline" className={cn(
+                                                                    "font-black text-[10px] px-3 py-1 border-2",
+                                                                    successRate >= 50 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'
+                                                                )}>
                                                                 {correctAnswers}/{totalQuestions} Doğru
                                                             </Badge>
                                                         ) : (
-                                                            <Badge variant="outline" className="bg-slate-800 text-slate-400 border-white/10">Başlamadı</Badge>
+                                                            <Badge variant="outline" className="bg-slate-800/50 text-slate-500 border-white/5 text-[10px]">KATILMADI</Badge>
                                                         )}
                                                     </TableCell>
-                                                    <TableCell className="text-right font-black text-lg text-emerald-400">
-                                                        {scoreEvent?.points || 0}
+                                                    <TableCell className="text-right pr-8">
+                                                        <span className={cn("text-lg font-black", hasAttempted ? "text-cyan-400" : "text-slate-700")}>
+                                                            {scoreEvent?.points || 0}
+                                                        </span>
                                                     </TableCell>
                                                 </TableRow>
                                             )
                                         })
                                     ) : (
                                         <TableRow>
-                                            <TableCell colSpan={5} className="h-24 text-center text-slate-500 italic">
-                                                Bu denemeyi henüz çözen öğrenci bulunmuyor veya denemeye öğrenci atanmamış.
-                                            </TableCell>
+                                            <TableCell colSpan={5} className="h-32 text-center text-slate-500 italic">Kayıtlı veri bulunamadı.</TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>
@@ -235,3 +294,6 @@ function AssignmentDetailPage() {
         </div>
     );
 }
+
+// KRİTİK: Next.js sayfanın bir default export içermesini bekler.
+export default AssignmentDetailPage;
