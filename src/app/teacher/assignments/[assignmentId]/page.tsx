@@ -24,7 +24,7 @@ import {
     FileQuestion, // EKLENDİ
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import Link from "next/link";
+import Link from 'next/link';
 import { UserAvatar } from "@/components/user-avatar";
 import {
     Table,
@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
-import { tr } from "date-fns/locale";
+import { tr } from 'date-fns/locale';
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -50,37 +50,17 @@ function ErrorWithLink({ message }: { message: string }) {
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Hata!</AlertTitle>
             <AlertDescription className="whitespace-pre-wrap">
-                {parts.map((part, index) =>
-                    urlRegex.test(part) ? (
-                        <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all">
-                            {part}
-                        </a>
-                    ) : (
-                        <span key={index}>{part}</span>
-                    )
+                {parts.map((part, index) => 
+                    urlRegex.test(part) ? 
+                    <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all">{part}</a> : 
+                    <span key={index}>{part}</span>
                 )}
             </AlertDescription>
         </Alert>
     );
 }
 
-function ErrorDisplay({ error }: { error: string }) {
-    return (
-        <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-red-950/30 border border-red-500/30 rounded-xl">
-            <AlertTriangle className="h-12 w-12 text-red-400 mb-4" />
-            <h2 className="text-xl font-bold text-white">Hata</h2>
-            <ErrorWithLink message={error} />
-            <Button asChild variant="outline" size="sm" className="mt-6 border-white/10 text-white hover:bg-white/10">
-                 <Link href="/teacher/exams">
-                     <ArrowLeft className="mr-2 h-4 w-4" />
-                     Denemeler Sayfasına Dön
-                 </Link>
-             </Button>
-        </div>
-    )
-}
-
-export default function AssignmentDetailPage() {
+function AssignmentDetailPage() {
     const params = useParams();
     const assignmentId = params.assignmentId as string;
     const router = useRouter();
@@ -124,7 +104,7 @@ export default function AssignmentDetailPage() {
         return (
             <div className="min-h-screen bg-slate-950 p-4 sm:p-6 md:p-8">
                 <div className="max-w-7xl mx-auto">
-                    <ErrorDisplay error={error || "Ödev detayları yüklenemedi."} />
+                    <ErrorWithLink message={error || "Ödev detayları yüklenemedi."} />
                 </div>
             </div>
         );
@@ -255,3 +235,4 @@ export default function AssignmentDetailPage() {
         </div>
     );
 }
+export default AssignmentDetailPage;

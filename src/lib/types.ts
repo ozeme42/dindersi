@@ -447,4 +447,5 @@ export type GameTask = {
   export type UserMissionProgress = {
     userId: string;
     completedTaskIds: string[]; // Biten görev ID'leri
-    scores: { [taskId: string]: number
+    scores: { [taskId: string]: number; };
+  };

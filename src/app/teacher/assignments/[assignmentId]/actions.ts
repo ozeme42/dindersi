@@ -3,7 +3,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, documentId, orderBy, Timestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, documentId, orderBy, Timestamp, writeBatch, serverTimestamp, increment } from "firebase/firestore";
 import type { Assignment, UserProfile, ScoreEvent } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
