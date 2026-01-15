@@ -199,7 +199,7 @@ export function CreateExamClientPage() {
     };
     
     const toggleAllQuestions = () => {
-        const allIdsOnPage = new Set(paginatedQuestions.map(q => q.id));
+        const allOnPageIds = new Set(paginatedQuestions.map(q => q.id));
         const currentSelectedOnPage = paginatedQuestions.filter(q => selectedQuestionIds.has(q.id));
         const allAreSelected = currentSelectedOnPage.length === paginatedQuestions.length && paginatedQuestions.length > 0;
         setSelectedQuestionIds(prev => {
@@ -384,11 +384,34 @@ export function CreateExamClientPage() {
     )
 }
 
-export default function CreateExamPage() {
-    return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>}>
-            <CreateExamClientPage />
-        </Suspense>
-    )
+```
+- src/hooks/use-local-storage.ts:
+```ts
+'use client';
+import { useState, useEffect } from 'react';
+
+export function useLocalStorage<T>(key: string, initialValue: T) {
+    const [storedValue, setStoredValue] = useState<T>(() => {
+        try {
+            const item = window.localStorage.getItem(key);
+            return item ? JSON.parse(item) : initialValue;
+        } catch (error) {
+            console.log(error);
+            return initialValue;
+        }
+    });
+
+    const setValue = (value: T | ((val: T) => T)) => {
+        try {
+            const valueToStore = value instanceof Function ? value(storedValue) : value;
+            setStoredValue(valueToStore);
+            window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    return [storedValue, setValue] as const;
 }
+
 ```
