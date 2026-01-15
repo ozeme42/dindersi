@@ -76,6 +76,7 @@ export function BottomNavBar() {
     const distractionFreePaths = [
         '/student/ders/', // Ders akışı ve tüm alt sayfaları
         '/oyunlar/',      // Tüm oyun sayfaları
+        '/student/deneme/' // Deneme çözme ve sonuç ekranı
     ];
 
     if (user.role === 'student' && (isEmbedded || distractionFreePaths.some(p => pathname.startsWith(p)))) {

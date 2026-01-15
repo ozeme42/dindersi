@@ -38,7 +38,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { formatDistanceToNow, isFuture } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { tr } from 'date-fns/locale';
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -118,7 +118,7 @@ function AssignmentDetailPage() {
 
     const getCorrectAnswers = (scoreEvent: ScoreEvent | null) => {
         if (!scoreEvent || !scoreEvent.points || totalQuestions === 0) return 0;
-        return Math.round(scoreEvent.points / 10);
+        return Math.round(scoreEvent.points / 100); // 100 puanlık her soru için düzeltildi
     };
     
     const sortedProgress = [...studentProgress].sort((a, b) => {
@@ -172,7 +172,7 @@ function AssignmentDetailPage() {
                                 <p className="text-xl font-black text-white">%{Math.round((studentProgress.filter(p => p.scoreEvent).length / assignment.assignedTo.length) * 100) || 0}</p>
                              </div>
                              <div className="bg-slate-950/40 p-4 rounded-2xl border border-white/5">
-                                <p className="text-[10px] font-black text-slate-500 uppercase mb-1">Ort. Skor</p>
+                                <p className="text-[10px] font-black text-slate-500 uppercase mb-1">Sınıf Ort.</p>
                                 <p className="text-xl font-black text-cyan-400">
                                     {Math.round(studentProgress.reduce((acc, curr) => acc + (curr.scoreEvent?.points || 0), 0) / (studentProgress.filter(p => p.scoreEvent).length || 1))}
                                 </p>
@@ -182,7 +182,7 @@ function AssignmentDetailPage() {
                                 <p className="text-xl font-black text-emerald-400">{Math.max(...studentProgress.map(p => p.scoreEvent?.points || 0), 0)}</p>
                              </div>
                              <div className="bg-slate-950/40 p-4 rounded-2xl border border-white/5">
-                                <p className="text-[10px] font-black text-slate-500 uppercase mb-1">Toplam Atanan</p>
+                                <p className="text-[10px] font-black text-slate-500 uppercase mb-1">Kişi Sayısı</p>
                                 <p className="text-xl font-black text-indigo-400">{assignment.assignedTo.length}</p>
                              </div>
                         </CardContent>
@@ -192,7 +192,7 @@ function AssignmentDetailPage() {
                     <Card className="bg-slate-900/60 backdrop-blur-xl border border-amber-500/20 shadow-2xl overflow-hidden">
                         <div className="bg-amber-500/10 p-4 border-b border-amber-500/20 flex items-center gap-2">
                             <Zap className="h-4 w-4 text-amber-400 fill-amber-400" />
-                            <span className="text-xs font-black text-amber-200 uppercase tracking-widest">Aktif Ödül Sistemi</span>
+                            <span className="text-xs font-black text-amber-200 uppercase tracking-widest">Bonus Baremleri</span>
                         </div>
                         <CardContent className="p-4">
                             {sortedThresholds.length > 0 ? (
@@ -201,7 +201,7 @@ function AssignmentDetailPage() {
                                         <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-slate-950/50 border border-white/5">
                                             <div className="flex items-center gap-3">
                                                 <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">%{t.rate}</Badge>
-                                                <span className="text-xs font-bold text-slate-300">Başarı Üstü</span>
+                                                <span className="text-xs font-bold text-slate-300">Başarı</span>
                                             </div>
                                             <span className="text-sm font-black text-emerald-400">+{t.points} XP</span>
                                         </div>
@@ -210,7 +210,7 @@ function AssignmentDetailPage() {
                             ) : (
                                 <div className="h-full flex flex-col items-center justify-center py-8 text-center">
                                     <Award className="h-8 w-8 text-slate-700 mb-2" />
-                                    <p className="text-xs text-slate-500 font-medium">Bu deneme için özel bir ödül tanımlanmamış.</p>
+                                    <p className="text-xs text-slate-500 font-medium">Ödül tanımlanmamış.</p>
                                 </div>
                             )}
                         </CardContent>
@@ -229,11 +229,11 @@ function AssignmentDetailPage() {
                             <Table>
                                 <TableHeader className="bg-slate-950/50">
                                     <TableRow className="border-white/5 hover:bg-transparent">
-                                        <TableHead className="w-16 text-slate-400 font-bold uppercase text-[10px] text-center">Sıra</TableHead>
+                                        <TableHead className="w-16 text-slate-400 font-bold uppercase text-center text-[10px]">Sıra</TableHead>
                                         <TableHead className="text-slate-400 font-bold uppercase text-[10px]">Öğrenci</TableHead>
-                                        <TableHead className="text-slate-400 font-bold uppercase text-[10px]">Çözüm Tarihi</TableHead>
+                                        <TableHead className="text-slate-400 font-bold uppercase text-[10px]">Son Çözüm</TableHead>
                                         <TableHead className="text-slate-400 font-bold uppercase text-[10px]">Doğruluk</TableHead>
-                                        <TableHead className="text-right text-slate-400 font-bold uppercase text-[10px] pr-8">Puan</TableHead>
+                                        <TableHead className="text-right text-slate-400 font-bold uppercase pr-8 text-[10px]">Toplam Puan</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -269,7 +269,7 @@ function AssignmentDetailPage() {
                                                                 {correctAnswers}/{totalQuestions} Doğru
                                                             </Badge>
                                                         ) : (
-                                                            <Badge variant="outline" className="bg-slate-800/50 text-slate-500 border-white/5 text-[10px]">KATILMADI</Badge>
+                                                            <Badge variant="outline" className="bg-slate-800/50 text-slate-500 border-white/5 text-[10px]">GİRMEDİ</Badge>
                                                         )}
                                                     </TableCell>
                                                     <TableCell className="text-right pr-8">
@@ -282,7 +282,7 @@ function AssignmentDetailPage() {
                                         })
                                     ) : (
                                         <TableRow>
-                                            <TableCell colSpan={5} className="h-32 text-center text-slate-500 italic">Kayıtlı veri bulunamadı.</TableCell>
+                                            <TableCell colSpan={5} className="h-32 text-center text-slate-500 italic">Henüz bir veri bulunmamaktadır.</TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>
@@ -295,5 +295,5 @@ function AssignmentDetailPage() {
     );
 }
 
-// KRİTİK: Next.js sayfanın bir default export içermesini bekler.
+// Next.js App Router sayfa hatasını çözen kritik export:
 export default AssignmentDetailPage;

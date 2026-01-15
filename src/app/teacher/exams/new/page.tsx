@@ -18,14 +18,26 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { useParams, useRouter } from 'next/navigation';
 import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, Timestamp } from "firebase/firestore";
+
+// --- GÜVENLİ TARİH YARDIMCISI ---
+const safeFormat = (date: any, label: string) => {
+    if (!date) return label;
+    try {
+        const d = date instanceof Date ? date : (date?.toDate ? date.toDate() : new Date(date));
+        if (!isValid(d)) return label;
+        return format(d, "PPP", { locale: tr });
+    } catch (e) {
+        return label;
+    }
+};
 
 type ExamCreationData = {
     classes: SchoolClass[];
@@ -87,9 +99,9 @@ export default function CreateExamClientPage() {
     const [dueDate, setDueDate] = useState<Date | undefined>();
     
     const [rewardThresholds, setRewardThresholds] = useState<{ rate: number; points: number }[]>([
-        { rate: 50, points: 25 },
-        { rate: 75, points: 50 },
-        { rate: 90, points: 100 }
+        { rate: 50, points: 500 },
+        { rate: 75, points: 1000 },
+        { rate: 90, points: 2000 }
     ]);
     
     const [selectedQuestionIds, setSelectedQuestionIds] = useState<Set<string>>(new Set());
@@ -116,8 +128,17 @@ export default function CreateExamClientPage() {
                         setSelectedStudentUids(new Set(assignmentToEdit.assignedTo || []));
                         setSelectedQuestionIds(new Set(assignmentToEdit.questionIds || []));
                         setDuration(assignmentToEdit.duration);
-                        setStartDate(assignmentToEdit.startDate ? new Date(assignmentToEdit.startDate) : undefined);
-                        setDueDate(assignmentToEdit.dueDate ? new Date(assignmentToEdit.dueDate) : undefined);
+                        
+                        // Düzenleme modunda tarihleri güvenli çekme
+                        if (assignmentToEdit.startDate) {
+                            const sd = assignmentToEdit.startDate instanceof Timestamp ? assignmentToEdit.startDate.toDate() : new Date(assignmentToEdit.startDate);
+                            if (isValid(sd)) setStartDate(sd);
+                        }
+                        if (assignmentToEdit.dueDate) {
+                            const dd = assignmentToEdit.dueDate instanceof Timestamp ? assignmentToEdit.dueDate.toDate() : new Date(assignmentToEdit.dueDate);
+                            if (isValid(dd)) setDueDate(dd);
+                        }
+                        
                         if (assignmentToEdit.rewardThresholds) setRewardThresholds(assignmentToEdit.rewardThresholds);
                     }
                 }
@@ -139,7 +160,6 @@ export default function CreateExamClientPage() {
         setRewardThresholds(newThresholds);
     };
 
-    // Filtreleme Mantıkları
     const filteredCourses = useMemo(() => {
         const courses = creationData?.courses || [];
         if (selectedClassId === 'all') return courses;
@@ -192,7 +212,6 @@ export default function CreateExamClientPage() {
 
     const totalQuestionPages = Math.ceil(filteredExamQuestions.length / questionsItemsPerPage);
 
-    // Seçim İşlemleri
     const toggleQuestion = (id: string) => {
         const next = new Set(selectedQuestionIds);
         if (next.has(id)) next.delete(id); else next.add(id);
@@ -253,13 +272,13 @@ export default function CreateExamClientPage() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/10 pb-8">
                     <div>
                         <Button asChild variant="ghost" size="sm" className="mb-2 text-slate-400 hover:text-white"><Link href="/teacher/exams"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link></Button>
-                        <h1 className="text-3xl font-black text-white uppercase flex items-center gap-3"><FilePenLine className="h-8 w-8 text-indigo-400" /> {isEditMode ? 'Düzenle' : 'Yeni Deneme'}</h1>
+                        <h1 className="text-3xl font-black text-white tracking-tight uppercase flex items-center gap-3"><FilePenLine className="h-8 w-8 text-indigo-400" /> {isEditMode ? 'Denemeyi Düzenle' : 'Yeni Deneme'}</h1>
                     </div>
                     <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 px-8 rounded-xl shadow-xl">{isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>} Kaydet</Button>
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div className="lg:col-span-4 xl:col-span-3 space-y-6">
+                    <div className="lg:col-span-4 xl:col-span-3 space-y-6 lg:sticky lg:top-8">
                         <Card className="bg-slate-900/60 border border-white/10 shadow-xl">
                             <CardHeader><CardTitle className="text-white text-xs uppercase">Sınav Yapılandırması</CardTitle></CardHeader>
                             <CardContent className="space-y-4">
@@ -269,8 +288,30 @@ export default function CreateExamClientPage() {
                                     <div><Label>Soru</Label><div className="h-10 flex items-center px-3 rounded-md bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold">{selectedQuestionIds.size}</div></div>
                                 </div>
                                 <div className="space-y-3 pt-2">
-                                    <Popover><PopoverTrigger asChild><Button variant="outline" className="w-full justify-start bg-slate-950 border-white/10 text-white"><CalendarIcon className="mr-2 h-4 w-4 text-indigo-400" />{startDate ? format(startDate, "PPP", { locale: tr }) : "Başlangıç"}</Button></PopoverTrigger><PopoverContent className="w-auto p-0 bg-slate-900 border-white/10"><Calendar mode="single" selected={startDate} onSelect={setStartDate} initialFocus /></PopoverContent></Popover>
-                                    <Popover><PopoverTrigger asChild><Button variant="outline" className="w-full justify-start bg-slate-950 border-white/10 text-white"><CalendarIcon className="mr-2 h-4 w-4 text-rose-400" />{dueDate ? format(dueDate, "PPP", { locale: tr }) : "Bitiş"}</Button></PopoverTrigger><PopoverContent className="w-auto p-0 bg-slate-900 border-white/10"><Calendar mode="single" selected={dueDate} onSelect={setDueDate} initialFocus /></PopoverContent></Popover>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button variant="outline" className="w-full justify-start bg-slate-950 border-white/10 text-white">
+                                                <CalendarIcon className="mr-2 h-4 w-4 text-indigo-400" />
+                                                {/* GÜVENLİ FORMATLAMA BURADA YAPILDI */}
+                                                {safeFormat(startDate, "Başlangıç Tarihi")}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0 bg-slate-900 border-white/10">
+                                            <Calendar mode="single" selected={startDate} onSelect={setStartDate} initialFocus />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button variant="outline" className="w-full justify-start bg-slate-950 border-white/10 text-white">
+                                                <CalendarIcon className="mr-2 h-4 w-4 text-rose-400" />
+                                                {/* GÜVENLİ FORMATLAMA BURADA YAPILDI */}
+                                                {safeFormat(dueDate, "Bitiş Tarihi")}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0 bg-slate-900 border-white/10">
+                                            <Calendar mode="single" selected={dueDate} onSelect={setDueDate} initialFocus />
+                                        </PopoverContent>
+                                    </Popover>
                                 </div>
                             </CardContent>
                         </Card>
@@ -325,7 +366,7 @@ export default function CreateExamClientPage() {
                                     <CardTitle className="text-white flex items-center gap-2 font-black uppercase tracking-tight"><BookOpen className="h-5 w-5 text-indigo-400"/> Soru Havuzu</CardTitle>
                                     <div className="flex gap-2 w-full md:w-auto">
                                         <div className="relative flex-grow md:w-64"><Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500"/><Input placeholder="Soru ara..." value={questionSearchTerm} onChange={e => setQuestionSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 pl-9 h-10"/></div>
-                                        <Button variant="outline" size="sm" onClick={toggleAllQuestions} className="border-white/10 text-slate-300 h-10">{paginatedQuestions.every(q => selectedQuestionIds.has(q.id)) ? "Bırak" : "Hepsini Seç"}</Button>
+                                        <Button variant="outline" size="sm" onClick={toggleAllQuestions} className="border-white/10 text-slate-300 h-10">{paginatedQuestions.every(q => selectedQuestionIds.has(q.id)) && paginatedQuestions.length > 0 ? "Bırak" : "Hepsini Seç"}</Button>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
