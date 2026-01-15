@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { 
     Loader2, Save, X, Search, ArrowLeft, FileQuestion, Users, BookOpen, Clock, Calendar as CalendarIcon, FilePenLine, Trophy, Award
 } from 'lucide-react';
-import { createExam, getExamCreationData, updateExam } from '../actions';
+import { createExam, getExamCreationData, updateExam } from './actions';
 import type { Assignment, UserProfile, Question, SchoolClass, Course, Unit, Topic } from "@/lib/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -139,30 +139,30 @@ export function CreateExamClientPage() {
     }, [selectedQuestionIds.size, isEditMode]);
 
      const selectedClassData = useMemo(() => {
-        if (!creationData) return null;
+        if (!creationData || !creationData.classes) return null;
         return creationData.classes.find(c => c.id === selectedClassId);
     }, [selectedClassId, creationData]);
 
      const filteredCourses = useMemo(() => {
-        if (!creationData) return [];
+        if (!creationData || !creationData.courses) return [];
         if (selectedClassId === 'all') return creationData.courses;
         return creationData.courses.filter(c => c.classId === selectedClassId || !c.classId);
     }, [selectedClassId, creationData]);
 
     const filteredUnits = useMemo(() => {
-        if (!creationData || !selectedCourseId || selectedCourseId === 'all') return [];
+        if (!creationData || !creationData.courses || !selectedCourseId || selectedCourseId === 'all') return [];
         const course = filteredCourses.find(c => c.id === selectedCourseId);
         return course?.units || [];
     }, [selectedCourseId, filteredCourses, creationData]);
 
     const filteredTopics = useMemo(() => {
-        if (!creationData || !selectedUnitId || selectedUnitId === 'all') return [];
+        if (!creationData || !creationData.courses || !selectedUnitId || selectedUnitId === 'all') return [];
         const unit = filteredUnits.find(u => u.id === selectedUnitId);
         return unit?.topics || [];
     }, [selectedUnitId, filteredUnits, creationData]);
 
     const filteredStudents = useMemo(() => {
-        if (!creationData) return [];
+        if (!creationData || !creationData.students) return [];
         if (selectedClassId === 'all') return creationData.students;
         if (!selectedClassData) return [];
         if (selectedBranch === 'all') return creationData.students.filter(s => s.class?.startsWith(selectedClassData.name));
@@ -175,7 +175,7 @@ export function CreateExamClientPage() {
         if (selectedTopicId && selectedTopicId !== 'all') questions = questions.filter(q => q.topicId === selectedTopicId);
         else if (selectedUnitId && selectedUnitId !== 'all') questions = questions.filter(q => q.unitId === selectedUnitId);
         else if (selectedCourseId && selectedCourseId !== 'all') questions = questions.filter(q => q.courseId === selectedCourseId);
-        else if (selectedClassId && selectedClassId !== 'all') {
+        else if (selectedClassId && selectedClassId !== 'all' && filteredCourses) {
             const classCourseIds = new Set(filteredCourses.map(c => c.id));
             questions = questions.filter(q => q.courseId && classCourseIds.has(q.courseId));
         }
@@ -391,5 +391,4 @@ export default function CreateExamPage() {
         </Suspense>
     )
 }
-
-    
+```
