@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { 
     Loader2, Save, X, Search, ArrowLeft, FileQuestion, Users, BookOpen, Clock, Calendar as CalendarIcon, FilePenLine, Trophy, Award
 } from 'lucide-react';
-import { createExam, getExamCreationData, updateExam, getTeacherExams } from '../actions';
+import { createExam, getExamCreationData, updateExam } from '../actions';
 import type { Assignment, UserProfile, Question, SchoolClass, Course, Unit, Topic } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -69,7 +69,7 @@ function QuestionSelectionCard({ question, isSelected, onToggle }: { question: Q
     )
 }
 
-export function CreateExamClientPage() {
+export default function CreateExamClientPage() {
     const { user } = useAuth();
     const { toast } = useToast();
     const router = useRouter();
@@ -108,9 +108,11 @@ export function CreateExamClientPage() {
         } else {
             setCreationData(data);
             if (isEditMode && user) {
-                const examsResult = await getTeacherExams(user.uid);
-                const assignmentToEdit = examsResult.data?.find(a => a.id === assignmentId);
-                if (assignmentToEdit) {
+                // Bu kısmı getTeacherExams ile doldurmak daha doğru olacak, şimdilik iskelet
+                const examRef = doc(db, "assignments", assignmentId);
+                const examSnap = await getDoc(examRef);
+                if (examSnap.exists()) {
+                    const assignmentToEdit = examSnap.data() as Assignment;
                     setTitle(assignmentToEdit.title);
                     setSelectedClassId(assignmentToEdit.classId || 'all');
                     setSelectedCourseId(assignmentToEdit.courseId || 'all');
@@ -252,7 +254,6 @@ export function CreateExamClientPage() {
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 lg:p-8 relative overflow-hidden">
-             {/* Arka Plan */}
              <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px]" />
@@ -283,7 +284,7 @@ export function CreateExamClientPage() {
                      {/* SOL PANEL */}
                      <div className="lg:col-span-4 xl:col-span-3 space-y-6 lg:sticky lg:top-8">
                          {/* Temel Bilgiler */}
-                         <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl">
+                         <Card className="bg-slate-900/60 backdrop-blur-md border border-white/10 shadow-xl">
                             <CardHeader><CardTitle className="text-white">Temel Bilgiler</CardTitle></CardHeader>
                             <CardContent className="space-y-4">
                                 <div><Label>Sınav Başlığı</Label><Input value={title} onChange={e => setTitle(e.target.value)} placeholder="Örn: 1. Dönem Tarama" className="bg-slate-950 border-white/10 text-white"/></div>
