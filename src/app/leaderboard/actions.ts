@@ -3,9 +3,9 @@
 import { getAdminDb } from "@/lib/firebase-admin";
 import { db } from "@/lib/firebase"; 
 import { collection, query, where, getDocs, orderBy, limit, addDoc, deleteDoc, updateDoc, doc, Timestamp as ClientTimestamp, serverTimestamp } from 'firebase/firestore'; 
-import { FieldValue, Timestamp } from "firebase-admin/firestore";
+import { FieldValue } from "firebase-admin/firestore";
 import { unstable_noStore as noStore } from 'next/cache';
-import type { UserProfile, ScoreEvent, Announcement } from "@/lib/types";
+import type { UserProfile } from "@/lib/types";
 import { eachMonthOfInterval, endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 import { tr } from "date-fns/locale";
 
@@ -49,7 +49,7 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
     const seasonsSnap = await adminDb.collection('archivedSeasons').orderBy('createdAt', 'desc').get();
     const seasons = seasonsSnap.docs.map(doc => ({ 
         periodName: doc.data().seasonName, 
-        winners: doc.data().leaderboard.slice(0, 10) 
+        winners: doc.data().leaderboard // Artık slice(0,10) yapmıyoruz, frontend'de tamamı görülebilsin diye hepsini gönderiyoruz.
     } as HallOfFamePeriod));
 
     // Aylık Hesaplama
@@ -82,7 +82,7 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
                     .map(([uid, score]) => ({ student: studentsMap.get(uid), score }))
                     .filter((entry): entry is { student: UserProfile; score: number } => !!entry.student && entry.score > 0)
                     .sort((a, b) => b.score - a.score)
-                    .slice(0, 3)
+                    .slice(0, 10) // Aylık şampiyonlarda ilk 10'u alalım
                     .map(entry => ({...entry.student, score: entry.score }));
 
                 if (leaderboard.length > 0) {
@@ -95,6 +95,7 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
     return { seasons: serialize(seasons), monthly: serialize(monthlyWinners.reverse()) };
 }
 
+// Okul/Sınıf Listeleri
 export async function getSchoolLeaderboard(): Promise<ClassLeaderboardEntry[]> {
     noStore();
     try {
@@ -114,7 +115,6 @@ export async function getSchoolLeaderboard(): Promise<ClassLeaderboardEntry[]> {
         return JSON.parse(JSON.stringify(list));
     } catch (e) { return []; }
 }
-
 export async function getGradeLeaderboard(): Promise<ClassLeaderboardEntry[]> {
     noStore();
     try {
@@ -134,7 +134,6 @@ export async function getGradeLeaderboard(): Promise<ClassLeaderboardEntry[]> {
         return JSON.parse(JSON.stringify(list));
     } catch (e) { return []; }
 }
-
 export async function getBranchLeaderboard(): Promise<ClassLeaderboardEntry[]> {
     noStore();
     try {
@@ -180,7 +179,6 @@ export async function saveLeaderboardSettings(settings: any) {
     try {
         const dataToSave = {
             seasonName: settings.seasonName,
-            holidayMode: settings.holidayMode,
             holidayMessage: settings.holidayMessage,
             rewards: settings.rewards,
             seasonStartDate: settings.seasonStartDate || null,
@@ -192,43 +190,148 @@ export async function saveLeaderboardSettings(settings: any) {
     } catch (e: any) { return { success: false, error: e.message }; }
 }
 
-export async function finishHolidayAndStartSeason(seasonName: string, rewards: any) {
+// 1. SENARYO: SEZONU BİTİR VE TATİLE GEÇ
+export async function startHolidayMode(currentSeasonName: string, holidayMessage: string) {
     const adminDb = getAdminDb();
     try {
-        // Mevcut puanları arşivle
+        const usersSnap = await adminDb.collection('users').where('role', '==', 'student').orderBy('score', 'desc').limit(100).get();
+        const leaderboard = usersSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+
+        await adminDb.collection('archivedSeasons').add({
+            seasonName: currentSeasonName,
+            leaderboard,
+            createdAt: new Date(),
+            type: 'season_final'
+        });
+
+        const batch = adminDb.batch();
+        const allStudents = await adminDb.collection('users').where('role', '==', 'student').get();
+        let ops = 0;
+
+        for (const doc of allStudents.docs) {
+            batch.update(doc.ref, { score: 0 });
+            ops++;
+            if (ops >= 450) { await batch.commit(); ops = 0; }
+        }
+        if (ops > 0) await batch.commit();
+
+        await adminDb.collection('settings').doc('leaderboard').set({
+            holidayMode: true,
+            holidayMessage: holidayMessage,
+            seasonName: "TATİL DÖNEMİ",
+            updatedAt: new Date().toISOString()
+        }, { merge: true });
+
+        return { success: true, message: "Sezon arşivlendi, puanlar sıfırlandı ve tatil modu başladı." };
+    } catch (e: any) { return { success: false, error: e.message }; }
+}
+
+// 2. SENARYO: TATİLİ BİTİR VE YENİ SEZONA BAŞLA
+export async function finishHolidayAndStartSeason(newSeasonName: string, rewards: any) {
+    const adminDb = getAdminDb();
+    try {
         const usersSnap = await adminDb.collection('users').where('role', '==', 'student').orderBy('score', 'desc').limit(100).get();
         const leaderboard = usersSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
         const top3 = leaderboard.slice(0, 3);
         
-        await adminDb.collection('archivedSeasons').add({ seasonName: seasonName + " (Tatil Dönemi)", leaderboard, createdAt: new Date(), type: 'holiday_cup' });
+        await adminDb.collection('archivedSeasons').add({ 
+            seasonName: "Tatil Kupası", 
+            leaderboard, 
+            createdAt: new Date(), 
+            type: 'holiday_cup' 
+        });
         
-        // Puanları sıfırla ve ödülleri dağıt
         const batch = adminDb.batch();
         const allStudents = await adminDb.collection('users').where('role', '==', 'student').get();
         let ops = 0;
         
         for (const doc of allStudents.docs) {
-            let score = 0;
-            let msg = "Yeni Sezon";
-            if (top3[0] && doc.id === top3[0].uid) { score = rewards.first; msg = "Tatil 1.si Ödülü"; }
-            else if (top3[1] && doc.id === top3[1].uid) { score = rewards.second; msg = "Tatil 2.si Ödülü"; }
-            else if (top3[2] && doc.id === top3[2].uid) { score = rewards.third; msg = "Tatil 3.sü Ödülü"; }
+            let startScore = 0;
+            let msg = "";
             
-            batch.update(doc.ref, { score });
+            if (top3[0] && doc.id === top3[0].uid) { startScore = rewards.first; msg = "Tatil 1.si Ödülü"; }
+            else if (top3[1] && doc.id === top3[1].uid) { startScore = rewards.second; msg = "Tatil 2.si Ödülü"; }
+            else if (top3[2] && doc.id === top3[2].uid) { startScore = rewards.third; msg = "Tatil 3.sü Ödülü"; }
+            
+            batch.update(doc.ref, { score: startScore });
             ops++;
-            if (score > 0) {
+
+            if (startScore > 0) {
                 const ref = adminDb.collection('scoreEvents').doc();
-                batch.set(ref, { userId: doc.id, points: score, gameType: 'holiday_reward', context: msg, timestamp: FieldValue.serverTimestamp() });
+                batch.set(ref, { userId: doc.id, points: startScore, gameType: 'holiday_reward', context: msg, timestamp: FieldValue.serverTimestamp() });
                 ops++;
             }
+            
             if (ops >= 450) { await batch.commit(); ops = 0; }
         }
         if (ops > 0) await batch.commit();
         
-        // Tatil modunu kapat
-        await adminDb.collection('settings').doc('leaderboard').update({ holidayMode: false });
+        await adminDb.collection('settings').doc('leaderboard').update({ 
+            holidayMode: false,
+            seasonName: newSeasonName,
+            updatedAt: new Date().toISOString()
+        });
+
         return { success: true, message: "Yeni sezon başlatıldı." };
     } catch (e: any) { return { success: false, error: e.message }; }
+}
+
+// 3. SENARYO: GERİ ALMA (UNDO)
+export async function undoLastSeasonAction() {
+    const adminDb = getAdminDb();
+    try {
+        const settingsSnap = await adminDb.collection('settings').doc('leaderboard').get();
+        const settings = settingsSnap.data();
+        const isHolidayMode = settings?.holidayMode || false;
+
+        let archiveQuery;
+        let targetSeasonName = "";
+        let targetHolidayMode = false;
+        let undoType = "";
+
+        if (isHolidayMode) {
+            undoType = "Sezon Bitirme Geri Alındı";
+            archiveQuery = adminDb.collection('archivedSeasons').where('type', '==', 'season_final').orderBy('createdAt', 'desc').limit(1);
+            targetHolidayMode = false; 
+        } else {
+            undoType = "Tatil Bitirme Geri Alındı";
+            archiveQuery = adminDb.collection('archivedSeasons').where('type', '==', 'holiday_cup').orderBy('createdAt', 'desc').limit(1);
+            targetHolidayMode = true; 
+            targetSeasonName = "TATİL DÖNEMİ";
+        }
+
+        const archiveSnap = await archiveQuery.get();
+        if (archiveSnap.empty) return { success: false, error: "Geri alınacak bir işlem (arşiv kaydı) bulunamadı. Lütfen daha önce işlem yapılıp yapılmadığını kontrol edin." };
+
+        const archiveDoc = archiveSnap.docs[0];
+        const archiveData = archiveDoc.data();
+        const leaderboardBackup = archiveData.leaderboard;
+
+        if (!leaderboardBackup || leaderboardBackup.length === 0) return { success: false, error: "Arşiv dosyası boş." };
+
+        if (!isHolidayMode) targetSeasonName = archiveData.seasonName || "Liderlik Tablosu";
+
+        const batch = adminDb.batch();
+        let ops = 0;
+
+        for (const userBackup of leaderboardBackup) {
+            if (userBackup.uid) {
+                batch.update(adminDb.collection('users').doc(userBackup.uid), { score: userBackup.score || 0 });
+                ops++;
+                if (ops >= 450) { await batch.commit(); ops = 0; }
+            }
+        }
+        
+        batch.delete(archiveDoc.ref);
+        ops++;
+        batch.update(adminDb.collection('settings').doc('leaderboard'), { holidayMode: targetHolidayMode, seasonName: targetSeasonName, updatedAt: new Date().toISOString() });
+        ops++;
+
+        if (ops > 0) await batch.commit();
+
+        return { success: true, message: `${undoType}. Puanlar eski haline döndürüldü.` };
+
+    } catch (e: any) { return { success: false, error: "Geri alma başarısız: " + e.message }; }
 }
 
 // ==========================================
@@ -251,14 +354,9 @@ export async function createAnnouncement(data: any) {
 export async function updateAnnouncement(id: string, data: { title: string; content: string; category: string }): Promise<{ success: boolean; error?: string }> {
     try {
         const docRef = doc(db, 'announcements', id);
-        await updateDoc(docRef, {
-            ...data,
-            updatedAt: serverTimestamp()
-        });
+        await updateDoc(docRef, { ...data, updatedAt: serverTimestamp() });
         return { success: true };
-    } catch (e: any) {
-        return { success: false, error: "Duyuru güncellenemedi: " + e.message };
-    }
+    } catch (e: any) { return { success: false, error: e.message }; }
 }
 
 export async function deleteAnnouncement(id: string) {

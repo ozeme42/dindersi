@@ -33,6 +33,10 @@ const DraggableToolbar = ({ onPlus, onMinus, onFullscreen, isFullscreen, label }
     const [isOpen, setIsOpen] = useState(true);
     const dragStartPos = useRef({ x: 0, y: 0 });
 
+    useEffect(() => {
+        if (window.innerWidth < 768) setIsOpen(false);
+    }, []);
+
     const handleDragStart = (e: React.MouseEvent) => {
         setIsDragging(true);
         dragStartPos.current = { x: e.clientX - position.x, y: e.clientY - position.y };
@@ -55,7 +59,7 @@ const DraggableToolbar = ({ onPlus, onMinus, onFullscreen, isFullscreen, label }
     }, [isDragging]);
 
     return (
-        <div className="fixed z-[100] transition-all duration-100 ease-out" style={{ left: '50%', bottom: '2rem', transform: `translate(calc(-50% + ${position.x}px), ${position.y}px)` }}>
+        <div className="fixed z-[100] transition-all duration-100 ease-out" style={{ left: '50%', bottom: '2rem', transform: `translate(calc(-50% + ${position.x}px), ${position.y}px)`, cursor: isDragging ? 'grabbing' : 'default' }}>
             <div className="flex items-center gap-2 p-2 rounded-full bg-white/95 border border-slate-200 shadow-2xl backdrop-blur-xl ring-1 ring-black/5">
                 <div onMouseDown={handleDragStart} className="cursor-grab active:cursor-grabbing text-slate-400 p-2 border-r border-slate-100 mr-1">
                     <GripHorizontal className="h-6 w-6" />
@@ -84,6 +88,8 @@ const DraggableToolbar = ({ onPlus, onMinus, onFullscreen, isFullscreen, label }
 // --- OYUN KARTI ---
 const GameCard = ({ activity, courseId, unitId, isTeam = false }: any) => {
     const Icon = activity.icon;
+    
+    // Canlı, neon ve doygun renkler (Konu sayfasındakiyle aynı)
     const vibrantGradientMap: Record<string, string> = {
         purple: "from-violet-600 via-purple-600 to-fuchsia-600 shadow-violet-500/40",
         amber: "from-amber-500 via-orange-500 to-red-500 shadow-amber-500/40",
@@ -110,25 +116,45 @@ const GameCard = ({ activity, courseId, unitId, isTeam = false }: any) => {
                 vibrantGradientMap[activity.color],
                 isTeam && "border-amber-300/50 shadow-amber-500/20"
             )}>
+                 {/* Arka Plan Efektleri */}
+                 <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
+                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/20 to-transparent opacity-50" />
+                
                 <Icon className={cn("absolute -right-8 -bottom-8 text-white opacity-10 rotate-12 group-hover:rotate-45 transition-transform duration-700", isTeam ? "w-56 h-56" : "w-40 h-40")} />
+                
                 {isTeam && (
                     <div className="absolute top-4 right-4 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-1 border border-white/10">
                         <Users className="w-3 h-3" /> TAKIM MODU
                     </div>
                 )}
-                <div className="relative z-10 mb-4 animate-float">
-                    <div className={cn("rounded-2xl bg-white/20 backdrop-blur-sm border border-white/40 shadow-lg flex items-center justify-center", isTeam ? "w-24 h-24" : "w-20 h-20")}>
+
+                 {/* Merkez İkon (Yüzen Animasyon) */}
+                <div className="relative z-10 mb-4 transform transition-transform duration-500 group-hover:scale-110">
+                    <div className={cn("rounded-2xl bg-white/20 backdrop-blur-sm border border-white/40 shadow-lg flex items-center justify-center animate-float", isTeam ? "w-24 h-24" : "w-20 h-20")}>
                         <Icon className={cn("text-white drop-shadow-md", isTeam ? "w-12 h-12" : "w-10 h-10")} />
                     </div>
                 </div>
+
                 <div className="relative z-10 text-center w-full px-4">
                     <h3 className={cn("font-black text-white uppercase tracking-tight drop-shadow-md mb-2 leading-none", isTeam ? "text-2xl" : "text-lg")}>{activity.label}</h3>
                     <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex justify-center">
-                        <div className="bg-white text-slate-900 rounded-full px-4 py-1.5 text-xs font-black flex items-center gap-1 shadow-lg">
+                        <div className="bg-white text-slate-900 rounded-full px-4 py-1.5 text-xs font-black flex items-center gap-1 shadow-lg hover:bg-slate-100">
                             {isTeam ? "MÜCADELEYE BAŞLA" : "OYNA"} <Play className="w-3 h-3 fill-current" />
                         </div>
                     </div>
                 </div>
+
+                {/* Parlama Efekti */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform -translate-x-full group-hover:translate-x-full" style={{ transitionDuration: '1s' }} />
+                
+                 {/* Rozet (Varsa) */}
+                 {activity.badge && (
+                    <div className="absolute top-0 right-0">
+                        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[9px] font-black px-2 py-1 rounded-bl-xl shadow-lg">
+                            {activity.badge}
+                        </div>
+                    </div>
+                )}
             </div>
         </Link>
     );
@@ -175,7 +201,8 @@ function OzetDisplayPage() {
     }, [unitId]);
 
     const activityTypes = [
-        { href: '/oyunlar/yazi-tura', label: 'Yazı Tura', icon: Coins, color: 'amber' },
+        { href: '/oyunlar/yazi-tura', label: 'Gol Kralı', icon: Trophy, color: 'amber' },
+        { href: '/oyunlar/carkifelek', label: 'Çarkıfelek', icon: Zap, color: 'purple', badge: 'YENİ' }, // EKLENDİ
         { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, color: 'pink' },
         { href: '/oyunlar/kelime-avi', label: 'Kelime Avı', icon: Search, color: 'teal' },
         { href: '/oyunlar/kutu-ac', label: 'Kutu Aç', icon: Package, color: 'indigo' },
@@ -193,7 +220,8 @@ function OzetDisplayPage() {
         { href: '/oyunlar/balon-avcisi', label: 'Balon Avcısı', icon: Target, color: 'rose' },
     ];
 
-    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado'];
+    // Çarkıfelek'i takım oyunlarına ekledim
+    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek'];
     const teamGames = activityTypes.filter(a => teamGameSlugs.includes(a.href.split('/').pop() || ''));
     const soloGames = activityTypes.filter(a => !teamGameSlugs.includes(a.href.split('/').pop() || ''));
 
@@ -205,23 +233,44 @@ function OzetDisplayPage() {
             
             <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200">
                 <div className="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex items-center gap-5">
+                    <div className="flex items-center gap-5 w-full md:w-auto">
                         <Link href="/">
-                            <button className="group relative flex items-center justify-center h-12 px-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300">
-                                <ArrowLeft className="h-5 w-5 text-slate-600 group-hover:-translate-x-1 transition-all" />
-                                <span className="ml-2 font-black text-xs uppercase tracking-widest text-slate-600">GERİ</span>
+                            <button className="group relative flex items-center justify-center h-12 px-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300 overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                <div className="relative flex items-center gap-2">
+                                    <ArrowLeft className="h-5 w-5 text-slate-600 group-hover:text-white group-hover:-translate-x-1 transition-all duration-300" />
+                                    <span className="font-black text-xs uppercase tracking-widest text-slate-600 group-hover:text-white transition-colors duration-300">GERİ</span>
+                                </div>
                             </button>
                         </Link>
+                        <div className="hidden md:block h-8 w-[1px] bg-slate-200 mx-2" />
                         <div className="flex flex-col">
-                            <h1 className="text-2xl font-black text-slate-800 tracking-tighter">{content?.title}</h1>
+                            <h1 className="text-2xl font-black text-slate-800 tracking-tighter line-clamp-1">{content?.title}</h1>
                             <p className="text-[10px] text-indigo-500 font-black uppercase tracking-widest">{content?.courseName} / Ünite Özeti</p>
                         </div>
                     </div>
 
-                    <Tabs value={activeTab} onValueChange={setActiveTab}>
-                        <TabsList className="bg-slate-100/80 p-1 rounded-2xl border border-slate-200">
-                            <TabsTrigger value="ozet" className="rounded-xl px-8 py-2.5 font-black text-xs uppercase tracking-widest data-[state=active]:bg-violet-600 data-[state=active]:text-white flex items-center gap-2"><BookOpen className="h-4 w-4"/> Özet</TabsTrigger>
-                            <TabsTrigger value="oyunlar" className="rounded-xl px-8 py-2.5 font-black text-xs uppercase tracking-widest data-[state=active]:bg-emerald-600 data-[state=active]:text-white flex items-center gap-2"><Gamepad2 className="h-4 w-4"/> Oyunlar</TabsTrigger>
+                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto overflow-x-auto no-scrollbar">
+                        <TabsList className="bg-slate-100/80 p-1.5 rounded-full border border-slate-200 h-auto grid grid-cols-2 md:flex gap-2 shadow-inner w-full md:w-auto">
+                            
+                            {/* ÖZET SEKME */}
+                            <TabsTrigger 
+                                value="ozet" 
+                                className="rounded-full px-6 py-2.5 font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-violet-500/30 data-[state=active]:bg-gradient-to-r from-violet-600 to-purple-600 hover:bg-white/50"
+                            >
+                                <BookOpen className="h-4 w-4 relative z-10"/> 
+                                <span className="relative z-10">Özet</span>
+                            </TabsTrigger>
+
+                            {/* OYUN SEKME */}
+                            <TabsTrigger 
+                                value="oyunlar" 
+                                className="rounded-full px-6 py-2.5 font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/30 data-[state=active]:bg-gradient-to-r from-emerald-500 to-green-500 hover:bg-white/50"
+                            >
+                                <Gamepad2 className="h-4 w-4 relative z-10"/> 
+                                <span className="relative z-10">Oyunlar</span>
+                            </TabsTrigger>
+                        
                         </TabsList>
                     </Tabs>
                 </div>
@@ -247,23 +296,24 @@ function OzetDisplayPage() {
 
                     <TabsContent value="oyunlar" className="m-0 focus:outline-none">
                         <div className="max-w-[1800px] mx-auto p-8 space-y-12 pb-32">
-                            <div className="flex flex-col items-center justify-center space-y-4 py-8">
+                            <div className="flex flex-col items-center justify-center space-y-4 py-8 relative">
+                                <div className="absolute inset-0 bg-indigo-500/5 blur-[100px] rounded-full" />
                                 <div className="relative inline-block">
-                                    <h2 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 tracking-tighter">OYUN DÜNYASI</h2>
+                                    <h2 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 tracking-tighter animate-pulse-slow">OYUN DÜNYASI</h2>
                                     <Star className="absolute -top-6 -right-8 w-12 h-12 text-amber-400 animate-spin-slow" fill="currentColor" />
                                 </div>
                                 <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Bu ünitedeki tüm konuları kapsayan karma alıştırmalar</p>
                             </div>
 
                             <div className="space-y-6">
-                                <div className="flex items-center gap-3 border-b-2 border-slate-200 pb-2"><Crown className="w-8 h-8 text-indigo-500" /><h3 className="text-2xl font-black text-slate-800 uppercase">BİREYSEL ALIŞTIRMALAR</h3></div>
+                                <div className="flex items-center gap-3 border-b-2 border-slate-200 pb-2"><Crown className="w-8 h-8 text-indigo-500" /><h3 className="text-2xl font-black text-slate-800 uppercase tracking-tighter">BİREYSEL ALIŞTIRMALAR</h3></div>
                                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
                                     {soloGames.sort((a,b) => a.label.localeCompare(b.label, 'tr')).map(a => <GameCard key={a.label} activity={a} courseId={courseId} unitId={unitId} />)}
                                 </div>
                             </div>
 
                             <div className="space-y-6">
-                                <div className="flex items-center gap-3 border-b-2 border-slate-200 pb-2"><Swords className="w-8 h-8 text-rose-500" /><h3 className="text-2xl font-black text-slate-800 uppercase">SINIF İÇİ MÜCADELE</h3></div>
+                                <div className="flex items-center gap-3 border-b-2 border-slate-200 pb-2"><Swords className="w-8 h-8 text-rose-500" /><h3 className="text-2xl font-black text-slate-800 uppercase tracking-tighter">SINIF İÇİ MÜCADELE</h3><span className="text-xs font-bold text-rose-500 bg-rose-100 px-2 py-1 rounded-md">VS MODE</span></div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {teamGames.map(a => <GameCard key={a.label} activity={a} courseId={courseId} unitId={unitId} isTeam />)}
                                 </div>
