@@ -2,11 +2,9 @@
 'use server';
 
 import { getAdminDb } from "@/lib/firebase-admin";
-import { db } from "@/lib/firebase"; 
-import { collection, query, where, getDocs, orderBy, limit, addDoc, deleteDoc, updateDoc, doc, Timestamp as ClientTimestamp, serverTimestamp } from 'firebase/firestore'; 
-import { FieldValue } from "firebase-admin/firestore";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { unstable_noStore as noStore } from 'next/cache';
-import type { UserProfile } from "@/lib/types";
+import type { UserProfile, Announcement } from "@/lib/types";
 import { eachMonthOfInterval, endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 import { tr } from "date-fns/locale";
 
@@ -35,9 +33,10 @@ const serialize = (data: any): any => {
 
 export async function getLiveLeaderboard(): Promise<LeaderboardEntry[]> {
     noStore();
+    const adminDb = getAdminDb();
     try {
-        const usersQuery = query(collection(db, 'users'), where('role', '==', 'student'));
-        const usersSnapshot = await getDocs(usersQuery);
+        const usersQuery = adminDb.collection('users').where('role', '==', 'student');
+        const usersSnapshot = await usersQuery.get();
         
         const allStudents = usersSnapshot.docs.map(doc => ({ 
             ...doc.data(), 
@@ -71,17 +70,19 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
     const startDate = subMonths(now, 6);
     const months = eachMonthOfInterval({ start: startDate, end: now });
 
-    const usersSnapshot = await getDocs(query(collection(db, 'users'), where("role", "==", "student")));
+    const usersSnapshot = await adminDb.collection('users').where("role", "==", "student").get();
     const studentsMap = new Map();
     usersSnapshot.forEach(doc => studentsMap.set(doc.id, { uid: doc.id, ...doc.data() }));
 
     for (const month of months) {
         const monthStart = startOfMonth(month);
         const monthEnd = endOfMonth(month);
-        const monthlyEventsQuery = query(collection(db, 'scoreEvents'), where("timestamp", ">=", ClientTimestamp.fromDate(monthStart)), where("timestamp", "<=", ClientTimestamp.fromDate(monthEnd)));
+        const monthlyEventsQuery = adminDb.collection('scoreEvents')
+            .where("timestamp", ">=", Timestamp.fromDate(monthStart))
+            .where("timestamp", "<=", Timestamp.fromDate(monthEnd));
         
         try {
-            const eventsSnapshot = await getDocs(monthlyEventsQuery);
+            const eventsSnapshot = await monthlyEventsQuery.get();
             const scoresByStudent = new Map<string, number>();
             eventsSnapshot.forEach(eventDoc => {
                 const event = eventDoc.data();
@@ -111,9 +112,9 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
 // Okul/Sınıf Listeleri
 export async function getSchoolLeaderboard(): Promise<ClassLeaderboardEntry[]> {
     noStore();
+    const adminDb = getAdminDb();
     try {
-        const studentsQuery = query(collection(db, 'users'), where("role", "==", "student"));
-        const studentsSnapshot = await getDocs(studentsQuery);
+        const studentsSnapshot = await adminDb.collection('users').where("role", "==", "student").get();
         const scoresBySchool: Record<string, { totalScore: number, studentCount: number }> = {};
         studentsSnapshot.forEach(doc => {
             const student = doc.data() as UserProfile;
@@ -130,9 +131,9 @@ export async function getSchoolLeaderboard(): Promise<ClassLeaderboardEntry[]> {
 }
 export async function getGradeLeaderboard(): Promise<ClassLeaderboardEntry[]> {
     noStore();
+    const adminDb = getAdminDb();
     try {
-        const studentsQuery = query(collection(db, 'users'), where("role", "==", "student"));
-        const studentsSnapshot = await getDocs(studentsQuery);
+        const studentsSnapshot = await adminDb.collection('users').where("role", "==", "student").get();
         const scoresByClass: Record<string, { totalScore: number, studentCount: number }> = {};
         studentsSnapshot.forEach(doc => {
             const student = doc.data() as UserProfile;
@@ -149,9 +150,9 @@ export async function getGradeLeaderboard(): Promise<ClassLeaderboardEntry[]> {
 }
 export async function getBranchLeaderboard(): Promise<ClassLeaderboardEntry[]> {
     noStore();
+    const adminDb = getAdminDb();
     try {
-        const studentsQuery = query(collection(db, 'users'), where("role", "==", "student"));
-        const studentsSnapshot = await getDocs(studentsQuery);
+        const studentsSnapshot = await adminDb.collection('users').where("role", "==", "student").get();
         const scoresByBranch: Record<string, { totalScore: number, studentCount: number }> = {};
         studentsSnapshot.forEach(doc => {
             const student = doc.data() as UserProfile;
@@ -355,30 +356,35 @@ export async function undoLastSeasonAction() {
 // 4. DUYURU YÖNETİMİ
 // ==========================================
 
-export async function getAnnouncements(category: string) {
+export async function getAnnouncements(category: string): Promise<{ success: boolean; data?: Announcement[]; error?: string }> {
+    const adminDb = getAdminDb();
     try {
-        const q = query(collection(db, 'announcements'), where('category', '==', category), orderBy('createdAt', 'desc'));
-        const snap = await getDocs(q);
-        const data = snap.docs.map(d => ({ id: d.id, ...d.data(), createdAt: (d.data().createdAt as ClientTimestamp).toDate().toISOString() }));
+        const q = adminDb.collection('announcements').where('category', '==', category).orderBy('createdAt', 'desc');
+        const snap = await q.get();
+        const data = snap.docs.map(d => ({ id: d.id, ...d.data(), createdAt: (d.data().createdAt as Timestamp).toDate().toISOString() }));
         return { success: true, data: serialize(data) };
-    } catch (e) { return { success: false }; }
+    } catch (e) { return { success: false, error: "Duyurular alınamadı." }; }
 }
 
-export async function createAnnouncement(data: any) {
-    try { await addDoc(collection(db, 'announcements'), { ...data, createdAt: serverTimestamp() }); return { success: true }; } catch (e) { return { success: false }; }
+export async function createAnnouncement(data: any): Promise<{ success: boolean; error?: string }> {
+    const adminDb = getAdminDb();
+    try { await adminDb.collection('announcements').add({ ...data, createdAt: FieldValue.serverTimestamp() }); return { success: true }; } catch (e: any) { return { success: false, error: e.message }; }
 }
 
 export async function updateAnnouncement(id: string, data: { title: string; content: string; category: string }): Promise<{ success: boolean; error?: string }> {
+    const adminDb = getAdminDb();
     try {
-        const docRef = doc(db, 'announcements', id);
-        await updateDoc(docRef, { ...data, updatedAt: serverTimestamp() });
+        const docRef = adminDb.collection('announcements').doc(id);
+        await docRef.update({ ...data, updatedAt: FieldValue.serverTimestamp() });
         return { success: true };
     } catch (e: any) { return { success: false, error: e.message }; }
 }
 
-export async function deleteAnnouncement(id: string) {
-    try { await deleteDoc(doc(db, 'announcements', id)); return { success: true }; } catch (e) { return { success: false }; }
+export async function deleteAnnouncement(id: string): Promise<{ success: boolean; error?: string }> {
+    const adminDb = getAdminDb();
+    try { await adminDb.collection('announcements').doc(id).delete(); return { success: true }; } catch (e: any) { return { success: false, error: e.message }; }
 }
+
 
 // ==========================================
 // 5. YENİ: AYRI TARİHLİ PUAN TAMİR SİSTEMİ
