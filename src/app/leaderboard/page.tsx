@@ -17,7 +17,8 @@ import {
     finishHolidayAndStartSeason, startHolidayMode, undoLastSeasonAction,
     createAnnouncement, deleteAnnouncement, updateAnnouncement,
     getSchoolLeaderboard, getGradeLeaderboard, getBranchLeaderboard,
-    repairAllStudentScores
+    repairAllStudentScores,
+    saveApprovalSetting
 } from '@/app/leaderboard/actions';
 import type { UserProfile } from "@/lib/types";
 import { UserAvatar } from "@/components/user-avatar";
@@ -115,6 +116,12 @@ function AdminSettingsDialog({ onSettingsChange }: { onSettingsChange: () => voi
         seasonName: '', holidayMode: false, holidayMessage: '', rewards: { first: 500, second: 250, third: 100 }, 
         seasonStartDate: '', seasonEndDate: '', scoreCalculationStartDate: '', requireApproval: true 
     });
+    
+    // Onay Ayarı için Ayrı State
+    const [localRequireApproval, setLocalRequireApproval] = useState(true);
+    const [isApprovalSaving, setIsApprovalSaving] = useState(false);
+
+
     const [announcements, setAnnouncements] = useState<any[]>([]);
     const [annForm, setAnnForm] = useState({ id: '', title: '', content: '', category: 'general' });
     const [loadingAnn, setLoadingAnn] = useState(false);
@@ -128,19 +135,30 @@ function AdminSettingsDialog({ onSettingsChange }: { onSettingsChange: () => voi
     useEffect(() => {
         if (open) {
             getLeaderboardSettings().then(data => {
-                if(data) setSettings({ 
-                    ...data, 
-                    seasonStartDate: formatIsoToLocalInput(data.seasonStartDate), 
-                    seasonEndDate: formatIsoToLocalInput(data.seasonEndDate),
-                    scoreCalculationStartDate: formatIsoToLocalInput(data.scoreCalculationStartDate),
-                    requireApproval: data.requireApproval ?? true,
-                });
+                if(data) {
+                    const newSettings = { 
+                        ...data, 
+                        seasonStartDate: formatIsoToLocalInput(data.seasonStartDate), 
+                        seasonEndDate: formatIsoToLocalInput(data.seasonEndDate),
+                        scoreCalculationStartDate: formatIsoToLocalInput(data.scoreCalculationStartDate),
+                        requireApproval: data.requireApproval ?? true,
+                    };
+                    setSettings(newSettings);
+                    setLocalRequireApproval(newSettings.requireApproval);
+                }
             });
             fetchAnnouncements();
             setIndexLink(null);
         }
     }, [open]);
+
+    useEffect(() => {
+        setLocalRequireApproval(settings.requireApproval);
+    }, [settings.requireApproval]);
+
+
     const fetchAnnouncements = () => { setLoadingAnn(true); getAnnouncements(annForm.category).then(res => { if(res.success && res.data) setAnnouncements(res.data); setLoadingAnn(false); }); };
+    
     const handleSaveSettings = async () => {
         setIsSaving(true);
         const dataToSave = { 
@@ -150,12 +168,24 @@ function AdminSettingsDialog({ onSettingsChange }: { onSettingsChange: () => voi
             seasonStartDate: settings.seasonStartDate ? new Date(settings.seasonStartDate).toISOString() : null, 
             seasonEndDate: settings.seasonEndDate ? new Date(settings.seasonEndDate).toISOString() : null,
             scoreCalculationStartDate: settings.scoreCalculationStartDate ? new Date(settings.scoreCalculationStartDate).toISOString() : null,
-            requireApproval: settings.requireApproval
         };
         const result = await saveLeaderboardSettings(dataToSave);
-        if (result.success) { toast({ title: "Başarılı", description: "Ayarlar güncellendi." }); onSettingsChange();
+        if (result.success) { toast({ title: "Başarılı", description: "Sezon ayarları güncellendi." }); onSettingsChange();
         } else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
         setIsSaving(false);
+    };
+
+    const handleApprovalSave = async () => {
+        setIsApprovalSaving(true);
+        const result = await saveApprovalSetting(localRequireApproval);
+        if (result.success) {
+            toast({ title: "Başarılı", description: "Onay ayarı güncellendi." });
+            onSettingsChange();
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+            setLocalRequireApproval(settings.requireApproval);
+        }
+        setIsApprovalSaving(false);
     };
 
     const handleStartHoliday = async () => {
@@ -254,19 +284,29 @@ function AdminSettingsDialog({ onSettingsChange }: { onSettingsChange: () => voi
                             <div className="space-y-2"><Label className="text-xs uppercase font-bold text-slate-400">Bitiş Tarihi (Görünür)</Label><Input type="datetime-local" value={settings.seasonEndDate} onChange={(e) => setSettings({ ...settings, seasonEndDate: e.target.value })} className="bg-slate-900 border-white/10 text-xs" /></div>
                         </div>
                         
-                        <Button onClick={handleSaveSettings} disabled={isSaving} variant="outline" className="w-full border-white/10 hover:bg-white/5 mt-2">{isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4"/>} Ayarları & Tarihleri Kaydet</Button>
+                        <Button onClick={handleSaveSettings} disabled={isSaving} variant="outline" className="w-full border-white/10 hover:bg-white/5 mt-2">{isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4"/>} Sezon Ayarlarını Kaydet</Button>
                         
                         <div className="mt-6 pt-4 border-t border-white/5 space-y-3">
-                            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700">
-                                <div>
-                                    <Label htmlFor="approval-switch" className="font-bold text-white">Yeni Kayıt Onayı</Label>
-                                    <p className="text-xs text-slate-400">Kapalıysa, yeni kayıtlar onaysız olarak öğrenci olur.</p>
+                            <div className="space-y-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <Label htmlFor="approval-switch" className="font-bold text-white">Yeni Kayıt Onayı</Label>
+                                        <p className="text-xs text-slate-400">Kapalıysa, yeni kayıtlar onaysız olarak öğrenci olur.</p>
+                                    </div>
+                                    <Switch
+                                        id="approval-switch"
+                                        checked={localRequireApproval}
+                                        onCheckedChange={setLocalRequireApproval}
+                                    />
                                 </div>
-                                <Switch
-                                    id="approval-switch"
-                                    checked={settings.requireApproval}
-                                    onCheckedChange={(checked) => setSettings({ ...settings, requireApproval: checked })}
-                                />
+                                {localRequireApproval !== settings.requireApproval && (
+                                    <div className="flex justify-end pt-3 mt-3 border-t border-white/10">
+                                        <Button onClick={handleApprovalSave} disabled={isApprovalSaving} size="sm" className="bg-indigo-600 hover:bg-indigo-500">
+                                            {isApprovalSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>}
+                                            Onay Ayarını Kaydet
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

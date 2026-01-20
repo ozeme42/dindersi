@@ -199,7 +199,7 @@ export async function saveLeaderboardSettings(settings: any) {
             seasonStartDate: settings.seasonStartDate || null,
             seasonEndDate: settings.seasonEndDate || null,
             scoreCalculationStartDate: settings.scoreCalculationStartDate || null,
-            requireApproval: settings.requireApproval,
+            // requireApproval buradan kaldırıldı, kendi fonksiyonu var
             updatedAt: new Date().toISOString()
         };
         await adminDb.collection('settings').doc('leaderboard').set(dataToSave, { merge: true });
@@ -479,5 +479,19 @@ export async function repairAllStudentScores() {
 
     } catch (e: any) {
         return { success: false, error: "Hata: " + e.message };
+    }
+}
+
+
+// YENİ: Sadece onay ayarını kaydetmek için özel fonksiyon
+export async function saveApprovalSetting(requireApproval: boolean): Promise<{ success: boolean; error?: string }> {
+    const adminDb = getAdminDb();
+    try {
+        await adminDb.collection('settings').doc('leaderboard').set({
+            requireApproval: requireApproval
+        }, { merge: true });
+        return { success: true };
+    } catch (e: any) {
+        return { success: false, error: `Ayar kaydedilemedi: ${e.message}` };
     }
 }
