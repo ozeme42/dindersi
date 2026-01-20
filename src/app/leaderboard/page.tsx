@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -110,10 +111,9 @@ function HallOfFameCard({ period }: { period: HallOfFamePeriod }) {
 function AdminSettingsDialog({ onSettingsChange }: { onSettingsChange: () => void }) {
     const { toast } = useToast();
     const [open, setOpen] = useState(false);
-    // YENİ ALAN EKLENDİ: scoreCalculationStartDate
     const [settings, setSettings] = useState({ 
         seasonName: '', holidayMode: false, holidayMessage: '', rewards: { first: 500, second: 250, third: 100 }, 
-        seasonStartDate: '', seasonEndDate: '', scoreCalculationStartDate: '' 
+        seasonStartDate: '', seasonEndDate: '', scoreCalculationStartDate: '', requireApproval: true 
     });
     const [announcements, setAnnouncements] = useState<any[]>([]);
     const [annForm, setAnnForm] = useState({ id: '', title: '', content: '', category: 'general' });
@@ -132,7 +132,8 @@ function AdminSettingsDialog({ onSettingsChange }: { onSettingsChange: () => voi
                     ...data, 
                     seasonStartDate: formatIsoToLocalInput(data.seasonStartDate), 
                     seasonEndDate: formatIsoToLocalInput(data.seasonEndDate),
-                    scoreCalculationStartDate: formatIsoToLocalInput(data.scoreCalculationStartDate) 
+                    scoreCalculationStartDate: formatIsoToLocalInput(data.scoreCalculationStartDate),
+                    requireApproval: data.requireApproval ?? true,
                 });
             });
             fetchAnnouncements();
@@ -148,10 +149,11 @@ function AdminSettingsDialog({ onSettingsChange }: { onSettingsChange: () => voi
             rewards: settings.rewards, 
             seasonStartDate: settings.seasonStartDate ? new Date(settings.seasonStartDate).toISOString() : null, 
             seasonEndDate: settings.seasonEndDate ? new Date(settings.seasonEndDate).toISOString() : null,
-            scoreCalculationStartDate: settings.scoreCalculationStartDate ? new Date(settings.scoreCalculationStartDate).toISOString() : null
+            scoreCalculationStartDate: settings.scoreCalculationStartDate ? new Date(settings.scoreCalculationStartDate).toISOString() : null,
+            requireApproval: settings.requireApproval
         };
         const result = await saveLeaderboardSettings(dataToSave);
-        if (result.success) { toast({ title: "Başarılı", description: "Ayarlar ve tarihler güncellendi." }); onSettingsChange();
+        if (result.success) { toast({ title: "Başarılı", description: "Ayarlar güncellendi." }); onSettingsChange();
         } else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
         setIsSaving(false);
     };
@@ -254,6 +256,20 @@ function AdminSettingsDialog({ onSettingsChange }: { onSettingsChange: () => voi
                         
                         <Button onClick={handleSaveSettings} disabled={isSaving} variant="outline" className="w-full border-white/10 hover:bg-white/5 mt-2">{isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4"/>} Ayarları & Tarihleri Kaydet</Button>
                         
+                        <div className="mt-6 pt-4 border-t border-white/5 space-y-3">
+                            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+                                <div>
+                                    <Label htmlFor="approval-switch" className="font-bold text-white">Yeni Kayıt Onayı</Label>
+                                    <p className="text-xs text-slate-400">Kapalıysa, yeni kayıtlar onaysız olarak öğrenci olur.</p>
+                                </div>
+                                <Switch
+                                    id="approval-switch"
+                                    checked={settings.requireApproval}
+                                    onCheckedChange={(checked) => setSettings({ ...settings, requireApproval: checked })}
+                                />
+                            </div>
+                        </div>
+
                         {indexLink && (<div className="bg-red-900/50 p-4 rounded-lg border border-red-500/50 mb-4 animate-in fade-in"><p className="font-bold text-red-200 mb-2 flex items-center gap-2"><AlertTriangle className="h-4 w-4"/> Firebase İndeksi Eksik</p><p className="text-xs text-red-300 mb-2">Geri alma işlemini yapabilmek için veritabanı indeksi gerekiyor. Linke tıklayıp "Create Index" deyin:</p><a href={indexLink} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline text-xs break-all hover:text-blue-300 block bg-black/30 p-2 rounded">{indexLink}</a><Button onClick={() => setIndexLink(null)} size="sm" variant="ghost" className="mt-2 h-6 text-xs text-red-400 hover:bg-red-900/50 hover:text-white">Kapat</Button></div>)}
                         <div className="mt-8 pt-4 border-t-2 border-dashed border-red-500/30"><div className="flex items-center justify-between"><div className="text-xs text-red-400 font-bold">Hatalı işlem mi yaptınız?</div><Button onClick={handleUndo} disabled={isUndoing} variant="ghost" size="sm" className="text-red-400 hover:text-white hover:bg-red-500/20 h-8 text-xs border border-red-500/30">{isUndoing ? <Loader2 className="mr-2 h-3 w-3 animate-spin"/> : <RotateCcw className="mr-2 h-3 w-3"/>} Son İşlemi Geri Al</Button></div><p className="text-[10px] text-slate-500 mt-2">Bu buton, en son yapılan sezon işlemini iptal eder.</p></div>
 

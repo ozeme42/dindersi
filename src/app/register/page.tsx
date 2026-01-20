@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Info, Gamepad2, User, Lock, ArrowLeft, LogIn, School as SchoolIcon, PlusCircle, UserPlus } from 'lucide-react';
+import { Loader2, Info, Gamepad2, User, Lock, ArrowLeft, LogIn, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
@@ -16,13 +16,18 @@ import { collection, query, where, getDocs, doc, setDoc, addDoc, serverTimestamp
 import type { UserProfile, SchoolClass, School } from '@/lib/types';
 import { normalizeNameToEmailLocalPart } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getLeaderboardSettings } from '@/app/leaderboard/actions';
+import { PlusCircle } from 'lucide-react';
+
 
 // --- UI COMPONENTS ---
+
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
         "backdrop-blur-xl bg-[#1a0b2e]/60 border-2 border-white/10 rounded-3xl shadow-2xl overflow-hidden relative transition-all duration-300",
         className
     )}>
+        {/* Top Glow Line */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-50"></div>
         {children}
     </div>
@@ -41,7 +46,28 @@ export default function RegisterPage() {
   const [selectedSchoolId, setSelectedSchoolId] = useState('');
   const [newSchoolName, setNewSchoolName] = useState('');
 
+  const [requireApproval, setRequireApproval] = useState(true);
+  const [settingsLoading, setSettingsLoading] = useState(true);
+
   const selectedClass = classes.find(c => c.id === selectedClassId);
+
+  useEffect(() => {
+    async function fetchSettings() {
+        setSettingsLoading(true);
+        try {
+            const settings = await getLeaderboardSettings();
+            if (settings) {
+                setRequireApproval(settings.requireApproval ?? true);
+            }
+        } catch (e) {
+            console.error("Could not fetch registration settings", e);
+            setRequireApproval(true);
+        } finally {
+            setSettingsLoading(false);
+        }
+    }
+    fetchSettings();
+  }, []);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -107,11 +133,13 @@ export default function RegisterPage() {
         
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        
+        const roleForNewUser = requireApproval ? 'pending' : 'student';
 
         const userProfile: Omit<UserProfile, 'uid'> = {
             displayName,
             email,
-            role: 'pending',
+            role: roleForNewUser,
             class: `${selectedClass?.name} - ${selectedBranch}`,
             schoolName: finalSchoolName,
             score: 0,
@@ -121,7 +149,7 @@ export default function RegisterPage() {
 
         await setDoc(doc(db, "users", user.uid), userProfile);
         
-        toast({ title: "Kayıt Başarılı!", description: "Hesabınız oluşturuldu. Öğretmeninizin onayı sonrası giriş yapabilirsiniz." });
+        toast({ title: "Kayıt Başarılı!", description: "Hesabınız oluşturuldu. " + (roleForNewUser === 'pending' ? 'Öğretmeninizin onayı sonrası giriş yapabilirsiniz.' : 'Hemen giriş yapabilirsiniz.') });
         router.push('/login');
 
     } catch (error: any) {
@@ -136,7 +164,7 @@ export default function RegisterPage() {
     }
   };
   
-  if (isLoading) {
+  if (isLoading || settingsLoading) {
       return (
         <div className="flex h-screen items-center justify-center bg-slate-950">
             <Loader2 className="h-12 w-12 animate-spin text-cyan-500" />
@@ -218,8 +246,16 @@ export default function RegisterPage() {
                     </div>
                 )}
 
-                <Button type="submit" disabled={isSubmitting} className="w-full h-12 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg rounded-xl shadow-lg shadow-cyan-900/20 border-b-4 border-blue-800 active:border-b-0 active:translate-y-1 transition-all">
-                    {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Yükleniyor...</> : <><UserPlus className="mr-2 h-5 w-5" /> Kayıt Ol</>}
+                <Button type="submit" disabled={isSubmitting || settingsLoading} className="w-full h-12 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg rounded-xl shadow-lg shadow-cyan-900/20 border-b-4 border-blue-800 active:border-b-0 active:translate-y-1 transition-all">
+                    {isSubmitting || settingsLoading ? (
+                        <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Yükleniyor...
+                        </>
+                    ) : (
+                        <>
+                            <UserPlus className="mr-2 h-5 w-5" /> Kayıt Ol
+                        </>
+                    )}
                 </Button>
 
                 <div className="pt-2 text-center">

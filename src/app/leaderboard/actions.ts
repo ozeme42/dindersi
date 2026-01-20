@@ -1,3 +1,4 @@
+
 'use server';
 
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -182,8 +183,8 @@ export async function getLeaderboardSettings() {
             rewards: data?.rewards || { first: 500, second: 250, third: 100 },
             seasonStartDate: data?.seasonStartDate || null,
             seasonEndDate: data?.seasonEndDate || null,
-            // YENİ ALAN: Sadece hesaplama için kullanılacak tarih
-            scoreCalculationStartDate: data?.scoreCalculationStartDate || null 
+            scoreCalculationStartDate: data?.scoreCalculationStartDate || null,
+            requireApproval: data?.requireApproval ?? true,
         };
     } catch (error) { return null; }
 }
@@ -197,8 +198,8 @@ export async function saveLeaderboardSettings(settings: any) {
             rewards: settings.rewards,
             seasonStartDate: settings.seasonStartDate || null,
             seasonEndDate: settings.seasonEndDate || null,
-            // YENİ ALANI KAYDET
             scoreCalculationStartDate: settings.scoreCalculationStartDate || null,
+            requireApproval: settings.requireApproval,
             updatedAt: new Date().toISOString()
         };
         await adminDb.collection('settings').doc('leaderboard').set(dataToSave, { merge: true });
