@@ -35,10 +35,22 @@ const serialize = (data: any): any => {
 export async function getLiveLeaderboard(): Promise<LeaderboardEntry[]> {
     noStore();
     try {
-        const usersQuery = query(collection(db, 'users'), where('role', '==', 'student'), orderBy('score', 'desc'), limit(100));
+        const usersQuery = query(collection(db, 'users'), where('role', '==', 'student'));
         const usersSnapshot = await getDocs(usersQuery);
-        return serialize(usersSnapshot.docs.map(doc => ({ ...doc.data(), uid: doc.id, score: doc.data().score || 0 })));
-    } catch (e) { return []; }
+        
+        const allStudents = usersSnapshot.docs.map(doc => ({ 
+            ...doc.data(), 
+            uid: doc.id, 
+            score: doc.data().score || 0 
+        })) as LeaderboardEntry[];
+
+        allStudents.sort((a, b) => b.score - a.score);
+
+        return serialize(allStudents);
+    } catch (e) { 
+        console.error("Leaderboard hatası:", e);
+        return []; 
+    }
 }
 
 export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }> {
@@ -49,7 +61,7 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
     const seasonsSnap = await adminDb.collection('archivedSeasons').orderBy('createdAt', 'desc').get();
     const seasons = seasonsSnap.docs.map(doc => ({ 
         periodName: doc.data().seasonName, 
-        winners: doc.data().leaderboard // Artık slice(0,10) yapmıyoruz, frontend'de tamamı görülebilsin diye hepsini gönderiyoruz.
+        winners: doc.data().leaderboard 
     } as HallOfFamePeriod));
 
     // Aylık Hesaplama
@@ -82,7 +94,7 @@ export async function getHallOfFameData(): Promise<{ seasons: HallOfFamePeriod[]
                     .map(([uid, score]) => ({ student: studentsMap.get(uid), score }))
                     .filter((entry): entry is { student: UserProfile; score: number } => !!entry.student && entry.score > 0)
                     .sort((a, b) => b.score - a.score)
-                    .slice(0, 10) // Aylık şampiyonlarda ilk 10'u alalım
+                    .slice(0, 10) 
                     .map(entry => ({...entry.student, score: entry.score }));
 
                 if (leaderboard.length > 0) {
@@ -169,7 +181,9 @@ export async function getLeaderboardSettings() {
             holidayMessage: data?.holidayMessage || '',
             rewards: data?.rewards || { first: 500, second: 250, third: 100 },
             seasonStartDate: data?.seasonStartDate || null,
-            seasonEndDate: data?.seasonEndDate || null
+            seasonEndDate: data?.seasonEndDate || null,
+            // YENİ ALAN: Sadece hesaplama için kullanılacak tarih
+            scoreCalculationStartDate: data?.scoreCalculationStartDate || null 
         };
     } catch (error) { return null; }
 }
@@ -183,6 +197,8 @@ export async function saveLeaderboardSettings(settings: any) {
             rewards: settings.rewards,
             seasonStartDate: settings.seasonStartDate || null,
             seasonEndDate: settings.seasonEndDate || null,
+            // YENİ ALANI KAYDET
+            scoreCalculationStartDate: settings.scoreCalculationStartDate || null,
             updatedAt: new Date().toISOString()
         };
         await adminDb.collection('settings').doc('leaderboard').set(dataToSave, { merge: true });
@@ -335,7 +351,7 @@ export async function undoLastSeasonAction() {
 }
 
 // ==========================================
-// 3. DUYURU YÖNETİMİ
+// 4. DUYURU YÖNETİMİ
 // ==========================================
 
 export async function getAnnouncements(category: string) {
@@ -361,4 +377,106 @@ export async function updateAnnouncement(id: string, data: { title: string; cont
 
 export async function deleteAnnouncement(id: string) {
     try { await deleteDoc(doc(db, 'announcements', id)); return { success: true }; } catch (e) { return { success: false }; }
+}
+
+// ==========================================
+// 5. YENİ: AYRI TARİHLİ PUAN TAMİR SİSTEMİ
+// ==========================================
+// Bu fonksiyon artık "Sezon Başlangıç Tarihi"ne değil,
+// Özel olarak ayarlanan "Hesaplama Başlangıç Tarihi"ne bakar.
+
+export async function repairAllStudentScores() {
+    const adminDb = getAdminDb();
+    try {
+        // 1. AYARLARDAN TARİHİ AL
+        const settingsDoc = await adminDb.collection('settings').doc('leaderboard').get();
+        const settings = settingsDoc.data();
+        
+        let startDate = null;
+        
+        // ÖNCELİK YENİ EKLENEN TARİHTE
+        if (settings?.scoreCalculationStartDate) {
+            startDate = new Date(settings.scoreCalculationStartDate);
+        } 
+        // Eğer o yoksa eskisini kullan (Fallback)
+        else if (settings?.seasonStartDate) {
+            startDate = new Date(settings.seasonStartDate);
+        }
+
+        if (!startDate || isNaN(startDate.getTime())) {
+            return { 
+                success: false, 
+                error: "Lütfen önce Yönetim panelinden 'Puan Hesaplama Başlangıç Tarihi'ni ayarlayıp kaydedin." 
+            };
+        }
+
+        console.log("Hesaplama Başlangıç Tarihi:", startDate.toISOString());
+
+        // 2. TÜM PUANLARI ÇEK
+        const eventsSnap = await adminDb.collection('scoreEvents').get();
+        
+        const scoresMap = new Map<string, number>();
+        let skippedCount = 0;
+        let processedCount = 0;
+
+        // 3. TEK TEK TARİH KONTROLÜ YAP
+        eventsSnap.forEach(doc => {
+            const data = doc.data();
+            
+            // Tarihi güvenli şekilde çevir
+            let eventDate: Date | null = null;
+            if (data.timestamp && typeof data.timestamp.toDate === 'function') {
+                eventDate = data.timestamp.toDate();
+            } else if (data.timestamp instanceof Date) {
+                eventDate = data.timestamp;
+            } else if (typeof data.timestamp === 'string') {
+                eventDate = new Date(data.timestamp);
+            }
+
+            // Eğer tarih belirlenen hesaplama tarihinden ESKİYSE atla
+            if (!eventDate || eventDate.getTime() < startDate!.getTime()) {
+                skippedCount++;
+                return; // Döngüyü atla, bu puanı toplama
+            }
+
+            // Tarih uygunsa topla
+            const uid = data.userId;
+            const points = Number(data.points) || 0;
+            if (uid && !isNaN(points)) {
+                const current = scoresMap.get(uid) || 0;
+                scoresMap.set(uid, current + points);
+                processedCount++;
+            }
+        });
+
+        // 4. ÖĞRENCİLERİ GÜNCELLE
+        const usersSnap = await adminDb.collection('users').where('role', '==', 'student').get();
+        const batch = adminDb.batch();
+        let ops = 0;
+        let updateCount = 0;
+
+        usersSnap.forEach(doc => {
+            const calculatedScore = scoresMap.get(doc.id) || 0;
+            const currentDbScore = doc.data().score || 0;
+
+            if (calculatedScore !== currentDbScore) {
+                batch.update(doc.ref, { score: calculatedScore });
+                ops++;
+                updateCount++;
+                if (ops >= 450) { batch.commit(); ops = 0; }
+            }
+        });
+
+        if (ops > 0) { await batch.commit(); }
+
+        const dateStr = startDate.toLocaleString('tr-TR', { day: 'numeric', month: 'long', hour: '2-digit', minute:'2-digit' });
+        
+        return { 
+            success: true, 
+            message: `BAŞARILI: ${dateStr} tarihinden İTİBAREN hesaplandı. Daha eski ${skippedCount} kayıt yoksayıldı.` 
+        };
+
+    } catch (e: any) {
+        return { success: false, error: "Hata: " + e.message };
+    }
 }
