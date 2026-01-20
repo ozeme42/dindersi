@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -160,7 +161,7 @@ export default function SuperAdminPage() {
 
       const curriculumData = await getExamCreationData();
       if (!curriculumData.error) {
-        setAllCourses(curriculumData.courses);
+        setAllCourses(curriculumData.courses || []);
       }
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -211,7 +212,7 @@ export default function SuperAdminPage() {
 
   // --- HANDLERS ---
   const handleOpenDialog = (user: Partial<UserProfile> | null = null, role: 'student' | 'teacher') => {
-      const defaultUser = { role };
+      const defaultUser = { role: role, schoolName: '' };
       setDialogState({ isOpen: true, user: user || defaultUser });
   };
 
@@ -371,20 +372,21 @@ export default function SuperAdminPage() {
   };
 
   const availableCourses = useMemo(() => {
+    if (!allCourses) return [];
     if (staticFilters.classId === 'all') return allCourses;
     return allCourses.filter(c => c.classId === staticFilters.classId);
   }, [allCourses, staticFilters.classId]);
 
   const availableUnits = useMemo(() => {
     if (staticFilters.courseId === 'all') return [];
-    const course = allCourses.find(c => c.id === staticFilters.courseId);
-    return course ? course.units : [];
+    const course = allCourses?.find(c => c.id === staticFilters.courseId);
+    return course?.units || [];
   }, [allCourses, staticFilters.courseId]);
 
   const availableTopics = useMemo(() => {
     if (staticFilters.unitId === 'all') return [];
-    const unit = availableUnits.find(u => u.id === staticFilters.unitId);
-    return unit ? unit.topics : [];
+    const unit = availableUnits?.find(u => u.id === staticFilters.unitId);
+    return unit?.topics || [];
   }, [availableUnits, staticFilters.unitId]);
 
   const handleSelectUser = (userId: string) => {
@@ -429,7 +431,7 @@ export default function SuperAdminPage() {
                     </div>
                 </div>
                 <div className="flex gap-3">
-                    <Button asChild variant="outline" className="border-white/10 hover:bg-white/5 bg-slate-900/50 backdrop-blur-md">
+                    <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900/50 backdrop-blur-md">
                         <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
                     </Button>
                 </div>
@@ -530,13 +532,14 @@ export default function SuperAdminPage() {
                                         <Table>
                                             <TableHeader className="bg-slate-950/50">
                                                 <TableRow className="border-white/5 hover:bg-transparent">
-                                                    <TableHead className="px-4"><Checkbox onCheckedChange={checked => {
-                                                        const currentIds = new Set(selectedUserIds);
-                                                        paginatedStudents.forEach(s => {
-                                                            if (checked) currentIds.add(s.uid);
-                                                            else currentIds.delete(s.uid);
-                                                        });
-                                                        setSelectedUserIds(currentIds);
+                                                    <TableHead className="px-4"><Checkbox onCheckedChange={(checked) => {
+                                                        setSelectedUserIds(prev => {
+                                                            const currentIds = new Set(prev);
+                                                            paginatedStudents.forEach(s => {
+                                                                if (checked) currentIds.add(s.uid); else currentIds.delete(s.uid);
+                                                            });
+                                                            return currentIds;
+                                                        })
                                                     }} /></TableHead>
                                                     <TableHead className="text-slate-300">Öğrenci</TableHead>
                                                     <TableHead className="text-slate-300">Okul</TableHead>
@@ -567,7 +570,7 @@ export default function SuperAdminPage() {
                                                                     <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-400 hover:text-white"><MoreHorizontal className="h-4 w-4"/></Button>
                                                                 </DropdownMenuTrigger>
                                                                 <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
-                                                                    <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+                                                                    <DropdownMenuLabel>Seçenekler</DropdownMenuLabel>
                                                                     <DropdownMenuItem onClick={() => handleOpenDialog(student, 'student')}><FilePenLine className="mr-2 h-4 w-4 text-emerald-400"/> Düzenle</DropdownMenuItem>
                                                                     <DropdownMenuItem onClick={() => handleDeleteUser(student.uid)} className="text-red-400 focus:text-red-300"><Trash2 className="mr-2 h-4 w-4"/> Sil</DropdownMenuItem>
                                                                 </DropdownMenuContent>

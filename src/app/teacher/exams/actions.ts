@@ -148,16 +148,17 @@ export async function getExamCreationData(): Promise<any> {
             getDocs(query(collection(db, 'classes'), orderBy("createdAt", "asc"))),
             getDocs(query(collection(db, 'courses'))),
             getDocs(query(collection(db, 'users'), where("role", "==", "student"))),
-            getDocs(query(collection(db, 'questions'))) // `examQuestions` yerine `questions` kullanıyoruz
+            getDocs(query(collection(db, 'questions')))
         ]);
         
         const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+        const courses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-        // Bu bölümü JSON güvenliği için parse/stringify yapıyoruz
         return JSON.parse(JSON.stringify({ 
             classes, 
             students,
+            courses,
             examQuestions: examQuestionsSnap.docs.map(d => ({ id: d.id, ...d.data() }))
         }));
     } catch(e) {
