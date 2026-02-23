@@ -13,8 +13,7 @@ import { playSound } from '@/lib/audio-service';
 import { GENERIC_TURKISH_WORDS } from '@/lib/generic-words';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import Confetti from 'react-dom-confetti';
+import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 
 // --- ORTAK ARKA PLAN ---
 const MagnificentLightBackground = () => (
@@ -333,8 +332,6 @@ function WordSearchGame() {
         fetchGameData();
     };
 
-    // --- BAŞARI KONTROLÜ ---
-    // Görevin başarılı sayılması için tüm kelimeler bulunmalıdır.
     const isAllWordsFound = wordsToFind.length > 0 && foundWords.size === wordsToFind.length;
 
     const saveScore = async () => {
@@ -343,19 +340,32 @@ function WordSearchGame() {
 
         try {
             if (isMission && topicId) {
-                // --- GÖREV MODU KAYDI ---
-                await addDoc(collection(db, 'scoreEvents'), {
+                // --- GÖREV MODU KAYDI (LİDERLİK TABLOSU DÜZELTİLDİ) ---
+                const batch = writeBatch(db);
+                
+                // 1. Etkinlik Kaydı (scoreEvents)
+                const eventRef = doc(collection(db, 'scoreEvents'));
+                batch.set(eventRef, {
                     userId: user.uid,
-                    points: score, // Kazanılan puanı kaydet (başarısız olsa bile)
+                    points: score,
                     context: topicId, 
                     gameType: 'kelime-avi', 
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: isAllWordsFound // Sadece hepsi bulunduysa TRUE
+                    completed: isAllWordsFound
                 });
 
+                // 2. Kullanıcı Profilini Güncelleme (users -> score)
+                const userRef = doc(db, 'users', user.uid);
+                batch.update(userRef, {
+                    score: increment(score)
+                });
+
+                // Batch'i uygula
+                await batch.commit();
+
                 if (isAllWordsFound) {
-                    toast({ title: "Görev Başarılı!", description: "Tüm kelimeleri buldun.", className: "bg-green-600 text-white" });
+                    toast({ title: "Görev Başarılı!", description: "Tüm kelimeleri buldun ve puanın kaydedildi.", className: "bg-green-600 text-white" });
                 } else {
                     toast({ title: "Puan Kaydedildi", description: "Ancak görev tamamlanmadı.", className: "bg-yellow-600 text-white" });
                 }
@@ -396,8 +406,6 @@ function WordSearchGame() {
                     setFoundWords(prev => new Set(prev).add(found));
                     setFoundPaths(prev => [...prev, line]);
                     
-                    // --- PUANLAMA DEĞİŞİKLİĞİ ---
-                    // Her kelime 10 puan
                     setScore(prev => prev + 10);
                 }
             }
@@ -473,21 +481,18 @@ function WordSearchGame() {
                             </p>
 
                             <div className="space-y-3">
-                                {/* PUAN VARSA KAYDET BUTONU GÖRÜNÜR (BAŞARISIZ OLSA BİLE) */}
                                 {!isScoreSaved && score > 0 && (
                                     <Button onClick={saveScore} disabled={isSaving} className={cn("w-full h-12 text-lg font-bold shadow-lg", isAllWordsFound ? "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200" : "bg-amber-600 hover:bg-amber-700 shadow-amber-200")}>
                                         {isSaving ? <Loader2 className="animate-spin mr-2"/> : (isAllWordsFound ? "Kaydet ve Devam Et" : "Puanı Al ve Çık")}
                                     </Button>
                                 )}
                                 
-                                {/* BAŞARILIYSA VE KAYDEDİLDİYSE GÖREVLERE DÖN */}
                                 {isScoreSaved && isAllWordsFound && (
                                     <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
                                         <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
                                     </Button>
                                 )}
 
-                                {/* BAŞARISIZSA TEKRAR DENE */}
                                 {(!isAllWordsFound || isScoreSaved) && (
                                     <Button onClick={handleRestart} variant="outline" className="w-full h-12 text-lg font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">
                                         <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
@@ -501,7 +506,6 @@ function WordSearchGame() {
                         </div>
                     </div>
                 ) : (
-                    // NORMAL (ARCADE) MOD BİTİŞ EKRANI
                     <GameEndScreen 
                         score={score} 
                         onSave={saveScore} 

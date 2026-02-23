@@ -14,7 +14,7 @@ import { playSound } from '@/lib/audio-service';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import Confetti from 'react-dom-confetti';
 
 // --- RENK PALETİ ---
@@ -58,7 +58,6 @@ function BilBakalimGame() {
     const [queue, setQueue] = useState<Partial<Question>[]>([]); 
     const [allTerms, setAllTerms] = useState<string[]>([]);
     
-    // isLoading yerine gameState kullanıyoruz
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'won' | 'error' | 'finished'>('loading');
     
     const [score, setScore] = useState(0);
@@ -167,7 +166,6 @@ function BilBakalimGame() {
                  router.push(isMission ? '/student/gorevler' : backUrl);
                  return;
             }
-            // Kaydedildiyse zaten butonlar farklı olacak
         }
         
         // Puan varsa kaydetmeye çalış (Görev başarısız olsa bile puanı alabilir)
@@ -175,8 +173,12 @@ function BilBakalimGame() {
             setIsSaving(true);
             try {
                 if (isMission && topicId) {
-                    // --- GÖREV MODU KAYDI ---
-                    await addDoc(collection(db, 'scoreEvents'), {
+                    // --- GÖREV MODU KAYDI (LİDERLİK TABLOSU GÜNCELLENDİ) ---
+                    const batch = writeBatch(db);
+
+                    // 1. Etkinlik Kaydı (scoreEvents)
+                    const eventRef = doc(collection(db, 'scoreEvents'));
+                    batch.set(eventRef, {
                         userId: user.uid,
                         points: score,
                         context: topicId,
@@ -186,8 +188,17 @@ function BilBakalimGame() {
                         completed: isAllSolved
                     });
 
+                    // 2. Kullanıcı Profilini Güncelleme (users -> score)
+                    const userRef = doc(db, 'users', user.uid);
+                    batch.update(userRef, {
+                        score: increment(score)
+                    });
+
+                    // İşlemleri Kaydet
+                    await batch.commit();
+
                     if (isAllSolved) {
-                        toast({ title: "Görev Başarılı!", description: "Tüm kavramları bildin.", className: "bg-green-600 text-white" });
+                        toast({ title: "Görev Başarılı!", description: "Tüm kavramları bildin ve puanın kaydedildi.", className: "bg-green-600 text-white" });
                     } else {
                         toast({ title: "Puan Kaydedildi", description: "Ancak tüm soruları bitirmedin.", className: "bg-yellow-600 text-white" });
                     }
@@ -222,7 +233,6 @@ function BilBakalimGame() {
         fetchGameData();
     };
 
-    // --- DÜZELTİLEN KISIM: gameState kontrolü ---
     if (gameState === 'loading') {
         return (
             <div className="flex h-screen w-full items-center justify-center bg-slate-50">

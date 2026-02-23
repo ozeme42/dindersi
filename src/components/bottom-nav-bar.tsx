@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -95,8 +94,8 @@ export function BottomNavBar() {
         { href: '/', icon: Home, label: 'Panel' },
         { href: '/teacher/students', icon: Users, label: 'Öğrenciler' },
         { href: '/oyunlar', icon: Gamepad2, label: 'Etkinlikler' },
-        { href: '/teacher/scales', icon: Scale, label: 'Ölçekler' },
         { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
+        { href: '/teacher/scales', icon: Scale, label: 'Ölçekler' },
     ];
     
     const links = user.role === 'teacher' || user.role === 'superadmin' ? teacherLinks : studentLinks;

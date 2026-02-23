@@ -12,10 +12,10 @@ import type { Question } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
-import { useToast } from '@/hooks/use-toast'; // Import edildi
+import { useToast } from '@/hooks/use-toast';
 
 const MONEY_LEVELS = [
     "100", "200", "300", "400", "500", "600", "700", "800", "900", "1.000"
@@ -39,7 +39,7 @@ function MilyonerGame() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user, loading: userLoading } = useAuth();
-    const { toast } = useToast(); // EKLENEN KISIM: Toast tanımlandı
+    const { toast } = useToast(); 
     
     const [questions, setQuestions] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -151,11 +151,14 @@ function MilyonerGame() {
              }
 
             if (isMission && topicId) {
-                // --- GÖREV MODU KAYDI ---
-                // Burada completed: true gidince, Görevler sayfasındaki o adım Yeşil (Passed) olur.
-                await addDoc(collection(db, 'scoreEvents'), {
+                // --- GÖREV MODU KAYDI (LİDERLİK TABLOSU İÇİN GÜNCELLENDİ) ---
+                const batch = writeBatch(db);
+
+                // 1. Etkinlik Kaydı (scoreEvents)
+                const eventRef = doc(collection(db, 'scoreEvents'));
+                batch.set(eventRef, {
                     userId: user.uid,
-                    points: finalPrize,
+                    points: finalPrize, // Gerekirse kısıtlanmış puan
                     context: topicId,
                     gameType: 'milyoner-yarismasi',
                     timestamp: serverTimestamp(),
@@ -163,8 +166,17 @@ function MilyonerGame() {
                     completed: isSuccess
                 });
 
+                // 2. Kullanıcı Profilini Güncelleme (users -> score)
+                const userRef = doc(db, 'users', user.uid);
+                batch.update(userRef, {
+                    score: increment(finalPrize)
+                });
+
+                // İşlemleri Kaydet
+                await batch.commit();
+
                 if (isSuccess) {
-                    toast({ title: "Görev Başarılı!", description: "Tebrikler! Konuyu tamamladın.", className: "bg-green-600 text-white" });
+                    toast({ title: "Görev Başarılı!", description: `Tebrikler! Konuyu tamamladın ve ${finalPrize} puan eklendi.`, className: "bg-green-600 text-white" });
                 } else {
                     toast({ title: "Görev Tamamlanamadı", description: "Büyük ödülü (1.000 puan) kazanmalısın.", variant: "destructive" });
                 }

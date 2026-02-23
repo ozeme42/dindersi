@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import Confetti from 'react-dom-confetti';
 
 const HANGMAN_STAGES = 6;
@@ -159,8 +159,12 @@ function HangmanGame() {
         setIsSaving(true);
         try {
             if (isMission && topicId) {
-                // --- GÖREV MODU KAYDI ---
-                await addDoc(collection(db, 'scoreEvents'), {
+                // --- GÖREV MODU KAYDI (LİDERLİK TABLOSU DÜZELTİLDİ) ---
+                const batch = writeBatch(db);
+
+                // 1. Etkinlik Kaydı (scoreEvents)
+                const eventRef = doc(collection(db, 'scoreEvents'));
+                batch.set(eventRef, {
                     userId: user.uid,
                     points: totalScore,
                     context: topicId,
@@ -170,10 +174,19 @@ function HangmanGame() {
                     completed: isThresholdPassed // Yarısından fazlası doğruysa TRUE
                 });
 
+                // 2. Kullanıcı Profilini Güncelleme (users -> score)
+                const userRef = doc(db, 'users', user.uid);
+                batch.update(userRef, {
+                    score: increment(totalScore)
+                });
+
+                // İşlemleri Kaydet
+                await batch.commit();
+
                 if (isThresholdPassed) {
-                    toast({ title: "Görev Başarılı!", description: "Tebrikler, görevi tamamladın.", className: "bg-green-600 text-white" });
+                    toast({ title: "Görev Başarılı!", description: "Tebrikler, görevi tamamladın ve puanın eklendi.", className: "bg-green-600 text-white" });
                 } else {
-                    toast({ title: "Görev Tamamlanamadı", description: "Soruların en az yarısını doğru bilmelisin.", variant: "destructive" });
+                    toast({ title: "Görev Tamamlanamadı", description: "Puan kaydedildi ancak soruların en az yarısını bilmelisin.", variant: "destructive" });
                 }
             } else {
                 // --- NORMAL MOD KAYDI ---

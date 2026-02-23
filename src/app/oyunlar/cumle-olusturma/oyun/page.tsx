@@ -12,7 +12,7 @@ import { playSound } from '@/lib/audio-service';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import Confetti from 'react-dom-confetti';
 
 // Kelime Kartı Bileşeni
@@ -199,8 +199,12 @@ function SentenceClickGame() {
         setIsSaving(true);
         try {
             if (isMission && topicId) {
-                // --- GÖREV MODU KAYDI ---
-                await addDoc(collection(db, 'scoreEvents'), {
+                // --- GÖREV MODU KAYDI (LİDERLİK TABLOSU DÜZELTİLDİ) ---
+                const batch = writeBatch(db);
+
+                // 1. Etkinlik Kaydı (scoreEvents)
+                const eventRef = doc(collection(db, 'scoreEvents'));
+                batch.set(eventRef, {
                     userId: user.uid,
                     points: score, // Kazanılan puanı kaydediyoruz (başarısız olsa bile)
                     context: topicId,
@@ -210,8 +214,17 @@ function SentenceClickGame() {
                     completed: isAllSentencesCompleted // Sadece hepsi bittiyse TRUE
                 });
 
+                // 2. Kullanıcı Profilini Güncelleme (users -> score)
+                const userRef = doc(db, 'users', user.uid);
+                batch.update(userRef, {
+                    score: increment(score)
+                });
+
+                // Batch İşlemini Uygula
+                await batch.commit();
+
                 if (isAllSentencesCompleted) {
-                    toast({ title: "Görev Başarılı!", description: "Harika iş çıkardın!", className: "bg-green-600 text-white" });
+                    toast({ title: "Görev Başarılı!", description: "Harika iş çıkardın ve puanın kaydedildi!", className: "bg-green-600 text-white" });
                 } else {
                     toast({ title: "Puan Kaydedildi", description: "Ancak görev tamamlanmadı.", className: "bg-yellow-600 text-white" });
                 }

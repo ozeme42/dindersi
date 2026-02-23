@@ -14,7 +14,7 @@ import { playSound } from '@/lib/audio-service';
 import { Progress } from '@/components/ui/progress';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import Confetti from 'react-dom-confetti';
 
 const INITIAL_TIME = 15; 
@@ -136,8 +136,12 @@ function TrueFalseChainGame() {
 
         try {
             if (isMission && topicId) {
-                // --- GÖREV MODU KAYDI ---
-                await addDoc(collection(db, 'scoreEvents'), {
+                // --- GÖREV MODU KAYDI (LİDERLİK TABLOSU İÇİN GÜNCELLENDİ) ---
+                const batch = writeBatch(db);
+
+                // 1. Etkinlik Kaydı (scoreEvents)
+                const eventRef = doc(collection(db, 'scoreEvents'));
+                batch.set(eventRef, {
                     userId: user.uid,
                     points: score,
                     context: topicId,
@@ -147,10 +151,19 @@ function TrueFalseChainGame() {
                     completed: isSuccess // %70 Barajı
                 });
 
+                // 2. Kullanıcı Profilini Güncelleme (users -> score)
+                const userRef = doc(db, 'users', user.uid);
+                batch.update(userRef, {
+                    score: increment(score)
+                });
+
+                // İşlemleri Kaydet
+                await batch.commit();
+
                 if (isSuccess) {
-                    toast({ title: "Görev Başarılı!", description: `Tebrikler! %70 barajını geçtin (${score} Puan).`, className: "bg-green-600 text-white" });
+                    toast({ title: "Görev Başarılı!", description: `Tebrikler! %70 barajını geçtin ve ${score} puan kazandın.`, className: "bg-green-600 text-white" });
                 } else {
-                    toast({ title: "Görev Tamamlanamadı", description: `Başarı için en az ${successThreshold} puan gerekli.`, variant: "destructive" });
+                    toast({ title: "Görev Tamamlanamadı", description: `Başarı için en az ${successThreshold} puan gerekli. (Puan kaydedildi)`, variant: "destructive" });
                 }
             } else {
                 // --- NORMAL MOD KAYDI ---

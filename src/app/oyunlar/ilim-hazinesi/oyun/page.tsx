@@ -14,7 +14,7 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { playSound } from '@/lib/audio-service';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import Confetti from 'react-dom-confetti';
 
 // Harf Renk Paleti
@@ -208,7 +208,12 @@ function GameComponent() {
         setIsSaving(true);
         try {
             if (isMission && topicId) {
-                await addDoc(collection(db, 'scoreEvents'), {
+                // --- GÖREV MODU KAYDI (LİDERLİK TABLOSU İÇİN GÜNCELLENDİ) ---
+                const batch = writeBatch(db);
+
+                // 1. Etkinlik Kaydı (scoreEvents)
+                const eventRef = doc(collection(db, 'scoreEvents'));
+                batch.set(eventRef, {
                     userId: user.uid,
                     points: score,
                     context: topicId,
@@ -218,12 +223,22 @@ function GameComponent() {
                     completed: isSuccess
                 });
 
+                // 2. Kullanıcı Profilini Güncelleme (users -> score)
+                const userRef = doc(db, 'users', user.uid);
+                batch.update(userRef, {
+                    score: increment(score)
+                });
+
+                // İşlemleri Kaydet
+                await batch.commit();
+
                 if (isSuccess) {
-                    toast({ title: "Görev Başarılı!", description: "Tebrikler, tüm hazineleri topladın.", className: "bg-green-600 text-white" });
+                    toast({ title: "Görev Başarılı!", description: "Tebrikler, tüm hazineleri topladın ve puanın kaydedildi.", className: "bg-green-600 text-white" });
                 } else {
                     toast({ title: "Puan Kaydedildi", description: "Ancak görev tamamlanmadı.", className: "bg-yellow-600 text-white" });
                 }
             } else {
+                // --- NORMAL MOD KAYDI ---
                 const result = await submitIlimHazinesiScoreAction(user.uid, score, gameContext);
                 if (result.success) {
                     toast({ title: "Başarılı!", description: "Puanın kaydedildi." });
@@ -313,14 +328,14 @@ function GameComponent() {
 
                             <div className="space-y-3">
                                 {/* Puan varsa ve kaydedilmemişse Kaydet Butonu */}
-                                {!isScoreSaved && (
+                                {!isScoreSaved && score > 0 && (
                                     <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
                                         {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
                                     </Button>
                                 )}
                                 
                                 {/* Kaydedildiyse Görevlere Dön */}
-                                {isScoreSaved && (
+                                {isScoreSaved && isSuccess && (
                                     <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
                                         <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
                                     </Button>
@@ -346,14 +361,10 @@ function GameComponent() {
         return (
             <GameEndScreen 
                 score={score}
-                // Kullanıcı yoksa onSave undefined gider, böylece buton gizlenir (GameEndScreen mantığına göre)
-                // Eğer GameEndScreen buna rağmen gösteriyorsa, bileşenin içinde `if (!onSave) return null` gibi bir kontrol olmalı.
-                // Biz burada en güvenli yolu seçerek, kullanıcı yoksa undefined gönderiyoruz.
                 onSave={user ? handleSaveAndExit : undefined}
                 isSaving={isSaving}
                 scoreSaved={isScoreSaved}
                 onRestart={handleRestart}
-                // Kullanıcı yoksa '/' ana sayfaya, varsa oyun menüsüne
                 backUrl={user ? backUrl : '/'}
             />
         )
@@ -419,7 +430,6 @@ function GameComponent() {
             
             {/* --- OYUN ALANI --- */}
             <div className="flex-1 w-full max-w-4xl z-10 flex flex-col justify-between items-center pb-8 pt-4 px-2">
-                {/* ... Oyunun görsel kısmı aynı kalıyor ... */}
                 <div className="flex-1 flex flex-col items-center justify-center w-full min-h-0 overflow-y-auto">
                     <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-3 px-1 w-full">
                         {targetWords.map((word, wordIndex) => (
