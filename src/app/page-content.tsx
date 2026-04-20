@@ -12,6 +12,7 @@ import {
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // --- UTILS ---
 import { cn } from '@/lib/utils';
@@ -73,7 +74,7 @@ const getUnitTheme = (index: number) => {
 const MagnificentLightBackground = () => (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#f8fafc]">
         <div className="absolute top-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-100/50 rounded-full blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-sky-100/50 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-sky-100/50 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
     </div>
 );
 
@@ -215,7 +216,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     <div className="flex flex-col min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-indigo-100 relative">
       <MagnificentLightBackground />
       <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10">
-         <div className="bg-white/70 backdrop-blur-xl rounded-[2rem] p-8 border border-white/50 shadow-xl relative overflow-hidden group">
+         <div className="bg-white/70 backdrop-blur-xl rounded-[2rem] p-8 border border-white/5 shadow-xl relative overflow-hidden group">
              <div className="flex items-center gap-4 mb-6 relative z-10">
                  <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg shadow-indigo-200">
                     <MonitorPlay className="h-6 w-6 text-white"/>
@@ -349,9 +350,13 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 {/* Header Kısmı */}
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200/60 animate-in fade-in slide-in-from-top-4 duration-1000">
                     <div className="flex items-center gap-4">
-                         <div className="relative p-3 bg-white rounded-2xl shadow-xl shadow-indigo-100 border border-indigo-50">
-                             <Feather className="h-7 w-7 text-indigo-600" />
-                             <div className="absolute -top-1 -right-1 w-3 h-3 bg-amber-400 rounded-full border-2 border-white animate-pulse" />
+                         <div className="relative h-16 w-16 overflow-hidden rounded-2xl shadow-xl border border-indigo-50 bg-white">
+                             <Image 
+                                src="https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202026-04-06%20191410%20(2).png?alt=media&token=af8346d3-7274-4c37-8199-bbdc9bc85b1a" 
+                                alt="Logo" 
+                                fill
+                                className="object-cover"
+                             />
                          </div>
                          <div>
                              <h1 className="text-3xl font-black tracking-tight text-slate-900 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">Din Dersi Atölyesi</h1>
