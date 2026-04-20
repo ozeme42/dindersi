@@ -2,461 +2,941 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Allah'ın Elçileri: Peygamberler</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap');
+
+        html { font-size: 100%; transition: font-size 0.3s ease; }
+        
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #f0fdf4; /* Green-50 */
-            color: #14532d; /* Green-900 */
+            background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+            overflow: hidden; margin: 0; padding: 0; 
+            height: 100vh; height: 100dvh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
-        .title-font {
-            font-family: 'Fredoka', sans-serif;
+
+        h1, h2, h3, .title-font { font-family: 'Quicksand', sans-serif; }
+
+        /* DİNAMİK TİPOGRAFİ (Mobil ve Tahta İçin Optimize Edildi) */
+        .text-huge { font-size: clamp(1.8rem, 6vw, 4.5rem); line-height: 1.1; }
+        .text-x-large { font-size: clamp(1.2rem, 3.5vw, 2.5rem); line-height: 1.2; }
+        .text-large { font-size: clamp(1rem, 2.8vw, 2rem); line-height: 1.3; }
+        .text-medium { font-size: clamp(0.85rem, 2.2vw, 1.5rem); line-height: 1.3; }
+        
+        .slide {
+            display: none; opacity: 0; height: 100%; width: 100%; 
+            padding: 0.5rem; box-sizing: border-box; flex-direction: column; 
+            justify-content: center; align-items: center; 
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            position: absolute; top: 0; left: 0;
         }
-        .flow-line {
-            position: relative;
+        .slide.active { display: flex; opacity: 1; z-index: 10; }
+        .slide.slide-in-right { animation: slideInRight 0.4s forwards; }
+        .slide.slide-in-left { animation: slideInLeft 0.4s forwards; }
+        .slide.slide-out-left { animation: slideOutLeft 0.4s forwards; }
+        .slide.slide-out-right { animation: slideOutRight 0.4s forwards; }
+
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutLeft { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-100%); opacity: 0; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+        /* Sunum Kartı */
+        .presentation-card {
+            background: white; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 98vw; max-width: 1600px; height: 98vh; display: flex; flex-direction: column;
+            overflow: hidden; position: relative; margin: auto;
         }
-        .flow-line::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 100%;
-            width: 50px;
-            height: 4px;
-            background: #cbd5e1;
-            transform: translateY(-50%);
-            z-index: 0;
+        @media (min-width: 768px) { .presentation-card { height: 94vh; border-radius: 1.5rem; } }
+
+        .card-header {
+            background: #0284c7; color: white; padding: 0.5rem 1rem;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap;
         }
-        @media (max-width: 768px) {
-            .flow-line::after {
-                width: 4px;
-                height: 30px;
-                top: 100%;
-                left: 50%;
-                transform: translateX(-50%);
-            }
+        @media (min-width: 768px) { .card-header { padding: 0.8rem 2rem; } }
+
+        .card-body {
+            flex-grow: 1; padding: 0.5rem; overflow-y: auto; overflow-x: hidden;
+            display: flex; flex-direction: column; justify-content: center;
         }
-        .game-input {
-            text-transform: uppercase;
-            text-align: center;
-            font-weight: bold;
-            transition: all 0.3s;
+        @media (min-width: 768px) { .card-body { padding: 1rem 2rem; } }
+        .card-body::-webkit-scrollbar { width: 6px; }
+        .card-body::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .card-body::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+
+        /* Yüzen Araç Çubuğu */
+        .toolbar-widget {
+            position: fixed; bottom: 0.2rem; left: 50%; transform: translateX(-50%);
+            z-index: 9999; background: rgba(255, 255, 255, 0.85);
+            border-radius: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            backdrop-filter: blur(12px); border: 2px solid rgba(226, 232, 240, 0.8);
+            display: flex; flex-direction: column; width: auto; min-width: 250px;
         }
-        .game-input:focus {
-            outline: none;
-            border-color: #16a34a;
-            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.3);
+        @media (min-width: 768px) { .toolbar-widget { bottom: 0.5rem; border-radius: 1.5rem; min-width: 320px; } }
+        .toolbar-widget.is-dragged { transform: none !important; }
+        
+        #toolbar-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.2rem 0.8rem; background: rgba(248, 250, 252, 0.8); border-radius: 1rem 1rem 0 0;
+            cursor: grab; border-bottom: 1px solid rgba(226, 232, 240, 0.5); user-select: none;
         }
-        .fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
+        @media (min-width: 768px) { #toolbar-header { padding: 0.4rem 1rem; border-radius: 1.5rem 1.5rem 0 0; } }
+        #toolbar-header:active { cursor: grabbing; }
+        
+        .minimize-btn {
+            background: none; border: none; color: #64748b; cursor: pointer; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; transition: all 0.2s;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @media (min-width: 768px) { .minimize-btn { font-size: 1.2rem; width: 2rem; height: 2rem; } }
+        .minimize-btn:hover { background: rgba(226, 232, 240, 0.8); color: #0ea5e9; }
+        
+        #toolbar-body {
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+            padding: 0.4rem 0.6rem; transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+            max-height: 150px; opacity: 1; overflow: hidden; flex-wrap: nowrap;
         }
+        @media (min-width: 768px) { #toolbar-body { gap: 0.8rem; padding: 0.6rem 1rem; max-height: 200px; } }
+        #toolbar-body.collapsed { max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0; border: none; }
+
+        .nav-btn {
+            background: rgba(14, 165, 233, 0.9); color: white; border: none; width: 2.2rem; height: 2.2rem;
+            border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; transition: all 0.2s; backdrop-filter: blur(4px);
+        }
+        @media (min-width: 768px) { .nav-btn { width: 3rem; height: 3rem; font-size: 1.4rem; } }
+        .nav-btn:hover { transform: scale(1.1); background: rgba(14, 165, 233, 1); }
+        .nav-btn:disabled { background: rgba(203, 213, 225, 0.8); cursor: not-allowed; transform: none; color: #475569; }
+        
+        .zoom-btn { background: rgba(241, 245, 249, 0.9); color: #334155; width: 1.8rem; height: 1.8rem; font-size: 0.8rem; border-radius: 0.5rem; border: 1px solid rgba(226, 232, 240, 0.8);}
+        @media (min-width: 768px) { .zoom-btn { width: 2.5rem; height: 2.5rem; font-size: 1.1rem; border-radius: 0.8rem; } }
+        .zoom-btn:hover { background: rgba(226, 232, 240, 1); }
+
+        .progress-dots { display: flex; align-items: center; gap: 0.2rem; justify-content: center;}
+        @media (min-width: 768px) { .progress-dots { gap: 0.4rem; } }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(156, 163, 175, 0.8); transition: all 0.3s; cursor: pointer; }
+        @media (min-width: 768px) { .dot { width: 10px; height: 10px; } }
+        .dot.active { background: #0284c7; transform: scale(1.5); }
+
+        .highlight { background: linear-gradient(120deg, #bae6fd 0%, #bae6fd 100%); background-repeat: no-repeat; background-size: 100% 40%; background-position: 0 88%; font-weight: bold; padding: 0 0.2em; }
+
+        /* Etkinlik 1: Şema */
+        .mind-map-center {
+            width: 100px; height: 100px; background: #0ea5e9; color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            font-weight: bold; font-size: 0.85rem; box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+            z-index: 2; position: relative; border: 3px solid white; line-height: 1.1; margin: 1rem auto;
+        }
+        @media (min-width: 768px) { .mind-map-center { width: 220px; height: 220px; font-size: 2rem; margin: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-width: 6px;} }
+        
+        .mind-map-node {
+            background: white; border: 2px dashed #bae6fd; border-radius: 0.8rem; padding: 0.8rem;
+            text-align: center; font-weight: bold; color: #0284c7; cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); width: 100%; font-size: 0.9rem; line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        @media (min-width: 768px) { 
+            .mind-map-node { position: absolute; width: auto; min-width: 250px; font-size: 1.5rem; padding: 1.5rem; border-width: 4px; border-radius: 1.5rem; margin-bottom: 0; } 
+            .node-pos-1 { transform: translate(-120%, -80%); }
+            .node-pos-2 { transform: translate(120%, -80%); }
+            .node-pos-3 { transform: translate(-120%, 80%); }
+            .node-pos-4 { transform: translate(120%, 80%); }
+        }
+        .mind-map-node.revealed { border-style: solid; border-color: #0ea5e9; background: #f0f9ff; animation: popIn 0.3s ease; }
+        .node-hidden-text { display: none; }
+        .mind-map-node.revealed .node-hidden-text { display: block; }
+        .mind-map-node.revealed .node-icon { display: none; }
+
+        /* Etkinlik 2: Kelime */
+        .letter-box {
+            width: 35px; height: 45px; border: 2px solid #cbd5e1; border-radius: 0.5rem;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold;
+            color: #0f172a; background: #f8fafc; text-transform: uppercase; margin: 2px;
+        }
+        @media (min-width: 768px) { .letter-box { width: 70px; height: 85px; font-size: 3.5rem; border-width: 4px; border-radius: 1rem; } }
+        .letter-box.missing { border-style: dashed; border-color: #38bdf8; background: #e0f2fe; color: transparent; cursor: pointer; transition: all 0.3s; }
+        .letter-box.missing:hover { background: #bae6fd; transform: scale(1.05); }
+        .letter-box.missing.revealed { border-style: solid; border-color: #10b981; background: #ecfdf5; color: #047857; animation: popIn 0.3s; cursor: default; }
+
+        /* Etkinlik 3: Dallanmış Ağaç */
+        .tree-node-card { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-top: 6px solid #0ea5e9; text-align: center; width: 100%; max-width: 1000px; margin: 0 auto;}
+        @media (min-width: 768px) { .tree-node-card { border-radius: 1.5rem; padding: 3rem; border-top-width: 10px; } }
+        
+        .tree-btn { padding: 0.8rem 1rem; font-size: 1.2rem; font-weight: bold; border-radius: 0.8rem; border: none; cursor: pointer; color: white; width: 100%; max-width: 200px; }
+        @media (min-width: 768px) { .tree-btn { font-size: 2rem; padding: 1.5rem 3rem; border-radius: 1.5rem; max-width: 300px; } }
+        .tree-btn.btn-true { background: #10b981; box-shadow: 0 4px 0 #059669; }
+        .tree-btn.btn-false { background: #ef4444; box-shadow: 0 4px 0 #b91c1c; }
+
+        /* Defter Notları */
+        .notebook-paper { background-color: #fefce8; border-left: 4px double #ef4444; padding: 0.8rem; border-radius: 0.8rem; font-family: 'Quicksand', sans-serif; display: block; overflow-y: auto; height: 100%;}
+        @media (min-width: 768px) { .notebook-paper { border-left: 8px double #ef4444; padding: 1.5rem 2rem; border-radius: 1.5rem; } }
+        .notebook-paper::-webkit-scrollbar { width: 6px; }
+        .notebook-paper::-webkit-scrollbar-track { background: transparent; }
+        .notebook-paper::-webkit-scrollbar-thumb { background: #fca5a5; border-radius: 10px; }
+        .note-item { background: white; padding: 0.6rem; border-radius: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #fef08a; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);}
+        @media (min-width: 768px) { .note-item { padding: 1rem 1.5rem; border-radius: 1rem; border-width: 2px; margin-bottom: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); } }
+
+        /* Eşleştirme */
+        .match-btn { background: white; border: 2px solid #e2e8f0; border-radius: 0.8rem; padding: 0.6rem; font-size: 0.85rem; font-weight: bold; color: #475569; cursor: pointer; transition: all 0.3s; text-align: left; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        @media (min-width: 768px) { .match-btn { padding: 1.2rem 1.5rem; font-size: 1.6rem; border-width: 4px; border-radius: 1.5rem;} }
+        .match-btn.selected { border-color: #0ea5e9; background: #f0f9ff; color: #0284c7; transform: scale(1.02); }
+        .match-btn.correct { border-color: #10b981; background: #ecfdf5; color: #047857; cursor: default; transform: none; }
+        .match-btn.wrong { animation: shake 0.5s; border-color: #ef4444; background: #fef2f2; color: #b91c1c; }
+        
+        /* Anagram */
+        .ana-slot { width: 35px; height: 45px; border: 2px dashed #cbd5e1; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: #1e293b; background: white; }
+        @media (min-width: 768px) { .ana-slot { width: 70px; height: 85px; border-width: 4px; border-radius: 1rem; font-size: 3.5rem; } }
+        .ana-slot.filled { border-style: solid; border-color: #0ea5e9; background: #f0f9ff; color: #0284c7;}
+        .ana-slot.correct { border-color: #10b981; background: #ecfdf5; color: #047857; animation: popIn 0.3s; }
+        .ana-slot.wrong { border-color: #ef4444; background: #fef2f2; color: #b91c1c; animation: shake 0.4s; }
+        
+        .ana-letter { width: 35px; height: 45px; border-radius: 0.5rem; background: #f59e0b; color: white; border: none; font-size: 1.5rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 #d97706; transition: all 0.1s; }
+        @media (min-width: 768px) { .ana-letter { width: 70px; height: 85px; border-radius: 1rem; font-size: 3.5rem; box-shadow: 0 8px 0 #d97706; } }
+        .ana-letter:active { transform: translateY(4px); box-shadow: 0 0 0 #d97706; }
+        .ana-letter.used { opacity: 0; pointer-events: none; transform: scale(0); }
+
+        /* Cümle Kurmaca */
+        .sent-word { padding: 0.5rem 0.8rem; border-radius: 0.5rem; background: #0ea5e9; color: white; border: none; font-size: 0.9rem; font-weight: bold; cursor: pointer; box-shadow: 0 3px 0 #0284c7; transition: all 0.1s; }
+        @media (min-width: 768px) { .sent-word { padding: 1rem 2rem; border-radius: 1rem; font-size: 2rem; box-shadow: 0 6px 0 #0284c7; } }
+        .sent-word:active { transform: translateY(3px); box-shadow: 0 0 0 #0284c7; }
+        .sent-word.used { opacity: 0.5; pointer-events: none; background: #94a3b8; box-shadow: 0 3px 0 #64748b; }
+        
+        .sent-slot-word { padding: 0.5rem 0.8rem; border-radius: 0.5rem; background: #10b981; color: white; font-size: 0.9rem; font-weight: bold; animation: popIn 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        @media (min-width: 768px) { .sent-slot-word { padding: 1rem 2rem; border-radius: 1rem; font-size: 2rem; box-shadow: 0 4px 8px rgba(0,0,0,0.15); } }
+
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .confetti { position: absolute; width: 8px; height: 8px; background-color: #f00; opacity: 0; z-index: 100; }
+        @media (min-width: 768px) { .confetti { width: 12px; height: 12px; } }
     </style>
 </head>
 <body>
 
-    <!-- Hero Section -->
-    <header class="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-10 px-4 text-center rounded-b-[40px] shadow-lg mb-12">
-        <div class="max-w-4xl mx-auto">
-            <span class="bg-white/20 border border-white/30 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">4. Ünite</span>
-            <h1 class="text-4xl md:text-6xl title-font mb-4">ALLAH'IN ELÇİLERİ</h1>
-            <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">
-                "Bizim için seçilmiş en güzel öğretmenler: Peygamberler"
-            </p>
+    <div id="slides-container" class="relative w-full h-full">
+        
+        <!-- Slayt 1: Kapak -->
+        <div class="slide active" id="slide-0">
+            <div class="presentation-card bg-sky-800 text-white justify-center items-center text-center p-4 md:p-8 border-4 md:border-8 border-sky-600">
+                <i class="fas fa-mosque text-6xl md:text-9xl text-sky-300 mb-2 md:mb-6 opacity-80"></i>
+                <h2 class="text-lg md:text-4xl tracking-widest text-sky-200 mb-1 md:mb-3 uppercase font-bold">4. Ünite: Allah'ın Elçileri</h2>
+                <h1 class="text-huge font-bold mb-3 md:mb-6 leading-tight text-yellow-300">Peygamberler</h1>
+                <div class="bg-sky-900/50 p-3 md:p-6 rounded-xl md:rounded-2xl w-full max-w-5xl border border-sky-700/50">
+                    <p class="text-medium md:text-x-large italic font-serif opacity-90">"Sizin bilmediğiniz şeyleri de Allah tarafından gelen vahiy ile biliyorum."</p>
+                    <p class="text-sm md:text-2xl mt-1 md:mt-3 text-sky-300 font-bold">(A'râf suresi, 62. ayet)</p>
+                </div>
+            </div>
         </div>
-    </header>
 
-    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
-
-        <!-- BÖLÜM 1: İLETİŞİM ZİNCİRİ (Görsel Anlatım) -->
-        <section class="text-center">
-            <h2 class="text-3xl font-bold text-green-800 mb-8 title-font">Vahyin Yolculuğu</h2>
-            
-            <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-0">
-                
-                <!-- Allah -->
-                <div class="flow-line relative z-10">
-                    <div class="w-32 h-32 bg-white rounded-full flex flex-col items-center justify-center shadow-xl border-4 border-amber-400">
-                        <span class="arabic text-3xl font-bold text-amber-500 mb-1">الله</span>
-                        <span class="font-bold text-gray-700">ALLAH (c.c)</span>
+        <!-- Slayt 2: Giriş -->
+        <div class="slide" id="slide-1">
+            <div class="presentation-card">
+                <div class="card-header bg-sky-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-chalkboard-teacher text-sky-200 mr-2 md:mr-3"></i>1. Konuya Başlarken</h2>
+                    <span class="text-sky-200 font-bold text-sm md:text-xl">2 / 10</span>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row items-stretch gap-2 md:gap-6 h-full">
+                        <div class="flex-1 bg-blue-50 p-4 md:p-10 rounded-2xl md:rounded-3xl border-2 md:border-4 border-blue-200 shadow-sm md:shadow-md text-center flex flex-col justify-center items-center">
+                            <i class="fas fa-school text-5xl md:text-8xl text-blue-500 mb-2 md:mb-4"></i>
+                            <h3 class="text-2xl md:text-5xl font-bold text-blue-900 mb-2 md:mb-4">İlk Öğretmenlerimiz</h3>
+                            <p class="text-medium md:text-x-large text-gray-700">Biz konuşmayı, yürümeyi <span class="font-bold text-blue-700">ailemizden</span>; okuma yazmayı <span class="font-bold text-blue-700">okulda öğretmenlerimizden</span> öğreniriz.</p>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center gap-2 md:gap-6">
+                            <div class="bg-white p-4 md:p-8 rounded-xl md:rounded-3xl border-l-4 md:border-l-8 border-sky-500 shadow-sm md:shadow-md">
+                                <h4 class="text-xl md:text-4xl font-bold text-gray-800 mb-1 md:mb-2">Allah'ın Öğretmenleri</h4>
+                                <p class="text-medium md:text-x-large text-gray-600"><span class="highlight">Peygamberler de Allah'ın (cc) bizler için seçtiği öğretmenlerdir.</span></p>
+                            </div>
+                            <div class="bg-amber-50 p-4 md:p-8 rounded-xl md:rounded-3xl border-2 md:border-4 border-amber-200 text-center shadow-inner">
+                                <p class="text-lg md:text-4xl font-bold text-amber-800 mb-1 md:mb-2"><i class="fas fa-question-circle mr-1 md:mr-2"></i> Düşünelim:</p>
+                                <p class="text-medium md:text-x-large text-gray-700">Allah (cc) bizim için bu öğretmenleri göndermeseydi ne olurdu?</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Ok (Mobil için dikey, masaüstü için yatay boşluk) -->
-                <div class="w-12 h-12 flex items-center justify-center text-gray-400 md:mx-4">
-                    <i class="fas fa-chevron-right hidden md:block text-2xl"></i>
-                    <i class="fas fa-chevron-down md:hidden text-2xl"></i>
-                </div>
-
-                <!-- Mesaj (Vahiy) -->
-                <div class="flow-line relative z-10">
-                    <div class="w-32 h-32 bg-white rounded-full flex flex-col items-center justify-center shadow-xl border-4 border-blue-400">
-                        <i class="fas fa-envelope-open-text text-3xl text-blue-500 mb-2"></i>
-                        <span class="font-bold text-gray-700">VAHİY</span>
-                        <span class="text-xs text-gray-500">(Mesaj)</span>
-                    </div>
-                </div>
-
-                <!-- Ok -->
-                <div class="w-12 h-12 flex items-center justify-center text-gray-400 md:mx-4">
-                    <i class="fas fa-chevron-right hidden md:block text-2xl"></i>
-                    <i class="fas fa-chevron-down md:hidden text-2xl"></i>
-                </div>
-
-                <!-- Peygamber -->
-                <div class="flow-line relative z-10">
-                    <div class="w-32 h-32 bg-white rounded-full flex flex-col items-center justify-center shadow-xl border-4 border-green-500">
-                        <i class="fas fa-user-tie text-3xl text-green-600 mb-2"></i>
-                        <span class="font-bold text-gray-700">PEYGAMBER</span>
-                        <span class="text-xs text-gray-500">(Elçi / Öğretmen)</span>
-                    </div>
-                </div>
-
-                <!-- Ok -->
-                <div class="w-12 h-12 flex items-center justify-center text-gray-400 md:mx-4">
-                    <i class="fas fa-chevron-right hidden md:block text-2xl"></i>
-                    <i class="fas fa-chevron-down md:hidden text-2xl"></i>
-                </div>
-
-                <!-- İnsanlar -->
-                <div class="relative z-10">
-                    <div class="w-32 h-32 bg-white rounded-full flex flex-col items-center justify-center shadow-xl border-4 border-purple-400">
-                        <i class="fas fa-users text-3xl text-purple-500 mb-2"></i>
-                        <span class="font-bold text-gray-700">İNSANLAR</span>
-                    </div>
-                </div>
-
-            </div>
-            
-            <div class="mt-8 bg-green-50 border border-green-200 p-4 rounded-xl max-w-2xl mx-auto text-green-800">
-                <p><strong>Biliyor musun?</strong> Peygamberlik, çalışarak kazanılan bir makam değildir. Allah (c.c) dilediği kulunu peygamber olarak seçer.</p>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 2: GÖREVLER VE ÖZELLİKLER -->
-        <section>
-            <div class="flex items-center gap-4 mb-8">
-                <div class="h-px bg-green-200 flex-1"></div>
-                <h2 class="text-3xl font-bold text-green-800 title-font">Peygamberlerin Görevleri</h2>
-                <div class="h-px bg-green-200 flex-1"></div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Kart 1 -->
-                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-blue-500 hover:-translate-y-2 transition duration-300">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl mb-4">
-                        <i class="fas fa-bullhorn"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Bildirmek (Tebliğ)</h3>
-                    <p class="text-sm text-gray-600">Allah'tan aldıkları emir ve yasakları hiçbir şeyi değiştirmeden insanlara ulaştırırlar.</p>
-                </div>
-
-                <!-- Kart 2 -->
-                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-amber-500 hover:-translate-y-2 transition duration-300">
-                    <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 text-xl mb-4">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Açıklamak</h3>
-                    <p class="text-sm text-gray-600">Anlaşılması zor olan konuları açıklar, ibadetlerin nasıl yapılacağını öğretirler.</p>
-                </div>
-
-                <!-- Kart 3 -->
-                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-emerald-500 hover:-translate-y-2 transition duration-300">
-                    <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-xl mb-4">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">Örnek Olmak</h3>
-                    <p class="text-sm text-gray-600">Sözleriyle değil, davranışlarıyla da en güzel örnektirler. Dürüst, güvenilir ve merhametlidirler.</p>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- BÖLÜM 3: KELİME AVI OYUNU -->
-        <section class="max-w-3xl mx-auto bg-white p-8 rounded-3xl shadow-xl border border-green-100">
-            <div class="text-center mb-6">
-                <span class="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Etkinlik</span>
-                <h2 class="text-2xl font-bold text-gray-800 mt-2">Şifreli Kelimeleri Bul</h2>
-                <p class="text-gray-500">Boşlukları doldurarak anahtar kelimeleri tamamla.</p>
+        <!-- Slayt 3: Neden İhtiyaç Var -->
+        <div class="slide" id="slide-2">
+            <div class="presentation-card">
+                <div class="card-header bg-sky-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-brain text-sky-200 mr-2 md:mr-3"></i>2. Neden İhtiyacımız Var?</h2>
+                    <span class="text-sky-200 font-bold text-sm md:text-xl">3 / 10</span>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row items-stretch gap-2 md:gap-6 h-full">
+                        <div class="flex-1 bg-white rounded-2xl md:rounded-3xl p-4 md:p-10 border-2 md:border-4 border-gray-200 flex flex-col justify-center shadow-sm md:shadow-md relative">
+                            <div class="absolute top-2 right-2 md:top-4 md:right-4 text-4xl md:text-7xl text-gray-200"><i class="fas fa-search"></i></div>
+                            <h3 class="text-xl md:text-5xl font-bold text-gray-800 mb-2 md:mb-4">Aklımız Neleri Bulabilir?</h3>
+                            <p class="text-medium md:text-x-large text-gray-700">İnsan, çevresini gözlemleyip evrendeki düzene bakarak <span class="font-bold text-sky-600">evrenin bir yaratıcısı olduğunu</span> kendi aklıyla anlayabilir.</p>
+                        </div>
+                        <div class="flex-1 bg-sky-50 rounded-2xl md:rounded-3xl p-4 md:p-10 border-2 md:border-4 border-sky-200 flex flex-col justify-center shadow-sm md:shadow-md relative">
+                            <div class="absolute top-2 right-2 md:top-4 md:right-4 text-4xl md:text-7xl text-sky-200"><i class="fas fa-map-signs"></i></div>
+                            <h3 class="text-xl md:text-5xl font-bold text-sky-900 mb-2 md:mb-4">Aklımız Neleri Bulamaz?</h3>
+                            <p class="text-medium md:text-x-large text-gray-700 mb-3 md:mb-6">Ancak niçin yaratıldığını, nasıl ibadet edeceğini ve <span class="font-bold text-red-500">ahiret hayatını</span> aklıyla kavrayamaz.</p>
+                            <div class="bg-white p-2 md:p-6 rounded-lg md:rounded-2xl text-sm md:text-3xl font-bold text-sky-800 border-2 md:border-4 border-sky-300 mt-auto shadow-inner text-center">
+                                <i class="fas fa-arrow-right text-sky-500 mr-1 md:mr-2"></i> Bunun için <span class="highlight">peygamberlere</span> muhtacız.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="space-y-4">
-                
-                <!-- Soru 1 -->
-                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                    <span class="text-sm font-bold text-gray-500 w-8">1.</span>
-                    <div class="flex gap-2">
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">M</div>
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">E</div>
-                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="S">
-                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="A">
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">J</div>
-                    </div>
-                    <button onclick="checkWord(this)" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Kontrol</button>
+        <!-- Slayt 4: Etkinlik 1 (Şema) -->
+        <div class="slide" id="slide-3">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-500">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-project-diagram text-orange-200 mr-2 md:mr-3"></i>Etkinlik 1: Fikrini Söyle</h2>
+                    <span class="text-orange-200 font-bold text-sm md:text-xl">4 / 10</span>
                 </div>
-
-                <!-- Soru 2 -->
-                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                    <span class="text-sm font-bold text-gray-500 w-8">2.</span>
-                    <div class="flex gap-2">
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">Ö</div>
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">Ğ</div>
-                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="Ü">
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">T</div>
+                <div class="card-body bg-orange-50 flex flex-col justify-center">
+                    <p class="text-center text-sm md:text-3xl text-orange-800 mb-2 md:mb-8 font-bold bg-orange-100 p-2 md:p-4 rounded-xl md:rounded-2xl border-2 md:border-4 border-orange-200 shadow-sm">
+                        Boş bırakılan yerlere dokunarak görevleri öğrenin!
+                    </p>
+                    <div class="relative flex-grow flex items-center justify-center min-h-[250px] md:min-h-[300px]">
+                        <div class="mind-map-center shadow-xl">PEYGAMBERLERİN<br>GÖREVLERİ</div>
+                        <div class="absolute inset-0 flex flex-col md:flex-row flex-wrap items-center justify-center gap-2 md:gap-8 p-2 md:p-4 z-1 w-full h-full">
+                            <div class="mind-map-node revealed node-pos-1">
+                                <span class="node-hidden-text">Mesajları bildirmek</span>
+                            </div>
+                            <div class="mind-map-node node-pos-2" onclick="this.classList.add('revealed')">
+                                <i class="fas fa-question-circle text-3xl md:text-5xl node-icon text-orange-300"></i>
+                                <span class="node-hidden-text text-green-700">Yaşayarak örnek olmak</span>
+                            </div>
+                            <div class="mind-map-node node-pos-3" onclick="this.classList.add('revealed')">
+                                <i class="fas fa-question-circle text-3xl md:text-5xl node-icon text-orange-300"></i>
+                                <span class="node-hidden-text text-purple-700">İyiyi anlatıp, kötülükten sakındırmak</span>
+                            </div>
+                            <div class="mind-map-node node-pos-4" onclick="this.classList.add('revealed')">
+                                <i class="fas fa-question-circle text-3xl md:text-5xl node-icon text-orange-300"></i>
+                                <span class="node-hidden-text text-rose-700">Ahiret ve dünya yollarını göstermek</span>
+                            </div>
+                        </div>
                     </div>
-                    <button onclick="checkWord(this)" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Kontrol</button>
                 </div>
-
-                <!-- Soru 3 -->
-                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                    <span class="text-sm font-bold text-gray-500 w-8">3.</span>
-                    <div class="flex gap-2">
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">İ</div>
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">Y</div>
-                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="İ">
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">L</div>
-                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="İ">
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">K</div>
-                    </div>
-                    <button onclick="checkWord(this)" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Kontrol</button>
-                </div>
-
-                <!-- Soru 4 -->
-                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                    <span class="text-sm font-bold text-gray-500 w-8">4.</span>
-                    <div class="flex gap-2">
-                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="Ö">
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">R</div>
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">N</div>
-                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="E">
-                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">K</div>
-                    </div>
-                    <button onclick="checkWord(this)" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Kontrol</button>
-                </div>
-
             </div>
-        </section>
+        </div>
 
-        <!-- BÖLÜM 4: DOĞRU ÇIKIŞI BUL (Tanılayıcı Ağaç Oyunu) -->
-        <section class="text-center">
-            <h2 class="text-3xl font-bold text-green-800 mb-8 title-font">Doğru Çıkışı Bul</h2>
-            
-            <div class="bg-indigo-900 rounded-3xl p-8 max-w-3xl mx-auto shadow-2xl relative overflow-hidden text-white">
-                <div class="absolute top-0 right-0 p-10 opacity-10">
-                    <i class="fas fa-project-diagram text-9xl"></i>
+        <!-- Slayt 5: Etkinlik 2 (Kelime Bulmaca) -->
+        <div class="slide" id="slide-4">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-font text-teal-200 mr-2 md:mr-3"></i>Etkinlik 2: Eksik Harfler</h2>
+                    <span class="text-teal-200 font-bold text-sm md:text-xl">5 / 10</span>
                 </div>
+                <div class="card-body bg-teal-50 flex flex-col justify-center items-center">
+                    <div id="word-puzzle-container" class="flex flex-col gap-2 md:gap-5 items-center w-full max-w-6xl">
+                        <!-- JS ile doldurulacak -->
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                <div id="tree-game-container" class="relative z-10 min-h-[250px] flex flex-col justify-center items-center">
-                    
-                    <!-- Soru Alanı -->
-                    <div id="tree-question" class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 mb-8 w-full">
-                        <h3 class="text-xl md:text-2xl font-bold mb-4" id="q-text">Yükleniyor...</h3>
-                        
-                        <div class="flex justify-center gap-6">
-                            <button onclick="nextStep('D')" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-bold transition transform hover:scale-105 shadow-lg border-b-4 border-green-700 active:border-b-0 active:translate-y-1">
-                                <i class="fas fa-check mr-2"></i> DOĞRU
-                            </button>
-                            <button onclick="nextStep('Y')" class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-bold transition transform hover:scale-105 shadow-lg border-b-4 border-red-700 active:border-b-0 active:translate-y-1">
-                                <i class="fas fa-times mr-2"></i> YANLIŞ
-                            </button>
+        <!-- Slayt 6: Etkinlik 3 (Dallanmış Ağaç) -->
+        <div class="slide" id="slide-5">
+            <div class="presentation-card">
+                <div class="card-header bg-rose-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-code-branch text-rose-200 mr-2 md:mr-3"></i>Etkinlik 3: Kontrol Noktası</h2>
+                    <span class="text-rose-200 font-bold text-sm md:text-xl">6 / 10</span>
+                </div>
+                <div class="card-body bg-slate-100 flex flex-col justify-center items-center text-center" id="tree-game-area">
+                    <div id="tree-intro" class="flex flex-col items-center">
+                        <i class="fas fa-network-wired text-6xl md:text-9xl text-rose-300 mb-2 md:mb-4"></i>
+                        <h3 class="text-2xl md:text-6xl font-bold text-rose-900 mb-2 md:mb-4">Tanılayıcı Dallanmış Ağaç</h3>
+                        <p class="text-medium md:text-x-large text-gray-700 mb-4 md:mb-8 max-w-4xl">İfadelere <strong>Doğru (D)</strong> veya <strong>Yanlış (Y)</strong> diyerek ilerleyin.</p>
+                        <button onclick="startTreeGame()" class="bg-rose-600 text-white px-6 md:px-10 py-2 md:py-4 rounded-full text-lg md:text-4xl font-bold shadow-xl">Oyuna Başla</button>
+                    </div>
+
+                    <div id="tree-node-container" class="tree-node-card hidden">
+                        <span id="tree-node-id" class="inline-block bg-sky-200 text-sky-800 px-4 md:px-6 py-1 md:py-2 rounded-full font-bold mb-2 md:mb-4 text-xs md:text-2xl">İfade</span>
+                        <h3 id="tree-node-text" class="text-lg md:text-5xl font-bold text-gray-800 mb-4 md:mb-8 min-h-[80px] md:min-h-[150px] flex items-center justify-center">...</h3>
+                        <div class="flex gap-2 md:gap-8 justify-center w-full">
+                            <button onclick="makeTreeDecision('D')" class="tree-btn btn-true">DOĞRU</button>
+                            <button onclick="makeTreeDecision('Y')" class="tree-btn btn-false">YANLIŞ</button>
                         </div>
                     </div>
 
-                    <!-- Sonuç Alanı (Başlangıçta Gizli) -->
-                    <div id="tree-result" class="hidden text-center">
-                        <div class="text-6xl mb-4" id="result-icon"></div>
-                        <h3 class="text-3xl font-bold mb-2 text-yellow-300" id="result-title"></h3>
-                        <p class="text-indigo-200 mb-6" id="result-desc"></p>
-                        <button onclick="resetTree()" class="text-white underline hover:text-yellow-300">Başa Dön</button>
+                    <div id="tree-result-container" class="hidden flex-col items-center text-center">
+                        <div id="tree-result-icon" class="text-6xl md:text-9xl mb-2 md:mb-4"></div>
+                        <h2 id="tree-result-title" class="text-2xl md:text-6xl font-bold mb-2 md:mb-4"></h2>
+                        <p id="tree-result-text" class="text-sm md:text-x-large text-gray-700 mb-4 md:mb-8 max-w-3xl"></p>
+                        <button onclick="startTreeGame()" class="bg-slate-800 text-white px-6 md:px-8 py-2 md:py-4 rounded-full text-lg md:text-4xl font-bold shadow-xl">Yeniden Dene</button>
                     </div>
-
                 </div>
             </div>
-        </section>
+        </div>
 
-    </main>
+        <!-- Slayt 7: OYUN 4 - ANAGRAM -->
+        <div class="slide" id="slide-6">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-sort-alpha-down text-purple-200 mr-2 md:mr-3"></i>Oyun 4: Anagram (Kelime Avı)</h2>
+                    <span class="text-purple-200 font-bold text-sm md:text-xl">7 / 10</span>
+                </div>
+                <div class="card-body bg-purple-50 relative flex flex-col justify-center items-center" id="anagram-game-area">
+                    <p class="text-center text-sm md:text-2xl text-purple-800 mb-2 md:mb-6 font-bold bg-purple-100 p-2 md:p-4 rounded-xl border-2 border-purple-200 shadow-sm">
+                        İpucunu oku, karışık harflere sırayla dokun!
+                    </p>
+                    <div class="bg-white p-3 md:p-6 rounded-2xl shadow-sm border border-gray-200 w-full max-w-4xl text-center mb-4 md:mb-8">
+                        <h3 id="anagram-hint" class="text-lg md:text-3xl font-bold text-gray-800 leading-snug">...</h3>
+                    </div>
+                    
+                    <div id="anagram-slots" class="flex flex-wrap gap-1 md:gap-3 justify-center mb-4 md:mb-8 w-full max-w-4xl"></div>
+                    <div id="anagram-letters" class="flex flex-wrap gap-1 md:gap-3 justify-center mb-6 md:mb-10 w-full max-w-4xl"></div>
+                    
+                    <div class="flex gap-2 md:gap-6 mt-auto">
+                        <button onclick="clearAnagram()" class="bg-slate-300 text-slate-800 px-4 md:px-8 py-2 md:py-4 rounded-full text-sm md:text-2xl font-bold hover:bg-slate-400 shadow"><i class="fas fa-undo md:mr-2"></i> Geri Al</button>
+                        <button id="anagram-next-btn" onclick="nextAnagram()" class="hidden bg-purple-600 text-white px-4 md:px-8 py-2 md:py-4 rounded-full text-sm md:text-2xl font-bold hover:bg-purple-700 shadow-md">Sonraki <i class="fas fa-arrow-right md:ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <footer class="bg-green-900 text-green-300 py-8 text-center text-sm">
-        <p>2024 Din Kültürü ve Ahlak Bilgisi - Peygamberler Ünitesi</p>
-    </footer>
+        <!-- Slayt 8: OYUN 5 - CÜMLE KURMACA -->
+        <div class="slide" id="slide-7">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-align-left text-teal-200 mr-2 md:mr-3"></i>Oyun 5: Cümle Kurmaca</h2>
+                    <span class="text-teal-200 font-bold text-sm md:text-xl">8 / 10</span>
+                </div>
+                <div class="card-body bg-teal-50 relative flex flex-col justify-center items-center" id="sentence-game-area">
+                    <p class="text-center text-sm md:text-2xl text-teal-800 mb-2 md:mb-6 font-bold bg-teal-100 p-2 md:p-4 rounded-xl border-2 border-teal-200 shadow-sm">
+                        Kelimelere doğru sırayla dokun ve cümleyi oluştur!
+                    </p>
+                    
+                    <div id="sentence-slots" class="flex flex-wrap gap-1 md:gap-3 justify-center bg-white p-3 md:p-8 rounded-2xl border-2 md:border-4 border-dashed border-teal-300 shadow-inner w-full max-w-5xl min-h-[100px] md:min-h-[160px] items-center mb-4 md:mb-8">
+                    </div>
+                    
+                    <div id="sentence-words" class="flex flex-wrap gap-1 md:gap-3 justify-center w-full max-w-5xl mb-6 md:mb-10">
+                    </div>
+                    
+                    <div class="flex gap-2 md:gap-6 mt-auto">
+                        <button onclick="clearSentence()" class="bg-slate-300 text-slate-800 px-4 md:px-8 py-2 md:py-4 rounded-full text-sm md:text-2xl font-bold hover:bg-slate-400 shadow"><i class="fas fa-trash-alt md:mr-2"></i> Temizle</button>
+                        <button id="sentence-next-btn" onclick="nextSentence()" class="hidden bg-teal-600 text-white px-4 md:px-8 py-2 md:py-4 rounded-full text-sm md:text-2xl font-bold hover:bg-teal-700 shadow-md">Sonraki <i class="fas fa-arrow-right md:ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 9: OYUN 6 - EŞLEŞTİRME -->
+        <div class="slide" id="slide-8">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-puzzle-piece text-orange-200 mr-2 md:mr-3"></i>Oyun 6: Kavram Eşleştirme</h2>
+                    <span class="text-orange-200 font-bold text-sm md:text-xl">9 / 10</span>
+                </div>
+                <div class="card-body bg-orange-50 relative" id="match-game-area">
+                    <p class="text-center text-sm md:text-2xl text-orange-800 mb-2 md:mb-4 font-bold bg-orange-100 p-2 md:p-4 rounded-xl border-2 border-orange-200 shadow-sm">
+                        Sol taraftan kavramı seç, sağ taraftan doğru tanımı bul!
+                    </p>
+                    <div class="flex flex-row gap-2 md:gap-6 h-full">
+                        <div class="flex flex-col gap-1 md:gap-3 w-1/2" id="left-col">
+                            <button class="match-btn left-btn" data-id="1"><i class="fas fa-paper-plane md:mr-3 text-blue-500 hidden md:inline"></i>Elçi</button>
+                            <button class="match-btn left-btn" data-id="2"><i class="fas fa-map-signs md:mr-3 text-green-500 hidden md:inline"></i>Rehber</button>
+                            <button class="match-btn left-btn" data-id="3"><i class="fas fa-brain md:mr-3 text-purple-500 hidden md:inline"></i>Akıl</button>
+                            <button class="match-btn left-btn" data-id="4"><i class="fas fa-bullhorn md:mr-3 text-orange-500 hidden md:inline"></i>Tebliğ</button>
+                            <button class="match-btn left-btn" data-id="5"><i class="fas fa-heart md:mr-3 text-red-500 hidden md:inline"></i>Merhamet</button>
+                        </div>
+                        <div class="flex flex-col gap-1 md:gap-3 w-1/2" id="right-col">
+                            <button class="match-btn right-btn" data-match="3">Yaratıcıyı bulmamızı sağlayan ama ibadeti bulamayan yetimiz.</button>
+                            <button class="match-btn right-btn" data-match="5">Allah'ın peygamber göndererek insanlara gösterdiği sevgi ve şefkat.</button>
+                            <button class="match-btn right-btn" data-match="1">Allah'ın mesajlarını bildirmek üzere seçtiği kişi.</button>
+                            <button class="match-btn right-btn" data-match="4">Peygamberlerin Allah'tan aldıkları mesajları insanlara ulaştırması.</button>
+                            <button class="match-btn right-btn" data-match="2">Peygamberlerin yaşayarak insanlara yol göstermesi, örnek olması.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 10: Defter Notları (Dev Punto, İki Sütun) -->
+        <div class="slide" id="slide-9">
+            <div class="presentation-card">
+                <div class="card-header bg-slate-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-pen-nib text-slate-200 mr-2 md:mr-3"></i>Deftere Yazılacak Notlar</h2>
+                    <span class="text-slate-200 font-bold text-sm md:text-xl">10 / 10</span>
+                </div>
+                <div class="card-body bg-slate-50 p-1 md:p-6">
+                    <div class="notebook-paper w-full h-full">
+                        <h3 class="text-xl md:text-5xl font-bold text-center text-red-600 border-b-2 md:border-b-4 border-red-200 pb-1 md:pb-4 mb-2 md:mb-4">PEYGAMBERLER ÖZETİ</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 flex-grow content-start">
+                            <div class="note-item"><p class="text-medium"><span class="font-bold text-blue-700 block text-base md:text-3xl mb-0 md:mb-1">Peygamber Nedir?</span>Allah'ın emirlerini bildirmek üzere seçtiği elçilerdir.</p></div>
+                            <div class="note-item"><p class="text-medium"><span class="font-bold text-sky-700 block text-base md:text-3xl mb-0 md:mb-1">Aklın Sınırı:</span>Aklımızla <strong class="text-gray-900">ahiret hayatını ve ibadetleri</strong> bulamayız.</p></div>
+                            <div class="note-item"><p class="text-medium"><span class="font-bold text-indigo-700 block text-base md:text-3xl mb-0 md:mb-1">Tebliğ Görevi:</span>Allah'tan alınan mesajları insanlara ulaştırmaktır.</p></div>
+                            <div class="note-item"><p class="text-medium"><span class="font-bold text-teal-700 block text-base md:text-3xl mb-0 md:mb-1">Örnek Olma:</span>Allah'ın emrettiği şekilde yaşayarak model olurlar.</p></div>
+                            <div class="note-item md:col-span-2"><p class="text-medium text-center"><span class="font-bold text-rose-700 block text-base md:text-3xl mb-0 md:mb-1">Allah'ın Merhameti:</span>Peygamber gönderilmesi, Allah'ın insanlara olan sevgi ve merhametindendir.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Yüzen, Sürüklenebilir Şeffaf Araç Çubuğu -->
+    <div id="toolbar" class="toolbar-widget">
+        <div id="toolbar-header">
+            <div class="text-gray-600 font-bold text-xs md:text-base flex items-center gap-1 md:gap-2 pointer-events-none">
+                <i class="fas fa-grip-horizontal"></i> <span>Araçlar</span>
+            </div>
+            <button class="minimize-btn" onclick="toggleToolbar()" title="Küçült/Büyüt">
+                <i id="toolbar-toggle-icon" class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        <div id="toolbar-body">
+            <div class="flex gap-1 md:gap-2 border-r border-gray-300 pr-1 md:pr-4">
+                <button class="nav-btn zoom-btn" onclick="toggleFullScreen()" title="Tam Ekran"><i id="fs-icon" class="fas fa-expand"></i></button>
+                <button class="nav-btn zoom-btn" onclick="changeZoom(-5)" title="Küçült"><i class="fas fa-search-minus"></i></button>
+                <button class="nav-btn zoom-btn font-bold text-sm md:text-lg" onclick="resetZoom()" title="Orijinal Boyut">A</button>
+                <button class="nav-btn zoom-btn" onclick="changeZoom(5)" title="Büyüt"><i class="fas fa-search-plus"></i></button>
+            </div>
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled><i class="fas fa-chevron-left"></i></button>
+            <div class="progress-dots" id="dots-container"></div>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
 
     <script>
-        // --- WORD GAME LOGIC ---
-        function checkWord(btn) {
-            const container = btn.parentElement;
-            const inputs = container.querySelectorAll('.game-input');
-            let allCorrect = true;
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('dots-container');
+        let currentZoom = 100;
 
-            inputs.forEach(input => {
-                const answer = input.getAttribute('data-answer');
-                // Türkçe karakter uyumluluğu için
-                const userVal = input.value.trim().toUpperCase().replace('ı', 'I').replace('i', 'İ');
-                
-                if (userVal === answer) {
-                    input.classList.remove('border-gray-300', 'border-red-500', 'bg-white');
-                    input.classList.add('border-green-500', 'bg-green-100', 'text-green-700');
-                } else {
-                    input.classList.remove('border-gray-300', 'bg-white');
-                    input.classList.add('border-red-500', 'bg-red-50');
-                    allCorrect = false;
-                }
-            });
+        function changeZoom(amount) {
+            currentZoom += amount;
+            if(currentZoom > 150) currentZoom = 150;
+            if(currentZoom < 70) currentZoom = 70;
+            document.documentElement.style.fontSize = currentZoom + '%';
+        }
+        function resetZoom() { currentZoom = 100; document.documentElement.style.fontSize = '100%'; }
 
-            if (allCorrect) {
-                btn.innerHTML = '<i class="fas fa-check"></i> Harika!';
-                btn.classList.remove('bg-green-500', 'hover:bg-green-600');
-                btn.classList.add('bg-green-700', 'cursor-default');
-                btn.disabled = true;
-            } else {
-                btn.innerText = 'Tekrar Dene';
-                btn.classList.remove('bg-green-500');
-                btn.classList.add('bg-red-500', 'hover:bg-red-600');
-                setTimeout(() => {
-                    btn.innerText = 'Kontrol';
-                    btn.classList.add('bg-green-500');
-                    btn.classList.remove('bg-red-500', 'hover:bg-red-600');
-                }, 1000);
-            }
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{});
+            else if (document.exitFullscreen) document.exitFullscreen();
+        }
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById('fs-icon');
+            if (document.fullscreenElement) icon.classList.replace('fa-expand', 'fa-compress');
+            else icon.classList.replace('fa-compress', 'fa-expand');
+        });
+
+        for(let i=0; i<totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+        const dots = document.querySelectorAll('.dot');
+
+        function updateControls() {
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            dots.forEach((dot, index) => { dot.classList.toggle('active', index === currentSlide); });
         }
 
-        // --- DECISION TREE LOGIC ---
-        // Metindeki ağaç yapısının simülasyonu
-        const treeData = {
-            'start': {
-                text: "1. Peygamberler Allah'ın emirlerini insanlara ulaştıran elçilerdir.",
-                D: 'q2', // Sol kol (Doğru)
-                Y: 'q3'  // Sağ kol (Yanlış)
-            },
-            'q2': {
-                text: "2. Peygamberler insanlara güzel ahlak konusunda örnek olur.",
-                D: 'q4',
-                Y: 'exit_4' // 4. Çıkış (Hatalı yol)
-            },
-            'q3': {
-                text: "3. Peygamberlerin tek görevi mesajı iletmektir (açıklama yapmazlar).", // Yanlış ifade
-                D: 'exit_6', 
-                Y: 'exit_5' // Burası metinde biraz karışık olabilir, mantıken Yanlış'a gitmeli ama metindeki akışı simüle edelim. 
-                // Metindeki: Sağ kol -> "Peygamberlerin tek görevi... bildirmektir" -> Doğru dersen 5. çıkış (Hata), Yanlış dersen -> "Peygamberler adil... kimselerdir"
-            },
-            // Sol kolun devamı
-            'q4': {
-                text: "3. Peygamberler adil, merhametli ve yardımsever kimselerdir.",
-                D: 'exit_1', // 1. Çıkış (TEBRİKLER)
-                Y: 'exit_2'
-            },
-            // Sağ kolun devamı (q3 -> Yanlış dediğinde)
-            'exit_5': { // q3'e Doğru dersen
-                 isExit: true,
-                 id: 5,
-                 correct: false
-            },
-            'exit_6': { // q3'e Yanlış dersen -> Yeni soruya geçmesi gerekirdi ama metindeki yapıya sadık kalalım veya basitleştirelim.
-                // Metinde: Sağ koldan (Y) -> Soru 2: Tek görevi bildirmektir. (D->5, Y->Soru 3)
-                // Biz burada basitleştirilmiş bir akış sunuyoruz.
-                isExit: true,
-                id: 6,
-                correct: false
-            },
-            // Çıkışlar
-            'exit_1': { isExit: true, id: 1, correct: true },
-            'exit_2': { isExit: true, id: 2, correct: false },
-            'exit_4': { isExit: true, id: 4, correct: false }
-        };
-
-        // Metindeki tam akışı koda dökmek için özelleştirilmiş veri:
-        // Soru 1: Elçidir? (D -> Soru 2A, Y -> Soru 2B)
-        // Soru 2A: Örnek olur? (D -> Soru 3A, Y -> Çıkış 2) -> (Metinde D->3.Soru, Y->4.Çıkış demiş, biz mantığı kuruyoruz)
-        // Soru 3A: Adil merhametlidir? (D -> Çıkış 1, Y -> Çıkış 2)
-        
-        // Basitleştirilmiş, Eğitici Akış:
-        const simpleTree = {
-            'start': {
-                text: "Peygamberler, Allah'ın mesajını ileten elçilerdir.",
-                D: 'step2_left',
-                Y: 'step2_right'
-            },
-            'step2_left': {
-                text: "Peygamberler sadece mesajı iletir, başka bir şey yapmazlar.",
-                D: 'fail_msg_only',
-                Y: 'step3_correct'
-            },
-            'step2_right': {
-                // İlk soruya yanlış dediği için zaten kaybetti ama eğitmeye devam edelim
-                text: "Peygamberler olmasaydı insanlar her şeyi kendi aklıyla bulabilirdi.",
-                D: 'fail_reason',
-                Y: 'fail_reason' // Her türlü yanlış yolda
-            },
-            'step3_correct': {
-                text: "Peygamberler güzel ahlaklarıyla insanlara örnek olurlar.",
-                D: 'win',
-                Y: 'fail_sample'
-            },
+        function goToSlide(index) {
+            if (index === currentSlide) return;
+            const dir = index > currentSlide ? 'right' : 'left';
+            const outAnim = dir === 'right' ? 'slide-out-left' : 'slide-out-right';
+            const inAnim = dir === 'right' ? 'slide-in-right' : 'slide-in-left';
             
-            // Sonuçlar
-            'win': { type: 'result', success: true, msg: "Tebrikler! 1. Çıkışa ulaştın. Peygamberler hem elçi hem de en güzel örnektir." },
-            'fail_msg_only': { type: 'result', success: false, msg: "Hata! Peygamberler sadece mesajı iletmez, aynı zamanda açıklar ve yaşayarak öğretirler." },
-            'fail_reason': { type: 'result', success: false, msg: "Hata! İnsan aklı her şeyi kavrayamaz, bu yüzden peygamberlere muhtaçtır." },
-            'fail_sample': { type: 'result', success: false, msg: "Hata! Peygamberlerin en önemli özelliklerinden biri örnek olmalarıdır." }
+            slides[currentSlide].classList.add('active', outAnim);
+            slides[index].classList.add('active', inAnim);
+            
+            let oldIndex = currentSlide;
+            currentSlide = index;
+            updateControls();
+
+            setTimeout(() => {
+                slides[oldIndex].className = 'slide';
+                slides[currentSlide].className = 'slide active';
+            }, 400);
+        }
+
+        function changeSlide(step) {
+            const newIndex = currentSlide + step;
+            if (newIndex >= 0 && newIndex < totalSlides) goToSlide(newIndex);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') changeSlide(1);
+            else if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        // Etkinlik 2: Kelime Bulmaca
+        const puzzleWords = [
+            { word: "MESAJ", missing: [2, 3], explanation: "Allah (cc) ile insanlar arasında elçilik yapmak." },
+            { word: "ÖĞÜT", missing: [2], explanation: "İnsanları iyi olana yönlendiren sözler." },
+            { word: "MUTLULUK", missing: [3, 5, 6], explanation: "Dünya ve ahirette ulaşılmak istenen durum." },
+            { word: "İYİLİK", missing: [2, 4], explanation: "Peygamberlerin daima tavsiye ettiği şey." },
+            { word: "ÖRNEK", missing: [0, 3], explanation: "Yaşantılarıyla bize en güzel ...... olmuşlardır." }
+        ];
+
+        function initWordPuzzle() {
+            const container = document.getElementById('word-puzzle-container');
+            container.innerHTML = '';
+            puzzleWords.forEach((item) => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = "flex flex-col md:flex-row items-center gap-2 md:gap-4 bg-white p-2 md:p-4 rounded-xl md:rounded-2xl shadow-sm w-full";
+                const wordDiv = document.createElement('div');
+                wordDiv.className = "flex gap-1 md:gap-2 flex-shrink-0";
+                
+                let missingCount = item.missing.length;
+                item.word.split('').forEach((letter, idx) => {
+                    const box = document.createElement('div');
+                    if(item.missing.includes(idx)) {
+                        box.className = "letter-box missing"; box.innerText = "?";
+                        box.onclick = function() {
+                            if(!this.classList.contains('revealed')) {
+                                this.innerText = letter; this.classList.add('revealed');
+                                missingCount--;
+                                if(missingCount === 0) fireConfetti('word-puzzle-container', 20);
+                            }
+                        };
+                    } else { box.className = "letter-box"; box.innerText = letter; }
+                    wordDiv.appendChild(box);
+                });
+
+                const textDiv = document.createElement('div');
+                textDiv.className = "text-sm md:text-3xl text-gray-700 font-semibold flex-grow text-center md:text-left md:ml-4";
+                textDiv.innerText = item.explanation;
+
+                rowDiv.appendChild(wordDiv); rowDiv.appendChild(textDiv); container.appendChild(rowDiv);
+            });
+        }
+        initWordPuzzle();
+
+        // Etkinlik 3: Dallanmış Ağaç
+        const treeLogic = {
+            'A': { text: "Peygamberler Allah'ın (cc) emirlerini ulaştıran elçilerdir.", D: 'B', Y: 'C' },
+            'B': { text: "Peygamberler olmasaydı da insan aklıyla her şeyi bulabilirdi.", D: 'D', Y: 'E' },
+            'C': { text: "Peygamberlerin tek görevi vahyi bildirmektir, yaşayarak örnek olmazlar.", D: 'F', Y: 'G' },
+            'D': { text: "Peygamberler Allah'ın emirlerini uygulamasa da olur.", D: 'Exit1', Y: 'Exit2' },
+            'E': { text: "Peygamberler insanlara güzel ahlak konusunda örnek olur.", D: 'Exit3', Y: 'Exit4' },
+            'F': { text: "İnsan, peygamberleri örnek alarak dünyada ve ahirette mutlu olabilir.", D: 'Exit5', Y: 'Exit6' },
+            'G': { text: "Peygamberler adil, merhametli ve yardımsever kimselerdir.", D: 'Exit7', Y: 'Exit8' }
         };
 
-        let currentStep = 'start';
+        let currentNode = 'A';
+        function startTreeGame() {
+            currentNode = 'A';
+            document.getElementById('tree-intro').classList.add('hidden');
+            document.getElementById('tree-result-container').classList.add('hidden');
+            document.getElementById('tree-result-container').classList.remove('flex');
+            document.getElementById('tree-node-container').classList.remove('hidden');
+            updateTreeNode();
+        }
 
-        function nextStep(choice) {
-            const node = simpleTree[currentStep];
-            const nextKey = node[choice];
-            const nextNode = simpleTree[nextKey];
+        function updateTreeNode() {
+            document.getElementById('tree-node-id').innerText = `Geçerli İfade`;
+            document.getElementById('tree-node-text').innerText = treeLogic[currentNode].text;
+        }
 
-            if (nextNode.type === 'result') {
-                showResult(nextNode);
+        function makeTreeDecision(decision) {
+            const nextNode = treeLogic[currentNode][decision];
+            if(nextNode.startsWith('Exit')) showTreeResult(nextNode);
+            else { currentNode = nextNode; updateTreeNode(); }
+        }
+
+        function showTreeResult(exitCode) {
+            document.getElementById('tree-node-container').classList.add('hidden');
+            const res = document.getElementById('tree-result-container');
+            res.classList.remove('hidden'); res.classList.add('flex');
+            if(exitCode === 'Exit3') {
+                document.getElementById('tree-result-icon').innerHTML = '<i class="fas fa-trophy text-yellow-500"></i>';
+                document.getElementById('tree-result-title').innerHTML = '<span class="text-green-600">Doğru Çıkış (3)</span>';
+                document.getElementById('tree-result-text').innerText = "Tüm ifadelere doğru karar verdiniz.";
+                fireConfetti('tree-game-area', 50);
             } else {
-                currentStep = nextKey;
-                
-                // Animasyonlu geçiş
-                const qDiv = document.getElementById('tree-question');
-                qDiv.classList.remove('fade-in');
-                void qDiv.offsetWidth; // trigger reflow
-                qDiv.classList.add('fade-in');
-                
-                document.getElementById('q-text').innerText = nextNode.text;
+                document.getElementById('tree-result-icon').innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+                document.getElementById('tree-result-title').innerHTML = `<span class="text-red-600">Yanlış Çıkış (${exitCode.replace('Exit','')})</span>`;
+                document.getElementById('tree-result-text').innerText = "Tekrar deneyin.";
             }
         }
 
-        function showResult(node) {
-            document.getElementById('tree-question').classList.add('hidden');
-            const resDiv = document.getElementById('tree-result');
-            resDiv.classList.remove('hidden');
-            resDiv.classList.add('fade-in');
+        // Oyun 4: Anagram (Kelime Avı)
+        const anagrams = [
+            { w: "ELÇİ", h: "Allah ile insanlar arasında haber getiren, bildiren." },
+            { w: "AKIL", h: "Yaratıcıyı bulmamızı sağlayan ama ibadeti bulamayan yetimiz." },
+            { w: "TEBLİĞ", h: "Peygamberlerin Allah'tan aldıkları mesajları insanlara ulaştırması." },
+            { w: "REHBER", h: "Peygamberlerin yaşayarak insanlara yol göstermesi, model olması." }
+        ];
+        let curAna = 0;
+        let anaFilled = [];
 
-            const icon = document.getElementById('result-icon');
-            const title = document.getElementById('result-title');
-            const desc = document.getElementById('result-desc');
-
-            if (node.success) {
-                icon.innerHTML = '<i class="fas fa-trophy text-yellow-400"></i>';
-                title.innerText = "DOĞRU ÇIKIŞ!";
-                title.className = "text-3xl font-bold mb-2 text-green-400";
-            } else {
-                icon.innerHTML = '<i class="fas fa-exclamation-circle text-red-400"></i>';
-                title.innerText = "YANLIŞ ÇIKIŞ";
-                title.className = "text-3xl font-bold mb-2 text-red-400";
+        function initAnagram() {
+            if(curAna >= anagrams.length) {
+                document.getElementById('anagram-hint').innerHTML = "<i class='fas fa-medal text-yellow-500 text-6xl md:text-8xl block mb-4'></i><span class='text-green-600'>Harika! Tüm kelimeleri buldunuz.</span>";
+                document.getElementById('anagram-slots').innerHTML = "";
+                document.getElementById('anagram-letters').innerHTML = "";
+                document.getElementById('anagram-next-btn').classList.add('hidden');
+                fireConfetti('anagram-game-area', 80);
+                return;
             }
-            desc.innerText = node.msg;
+            document.getElementById('anagram-hint').innerText = anagrams[curAna].h;
+            document.getElementById('anagram-next-btn').classList.add('hidden');
+            anaFilled = [];
+            
+            const slots = document.getElementById('anagram-slots');
+            slots.innerHTML = "";
+            for(let i=0; i<anagrams[curAna].w.length; i++) {
+                slots.innerHTML += `<div class="ana-slot" id="ana-slot-${i}"></div>`;
+            }
+
+            const letters = anagrams[curAna].w.split('').sort(()=> Math.random()-0.5);
+            const lContainer = document.getElementById('anagram-letters');
+            lContainer.innerHTML = "";
+            letters.forEach((l, i) => {
+                lContainer.innerHTML += `<button class="ana-letter" id="ana-l-${i}" onclick="pushAna(this, ${i})">${l}</button>`;
+            });
         }
 
-        function resetTree() {
-            currentStep = 'start';
-            document.getElementById('tree-result').classList.add('hidden');
-            document.getElementById('tree-question').classList.remove('hidden');
-            document.getElementById('q-text').innerText = simpleTree['start'].text;
+        function pushAna(btn, i) {
+            if(btn.classList.contains('used')) return;
+            const l = btn.innerText;
+            const targetLen = anagrams[curAna].w.length;
+            if(anaFilled.length < targetLen) {
+                const slot = document.getElementById(`ana-slot-${anaFilled.length}`);
+                slot.innerText = l;
+                slot.classList.add('filled');
+                anaFilled.push(l);
+                btn.classList.add('used');
+
+                if(anaFilled.length === targetLen) checkAna();
+            }
         }
 
-        // Başlangıç
-        document.getElementById('q-text').innerText = simpleTree['start'].text;
+        function checkAna() {
+            const userW = anaFilled.join('');
+            const slots = document.querySelectorAll('.ana-slot');
+            if(userW === anagrams[curAna].w) {
+                slots.forEach(s => s.classList.add('correct'));
+                document.getElementById('anagram-next-btn').classList.remove('hidden');
+                fireConfetti('anagram-game-area', 50);
+            } else {
+                slots.forEach(s => s.classList.add('wrong'));
+                setTimeout(clearAnagram, 600);
+            }
+        }
+
+        function clearAnagram() { initAnagram(); }
+        function nextAnagram() { curAna++; initAnagram(); }
+        initAnagram();
+
+        // Oyun 5: Cümle Kurmaca
+        const sentences = [
+            "Peygamberler Allah'ın mesajlarını insanlara ulaştırır",
+            "İnsan aklıyla ahiret hayatını ve ibadetleri bulamaz",
+            "Peygamberler yaşayarak insanlara en güzel örnek olurlar",
+            "Peygamber gönderilmesi Allah'ın insanlara olan merhametindendir"
+        ];
+        let curSent = 0;
+        let sentFilled = [];
+        let sentWords = [];
+
+        function initSentence() {
+            if(curSent >= sentences.length) {
+                document.getElementById('sentence-slots').innerHTML = "<div class='text-center w-full'><i class='fas fa-medal text-yellow-500 text-5xl md:text-8xl block mb-2 md:mb-4'></i><span class='text-2xl md:text-5xl font-bold text-green-600'>Tebrikler! Cümleleri başarıyla kurdunuz!</span></div>";
+                document.getElementById('sentence-slots').classList.replace('border-teal-300', 'border-transparent');
+                document.getElementById('sentence-words').innerHTML = "";
+                document.getElementById('sentence-next-btn').classList.add('hidden');
+                fireConfetti('sentence-game-area', 80);
+                return;
+            }
+            sentFilled = [];
+            document.getElementById('sentence-next-btn').classList.add('hidden');
+            const slotsBox = document.getElementById('sentence-slots');
+            slotsBox.innerHTML = "";
+            slotsBox.className = "flex flex-wrap gap-1 md:gap-3 justify-center bg-white p-3 md:p-8 rounded-2xl border-2 md:border-4 border-dashed border-teal-300 shadow-inner w-full max-w-5xl min-h-[100px] md:min-h-[160px] items-center mb-4 md:mb-8";
+            
+            sentWords = sentences[curSent].split(' ');
+            const shuffled = [...sentWords].sort(()=> Math.random()-0.5);
+            
+            const wContainer = document.getElementById('sentence-words');
+            wContainer.innerHTML = "";
+            shuffled.forEach((w, i) => {
+                wContainer.innerHTML += `<button class="sent-word" id="sent-w-${i}" onclick="pushSent(this, ${i})">${w}</button>`;
+            });
+        }
+
+        function pushSent(btn, i) {
+            if(btn.classList.contains('used')) return;
+            const w = btn.innerText;
+            
+            const slots = document.getElementById('sentence-slots');
+            slots.innerHTML += `<div class="sent-slot-word">${w}</div>`;
+            sentFilled.push(w);
+            btn.classList.add('used');
+
+            if(sentFilled.length === sentWords.length) checkSent();
+        }
+
+        function checkSent() {
+            const userS = sentFilled.join(' ');
+            const targetS = sentences[curSent];
+            const slotsBox = document.getElementById('sentence-slots');
+            
+            if(userS === targetS) {
+                slotsBox.classList.replace('border-teal-300', 'border-green-500');
+                slotsBox.classList.replace('border-dashed', 'border-solid');
+                slotsBox.classList.add('bg-green-50');
+                document.getElementById('sentence-next-btn').classList.remove('hidden');
+                fireConfetti('sentence-game-area', 50);
+            } else {
+                slotsBox.classList.replace('border-teal-300', 'border-red-500');
+                slotsBox.classList.replace('border-dashed', 'border-solid');
+                slotsBox.classList.add('bg-red-50');
+                slotsBox.style.animation = "shake 0.4s";
+                
+                setTimeout(() => {
+                    slotsBox.style.animation = "";
+                    slotsBox.classList.replace('border-red-500', 'border-teal-300');
+                    slotsBox.classList.replace('border-solid', 'border-dashed');
+                    slotsBox.classList.remove('bg-red-50');
+                    clearSentence();
+                }, 800);
+            }
+        }
+
+        function clearSentence() { initSentence(); }
+        function nextSentence() { curSent++; initSentence(); }
+        initSentence();
+
+        // Oyun 6: Eşleştirme
+        let selectedLeft = null, selectedRight = null, correctMatches = 0;
+        const leftBtns = document.querySelectorAll('.left-btn'), rightBtns = document.querySelectorAll('.right-btn');
+
+        function handleMatchClick(e) {
+            const btn = e.target.closest('.match-btn');
+            if(btn.classList.contains('correct')) return;
+
+            if(btn.classList.contains('left-btn')) {
+                leftBtns.forEach(b => { if(!b.classList.contains('correct')) b.classList.remove('selected') });
+                btn.classList.add('selected'); selectedLeft = btn;
+            } else if(btn.classList.contains('right-btn')) {
+                rightBtns.forEach(b => { if(!b.classList.contains('correct')) b.classList.remove('selected') });
+                btn.classList.add('selected'); selectedRight = btn;
+            }
+
+            if(selectedLeft && selectedRight) {
+                if(selectedLeft.dataset.id === selectedRight.dataset.match) {
+                    selectedLeft.classList.replace('selected', 'correct'); selectedRight.classList.replace('selected', 'correct');
+                    selectedLeft.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>';
+                    selectedRight.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>';
+                    correctMatches++;
+                    if(correctMatches === 5) setTimeout(() => fireConfetti('match-game-area', 80), 300);
+                } else {
+                    selectedLeft.classList.add('wrong'); selectedRight.classList.add('wrong');
+                    setTimeout(() => {
+                        selectedLeft.classList.remove('wrong', 'selected'); selectedRight.classList.remove('wrong', 'selected');
+                    }, 600);
+                }
+                selectedLeft = null; selectedRight = null;
+            }
+        }
+        leftBtns.forEach(btn => btn.addEventListener('click', handleMatchClick));
+        rightBtns.forEach(btn => btn.addEventListener('click', handleMatchClick));
+
+        // Ortak: Konfeti
+        function fireConfetti(areaId, baseCount = 30) {
+            const area = document.getElementById(areaId);
+            const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d', '#10b981', '#3b82f6'];
+            
+            for (let i = 0; i < baseCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                if (Math.random() > 0.5) confetti.style.borderRadius = '50%';
+                
+                area.appendChild(confetti);
+
+                const duration = Math.random() * 3 + 2; 
+                const delay = Math.random() * 0.2;
+                
+                confetti.animate([
+                    { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${Math.random()*200 - 100}px, ${area.offsetHeight}px, 0) rotate(${Math.random()*720}deg)`, opacity: 0 }
+                ], { duration: duration * 1000, delay: delay * 1000, fill: 'forwards' });
+
+                setTimeout(() => confetti.remove(), (duration + delay) * 1000);
+            }
+        }
+
+        // --- ARAÇ ÇUBUĞU KONTROLLERİ ---
+        function toggleToolbar() {
+            const body = document.getElementById('toolbar-body');
+            const icon = document.getElementById('toolbar-toggle-icon');
+            if (body.classList.contains('collapsed')) {
+                body.classList.remove('collapsed');
+                icon.className = 'fas fa-chevron-down';
+            } else {
+                body.classList.add('collapsed');
+                icon.className = 'fas fa-chevron-up';
+            }
+        }
+
+        const toolbar = document.getElementById('toolbar');
+        const handle = document.getElementById('toolbar-header');
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+
+        function dragStart(e) {
+            if (e.target.closest('.minimize-btn')) return; 
+            e.preventDefault();
+            isDragging = true;
+            
+            if (!toolbar.classList.contains('is-dragged')) {
+                const rect = toolbar.getBoundingClientRect();
+                toolbar.classList.add('is-dragged');
+                toolbar.style.left = rect.left + 'px';
+                toolbar.style.top = rect.top + 'px';
+                toolbar.style.bottom = 'auto';
+                toolbar.style.right = 'auto';
+            }
+
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            startX = clientX; startY = clientY;
+            initialLeft = toolbar.offsetLeft; initialTop = toolbar.offsetTop;
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+            let newLeft = initialLeft + (clientX - startX);
+            let newTop = initialTop + (clientY - startY);
+
+            const rect = toolbar.getBoundingClientRect();
+            if (newLeft < 0) newLeft = 0;
+            if (newTop < 0) newTop = 0;
+            if (newLeft + rect.width > window.innerWidth) newLeft = window.innerWidth - rect.width;
+            if (newTop + rect.height > window.innerHeight) newTop = window.innerHeight - rect.height;
+
+            toolbar.style.left = newLeft + 'px';
+            toolbar.style.top = newTop + 'px';
+        }
+
+        function dragEnd() { isDragging = false; }
+
+        handle.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+        handle.addEventListener('touchstart', dragStart, { passive: false });
+        document.addEventListener('touchmove', drag, { passive: false });
+        document.addEventListener('touchend', dragEnd);
 
     </script>
 </body>

@@ -2,313 +2,724 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bir Sure Öğreniyorum: Kureyş</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bir Sure Öğreniyorum: Kureyş Suresi</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Rubik:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Rubik', sans-serif;
-            background-color: #fdf6e3; /* Sand color */
-            color: #5d4037; /* Dark brown */
-        }
-        .arabic-text {
-            font-family: 'Amiri', serif;
-            line-height: 2.2;
-        }
-        .desert-gradient {
-            background: linear-gradient(135deg, #d4a373 0%, #8d6e63 100%);
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(93, 64, 55, 0.2);
-        }
-        .kervan-anim {
-            animation: moveCaravan 20s linear infinite;
-        }
-        @keyframes moveCaravan {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        .correct-anim { animation: pulse-green 0.5s; }
-        .wrong-anim { animation: shake 0.5s; }
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap');
+
+        html { font-size: 100%; transition: font-size 0.3s ease; }
         
-        @keyframes pulse-green {
-            0% { transform: scale(1); background-color: #a7f3d0; }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); background-color: #ffffff; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #fefce8 0%, #fef08a 100%);
+            overflow: hidden; margin: 0; padding: 0; 
+            height: 100vh; height: 100dvh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+
+        h1, h2, h3, .title-font { font-family: 'Quicksand', sans-serif; }
+
+        /* AKILLI TAHTA İÇİN DEVASA TİPOGRAFİ */
+        .text-huge { font-size: clamp(2rem, 7vw, 4.5rem); line-height: 1.1; }
+        .text-x-large { font-size: clamp(1.4rem, 3.5vw, 2.5rem); line-height: 1.2; }
+        .text-large { font-size: clamp(1.1rem, 2.8vw, 1.8rem); line-height: 1.3; }
+        .text-medium { font-size: clamp(0.9rem, 2.2vw, 1.4rem); line-height: 1.3; }
+        
+        .slide {
+            display: none; opacity: 0; height: 100%; width: 100%; 
+            padding: 0.5rem; box-sizing: border-box; flex-direction: column; 
+            justify-content: center; align-items: center; 
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            position: absolute; top: 0; left: 0;
         }
+        .slide.active { display: flex; opacity: 1; z-index: 10; }
+        .slide.slide-in-right { animation: slideInRight 0.4s forwards; }
+        .slide.slide-in-left { animation: slideInLeft 0.4s forwards; }
+        .slide.slide-out-left { animation: slideOutLeft 0.4s forwards; }
+        .slide.slide-out-right { animation: slideOutRight 0.4s forwards; }
+
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutLeft { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-100%); opacity: 0; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+        /* Sunum Kartı (Tam Ekran, Minimum Boşluk) */
+        .presentation-card {
+            background: white; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 98vw; max-width: 1600px; height: 98vh; display: flex; flex-direction: column;
+            overflow: hidden; position: relative; margin: auto; border: 4px solid #eab308;
+        }
+        @media (min-width: 768px) { .presentation-card { height: 94vh; border-radius: 1.5rem; border-width: 8px; border-color: #ca8a04;} }
+
+        .card-header {
+            background: #ca8a04; color: white; padding: 0.5rem 1rem;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap;
+        }
+        @media (min-width: 768px) { .card-header { padding: 0.8rem 2rem; } }
+
+        .card-body {
+            flex-grow: 1; padding: 0.5rem; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        @media (min-width: 768px) { .card-body { padding: 1rem 2rem; } }
+
+        /* Yüzen Araç Çubuğu */
+        .toolbar-widget {
+            position: fixed; bottom: 0.2rem; left: 50%; transform: translateX(-50%);
+            z-index: 9999; background: rgba(255, 255, 255, 0.85);
+            border-radius: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            backdrop-filter: blur(12px); border: 2px solid rgba(226, 232, 240, 0.8);
+            display: flex; flex-direction: column; width: auto; min-width: 250px;
+        }
+        @media (min-width: 768px) { .toolbar-widget { bottom: 0.5rem; border-radius: 1.5rem; min-width: 320px; } }
+        .toolbar-widget.is-dragged { transform: none !important; }
+        
+        #toolbar-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.2rem 0.8rem; background: rgba(248, 250, 252, 0.8); border-radius: 1rem 1rem 0 0;
+            cursor: grab; border-bottom: 1px solid rgba(226, 232, 240, 0.5); user-select: none;
+        }
+        #toolbar-header:active { cursor: grabbing; }
+        .minimize-btn {
+            background: none; border: none; color: #64748b; cursor: pointer; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; transition: all 0.2s;
+        }
+        @media (min-width: 768px) { .minimize-btn { font-size: 1.2rem; width: 2rem; height: 2rem; } }
+        .minimize-btn:hover { background: rgba(226, 232, 240, 0.8); color: #ca8a04; }
+        
+        #toolbar-body {
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+            padding: 0.4rem 0.6rem; transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+            max-height: 150px; opacity: 1; overflow: hidden; flex-wrap: nowrap;
+        }
+        @media (min-width: 768px) { #toolbar-body { gap: 0.8rem; padding: 0.6rem 1rem; max-height: 200px; } }
+        #toolbar-body.collapsed { max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0; border: none; }
+
+        .nav-btn {
+            background: rgba(202, 138, 4, 0.9); color: white; border: none; width: 2.2rem; height: 2.2rem;
+            border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; transition: all 0.2s; backdrop-filter: blur(4px);
+        }
+        @media (min-width: 768px) { .nav-btn { width: 3rem; height: 3rem; font-size: 1.4rem; } }
+        .nav-btn:hover { transform: scale(1.1); background: rgba(202, 138, 4, 1); }
+        .nav-btn:disabled { background: rgba(203, 213, 225, 0.8); cursor: not-allowed; transform: none; color: #475569; }
+        
+        .zoom-btn { background: rgba(241, 245, 249, 0.9); color: #334155; width: 1.8rem; height: 1.8rem; font-size: 0.8rem; border-radius: 0.5rem; border: 1px solid rgba(226, 232, 240, 0.8);}
+        @media (min-width: 768px) { .zoom-btn { width: 2.5rem; height: 2.5rem; font-size: 1.1rem; border-radius: 0.8rem; } }
+
+        .progress-dots { display: flex; align-items: center; gap: 0.2rem; justify-content: center;}
+        @media (min-width: 768px) { .progress-dots { gap: 0.4rem; } }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(156, 163, 175, 0.8); transition: all 0.3s; cursor: pointer; }
+        @media (min-width: 768px) { .dot { width: 10px; height: 10px; } }
+        .dot.active { background: #ca8a04; transform: scale(1.5); }
+
+        .highlight { background: linear-gradient(120deg, #fef08a 0%, #fef08a 100%); background-repeat: no-repeat; background-size: 100% 40%; background-position: 0 88%; font-weight: bold; padding: 0 0.2em; }
+
+        /* Mesaj Kutuları (Flip Card) */
+        .flip-card { background-color: transparent; width: 100%; height: 140px; perspective: 1000px; cursor: pointer; }
+        @media (min-width: 768px) { .flip-card { height: 220px; } }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-radius: 1rem; }
+        @media (min-width: 768px) { .flip-card-inner { border-radius: 1.5rem; } }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; font-size: 0.9rem; border: 2px solid rgba(255,255,255,0.5); }
+        @media (min-width: 768px) { .flip-card-front, .flip-card-back { border-radius: 1.5rem; font-size: 1.8rem; border-width: 4px; padding: 1.5rem; } }
+        .flip-card-front { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
+        .flip-card-back { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; transform: rotateY(180deg); }
+
+        /* Ayet Sıralama Oyunu Stilleri */
+        .verse-btn { 
+            background: white; border: 3px solid #e2e8f0; border-radius: 1rem; padding: 1rem; 
+            font-size: 1.2rem; font-weight: bold; color: #334155; cursor: pointer; transition: all 0.3s; 
+            text-align: center; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        }
+        @media (min-width: 768px) { .verse-btn { padding: 1.5rem; font-size: 2.2rem; border-width: 4px; border-radius: 1.5rem;} }
+        .verse-btn:hover { border-color: #facc15; transform: translateY(-3px); }
+        .verse-btn.correct { border-color: #10b981; background: #ecfdf5; color: #047857; cursor: default; transform: none; box-shadow: inset 0 0 10px rgba(16,185,129,0.2);}
+        .verse-btn.wrong { animation: shake 0.5s; border-color: #ef4444; background: #fef2f2; color: #b91c1c; }
+
+        /* Doğru Yanlış Stilleri */
+        .tf-btn { padding: 1rem; font-size: 1.2rem; font-weight: bold; border-radius: 0.8rem; cursor: pointer; transition: all 0.3s; flex: 1; text-align: center; border: 3px solid transparent; background: white; color: #334155; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        @media (min-width: 768px) { .tf-btn { font-size: 2.5rem; border-radius: 1.5rem; padding: 2rem; border-width: 4px; gap: 1rem;} }
+        .tf-btn.true { border-color: #10b981; color: #047857; }
+        .tf-btn.true:hover { background: #10b981; color: white; transform: translateY(-5px); }
+        .tf-btn.false { border-color: #ef4444; color: #b91c1c; }
+        .tf-btn.false:hover { background: #ef4444; color: white; transform: translateY(-5px); }
+
+        .notebook-paper { background-color: #fefce8; border-left: 4px double #ef4444; padding: 0.8rem; border-radius: 0.8rem; font-family: 'Quicksand', sans-serif; display: block; overflow-y: auto; height: 100%;}
+        @media (min-width: 768px) { .notebook-paper { border-left: 8px double #ef4444; padding: 1.5rem 2rem; border-radius: 1.5rem; } }
+        .notebook-paper::-webkit-scrollbar { width: 6px; }
+        .notebook-paper::-webkit-scrollbar-thumb { background: #fca5a5; border-radius: 10px; }
+        .note-item { background: white; padding: 0.6rem; border-radius: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #fef08a; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);}
+        @media (min-width: 768px) { .note-item { padding: 1rem 1.5rem; border-radius: 1rem; border-width: 2px; margin-bottom: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); } }
+
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .confetti { position: absolute; width: 8px; height: 8px; background-color: #f00; opacity: 0; z-index: 100; pointer-events: none;}
+        @media (min-width: 768px) { .confetti { width: 12px; height: 12px; } }
     </style>
 </head>
 <body>
 
-    <!-- Hero Section -->
-    <header class="desert-gradient text-white pt-16 pb-24 px-4 text-center rounded-b-[60px] shadow-xl relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+    <div id="slides-container" class="relative w-full h-full">
         
-        <!-- Caravan Animation Background -->
-        <div class="absolute bottom-4 left-0 w-full opacity-20 pointer-events-none overflow-hidden">
-            <div class="kervan-anim whitespace-nowrap text-6xl text-[#3e2723]">
-                <i class="fas fa-camel"></i> <i class="fas fa-camel"></i> <i class="fas fa-camel"></i>
+        <!-- Slayt 1: Kapak -->
+        <div class="slide active" id="slide-0">
+            <div class="presentation-card bg-yellow-600 text-white justify-center items-center text-center p-4 md:p-8 border-4 md:border-8 border-yellow-500">
+                <i class="fas fa-kaaba text-6xl md:text-9xl text-yellow-200 mb-2 md:mb-6 opacity-90 drop-shadow-lg"></i>
+                <h2 class="text-lg md:text-4xl tracking-widest text-yellow-100 mb-1 md:mb-3 uppercase font-bold">Bir Sure Öğreniyorum</h2>
+                <h1 class="text-huge font-bold mb-3 md:mb-6 leading-tight text-white drop-shadow-md">Kureyş Suresi</h1>
+                <div class="bg-yellow-800/50 p-3 md:p-6 rounded-xl md:rounded-2xl w-full max-w-5xl border border-yellow-500/50 shadow-inner">
+                    <p class="text-medium md:text-x-large italic font-serif opacity-90">Kâbe'nin Rabbine Kulluk Etmek</p>
+                </div>
             </div>
         </div>
 
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <span class="bg-white/20 border border-white/40 text-orange-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">4. Ünite</span>
-            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-md">KUREYŞ SURESİ</h1>
-            <p class="text-xl text-orange-100 font-light max-w-2xl mx-auto">
-                "Şu Evin (Kâbe'nin) Rabbine kulluk etsinler."
-            </p>
-        </div>
-    </header>
-
-    <main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 space-y-16 pb-20">
-
-        <!-- BÖLÜM 1: TARİHSEL BAĞLAM (Bilgi Kutusu) -->
-        <section class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-[#8d6e63]">
-            <div class="flex flex-col md:flex-row gap-8 items-center">
-                <div class="md:w-1/3 text-center">
-                    <div class="bg-orange-50 p-6 rounded-full inline-block mb-4">
-                        <i class="fas fa-kaaba text-6xl text-[#8d6e63]"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-[#5d4037]">Kureyş Kabilesi</h3>
+        <!-- Slayt 2: Kureyş Kimdir? -->
+        <div class="slide" id="slide-1">
+            <div class="presentation-card">
+                <div class="card-header bg-yellow-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-users text-yellow-200 mr-2 md:mr-3"></i>1. Konuya Başlarken: Kureyş</h2>
+                    <span class="text-yellow-200 font-bold text-sm md:text-xl">2 / 7</span>
                 </div>
-                <div class="md:w-2/3 space-y-4 text-gray-600 leading-relaxed">
-                    <p>
-                        Kureyş, Peygamberimiz Hz. Muhammed'in (sav) mensup olduğu, Mekke'nin en saygın kabilesidir.
-                    </p>
-                    <div class="bg-[#efebe9] p-4 rounded-xl border-l-4 border-[#8d6e63]">
-                        <h4 class="font-bold text-[#5d4037] mb-2"><i class="fas fa-route mr-2"></i> Kış ve Yaz Yolculukları</h4>
-                        <p class="text-sm">
-                            Kureyşliler geçimlerini ticaretle sağlardı. Kışın güneye (Yemen'e), yazın kuzeye (Şam'a) güven içinde ticaret kervanları düzenlerlerdi. Allah (cc), bu surede onlara verdiği bu nimetleri ve güvenliği hatırlatarak şükretmelerini istemiştir.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row items-stretch gap-2 md:gap-6 h-full justify-center">
+                        <div class="flex-1 bg-yellow-50 p-4 md:p-10 rounded-xl md:rounded-3xl border-2 md:border-4 border-yellow-200 shadow-sm md:shadow-md text-center flex flex-col justify-center items-center">
+                            <i class="fas fa-kaaba text-5xl md:text-8xl text-yellow-600 mb-2 md:mb-6"></i>
+                            <h3 class="text-xl md:text-5xl font-bold text-yellow-900 mb-2 md:mb-4">Mekke'nin Yerli Halkı</h3>
+                            <p class="text-medium md:text-x-large text-gray-700">Hz. Muhammed'in (sav) mensup olduğu ailedir. Mekke'de <span class="font-bold text-yellow-700">Kâbe'nin bakımını üstlenmiş</span> ve hacılara yemek/su dağıtmışlardır. Bu yüzden çok saygı görürlerdi.</p>
+                        </div>
 
-        <!-- BÖLÜM 2: SUREYİ ÖĞRENİYORUM (Kartlar) -->
-        <section>
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-[#5d4037]">Surenin Anlamı</h2>
-                <p class="text-[#8d6e63]">Kartları inceleyerek ayetleri öğren.</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Ayet 1 -->
-                <div class="card-hover bg-white rounded-xl p-6 border border-orange-100 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-[#8d6e63] text-white w-8 h-8 flex items-center justify-center rounded-bl-xl font-bold">1</div>
-                    <p class="arabic-text text-3xl text-right mb-4 text-[#3e2723]">لِا۪يلَافِ قُرَيْشٍۙ</p>
-                    <p class="font-bold text-[#d84315] mb-2">Liîlâfi Ḳurayş</p>
-                    <p class="text-gray-600 text-sm">"Kureyş'e kolaylaştırıldığı,"</p>
-                </div>
-
-                <!-- Ayet 2 -->
-                <div class="card-hover bg-white rounded-xl p-6 border border-orange-100 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-[#8d6e63] text-white w-8 h-8 flex items-center justify-center rounded-bl-xl font-bold">2</div>
-                    <p class="arabic-text text-3xl text-right mb-4 text-[#3e2723]">ا۪يلَافِهِمْ رِحْلَةَ الشِّتَٓاءِ وَالصَّيْفِۚ</p>
-                    <p class="font-bold text-[#d84315] mb-2">Îlâfihim riḥleteşşitâi vessayf</p>
-                    <p class="text-gray-600 text-sm">"Evet, kış ve yaz seyahatleri onlara kolaylaştırıldığı için,"</p>
-                </div>
-
-                <!-- Ayet 3 -->
-                <div class="card-hover bg-white rounded-xl p-6 border border-orange-100 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-[#8d6e63] text-white w-8 h-8 flex items-center justify-center rounded-bl-xl font-bold">3</div>
-                    <p class="arabic-text text-3xl text-right mb-4 text-[#3e2723]">فَلْيَعْبُدُوا رَبَّ هٰذَا الْبَيْتِۙ</p>
-                    <p class="font-bold text-[#d84315] mb-2">Felya’büdû rabbe hâẕelbeyt</p>
-                    <p class="text-gray-600 text-sm">"Onlar, şu evin (Kâbe’nin) Rabbine kulluk etsinler."</p>
-                </div>
-
-                <!-- Ayet 4 -->
-                <div class="card-hover bg-white rounded-xl p-6 border border-orange-100 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-[#8d6e63] text-white w-8 h-8 flex items-center justify-center rounded-bl-xl font-bold">4</div>
-                    <p class="arabic-text text-3xl text-right mb-4 text-[#3e2723]">اَلَّذ۪ٓي اَطْعَمَهُمْ مِنْ جُوعٍ وَاٰمَنَهُمْ مِنْ خَوْفٍ</p>
-                    <p class="font-bold text-[#d84315] mb-2">Elleẕî et’amehüm min cûivveâmenehüm min ḫavf</p>
-                    <p class="text-gray-600 text-sm">"Kendilerini açlıktan doyuran ve her çeşit korkudan emin kılan (Rabbe)."</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 3: SIRALAMA OYUNU -->
-        <section class="max-w-3xl mx-auto bg-[#4e342e] rounded-3xl p-8 text-[#fff8e1] shadow-2xl relative overflow-hidden">
-            <!-- Background Icon -->
-            <div class="absolute -right-6 -bottom-6 text-[#3e2723] text-9xl opacity-50">
-                <i class="fas fa-layer-group"></i>
-            </div>
-
-            <div class="relative z-10 text-center">
-                <span class="bg-[#8d6e63] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Etkinlik</span>
-                <h2 class="text-3xl font-bold mt-2 mb-6">Ayetleri Sırala</h2>
-                <p class="text-[#d7ccc8] mb-8 text-sm">Aşağıdaki karışık ayetlere doğru sırayla tıkla.</p>
-
-                <!-- Hedef Alan -->
-                <div id="target-area" class="bg-white/10 backdrop-blur-sm rounded-xl p-6 min-h-[100px] mb-6 flex flex-col gap-2 border border-white/20 items-center justify-center">
-                    <span class="text-[#d7ccc8]/50 text-sm italic" id="placeholder-text">1. Ayetten başla...</span>
-                </div>
-
-                <!-- Kaynak Alan -->
-                <div id="source-area" class="flex flex-wrap justify-center gap-3">
-                    <!-- JS ile butonlar gelecek -->
-                </div>
-
-                <div id="game-msg" class="mt-6 font-bold text-yellow-300 h-8 text-lg"></div>
-                <button onclick="resetGame()" class="mt-4 text-sm text-[#d7ccc8] underline hover:text-white hidden" id="reset-btn">Tekrar Oyna</button>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 4: DOĞRU / YANLIŞ TESTİ (Kontrol Noktası) -->
-        <section class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8 border border-[#d7ccc8]">
-            <h2 class="text-2xl font-bold text-[#5d4037] mb-6 flex items-center gap-2">
-                <i class="fas fa-check-double text-[#8d6e63]"></i> Kontrol Noktası
-            </h2>
-            <div class="space-y-4" id="quiz-container">
-                <!-- JS ile Doldurulacak -->
-            </div>
-            <div id="quiz-result" class="hidden mt-4 p-4 bg-green-100 text-green-800 rounded-lg text-center font-bold">
-                Tebrikler! Testi tamamladın.
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-[#3e2723] text-[#d7ccc8] py-8 text-center text-sm">
-        <p>2024 Din Kültürü ve Ahlak Bilgisi - Kureyş Suresi</p>
-    </footer>
-
-    <script>
-        // --- AYET SIRALAMA OYUNU ---
-        const verses = [
-            { id: 1, text: "Liîlâfi Ḳurayş" },
-            { id: 2, text: "Îlâfihim riḥleteşşitâi vessayf" },
-            { id: 3, text: "Felya’büdû rabbe hâẕelbeyt" },
-            { id: 4, text: "Elleẕî et’amehüm min cûivveâmenehüm min ḫavf" }
-        ];
-
-        let currentStep = 1;
-
-        function initGame() {
-            const sourceArea = document.getElementById('source-area');
-            const targetArea = document.getElementById('target-area');
-            const msg = document.getElementById('game-msg');
-            const placeholder = document.getElementById('placeholder-text');
-            
-            sourceArea.innerHTML = '';
-            targetArea.innerHTML = '';
-            targetArea.appendChild(placeholder);
-            msg.innerText = '';
-            currentStep = 1;
-            document.getElementById('reset-btn').classList.add('hidden');
-            placeholder.classList.remove('hidden');
-
-            // Shuffle
-            const shuffled = [...verses].sort(() => Math.random() - 0.5);
-
-            shuffled.forEach(v => {
-                const btn = document.createElement('button');
-                btn.className = "bg-[#efebe9] text-[#5d4037] px-4 py-3 rounded-lg font-bold shadow hover:bg-[#d7ccc8] transition w-full md:w-auto text-sm";
-                btn.innerText = v.text;
-                btn.onclick = () => checkOrder(btn, v.id);
-                sourceArea.appendChild(btn);
-            });
-        }
-
-        function checkOrder(btn, id) {
-            const targetArea = document.getElementById('target-area');
-            const msg = document.getElementById('game-msg');
-            const placeholder = document.getElementById('placeholder-text');
-
-            if(id === currentStep) {
-                // Correct
-                placeholder.classList.add('hidden');
-                btn.classList.remove('bg-[#efebe9]', 'text-[#5d4037]');
-                btn.classList.add('bg-green-500', 'text-white', 'w-full', 'order-correct');
-                btn.disabled = true;
-                targetArea.appendChild(btn);
-                
-                currentStep++;
-
-                if(currentStep > 4) {
-                    msg.innerHTML = '<i class="fas fa-star"></i> Harika! Sureyi tamamladın.';
-                    document.getElementById('reset-btn').classList.remove('hidden');
-                }
-            } else {
-                // Wrong
-                btn.classList.add('bg-red-500', 'text-white');
-                msg.innerText = 'Yanlış sıra, tekrar dene!';
-                setTimeout(() => {
-                    btn.classList.remove('bg-red-500', 'text-white');
-                    msg.innerText = '';
-                }, 500);
-            }
-        }
-
-        function resetGame() {
-            initGame();
-        }
-
-        // --- QUIZ LOGIC (Kontrol Noktası) ---
-        const quizData = [
-            { q: "Surede Hz. İbrahim'in ailesi Kureyş'ten bahsedilir.", a: false, note: "Yanlış. Hz. Muhammed'in (sav) kabilesinden bahsedilir." },
-            { q: "Kureyş kabilesi geçimini hayvancılıkla sağlamıştır.", a: false, note: "Yanlış. Ticaretle (kervanlarla) sağlamıştır." },
-            { q: "Surede Allah'ın (cc) Kureyş'e verdiği nimetler hatırlatılır.", a: true, note: "Doğru. Güvenlik ve rızık nimeti." },
-            { q: "Kureyş suresinde tevhit inancına (tek Allah'a kulluk) dikkat çekilir.", a: true, note: "Doğru. 'Şu evin Rabbine kulluk etsinler' denir." },
-            { q: "Allah (cc) Kureyş kabilesinin güvenliğini sağlamıştır.", a: true, note: "Doğru. 'Korkudan emin kılan' ifadesi geçer." }
-        ];
-
-        function initQuiz() {
-            const container = document.getElementById('quiz-container');
-            
-            quizData.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = "bg-[#efebe9]/50 p-4 rounded-lg border border-[#d7ccc8]";
-                div.innerHTML = `
-                    <div class="flex justify-between items-start gap-4 mb-2">
-                        <p class="font-semibold text-[#5d4037] text-sm">${index + 1}. ${item.q}</p>
-                        <div class="flex gap-2 shrink-0">
-                            <button onclick="checkQuiz(this, ${index}, true)" class="w-8 h-8 rounded-full bg-white border border-green-300 text-green-700 font-bold hover:bg-green-50 transition">D</button>
-                            <button onclick="checkQuiz(this, ${index}, false)" class="w-8 h-8 rounded-full bg-white border border-red-300 text-red-700 font-bold hover:bg-red-50 transition">Y</button>
+                        <div class="flex-[0.8] flex flex-col justify-center gap-2 md:gap-6">
+                            <div class="bg-white p-4 md:p-8 rounded-xl md:rounded-3xl border-l-4 md:border-l-8 border-yellow-500 shadow-sm md:shadow-md h-full flex flex-col justify-center">
+                                <h4 class="text-xl md:text-4xl font-bold text-gray-800 mb-2 md:mb-4"><i class="fas fa-question-circle text-yellow-500 mr-2"></i> Düşünelim:</h4>
+                                <p class="text-medium md:text-x-large text-gray-600 leading-relaxed">
+                                    Siz Kureyş Suresi hakkında neler biliyorsunuz? Daha önce namazlarda okunduğunu duydunuz mu?
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <p id="feedback-${index}" class="text-xs font-bold hidden"></p>
-                `;
-                container.appendChild(div);
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 3: Okunuş ve Anlam -->
+        <div class="slide" id="slide-2">
+            <div class="presentation-card">
+                <div class="card-header bg-yellow-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-book-open text-yellow-200 mr-2 md:mr-3"></i>2. Surenin Okunuşu ve Anlamı</h2>
+                    <span class="text-yellow-200 font-bold text-sm md:text-xl">3 / 7</span>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row items-stretch gap-2 md:gap-6 h-full">
+                        
+                        <!-- Okunuşu -->
+                        <div class="flex-1 bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 border-2 md:border-4 border-gray-200 shadow-sm md:shadow-md flex flex-col">
+                            <h3 class="text-xl md:text-4xl font-bold text-gray-800 mb-2 md:mb-6 border-b-4 border-yellow-400 pb-2 inline-block self-start">Okunuşu</h3>
+                            <p class="text-medium md:text-2xl font-bold text-teal-700 mb-2 md:mb-6 text-center">Bismillâhirraḥmânirraḥîm</p>
+                            <ol class="text-medium md:text-x-large text-gray-800 space-y-2 md:space-y-6 list-decimal list-inside font-semibold leading-relaxed">
+                                <li>Liîlâfi Ḳurayş</li>
+                                <li>Îlâfihim riḥleteşşitâi vessayf</li>
+                                <li>Felya’büdû rabbe hâẕelbeyt</li>
+                                <li>Elleẕî et’amehüm min cûivveâmenehüm min ḫavf</li>
+                            </ol>
+                        </div>
+                        
+                        <!-- Anlamı -->
+                        <div class="flex-1 bg-yellow-50 rounded-2xl md:rounded-3xl p-4 md:p-8 border-2 md:border-4 border-yellow-300 shadow-sm md:shadow-md flex flex-col">
+                            <h3 class="text-xl md:text-4xl font-bold text-yellow-900 mb-2 md:mb-6 border-b-4 border-yellow-500 pb-2 inline-block self-start">Anlamı</h3>
+                            <p class="text-medium md:text-2xl font-bold text-teal-700 mb-2 md:mb-6 text-center">Rahman ve Rahîm olan Allah’ın adıyla.</p>
+                            <p class="text-medium md:text-x-large text-gray-800 leading-relaxed font-semibold">
+                                <span class="bg-yellow-200 px-2 rounded">1-4.</span> Kureyş’e kolaylaştırıldığı, evet, kış ve yaz seyahatleri onlara kolaylaştırıldığı için onlar, kendilerini açlıktan doyuran ve her çeşit korkudan emin kılan şu evin (Kâbe’nin) Rabbine kulluk etsinler.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 4: Surenin Mesajları (Flip Cards) -->
+        <div class="slide" id="slide-3">
+            <div class="presentation-card">
+                <div class="card-header bg-yellow-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-lightbulb text-yellow-200 mr-2 md:mr-3"></i>3. Kureyş Suresinin Mesajları</h2>
+                    <span class="text-yellow-200 font-bold text-sm md:text-xl">4 / 7</span>
+                </div>
+                <div class="card-body bg-yellow-50">
+                    <p class="text-center text-sm md:text-2xl text-yellow-800 mb-2 md:mb-6 font-bold bg-yellow-100 p-2 md:p-4 rounded-xl border-2 border-yellow-200 shadow-sm">
+                        Kutulara dokunarak Kureyş suresindeki 4 temel mesajı öğrenin!
+                    </p>
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-6 pb-4 flex-grow">
+                        
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center flex flex-col justify-center">
+                                    <i class="fas fa-gift text-4xl md:text-7xl mb-2 opacity-80"></i>
+                                    <h3 class="text-lg md:text-3xl font-bold">1. Mesaj</h3>
+                                    <span class="text-[10px] md:text-sm mt-2 md:mt-4 bg-white/20 px-3 py-1 rounded-full w-max mx-auto">Dokun</span>
+                                </div>
+                                <div class="flip-card-back text-center flex flex-col justify-center">
+                                    <p class="font-bold text-base md:text-3xl">Allah'ın Verdiği Nimetler</p>
+                                    <p class="text-xs md:text-xl bg-white/20 p-2 rounded-lg mt-2 font-normal">Kureyş kabilesine verilen sayısız nimetler hatırlatılır.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center flex flex-col justify-center" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                    <i class="fas fa-camel text-4xl md:text-7xl mb-2 opacity-80"></i>
+                                    <h3 class="text-lg md:text-3xl font-bold">2. Mesaj</h3>
+                                    <span class="text-[10px] md:text-sm mt-2 md:mt-4 bg-white/20 px-3 py-1 rounded-full w-max mx-auto">Dokun</span>
+                                </div>
+                                <div class="flip-card-back text-center flex flex-col justify-center" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                    <p class="font-bold text-base md:text-3xl">Ticari Yolculuklar</p>
+                                    <p class="text-xs md:text-xl bg-white/20 p-2 rounded-lg mt-2 font-normal">Kureyş'in geçimini sağladığı yaz ve kış seyahatlerine dikkat çekilir.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center flex flex-col justify-center" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                                    <i class="fas fa-shield-alt text-4xl md:text-7xl mb-2 opacity-80"></i>
+                                    <h3 class="text-lg md:text-3xl font-bold">3. Mesaj</h3>
+                                    <span class="text-[10px] md:text-sm mt-2 md:mt-4 bg-white/20 px-3 py-1 rounded-full w-max mx-auto">Dokun</span>
+                                </div>
+                                <div class="flip-card-back text-center flex flex-col justify-center" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                                    <p class="font-bold text-base md:text-3xl">Güvenlik ve Huzur</p>
+                                    <p class="text-xs md:text-xl bg-white/20 p-2 rounded-lg mt-2 font-normal">Allah'ın onları açlıktan doyurduğu ve her türlü korkudan emin kıldığı vurgulanır.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center flex flex-col justify-center" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+                                    <i class="fas fa-praying-hands text-4xl md:text-7xl mb-2 opacity-80"></i>
+                                    <h3 class="text-lg md:text-3xl font-bold">4. Mesaj</h3>
+                                    <span class="text-[10px] md:text-sm mt-2 md:mt-4 bg-white/20 px-3 py-1 rounded-full w-max mx-auto">Dokun</span>
+                                </div>
+                                <div class="flip-card-back text-center flex flex-col justify-center" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">
+                                    <p class="font-bold text-base md:text-3xl">Kâbe'nin Rabbine Kulluk</p>
+                                    <p class="text-xs md:text-xl bg-white/20 p-2 rounded-lg mt-2 font-normal">Tüm bu nimetler karşılığında tevhit inancıyla Allah'a kulluk etmeye davet edilir.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 5: ETKİNLİK OYUNU 1 (Ayet Sıralama) -->
+        <div class="slide" id="slide-4">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-sort-numeric-down text-teal-200 mr-2 md:mr-3"></i>Oyun 1: Ayetleri Sırala</h2>
+                    <span class="text-teal-200 font-bold text-sm md:text-xl">5 / 7</span>
+                </div>
+                <div class="card-body bg-teal-50 relative" id="sort-game-area">
+                    <p class="text-center text-sm md:text-2xl text-teal-800 mb-2 md:mb-6 font-bold bg-teal-100 p-2 md:p-4 rounded-xl border-2 border-teal-200 shadow-sm">
+                        Kureyş Suresinin ayetlerine <span class="text-red-500">sırasıyla</span> dokunarak sureyi tamamla!
+                    </p>
+                    
+                    <!-- İlerleme Çubuğu -->
+                    <div class="w-full max-w-4xl mx-auto flex justify-between items-center mb-4 md:mb-8 px-4">
+                        <div id="sort-step-1" class="w-8 h-8 md:w-16 md:h-16 rounded-full bg-gray-300 flex items-center justify-center font-bold text-white text-lg md:text-3xl transition-colors">1</div>
+                        <div class="flex-1 h-2 md:h-4 bg-gray-300 mx-2 md:mx-4 rounded-full overflow-hidden"><div id="sort-line-1" class="h-full bg-teal-500 w-0 transition-all duration-500"></div></div>
+                        <div id="sort-step-2" class="w-8 h-8 md:w-16 md:h-16 rounded-full bg-gray-300 flex items-center justify-center font-bold text-white text-lg md:text-3xl transition-colors">2</div>
+                        <div class="flex-1 h-2 md:h-4 bg-gray-300 mx-2 md:mx-4 rounded-full overflow-hidden"><div id="sort-line-2" class="h-full bg-teal-500 w-0 transition-all duration-500"></div></div>
+                        <div id="sort-step-3" class="w-8 h-8 md:w-16 md:h-16 rounded-full bg-gray-300 flex items-center justify-center font-bold text-white text-lg md:text-3xl transition-colors">3</div>
+                        <div class="flex-1 h-2 md:h-4 bg-gray-300 mx-2 md:mx-4 rounded-full overflow-hidden"><div id="sort-line-3" class="h-full bg-teal-500 w-0 transition-all duration-500"></div></div>
+                        <div id="sort-step-4" class="w-8 h-8 md:w-16 md:h-16 rounded-full bg-gray-300 flex items-center justify-center font-bold text-white text-lg md:text-3xl transition-colors">4</div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 md:gap-4 w-full max-w-4xl mx-auto h-full justify-center pb-4" id="verse-buttons">
+                        <!-- JS ile karıştırılarak yüklenecek -->
+                    </div>
+
+                    <!-- Bitiş Ekranı -->
+                    <div id="sort-win-screen" class="hidden absolute inset-0 bg-white/95 backdrop-blur-sm z-20 flex-col items-center justify-center text-center rounded-b-xl md:rounded-b-3xl">
+                        <i class="fas fa-medal text-7xl md:text-9xl text-yellow-400 mb-4 md:mb-8 drop-shadow-md"></i>
+                        <h2 class="text-3xl md:text-6xl font-bold text-teal-700 mb-4">Tebrikler!</h2>
+                        <p class="text-xl md:text-3xl text-gray-700 mb-8">Kureyş Suresini doğru sırayla tamamladınız.</p>
+                        <button onclick="initSortGame()" class="bg-teal-600 text-white px-8 py-4 rounded-full text-xl md:text-3xl font-bold shadow-lg hover:bg-teal-700"><i class="fas fa-redo mr-2"></i> Yeniden Oyna</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 6: OYUN 2 - DOĞRU YANLIŞ (Kontrol Noktası) -->
+        <div class="slide" id="slide-5">
+            <div class="presentation-card">
+                <div class="card-header bg-cyan-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-check-double text-cyan-200 mr-2 md:mr-3"></i>Oyun 2: Doğru mu, Yanlış mı?</h2>
+                    <span class="text-cyan-200 font-bold text-sm md:text-xl">6 / 7</span>
+                </div>
+                <div class="card-body bg-cyan-50 relative flex flex-col justify-center items-center" id="tf-game-area">
+                    
+                    <div id="tf-feedback" class="tf-feedback">
+                        <div id="tf-feedback-icon" class="text-6xl md:text-8xl mb-2 md:mb-4"></div>
+                        <h2 id="tf-feedback-text" class="text-xl md:text-5xl font-bold text-gray-800 mb-2 md:mb-6"></h2>
+                        <button onclick="nextTfQuestion()" class="bg-cyan-600 text-white px-6 md:px-10 py-2 md:py-4 rounded-full text-base md:text-3xl font-bold hover:bg-cyan-700 shadow-xl">Sonraki Soru <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+
+                    <div class="text-center mb-2 md:mb-4 w-full" id="tf-header-area">
+                        <span class="bg-cyan-200 text-cyan-800 px-4 md:px-6 py-1 md:py-2 rounded-full font-bold text-sm md:text-2xl">Soru <span id="tf-current-num">1</span> / 5</span>
+                    </div>
+
+                    <div class="bg-white border-2 md:border-4 border-cyan-200 rounded-2xl md:rounded-3xl p-4 md:p-10 w-full max-w-5xl shadow-md md:shadow-xl text-center mb-4 md:mb-10 flex flex-col justify-center min-h-[150px] md:min-h-[250px]">
+                        <h3 id="tf-question-text" class="text-xl md:text-4xl font-bold text-gray-800 leading-tight">...</h3>
+                        <button id="tf-restart-btn" class="hidden bg-cyan-600 text-white px-6 md:px-10 py-2 md:py-4 rounded-full text-base md:text-3xl font-bold hover:bg-cyan-700 shadow-xl mx-auto mt-4 md:mt-8" onclick="restartTfGame()"><i class="fas fa-redo mr-2"></i> Yeniden Oyna</button>
+                    </div>
+
+                    <div class="flex flex-row w-full max-w-5xl gap-2 md:gap-8" id="tf-buttons-container">
+                        <button class="tf-btn true" onclick="checkTfAnswer(true)"><i class="fas fa-check-circle md:mr-3 hidden md:inline"></i> DOĞRU</button>
+                        <button class="tf-btn false" onclick="checkTfAnswer(false)"><i class="fas fa-times-circle md:mr-3 hidden md:inline"></i> YANLIŞ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 7: Defter Notları (Dev Punto, İki Sütun) -->
+        <div class="slide" id="slide-6">
+            <div class="presentation-card">
+                <div class="card-header bg-slate-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-pen-nib text-slate-200 mr-2 md:mr-3"></i>Deftere Yazılacak Notlar</h2>
+                    <span class="text-slate-200 font-bold text-sm md:text-xl">7 / 7</span>
+                </div>
+                <div class="card-body bg-slate-50 p-1 md:p-6">
+                    <div class="notebook-paper w-full h-full">
+                        <h3 class="text-xl md:text-5xl font-bold text-center text-red-600 border-b-2 md:border-b-4 border-red-200 pb-1 md:pb-4 mb-2 md:mb-4">KUREYŞ SURESİ ÖZETİ</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6 flex-grow content-start pb-4">
+                            <div class="note-item"><p class="text-medium"><span class="font-bold text-blue-700 block text-base md:text-3xl mb-0 md:mb-2">1. Kureyş Kimdir?</span>Mekke'nin yerli halkı, <strong class="text-gray-900">Kâbe'nin bakımını üstlenen</strong> ve Hz. Muhammed'in mensup olduğu saygın kabiledir.</p></div>
+                            <div class="note-item"><p class="text-medium"><span class="font-bold text-sky-700 block text-base md:text-3xl mb-0 md:mb-2">2. Nimetlerin Hatırlatılması</span>Allah'ın onlara verdiği <strong class="text-gray-900">yaz ve kış ticari yolculukları</strong> nimet olarak vurgulanır.</p></div>
+                            <div class="note-item"><p class="text-medium"><span class="font-bold text-indigo-700 block text-base md:text-3xl mb-0 md:mb-2">3. Güvenlik ve Rızık</span>Allah'ın onları <strong class="text-gray-900">açlıktan doyurduğu</strong> ve her türlü korkudan emin (güvenli) kıldığı anlatılır.</p></div>
+                            <div class="note-item"><p class="text-medium"><span class="font-bold text-teal-700 block text-base md:text-3xl mb-0 md:mb-2">4. Asıl Mesaj (Tevhit)</span>Tüm bu nimetler karşılığında Kureyş'in <strong class="text-gray-900">Kâbe'nin Rabbine (Allah'a) kulluk etmesi</strong> emredilir.</p></div>
+                            
+                            <div class="note-item md:col-span-2 bg-yellow-50"><p class="text-medium text-center"><span class="font-bold text-rose-700 block text-base md:text-3xl mb-0 md:mb-2">Öğüt (Hisse)</span>Nimet verenin yalnızca Allah (cc) olduğunu bilmeli ve yalnızca O’na ibadet (şükür) etmeliyiz.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Yüzen, Sürüklenebilir Şeffaf Araç Çubuğu -->
+    <div id="toolbar" class="toolbar-widget">
+        <div id="toolbar-header">
+            <div class="text-gray-600 font-bold text-xs md:text-base flex items-center gap-1 md:gap-2 pointer-events-none">
+                <i class="fas fa-grip-horizontal"></i> <span>Araçlar</span>
+            </div>
+            <button class="minimize-btn" onclick="toggleToolbar()" title="Küçült/Büyüt">
+                <i id="toolbar-toggle-icon" class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        <div id="toolbar-body">
+            <div class="flex gap-1 md:gap-2 border-r border-gray-300 pr-1 md:pr-4">
+                <button class="nav-btn zoom-btn" onclick="toggleFullScreen()" title="Tam Ekran"><i id="fs-icon" class="fas fa-expand"></i></button>
+                <button class="nav-btn zoom-btn" onclick="changeZoom(-5)" title="Küçült"><i class="fas fa-search-minus"></i></button>
+                <button class="nav-btn zoom-btn font-bold text-sm md:text-lg" onclick="resetZoom()" title="Orijinal Boyut">A</button>
+                <button class="nav-btn zoom-btn" onclick="changeZoom(5)" title="Büyüt"><i class="fas fa-search-plus"></i></button>
+            </div>
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled><i class="fas fa-chevron-left"></i></button>
+            <div class="progress-dots" id="dots-container"></div>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('dots-container');
+        let currentZoom = 100;
+
+        function changeZoom(amount) {
+            currentZoom += amount;
+            if(currentZoom > 150) currentZoom = 150;
+            if(currentZoom < 70) currentZoom = 70;
+            document.documentElement.style.fontSize = currentZoom + '%';
+        }
+        function resetZoom() { currentZoom = 100; document.documentElement.style.fontSize = '100%'; }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{});
+            else if (document.exitFullscreen) document.exitFullscreen();
+        }
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById('fs-icon');
+            if (document.fullscreenElement) icon.classList.replace('fa-expand', 'fa-compress');
+            else icon.classList.replace('fa-compress', 'fa-expand');
+        });
+
+        for(let i=0; i<totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+        const dots = document.querySelectorAll('.dot');
+
+        function updateControls() {
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            dots.forEach((dot, index) => { dot.classList.toggle('active', index === currentSlide); });
+        }
+
+        function goToSlide(index) {
+            if (index === currentSlide) return;
+            const dir = index > currentSlide ? 'right' : 'left';
+            const outAnim = dir === 'right' ? 'slide-out-left' : 'slide-out-right';
+            const inAnim = dir === 'right' ? 'slide-in-right' : 'slide-in-left';
+            
+            slides[currentSlide].classList.add('active', outAnim);
+            slides[index].classList.add('active', inAnim);
+            
+            let oldIndex = currentSlide;
+            currentSlide = index;
+            updateControls();
+
+            setTimeout(() => {
+                slides[oldIndex].className = 'slide';
+                slides[currentSlide].className = 'slide active';
+            }, 400);
+        }
+
+        function changeSlide(step) {
+            const newIndex = currentSlide + step;
+            if (newIndex >= 0 && newIndex < totalSlides) goToSlide(newIndex);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') changeSlide(1);
+            else if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        // --- Oyun 1: Ayet Sıralama ---
+        const verses = [
+            { id: 1, text: "1. Liîlâfi Ḳurayş" },
+            { id: 2, text: "2. Îlâfihim riḥleteşşitâi vessayf" },
+            { id: 3, text: "3. Felya’büdû rabbe hâẕelbeyt" },
+            { id: 4, text: "4. Elleẕî et’amehüm min cûivveâmenehüm min ḫavf" }
+        ];
+        let expectedVerse = 1;
+
+        function initSortGame() {
+            expectedVerse = 1;
+            document.getElementById('sort-win-screen').classList.add('hidden');
+            document.getElementById('sort-win-screen').classList.remove('flex');
+            
+            // Reset Progress Bar
+            for(let i=1; i<=4; i++) {
+                document.getElementById('sort-step-'+i).className = "w-8 h-8 md:w-16 md:h-16 rounded-full bg-gray-300 flex items-center justify-center font-bold text-white text-lg md:text-3xl transition-colors";
+                if(i<4) document.getElementById('sort-line-'+i).style.width = "0%";
+            }
+
+            const container = document.getElementById('verse-buttons');
+            container.innerHTML = "";
+            
+            // Karıştır
+            const shuffled = [...verses].sort(() => Math.random() - 0.5);
+            
+            shuffled.forEach(v => {
+                const btn = document.createElement('button');
+                btn.className = "verse-btn";
+                // Metin içindeki rakamı gizlemek isterseniz v.text.substring(3) yapabilirsiniz, ama çocuklar görsün.
+                // Zorlaştırmak için rakamları siliyoruz:
+                btn.innerText = v.text.substring(3); 
+                btn.onclick = () => checkVerse(btn, v.id);
+                container.appendChild(btn);
             });
         }
 
-        function checkQuiz(btn, index, userChoice) {
-            const item = quizData[index];
-            const feedbackEl = document.getElementById(`feedback-${index}`);
-            const parent = btn.parentElement;
-            const buttons = parent.querySelectorAll('button');
-            
-            // Disable buttons
-            buttons.forEach(b => b.disabled = true);
+        function checkVerse(btn, id) {
+            if(btn.classList.contains('correct')) return; // Zaten bilindi
 
-            feedbackEl.classList.remove('hidden');
-            
-            if (userChoice === item.a) {
-                // Correct
-                btn.classList.add('bg-green-500', 'text-white', 'border-transparent');
-                feedbackEl.innerHTML = `<span class="text-green-600">✓ ${item.note}</span>`;
+            if(id === expectedVerse) {
+                // Doğru ayet
+                btn.classList.add('correct');
+                
+                // İlerleme çubuğunu güncelle
+                document.getElementById('sort-step-'+expectedVerse).classList.replace('bg-gray-300', 'bg-teal-500');
+                if(expectedVerse < 4) {
+                    document.getElementById('sort-line-'+expectedVerse).style.width = "100%";
+                }
+
+                expectedVerse++;
+
+                // Oyun bitti mi?
+                if(expectedVerse > 4) {
+                    setTimeout(() => {
+                        document.getElementById('sort-win-screen').classList.remove('hidden');
+                        document.getElementById('sort-win-screen').classList.add('flex');
+                        fireConfetti('sort-game-area', 80);
+                    }, 500);
+                }
             } else {
-                // Wrong
-                btn.classList.add('bg-red-500', 'text-white', 'border-transparent');
-                feedbackEl.innerHTML = `<span class="text-red-600">✗ ${item.note}</span>`;
+                // Yanlış ayet
+                btn.classList.add('wrong');
+                setTimeout(() => btn.classList.remove('wrong'), 500);
+            }
+        }
+        initSortGame();
+
+
+        // --- Oyun 2: Doğru Yanlış Testi ---
+        const tfQuestions = [
+            { q: "Surede Hz. İbrahim'in ailesi Kureyş'ten bahsedilir.", a: false, expl: "Yanlış! Hz. Muhammed'in (sav) ailesi Kureyş kabilesinden bahsedilir." },
+            { q: "Kureyş kabilesi geçimini sadece hayvancılıkla sağlamıştır.", a: false, expl: "Yanlış! Geçimlerini yaz ve kış yaptıkları ticari yolculuklarla sağlamışlardır." },
+            { q: "Surede Allah'ın (cc) Kureyş'e verdiği nimetler hatırlatılır.", a: true, expl: "Doğru! Onları doyurması ve korkudan emin kılması gibi nimetler hatırlatılır." },
+            { q: "Kureyş suresinde tevhit inancına (Allah'ın birliğine) dikkat çekilir.", a: true, expl: "Doğru! Kâbe'nin Rabbine (Allah'a) kulluk edin diyerek tevhit vurgulanır." },
+            { q: "Allah (cc) Kureyş kabilesinin güvenliğini sağlamıştır.", a: true, expl: "Doğru! Ayette 'her çeşit korkudan emin kılan' Yüce Allah'tır." }
+        ];
+        let currentTfIndex = 0;
+
+        function loadTfQuestion() {
+            if(currentTfIndex >= tfQuestions.length) {
+                document.getElementById('tf-question-text').innerHTML = "<i class='fas fa-medal text-yellow-500 text-6xl md:text-8xl block mb-4'></i> Harika! Tüm soruları tamamladınız.";
+                document.getElementById('tf-buttons-container').classList.add('hidden');
+                document.getElementById('tf-header-area').classList.add('hidden');
+                document.getElementById('tf-restart-btn').classList.remove('hidden');
+                fireConfetti('tf-game-area', 80);
+                return;
+            }
+            document.getElementById('tf-question-text').innerText = tfQuestions[currentTfIndex].q;
+            document.getElementById('tf-current-num').innerText = currentTfIndex + 1;
+        }
+
+        function checkTfAnswer(userAnswer) {
+            const isCorrect = userAnswer === tfQuestions[currentTfIndex].a;
+            const feedbackBox = document.getElementById('tf-feedback');
+            const icon = document.getElementById('tf-feedback-icon');
+            const text = document.getElementById('tf-feedback-text');
+
+            if(isCorrect) {
+                icon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+                text.innerHTML = '<span class="text-green-600">Doğru!</span><br><span class="text-xl md:text-3xl text-gray-600 font-normal mt-2 md:mt-4 block">' + tfQuestions[currentTfIndex].expl + '</span>';
+            } else {
+                icon.innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+                text.innerHTML = '<span class="text-red-600">Yanlış!</span><br><span class="text-xl md:text-3xl text-gray-600 font-normal mt-2 md:mt-4 block">' + tfQuestions[currentTfIndex].expl + '</span>';
+            }
+            feedbackBox.classList.add('show');
+        }
+
+        function nextTfQuestion() {
+            document.getElementById('tf-feedback').classList.remove('show');
+            currentTfIndex++;
+            loadTfQuestion();
+        }
+
+        function restartTfGame() {
+            currentTfIndex = 0;
+            document.getElementById('tf-buttons-container').classList.remove('hidden');
+            document.getElementById('tf-restart-btn').classList.add('hidden');
+            document.getElementById('tf-header-area').classList.remove('hidden');
+            loadTfQuestion();
+        }
+
+        loadTfQuestion();
+
+        // Ortak: Konfeti
+        function fireConfetti(areaId, baseCount = 30) {
+            const area = document.getElementById(areaId);
+            const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d', '#10b981', '#3b82f6'];
+            
+            for (let i = 0; i < baseCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                if (Math.random() > 0.5) confetti.style.borderRadius = '50%';
+                
+                area.appendChild(confetti);
+
+                const duration = Math.random() * 3 + 2; 
+                const delay = Math.random() * 0.2;
+                
+                confetti.animate([
+                    { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${Math.random()*200 - 100}px, ${area.offsetHeight}px, 0) rotate(${Math.random()*720}deg)`, opacity: 0 }
+                ], { duration: duration * 1000, delay: delay * 1000, fill: 'forwards' });
+
+                setTimeout(() => confetti.remove(), (duration + delay) * 1000);
             }
         }
 
-        // Start Scripts
-        initGame();
-        initQuiz();
+        // --- ARAÇ ÇUBUĞU KONTROLLERİ ---
+        function toggleToolbar() {
+            const body = document.getElementById('toolbar-body');
+            const icon = document.getElementById('toolbar-toggle-icon');
+            if (body.classList.contains('collapsed')) {
+                body.classList.remove('collapsed');
+                icon.className = 'fas fa-chevron-down';
+            } else {
+                body.classList.add('collapsed');
+                icon.className = 'fas fa-chevron-up';
+            }
+        }
+
+        const toolbar = document.getElementById('toolbar');
+        const handle = document.getElementById('toolbar-header');
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+
+        function dragStart(e) {
+            if (e.target.closest('.minimize-btn')) return; 
+            e.preventDefault();
+            isDragging = true;
+            
+            if (!toolbar.classList.contains('is-dragged')) {
+                const rect = toolbar.getBoundingClientRect();
+                toolbar.classList.add('is-dragged');
+                toolbar.style.left = rect.left + 'px';
+                toolbar.style.top = rect.top + 'px';
+                toolbar.style.bottom = 'auto';
+                toolbar.style.right = 'auto';
+            }
+
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            startX = clientX; startY = clientY;
+            initialLeft = toolbar.offsetLeft; initialTop = toolbar.offsetTop;
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+            let newLeft = initialLeft + (clientX - startX);
+            let newTop = initialTop + (clientY - startY);
+
+            const rect = toolbar.getBoundingClientRect();
+            if (newLeft < 0) newLeft = 0;
+            if (newTop < 0) newTop = 0;
+            if (newLeft + rect.width > window.innerWidth) newLeft = window.innerWidth - rect.width;
+            if (newTop + rect.height > window.innerHeight) newTop = window.innerHeight - rect.height;
+
+            toolbar.style.left = newLeft + 'px';
+            toolbar.style.top = newTop + 'px';
+        }
+
+        function dragEnd() { isDragging = false; }
+
+        handle.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+        handle.addEventListener('touchstart', dragStart, { passive: false });
+        document.addEventListener('touchmove', drag, { passive: false });
+        document.addEventListener('touchend', dragEnd);
 
     </script>
 </body>

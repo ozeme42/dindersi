@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kur'an-ı Kerim'in İç Düzeni - 6. Sınıf</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #f0fdf4; /* Light Mint Background */
+            background-image: radial-gradient(#dcfce7 10%, transparent 10%);
+            background-size: 20px 20px;
+        }
+        .arabic-text {
+            font-family: 'Amiri', serif;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .blob {
+            position: absolute;
+            filter: blur(40px);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 text-gray-700">
+
+    <!-- Main Container -->
+    <div class="max-w-5xl mx-auto relative">
+        
+        <!-- Decorative Blobs -->
+        <div class="blob bg-green-300 w-64 h-64 rounded-full top-0 left-0 opacity-50 mix-blend-multiply animate-pulse"></div>
+        <div class="blob bg-yellow-300 w-64 h-64 rounded-full bottom-0 right-0 opacity-50 mix-blend-multiply animate-pulse" style="animation-delay: 1s;"></div>
+
+        <!-- Header -->
+        <header class="text-center mb-10 bg-white p-8 rounded-3xl shadow-xl border-b-8 border-green-500 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <i class="fas fa-book-quran text-9xl text-green-600"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-green-600 mb-2">Kur'an-ı Kerim'in İç Düzeni</h1>
+            <p class="text-xl text-orange-500 font-semibold">6. Sınıf - 1. Ünite Özeti</p>
+            <div class="mt-4 flex justify-center gap-2">
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">#Ayet</span>
+                <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm">#Sure</span>
+                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">#Cüz</span>
+                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">#Hizip</span>
+            </div>
+        </header>
+
+        <!-- 4 Main Concepts Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            
+            <!-- AYET Card -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-8 border-rose-400 card-hover transition-all duration-300">
+                <div class="bg-rose-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto text-rose-500">
+                    <i class="fas fa-star text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">1. AYET</h2>
+                <p class="text-center text-gray-600 mb-4">Kur'an'ın her bir cümlesine denir.</p>
+                <ul class="text-sm space-y-2 bg-rose-50 p-3 rounded-xl">
+                    <li class="flex items-center"><i class="fas fa-check text-rose-400 mr-2"></i>Duraklarla ayrılır.</li>
+                    <li class="flex items-center"><i class="fas fa-check text-rose-400 mr-2"></i>Vahiy cümlesidir.</li>
+                    <li class="flex items-center"><i class="fas fa-check text-rose-400 mr-2"></i>Kısa veya uzun olabilir.</li>
+                </ul>
+            </div>
+
+            <!-- SURE Card -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-8 border-orange-400 card-hover transition-all duration-300">
+                <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto text-orange-500">
+                    <i class="fas fa-book-open text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">2. SURE</h2>
+                <p class="text-center text-gray-600 mb-4">Ayetlerin oluşturduğu bölümlerdir.</p>
+                <ul class="text-sm space-y-2 bg-orange-50 p-3 rounded-xl">
+                    <li class="flex items-center"><i class="fas fa-check text-orange-400 mr-2"></i>Toplam <strong>114</strong> sure vardır.</li>
+                    <li class="flex items-center"><i class="fas fa-check text-orange-400 mr-2"></i>Tevbe hariç Besmele ile başlar.</li>
+                    <li class="flex items-center"><i class="fas fa-check text-orange-400 mr-2"></i>En kısa: Kevser</li>
+                </ul>
+            </div>
+
+            <!-- CÜZ Card -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-8 border-purple-400 card-hover transition-all duration-300">
+                <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto text-purple-500">
+                    <i class="fas fa-chart-pie text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">3. CÜZ</h2>
+                <p class="text-center text-gray-600 mb-4">20 Sayfalık bölümdür.</p>
+                <ul class="text-sm space-y-2 bg-purple-50 p-3 rounded-xl">
+                    <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Toplam <strong>30</strong> cüz vardır.</li>
+                    <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Okumayı kolaylaştırır.</li>
+                    <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Ramazan'da mukabele yapılır.</li>
+                </ul>
+            </div>
+
+            <!-- HİZİP Card -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-8 border-blue-400 card-hover transition-all duration-300">
+                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto text-blue-500">
+                    <i class="fas fa-bookmark text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">4. HİZİP</h2>
+                <p class="text-center text-gray-600 mb-4">Cüzün her 5 sayfasına denir.</p>
+                <ul class="text-sm space-y-2 bg-blue-50 p-3 rounded-xl">
+                    <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>1 Cüz = <strong>4 Hizip</strong></li>
+                    <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>Toplam 120 hizip vardır.</li>
+                    <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>Sayfa kenarında işareti vardır.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Math Section (Visual Connection) -->
+        <div class="bg-indigo-600 text-white p-8 rounded-3xl shadow-xl mb-12 flex flex-col md:flex-row items-center justify-around text-center">
+            <div class="mb-4 md:mb-0">
+                <span class="text-5xl font-bold block">5</span>
+                <span class="opacity-80">Sayfa</span>
+                <div class="mt-2 text-xl font-bold text-yellow-300">= 1 HİZİP</div>
+            </div>
+            <div class="text-3xl opacity-50 hidden md:block"><i class="fas fa-arrow-right"></i></div>
+            <div class="mb-4 md:mb-0">
+                <span class="text-5xl font-bold block">4</span>
+                <span class="opacity-80">Hizip</span>
+                <div class="mt-2 text-xl font-bold text-yellow-300">= 1 CÜZ</div>
+            </div>
+            <div class="text-3xl opacity-50 hidden md:block"><i class="fas fa-arrow-right"></i></div>
+            <div>
+                <span class="text-5xl font-bold block">30</span>
+                <span class="opacity-80">Cüz</span>
+                <div class="mt-2 text-xl font-bold text-yellow-300">= KUR'AN</div>
+            </div>
+        </div>
+
+        <!-- Peltek Harfler Section -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-12 border-4 border-yellow-200">
+            <div class="bg-yellow-200 p-4 text-center">
+                <h3 class="text-2xl font-bold text-yellow-800">Dikkat! Peltek Harfler</h3>
+                <p class="text-yellow-700">Dil ucunu dişlere değdirerek okumalıyız.</p>
+            </div>
+            <div class="p-8 flex flex-wrap justify-center gap-8 md:gap-16">
+                <!-- Se -->
+                <div class="text-center group">
+                    <div class="w-24 h-24 bg-yellow-50 rounded-full flex items-center justify-center border-4 border-yellow-300 mb-2 group-hover:bg-yellow-300 transition-colors">
+                        <span class="arabic-text text-6xl text-gray-800">ث</span>
+                    </div>
+                    <h4 class="font-bold text-xl text-gray-700">Peltek Se</h4>
+                    <p class="text-sm text-gray-500">(İnce okunur)</p>
+                </div>
+
+                <!-- Zel -->
+                <div class="text-center group">
+                    <div class="w-24 h-24 bg-yellow-50 rounded-full flex items-center justify-center border-4 border-yellow-300 mb-2 group-hover:bg-yellow-300 transition-colors">
+                        <span class="arabic-text text-6xl text-gray-800">ذ</span>
+                    </div>
+                    <h4 class="font-bold text-xl text-gray-700">Peltek Zel</h4>
+                    <p class="text-sm text-gray-500">(İnce okunur)</p>
+                </div>
+
+                <!-- Za -->
+                <div class="text-center group">
+                    <div class="w-24 h-24 bg-yellow-50 rounded-full flex items-center justify-center border-4 border-yellow-300 mb-2 group-hover:bg-yellow-300 transition-colors">
+                        <span class="arabic-text text-6xl text-gray-800">ظ</span>
+                    </div>
+                    <h4 class="font-bold text-xl text-gray-700">Peltek Za</h4>
+                    <p class="text-sm text-gray-500"><strong>(Kalın okunur)</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Salli Barik Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-gradient-to-br from-teal-500 to-green-600 rounded-3xl p-6 text-white shadow-lg">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-hands-praying text-3xl mr-3 text-yellow-300"></i>
+                    <h3 class="text-2xl font-bold">Salli ve Barik Duaları</h3>
+                </div>
+                <p class="mb-4 text-lg opacity-90">Bu dualar namazların son oturuşunda okunur.</p>
+                <div class="bg-white/20 p-4 rounded-xl backdrop-blur-sm">
+                    <p class="font-semibold italic">"Allah'ım! Hz. Muhammed'e ve ailesine rahmet et..."</p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-3xl p-6 shadow-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center text-center">
+                <h3 class="text-xl font-bold text-gray-700 mb-2">Bunları Biliyor muydun?</h3>
+                <p class="text-gray-600">Kur'an-ı Kerim <strong>23 yılda</strong> parça parça indirilmiştir.</p>
+                <div class="mt-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg font-bold">
+                    Son İlahi Kitaptır!
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>© 6. Sınıf Din Kültürü ve Ahlak Bilgisi Dersi Materyali</p>
+        </footer>
+
+    </div>
+</body>
+</html>

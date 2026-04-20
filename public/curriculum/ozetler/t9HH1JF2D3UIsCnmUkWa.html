@@ -309,7 +309,7 @@
                                         <h3 className="text-2xl font-bold text-slate-800 mb-4">Kendini Test Etmeye Hazır mısın?</h3>
                                         <p className="text-slate-500 mb-8">Ünitede öğrendiğin bilgileri 4 soruda test edelim.</p>
                                         <button 
-                                            onClick={() => setCurrentQuestion(0)} 
+                                            onClick={() => { setShowQuiz(true); setCurrentQuestion(0); }}
                                             className="bg-emerald-600 text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition flex items-center gap-2 mx-auto"
                                         >
                                             Teste Başla <ArrowRight size={20} />

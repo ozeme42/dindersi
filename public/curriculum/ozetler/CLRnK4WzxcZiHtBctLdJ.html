@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>En Güzel Örnek Peygamberimiz (s.a.v) - Detaylı Sunum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap');
+
+        html { font-size: 100%; transition: font-size 0.3s ease; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #f0fdfa 0%, #d1fae5 100%);
+            overflow: hidden; margin: 0; padding: 0; height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        h1, h2, h3, .title-font { font-family: 'Quicksand', sans-serif; }
+
+        .slide {
+            display: none; opacity: 0; height: 100%; width: 100%; padding: 2rem;
+            box-sizing: border-box; flex-direction: column; justify-content: center;
+            align-items: center; transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            position: absolute; top: 0; left: 0;
+        }
+
+        .slide.active { display: flex; opacity: 1; z-index: 10; }
+
+        .slide.slide-in-right { animation: slideInRight 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
+        .slide.slide-in-left { animation: slideInLeft 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
+        .slide.slide-out-left { animation: slideOutLeft 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
+        .slide.slide-out-right { animation: slideOutRight 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
+
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutLeft { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-100%); opacity: 0; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+        .text-huge { font-size: 3.5rem; line-height: 1.2; }
+        .text-x-large { font-size: 2.2rem; line-height: 1.4; }
+        .text-large { font-size: 1.6rem; line-height: 1.6; }
+        .text-medium-large { font-size: 1.3rem; line-height: 1.6; }
+
+        .presentation-card {
+            background: white; border-radius: 2rem; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 95%; max-width: 1500px; height: 88vh; display: flex; flex-direction: column;
+            overflow: hidden; position: relative;
+        }
+
+        .card-header {
+            background: #047857; color: white; padding: 1.2rem 3rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .card-body {
+            flex-grow: 1; padding: 2.5rem; overflow-y: auto;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+
+        .card-body::-webkit-scrollbar { width: 10px; }
+        .card-body::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .card-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .card-body::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .controls {
+            position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 1rem; z-index: 50;
+            background: rgba(255, 255, 255, 0.95); padding: 0.8rem 1.5rem;
+            border-radius: 3rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            background: #10b981; color: white; border: none; width: 3.2rem; height: 3.2rem;
+            border-radius: 50%; font-size: 1.4rem; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:hover { transform: scale(1.1); filter: brightness(1.1); }
+        .nav-btn:active { transform: scale(0.95); }
+        .nav-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; box-shadow: none; color: #94a3b8; }
+
+        .zoom-btn { background: #f1f5f9; color: #334155; width: 2.8rem; height: 2.8rem; font-size: 1.1rem; }
+        .zoom-btn:hover { background: #e2e8f0; }
+
+        /* Slayt sayısı arttığı için noktaları sarmalamaya ayarlıyoruz */
+        .progress-dots { display: flex; align-items: center; gap: 0.4rem; margin: 0 0.5rem; flex-wrap: wrap; justify-content: center; max-width: 400px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: #d1d5db; transition: all 0.3s; cursor: pointer; margin-bottom: 2px; }
+        .dot.active { background: #059669; transform: scale(1.5); }
+
+        .icon-box {
+            width: 90px; height: 90px; border-radius: 1.5rem; display: flex;
+            align-items: center; justify-content: center; font-size: 2.8rem;
+            margin: 0 auto 1rem auto; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .notebook-paper {
+            background-color: #fefce8; border-left: 6px double #ef4444; padding: 1.5rem 2.5rem;
+            border-radius: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05), inset 0 0 20px rgba(0,0,0,0.02);
+            font-family: 'Quicksand', sans-serif; position: relative; height: auto; min-height: 100%;
+        }
+
+        .note-item {
+            break-inside: avoid-column; background: white; padding: 1rem 1.2rem;
+            border-radius: 0.5rem; margin-bottom: 0.8rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid #fef08a; font-size: 1.2rem;
+        }
+
+        /* Oyun Stilleri */
+        .match-btn { background: white; border: 3px solid #e2e8f0; border-radius: 1rem; padding: 0.8rem 1.2rem; font-size: 1.1rem; font-weight: bold; color: #475569; cursor: pointer; transition: all 0.3s; text-align: left; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .match-btn:hover { border-color: #94a3b8; transform: translateY(-2px); }
+        .match-btn.selected { border-color: #3b82f6; background: #eff6ff; color: #1d4ed8; transform: scale(1.02); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2); }
+        .match-btn.correct { border-color: #10b981; background: #ecfdf5; color: #047857; cursor: default; transform: none; opacity: 0.9; }
+        .match-btn.wrong { animation: shake 0.5s; border-color: #ef4444; background: #fef2f2; color: #b91c1c; }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+
+        .flip-card { background-color: transparent; width: 100%; height: 230px; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 1.5rem; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; font-size: 1.3rem; border: 4px solid rgba(255,255,255,0.5); }
+        .flip-card-front { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: white; }
+        .flip-card-back { background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); color: white; transform: rotateY(180deg); }
+
+        .tf-btn { padding: 1.5rem; font-size: 2rem; font-weight: bold; border-radius: 1.5rem; color: white; cursor: pointer; transition: all 0.2s; box-shadow: 0 10px 20px rgba(0,0,0,0.1); flex: 1; text-align: center; border: none; }
+        .tf-btn.true { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .tf-btn.false { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
+        .tf-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,0,0,0.2); }
+        .tf-btn:active { transform: scale(0.95); }
+        .tf-feedback { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; border-radius: 2rem; z-index: 20; background: rgba(255,255,255,0.95); flex-direction: column;}
+        .tf-feedback.show { display: flex; animation: fadeIn 0.3s forwards;}
+        
+        .anagram-slot { width: 70px; height: 80px; border: 4px dashed #cbd5e1; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: #1e293b; background: #f8fafc; transition: all 0.3s; margin: 0.2rem;}
+        .anagram-slot.filled { border: 4px solid #3b82f6; background: #eff6ff; color: #1d4ed8; }
+        .anagram-slot.correct-word { border-color: #10b981; background: #ecfdf5; color: #047857; animation: bounce 0.5s; }
+        .anagram-slot.wrong-word { border-color: #ef4444; background: #fef2f2; color: #b91c1c; animation: shake 0.5s; }
+        .anagram-letter-btn { width: 60px; height: 70px; border-radius: 1rem; border: none; background: #f59e0b; color: white; font-size: 2.2rem; font-weight: bold; cursor: pointer; box-shadow: 0 6px 0 #d97706, 0 10px 10px rgba(0,0,0,0.1); transition: all 0.1s; margin: 0.4rem; }
+        .anagram-letter-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #d97706; }
+        .anagram-letter-btn.used { opacity: 0; pointer-events: none; transform: scale(0); }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; z-index: 100; }
+    </style>
+</head>
+<body>
+
+    <div id="slides-container" class="relative w-full h-full">
+        
+        <!-- Slayt 0: Kapak -->
+        <div class="slide active" id="slide-0">
+            <div class="presentation-card bg-emerald-800 text-white justify-center items-center text-center p-12 border-4 border-emerald-600">
+                <i class="fas fa-book-open text-8xl text-emerald-300 mb-8 opacity-80"></i>
+                <h2 class="text-3xl tracking-widest text-emerald-200 mb-4 uppercase font-bold">7. Sınıf Siyer • 4. Ünite</h2>
+                <h1 class="text-huge font-bold mb-8 leading-tight">En Güzel Örnek<br><span class="text-yellow-300">Peygamberimiz</span> (s.a.v)</h1>
+                <div class="bg-emerald-900/50 p-6 rounded-2xl max-w-3xl mt-8 border border-emerald-700/50">
+                    <p class="text-x-large italic font-serif opacity-90">"Andolsun ki, Resulullah'ta sizin için... çok güzel bir örnek vardır."</p>
+                    <p class="text-xl mt-4 text-emerald-300 font-bold">(Ahzâb suresi, 21. ayet)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. İBADET HAYATI (BÖLÜM 1) -->
+        <div class="slide" id="slide-1">
+            <div class="presentation-card">
+                <div class="card-header bg-blue-700">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-praying-hands text-blue-200 mr-4"></i>1. İbadet Hayatı (1)</h2>
+                    <span class="text-blue-200 text-xl font-bold">1 / 14</span>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row gap-10 h-full items-center">
+                        <div class="flex-[1.5] space-y-6">
+                            <h3 class="text-4xl font-bold text-blue-900 border-b-4 border-blue-200 pb-4 inline-block">İhlas ve Samimiyet</h3>
+                            <p class="text-x-large text-gray-700 leading-relaxed">
+                                Peygamberimiz ibadetlerini <span class="highlight">gösterişten (riya) tamamen uzak</span> bir şekilde, sadece Allah'ın rızasını kazanmak için yapardı. Buna dinde <strong>"İhlas"</strong> denir.
+                            </p>
+                            <div class="bg-blue-50 p-6 rounded-2xl border-l-8 border-blue-500 shadow flex items-center gap-4">
+                                <i class="fas fa-heart text-4xl text-blue-500"></i>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-gray-800">Niyetin Önemi</h4>
+                                    <p class="text-xl text-gray-600 mt-2">"Ameller niyetlere göredir. Herkese niyet ettiği şeyin karşılığı vardır." buyurarak, ibadette dış görünüşten ziyade kalpteki samimiyetin ölçü olduğunu belirtmiştir.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1 bg-gradient-to-br from-blue-100 to-blue-200 rounded-[3rem] p-8 aspect-square flex flex-col justify-center items-center text-center shadow-xl">
+                            <i class="fas fa-kaaba text-8xl text-blue-700 mb-6"></i>
+                            <h3 class="text-3xl font-bold text-blue-900 mb-2">Gösterişsiz İbadet</h3>
+                            <p class="text-lg text-gray-700 font-semibold">Başkaları görsün diye kılınan namazı veya tutulan orucu, "gizli şirk (ortak koşma)" olarak nitelendirmiştir.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. İBADET HAYATI (BÖLÜM 2) -->
+        <div class="slide" id="slide-2">
+            <div class="presentation-card">
+                <div class="card-header bg-blue-800">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-clock text-blue-200 mr-4"></i>1. İbadet Hayatı (2)</h2>
+                    <span class="text-blue-200 text-xl font-bold">2 / 14</span>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-cols-2 gap-10 h-full">
+                        <div class="bg-white rounded-3xl p-8 border-4 border-blue-100 flex flex-col justify-center shadow-lg">
+                            <div class="icon-box bg-blue-100 text-blue-600 relative z-10"><i class="fas fa-infinity"></i></div>
+                            <h3 class="text-4xl font-bold text-blue-900 mb-4 text-center">Devamlılık (İstikrar)</h3>
+                            <p class="text-large text-gray-700 text-center mb-6">İbadetlerde bir gün çok yapıp diğer gün bırakmayı sevmezdi. İbadeti <span class="font-bold text-blue-700">hiç aksatmadan, dengeli bir şekilde</span> yapmayı tavsiye ederdi.</p>
+                            <div class="bg-blue-50 p-4 rounded-xl text-center text-xl font-bold text-blue-800 border border-blue-200">"Amellerin Allah'a en sevimli olanı, az da olsa devamlı olanıdır."</div>
+                        </div>
+                        
+                        <div class="bg-amber-50 rounded-3xl p-8 border-4 border-amber-200 flex flex-col justify-center shadow-lg">
+                            <div class="icon-box bg-amber-200 text-amber-700 relative z-10"><i class="fas fa-praying-hands"></i></div>
+                            <h3 class="text-4xl font-bold text-amber-900 mb-4 text-center">İbadetin Özü: Şükür</h3>
+                            <p class="text-large text-gray-700 text-center mb-6">Geceleri (Teheccüd namazında) ayakları şişene kadar namaz kıldığında, Hz. Aişe'nin "Senin geçmiş ve gelecek günahların bağışlandı" sözüne verdiği cevap:</p>
+                            <div class="bg-white p-4 rounded-xl text-center text-2xl font-extrabold text-amber-800 border border-amber-300">"Şükreden bir kul olmayayım mı?"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. RAMAZAN VE ORUÇ (BÖLÜM 1) -->
+        <div class="slide" id="slide-3">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-700">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-moon text-indigo-200 mr-4"></i>2. Ramazan ve Oruç (1)</h2>
+                    <span class="text-indigo-200 text-xl font-bold">3 / 14</span>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row gap-8 h-full items-center">
+                        <div class="flex-[1] flex flex-col justify-center items-center bg-indigo-50 rounded-[2rem] p-8 h-full border border-indigo-100 shadow-inner">
+                            <i class="fas fa-book-open text-8xl text-indigo-400 mb-6"></i>
+                            <h3 class="text-3xl font-bold text-indigo-900 mb-4 text-center">Kur'an ve Mukabele</h3>
+                            <p class="text-xl text-gray-700 text-center">Ramazan ayı bir Kur'an ayıdır. Peygamberimiz her Ramazan ayında Hz. Cebrail (a.s) ile bir araya gelir ve karşılıklı olarak Kur'an-ı Kerim okurlardı. Bu sünnete günümüzde <span class="font-bold text-indigo-700 text-2xl">MUKABELE</span> diyoruz.</p>
+                        </div>
+
+                        <div class="flex-[1] flex flex-col justify-center items-center bg-teal-50 rounded-[2rem] p-8 h-full border border-teal-100 shadow-inner">
+                            <i class="fas fa-hand-holding-heart text-8xl text-teal-400 mb-6"></i>
+                            <h3 class="text-3xl font-bold text-teal-900 mb-4 text-center">Cömertlik Ayı</h3>
+                            <p class="text-xl text-gray-700 text-center">Peygamberimiz normalde de insanların en cömerdi idi. Fakat Ramazan ayında onun cömertliği <span class="font-bold text-teal-700">"esen rüzgarlardan daha hızlı"</span> olurdu. Sadaka vermeyi ve iftar ettirmeyi teşvik ederdi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. RAMAZAN VE ORUÇ (BÖLÜM 2) -->
+        <div class="slide" id="slide-4">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-800">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-utensils text-indigo-200 mr-4"></i>2. Ramazan ve Oruç (2)</h2>
+                    <span class="text-indigo-200 text-xl font-bold">4 / 14</span>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col gap-6 h-full">
+                        <div class="flex gap-6 flex-[2]">
+                            <div class="bg-yellow-50 p-6 rounded-3xl border border-yellow-200 shadow-md flex-1 flex flex-col justify-center text-center">
+                                <i class="fas fa-sun text-5xl text-yellow-500 mb-4"></i>
+                                <h4 class="font-bold text-3xl text-yellow-800 mb-2">Sahur Bereketi</h4>
+                                <p class="text-xl text-gray-700">Oruç tutacakların mutlaka sahura kalkmasını tavsiye eder, <strong>"Sahura kalkın, zira sahurda bereket vardır"</strong> derdi. Sahur vaktini olabildiğince <strong>geciktirirdi</strong> (tehir ederdi).</p>
+                            </div>
+                            <div class="bg-orange-50 p-6 rounded-3xl border border-orange-200 shadow-md flex-1 flex flex-col justify-center text-center">
+                                <i class="fas fa-cloud-sun text-5xl text-orange-500 mb-4"></i>
+                                <h4 class="font-bold text-3xl text-orange-800 mb-2">İftar Sevinci</h4>
+                                <p class="text-xl text-gray-700">Oruç açarken (iftarda) vakit girer girmez <strong>acele ederdi</strong>. Orucunu genellikle taze hurma veya su ile açar ve iftar duasını okurdu.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-purple-100 p-6 rounded-3xl border border-purple-200 shadow-md flex-[1] flex items-center gap-8">
+                            <i class="fas fa-mosque text-6xl text-purple-600 pl-4"></i>
+                            <div>
+                                <h4 class="font-bold text-3xl text-purple-900 mb-2">İtikaf İbadeti</h4>
+                                <p class="text-xl text-gray-800">Ramazan'ın <span class="font-bold">son 10 gününde</span> dünya işlerini bırakıp mescitte ibadete çekilirdi. Bu ibadete <strong>İtikaf</strong> denir. Kadir Gecesi'ni de bu son 10 gün içinde arardı.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. GİYİM KUŞAM ADABI (BÖLÜM 1) -->
+        <div class="slide" id="slide-5">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-700">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-tshirt text-teal-200 mr-4"></i>3. Giyim Kuşam Adabı (1)</h2>
+                    <span class="text-teal-200 text-xl font-bold">5 / 14</span>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row items-center gap-10 h-full">
+                        <div class="flex-[1.5] space-y-6">
+                            <h3 class="text-4xl font-bold text-teal-900 border-b-4 border-teal-200 pb-4 inline-block">Temizlik ve Düzen</h3>
+                            <p class="text-x-large text-gray-700 leading-relaxed">
+                                Peygamberimiz <span class="highlight">"Temizlik imanın yarısıdır"</span> buyurarak her daim temizliğe büyük önem vermiştir.
+                            </p>
+                            <ul class="text-large text-gray-600 space-y-4">
+                                <li class="flex items-center"><i class="fas fa-chevron-right text-teal-500 mr-3 text-2xl"></i>Elbiselerinin daima temiz ve düzenli olmasına özen gösterirdi.</li>
+                                <li class="flex items-center"><i class="fas fa-chevron-right text-teal-500 mr-3 text-2xl"></i>Kirli ve pejmürde (paspaye) kıyafetlerle dolaşmayı hoş karşılamazdı.</li>
+                                <li class="flex items-center"><i class="fas fa-chevron-right text-teal-500 mr-3 text-2xl"></i>Saç ve sakal bakımını yapar, aynaya bakarak saçlarını tarardı.</li>
+                            </ul>
+                        </div>
+                        <div class="flex-1 bg-gradient-to-tr from-teal-50 to-teal-100 rounded-[3rem] p-8 aspect-square flex flex-col justify-center items-center text-center shadow-lg border-4 border-white">
+                            <i class="fas fa-pump-soap text-8xl text-teal-600 mb-6"></i>
+                            <h3 class="text-3xl font-bold text-teal-900 mb-2">Güzel Koku (Misk)</h3>
+                            <p class="text-lg text-gray-700">Güzel kokuyu çok sever, misk ve gül yağı sürünürdü. Yanından geçenler güzel kokusundan onun geçtiğini anlardı.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. GİYİM KUŞAM ADABI (BÖLÜM 2) -->
+        <div class="slide" id="slide-6">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-800">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-leaf text-teal-200 mr-4"></i>3. Giyim Kuşam Adabı (2)</h2>
+                    <span class="text-teal-200 text-xl font-bold">6 / 14</span>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-cols-2 gap-10 h-full">
+                        <div class="bg-gray-50 rounded-3xl p-8 border-4 border-gray-200 flex flex-col justify-center shadow-lg relative">
+                            <div class="absolute top-4 right-4 text-6xl text-gray-300"><i class="fas fa-ban"></i></div>
+                            <h3 class="text-4xl font-bold text-gray-800 mb-6">Sadelik ve İsraftan Kaçınma</h3>
+                            <p class="text-x-large text-gray-700 mb-6">Giyiminde lükse, markaya veya gösterişe kaçmazdı. Gardırobunda gereğinden fazla kıyafet bulundurmaz, <span class="font-bold text-red-500">israf etmeyi</span> kesinlikle yasaklardı.</p>
+                            <div class="bg-white p-4 rounded-xl text-xl font-bold text-gray-600 border border-gray-300">"Kibirlenmeden ve israf etmeden yiyiniz, içiniz, giyininiz."</div>
+                        </div>
+                        
+                        <div class="bg-sky-50 rounded-3xl p-8 border-4 border-sky-200 flex flex-col justify-center shadow-lg relative">
+                            <div class="absolute top-4 right-4 text-6xl text-sky-300"><i class="fas fa-user-tie"></i></div>
+                            <h3 class="text-4xl font-bold text-sky-900 mb-6">Kibir Aracı Yapmamak</h3>
+                            <p class="text-x-large text-gray-700 mb-6">Kıyafetin böbürlenme, hava atma ve diğer insanları küçümseme (kibir) aracı olarak kullanılmasını büyük bir günah sayardı.</p>
+                            <div class="bg-white p-4 rounded-xl text-xl font-bold text-sky-800 border border-sky-300">Not: Renk olarak temizliği ve sadeliği temsil eden <strong>beyaz renk</strong> elbiseleri tercih ve tavsiye ederdi.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. NEZAKET VE HİLM (BÖLÜM 1) -->
+        <div class="slide" id="slide-7">
+            <div class="presentation-card">
+                <div class="card-header bg-rose-700">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-smile text-rose-200 mr-4"></i>4. Nezaketi ve Hilmi (1)</h2>
+                    <span class="text-rose-200 text-xl font-bold">7 / 14</span>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row items-center gap-10 h-full">
+                        <div class="flex-1 bg-pink-50 p-10 rounded-[3rem] border-2 border-pink-200 shadow-xl text-center">
+                            <i class="fas fa-smile-beam text-9xl text-pink-500 mb-6"></i>
+                            <h3 class="text-4xl font-bold text-pink-900 mb-6">Zarafeti ve Tebessümü</h3>
+                            <p class="text-x-large text-gray-800 mb-6">Çevresindeki herkese çok kibar davranır, kaba ve kırıcı söz söylemezdi. Herkese daima <span class="font-bold text-pink-600">güler yüzle (tebessümle)</span> yaklaşırdı.</p>
+                            <div class="bg-white p-5 rounded-2xl font-bold text-2xl text-pink-800 shadow-inner">
+                                "Mümin kardeşine tebessüm etmen sadakadır."
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-6">
+                            <div class="bg-white p-6 rounded-2xl border-l-8 border-rose-500 shadow-md">
+                                <h4 class="text-2xl font-bold text-gray-800 mb-2"><i class="fas fa-ear-listen text-rose-500 mr-2"></i>İletişim Adabı</h4>
+                                <p class="text-xl text-gray-600">Konuşan kişinin sözünü asla kesmez, o lafını bitirene kadar onu dinlerdi.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl border-l-8 border-rose-500 shadow-md">
+                                <h4 class="text-2xl font-bold text-gray-800 mb-2"><i class="fas fa-users text-rose-500 mr-2"></i>İnsanlara Değer Verme</h4>
+                                <p class="text-xl text-gray-600">Biriyle konuşurken sadece kafasını çevirmez, bütün vücuduyla o kişiye döner ve değer verdiğini hissettirirdi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. NEZAKET VE HİLM (BÖLÜM 2) -->
+        <div class="slide" id="slide-8">
+            <div class="presentation-card">
+                <div class="card-header bg-rose-800">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-dove text-rose-200 mr-4"></i>4. Nezaketi ve Hilmi (2)</h2>
+                    <span class="text-rose-200 text-xl font-bold">8 / 14</span>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row gap-8 h-full items-stretch">
+                        <div class="flex-[3] bg-rose-50 rounded-3xl p-8 border-2 border-rose-100 flex flex-col justify-center shadow-lg relative overflow-hidden">
+                            <h3 class="text-4xl font-bold text-rose-900 mb-4">Hilm (Yumuşak Huyluluk) Nedir?</h3>
+                            <p class="text-x-large text-gray-800 mb-6"><span class="highlight">Hilm:</span> İnsanın öfkesine hakim olması, kaba davrananlara karşı bile tahammüllü, hoşgörülü ve sabırlı (yumuşak huylu) olmasıdır.</p>
+                            <div class="bg-white p-6 rounded-xl border-l-8 border-rose-500 shadow-md">
+                                <p class="text-xl text-gray-700"><strong>Bedevi Örneği:</strong> Çölden gelen kaba bir bedevi (köylü adam) gelip arkasından hırkasını sertçe çekerek canını yaktığında bile Peygamberimiz ona öfkelenmemiş, sadece gülümsemiş ve isteğini vermiştir.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex-[2] flex flex-col gap-6">
+                            <div class="bg-red-50 p-6 rounded-2xl border border-red-200 shadow-sm flex-1 flex flex-col justify-center items-center text-center">
+                                <i class="fas fa-fire-extinguisher text-5xl text-red-500 mb-4"></i>
+                                <h4 class="font-bold text-2xl text-red-800 mb-2">Öfke Kontrolü</h4>
+                                <p class="text-lg text-gray-700">"Gerçek pehlivan (güçlü kişi) güreşte rakibini yenen değil, <strong>öfkelendiği zaman öfkesine hakim olandır.</strong>" buyurmuştur.</p>
+                            </div>
+                            <div class="bg-green-50 p-6 rounded-2xl border border-green-200 shadow-sm flex-1 flex flex-col justify-center items-center text-center">
+                                <i class="fas fa-handshake text-5xl text-green-500 mb-4"></i>
+                                <h4 class="font-bold text-2xl text-green-800 mb-2">Bağışlayıcılığı</h4>
+                                <p class="text-lg text-gray-700">Taif'te kendisini taşlayanları affettiği gibi, kendisine kötülük edenleri şahsi meseleler yüzünden asla cezalandırmamıştır.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 9: Deftere Yazılacak Notlar -->
+        <div class="slide" id="slide-9">
+            <div class="presentation-card">
+                <div class="card-header bg-slate-800">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-pen-nib text-slate-200 mr-4"></i>Deftere Yazılacak Notlar</h2>
+                    <span class="text-slate-200 text-xl font-bold">9 / 14</span>
+                </div>
+                <div class="card-body bg-slate-50 p-4 md:p-8">
+                    <div class="notebook-paper flex flex-col">
+                        <h3 class="text-3xl font-bold text-center text-red-600 border-b-2 border-red-200 pb-3 mb-6">4. ÜNİTE TAM ÖZETİ</h3>
+                        <div class="columns-1 md:columns-2 gap-6 text-medium-large text-gray-800">
+                            <div class="note-item"><p><span class="font-bold text-blue-700">İbadette Devamlılık:</span> "Amellerin en hayırlısı az da olsa devamlı olanıdır" diyerek istikrarın önemini vurgulamıştır.</p></div>
+                            <div class="note-item"><p><span class="font-bold text-blue-700">İbadetin Özü Şükür:</span> Ayakları şişene kadar namaz kılmasının nedenini "Şükreden bir kul olmayayım mı?" diyerek açıklamıştır.</p></div>
+                            <div class="note-item"><p><span class="font-bold text-indigo-700">Mukabele ve İtikaf:</span> Ramazan ayında karşılıklı Kur'an okuması (Mukabele) ve son 10 gün ibadete çekilmesi (İtikaf) önemli sünnetleridir.</p></div>
+                            <div class="note-item"><p><span class="font-bold text-indigo-700">İftar ve Sahur:</span> İftarda acele eder, sahuru ise geciktirirdi.</p></div>
+                            <div class="note-item"><p><span class="font-bold text-teal-700">Giyim Kuşam:</span> Elbiselerinin temiz olmasına çok dikkat eder, israftan ve kıyafetle kibirlenmekten kaçınırdı.</p></div>
+                            <div class="note-item"><p><span class="font-bold text-rose-700">Tebessüm:</span> İnsanlara güler yüz göstermeyi bir sadaka (sevap) olarak görmüştür.</p></div>
+                            <div class="note-item"><p><span class="font-bold text-rose-700">Hilm (Yumuşak Huyluluk):</span> Öfkeyi kontrol etmek, kaba davrananlara bile nezaket ve sabırla yaklaşmaktır.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 10: ETKİNLİK 1 (Eşleştirme) -->
+        <div class="slide" id="slide-10">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-puzzle-piece text-orange-200 mr-4"></i>Oyun 1: Eşleştirme</h2>
+                    <span class="text-orange-200 text-xl font-bold">10 / 14</span>
+                </div>
+                <div class="card-body bg-orange-50 relative" id="match-game-area">
+                    <p class="text-center text-xl text-orange-800 mb-6 font-bold bg-orange-100 p-3 rounded-xl">Sol taraftaki kavramı seç, sağ taraftan doğru tanımı bul!</p>
+                    <div class="flex gap-10 h-full">
+                        <div class="flex flex-col gap-3 w-1/2" id="left-col">
+                            <button class="match-btn left-btn" data-id="1"><i class="fas fa-dove mr-2 text-rose-500"></i>Hilm Sahibi Olmak</button>
+                            <button class="match-btn left-btn" data-id="2"><i class="fas fa-moon mr-2 text-indigo-500"></i>İtikaf</button>
+                            <button class="match-btn left-btn" data-id="3"><i class="fas fa-quran mr-2 text-blue-500"></i>Mukabele</button>
+                            <button class="match-btn left-btn" data-id="4"><i class="fas fa-smile mr-2 text-pink-500"></i>Nezaket ve Tebessüm</button>
+                            <button class="match-btn left-btn" data-id="5"><i class="fas fa-tshirt mr-2 text-teal-500"></i>Giyimde İsraf</button>
+                        </div>
+                        <div class="flex flex-col gap-3 w-1/2" id="right-col">
+                            <button class="match-btn right-btn" data-match="4">İnsanlara kibar davranmak, güler yüzlü olmak (Sadakadır).</button>
+                            <button class="match-btn right-btn" data-match="5">Kıyafetlerde aşırı lükse, gösterişe ve gereksiz harcamaya kaçmak.</button>
+                            <button class="match-btn right-btn" data-match="1">Öfkeyi kontrol edebilmek, yumuşak huylu olmak.</button>
+                            <button class="match-btn right-btn" data-match="3">Ramazan ayında karşılıklı Kur'an-ı Kerim okumak.</button>
+                            <button class="match-btn right-btn" data-match="2">Ramazan'ın son 10 gününde dünya işlerini bırakıp mescitte ibadete çekilmek.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 11: ETKİNLİK 2 (Kart Çevirme) -->
+        <div class="slide" id="slide-11">
+            <div class="presentation-card">
+                <div class="card-header bg-pink-600">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-question-circle text-pink-200 mr-4"></i>Oyun 2: Çevir ve Bil!</h2>
+                    <span class="text-pink-200 text-xl font-bold">11 / 14</span>
+                </div>
+                <div class="card-body bg-pink-50">
+                    <p class="text-center text-xl text-pink-800 mb-8 font-bold bg-pink-100 p-3 rounded-xl">Soruyu oku, cevabı tahmin et, karta dokun!</p>
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center">
+                                    <i class="fas fa-praying-hands text-4xl mb-4 opacity-50"></i>
+                                    <p>Peygamberimizin "Az da olsa devamlı olanı hayırlıdır" dediği şey nedir?</p>
+                                    <span class="text-sm mt-4 bg-white/20 px-3 py-1 rounded-full">Dokun</span>
+                                </div>
+                                <div class="flip-card-back text-center"><p class="font-bold text-4xl">İbadet / Amel</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                                    <i class="fas fa-smile-beam text-4xl mb-4 opacity-50"></i>
+                                    <p>"Kardeşine gülümsemen/tebessüm etmen .........'dır." Hadisi nasıl biter?</p>
+                                    <span class="text-sm mt-4 bg-white/20 px-3 py-1 rounded-full">Dokun</span>
+                                </div>
+                                <div class="flip-card-back text-center" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"><p class="font-bold text-4xl">Sadaka</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
+                                    <i class="fas fa-broom text-4xl mb-4 opacity-50"></i>
+                                    <p>Peygamberimizin giyim kuşamda lüks ve gösterişten de önce en çok dikkat ettiği şey nedir?</p>
+                                    <span class="text-sm mt-4 bg-white/20 px-3 py-1 rounded-full">Dokun</span>
+                                </div>
+                                <div class="flip-card-back text-center" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);"><p class="font-bold text-4xl">Temizlik</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 12: ETKİNLİK 3 (Doğru Yanlış Testi) -->
+        <div class="slide" id="slide-12">
+            <div class="presentation-card">
+                <div class="card-header bg-cyan-700">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-check-double text-cyan-200 mr-4"></i>Oyun 3: Doğru mu, Yanlış mı?</h2>
+                    <span class="text-cyan-200 text-xl font-bold">12 / 14</span>
+                </div>
+                <div class="card-body bg-cyan-50 relative flex flex-col justify-center items-center" id="tf-game-area">
+                    
+                    <div id="tf-feedback" class="tf-feedback">
+                        <div id="tf-feedback-icon" class="text-8xl mb-4"></div>
+                        <h2 id="tf-feedback-text" class="text-4xl font-bold text-gray-800 mb-6"></h2>
+                        <button onclick="nextTfQuestion()" class="bg-cyan-600 text-white px-8 py-3 rounded-full text-2xl font-bold hover:bg-cyan-700 shadow-lg">Sonraki Soru <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+
+                    <div class="text-center mb-4"><span class="bg-cyan-200 text-cyan-800 px-4 py-1 rounded-full font-bold">Soru <span id="tf-current-num">1</span> / 5</span></div>
+
+                    <div class="bg-white border-4 border-cyan-200 rounded-3xl p-10 w-full max-w-4xl shadow-xl text-center mb-10">
+                        <h3 id="tf-question-text" class="text-4xl font-bold text-gray-800 leading-tight">...</h3>
+                    </div>
+
+                    <div class="flex w-full max-w-4xl gap-8">
+                        <button class="tf-btn true" onclick="checkTfAnswer(true)"><i class="fas fa-check-circle mr-3"></i> DOĞRU</button>
+                        <button class="tf-btn false" onclick="checkTfAnswer(false)"><i class="fas fa-times-circle mr-3"></i> YANLIŞ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 13: ETKİNLİK 4 (Anagram / Kelime Avı) -->
+        <div class="slide" id="slide-13">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-700">
+                    <h2 class="text-3xl font-bold"><i class="fas fa-sort-alpha-down text-indigo-200 mr-4"></i>Oyun 4: Kelime Avı (Anagram)</h2>
+                    <span class="text-indigo-200 text-xl font-bold">13 / 14</span>
+                </div>
+                <div class="card-body bg-indigo-50 flex flex-col justify-center items-center relative" id="anagram-game-area">
+                    
+                    <div class="bg-indigo-100 text-indigo-800 p-4 rounded-xl text-2xl font-bold text-center mb-8 border-2 border-indigo-200 w-full max-w-3xl shadow-sm">
+                        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i> İpucu: <span id="anagram-hint">...</span>
+                    </div>
+
+                    <div id="anagram-slots" class="flex gap-2 mb-12 flex-wrap justify-center"></div>
+                    <div id="anagram-letters" class="flex gap-2 mb-8 flex-wrap justify-center"></div>
+
+                    <div class="flex gap-4">
+                        <button onclick="clearAnagram()" class="bg-slate-200 text-slate-700 px-6 py-3 rounded-xl font-bold text-xl hover:bg-slate-300 shadow"><i class="fas fa-undo mr-2"></i>Geri Al</button>
+                        <button id="anagram-next-btn" onclick="nextAnagram()" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold text-xl hover:bg-indigo-700 shadow hidden">Sonraki Kelime <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+
+                    <div id="anagram-finish" class="tf-feedback" style="background: white;">
+                        <i class="fas fa-trophy text-yellow-500 text-9xl mb-6"></i>
+                        <h2 class="text-5xl font-bold text-indigo-800 mb-4">Tebrikler!</h2>
+                        <p class="text-2xl text-gray-600">Tüm kelimeleri başarıyla buldunuz.</p>
+                        <button onclick="resetAnagramGame()" class="mt-8 bg-indigo-600 text-white px-8 py-3 rounded-full text-2xl font-bold shadow-lg">Tekrar Oyna</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Alt Kontrol Çubuğu -->
+    <div class="controls">
+        <div class="flex gap-2 border-r-2 border-gray-200 pr-4">
+            <button class="nav-btn zoom-btn" onclick="changeZoom(-5)" title="Yazıları Küçült"><i class="fas fa-search-minus"></i></button>
+            <button class="nav-btn zoom-btn font-bold text-lg" onclick="resetZoom()" title="Orijinal Boyut">A</button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(5)" title="Yazıları Büyüt"><i class="fas fa-search-plus"></i></button>
+        </div>
+
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled><i class="fas fa-chevron-left"></i></button>
+        <div class="progress-dots" id="dots-container"></div>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <script>
+        // --- 1. SLAYT VE ZOOM KONTROLLERİ ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('dots-container');
+        let currentZoom = 100;
+
+        function changeZoom(amount) {
+            currentZoom += amount;
+            if(currentZoom > 150) currentZoom = 150;
+            if(currentZoom < 70) currentZoom = 70;
+            document.documentElement.style.fontSize = currentZoom + '%';
+        }
+        function resetZoom() { currentZoom = 100; document.documentElement.style.fontSize = '100%'; }
+
+        for(let i=0; i<totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+        const dots = document.querySelectorAll('.dot');
+
+        function updateControls() {
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            dots.forEach((dot, index) => { dot.classList.toggle('active', index === currentSlide); });
+        }
+
+        function goToSlide(index) {
+            if (index === currentSlide) return;
+            const direction = index > currentSlide ? 'right' : 'left';
+            const outAnim = direction === 'right' ? 'slide-out-left' : 'slide-out-right';
+            const inAnim = direction === 'right' ? 'slide-in-right' : 'slide-in-left';
+            const current = slides[currentSlide];
+            const next = slides[index];
+
+            slides.forEach(s => s.className = 'slide');
+            current.classList.add('active', outAnim);
+            next.classList.add('active', inAnim);
+
+            currentSlide = index;
+            updateControls();
+
+            setTimeout(() => {
+                current.className = 'slide';
+                next.className = 'slide active';
+            }, 600);
+        }
+
+        function changeSlide(step) {
+            const newIndex = currentSlide + step;
+            if (newIndex >= 0 && newIndex < totalSlides) goToSlide(newIndex);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') changeSlide(1);
+            else if (e.key === 'ArrowLeft') changeSlide(-1);
+            else if (e.key === '+') changeZoom(5);
+            else if (e.key === '-') changeZoom(-5);
+        });
+
+        // --- 2. OYUN 1: EŞLEŞTİRME MANTIĞI ---
+        let selectedLeft = null, selectedRight = null, correctMatches = 0;
+        const leftBtns = document.querySelectorAll('.left-btn'), rightBtns = document.querySelectorAll('.right-btn');
+
+        function handleMatchClick(e) {
+            const btn = e.target.closest('.match-btn');
+            if(btn.classList.contains('correct')) return;
+
+            if(btn.classList.contains('left-btn')) {
+                leftBtns.forEach(b => { if(!b.classList.contains('correct')) b.classList.remove('selected') });
+                btn.classList.add('selected'); selectedLeft = btn;
+            } else if(btn.classList.contains('right-btn')) {
+                rightBtns.forEach(b => { if(!b.classList.contains('correct')) b.classList.remove('selected') });
+                btn.classList.add('selected'); selectedRight = btn;
+            }
+
+            if(selectedLeft && selectedRight) {
+                if(selectedLeft.dataset.id === selectedRight.dataset.match) {
+                    selectedLeft.classList.replace('selected', 'correct'); selectedRight.classList.replace('selected', 'correct');
+                    selectedLeft.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>';
+                    selectedRight.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>';
+                    correctMatches++;
+                    if(correctMatches === 5) setTimeout(() => fireConfetti('match-game-area'), 300);
+                } else {
+                    selectedLeft.classList.add('wrong'); selectedRight.classList.add('wrong');
+                    setTimeout(() => {
+                        selectedLeft.classList.remove('wrong', 'selected'); selectedRight.classList.remove('wrong', 'selected');
+                    }, 600);
+                }
+                selectedLeft = null; selectedRight = null;
+            }
+        }
+        leftBtns.forEach(btn => btn.addEventListener('click', handleMatchClick));
+        rightBtns.forEach(btn => btn.addEventListener('click', handleMatchClick));
+
+
+        // --- 3. OYUN 3: DOĞRU YANLIŞ TESTİ MANTIĞI ---
+        const tfQuestions = [
+            { q: "Peygamberimiz kıyafetlerinin lüks, marka ve çok pahalı olmasına aşırı önem verirdi.", a: false, expl: "Hayır, O sadeliği tercih eder ve israftan kaçınırdı. En çok temizliğe önem verirdi." },
+            { q: "Hilm sahibi olmak, öfkeyi kontrol edip insanlara karşı yumuşak huylu olmak demektir.", a: true, expl: "Peygamberimiz kaba davranan bedevilere bile hilm ile (yumuşaklıkla) karşılık vermiştir." },
+            { q: "Peygamberimiz ibadetlerini insanların görmesi için değil, sadece Allah'ın rızası için (İhlasla) yapardı.", a: true, expl: "Gösterişten uzak, az da olsa devamlı ibadeti tercih ederdi." },
+            { q: "Oruç açarken (iftarda) hiç acele etmez, sahuru ise gecenin çok erken saatlerinde yapardı.", a: false, expl: "Tam tersi! İftarda vakit girer girmez acele eder, sahuru ise olabildiğince geciktirirdi." },
+            { q: "Ramazan ayında, diğer aylara göre cömertliğini ve yardımlarını daha da artırırdı.", a: true, expl: "Hadislerde Ramazan ayında esen rüzgarlardan daha cömert olduğu belirtilir." }
+        ];
+        let currentTfIndex = 0;
+
+        function loadTfQuestion() {
+            if(currentTfIndex >= tfQuestions.length) {
+                document.getElementById('tf-question-text').innerHTML = "<i class='fas fa-star text-yellow-400 text-6xl block mb-4'></i> Harika! Tüm soruları tamamladınız.";
+                document.querySelector('.tf-btn.true').style.display = 'none';
+                document.querySelector('.tf-btn.false').style.display = 'none';
+                document.getElementById('tf-current-num').innerText = tfQuestions.length;
+                fireConfetti('tf-game-area');
+                return;
+            }
+            document.getElementById('tf-question-text').innerText = tfQuestions[currentTfIndex].q;
+            document.getElementById('tf-current-num').innerText = currentTfIndex + 1;
+        }
+
+        function checkTfAnswer(userAnswer) {
+            const isCorrect = userAnswer === tfQuestions[currentTfIndex].a;
+            const feedbackBox = document.getElementById('tf-feedback');
+            const icon = document.getElementById('tf-feedback-icon');
+            const text = document.getElementById('tf-feedback-text');
+
+            if(isCorrect) {
+                icon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+                text.innerHTML = '<span class="text-green-600">Doğru!</span><br><span class="text-xl text-gray-600 font-normal mt-2 block">' + tfQuestions[currentTfIndex].expl + '</span>';
+            } else {
+                icon.innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+                text.innerHTML = '<span class="text-red-600">Yanlış!</span><br><span class="text-xl text-gray-600 font-normal mt-2 block">' + tfQuestions[currentTfIndex].expl + '</span>';
+            }
+            feedbackBox.classList.add('show');
+        }
+
+        function nextTfQuestion() {
+            document.getElementById('tf-feedback').classList.remove('show');
+            currentTfIndex++;
+            loadTfQuestion();
+        }
+        loadTfQuestion();
+
+
+        // --- 4. OYUN 4: ANAGRAM BULMACA MANTIĞI ---
+        const anagrams = [
+            { w: "HİLM", h: "Peygamberimizin öfkesini kontrol etmesi, sabırlı ve yumuşak huylu olması." },
+            { w: "İTİKAF", h: "Ramazan'ın son 10 günü dünya işlerini bırakıp mescitte ibadete çekilme ibadeti." },
+            { w: "MUKABELE", h: "Ramazan ayında Hz. Cebrail ile karşılıklı olarak Kur'an-ı Kerim okumaları." },
+            { w: "TEBESSÜM", h: "Gülümsemek demektir. Peygamberimiz bunun sadaka olduğunu söylemiştir." }
+        ];
+        let currentAnagramIndex = 0;
+        let filledLetters = [];
+
+        function initAnagram() {
+            if(currentAnagramIndex >= anagrams.length) {
+                document.getElementById('anagram-finish').classList.add('show');
+                fireConfetti('anagram-game-area');
+                return;
+            }
+
+            const data = anagrams[currentAnagramIndex];
+            document.getElementById('anagram-hint').innerText = data.h;
+            
+            const slotsContainer = document.getElementById('anagram-slots');
+            slotsContainer.innerHTML = '';
+            for(let i=0; i<data.w.length; i++) {
+                slotsContainer.innerHTML += `<div class="anagram-slot" id="slot-${i}"></div>`;
+            }
+
+            const letters = data.w.split('').sort(() => 0.5 - Math.random());
+            const lettersContainer = document.getElementById('anagram-letters');
+            lettersContainer.innerHTML = '';
+            letters.forEach((char, idx) => {
+                lettersContainer.innerHTML += `<button class="anagram-letter-btn" id="letter-${idx}" onclick="pushLetter('${char}', ${idx})">${char}</button>`;
+            });
+
+            filledLetters = [];
+            document.getElementById('anagram-next-btn').classList.add('hidden');
+        }
+
+        function pushLetter(char, btnId) {
+            const btn = document.getElementById(`letter-${btnId}`);
+            if(btn.classList.contains('used')) return;
+
+            const slotIndex = filledLetters.length;
+            const targetWordLength = anagrams[currentAnagramIndex].w.length;
+            
+            if(slotIndex < targetWordLength) {
+                const slot = document.getElementById(`slot-${slotIndex}`);
+                slot.innerText = char;
+                slot.classList.add('filled');
+                slot.dataset.btnId = btnId; 
+                
+                filledLetters.push(char);
+                btn.classList.add('used');
+
+                if(filledLetters.length === targetWordLength) {
+                    checkAnagramWord();
+                }
+            }
+        }
+
+        function clearAnagram() { initAnagram(); }
+
+        function checkAnagramWord() {
+            const userWord = filledLetters.join('');
+            const targetWord = anagrams[currentAnagramIndex].w;
+            const slots = document.querySelectorAll('.anagram-slot');
+
+            if(userWord === targetWord) {
+                slots.forEach(s => { s.classList.remove('filled'); s.classList.add('correct-word'); });
+                document.getElementById('anagram-next-btn').classList.remove('hidden');
+                fireConfetti('anagram-game-area');
+            } else {
+                slots.forEach(s => { s.classList.remove('filled'); s.classList.add('wrong-word'); });
+                setTimeout(() => clearAnagram(), 800); 
+            }
+        }
+
+        function nextAnagram() { currentAnagramIndex++; initAnagram(); }
+
+        function resetAnagramGame() {
+            document.getElementById('anagram-finish').classList.remove('show');
+            currentAnagramIndex = 0;
+            initAnagram();
+        }
+        initAnagram();
+
+
+        // --- ORTAK: KONFETİ EFEKTİ ---
+        function fireConfetti(areaId) {
+            const area = document.getElementById(areaId);
+            const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d', '#10b981', '#3b82f6'];
+            
+            for (let i = 0; i < 70; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                if (Math.random() > 0.5) confetti.style.borderRadius = '50%';
+                
+                area.appendChild(confetti);
+
+                const duration = Math.random() * 3 + 2; 
+                const delay = Math.random() * 0.2;
+                
+                confetti.animate([
+                    { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${Math.random()*200 - 100}px, ${area.offsetHeight}px, 0) rotate(${Math.random()*720}deg)`, opacity: 0 }
+                ], { duration: duration * 1000, delay: delay * 1000, easing: 'cubic-bezier(.37,0,.63,1)', fill: 'forwards' });
+
+                setTimeout(() => confetti.remove(), (duration + delay) * 1000);
+            }
+        }
+
+    </script>
+</body>
+</html>

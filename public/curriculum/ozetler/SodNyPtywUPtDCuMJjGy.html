@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3. Ünite: İslam'ın Direği Namaz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap');
+
+        html { 
+            font-size: 100%; 
+            transition: font-size 0.3s ease; 
+            background-color: #0f172a; /* Temel yedek renk: Koyu Lacivert */
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%) !important;
+            overflow: hidden; margin: 0; padding: 0; 
+            height: 100vh; height: 100dvh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+
+        h1, h2, h3, .title-font { font-family: 'Quicksand', sans-serif; }
+
+        /* AKILLI TAHTA İÇİN DEVASA DİNAMİK TİPOGRAFİ */
+        .text-huge { font-size: clamp(2rem, 6vw, 4.5rem); line-height: 1.1; }
+        .text-x-large { font-size: clamp(1.4rem, 3.5vw, 2.8rem); line-height: 1.2; }
+        .text-large { font-size: clamp(1.1rem, 2.5vw, 2rem); line-height: 1.2; }
+        .text-medium { font-size: clamp(0.9rem, 2vw, 1.6rem); line-height: 1.3; }
+        .text-base-dyn { font-size: clamp(0.8rem, 1.8vw, 1.3rem); line-height: 1.3; }
+        
+        .slide {
+            display: none; opacity: 0; height: 100%; width: 100%; 
+            padding: 0.5rem; box-sizing: border-box; flex-direction: column; 
+            justify-content: center; align-items: center; 
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            position: absolute; top: 0; left: 0;
+        }
+        .slide.active { display: flex; opacity: 1; z-index: 10; }
+        .slide.slide-in-right { animation: slideInRight 0.4s forwards; }
+        .slide.slide-in-left { animation: slideInLeft 0.4s forwards; }
+
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Sunum Kartı (Sıfır Boşluk, Kaydırmasız) */
+        .presentation-card {
+            background-color: #ffffff; border-radius: 1rem; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            width: 98vw; max-width: 100%; height: 96vh; display: flex; flex-direction: column;
+            overflow: hidden; position: relative; margin: auto; border: 4px solid #f59e0b; /* Altın Sarısı Kenarlık */
+        }
+        @media (min-width: 768px) { .presentation-card { border-radius: 1.5rem; border-width: 8px; } }
+
+        /* Tailwind sınıfları geciktiğinde veya ezildiğinde renklerin beyaz çıkmasını engellemek için koruma */
+        .presentation-card.bg-slate-800 { background-color: #1e293b !important; border-color: transparent !important; }
+        .presentation-card.bg-indigo-900 { background-color: #312e81 !important; border-color: transparent !important; }
+
+        .card-header {
+            background: #d97706; color: white; padding: 0.5rem 1rem;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap;
+        }
+        @media (min-width: 768px) { .card-header { padding: 0.8rem 2rem; } }
+
+        .card-body {
+            flex-grow: 1; padding: 0.5rem; overflow: hidden; /* SCROLL KESİNLİKLE KAPALI */
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        @media (min-width: 768px) { .card-body { padding: 1rem 2rem; } }
+
+        /* YÜZEN ARAÇ ÇUBUĞU (PILL) */
+        .toolbar-pill {
+            position: fixed; bottom: 0.5rem; left: 50%; transform: translateX(-50%);
+            z-index: 9999; background: rgba(255, 255, 255, 0.95);
+            border-radius: 9999px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            backdrop-filter: blur(16px); border: 2px solid rgba(245, 158, 11, 0.6);
+            display: flex; align-items: center; padding: 0.4rem; gap: 0.5rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); width: max-content;
+        }
+        .toolbar-pill.is-dragged { transform: none !important; }
+        .toolbar-pill.collapsed { width: 3.8rem; height: 3.8rem; padding: 0; justify-content: center; border-radius: 50%; }
+        
+        .drag-handle { cursor: grab; color: #94a3b8; padding: 0.5rem 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .drag-handle:active { cursor: grabbing; color: #d97706; }
+        
+        .toolbar-content { display: flex; align-items: center; gap: 0.4rem; overflow: hidden; transition: all 0.3s ease; white-space: nowrap; }
+        @media (min-width: 768px) { .toolbar-content { gap: 0.8rem; } }
+        
+        .toolbar-pill.collapsed .toolbar-content { width: 0; opacity: 0; pointer-events: none; margin: 0; gap: 0; }
+        .toolbar-pill.collapsed .drag-handle { display: none; }
+        
+        .divider { width: 2px; height: 2rem; background: #e2e8f0; margin: 0 0.2rem; border-radius: 1px;}
+        .slide-counter { font-weight: 800; color: #d97706; font-size: 1.2rem; min-width: 5rem; text-align: center; font-family: 'Quicksand', sans-serif;}
+        
+        .nav-btn {
+            background: #f59e0b; color: white; border: none; width: 2.8rem; height: 2.8rem;
+            border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+        }
+        .nav-btn:hover { transform: scale(1.1); background: #d97706; }
+        .nav-btn:active { transform: scale(0.95); }
+        .nav-btn:disabled { background: #f1f5f9; cursor: not-allowed; transform: none; box-shadow: none; color: #cbd5e1; }
+        
+        .zoom-btn { background: transparent; color: #64748b; box-shadow: none; width: 2.4rem; height: 2.4rem; font-size: 1.1rem;}
+        .zoom-btn:hover { background: #fef3c7; color: #d97706; transform: scale(1.1);}
+        
+        .minimize-btn {
+            background: transparent; border: none; color: #64748b; cursor: pointer; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: 50%; transition: all 0.2s;
+        }
+        .minimize-btn:hover { background: #fef3c7; color: #d97706; }
+        .toolbar-pill.collapsed .minimize-btn { width: 100%; height: 100%; font-size: 1.5rem; color: #d97706; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+
+        /* Ortak Kutu Stilleri */
+        .info-box { background: white; border-radius: 1rem; padding: 0.8rem; border: 3px solid #e2e8f0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); flex: 1;}
+        .info-box.gold { border-color: #fcd34d; background: #fefce8; color: #854d0e;}
+        .info-box.blue { border-color: #93c5fd; background: #eff6ff; color: #1e3a8a;}
+        .info-box.teal { border-color: #5eead4; background: #f0fdfa; color: #134e4a;}
+        .info-box.rose { border-color: #fda4af; background: #fff1f2; color: #881337;}
+
+        /* Eşleştirme Stilleri */
+        .match-btn { background: white; border: 2px solid #e2e8f0; border-radius: 0.8rem; padding: 0.6rem; font-size: clamp(0.9rem, 2vw, 1.5rem); font-weight: bold; color: #475569; cursor: pointer; transition: all 0.3s; text-align: left; width: 100%; display: flex; align-items: center; gap: 0.5rem; min-height: 50px;}
+        @media (min-width: 768px) { .match-btn { padding: 1rem 1.5rem; border-width: 4px; border-radius: 1.2rem; min-height: 80px;} }
+        .match-btn.selected { border-color: #d97706; background: #fffbeb; color: #b45309; transform: scale(1.02); }
+        .match-btn.correct { border-color: #10b981; background: #ecfdf5; color: #047857; cursor: default; transform: none; opacity: 0.9; }
+        .match-btn.wrong { animation: shake 0.4s; border-color: #ef4444; background: #fef2f2; color: #b91c1c; }
+
+        /* Doğru Yanlış Stilleri */
+        .tf-btn { padding: 1rem; font-size: 1.5rem; font-weight: bold; border-radius: 1rem; cursor: pointer; transition: all 0.3s; flex: 1; text-align: center; border: 3px solid transparent; background: white; color: #334155; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        @media (min-width: 768px) { .tf-btn { font-size: 3rem; border-radius: 1.5rem; padding: 2rem; border-width: 4px; gap: 1.5rem;} }
+        .tf-btn.true { border-color: #10b981; color: #047857; }
+        .tf-btn.true:hover { background: #10b981; color: white; transform: translateY(-5px); box-shadow: 0 15px 25px rgba(16, 185, 129, 0.3); }
+        .tf-btn.false { border-color: #ef4444; color: #b91c1c; }
+        .tf-btn.false:hover { background: #ef4444; color: white; transform: translateY(-5px); box-shadow: 0 15px 25px rgba(239, 68, 68, 0.3); }
+        .tf-btn:active { transform: scale(0.95); box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        
+        .tf-feedback { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; border-radius: 1.5rem; z-index: 20; background: rgba(255,255,255,0.95); flex-direction: column; text-align: center;}
+        .tf-feedback.show { display: flex; animation: fadeIn 0.3s forwards;}
+
+        /* Çoktan Seçmeli (Quiz) Stilleri */
+        .quiz-opt { background: white; border: 3px solid #cbd5e1; border-radius: 0.8rem; padding: 0.8rem; font-size: clamp(0.9rem, 2vw, 1.5rem); font-weight: bold; color: #334155; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem; text-align: left; min-height: 60px;}
+        @media (min-width: 768px) { .quiz-opt { font-size: clamp(1.2rem, 2.5vw, 1.8rem); border-width: 4px; border-radius: 1.2rem; padding: 1.2rem;} }
+        .quiz-opt:hover { border-color: #94a3b8; background: #f8fafc; }
+        .quiz-opt.selected-opt { border-color: #d97706; background: #fffbeb; color: #b45309; transform: scale(1.02); box-shadow: 0 4px 10px rgba(217, 119, 6, 0.2); }
+        .quiz-opt.correct { border-color: #10b981 !important; background: #ecfdf5 !important; color: #047857 !important; transform: scale(1.02); box-shadow: 0 0 15px rgba(16,185,129,0.3);}
+        .quiz-opt.wrong { border-color: #ef4444 !important; background: #fef2f2 !important; color: #b91c1c !important; animation: shake 0.4s; }
+        
+        .show-ans-btn { background: #f59e0b; color: white; padding: 0.8rem 1.5rem; border-radius: 0.8rem; font-weight: bold; cursor: pointer; border: none; font-size: clamp(1rem, 2vw, 1.8rem); transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 1rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;}
+        @media (min-width: 768px) { .show-ans-btn { width: auto; margin-left: auto; margin-right: auto; padding: 1rem 3rem; border-radius: 1rem;} }
+        .show-ans-btn:hover { background: #d97706; transform: translateY(-2px); }
+
+        .quiz-expl { display: none; background: #f0fdfa; border: 2px solid #5eead4; padding: 1rem; border-radius: 0.8rem; color: #0f766e; font-weight: bold; margin-top: 1rem; font-size: clamp(0.9rem, 1.8vw, 1.4rem); animation: popIn 0.3s;}
+
+        /* Boşluk Doldurma Stilleri */
+        .fill-blank-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; background: #e2e8f0; font-weight: bold; cursor: pointer; border: 2px solid #94a3b8; font-size: clamp(0.9rem, 2vw, 1.5rem); }
+        .fill-blank-btn.selected { background: #d97706; color: white; border-color: #b45309; transform: scale(1.1); }
+        .fill-slot { display: inline-block; min-width: 100px; height: 30px; border-bottom: 3px dashed #d97706; text-align: center; color: #b45309; font-weight: bold; cursor: pointer; padding: 0 0.5rem;}
+        @media (min-width: 768px) { .fill-slot { min-width: 150px; height: 40px; } }
+
+        /* Açık Uçlu Soru */
+        .open-q-box { background: white; border: 3px dashed #f59e0b; border-radius: 1rem; padding: 1rem; text-align: left; width: 100%; display: flex; flex-direction: column; justify-content: center; flex: 1;}
+        .open-a-box { display: none; background: #fffbeb; border-top: 2px solid #f59e0b; padding-top: 0.8rem; margin-top: 0.8rem; color: #b45309; font-weight: bold; font-size: clamp(1rem, 2vw, 1.5rem); animation: popIn 0.4s;}
+
+        /* Anagram / Kelime Bulmaca Stilleri */
+        .ana-slot { width: 35px; height: 45px; border: 2px dashed #cbd5e1; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: #1e293b; background: white; }
+        @media (min-width: 768px) { .ana-slot { width: 60px; height: 75px; border-width: 4px; border-radius: 1rem; font-size: 3rem; } }
+        .ana-slot.filled { border-style: solid; border-color: #f59e0b; background: #fffbeb; color: #d97706;}
+        .ana-slot.correct { border-color: #10b981; background: #ecfdf5; color: #047857; animation: popIn 0.3s; }
+        .ana-slot.wrong { border-color: #ef4444; background: #fef2f2; color: #b91c1c; animation: shake 0.4s; }
+        
+        .ana-letter { width: 35px; height: 45px; border-radius: 0.5rem; background: #3b82f6; color: white; border: none; font-size: 1.5rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 #1d4ed8; transition: all 0.1s; }
+        @media (min-width: 768px) { .ana-letter { width: 60px; height: 75px; border-radius: 1rem; font-size: 3rem; box-shadow: 0 8px 0 #1d4ed8; } }
+        .ana-letter:active { transform: translateY(4px); box-shadow: 0 0 0 #1d4ed8; }
+        .ana-letter.used { opacity: 0; pointer-events: none; transform: scale(0); }
+
+        /* Kart Çevirme Stilleri */
+        .flip-card { background-color: transparent; width: 100%; height: 100%; perspective: 1000px; cursor: pointer; min-height: 120px;}
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-radius: 1rem; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.5rem; font-size: clamp(0.9rem, 2vw, 1.8rem); border: 3px solid rgba(255,255,255,0.5); }
+        .flip-card-front { background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%); color: white; }
+        .flip-card-back { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; transform: rotateY(180deg); }
+
+        /* Defter Notları Scrollable Alanı */
+        .notebook-paper { background-color: #fefce8; border-left: 6px double #ef4444; padding: 1.5rem; border-radius: 1rem; font-family: 'Quicksand', sans-serif; display: block; overflow-y: auto; height: 100%;}
+        @media (min-width: 768px) { .notebook-paper { padding: 1.5rem 2.5rem; } }
+        .notebook-paper::-webkit-scrollbar { width: 8px; }
+        .notebook-paper::-webkit-scrollbar-track { background: transparent; }
+        .notebook-paper::-webkit-scrollbar-thumb { background: #fca5a5; border-radius: 10px; }
+        .note-item { background: white; padding: 1rem 1.2rem; border-radius: 0.8rem; margin-bottom: 1rem; border: 2px solid #fef08a; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; z-index: 100; pointer-events: none;}
+    </style>
+</head>
+<body>
+
+    <div id="slides-container" class="relative w-full h-full">
+        
+        <!-- Slayt 1: Kapak -->
+        <div class="slide active" id="slide-0">
+            <div class="presentation-card bg-slate-800 text-white justify-center items-center text-center p-4 md:p-8 border-none" style="background-color: #1e293b !important;">
+                <i class="fas fa-pray text-6xl md:text-9xl text-amber-400 mb-2 md:mb-6 opacity-90 drop-shadow-lg"></i>
+                <h2 class="text-lg md:text-4xl tracking-widest text-slate-300 mb-1 md:mb-3 uppercase font-bold">3. Ünite</h2>
+                <h1 class="text-huge font-bold mb-3 md:mb-6 leading-tight text-white drop-shadow-md">İslam'ın Direği Namaz</h1>
+                <div class="bg-slate-900/50 p-3 md:p-6 rounded-xl md:rounded-2xl w-full max-w-5xl border border-slate-600/50 shadow-inner">
+                    <p class="text-medium md:text-x-large italic font-serif text-amber-200">"Namaz müminin miracıdır."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 1: Namazla İlgili Hükümler (1) -->
+        <div class="slide" id="slide-1">
+            <div class="presentation-card">
+                <div class="card-header bg-blue-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-list-ol text-blue-200 mr-2"></i>1. Namazın Önemi ve Dışındaki Farzlar</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col h-full gap-2 md:gap-4">
+                        <div class="info-box gold flex-none">
+                            <h3 class="text-x-large font-bold mb-1 border-b-2 border-yellow-300 pb-1"><i class="fas fa-key mr-2"></i>Dinin Direği</h3>
+                            <p class="text-medium">Namaz, Allah'a kulluğumuzun en büyük göstergesidir. Peygamberimiz namazın <strong>cennetin anahtarı</strong> olduğunu bildirmiştir.</p>
+                        </div>
+                        <div class="info-box blue flex-grow justify-start">
+                            <h3 class="text-x-large font-bold mb-2">Namaza Hazırlık Şartları (Dışındaki Farzlar)</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-blue-200 text-base-dyn"><strong class="text-blue-800">Hadesten Taharet:</strong> Abdest almak.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-blue-200 text-base-dyn"><strong class="text-blue-800">Necasetten Taharet:</strong> Beden, elbise ve yerin temizliği.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-blue-200 text-base-dyn"><strong class="text-blue-800">Setriavret:</strong> Gerekli yerlerin örtülmesi.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-blue-200 text-base-dyn"><strong class="text-blue-800">İstikbalikıble:</strong> Kâbe'ye yönelmek.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-blue-200 text-base-dyn"><strong class="text-blue-800">Vakit:</strong> Vakti içinde kılmak.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-blue-200 text-base-dyn"><strong class="text-blue-800">Niyet:</strong> Hangi namazı kıldığını bilmek.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 1: Namazla İlgili Hükümler (2) -->
+        <div class="slide" id="slide-2">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-pray text-indigo-200 mr-2"></i>1. Namazın İçindeki Farzlar (Kılınış)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col h-full gap-2 md:gap-4">
+                        <div class="info-box teal flex-grow justify-start">
+                            <h3 class="text-x-large font-bold mb-2">Namazın Rükünleri (İçindeki Farzlar)</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-teal-200 text-base-dyn"><strong class="text-teal-800">İftitah Tekbiri:</strong> "Allahüekber" ile başlamak.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-teal-200 text-base-dyn"><strong class="text-teal-800">Kıyam:</strong> Ayakta durmak.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-teal-200 text-base-dyn"><strong class="text-teal-800">Kıraat:</strong> Kur'an okumak.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-teal-200 text-base-dyn"><strong class="text-teal-800">Rükû:</strong> Elleri dize koyup eğilmek.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-teal-200 text-base-dyn"><strong class="text-teal-800">Secde:</strong> Yüz, el, diz, ayak parmaklarını yere koymak.</div>
+                                <div class="bg-white p-2 rounded-lg text-left shadow-sm border border-teal-200 text-base-dyn"><strong class="text-teal-800">Kade-i Ahire:</strong> Son oturuş (Tahiyyat kadar).</div>
+                            </div>
+                        </div>
+                        <div class="info-box rose flex-none">
+                            <h3 class="text-large font-bold mb-1 border-b-2 border-rose-300 pb-1"><i class="fas fa-times-circle mr-2"></i>Namazı Bozan Şeyler</h3>
+                            <p class="text-medium text-left">Konuşmak, gülmek, bir şey yemek/içmek, göğsü kıbleden çevirmek, farzlardan birini eksik yapmak namazı bozar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK 1: Eşleştirme (Farzlar) -->
+        <div class="slide" id="slide-3">
+            <div class="presentation-card">
+                <div class="card-header bg-amber-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-puzzle-piece text-amber-200 mr-2"></i>Etkinlik 1: Farzları Eşleştir</h2>
+                </div>
+                <div class="card-body bg-amber-50" id="match1-game-area">
+                    <p class="text-center text-sm md:text-xl text-amber-900 mb-2 font-bold p-2">Kavramı seç, doğru anlamıyla eşleştir!</p>
+                    <div class="flex flex-row gap-2 md:gap-4 h-full">
+                        <div class="flex flex-col gap-1 w-1/2" id="left-col-1">
+                            <button class="match-btn left-btn" data-id="1"><i class="fas fa-tint mr-2 text-blue-500"></i>H. Taharet</button>
+                            <button class="match-btn left-btn" data-id="2"><i class="fas fa-compass mr-2 text-green-500"></i>İstikbalikıble</button>
+                            <button class="match-btn left-btn" data-id="3"><i class="fas fa-male mr-2 text-purple-500"></i>Kıyam</button>
+                            <button class="match-btn left-btn" data-id="4"><i class="fas fa-book-open mr-2 text-orange-500"></i>Kıraat</button>
+                            <button class="match-btn left-btn" data-id="5"><i class="fas fa-tshirt mr-2 text-red-500"></i>Setriavret</button>
+                        </div>
+                        <div class="flex flex-col gap-1 w-1/2" id="right-col-1">
+                            <button class="match-btn right-btn" data-match="3">Namazda ayakta durmak.</button>
+                            <button class="match-btn right-btn" data-match="1">Abdest veya gusül almak.</button>
+                            <button class="match-btn right-btn" data-match="5">Örtülmesi gereken yerleri örtmek.</button>
+                            <button class="match-btn right-btn" data-match="2">Namazda Kâbe'ye yönelmek.</button>
+                            <button class="match-btn right-btn" data-match="4">Namazda ayet/sure okumak.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 2: Sehiv Secdesi -->
+        <div class="slide" id="slide-4">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-undo text-teal-200 mr-2"></i>2. Sehiv Secdesi</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col gap-2 md:gap-4 h-full">
+                        <div class="info-box teal flex-none">
+                            <h3 class="text-x-large font-bold mb-2">Sehiv Nedir? Neden Yapılır?</h3>
+                            <p class="text-large text-left">Sehiv, yanılma ve unutma demektir. Namazda unutarak bir <strong>vacibi terk etmek, vacibi/farzı geciktirmek</strong> durumunda namazın sonunda telafi için yapılan 2 secdedir.</p>
+                        </div>
+                        <div class="info-box gold flex-grow justify-start">
+                            <h3 class="text-x-large font-bold mb-2">Nasıl Yapılır?</h3>
+                            <ol class="text-large text-left list-decimal pl-6 space-y-2">
+                                <li>Son oturuşta Tahiyyat okunur.</li>
+                                <li>Sağa (veya iki tarafa) selam verilir.</li>
+                                <li>"Allahüekber" diyerek iki defa secde yapılır.</li>
+                                <li>Tekrar oturulur; Tahiyyat, Salavat, Rabbena duaları okunup selam verilerek namaz bitirilir.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 2: Tilavet Secdesi -->
+        <div class="slide" id="slide-5">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-book-reader text-purple-200 mr-2"></i>2. Tilavet Secdesi</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col gap-2 md:gap-4 h-full">
+                        <div class="info-box purple flex-none">
+                            <h3 class="text-x-large font-bold mb-2">Tilavet Secdesi Nedir?</h3>
+                            <p class="text-large text-left">Kur'an-ı Kerim'de bulunan <strong>14 adet secde ayetinin</strong> okunması veya işitilmesi durumunda yapılması gereken secdedir.</p>
+                        </div>
+                        <div class="info-box blue flex-grow justify-start">
+                            <h3 class="text-x-large font-bold mb-2">Nasıl Yapılır?</h3>
+                            <ul class="text-large text-left list-disc pl-6 space-y-2">
+                                <li>Abdestli ve örtülü şekilde kıbleye dönülür. Niyet edilir.</li>
+                                <li>Eller kaldırılmadan "Allahüekber" diyerek doğrudan secdeye gidilir.</li>
+                                <li>Secdede 3 kez <em>"Sübhâne rabbiye’l-a‘lâ"</em> denir.</li>
+                                <li>Tekbir ile ayağa kalkılır ve <em>"Semi’nâ ve eta’nâ ğufrâneke rabbenâ ve ileyke’l masîr"</em> denilerek bitirilir.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK 2: Durum Tablosu (Namaz Bozulur mu?) -->
+        <div class="slide" id="slide-6">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-clipboard-check text-indigo-200 mr-2"></i>Etkinlik 2: Ne Yapılmalı?</h2>
+                </div>
+                <div class="card-body bg-indigo-50 relative flex flex-col justify-center items-center" id="act2-game-area">
+                    <div id="act2-feedback" class="tf-feedback">
+                        <div id="act2-icon" class="text-6xl md:text-9xl mb-2"></div>
+                        <h2 id="act2-title" class="text-2xl md:text-5xl font-bold mb-4"></h2>
+                        <button onclick="nextAct2()" class="bg-indigo-600 text-white px-8 py-3 rounded-full text-xl md:text-3xl font-bold shadow-lg hover:bg-indigo-700">Sonraki Soru</button>
+                    </div>
+                    <div class="text-center mb-2 w-full"><span class="bg-indigo-200 text-indigo-800 px-6 py-2 rounded-full font-bold text-lg md:text-2xl">Durum <span id="act2-num">1</span> / 4</span></div>
+                    <div class="bg-white border-4 border-indigo-200 rounded-3xl p-6 md:p-10 w-full max-w-4xl shadow-xl text-center mb-6 min-h-[150px] flex flex-col justify-center">
+                        <h3 id="act2-text" class="text-xl md:text-4xl font-bold text-gray-800 leading-tight">...</h3>
+                        <button id="act2-restart" class="hidden bg-indigo-600 text-white px-8 py-3 rounded-full text-xl md:text-3xl font-bold shadow-xl mx-auto mt-6" onclick="restartAct2()"><i class="fas fa-redo mr-2"></i> Yeniden Oyna</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl" id="act2-btns">
+                        <button class="tf-btn" style="border-color:#ef4444; color:#b91c1c;" onclick="checkAct2('BOZULUR')">Namaz Bozulur</button>
+                        <button class="tf-btn" style="border-color:#f59e0b; color:#b45309;" onclick="checkAct2('SEHİV')">Sehiv Secdesi Gerekir</button>
+                        <button class="tf-btn" style="border-color:#10b981; color:#047857;" onclick="checkAct2('GEREKMEZ')">Bir Şey Gerekmez</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 3: Dualar -->
+        <div class="slide" id="slide-7">
+            <div class="presentation-card">
+                <div class="card-header bg-rose-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-hands-praying text-rose-200 mr-2"></i>3. Namazda Okunan Dualar</h2>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 h-full">
+                        <div class="info-box rose">
+                            <h3 class="text-x-large font-bold mb-1">Sübhaneke Duası</h3>
+                            <p class="text-medium">Namazda iftitah tekbirinden sonra okunur. Allah'ın eksik sıfatlardan uzak olduğunu ve övgüye layık olduğunu belirtir.</p>
+                        </div>
+                        <div class="info-box blue">
+                            <h3 class="text-x-large font-bold mb-1">Tahiyyat Duası</h3>
+                            <p class="text-medium">İlk ve son oturuşlarda okunur. Kelimeişehadeti içerir. Bedenî ve mali ibadetlerin Allah'a ait olduğunu ifade eder.</p>
+                        </div>
+                        <div class="info-box teal">
+                            <h3 class="text-x-large font-bold mb-1">Salavat & Rabbena</h3>
+                            <p class="text-medium">Son oturuşta (Kade-i Ahire) Tahiyyat'tan sonra okunurlar. Salavatlar Peygamberimize dua; Rabbena ise dünya ve ahiret iyiliği içindir.</p>
+                        </div>
+                        <div class="info-box gold">
+                            <h3 class="text-x-large font-bold mb-1">Kunut Duaları</h3>
+                            <p class="text-medium">Vitir namazının üçüncü rekâtında rükûya eğilmeden önce tekbir alınarak okunan dualardır.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 3: Tesbihler -->
+        <div class="slide" id="slide-8">
+            <div class="presentation-card">
+                <div class="card-header bg-rose-900">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-comment-dots text-rose-200 mr-2"></i>3. Namazda ve Sonrasında Tesbihler</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col gap-2 md:gap-4 h-full">
+                        <div class="info-box teal flex-1 justify-start">
+                            <h3 class="text-x-large font-bold mb-2 border-b-2 border-teal-300 pb-1">Namaz İçi Tesbihler</h3>
+                            <ul class="text-large text-left list-disc pl-5 space-y-1">
+                                <li><strong>Rükûda (3 kez):</strong> Sübhâne Rabbiye’l azîm.</li>
+                                <li><strong>Rükûdan kalkarken:</strong> Semiallahü limen hamideh.</li>
+                                <li><strong>Ayaktayken:</strong> Rabbenâ lekel hamd.</li>
+                                <li><strong>Secdede (3 kez):</strong> Sübhâne Rabbiye’l a’lâ.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box blue flex-1 justify-start">
+                            <h3 class="text-x-large font-bold mb-2 border-b-2 border-blue-300 pb-1">Namaz Sonrası Tesbihat</h3>
+                            <p class="text-large text-left">Selam verildikten sonra <strong>"Allahümme ente’s selâmü..."</strong> denir. Ayet el-Kürsi okunur. Ardından 33 defa <strong>Sübhânallah</strong>, 33 defa <strong>Elhamdülillâh</strong>, 33 defa <strong>Allahüekber</strong> denilerek Allah anılır.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK 3: Dualar Eşleştirme -->
+        <div class="slide" id="slide-9">
+            <div class="presentation-card">
+                <div class="card-header bg-amber-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-puzzle-piece text-amber-200 mr-2"></i>Etkinlik 3: Dua ve Anlam Eşleştir</h2>
+                </div>
+                <div class="card-body bg-amber-50" id="match2-game-area">
+                    <p class="text-center text-sm md:text-xl text-amber-900 mb-2 font-bold p-2">Duayı seç, nerede okunduğunu veya anlamını bul!</p>
+                    <div class="flex flex-row gap-2 md:gap-4 h-full">
+                        <div class="flex flex-col gap-1 w-[40%]" id="left-col-2">
+                            <button class="match-btn left-btn" data-id="1">Sübhaneke</button>
+                            <button class="match-btn left-btn" data-id="2">Tahiyyat</button>
+                            <button class="match-btn left-btn" data-id="3">Kunut</button>
+                            <button class="match-btn left-btn" data-id="4">Rabbena</button>
+                            <button class="match-btn left-btn" data-id="5">Salavat</button>
+                        </div>
+                        <div class="flex flex-col gap-1 w-[60%]" id="right-col-2">
+                            <button class="match-btn right-btn" data-match="2">İlk ve son oturuşlarda okunur. Kelimeişehadet içerir.</button>
+                            <button class="match-btn right-btn" data-match="4">"Bize dünyada ve ahirette iyilik ver" anlmındadır. Sonda okunur.</button>
+                            <button class="match-btn right-btn" data-match="1">Namazın en başında, iftitah tekbirinden sonra okunur.</button>
+                            <button class="match-btn right-btn" data-match="5">Son oturuşta Tahiyyat'tan sonra Peygamberimize okunan duadır.</button>
+                            <button class="match-btn right-btn" data-match="3">Sadece Vitir namazının üçüncü rekâtında ayaktayken okunur.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 4: Mescitler (1) -->
+        <div class="slide" id="slide-10">
+            <div class="presentation-card">
+                <div class="card-header bg-green-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-mosque text-green-200 mr-2"></i>4. Allah'ın Evleri: Mescitler ve Camiler</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col gap-2 md:gap-4 h-full">
+                        <div class="info-box green flex-none">
+                            <h3 class="text-x-large font-bold mb-2">Mescit ve Cami</h3>
+                            <p class="text-large text-left">Mescit, "secde edilen yer" demektir. Cami ise "toplayan, bir araya getiren" demektir. Buralar sadece ibadet değil, eğitim, dayanışma ve sorun çözme merkezleridir.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 flex-grow">
+                            <div class="info-box teal justify-start">
+                                <h3 class="text-large font-bold mb-2 border-b-2 border-teal-400 pb-1">Dış Bölümler</h3>
+                                <ul class="text-medium text-left list-disc pl-5">
+                                    <li><strong>Minare:</strong> Ezan okunan yüksek yapı. (Balkonuna Şerefe denir).</li>
+                                    <li><strong>Kubbe:</strong> Caminin üzerini örten yarım küre yapı.</li>
+                                    <li><strong>Şadırvan:</strong> Avluda abdest alınan yer.</li>
+                                </ul>
+                            </div>
+                            <div class="info-box blue justify-start">
+                                <h3 class="text-large font-bold mb-2 border-b-2 border-blue-400 pb-1">İç Bölümler</h3>
+                                <ul class="text-medium text-left list-disc pl-5">
+                                    <li><strong>Mihrap:</strong> İmamın namaz kıldırırken durduğu kıbleyi gösteren oyuk.</li>
+                                    <li><strong>Minber:</strong> Cuma ve bayramda hutbe okunan merdivenli yer.</li>
+                                    <li><strong>Kürsü:</strong> Vaaz verilen yüksekçe yer.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 4: Mescitler (2) -->
+        <div class="slide" id="slide-11">
+            <div class="presentation-card">
+                <div class="card-header bg-emerald-900">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-kaaba text-emerald-200 mr-2"></i>4. Üç Büyük Mescit ve Ulu Camiler</h2>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 h-full">
+                        <div class="info-box gold justify-start">
+                            <h3 class="text-large font-bold mb-2">1. Mescid-i Haram</h3>
+                            <p class="text-medium text-left">Mekke'dedir. Ortasında kıblemiz olan <strong>Kâbe</strong> bulunur. Yeryüzündeki ilk mescittir (Hz. Adem, Hz. İbrahim).</p>
+                        </div>
+                        <div class="info-box teal justify-start">
+                            <h3 class="text-large font-bold mb-2">2. Mescid-i Nebi</h3>
+                            <p class="text-medium text-left">Medine'dedir. Peygamber Efendimiz hicretten sonra inşa etmiştir. İçinde eğitim verilen "Suffe" bulunur.</p>
+                        </div>
+                        <div class="info-box blue justify-start">
+                            <h3 class="text-large font-bold mb-2">3. Mescid-i Aksa</h3>
+                            <p class="text-medium text-left">Kudüs'tedir. Müslümanların <strong>ilk kıblesidir.</strong> İsra ve Miraç olayının gerçekleştiği mukaddes bir yerdir.</p>
+                        </div>
+                        <div class="info-box purple md:col-span-3 min-h-[80px]">
+                            <h3 class="text-large font-bold mb-1 border-b-2 border-purple-300 pb-1">Ulu Camiler ve Selatin Camileri</h3>
+                            <p class="text-medium text-left">Türk şehirlerinde cemaatin toplandığı büyük merkez camilere <strong>Ulu Cami</strong> (Bursa Ulu Cami vb.) denir. Padişah ve ailesinin yaptırdığı çok minareli camilere ise <strong>Selatin Camileri</strong> (Sultanahmet, Süleymaniye, Selimiye vb.) denir.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK 4: Kart Çevirme (Mescitler) -->
+        <div class="slide" id="slide-12">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-question-circle text-purple-200 mr-2"></i>Etkinlik 4: Hangi Mescit/Bölüm?</h2>
+                </div>
+                <div class="card-body bg-purple-50">
+                    <p class="text-center text-sm md:text-xl text-purple-800 mb-2 font-bold p-2">İpucunu oku, cevabı tahmin et ve karta dokun!</p>
+                    <div class="grid grid-cols-2 gap-2 md:gap-4 flex-grow content-center">
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center flex flex-col justify-center">
+                                    <p class="text-sm md:text-2xl font-bold">Müslümanların ilk kıblesi olan ve Kudüs'te bulunan mescittir.</p>
+                                    <span class="text-xs bg-white/20 px-2 py-1 rounded-full mt-2">Dokun</span>
+                                </div>
+                                <div class="flip-card-back"><p class="font-bold text-xl md:text-4xl">Mescid-i Aksa</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center flex flex-col justify-center">
+                                    <p class="text-sm md:text-2xl font-bold">İmamın namaz kıldırırken durduğu kıbleyi gösteren oyuk bölümdür.</p>
+                                    <span class="text-xs bg-white/20 px-2 py-1 rounded-full mt-2">Dokun</span>
+                                </div>
+                                <div class="flip-card-back"><p class="font-bold text-xl md:text-4xl">Mihrap</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center flex flex-col justify-center">
+                                    <p class="text-sm md:text-2xl font-bold">Osmanlı padişahlarının kendi imkanlarıyla yaptırdıkları camilere denir.</p>
+                                    <span class="text-xs bg-white/20 px-2 py-1 rounded-full mt-2">Dokun</span>
+                                </div>
+                                <div class="flip-card-back"><p class="font-bold text-xl md:text-4xl">Selatin Camileri</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front text-center flex flex-col justify-center">
+                                    <p class="text-sm md:text-2xl font-bold">Hicretten sonra Peygamberimizin Medine'de inşa ettiği mescittir.</p>
+                                    <span class="text-xs bg-white/20 px-2 py-1 rounded-full mt-2">Dokun</span>
+                                </div>
+                                <div class="flip-card-back"><p class="font-bold text-xl md:text-4xl">Mescid-i Nebi</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 5: Esmalar (1) -->
+        <div class="slide" id="slide-13">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-star text-indigo-200 mr-2"></i>5. Esmayıhüsnayı Tanıyorum (I)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row gap-2 md:gap-4 h-full items-stretch">
+                        <div class="info-box blue justify-start pt-4 md:pt-8 flex-1">
+                            <i class="fas fa-seedling text-5xl md:text-8xl text-blue-400 mb-4"></i>
+                            <h3 class="text-huge font-bold text-blue-900 mb-2">RAB</h3>
+                            <p class="text-x-large text-left w-full px-4">Yaratan, terbiye eden, düzene koyan, rızık veren, koruyup gözeten ve ihtiyaçları gideren demektir. Yaratılıştaki kusursuz düzen O'nun Rab sıfatının eseridir.</p>
+                        </div>
+                        <div class="info-box teal justify-start pt-4 md:pt-8 flex-1">
+                            <i class="fas fa-hands-praying text-5xl md:text-8xl text-teal-400 mb-4"></i>
+                            <h3 class="text-huge font-bold text-teal-900 mb-2">MUCİB</h3>
+                            <p class="text-x-large text-left w-full px-4">Dua ve dileklere olumlu cevap veren manasına gelir. Darda kalan kullarını sıkıntıdan kurtarır. Allah dualarımıza mutlaka en hayırlı şekilde icabet eder.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONU 5: Esmalar (2) -->
+        <div class="slide" id="slide-14">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-900">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-star text-indigo-200 mr-2"></i>5. Esmayıhüsnayı Tanıyorum (II)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row gap-2 md:gap-4 h-full items-stretch">
+                        <div class="info-box rose justify-start pt-4 md:pt-8 flex-1">
+                            <i class="fas fa-heart text-5xl md:text-8xl text-rose-400 mb-4"></i>
+                            <h3 class="text-huge font-bold text-rose-900 mb-2">GAFUR</h3>
+                            <p class="text-x-large text-left w-full px-4">Kusurları örten, suçları bağışlayan anlamına gelir. Tövbe edip hatasından dönen kullarını çokça affedendir. Gafur ismi merhametin büyüklüğünü gösterir.</p>
+                        </div>
+                        <div class="info-box gold justify-start pt-4 md:pt-8 flex-1">
+                            <i class="fas fa-users text-5xl md:text-8xl text-yellow-500 mb-4"></i>
+                            <h3 class="text-huge font-bold text-yellow-900 mb-2">CÂMİ</h3>
+                            <p class="text-x-large text-left w-full px-4">Toplayan, biriktiren, birleştiren anlamına gelir. Hem ahirette hesap için tüm insanları toplayacak olandır, hem de dünyada zıtlıkları ahenkle bir arada tutandır.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK 5: Esma Ayet Eşleştirme -->
+        <div class="slide" id="slide-15">
+            <div class="presentation-card">
+                <div class="card-header bg-amber-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-puzzle-piece text-amber-200 mr-2"></i>Etkinlik 5: Ayet ve Esma Eşleştir</h2>
+                </div>
+                <div class="card-body bg-amber-50" id="match3-game-area">
+                    <p class="text-center text-sm md:text-xl text-amber-900 mb-2 font-bold p-2">Ayetin anlattığı esmayı bul ve eşleştir!</p>
+                    <div class="flex flex-row gap-2 md:gap-4 h-full">
+                        <div class="flex flex-col gap-1 w-[40%]" id="left-col-3">
+                            <button class="match-btn left-btn text-center justify-center" data-id="1">Rab</button>
+                            <button class="match-btn left-btn text-center justify-center" data-id="2">Mucib</button>
+                            <button class="match-btn left-btn text-center justify-center" data-id="3">Gafur</button>
+                            <button class="match-btn left-btn text-center justify-center" data-id="4">Câmi</button>
+                        </div>
+                        <div class="flex flex-col gap-1 w-[60%]" id="right-col-3">
+                            <button class="match-btn right-btn text-base-dyn" data-match="4">"Rabbimiz! Şüphesiz sen, hakkında şüphe olmayan bir günde insanları toplayacaksın..."</button>
+                            <button class="match-btn right-btn text-base-dyn" data-match="2">"Ant olsun, Nuh bize dua edip seslenmişti. Biz ne güzel cevap vereniz!"</button>
+                            <button class="match-btn right-btn text-base-dyn" data-match="1">"Sana kitabı öğretecek... Çünkü üstün gelen, her şeyi yerli yerince (terbiye) yapan sensin."</button>
+                            <button class="match-btn right-btn text-base-dyn" data-match="3">"...Allah'ın rahmetinden ümit kesmeyin. Allah bütün günahları bağışlar..."</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEFTERE YAZILACAK NOTLAR (YENİ EKLENEN ÖZET SLAYTI) -->
+        <div class="slide" id="slide-16">
+            <div class="presentation-card">
+                <div class="card-header bg-slate-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-pen-nib text-slate-200 mr-2"></i>3. Ünite Defter Notları (Tam Özet)</h2>
+                </div>
+                <div class="card-body bg-slate-50 p-2 md:p-6">
+                    <div class="notebook-paper w-full h-full">
+                        <h3 class="text-2xl md:text-4xl font-bold text-center text-red-600 border-b-2 md:border-b-4 border-red-200 pb-2 md:pb-4 mb-4">İSLAM'IN DİREĞİ NAMAZ ÖZETİ</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 flex-grow content-start pb-4">
+                            <div class="note-item">
+                                <p class="text-medium"><span class="font-bold text-blue-700 block text-lg md:text-2xl mb-1"><i class="fas fa-list-ol mr-2"></i>Namazın Farzları</span>
+                                <strong>Dışındakiler (Hazırlık):</strong> H. Taharet, N. Taharet, Setriavret, İstikbalikıble, Vakit, Niyet. <br>
+                                <strong>İçindekiler (Kılınış):</strong> İftitah Tekbiri, Kıyam, Kıraat, Rükû, Secde, Kade-i Ahire.</p>
+                            </div>
+                            
+                            <div class="note-item">
+                                <p class="text-medium"><span class="font-bold text-rose-700 block text-lg md:text-2xl mb-1"><i class="fas fa-times-circle mr-2"></i>Namazı Bozanlar & Secdeler</span>
+                                Konuşmak, gülmek, yemek yemek namazı bozar. Unutarak/yanılarak yapılan hatalarda <strong>Sehiv Secdesi</strong> (2 secde), 14 secde ayeti okunduğunda <strong>Tilavet Secdesi</strong> (1 secde) yapılır.</p>
+                            </div>
+
+                            <div class="note-item">
+                                <p class="text-medium"><span class="font-bold text-teal-700 block text-lg md:text-2xl mb-1"><i class="fas fa-hands-praying mr-2"></i>Okunan Dualar</span>
+                                <strong>Sübhaneke:</strong> Namazın en başında. <strong>Tahiyyat:</strong> Tüm oturuşlarda. <strong>Salavat ve Rabbena:</strong> Son oturuşta. <strong>Kunut:</strong> Sadece Vitir namazında okunur.</p>
+                            </div>
+
+                            <div class="note-item">
+                                <p class="text-medium"><span class="font-bold text-green-700 block text-lg md:text-2xl mb-1"><i class="fas fa-mosque mr-2"></i>Üç Büyük Mescit</span>
+                                <strong>Mescid-i Haram:</strong> Mekke'dedir, ortasında Kâbe vardır. <strong>Mescid-i Nebi:</strong> Medine'dedir, Peygamberimiz yapmıştır. <strong>Mescid-i Aksa:</strong> Kudüs'tedir, ilk kıblemizdir.</p>
+                            </div>
+
+                            <div class="note-item md:col-span-2">
+                                <p class="text-medium"><span class="font-bold text-purple-700 block text-lg md:text-2xl mb-1 text-center"><i class="fas fa-star mr-2"></i>Esmayıhüsna (Allah'ın İsimleri)</span>
+                                <span class="text-center block"><strong>Rab:</strong> Yaratan, terbiye eden, rızık veren. | <strong>Mucib:</strong> Duaları kabul eden. <br><strong>Gafur:</strong> Günahları affeden, bağışlayan. | <strong>Câmi:</strong> Toplayan, kıyamette bir araya getiren.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEĞERLENDİRME A: DOĞRU YANLIŞ -->
+        <div class="slide" id="slide-17">
+            <div class="presentation-card">
+                <div class="card-header bg-slate-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-check-double text-slate-200 mr-2"></i>Değerlendirme A: Doğru mu, Yanlış mı?</h2>
+                </div>
+                <div class="card-body bg-slate-50 relative flex flex-col justify-center items-center" id="tf-game-area">
+                    <div id="tf-feedback" class="tf-feedback">
+                        <div id="tf-icon" class="text-6xl md:text-9xl mb-2 md:mb-6"></div>
+                        <h2 id="tf-title" class="text-2xl md:text-6xl font-bold text-gray-800 mb-4 md:mb-8 max-w-4xl leading-tight"></h2>
+                        <button onclick="nextTf()" class="bg-slate-800 text-white px-8 md:px-12 py-3 md:py-6 rounded-full text-xl md:text-4xl font-bold shadow-lg hover:bg-slate-700 transition">Sonraki Soru <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                    <div class="text-center mb-2 md:mb-6 w-full" id="tf-header">
+                        <span class="bg-slate-200 text-slate-800 px-6 py-2 rounded-full font-bold text-base md:text-3xl shadow-sm">Soru <span id="tf-num">1</span> / 5</span>
+                    </div>
+                    <div class="bg-white border-4 border-slate-300 rounded-3xl p-6 md:p-12 w-full max-w-5xl shadow-xl text-center mb-6 md:mb-10 flex flex-col justify-center min-h-[150px] md:min-h-[300px]">
+                        <h3 id="tf-text" class="text-2xl md:text-5xl font-bold text-gray-800 leading-tight">...</h3>
+                        <button id="tf-restart" class="hidden bg-slate-800 text-white px-8 md:px-12 py-3 md:py-6 rounded-full text-xl md:text-4xl font-bold shadow-xl mx-auto mt-6 md:mt-10 hover:bg-slate-700 transition" onclick="restartTf()"><i class="fas fa-arrow-right mr-2"></i> Diğer Bölüme Geç</button>
+                    </div>
+                    <div class="flex flex-row w-full max-w-5xl gap-4 md:gap-10" id="tf-btns">
+                        <button class="tf-btn true" onclick="checkTf(true)"><i class="fas fa-check-circle text-3xl md:text-6xl"></i> DOĞRU</button>
+                        <button class="tf-btn false" onclick="checkTf(false)"><i class="fas fa-times-circle text-3xl md:text-6xl"></i> YANLIŞ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEĞERLENDİRME B: BOŞLUK DOLDURMA -->
+        <div class="slide" id="slide-18">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-pen text-teal-200 mr-2"></i>Değerlendirme B: Boşluk Doldurma</h2>
+                </div>
+                <div class="card-body bg-slate-50 flex flex-col justify-center items-center" id="fill-game-area">
+                    <div class="text-center mb-2 md:mb-6 w-full" id="fill-header">
+                        <span class="bg-teal-200 text-teal-800 px-6 py-2 rounded-full font-bold text-base md:text-3xl shadow-sm">Soru <span id="fill-num">1</span> / 5</span>
+                    </div>
+                    
+                    <div class="bg-white border-4 border-teal-300 rounded-3xl p-6 md:p-12 w-full max-w-5xl shadow-xl text-center mb-6 flex flex-col justify-center min-h-[150px] md:min-h-[250px]">
+                        <h3 id="fill-text" class="text-xl md:text-4xl font-bold text-gray-800 leading-relaxed">...</h3>
+                        <div id="fill-success" class="hidden mt-4 text-2xl md:text-5xl text-green-600 font-bold"><i class="fas fa-check-circle"></i> Doğru!</div>
+                    </div>
+
+                    <div id="fill-options" class="flex flex-wrap justify-center gap-2 md:gap-4 w-full max-w-5xl">
+                        <!-- JS ile yüklenecek -->
+                    </div>
+                    
+                    <button id="fill-next" class="hidden bg-teal-600 text-white px-8 py-4 rounded-full text-xl md:text-3xl font-bold shadow-lg mt-6 hover:bg-teal-700" onclick="nextFill()">Sonraki <i class="fas fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEĞERLENDİRME C: ÇOKTAN SEÇMELİ -->
+        <div class="slide" id="slide-19">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-list-ul text-orange-200 mr-2"></i>Değerlendirme C: Çoktan Seçmeli</h2>
+                </div>
+                <div class="card-body bg-slate-50 flex flex-col justify-center items-center" id="quiz-game-area">
+                    <div class="text-center mb-2 md:mb-6 w-full" id="quiz-header">
+                        <span class="bg-orange-200 text-orange-800 px-6 py-2 rounded-full font-bold text-base md:text-3xl shadow-sm">Soru <span id="quiz-num">1</span> / 5</span>
+                    </div>
+                    
+                    <div class="bg-white border-4 border-orange-300 rounded-3xl p-4 md:p-8 w-full max-w-6xl shadow-xl mb-4 flex flex-col">
+                        <h3 id="quiz-q" class="text-large md:text-3xl font-bold text-gray-800 leading-tight mb-4">...</h3>
+                        <div id="quiz-opts" class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
+                            <!-- JS -->
+                        </div>
+                        <button id="quiz-reveal-btn" class="show-ans-btn" onclick="revealQuiz()"><i class="fas fa-eye mr-2"></i>Cevabı Göster</button>
+                        <div id="quiz-expl" class="quiz-expl text-medium"></div>
+                    </div>
+                    
+                    <button id="quiz-next" class="hidden bg-orange-600 text-white px-8 py-4 rounded-full text-xl md:text-3xl font-bold shadow-lg hover:bg-orange-700" onclick="nextQuiz()">Sonraki Soru <i class="fas fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEĞERLENDİRME D: AÇIK UÇLU -->
+        <div class="slide" id="slide-20">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-edit text-purple-200 mr-2"></i>Değerlendirme D: Açık Uçlu (Birlikte Cevaplayalım)</h2>
+                </div>
+                <div class="card-body bg-purple-50 flex flex-col justify-center items-center" id="open-game-area">
+                    <div class="text-center mb-2 md:mb-6 w-full" id="open-header">
+                        <span class="bg-purple-200 text-purple-800 px-6 py-2 rounded-full font-bold text-base md:text-3xl shadow-sm">Soru <span id="open-num">1</span> / 4</span>
+                    </div>
+                    
+                    <div class="open-q-box max-w-5xl shadow-xl border-4 bg-white min-h-[300px]">
+                        <h3 id="open-q" class="text-xl md:text-5xl font-bold text-gray-800 mb-6 leading-tight">...</h3>
+                        <button id="open-reveal-btn" class="bg-purple-600 text-white px-8 py-4 rounded-xl font-bold text-xl md:text-3xl shadow-md hover:bg-purple-700 mt-auto w-full md:w-auto self-center" onclick="revealOpen()"><i class="fas fa-eye mr-2"></i>Cevabı Göster</button>
+                        <div id="open-a" class="open-a-box text-xl md:text-4xl">...</div>
+                    </div>
+                    
+                    <button id="open-next" class="hidden bg-purple-700 text-white px-8 py-4 rounded-full text-xl md:text-3xl font-bold shadow-lg mt-6 hover:bg-purple-800" onclick="nextOpen()">Sonraki Soru <i class="fas fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEĞERLENDİRME E: BULMACA ŞİFRE -->
+        <div class="slide" id="slide-21">
+            <div class="presentation-card">
+                <div class="card-header bg-emerald-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-key text-emerald-200 mr-2"></i>Değerlendirme E: Şifreyi Çöz (Kelime Avı)</h2>
+                </div>
+                <div class="card-body bg-emerald-50 relative flex flex-col justify-center items-center" id="pass-game-area">
+                    <div class="text-center mb-2 md:mb-6 w-full">
+                        <span class="bg-emerald-200 text-emerald-800 px-6 py-2 rounded-full font-bold text-base md:text-3xl shadow-sm">Kelime <span id="pass-num">1</span> / 5</span>
+                    </div>
+                    
+                    <div class="bg-white p-4 md:p-8 rounded-2xl shadow-md border-4 border-emerald-300 w-full max-w-5xl text-center mb-6">
+                        <h3 id="pass-hint" class="text-xl md:text-4xl font-bold text-gray-800 leading-tight">...</h3>
+                    </div>
+                    
+                    <div id="pass-slots" class="flex flex-wrap gap-2 md:gap-4 justify-center mb-6 w-full max-w-5xl"></div>
+                    <div id="pass-letters" class="flex flex-wrap gap-2 md:gap-4 justify-center mb-6 w-full max-w-5xl"></div>
+                    
+                    <div class="flex gap-4 mt-auto">
+                        <button onclick="clearPass()" class="bg-slate-300 text-slate-800 px-6 py-3 rounded-full text-lg md:text-2xl font-bold hover:bg-slate-400 shadow"><i class="fas fa-undo mr-2"></i> Geri Al</button>
+                        <button id="pass-next-btn" onclick="nextPass()" class="hidden bg-emerald-600 text-white px-6 py-3 rounded-full text-lg md:text-2xl font-bold hover:bg-emerald-700 shadow-md">Sonraki <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BİTİŞ EKRANI -->
+        <div class="slide" id="slide-22">
+            <div class="presentation-card bg-indigo-900 text-white justify-center items-center text-center p-6 border-none" style="background-color: #312e81 !important;">
+                <i class="fas fa-trophy text-7xl md:text-9xl text-yellow-400 mb-4 opacity-90 drop-shadow-lg"></i>
+                <h1 class="text-huge font-bold mb-4 leading-tight text-white">3. Üniteyi Tamamladınız!</h1>
+                <p class="text-x-large text-indigo-200 max-w-5xl mx-auto">İslam'ın Direği Namaz ünitesini ve kitabın sonundaki tüm A, B, C, D ve E değerlendirme etkinliklerini kusursuzca bitirdiniz.</p>
+                <button onclick="changeSlide(-22)" class="mt-8 bg-indigo-600 text-white px-8 py-4 rounded-full text-xl md:text-3xl font-bold shadow-lg border-2 border-indigo-400 hover:bg-indigo-500 transition"><i class="fas fa-home mr-2"></i> En Başa Dön</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Yeni Modern Yüzen Araç Çubuğu (Pill Design) -->
+    <div id="toolbar" class="toolbar-pill">
+        <div class="drag-handle" id="toolbar-drag" title="Sürükle">
+            <i class="fas fa-grip-vertical"></i>
+        </div>
+        <div class="toolbar-content" id="toolbar-content">
+            <button class="nav-btn zoom-btn" onclick="toggleFullScreen()" title="Tam Ekran"><i id="fs-icon" class="fas fa-expand"></i></button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(-5)" title="Küçült"><i class="fas fa-search-minus"></i></button>
+            <button class="nav-btn zoom-btn font-bold font-sans" onclick="resetZoom()" title="Orijinal Boyut">A</button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(5)" title="Büyüt"><i class="fas fa-search-plus"></i></button>
+            
+            <div class="divider"></div>
+            
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled><i class="fas fa-chevron-left"></i></button>
+            <div class="slide-counter" id="slide-counter-text">1 / 23</div>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <button class="minimize-btn" onclick="toggleToolbar()" title="Küçült/Büyüt">
+            <i id="toolbar-toggle-icon" class="fas fa-compress-alt"></i>
+        </button>
+    </div>
+
+    <script>
+        // --- SLIDE NAVIGATION ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateControls() {
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            document.getElementById('slide-counter-text').innerText = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function goToSlide(index) {
+            if (index === currentSlide) return;
+            const direction = index > currentSlide ? 'right' : 'left';
+            const outAnim = direction === 'right' ? 'slide-out-left' : 'slide-out-right';
+            const inAnim = direction === 'right' ? 'slide-in-right' : 'slide-in-left';
+            
+            const current = slides[currentSlide];
+            const next = slides[index];
+
+            slides.forEach(s => s.className = 'slide');
+            current.classList.add('active', outAnim);
+            next.classList.add('active', inAnim);
+            
+            currentSlide = index;
+            updateControls();
+
+            setTimeout(() => {
+                current.className = 'slide';
+                next.className = 'slide active';
+            }, 400);
+        }
+
+        function changeSlide(step) {
+            const newIndex = currentSlide + step;
+            if (newIndex >= 0 && newIndex < totalSlides) goToSlide(newIndex);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') changeSlide(1);
+            else if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+        updateControls();
+
+        // --- ZOOM LOGIC ---
+        let currentZoom = 100;
+        function changeZoom(amount) {
+            currentZoom += amount;
+            if(currentZoom > 150) currentZoom = 150;
+            if(currentZoom < 70) currentZoom = 70;
+            document.documentElement.style.fontSize = currentZoom + '%';
+        }
+        function resetZoom() { currentZoom = 100; document.documentElement.style.fontSize = '100%'; }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{});
+            else if (document.exitFullscreen) document.exitFullscreen();
+        }
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById('fs-icon');
+            if (document.fullscreenElement) icon.classList.replace('fa-expand', 'fa-compress');
+            else icon.classList.replace('fa-compress', 'fa-expand');
+        });
+
+        // --- TOOLBAR DRAG LOGIC ---
+        function toggleToolbar() {
+            const toolbar = document.getElementById('toolbar');
+            const icon = document.getElementById('toolbar-toggle-icon');
+            if (toolbar.classList.contains('collapsed')) { 
+                toolbar.classList.remove('collapsed'); 
+                icon.className = 'fas fa-compress-alt';
+            } else { 
+                toolbar.classList.add('collapsed'); 
+                icon.className = 'fas fa-expand-arrows-alt'; 
+            }
+        }
+
+        const toolbar = document.getElementById('toolbar');
+        const handle = document.getElementById('toolbar-drag');
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+
+        function dragStart(e) {
+            if (e.target.closest('.minimize-btn')) return; 
+            e.preventDefault();
+            isDragging = true;
+            if (!toolbar.classList.contains('is-dragged')) {
+                const rect = toolbar.getBoundingClientRect();
+                toolbar.classList.add('is-dragged');
+                toolbar.style.left = rect.left + 'px'; toolbar.style.top = rect.top + 'px';
+                toolbar.style.bottom = 'auto'; toolbar.style.right = 'auto';
+            }
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            startX = clientX; startY = clientY;
+            initialLeft = toolbar.offsetLeft; initialTop = toolbar.offsetTop;
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            let newLeft = initialLeft + (clientX - startX);
+            let newTop = initialTop + (clientY - startY);
+            
+            const rect = toolbar.getBoundingClientRect();
+            if (newLeft < 0) newLeft = 0;
+            if (newTop < 0) newTop = 0;
+            if (newLeft + rect.width > window.innerWidth) newLeft = window.innerWidth - rect.width;
+            if (newTop + rect.height > window.innerHeight) newTop = window.innerHeight - rect.height;
+            toolbar.style.left = newLeft + 'px'; toolbar.style.top = newTop + 'px';
+        }
+        function dragEnd() { isDragging = false; }
+        
+        handle.addEventListener('mousedown', dragStart); document.addEventListener('mousemove', drag); document.addEventListener('mouseup', dragEnd);
+        handle.addEventListener('touchstart', dragStart, { passive: false }); document.addEventListener('touchmove', drag, { passive: false }); document.addEventListener('touchend', dragEnd);
+
+
+        // --- ORTAK: KONFETİ EFEKTİ ---
+        function fireConfetti(areaId, baseCount = 40) {
+            const area = document.getElementById(areaId);
+            if(!area) return;
+            const colors = ['#fcd34d', '#34d399', '#60a5fa', '#f472b6', '#a78bfa'];
+            for (let i = 0; i < baseCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                if (Math.random() > 0.5) confetti.style.borderRadius = '50%';
+                area.appendChild(confetti);
+                const duration = Math.random() * 3 + 2; 
+                const delay = Math.random() * 0.2;
+                confetti.animate([
+                    { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${Math.random()*200 - 100}px, ${area.offsetHeight}px, 0) rotate(${Math.random()*720}deg)`, opacity: 0 }
+                ], { duration: duration * 1000, delay: delay * 1000, fill: 'forwards' });
+                setTimeout(() => confetti.remove(), (duration + delay) * 1000);
+            }
+        }
+
+        // --- ORTAK: EŞLEŞTİRME OYUNU MANTIĞI (GENELK KULLANIM İÇİN) ---
+        function setupMatchGame(col1Id, col2Id, areaId, targetMatches) {
+            const leftBtns = document.getElementById(col1Id).querySelectorAll('.left-btn');
+            const rightBtns = document.getElementById(col2Id).querySelectorAll('.right-btn');
+            let selectedLeft = null, selectedRight = null, matched = 0;
+
+            function clickHandler(e) {
+                const btn = e.target.closest('.match-btn');
+                if(!btn || btn.classList.contains('correct')) return;
+
+                if(btn.classList.contains('left-btn')) {
+                    leftBtns.forEach(b => { if(!b.classList.contains('correct')) b.classList.remove('selected') });
+                    btn.classList.add('selected'); selectedLeft = btn;
+                } else if(btn.classList.contains('right-btn')) {
+                    rightBtns.forEach(b => { if(!b.classList.contains('correct')) b.classList.remove('selected') });
+                    btn.classList.add('selected'); selectedRight = btn;
+                }
+
+                if(selectedLeft && selectedRight) {
+                    if(selectedLeft.dataset.id === selectedRight.dataset.match) {
+                        selectedLeft.classList.replace('selected', 'correct'); selectedRight.classList.replace('selected', 'correct');
+                        selectedLeft.innerHTML += ' <i class="fas fa-check-circle ml-auto"></i>';
+                        selectedRight.innerHTML += ' <i class="fas fa-check-circle ml-auto"></i>';
+                        matched++;
+                        if(matched === targetMatches) setTimeout(() => fireConfetti(areaId, 80), 300);
+                    } else {
+                        selectedLeft.classList.add('wrong'); selectedRight.classList.add('wrong');
+                        setTimeout(() => {
+                            selectedLeft.classList.remove('wrong', 'selected'); selectedRight.classList.remove('wrong', 'selected');
+                        }, 500);
+                    }
+                    selectedLeft = null; selectedRight = null;
+                }
+            }
+            leftBtns.forEach(b => b.addEventListener('click', clickHandler));
+            rightBtns.forEach(b => b.addEventListener('click', clickHandler));
+        }
+        
+        setupMatchGame('left-col-1', 'right-col-1', 'match1-game-area', 5);
+        setupMatchGame('left-col-2', 'right-col-2', 'match2-game-area', 5);
+        setupMatchGame('left-col-3', 'right-col-3', 'match3-game-area', 4);
+
+        // --- ETKİNLİK 2: Durum Tablosu (Namaz Bozulur mu) ---
+        const act2Questions = [
+            { text: "Namazın içinde selam vermek.", ans: "BOZULUR" },
+            { text: "Rükuyu yanlışlıkla iki kez yapmak.", ans: "SEHİV" },
+            { text: "Selamünaleyküm diyen birine 'Aleykümselam' demek.", ans: "BOZULUR" },
+            { text: "Namaz kıldığı elbisede necaset (pislik) olduğunu fark etmek.", ans: "BOZULUR" },
+            { text: "Fatiha'dan önce euzübesmele okumayı unutmak.", ans: "GEREKMEZ" },
+            { text: "Tahiyyat duasını okumayı unutup ayağa kalkmak (Vacibin terki).", ans: "SEHİV" }
+        ];
+        let act2Idx = 0;
+        function loadAct2() {
+            if(act2Idx >= act2Questions.length) {
+                document.getElementById('act2-text').innerHTML = "<i class='fas fa-medal text-yellow-500 text-8xl mb-4'></i><br>Tüm durumları başarıyla değerlendirdin!";
+                document.getElementById('act2-btns').classList.add('hidden');
+                document.getElementById('act2-restart').classList.remove('hidden');
+                fireConfetti('act2-game-area', 80);
+                return;
+            }
+            document.getElementById('act2-text').innerText = act2Questions[act2Idx].text;
+            document.getElementById('act2-num').innerText = act2Idx + 1;
+        }
+        function checkAct2(userAns) {
+            const isCorrect = userAns === act2Questions[act2Idx].ans;
+            const fb = document.getElementById('act2-feedback');
+            const icon = document.getElementById('act2-icon');
+            const title = document.getElementById('act2-title');
+            
+            if(isCorrect) {
+                icon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+                title.innerHTML = '<span class="text-green-600">Doğru Tespit!</span>';
+            } else {
+                icon.innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+                title.innerHTML = `<span class="text-red-600">Yanlış! Doğrusu: ${act2Questions[act2Idx].ans}</span>`;
+            }
+            fb.classList.add('show');
+        }
+        function nextAct2() { document.getElementById('act2-feedback').classList.remove('show'); act2Idx++; loadAct2(); }
+        function restartAct2() { act2Idx = 0; document.getElementById('act2-btns').classList.remove('hidden'); document.getElementById('act2-restart').classList.add('hidden'); loadAct2(); }
+        loadAct2();
+
+        // --- DEĞERLENDİRME A: DOĞRU YANLIŞ TESTİ ---
+        const tfEvalQs = [
+            { q: "İstikbalikıble namazın sünnetlerindendir.", a: false, expl: "Yanlış! Namazın dışındaki FARZLARINDANDIR." },
+            { q: "Secdede burnu yere koymak namazın vaciplerindendir.", a: true, expl: "Doğru!" },
+            { q: "Sübhaneke duası Peygamberimizin öğrettiği bir duadır.", a: true, expl: "Doğru!" },
+            { q: "Câmi esması, birinin kusurunu örten anlamına gelir.", a: false, expl: "Yanlış! O esma Gafur'dur. Câmi, toplayan demektir." },
+            { q: "Mescid-i Nebi, hicretten sonra Medine'de inşa edilmiştir.", a: true, expl: "Doğru! Peygamber Mescidi anlamına gelir." }
+        ];
+        let tfIdx = 0;
+        function loadTf() {
+            if(tfIdx >= tfEvalQs.length) {
+                document.getElementById('tf-text').innerHTML = "<i class='fas fa-star text-yellow-400 text-8xl mb-4'></i><br>Bölüm A Tamamlandı!";
+                document.getElementById('tf-btns').classList.add('hidden');
+                document.getElementById('tf-header').classList.add('hidden');
+                document.getElementById('tf-restart').classList.remove('hidden');
+                fireConfetti('tf-game-area', 80);
+                return;
+            }
+            document.getElementById('tf-text').innerText = tfEvalQs[tfIdx].q;
+            document.getElementById('tf-num').innerText = tfIdx + 1;
+        }
+        function checkTf(ans) {
+            const isCorrect = ans === tfEvalQs[tfIdx].a;
+            const fb = document.getElementById('tf-feedback');
+            const icon = document.getElementById('tf-icon');
+            const title = document.getElementById('tf-title');
+            
+            if(isCorrect) {
+                icon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+                title.innerHTML = `<span class="text-green-600">Doğru!</span><br><span class="text-2xl md:text-4xl text-gray-700 mt-4 block">${tfEvalQs[tfIdx].expl}</span>`;
+            } else {
+                icon.innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+                title.innerHTML = `<span class="text-red-600">Yanlış!</span><br><span class="text-2xl md:text-4xl text-gray-700 mt-4 block">${tfEvalQs[tfIdx].expl}</span>`;
+            }
+            fb.classList.add('show');
+        }
+        function nextTf() { document.getElementById('tf-feedback').classList.remove('show'); tfIdx++; loadTf(); }
+        function restartTf() { changeSlide(1); } // Sonraki bölüme geç
+        loadTf();
+
+        // --- DEĞERLENDİRME B: BOŞLUK DOLDURMA (1 by 1) ---
+        const fillQs = [
+            { text: "Namaz kılarken oturuşta Tahiyyat duasını okumayı ifade eden kavramdır.", ans: "teşehhüt", opts: ["teşehhüt", "kıyam", "rükû"] },
+            { text: "Fazlalık veya eksiklikleri telafi etmek amacıyla namazın sonunda yapılan iki secdeye denir.", ans: "sehiv secdesi", opts: ["tilavet secdesi", "sehiv secdesi", "şükür secdesi"] },
+            { text: "Namaz kılmaya başlamadan önce bedenin gerekli yerlerinin örtülmesi şartıdır.", ans: "setriavret", opts: ["necasetten taharet", "vakit", "setriavret"] },
+            { text: "Yüce Allah’ın dualara karşılık veren anlamına gelen güzel ismidir.", ans: "Mucib", opts: ["Rab", "Gafur", "Mucib"] },
+            { text: "Emeviler döneminde Şam’da inşa edilen ve dünyanın eski camilerinden biri olan yapıdır.", ans: "Emeviyye Camii", opts: ["Mescid-i Aksa", "Emeviyye Camii", "Sultanahmet Camii"] }
+        ];
+        let fillIdx = 0;
+        function loadFill() {
+            if(fillIdx >= fillQs.length) {
+                document.getElementById('fill-text').innerHTML = "<i class='fas fa-medal text-yellow-500 text-8xl mb-4'></i><br>Bölüm B Tamamlandı!";
+                document.getElementById('fill-options').classList.add('hidden');
+                document.getElementById('fill-header').classList.add('hidden');
+                document.getElementById('fill-next').innerText = "Diğer Bölüme Geç";
+                document.getElementById('fill-next').classList.remove('hidden');
+                document.getElementById('fill-next').onclick = () => changeSlide(1);
+                fireConfetti('fill-game-area', 80);
+                return;
+            }
+            document.getElementById('fill-success').classList.add('hidden');
+            document.getElementById('fill-next').classList.add('hidden');
+            
+            const q = fillQs[fillIdx];
+            document.getElementById('fill-text').innerHTML = q.text.replace("denir", "<span id='current-fill-slot' class='fill-slot'>________</span> denir").replace("şartıdır", "şartı <span id='current-fill-slot' class='fill-slot'>________</span> dır").replace("ismidir", "ismi <span id='current-fill-slot' class='fill-slot'>________</span> dir").replace("yapıdır", "yapı <span id='current-fill-slot' class='fill-slot'>________</span> dir");
+            if(!document.getElementById('current-fill-slot')) {
+                document.getElementById('fill-text').innerHTML = `<span id='current-fill-slot' class='fill-slot'>________</span>, ` + q.text;
+            }
+            
+            document.getElementById('fill-num').innerText = fillIdx + 1;
+            
+            const optBox = document.getElementById('fill-options');
+            optBox.innerHTML = "";
+            q.opts.sort(()=>Math.random()-0.5).forEach(opt => {
+                optBox.innerHTML += `<button class="fill-blank-btn" onclick="checkFill('${opt}')">${opt}</button>`;
+            });
+        }
+        function checkFill(opt) {
+            const slot = document.getElementById('current-fill-slot');
+            if(opt === fillQs[fillIdx].ans) {
+                slot.innerText = opt;
+                slot.style.border = "none";
+                slot.style.color = "#047857";
+                document.getElementById('fill-options').innerHTML = ""; // hide options
+                document.getElementById('fill-success').classList.remove('hidden');
+                document.getElementById('fill-next').classList.remove('hidden');
+                fireConfetti('fill-game-area', 30);
+            } else {
+                slot.style.color = "#ef4444";
+                slot.innerText = "Yanlış";
+                setTimeout(() => { slot.style.color = "#059669"; slot.innerText = "________"; }, 500);
+            }
+        }
+        function nextFill() { fillIdx++; loadFill(); }
+        loadFill();
+
+        // --- DEĞERLENDİRME C: ÇOKTAN SEÇMELİ TEST (1 by 1) ---
+        const mcqQs = [
+            {
+                q: "1. Namazın farzlarıyla ilgili açıklamalardan hangisi yanlıştır?",
+                opts: ["A) Necasetten Taharet: Temizlik", "B) Setriavret: Örtünmek", "C) Kıyam: Eğilmek", "D) Kıraat: Kur'an okumak"],
+                correct: 2, expl: "Cevap C. Kıyam ayakta durmaktır. Eğilmek Rükûdur."
+            },
+            {
+                q: "2. Hangisi sehiv secdesiyle ilgili değildir?",
+                opts: ["A) Eksiklik durumunda yapılır", "B) Farz gecikirse yapılır", "C) Secde ayeti okunduğunda yapılır", "D) Selamdan sonra yapılır"],
+                correct: 2, expl: "Cevap C. Secde ayeti okunduğunda yapılan secdeye Tilavet Secdesi denir."
+            },
+            {
+                q: "3. Sübhaneke duası ne zaman okunur?",
+                opts: ["A) Rükûdan sonra", "B) Secdeden önce", "C) Kade-i Ahirede", "D) İftitah tekbirinden sonra"],
+                correct: 3, expl: "Cevap D. Namazın en başında tekbirden hemen sonra okunur."
+            },
+            {
+                q: "4. Mescitlerle ilgili kimin verdiği bilgi yanlıştır?",
+                opts: ["A) Esma: Coğrafya mimariyi etkiler", "B) Kerem: Hanedan camilerine Ulu Cami denir", "C) Zeynep: Minber iç kısımdadır", "D) Eren: Mescitler hayatın merkezidir"],
+                correct: 1, expl: "Cevap B. Padişahların ve hanedanın yaptırdığı camilere Ulu Cami değil, Selatin Camileri denir."
+            },
+            {
+                q: "5. Hangileri mescitlerin işlevlerindendir? (I. İbadet, II. Sevinç/Üzüntü Paylaşma, III. İlim Öğrenme)",
+                opts: ["A) I ve II", "B) I ve III", "C) II ve III", "D) I, II ve III"],
+                correct: 3, expl: "Cevap D. Mescitler ibadet, eğitim ve toplumsal dayanışma merkezleridir."
+            }
+        ];
+        let mcqIdx = 0;
+        function loadQuiz() {
+            if(mcqIdx >= mcqQs.length) {
+                document.getElementById('quiz-q').innerHTML = "<i class='fas fa-trophy text-yellow-500 text-8xl mb-4'></i><br>Bölüm C Tamamlandı!";
+                document.getElementById('quiz-opts').innerHTML = "";
+                document.getElementById('quiz-reveal-btn').classList.add('hidden');
+                document.getElementById('quiz-expl').style.display = 'none';
+                document.getElementById('quiz-header').classList.add('hidden');
+                document.getElementById('quiz-next').innerText = "Diğer Bölüme Geç";
+                document.getElementById('quiz-next').classList.remove('hidden');
+                document.getElementById('quiz-next').onclick = () => changeSlide(1);
+                fireConfetti('quiz-game-area', 80);
+                return;
+            }
+            const q = mcqQs[mcqIdx];
+            document.getElementById('quiz-q').innerText = q.q;
+            document.getElementById('quiz-num').innerText = mcqIdx + 1;
+            document.getElementById('quiz-expl').style.display = 'none';
+            document.getElementById('quiz-expl').innerText = q.expl;
+            document.getElementById('quiz-reveal-btn').classList.remove('hidden');
+            document.getElementById('quiz-next').classList.add('hidden');
+            
+            const optsBox = document.getElementById('quiz-opts');
+            optsBox.innerHTML = "";
+            q.opts.forEach((opt, idx) => {
+                const isCorrect = idx === q.correct ? 'true' : 'false';
+                optsBox.innerHTML += `<button class="quiz-opt" data-correct="${isCorrect}" onclick="selectOpt(this)">${opt}</button>`;
+            });
+        }
+        function selectOpt(btn) {
+            const container = btn.parentElement;
+            const options = container.querySelectorAll('.quiz-opt');
+            options.forEach(opt => opt.classList.remove('selected-opt'));
+            btn.classList.add('selected-opt');
+        }
+        function revealQuiz() {
+            const container = document.getElementById('quiz-opts');
+            const options = container.querySelectorAll('.quiz-opt');
+            let isSelectedCorrect = false;
+
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if(opt.getAttribute('data-correct') === 'true') {
+                    opt.classList.add('correct');
+                    if(!opt.innerHTML.includes('fa-check')) opt.innerHTML += ' <i class="fas fa-check-circle ml-auto text-3xl"></i>';
+                    if(opt.classList.contains('selected-opt')) isSelectedCorrect = true;
+                } else if(opt.classList.contains('selected-opt')) {
+                    opt.classList.add('wrong');
+                    if(!opt.innerHTML.includes('fa-times')) opt.innerHTML += ' <i class="fas fa-times-circle ml-auto text-3xl"></i>';
+                }
+            });
+
+            document.getElementById('quiz-expl').style.display = 'block';
+            document.getElementById('quiz-reveal-btn').classList.add('hidden');
+            document.getElementById('quiz-next').classList.remove('hidden');
+
+            if(isSelectedCorrect) fireConfetti('quiz-game-area', 40);
+        }
+        function nextQuiz() { mcqIdx++; loadQuiz(); }
+        loadQuiz();
+
+        // --- DEĞERLENDİRME D: AÇIK UÇLU (1 by 1) ---
+        const openQs = [
+            { q: "1. Namazın sünnetlerine üç örnek veriniz.", a: "Sübhaneke duasını okumak, rükûya ve secdeye giderken 'Allahüekber' demek, rükûda 'Sübhâne rabbiye’l-azîm' demek." },
+            { q: "2. Tilavet secdesi nasıl yapılır?", a: "Abdestli şekilde kıbleye dönüp niyet edilir. Eller kaldırılmadan 'Allahüekber' denilip doğrudan 1 kez secdeye gidilir, 3 defa Sübhane rabbiyel a'la denir, sonra ayağa kalkılıp özel duası okunur." },
+            { q: "4. Cemaatle namaz kılmak niçin önemlidir?", a: "İnsanlar arasında tanışma, kaynaşma ve dayanışmayı sağlar. Cemaatle kılınan namaz tek başına kılınandan 27 derece daha sevaptır." },
+            { q: "5. Allah'ın Gafur ve Rab isimlerinin anlamı nedir?", a: "Gafur: Suçları bağışlayan, kusurları örten demektir. <br>Rab: Yaratan, terbiye eden, rızık veren, koruyup gözeten demektir." }
+        ];
+        let openIdx = 0;
+        function loadOpen() {
+            if(openIdx >= openQs.length) {
+                document.getElementById('open-q').innerHTML = "<i class='fas fa-medal text-purple-500 text-8xl mb-4'></i><br>Bölüm D Tamamlandı!";
+                document.getElementById('open-reveal-btn').classList.add('hidden');
+                document.getElementById('open-a').style.display = 'none';
+                document.getElementById('open-header').classList.add('hidden');
+                document.getElementById('open-next').innerText = "Son Bölüme Geç (Oyun)";
+                document.getElementById('open-next').classList.remove('hidden');
+                document.getElementById('open-next').onclick = () => changeSlide(1);
+                fireConfetti('open-game-area', 80);
+                return;
+            }
+            const q = openQs[openIdx];
+            document.getElementById('open-q').innerText = q.q;
+            document.getElementById('open-num').innerText = openIdx + 1;
+            document.getElementById('open-a').style.display = 'none';
+            document.getElementById('open-a').innerHTML = "<i class='fas fa-check-circle mr-2'></i>" + q.a;
+            document.getElementById('open-reveal-btn').classList.remove('hidden');
+            document.getElementById('open-next').classList.add('hidden');
+        }
+        function revealOpen() {
+            document.getElementById('open-a').style.display = 'block';
+            document.getElementById('open-reveal-btn').classList.add('hidden');
+            document.getElementById('open-next').classList.remove('hidden');
+        }
+        function nextOpen() { openIdx++; loadOpen(); }
+        loadOpen();
+
+        // --- DEĞERLENDİRME E: ŞİFRE ÇÖZÜCÜ (Anagram-Bulmaca) ---
+        const passQs = [
+            { q: "Namazın her rekâtında kıraat süresi kadar ayakta durmak.", a: "KIYAM" },
+            { q: "Namazda iftitah tekbirinden sonra okunan ilk dua.", a: "SÜBHANEKE" },
+            { q: "Camilerde minarenin etrafındaki balkon, ezan okunan yer.", a: "ŞEREFE" },
+            { q: "Namaz kılarken yöneldiğimiz kıblemiz.", a: "KÂBE" },
+            { q: "Mimar Sinan'ın 'ustalık eserim' dediği Edirne'deki cami.", a: "SELİMİYE" }
+        ];
+        let passIdx = 0;
+        let passFilled = [];
+        
+        function initPass() {
+            if(passIdx >= passQs.length) {
+                document.getElementById('pass-hint').innerHTML = "<i class='fas fa-trophy text-yellow-500 text-8xl mb-4'></i><br><span class='text-green-600'>Tebrikler! Tüm kelimeleri buldunuz.</span>";
+                document.getElementById('pass-slots').innerHTML = "";
+                document.getElementById('pass-letters').innerHTML = "";
+                document.getElementById('pass-next-btn').classList.add('hidden');
+                fireConfetti('pass-game-area', 100);
+                setTimeout(() => changeSlide(1), 3000); // Bitiş ekranına geç
+                return;
+            }
+            document.getElementById('pass-hint').innerText = passQs[passIdx].q;
+            document.getElementById('pass-num').innerText = passIdx + 1;
+            document.getElementById('pass-next-btn').classList.add('hidden');
+            passFilled = [];
+            
+            const slots = document.getElementById('pass-slots');
+            slots.innerHTML = "";
+            for(let i=0; i<passQs[passIdx].a.length; i++) {
+                slots.innerHTML += `<div class="ana-slot" id="pass-slot-${i}"></div>`;
+            }
+
+            const letters = passQs[passIdx].a.split('').sort(()=> Math.random()-0.5);
+            const lContainer = document.getElementById('pass-letters');
+            lContainer.innerHTML = "";
+            letters.forEach((l, i) => {
+                lContainer.innerHTML += `<button class="ana-letter" onclick="pushPass(this)">${l}</button>`;
+            });
+        }
+
+        function pushPass(btn) {
+            if(btn.classList.contains('used')) return;
+            const l = btn.innerText;
+            const targetLen = passQs[passIdx].a.length;
+            if(passFilled.length < targetLen) {
+                const slot = document.getElementById(`pass-slot-${passFilled.length}`);
+                slot.innerText = l;
+                slot.classList.add('filled');
+                passFilled.push(l);
+                btn.classList.add('used');
+
+                if(passFilled.length === targetLen) checkPass();
+            }
+        }
+
+        function checkPass() {
+            const userW = passFilled.join('');
+            const slots = document.querySelectorAll('#pass-slots .ana-slot');
+            if(userW === passQs[passIdx].a) {
+                slots.forEach(s => s.classList.add('correct'));
+                document.getElementById('pass-next-btn').classList.remove('hidden');
+                fireConfetti('pass-game-area', 40);
+            } else {
+                slots.forEach(s => s.classList.add('wrong'));
+                setTimeout(clearPass, 600);
+            }
+        }
+
+        function clearPass() { initPass(); }
+        function nextPass() { passIdx++; initPass(); }
+        initPass();
+
+    </script>
+</body>
+</html>

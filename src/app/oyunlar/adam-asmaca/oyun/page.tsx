@@ -19,6 +19,16 @@ import Confetti from 'react-dom-confetti';
 const HANGMAN_STAGES = 6;
 const ALPHABET = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ'.split('');
 
+// --- Şapkalı harfleri standart harflere çevirme ---
+const normalizeText = (text: string) => {
+    if (!text) return '';
+    return text.toLocaleUpperCase('tr-TR')
+        .replace(/Â/g, 'A')
+        .replace(/Î/g, 'İ')
+        .replace(/Û/g, 'U')
+        .replace(/Ê/g, 'E');
+};
+
 // --- ORTAK ARKA PLAN ---
 const MagnificentLightBackground = () => (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-50">
@@ -33,7 +43,6 @@ const MagnificentLightBackground = () => (
 const SketchHangman = ({ mistakes, status }: { mistakes: number, status: 'playing' | 'won' | 'lost' | 'finished' }) => {
     const baseStroke = "stroke-slate-800 stroke-[6px] [stroke-linecap:round] [stroke-linejoin:round]";
     const bodyStroke = "stroke-rose-500 stroke-[5px] [stroke-linecap:round] [stroke-linejoin:round] fill-transparent transition-all duration-500 ease-out";
-    
     return (
         <div className="relative w-full h-64 lg:h-96 flex items-center justify-center">
             <div className="absolute inset-2 bg-white/60 rounded-[2rem] border-4 border-slate-100 shadow-inner backdrop-blur-sm" />
@@ -63,7 +72,6 @@ function HangmanGame() {
     const { user } = useAuth();
     const { toast } = useToast();
     const mainContentRef = useRef<HTMLDivElement>(null);
-
     const [gameData, setGameData] = useState<HangmanData[] | null>(null);
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -92,8 +100,11 @@ function HangmanGame() {
             topicId: searchParams.get('topicId') || undefined,
         };
         const result = await getAdamAsmacaAction(params);
-        if (result.data) setGameData(result.data);
-        else setError(result.error || "Hata oluştu.");
+        if (result.data) {
+            setGameData(result.data);
+        } else {
+            setError(result.error || "Hata oluştu.");
+        }
         setIsLoading(false);
     }, [searchParams]);
 
@@ -106,32 +117,35 @@ function HangmanGame() {
         if (gameState !== 'playing' || guessedLetters.has(letter) || !currentWordObj) return;
         setGuessedLetters(prev => new Set(prev).add(letter));
 
-        if (!currentWordObj.word.includes(letter)) {
+        const normalizedWord = normalizeText(currentWordObj.word);
+
+        if (!normalizedWord.includes(letter)) {
             setWrongGuesses(prev => prev + 1);
             playSound('incorrect');
             setGameShake(true);
             setTimeout(() => setGameShake(false), 500);
         } else {
             playSound('correct');
-            // --- PUANLAMA: Her doğru harf 3 Puan ---
             setTotalScore(prev => prev + 3);
         }
     };
 
     useEffect(() => {
         if (!currentWordObj || gameState !== 'playing') return;
-        const isWon = currentWordObj.word.split('').every(l => guessedLetters.has(l));
+        
+        const normalizedWord = normalizeText(currentWordObj.word);
+        const lettersToGuess = normalizedWord.split('').filter(char => ALPHABET.includes(char));
+        const isWon = lettersToGuess.length === 0 ? true : lettersToGuess.every(l => guessedLetters.has(l));
+
         if (isWon) {
             setGameState('won');
-            // BONUS PUAN KALDIRILDI
-            // setTotalScore(prev => prev + 50); 
             setCorrectCount(prev => prev + 1); 
             playSound('correct');
         } else if (wrongGuesses >= HANGMAN_STAGES) {
             setGameState('lost');
             playSound('incorrect');
         }
-    }, [guessedLetters, wrongGuesses]);
+    }, [guessedLetters, wrongGuesses, currentWordObj, gameState]);
 
     const handleNext = () => {
         if (!isLastQuestion) {
@@ -147,8 +161,6 @@ function HangmanGame() {
         }
     };
 
-    // --- BAŞARI KONTROLÜ ---
-    // Soruların en az yarısını doğru bilmek gerekir.
     const isThresholdPassed = gameData ? correctCount >= Math.ceil(gameData.length / 2) : false;
 
     const handleFinishAndSave = async () => {
@@ -159,10 +171,7 @@ function HangmanGame() {
         setIsSaving(true);
         try {
             if (isMission && topicId) {
-                // --- GÖREV MODU KAYDI (LİDERLİK TABLOSU DÜZELTİLDİ) ---
                 const batch = writeBatch(db);
-
-                // 1. Etkinlik Kaydı (scoreEvents)
                 const eventRef = doc(collection(db, 'scoreEvents'));
                 batch.set(eventRef, {
                     userId: user.uid,
@@ -171,16 +180,14 @@ function HangmanGame() {
                     gameType: 'adam-asmaca',
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: isThresholdPassed // Yarısından fazlası doğruysa TRUE
+                    completed: isThresholdPassed
                 });
 
-                // 2. Kullanıcı Profilini Güncelleme (users -> score)
                 const userRef = doc(db, 'users', user.uid);
                 batch.update(userRef, {
                     score: increment(totalScore)
                 });
 
-                // İşlemleri Kaydet
                 await batch.commit();
 
                 if (isThresholdPassed) {
@@ -189,7 +196,6 @@ function HangmanGame() {
                     toast({ title: "Görev Tamamlanamadı", description: "Puan kaydedildi ancak soruların en az yarısını bilmelisin.", variant: "destructive" });
                 }
             } else {
-                // --- NORMAL MOD KAYDI ---
                 await submitAdamAsmacaScoreAction(user.uid, totalScore, gameContext);
                 toast({ title: "Başarılı", description: "Puanınız kaydedildi." });
             }
@@ -199,7 +205,72 @@ function HangmanGame() {
         } finally { setIsSaving(false); }
     };
 
-    if (isLoading) return <div className="h-screen bg-slate-50 flex items-center justify-center"><MagnificentLightBackground /><Loader2 className="animate-spin h-10 w-10 text-rose-600" /></div>;
+    // --- EKSİK KELİME & GÖREV OTO-TAMAMLAMA İŞLEMİ ---
+    const handleEmptyMissionSave = async () => {
+        if (!user || isSaving) return;
+        setIsSaving(true);
+        try {
+            const batch = writeBatch(db);
+            const eventRef = doc(collection(db, 'scoreEvents'));
+            batch.set(eventRef, {
+                userId: user.uid,
+                points: 0,
+                context: topicId,
+                gameType: 'adam-asmaca',
+                timestamp: serverTimestamp(),
+                isMission: true,
+                completed: true // İçerik yoksa otomatik başarılı sayıyoruz
+            });
+
+            await batch.commit();
+            toast({ title: "Görev Başarılı!", description: "İçerik bulunmadığı için görev otomatik olarak tamamlandı.", className: "bg-green-600 text-white" });
+            router.push('/student/gorevler');
+        } catch (e) {
+            toast({ title: "Hata", variant: "destructive" });
+        } finally { 
+            setIsSaving(false); 
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="h-screen bg-slate-50 flex items-center justify-center">
+                <MagnificentLightBackground />
+                <Loader2 className="animate-spin h-10 w-10 text-rose-600" />
+            </div>
+        );
+    }
+
+    if (!gameData || gameData.length === 0) {
+        return (
+            <div className="h-screen bg-slate-50 flex items-center justify-center text-center p-4">
+                <MagnificentLightBackground />
+                <div className="bg-white/90 backdrop-blur-sm p-8 rounded-[2rem] shadow-xl z-10 max-w-md w-full">
+                    {isMission ? (
+                        <>
+                            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+                            <h2 className="text-2xl font-black text-slate-800 mb-2">Görev Tamamlandı!</h2>
+                            <p className="text-slate-500 mb-6">Bu kategoriye ait kelime bulunmuyor. Bu yüzden görevin otomatik olarak başarılı sayıldı.</p>
+                            <Button 
+                                onClick={handleEmptyMissionSave} 
+                                disabled={isSaving}
+                                className="w-full h-12 text-lg bg-green-600 hover:bg-green-700 text-white font-bold"
+                            >
+                                {isSaving ? "Kaydediliyor..." : "Görevi Tamamla ve Dön"}
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <XOctagon className="h-16 w-16 text-slate-300 mx-auto mb-4" />
+                            <h2 className="text-2xl font-black text-slate-800 mb-2">Kelime Bulunamadı</h2>
+                            <p className="text-slate-500 mb-6">Bu kategori için henüz kelime eklenmemiş veya bir hata oluştu.</p>
+                            <Button onClick={() => router.back()} className="w-full">Geri Dön</Button>
+                        </>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     if (gameState === 'finished') {
         return (
@@ -213,7 +284,7 @@ function HangmanGame() {
                             <div className="mb-6 flex justify-center">
                                 {isThresholdPassed ? <Trophy className="h-16 w-16 text-green-600 animate-bounce" /> : <XOctagon className="h-16 w-16 text-red-500" />}
                             </div>
-                            
+ 
                             <h2 className="text-3xl font-black text-slate-800 mb-2">{isThresholdPassed ? "GÖREV BAŞARILI!" : "BAŞARISIZ"}</h2>
                             <p className="text-slate-500 mb-6">
                                 {isThresholdPassed 
@@ -222,7 +293,6 @@ function HangmanGame() {
                             </p>
                             
                             <div className="space-y-3">
-                                {/* PUAN VARSA KAYDET BUTONU GÖRÜNÜR */}
                                 {!isScoreSaved && totalScore > 0 && (
                                     <Button onClick={handleFinishAndSave} disabled={isSaving} className={cn("w-full h-12 text-lg font-bold shadow-lg", isThresholdPassed ? "bg-indigo-600 hover:bg-indigo-700" : "bg-amber-600 hover:bg-amber-700")}>
                                         {isSaving ? "Kaydediliyor..." : (isThresholdPassed ? "Kaydet ve Devam Et" : "Puanı Al ve Çık")}
@@ -271,7 +341,7 @@ function HangmanGame() {
             <main className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 z-10 flex-grow items-center">
                 <SketchHangman mistakes={wrongGuesses} status={gameState} />
 
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 w-full max-w-full overflow-hidden">
                     <div className="bg-white/90 backdrop-blur-sm p-6 rounded-[2rem] border border-white shadow-lg text-center">
                         <div className="flex items-center justify-center gap-2 mb-2 text-amber-600 font-bold text-xs uppercase tracking-widest">
                             <Lightbulb className="h-4 w-4" /> İpucu
@@ -279,20 +349,32 @@ function HangmanGame() {
                         <p className="text-xl font-bold text-slate-800 leading-relaxed">{currentWordObj?.hint}</p>
                     </div>
 
-                    <div className="flex flex-wrap justify-center gap-2 lg:gap-3 py-4">
-                        {currentWordObj?.word.split('').map((letter, i) => (
-                            <div key={i} className={cn(
-                                "w-10 h-14 md:w-14 md:h-20 rounded-xl lg:rounded-2xl flex items-center justify-center text-3xl font-black border-2 transition-all duration-300",
-                                guessedLetters.has(letter) ? "bg-white border-indigo-200 text-indigo-600 shadow-md transform -translate-y-1" : "bg-slate-100/50 border-dashed border-slate-300 text-transparent"
-                            )}>
-                                {guessedLetters.has(letter) || gameState === 'lost' ? letter : ''}
-                            </div>
-                        ))}
+                    <div className="flex flex-wrap justify-center gap-1.5 md:gap-2 lg:gap-3 py-4">
+                        {currentWordObj?.word && normalizeText(currentWordObj.word).split('').map((normalizedChar, i) => {
+                            const originalChar = currentWordObj.word[i];
+                            const isSpecialChar = !ALPHABET.includes(normalizedChar);
+                            const isGuessed = isSpecialChar || guessedLetters.has(normalizedChar);
+
+                            if (normalizedChar === ' ') {
+                                return <div key={i} className="w-3 md:w-6 lg:w-8" />;
+                            }
+
+                            return (
+                                <div key={i} className={cn(
+                                    "w-8 h-12 sm:w-10 sm:h-14 md:w-12 md:h-16 lg:w-14 lg:h-20 rounded-lg lg:rounded-2xl flex items-center justify-center text-xl md:text-2xl lg:text-3xl font-black border-2 transition-all duration-300",
+                                    isSpecialChar ? "bg-transparent border-transparent text-slate-800 shadow-none" :
+                                    isGuessed ? "bg-white border-indigo-200 text-indigo-600 shadow-md transform -translate-y-1" : 
+                                    "bg-slate-100/50 border-dashed border-slate-300 text-transparent"
+                                )}>
+                                    {isGuessed || gameState === 'lost' ? (isSpecialChar ? originalChar : normalizedChar) : ''}
+                                </div>
+                            );
+                        })}
                     </div>
 
                     {gameState !== 'playing' ? (
                         <div className="flex flex-col items-center gap-4 animate-in slide-in-from-bottom-4">
-                            <h3 className={cn("text-2xl font-black uppercase tracking-tighter", gameState === 'won' ? "text-emerald-500" : "text-rose-500")}>
+                            <h3 className={cn("text-2xl font-black uppercase tracking-tighter text-center", gameState === 'won' ? "text-emerald-500" : "text-rose-500")}>
                                 {gameState === 'won' ? 'Harika! Doğru' : 'Olmadı! Kelime: ' + currentWordObj?.word}
                             </h3>
                             <Button onClick={handleNext} className="h-16 px-12 text-xl font-black rounded-2xl bg-slate-900 text-white shadow-2xl hover:scale-[1.02] transition-all w-full">

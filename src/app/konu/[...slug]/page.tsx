@@ -96,7 +96,7 @@ const DraggableToolbar = ({ onPlus, onMinus, onDownload, onFullscreen, isFullscr
 };
 
 // =================================================================================================
-// 1. BİLEŞEN: ÖZET
+// 1. BİLEŞEN: ÖZET (Araç çubuğu kaldırıldı)
 // =================================================================================================
 const SummaryTab = ({ topicId, title }: { topicId: string, title: string }) => {
     const [htmlContent, setHtmlContent] = useState<string | null>(null);
@@ -112,11 +112,6 @@ const SummaryTab = ({ topicId, title }: { topicId: string, title: string }) => {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, [topicId]);
 
-    const toggleFullscreen = () => {
-        if (!document.fullscreenElement) containerRef.current?.requestFullscreen();
-        else document.exitFullscreen();
-    };
-
     const getZoomedHtml = () => htmlContent ? htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; }</style>` : '';
     
     useEffect(() => {
@@ -128,7 +123,6 @@ const SummaryTab = ({ topicId, title }: { topicId: string, title: string }) => {
     return (
         <div ref={containerRef} className={cn("w-full relative flex flex-col bg-white transition-all duration-300", isFullscreen ? "fixed inset-0 z-[100] h-screen w-screen" : "h-[calc(100vh-90px)] border-t border-slate-200")}>
             <iframe ref={iframeRef} className="w-full h-full border-0 block bg-white" title={title} sandbox="allow-scripts allow-same-origin allow-popups allow-forms" />
-            <DraggableToolbar label="Zoom" onPlus={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} onMinus={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} onFullscreen={toggleFullscreen} isFullscreen={isFullscreen} />
         </div>
     );
 };

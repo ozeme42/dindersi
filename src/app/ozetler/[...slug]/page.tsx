@@ -285,12 +285,6 @@ function OzetDisplayPage() {
                                 className="w-full h-full border-0 bg-white" 
                                 sandbox="allow-scripts allow-same-origin"
                             />
-                            <DraggableToolbar label="Zoom" 
-                                onPlus={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} 
-                                onMinus={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} 
-                                onFullscreen={() => isFullscreen ? document.exitFullscreen() : containerRef.current?.requestFullscreen()} 
-                                isFullscreen={isFullscreen} 
-                            />
                         </div>
                     </TabsContent>
 

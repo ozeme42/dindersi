@@ -4,243 +4,318 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peygamberimizin Mekke Yılları (610-622)</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --primary-teal: #164e63;
+            --bg-sand: #fdfbf7;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Mavi-Gri Açık Ton */
+            background-color: var(--bg-sand);
+            color: #1f2937;
         }
-        .timeline-wrapper {
-            position: relative;
-            padding-left: 20px; /* Mobil uyum için boşluk */
+
+        h1, h2, h3, .arabic-font {
+            font-family: 'Amiri', serif;
         }
+
         .timeline-line {
             position: absolute;
-            left: 22px; /* Dikey çizginin konumu */
+            left: 50%;
             top: 0;
             bottom: 0;
             width: 4px;
-            background-color: #94a3b8; /* Slate-400 */
-            z-index: 5;
-        }
-        .timeline-event-card {
-            position: relative;
-            margin-left: 50px; /* Kart içeriğini çizgiden ayırır */
-            margin-bottom: 2.5rem;
-            padding: 1.5rem;
-            z-index: 10;
-            background-color: white;
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-        }
-        .timeline-dot {
-            position: absolute;
-            left: -32px; /* Noktanın çizgiyi sarması için ayar */
-            top: 1.75rem; /* Kartın üst kenarına hizalama */
-            width: 28px;
-            height: 28px;
-            border-radius: 9999px;
-            background-color: #3b82f6; /* Blue-500 */
-            border: 5px solid #dbeafe; /* Blue-100 */
-            z-index: 20;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 0 0 4px #3b82f6; /* Vurgu halkası */
+            background: linear-gradient(to bottom, #D4AF37, #164e63, #D4AF37);
+            transform: translateX(-50%);
+            z-index: 0;
         }
 
-        /* Büyük ekranlarda çizgiyi sola taşımak için */
-        @media (min-width: 1024px) {
+        .timeline-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mobile adjustments for timeline */
+        @media (max-width: 768px) {
             .timeline-line {
-                left: 50%;
-                transform: translateX(-50%);
+                left: 20px;
             }
-            .timeline-event-card {
-                width: 48%; /* Geniş ekranlarda iki yana yayılsın */
-                margin-left: 55%; /* Sağa it */
+            .timeline-content-left, .timeline-content-right {
+                width: 100% !important;
+                padding-left: 50px !important;
+                padding-right: 10px !important;
+                text-align: left !important;
             }
-            /* İki taraflı yerleşim için sol taraftaki kartlar */
-            .timeline-event-card:nth-child(even) { /* Tek numaralı kartlar (1. kart: 1, 3, 5, ...) */
-                margin-left: 55%;
-            }
-            .timeline-event-card:nth-child(odd) { /* Çift numaralı kartlar (2. kart: 2, 4, 6, ...) */
-                margin-left: 0;
-                margin-right: 55%;
-                text-align: right;
-            }
-            .timeline-event-card:nth-child(odd) .timeline-dot {
-                left: initial;
-                right: -32px; /* Sol taraftaki kart için noktayı sağa taşı */
-            }
-
             .timeline-dot {
-                left: 50%;
-                transform: translateX(-50%);
+                left: 20px !important;
             }
+        }
+
+        .pattern-bg {
+            background-image: radial-gradient(#D4AF37 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+        }
+
+        .info-box {
+            border-left: 4px solid var(--primary-gold);
         }
     </style>
 </head>
-<body>
+<body class="overflow-x-hidden">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+    <!-- Header Section -->
+    <header class="relative bg-cyan-900 text-white py-16 px-4 overflow-hidden">
+        <div class="absolute inset-0 pattern-bg opacity-20"></div>
+        <div class="container mx-auto text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 text-yellow-500">Peygamberimizin Mekke Yılları</h1>
+            <p class="text-xl md:text-2xl font-light opacity-90 max-w-2xl mx-auto">
+                "Karanlıktan Aydınlığa: 610 - 622"
+            </p>
+            <p class="mt-4 text-sm opacity-75">Hira'dan Medine'ye uzanan kutlu yolculuğun hikayesi.</p>
+        </div>
+        <!-- Decorative SVG Wave -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+            <svg class="relative block w-full h-[50px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#fdfbf7"></path>
+            </svg>
+        </div>
+    </header>
 
-        <!-- Başlık Bölümü -->
-        <header class="text-center py-8 md:py-12 bg-white rounded-xl shadow-2xl mb-12 border-b-4 border-blue-500">
-            <h1 class="text-3xl md:text-5xl font-black text-gray-800 mb-2">Peygamberimiz'in Mekke Yılları (610-622)</h1>
-            <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto mt-3">Tevhidin İlk 13 Yılı: Vahiy, Zulüm ve Sabır Kronolojisi</p>
-        </header>
+    <!-- Key Definitions Section -->
+    <section class="container mx-auto py-10 px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-cyan-700">
+                <h3 class="font-bold text-cyan-800 mb-2">Vahiy</h3>
+                <p class="text-sm text-gray-600">Allah’ın (cc) dilediği emir ve bilgileri peygamberine bildirmesidir.</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-yellow-600">
+                <h3 class="font-bold text-yellow-700 mb-2">Tevhit</h3>
+                <p class="text-sm text-gray-600">Allah’ı (cc) zatında, sıfatlarında ve fiillerinde birleme, eşsiz olduğuna inanmadır.</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-green-600">
+                <h3 class="font-bold text-green-700 mb-2">Hanif</h3>
+                <p class="text-sm text-gray-600">Hz. İbrahim'in dinine mensup, şirkten uzak, Allah'ın birliğine inanan kimse.</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow border-t-4 border-indigo-600">
+                <h3 class="font-bold text-indigo-700 mb-2">Tefekkür</h3>
+                <p class="text-sm text-gray-600">Derin düşünme, Allah’ın yarattıkları üzerinde kafa yorma.</p>
+            </div>
+        </div>
+    </section>
 
-        <!-- Ana İçerik: Dikey Zaman Çizelgesi -->
-        <div class="timeline-wrapper">
-            <div class="timeline-line"></div>
-            
-            <!-- Her bir olay, dikey akışın bir kartıdır -->
+    <!-- Timeline Section -->
+    <section class="container mx-auto px-4 relative pb-20">
+        <div class="timeline-line"></div>
 
-            <!-- 1. İlk Vahiy -->
-            <div class="timeline-event-card" id="vahiy">
-                <div class="timeline-dot bg-blue-500">1</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">610: İlk Vahiy ve Nübüvvetin Başlangıcı</h3>
-                <p class="text-gray-700 mb-3">Hz. Muhammed (sav) 40 yaşında, Ramazan ayında **Hira Mağarası'nda** iken, Cebrail (as) vasıtasıyla **"Oku!"** emriyle başlayan Alak Suresi'nin ilk 5 ayeti indi. İlk desteği ve teselliyi eşi **Hz. Hatice (ra)** verdi.</p>
-                <div class="bg-blue-50 p-3 rounded-lg text-sm text-gray-600 border-l-4 border-blue-400">
-                    <span class="font-semibold text-blue-700">İlk Müslüman:</span> Hz. Hatice annemiz hiç tereddüt etmeden iman etti.
+        <!-- Event 1: İlk Vahiy -->
+        <div class="flex flex-col md:flex-row items-center w-full mb-12 relative">
+            <div class="w-full md:w-1/2 md:pr-8 text-right timeline-content-left order-2 md:order-1">
+                <div class="timeline-card bg-white p-6 rounded-xl shadow-lg border-l-4 border-cyan-600">
+                    <span class="inline-block px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-xs font-bold mb-2">610 Miladi - Ramazan</span>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">İlk Vahiy: "Oku!"</h3>
+                    <p class="text-gray-600 mb-2">Hira Mağarası'nda inziva halindeyken Cebrail (as) geldi. İlk inen ayetler Alak Suresi'nin ilk 5 ayetidir.</p>
+                    <blockquote class="italic text-sm text-gray-500 border-r-2 border-gray-300 pr-2">"Yaratan Rabb’inin adıyla oku!"</blockquote>
                 </div>
             </div>
-
-            <!-- 2. Gizli Davet -->
-            <div class="timeline-event-card" id="gizli">
-                <div class="timeline-dot bg-blue-500">2</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">610-613: Gizli Davet Dönemi (3 Yıl)</h3>
-                <p class="text-gray-700 mb-3">Müddessir Suresi'nin inişiyle başlayan tebliğ görevi, ilk üç yıl Mekke'deki tepkiden korunmak amacıyla gizli sürdürüldü. Bu dönemin merkezi **Dârülerkam** oldu.</p>
-                <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4 text-sm">
-                    <li><span class="font-semibold">İlkler:</span> Hz. Hatice, Hz. Ali (ilk genç), Zeyd b. Harise (evlatlık), Hz. Ebu Bekir.</li>
-                    <li><span class="font-semibold">Destek:</span> Hz. Ebu Bekir, yakın çevresini İslam'a davet ederek birçok sahabi'nin hidayetine vesile oldu.</li>
-                </ul>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 bg-cyan-700 rounded-full flex items-center justify-center text-white border-4 border-white shadow timeline-dot z-10 md:order-2 order-1 mb-4 md:mb-0">
+                <i class="fas fa-book-open"></i>
             </div>
-
-            <!-- 3. Açık Davet -->
-            <div class="timeline-event-card" id="acik">
-                <div class="timeline-dot bg-blue-500">3</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">613: Davetin Açıklanması ve İlk Tepkiler</h3>
-                <p class="text-gray-700 mb-3">Hicr Suresi, 94. ayetle davet açıktan ilan edildi. Hz. Peygamber (sav) akrabalarını ve ardından tüm Mekkelileri **Safâ Tepesi'ne** çağırarak uyardı. Bu durum müşriklerin şiddetli tepkisine yol açtı.</p>
-                <div class="bg-red-50 p-3 rounded-lg text-sm text-gray-600 border-l-4 border-red-400">
-                    <span class="font-semibold text-red-700">Düşmanlık:</span> Müşrikler, ticari ve sosyal ayrıcalıklarını kaybetmekten korkuyorlardı. Ebu Leheb ve eşi Ümmü Cemil'in eziyetleri üzerine **Tebbet Suresi** indirildi.
-                </div>
-            </div>
-
-            <!-- 4. Baskı ve Şehitler -->
-            <div class="timeline-event-card" id="baski">
-                <div class="timeline-dot bg-blue-500">4</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">Zulüm ve İlk Şehadetler</h3>
-                <p class="text-gray-700 mb-3">Kimsesi olmayan köleler ve fakirler en ağır baskılara maruz kaldı. Hz. Ebu Bekir, Bilal-i Habeşi gibi köleleri yüksek bedellerle satın alarak özgürleştirdi.</p>
-                <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4 text-sm font-semibold text-red-700">
-                    <li>İlk Şehit: <span class="text-red-900">Sümeyye (ra)</span></li>
-                    <li>Bilal (ra): "Ehad! Ehad!" diyerek çöl güneşinde işkenceye direndi.</li>
-                    <li>Ammar (ra): Can güvenliği için zorla inkâr sözü vermesi üzerine, Kalbinin imanla dolu olduğu teyit edilerek <span class="font-normal">(Nahl Suresi, 106)</span> mazur görüldü.</li>
-                </ul>
-            </div>
-
-            <!-- 5. Habeşistan Hicreti -->
-            <div class="timeline-event-card" id="habes">
-                <div class="timeline-dot bg-blue-500">5</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">615: İlk Hicret (Habeşistan)</h3>
-                <p class="text-gray-700 mb-3">İşkenceler karşısında can, mal ve din emniyetlerini yitiren Müslümanlar, adil bir hükümdarın olduğu Habeşistan'a (Necâşî Ashame) göç etti. Müşriklerin iade talebi reddedildi.</p>
-                <div class="bg-yellow-50 p-3 rounded-lg text-sm text-gray-600 border-l-4 border-yellow-400">
-                    <span class="font-semibold text-yellow-700">Necâşî'nin Kararı:</span> Cafer b. Ebi Talib'in Meryem Suresi'ni okuması üzerine Necâşî (ra) Müslümanları himaye etti.
-                </div>
-            </div>
-
-            <!-- 6. Güçlenme -->
-            <div class="timeline-event-card" id="guc">
-                <div class="timeline-dot bg-blue-500">6</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">616: İslam'ın İki Güçlü Sütunu: Hamza ve Ömer</h3>
-                <p class="text-gray-700 mb-3">Hz. Peygamber'in (sav) duası gerçekleşti. İki güçlü liderin İslam'ı kabul etmesi, Müslümanların moralini ve gücünü artırdı. Zulümler bir nebze azaldı.</p>
-                <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4 text-sm">
-                    <li><span class="font-semibold">Hz. Hamza (ra):</span> Avdan dönerken Ebu Cehil'in hakaretini öğrenip öfkesiyle iman etti.</li>
-                    <li><span class="font-semibold">Hz. Ömer (ra):</span> Tâhâ Suresi'ni dinledikten sonra Müslüman oldu. Hak ile batılı ayırdığı için **"Fâruk"** lakabını aldı ve Kâbe'de açıktan namaz kılınmasını sağladı.</li>
-                </ul>
-            </div>
-
-            <!-- 7. Ambargo (Boykot) -->
-            <div class="timeline-event-card" id="ambargo">
-                <div class="timeline-dot bg-blue-500">7</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">616-619: Haşimoğullarına Boykot (3 Yıl)</h3>
-                <p class="text-gray-700 mb-3">Müşrikler son çare olarak, Kâbe duvarına astıkları bir metinle Haşimoğullarını (Ebu Talib Mahallesi'ne sığınanları) ekonomik ve sosyal yönden izole etti.</p>
-                <div class="bg-gray-100 p-3 rounded-lg text-sm text-gray-600 border-l-4 border-gray-400">
-                    <span class="font-semibold">Açlık ve Zorluk:</span> Üç yıl süren ambargo boyunca büyük zorluklar çekildi. Nihayet bazı Kureyşlilerin rahatsız olmasıyla anlaşma bozuldu ve Müslümanlar bu zorluktan daha da **güçlenerek** çıktı.
-                </div>
-            </div>
-
-            <!-- 8. Hüzün Yılı -->
-            <div class="timeline-event-card" id="huzun">
-                <div class="timeline-dot bg-blue-500">8</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">620: Hüzün Yılı (Ammu'l-Hüzn)</h3>
-                <p class="text-gray-700 mb-3">Boykotun sona ermesinden kısa süre sonra, Hz. Peygamber'in (sav) en büyük iki destekçisi vefat etti: **Amcası Ebu Talib** ve eşi **Hz. Hatice (ra).** Bu kayıplar, müşriklerin baskısını bir kat daha artırdı.</p>
-            </div>
-
-            <!-- 9. Taif Yolculuğu ve Merhamet Duası -->
-            <div class="timeline-event-card" id="taif">
-                <div class="timeline-dot bg-blue-500">9</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">620: Taif Yolculuğu ve İlahi Merhamet</h3>
-                <p class="text-gray-700 mb-3">Artan zulüm karşısında Resul-i Ekrem (sav) himaye arayışıyla Zeyd b. Harise ile Taif'e gitti, ancak burada taşlanarak kötü muamele gördü. Yaralı hâlde sığındığı yerde **Addas** (ra) isimli kölenin Müslüman olması, çekilen zahmetlere teselli oldu.</p>
-                <div class="bg-yellow-50 p-3 rounded-lg text-sm text-gray-600 border-l-4 border-yellow-400">
-                    <span class="font-semibold text-yellow-700">Dönüm Noktası:</span> Taif'ten dönerken melek, iki yalçın dağı Taiflilerin üzerine kapatmayı teklif etti. Hz. Peygamber ise **"Hayır, onların soyundan yalnız Allah'a ibadet edecek kimseler çıkarmasını ümit ederim."** diyerek merhametini gösterdi.
-                </div>
-            </div>
-
-            <!-- 10. İsra ve Miraç -->
-            <div class="timeline-event-card" id="isra_mirac">
-                <div class="timeline-dot bg-blue-500">10</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">621: İsra ve Miraç Mucizesi</h3>
-                <p class="text-gray-700 mb-3">Hicret'ten bir buçuk yıl önce gerçekleşen bu olayda, Hz. Peygamber (sav) Mescid-i Haram'dan (Mekke) Mescid-i Aksa'ya (Kudüs - İsra) ve oradan göklere (Miraç) yükseltilerek ilahi bir teselli buldu.</p>
-                <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4 text-sm">
-                    <li><span class="font-semibold">Vahiy:</span> Beş vakit namaz bu gecede farz kılındı.</li>
-                    <li><span class="font-semibold">Sınanma:</span> Ertesi gün yaşananlar, Müslümanların peygamberlerine olan imanının bir kez daha sınandığı önemli bir olay oldu.</li>
-                </ul>
-            </div>
-
-            <!-- 11. Akabe Biatları -->
-            <div class="timeline-event-card" id="akabe">
-                <div class="timeline-dot bg-blue-500">11</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">621-622: Akabe Biatları (Hicretin Temeli)</h3>
-                <p class="text-gray-700 mb-3">Mina'da Medine'den (Yesrib) gelen gruplarla yapılan iki önemli antlaşmadır. **Birinci Biat** (6 kişi, sonra 12) daha çok ahlaki sorumlulukları içerirken, **İkinci Biat** (75 kişi) Hz. Peygamber'e (sav) siyasi ve askeri himaye sözü verilerek **hicretin önünü açtı.**</p>
-                <div class="bg-green-50 p-3 rounded-lg text-sm text-gray-600 border-l-4 border-green-400 font-semibold text-green-700">
-                    <span class="font-semibold">Öğretmen:</span> İkinci Biat sonrası, Hz. Peygamber (sav) Mus'ab b. Umeyr'i ilk öğretmen olarak Yesrib'e gönderdi ve İslam burada hızla yayıldı.
-                </div>
-            </div>
-            
-            <!-- 12. Mekke'den Hicret Başlangıcı -->
-            <div class="timeline-event-card" id="hicret_baslangic">
-                <div class="timeline-dot bg-blue-500">12</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">622: Müslümanların Yesrib'e (Medine) Hicreti</h3>
-                <p class="text-gray-700 mb-3">Akabe Biatları sonrası Hz. Peygamber'in izniyle Mekkeli Müslümanlar, Yesribli **Ensar** tarafından kardeşçe karşılanmak üzere parça parça Mekke'den ayrılmaya başladı. Buna engel olamayan müşrikler, Hz. Peygamber'i (sav) öldürme kararı aldılar.</p>
-                <div class="bg-blue-50 p-3 rounded-lg text-sm text-gray-600 border-l-4 border-blue-400">
-                    <span class="font-semibold text-blue-700">Büyük Fedakarlık:</span> **Suheyb b. Sinan** (ra) bütün malını mülkünü Mekkelilere bırakarak sadece canıyla hicret etti. Bunun üzerine Allah Resulü **"Suheyb kazandı!"** buyurdu.
-                </div>
-            </div>
-
-            <!-- 13. Hz. Peygamber'in Hicreti ve Sevr Mağarası -->
-            <div class="timeline-event-card" id="peygamber_hicret">
-                <div class="timeline-dot bg-blue-500">13</div>
-                <h3 class="text-xl font-extrabold text-blue-600 mb-2">622: Hz. Peygamber'in Yolculuğu</h3>
-                <p class="text-gray-700 mb-3">Hicret emri gelince Hz. Peygamber (sav), Hz. Ebu Bekir (ra) ile yola çıktı. Müşrikleri yanıltmak için ters yöne giderek üç gün boyunca **Sevr Mağarası'nda** gizlendiler. Müşrikler mağaranın yakınına gelince Hz. Peygamber arkadaşına: **"Üzülme çünkü Allah bizimle beraberdir."** buyurdu (Tevbe, 40).</p>
-                <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4 text-sm font-semibold">
-                    <li><span class="font-semibold">Hz. Ali'nin Rolü:</span> Peygamberimizin yatağına yatarak canını tehlikeye attı ve emanetleri sahiplerine teslim etti.</li>
-                    <li><span class="font-semibold">Kuba Mescidi:</span> Yesrib'e ulaşmadan önce Kuba'da inşa edilen ve Kur'an'da bahsedilen (Tevbe, 108) ilk mescit.</li>
-                </ul>
-            </div>
-
+            <div class="w-full md:w-1/2 md:pl-8 order-3"></div>
         </div>
 
-        <footer class="text-center mt-12 py-6 border-t border-gray-300">
-            <p class="text-sm text-gray-500">Bu infografik, Peygamber Efendimiz'in (sav) Mekke'deki tebliğ ve mücadele yıllarını kronolojik olarak özetlemektedir.</p>
-        </footer>
+        <!-- Event 2: Gizli Davet -->
+        <div class="flex flex-col md:flex-row items-center w-full mb-12 relative">
+            <div class="w-full md:w-1/2 md:pr-8 order-3 md:order-1"></div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 bg-yellow-600 rounded-full flex items-center justify-center text-white border-4 border-white shadow timeline-dot z-10 order-1 mb-4 md:mb-0">
+                <i class="fas fa-user-secret"></i>
+            </div>
+            <div class="w-full md:w-1/2 md:pl-8 text-left timeline-content-right order-2 md:order-3">
+                <div class="timeline-card bg-white p-6 rounded-xl shadow-lg border-r-4 border-yellow-500">
+                    <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-bold mb-2">İlk 3 Yıl</span>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Gizli Davet Dönemi</h3>
+                    <p class="text-gray-600 mb-3">Müddessir suresi ile davet başladı. Davet 3 yıl gizli sürdü.</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i><strong>İlk Müslümanlar:</strong> Hz. Hatice, Hz. Ali, Zeyd b. Hârise, Hz. Ebu Bekir.</li>
+                        <li><i class="fas fa-home text-blue-500 mr-2"></i><strong>Dârülerkam:</strong> Erkam'ın evi gizli eğitim merkezi oldu.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-    </div>
+        <!-- Event 3: Açık Davet -->
+        <div class="flex flex-col md:flex-row items-center w-full mb-12 relative">
+            <div class="w-full md:w-1/2 md:pr-8 text-right timeline-content-left order-2 md:order-1">
+                <div class="timeline-card bg-white p-6 rounded-xl shadow-lg border-l-4 border-red-500">
+                    <span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-bold mb-2">4. Yıl</span>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Açık Davet ve Tepkiler</h3>
+                    <p class="text-gray-600">"En yakın akrabanı uyar" emriyle Safa Tepesi'nde tüm Mekkeliler uyarıldı. Müşriklerin (özellikle Ebu Leheb ve Ebu Cehil) düşmanlığı ve zulmü başladı.</p>
+                </div>
+            </div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white border-4 border-white shadow timeline-dot z-10 md:order-2 order-1 mb-4 md:mb-0">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <div class="w-full md:w-1/2 md:pl-8 order-3"></div>
+        </div>
 
+        <!-- Event 4: Habeşistan Hicreti & Güçlenme -->
+        <div class="flex flex-col md:flex-row items-center w-full mb-12 relative">
+            <div class="w-full md:w-1/2 md:pr-8 order-3 md:order-1"></div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white border-4 border-white shadow timeline-dot z-10 order-1 mb-4 md:mb-0">
+                <i class="fas fa-ship"></i>
+            </div>
+            <div class="w-full md:w-1/2 md:pl-8 text-left timeline-content-right order-2 md:order-3">
+                <div class="timeline-card bg-white p-6 rounded-xl shadow-lg border-r-4 border-indigo-500">
+                    <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-bold mb-2">615 Miladi</span>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">İlk Hicret ve Yeni Destekler</h3>
+                    <div class="mb-3">
+                        <h4 class="font-bold text-sm text-indigo-900">Habeşistan'a Hicret</h4>
+                        <p class="text-xs text-gray-600">Zulümden kaçan Müslümanlar adaletli kral Necaşi'ye sığındı. Cafer b. Ebi Talib Meryem suresini okudu.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-indigo-900">İki Büyük Güç: Hz. Hamza ve Hz. Ömer</h4>
+                        <p class="text-xs text-gray-600">Onların İslam'a girmesiyle Müslümanlar ilk kez Kâbe'de açıktan namaz kıldı.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event 5: Boykot ve Hüzün Yılı -->
+        <div class="flex flex-col md:flex-row items-center w-full mb-12 relative">
+            <div class="w-full md:w-1/2 md:pr-8 text-right timeline-content-left order-2 md:order-1">
+                <div class="timeline-card bg-gray-100 p-6 rounded-xl shadow-lg border-l-4 border-gray-600">
+                    <span class="inline-block px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-xs font-bold mb-2">7. - 10. Yıllar</span>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Boykot ve Hüzün Yılı</h3>
+                    <p class="text-gray-600 mb-2"><strong>Ambargo:</strong> Haşimoğullarına 3 yıl boyunca yiyecek ve ticaret yasağı. Açlık ve sefalet.</p>
+                    <p class="text-gray-600"><strong>Hüzün Yılı:</strong> Peygamberimizin en büyük destekçileri Ebu Talib ve eşi Hz. Hatice vefat etti.</p>
+                </div>
+            </div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white border-4 border-white shadow timeline-dot z-10 md:order-2 order-1 mb-4 md:mb-0">
+                <i class="fas fa-heart-broken"></i>
+            </div>
+            <div class="w-full md:w-1/2 md:pl-8 order-3"></div>
+        </div>
+
+        <!-- Event 6: Taif ve İsra Miraç -->
+        <div class="flex flex-col md:flex-row items-center w-full mb-12 relative">
+            <div class="w-full md:w-1/2 md:pr-8 order-3 md:order-1"></div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white border-4 border-white shadow timeline-dot z-10 order-1 mb-4 md:mb-0">
+                <i class="fas fa-star-and-crescent"></i>
+            </div>
+            <div class="w-full md:w-1/2 md:pl-8 text-left timeline-content-right order-2 md:order-3">
+                <div class="timeline-card bg-white p-6 rounded-xl shadow-lg border-r-4 border-purple-500">
+                    <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-bold mb-2">Hüzün Sonrası Teselli</span>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Taif ve Miraç</h3>
+                    <p class="text-gray-600 text-sm mb-2"><strong>Taif:</strong> Taşlanma, Zeyd b. Hârise'nin siper oluşu ve Addas'ın imanı.</p>
+                    <p class="text-gray-600 text-sm"><strong>İsra ve Miraç:</strong> Mescid-i Haram'dan Mescid-i Aksa'ya gece yürüyüşü ve göğe yükseliş. 5 vakit namaz farz kılındı.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event 7: Akabe Biatları -->
+        <div class="flex flex-col md:flex-row items-center w-full mb-12 relative">
+            <div class="w-full md:w-1/2 md:pr-8 text-right timeline-content-left order-2 md:order-1">
+                <div class="timeline-card bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-500">
+                    <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold mb-2">11. ve 12. Yıl</span>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Yeni Yurt: Akabe Biatları</h3>
+                    <p class="text-gray-600">Yesrib'den (Medine) gelen gruplarla görüşüldü.</p>
+                    <ul class="text-sm text-gray-600 mt-2 list-none">
+                        <li><strong>1. Biat:</strong> 12 Kişi. Mus'ab b. Umeyr öğretmen olarak gönderildi.</li>
+                        <li><strong>2. Biat:</strong> 75 Kişi. Peygamberimizi Medine'ye davet ettiler ve koruyacaklarına söz verdiler.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white border-4 border-white shadow timeline-dot z-10 md:order-2 order-1 mb-4 md:mb-0">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <div class="w-full md:w-1/2 md:pl-8 order-3"></div>
+        </div>
+
+         <!-- Event 8: Büyük Hicret -->
+         <div class="flex flex-col md:flex-row items-center w-full mb-12 relative">
+            <div class="w-full md:w-1/2 md:pr-8 order-3 md:order-1"></div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-white border-4 border-white shadow timeline-dot z-10 order-1 mb-4 md:mb-0">
+                <i class="fas fa-route"></i>
+            </div>
+            <div class="w-full md:w-1/2 md:pl-8 text-left timeline-content-right order-2 md:order-3">
+                <div class="timeline-card bg-white p-6 rounded-xl shadow-lg border-r-4 border-amber-400">
+                    <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold mb-2">622 Miladi</span>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Kutlu Yolculuk: Hicret</h3>
+                    <div class="space-y-2 text-sm text-gray-600">
+                        <p><i class="fas fa-bed text-gray-400 mr-2"></i>Hz. Ali, Peygamberimizin yatağına yattı.</p>
+                        <p><i class="fas fa-mountain text-gray-400 mr-2"></i>Hz. Ebu Bekir ile Sevr Mağarası'nda 3 gün gizlendiler.</p>
+                        <p><i class="fas fa-mosque text-gray-400 mr-2"></i>Kuba'da ilk mescit inşa edildi.</p>
+                        <p><i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>Yesrib'e (Medine) varış ve büyük coşku.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Did You Know? / Additional Info -->
+    <section class="bg-cyan-900 text-white py-12 px-4">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8 text-yellow-500">Bunları Biliyor muydunuz?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-cyan-800 p-6 rounded-lg">
+                    <h4 class="font-bold text-xl mb-2 flex items-center"><i class="fas fa-spider mr-2 text-yellow-400"></i> Sevr Mağarası Mucizesi</h4>
+                    <p class="text-sm opacity-90">Müşrikler mağaranın ağzına kadar geldiler. Ancak Allah (cc), bir örümcek ağı ve güvercin yuvası ile onları gizledi.</p>
+                </div>
+                <div class="bg-cyan-800 p-6 rounded-lg">
+                    <h4 class="font-bold text-xl mb-2 flex items-center"><i class="fas fa-coins mr-2 text-yellow-400"></i> Suheyb'in Fedakarlığı</h4>
+                    <p class="text-sm opacity-90">Suheyb-i Rumi, hicret edebilmek için tüm servetini Mekkeli müşriklere bıraktı. Peygamberimiz (sav) onun için "Suheyb kazandı!" buyurdu.</p>
+                </div>
+                <div class="bg-cyan-800 p-6 rounded-lg">
+                    <h4 class="font-bold text-xl mb-2 flex items-center"><i class="fas fa-users mr-2 text-yellow-400"></i> Ensar ve Muhacir</h4>
+                    <p class="text-sm opacity-90">Mekke'den göç edenlere <strong>Muhacir</strong>, onlara Medine'de yardım eden ve evlerini açan Müslümanlara <strong>Ensar</strong> denir.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm">
+        <p>1. Ünite Özeti - Peygamberimizin Mekke Yılları</p>
+    </footer>
+
+    <script>
+        // Simple script to add fade-in animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        entry.target.classList.remove('opacity-0', 'translate-y-10');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const cards = document.querySelectorAll('.timeline-card');
+            cards.forEach(card => {
+                card.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700');
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
