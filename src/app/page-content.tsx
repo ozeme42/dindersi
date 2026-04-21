@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
@@ -139,14 +140,10 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
 
     // GÜVENLİK KONTROLÜ 1: Eğer öğrenciyse, useEffect çalışmadan önce bile UI render etme.
     if (user.role === 'student' && process.env.NEXT_PUBLIC_STATIC_BUILD !== 'true') {
-        // Bu return null, "Geri" tuşuna basıldığında bile öğretmen panelinin
-        // milisaniyelik görünmesini engeller.
         return null;
     }
 
     useEffect(() => {
-        // Bu useEffect, PageContent tarafındaki yönlendirme kaçarsa diye
-        // son bir güvenlik önlemidir.
         if (user.role === 'student' && process.env.NEXT_PUBLIC_STATIC_BUILD !== 'true') {
             router.replace('/student');
         }
@@ -234,9 +231,9 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
                  <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Araçlar</h2>
              </div>
              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                {getManagementButtons().map(({ key, href, title, icon, color }) =>
+                {getManagementButtons().map(({ key, href, title, icon, color }) => (
                     <ManagementButton key={key} href={href} title={title} icon={icon} gradient={color} />
-                )}
+                ))}
                  <AlertDialog>
                     <AlertDialogTrigger asChild>
                           <button className="block group h-full w-full">
@@ -271,7 +268,7 @@ const ManagementButton = ({ href, title, icon, gradient, onClick }: any) => {
             <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br mask-gradient", gradient)} style={{maskImage: 'linear-gradient(black, black), linear-gradient(black, black)', maskClip: 'content-box, border-box', maskComposite: 'exclude', padding: '1px'}} />
             <div className="p-4 flex flex-col items-center justify-center w-full h-full relative z-10">
                 <div className={cn("p-3 rounded-xl mb-4 transition-all duration-300 shadow-lg group-hover:scale-110 group-hover:shadow-2xl bg-gradient-to-br", gradient)}>
-                    {React.cloneElement(icon, { className: "h-6 w-6 text-white" })}
+                    {React.cloneElement(icon as React.ReactElement, { className: "h-6 w-6 text-white" })}
                 </div>
                 <h3 className="font-bold text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{title}</h3>
             </div>
@@ -285,7 +282,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
     const [activeCourseId, setActiveCourseId] = useState<string>("");
 
     const activeClassData = useMemo(() => {
-        return classGroups.find(g => g.name === activeTab);
+        return (classGroups || []).find(g => g.name === activeTab);
     }, [classGroups, activeTab]);
 
     const sortedCourses = useMemo(() => {
@@ -485,7 +482,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                         <div className={cn("mt-16 transition-all duration-700", gridConfig.wrapper)}>
                             {activeCourseData && (
                                 <div className={cn("grid gap-5 xl:gap-6 gap-y-12 animate-in zoom-in-95 duration-1000 place-content-center", gridConfig.grid)}>
-                                    {activeCourseData.units.sort((a: PublicUnit, b: PublicUnit) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((unit, index) => {
+                                    {(activeCourseData.units || []).sort((a: PublicUnit, b: PublicUnit) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((unit, index) => {
                                         const theme = getUnitTheme(index);
                                         const { full: courseFullName } = getCourseDisplayInfo(activeCourseData.title);
                                         return (
@@ -567,17 +564,10 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') return <LoggedOutPage classGroups={classGroups || []} />;
     
     if (user) {
-        // GÜVENLİK DÜZELTMESİ:
-        // Eğer kullanıcı öğrenci ise LoggedInDashboard BİLEŞENİNİ ASLA RENDER ETME.
-        // Doğrudan yükleniyor ikonuna dön ve öğrenci sayfasına yönlendir.
         if (user.role === 'student') {
-             // Burada router.replace kullanarak history stack'i temizliyoruz,
-             // böylece "Geri" tuşu öğretmen paneline dönemez.
              router.replace('/student');
              return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="h-10 w-10 animate-spin text-indigo-500" /></div>;
         }
-        
-        // Sadece öğrenci değilse Dashboard'u göster
         return <LoggedInDashboard user={user} />;
     }
     
