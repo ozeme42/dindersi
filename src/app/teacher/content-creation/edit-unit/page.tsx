@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { Suspense, useState, useEffect, useCallback } from 'react';
@@ -21,16 +19,14 @@ import { FileText } from 'lucide-react';
 // Adımlara benzersiz ve istikrarlı ID'ler atayan yardımcı fonksiyon
 const addStableIdsToSteps = (steps: LessonStep[]): (LessonStep & { id: string })[] => {
     return steps.map((step, index) => {
-        // Eğer adımda zaten bir ID varsa onu kullan, yoksa yeni bir tane oluştur.
         const existingId = (step as any).id;
         return {
             ...step,
             isPublished: step.isPublished ?? true,
-            id: existingId || `step-${Date.now()}-${index}-${Math.random()}`
+            id: existingId || `step-${Date.now()}-${index}-${Math.random().toString(36).substring(2, 9)}`
         };
     });
 };
-
 
 function UnitFlowEditor() {
     const params = useParams();
@@ -90,6 +86,19 @@ function UnitFlowEditor() {
         fetchUnitData();
     }, [fetchUnitData]);
 
+    // ÇÖZÜM BURADA: TopicEditor'ün doğrudan setSteps çağırmasını yakalayan fonksiyon.
+    // Her ekleme veya düzenlemede state'e girmeden önce ID kontrolü yapar.
+    const handleSetSteps = useCallback((updaterOrValue: any) => {
+        setSteps((prevSteps) => {
+            // Eğer TopicEditor bir fonksiyon gönderdiyse (prev => [...prev, newStep] gibi) onu çalıştır.
+            // Değilse doğrudan gönderdiği yeni diziyi al.
+            const nextSteps = typeof updaterOrValue === 'function' ? updaterOrValue(prevSteps) : updaterOrValue;
+            
+            // Tüm adımların ID'si olduğundan emin ol ve state'i öyle güncelle
+            return addStableIdsToSteps(nextSteps);
+        });
+    }, []);
+
     const handleSave = async () => {
         if (!courseId || !unitId || !unit) return;
         
@@ -97,6 +106,7 @@ function UnitFlowEditor() {
         
         const dataToSave = {
             title: title,
+            // Veritabanına kaydederken eklediğimiz custom ID'leri temizliyoruz ki çöplük oluşmasın
             steps: steps.map(({ id, ...rest }) => rest),
             sourceText: sourceText,
             htmlContent: htmlContent,
@@ -141,7 +151,8 @@ function UnitFlowEditor() {
                 title={title}
                 setTitle={setTitle}
                 steps={steps}
-                setSteps={setSteps as any}
+                // Doğrudan setSteps yerine aracı fonksiyonumuzu veriyoruz
+                setSteps={handleSetSteps as any} 
                 sourceText={sourceText}
                 setSourceText={setSourceText}
                 onSave={handleSave}
@@ -149,7 +160,6 @@ function UnitFlowEditor() {
                 isUnitFlow={true}
                 onOpenAIGeneration={(type) => { setAiGenerationType(type); setIsAiOpen(true); }}
             >
-                {/* HTML İçerik alanı `children` olarak buraya eklendi */}
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-2xl">
                     <Accordion type="single" collapsible className="w-full" defaultValue="html-content">
                         <AccordionItem value="html-content" className="border-b-0">
@@ -183,7 +193,7 @@ function UnitFlowEditor() {
                 isOpen={isAiOpen}
                 onOpenChange={setIsAiOpen}
                 context={{ 
-                    topicId: unit.id, // Pass unitId as topicId for context
+                    topicId: unit.id,
                     topicTitle: unit.title, 
                     sourceText: sourceText
                 }}
