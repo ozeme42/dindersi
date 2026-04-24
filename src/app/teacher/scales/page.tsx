@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -27,7 +26,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
     Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
     AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3, Home, UserCog,
-    Sparkles, ClipboardList
+    Sparkles, ClipboardList, Check
 } from 'lucide-react';
 
 // Firebase and Actions
@@ -93,7 +92,7 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
         
         // Eğer şablon seçildiyse sütunları oradan al
         if (data.templateId && data.templateId !== 'none') {
-            const template = SCALE_TEMPLATES.find(t => t.id === data.templateId);
+            const template = SCALE_TEMPLATES.find(t => t.id === selectedTemplateId);
             if (template) {
                 finalColumns = template.columns;
             }
