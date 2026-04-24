@@ -314,15 +314,25 @@ export type EvaluationScale = {
 
 // An entry for a student within a scale
 export type ScaleEntry = {
-    // For tally type
+    // For tally type (compatibility)
     plus?: number;
     minus?: number;
 
-    // For checklist type
+    // For checklist type (compatibility)
     statuses?: { [columnId: string]: '+' | '-' | 'o' | null };
     
-    // For points type
+    // For points type (compatibility)
     values?: { [columnId: string]: number };
+
+    // New history-based data structure
+    history?: {
+        [date: string]: {
+            plus?: number;
+            minus?: number;
+            statuses?: { [columnId: string]: '+' | '-' | 'o' | null };
+            values?: { [columnId: string]: number };
+        }
+    }
 
     // Common field
     note?: string;

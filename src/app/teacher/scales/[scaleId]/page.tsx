@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -6,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -30,7 +29,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
+import { format, startOfDay } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { useAuth } from '@/context/auth-context';
 
@@ -128,8 +127,8 @@ export default function ScaleDetailPage() {
     const { user } = useAuth();
     const searchParams = useSearchParams();
     const courseId = searchParams.get('courseId');
-    const type = searchParams.get('type'); // 'unit' or 'manual'
-    const branch = searchParams.get('branch'); // branch name like 'A'
+    const type = searchParams.get('type'); 
+    const branch = searchParams.get('branch'); 
     
     const [scale, setScale] = useState<EvaluationScale | null>(null);
     const [course, setCourse] = useState<Course | null>(null);
@@ -140,6 +139,10 @@ export default function ScaleDetailPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [isColumnEditorOpen, setIsColumnEditorOpen] = useState(false);
     const { toast } = useToast();
+
+    // Tarih Bazlı Takip State'i
+    const [selectedDate, setSelectedDate] = useState<Date>(startOfDay(new Date()));
+    const dateKey = format(selectedDate, 'yyyy-MM-dd');
     
     // State for Assignment Dialog
     const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
@@ -165,7 +168,6 @@ export default function ScaleDetailPage() {
             if (type === 'unit' && 'unit' in result.data) {
                 const unitData = result.data.unit;
                  setUnit(unitData || null);
-                 // Create a scale-like object from unit data
                  setScale({
                     id: unitData.id,
                     name: unitData.title,
@@ -173,7 +175,7 @@ export default function ScaleDetailPage() {
                     columns: (unitData.topics || []).map(t => ({ id: t.id, name: t.title, type: 'status' })),
                     classId: result.data.course.classId || '',
                     courseId: result.data.course.id,
-                    teacherId: '', // not strictly needed
+                    teacherId: '', 
                     createdAt: unitData.createdAt,
                 });
             } else if ('scale' in result.data) {
@@ -195,14 +197,48 @@ export default function ScaleDetailPage() {
         fetchData();
     }, [fetchData, type, courseId, branch, router, toast]);
 
+    // Veri Erişim Yardımcısı (Tarih bazlı veya genel fall-back)
+    const getStudentDataAtDate = (studentId: string) => {
+        const entry = entries[studentId];
+        if (!entry) return null;
+        
+        // Eğer seçili tarihte kayıt varsa onu dön
+        if (entry.history && entry.history[dateKey]) {
+            return entry.history[dateKey];
+        }
+
+        // Eğer tarih anahtarı yoksa ama eski formatta veri varsa (ilk geçiş için)
+        // Sadece bugünün tarihinde eski veriyi gösterelim ki kaybolmasınlar
+        const isToday = format(new Date(), 'yyyy-MM-dd') === dateKey;
+        if (isToday) {
+            return {
+                plus: entry.plus,
+                minus: entry.minus,
+                statuses: entry.statuses,
+                values: entry.values
+            };
+        }
+
+        return null;
+    };
+
     const handleTallyChange = (studentId: string, field: 'plus' | 'minus', value: number) => {
         setEntries(prev => {
-            const studentEntry = prev[studentId] || { plus: 0, minus: 0, note: '' };
+            const studentEntry = prev[studentId] || { history: {}, note: '' };
+            const history = studentEntry.history || {};
+            const dateData = history[dateKey] || { plus: 0, minus: 0 };
+            
             return {
                 ...prev,
                 [studentId]: {
                     ...studentEntry,
-                    [field]: Math.max(0, value)
+                    history: {
+                        ...history,
+                        [dateKey]: {
+                            ...dateData,
+                            [field]: Math.max(0, value)
+                        }
+                    }
                 }
             };
         });
@@ -211,21 +247,51 @@ export default function ScaleDetailPage() {
     const handleChecklistChange = (studentId: string, columnId: string) => {
         const statuses: (('+' | '-' | 'o') | null)[] = ['+', '-', 'o', null];
         setEntries(prev => {
-            const studentEntry = prev[studentId] || { statuses: {}, note: '' };
-            const currentStatus = studentEntry.statuses?.[columnId] || null;
-            const currentIndex = currentStatus ? statuses.indexOf(currentStatus) : -1;
+            const studentEntry = prev[studentId] || { history: {}, note: '' };
+            const history = studentEntry.history || {};
+            const dateData = history[dateKey] || { statuses: {} };
+            const currentStatuses = dateData.statuses || {};
+            
+            const currentStatus = currentStatuses[columnId] || null;
+            const currentIndex = statuses.indexOf(currentStatus);
             const nextStatus = statuses[(currentIndex + 1) % statuses.length];
             
-            const newStatuses = { ...(studentEntry.statuses || {}), [columnId]: nextStatus };
-            return { ...prev, [studentId]: { ...studentEntry, statuses: newStatuses } };
+            return {
+                ...prev,
+                [studentId]: {
+                    ...studentEntry,
+                    history: {
+                        ...history,
+                        [dateKey]: {
+                            ...dateData,
+                            statuses: { ...currentStatuses, [columnId]: nextStatus }
+                        }
+                    }
+                }
+            };
         });
     };
 
     const handlePointsChange = (studentId: string, columnId: string, value: number) => {
         setEntries(prev => {
-            const studentEntry = prev[studentId] || { values: {}, note: '' };
-            const newValues = { ...(studentEntry.values || {}), [columnId]: value };
-            return { ...prev, [studentId]: { ...studentEntry, values: newValues } };
+            const studentEntry = prev[studentId] || { history: {}, note: '' };
+            const history = studentEntry.history || {};
+            const dateData = history[dateKey] || { values: {} };
+            const currentValues = dateData.values || {};
+
+            return {
+                ...prev,
+                [studentId]: {
+                    ...studentEntry,
+                    history: {
+                        ...history,
+                        [dateKey]: {
+                            ...dateData,
+                            values: { ...currentValues, [columnId]: value }
+                        }
+                    }
+                }
+            };
         });
     };
 
@@ -241,7 +307,7 @@ export default function ScaleDetailPage() {
         setIsSaving(true);
         const result = await saveScaleEntries(scale.id, entries);
         if (result.success) {
-            toast({ title: "Kaydedildi", description: "Değerlendirmeler başarıyla kaydedildi." });
+            toast({ title: "Kaydedildi", description: "Haftalık gelişim verileri başarıyla güncellendi." });
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive"});
         }
@@ -261,69 +327,50 @@ export default function ScaleDetailPage() {
         }
         setIsSaving(false);
     }
-    
-    // HAFTALIK TAKİP İÇİN OTOMATİK SÜTUN EKLEME
-    const handleAddWeekColumn = async () => {
-        if (!scale) return;
+
+    // --- ORTALAMA HESAPLAMA MANTIĞI ---
+
+    const calculateStudentAverage = useCallback((studentId: string): number | null => {
+        const entry = entries[studentId];
+        if (!entry || !entry.history) return null;
+
+        const dates = Object.keys(entry.history);
+        if (dates.length === 0) return null;
+
+        let totalPoints = 0;
+        let totalCount = 0;
+
+        dates.forEach(date => {
+            const data = entry.history![date];
+            if (scale?.type === 'points' && data.values) {
+                const dayValues = Object.values(data.values);
+                dayValues.forEach(v => {
+                    totalPoints += v;
+                    totalCount++;
+                });
+            } else if (scale?.type === 'checklist' && data.statuses) {
+                const dayStatuses = Object.values(data.statuses);
+                dayStatuses.forEach(s => {
+                    if (s === '+') totalPoints += 100;
+                    else if (s === 'o') totalPoints += 50;
+                    // '-' is 0
+                    totalCount++;
+                });
+            }
+        });
+
+        if (totalCount === 0) return null;
+        return Math.round(totalPoints / totalCount);
+    }, [entries, scale?.type]);
+
+    const classOverallAverage = useMemo(() => {
+        const studentAverages = students
+            .map(s => calculateStudentAverage(s.uid))
+            .filter((avg): avg is number => avg !== null);
         
-        // Mevcut "Hafta" içeren sütunları bul
-        const weekColumns = scale.columns.filter(c => c.name.toLowerCase().includes('hafta'));
-        let nextWeekNum = 1;
-        
-        if (weekColumns.length > 0) {
-            const nums = weekColumns.map(c => {
-                const match = c.name.match(/\d+/);
-                return match ? parseInt(match[0]) : 0;
-            });
-            nextWeekNum = Math.max(...nums) + 1;
-        } else if (scale.columns.length > 0) {
-            nextWeekNum = scale.columns.length + 1;
-        }
-
-        const newColumn: EvaluationScaleColumn = {
-            id: `week_${Date.now()}`,
-            name: `${nextWeekNum}. Hafta`,
-            type: scale.type === 'points' ? 'number' : 'status'
-        };
-
-        const updatedColumns = [...scale.columns, newColumn];
-        setIsSaving(true);
-        const result = await updateScaleColumns(scale.id, updatedColumns);
-        if (result.success) {
-            setScale({ ...scale, columns: updatedColumns });
-            toast({ title: "Yeni Sütun Eklendi", description: `${nextWeekNum}. hafta için yer açıldı.` });
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsSaving(false);
-    };
-
-    const calculateChecklistScore = useCallback((entry: ScaleEntry): number | null => {
-        if (!entry?.statuses) return null;
-        const statuses = Object.values(entry.statuses);
-        const pluses = statuses.filter(s => s === '+').length;
-        const totalGraded = pluses + statuses.filter(s => s === '-').length;
-        if (totalGraded === 0) return null;
-        return Math.round((pluses / totalGraded) * 100);
-    }, []);
-
-    const calculatePointsTotal = useCallback((entry: ScaleEntry): number => {
-        if (!entry?.values) return 0;
-        return Object.values(entry.values).reduce((sum, val) => sum + (val || 0), 0);
-    }, []);
-
-    const overallScore = useMemo(() => {
-        if (!scale || scale.type !== 'checklist') return null;
-
-        const studentScores = Object.values(entries)
-            .map(calculateChecklistScore)
-            .filter((score): score is number => score !== null);
-        
-        if (studentScores.length === 0) return null;
-
-        const totalScore = studentScores.reduce((sum, score) => sum + score, 0);
-        return Math.round(totalScore / studentScores.length);
-    }, [entries, calculateChecklistScore, scale]);
+        if (studentAverages.length === 0) return null;
+        return Math.round(studentAverages.reduce((a, b) => a + b, 0) / studentAverages.length);
+    }, [students, calculateStudentAverage]);
 
     const handleCreateAssignment = async () => {
         if (!user || !unit || !course || !branch || selectedStudentUids.size === 0) {
@@ -399,11 +446,7 @@ export default function ScaleDetailPage() {
                                 <Send className="mr-2 h-4 w-4" /> Ödev Olarak Ata
                             </Button>
                         )}
-                        {(scale.type === 'checklist' || scale.type === 'points') && (
-                            <Button variant="outline" size="sm" onClick={handleAddWeekColumn} className="bg-cyan-600/20 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500 hover:text-white">
-                                <CalendarPlus className="mr-2 h-4 w-4" /> Hafta Ekle
-                            </Button>
-                        )}
+                        
                         {(scale.type === 'checklist' || scale.type === 'points') && type !== 'unit' && (
                             <Button variant="outline" size="sm" onClick={() => setIsColumnEditorOpen(true)} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                                 <Settings className="mr-2 h-4 w-4" /> Sütunları Düzenle
@@ -416,142 +459,159 @@ export default function ScaleDetailPage() {
                     </div>
                 </div>
                 
-                {/* Ana İçerik Kartı */}
+                {/* Tarih ve Başlık Paneli */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <Card className="md:col-span-2 bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
+                        <CardHeader className="pb-4">
+                            <CardTitle className="text-2xl font-black text-white">{scale.name.split('(')[0]?.trim() || 'Ölçek Başlığı'}</CardTitle>
+                            <CardDescription className="text-slate-400">
+                                <span className="font-bold text-sm">{course?.title} - {branch && `${course?.className} - ${branch}`}</span>
+                            </CardDescription>
+                            <div className="flex items-center gap-4 text-sm text-slate-300 flex-wrap pt-2">
+                                <Badge className="bg-purple-600 text-white">Tip: {scale.type === 'tally' ? 'Çetele' : scale.type === 'checklist' ? 'Kontrol Listesi' : 'Puanlı Ölçek'}</Badge>
+                                {classOverallAverage !== null && (
+                                    <span className="flex items-center gap-2">
+                                        <TrendingUp className="h-4 w-4 text-cyan-400"/>
+                                        Genel Sınıf Ortalaması:
+                                        <Badge className={cn("text-white font-bold", getScoreColorClass(classOverallAverage))}>
+                                            {classOverallAverage}%
+                                        </Badge>
+                                    </span>
+                                )}
+                            </div>
+                        </CardHeader>
+                    </Card>
+
+                    {/* TARİH SEÇİCİ */}
+                    <Card className="bg-indigo-900/20 border border-indigo-500/30 shadow-xl overflow-hidden flex flex-col justify-center p-6">
+                        <Label className="text-xs font-black text-indigo-300 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <CalendarDays className="w-4 h-4"/> Değerlendirme Tarihi
+                        </Label>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant="outline" className="w-full justify-between text-left font-black text-lg h-14 bg-slate-900 border-white/10 text-white hover:bg-slate-800">
+                                    {format(selectedDate, "d MMMM yyyy", { locale: tr })}
+                                    <CalendarIcon className="h-5 w-5 text-indigo-400" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0 bg-slate-900 border-white/10 text-white" align="end">
+                                <Calendar mode="single" selected={selectedDate} onSelect={(date) => date && setSelectedDate(startOfDay(date))} initialFocus />
+                            </PopoverContent>
+                        </Popover>
+                        <p className="text-[10px] text-indigo-300/60 mt-3 text-center italic">Değerlendirmeler seçilen bu tarihe kaydedilir.</p>
+                    </Card>
+                </div>
+                
+                {/* Ana Tablo Kartı */}
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
-                    <CardHeader className="border-b border-white/5 pb-4">
-                        <CardTitle className="text-2xl font-black text-white">{scale.name.split('(')[0]?.trim() || 'Ölçek Başlığı'}</CardTitle>
-                        <CardDescription className="text-slate-400">
-                            <span className="font-bold text-sm">{course?.title} - {branch && `${course?.className} - ${branch}`}</span>
-                        </CardDescription>
-                         <div className="flex items-center gap-4 text-sm text-slate-300 flex-wrap pt-2">
-                             <Badge className="bg-purple-600 text-white shadow-md">Tip: {scale.type === 'tally' ? 'Çetele' : scale.type === 'checklist' ? 'Kontrol Listesi' : 'Puanlı Ölçek'}</Badge>
-                             {scale.type === 'checklist' && overallScore !== null && (
-                                 <span className="flex items-center gap-2">
-                                     <TrendingUp className="h-4 w-4 text-cyan-400"/>
-                                     Sınıf Ortalaması:
-                                     <Badge className={cn("text-white font-bold", getScoreColorClass(overallScore))}>
-                                         {overallScore}%
-                                     </Badge>
-                                 </span>
-                             )}
-                              {scale.type === 'tally' && (
-                                  <>
-                                      <span className="text-emerald-400">Toplam Artı: <span className="font-bold">{Object.values(entries).reduce((s, e) => s + (e.plus || 0), 0)}</span></span>
-                                      <span className="text-red-400">Toplam Eksi: <span className="font-bold">{Object.values(entries).reduce((s, e) => s + (e.minus || 0), 0)}</span></span>
-                                  </>
-                              )}
-                              {scale.type === 'points' && (
-                                   <span className="text-cyan-400">Toplam Sınıf Puanı: <span className="font-bold">{Object.values(entries).reduce((s, e) => s + calculatePointsTotal(e), 0).toLocaleString()}</span></span>
-                              )}
-                         </div>
-                    </CardHeader>
-                    
                     <CardContent className="p-0">
                         <div className="border rounded-md overflow-x-auto">
                             {students.length > 0 ? (
                                <Table className="min-w-[1000px] border-collapse">
                                     <TableHeader className="bg-slate-800/80">
                                         <TableRow className="border-white/5 hover:bg-transparent">
-                                            <TableHead className="min-w-48 sticky left-0 bg-slate-800/90 z-20 text-slate-300 font-bold text-base border-r border-white/5">Öğrenci / Sonuç</TableHead>
+                                            <TableHead className="min-w-48 sticky left-0 bg-slate-800/90 z-20 text-slate-300 font-bold text-base border-r border-white/5">Öğrenci</TableHead>
+                                            
+                                            {(scale.type === 'checklist' || scale.type === 'points') && (
+                                                (scale.columns || []).map(col => (
+                                                    <TableHead key={col.id} className="w-32 text-center text-slate-400 font-medium border-x border-white/5">
+                                                        <span className="inline-block whitespace-nowrap text-xs font-bold uppercase tracking-wider">{col.name}</span>
+                                                    </TableHead>
+                                                ))
+                                            )}
+                                            
                                             {scale.type === 'tally' && (
                                                 <>
                                                     <TableHead className="w-40 text-center text-emerald-400">ART+ (Başarı)</TableHead>
                                                     <TableHead className="w-40 text-center text-red-400">EKSİ- (Gelişim)</TableHead>
                                                 </>
                                             )}
-                                            {(scale.type === 'checklist' || scale.type === 'points') && (
-                                                (scale.columns || []).map(col => (
-                                                    <TableHead key={col.id} className="w-32 text-center text-slate-400 font-medium border-x border-white/5 rotate-0">
-                                                        <span className="inline-block whitespace-nowrap text-xs font-bold uppercase tracking-wider">{col.name}</span>
-                                                    </TableHead>
-                                                ))
-                                            )}
-                                            {scale.type === 'points' && <TableHead className="w-24 text-center text-emerald-400 font-black border-l border-white/10">TOPLAM</TableHead>}
+
+                                            <TableHead className="w-32 text-center text-emerald-400 font-black border-l border-white/10 bg-slate-800/50">GENEL ORTALAMA</TableHead>
                                             <TableHead className="min-w-64 border-l border-white/5 text-slate-300">Notlar</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     
                                     <TableBody>
                                         {students.map(student => {
-                                            const studentEntry = entries[student.uid] || { plus: 0, minus: 0, statuses: {}, values: {}, note: '' };
-                                            const studentScore = scale.type === 'checklist' ? calculateChecklistScore(studentEntry) : null;
-                                            const studentPointsTotal = scale.type === 'points' ? calculatePointsTotal(studentEntry) : null;
+                                            const studentEntry = entries[student.uid] || { history: {}, note: '' };
+                                            const dateData = getStudentDataAtDate(student.uid) || {};
+                                            const studentAvg = calculateStudentAverage(student.uid);
                                             
                                             return (
                                                 <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
                                                     
-                                                    {/* Öğrenci Adı ve Başarı */}
+                                                    {/* Öğrenci Adı */}
                                                     <TableCell className="sticky left-0 bg-slate-900/90 z-10 border-r border-white/5 group-hover:bg-slate-800/90 transition-colors">
                                                         <div className="flex items-center gap-3">
                                                             <UserAvatar user={student} className="h-9 w-9 border-2 border-slate-700 group-hover:border-purple-400" />
-                                                            <div className="flex flex-col">
-                                                                <span className="font-medium text-white">{student.displayName}</span>
-                                                                {studentScore !== null && (
-                                                                    <Badge className={cn("w-fit text-white mt-1 text-xs font-bold", getScoreColorClass(studentScore))}>
-                                                                        {studentScore}%
-                                                                    </Badge>
-                                                                )}
+                                                            <div className="flex flex-col min-w-0">
+                                                                <span className="font-bold text-white truncate">{student.displayName}</span>
+                                                                <span className="text-[10px] text-slate-500 font-mono">{student.class}</span>
                                                             </div>
                                                         </div>
                                                     </TableCell>
                                                     
-                                                    {/* Çetele Girişi */}
-                                                    {scale.type === 'tally' && (
-                                                        <>
-                                                            <TableCell className="text-center bg-transparent border-x border-white/5">
-                                                                <div className="flex items-center justify-center gap-2 bg-emerald-900/30 p-1 rounded-lg">
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400 hover:bg-emerald-500/20" onClick={() => handleTallyChange(student.uid, 'plus', Math.max(0, (studentEntry.plus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
-                                                                    <span className="font-bold text-lg text-white">{studentEntry.plus || 0}</span>
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400 hover:bg-emerald-500/20" onClick={() => handleTallyChange(student.uid, 'plus', (studentEntry.plus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell className="text-center bg-transparent border-r border-white/5">
-                                                                <div className="flex items-center justify-center gap-2 bg-red-900/30 p-1 rounded-lg">
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400 hover:bg-red-500/20" onClick={() => handleTallyChange(student.uid, 'minus', Math.max(0, (studentEntry.minus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
-                                                                    <span className="font-bold text-lg text-white">{studentEntry.minus || 0}</span>
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400 hover:bg-red-500/20" onClick={() => handleTallyChange(student.uid, 'minus', (studentEntry.minus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
-                                                                </div>
-                                                            </TableCell>
-                                                        </>
-                                                    )}
-                                                    
-                                                    {/* Kontrol Listesi Girişi */}
+                                                    {/* Dinamik Sütunlar (Points/Checklist) */}
                                                     {scale.type === 'checklist' && (
                                                         (scale.columns || []).map(col => (
                                                             <TableCell key={col.id} className="text-center bg-transparent border-r border-white/5">
                                                                 <StatusButton
-                                                                    status={studentEntry.statuses?.[col.id] || null}
+                                                                    status={dateData.statuses?.[col.id] || null}
                                                                     onClick={() => handleChecklistChange(student.uid, col.id)}
                                                                 />
                                                             </TableCell>
                                                         ))
                                                     )}
 
-                                                    {/* Puanlı Ölçek Girişi */}
                                                     {scale.type === 'points' && (
                                                          (scale.columns || []).map(col => (
                                                             <TableCell key={col.id} className="text-center bg-transparent border-r border-white/5">
-                                                                <div className="relative group/input">
-                                                                    <Input 
-                                                                        type="number"
-                                                                        min="0"
-                                                                        value={studentEntry.values?.[col.id] ?? ""}
-                                                                        onChange={(e) => handlePointsChange(student.uid, col.id, parseInt(e.target.value) || 0)}
-                                                                        className="w-20 mx-auto bg-slate-800 border-white/10 text-center font-bold text-lg h-10 focus:ring-cyan-500/50 focus:border-cyan-500"
-                                                                        placeholder="-"
-                                                                    />
-                                                                    <Hash className="absolute right-1 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-600 opacity-0 group-hover/input:opacity-100 transition-opacity" />
-                                                                </div>
+                                                                <Input 
+                                                                    type="number"
+                                                                    min="0"
+                                                                    value={dateData.values?.[col.id] ?? ""}
+                                                                    onChange={(e) => handlePointsChange(student.uid, col.id, parseInt(e.target.value) || 0)}
+                                                                    className="w-20 mx-auto bg-slate-800 border-white/10 text-center font-bold text-lg h-10 focus:ring-cyan-500/50 focus:border-cyan-500"
+                                                                    placeholder="-"
+                                                                />
                                                             </TableCell>
                                                         ))
                                                     )}
-                                                    
-                                                    {/* Toplam Puan (Sadece Points Tipi İçin) */}
-                                                    {scale.type === 'points' && (
-                                                        <TableCell className="text-center bg-slate-900/50 border-l border-white/10">
-                                                            <span className="text-xl font-black text-emerald-400 drop-shadow-sm">{studentPointsTotal}</span>
-                                                        </TableCell>
+
+                                                    {/* Çetele (Tally) */}
+                                                    {scale.type === 'tally' && (
+                                                        <>
+                                                            <TableCell className="text-center bg-transparent border-x border-white/5">
+                                                                <div className="flex items-center justify-center gap-2 bg-emerald-900/30 p-1 rounded-lg">
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', Math.max(0, (dateData.plus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
+                                                                    <span className="font-bold text-lg text-white">{dateData.plus || 0}</span>
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', (dateData.plus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell className="text-center bg-transparent border-r border-white/5">
+                                                                <div className="flex items-center justify-center gap-2 bg-red-900/30 p-1 rounded-lg">
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400" onClick={() => handleTallyChange(student.uid, 'minus', Math.max(0, (dateData.minus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
+                                                                    <span className="font-bold text-lg text-white">{dateData.minus || 0}</span>
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400" onClick={() => handleTallyChange(student.uid, 'minus', (dateData.minus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
+                                                                </div>
+                                                            </TableCell>
+                                                        </>
                                                     )}
+                                                    
+                                                    {/* GENEL ORTALAMA SÜTUNU */}
+                                                    <TableCell className="text-center bg-slate-900/50 border-l border-white/10 group-hover:bg-slate-800/80 transition-colors">
+                                                        <div className="flex flex-col items-center">
+                                                            <span className={cn("text-xl font-black transition-colors", studentAvg !== null ? "text-emerald-400" : "text-slate-700")}>
+                                                                {studentAvg !== null ? `${studentAvg}%` : "-"}
+                                                            </span>
+                                                            {studentAvg !== null && (
+                                                                <div className="w-16 h-1 bg-slate-800 rounded-full mt-1 overflow-hidden">
+                                                                    <div className={cn("h-full transition-all", getScoreColorClass(studentAvg))} style={{ width: `${studentAvg}%` }} />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </TableCell>
                                                     
                                                     {/* Not Alanı */}
                                                     <TableCell className="min-w-64">
@@ -560,7 +620,7 @@ export default function ScaleDetailPage() {
                                                             placeholder="Gözlem/Not ekle..." 
                                                             value={studentEntry.note || ''} 
                                                             onChange={e => handleNoteChange(student.uid, e.target.value)} 
-                                                            className="bg-slate-900 border-white/10 text-white h-9 text-sm focus:border-purple-500/50"
+                                                            className="bg-slate-900 border-white/10 text-white h-9 text-sm"
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -569,7 +629,7 @@ export default function ScaleDetailPage() {
                                     </TableBody>
                                 </Table>
                             ) : (
-                                <p className="text-center h-24 text-slate-500 flex items-center justify-center">Bu şubede öğrenci bulunamadı.</p>
+                                <p className="text-center h-24 text-slate-500 flex items-center justify-center font-medium">Bu şubede sanal öğrenci bulunamadı.</p>
                             )}
                         </div>
                     </CardContent>
@@ -586,7 +646,7 @@ export default function ScaleDetailPage() {
                 isSaving={isSaving}
             />
 
-            {/* Ödev Ata Dialogu (Sadece Ünite Bazlı Ölçekler için) */}
+            {/* Ödev Ata Dialogu */}
             <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
                 <DialogContent className="max-w-2xl bg-slate-900 border-white/10 text-white">
                     <DialogHeader>

@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -25,7 +23,7 @@ export async function getUnitScaleDetails(
     courseId: string, 
     unitId: string, 
     branchName: string | null,
-    teacherSchoolName: string | null // teacherId yerine okul adı alıyoruz.
+    teacherSchoolName: string | null
 ): Promise<{ success: boolean; data?: UnitScaleDetails; error?: string }> {
     noStore();
     if (!courseId || !unitId) return { success: false, error: 'Ders veya Ünite ID\'si bulunamadı.' };
@@ -43,26 +41,19 @@ export async function getUnitScaleDetails(
         const unit = { id: unitSnap.id, ...unitSnap.data() } as Unit;
 
         const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseId}/units/${unitId}/topics`)));
-        
         const unsortedTopics = topicsSnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}) as Topic);
+        unit.topics = unsortedTopics.sort((a, b) => a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' }));
         
-        unit.topics = unsortedTopics.sort((a, b) => 
-            a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' })
-        );
-        
-        // --- YENİ MANTIK: Tüm sanal öğrencileri çekip okul adına göre filtrele ---
         const allGuestsQuery = query(collection(db, 'users'), where('role', '==', 'guest'));
         const allGuestsSnapshot = await getDocs(allGuestsQuery);
         let allGuests = allGuestsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
         
-        // Eğer öğretmen bir okula atanmışsa, sadece o okulun sanal öğrencilerini al.
         if (teacherSchoolName) {
             allGuests = allGuests.filter(s => s.schoolName === teacherSchoolName);
         }
 
         let students = allGuests;
         
-        // Şube filtresini uygula
         if (branchName !== 'all') {
              if (course.classId) {
                  const classRef = doc(db, 'classes', course.classId);
@@ -122,7 +113,6 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
 
         const course = { id: courseSnap.id, ...courseSnap.data() } as Course;
         
-        // --- YENİ MANTIK: Tüm sanal öğrencileri çekip öğretmenin okuluna göre filtrele ---
         const allGuestsQuery = query(collection(db, 'users'), where('role', '==', 'guest'));
         const allGuestsSnapshot = await getDocs(allGuestsQuery);
         let allGuests = allGuestsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
@@ -172,10 +162,15 @@ export async function saveScaleEntries(scaleId: string, entries: { [studentId: s
             const entryData = entries[studentId];
             const entryRef = doc(db, `evaluationScales/${scaleId}/entries`, studentId);
             
-            const dataToSet = {
+            // Clean undefined from history if needed
+            const cleanedHistory = entryData.history ? JSON.parse(JSON.stringify(entryData.history)) : null;
+
+            const dataToSet: any = {
                 ...entryData,
                 lastUpdated: serverTimestamp()
             };
+            
+            if (cleanedHistory) dataToSet.history = cleanedHistory;
 
             batch.set(entryRef, dataToSet, { merge: true });
         }
