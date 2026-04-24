@@ -21,21 +21,23 @@ import {
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Lucide Icons
 import { 
     Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
     AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3, Home, UserCog,
-    Sparkles, ClipboardList, Check
+    Sparkles, ClipboardList, Check, Settings, FileEdit, X, Plus, GripVertical
 } from 'lucide-react';
 
 // Firebase and Actions
 import { useToast } from '@/hooks/use-toast';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/auth-context';
-import { createScale, getTeacherScales, deleteScale, getBranchScaleScores, type BranchScore } from './actions';
-import { SCALE_TEMPLATES } from '@/lib/scale-templates';
+import { createScale, getTeacherScales, deleteScale, getBranchScaleScores, type BranchScore, getScaleTemplates, saveScaleTemplate, deleteScaleTemplate } from './actions';
+import { type ScaleTemplate } from '@/lib/scale-templates';
 
 // Types and Utils
 import type { EvaluationScale, SchoolClass, Course, Unit } from '@/lib/types';
@@ -54,20 +56,238 @@ const createScaleSchema = z.object({
 
 type CreateScaleFormValues = z.infer<typeof createScaleSchema>;
 
-// --- BİLEŞENLER ---
+// --- ŞABLON EDİTÖRÜ BİLEŞENİ ---
+function TemplateManagerDialog({
+    isOpen,
+    onOpenChange,
+    templates,
+    onSave,
+    onDelete,
+    isSaving
+}: {
+    isOpen: boolean;
+    onOpenChange: (open: boolean) => void;
+    templates: ScaleTemplate[];
+    onSave: (template: Partial<ScaleTemplate>) => Promise<void>;
+    onDelete: (id: string) => Promise<void>;
+    isSaving: boolean;
+}) {
+    const [editingTemplate, setEditingTemplate] = useState<Partial<ScaleTemplate> | null>(null);
 
-function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, selectedCourseId }: {
+    const handleAdd = () => {
+        setEditingTemplate({
+            id: `temp-${Date.now()}`,
+            name: '',
+            description: '',
+            type: 'checklist',
+            columns: [{ id: `col_${Date.now()}`, name: 'Kriter 1', type: 'status' }]
+        });
+    };
+
+    const handleEdit = (t: ScaleTemplate) => {
+        setEditingTemplate(JSON.parse(JSON.stringify(t)));
+    };
+
+    const handleColumnChange = (colId: string, name: string) => {
+        if (!editingTemplate) return;
+        setEditingTemplate({
+            ...editingTemplate,
+            columns: editingTemplate.columns?.map(c => c.id === colId ? { ...c, name } : c)
+        });
+    };
+
+    const addColumn = () => {
+        if (!editingTemplate) return;
+        setEditingTemplate({
+            ...editingTemplate,
+            columns: [
+                ...(editingTemplate.columns || []),
+                { id: `col_${Date.now()}`, name: `Kriter ${editingTemplate.columns?.length || 0 + 1}`, type: editingTemplate.type === 'points' ? 'number' : 'status' }
+            ]
+        });
+    };
+
+    const removeColumn = (id: string) => {
+        if (!editingTemplate) return;
+        setEditingTemplate({
+            ...editingTemplate,
+            columns: editingTemplate.columns?.filter(c => c.id !== id)
+        });
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className="max-w-4xl bg-slate-950 border-white/10 text-white h-[85vh] flex flex-col p-0 overflow-hidden">
+                <DialogHeader className="p-6 border-b border-white/5 bg-slate-900/50">
+                    <DialogTitle className="text-2xl font-black flex items-center gap-3">
+                        <Settings className="w-6 h-6 text-indigo-400" />
+                        Şablon Yönetimi
+                    </DialogTitle>
+                    <DialogDescription className="text-slate-400">
+                        Hazır ölçek listesini buradan düzenleyebilir veya yeni şablonlar ekleyebilirsiniz.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
+                    {/* SOL: LİSTE */}
+                    <div className="w-full md:w-80 border-r border-white/5 flex flex-col bg-slate-900/30">
+                        <div className="p-4 border-b border-white/5 flex justify-between items-center">
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Kayıtlı Şablonlar</span>
+                            <Button size="icon" variant="ghost" onClick={handleAdd} className="h-7 w-7 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white">
+                                <Plus className="w-4 h-4" />
+                            </Button>
+                        </div>
+                        <ScrollArea className="flex-1">
+                            <div className="p-2 space-y-1">
+                                {templates.map(t => (
+                                    <button
+                                        key={t.id}
+                                        onClick={() => handleEdit(t)}
+                                        className={cn(
+                                            "w-full text-left p-3 rounded-xl transition-all border",
+                                            editingTemplate?.id === t.id 
+                                                ? "bg-indigo-600/20 border-indigo-500/50 text-white" 
+                                                : "bg-transparent border-transparent text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                                        )}
+                                    >
+                                        <p className="font-bold text-sm truncate">{t.name}</p>
+                                        <p className="text-[10px] opacity-60 uppercase">{t.type === 'points' ? 'Puanlı' : 'Kontrol'}</p>
+                                    </button>
+                                ))}
+                            </div>
+                        </ScrollArea>
+                    </div>
+
+                    {/* SAĞ: EDİTÖR */}
+                    <div className="flex-1 overflow-y-auto p-6 bg-slate-950">
+                        {editingTemplate ? (
+                            <div className="space-y-6 animate-in fade-in duration-300">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label className="text-slate-400 text-xs uppercase font-bold">Şablon Adı</Label>
+                                        <Input 
+                                            value={editingTemplate.name} 
+                                            onChange={e => setEditingTemplate({...editingTemplate, name: e.target.value})} 
+                                            className="bg-slate-900 border-white/10 text-white h-11"
+                                            placeholder="Örn: Namaz Takibi"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label className="text-slate-400 text-xs uppercase font-bold">Ölçek Tipi</Label>
+                                        <Select 
+                                            value={editingTemplate.type} 
+                                            onValueChange={(v: any) => {
+                                                const newCols = editingTemplate.columns?.map(c => ({...c, type: v === 'points' ? 'number' : 'status'}));
+                                                setEditingTemplate({...editingTemplate, type: v, columns: newCols as any});
+                                            }}
+                                        >
+                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-11"><SelectValue /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                <SelectItem value="checklist">Kontrol Listesi</SelectItem>
+                                                <SelectItem value="points">Puanlı Ölçek</SelectItem>
+                                                <SelectItem value="tally">Çetele</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label className="text-slate-400 text-xs uppercase font-bold">Açıklama</Label>
+                                    <Input 
+                                        value={editingTemplate.description} 
+                                        onChange={e => setEditingTemplate({...editingTemplate, description: e.target.value})} 
+                                        className="bg-slate-900 border-white/10 text-white h-11"
+                                        placeholder="Kısa açıklama..."
+                                    />
+                                </div>
+
+                                <div className="space-y-4 pt-4 border-t border-white/5">
+                                    <div className="flex items-center justify-between">
+                                        <Label className="text-indigo-400 font-black uppercase tracking-wider text-xs">Sütunlar (Kriterler)</Label>
+                                        <Button size="sm" variant="outline" onClick={addColumn} className="border-indigo-500/30 text-indigo-400 h-8">
+                                            <Plus className="w-3 h-3 mr-1" /> Ekle
+                                        </Button>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {editingTemplate.columns?.map((col, idx) => (
+                                            <div key={col.id} className="flex items-center gap-2 bg-slate-900 p-2 rounded-xl border border-white/5">
+                                                <div className="bg-white/5 w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold text-slate-500">{idx + 1}</div>
+                                                <Input 
+                                                    value={col.name} 
+                                                    onChange={e => handleColumnChange(col.id, e.target.value)} 
+                                                    className="bg-transparent border-0 h-8 text-sm focus-visible:ring-0 p-1"
+                                                    placeholder="Sütun adı..."
+                                                />
+                                                <Button size="icon" variant="ghost" onClick={() => removeColumn(col.id)} className="h-7 w-7 text-slate-500 hover:text-red-400">
+                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="pt-8 flex items-center justify-between border-t border-white/5">
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant="ghost" className="text-red-500 hover:bg-red-500/10 h-10 px-4">
+                                                <Trash2 className="w-4 h-4 mr-2" /> Şablonu Sil
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                            <AlertDialogHeader>
+                                                <RadixAlertDialogTitle>Emin misiniz?</RadixAlertDialogTitle>
+                                                <AlertDialogDescription className="text-slate-400">Bu şablon kalıcı olarak silinecektir.</AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel className="bg-transparent text-slate-400">İptal</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => { onDelete(editingTemplate.id!); setEditingTemplate(null); }} className="bg-red-600 hover:bg-red-500">Evet, Sil</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+
+                                    <Button onClick={() => onSave(editingTemplate)} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-11 px-8">
+                                        {isSaving && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                                        <Save className="w-4 h-4 mr-2" /> Şablonu Kaydet
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 space-y-4">
+                                <Settings className="w-16 h-16 opacity-10" />
+                                <p className="text-lg">Düzenlemek için bir şablon seçin veya yeni bir tane oluşturun.</p>
+                                <Button variant="outline" onClick={handleAdd} className="border-white/10 text-slate-300">
+                                    <PlusCircle className="mr-2 h-4 w-4" /> Yeni Şablon Ekle
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <DialogFooter className="p-4 bg-slate-900 border-t border-white/5">
+                    <DialogClose asChild><Button variant="ghost" className="text-slate-400">Kapat</Button></DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
+// --- CREATE SCALE FORM ---
+function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, selectedCourseId, templates, onManageTemplates, isSuperAdmin }: {
     onSave: (data: Omit<CreateScaleFormValues, 'branch'> & { generatedName: string, courseId: string, columns: any[] }) => void;
     isSaving: boolean;
     selectedClass: SchoolClass | undefined;
     selectedBranch: string;
     selectedCourseId: string;
+    templates: ScaleTemplate[];
+    onManageTemplates: () => void;
+    isSuperAdmin: boolean;
 }) {
     const { handleSubmit, control, watch, formState: { errors }, reset, setValue } = useForm<CreateScaleFormValues>({
         resolver: zodResolver(createScaleSchema),
         defaultValues: {
             name: '',
-            type: 'tally',
+            type: 'checklist',
             templateId: 'none'
         }
     });
@@ -77,27 +297,25 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
     // Şablon seçildiğinde form alanlarını güncelle
     useEffect(() => {
         if (selectedTemplateId && selectedTemplateId !== 'none') {
-            const template = SCALE_TEMPLATES.find(t => t.id === selectedTemplateId);
+            const template = templates.find(t => t.id === selectedTemplateId);
             if (template) {
                 setValue('name', template.name.split(' (')[0]);
                 setValue('type', template.type);
             }
         }
-    }, [selectedTemplateId, setValue]);
+    }, [selectedTemplateId, setValue, templates]);
 
     const onSubmit = (data: CreateScaleFormValues) => {
         if (!selectedClass || !selectedCourseId) return;
         
         let finalColumns: any[] = [];
         
-        // Eğer şablon seçildiyse sütunları oradan al
         if (data.templateId && data.templateId !== 'none') {
-            const template = SCALE_TEMPLATES.find(t => t.id === selectedTemplateId);
+            const template = templates.find(t => t.id === selectedTemplateId);
             if (template) {
                 finalColumns = template.columns;
             }
         } else {
-            // Şablon seçilmediyse varsayılan bir sütun ekle
             finalColumns = [{ id: `col_${Date.now()}`, name: 'Başlık 1', type: data.type === 'points' ? 'number' : 'status' }];
         }
 
@@ -111,9 +329,16 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
             
             <div className="space-y-4">
                 <div className="space-y-1">
-                    <Label className="text-indigo-400 text-xs font-bold uppercase flex items-center gap-2">
-                        <Sparkles className="w-3 h-3"/> Hazır Şablon Seç (Önerilen)
-                    </Label>
+                    <div className="flex items-center justify-between mb-1">
+                        <Label className="text-indigo-400 text-xs font-bold uppercase flex items-center gap-2">
+                            <Sparkles className="w-3 h-3"/> Hazır Şablon Seç (Önerilen)
+                        </Label>
+                        {isSuperAdmin && (
+                            <Button type="button" variant="ghost" size="sm" onClick={onManageTemplates} className="h-6 text-[10px] text-slate-500 hover:text-indigo-400 hover:bg-indigo-500/10">
+                                <Settings className="w-3 h-3 mr-1" /> Şablonları Yönet
+                            </Button>
+                        )}
+                    </div>
                     <Controller
                         name="templateId"
                         control={control}
@@ -124,7 +349,7 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
                                 </SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
                                     <SelectItem value="none">Şablon Kullanma (Boş Ölçek)</SelectItem>
-                                    {SCALE_TEMPLATES.map(t => (
+                                    {templates.map(t => (
                                         <SelectItem key={t.id} value={t.id}>
                                             <div className="flex flex-col text-left">
                                                 <span className="font-bold">{t.name}</span>
@@ -178,97 +403,25 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
     );
 }
 
-function ErrorWithLink({ message }: { message: string }) {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = message.split(urlRegex);
-
-    return (
-        <Alert variant="destructive" className="whitespace-pre-wrap bg-red-900/40 border-red-500/50 text-red-100">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Hata!</AlertTitle>
-            <AlertDescription className="text-red-200">
-                {parts.map((part, index) => 
-                    urlRegex.test(part) ? 
-                    <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all text-red-100">{part}</a> : 
-                    <span key={index}>{part}</span>
-                )}
-            </AlertDescription>
-        </Alert>
-    );
-}
-
-// --- ŞUBE BAŞARI SIRALAMASI KARTI ---
-function BranchLeaderboardCard({ branchScores, isLoading }: { branchScores: BranchScore[], isLoading: boolean }) {
-    const getSuccessColor = (score: number) => {
-        if (score >= 85) return 'bg-emerald-500';
-        if (score >= 70) return 'bg-yellow-500';
-        if (score >= 50) return 'bg-orange-500';
-        return 'bg-red-500';
-    }
-
-    const rankIcon = (rank: number) => {
-        if (rank === 0) return <Trophy className="h-5 w-5 text-yellow-400" />;
-        if (rank === 1) return <Trophy className="h-5 w-5 text-slate-300" />;
-        if (rank === 2) return <Trophy className="h-5 w-5 text-amber-600" />;
-        return <span className="font-bold text-slate-400 w-6 text-center">{rank + 1}</span>
-    }
-
-    return (
-        <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
-            <CardHeader>
-                <CardTitle className="text-white flex items-center gap-3 text-xl">
-                    <div className="p-2 bg-purple-500/20 rounded-lg border border-purple-500/30">
-                        <BarChart3 className="h-5 w-5 text-purple-400" />
-                    </div>
-                    Şube Başarı Sıralaması
-                </CardTitle>
-                <CardDescription className="text-slate-400">Ünite bazlı kontrol listesi ortalamaları.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                {isLoading ? (
-                    <div className="flex justify-center items-center h-40"><Loader2 className="h-8 w-8 animate-spin text-purple-400"/></div>
-                ) : branchScores.length > 0 ? (
-                    <div className="space-y-3">
-                        {branchScores.map((branch, index) => (
-                            <div key={branch.branchName} className="p-3 bg-slate-800/50 rounded-lg border border-white/5 flex items-center gap-4">
-                                <div className="w-8 h-8 flex items-center justify-center shrink-0">{rankIcon(index)}</div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex justify-between items-baseline mb-1">
-                                        <p className="font-bold text-base text-white truncate">{branch.branchName}</p>
-                                        <p className="text-xs text-slate-400 font-mono">{branch.studentCount} Öğrenci</p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Progress value={branch.averageSuccess} className="h-2 [&>div]:transition-all" indicatorClassName={getSuccessColor(branch.averageSuccess)} />
-                                        <span className={cn("text-xs font-bold", getSuccessColor(branch.averageSuccess).replace('bg-','text-'))}>{branch.averageSuccess}%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-center text-sm text-slate-500 py-10">Sıralama için henüz yeterli veri bulunmuyor.</p>
-                )}
-            </CardContent>
-        </Card>
-    )
-}
-
-// --- ANA SAYFA COMPONENTİ ---
+// --- ANA SAYFA ---
 export default function ScalesPage() {
     const { user } = useAuth();
     const { toast } = useToast();
+    const router = useRouter();
     
     // Veri State'leri
     const [unitBasedData, setUnitBasedData] = useState<EnrichedClass[]>([]);
     const [manualScales, setManualScales] = useState<EvaluationScale[]>([]);
     const [allCourses, setAllCourses] = useState<Course[]>([]);
     const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
+    const [templates, setTemplates] = useState<ScaleTemplate[]>([]);
     
     // UI State'leri
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
     const [isCreateAccordionOpen, setIsCreateAccordionOpen] = useState(false);
+    const [isTemplateManagerOpen, setIsTemplateManagerOpen] = useState(false);
     
     // Seçim State'leri
     const [selectedClassId, setSelectedClassId] = useState<string>('');
@@ -287,7 +440,13 @@ export default function ScalesPage() {
         setIsLoading(true);
         setFetchError(null);
         try {
-            const scalesResult = await getTeacherScales(user.uid);
+            const [scalesResult, classesSnap, coursesSnap, templatesData] = await Promise.all([
+                getTeacherScales(user.uid),
+                getDocs(query(collection(db, 'classes'), orderBy('name'))),
+                getDocs(query(collection(db, 'courses'), orderBy('title'))),
+                getScaleTemplates()
+            ]);
+
             if(scalesResult.success && scalesResult.data) {
                  setManualScales(scalesResult.data);
             } else if (scalesResult.error) {
@@ -295,15 +454,11 @@ export default function ScalesPage() {
                  setManualScales([]);
             }
 
-            const [classesSnap, coursesSnap] = await Promise.all([
-                getDocs(query(collection(db, 'classes'), orderBy('name'))),
-                getDocs(query(collection(db, 'courses'), orderBy('title'))),
-            ]);
-
             const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
             const courses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
             setAllClasses(classes);
             setAllCourses(courses);
+            setTemplates(templatesData);
             
             const enrichedClasses: EnrichedClass[] = await Promise.all(classes.map(async (cls) => {
                  const coursesForClass = courses.filter(course => course.classId === cls.id || !course.classId);
@@ -377,6 +532,30 @@ export default function ScalesPage() {
         }
         setIsSaving(false);
     };
+
+    const handleSaveTemplate = async (template: Partial<ScaleTemplate>) => {
+        setIsSaving(true);
+        const result = await saveScaleTemplate(template);
+        if (result.success) {
+            toast({ title: "Başarılı", description: "Şablon güncellendi." });
+            const updated = await getScaleTemplates();
+            setTemplates(updated);
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+        setIsSaving(false);
+    }
+
+    const handleDeleteTemplate = async (id: string) => {
+        const result = await deleteScaleTemplate(id);
+        if (result.success) {
+            toast({ title: "Silindi" });
+            const updated = await getScaleTemplates();
+            setTemplates(updated);
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+    }
 
     const filteredUnitData = useMemo(() => {
         if (!selectedClass) return [];
@@ -524,6 +703,9 @@ export default function ScalesPage() {
                                                         selectedClass={selectedClass}
                                                         selectedBranch={selectedBranch}
                                                         selectedCourseId={selectedCourseId}
+                                                        templates={templates}
+                                                        onManageTemplates={() => setIsTemplateManagerOpen(true)}
+                                                        isSuperAdmin={user?.role === 'superadmin'}
                                                     />}
                                                 </>
                                             ) : (
@@ -600,7 +782,7 @@ export default function ScalesPage() {
                                                         </CardHeader>
                                                         <CardFooter className="flex justify-between items-center pt-2 gap-2">
                                                             <Button asChild size="sm" className="bg-purple-600 hover:bg-purple-500 text-white flex-1 text-xs">
-                                                                <Link href={`/teacher/scales/${scale.id}?type=manual`}>Değerlendir</Link>
+                                                                <Link href={`/teacher/scales/${scale.id}?type=manual`}>Değerlendirme</Link>
                                                             </Button>
                                                             <AlertDialog>
                                                                 <AlertDialogTrigger asChild>
@@ -635,6 +817,15 @@ export default function ScalesPage() {
                     </div>
                 </div>
             </div>
+
+            <TemplateManagerDialog 
+                isOpen={isTemplateManagerOpen}
+                onOpenChange={setIsTemplateManagerOpen}
+                templates={templates}
+                onSave={handleSaveTemplate}
+                onDelete={handleDeleteTemplate}
+                isSaving={isSaving}
+            />
         </div>
     );
 }

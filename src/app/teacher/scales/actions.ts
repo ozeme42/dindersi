@@ -1,9 +1,10 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, addDoc, serverTimestamp, writeBatch, updateDoc, deleteDoc, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc, addDoc, serverTimestamp, writeBatch, updateDoc, deleteDoc, orderBy, setDoc } from 'firebase/firestore';
 import type { EvaluationScale, UserProfile, SchoolClass, ScaleEntry, Course, Unit, Topic, EvaluationScaleColumn } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
+import { SCALE_TEMPLATES, type ScaleTemplate } from '@/lib/scale-templates';
 
 export async function getTeacherScales(teacherId: string): Promise<{ success: boolean; data?: EvaluationScale[]; error?: string }> {
     noStore();
@@ -84,8 +85,59 @@ export async function deleteScale(scaleId: string): Promise<{ success: boolean; 
     }
 }
 
+// --- ŞABLON YÖNETİMİ ---
 
-// --- YENİ FONKSİYON: ŞUBE BAŞARI SIRALAMASI ---
+export async function getScaleTemplates(): Promise<ScaleTemplate[]> {
+    noStore();
+    try {
+        const q = query(collection(db, 'scaleTemplates'), orderBy('name'));
+        const snap = await getDocs(q);
+        
+        if (snap.empty) {
+            // Eğer veritabanı boşsa varsayılanları döndür
+            return SCALE_TEMPLATES;
+        }
+        
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as ScaleTemplate));
+    } catch (e) {
+        console.error("Error fetching templates:", e);
+        return SCALE_TEMPLATES;
+    }
+}
+
+export async function saveScaleTemplate(template: Partial<ScaleTemplate>): Promise<{ success: boolean, error?: string }> {
+    try {
+        const templatesRef = collection(db, 'scaleTemplates');
+        if (template.id && !template.id.startsWith('temp-')) {
+            const docRef = doc(db, 'scaleTemplates', template.id);
+            await updateDoc(docRef, {
+                ...template,
+                updatedAt: serverTimestamp()
+            });
+        } else {
+            const { id, ...data } = template;
+            await addDoc(templatesRef, {
+                ...data,
+                createdAt: serverTimestamp()
+            });
+        }
+        return { success: true };
+    } catch (e: any) {
+        return { success: false, error: e.message };
+    }
+}
+
+export async function deleteScaleTemplate(id: string): Promise<{ success: boolean, error?: string }> {
+    try {
+        await deleteDoc(doc(db, 'scaleTemplates', id));
+        return { success: true };
+    } catch (e: any) {
+        return { success: false, error: e.message };
+    }
+}
+
+
+// --- ŞUBE BAŞARI SIRALAMASI ---
 
 export type BranchScore = {
     branchName: string;
