@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -5,7 +6,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -140,15 +141,28 @@ export default function ScaleDetailPage() {
     const [isColumnEditorOpen, setIsColumnEditorOpen] = useState(false);
     const { toast } = useToast();
 
-    // Tarih Bazlı Takip State'i
-    const [selectedDate, setSelectedDate] = useState<Date>(startOfDay(new Date()));
-    const dateKey = format(selectedDate, 'yyyy-MM-dd');
-    
-    // State for Assignment Dialog
-    const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
-    const [assignmentTitle, setAssignmentTitle] = useState("");
-    const [assignmentDueDate, setAssignmentDueDate] = useState<Date | undefined>();
-    const [selectedStudentUids, setSelectedStudentUids] = useState<Set<string>>(new Set());
+    // --- OTURUM MANTIĞI ---
+    const [activeSessionId, setActiveSessionId] = useState<string>("1");
+
+    const availableSessions = useMemo(() => {
+        const sessions = new Set<string>();
+        // 1 her zaman olsun
+        sessions.add("1");
+        
+        Object.values(entries).forEach(entry => {
+            if (entry.history) {
+                Object.keys(entry.history).forEach(key => sessions.add(key));
+            }
+        });
+
+        return Array.from(sessions).sort((a, b) => parseInt(a) - parseInt(b));
+    }, [entries]);
+
+    const handleAddSession = () => {
+        const nextId = (Math.max(...availableSessions.map(s => parseInt(s))) + 1).toString();
+        setActiveSessionId(nextId);
+        toast({ title: `${nextId}. Değerlendirme Başlatıldı`, description: "Puanları girmeye başlayabilirsiniz." });
+    }
 
     const fetchData = useCallback(async () => {
         if (!scaleOrUnitId || !user) return;
@@ -197,20 +211,16 @@ export default function ScaleDetailPage() {
         fetchData();
     }, [fetchData, type, courseId, branch, router, toast]);
 
-    // Veri Erişim Yardımcısı (Tarih bazlı veya genel fall-back)
-    const getStudentDataAtDate = (studentId: string) => {
+    const getStudentDataAtSession = (studentId: string) => {
         const entry = entries[studentId];
         if (!entry) return null;
         
-        // Eğer seçili tarihte kayıt varsa onu dön
-        if (entry.history && entry.history[dateKey]) {
-            return entry.history[dateKey];
+        if (entry.history && entry.history[activeSessionId]) {
+            return entry.history[activeSessionId];
         }
 
-        // Eğer tarih anahtarı yoksa ama eski formatta veri varsa (ilk geçiş için)
-        // Sadece bugünün tarihinde eski veriyi gösterelim ki kaybolmasınlar
-        const isToday = format(new Date(), 'yyyy-MM-dd') === dateKey;
-        if (isToday) {
+        // İlk oturum için ve eski veri varsa fall-back
+        if (activeSessionId === "1") {
             return {
                 plus: entry.plus,
                 minus: entry.minus,
@@ -226,7 +236,7 @@ export default function ScaleDetailPage() {
         setEntries(prev => {
             const studentEntry = prev[studentId] || { history: {}, note: '' };
             const history = studentEntry.history || {};
-            const dateData = history[dateKey] || { plus: 0, minus: 0 };
+            const sessionData = history[activeSessionId] || { plus: 0, minus: 0 };
             
             return {
                 ...prev,
@@ -234,8 +244,8 @@ export default function ScaleDetailPage() {
                     ...studentEntry,
                     history: {
                         ...history,
-                        [dateKey]: {
-                            ...dateData,
+                        [activeSessionId]: {
+                            ...sessionData,
                             [field]: Math.max(0, value)
                         }
                     }
@@ -249,8 +259,8 @@ export default function ScaleDetailPage() {
         setEntries(prev => {
             const studentEntry = prev[studentId] || { history: {}, note: '' };
             const history = studentEntry.history || {};
-            const dateData = history[dateKey] || { statuses: {} };
-            const currentStatuses = dateData.statuses || {};
+            const sessionData = history[activeSessionId] || { statuses: {} };
+            const currentStatuses = sessionData.statuses || {};
             
             const currentStatus = currentStatuses[columnId] || null;
             const currentIndex = statuses.indexOf(currentStatus);
@@ -262,8 +272,8 @@ export default function ScaleDetailPage() {
                     ...studentEntry,
                     history: {
                         ...history,
-                        [dateKey]: {
-                            ...dateData,
+                        [activeSessionId]: {
+                            ...sessionData,
                             statuses: { ...currentStatuses, [columnId]: nextStatus }
                         }
                     }
@@ -276,8 +286,8 @@ export default function ScaleDetailPage() {
         setEntries(prev => {
             const studentEntry = prev[studentId] || { history: {}, note: '' };
             const history = studentEntry.history || {};
-            const dateData = history[dateKey] || { values: {} };
-            const currentValues = dateData.values || {};
+            const sessionData = history[activeSessionId] || { values: {} };
+            const currentValues = sessionData.values || {};
 
             return {
                 ...prev,
@@ -285,8 +295,8 @@ export default function ScaleDetailPage() {
                     ...studentEntry,
                     history: {
                         ...history,
-                        [dateKey]: {
-                            ...dateData,
+                        [activeSessionId]: {
+                            ...sessionData,
                             values: { ...currentValues, [columnId]: value }
                         }
                     }
@@ -307,7 +317,7 @@ export default function ScaleDetailPage() {
         setIsSaving(true);
         const result = await saveScaleEntries(scale.id, entries);
         if (result.success) {
-            toast({ title: "Kaydedildi", description: "Haftalık gelişim verileri başarıyla güncellendi." });
+            toast({ title: "Kaydedildi", description: "Değerlendirmeler başarıyla güncellendi." });
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive"});
         }
@@ -328,32 +338,29 @@ export default function ScaleDetailPage() {
         setIsSaving(false);
     }
 
-    // --- ORTALAMA HESAPLAMA MANTIĞI ---
-
     const calculateStudentAverage = useCallback((studentId: string): number | null => {
         const entry = entries[studentId];
         if (!entry || !entry.history) return null;
 
-        const dates = Object.keys(entry.history);
-        if (dates.length === 0) return null;
+        const sessionKeys = Object.keys(entry.history);
+        if (sessionKeys.length === 0) return null;
 
         let totalPoints = 0;
         let totalCount = 0;
 
-        dates.forEach(date => {
-            const data = entry.history![date];
+        sessionKeys.forEach(key => {
+            const data = entry.history![key];
             if (scale?.type === 'points' && data.values) {
-                const dayValues = Object.values(data.values);
-                dayValues.forEach(v => {
+                const sessionValues = Object.values(data.values);
+                sessionValues.forEach(v => {
                     totalPoints += v;
                     totalCount++;
                 });
             } else if (scale?.type === 'checklist' && data.statuses) {
-                const dayStatuses = Object.values(data.statuses);
-                dayStatuses.forEach(s => {
+                const sessionStatuses = Object.values(data.statuses);
+                sessionStatuses.forEach(s => {
                     if (s === '+') totalPoints += 100;
                     else if (s === 'o') totalPoints += 50;
-                    // '-' is 0
                     totalCount++;
                 });
             }
@@ -403,11 +410,7 @@ export default function ScaleDetailPage() {
     };
 
     if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-full py-20 bg-slate-950">
-                <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
-            </div>
-        );
+        return <div className="flex justify-center items-center h-full py-20 bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
     }
 
     if (!scale) {
@@ -437,29 +440,29 @@ export default function ScaleDetailPage() {
                      <Button asChild variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl">
                         <Link href="/teacher/scales">
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Tüm Ölçekler
+                            Ölçekler
                         </Link>
                     </Button>
                     <div className="flex items-center gap-2">
                         {type === 'unit' && (
                             <Button variant="outline" size="sm" onClick={() => setIsAssignDialogOpen(true)} className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20">
-                                <Send className="mr-2 h-4 w-4" /> Ödev Olarak Ata
+                                <Send className="mr-2 h-4 w-4" /> Ödev Ata
                             </Button>
                         )}
                         
                         {(scale.type === 'checklist' || scale.type === 'points') && type !== 'unit' && (
                             <Button variant="outline" size="sm" onClick={() => setIsColumnEditorOpen(true)} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
-                                <Settings className="mr-2 h-4 w-4" /> Sütunları Düzenle
+                                <Settings className="mr-2 h-4 w-4" /> Sütunlar
                             </Button>
                         )}
                         <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4" />}
-                            Değerlendirmeyi Kaydet
+                            Değişiklikleri Kaydet
                         </Button>
                     </div>
                 </div>
                 
-                {/* Tarih ve Başlık Paneli */}
+                {/* Oturum Seçici Paneli */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <Card className="md:col-span-2 bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
                         <CardHeader className="pb-4">
@@ -468,42 +471,62 @@ export default function ScaleDetailPage() {
                                 <span className="font-bold text-sm">{course?.title} - {branch && `${course?.className} - ${branch}`}</span>
                             </CardDescription>
                             <div className="flex items-center gap-4 text-sm text-slate-300 flex-wrap pt-2">
-                                <Badge className="bg-purple-600 text-white">Tip: {scale.type === 'tally' ? 'Çetele' : scale.type === 'checklist' ? 'Kontrol Listesi' : 'Puanlı Ölçek'}</Badge>
+                                <Badge className="bg-purple-600 text-white">{scale.type === 'tally' ? 'Çetele' : scale.type === 'checklist' ? 'Kontrol Listesi' : 'Puanlı Ölçek'}</Badge>
                                 {classOverallAverage !== null && (
                                     <span className="flex items-center gap-2">
                                         <TrendingUp className="h-4 w-4 text-cyan-400"/>
-                                        Genel Sınıf Ortalaması:
-                                        <Badge className={cn("text-white font-bold", getScoreColorClass(classOverallAverage))}>
-                                            {classOverallAverage}%
-                                        </Badge>
+                                        Sınıf Ort: <Badge className={cn("text-white font-bold", getScoreColorClass(classOverallAverage))}>{classOverallAverage}%</Badge>
                                     </span>
                                 )}
                             </div>
                         </CardHeader>
                     </Card>
 
-                    {/* TARİH SEÇİCİ */}
-                    <Card className="bg-indigo-900/20 border border-indigo-500/30 shadow-xl overflow-hidden flex flex-col justify-center p-6">
-                        <Label className="text-xs font-black text-indigo-300 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <CalendarDays className="w-4 h-4"/> Değerlendirme Tarihi
-                        </Label>
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full justify-between text-left font-black text-lg h-14 bg-slate-900 border-white/10 text-white hover:bg-slate-800">
-                                    {format(selectedDate, "d MMMM yyyy", { locale: tr })}
-                                    <CalendarIcon className="h-5 w-5 text-indigo-400" />
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0 bg-slate-900 border-white/10 text-white" align="end">
-                                <Calendar mode="single" selected={selectedDate} onSelect={(date) => date && setSelectedDate(startOfDay(date))} initialFocus />
-                            </PopoverContent>
-                        </Popover>
-                        <p className="text-[10px] text-indigo-300/60 mt-3 text-center italic">Değerlendirmeler seçilen bu tarihe kaydedilir.</p>
+                    {/* OTURUM SEÇİCİ */}
+                    <Card className="bg-indigo-900/20 border border-indigo-500/30 shadow-xl p-4 flex flex-col">
+                        <div className="flex items-center justify-between mb-3">
+                            <Label className="text-xs font-black text-indigo-300 uppercase tracking-widest flex items-center gap-2">
+                                <History className="w-4 h-4"/> Değerlendirmeler
+                            </Label>
+                            <Button size="icon" variant="ghost" onClick={handleAddSession} className="h-7 w-7 rounded-full bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500 hover:text-white" title="Yeni Ekle">
+                                <Plus className="h-4 w-4"/>
+                            </Button>
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-2">
+                            {availableSessions.map(session => (
+                                <button
+                                    key={session}
+                                    onClick={() => setActiveSessionId(session)}
+                                    className={cn(
+                                        "h-10 w-10 rounded-xl font-black transition-all border shadow-sm",
+                                        activeSessionId === session 
+                                            ? "bg-indigo-600 border-indigo-400 text-white scale-110 shadow-indigo-500/40" 
+                                            : "bg-slate-900 border-white/5 text-slate-500 hover:border-white/20 hover:text-white"
+                                    )}
+                                >
+                                    {session}
+                                </button>
+                            ))}
+                            <button 
+                                onClick={handleAddSession}
+                                className="h-10 w-10 rounded-xl font-black border-2 border-dashed border-indigo-500/30 text-indigo-400 flex items-center justify-center hover:bg-indigo-500/10 hover:border-indigo-500 transition-all"
+                            >
+                                <Plus className="h-5 w-5"/>
+                            </button>
+                        </div>
+                        <p className="text-[10px] text-indigo-300/60 mt-3 text-center italic">Düzenlemek istediğiniz numaraya tıklayın.</p>
                     </Card>
                 </div>
                 
                 {/* Ana Tablo Kartı */}
-                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
+                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden rounded-[2rem]">
+                    <CardHeader className="bg-slate-800/40 border-b border-white/5 py-3 px-6 flex flex-row items-center justify-between">
+                         <div className="flex items-center gap-2">
+                            <span className="text-sm font-black text-indigo-400">{activeSessionId}. Değerlendirme Oturumu</span>
+                         </div>
+                         <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Puanlar otomatik kaydedilmez, "Kaydet"e basın.</div>
+                    </CardHeader>
                     <CardContent className="p-0">
                         <div className="border rounded-md overflow-x-auto">
                             {students.length > 0 ? (
@@ -535,7 +558,7 @@ export default function ScaleDetailPage() {
                                     <TableBody>
                                         {students.map(student => {
                                             const studentEntry = entries[student.uid] || { history: {}, note: '' };
-                                            const dateData = getStudentDataAtDate(student.uid) || {};
+                                            const sessionData = getStudentDataAtSession(student.uid) || {};
                                             const studentAvg = calculateStudentAverage(student.uid);
                                             
                                             return (
@@ -557,7 +580,7 @@ export default function ScaleDetailPage() {
                                                         (scale.columns || []).map(col => (
                                                             <TableCell key={col.id} className="text-center bg-transparent border-r border-white/5">
                                                                 <StatusButton
-                                                                    status={dateData.statuses?.[col.id] || null}
+                                                                    status={sessionData.statuses?.[col.id] || null}
                                                                     onClick={() => handleChecklistChange(student.uid, col.id)}
                                                                 />
                                                             </TableCell>
@@ -570,7 +593,7 @@ export default function ScaleDetailPage() {
                                                                 <Input 
                                                                     type="number"
                                                                     min="0"
-                                                                    value={dateData.values?.[col.id] ?? ""}
+                                                                    value={sessionData.values?.[col.id] ?? ""}
                                                                     onChange={(e) => handlePointsChange(student.uid, col.id, parseInt(e.target.value) || 0)}
                                                                     className="w-20 mx-auto bg-slate-800 border-white/10 text-center font-bold text-lg h-10 focus:ring-cyan-500/50 focus:border-cyan-500"
                                                                     placeholder="-"
@@ -584,16 +607,16 @@ export default function ScaleDetailPage() {
                                                         <>
                                                             <TableCell className="text-center bg-transparent border-x border-white/5">
                                                                 <div className="flex items-center justify-center gap-2 bg-emerald-900/30 p-1 rounded-lg">
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', Math.max(0, (dateData.plus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
-                                                                    <span className="font-bold text-lg text-white">{dateData.plus || 0}</span>
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', (dateData.plus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', Math.max(0, (sessionData.plus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
+                                                                    <span className="font-bold text-lg text-white">{sessionData.plus || 0}</span>
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', (sessionData.plus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
                                                                 </div>
                                                             </TableCell>
                                                             <TableCell className="text-center bg-transparent border-r border-white/5">
                                                                 <div className="flex items-center justify-center gap-2 bg-red-900/30 p-1 rounded-lg">
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400" onClick={() => handleTallyChange(student.uid, 'minus', Math.max(0, (dateData.minus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
-                                                                    <span className="font-bold text-lg text-white">{dateData.minus || 0}</span>
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400" onClick={() => handleTallyChange(student.uid, 'minus', (dateData.minus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400" onClick={() => handleTallyChange(student.uid, 'minus', Math.max(0, (sessionData.minus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
+                                                                    <span className="font-bold text-lg text-white">{sessionData.minus || 0}</span>
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400" onClick={() => handleTallyChange(student.uid, 'minus', (sessionData.minus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
                                                                 </div>
                                                             </TableCell>
                                                         </>
@@ -617,7 +640,7 @@ export default function ScaleDetailPage() {
                                                     <TableCell className="min-w-64">
                                                         <Input 
                                                             type="text" 
-                                                            placeholder="Gözlem/Not ekle..." 
+                                                            placeholder="Gözlem..." 
                                                             value={studentEntry.note || ''} 
                                                             onChange={e => handleNoteChange(student.uid, e.target.value)} 
                                                             className="bg-slate-900 border-white/10 text-white h-9 text-sm"
@@ -629,7 +652,7 @@ export default function ScaleDetailPage() {
                                     </TableBody>
                                 </Table>
                             ) : (
-                                <p className="text-center h-24 text-slate-500 flex items-center justify-center font-medium">Bu şubede sanal öğrenci bulunamadı.</p>
+                                <p className="text-center h-24 text-slate-500 flex items-center justify-center font-medium">Öğrenci bulunamadı.</p>
                             )}
                         </div>
                     </CardContent>
@@ -652,19 +675,19 @@ export default function ScaleDetailPage() {
                     <DialogHeader>
                         <DialogTitle className="text-xl font-bold text-indigo-400">Ödev Olarak Ata</DialogTitle>
                         <DialogDescription className="text-slate-400">
-                            "{unit?.title}" ünitesindeki tüm konuları seçili öğrencilere ödev olarak atayın.
+                            "{unit?.title}" ünitesindeki konuları öğrencilere atayın.
                         </DialogDescription>
                     </DialogHeader>
                     
                     <div className="py-4 space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="assignment-title" className="text-slate-300">Ödev Başlığı</Label>
-                            <Input id="assignment-title" value={assignmentTitle} onChange={e => setAssignmentTitle(e.target.value)} placeholder={`${unit?.title} Tekrar Ödevi`} className="bg-slate-950 border-white/10 text-white"/>
+                            <Input id="assignment-title" value={assignmentTitle} onChange={e => setAssignmentTitle(e.target.value)} placeholder={`${unit?.title} Ödevi`} className="bg-slate-950 border-white/10 text-white"/>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label className="text-slate-300">Öğrenciler ({selectedStudentUids.size} seçildi)</Label>
+                                <Label className="text-slate-300">Öğrenciler ({selectedStudentUids.size})</Label>
                                 <ScrollArea className="h-48 border border-white/10 rounded-md bg-slate-950/50 p-2">
                                     <div className="flex items-center space-x-2 p-1 border-b border-white/10 bg-slate-900/50">
                                         <Checkbox 
