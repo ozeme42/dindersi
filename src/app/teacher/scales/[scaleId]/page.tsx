@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -5,7 +6,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -261,6 +262,42 @@ export default function ScaleDetailPage() {
         setIsSaving(false);
     }
     
+    // HAFTALIK TAKİP İÇİN OTOMATİK SÜTUN EKLEME
+    const handleAddWeekColumn = async () => {
+        if (!scale) return;
+        
+        // Mevcut "Hafta" içeren sütunları bul
+        const weekColumns = scale.columns.filter(c => c.name.toLowerCase().includes('hafta'));
+        let nextWeekNum = 1;
+        
+        if (weekColumns.length > 0) {
+            const nums = weekColumns.map(c => {
+                const match = c.name.match(/\d+/);
+                return match ? parseInt(match[0]) : 0;
+            });
+            nextWeekNum = Math.max(...nums) + 1;
+        } else if (scale.columns.length > 0) {
+            nextWeekNum = scale.columns.length + 1;
+        }
+
+        const newColumn: EvaluationScaleColumn = {
+            id: `week_${Date.now()}`,
+            name: `${nextWeekNum}. Hafta`,
+            type: scale.type === 'points' ? 'number' : 'status'
+        };
+
+        const updatedColumns = [...scale.columns, newColumn];
+        setIsSaving(true);
+        const result = await updateScaleColumns(scale.id, updatedColumns);
+        if (result.success) {
+            setScale({ ...scale, columns: updatedColumns });
+            toast({ title: "Yeni Sütun Eklendi", description: `${nextWeekNum}. hafta için yer açıldı.` });
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+        setIsSaving(false);
+    };
+
     const calculateChecklistScore = useCallback((entry: ScaleEntry): number | null => {
         if (!entry?.statuses) return null;
         const statuses = Object.values(entry.statuses);
@@ -350,7 +387,7 @@ export default function ScaleDetailPage() {
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
                 {/* Aksiyon Barı */}
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                     <Button asChild variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/10">
+                     <Button asChild variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl">
                         <Link href="/teacher/scales">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Tüm Ölçekler
@@ -362,12 +399,17 @@ export default function ScaleDetailPage() {
                                 <Send className="mr-2 h-4 w-4" /> Ödev Olarak Ata
                             </Button>
                         )}
+                        {(scale.type === 'checklist' || scale.type === 'points') && (
+                            <Button variant="outline" size="sm" onClick={handleAddWeekColumn} className="bg-cyan-600/20 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500 hover:text-white">
+                                <CalendarPlus className="mr-2 h-4 w-4" /> Hafta Ekle
+                            </Button>
+                        )}
                         {(scale.type === 'checklist' || scale.type === 'points') && type !== 'unit' && (
                             <Button variant="outline" size="sm" onClick={() => setIsColumnEditorOpen(true)} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                                 <Settings className="mr-2 h-4 w-4" /> Sütunları Düzenle
                             </Button>
                         )}
-                        <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20">
+                        <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4" />}
                             Değerlendirmeyi Kaydet
                         </Button>
