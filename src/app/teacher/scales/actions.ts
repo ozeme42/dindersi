@@ -1,10 +1,44 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, addDoc, serverTimestamp, writeBatch, updateDoc, deleteDoc, orderBy, setDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc, addDoc, serverTimestamp, writeBatch, updateDoc, deleteDoc, orderBy, setDoc, Timestamp } from 'firebase/firestore';
 import type { EvaluationScale, UserProfile, SchoolClass, ScaleEntry, Course, Unit, Topic, EvaluationScaleColumn } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { SCALE_TEMPLATES, type ScaleTemplate } from '@/lib/scale-templates';
+
+// --- YARDIMCI FONKSİYON: GÜVENLİ SERIALIZER ---
+// Firestore Timestamp ve Date nesnelerini düz stringlere dönüştürür.
+const serialize = (data: any): any => {
+  if (data === null || data === undefined) return null;
+  if (Array.isArray(data)) return data.map(serialize);
+  
+  // Firestore Timestamp nesnesi kontrolü
+  if (data instanceof Timestamp) {
+      return data.toDate().toISOString();
+  }
+  
+  // Date nesnesi kontrolü
+  if (data instanceof Date) {
+      return data.toISOString();
+  }
+
+  // Düz nesne içindeki Timestamp yapısı kontrolü (Bazen serialization sırasında bu formatta kalabilir)
+  if (typeof data === 'object' && '_seconds' in data && '_nanoseconds' in data) {
+      return new Date(data._seconds * 1000).toISOString();
+  }
+  
+  // Nesne içindeki alanları gez (Recursive)
+  if (typeof data === 'object') {
+    const newObj: { [key: string]: any } = {};
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        newObj[key] = serialize(data[key]);
+      }
+    }
+    return newObj;
+  }
+  return data;
+};
 
 export async function getTeacherScales(teacherId: string): Promise<{ success: boolean; data?: EvaluationScale[]; error?: string }> {
     noStore();
@@ -23,7 +57,7 @@ export async function getTeacherScales(teacherId: string): Promise<{ success: bo
         
         scales.sort((a, b) => a.name.localeCompare(b.name, 'tr', { numeric: true }));
 
-        return { success: true, data: JSON.parse(JSON.stringify(scales)) };
+        return { success: true, data: serialize(scales) };
     } catch (error: any) {
         console.error("Error fetching scales:", error);
         if (error.code === 'failed-precondition') {
@@ -95,13 +129,14 @@ export async function getScaleTemplates(): Promise<ScaleTemplate[]> {
         
         if (snap.empty) {
             // Eğer veritabanı boşsa varsayılanları döndür
-            return SCALE_TEMPLATES;
+            return serialize(SCALE_TEMPLATES);
         }
         
-        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as ScaleTemplate));
+        const templates = snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as ScaleTemplate));
+        return serialize(templates);
     } catch (e) {
         console.error("Error fetching templates:", e);
-        return SCALE_TEMPLATES;
+        return serialize(SCALE_TEMPLATES);
     }
 }
 
@@ -208,7 +243,7 @@ export async function getBranchScaleScores(): Promise<BranchScore[]> {
             averageSuccess: Math.round(data.totalSuccess / data.studentCount),
         }));
 
-        return finalLeaderboard.sort((a, b) => b.averageSuccess - a.averageSuccess);
+        return serialize(finalLeaderboard.sort((a, b) => b.averageSuccess - a.averageSuccess));
 
     } catch (e) {
         console.error("Error calculating branch scale scores:", e);
