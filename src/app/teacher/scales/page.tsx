@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
 
 // Lucide Icons
 import { 
