@@ -1,9 +1,7 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, addDoc, updateDoc, deleteDoc, collection, serverTimestamp, writeBatch, Timestamp } from "firebase/firestore";
+import { doc, addDoc, updateDoc, deleteDoc, collection, serverTimestamp, writeBatch, deleteField } from "firebase/firestore"; // deleteField eklendi
 
 // Simplified save function
 export async function saveCurriculumItem(
@@ -32,7 +30,7 @@ export async function saveCurriculumItem(
             if (type === 'Sınıf') {
                 collectionPath = 'classes';
                 dataToAdd.name = name;
-                dataToAdd.branches = [];
+                dataToAdd.branches = branches || [];
             } else if (type === 'Ders' && parentId) {
                 collectionPath = 'courses';
                 dataToAdd.title = name;
@@ -71,9 +69,15 @@ export async function saveCurriculumItem(
             } else if (type === 'Konu' && parentId && courseId) {
                 docPath = `courses/${courseId}/units/${parentId}/topics/${id}`;
                 dataToUpdate.title = name;
-                // Use null to remove the field if the link is cleared
-                dataToUpdate.externalLink = externalLink || null;
-                dataToUpdate.sourceText = sourceText || '';
+                
+                // KRİTİK DÜZELTME: Veri silinmesini önlemek için sadece undefined DEĞİLSE güncelle
+                if (externalLink !== undefined) {
+                    // Eğer boş string gönderildiyse linki temizle, doluysa ata
+                    dataToUpdate.externalLink = externalLink === '' ? deleteField() : externalLink;
+                }
+                if (sourceText !== undefined) {
+                    dataToUpdate.sourceText = sourceText;
+                }
             } else {
                 throw new Error("Geçersiz veya eksik parametreler.");
             }
@@ -101,12 +105,8 @@ export async function togglePublishState(path: string, currentPublishedState: bo
     }
 }
 
-
 // Delete function
 export async function deleteCurriculumItem(path: string) {
-    // Note: This does not delete subcollections, which is a limitation of Firestore SDKs.
-    // For a production app, a Firebase Function would be needed for recursive deletes.
-    // For this app's purpose, this is sufficient.
     try {
         await deleteDoc(doc(db, path));
         return { success: true };
@@ -147,7 +147,7 @@ export async function bulkAddCurriculumItems(
 
         names.forEach(name => {
             const docRef = doc(collection(db, collectionPath));
-            let data: any = { createdAt: serverTimestamp(), isPublished: true }; // Default to published
+            let data: any = { createdAt: serverTimestamp(), isPublished: true }; 
             
             if (type === 'Sınıf') {
                 data.name = name;
@@ -164,8 +164,7 @@ export async function bulkAddCurriculumItems(
 
         await batch.commit();
         return { success: true, count: names.length };
-    } catch (error: any)
-    {
+    } catch (error: any) {
         console.error("Error bulk saving items:", error);
         return { success: false, error: "Toplu ekleme sırasında bir hata oluştu." };
     }

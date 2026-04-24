@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -7,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -59,19 +57,21 @@ const StatusButton = ({ status, onClick }: { status: '+' | '-' | 'o' | null, onC
     )
 }
 
-// SÜTUN DÜZENLEYİCİ DİYALOG (isSaving prop'u eklendi)
+// SÜTUN DÜZENLEYİCİ DİYALOG
 function ColumnEditorDialog({
     isOpen,
     onOpenChange,
     columns,
     onSave,
-    isSaving
+    isSaving,
+    scaleType
 }: {
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
     columns: EvaluationScaleColumn[];
     onSave: (newColumns: EvaluationScaleColumn[]) => void;
-    isSaving: boolean; // <-- EKLENDİ
+    isSaving: boolean;
+    scaleType: 'checklist' | 'points' | 'tally';
 }) {
     const [localColumns, setLocalColumns] = useState(columns);
 
@@ -83,7 +83,7 @@ function ColumnEditorDialog({
         setLocalColumns(prev => prev.map(col => col.id === id ? { ...col, name: newName } : col));
     }
     const handleAddColumn = () => {
-        setLocalColumns(prev => [...prev, { id: `col_${Date.now()}`, name: "Yeni Görev", type: 'status' }]);
+        setLocalColumns(prev => [...prev, { id: `col_${Date.now()}`, name: "Yeni Başlık", type: scaleType === 'points' ? 'number' : 'status' }]);
     }
     const handleRemoveColumn = (id: string) => {
         setLocalColumns(prev => prev.filter(col => col.id !== id));
@@ -220,6 +220,14 @@ export default function ScaleDetailPage() {
         });
     };
 
+    const handlePointsChange = (studentId: string, columnId: string, value: number) => {
+        setEntries(prev => {
+            const studentEntry = prev[studentId] || { values: {}, note: '' };
+            const newValues = { ...(studentEntry.values || {}), [columnId]: value };
+            return { ...prev, [studentId]: { ...studentEntry, values: newValues } };
+        });
+    };
+
     const handleNoteChange = (studentId: string, value: string) => {
         setEntries(prev => {
             const studentEntry = prev[studentId] || {};
@@ -241,7 +249,7 @@ export default function ScaleDetailPage() {
 
     const handleSaveColumns = async (newColumns: EvaluationScaleColumn[]) => {
         if (!scale) return;
-        setIsSaving(true); // <-- isSaving durumu burada ayarlanıyor
+        setIsSaving(true);
         const result = await updateScaleColumns(scale.id, newColumns);
         if (result.success) {
             toast({ title: "Sütunlar Güncellendi" });
@@ -250,7 +258,7 @@ export default function ScaleDetailPage() {
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
-        setIsSaving(false); // <-- isSaving durumu burada kapatılıyor
+        setIsSaving(false);
     }
     
     const calculateChecklistScore = useCallback((entry: ScaleEntry): number | null => {
@@ -260,6 +268,11 @@ export default function ScaleDetailPage() {
         const totalGraded = pluses + statuses.filter(s => s === '-').length;
         if (totalGraded === 0) return null;
         return Math.round((pluses / totalGraded) * 100);
+    }, []);
+
+    const calculatePointsTotal = useCallback((entry: ScaleEntry): number => {
+        if (!entry?.values) return 0;
+        return Object.values(entry.values).reduce((sum, val) => sum + (val || 0), 0);
     }, []);
 
     const overallScore = useMemo(() => {
@@ -295,7 +308,7 @@ export default function ScaleDetailPage() {
             dueDate: assignmentDueDate || null,
         };
 
-        const result = await createExam(assignmentData);
+        const result = await createExam(assignmentData as any);
         if (result.success) {
             toast({ title: "Başarılı", description: "Ödev başarıyla oluşturuldu." });
             setIsAssignDialogOpen(false);
@@ -349,7 +362,7 @@ export default function ScaleDetailPage() {
                                 <Send className="mr-2 h-4 w-4" /> Ödev Olarak Ata
                             </Button>
                         )}
-                        {scale.type === 'checklist' && type !== 'unit' && (
+                        {(scale.type === 'checklist' || scale.type === 'points') && type !== 'unit' && (
                             <Button variant="outline" size="sm" onClick={() => setIsColumnEditorOpen(true)} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                                 <Settings className="mr-2 h-4 w-4" /> Sütunları Düzenle
                             </Button>
@@ -369,7 +382,7 @@ export default function ScaleDetailPage() {
                             <span className="font-bold text-sm">{course?.title} - {branch && `${course?.className} - ${branch}`}</span>
                         </CardDescription>
                          <div className="flex items-center gap-4 text-sm text-slate-300 flex-wrap pt-2">
-                             <Badge className="bg-purple-600 text-white shadow-md">Tip: {scale.type === 'tally' ? 'Çetele' : 'Kontrol Listesi'}</Badge>
+                             <Badge className="bg-purple-600 text-white shadow-md">Tip: {scale.type === 'tally' ? 'Çetele' : scale.type === 'checklist' ? 'Kontrol Listesi' : 'Puanlı Ölçek'}</Badge>
                              {scale.type === 'checklist' && overallScore !== null && (
                                  <span className="flex items-center gap-2">
                                      <TrendingUp className="h-4 w-4 text-cyan-400"/>
@@ -385,6 +398,9 @@ export default function ScaleDetailPage() {
                                       <span className="text-red-400">Toplam Eksi: <span className="font-bold">{Object.values(entries).reduce((s, e) => s + (e.minus || 0), 0)}</span></span>
                                   </>
                               )}
+                              {scale.type === 'points' && (
+                                   <span className="text-cyan-400">Toplam Sınıf Puanı: <span className="font-bold">{Object.values(entries).reduce((s, e) => s + calculatePointsTotal(e), 0).toLocaleString()}</span></span>
+                              )}
                          </div>
                     </CardHeader>
                     
@@ -394,28 +410,30 @@ export default function ScaleDetailPage() {
                                <Table className="min-w-[1000px] border-collapse">
                                     <TableHeader className="bg-slate-800/80">
                                         <TableRow className="border-white/5 hover:bg-transparent">
-                                            <TableHead className="min-w-48 sticky left-0 bg-slate-800/90 z-20 text-slate-300 font-bold text-base border-r border-white/5">Öğrenci / Başarı</TableHead>
+                                            <TableHead className="min-w-48 sticky left-0 bg-slate-800/90 z-20 text-slate-300 font-bold text-base border-r border-white/5">Öğrenci / Sonuç</TableHead>
                                             {scale.type === 'tally' && (
                                                 <>
                                                     <TableHead className="w-40 text-center text-emerald-400">ART+ (Başarı)</TableHead>
                                                     <TableHead className="w-40 text-center text-red-400">EKSİ- (Gelişim)</TableHead>
                                                 </>
                                             )}
-                                            {scale.type === 'checklist' && (
+                                            {(scale.type === 'checklist' || scale.type === 'points') && (
                                                 (scale.columns || []).map(col => (
                                                     <TableHead key={col.id} className="w-32 text-center text-slate-400 font-medium border-x border-white/5 rotate-0">
                                                         <span className="inline-block whitespace-nowrap text-xs font-bold uppercase tracking-wider">{col.name}</span>
                                                     </TableHead>
                                                 ))
                                             )}
+                                            {scale.type === 'points' && <TableHead className="w-24 text-center text-emerald-400 font-black border-l border-white/10">TOPLAM</TableHead>}
                                             <TableHead className="min-w-64 border-l border-white/5 text-slate-300">Notlar</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     
                                     <TableBody>
                                         {students.map(student => {
-                                            const studentEntry = entries[student.uid] || { plus: 0, minus: 0, statuses: {}, note: '' };
+                                            const studentEntry = entries[student.uid] || { plus: 0, minus: 0, statuses: {}, values: {}, note: '' };
                                             const studentScore = scale.type === 'checklist' ? calculateChecklistScore(studentEntry) : null;
+                                            const studentPointsTotal = scale.type === 'points' ? calculatePointsTotal(studentEntry) : null;
                                             
                                             return (
                                                 <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
@@ -466,6 +484,32 @@ export default function ScaleDetailPage() {
                                                             </TableCell>
                                                         ))
                                                     )}
+
+                                                    {/* Puanlı Ölçek Girişi */}
+                                                    {scale.type === 'points' && (
+                                                         (scale.columns || []).map(col => (
+                                                            <TableCell key={col.id} className="text-center bg-transparent border-r border-white/5">
+                                                                <div className="relative group/input">
+                                                                    <Input 
+                                                                        type="number"
+                                                                        min="0"
+                                                                        value={studentEntry.values?.[col.id] ?? ""}
+                                                                        onChange={(e) => handlePointsChange(student.uid, col.id, parseInt(e.target.value) || 0)}
+                                                                        className="w-20 mx-auto bg-slate-800 border-white/10 text-center font-bold text-lg h-10 focus:ring-cyan-500/50 focus:border-cyan-500"
+                                                                        placeholder="-"
+                                                                    />
+                                                                    <Hash className="absolute right-1 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-600 opacity-0 group-hover/input:opacity-100 transition-opacity" />
+                                                                </div>
+                                                            </TableCell>
+                                                        ))
+                                                    )}
+                                                    
+                                                    {/* Toplam Puan (Sadece Points Tipi İçin) */}
+                                                    {scale.type === 'points' && (
+                                                        <TableCell className="text-center bg-slate-900/50 border-l border-white/10">
+                                                            <span className="text-xl font-black text-emerald-400 drop-shadow-sm">{studentPointsTotal}</span>
+                                                        </TableCell>
+                                                    )}
                                                     
                                                     {/* Not Alanı */}
                                                     <TableCell className="min-w-64">
@@ -495,8 +539,9 @@ export default function ScaleDetailPage() {
                 isOpen={isColumnEditorOpen}
                 onOpenChange={setIsColumnEditorOpen}
                 columns={scale.columns || []}
+                scaleType={scale.type}
                 onSave={handleSaveColumns}
-                isSaving={isSaving} // isSaving prop'u aktarıldı
+                isSaving={isSaving}
             />
 
             {/* Ödev Ata Dialogu (Sadece Ünite Bazlı Ölçekler için) */}

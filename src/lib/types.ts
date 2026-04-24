@@ -297,7 +297,7 @@ export type Assignment = {
 export type EvaluationScaleColumn = {
   id: string;
   name: string;
-  type: 'status'; // For now, only status is needed for checklists
+  type: 'status' | 'number'; 
 };
 
 // A manually created scale
@@ -307,7 +307,7 @@ export type EvaluationScale = {
   teacherId: string;
   classId: string;
   courseId: string;
-  type: 'tally' | 'checklist';
+  type: 'tally' | 'checklist' | 'points';
   columns: EvaluationScaleColumn[];
   createdAt: any;
 };
@@ -320,6 +320,9 @@ export type ScaleEntry = {
 
     // For checklist type
     statuses?: { [columnId: string]: '+' | '-' | 'o' | null };
+    
+    // For points type
+    values?: { [columnId: string]: number };
 
     // Common field
     note?: string;

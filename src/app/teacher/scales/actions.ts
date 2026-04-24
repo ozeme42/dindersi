@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -46,7 +44,7 @@ export async function createScale(data: Omit<EvaluationScale, 'id' | 'createdAt'
             teacherId: data.teacherId,
             classId: data.classId,
             courseId: data.courseId,
-            columns: data.type === 'checklist' ? (data.columns || [{ id: `col_${Date.now()}`, name: 'Ödevini Yaptı', type: 'status' }]) : [],
+            columns: (data.type === 'checklist' || data.type === 'points') ? (data.columns || [{ id: `col_${Date.now()}`, name: 'Görev 1', type: data.type === 'checklist' ? 'status' : 'number' }]) : [],
             createdAt: serverTimestamp(),
         };
 

@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -47,7 +45,7 @@ type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 
 const createScaleSchema = z.object({
     name: z.string().min(3, { message: "Ölçek adı en az 3 karakter olmalıdır." }),
-    type: z.enum(['tally', 'checklist']),
+    type: z.enum(['tally', 'checklist', 'points']),
 });
 
 type CreateScaleFormValues = z.infer<typeof createScaleSchema>;
@@ -98,7 +96,8 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
                                 <SelectTrigger className="bg-slate-900 border-white/10 text-white h-10"><SelectValue/></SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
                                     <SelectItem value="tally">Çetele (+/-)</SelectItem>
-                                    <SelectItem value="checklist">Kontrol Listesi</SelectItem>
+                                    <SelectItem value="checklist">Kontrol Listesi (Başarı Oranlı)</SelectItem>
+                                    <SelectItem value="points">Puanlı Ölçek (Sayısal Giriş)</SelectItem>
                                 </SelectContent>
                             </Select>
                         )}
@@ -122,7 +121,7 @@ function ErrorWithLink({ message }: { message: string }) {
     return (
         <Alert variant="destructive" className="whitespace-pre-wrap bg-red-900/40 border-red-500/50 text-red-100">
             <AlertTriangle className="h-4 w-4" />
-            <AlertTitle className="text-white">Hata!</AlertTitle>
+            <AlertTitle>Hata!</AlertTitle>
             <AlertDescription className="text-red-200">
                 {parts.map((part, index) => 
                     urlRegex.test(part) ? 
@@ -304,7 +303,7 @@ export default function ScalesPage() {
             columns: [],
         };
         
-        const result = await createScale(dataToSave);
+        const result = await createScale(dataToSave as any);
         if (result.success) {
             toast({ title: "Başarılı", description: "Yeni ölçek oluşturuldu." });
             await fetchData();
@@ -384,10 +383,10 @@ export default function ScalesPage() {
                      
                      <div className="flex gap-3">
                          <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
-                           <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
+                           <Link href="/"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
                          </Button>
                          <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
-                           <Link href="/teacher/guest-students"><UserCog className="mr-2 h-4 w-4"/>Sanal Öğrencileri Yönet</Link>
+                           <Link href="/teacher/students"><UserCog className="mr-2 h-4 w-4"/>Sanal Öğrencileri Yönet</Link>
                          </Button>
                          <Button 
                              onClick={() => setIsCreateAccordionOpen(!isCreateAccordionOpen)} 
@@ -521,7 +520,7 @@ export default function ScalesPage() {
                                 {/* Manuel Ölçekler Listesi */}
                                 <div className="space-y-4">
                                     <h3 className="text-xl font-black text-white flex items-center gap-2 border-b border-white/10 pb-2">
-                                        <UserCheck className="h-6 w-6 text-purple-400"/> Özel Çeteleler ({filteredManualScales.length})
+                                        <UserCheck className="h-6 w-6 text-purple-400"/> Özel Ölçekler ({filteredManualScales.length})
                                     </h3>
                                     
                                     {filteredManualScales.length > 0 ? (
@@ -533,6 +532,7 @@ export default function ScalesPage() {
                                                         <CardHeader className="pb-2">
                                                             <CardTitle className="text-sm font-bold text-white">{scale.name.split(' (')[0]}</CardTitle>
                                                             <CardDescription className="text-xs text-slate-500">{courseName}</CardDescription>
+                                                            <Badge variant="outline" className="w-fit text-[10px] mt-1 bg-white/5">{scale.type === 'points' ? 'Puanlı' : scale.type === 'tally' ? 'Çetele' : 'Kontrol Listesi'}</Badge>
                                                         </CardHeader>
                                                         <CardFooter className="flex justify-between items-center pt-2 gap-2">
                                                             <Button asChild size="sm" className="bg-purple-600 hover:bg-purple-500 text-white flex-1 text-xs">
