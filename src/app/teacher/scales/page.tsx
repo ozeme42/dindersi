@@ -29,7 +29,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
     Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
     AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3, Home, UserCog,
-    Sparkles, ClipboardList, Check, Settings, FileEdit, X, Plus, GripVertical
+    Sparkles, ClipboardList, Check, Settings, FileEdit, X, Plus, GripVertical,
+    Save, ChevronDown
 } from 'lucide-react';
 
 // Firebase and Actions
