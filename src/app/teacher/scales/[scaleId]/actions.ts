@@ -19,6 +19,43 @@ export type UnitScaleDetails = {
     entries: { [studentId: string]: ScaleEntry };
 }
 
+// GÜVENLİ SERIALIZER: Tarih ve Timestamp nesnelerini stringe çevirir.
+const serialize = (data: any): any => {
+    if (data === null || data === undefined) return null;
+    if (Array.isArray(data)) return data.map(serialize);
+    
+    // Firestore Timestamp nesnesi kontrolü
+    if (data && typeof data === 'object' && typeof data.toDate === 'function') {
+        return data.toDate().toISOString();
+    }
+    
+    // Date nesnesi kontrolü
+    if (data instanceof Date) {
+        return data.toISOString();
+    }
+  
+    // Düz nesne içindeki Timestamp yapısı kontrolü (Firebase'den gelen ham yapı)
+    if (data && typeof data === 'object' && '_seconds' in data && '_nanoseconds' in data) {
+        return new Date(data._seconds * 1000).toISOString();
+    }
+    
+    // Nesne içindeki alanları gez (Recursive)
+    if (typeof data === 'object') {
+      const newObj: { [key: string]: any } = {};
+      for (const key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          newObj[key] = serialize(data[key]);
+        }
+      }
+      return newObj;
+    }
+    return data;
+};
+
+/**
+ * Ünite bazlı ölçek detaylarını getirir (Müfredat üzerinden).
+ * Sadece ilgili sınıfın ve şubenin öğrencilerini getirir.
+ */
 export async function getUnitScaleDetails(
     courseId: string, 
     unitId: string, 
@@ -27,46 +64,51 @@ export async function getUnitScaleDetails(
 ): Promise<{ success: boolean; data?: UnitScaleDetails; error?: string }> {
     noStore();
     if (!courseId || !unitId) return { success: false, error: 'Ders veya Ünite ID\'si bulunamadı.' };
-    if (!branchName) return { success: false, error: 'Şube bilgisi eksik.' };
 
     try {
         const courseRef = doc(db, 'courses', courseId);
         const unitRef = doc(db, `courses/${courseId}/units`, unitId);
         const [courseSnap, unitSnap] = await Promise.all([getDoc(courseRef), getDoc(unitRef)]);
 
-        if (!courseSnap.exists()) return { success: false, error: 'Ders bulunamadı.' };
-        if (!unitSnap.exists()) return { success: false, error: 'Ünite bulunamadı.' };
+        if (!courseSnap.exists() || !unitSnap.exists()) {
+             return { success: false, error: 'Ders veya ünite bulunamadı.' };
+        }
         
-        const course = { id: courseSnap.id, ...courseSnap.data() } as Course;
-        const unit = { id: unitSnap.id, ...unitSnap.data() } as Unit;
+        const courseData = { id: courseSnap.id, ...courseSnap.data() } as Course;
+        const unitData = { id: unitSnap.id, ...unitSnap.data() } as Unit;
 
+        // Ünite konularını çek (Sütunlar için)
         const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseId}/units/${unitId}/topics`)));
-        const unsortedTopics = topicsSnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}) as Topic);
-        unit.topics = unsortedTopics.sort((a, b) => a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' }));
+        unitData.topics = topicsSnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}) as Topic)
+            .sort((a, b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
         
-        const allGuestsQuery = query(collection(db, 'users'), where('role', '==', 'guest'));
-        const allGuestsSnapshot = await getDocs(allGuestsQuery);
-        let allGuests = allGuestsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+        // Tüm potansiyel öğrencileri (Gerçek ve Sanal) çek
+        const studentsQuery = query(collection(db, 'users'), where('role', 'in', ['student', 'guest']));
+        const studentsSnapshot = await getDocs(studentsQuery);
+        let students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
         
+        // Okula göre filtrele (Eğer öğretmenin okulu belliyse)
         if (teacherSchoolName) {
-            allGuests = allGuests.filter(s => s.schoolName === teacherSchoolName);
+            students = students.filter(s => s.schoolName === teacherSchoolName);
         }
 
-        let students = allGuests;
-        
-        if (branchName !== 'all') {
-             if (course.classId) {
-                 const classRef = doc(db, 'classes', course.classId);
-                 const classSnap = await getDoc(classRef);
-                 if (classSnap.exists()) {
-                    const className = classSnap.data().name;
+        // Sınıf ve Şubeye göre filtrele
+        if (courseData.classId) {
+            const classSnap = await getDoc(doc(db, 'classes', courseData.classId));
+            if (classSnap.exists()) {
+                const className = classSnap.data().name;
+                if (branchName && branchName !== 'all') {
                     const fullClassName = `${className} - ${branchName}`;
                     const poolClassName = `${fullClassName} (Havuz)`;
                     students = students.filter(s => s.class === fullClassName || s.class === poolClassName);
-                 }
+                } else {
+                    // Sadece sınıf seviyesi (örn: 5. Sınıfın tüm şubeleri)
+                    students = students.filter(s => s.class?.startsWith(className));
+                }
             }
         }
         
+        // Mevcut değerlendirmeleri çek
         const entriesRef = collection(db, `evaluationScales/${unitId}/entries`);
         const entriesSnapshot = await getDocs(entriesRef);
         const entries: { [studentId: string]: ScaleEntry } = {};
@@ -74,12 +116,14 @@ export async function getUnitScaleDetails(
             entries[docSnap.id] = docSnap.data() as ScaleEntry;
         });
 
-        return { success: true, data: JSON.parse(JSON.stringify({ 
-            course: course,
-            unit: unit,
+        const finalData = { 
+            course: courseData,
+            unit: unitData,
             students: students,
             entries: entries,
-        })) };
+        };
+
+        return { success: true, data: serialize(finalData) };
 
     } catch (error) {
         console.error("Error fetching unit scale details:", error);
@@ -87,6 +131,10 @@ export async function getUnitScaleDetails(
     }
 }
 
+/**
+ * Manuel oluşturulmuş özel ölçeklerin detaylarını getirir.
+ * Ölçek ismindeki sınıf ve şube bilgisine göre öğrencileri filtreler.
+ */
 export async function getScaleDetails(scaleId: string): Promise<{ success: boolean; data?: ScaleDetails; error?: string }> {
     noStore();
     if (!scaleId) return { success: false, error: 'Ölçek ID\'si bulunamadı.' };
@@ -100,52 +148,58 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
         }
 
         const scaleData = scaleSnap.data();
-        const scale: EvaluationScale = {
-            id: scaleSnap.id,
-            ...scaleData,
-            createdAt: (scaleData.createdAt as Timestamp)?.toDate().toISOString()
-        } as EvaluationScale;
+        const scale = { id: scaleSnap.id, ...scaleData } as EvaluationScale;
         
         if (!scale.courseId) return { success: false, error: 'Ölçeğe bağlı ders bilgisi eksik.' };
-        const courseRef = doc(db, 'courses', scale.courseId);
-        const courseSnap = await getDoc(courseRef);
+        const courseSnap = await getDoc(doc(db, 'courses', scale.courseId));
         if (!courseSnap.exists()) return { success: false, error: 'Ölçeğe bağlı ders bulunamadı.' };
-
         const course = { id: courseSnap.id, ...courseSnap.data() } as Course;
         
-        const allGuestsQuery = query(collection(db, 'users'), where('role', '==', 'guest'));
-        const allGuestsSnapshot = await getDocs(allGuestsQuery);
-        let allGuests = allGuestsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+        // Tüm öğrencileri çek
+        const studentsQuery = query(collection(db, 'users'), where('role', 'in', ['student', 'guest']));
+        const studentsSnapshot = await getDocs(studentsQuery);
+        let students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
 
+        // Öğretmenin okuluna göre filtrele
         const teacherSnap = await getDoc(doc(db, 'users', scale.teacherId));
         if (teacherSnap.exists()) {
             const teacherData = teacherSnap.data() as UserProfile;
             if (teacherData.schoolName) {
-                allGuests = allGuests.filter(s => s.schoolName === teacherData.schoolName);
+                students = students.filter(s => s.schoolName === teacherData.schoolName);
+            }
+        }
+
+        // Ölçek ismindeki " (Sınıf - Şube)" bilgisini ayıkla ve öğrencileri filtrele
+        // Format: "Ölçek Adı (5 - A)"
+        const classMatch = scale.name.match(/\(([^)]+)\)/);
+        if (classMatch) {
+            const targetClassStr = classMatch[1]; // Örn: "5 - A" veya "5 - all"
+            if (targetClassStr.includes(' - all')) {
+                const baseClass = targetClassStr.split(' - ')[0];
+                students = students.filter(s => s.class?.startsWith(baseClass));
+            } else {
+                const poolClassName = `${targetClassStr} (Havuz)`;
+                students = students.filter(s => s.class === targetClassStr || s.class === poolClassName);
             }
         }
         
-        const entriesQuery = query(collection(db, `evaluationScales/${scaleId}/entries`));
-        const entriesSnapshot = await getDocs(entriesQuery);
+        const entriesSnapshot = await getDocs(collection(db, `evaluationScales/${scaleId}/entries`));
         const entries: { [studentId: string]: ScaleEntry } = {};
         entriesSnapshot.forEach(docSnap => {
             entries[docSnap.id] = docSnap.data() as ScaleEntry;
         });
 
-        return { success: true, data: JSON.parse(JSON.stringify({ 
+        const finalData = { 
             scale: scale, 
-            students: allGuests,
+            students: students,
             entries: entries,
             course: course,
-        })) };
+        };
+
+        return { success: true, data: serialize(finalData) };
 
     } catch (error: any) {
-        console.error("Error fetching assignment details:", error);
-         if (error.code === 'failed-precondition') {
-             const urlRegex = /(https?:\/\/[^\s]+)/g;
-             const url = error.message.match(urlRegex)?.[0] || '#';
-             return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${error.message}` };
-        }
+        console.error("Error fetching scale details:", error);
         return { success: false, error: 'Ölçek detayları alınırken bir hata oluştu.' };
     }
 }
