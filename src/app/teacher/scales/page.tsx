@@ -5,6 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 // UI Imports
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -56,7 +57,65 @@ const createScaleSchema = z.object({
 
 type CreateScaleFormValues = z.infer<typeof createScaleSchema>;
 
-// --- ŞABLON EDİTÖRÜ BİLEŞENİ ---
+// --- HATA BİLEŞENİ ---
+function ErrorWithLink({ message }: { message: string }) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = message.split(urlRegex);
+
+    return (
+        <Alert variant="destructive" className="whitespace-pre-wrap">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Hata!</AlertTitle>
+            <AlertDescription className="text-red-200">
+                {parts.map((part, index) => 
+                    urlRegex.test(part) ? 
+                    <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all">{part}</a> : 
+                    <span key={index}>{part}</span>
+                )}
+            </AlertDescription>
+        </Alert>
+    );
+}
+
+// --- ŞUBE BAŞARI SIRALAMASI KARTI ---
+function BranchLeaderboardCard({ branchScores, isLoading }: { branchScores: BranchScore[], isLoading: boolean }) {
+    return (
+        <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
+            <CardHeader className="bg-indigo-500/10 border-b border-white/5">
+                <CardTitle className="text-white flex items-center gap-2 text-lg">
+                    <Trophy className="h-5 w-5 text-yellow-400"/> Şube Başarı Ligi
+                </CardTitle>
+                <CardDescription className="text-slate-400 text-xs">Kontrol listesi bazlı genel şube başarıları.</CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+                {isLoading ? (
+                    <div className="p-8 flex justify-center"><Loader2 className="h-6 w-6 animate-spin text-indigo-400"/></div>
+                ) : branchScores.length > 0 ? (
+                    <div className="divide-y divide-white/5">
+                        {branchScores.map((branch, index) => (
+                            <div key={branch.branchName} className="p-4 flex items-center gap-4 hover:bg-white/5 transition-colors">
+                                <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-800 border border-white/10 text-xs font-black text-slate-400">
+                                    {index + 1}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex justify-between mb-1">
+                                        <span className="font-bold text-slate-200 text-sm truncate">{branch.branchName}</span>
+                                        <span className="font-black text-emerald-400 text-sm">%{branch.averageSuccess}</span>
+                                    </div>
+                                    <Progress value={branch.averageSuccess} className="h-1.5 bg-slate-800" indicatorClassName="bg-emerald-500" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="p-8 text-center text-slate-500 text-sm">Henüz veri toplanmadı.</p>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
+
+// --- ŞABLON EDİTÖRÜ DİYALOG BİLEŞENİ ---
 function TemplateManagerDialog({
     isOpen,
     onOpenChange,
