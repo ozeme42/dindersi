@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -6,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -143,6 +142,12 @@ export default function ScaleDetailPage() {
 
     // --- OTURUM MANTIĞI ---
     const [activeSessionId, setActiveSessionId] = useState<string>("1");
+
+    // --- ÖDEV ATA STATE'LERİ ---
+    const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+    const [assignmentTitle, setAssignmentTitle] = useState('');
+    const [assignmentDueDate, setAssignmentDueDate] = useState<Date | undefined>();
+    const [selectedStudentUids, setSelectedStudentUids] = useState<Set<string>>(new Set());
 
     const availableSessions = useMemo(() => {
         const sessions = new Set<string>();
