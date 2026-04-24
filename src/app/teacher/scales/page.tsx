@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -25,7 +26,8 @@ import { Badge } from '@/components/ui/badge';
 // Lucide Icons
 import { 
     Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
-    AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3, Home, UserCog
+    AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3, Home, UserCog,
+    Sparkles, ClipboardList
 } from 'lucide-react';
 
 // Firebase and Actions
@@ -34,6 +36,7 @@ import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/auth-context';
 import { createScale, getTeacherScales, deleteScale, getBranchScaleScores, type BranchScore } from './actions';
+import { SCALE_TEMPLATES } from '@/lib/scale-templates';
 
 // Types and Utils
 import type { EvaluationScale, SchoolClass, Course, Unit } from '@/lib/types';
@@ -47,6 +50,7 @@ type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 const createScaleSchema = z.object({
     name: z.string().min(3, { message: "Ölçek adı en az 3 karakter olmalıdır." }),
     type: z.enum(['tally', 'checklist', 'points']),
+    templateId: z.string().optional(),
 });
 
 type CreateScaleFormValues = z.infer<typeof createScaleSchema>;
@@ -54,61 +58,121 @@ type CreateScaleFormValues = z.infer<typeof createScaleSchema>;
 // --- BİLEŞENLER ---
 
 function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, selectedCourseId }: {
-    onSave: (data: Omit<CreateScaleFormValues, 'branch'> & { generatedName: string, courseId: string }) => void;
+    onSave: (data: Omit<CreateScaleFormValues, 'branch'> & { generatedName: string, courseId: string, columns: any[] }) => void;
     isSaving: boolean;
     selectedClass: SchoolClass | undefined;
     selectedBranch: string;
     selectedCourseId: string;
 }) {
-    const { handleSubmit, control, watch, formState: { errors }, reset } = useForm<CreateScaleFormValues>({
+    const { handleSubmit, control, watch, formState: { errors }, reset, setValue } = useForm<CreateScaleFormValues>({
         resolver: zodResolver(createScaleSchema),
         defaultValues: {
             name: '',
             type: 'tally',
+            templateId: 'none'
         }
     });
 
+    const selectedTemplateId = watch('templateId');
+
+    // Şablon seçildiğinde form alanlarını güncelle
+    useEffect(() => {
+        if (selectedTemplateId && selectedTemplateId !== 'none') {
+            const template = SCALE_TEMPLATES.find(t => t.id === selectedTemplateId);
+            if (template) {
+                setValue('name', template.name.split(' (')[0]);
+                setValue('type', template.type);
+            }
+        }
+    }, [selectedTemplateId, setValue]);
+
     const onSubmit = (data: CreateScaleFormValues) => {
         if (!selectedClass || !selectedCourseId) return;
+        
+        let finalColumns: any[] = [];
+        
+        // Eğer şablon seçildiyse sütunları oradan al
+        if (data.templateId && data.templateId !== 'none') {
+            const template = SCALE_TEMPLATES.find(t => t.id === data.templateId);
+            if (template) {
+                finalColumns = template.columns;
+            }
+        } else {
+            // Şablon seçilmediyse varsayılan bir sütun ekle
+            finalColumns = [{ id: `col_${Date.now()}`, name: 'Başlık 1', type: data.type === 'points' ? 'number' : 'status' }];
+        }
+
         const generatedName = `${data.name} (${selectedClass.name} - ${selectedBranch})`;
-        onSave({ ...data, generatedName, courseId: selectedCourseId });
+        onSave({ ...data, generatedName, courseId: selectedCourseId, columns: finalColumns });
         reset();
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-6 rounded-xl bg-slate-950/30 border border-white/5 shadow-inner">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <div className="space-y-4">
                 <div className="space-y-1">
-                    <Label htmlFor="scale-name" className="text-slate-300">Ölçek Adı</Label>
+                    <Label className="text-indigo-400 text-xs font-bold uppercase flex items-center gap-2">
+                        <Sparkles className="w-3 h-3"/> Hazır Şablon Seç (Önerilen)
+                    </Label>
                     <Controller
-                        name="name"
-                        control={control}
-                        render={({ field }) => <Input id="scale-name" {...field} placeholder="Örn: Namaz Çetelesi" className="bg-slate-900 border-white/10 text-white h-10" />}
-                    />
-                    {errors.name && <p className="text-xs text-red-400">{errors.name.message}</p>}
-                </div>
-                 <div className="space-y-1">
-                    <Label className="text-slate-300">Ölçek Tipi</Label>
-                    <Controller
-                        name="type"
+                        name="templateId"
                         control={control}
                         render={({ field }) => (
                             <Select onValueChange={field.onChange} value={field.value}>
-                                <SelectTrigger className="bg-slate-900 border-white/10 text-white h-10"><SelectValue/></SelectTrigger>
+                                <SelectTrigger className="bg-slate-900 border-white/10 text-white h-12">
+                                    <SelectValue placeholder="Bir şablon seçin veya kendiniz oluşturun" />
+                                </SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    <SelectItem value="tally">Çetele (+/-)</SelectItem>
-                                    <SelectItem value="checklist">Kontrol Listesi (Başarı Oranlı)</SelectItem>
-                                    <SelectItem value="points">Puanlı Ölçek (Sayısal Giriş)</SelectItem>
+                                    <SelectItem value="none">Şablon Kullanma (Boş Ölçek)</SelectItem>
+                                    {SCALE_TEMPLATES.map(t => (
+                                        <SelectItem key={t.id} value={t.id}>
+                                            <div className="flex flex-col text-left">
+                                                <span className="font-bold">{t.name}</span>
+                                                <span className="text-[10px] text-slate-500">{t.description}</span>
+                                            </div>
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         )}
                     />
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                        <Label htmlFor="scale-name" className="text-slate-300">Ölçek Adı</Label>
+                        <Controller
+                            name="name"
+                            control={control}
+                            render={({ field }) => <Input id="scale-name" {...field} placeholder="Örn: Namaz Çetelesi" className="bg-slate-900 border-white/10 text-white h-10" />}
+                        />
+                        {errors.name && <p className="text-xs text-red-400">{errors.name.message}</p>}
+                    </div>
+                     <div className="space-y-1">
+                        <Label className="text-slate-300">Ölçek Tipi</Label>
+                        <Controller
+                            name="type"
+                            control={control}
+                            render={({ field }) => (
+                                <Select onValueChange={field.onChange} value={field.value} disabled={selectedTemplateId !== 'none'}>
+                                    <SelectTrigger className="bg-slate-900 border-white/10 text-white h-10"><SelectValue/></SelectTrigger>
+                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                        <SelectItem value="tally">Çetele (+/-)</SelectItem>
+                                        <SelectItem value="checklist">Kontrol Listesi (Başarı Oranlı)</SelectItem>
+                                        <SelectItem value="points">Puanlı Ölçek (Sayısal Giriş)</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                    </div>
+                </div>
             </div>
-            <div className="flex justify-end">
-                <Button type="submit" disabled={isSaving || !selectedCourseId || !watch('name')} className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
+
+            <div className="flex justify-end pt-4 border-t border-white/5">
+                <Button type="submit" disabled={isSaving || !selectedCourseId || !watch('name')} className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20 px-8 h-11">
                     {isSaving && <Loader2 className="h-4 w-4 animate-spin mr-2"/>}
-                    <PlusCircle className="h-4 w-4 mr-2"/> Oluştur
+                    <Check className="h-4 w-4 mr-2"/> Ölçeği Hemen Oluştur
                 </Button>
             </div>
         </form>
@@ -291,7 +355,7 @@ export default function ScalesPage() {
         }
     };
     
-    const handleCreateScale = async (data: Omit<CreateScaleFormValues, 'branch'> & { generatedName: string, courseId: string }) => {
+    const handleCreateScale = async (data: Omit<CreateScaleFormValues, 'branch'> & { generatedName: string, courseId: string, columns: any[] }) => {
         if (!user) return;
         setIsSaving(true);
         
@@ -301,7 +365,7 @@ export default function ScalesPage() {
             teacherId: user.uid,
             classId: selectedClassId,
             courseId: data.courseId,
-            columns: [],
+            columns: data.columns || [],
         };
         
         const result = await createScale(dataToSave as any);
