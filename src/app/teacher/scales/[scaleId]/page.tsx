@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -6,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown, Palette, Minimize2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -152,7 +151,6 @@ export default function ScaleDetailPage() {
 
     const availableSessions = useMemo(() => {
         const sessions = new Set<string>();
-        // 1 her zaman olsun
         sessions.add("1");
         
         Object.values(entries).forEach(entry => {
@@ -225,7 +223,6 @@ export default function ScaleDetailPage() {
             return entry.history[activeSessionId];
         }
 
-        // İlk oturum için ve eski veri varsa fall-back
         if (activeSessionId === "1") {
             return {
                 plus: entry.plus,
@@ -351,29 +348,35 @@ export default function ScaleDetailPage() {
         const sessionKeys = Object.keys(entry.history);
         if (sessionKeys.length === 0) return null;
 
-        let totalPoints = 0;
-        let totalCount = 0;
+        let totalSumsAcrossSessions = 0;
+        let validSessionCount = 0;
 
         sessionKeys.forEach(key => {
             const data = entry.history![key];
             if (scale?.type === 'points' && data.values) {
-                const sessionValues = Object.values(data.values);
-                sessionValues.forEach(v => {
-                    totalPoints += v;
-                    totalCount++;
-                });
+                const sessionSum = Object.values(data.values).reduce((a, b) => a + (b || 0), 0);
+                if (sessionSum > 0 || Object.keys(data.values).length > 0) {
+                    totalSumsAcrossSessions += sessionSum;
+                    validSessionCount++;
+                }
             } else if (scale?.type === 'checklist' && data.statuses) {
                 const sessionStatuses = Object.values(data.statuses);
+                let sessionSuccessSum = 0;
+                let sessionGradedCount = 0;
                 sessionStatuses.forEach(s => {
-                    if (s === '+') totalPoints += 100;
-                    else if (s === 'o') totalPoints += 50;
-                    totalCount++;
+                    if (s === '+') sessionSuccessSum += 100;
+                    else if (s === 'o') sessionSuccessSum += 50;
+                    if (s !== null) sessionGradedCount++;
                 });
+                if (sessionGradedCount > 0) {
+                    totalSumsAcrossSessions += (sessionSuccessSum / sessionGradedCount);
+                    validSessionCount++;
+                }
             }
         });
 
-        if (totalCount === 0) return null;
-        return Math.round(totalPoints / totalCount);
+        if (validSessionCount === 0) return null;
+        return Math.round(totalSumsAcrossSessions / validSessionCount);
     }, [entries, scale?.type]);
 
     const classOverallAverage = useMemo(() => {
@@ -433,7 +436,6 @@ export default function ScaleDetailPage() {
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-             {/* Arka Plan */}
              <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
@@ -441,7 +443,6 @@ export default function ScaleDetailPage() {
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
-                {/* Aksiyon Barı */}
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                      <Button asChild variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl">
                         <Link href="/teacher/scales">
@@ -468,11 +469,10 @@ export default function ScaleDetailPage() {
                     </div>
                 </div>
                 
-                {/* Oturum Seçici Paneli */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <Card className="md:col-span-2 bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
                         <CardHeader className="pb-4">
-                            <CardTitle className="text-2xl font-black text-white">{scale.name.split('(')[0]?.trim() || 'Ölçek Başlığı'}</CardTitle>
+                            <CardTitle className="text-2xl font-black text-white">{scale.name.split(' (')[0]?.trim() || 'Ölçek Başlığı'}</CardTitle>
                             <CardDescription className="text-slate-400">
                                 <span className="font-bold text-sm">{course?.title} - {branch && `${course?.className} - ${branch}`}</span>
                             </CardDescription>
@@ -481,14 +481,13 @@ export default function ScaleDetailPage() {
                                 {classOverallAverage !== null && (
                                     <span className="flex items-center gap-2">
                                         <TrendingUp className="h-4 w-4 text-cyan-400"/>
-                                        Sınıf Ort: <Badge className={cn("text-white font-bold", getScoreColorClass(classOverallAverage))}>{classOverallAverage}%</Badge>
+                                        Sınıf Ortalaması: <Badge className={cn("text-white font-bold", getScoreColorClass(classOverallAverage))}>{classOverallAverage}{scale.type === 'checklist' ? '%' : ''}</Badge>
                                     </span>
                                 )}
                             </div>
                         </CardHeader>
                     </Card>
 
-                    {/* OTURUM SEÇİCİ */}
                     <Card className="bg-indigo-900/20 border border-indigo-500/30 shadow-xl p-4 flex flex-col">
                         <div className="flex items-center justify-between mb-3">
                             <Label className="text-xs font-black text-indigo-300 uppercase tracking-widest flex items-center gap-2">
@@ -525,7 +524,6 @@ export default function ScaleDetailPage() {
                     </Card>
                 </div>
                 
-                {/* Ana Tablo Kartı */}
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden rounded-[2rem]">
                     <CardHeader className="bg-slate-800/40 border-b border-white/5 py-3 px-6 flex flex-row items-center justify-between">
                          <div className="flex items-center gap-2">
@@ -556,7 +554,10 @@ export default function ScaleDetailPage() {
                                                 </>
                                             )}
 
-                                            <TableHead className="w-32 text-center text-emerald-400 font-black border-l border-white/10 bg-slate-800/50">GENEL ORTALAMA</TableHead>
+                                            <TableHead className="w-32 text-center text-emerald-400 font-black border-l border-white/10 bg-slate-800/50">
+                                                {scale.type === 'points' ? 'OTURUM TOPLAMI' : 'OTURUM BAŞARISI'}
+                                            </TableHead>
+                                            <TableHead className="w-32 text-center text-indigo-400 font-black border-l border-white/10">GENEL NOT</TableHead>
                                             <TableHead className="min-w-64 border-l border-white/5 text-slate-300">Notlar</TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -567,21 +568,25 @@ export default function ScaleDetailPage() {
                                             const sessionData = getStudentDataAtSession(student.uid) || {};
                                             const studentAvg = calculateStudentAverage(student.uid);
                                             
+                                            // Aktif oturum toplamı (Puanlı ölçek için)
+                                            const currentSessionTotal = scale.type === 'points' 
+                                                ? Object.values(sessionData.values || {}).reduce((a, b) => a + (b || 0), 0)
+                                                : null;
+
                                             return (
                                                 <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
                                                     
-                                                    {/* Öğrenci Adı */}
                                                     <TableCell className="sticky left-0 bg-slate-900/90 z-10 border-r border-white/5 group-hover:bg-slate-800/90 transition-colors">
                                                         <div className="flex items-center gap-3">
                                                             <UserAvatar user={student} className="h-9 w-9 border-2 border-slate-700 group-hover:border-purple-400" />
                                                             <div className="flex flex-col min-w-0">
                                                                 <span className="font-bold text-white truncate">{student.displayName}</span>
                                                                 <span className="text-[10px] text-slate-500 font-mono">{student.class}</span>
+                                                                {studentAvg !== null && <span className="text-[9px] font-black text-indigo-400 uppercase">Not: {studentAvg}</span>}
                                                             </div>
                                                         </div>
                                                     </TableCell>
                                                     
-                                                    {/* Dinamik Sütunlar (Points/Checklist) */}
                                                     {scale.type === 'checklist' && (
                                                         (scale.columns || []).map(col => (
                                                             <TableCell key={col.id} className="text-center bg-transparent border-r border-white/5">
@@ -608,7 +613,6 @@ export default function ScaleDetailPage() {
                                                         ))
                                                     )}
 
-                                                    {/* Çetele (Tally) */}
                                                     {scale.type === 'tally' && (
                                                         <>
                                                             <TableCell className="text-center bg-transparent border-x border-white/5">
@@ -628,13 +632,22 @@ export default function ScaleDetailPage() {
                                                         </>
                                                     )}
                                                     
-                                                    {/* GENEL ORTALAMA SÜTUNU */}
+                                                    {/* OTURUM TOPLAMI SÜTUNU */}
+                                                    <TableCell className="text-center bg-slate-950/30 border-l border-white/10 font-bold">
+                                                        {scale.type === 'points' ? (
+                                                            <span className="text-2xl font-black text-cyan-400 drop-shadow-sm">{currentSessionTotal}</span>
+                                                        ) : (
+                                                            <span className="text-slate-500">-</span>
+                                                        )}
+                                                    </TableCell>
+                                                    
+                                                    {/* GENEL NOT (ORTALAMA) SÜTUNU */}
                                                     <TableCell className="text-center bg-slate-900/50 border-l border-white/10 group-hover:bg-slate-800/80 transition-colors">
                                                         <div className="flex flex-col items-center">
-                                                            <span className={cn("text-xl font-black transition-colors", studentAvg !== null ? "text-emerald-400" : "text-slate-700")}>
-                                                                {studentAvg !== null ? `${studentAvg}%` : "-"}
+                                                            <span className={cn("text-2xl font-black transition-colors", studentAvg !== null ? "text-indigo-400" : "text-slate-700")}>
+                                                                {studentAvg !== null ? studentAvg : "-"}
                                                             </span>
-                                                            {studentAvg !== null && (
+                                                            {studentAvg !== null && scale.type === 'checklist' && (
                                                                 <div className="w-16 h-1 bg-slate-800 rounded-full mt-1 overflow-hidden">
                                                                     <div className={cn("h-full transition-all", getScoreColorClass(studentAvg))} style={{ width: `${studentAvg}%` }} />
                                                                 </div>
@@ -642,7 +655,6 @@ export default function ScaleDetailPage() {
                                                         </div>
                                                     </TableCell>
                                                     
-                                                    {/* Not Alanı */}
                                                     <TableCell className="min-w-64">
                                                         <Input 
                                                             type="text" 
@@ -665,7 +677,6 @@ export default function ScaleDetailPage() {
                 </Card>
             </div>
             
-            {/* Sütun Düzenleyici Modal */}
             <ColumnEditorDialog
                 isOpen={isColumnEditorOpen}
                 onOpenChange={setIsColumnEditorOpen}
@@ -675,7 +686,6 @@ export default function ScaleDetailPage() {
                 isSaving={isSaving}
             />
 
-            {/* Ödev Ata Dialogu */}
             <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
                 <DialogContent className="max-w-2xl bg-slate-900 border-white/10 text-white">
                     <DialogHeader>
