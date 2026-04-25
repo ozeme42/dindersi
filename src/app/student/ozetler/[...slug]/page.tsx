@@ -1,68 +1,26 @@
-
 'use client';
 
 import { Suspense, useEffect, useState, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { Loader2, ArrowLeft, LayoutTemplate } from 'lucide-react';
+import { Loader2, ArrowLeft, LayoutTemplate, BookOpen, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
-
-async function getContent(slug: string[]): Promise<{ title: string, htmlContent: string } | null> {
-    if (!slug || slug.length === 0) return null;
-    const contentId = slug[slug.length - 1]; // Use the last segment of the slug as the ID
-    
-    try {
-        const res = await fetch(`/curriculum/ozetler/${contentId}.html`);
-        if (!res.ok) {
-            return null;
-        }
-        const htmlContent = await res.text();
-        
-        // Fetch title from manifest
-        const manifestRes = await fetch('/curriculum/manifest.json');
-        if (!manifestRes.ok) throw new Error('Manifest not found');
-        const manifest = await manifestRes.json();
-        
-        let title = '';
-        for (const group of manifest.classGroups) {
-            for (const course of group.courses) {
-                for (const unit of course.units) {
-                    if (unit.id === contentId) {
-                        title = unit.title;
-                        break;
-                    }
-                    if (slug.length > 2) { // Topic has more segments
-                        const topic = unit.topics.find((t: any) => t.id === contentId);
-                        if (topic) {
-                            title = topic.title;
-                            break;
-                        }
-                    }
-                }
-                if(title) break;
-            }
-            if(title) break;
-        }
-
-        return { title: title || 'Özet', htmlContent };
-    } catch (e) {
-        console.error("Error fetching static content:", e);
-        return null;
-    }
-}
-
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 function OzetDisplayPage() {
     const params = useParams();
     const slug = params.slug as string[];
+    const [courseId, unitId, topicId] = slug || [];
 
-    const [content, setContent] = useState<{title: string, htmlContent: string} | null>(null);
+    const [content, setContent] = useState<{title: string, htmlContent: string, courseName: string} | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1.0);
     
     const backUrl = `/student/ozetler`;
 
@@ -75,24 +33,54 @@ function OzetDisplayPage() {
     }, []);
 
     useEffect(() => {
-        if (!slug) {
+        if (!courseId || !unitId) {
             setError("Geçersiz URL.");
             setIsLoading(false);
             return;
         }
 
-        const fetchUnit = async () => {
+        const fetchData = async () => {
             setIsLoading(true);
-            const fetchedContent = await getContent(slug);
-            if (fetchedContent) {
-                setContent(fetchedContent);
-            } else {
-                setError('Bu içerik için interaktif özet bulunamadı.');
+            try {
+                const docRef = topicId 
+                    ? doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId)
+                    : doc(db, 'courses', courseId, 'units', unitId);
+                
+                const [docSnap, courseSnap] = await Promise.all([
+                    getDoc(docRef),
+                    getDoc(doc(db, 'courses', courseId))
+                ]);
+
+                if (!docSnap.exists()) {
+                    setError("İçerik bulunamadı.");
+                    setIsLoading(false);
+                    return;
+                }
+
+                const data = docSnap.data();
+                const courseData = courseSnap.data();
+
+                if (!data.htmlContent) {
+                    setError("Bu konu için interaktif özet içeriği henüz eklenmemiş.");
+                    setIsLoading(false);
+                    return;
+                }
+
+                setContent({ 
+                    title: data.title, 
+                    htmlContent: data.htmlContent, 
+                    courseName: courseData?.title || 'Ders' 
+                });
+
+            } catch (e: any) {
+                console.error(e);
+                setError("Veri çekilirken bir hata oluştu.");
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false);
         };
-        fetchUnit();
-    }, [slug]);
+        fetchData();
+    }, [courseId, unitId, topicId]);
     
     if (isLoading) {
         return (
@@ -102,7 +90,7 @@ function OzetDisplayPage() {
         );
     }
     
-    if (error || !content || !content.htmlContent) {
+    if (error || !content) {
         return (
             <div className="min-h-screen bg-slate-800 flex flex-col items-center justify-center p-8 text-center">
                 <div className="bg-slate-700 p-8 rounded-3xl border border-red-400/30 max-w-md w-full backdrop-blur-sm shadow-xl">
@@ -149,8 +137,15 @@ function OzetDisplayPage() {
                                 {content?.title || 'Özet'}
                             </h1>
                         </div>
-                        <div className="flex items-center gap-2 [&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/50 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
-                             <FullscreenToggle elementRef={mainContentRef} />
+                        <div className="flex items-center gap-2">
+                             <div className="flex items-center bg-slate-800/50 rounded-lg p-1 border border-white/10 mr-2">
+                                <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-8 w-8 text-white hover:bg-white/10 rounded-md"><Minus className="h-4 w-4"/></Button>
+                                <span className="text-[10px] font-bold text-slate-300 w-10 text-center">ZOOM</span>
+                                <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 text-white hover:bg-white/10 rounded-md"><Plus className="h-4 w-4"/></Button>
+                            </div>
+                            <div className="[&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/50 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
+                                <FullscreenToggle elementRef={mainContentRef} />
+                            </div>
                         </div>
                     </div>
                  </div>
@@ -182,7 +177,7 @@ function OzetDisplayPage() {
                         </div>
                     )}
                     <iframe
-                        srcDoc={content.htmlContent}
+                        srcDoc={content.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; font-family: sans-serif; }</style>`}
                         className="w-full flex-grow border-0 bg-white"
                         title={content.title}
                         sandbox="allow-scripts allow-same-origin"
@@ -192,7 +187,6 @@ function OzetDisplayPage() {
         </div>
     );
 }
-
 
 export default function Page() {
     return (

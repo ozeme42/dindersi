@@ -1,41 +1,14 @@
-
 'use client';
 
 import { Suspense, useEffect, useState, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { Loader2, ArrowLeft, LayoutTemplate, BookOpen } from 'lucide-react';
+import { Loader2, ArrowLeft, BookOpen, Plus, Minus } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { Unit, Topic } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-
-async function getContent(courseId: string, unitId: string, topicId?: string): Promise<{ title: string, htmlContent: string } | null> {
-    try {
-        let docRef;
-        if (topicId) {
-            docRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-        } else {
-            docRef = doc(db, 'courses', courseId, 'units', unitId);
-        }
-        
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            if (data.htmlContent) {
-                return { title: data.title, htmlContent: data.htmlContent };
-            }
-        }
-        return null;
-    } catch (e) {
-        console.error("Error fetching content:", e);
-        return null;
-    }
-}
-
 
 function OzetDisplayPage() {
     const params = useParams();
@@ -46,6 +19,7 @@ function OzetDisplayPage() {
     const [error, setError] = useState<string | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1.0);
     
     const backUrl = `/teacher/smartboard/ozetler?courseId=${courseId}`;
 
@@ -64,35 +38,57 @@ function OzetDisplayPage() {
             return;
         }
 
-        const fetchUnit = async () => {
+        const fetchData = async () => {
             setIsLoading(true);
-            const fetchedContent = await getContent(courseId, unitId, topicId || undefined);
-            if (fetchedContent) {
-                setContent(fetchedContent);
-            } else {
-                setError('Bu içerik için interaktif özet bulunamadı.');
+            try {
+                const docRef = topicId 
+                    ? doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId)
+                    : doc(db, 'courses', courseId, 'units', unitId);
+                
+                const docSnap = await getDoc(docRef);
+
+                if (!docSnap.exists()) {
+                    setError("İçerik bulunamadı.");
+                    setIsLoading(false);
+                    return;
+                }
+
+                const data = docSnap.data();
+
+                if (!data.htmlContent) {
+                    setError("Bu içerik için interaktif özet henüz eklenmemiş.");
+                    setIsLoading(false);
+                    return;
+                }
+
+                setContent({ title: data.title, htmlContent: data.htmlContent });
+
+            } catch (e: any) {
+                console.error(e);
+                setError("Veri çekilirken bir hata oluştu.");
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false);
         };
 
-        fetchUnit();
+        fetchData();
     }, [courseId, unitId, topicId]);
     
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-slate-800 flex justify-center items-center">
-                <Loader2 className="h-12 w-12 animate-spin text-cyan-400"/>
+            <div className="flex justify-center items-center h-screen bg-slate-950">
+                <Loader2 className="h-12 w-12 animate-spin text-rose-500"/>
             </div>
         );
     }
     
     if (error || !content) {
         return (
-            <div className="min-h-screen bg-slate-800 flex flex-col items-center justify-center p-8 text-center">
-                <div className="bg-slate-700 p-8 rounded-3xl border border-red-400/30 max-w-md w-full backdrop-blur-sm shadow-xl">
-                    <p className="text-red-300 mb-6 font-medium text-lg">{error || "Bu içerik bulunamadı."}</p>
-                    <Button asChild className="bg-white text-slate-900 hover:bg-slate-200 border-0 w-full font-bold">
-                        <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
+            <div className="flex h-screen items-center justify-center text-center p-8 bg-slate-950 text-white font-sans">
+                <div className="bg-slate-900 p-8 rounded-3xl border border-red-500/20 max-w-md w-full shadow-2xl">
+                    <p className="text-red-400 text-xl mb-8 font-bold">{error || "Bu içerik bulunamadı."}</p>
+                    <Button asChild size="lg" className="w-full bg-slate-800 hover:bg-slate-700">
+                        <Link href={backUrl}><ArrowLeft className="mr-2 h-5 w-5"/> Geri Dön</Link>
                     </Button>
                 </div>
             </div>
@@ -132,12 +128,22 @@ function OzetDisplayPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" asChild size="sm" className="hidden md:flex border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-9">
-                        <Link href={`/teacher/content-creation/edit-unit/${unitId}?courseId=${courseId}`}>
-                             Düzenle
-                        </Link>
-                    </Button>
+                     <div className="flex items-center bg-slate-800/80 rounded-lg p-1 border border-white/10 mr-2">
+                        <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-8 w-8 text-white hover:bg-white/10 rounded-md"><Minus className="h-4 w-4"/></Button>
+                        <span className="text-[10px] font-bold text-slate-400 w-10 text-center">ZOOM</span>
+                        <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 text-white hover:bg-white/10 rounded-md"><Plus className="h-4 w-4"/></Button>
+                    </div>
+                    
+                    {!isFullscreen && (
+                        <Button variant="outline" asChild size="sm" className="hidden md:flex border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-9">
+                            <Link href={`/teacher/content-creation/edit?courseId=${courseId}&unitId=${unitId}&topicId=${topicId}`}>
+                                Düzenle
+                            </Link>
+                        </Button>
+                    )}
+
                     <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 text-slate-300 hover:text-white border-0 h-9 w-9 rounded-lg" />
+                    
                     {!isFullscreen && (
                         <Button variant="ghost" asChild size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-lg h-9 w-9">
                             <Link href={backUrl}><ArrowLeft className="h-5 w-5"/></Link>
@@ -152,7 +158,7 @@ function OzetDisplayPage() {
                     isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl bg-white ring-1 ring-white/10"
                 )}>
                     <iframe
-                        srcDoc={content.htmlContent}
+                        srcDoc={content.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; font-family: sans-serif; }</style>`}
                         className="w-full h-full border-0 block bg-white"
                         title={content.title}
                         sandbox="allow-scripts allow-same-origin"
