@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { PageContent, type PublicClass } from './page-content';
+import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -15,16 +16,21 @@ export default function Home() {
     if (loading) {
       return;
     }
-    if (!user) {
+    
+    // Her durumda canlı veritabanından çek (isStatic: false)
+    // dataType: 'ozetler' seçerek içeriği olan (htmlContent veya yazılacaklar) konuları getirmesini sağlıyoruz
+    if (!user || process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
       setDataLoading(true);
-      fetch('/curriculum/manifest.json')
-        .then(res => res.json())
-        .then(data => {
-          setClassGroups(data.classGroups || []);
+      getCurriculumForSelection('ozetler', false)
+        .then(res => {
+          if (res.classGroups) {
+            // Transform internal ClassGroup to PublicClass structure expected by PageContent
+            setClassGroups(res.classGroups as any);
+          }
           setDataLoading(false);
         })
         .catch(err => {
-          console.error("Failed to fetch public curriculum manifest:", err);
+          console.error("Failed to fetch curriculum from DB:", err);
           setDataLoading(false);
         });
     } else {

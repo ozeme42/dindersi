@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
@@ -12,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
 
 export function YazilacaklarDisplayPage() {
     const params = useParams();
@@ -47,12 +47,12 @@ export function YazilacaklarDisplayPage() {
         setIsLoading(true);
         setError(null);
         try {
-            const manifestRes = await fetch('/curriculum/manifest.json');
-            if (!manifestRes.ok) throw new Error('Manifest yüklenemedi');
-            const manifestData = await manifestRes.json();
+            // Canlı veritabanından hiyerarşiyi çek
+            const { classGroups, error: fetchError } = await getCurriculumForSelection('yazilacaklar', false);
+            if (fetchError) throw new Error(fetchError);
             
             let foundTopic = null;
-            for (const group of manifestData.classGroups) {
+            for (const group of classGroups) {
                 for (const course of group.courses) {
                     for (const unit of course.units) {
                         const topic = unit.topics.find((t: any) => t.id === topicId);
@@ -70,6 +70,7 @@ export function YazilacaklarDisplayPage() {
                 setTopicTitle((foundTopic as any).title);
             }
 
+            // Statik JSON dosyasından veriyi çek (Detaylı veri dosyada tutulmaya devam edebilir)
             const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
             if (!res.ok) {
                 throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı.');

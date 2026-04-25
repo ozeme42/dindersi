@@ -2,427 +2,369 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dinin Mimarimize Etkisi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>5.1 Dinin Mimarimize Etkisi</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Raleway:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Raleway', sans-serif;
-            background-color: #f0fdfa; /* Teal-50 */
-            color: #115e59; /* Teal-900 */
-        }
-        .art-font {
-            font-family: 'Aref Ruqaa', serif;
-        }
-        .pattern-bg {
-            background-color: #134e4a;
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232dd4bf' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(20, 184, 166, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-        }
-        .tile-card {
-            transition: all 0.4s ease;
-            cursor: pointer;
-        }
-        .tile-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        /* Motif decoration */
-        .motif-border {
-            position: relative;
-        }
-        .motif-border::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 3px;
-            background: #0d9488;
-            border-radius: 2px;
-        }
-        .fade-in { animation: fadeIn 0.6s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Nunito:wght@400;600;700&display=swap');
+        html { font-size: 100%; transition: font-size 0.3s ease; }
+        body { font-family: 'Nunito', sans-serif; overflow: hidden; margin: 0; padding: 0; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0f172a; color: #f8fafc; }
+        .title-font { font-family: 'Cinzel', serif; }
+        
+        .slide { display: none; opacity: 0; height: 100%; width: 100%; padding: 0.5rem; flex-direction: column; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 10; }
+        .slide.active { display: flex; opacity: 1; z-index: 20; animation: fadeUp 0.6s forwards; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .presentation-card { background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6); border-radius: 1.5rem; width: 98vw; height: 96dvh; display: flex; flex-direction: column; position: relative; margin: auto; overflow: hidden; }
+        .card-header { background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #fbbf24; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;}
+        .card-body { flex-grow: 1; padding: 1rem 2rem; display: flex; flex-direction: column; justify-content: center; overflow-y: auto;}
+
+        .info-box { background: rgba(15, 23, 42, 0.5); border-radius: 1rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.3s; }
+        .info-box.green { border-bottom: 3px solid #10b981; } .info-box.orange { border-bottom: 3px solid #f59e0b; } .info-box.blue { border-bottom: 3px solid #3b82f6; } .info-box.teal { border-bottom: 3px solid #14b8a6; } .info-box.purple { border-bottom: 3px solid #8b5cf6; }
+        .highlight-dark { background: rgba(251, 191, 36, 0.15); color: #fcd34d; padding: 0.1rem 0.4rem; border-radius: 0.3rem; font-weight: 700; }
+
+        /* YÜZEN ARAÇ ÇUBUĞU */
+        .toolbar-pill { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); z-index: 9999; background: rgba(15, 23, 42, 0.85); border-radius: 9999px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; padding: 0.4rem; gap: 0.5rem; transition: all 0.3s ease; }
+        .toolbar-pill.collapsed { width: 3.8rem; height: 3.8rem; padding: 0; justify-content: center; border-radius: 50%; }
+        .drag-handle { cursor: grab; color: #94a3b8; padding: 0.5rem 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .toolbar-content { display: flex; align-items: center; gap: 0.8rem; overflow: hidden; transition: all 0.3s ease; white-space: nowrap; }
+        .toolbar-pill.collapsed .toolbar-content, .toolbar-pill.collapsed .drag-handle { display: none; }
+        .nav-btn { background: rgba(255,255,255,0.1); color: #fbbf24; border: 1px solid rgba(255,255,255,0.1); width: 2.8rem; height: 2.8rem; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .nav-btn:hover { background: rgba(251, 191, 36, 0.2); transform: scale(1.1); }
+        .nav-btn:disabled { background: transparent; color: #475569; border-color: transparent; cursor: not-allowed;}
+        .zoom-btn { background: transparent; color: #94a3b8; border: none; width: 2.4rem; height: 2.4rem; font-size: 1.1rem; cursor: pointer;}
+        .minimize-btn { background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 1.2rem; width: 3rem; height: 3rem; }
+
+        /* DEFTER */
+        .notebook-paper { background-color: #1e293b; background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 3rem; line-height: 3rem; padding: 1rem 2rem 1rem 4rem; border-left: 4px solid #ef4444; color: #f8fafc; font-size: clamp(1.2rem, 3vw, 2.2rem); font-weight: bold; position: relative; overflow-y: auto; width: 100%; height: 100%; }
+        .notebook-paper::before { content: ''; position: absolute; top: 0; bottom: 0; left: 2.5rem; width: 2px; background-color: rgba(239, 68, 68, 0.4); }
+
+        /* OYUNLAR */
+        .letter-box { width: clamp(35px, 8vw, 55px); height: clamp(45px, 10vw, 70px); border: 2px solid rgba(255,255,255,0.2); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: bold; color: #fbbf24; background: rgba(15,23,42,0.6); margin: 2px;}
+        .letter-box.missing { border-style: dashed; border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); color: transparent; cursor: pointer; }
+        .letter-box.missing.revealed { border-style: solid; color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .match-btn { background: rgba(30,41,59,0.7); border: 2px solid rgba(255,255,255,0.1); border-radius: 0.8rem; padding: 1rem; font-size: clamp(0.9rem, 2vw, 1.2rem); font-weight: bold; color: #e2e8f0; cursor: pointer; text-align: left; width: 100%; transition: all 0.2s;}
+        .match-btn.selected { border-color: #fbbf24; color: #fcd34d; transform: scale(1.02); }
+        .match-btn.correct { border-color: #10b981; color: #6ee7b7; cursor: default; }
+        .match-btn.wrong { animation: shake 0.4s; border-color: #ef4444; }
+        .flip-card { background: transparent; width: 100%; height: 160px; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; border-radius: 1rem; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 1rem; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.2); padding: 1rem;}
+        .flip-card-front { background: rgba(30,41,59,0.8); color: #cbd5e1; }
+        .flip-card-back { background: rgba(217,119,6,0.9); color: white; transform: rotateY(180deg); }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .confetti { position: absolute; width: 10px; height: 10px; opacity: 0; z-index: 100; pointer-events: none;}
+
+        /* MOBİL UYUMLULUK SİHİRBAZI */
+        @media (max-width: 768px) {
+            .presentation-card { border-radius: 0; width: 100vw; height: 100dvh; border: none; }
+            .card-header { flex-direction: column; text-align: center; padding: 0.8rem; gap: 0.5rem; }
+            .card-header h2 { font-size: 1.4rem !important; }
+            .card-body { padding: 0.5rem; }
+            .info-box { padding: 1rem; margin-bottom: 0.5rem; }
+            .toolbar-pill { width: 95%; max-width: 400px; padding: 0.3rem; gap: 0.3rem; justify-content: space-around; bottom: 0.5rem; flex-wrap: wrap;}
+            .toolbar-content { gap: 0.3rem; flex-wrap: wrap; justify-content: center; }
+            .nav-btn { width: 2.4rem; height: 2.4rem; font-size: 1rem; }
+            .zoom-btn { width: 2rem; height: 2rem; font-size: 1rem; }
+            .notebook-paper { padding: 1rem 0.5rem 1rem 2rem; font-size: 1.1rem !important; line-height: 1.8rem !important; background-size: 100% 1.8rem !important; }
+            .notebook-paper::before { left: 1.2rem; }
+            .flip-card { height: 120px; }
+            .flip-card-front p { font-size: 1rem !important; }
+            .flip-card-back p { font-size: 1.5rem !important; }
         }
     </style>
 </head>
 <body>
-
-    <!-- Header -->
-    <header class="pattern-bg text-white py-16 px-4 text-center rounded-b-[50px] shadow-2xl relative overflow-hidden mb-12">
-        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-[#134e4a]/80"></div>
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <span class="bg-teal-500/20 border border-teal-400/30 text-teal-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">5. Ünite</span>
-            <h1 class="text-5xl md:text-7xl art-font mb-4 tracking-wide">Sanat ve Mimari</h1>
-            <p class="text-xl text-teal-100 font-light max-w-2xl mx-auto">
-                "Din kültürün özü, kültür ise dinin somut yansımasıdır."
-            </p>
+    <div id="slides-container" class="relative w-full h-full z-10">
+        <!-- Kapak (Slayt 0) -->
+        <div class="slide active" id="slide-0">
+            <div class="presentation-card justify-center items-center text-center p-8 border-none">
+                <i class="fas fa-seedling text-7xl md:text-8xl text-amber-400 mb-6 drop-shadow-2xl"></i>
+                <h2 class="text-xl md:text-3xl tracking-widest text-slate-300 mb-3 uppercase font-bold title-font">5.1. Konu</h2>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white title-font px-4">Dinin Mimarimize Etkisi</h1>
+                <button onclick="changeSlide(1)" class="mt-8 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 px-8 py-3 rounded-full text-xl md:text-2xl font-bold hover:scale-105 transition"><i class="fas fa-play mr-2"></i> Başla</button>
+            </div>
         </div>
-    </header>
 
-    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
-
-        <!-- BÖLÜM 1: KÜLTÜR VE DİN (Giriş) -->
-        <section class="text-center fade-in">
-            <h2 class="text-3xl font-bold text-[#134e4a] mb-8 motif-border pb-4 inline-block">Kültür ve Dinin Uyumu</h2>
-            
-            <div class="grid md:grid-cols-2 gap-8 items-center bg-white p-8 rounded-3xl shadow-lg border border-teal-100">
-                <div class="text-left space-y-4">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-teal-100 p-3 rounded-full text-teal-700 text-xl"><i class="fas fa-city"></i></div>
-                        <div>
-                            <h3 class="font-bold text-lg text-teal-900">Şehir ve İmar</h3>
-                            <p class="text-gray-600 text-sm">İnsan yaşadığı yeri sadece barınmak için değil, inancına göre şekillendirmek için imar eder.</p>
+        <!-- KONU 1 (Slayt 1) -->
+        <div class="slide" id="slide-1">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-archway text-amber-400 mr-3"></i>Din ve Kültür İlişkisi</h2></div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                        <div class="info-box green justify-start w-full">
+                            <i class="fas fa-city text-4xl md:text-5xl mb-4 text-emerald-400"></i>
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2">Kültür ve Mimari</h3>
+                            <ul class="text-base md:text-xl text-left space-y-3">
+                                <li><i class="fas fa-check text-emerald-400 mr-2"></i> <span class="highlight-dark">Kültür:</span> Toplumun birikimleridir.</li>
+                                <li><i class="fas fa-check text-emerald-400 mr-2"></i> <span class="highlight-dark">Mimari:</span> İnançla birleşen yapım sanatıdır.</li>
+                            </ul>
                         </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <div class="bg-teal-100 p-3 rounded-full text-teal-700 text-xl"><i class="fas fa-fingerprint"></i></div>
-                        <div>
-                            <h3 class="font-bold text-lg text-teal-900">Kültürel Miras</h3>
-                            <p class="text-gray-600 text-sm">Nesilden nesile aktarılan maddi ve manevi değerler bütünüdür.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <div class="bg-teal-100 p-3 rounded-full text-teal-700 text-xl"><i class="fas fa-praying-hands"></i></div>
-                        <div>
-                            <h3 class="font-bold text-lg text-teal-900">Dinin Etkisi</h3>
-                            <p class="text-gray-600 text-sm">Namaz ibadeti camileri, temizlik emri şadırvanları, ilim emri medreseleri ortaya çıkarmıştır.</p>
+                        <div class="info-box orange justify-start w-full">
+                            <i class="fas fa-link text-4xl md:text-5xl mb-4 text-orange-400"></i>
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2">Etle Tırnak Gibi</h3>
+                            <ul class="text-base md:text-xl text-left space-y-3">
+                                <li><i class="fas fa-tint text-orange-400 mr-2"></i> Din ve kültür <span class="highlight-dark">iç içedir.</span></li>
+                                <li><i class="fas fa-star text-orange-400 mr-2"></i> Din kültürün özü, kültür dinin <span class="font-bold text-white">somut yansımasıdır.</span></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="relative h-64 rounded-2xl overflow-hidden shadow-inner bg-teal-900 flex items-center justify-center text-teal-100 p-6 text-center italic">
-                    "Su ile şekerin karışması gibi, din ve kültür iç içe geçmiştir."
-                    <i class="fas fa-mosque absolute bottom-[-20px] right-[-20px] text-9xl opacity-10"></i>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK 1 (Slayt 2) -->
+        <div class="slide" id="slide-2">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-font text-amber-400 mr-3"></i>Etkinlik 1: Eksik Harfleri Bul</h2></div>
+                <div class="card-body flex flex-col items-center justify-center">
+                    <p class="text-amber-200 mb-4 font-bold bg-slate-800 p-2 rounded-xl text-sm md:text-xl text-center shadow-lg"><i class="fas fa-hand-pointer mr-2"></i>Kesik çizgili kutulara dokunarak kelimeyi tamamla!</p>
+                    <div id="word-puzzle-container" class="flex flex-col gap-3 md:gap-4 items-center w-full max-w-4xl px-2"></div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- BÖLÜM 2: MİMARİ ESERLER (İnteraktif Grid) -->
-        <section class="fade-in" style="animation-delay: 0.2s;">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-[#134e4a] mb-2 art-font">İslam Şehrini Keşfet</h2>
-                <p class="text-teal-600">Kartlara tıklayarak yapıların işlevlerini öğren.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Cami -->
-                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-teal-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-mosque text-6xl text-teal-800"></i></div>
-                    <h3 class="text-xl font-bold text-teal-800 mb-2">CAMİ & MESCİT</h3>
-                    <p class="text-sm text-gray-500 italic">Şehrin Merkezi</p>
-                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
-                        Müslümanların ibadet ettiği, toplandığı, şehrin merkezinde yer alan ana yapıdır.
-                    </div>
-                    <button class="mt-4 text-xs font-bold text-teal-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
-                </div>
-
-                <!-- Medrese -->
-                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-blue-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-university text-6xl text-blue-800"></i></div>
-                    <h3 class="text-xl font-bold text-blue-800 mb-2">MEDRESE</h3>
-                    <p class="text-sm text-gray-500 italic">İlim Yuvası</p>
-                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
-                        Dinî ilimlerin yanında fen ve sosyal bilimlerin okutulduğu eğitim kurumlarıdır.
-                    </div>
-                    <button class="mt-4 text-xs font-bold text-blue-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
-                </div>
-
-                <!-- Kervansaray -->
-                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-amber-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-hotel text-6xl text-amber-800"></i></div>
-                    <h3 class="text-xl font-bold text-amber-800 mb-2">KERVANSARAY</h3>
-                    <p class="text-sm text-gray-500 italic">Yolcu Durağı</p>
-                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
-                        Yolcuların konakladığı, dinlendiği, yeme-içme ihtiyaçlarının ücretsiz karşılandığı yapılar.
-                    </div>
-                    <button class="mt-4 text-xs font-bold text-amber-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
-                </div>
-
-                <!-- Külliye -->
-                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-purple-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-layer-group text-6xl text-purple-800"></i></div>
-                    <h3 class="text-xl font-bold text-purple-800 mb-2">KÜLLİYE</h3>
-                    <p class="text-sm text-gray-500 italic">Yapılar Topluluğu</p>
-                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
-                        Merkezinde cami olan; çevresinde medrese, imarethane (aşevi), şifahane bulunan kompleks.
-                    </div>
-                    <button class="mt-4 text-xs font-bold text-purple-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
-                </div>
-
-                <!-- Darüşşifa -->
-                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-rose-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-heartbeat text-6xl text-rose-800"></i></div>
-                    <h3 class="text-xl font-bold text-rose-800 mb-2">ŞİFAHANE</h3>
-                    <p class="text-sm text-gray-500 italic">Sağlık Merkezi</p>
-                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
-                        Hastaların tedavi edildiği hastanelerdir. (Örn: II. Bayezid Darüşşifası).
-                    </div>
-                    <button class="mt-4 text-xs font-bold text-rose-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
-                </div>
-
-                <!-- Sebil/Çeşme -->
-                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-cyan-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-tint text-6xl text-cyan-800"></i></div>
-                    <h3 class="text-xl font-bold text-cyan-800 mb-2">SEBİL & ÇEŞME</h3>
-                    <p class="text-sm text-gray-500 italic">Su Hayattır</p>
-                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
-                        İnsanların ve hayvanların su ihtiyacını karşılamak için yapılan estetik su yapılarıdır.
-                    </div>
-                    <button class="mt-4 text-xs font-bold text-cyan-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 3: İSLAM SANATLARI (Görsel Galeri) -->
-        <section class="bg-[#111827] rounded-3xl p-10 text-white shadow-2xl fade-in relative overflow-hidden" style="animation-delay: 0.4s;">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500 rounded-full blur-3xl opacity-10 -mr-16 -mt-16 pointer-events-none"></div>
-            
-            <div class="text-center mb-10 relative z-10">
-                <h2 class="text-3xl font-bold mb-2 art-font text-teal-400">Estetik ve Zarafet: İslam Sanatları</h2>
-                <p class="text-gray-400">Yapıları süsleyen ince ruhlu sanatlar.</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8 relative z-10">
-                
-                <!-- Hüsnühat -->
-                <div class="flex gap-4 items-start bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-teal-500 transition">
-                    <div class="bg-white text-black w-12 h-12 flex items-center justify-center rounded font-serif font-bold text-2xl">ه</div>
-                    <div>
-                        <h4 class="text-xl font-bold text-teal-300">Hüsnühat (Hat)</h4>
-                        <p class="text-sm text-gray-300 mt-1">Arap harflerinin estetik ölçülerle güzel yazılması sanatıdır. Camilerin içini ayetlerle süsler.</p>
-                    </div>
-                </div>
-
-                <!-- Tezhip -->
-                <div class="flex gap-4 items-start bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-teal-500 transition">
-                    <div class="bg-amber-400 text-black w-12 h-12 flex items-center justify-center rounded text-2xl"><i class="fas fa-star"></i></div>
-                    <div>
-                        <h4 class="text-xl font-bold text-amber-300">Tezhip</h4>
-                        <p class="text-sm text-gray-300 mt-1">Altınlama demektir. Kitap kenarlarının, levhaların altın ve boya ile desen desen süslenmesidir.</p>
-                    </div>
-                </div>
-
-                <!-- Çini -->
-                <div class="flex gap-4 items-start bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-teal-500 transition">
-                    <div class="bg-blue-600 text-white w-12 h-12 flex items-center justify-center rounded text-2xl"><i class="fas fa-shapes"></i></div>
-                    <div>
-                        <h4 class="text-xl font-bold text-blue-300">Çini</h4>
-                        <p class="text-sm text-gray-300 mt-1">Seramik ve porselenlerin geometrik veya çiçek motifleriyle süslenip fırınlanmasıdır. Mavi tonları hakimdir.</p>
-                    </div>
-                </div>
-
-                <!-- Minyatür -->
-                <div class="flex gap-4 items-start bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-teal-500 transition">
-                    <div class="bg-rose-500 text-white w-12 h-12 flex items-center justify-center rounded text-2xl"><i class="fas fa-paint-brush"></i></div>
-                    <div>
-                        <h4 class="text-xl font-bold text-rose-300">Minyatür</h4>
-                        <p class="text-sm text-gray-300 mt-1">Derinlik (perspektif) verilmeyen, ince işçilikle yapılan küçük renkli resim sanatıdır.</p>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- BÖLÜM 4: TANILAYICI DALLANMIŞ AĞAÇ (Oyun) -->
-        <section class="max-w-3xl mx-auto text-center fade-in" style="animation-delay: 0.6s;">
-            <h2 class="text-3xl font-bold text-[#134e4a] mb-8">Doğru Çıkışı Bul</h2>
-            
-            <div class="bg-white rounded-3xl shadow-xl border border-teal-200 p-8 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-400 to-teal-600"></div>
-                
-                <div id="game-container" class="min-h-[250px] flex flex-col justify-center items-center">
-                    
-                    <!-- Soru Kartı -->
-                    <div id="question-card" class="w-full">
-                        <div class="bg-teal-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 text-teal-600 text-2xl font-bold border-2 border-teal-200" id="step-number">1</div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-8 px-4" id="question-text">Yükleniyor...</h3>
-                        
-                        <div class="flex gap-6 justify-center w-full">
-                            <button onclick="nextStep('D')" class="flex-1 max-w-[150px] bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-bold shadow-lg transform transition active:scale-95 border-b-4 border-green-700 active:border-b-0">
-                                DOĞRU
-                            </button>
-                            <button onclick="nextStep('Y')" class="flex-1 max-w-[150px] bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-bold shadow-lg transform transition active:scale-95 border-b-4 border-red-700 active:border-b-0">
-                                YANLIŞ
-                            </button>
+        <!-- KONU 2 (Slayt 3) -->
+        <div class="slide" id="slide-3">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-hands-helping text-amber-400 mr-3"></i>İbadetlerin Mimariye Etkisi</h2></div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                        <div class="info-box blue justify-start w-full">
+                            <i class="fas fa-mosque text-4xl md:text-5xl mb-4 text-blue-400"></i>
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2">Şehrin Merkezi</h3>
+                            <p class="text-base md:text-xl text-left leading-relaxed">
+                                İslam şehirlerinde hayat <span class="highlight-dark">Cami</span> etrafında şekillenir. Eğitim ve yardım kurumları ibadethanelerin çevresine inşa edilmiştir.
+                            </p>
+                        </div>
+                        <div class="info-box teal justify-start w-full">
+                            <i class="fas fa-hand-holding-water text-4xl md:text-5xl mb-4 text-teal-400"></i>
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2">İhtiyaçtan Doğan Eserler</h3>
+                            <ul class="text-base md:text-xl text-left space-y-3">
+                                <li><i class="fas fa-faucet text-teal-400 mr-2"></i> Temizlik için <span class="highlight-dark">şadırvan/çeşme</span></li>
+                                <li><i class="fas fa-utensils text-teal-400 mr-2"></i> Yardımlaşma için <span class="highlight-dark">aşevi</span></li>
+                                <li><i class="fas fa-book-reader text-teal-400 mr-2"></i> Eğitim için <span class="highlight-dark">medrese</span></li>
+                            </ul>
                         </div>
                     </div>
-
-                    <!-- Sonuç Kartı (Gizli) -->
-                    <div id="result-card" class="hidden w-full">
-                        <div class="text-6xl mb-4" id="result-icon"></div>
-                        <h3 class="text-3xl font-bold mb-2" id="result-title"></h3>
-                        <p class="text-gray-600 mb-6 text-lg" id="result-desc"></p>
-                        <button onclick="resetGame()" class="text-teal-600 font-bold underline hover:text-teal-800">Başa Dön</button>
-                    </div>
-
                 </div>
             </div>
-        </section>
+        </div>
 
-    </main>
+        <!-- ETKİNLİK 2 (Slayt 4) -->
+        <div class="slide" id="slide-4">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-puzzle-piece text-amber-400 mr-3"></i>Etkinlik 2: Eşleştir</h2></div>
+                <div class="card-body" id="match-game-area">
+                    <p class="text-center text-sm md:text-xl text-amber-200 mb-4 font-bold bg-slate-800/50 p-2 rounded-xl">Mimari eseri seç, yapılış amacını bul!</p>
+                    <div class="flex flex-row gap-2 md:gap-6 h-full px-2">
+                        <div class="flex flex-col gap-2 md:gap-4 w-1/2 justify-center">
+                            <button class="match-btn left-btn" data-id="1">Şadırvan</button>
+                            <button class="match-btn left-btn" data-id="2">Medrese</button>
+                            <button class="match-btn left-btn" data-id="3">Aşevi</button>
+                            <button class="match-btn left-btn" data-id="4">Şifahane</button>
+                        </div>
+                        <div class="flex flex-col gap-2 md:gap-4 w-1/2 justify-center">
+                            <button class="match-btn right-btn" data-match="3">Yoksullara yemek verir</button>
+                            <button class="match-btn right-btn" data-match="4">Hastaları tedavi eder</button>
+                            <button class="match-btn right-btn" data-match="1">Abdest ihtiyacını giderir</button>
+                            <button class="match-btn right-btn" data-match="2">Eğitim ve ilim öğretir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <footer class="bg-[#134e4a] text-teal-200 py-8 text-center text-sm">
-        <p>2024 Din Kültürü ve Ahlak Bilgisi - Sanat ve Mimari Ünitesi</p>
-    </footer>
+        <!-- KONU 3 (Slayt 5) -->
+        <div class="slide" id="slide-5">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-paint-brush text-amber-400 mr-3"></i>Süsleme Sanatları</h2></div>
+                <div class="card-body">
+                    <div class="info-box purple justify-start w-full h-full">
+                        <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2">Mimaride Estetik</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-left">
+                            <div class="flex items-start"><i class="fas fa-pen-nib text-purple-400 mt-1 mr-3 text-2xl md:text-3xl"></i> <div><span class="highlight-dark">Hüsnühat:</span><br><span class="text-sm md:text-lg">Arap harfleriyle güzel yazı.</span></div></div>
+                            <div class="flex items-start"><i class="fas fa-star text-purple-400 mt-1 mr-3 text-2xl md:text-3xl"></i> <div><span class="highlight-dark">Tezhip:</span><br><span class="text-sm md:text-lg">Yaldız ve boya ile süsleme.</span></div></div>
+                            <div class="flex items-start"><i class="fas fa-image text-purple-400 mt-1 mr-3 text-2xl md:text-3xl"></i> <div><span class="highlight-dark">Minyatür:</span><br><span class="text-sm md:text-lg">Tek boyutlu küçük resim.</span></div></div>
+                            <div class="flex items-start"><i class="fas fa-border-all text-purple-400 mt-1 mr-3 text-2xl md:text-3xl"></i> <div><span class="highlight-dark">Çini:</span><br><span class="text-sm md:text-lg">Sırlı kil toprağı seramiği.</span></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK 3 (Slayt 6) -->
+        <div class="slide" id="slide-6">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-question-circle text-amber-400 mr-3"></i>Etkinlik 3: Sanat Dalı</h2></div>
+                <div class="card-body">
+                    <p class="text-center text-sm md:text-xl text-amber-200 mb-4 font-bold bg-slate-800/50 p-2 rounded-xl">İpucunu oku, tahmin et ve karta dokun!</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow content-center px-2">
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><p class="font-bold">Arap harfleriyle güzel yazı sanatıyım.</p></div><div class="flip-card-back"><p class="font-bold title-font">Hüsnühat</p></div></div></div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><p class="font-bold">Yazıları yaldız ile süsleme sanatıyım.</p></div><div class="flip-card-back"><p class="font-bold title-font">Tezhip</p></div></div></div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><p class="font-bold">Tek boyutlu küçük resim sanatıyım.</p></div><div class="flip-card-back"><p class="font-bold title-font">Minyatür</p></div></div></div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><p class="font-bold">Kil toprağı motiflerle süsleme sanatıyım.</p></div><div class="flip-card-back"><p class="font-bold title-font">Çini</p></div></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÖZET DEFTER (Slayt 7) -->
+        <div class="slide" id="slide-7">
+            <div class="presentation-card bg-transparent border-none p-0 !h-full !w-full">
+                <div class="card-header border border-white/10 z-10 w-full relative"><h2 class="title-font"><i class="fas fa-pencil-alt mr-3"></i>Defterimize Yazalım (Özet)</h2></div>
+                <div class="card-body p-0 h-full w-full relative">
+                    <div class="notebook-paper flex flex-col !border-y-0 !border-r-0 !border-white/10 !m-0 absolute inset-0">
+                        <h2 class="text-center text-amber-400 mb-2 underline decoration-wavy text-2xl md:text-4xl font-extrabold pt-2 title-font">DİNİN MİMARİYE ETKİSİ</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 w-full flex-grow px-2 md:px-6">
+                            <ul class="list-none m-0 p-0 text-left w-full space-y-0">
+                                <li><i class="fas fa-thumbtack text-amber-500 mr-2 text-lg"></i> <span class="text-emerald-400 font-bold">Kültür ve Mimari:</span></li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> Din kültürün özüdür.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> Şehirlerin kalbinde Cami vardır.</li>
+                                <li class="mt-2"><i class="fas fa-thumbtack text-amber-500 mr-2 text-lg"></i> <span class="text-emerald-400 font-bold">İhtiyaçtan Doğan Eserler:</span></li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> Temizlik: Şadırvan, Hamam</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> Eğitim: Medrese</li>
+                            </ul>
+                            <ul class="list-none m-0 p-0 text-left w-full space-y-0">
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> Sağlık: Şifahane</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> Yardımlaşma: Aşevi</li>
+                                <li class="mt-2"><i class="fas fa-thumbtack text-amber-500 mr-2 text-lg"></i> <span class="text-teal-300 font-bold">Süsleme Sanatları:</span></li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-teal-500 mr-1"></i> <span class="text-indigo-300">Hüsnühat:</span> Güzel yazı.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-teal-500 mr-1"></i> <span class="text-indigo-300">Tezhip:</span> Yaldızlı süsleme.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-teal-500 mr-1"></i> <span class="text-indigo-300">Minyatür & Çini</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ARAÇ ÇUBUĞU -->
+    <div id="toolbar" class="toolbar-pill">
+        <div class="drag-handle" id="toolbar-drag" title="Sürükle"><i class="fas fa-grip-vertical"></i></div>
+        <div class="toolbar-content" id="toolbar-content">
+            <button class="nav-btn zoom-btn" onclick="toggleFullScreen()" title="Tam Ekran"><i id="fs-icon" class="fas fa-expand"></i></button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(-5)" title="Küçült"><i class="fas fa-search-minus"></i></button>
+            <button class="nav-btn zoom-btn font-bold font-sans" onclick="resetZoom()" title="Orijinal Boyut">A</button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(5)" title="Büyüt"><i class="fas fa-search-plus"></i></button>
+            <div class="divider"></div>
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+            <span class="text-amber-400 font-bold px-2 md:px-4 text-base md:text-xl" id="counter">1 / 8</span>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <button class="minimize-btn" onclick="toggleToolbar()" title="Küçült/Büyüt"><i id="toolbar-toggle-icon" class="fas fa-compress-alt"></i></button>
+    </div>
 
     <script>
-        // --- EXPAND INFO CARD ---
-        function toggleInfo(card) {
-            const content = card.querySelector('.info-content');
-            const btn = card.querySelector('button');
-            
-            // Close others (optional, for accordion effect)
-            // document.querySelectorAll('.info-content').forEach(c => c.classList.add('hidden'));
+        // Slayt
+        let currentSlide = 0; const slides = document.querySelectorAll('.slide');
+        function changeSlide(step) {
+            const n = currentSlide + step;
+            if(n >= 0 && n < slides.length) {
+                slides[currentSlide].classList.remove('active'); slides[n].classList.add('active');
+                currentSlide = n;
+                document.getElementById('prevBtn').disabled = n === 0; document.getElementById('nextBtn').disabled = n === slides.length - 1;
+                document.getElementById('counter').innerText = `${n + 1} / ${slides.length}`;
+            }
+        }
+        changeSlide(0);
+        document.addEventListener('keydown', (e) => { if(e.key==='ArrowRight'||e.key==='Space')changeSlide(1); else if(e.key==='ArrowLeft')changeSlide(-1); });
 
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                btn.innerText = "Kapat";
-            } else {
-                content.classList.add('hidden');
-                btn.innerText = "Detay Göster";
+        // Zoom & Tam Ekran
+        let currentZoom = 100;
+        function changeZoom(amt) {
+            currentZoom += amt;
+            if(currentZoom > 150) currentZoom = 150; if(currentZoom < 70) currentZoom = 70;
+            if(window.innerWidth < 768 && currentZoom > 120) currentZoom = 120;
+            document.documentElement.style.fontSize = currentZoom + '%';
+        }
+        function resetZoom() { currentZoom = 100; document.documentElement.style.fontSize = '100%'; }
+        function toggleFullScreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{}); else if (document.exitFullscreen) document.exitFullscreen(); }
+        document.addEventListener('fullscreenchange', () => { document.getElementById('fs-icon').className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand'; });
+
+        // Araç Çubuğu
+        function toggleToolbar() {
+            const t = document.getElementById('toolbar'); const i = document.getElementById('toolbar-toggle-icon');
+            t.classList.toggle('collapsed'); i.className = t.classList.contains('collapsed') ? 'fas fa-expand-arrows-alt' : 'fas fa-compress-alt';
+        }
+        const toolbar = document.getElementById('toolbar'); const handle = document.getElementById('toolbar-drag');
+        let isDrag = false, startX, startY, initL, initT;
+        handle.addEventListener('mousedown', e => dragStart(e)); handle.addEventListener('touchstart', e => dragStart(e), {passive:false});
+        document.addEventListener('mousemove', drag); document.addEventListener('touchmove', drag, {passive:false});
+        document.addEventListener('mouseup', () => isDrag=false); document.addEventListener('touchend', () => isDrag=false);
+        function dragStart(e) {
+            if(e.target.closest('.minimize-btn')) return; e.preventDefault(); isDrag = true;
+            if(!toolbar.classList.contains('is-dragged')) { const r = toolbar.getBoundingClientRect(); toolbar.classList.add('is-dragged'); toolbar.style.left = r.left+'px'; toolbar.style.top = r.top+'px'; toolbar.style.bottom='auto'; toolbar.style.right='auto'; toolbar.style.transform='none'; }
+            startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX; startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            initL = toolbar.offsetLeft; initT = toolbar.offsetTop;
+        }
+        function drag(e) {
+            if(!isDrag) return; e.preventDefault();
+            const cx = e.type.includes('touch') ? e.touches[0].clientX : e.clientX; const cy = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            const r = toolbar.getBoundingClientRect(); let nl = initL + (cx - startX), nt = initT + (cy - startY);
+            nl = Math.max(0, Math.min(nl, window.innerWidth - r.width)); nt = Math.max(0, Math.min(nt, window.innerHeight - r.height));
+            toolbar.style.left = nl+'px'; toolbar.style.top = nt+'px';
+        }
+
+        // Konfeti
+        function fireConfetti(areaId) {
+            const area = document.getElementById(areaId) || document.body;
+            const colors = ['#fcd34d', '#38bdf8', '#34d399', '#f43f5e'];
+            for (let i = 0; i < 40; i++) {
+                const c = document.createElement('div'); c.classList.add('confetti');
+                c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                c.style.left = Math.random() * 100 + '%'; c.style.top = '0'; area.appendChild(c);
+                c.animate([ { transform: `translate3d(0,0,0)`, opacity: 1 }, { transform: `translate3d(${Math.random()*200-100}px, ${area.offsetHeight||window.innerHeight}px, 0) rotate(${Math.random()*720}deg)`, opacity: 0 } ], { duration: 2000+Math.random()*1000, fill: 'forwards' });
+                setTimeout(() => c.remove(), 3000);
             }
         }
 
-        // --- BRANCHING TREE GAME LOGIC ---
-        // Metindeki ağaca göre mantık
-        const treeData = {
-            'start': {
-                text: "Din ve inanç, kültürün şekillenmesini sağlar.",
-                D: 'q2_left', 
-                Y: 'q2_right'
-            },
-            // Sol Kol (Doğru yolun devamı)
-            'q2_left': {
-                text: "Müslümanlar cami, aşevi, şifahane inşa ederek coğrafyayı güzelleştirmiştir.",
-                D: 'exit_1', // 1. Çıkış
-                Y: 'exit_2'  // 2. Çıkış
-            },
-            // Sağ Kol (Yanlış yolun devamı)
-            'q2_right': {
-                text: "Arap harflerinin güzel yazımıyla minyatür sanatı oluşmuştur.", // Yanlış (Hat olmalı)
-                D: 'exit_3', // 3. Çıkış (Hatalı bilgiye doğru dedi)
-                Y: 'exit_4'  // 4. Çıkış
-            },
-            // Sonuçlar
-            'exit_1': { type: 'end', id: 1, correct: true, msg: "Tebrikler! Konuyu harika kavramışsın." },
-            'exit_2': { type: 'end', id: 2, correct: false, msg: "Yanlış Çıkış. Müslümanlar gerçekten de bu yapılarla şehirleri güzelleştirmiştir." },
-            'exit_3': { type: 'end', id: 3, correct: false, msg: "Yanlış Çıkış. Güzel yazı sanatına 'Hüsnühat' denir, Minyatür resim sanatıdır." },
-            'exit_4': { type: 'end', id: 4, correct: false, msg: "Yanlış Çıkış. İlk soruda hata yapmıştın." }
-        };
+        // Oyun 1: Bulmaca
+        const puzzleWords = [ { word: "KÜLTÜR", missing: [1, 4], exp: "Toplumun duygu ve birikimleridir." }, { word: "MİMARİ", missing: [0, 3], exp: "İnançla birleşen yapım sanatıdır." }, { word: "KÜLLİYE", missing: [2, 5], exp: "Merkezinde cami olan geniş yapılar bütünüdür." } ];
+        function initWordPuzzle() {
+            const container = document.getElementById('word-puzzle-container'); let tMiss = 0, fMiss = 0;
+            puzzleWords.forEach((item) => {
+                tMiss += item.missing.length;
+                const row = document.createElement('div'); row.className = "flex items-center gap-2 md:gap-4 bg-slate-800/80 p-2 md:p-4 rounded-xl border border-white/10 w-full shadow-lg";
+                const wordD = document.createElement('div'); wordD.className = "flex gap-1 md:gap-2";
+                item.word.split('').forEach((letter, idx) => {
+                    const box = document.createElement('div');
+                    if(item.missing.includes(idx)) {
+                        box.className = "letter-box missing"; box.innerText = "?";
+                        box.onclick = function() { if(!this.classList.contains('revealed')) { this.innerText = letter; this.classList.add('revealed'); fMiss++; if(fMiss === tMiss) fireConfetti('word-puzzle-container'); } };
+                    } else { box.className = "letter-box"; box.innerText = letter; }
+                    wordD.appendChild(box);
+                });
+                const txt = document.createElement('div'); txt.className = "text-xs md:text-xl text-slate-300 ml-2 font-semibold leading-tight"; txt.innerText = item.exp;
+                row.appendChild(wordD); row.appendChild(txt); container.appendChild(row);
+            });
+        }
+        initWordPuzzle();
 
-        // *Not: Metindeki ağaç yapısı biraz daha karmaşık olabilir (8 çıkışlı), 
-        // ancak web deneyimi için temel mantığı (2 seviye) simüle ettim.
-        // Daha karmaşık yapı istenirse veri yapısı genişletilebilir.
-        // Metindeki 8 çıkışlı yapıya göre genişletiyorum:
-
-        const complexTree = {
-            'start': {
-                text: "Din ve inanç, kültürün şekillenmesini sağlar.",
-                D: 'L2_sol', // Müslümanlar cami...
-                Y: 'L2_sag'  // Arap harfleri...
-            },
-            // SOL KOL
-            'L2_sol': {
-                text: "Müslümanlar cami, aşevi, şifahane inşa ederek coğrafyayı güzelleştirmiştir.",
-                D: 'L3_sol_sol', // Cami ve mescitler...
-                Y: 'L3_sol_sag'  // Çini yazma kitaplarda...
-            },
-            'L3_sol_sol': { // Soru: Cami ve mescitler Müslümanların ibadet yeridir.
-                text: "Cami ve mescitler Müslümanların ibadet ettiği ve toplandığı yerlerdir.",
-                D: 'exit_1', Y: 'exit_2'
-            },
-            'L3_sol_sag': { // Soru: Çini... (Yanlış, Tezhip olmalı)
-                text: "Çini, yazma kitaplarda, sayfaların yaldız ve boya ile bezenmesi sanatıdır.",
-                D: 'exit_3', Y: 'exit_4'
-            },
-
-            // SAĞ KOL
-            'L2_sag': {
-                text: "Arap harflerinin çeşitli şekil ve tarzlarda güzel yazımıyla minyatür sanatı oluşmuştur.",
-                D: 'L3_sag_sol', // Bölgenin iklimi...
-                Y: 'L3_sag_sag'  // Külliyeler...
-            },
-            'L3_sag_sol': {
-                text: "Bölgenin iklim ve şartlarına göre yapı malzemeleri değişebilir.",
-                D: 'exit_5', Y: 'exit_6'
-            },
-            'L3_sag_sag': {
-                text: "Külliyeler merkezinde cami olan ve diğer yapılarla kuşatılmış geniş merkezlerdir.",
-                D: 'exit_7', Y: 'exit_8'
-            },
-
-            // ÇIKIŞLAR
-            'exit_1': { type: 'end', title: "1. ÇIKIŞ", correct: true, msg: "Mükemmel! Tüm sorulara doğru cevap verdin." },
-            'exit_2': { type: 'end', title: "2. ÇIKIŞ", correct: false, msg: "Cami ve mescitler ibadet yeridir. Yanlış cevap." },
-            'exit_3': { type: 'end', title: "3. ÇIKIŞ", correct: false, msg: "Kitap süsleme sanatı Çini değil, Tezhip'tir." },
-            'exit_4': { type: 'end', title: "4. ÇIKIŞ", correct: false, msg: "İkinci soruda hata yaptın ama son bilgiyi doğru bildin (Çini tanımı yanlıştı)." },
-            'exit_5': { type: 'end', title: "5. ÇIKIŞ", correct: false, msg: "İlk soruda hata yaptın." },
-            'exit_6': { type: 'end', title: "6. ÇIKIŞ", correct: false, msg: "İlk soruda hata yaptın." },
-            'exit_7': { type: 'end', title: "7. ÇIKIŞ", correct: false, msg: "İlk soruda hata yaptın." },
-            'exit_8': { type: 'end', title: "8. ÇIKIŞ", correct: false, msg: "İlk soruda hata yaptın." }
-        };
-
-        let currentStep = 'start';
-
-        function nextStep(choice) {
-            const node = complexTree[currentStep];
-            const nextKey = node[choice];
-            const nextNode = complexTree[nextKey];
-
-            if (nextNode.type === 'end') {
-                showResult(nextNode);
-            } else {
-                currentStep = nextKey;
-                // Animation reset
-                const card = document.getElementById('question-card');
-                card.classList.remove('fade-in');
-                void card.offsetWidth; 
-                card.classList.add('fade-in');
-                
-                document.getElementById('question-text').innerText = nextNode.text;
-                // Update Step number visual
-                const stepNum = document.getElementById('step-number');
-                stepNum.innerText = parseInt(stepNum.innerText) + 1;
+        // Oyun 2: Eşleştirme
+        let selL = null, selR = null, matches = 0;
+        document.querySelectorAll('.match-btn').forEach(btn => btn.addEventListener('click', e => {
+            const b = e.target.closest('.match-btn'); if(b.classList.contains('correct')) return;
+            const al = document.querySelectorAll('.left-btn'), ar = document.querySelectorAll('.right-btn');
+            if(b.classList.contains('left-btn')) { al.forEach(x => { if(!x.classList.contains('correct')) x.classList.remove('selected') }); b.classList.add('selected'); selL = b; } 
+            else if(b.classList.contains('right-btn')) { ar.forEach(x => { if(!x.classList.contains('correct')) x.classList.remove('selected') }); b.classList.add('selected'); selR = b; }
+            if(selL && selR) {
+                if(selL.dataset.id === selR.dataset.match) {
+                    selL.classList.replace('selected', 'correct'); selR.classList.replace('selected', 'correct');
+                    selL.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>'; selR.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>';
+                    matches++; if(matches === 4) setTimeout(() => fireConfetti('match-game-area'), 300);
+                } else {
+                    selL.classList.add('wrong'); selR.classList.add('wrong');
+                    setTimeout(() => { selL.classList.remove('wrong', 'selected'); selR.classList.remove('wrong', 'selected'); }, 600);
+                }
+                selL = null; selR = null;
             }
-        }
-
-        function showResult(node) {
-            document.getElementById('question-card').classList.add('hidden');
-            const resCard = document.getElementById('result-card');
-            resCard.classList.remove('hidden');
-            resCard.classList.add('fade-in');
-
-            const icon = document.getElementById('result-icon');
-            const title = document.getElementById('result-title');
-            const desc = document.getElementById('result-desc');
-
-            title.innerText = node.title;
-            title.className = node.correct ? "text-3xl font-bold mb-2 text-green-600" : "text-3xl font-bold mb-2 text-red-500";
-            
-            icon.innerHTML = node.correct ? '<i class="fas fa-award text-yellow-400"></i>' : '<i class="fas fa-compass text-gray-400"></i>';
-            desc.innerText = node.msg;
-        }
-
-        function resetGame() {
-            currentStep = 'start';
-            document.getElementById('result-card').classList.add('hidden');
-            document.getElementById('question-card').classList.remove('hidden');
-            document.getElementById('question-text').innerText = complexTree['start'].text;
-            document.getElementById('step-number').innerText = "1";
-        }
-
-        // Init
-        document.getElementById('question-text').innerText = complexTree['start'].text;
-
+        }));
     </script>
 </body>
 </html>

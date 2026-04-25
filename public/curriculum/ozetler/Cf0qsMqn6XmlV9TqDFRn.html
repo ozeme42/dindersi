@@ -2,458 +2,333 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camileri Tanıyalım</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>5.2 Camileri Tanıyalım</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Work Sans', sans-serif;
-            background-color: #f5f5f4; /* Stone-100 */
-            color: #44403c; /* Stone-700 */
-        }
-        .art-font {
-            font-family: 'Scheherazade New', serif;
-        }
-        .arch-pattern {
-            background-color: #0d9488;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ccfbf1' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        .part-btn {
-            transition: all 0.3s ease;
-        }
-        .part-btn:hover {
-            transform: translateX(5px);
-            background-color: #f0fdfa; /* Teal-50 */
-            border-color: #0d9488;
-        }
-        .part-btn.active {
-            background-color: #0d9488;
-            color: white;
-            border-color: #0f766e;
-        }
-        .story-select {
-            border: none;
-            border-bottom: 2px solid #0d9488;
-            background: transparent;
-            color: #0d9488;
-            font-weight: bold;
-            padding: 0 5px;
-            cursor: pointer;
-            outline: none;
-        }
-        .story-select.correct {
-            border-bottom-color: #22c55e;
-            color: #15803d;
-        }
-        .story-select.wrong {
-            border-bottom-color: #ef4444;
-            color: #b91c1c;
-        }
-        .fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Nunito:wght@400;600;700&display=swap');
+        html { font-size: 100%; transition: font-size 0.3s ease; }
+        body { font-family: 'Nunito', sans-serif; overflow: hidden; margin: 0; padding: 0; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0f172a; color: #f8fafc; }
+        .title-font { font-family: 'Cinzel', serif; }
+        
+        .slide { display: none; opacity: 0; height: 100%; width: 100%; padding: 0.5rem; flex-direction: column; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 10; }
+        .slide.active { display: flex; opacity: 1; z-index: 20; animation: fadeUp 0.6s forwards; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .presentation-card { background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6); border-radius: 1.5rem; width: 98vw; height: 96dvh; display: flex; flex-direction: column; position: relative; margin: auto; overflow: hidden; }
+        .card-header { background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #fbbf24; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;}
+        .card-body { flex-grow: 1; padding: 1rem 2rem; display: flex; flex-direction: column; justify-content: center; overflow-y: auto;}
+
+        .info-box { background: rgba(15, 23, 42, 0.5); border-radius: 1rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.3s; }
+        .info-box.teal { border-bottom: 3px solid #14b8a6; } .info-box.cyan { border-bottom: 3px solid #06b6d4; }
+        .highlight-dark { background: rgba(251, 191, 36, 0.15); color: #fcd34d; padding: 0.1rem 0.4rem; border-radius: 0.3rem; font-weight: 700; }
+
+        /* YÜZEN ARAÇ ÇUBUĞU */
+        .toolbar-pill { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); z-index: 9999; background: rgba(15, 23, 42, 0.85); border-radius: 9999px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; padding: 0.4rem; gap: 0.5rem; transition: all 0.3s ease; }
+        .toolbar-pill.collapsed { width: 3.8rem; height: 3.8rem; padding: 0; justify-content: center; border-radius: 50%; }
+        .drag-handle { cursor: grab; color: #94a3b8; padding: 0.5rem 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .toolbar-content { display: flex; align-items: center; gap: 0.8rem; overflow: hidden; transition: all 0.3s ease; white-space: nowrap; }
+        .toolbar-pill.collapsed .toolbar-content, .toolbar-pill.collapsed .drag-handle { display: none; }
+        .nav-btn { background: rgba(255,255,255,0.1); color: #fbbf24; border: 1px solid rgba(255,255,255,0.1); width: 2.8rem; height: 2.8rem; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .nav-btn:hover { background: rgba(251, 191, 36, 0.2); transform: scale(1.1); }
+        .nav-btn:disabled { background: transparent; color: #475569; border-color: transparent; cursor: not-allowed;}
+        .zoom-btn { background: transparent; color: #94a3b8; border: none; width: 2.4rem; height: 2.4rem; font-size: 1.1rem; cursor: pointer;}
+        .minimize-btn { background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 1.2rem; width: 3rem; height: 3rem; }
+
+        /* DEFTER */
+        .notebook-paper { background-color: #1e293b; background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 3rem; line-height: 3rem; padding: 1rem 2rem 1rem 4rem; border-left: 4px solid #ef4444; color: #f8fafc; font-size: clamp(1.2rem, 3vw, 2.2rem); font-weight: bold; position: relative; overflow-y: auto; width: 100%; height: 100%; }
+        .notebook-paper::before { content: ''; position: absolute; top: 0; bottom: 0; left: 2.5rem; width: 2px; background-color: rgba(239, 68, 68, 0.4); }
+
+        /* OYUNLAR */
+        .sent-word { padding: 0.8rem 1.5rem; border-radius: 1rem; background: rgba(99, 102, 241, 0.8); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: clamp(1rem, 3vw, 1.8rem); font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 rgba(67, 56, 202, 0.8); transition: transform 0.1s; }
+        .sent-word:active { transform: translateY(4px); box-shadow: none; }
+        .sent-word.used { opacity: 0; pointer-events: none; }
+        .sent-slot-word { padding: 0.5rem 1rem; border-radius: 0.5rem; background: rgba(16, 185, 129, 0.8); color: white; font-size: clamp(1rem, 3vw, 1.8rem); font-weight: bold; }
+        .match-btn { background: rgba(30,41,59,0.7); border: 2px solid rgba(255,255,255,0.1); border-radius: 0.8rem; padding: 1rem; font-size: clamp(0.8rem, 2vw, 1.2rem); font-weight: bold; color: #e2e8f0; cursor: pointer; text-align: left; width: 100%; transition: all 0.2s;}
+        .match-btn.selected { border-color: #fbbf24; color: #fcd34d; transform: scale(1.02); }
+        .match-btn.correct { border-color: #10b981; color: #6ee7b7; cursor: default; }
+        .match-btn.wrong { animation: shake 0.4s; border-color: #ef4444; }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .confetti { position: absolute; width: 10px; height: 10px; opacity: 0; z-index: 100; pointer-events: none;}
+
+        /* MOBİL UYUMLULUK */
+        @media (max-width: 768px) {
+            .presentation-card { border-radius: 0; width: 100vw; height: 100dvh; border: none; }
+            .card-header { flex-direction: column; text-align: center; padding: 0.8rem; gap: 0.5rem; }
+            .card-header h2 { font-size: 1.4rem !important; }
+            .card-body { padding: 0.5rem; }
+            .info-box { padding: 1rem; margin-bottom: 0.5rem; }
+            .toolbar-pill { width: 95%; max-width: 400px; padding: 0.3rem; gap: 0.3rem; justify-content: space-around; bottom: 0.5rem; flex-wrap: wrap;}
+            .toolbar-content { gap: 0.3rem; flex-wrap: wrap; justify-content: center; }
+            .nav-btn { width: 2.4rem; height: 2.4rem; font-size: 1rem; }
+            .zoom-btn { width: 2rem; height: 2rem; font-size: 1rem; }
+            .notebook-paper { padding: 1rem 0.5rem 1rem 2rem; font-size: 1.1rem !important; line-height: 1.8rem !important; background-size: 100% 1.8rem !important; }
+            .notebook-paper::before { left: 1.2rem; }
         }
     </style>
 </head>
-<body>
-
-    <!-- Header -->
-    <header class="arch-pattern text-white py-12 px-4 text-center shadow-lg relative overflow-hidden rounded-b-[40px] mb-12">
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <span class="bg-teal-900/30 border border-teal-200/30 text-teal-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">5. Ünite</span>
-            <h1 class="text-4xl md:text-6xl font-bold mb-4 art-font leading-tight">CAMİLERİ TANIYALIM</h1>
-            <p class="text-xl text-teal-100 font-light max-w-2xl mx-auto">
-                "Şüphesiz mescitler Allah'ındır. O halde, Allah ile birlikte başkasına kulluk etmeyin." (Cin, 18)
-            </p>
+<body style="background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);">
+    <div id="slides-container" class="relative w-full h-full z-10">
+        
+        <!-- Kapak (Slayt 0) -->
+        <div class="slide active" id="slide-0">
+            <div class="presentation-card justify-center items-center text-center p-8 border-none">
+                <i class="fas fa-kaaba text-7xl md:text-8xl text-amber-400 mb-6 drop-shadow-2xl"></i>
+                <h2 class="text-xl md:text-3xl tracking-widest text-slate-300 mb-3 uppercase font-bold title-font">5.2. Konu</h2>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white title-font px-4">Camileri Tanıyalım</h1>
+                <button onclick="changeSlide(1)" class="mt-8 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 px-8 py-3 rounded-full text-xl md:text-2xl font-bold hover:scale-105 transition"><i class="fas fa-play mr-2"></i> Başla</button>
+            </div>
         </div>
-    </header>
 
-    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
-
-        <!-- BÖLÜM 1: TEMEL KAVRAMLAR -->
-        <section class="grid md:grid-cols-3 gap-6">
-            <!-- Cami -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-teal-500 hover:-translate-y-2 transition duration-300">
-                <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 text-2xl mb-4">
-                    <i class="fas fa-mosque"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">CAMİ</h3>
-                <p class="text-sm text-gray-600">"Toplayan, bir araya getiren" demektir. Cuma namazı kılınan, minberli büyük ibadethanelerdir.</p>
-            </div>
-
-            <!-- Mescit -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-blue-500 hover:-translate-y-2 transition duration-300">
-                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mb-4">
-                    <i class="fas fa-praying-hands"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">MESCİT</h3>
-                <p class="text-sm text-gray-600">"Secde edilen yer" demektir. İçinde minber bulunmayan, daha küçük ibadet yerleridir.</p>
-            </div>
-
-            <!-- Külliye -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-amber-500 hover:-translate-y-2 transition duration-300">
-                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 text-2xl mb-4">
-                    <i class="fas fa-layer-group"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">KÜLLİYE</h3>
-                <p class="text-sm text-gray-600">Merkezinde cami olan; medrese, aşevi, şifahane, hamam gibi yapıların bütünüdür.</p>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 2: MİMARİ REHBER (İç ve Dış Bölümler) -->
-        <section class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200">
-            <div class="bg-gray-100 p-4 border-b border-gray-200 flex justify-between items-center flex-wrap gap-4">
-                <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-search-location text-teal-600"></i> Caminin Bölümleri
-                </h2>
-                <div class="flex bg-white rounded-lg p-1 shadow-sm border border-gray-200">
-                    <button onclick="filterParts('all')" class="px-4 py-2 rounded-md text-sm font-bold bg-teal-500 text-white transition" id="btn-all">Tümü</button>
-                    <button onclick="filterParts('dis')" class="px-4 py-2 rounded-md text-sm font-bold text-gray-600 hover:bg-gray-100 transition" id="btn-dis">Dış Bölümler</button>
-                    <button onclick="filterParts('ic')" class="px-4 py-2 rounded-md text-sm font-bold text-gray-600 hover:bg-gray-100 transition" id="btn-ic">İç Bölümler</button>
-                </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row min-h-[450px]">
-                <!-- Sol Liste -->
-                <div class="md:w-1/3 border-r border-gray-100 p-4 space-y-2 bg-gray-50 h-full overflow-y-auto">
-                    <!-- Dış -->
-                    <button onclick="showDetail('minare')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="dis">
-                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Minare</span>
-                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
-                    </button>
-                    <button onclick="showDetail('serefe')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="dis">
-                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Şerefe</span>
-                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
-                    </button>
-                    <button onclick="showDetail('kubbe')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="dis">
-                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Kubbe</span>
-                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
-                    </button>
-                    <button onclick="showDetail('sadirvan')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="dis">
-                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Şadırvan</span>
-                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
-                    </button>
-                    <!-- İç -->
-                    <button onclick="showDetail('mihrap')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="ic">
-                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Mihrap</span>
-                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
-                    </button>
-                    <button onclick="showDetail('minber')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="ic">
-                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Minber</span>
-                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
-                    </button>
-                    <button onclick="showDetail('kursu')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="ic">
-                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Vaaz Kürsüsü</span>
-                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
-                    </button>
-                </div>
-
-                <!-- Sağ Detay -->
-                <div class="md:w-2/3 p-8 flex items-center justify-center bg-white relative">
-                    <!-- Default State -->
-                    <div id="default-view" class="text-center text-gray-400">
-                        <i class="fas fa-hand-pointer text-6xl mb-4 animate-bounce"></i>
-                        <p>Öğrenmek istediğiniz bölümü soldaki listeden seçin.</p>
-                    </div>
-
-                    <!-- Dynamic Content -->
-                    <div id="detail-view" class="hidden text-center max-w-lg fade-in">
-                        <div class="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6 text-teal-600 text-4xl shadow-inner" id="detail-icon">
-                            <i class="fas fa-mosque"></i>
+        <!-- KONU 1 (Slayt 1) -->
+        <div class="slide" id="slide-1">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-users text-amber-400 mr-3"></i>Cami ve Mescit</h2></div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                        <div class="info-box teal justify-start w-full">
+                            <i class="fas fa-pray text-4xl md:text-5xl mb-4 text-teal-400"></i>
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2 w-full">Mescit Ne Demektir?</h3>
+                            <ul class="text-base md:text-xl text-left space-y-3">
+                                <li><i class="fas fa-check text-teal-400 mr-2"></i> <span class="highlight-dark">Secde edilen</span> yer anlamına gelir.</li>
+                                <li><i class="fas fa-check text-teal-400 mr-2"></i> Okul, iş yeri gibi alanlarda namaz için ayrılan küçük mekanlardır.</li>
+                            </ul>
                         </div>
-                        <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block" id="detail-tag">Dış Bölüm</span>
-                        <h3 class="text-4xl font-bold text-teal-900 mb-4 art-font" id="detail-title">Başlık</h3>
-                        <p class="text-lg text-gray-600 leading-relaxed" id="detail-desc">Açıklama buraya gelecek.</p>
+                        <div class="info-box cyan justify-start w-full">
+                            <i class="fas fa-mosque text-4xl md:text-5xl mb-4 text-cyan-400"></i>
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2 w-full">Cami Ne Demektir?</h3>
+                            <ul class="text-base md:text-xl text-left space-y-3">
+                                <li><i class="fas fa-users text-cyan-400 mr-2"></i> <span class="highlight-dark">Toplayan, bir araya getiren</span> demektir.</li>
+                                <li><i class="fas fa-star text-cyan-400 mr-2"></i> İçerisinde <span class="font-bold text-white">cuma namazı kılınan</span> büyük mescitlerdir.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- BÖLÜM 3: HİKAYE TAMAMLAMA OYUNU -->
-        <section class="max-w-4xl mx-auto bg-[#fefce8] p-8 rounded-3xl border-2 border-yellow-200 shadow-lg relative overflow-hidden">
-            <!-- Decoration -->
-            <div class="absolute -top-6 -left-6 w-24 h-24 bg-yellow-300 rounded-full opacity-50 blur-xl"></div>
-            
-            <div class="relative z-10">
-                <div class="text-center mb-8">
-                    <span class="bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Etkinlik</span>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-2">Mahallemizdeki Cami</h2>
-                    <p class="text-gray-600">Zeynep'in hikayesindeki boşlukları doğru kelimelerle doldur.</p>
-                </div>
-
-                <div class="bg-white p-8 rounded-xl shadow-inner border border-yellow-100 text-lg leading-loose text-gray-700 text-justify">
-                    <p>
-                        Zeynep babasıyla camiye gittiğinde ilk olarak avluda insanların abdest aldığı
-                        <select class="story-select" id="q1">
-                            <option value="">Seç...</option>
-                            <option value="şadırvan">Şadırvan</option>
-                            <option value="kubbe">Kubbe</option>
-                            <option value="minare">Minare</option>
-                        </select>
-                        adı verilen yeri gördü. Caminin üzerini örten yarım küre şeklindeki yapıya
-                        <select class="story-select" id="q2">
-                            <option value="">Seç...</option>
-                            <option value="mihrap">Mihrap</option>
-                            <option value="kubbe">Kubbe</option>
-                            <option value="şerefe">Şerefe</option>
-                        </select>
-                        dendiğini öğrendi.
-                    </p>
-                    <p class="mt-4">
-                        Caminin yanındaki yüksek ve ince yapı olan
-                        <select class="story-select" id="q3">
-                            <option value="">Seç...</option>
-                            <option value="minare">Minare</option>
-                            <option value="minber">Minber</option>
-                            <option value="kürsü">Kürsü</option>
-                        </select>
-                        dikkatini çekti. Bu yapının etrafındaki balkon gibi yere ise
-                        <select class="story-select" id="q4">
-                            <option value="">Seç...</option>
-                            <option value="şerefe">Şerefe</option>
-                            <option value="mihrap">Mihrap</option>
-                            <option value="avlu">Avlu</option>
-                        </select>
-                        deniliyordu.
-                    </p>
-                    <p class="mt-4">
-                        İçeri girdiklerinde babası, imamın namaz kıldırırken durduğu oyuk yeri göstererek "Burası
-                        <select class="story-select" id="q5">
-                            <option value="">Seç...</option>
-                            <option value="minber">Minber</option>
-                            <option value="mihrap">Mihrap</option>
-                            <option value="kürsü">Kürsü</option>
-                        </select>
-                        " dedi. Cuma günü hutbe okunan merdivenli yerin
-                        <select class="story-select" id="q6">
-                            <option value="">Seç...</option>
-                            <option value="minber">Minber</option>
-                            <option value="şadırvan">Şadırvan</option>
-                            <option value="mihrap">Mihrap</option>
-                        </select>
-                        olduğunu, vaaz verilen yüksekçe koltuğun ise
-                        <select class="story-select" id="q7">
-                            <option value="">Seç...</option>
-                            <option value="minare">Minare</option>
-                            <option value="kürsü">Vaaz Kürsüsü</option>
-                            <option value="kubbe">Kubbe</option>
-                        </select>
-                        olduğunu öğrendi.
-                    </p>
-                </div>
-
-                <div class="text-center mt-6">
-                    <button onclick="checkStory()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-full font-bold shadow-lg transition transform hover:scale-105">Kontrol Et</button>
-                    <p id="story-feedback" class="mt-3 font-bold text-lg hidden"></p>
+        <!-- ETKİNLİK 1 (Slayt 2) -->
+        <div class="slide" id="slide-2">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-align-left text-amber-400 mr-3"></i>Etkinlik 1: Cümleyi Oluştur</h2></div>
+                <div class="card-body relative flex flex-col items-center" id="sentence-game-area">
+                    <p class="text-sm md:text-xl text-amber-200 mb-4 font-bold bg-slate-800/80 p-2 rounded-xl text-center shadow-lg">Kelimelere doğru sırayla dokunarak cümleyi tamamla!</p>
+                    <div id="sentence-slots" class="flex flex-wrap gap-2 justify-center bg-slate-800/60 p-4 md:p-8 rounded-2xl border-4 border-dashed border-white/20 w-full max-w-4xl min-h-[100px] items-center mb-6"></div>
+                    <div id="sentence-words" class="flex flex-wrap gap-2 md:gap-4 justify-center w-full max-w-4xl px-2"></div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- BÖLÜM 4: GİZLİ KELİME AVI (Kontrol Noktası) -->
-        <section class="max-w-2xl mx-auto bg-teal-900 rounded-3xl p-8 text-white relative shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-center"><i class="fas fa-question-circle text-teal-300"></i> Kontrol Noktası</h2>
-            
-            <div class="space-y-6">
-                <!-- Soru 1 -->
-                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
-                    <p class="text-sm text-teal-100 mb-2">1. Müslümanların bir araya gelip ibadet ettiği yer:</p>
-                    <div class="flex gap-2">
-                        <input type="text" id="ans1" class="bg-teal-800 border border-teal-600 rounded px-3 py-2 w-full text-white placeholder-teal-500/50 uppercase" placeholder="C _ _ _">
-                        <button onclick="checkAnswer(1, 'CAMİ')" class="bg-teal-500 px-4 rounded hover:bg-teal-400 font-bold">✓</button>
-                    </div>
-                </div>
-
-                <!-- Soru 2 -->
-                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
-                    <p class="text-sm text-teal-100 mb-2">2. Hz. Peygamber'in hicret ederken Kuba'da inşa ettiği yer:</p>
-                    <div class="flex gap-2">
-                        <input type="text" id="ans2" class="bg-teal-800 border border-teal-600 rounded px-3 py-2 w-full text-white placeholder-teal-500/50 uppercase" placeholder="K _ _ _  M _ _ _ _ _ _">
-                        <button onclick="checkAnswer(2, 'KUBA MESCİDİ')" class="bg-teal-500 px-4 rounded hover:bg-teal-400 font-bold">✓</button>
-                    </div>
-                </div>
-
-                <!-- Soru 3 -->
-                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
-                    <p class="text-sm text-teal-100 mb-2">3. Medine'de inşa edilen Peygamber Mescidi:</p>
-                    <div class="flex gap-2">
-                        <input type="text" id="ans3" class="bg-teal-800 border border-teal-600 rounded px-3 py-2 w-full text-white placeholder-teal-500/50 uppercase" placeholder="M _ _ _ _ _ - İ  N _ _ _ _ _">
-                        <button onclick="checkAnswer(3, 'MESCİD-İ NEBEVİ')" class="bg-teal-500 px-4 rounded hover:bg-teal-400 font-bold">✓</button>
+        <!-- KONU 2 (Slayt 3) -->
+        <div class="slide" id="slide-3">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-mosque text-amber-400 mr-3"></i>Caminin Bölümleri</h2></div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                        <div class="info-box teal justify-start w-full">
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2 w-full"><i class="fas fa-door-open mr-2"></i>İç Bölümler</h3>
+                            <ul class="text-base md:text-xl text-left space-y-3">
+                                <li><i class="fas fa-compass text-teal-400 mr-2"></i> <span class="highlight-dark">Mihrap:</span> İmamın namaz kıldırdığı oyuk.</li>
+                                <li><i class="fas fa-stairs text-teal-400 mr-2"></i> <span class="highlight-dark">Minber:</span> Hutbe okunan merdivenli yer.</li>
+                                <li><i class="fas fa-chair text-teal-400 mr-2"></i> <span class="highlight-dark">Vaaz Kürsüsü:</span> Cemaate vaaz verilen yüksek yer.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box cyan justify-start w-full">
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2 w-full"><i class="fas fa-cloud-sun mr-2"></i>Dış Bölümler</h3>
+                            <ul class="text-base md:text-xl text-left space-y-3">
+                                <li><i class="fas fa-faucet text-cyan-400 mr-2"></i> <span class="highlight-dark">Şadırvan:</span> Avluda abdest alınan yer.</li>
+                                <li><i class="fas fa-broadcast-tower text-cyan-400 mr-2"></i> <span class="highlight-dark">Minare:</span> Ezan okunan yüksek ince kule.</li>
+                                <li><i class="fas fa-archway text-cyan-400 mr-2"></i> <span class="highlight-dark">Kubbe:</span> Caminin üzerini örten yarım küre tavan.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-    </main>
+        <!-- ETKİNLİK 2 (Slayt 4) -->
+        <div class="slide" id="slide-4">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-puzzle-piece text-amber-400 mr-3"></i>Etkinlik 2: Bölümü Eşleştir</h2></div>
+                <div class="card-body" id="match-game-area">
+                    <p class="text-center text-sm md:text-xl text-amber-200 mb-4 font-bold bg-slate-800/50 p-2 rounded-xl">Kavramı seç, açıklamasını bul!</p>
+                    <div class="flex flex-row gap-2 md:gap-6 h-full px-2">
+                        <div class="flex flex-col gap-2 md:gap-4 w-1/2 justify-center">
+                            <button class="match-btn left-btn" data-id="1">Mihrap</button>
+                            <button class="match-btn left-btn" data-id="2">Minber</button>
+                            <button class="match-btn left-btn" data-id="3">Şadırvan</button>
+                            <button class="match-btn left-btn" data-id="4">Minare</button>
+                        </div>
+                        <div class="flex flex-col gap-2 md:gap-4 w-1/2 justify-center">
+                            <button class="match-btn right-btn" data-match="3">Avluda abdest alınan yerdir.</button>
+                            <button class="match-btn right-btn" data-match="1">İmamın durduğu kıble yönündeki yerdir.</button>
+                            <button class="match-btn right-btn" data-match="4">Ezan okumak için çıkılan yüksek kuledir.</button>
+                            <button class="match-btn right-btn" data-match="2">Hutbe okunan merdivenli yerdir.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <footer class="bg-stone-800 text-stone-300 py-8 text-center text-sm">
-        <p>2024 Din Kültürü ve Ahlak Bilgisi - Cami Mimarisi</p>
-    </footer>
+        <!-- ÖZET / YAZILACAKLAR (Slayt 5) -->
+        <div class="slide" id="slide-5">
+            <div class="presentation-card bg-transparent border-none p-0 !h-full !w-full">
+                <div class="card-header border border-white/10 z-10 w-full relative"><h2 class="title-font"><i class="fas fa-pencil-alt mr-3"></i>Defterimize Yazalım (Özet)</h2></div>
+                <div class="card-body p-0 h-full w-full relative">
+                    <div class="notebook-paper flex flex-col !border-y-0 !border-r-0 !border-white/10 !m-0 absolute inset-0">
+                        <h2 class="text-center text-amber-400 mb-2 underline decoration-wavy text-2xl md:text-4xl font-extrabold pt-2 title-font">CAMİLERİ TANIYALIM</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 w-full flex-grow px-2 md:px-6">
+                            <ul class="list-none m-0 p-0 text-left w-full space-y-0">
+                                <li><i class="fas fa-thumbtack text-amber-500 mr-2 text-lg"></i> <span class="text-emerald-400 font-bold">Temel Kavramlar:</span></li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> <span class="text-amber-200">Mescit:</span> Secde edilen yer.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> <span class="text-amber-200">Cami:</span> Toplayan, cuma kılınan.</li>
+                                <li class="mt-2"><i class="fas fa-thumbtack text-amber-500 mr-2 text-lg"></i> <span class="text-teal-300 font-bold">İç Bölümler:</span></li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-teal-500 mr-1"></i> <span class="text-indigo-300">Mihrap:</span> İmamın durduğu oyuk.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-teal-500 mr-1"></i> <span class="text-indigo-300">Minber:</span> Hutbe okunan merdiven.</li>
+                            </ul>
+                            <ul class="list-none m-0 p-0 text-left w-full space-y-0">
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-teal-500 mr-1"></i> <span class="text-indigo-300">Vaaz Kürsüsü:</span> Vaaz verilen yer.</li>
+                                <li class="mt-2"><i class="fas fa-thumbtack text-amber-500 mr-2 text-lg"></i> <span class="text-teal-300 font-bold">Dış Bölümler:</span></li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-cyan-500 mr-1"></i> <span class="text-indigo-300">Şadırvan:</span> Avludaki abdest yeri.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-cyan-500 mr-1"></i> <span class="text-indigo-300">Minare:</span> Ezan okunan uzun kule.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-cyan-500 mr-1"></i> <span class="text-indigo-300">Kubbe:</span> Yarım küre biçimli çatı.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ARAÇ ÇUBUĞU -->
+    <div id="toolbar" class="toolbar-pill">
+        <div class="drag-handle" id="toolbar-drag" title="Sürükle"><i class="fas fa-grip-vertical"></i></div>
+        <div class="toolbar-content" id="toolbar-content">
+            <button class="nav-btn zoom-btn" onclick="toggleFullScreen()" title="Tam Ekran"><i id="fs-icon" class="fas fa-expand"></i></button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(-5)" title="Küçült"><i class="fas fa-search-minus"></i></button>
+            <button class="nav-btn zoom-btn font-bold font-sans" onclick="resetZoom()" title="Orijinal Boyut">A</button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(5)" title="Büyüt"><i class="fas fa-search-plus"></i></button>
+            <div class="divider"></div>
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+            <span class="text-amber-400 font-bold px-2 md:px-4 text-base md:text-xl" id="counter">1 / 6</span>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <button class="minimize-btn" onclick="toggleToolbar()" title="Küçült/Büyüt"><i id="toolbar-toggle-icon" class="fas fa-compress-alt"></i></button>
+    </div>
 
     <script>
-        // --- ARCHITECTURE EXPLORER LOGIC ---
-        const partsData = {
-            'minare': {
-                title: "Minare",
-                tag: "Dış Bölüm",
-                desc: "Caminin yanında bulunan, yüksek ve ince yapıdır. Müezzin buradan ezan okur.",
-                icon: "fa-bullhorn"
-            },
-            'serefe': {
-                title: "Şerefe",
-                tag: "Dış Bölüm",
-                desc: "Minarenin etrafını saran balkon şeklindeki bölümdür. Müezzin ezanı buradan okur.",
-                icon: "fa-circle-notch"
-            },
-            'kubbe': {
-                title: "Kubbe",
-                tag: "Dış Bölüm",
-                desc: "Caminin üzerini örten yarım küre şeklindeki yapıdır. Gökyüzünü ve birliği simgeler.",
-                icon: "fa-globe-americas" // Abstract for dome
-            },
-            'sadirvan': {
-                title: "Şadırvan",
-                tag: "Dış Bölüm",
-                desc: "Genellikle cami avlusunda bulunan, abdest almak için yapılmış su akan yerdir.",
-                icon: "fa-faucet"
-            },
-            'mihrap': {
-                title: "Mihrap",
-                tag: "İç Bölüm",
-                desc: "Kıble yönünü gösteren, imamın namaz kıldırırken durduğu duvardaki oyuk kısımdır.",
-                icon: "fa-compass"
-            },
-            'minber': {
-                title: "Minber",
-                tag: "İç Bölüm",
-                desc: "Cuma ve bayram namazlarında imamın hutbe okumak için çıktığı merdivenli yerdir.",
-                icon: "fa-signal" // Resembles steps
-            },
-            'kursu': {
-                title: "Vaaz Kürsüsü",
-                tag: "İç Bölüm",
-                desc: "Camide vaaz verip cemaati bilgilendiren kişinin oturduğu yüksekçe yerdir.",
-                icon: "fa-chair"
+        // Slayt
+        let currentSlide = 0; const slides = document.querySelectorAll('.slide');
+        function changeSlide(step) {
+            const n = currentSlide + step;
+            if(n >= 0 && n < slides.length) {
+                slides[currentSlide].classList.remove('active'); slides[n].classList.add('active');
+                currentSlide = n;
+                document.getElementById('prevBtn').disabled = n === 0; document.getElementById('nextBtn').disabled = n === slides.length - 1;
+                document.getElementById('counter').innerText = `${n + 1} / ${slides.length}`;
             }
-        };
+        }
+        changeSlide(0);
+        document.addEventListener('keydown', (e) => { if(e.key==='ArrowRight'||e.key==='Space')changeSlide(1); else if(e.key==='ArrowLeft')changeSlide(-1); });
 
-        function showDetail(partId) {
-            const data = partsData[partId];
-            const defaultView = document.getElementById('default-view');
-            const detailView = document.getElementById('detail-view');
-            
-            // Buttons visual update
-            document.querySelectorAll('.part-btn').forEach(btn => btn.classList.remove('active'));
-            // Find button by onclick attribute containing partId
-            const activeBtn = document.querySelector(`button[onclick="showDetail('${partId}')"]`);
-            if(activeBtn) activeBtn.classList.add('active');
+        // Zoom & Tam Ekran
+        let currentZoom = 100;
+        function changeZoom(amt) {
+            currentZoom += amt;
+            if(currentZoom > 150) currentZoom = 150; if(currentZoom < 70) currentZoom = 70;
+            if(window.innerWidth < 768 && currentZoom > 120) currentZoom = 120;
+            document.documentElement.style.fontSize = currentZoom + '%';
+        }
+        function resetZoom() { currentZoom = 100; document.documentElement.style.fontSize = '100%'; }
+        function toggleFullScreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{}); else if (document.exitFullscreen) document.exitFullscreen(); }
+        document.addEventListener('fullscreenchange', () => { document.getElementById('fs-icon').className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand'; });
 
-            // Content update
-            document.getElementById('detail-title').innerText = data.title;
-            document.getElementById('detail-desc').innerText = data.desc;
-            document.getElementById('detail-tag').innerText = data.tag;
-            document.getElementById('detail-icon').innerHTML = `<i class="fas ${data.icon}"></i>`;
-
-            // Display Logic
-            defaultView.classList.add('hidden');
-            detailView.classList.remove('hidden');
-            
-            // Re-trigger animation
-            detailView.classList.remove('fade-in');
-            void detailView.offsetWidth;
-            detailView.classList.add('fade-in');
+        // Araç Çubuğu
+        function toggleToolbar() {
+            const t = document.getElementById('toolbar'); const i = document.getElementById('toolbar-toggle-icon');
+            t.classList.toggle('collapsed'); i.className = t.classList.contains('collapsed') ? 'fas fa-expand-arrows-alt' : 'fas fa-compress-alt';
+        }
+        const toolbar = document.getElementById('toolbar'); const handle = document.getElementById('toolbar-drag');
+        let isDrag = false, startX, startY, initL, initT;
+        handle.addEventListener('mousedown', e => dragStart(e)); handle.addEventListener('touchstart', e => dragStart(e), {passive:false});
+        document.addEventListener('mousemove', drag); document.addEventListener('touchmove', drag, {passive:false});
+        document.addEventListener('mouseup', () => isDrag=false); document.addEventListener('touchend', () => isDrag=false);
+        function dragStart(e) {
+            if(e.target.closest('.minimize-btn')) return; e.preventDefault(); isDrag = true;
+            if(!toolbar.classList.contains('is-dragged')) { const r = toolbar.getBoundingClientRect(); toolbar.classList.add('is-dragged'); toolbar.style.left = r.left+'px'; toolbar.style.top = r.top+'px'; toolbar.style.bottom='auto'; toolbar.style.right='auto'; toolbar.style.transform='none'; }
+            startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX; startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            initL = toolbar.offsetLeft; initT = toolbar.offsetTop;
+        }
+        function drag(e) {
+            if(!isDrag) return; e.preventDefault();
+            const cx = e.type.includes('touch') ? e.touches[0].clientX : e.clientX; const cy = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            const r = toolbar.getBoundingClientRect(); let nl = initL + (cx - startX), nt = initT + (cy - startY);
+            nl = Math.max(0, Math.min(nl, window.innerWidth - r.width)); nt = Math.max(0, Math.min(nt, window.innerHeight - r.height));
+            toolbar.style.left = nl+'px'; toolbar.style.top = nt+'px';
         }
 
-        function filterParts(filter) {
-            // Button styles
-            ['all', 'dis', 'ic'].forEach(id => {
-                const btn = document.getElementById('btn-' + id);
-                if (id === filter) {
-                    btn.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-100');
-                    btn.classList.add('bg-teal-500', 'text-white');
-                } else {
-                    btn.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-100');
-                    btn.classList.remove('bg-teal-500', 'text-white');
-                }
-            });
-
-            // List filtering
-            const buttons = document.querySelectorAll('.part-btn');
-            buttons.forEach(btn => {
-                if (filter === 'all' || btn.getAttribute('data-category') === filter) {
-                    btn.classList.remove('hidden');
-                } else {
-                    btn.classList.add('hidden');
-                }
-            });
+        // Konfeti
+        function fireConfetti(areaId) {
+            const area = document.getElementById(areaId) || document.body;
+            const colors = ['#fcd34d', '#38bdf8', '#34d399', '#f43f5e'];
+            for (let i = 0; i < 40; i++) {
+                const c = document.createElement('div'); c.classList.add('confetti');
+                c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                c.style.left = Math.random() * 100 + '%'; c.style.top = '0'; area.appendChild(c);
+                c.animate([ { transform: `translate3d(0,0,0)`, opacity: 1 }, { transform: `translate3d(${Math.random()*200-100}px, ${area.offsetHeight||window.innerHeight}px, 0) rotate(${Math.random()*720}deg)`, opacity: 0 } ], { duration: 2000+Math.random()*1000, fill: 'forwards' });
+                setTimeout(() => c.remove(), 3000);
+            }
         }
 
-        // --- STORY GAME LOGIC ---
-        function checkStory() {
-            const answers = {
-                q1: "şadırvan",
-                q2: "kubbe",
-                q3: "minare",
-                q4: "şerefe",
-                q5: "mihrap",
-                q6: "minber",
-                q7: "kürsü"
-            };
-
-            let score = 0;
-            let total = 7;
-
-            for (let i = 1; i <= total; i++) {
-                const select = document.getElementById('q' + i);
-                const userVal = select.value;
-                const correctVal = answers['q' + i];
-
-                select.classList.remove('correct', 'wrong');
-
-                if (userVal === correctVal) {
-                    select.classList.add('correct');
-                    score++;
-                } else {
-                    select.classList.add('wrong');
+        // Oyun 1: Cümle Kurma
+        const sentences = ["Cami Müslümanları birleştiren bir yerdir"];
+        let sentFilled = []; let sentWords = [];
+        function initSentence() {
+            sentFilled = []; const slotsBox = document.getElementById('sentence-slots');
+            slotsBox.innerHTML = ""; slotsBox.classList.replace('border-emerald-500', 'border-white/20');
+            sentWords = sentences[0].split(' '); const shuffled = [...sentWords].sort(()=> Math.random()-0.5);
+            const wContainer = document.getElementById('sentence-words'); wContainer.innerHTML = "";
+            shuffled.forEach((w, i) => { wContainer.innerHTML += `<button class="sent-word" id="sent-w-${i}" onclick="pushSent(this)">${w}</button>`; });
+        }
+        function pushSent(btn) {
+            if(btn.classList.contains('used')) return;
+            const w = btn.innerText; const expectedWord = sentWords[sentFilled.length];
+            if(w === expectedWord) {
+                document.getElementById('sentence-slots').innerHTML += `<div class="sent-slot-word">${w}</div>`;
+                sentFilled.push(w); btn.classList.add('used');
+                if(sentFilled.length === sentWords.length) {
+                    document.getElementById('sentence-slots').classList.replace('border-white/20', 'border-emerald-500');
+                    fireConfetti('sentence-game-area');
                 }
-            }
-
-            const feedback = document.getElementById('story-feedback');
-            feedback.classList.remove('hidden', 'text-green-600', 'text-red-600');
-            
-            if (score === total) {
-                feedback.innerText = "Harika! Hikayeyi eksiksiz tamamladın. 🎉";
-                feedback.classList.add('text-green-600');
             } else {
-                feedback.innerText = `${score} / ${total} doğru. Kırmızı olanları tekrar dene.`;
-                feedback.classList.add('text-red-600');
+                btn.style.backgroundColor = '#ef4444'; btn.style.boxShadow = '0 4px 0 #b91c1c'; btn.style.animation = 'shake 0.4s';
+                setTimeout(() => { btn.style.backgroundColor = ''; btn.style.boxShadow = ''; btn.style.animation = ''; }, 400);
             }
         }
+        initSentence();
 
-        // --- ANSWER CHECK LOGIC ---
-        function checkAnswer(id, correct) {
-            const input = document.getElementById('ans' + id);
-            // Normalize input: uppercase, replace Turkish chars
-            let val = input.value.toLocaleUpperCase('tr-TR').trim();
-            
-            // Allow minor variations if needed, but exact match for now
-            // Replacing spacing issues for multi-word answers
-            val = val.replace(/\s+/g, ' '); 
-
-            if (val === correct) {
-                input.classList.add('bg-green-100', 'text-green-800', 'border-green-500');
-                input.classList.remove('bg-teal-800', 'text-white');
-                input.disabled = true;
-            } else {
-                input.classList.add('animate-pulse', 'border-red-500');
-                setTimeout(() => input.classList.remove('animate-pulse', 'border-red-500'), 1000);
+        // Oyun 2: Eşleştirme
+        let selL = null, selR = null, matches = 0;
+        document.querySelectorAll('.match-btn').forEach(btn => btn.addEventListener('click', e => {
+            const b = e.target.closest('.match-btn'); if(b.classList.contains('correct')) return;
+            const al = document.querySelectorAll('.left-btn'), ar = document.querySelectorAll('.right-btn');
+            if(b.classList.contains('left-btn')) { al.forEach(x => { if(!x.classList.contains('correct')) x.classList.remove('selected') }); b.classList.add('selected'); selL = b; } 
+            else if(b.classList.contains('right-btn')) { ar.forEach(x => { if(!x.classList.contains('correct')) x.classList.remove('selected') }); b.classList.add('selected'); selR = b; }
+            if(selL && selR) {
+                if(selL.dataset.id === selR.dataset.match) {
+                    selL.classList.replace('selected', 'correct'); selR.classList.replace('selected', 'correct');
+                    selL.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>'; selR.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>';
+                    matches++; if(matches === 4) setTimeout(() => fireConfetti('match-game-area'), 300);
+                } else {
+                    selL.classList.add('wrong'); selR.classList.add('wrong');
+                    setTimeout(() => { selL.classList.remove('wrong', 'selected'); selR.classList.remove('wrong', 'selected'); }, 600);
+                }
+                selL = null; selR = null;
             }
-        }
-
+        }));
     </script>
 </body>
 </html>

@@ -2,333 +2,319 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kültürümüzden Cami Örnekleri</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>5.3 Kültürümüzden Cami Örnekleri</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #fdfcf6; /* Ivory/Paper */
-            color: #3e2723; /* Dark brown */
-        }
-        .serif-font {
-            font-family: 'Libre Baskerville', serif;
-        }
-        .pattern-bg {
-            background-color: #5d4037;
-            background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238d6e63' fill-opacity='0.4'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        .card-zoom {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-zoom:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        /* Tab Animation */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s ease-out;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Nunito:wght@400;600;700&display=swap');
+        html { font-size: 100%; transition: font-size 0.3s ease; }
+        body { font-family: 'Nunito', sans-serif; overflow: hidden; margin: 0; padding: 0; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0f172a; color: #f8fafc; }
+        .title-font { font-family: 'Cinzel', serif; }
         
-        .game-item {
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        .game-item.selected {
-            background-color: #d7ccc8;
-            border-color: #5d4037;
-        }
-        .game-item.matched {
-            background-color: #a5d6a7;
-            border-color: #2e7d32;
-            color: #1b5e20;
-            pointer-events: none;
+        .slide { display: none; opacity: 0; height: 100%; width: 100%; padding: 0.5rem; flex-direction: column; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 10; }
+        .slide.active { display: flex; opacity: 1; z-index: 20; animation: fadeUp 0.6s forwards; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .presentation-card { background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6); border-radius: 1.5rem; width: 98vw; height: 96dvh; display: flex; flex-direction: column; position: relative; margin: auto; overflow: hidden; }
+        .card-header { background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #fbbf24; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;}
+        .card-body { flex-grow: 1; padding: 1rem 2rem; display: flex; flex-direction: column; justify-content: center; overflow-y: auto;}
+
+        .info-box { background: rgba(15, 23, 42, 0.5); border-radius: 1rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.3s; }
+        .info-box.blue { border-bottom: 3px solid #3b82f6; } .info-box.teal { border-bottom: 3px solid #14b8a6; } .info-box.green { border-bottom: 3px solid #10b981; } .info-box.orange { border-bottom: 3px solid #f59e0b; } .info-box.purple { border-bottom: 3px solid #8b5cf6; }
+        .highlight-dark { background: rgba(251, 191, 36, 0.15); color: #fcd34d; padding: 0.1rem 0.4rem; border-radius: 0.3rem; font-weight: 700; }
+
+        /* YÜZEN ARAÇ ÇUBUĞU */
+        .toolbar-pill { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); z-index: 9999; background: rgba(15, 23, 42, 0.85); border-radius: 9999px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; padding: 0.4rem; gap: 0.5rem; transition: all 0.3s ease; }
+        .toolbar-pill.collapsed { width: 3.8rem; height: 3.8rem; padding: 0; justify-content: center; border-radius: 50%; }
+        .drag-handle { cursor: grab; color: #94a3b8; padding: 0.5rem 0.8rem; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .toolbar-content { display: flex; align-items: center; gap: 0.8rem; overflow: hidden; transition: all 0.3s ease; white-space: nowrap; }
+        .toolbar-pill.collapsed .toolbar-content, .toolbar-pill.collapsed .drag-handle { display: none; }
+        .nav-btn { background: rgba(255,255,255,0.1); color: #fbbf24; border: 1px solid rgba(255,255,255,0.1); width: 2.8rem; height: 2.8rem; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .nav-btn:hover { background: rgba(251, 191, 36, 0.2); transform: scale(1.1); }
+        .nav-btn:disabled { background: transparent; color: #475569; border-color: transparent; cursor: not-allowed;}
+        .zoom-btn { background: transparent; color: #94a3b8; border: none; width: 2.4rem; height: 2.4rem; font-size: 1.1rem; cursor: pointer;}
+        .minimize-btn { background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 1.2rem; width: 3rem; height: 3rem; }
+
+        /* DEFTER */
+        .notebook-paper { background-color: #1e293b; background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 3rem; line-height: 3rem; padding: 1rem 2rem 1rem 4rem; border-left: 4px solid #ef4444; color: #f8fafc; font-size: clamp(1.2rem, 3vw, 2.2rem); font-weight: bold; position: relative; overflow-y: auto; width: 100%; height: 100%; }
+        .notebook-paper::before { content: ''; position: absolute; top: 0; bottom: 0; left: 2.5rem; width: 2px; background-color: rgba(239, 68, 68, 0.4); }
+
+        /* OYUNLAR */
+        .flip-card { background: transparent; width: 100%; height: 160px; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; border-radius: 1rem; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 1rem; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.2); padding: 1rem;}
+        .flip-card-front { background: rgba(30,41,59,0.8); color: #cbd5e1; }
+        .flip-card-back { background: rgba(217,119,6,0.9); color: white; transform: rotateY(180deg); box-shadow: 0 0 30px rgba(245,158,11,0.3); border-color: rgba(251,191,36,0.5);}
+
+        .fill-blank-btn { padding: 0.8rem 1.5rem; border-radius: 0.5rem; background: rgba(51, 65, 85, 0.8); font-weight: bold; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; font-size: 1.2rem; transition: transform 0.1s;}
+        .fill-blank-btn:active { transform: scale(0.95); }
+        .fill-blank-btn.selected { background: rgba(245, 158, 11, 0.8); color: white; border-color: #fcd34d; transform: scale(1.1); box-shadow: 0 0 15px rgba(245,158,11,0.5);}
+        .fill-slot { display: inline-block; min-width: 150px; height: 35px; border-bottom: 3px dashed #fbbf24; text-align: center; color: #fcd34d; font-weight: bold; cursor: pointer; padding: 0 0.5rem; margin: 0 5px;}
+        
+        .confetti { position: absolute; width: 10px; height: 10px; opacity: 0; z-index: 100; pointer-events: none;}
+
+        /* MOBİL UYUMLULUK */
+        @media (max-width: 768px) {
+            .presentation-card { border-radius: 0; width: 100vw; height: 100dvh; border: none; }
+            .card-header { flex-direction: column; text-align: center; padding: 0.8rem; gap: 0.5rem; }
+            .card-header h2 { font-size: 1.4rem !important; }
+            .card-body { padding: 0.5rem; }
+            .info-box { padding: 1rem; margin-bottom: 0.5rem; }
+            .toolbar-pill { width: 95%; max-width: 400px; padding: 0.3rem; gap: 0.3rem; justify-content: space-around; bottom: 0.5rem; flex-wrap: wrap;}
+            .toolbar-content { gap: 0.3rem; flex-wrap: wrap; justify-content: center; }
+            .nav-btn { width: 2.4rem; height: 2.4rem; font-size: 1rem; }
+            .zoom-btn { width: 2rem; height: 2rem; font-size: 1rem; }
+            .notebook-paper { padding: 1rem 0.5rem 1rem 2rem; font-size: 1.1rem !important; line-height: 1.8rem !important; background-size: 100% 1.8rem !important; }
+            .notebook-paper::before { left: 1.2rem; }
+            .flip-card { height: 120px; }
+            .flip-card-front p { font-size: 1rem !important; }
+            .flip-card-back p { font-size: 1.5rem !important; }
+            .fill-blank-btn { font-size: 0.9rem !important; padding: 0.5rem; }
+            .fill-slot { min-width: 100px; height: 25px; }
         }
     </style>
 </head>
-<body>
-
-    <!-- Header -->
-    <header class="pattern-bg text-[#efebe9] py-12 px-4 text-center rounded-b-[50px] shadow-2xl relative overflow-hidden mb-12 border-b-8 border-[#3e2723]">
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <span class="bg-[#efebe9]/10 border border-[#efebe9]/30 text-[#efebe9] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">5. Ünite</span>
-            <h1 class="text-4xl md:text-6xl serif-font font-bold mb-4">KÜLTÜRÜMÜZ VE CAMİLER</h1>
-            <p class="text-xl text-[#d7ccc8] italic max-w-2xl mx-auto">
-                "Yeryüzünün mescitleri, Allah'ın evleridir."
-            </p>
+<body style="background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);">
+    <div id="slides-container" class="relative w-full h-full z-10">
+        
+        <!-- Kapak (Slayt 0) -->
+        <div class="slide active" id="slide-0">
+            <div class="presentation-card justify-center items-center text-center p-8 border-none">
+                <i class="fas fa-chess-rook text-7xl md:text-8xl text-amber-400 mb-6 drop-shadow-2xl"></i>
+                <h2 class="text-xl md:text-3xl tracking-widest text-slate-300 mb-3 uppercase font-bold title-font">5.3. Konu</h2>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white title-font px-4">Kültürümüzden Cami Örnekleri</h1>
+                <button onclick="changeSlide(1)" class="mt-8 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 px-8 py-3 rounded-full text-xl md:text-2xl font-bold hover:scale-105 transition"><i class="fas fa-play mr-2"></i> Başla</button>
+            </div>
         </div>
-    </header>
 
-    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
-
-        <!-- BÖLÜM 1: ÜÇ KUTSAL MESCİT -->
-        <section>
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 serif-font">Üç Harem (Mescid-i Selase)</h2>
-                <div class="h-1 w-20 bg-orange-400 mx-auto rounded"></div>
-                <p class="text-gray-600 mt-4">Peygamberimiz'in "Sadece şu üç mescide yolculuk yapılır" dediği kutsal mekanlar.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Kabe -->
-                <div class="bg-white rounded-2xl shadow-lg border-t-8 border-black overflow-hidden card-zoom group">
-                    <div class="h-40 bg-gray-900 flex items-center justify-center text-white relative">
-                        <i class="fas fa-kaaba text-7xl group-hover:scale-110 transition duration-500"></i>
-                        <div class="absolute bottom-2 right-2 text-xs opacity-50">Mekke</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Mescid-i Haram (Kâbe)</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed mb-4">
-                            Yeryüzünün ilk mabedidir (Beytullah). Hz. İbrahim ve Hz. İsmail tarafından yeniden inşa edilmiştir. Müslümanların kıblesidir.
-                        </p>
-                        <span class="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded font-bold">Hac & Umre</span>
-                    </div>
-                </div>
-
-                <!-- Mescid-i Nebi -->
-                <div class="bg-white rounded-2xl shadow-lg border-t-8 border-emerald-500 overflow-hidden card-zoom group">
-                    <div class="h-40 bg-emerald-700 flex items-center justify-center text-white relative">
-                        <i class="fas fa-mosque text-7xl group-hover:scale-110 transition duration-500"></i>
-                        <div class="absolute bottom-2 right-2 text-xs opacity-50">Medine</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Mescid-i Nebevi</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed mb-4">
-                            Peygamber Mescidi demektir. Hicretten sonra Hz. Peygamber ve ashabı tarafından inşa edilmiştir. Kabri buradadır.
-                        </p>
-                        <span class="inline-block bg-emerald-50 text-emerald-800 text-xs px-2 py-1 rounded font-bold">Hz. Peygamber'in Kabri</span>
-                    </div>
-                </div>
-
-                <!-- Mescid-i Aksa -->
-                <div class="bg-white rounded-2xl shadow-lg border-t-8 border-amber-500 overflow-hidden card-zoom group">
-                    <div class="h-40 bg-amber-600 flex items-center justify-center text-white relative">
-                        <i class="fas fa-place-of-worship text-7xl group-hover:scale-110 transition duration-500"></i>
-                        <div class="absolute bottom-2 right-2 text-xs opacity-50">Kudüs</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Mescid-i Aksa</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed mb-4">
-                            "Uzak Mescit" demektir. İlk kıblemizdir. Hz. Süleyman tarafından inşa edilmiştir. İsra ve Miraç olayının yaşandığı yerdir.
-                        </p>
-                        <span class="inline-block bg-amber-50 text-amber-800 text-xs px-2 py-1 rounded font-bold">Beytülmakdis</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 2: ANADOLU MİRASI (ULU ve SELATİN) -->
-        <section class="bg-white rounded-3xl shadow-xl overflow-hidden border border-[#d7ccc8]">
-            <div class="bg-[#efebe9] p-2 flex text-center">
-                <button onclick="openTab('ulu')" id="btn-ulu" class="flex-1 py-4 font-bold text-[#5d4037] border-b-4 border-[#5d4037] bg-white rounded-t-lg transition">
-                    ULU CAMİLER
-                </button>
-                <button onclick="openTab('selatin')" id="btn-selatin" class="flex-1 py-4 font-bold text-gray-500 border-b-4 border-transparent hover:bg-white/50 transition">
-                    SELATİN CAMİLERİ
-                </button>
-            </div>
-
-            <div class="p-8 min-h-[300px]">
-                <!-- ULU CAMİLER -->
-                <div id="ulu" class="tab-content active">
-                    <div class="flex flex-col md:flex-row gap-8 items-center">
-                        <div class="md:w-1/2">
-                            <h3 class="text-2xl font-bold text-[#3e2723] mb-4">Şehrin Kalbi: Ulu Camiler</h3>
-                            <p class="text-gray-700 mb-4 leading-relaxed">
-                                Selçuklu ve Beylikler döneminde yapılan, şehrin en büyük ibadethanelerine "Ulu Cami" veya "Cami-i Kebir" denir. Cuma namazları burada kılınır, hayat burada akar.
-                            </p>
-                            <ul class="space-y-2">
-                                <li class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-orange-500"></i> Bursa Ulu Cami</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-orange-500"></i> Diyarbakır Ulu Cami</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-orange-500"></i> Sivas Divriği Ulu Cami (Taş işçiliği şaheseri)</li>
+        <!-- KONU 1 (Slayt 1) -->
+        <div class="slide" id="slide-1">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-star-and-crescent text-amber-400 mr-3"></i>Üç Kutsal Mescit</h2></div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
+                        <div class="info-box blue justify-start w-full">
+                            <i class="fas fa-kaaba text-4xl md:text-5xl mb-4 text-blue-400"></i>
+                            <h3 class="text-lg md:text-xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2 w-full">Kâbe</h3>
+                            <ul class="text-base md:text-lg text-left space-y-3">
+                                <li><i class="fas fa-angle-right text-blue-400 mr-2"></i> Yeryüzünün <span class="highlight-dark">ilk mabedi</span>.</li>
+                                <li><i class="fas fa-angle-right text-blue-400 mr-2"></i> Müslümanların kıblesi.</li>
+                                <li><i class="fas fa-angle-right text-blue-400 mr-2"></i> Kur'an'da <span class="highlight-dark">Beytullah</span> denir.</li>
                             </ul>
                         </div>
-                        <div class="md:w-1/2 bg-[#f5f5f5] h-64 rounded-xl flex items-center justify-center border border-gray-200 relative overflow-hidden group">
-                            <i class="fas fa-gopuram text-9xl text-gray-300 group-hover:scale-110 transition duration-700"></i>
-                            <div class="absolute bottom-0 w-full bg-black/50 text-white p-2 text-center text-sm">Genelde çok sütunlu ve düz çatılıdırlar.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SELATİN CAMİLERİ -->
-                <div id="selatin" class="tab-content">
-                    <div class="flex flex-col md:flex-row gap-8 items-center">
-                        <div class="md:w-1/2">
-                            <h3 class="text-2xl font-bold text-[#3e2723] mb-4">Sultanların İmzası: Selatin Camileri</h3>
-                            <p class="text-gray-700 mb-4 leading-relaxed">
-                                Osmanlı döneminde padişahlar ve hanedan üyeleri tarafından yaptırılan, genellikle birden fazla minaresi olan ihtişamlı camilerdir. "Selatin", sultan kelimesinin çoğuludur.
-                            </p>
-                            <ul class="space-y-2">
-                                <li class="flex items-center gap-2"><i class="fas fa-crown text-purple-500"></i> Sultanahmet Camii (İstanbul)</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-crown text-purple-500"></i> Süleymaniye Camii (İstanbul)</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-crown text-purple-500"></i> Selimiye Camii (Edirne)</li>
+                        <div class="info-box teal justify-start w-full">
+                            <i class="fas fa-mosque text-4xl md:text-5xl mb-4 text-teal-400"></i>
+                            <h3 class="text-lg md:text-xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2 w-full">Mescid-i Aksa</h3>
+                            <ul class="text-base md:text-lg text-left space-y-3">
+                                <li><i class="fas fa-angle-right text-teal-400 mr-2"></i> Kudüs'tedir.</li>
+                                <li><i class="fas fa-angle-right text-teal-400 mr-2"></i> Müslümanların <span class="highlight-dark">ilk kıblesi</span>.</li>
+                                <li><i class="fas fa-angle-right text-teal-400 mr-2"></i> İsra ve Miraç burada gerçekleşmiştir.</li>
                             </ul>
                         </div>
-                        <div class="md:w-1/2 bg-[#f5f5f5] h-64 rounded-xl flex items-center justify-center border border-gray-200 relative overflow-hidden group">
-                            <i class="fas fa-mosque text-9xl text-purple-300 group-hover:scale-110 transition duration-700"></i>
-                            <div class="absolute bottom-0 w-full bg-black/50 text-white p-2 text-center text-sm">Büyük kubbeler ve ince minarelerle süslüdür.</div>
+                        <div class="info-box green justify-start w-full">
+                            <i class="fas fa-home text-4xl md:text-5xl mb-4 text-emerald-400"></i>
+                            <h3 class="text-lg md:text-xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2 w-full">Mescid-i Nebevi</h3>
+                            <ul class="text-base md:text-lg text-left space-y-3">
+                                <li><i class="fas fa-angle-right text-emerald-400 mr-2"></i> Medine'de inşa edilmiştir.</li>
+                                <li><i class="fas fa-angle-right text-emerald-400 mr-2"></i> <span class="highlight-dark">Peygamber Mescidi</span> anlamına gelir.</li>
+                                <li><i class="fas fa-angle-right text-emerald-400 mr-2"></i> Peygamberimizin kabri buradadır.</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- BÖLÜM 3: SANAT DETAYLARI (Görsel Kartlar) -->
-        <section class="text-center">
-            <h2 class="text-3xl font-bold text-[#3e2723] mb-8 serif-font">Mimarideki İnce Sanat</h2>
-            
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-teal-500">
-                    <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 text-teal-600 text-3xl">
-                        <i class="fas fa-pen-nib"></i>
+        <!-- ETKİNLİK 1 (Slayt 2) -->
+        <div class="slide" id="slide-2">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-question-circle text-amber-400 mr-3"></i>Etkinlik 1: Hangi Mescidim?</h2></div>
+                <div class="card-body">
+                    <p class="text-center text-sm md:text-xl text-amber-200 mb-4 font-bold bg-slate-800/50 p-2 rounded-xl">İpucunu oku, mescidi tahmin et ve karta dokun!</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-grow content-center px-2">
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><p class="font-bold">"Kur'an'da Beytullah (Allah'ın Evi) olarak anılırım."</p></div><div class="flip-card-back"><p class="font-bold title-font text-2xl md:text-4xl"><i class="fas fa-kaaba block mb-2"></i> Kâbe</p></div></div></div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><p class="font-bold">"Müslümanların ilk kıblesiyim, Kudüs'teyim."</p></div><div class="flip-card-back"><p class="font-bold title-font text-2xl md:text-4xl"><i class="fas fa-mosque block mb-2"></i> Mescid-i Aksa</p></div></div></div>
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><p class="font-bold">"İçimde Hz. Peygamberin kabri bulunur."</p></div><div class="flip-card-back"><p class="font-bold title-font text-2xl md:text-4xl"><i class="fas fa-home block mb-2"></i> Mescid-i Nebevi</p></div></div></div>
                     </div>
-                    <h3 class="font-bold text-gray-800 text-lg">Hüsnühat</h3>
-                    <p class="text-sm text-gray-600 mt-2">Cami duvarlarını süsleyen, ayetlerin en güzel şekilde yazıldığı yazı sanatıdır.</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-blue-500">
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600 text-3xl">
-                        <i class="fas fa-shapes"></i>
-                    </div>
-                    <h3 class="font-bold text-gray-800 text-lg">Çini</h3>
-                    <p class="text-sm text-gray-600 mt-2">Duvarları kaplayan, çiçek ve geometrik desenli seramiklerdir (Örn: İznik Yeşil Cami).</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-orange-500">
-                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-600 text-3xl">
-                        <i class="fas fa-hammer"></i>
-                    </div>
-                    <h3 class="font-bold text-gray-800 text-lg">Taş İşçiliği</h3>
-                    <p class="text-sm text-gray-600 mt-2">Kapı ve mihraplarda taşın dantel gibi işlenmesidir (Örn: Divriği Ulu Cami).</p>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- BÖLÜM 4: EŞLEŞTİRME OYUNU -->
-        <section class="max-w-4xl mx-auto bg-[#efebe9] p-8 rounded-3xl border border-[#d7ccc8] shadow-inner">
-            <div class="text-center mb-6">
-                <span class="bg-[#5d4037] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Etkinlik</span>
-                <h2 class="text-2xl font-bold text-[#3e2723] mt-2">Cümleleri Tamamla</h2>
-                <p class="text-gray-600">Sol taraftaki başlangıcı sağdaki doğru sonla eşleştir.</p>
-            </div>
-
-            <div class="flex flex-col md:flex-row gap-8 justify-between">
-                <!-- Sol Sütun -->
-                <div class="flex-1 space-y-3" id="left-col">
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm font-bold text-gray-700 text-sm" onclick="selectItem('left', 1, this)">1. Camilerde bir araya gelen Müslümanlar,</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm font-bold text-gray-700 text-sm" onclick="selectItem('left', 2, this)">2. Cuma namazının kılındığı büyük camilere</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm font-bold text-gray-700 text-sm" onclick="selectItem('left', 3, this)">3. Kudüs'teki Mescid-i Aksa</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm font-bold text-gray-700 text-sm" onclick="selectItem('left', 4, this)">4. Kâbe, Kur'an-ı Kerim'de</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm font-bold text-gray-700 text-sm" onclick="selectItem('left', 5, this)">5. Padişahların yaptırdığı camilere</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm font-bold text-gray-700 text-sm" onclick="selectItem('left', 6, this)">6. Mescid-i Nebevi'de</div>
-                </div>
-
-                <!-- Sağ Sütun -->
-                <div class="flex-1 space-y-3" id="right-col">
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm text-gray-600 text-sm" onclick="selectItem('right', 4, this)">Beytullah (Allah'ın evi) olarak anılır.</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm text-gray-600 text-sm" onclick="selectItem('right', 6, this)">Hz. Peygamber'in kabri bulunur.</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm text-gray-600 text-sm" onclick="selectItem('right', 1, this)">sevinç ve üzüntülerini paylaşırlar.</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm text-gray-600 text-sm" onclick="selectItem('right', 2, this)">"Ulu Cami" denir.</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm text-gray-600 text-sm" onclick="selectItem('right', 5, this)">"Selatin Camileri" denir.</div>
-                    <div class="game-item bg-white p-3 rounded-lg border border-gray-300 shadow-sm text-gray-600 text-sm" onclick="selectItem('right', 3, this)">Müslümanların ilk kıblesidir.</div>
+        <!-- KONU 2 (Slayt 3) -->
+        <div class="slide" id="slide-3">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-chess-rook text-amber-400 mr-3"></i>Ulu ve Selatin Camileri</h2></div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                        <div class="info-box orange justify-start w-full">
+                            <i class="fas fa-users text-5xl md:text-6xl mb-4 text-orange-400"></i>
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2 w-full">Ulu Camiler</h3>
+                            <ul class="text-base md:text-xl text-left space-y-3">
+                                <li><i class="fas fa-sun text-orange-400 mr-2"></i> Şehrin en büyük ibadethaneleri ve <span class="highlight-dark">cuma camileridir.</span></li>
+                                <li><i class="fas fa-university text-orange-400 mr-2"></i> Selçuklu döneminden kalmadır. (Örn: Bursa Ulu Camii)</li>
+                            </ul>
+                        </div>
+                        <div class="info-box purple justify-start w-full">
+                            <i class="fas fa-chess-king text-5xl md:text-6xl mb-4 text-purple-400"></i>
+                            <h3 class="text-lg md:text-2xl font-bold mb-4 title-font text-white border-b border-white/20 pb-2 w-full">Selatin Camileri</h3>
+                            <ul class="text-base md:text-xl text-left space-y-3">
+                                <li><i class="fas fa-crown text-purple-400 mr-2"></i> Osmanlı'da <span class="highlight-dark">sultanların</span> yaptırdığı camilerdir.</li>
+                                <li><i class="fas fa-place-of-worship text-purple-400 mr-2"></i> <span class="highlight-dark">Birden fazla minareye</span> sahiptirler. (Örn: Süleymaniye)</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div id="game-feedback" class="text-center mt-6 font-bold text-lg h-8 text-green-700"></div>
-        </section>
+        <!-- ETKİNLİK 2 (Slayt 4) -->
+        <div class="slide" id="slide-4">
+            <div class="presentation-card">
+                <div class="card-header"><h2 class="title-font"><i class="fas fa-pen text-amber-400 mr-3"></i>Etkinlik 2: Boşlukları Doldur</h2></div>
+                <div class="card-body flex flex-col items-center" id="fill-game-area">
+                    <p class="text-sm md:text-xl text-amber-200 mb-4 font-bold bg-slate-800/80 p-2 rounded-xl text-center">Önce kelimeye, sonra boşluğa dokun!</p>
+                    <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6" id="fill-word-bank">
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Selatin')">Selatin</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Ulu')">Ulu</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Cuma')">Cuma</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Minare')">Minare</button>
+                    </div>
+                    <div class="bg-slate-800/60 p-4 md:p-8 rounded-2xl border border-white/10 w-full max-w-4xl text-base md:text-2xl text-slate-200 font-semibold space-y-4 md:space-y-8 shadow-xl overflow-y-auto">
+                        <p>1. Osmanlı padişahlarının yaptırdığı camilere <span class="fill-slot" data-ans="Selatin" onclick="placeWord(this)">________</span> camileri denir.</p>
+                        <p>2. Şehrin merkezinde <span class="fill-slot" data-ans="Cuma" onclick="placeWord(this)">________</span> namazı kılınan en büyük camilere <span class="fill-slot" data-ans="Ulu" onclick="placeWord(this)">________</span> Cami denir.</p>
+                        <p>3. Selatin camilerinin ortak özelliği birden fazla <span class="fill-slot" data-ans="Minare" onclick="placeWord(this)">________</span> ye sahip olmalarıdır.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    </main>
+        <!-- ÖZET / YAZILACAKLAR (Slayt 5) -->
+        <div class="slide" id="slide-5">
+            <div class="presentation-card bg-transparent border-none p-0 !h-full !w-full">
+                <div class="card-header border border-white/10 z-10 w-full relative"><h2 class="title-font"><i class="fas fa-pencil-alt mr-3"></i>Defterimize Yazalım (Özet)</h2></div>
+                <div class="card-body p-0 h-full w-full relative">
+                    <div class="notebook-paper flex flex-col !border-y-0 !border-r-0 !border-white/10 !m-0 absolute inset-0">
+                        <h2 class="text-center text-amber-400 mb-2 underline decoration-wavy text-2xl md:text-4xl font-extrabold pt-2 title-font">KÜLTÜRÜMÜZDEN CAMİ ÖRNEKLERİ</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 w-full flex-grow px-2 md:px-6">
+                            <ul class="list-none m-0 p-0 text-left w-full space-y-0">
+                                <li><i class="fas fa-thumbtack text-amber-500 mr-2 text-lg"></i> <span class="text-emerald-400 font-bold">Üç Kutsal Mescit:</span></li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> <span class="text-amber-200">1. Kâbe:</span> Yeryüzünün ilk mabedi.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> <span class="text-amber-200">2. Mescid-i Aksa:</span> İlk kıblemiz.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-emerald-500 mr-1"></i> <span class="text-amber-200">3. Mescid-i Nebevi:</span> Peygamber mescidi.</li>
+                            </ul>
+                            <ul class="list-none m-0 p-0 text-left w-full space-y-0">
+                                <li class="mt-2 md:mt-0"><i class="fas fa-thumbtack text-amber-500 mr-2 text-lg"></i> <span class="text-teal-300 font-bold">Cami Türleri:</span></li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-cyan-500 mr-1"></i> <span class="text-indigo-300">Ulu Camiler:</span> Selçuklu dönemi.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-transparent mr-1"></i> En büyük cuma camileridir.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-cyan-500 mr-1"></i> <span class="text-indigo-300">Selatin Camileri:</span> Osmanlı dönemi.</li>
+                                <li class="pl-6 text-slate-300 font-bold"><i class="fas fa-angle-right text-transparent mr-1"></i> Sultanların yaptırdığı çok minareli camiler.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <footer class="bg-[#3e2723] text-[#d7ccc8] py-8 text-center text-sm">
-        <p>2024 Din Kültürü ve Ahlak Bilgisi - Cami Kültürü</p>
-    </footer>
+    </div>
+
+    <!-- ARAÇ ÇUBUĞU -->
+    <div id="toolbar" class="toolbar-pill">
+        <div class="drag-handle" id="toolbar-drag" title="Sürükle"><i class="fas fa-grip-vertical"></i></div>
+        <div class="toolbar-content" id="toolbar-content">
+            <button class="nav-btn zoom-btn" onclick="toggleFullScreen()" title="Tam Ekran"><i id="fs-icon" class="fas fa-expand"></i></button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(-5)" title="Küçült"><i class="fas fa-search-minus"></i></button>
+            <button class="nav-btn zoom-btn font-bold font-sans" onclick="resetZoom()" title="Orijinal Boyut">A</button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(5)" title="Büyüt"><i class="fas fa-search-plus"></i></button>
+            <div class="divider"></div>
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+            <span class="text-amber-400 font-bold px-2 md:px-4 text-base md:text-xl" id="counter">1 / 6</span>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <button class="minimize-btn" onclick="toggleToolbar()" title="Küçült/Büyüt"><i id="toolbar-toggle-icon" class="fas fa-compress-alt"></i></button>
+    </div>
 
     <script>
-        // --- TAB LOGIC ---
-        function openTab(tabId) {
-            // Hide contents
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            // Show selected
-            document.getElementById(tabId).classList.add('active');
-            
-            // Button Styles
-            const btnUlu = document.getElementById('btn-ulu');
-            const btnSelatin = document.getElementById('btn-selatin');
+        // Slayt
+        let currentSlide = 0; const slides = document.querySelectorAll('.slide');
+        function changeSlide(step) {
+            const n = currentSlide + step;
+            if(n >= 0 && n < slides.length) {
+                slides[currentSlide].classList.remove('active'); slides[n].classList.add('active');
+                currentSlide = n;
+                document.getElementById('prevBtn').disabled = n === 0; document.getElementById('nextBtn').disabled = n === slides.length - 1;
+                document.getElementById('counter').innerText = `${n + 1} / ${slides.length}`;
+            }
+        }
+        changeSlide(0);
+        document.addEventListener('keydown', (e) => { if(e.key==='ArrowRight'||e.key==='Space')changeSlide(1); else if(e.key==='ArrowLeft')changeSlide(-1); });
 
-            if(tabId === 'ulu') {
-                btnUlu.classList.add('border-[#5d4037]', 'text-[#5d4037]', 'bg-white');
-                btnUlu.classList.remove('border-transparent', 'text-gray-500', 'hover:bg-white/50');
-                
-                btnSelatin.classList.remove('border-[#5d4037]', 'text-[#5d4037]', 'bg-white');
-                btnSelatin.classList.add('border-transparent', 'text-gray-500', 'hover:bg-white/50');
-            } else {
-                btnSelatin.classList.add('border-[#5d4037]', 'text-[#5d4037]', 'bg-white');
-                btnSelatin.classList.remove('border-transparent', 'text-gray-500', 'hover:bg-white/50');
-                
-                btnUlu.classList.remove('border-[#5d4037]', 'text-[#5d4037]', 'bg-white');
-                btnUlu.classList.add('border-transparent', 'text-gray-500', 'hover:bg-white/50');
+        // Zoom & Tam Ekran
+        let currentZoom = 100;
+        function changeZoom(amt) {
+            currentZoom += amt;
+            if(currentZoom > 150) currentZoom = 150; if(currentZoom < 70) currentZoom = 70;
+            if(window.innerWidth < 768 && currentZoom > 120) currentZoom = 120;
+            document.documentElement.style.fontSize = currentZoom + '%';
+        }
+        function resetZoom() { currentZoom = 100; document.documentElement.style.fontSize = '100%'; }
+        function toggleFullScreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{}); else if (document.exitFullscreen) document.exitFullscreen(); }
+        document.addEventListener('fullscreenchange', () => { document.getElementById('fs-icon').className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand'; });
+
+        // Araç Çubuğu
+        function toggleToolbar() {
+            const t = document.getElementById('toolbar'); const i = document.getElementById('toolbar-toggle-icon');
+            t.classList.toggle('collapsed'); i.className = t.classList.contains('collapsed') ? 'fas fa-expand-arrows-alt' : 'fas fa-compress-alt';
+        }
+        const toolbar = document.getElementById('toolbar'); const handle = document.getElementById('toolbar-drag');
+        let isDrag = false, startX, startY, initL, initT;
+        handle.addEventListener('mousedown', e => dragStart(e)); handle.addEventListener('touchstart', e => dragStart(e), {passive:false});
+        document.addEventListener('mousemove', drag); document.addEventListener('touchmove', drag, {passive:false});
+        document.addEventListener('mouseup', () => isDrag=false); document.addEventListener('touchend', () => isDrag=false);
+        function dragStart(e) {
+            if(e.target.closest('.minimize-btn')) return; e.preventDefault(); isDrag = true;
+            if(!toolbar.classList.contains('is-dragged')) { const r = toolbar.getBoundingClientRect(); toolbar.classList.add('is-dragged'); toolbar.style.left = r.left+'px'; toolbar.style.top = r.top+'px'; toolbar.style.bottom='auto'; toolbar.style.right='auto'; toolbar.style.transform='none'; }
+            startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX; startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            initL = toolbar.offsetLeft; initT = toolbar.offsetTop;
+        }
+        function drag(e) {
+            if(!isDrag) return; e.preventDefault();
+            const cx = e.type.includes('touch') ? e.touches[0].clientX : e.clientX; const cy = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            const r = toolbar.getBoundingClientRect(); let nl = initL + (cx - startX), nt = initT + (cy - startY);
+            nl = Math.max(0, Math.min(nl, window.innerWidth - r.width)); nt = Math.max(0, Math.min(nt, window.innerHeight - r.height));
+            toolbar.style.left = nl+'px'; toolbar.style.top = nt+'px';
+        }
+
+        // Konfeti
+        function fireConfetti(areaId) {
+            const area = document.getElementById(areaId) || document.body;
+            const colors = ['#fcd34d', '#38bdf8', '#34d399', '#f43f5e'];
+            for (let i = 0; i < 40; i++) {
+                const c = document.createElement('div'); c.classList.add('confetti');
+                c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                c.style.left = Math.random() * 100 + '%'; c.style.top = '0'; area.appendChild(c);
+                c.animate([ { transform: `translate3d(0,0,0)`, opacity: 1 }, { transform: `translate3d(${Math.random()*200-100}px, ${area.offsetHeight||window.innerHeight}px, 0) rotate(${Math.random()*720}deg)`, opacity: 0 } ], { duration: 2000+Math.random()*1000, fill: 'forwards' });
+                setTimeout(() => c.remove(), 3000);
             }
         }
 
-        // --- MATCHING GAME LOGIC ---
-        let selectedLeft = null;
-        let selectedRight = null;
-        let matchesFound = 0;
-        const totalMatches = 6;
-
-        function selectItem(side, id, el) {
-            // Ignore if already matched
-            if(el.classList.contains('matched')) return;
-
-            // Handle styling for selected item
-            const container = side === 'left' ? document.getElementById('left-col') : document.getElementById('right-col');
-            // Remove 'selected' from siblings
-            Array.from(container.children).forEach(child => child.classList.remove('selected'));
-            el.classList.add('selected');
-
-            // Store selection
-            if(side === 'left') selectedLeft = { id: id, element: el };
-            else selectedRight = { id: id, element: el };
-
-            // Check match
-            if(selectedLeft && selectedRight) {
-                if(selectedLeft.id === selectedRight.id) {
-                    // Match found
-                    selectedLeft.element.classList.remove('selected');
-                    selectedLeft.element.classList.add('matched');
-                    selectedRight.element.classList.remove('selected');
-                    selectedRight.element.classList.add('matched');
-                    
-                    document.getElementById('game-feedback').innerHTML = '<i class="fas fa-check-circle"></i> Harika! Doğru Eşleşme.';
-                    
-                    selectedLeft = null;
-                    selectedRight = null;
-                    matchesFound++;
-
-                    if(matchesFound === totalMatches) {
-                        document.getElementById('game-feedback').innerHTML = '<i class="fas fa-trophy text-amber-500"></i> Tebrikler! Hepsini tamamladın.';
-                    }
-                } else {
-                    // No match
-                    document.getElementById('game-feedback').innerHTML = '<span class="text-red-500">Yanlış eşleşme, tekrar dene.</span>';
-                    setTimeout(() => {
-                        selectedLeft.element.classList.remove('selected');
-                        selectedRight.element.classList.remove('selected');
-                        selectedLeft = null;
-                        selectedRight = null;
-                        document.getElementById('game-feedback').innerText = '';
-                    }, 800);
-                }
+        // Boşluk Doldurma
+        let selectedFillWord = null; let selectedFillBtn = null; let fillScores = 0;
+        function selectWord(btn, word) {
+            if(selectedFillBtn) selectedFillBtn.classList.remove('selected');
+            selectedFillBtn = btn; selectedFillWord = word; btn.classList.add('selected');
+        }
+        function placeWord(slot) {
+            if(!selectedFillWord) return;
+            const ans = slot.getAttribute('data-ans');
+            if(ans === selectedFillWord) {
+                slot.innerText = selectedFillWord; slot.style.borderBottom = "none"; slot.style.color = "#10b981";
+                selectedFillBtn.style.visibility = "hidden"; selectedFillWord = null; selectedFillBtn = null;
+                fillScores++; if(fillScores === 4) fireConfetti('fill-game-area');
+            } else {
+                slot.style.color = "#ef4444"; slot.innerText = "Yanlış";
+                setTimeout(() => { slot.style.color = "#fcd34d"; slot.innerText = "________"; }, 600);
             }
         }
     </script>

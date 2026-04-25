@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Suspense, useEffect, useState, useRef } from 'react';
@@ -8,12 +7,12 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
+import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
 
 function OzetDisplayPage() {
     const params = useParams();
     const slug = params.slug as string[];
     
-    // Logic is the same as the main ozetler page, so we can reuse it or keep it simple.
     const [content, setContent] = useState<{title: string, htmlContent: string} | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -33,19 +32,19 @@ function OzetDisplayPage() {
         const fetchUnit = async () => {
             setIsLoading(true);
             try {
+                // Fetch HTML content from static storage (still stored as files for performance in iframes)
                 const res = await fetch(`/curriculum/ozetler/${contentId}.html`);
                 if (!res.ok) {
                     throw new Error('Özet içeriği bulunamadı veya yüklenemedi.');
                 }
                 const htmlContent = await res.text();
                 
-                // Fetch title from manifest
-                const manifestRes = await fetch('/curriculum/manifest.json');
-                if (!manifestRes.ok) throw new Error('Manifest not found');
-                const manifest = await manifestRes.json();
+                // Fetch title from Database instead of manifest.json
+                const { classGroups, error: fetchError } = await getCurriculumForSelection('ozetler', false);
+                if (fetchError) throw new Error(fetchError);
                 
                 let title = '';
-                 for (const group of manifest.classGroups) {
+                 for (const group of classGroups) {
                     for (const course of group.courses) {
                         for (const unit of course.units) {
                             if (unit.id === contentId) {
@@ -108,7 +107,7 @@ function OzetDisplayPage() {
                  <div className="container mx-auto px-4 pb-4">
                     <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3 overflow-hidden">
-                            <Button asChild size="sm" className="shrink-0 bg-white text-slate-900 hover:bg-cyan-300 hover:text-slate-950 font-extrabold rounded-xl h-10 px-4 shadow-lg border-2 border-white/50 transition-all">
+                            <Button asChild size="sm" className="shrink-0 bg-white text-slate-900 hover:bg-cyan-300 hover:text-slate-950 font-extrabold rounded-xl h-10 px-4 shadow-lg border-2 border-white/5 transition-all">
                                 <Link href={backUrl} className="flex items-center gap-2">
                                     <ArrowLeft className="h-5 w-5 stroke-[3px]"/>
                                     <span className="hidden sm:inline">Geri</span>
@@ -118,7 +117,7 @@ function OzetDisplayPage() {
                                 {content?.title || 'Özet'}
                             </h1>
                         </div>
-                         <div className="flex items-center gap-2 [&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/50 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
+                         <div className="flex items-center gap-2 [&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/5 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
                              <FullscreenToggle elementRef={mainContentRef} />
                         </div>
                     </div>
