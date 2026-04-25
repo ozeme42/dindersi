@@ -1,171 +1,182 @@
 'use server';
 
-import { db } from "@/lib/firebase";
-import { doc, addDoc, updateDoc, deleteDoc, collection, serverTimestamp, writeBatch, deleteField } from "firebase/firestore"; // deleteField eklendi
+import { getAdminDb } from "@/lib/firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 
-// Simplified save function
+/**
+ * Firestore 'undefined' kabul etmez. 
+ * Bu yardımcı fonksiyon nesne içindeki undefined değerleri temizler.
+ */
+const sanitizeData = (data: any) => {
+    const sanitized: any = {};
+    Object.keys(data).forEach(key => {
+        if (data[key] !== undefined) {
+            sanitized[key] = data[key];
+        }
+    });
+    return sanitized;
+};
+
 export async function saveCurriculumItem(
     type: 'Sınıf' | 'Ders' | 'Ünite' | 'Konu',
     mode: 'add' | 'edit',
     data: {
         name: string,
-        id?: string, // for edit mode
-        parentId?: string, // classId for Course, courseId for Unit, unitId for Topic
-        courseId?: string, // only for Konu type to build path
-        branches?: string[], // only for class
+        id?: string,
+        parentId?: string, // Ders için classId, Ünite için courseId, Konu için unitId
+        courseId?: string, // Sadece Konu düzenleme/ekleme için gerekli
+        branches?: string[],
         externalLink?: string,
         sourceText?: string,
     }
 ) {
     const { name, id, parentId, courseId, branches, externalLink, sourceText } = data;
-    if (!name.trim()) {
-        return { success: false, error: "İsim boş olamaz." };
+    const db = getAdminDb();
+
+    if (!name?.trim()) {
+        return { success: false, error: "İsim alanı boş bırakılamaz." };
     }
 
     try {
         if (mode === 'add') {
-            let collectionPath: string;
-            let dataToAdd: any = { createdAt: serverTimestamp(), isPublished: true }; // Default to published on creation
+            let collectionRef;
+            let payload: any = { 
+                createdAt: FieldValue.serverTimestamp(), 
+                isPublished: true 
+            };
 
             if (type === 'Sınıf') {
-                collectionPath = 'classes';
-                dataToAdd.name = name;
-                dataToAdd.branches = branches || [];
+                collectionRef = db.collection('classes');
+                payload.name = name;
+                payload.branches = branches || [];
             } else if (type === 'Ders' && parentId) {
-                collectionPath = 'courses';
-                dataToAdd.title = name;
-                dataToAdd.classId = parentId;
+                collectionRef = db.collection('courses');
+                payload.title = name;
+                payload.classId = parentId;
             } else if (type === 'Ünite' && parentId) {
-                collectionPath = `courses/${parentId}/units`;
-                dataToAdd.title = name;
+                collectionRef = db.collection('courses').doc(parentId).collection('units');
+                payload.title = name;
+                payload.steps = [];
             } else if (type === 'Konu' && parentId && courseId) {
-                collectionPath = `courses/${courseId}/units/${parentId}/topics`;
-                dataToAdd.title = name;
-                dataToAdd.steps = [];
-                dataToAdd.sourceText = sourceText || '';
-                 if (externalLink) {
-                    dataToAdd.externalLink = externalLink;
-                }
+                collectionRef = db.collection('courses').doc(courseId).collection('units').doc(parentId).collection('topics');
+                payload.title = name;
+                payload.steps = [];
+                payload.sourceText = sourceText || '';
+                payload.externalLink = externalLink || null;
             } else {
-                throw new Error("Geçersiz veya eksik parametreler.");
+                return { success: false, error: "Eksik üst dizin bilgisi. Lütfen hiyerarşiyi kontrol edin." };
             }
             
-            await addDoc(collection(db, collectionPath), dataToAdd);
+            await collectionRef.add(sanitizeData(payload));
         } else { // edit mode
-            if (!id) throw new Error("Düzenlenecek öğe ID'si eksik.");
-            let docPath: string;
-            let dataToUpdate: any = {};
+            if (!id) return { success: false, error: "Düzenlenecek öğe ID'si bulunamadı." };
+            
+            let docRef;
+            let updatePayload: any = {};
 
             if (type === 'Sınıf') {
-                docPath = `classes/${id}`;
-                dataToUpdate.name = name;
-                if (branches !== undefined) dataToUpdate.branches = branches;
+                docRef = db.collection('classes').doc(id);
+                updatePayload.name = name;
+                if (branches !== undefined) updatePayload.branches = branches;
             } else if (type === 'Ders') {
-                docPath = `courses/${id}`;
-                dataToUpdate.title = name;
+                docRef = db.collection('courses').doc(id);
+                updatePayload.title = name;
             } else if (type === 'Ünite' && parentId) {
-                docPath = `courses/${parentId}/units/${id}`;
-                dataToUpdate.title = name;
+                docRef = db.collection('courses').doc(parentId).collection('units').doc(id);
+                updatePayload.title = name;
             } else if (type === 'Konu' && parentId && courseId) {
-                docPath = `courses/${courseId}/units/${parentId}/topics/${id}`;
-                dataToUpdate.title = name;
-                
-                // KRİTİK DÜZELTME: Veri silinmesini önlemek için sadece undefined DEĞİLSE güncelle
-                if (externalLink !== undefined) {
-                    // Eğer boş string gönderildiyse linki temizle, doluysa ata
-                    dataToUpdate.externalLink = externalLink === '' ? deleteField() : externalLink;
-                }
-                if (sourceText !== undefined) {
-                    dataToUpdate.sourceText = sourceText;
-                }
+                docRef = db.collection('courses').doc(courseId).collection('units').doc(parentId).collection('topics').doc(id);
+                updatePayload.title = name;
+                updatePayload.externalLink = externalLink || null;
+                updatePayload.sourceText = sourceText || '';
             } else {
-                throw new Error("Geçersiz veya eksik parametreler.");
+                return { success: false, error: "Güncelleme için geçersiz parametreler." };
             }
             
-            await updateDoc(doc(db, docPath), dataToUpdate);
+            await docRef.update(sanitizeData(updatePayload));
         }
         return { success: true };
     } catch (error: any) {
         console.error("Error saving curriculum item:", error);
-        return { success: false, error: "İşlem sırasında bir hata oluştu." };
+        return { success: false, error: "Veritabanı kaydı sırasında bir hata oluştu: " + error.message };
     }
 }
 
-export async function togglePublishState(path: string, currentPublishedState: boolean): Promise<{ success: boolean; error?: string }> {
-    if (!path) {
-        return { success: false, error: "Geçersiz yol." };
-    }
-    try {
-        const docRef = doc(db, path);
-        await updateDoc(docRef, { isPublished: !currentPublishedState });
-        return { success: true };
-    } catch (error: any) {
-        console.error("Error toggling publish state:", error);
-        return { success: false, error: "Yayın durumu güncellenirken bir hata oluştu." };
-    }
-}
-
-// Delete function
-export async function deleteCurriculumItem(path: string) {
-    try {
-        await deleteDoc(doc(db, path));
-        return { success: true };
-    } catch (error: any) {
-        console.error("Error deleting item:", error);
-        return { success: false, error: "Öğe silinirken bir hata oluştu." };
-    }
-}
-
-// Bulk add
 export async function bulkAddCurriculumItems(
     type: 'Sınıf' | 'Ders' | 'Ünite' | 'Konu',
     names: string[],
     parentId?: string,
+    courseIdForTopic?: string // Konu eklerken kurs ID'si
 ) {
-     if (names.length === 0) {
-        return { success: false, error: "Eklenecek öğe bulunmuyor." };
+    if (!names || names.length === 0) {
+        return { success: false, error: "Eklenecek isim listesi boş." };
     }
     
+    const db = getAdminDb();
+    const batch = db.batch();
+
     try {
-        const batch = writeBatch(db);
-        let collectionPath: string;
-        let parentData: any = {};
+        let collectionRef;
+        let commonData: any = { 
+            createdAt: FieldValue.serverTimestamp(), 
+            isPublished: true 
+        };
 
         if (type === 'Sınıf') {
-            collectionPath = 'classes';
+            collectionRef = db.collection('classes');
         } else if (type === 'Ders' && parentId) {
-            collectionPath = 'courses';
-            parentData.classId = parentId;
+            collectionRef = db.collection('courses');
+            commonData.classId = parentId;
         } else if (type === 'Ünite' && parentId) {
-            collectionPath = `courses/${parentId}/units`;
-        } else if (type === 'Konu' && parentId) {
-            const [courseId, unitId] = parentId.split('/');
-            collectionPath = `courses/${courseId}/units/${unitId}/topics`;
+            collectionRef = db.collection('courses').doc(parentId).collection('units');
+        } else if (type === 'Konu' && parentId && courseIdForTopic) {
+            collectionRef = db.collection('courses').doc(courseIdForTopic).collection('units').doc(parentId).collection('topics');
+            commonData.steps = [];
+            commonData.sourceText = '';
         } else {
-            throw new Error("Geçersiz veya eksik parametreler.");
+            return { success: false, error: "Toplu ekleme için üst dizin bilgisi yetersiz." };
         }
 
         names.forEach(name => {
-            const docRef = doc(collection(db, collectionPath));
-            let data: any = { createdAt: serverTimestamp(), isPublished: true }; 
-            
+            const docRef = collectionRef.doc();
+            const itemData = { ...commonData };
             if (type === 'Sınıf') {
-                data.name = name;
-                data.branches = [];
+                itemData.name = name;
+                itemData.branches = [];
             } else {
-                data.title = name;
+                itemData.title = name;
             }
-             if (type === 'Konu') {
-                data.steps = [];
-                data.sourceText = '';
-            }
-            batch.set(docRef, { ...data, ...parentData });
+            batch.set(docRef, sanitizeData(itemData));
         });
 
         await batch.commit();
         return { success: true, count: names.length };
     } catch (error: any) {
         console.error("Error bulk saving items:", error);
-        return { success: false, error: "Toplu ekleme sırasında bir hata oluştu." };
+        return { success: false, error: "Toplu işlem sırasında hata: " + error.message };
+    }
+}
+
+export async function deleteCurriculumItem(path: string) {
+    if (!path) return { success: false, error: "Silinecek yol belirtilmedi." };
+    try {
+        const db = getAdminDb();
+        await db.doc(path).delete();
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error deleting item:", error);
+        return { success: false, error: "Silme işlemi başarısız: " + error.message };
+    }
+}
+
+export async function togglePublishState(path: string, currentPublishedState: boolean) {
+    if (!path) return { success: false, error: "Geçersiz yol." };
+    try {
+        const db = getAdminDb();
+        await db.doc(path).update({ isPublished: !currentPublishedState });
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error toggling publish state:", error);
+        return { success: false, error: "Yayın durumu güncellenemedi." };
     }
 }

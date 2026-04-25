@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
@@ -17,6 +15,7 @@ import {
     Loader2,
     Layers,
     ArrowLeft,
+    ArrowRight,
     Sparkles,
     FolderPlus,
     LayoutGrid,
@@ -467,12 +466,13 @@ export default function ContentCreationPage() {
         const names = bulkText.split('\n').map(n => n.trim()).filter(Boolean);
         const { type, parentId } = bulkAddDialogState;
         
-        let finalParentId = parentId;
-        if (type === 'Konu' && parentId) {
-            finalParentId = `${selections.courseId}/${parentId}`;
-        }
+        const result = await bulkAddCurriculumItems(
+            type, 
+            names, 
+            parentId, 
+            type === 'Konu' ? selections.courseId : undefined
+        );
 
-        const result = await bulkAddCurriculumItems(type, names, finalParentId);
         if (result.success) {
             toast({ title: "Başarılı", description: `${result.count} öğe eklendi.` });
             fetchCurriculum();
@@ -565,7 +565,7 @@ export default function ContentCreationPage() {
                                     </Button>
                                 )}
                                 <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleTogglePublish(path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
-                                    {isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                                    {isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-amber-500" />}
                                 </Button>
                                 <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); openDialog('edit', steps.find(s => s.id === currentStep)?.name as any, item, selections.courseId); }} title="Düzenle">
                                     <FilePenLine className="h-4 w-4" />
@@ -697,7 +697,7 @@ export default function ContentCreationPage() {
                             
                             <div className="flex gap-3 self-end md:self-center">
                                 {getBulkAddButtonAction() && (
-                                    <Button size="sm" variant="outline" onClick={getBulkAddButtonAction()!} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5">
+                                    <Button size="sm" variant="outline" onClick={getBulkAddButtonAction()!} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/10 bg-transparent">
                                         <Layers className="h-4 w-4 mr-2" /> Toplu Ekle
                                     </Button>
                                 )}
@@ -804,7 +804,7 @@ export default function ContentCreationPage() {
             </Dialog>
 
             {deleteDialogState && (
-                 <AlertDialog open={deleteDialogState.isOpen} onOpenChange={() => setDeleteDialogState(null)}>
+                 <AlertDialog open={deleteDialogState.isOpen} onOpenChange={setDeleteDialogState}>
                     <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
                         <AlertDialogHeader>
                             <AlertDialogTitle className="text-red-400">Silmek İstediğinize Emin misiniz?</AlertDialogTitle>
