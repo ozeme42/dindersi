@@ -18,7 +18,7 @@ const sanitizeData = (data: any) => {
 };
 
 export async function saveCurriculumItem(
-    type: 'Sınıf' | 'Ders' | 'Ünite' | 'Konu',
+    type: string,
     mode: 'add' | 'edit',
     data: {
         name: string,
@@ -37,6 +37,13 @@ export async function saveCurriculumItem(
         return { success: false, error: "İsim alanı boş bırakılamaz." };
     }
 
+    // Arayüzden gelen farklı isimlendirmeleri standardize et
+    let normalizedType = type;
+    if (type.includes('Sınıf')) normalizedType = 'Sınıf';
+    else if (type.includes('Ders')) normalizedType = 'Ders';
+    else if (type.includes('Ünite')) normalizedType = 'Ünite';
+    else if (type.includes('Konu')) normalizedType = 'Konu';
+
     try {
         if (mode === 'add') {
             let collectionRef;
@@ -45,26 +52,26 @@ export async function saveCurriculumItem(
                 isPublished: true 
             };
 
-            if (type === 'Sınıf') {
+            if (normalizedType === 'Sınıf') {
                 collectionRef = db.collection('classes');
                 payload.name = name;
                 payload.branches = branches || [];
-            } else if (type === 'Ders' && parentId) {
+            } else if (normalizedType === 'Ders' && parentId) {
                 collectionRef = db.collection('courses');
                 payload.title = name;
                 payload.classId = parentId;
-            } else if (type === 'Ünite' && parentId) {
+            } else if (normalizedType === 'Ünite' && parentId) {
                 collectionRef = db.collection('courses').doc(parentId).collection('units');
                 payload.title = name;
                 payload.steps = [];
-            } else if (type === 'Konu' && parentId && courseId) {
+            } else if (normalizedType === 'Konu' && parentId && courseId) {
                 collectionRef = db.collection('courses').doc(courseId).collection('units').doc(parentId).collection('topics');
                 payload.title = name;
                 payload.steps = [];
                 payload.sourceText = sourceText || '';
                 payload.externalLink = externalLink || null;
             } else {
-                return { success: false, error: "Eksik üst dizin bilgisi. Lütfen hiyerarşiyi kontrol edin." };
+                return { success: false, error: `Ekleme için geçersiz parametreler (${normalizedType} - Parent: ${parentId ? 'Var' : 'Yok'}).` };
             }
             
             await collectionRef.add(sanitizeData(payload));
@@ -74,23 +81,23 @@ export async function saveCurriculumItem(
             let docRef;
             let updatePayload: any = {};
 
-            if (type === 'Sınıf') {
+            if (normalizedType === 'Sınıf') {
                 docRef = db.collection('classes').doc(id);
                 updatePayload.name = name;
                 if (branches !== undefined) updatePayload.branches = branches;
-            } else if (type === 'Ders') {
+            } else if (normalizedType === 'Ders') {
                 docRef = db.collection('courses').doc(id);
                 updatePayload.title = name;
-            } else if (type === 'Ünite' && parentId) {
+            } else if (normalizedType === 'Ünite' && parentId) {
                 docRef = db.collection('courses').doc(parentId).collection('units').doc(id);
                 updatePayload.title = name;
-            } else if (type === 'Konu' && parentId && courseId) {
+            } else if (normalizedType === 'Konu' && parentId && courseId) {
                 docRef = db.collection('courses').doc(courseId).collection('units').doc(parentId).collection('topics').doc(id);
                 updatePayload.title = name;
                 updatePayload.externalLink = externalLink || null;
                 updatePayload.sourceText = sourceText || '';
             } else {
-                return { success: false, error: "Güncelleme için geçersiz parametreler." };
+                return { success: false, error: `Güncelleme için geçersiz parametreler (${normalizedType} - Parent: ${parentId ? 'Var' : 'Yok'}).` };
             }
             
             await docRef.update(sanitizeData(updatePayload));
@@ -103,14 +110,20 @@ export async function saveCurriculumItem(
 }
 
 export async function bulkAddCurriculumItems(
-    type: 'Sınıf' | 'Ders' | 'Ünite' | 'Konu',
+    type: string,
     names: string[],
     parentId?: string,
-    courseIdForTopic?: string // Konu eklerken kurs ID'si
+    courseIdForTopic?: string 
 ) {
     if (!names || names.length === 0) {
         return { success: false, error: "Eklenecek isim listesi boş." };
     }
+
+    let normalizedType = type;
+    if (type.includes('Sınıf')) normalizedType = 'Sınıf';
+    else if (type.includes('Ders')) normalizedType = 'Ders';
+    else if (type.includes('Ünite')) normalizedType = 'Ünite';
+    else if (type.includes('Konu')) normalizedType = 'Konu';
     
     const db = getAdminDb();
     const batch = db.batch();
@@ -122,14 +135,14 @@ export async function bulkAddCurriculumItems(
             isPublished: true 
         };
 
-        if (type === 'Sınıf') {
+        if (normalizedType === 'Sınıf') {
             collectionRef = db.collection('classes');
-        } else if (type === 'Ders' && parentId) {
+        } else if (normalizedType === 'Ders' && parentId) {
             collectionRef = db.collection('courses');
             commonData.classId = parentId;
-        } else if (type === 'Ünite' && parentId) {
+        } else if (normalizedType === 'Ünite' && parentId) {
             collectionRef = db.collection('courses').doc(parentId).collection('units');
-        } else if (type === 'Konu' && parentId && courseIdForTopic) {
+        } else if (normalizedType === 'Konu' && parentId && courseIdForTopic) {
             collectionRef = db.collection('courses').doc(courseIdForTopic).collection('units').doc(parentId).collection('topics');
             commonData.steps = [];
             commonData.sourceText = '';
@@ -140,7 +153,7 @@ export async function bulkAddCurriculumItems(
         names.forEach(name => {
             const docRef = collectionRef.doc();
             const itemData = { ...commonData };
-            if (type === 'Sınıf') {
+            if (normalizedType === 'Sınıf') {
                 itemData.name = name;
                 itemData.branches = [];
             } else {

@@ -138,7 +138,6 @@ export default function ContentCreationPage() {
     const [bulkText, setBulkText] = useState('');
     const [isAIGenOpen, setIsAIGenOpen] = useState(false);
     
-    // Veri state'ini güncellemek için merkezi bir fonksiyon
     const setCourseData = (courseId: string, unitId: string, updatedData: Partial<Topic | Unit>) => {
         setCurriculum(prevCurriculum => 
             prevCurriculum.map(cls => ({
@@ -166,7 +165,6 @@ export default function ContentCreationPage() {
     const handleAiStepsGenerated = (newSteps: LessonStep[], context: { topicId?: string; unitId?: string; courseId: string; }) => {
         const { courseId, unitId, topicId } = context;
         if (topicId) {
-            // Konuya adım ekle
             const course = curriculum.flatMap(c => c.courses).find(c => c.id === courseId);
             const unit = course?.units.find(u => u.id === unitId);
             const topic = unit?.topics.find(t => t.id === topicId);
@@ -175,7 +173,6 @@ export default function ContentCreationPage() {
                 setCourseData(courseId, unitId, updatedTopic);
             }
         } else {
-             // Üniteye adım ekle
             const course = curriculum.flatMap(c => c.courses).find(c => c.id === courseId);
             const unit = course?.units.find(u => u.id === unitId);
             if(unit) {
@@ -200,7 +197,6 @@ export default function ContentCreationPage() {
             ]);
             
             const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
-
             const allCourses = allCoursesSnapshot.docs.map(
                 (doc) => ({ id: doc.id, ...doc.data() } as Course)
             );
@@ -219,7 +215,6 @@ export default function ContentCreationPage() {
                 
                 for (const courseData of classCourses) {
                     const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
-
                     const unitsSnapshot = await getDocs(
                         query(
                             collection(db, `courses/${courseData.id}/units`),
@@ -229,7 +224,6 @@ export default function ContentCreationPage() {
                     for (const unitDoc of unitsSnapshot.docs) {
                         const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
                         const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, hasFlowContent: (unitData.steps || []).length > 0 };
-
                         const topicsSnapshot = await getDocs(
                             query(
                                 collection(
@@ -242,10 +236,8 @@ export default function ContentCreationPage() {
                         enrichedUnit.topics = topicsSnapshot.docs.map(
                             (topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic)
                         );
-                        
                         const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
                         enrichedUnit.questionCount = unitQuestionCount;
-
                         enrichedCourse.units.push(enrichedUnit);
                     }
                     enrichedClass.courses.push(enrichedCourse);
@@ -296,8 +288,6 @@ export default function ContentCreationPage() {
                     } as EnrichedClass)
                  }
             }
-
-
             setCurriculum(enrichedClasses);
         } catch (error) {
             console.error('Error fetching curriculum: ', error);
@@ -362,7 +352,7 @@ export default function ContentCreationPage() {
             return {
                 courseId: selections.courseId,
                 unitId: selections.unitId,
-                topicId: undefined, // Explicitly undefined for unit-level generation
+                topicId: undefined, 
                 topicTitle: selectedUnit.title,
                 sourceText: selectedUnit.sourceText || selectedUnit.title
             }
@@ -465,14 +455,12 @@ export default function ContentCreationPage() {
         setIsSaving(true);
         const names = bulkText.split('\n').map(n => n.trim()).filter(Boolean);
         const { type, parentId } = bulkAddDialogState;
-        
         const result = await bulkAddCurriculumItems(
             type, 
             names, 
             parentId, 
             type === 'Konu' ? selections.courseId : undefined
         );
-
         if (result.success) {
             toast({ title: "Başarılı", description: `${result.count} öğe eklendi.` });
             fetchCurriculum();
@@ -493,13 +481,14 @@ export default function ContentCreationPage() {
         }
 
         let itemsToRender: any[] = [];
+        let itemType: 'Sınıf' | 'Ders' | 'Ünite' | 'Konu' = 'Sınıf';
         let itemTitleKey = 'name';
         
         switch (currentStep) {
-            case 1: itemsToRender = curriculum; break;
-            case 2: itemsToRender = selectedClass?.courses || []; itemTitleKey = 'title'; break;
-            case 3: itemsToRender = selectedCourse?.units || []; itemTitleKey = 'title'; break;
-            case 4: itemsToRender = selectedUnit?.topics || []; itemTitleKey = 'title'; break;
+            case 1: itemsToRender = curriculum; itemType = 'Sınıf'; break;
+            case 2: itemsToRender = selectedClass?.courses || []; itemType = 'Ders'; itemTitleKey = 'title'; break;
+            case 3: itemsToRender = selectedCourse?.units || []; itemType = 'Ünite'; itemTitleKey = 'title'; break;
+            case 4: itemsToRender = selectedUnit?.topics || []; itemType = 'Konu'; itemTitleKey = 'title'; break;
             default: return null;
         }
 
@@ -517,10 +506,11 @@ export default function ContentCreationPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {itemsToRender.map((item, index) => {
                      let path = '';
+                     let parentIdForEdit = '';
                      if (currentStep === 1) path = `classes/${item.id}`;
-                     else if (currentStep === 2) path = `courses/${item.id}`;
-                     else if (currentStep === 3) path = `courses/${selections.courseId}/units/${item.id}`;
-                     else if (currentStep === 4) path = `courses/${selections.courseId}/units/${selections.unitId}/topics/${item.id}`;
+                     else if (currentStep === 2) { path = `courses/${item.id}`; parentIdForEdit = selections.classId; }
+                     else if (currentStep === 3) { path = `courses/${selections.courseId}/units/${item.id}`; parentIdForEdit = selections.courseId; }
+                     else if (currentStep === 4) { path = `courses/${selections.courseId}/units/${selections.unitId}/topics/${item.id}`; parentIdForEdit = selections.unitId; }
                     
                     const isPublished = item.isPublished ?? true;
                     const questionCount = item.questionCount;
@@ -567,10 +557,10 @@ export default function ContentCreationPage() {
                                 <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleTogglePublish(path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
                                     {isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-amber-500" />}
                                 </Button>
-                                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); openDialog('edit', steps.find(s => s.id === currentStep)?.name as any, item, selections.courseId); }} title="Düzenle">
+                                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); openDialog('edit', itemType, item, parentIdForEdit); }} title="Düzenle">
                                     <FilePenLine className="h-4 w-4" />
                                 </Button>
-                                <Button size="icon" variant="destructive" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); openDeleteDialog(steps.find(s => s.id === currentStep)?.name as any, { ...item, name: item.title || item.name, path }); }} title="Sil">
+                                <Button size="icon" variant="destructive" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); openDeleteDialog(itemType, { ...item, name: item.title || item.name, path }); }} title="Sil">
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
                             </div>
@@ -583,31 +573,21 @@ export default function ContentCreationPage() {
 
     const getAddButtonAction = () => {
         switch (currentStep) {
-            case 1:
-                return () => openDialog('add', 'Sınıf');
-            case 2:
-                return () => openDialog('add', 'Ders', undefined, selections.classId);
-            case 3:
-                return () => openDialog('add', 'Ünite', undefined, selections.courseId);
-            case 4:
-                return () => openDialog('add', 'Konu', undefined, selections.unitId);
-            default:
-                return () => { };
+            case 1: return () => openDialog('add', 'Sınıf');
+            case 2: return () => openDialog('add', 'Ders', undefined, selections.classId);
+            case 3: return () => openDialog('add', 'Ünite', undefined, selections.courseId);
+            case 4: return () => openDialog('add', 'Konu', undefined, selections.unitId);
+            default: return () => { };
         }
     };
 
     const getBulkAddButtonAction = () => {
         switch (currentStep) {
-            case 1:
-                return () => openBulkAddDialog('Sınıf');
-            case 2:
-                return () => openBulkAddDialog('Ders', selections.classId, selectionNames.className);
-            case 3:
-                return () => openBulkAddDialog('Ünite', selections.courseId, selectionNames.courseName);
-            case 4:
-                return () => openBulkAddDialog('Konu', selections.unitId, selectionNames.unitName);
-            default:
-                return null;
+            case 1: return () => openBulkAddDialog('Sınıf');
+            case 2: return () => openBulkAddDialog('Ders', selections.classId, selectionNames.className);
+            case 3: return () => openBulkAddDialog('Ünite', selections.courseId, selectionNames.courseName);
+            case 4: return () => openBulkAddDialog('Konu', selections.unitId, selectionNames.unitName);
+            default: return null;
         }
     };
 
@@ -635,7 +615,6 @@ export default function ContentCreationPage() {
                     </p>
                 </div>
 
-                {/* Stepper */}
                 <div className="flex justify-center items-center px-4 w-full mb-8">
                     <div className="relative flex items-center justify-between w-full max-w-3xl">
                         <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
@@ -647,10 +626,7 @@ export default function ContentCreationPage() {
                         {steps.map((step, index) => {
                             const isCompleted = currentStep > step.id;
                             const isActive = currentStep === step.id;
-                             const IconComponent = React.cloneElement(step.icon, {
-                                className: "w-6 h-6",
-                            });
-                            
+                             const IconComponent = React.cloneElement(step.icon, { className: "w-6 h-6" });
                             return (
                                 <div key={step.id} 
                                     className="flex flex-col items-center gap-3 group cursor-pointer"
@@ -728,7 +704,6 @@ export default function ContentCreationPage() {
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <Dialog open={dialogState.isOpen} onOpenChange={() => setDialogState({ isOpen: false, mode: 'add', type: null })}>
