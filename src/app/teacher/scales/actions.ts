@@ -7,27 +7,20 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { SCALE_TEMPLATES, type ScaleTemplate } from '@/lib/scale-templates';
 
 // --- YARDIMCI FONKSİYON: GÜVENLİ SERIALIZER ---
-// Firestore Timestamp ve Date nesnelerini düz stringlere dönüştürür.
 const serialize = (data: any): any => {
   if (data === null || data === undefined) return null;
   if (Array.isArray(data)) return data.map(serialize);
   
-  // Firestore Timestamp nesnesi kontrolü
-  if (data instanceof Timestamp) {
+  if (data && typeof data === 'object' && typeof data.toDate === 'function') {
       return data.toDate().toISOString();
   }
-  
-  // Date nesnesi kontrolü
-  if (data instanceof Date) {
-      return data.toISOString();
-  }
 
-  // Düz nesne içindeki Timestamp yapısı kontrolü (Bazen serialization sırasında bu formatta kalabilir)
-  if (typeof data === 'object' && '_seconds' in data && '_nanoseconds' in data) {
+  if (data && typeof data === 'object' && '_seconds' in data && '_nanoseconds' in data) {
       return new Date(data._seconds * 1000).toISOString();
   }
   
-  // Nesne içindeki alanları gez (Recursive)
+  if (data instanceof Date) return data.toISOString();
+  
   if (typeof data === 'object') {
     const newObj: { [key: string]: any } = {};
     for (const key in data) {
@@ -128,7 +121,6 @@ export async function getScaleTemplates(): Promise<ScaleTemplate[]> {
         const snap = await getDocs(q);
         
         if (snap.empty) {
-            // Eğer veritabanı boşsa varsayılanları döndür
             return serialize(SCALE_TEMPLATES);
         }
         
@@ -183,15 +175,15 @@ export type BranchScore = {
 export async function getBranchScaleScores(): Promise<BranchScore[]> {
     noStore();
     try {
+        // Sadece 'guest' rolündeki öğrencileri baz alıyoruz
         const [scalesSnap, usersSnap] = await Promise.all([
             getDocs(query(collection(db, 'evaluationScales'), where('type', '==', 'checklist'))),
-            getDocs(query(collection(db, 'users'), where('role', 'in', ['student', 'guest'])))
+            getDocs(query(collection(db, 'users'), where('role', '==', 'guest')))
         ]);
 
         const allStudents = usersSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
         const allStudentEntries: { [studentId: string]: { [scaleId: string]: ScaleEntry } } = {};
 
-        // Tüm ölçek girişlerini öğrenci bazında topla
         for (const scaleDoc of scalesSnap.docs) {
             const entriesSnap = await getDocs(collection(db, `evaluationScales/${scaleDoc.id}/entries`));
             entriesSnap.forEach(entryDoc => {
@@ -202,7 +194,6 @@ export async function getBranchScaleScores(): Promise<BranchScore[]> {
             });
         }
 
-        // Öğrenci puanlarını hesapla
         const studentScores: { [studentId: string]: { totalSuccess: number; scaleCount: number } } = {};
         for (const studentId in allStudentEntries) {
             studentScores[studentId] = { totalSuccess: 0, scaleCount: 0 };
@@ -220,11 +211,9 @@ export async function getBranchScaleScores(): Promise<BranchScore[]> {
             }
         }
 
-        // Sınıf seviyelerine göre grupla ve ortalama al
         const gradeScores: { [gradeName: string]: { totalSuccess: number; studentCount: number } } = {};
         allStudents.forEach(student => {
             const studentScoreData = studentScores[student.uid];
-            // Sınıf adından sadece seviyeyi al (örn: "5 - A" -> "5")
             const gradeName = student.class?.split(' - ')[0];
 
             if (gradeName && studentScoreData && studentScoreData.scaleCount > 0) {

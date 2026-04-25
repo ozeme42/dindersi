@@ -30,7 +30,6 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
         }
         const className = classDoc.data().name;
 
-        // 1. Get all students matching the criteria
         let studentsQuery;
         if (branch === 'all') {
             studentsQuery = query(
@@ -49,17 +48,21 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
 
         const studentsSnap = await getDocs(studentsQuery);
         if (studentsSnap.empty) {
-            return { success: true, data: [] }; // No students, no error
+            return { success: true, data: [] }; 
         }
-        const studentIds = studentsSnap.docs.map(d => d.id);
-        const studentsData = studentsSnap.docs.map(d => ({uid: d.id, ...d.data()}) as UserProfile);
 
-        // 2. Get all evaluation entries for these students
+        // KRİTİK: Sadece sanal öğrencileri (role: 'guest') alıyoruz
+        const studentsData = studentsSnap.docs
+            .map(d => ({uid: d.id, ...d.data()}) as UserProfile)
+            .filter(s => s.role === 'guest');
+
+        const studentIds = studentsData.map(s => s.uid);
+        if (studentIds.length === 0) return { success: true, data: [] };
+
         const studentEntryMap = new Map<string, ScaleEntry[]>();
 
         const allScalesSnap = await getDocs(query(collection(db, 'evaluationScales'), where('type', '==', 'checklist')));
         
-        // Chunk studentIds to avoid 'in' query limit of 30
         const studentIdChunks: string[][] = [];
         for (let i = 0; i < studentIds.length; i += 30) {
             studentIdChunks.push(studentIds.slice(i, i + 30));
@@ -80,7 +83,6 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
             }
         }
         
-        // 3. Process data
         const studentList: StudentAnalysisData[] = studentsData.map(student => {
             const studentEntries = studentEntryMap.get(student.uid) || [];
 
@@ -93,9 +95,26 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
                     const pluses = statuses.filter(s => s === '+').length;
                     const totalGraded = pluses + statuses.filter(s => s === '-').length;
                     if (totalGraded > 0) {
-                        totalSuccess += (pluses / totalGraded) * 100;
-                        totalScalesCount += 1;
+                        studentScores[studentId].totalSuccess += (pluses / totalGraded) * 100;
+                        studentScores[studentId].scaleCount += 1;
                     }
+                }
+            });
+
+            // entry.history yapısını da destekleyelim
+            studentEntries.forEach(entry => {
+                if (entry.history) {
+                    Object.values(entry.history).forEach(session => {
+                        if (session.statuses) {
+                            const statuses = Object.values(session.statuses);
+                            const pluses = statuses.filter(s => s === '+').length;
+                            const totalGraded = pluses + statuses.filter(s => s === '-').length;
+                            if (totalGraded > 0) {
+                                totalSuccess += (pluses / totalGraded) * 100;
+                                totalScalesCount += 1;
+                            }
+                        }
+                    });
                 }
             });
 
@@ -116,11 +135,6 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
 
     } catch (e: any) {
         console.error("Error in getStudentAnalysis:", e);
-         if (e.code === 'failed-precondition') {
-             const urlRegex = /(https?:\/\/[^\s]+)/g;
-             const url = e.message.match(urlRegex)?.[0] || '#';
-             return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için <a href="${url}" target="_blank" rel="noopener noreferrer" class="underline font-bold">bu linke tıklayarak</a> gerekli indeksi oluşturun.` };
-        }
         return { success: false, error: "Analiz verileri alınırken bir hata oluştu." };
     }
 }
