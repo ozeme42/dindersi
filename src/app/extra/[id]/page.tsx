@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
-import { getExtraPage } from '../actions';
+import { getExtraPage } from '@/app/teacher/extra-pages/actions';
 import Link from 'next/link';
 
 const MagnificentLightBackground = () => (
