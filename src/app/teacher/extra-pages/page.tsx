@@ -1,9 +1,8 @@
-
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import { 
-    Loader2, Globe, Plus, Search, Trash2, FileEdit, Eye, EyeOff, Save, ArrowLeft, Home, FileText
+    Loader2, Globe, Plus, Search, Trash2, FileEdit, Eye, EyeOff, Save, ArrowLeft, Home, FileText, Tag
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -82,7 +81,8 @@ export default function ExtraPagesManagement() {
 
     const filteredPages = pages.filter(p => 
         p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        p.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        p.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.category?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -108,7 +108,7 @@ export default function ExtraPagesManagement() {
                             <p className="text-slate-400 mt-1">Herhangi bir sınıf veya derse bağlı olmayan özel dökümanlar.</p>
                         </div>
                      </div>
-                     <Button onClick={() => setEditingPage({ title: '', description: '', htmlContent: '', isPublished: true })} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 px-6 rounded-xl shadow-lg">
+                     <Button onClick={() => setEditingPage({ title: '', description: '', category: 'Genel', htmlContent: '', isPublished: true })} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 px-6 rounded-xl shadow-lg">
                         <Plus className="mr-2 h-5 w-5" /> Yeni Sayfa Oluştur
                     </Button>
                 </div>
@@ -121,14 +121,28 @@ export default function ExtraPagesManagement() {
                                 <CardDescription>Gezinme listesinde görünecek detaylar.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
-                                <div className="space-y-2">
-                                    <Label>Sayfa Başlığı</Label>
-                                    <Input 
-                                        value={editingPage.title} 
-                                        onChange={e => setEditingPage({...editingPage, title: e.target.value})}
-                                        className="bg-slate-950 border-white/10 text-white h-11"
-                                        placeholder="Örn: Rehberlik Dökümanı"
-                                    />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label>Sayfa Başlığı</Label>
+                                        <Input 
+                                            value={editingPage.title} 
+                                            onChange={e => setEditingPage({...editingPage, title: e.target.value})}
+                                            className="bg-slate-950 border-white/10 text-white h-11"
+                                            placeholder="Örn: Rehberlik Dökümanı"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Kategori (Ana Grup)</Label>
+                                        <div className="relative">
+                                            <Tag className="absolute left-3 top-3 h-5 w-5 text-slate-500" />
+                                            <Input 
+                                                value={editingPage.category} 
+                                                onChange={e => setEditingPage({...editingPage, category: e.target.value})}
+                                                className="bg-slate-950 border-white/10 text-white h-11 pl-10"
+                                                placeholder="Örn: Rehberlik"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Açıklama (Kısa)</Label>
@@ -179,7 +193,7 @@ export default function ExtraPagesManagement() {
                         <div className="relative max-w-md">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                             <Input 
-                                placeholder="Sayfa ara..." 
+                                placeholder="Sayfa, kategori veya açıklama ara..." 
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                                 className="bg-slate-900 border-white/10 text-white pl-10 h-11 rounded-xl"
@@ -196,7 +210,10 @@ export default function ExtraPagesManagement() {
                                     <Card key={page.id} className="bg-slate-900/60 border-white/10 shadow-xl overflow-hidden group hover:border-cyan-500/30 transition-all">
                                         <CardHeader className="pb-3 border-b border-white/5 bg-slate-900/50">
                                             <div className="flex justify-between items-start gap-2">
-                                                <CardTitle className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-1">{page.title}</CardTitle>
+                                                <div className="space-y-1">
+                                                     <Badge variant="outline" className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-[9px] px-2">{page.category || 'Genel'}</Badge>
+                                                     <CardTitle className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-1">{page.title}</CardTitle>
+                                                </div>
                                                 {!page.isPublished && <Badge variant="destructive" className="text-[9px] h-4">TASLAK</Badge>}
                                             </div>
                                             <CardDescription className="line-clamp-2 text-xs h-8">{page.description || 'Açıklama belirtilmemiş.'}</CardDescription>
@@ -247,7 +264,7 @@ export default function ExtraPagesManagement() {
                             ) : (
                                 <div className="col-span-full py-20 border-2 border-dashed border-slate-800 rounded-[2.5rem] bg-slate-900/30 text-center">
                                     <Globe className="h-16 w-16 mx-auto text-slate-700 opacity-20 mb-4" />
-                                    <p className="text-slate-500">Henüz ekstra sayfa oluşturulmamış.</p>
+                                    <p className="text-slate-500">Henüz döküman eklenmemiş.</p>
                                 </div>
                             )}
                         </div>

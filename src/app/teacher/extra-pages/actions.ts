@@ -8,6 +8,7 @@ export type ExtraPage = {
     id: string;
     title: string;
     description?: string;
+    category?: string;
     htmlContent: string;
     isPublished: boolean;
     createdAt: string;
@@ -71,14 +72,17 @@ export async function saveExtraPage(data: Partial<ExtraPage>): Promise<{ success
         const db = getAdminDb();
         const { id, ...saveData } = data;
 
+        const payload = {
+            ...saveData,
+            category: saveData.category || 'Genel',
+            updatedAt: FieldValue.serverTimestamp()
+        };
+
         if (id) {
-            await db.collection('extraPages').doc(id).update({
-                ...saveData,
-                updatedAt: FieldValue.serverTimestamp()
-            });
+            await db.collection('extraPages').doc(id).update(payload);
         } else {
             await db.collection('extraPages').add({
-                ...saveData,
+                ...payload,
                 createdAt: FieldValue.serverTimestamp(),
                 isPublished: saveData.isPublished ?? true
             });
