@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -38,6 +37,7 @@ import { useToast } from '@/hooks/use-toast';
 // --- TYPES ---
 type PublicTopic = { id: string; title: string; hasYazilacaklarContent: boolean; hasOzetContent: boolean };
 type PublicUnit = { id: string; title: string; topics: PublicTopic[]; hasUnitOzet: boolean };
+type PublicTopicWithOzet = PublicTopic & { hasOzetContent: boolean };
 type PublicCourse = { id: string; title: string; units: PublicUnit[] };
 export type PublicClass = { name: string; courses: PublicCourse[] };
 
@@ -123,10 +123,10 @@ const MagnificentLightBackground = () => (
 );
 
 // --- FOOTER ---
-const SiteFooter = () => {
+export const SiteFooter = () => {
   return (
     <footer className="w-full border-t border-slate-200 bg-white/90 backdrop-blur-md py-3 mt-auto relative z-20">
-      <div className="container mx-auto px-4 flex flex-row items-center justify-between gap-4">
+      <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex flex-col md:flex-row md:items-center gap-0.5 md:gap-3 text-left">
           <span className="text-sm font-bold text-slate-700 tracking-tight whitespace-nowrap">
             Din Dersi Atölyesi
@@ -137,7 +137,20 @@ const SiteFooter = () => {
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-center gap-2">
+            {/* DİĞER BUTONU (Küçük ve Buraya Taşındı) */}
+            <Link 
+                href="/extra"
+                className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-100 transition-all duration-300 shadow-sm focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none"
+            >
+                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-600 text-white group-hover:scale-110 transition-transform">
+                    <MoreHorizontal className="w-3 h-3" />
+                </div>
+                <span className="text-xs font-bold text-indigo-800 whitespace-nowrap">
+                    Diğer
+                </span>
+            </Link>
+
             <Link 
                 href="https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/DinDersi%20At%C3%B6lyesi.apk?alt=media&token=0421a76b-8ca8-404b-9b05-d5f88afb343f"
                 className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 hover:border-emerald-300 hover:bg-emerald-100 transition-all duration-300 shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
@@ -598,7 +611,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                     
                     {/* Ayet Kartı */}
                     <div className="relative overflow-hidden bg-white/80 backdrop-blur-xl border border-emerald-100 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow group">
-                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10">
                             <Quote className="w-24 h-24 text-emerald-600 rotate-180" />
                         </div>
                         <div className="relative z-10 flex flex-col h-full">
@@ -621,7 +634,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
                     {/* Hadis Kartı */}
                     <div className="relative overflow-hidden bg-white/80 backdrop-blur-xl border border-indigo-100 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow group">
-                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10">
                             <Quote className="w-24 h-24 text-indigo-600 rotate-180" />
                         </div>
                         <div className="relative z-10 flex flex-col h-full">
@@ -641,19 +654,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                             </div>
                         </div>
                     </div>
-                </div>
-
-                {/* --- DİĞER BUTONU --- */}
-                <div className="mt-12 flex justify-center pb-12 relative z-10">
-                    <Link href="/extra" className="group flex items-center gap-4 px-10 py-5 rounded-[2.5rem] bg-slate-900 border-2 border-white/10 text-white shadow-2xl hover:border-cyan-500/50 hover:bg-slate-800 transition-all duration-300 hover:scale-[1.03]">
-                        <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-cyan-500/20 transition-colors">
-                             <MoreHorizontal className="h-8 w-8 text-slate-400 group-hover:text-cyan-400" />
-                        </div>
-                        <div className="text-left">
-                            <span className="block text-xl font-black uppercase tracking-widest">Daha Fazla Keşfet</span>
-                            <span className="block text-xs font-medium text-slate-500 group-hover:text-slate-300 transition-colors">Özel Dökümanlar ve Kaynaklar</span>
-                        </div>
-                    </Link>
                 </div>
 
              </main>
