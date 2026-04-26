@@ -1,16 +1,14 @@
-
 'use client';
 
 import { useState, useEffect, Suspense, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { 
-    Loader2, ArrowLeft, Download, Plus, Minus, Maximize2, Minimize2, Globe, Wand2
+    Loader2, ArrowLeft, Plus, Minus, Maximize2, Minimize2, FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { getExtraPage } from '../actions';
 import Link from 'next/link';
 
 const MagnificentLightBackground = () => (
@@ -34,17 +32,15 @@ function ExtraPageView() {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const fetchPage = async () => {
+        const fetchPageData = async () => {
             if (!id) return;
             setIsLoading(true);
             try {
-                const docRef = doc(db, 'extraPages', id);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    setPage(docSnap.data());
+                const result = await getExtraPage(id);
+                if (result.success && result.data) {
+                    setPage(result.data);
                 } else {
-                    setError("Döküman bulunamadı.");
+                    setError(result.error || "Döküman bulunamadı.");
                 }
             } catch (e) {
                 console.error(e);
@@ -52,7 +48,7 @@ function ExtraPageView() {
             }
             setIsLoading(false);
         };
-        fetchPage();
+        fetchPageData();
     }, [id]);
 
     useEffect(() => {

@@ -1,4 +1,3 @@
-
 'use server';
 
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -47,6 +46,22 @@ export async function getExtraPages(onlyPublished: boolean = false): Promise<{ s
         return { success: true, data: serialize(data) };
     } catch (e: any) {
         console.error("Error fetching extra pages:", e);
+        return { success: false, error: e.message };
+    }
+}
+
+export async function getExtraPage(id: string): Promise<{ success: boolean; data?: ExtraPage; error?: string }> {
+    noStore();
+    try {
+        const db = getAdminDb();
+        const docSnap = await db.collection('extraPages').doc(id).get();
+        if (!docSnap.exists) {
+            return { success: false, error: 'Döküman bulunamadı.' };
+        }
+        const data = { id: docSnap.id, ...docSnap.data() } as ExtraPage;
+        return { success: true, data: serialize(data) };
+    } catch (e: any) {
+        console.error("Error fetching extra page by id:", e);
         return { success: false, error: e.message };
     }
 }
