@@ -32,11 +32,15 @@ export default function ExtraPagesManagement() {
 
     const fetchPages = useCallback(async () => {
         setIsLoading(true);
-        const result = await getExtraPages();
-        if (result.success && result.data) {
-            setPages(result.data);
-        } else {
-            toast({ title: "Hata", description: "Sayfalar yüklenemedi.", variant: "destructive" });
+        try {
+            const result = await getExtraPages();
+            if (result.success && result.data) {
+                setPages(result.data);
+            } else {
+                toast({ title: "Hata", description: result.error || "Sayfalar yüklenemedi.", variant: "destructive" });
+            }
+        } catch (e) {
+            toast({ title: "Bağlantı Hatası", variant: "destructive" });
         }
         setIsLoading(false);
     }, [toast]);
@@ -224,7 +228,7 @@ export default function ExtraPagesManagement() {
                                                 <span>HTML: {page.htmlContent.length.toLocaleString()} karakter</span>
                                             </div>
                                             <div className="text-[10px] text-slate-600">
-                                                Oluşturma: {format(new Date(page.createdAt), 'd MMM yyyy', { locale: tr })}
+                                                Oluşturma: {page.createdAt ? format(new Date(page.createdAt), 'd MMM yyyy', { locale: tr }) : '-'}
                                             </div>
                                         </CardContent>
                                         <CardFooter className="bg-black/20 p-3 flex justify-between gap-2">

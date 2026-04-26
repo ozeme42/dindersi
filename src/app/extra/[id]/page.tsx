@@ -35,6 +35,7 @@ function ExtraPageView() {
             if (!id) return;
             setIsLoading(true);
             try {
+                // Sunucu tarafındaki kesin yolu kullanan aksiyonu çağırıyoruz
                 const result = await getExtraPage(id);
                 if (result.success && result.data) {
                     setPage(result.data);
