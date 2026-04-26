@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -7,7 +8,8 @@ import {
     ImageIcon, Settings, Trophy, DollarSign,  
     Gamepad2, LayoutGrid, Library, ArrowRight, LogOut, MonitorPlay,
     CheckCircle2, Layers, Sparkles,
-    LogIn, UserPlus, Download, Youtube, Quote
+    LogIn, UserPlus, Download, Youtube, Quote,
+    MoreHorizontal, FileText, Globe
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -210,6 +212,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     const managementButtons = {
         superAdmin: { key: 'superAdmin', href: '/teacher/superadmin', title: 'Süper Admin', icon: <Shield />, color: "from-slate-700 to-slate-900" },
         contentTeacher: { key: 'contentTeacher', href: "/teacher/content-creation", title: "İçerik Yönetimi", icon: <PenSquare />, color: "from-indigo-500 to-blue-600" },
+        extraPages: { key: 'extraPages', href: "/teacher/extra-pages", title: "Ekstra Sayfalar", icon: <Globe />, color: "from-cyan-500 to-blue-600" },
         studentsTeacher: { key: 'studentsTeacher', href: '/teacher/students', title: 'Öğrenci Yönetimi', icon: <UserCog />, color: "from-emerald-500 to-teal-600" },
         questionsTeacher: { key: 'questionsTeacher', href: '/teacher/questions', title: 'Soru Bankası', icon: <FileCog />, color: "from-amber-500 to-orange-600" },
         examQuestions: { key: 'examQuestions', href: '/teacher/exam-questions', title: 'Deneme Havuzu', icon: <FileQuestion />, color: "from-violet-500 to-purple-600" },
@@ -229,7 +232,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
             return [managementButtons.studentsTeacher, managementButtons.leaderboard, managementButtons.evaluationScales];
         }
         const buttons = [
-            managementButtons.contentTeacher, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
+            managementButtons.contentTeacher, managementButtons.extraPages, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
             managementButtons.examQuestions, managementButtons.activityDataBank, managementButtons.exams,
             managementButtons.evaluationScales, managementButtons.leaderboard, managementButtons.statsTeacher,
             managementButtons.imageLibrary, managementButtons.gameSettingsTeacher, managementButtons.scoreEvents,
@@ -638,7 +641,19 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                             </div>
                         </div>
                     </div>
+                </div>
 
+                {/* --- DİĞER BUTONU --- */}
+                <div className="mt-12 flex justify-center pb-12 relative z-10">
+                    <Link href="/extra" className="group flex items-center gap-4 px-10 py-5 rounded-[2.5rem] bg-slate-900 border-2 border-white/10 text-white shadow-2xl hover:border-cyan-500/50 hover:bg-slate-800 transition-all duration-300 hover:scale-[1.03]">
+                        <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-cyan-500/20 transition-colors">
+                             <MoreHorizontal className="h-8 w-8 text-slate-400 group-hover:text-cyan-400" />
+                        </div>
+                        <div className="text-left">
+                            <span className="block text-xl font-black uppercase tracking-widest">Daha Fazla Keşfet</span>
+                            <span className="block text-xs font-medium text-slate-500 group-hover:text-slate-300 transition-colors">Özel Dökümanlar ve Kaynaklar</span>
+                        </div>
+                    </Link>
                 </div>
 
              </main>
