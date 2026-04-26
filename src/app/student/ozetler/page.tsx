@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { Suspense } from 'react';
@@ -14,6 +13,7 @@ function OzetlerPage() {
                 pageIcon={BookOpen}
                 targetPath="student/ozetler"
                 dataType="ozetler"
+                isStatic={true} // Menü listeden (manifest) gelsin, ama tıklanınca canlı DB'ye gitsin
             />
         </div>
     );

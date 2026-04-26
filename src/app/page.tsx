@@ -12,35 +12,25 @@ export default function Home() {
   const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
-    // If user is logged in, teacher dashboard will be shown, no need to fetch public curriculum
-    if (loading) {
-      return;
-    }
-    
-    // Her durumda canlı veritabanından çek (isStatic: false)
-    // dataType: 'ozetler' seçerek içeriği olan (htmlContent veya yazılacaklar) konuları getirmesini sağlıyoruz
-    if (!user || process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+    // Statik modda veya giriş yapılmamışsa manifest.json'dan çek (Performans için)
+    if (!loading) {
       setDataLoading(true);
-      getCurriculumForSelection('ozetler', false)
+      // isStatic: true parametresi ile manifest.json dosyasını okumasını sağlıyoruz
+      getCurriculumForSelection('ozetler', true)
         .then(res => {
           if (res.classGroups) {
-            // Transform internal ClassGroup to PublicClass structure expected by PageContent
             setClassGroups(res.classGroups as any);
           }
           setDataLoading(false);
         })
         .catch(err => {
-          console.error("Failed to fetch curriculum from DB:", err);
+          console.error("Failed to fetch curriculum from manifest:", err);
           setDataLoading(false);
         });
-    } else {
-      setDataLoading(false);
     }
-  }, [user, loading]);
+  }, [loading]);
 
-  const viewLoading = loading || (dataLoading && !user);
-
-  if (viewLoading) {
+  if (loading || (dataLoading && !user)) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-950">
         <Loader2 className="h-12 w-12 animate-spin text-white" />

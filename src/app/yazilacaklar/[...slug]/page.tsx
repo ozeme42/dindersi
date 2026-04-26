@@ -9,8 +9,6 @@ import { useParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
 
 export function YazilacaklarDisplayPage() {
@@ -47,8 +45,8 @@ export function YazilacaklarDisplayPage() {
         setIsLoading(true);
         setError(null);
         try {
-            // Canlı veritabanından hiyerarşiyi çek
-            const { classGroups, error: fetchError } = await getCurriculumForSelection('yazilacaklar', false);
+            // Hiyerarşik başlık bilgisini statik manifestten çek
+            const { classGroups, error: fetchError } = await getCurriculumForSelection('yazilacaklar', true);
             if (fetchError) throw new Error(fetchError);
             
             let foundTopic = null;
@@ -70,15 +68,15 @@ export function YazilacaklarDisplayPage() {
                 setTopicTitle((foundTopic as any).title);
             }
 
-            // Statik JSON dosyasından veriyi çek (Detaylı veri dosyada tutulmaya devam edebilir)
+            // İçerik verisini statik dosyadan çek (Dosyadan gelmesi istendi)
             const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
             if (!res.ok) {
-                throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
+                throw new Error('Bu konu için yazılacak notlar bulunamadı.');
             }
             const data: YazilacaklarContent = await res.json();
 
             if ((data.notes?.length || 0) === 0 && (data.conceptDefinitions?.length || 0) === 0) {
-                 throw new Error('Bu konu için "Yazılacaklar" içeriği boş.');
+                 throw new Error('Yazılacak içerik boş.');
             }
             
             setContent(data);
@@ -182,7 +180,7 @@ export function YazilacaklarDisplayPage() {
                     <div className="flex-shrink-0 mt-0.5"><div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 font-bold text-sm">{index + 1}</div></div>
                     <p style={{ fontSize: `${fontSize}rem` }} className="text-slate-300 leading-relaxed pt-1">{note}</p>
                 </div>
-            )) : <div className="text-center py-12 text-slate-500 bg-slate-900/30 rounded-2xl border border-dashed border-white/5">Yapay zeka not üretemedi.</div>}
+            )) : <div className="text-center py-12 text-slate-500 bg-slate-900/30 rounded-2xl border border-dashed border-white/5">Bu konu için not bulunmuyor.</div>}
         </div>
     );
     

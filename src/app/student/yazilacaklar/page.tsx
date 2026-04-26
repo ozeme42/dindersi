@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { Suspense } from 'react';
@@ -13,6 +12,7 @@ function YazilacaklarPage() {
                 pageIcon={Columns}
                 targetPath="student/yazilacaklar"
                 dataType="yazilacaklar"
+                isStatic={true} // Menü ve içerik dosyadan gelsin
             />
         </div>
     );
