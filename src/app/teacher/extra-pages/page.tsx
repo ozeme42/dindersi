@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { 
-    Loader2, Globe, Plus, Search, Trash2, FileEdit, Eye, EyeOff, Save, ArrowLeft, Home, FileText, Tag
+    Loader2, Globe, Plus, Search, Trash2, FileEdit, Eye, EyeOff, Save, ArrowLeft, FileText, Tag
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';

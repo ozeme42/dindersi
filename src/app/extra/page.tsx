@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { getExtraPages, type ExtraPage } from '@/app/teacher/extra-pages/actions';
 import { 
-    Loader2, Globe, ArrowRight, ArrowLeft, Search, FileText, Sparkles, BookOpen, AlertTriangle, Layers, Tag
+    Loader2, ArrowRight, ArrowLeft, Search, FileText, BookOpen, AlertTriangle, Tag
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -146,7 +146,7 @@ export default function ExtraPagesGallery() {
                     </div>
                 ) : filteredPages.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredPages.map((page, index) => (
+                        {filteredPages.map((page) => (
                             <Link key={page.id} href={`/extra/${page.id}`} className="group relative h-full">
                                 <Card className="bg-white border-slate-200 rounded-[2rem] overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-200 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
                                     <div className="h-1.5 bg-gradient-to-r from-cyan-500 to-indigo-500 opacity-20 group-hover:opacity-100 transition-opacity" />

@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { 
-    Loader2, ArrowLeft, Plus, Minus, FileText, AlertTriangle
+    Loader2, ArrowLeft, Plus, Minus, AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -21,7 +21,6 @@ const MagnificentLightBackground = () => (
 function ExtraPageView() {
     const params = useParams();
     const id = params.id as string;
-    const router = useRouter();
 
     const [page, setPage] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -97,7 +96,7 @@ function ExtraPageView() {
                         <div className="hidden md:block h-8 w-[1px] bg-slate-200 mx-2" />
                         <div className="flex flex-col">
                             <h1 className="text-2xl font-black text-slate-800 tracking-tighter line-clamp-1">{page.title}</h1>
-                            <p className="text-[10px] text-cyan-600 font-black uppercase tracking-widest">Özel Döküman</p>
+                            <p className="text-[10px] text-cyan-600 font-black uppercase tracking-widest">{page.category || 'Özel Döküman'}</p>
                         </div>
                     </div>
 

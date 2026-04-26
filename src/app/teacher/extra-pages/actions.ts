@@ -17,12 +17,24 @@ export type ExtraPage = {
 const serialize = (data: any): any => {
   if (data === null || data === undefined) return null;
   if (Array.isArray(data)) return data.map(serialize);
-  if (data && typeof data === 'object' && typeof data.toDate === 'function') return data.toDate().toISOString();
-  if (data && typeof data === 'object' && '_seconds' in data) return new Date(data._seconds * 1000).toISOString();
+  
+  if (data && typeof data === 'object' && typeof data.toDate === 'function') {
+      return data.toDate().toISOString();
+  }
+  
+  if (data && typeof data === 'object' && '_seconds' in data && '_nanoseconds' in data) {
+      return new Date(data._seconds * 1000).toISOString();
+  }
+  
   if (data instanceof Date) return data.toISOString();
+  
   if (typeof data === 'object') {
     const newObj: { [key: string]: any } = {};
-    for (const key in data) if (Object.prototype.hasOwnProperty.call(data, key)) newObj[key] = serialize(data[key]);
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        newObj[key] = serialize(data[key]);
+      }
+    }
     return newObj;
   }
   return data;
