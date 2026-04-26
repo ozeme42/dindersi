@@ -1,10 +1,9 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getExtraPages, type ExtraPage } from '../teacher/extra-pages/actions';
+import { getExtraPages, type ExtraPage } from '@/app/teacher/extra-pages/actions';
 import { 
-    Loader2, Globe, ArrowRight, ArrowLeft, Search, FileText, Sparkles, BookOpen
+    Loader2, Globe, ArrowRight, ArrowLeft, Search, FileText, Sparkles, BookOpen, AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,14 +23,21 @@ const MagnificentLightBackground = () => (
 export default function ExtraPagesGallery() {
     const [pages, setPages] = useState<ExtraPage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchPages = async () => {
             setIsLoading(true);
-            const result = await getExtraPages(true); // Sadece yayınlananlar
-            if (result.success && result.data) {
-                setPages(result.data);
+            try {
+                const result = await getExtraPages(true); // Sadece yayınlananlar
+                if (result.success && result.data) {
+                    setPages(result.data);
+                } else if (!result.success) {
+                    setError(result.error || "Dökümanlar yüklenirken bir sorun oluştu.");
+                }
+            } catch (e: any) {
+                setError("Sunucuya bağlanılamadı.");
             }
             setIsLoading(false);
         };
@@ -80,6 +86,15 @@ export default function ExtraPagesGallery() {
                         {Array.from({ length: 6 }).map((_, i) => (
                             <div key={i} className="h-40 rounded-3xl bg-white/50 animate-pulse border border-slate-200" />
                         ))}
+                    </div>
+                ) : error ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
+                        <div className="p-4 bg-red-50 rounded-full">
+                            <AlertTriangle className="h-10 w-10 text-red-500" />
+                        </div>
+                        <h2 className="text-xl font-bold text-slate-800">Veriler Yüklenemedi</h2>
+                        <p className="text-slate-500 max-w-md">{error}</p>
+                        <Button onClick={() => window.location.reload()} variant="outline">Tekrar Dene</Button>
                     </div>
                 ) : filteredPages.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

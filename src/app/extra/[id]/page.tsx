@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { 
-    Loader2, ArrowLeft, Plus, Minus, Maximize2, Minimize2, FileText
+    Loader2, ArrowLeft, Plus, Minus, FileText, AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -63,6 +63,9 @@ function ExtraPageView() {
         return (
             <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8 text-center">
                 <div className="bg-white p-8 rounded-3xl border border-red-500/20 max-w-md w-full shadow-xl">
+                    <div className="p-3 bg-red-50 rounded-full w-fit mx-auto mb-4">
+                        <AlertTriangle className="h-8 w-8 text-red-500" />
+                    </div>
                     <p className="text-red-600 mb-6 font-medium text-lg">{error || "İçerik bulunamadı."}</p>
                     <Button asChild className="bg-slate-900 text-white hover:bg-slate-800 w-full">
                         <Link href="/extra"><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
