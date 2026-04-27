@@ -1,4 +1,3 @@
-
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -10,8 +9,6 @@ import type { UserProfile, SchoolClass, Course, Unit, Topic, LessonStep, School,
 
 import fs from 'fs/promises';
 import path from 'path';
-import { eachMonthOfInterval, endOfMonth, format, startOfMonth, subMonths } from "date-fns";
-import { tr } from "date-fns/locale";
 
 const serialize = (data: any): any => {
   if (data === null || data === undefined) return null;
@@ -32,7 +29,117 @@ const serialize = (data: any): any => {
 };
 
 // ==========================================
-// STATİK SİTE EXPORT FONKSİYONU (DOSYALARIN OLUŞTUĞU YER)
+// KULLANICI VE OKUL YÖNETİMİ
+// ==========================================
+
+export async function deleteUserFromFirestore(userId: string) {
+    const db = getAdminDb();
+    const auth = getAdminAuth();
+    try {
+        await db.collection('users').doc(userId).delete();
+        try {
+            await auth.deleteUser(userId);
+        } catch (authError) {
+            console.warn("User deleted from Firestore but not from Auth:", authError);
+        }
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function deleteBulkUsers(userIds: string[]) {
+    const db = getAdminDb();
+    const auth = getAdminAuth();
+    const batch = db.batch();
+    try {
+        for (const uid of userIds) {
+            batch.delete(db.collection('users').doc(uid));
+            try {
+                await auth.deleteUser(uid);
+            } catch (e) {}
+        }
+        await batch.commit();
+        return { success: true, deletedCount: userIds.length };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function saveSchool(school: Partial<School>) {
+    const db = getAdminDb();
+    try {
+        if (school.id) {
+            await db.collection('schools').doc(school.id).update({ name: school.name });
+        } else {
+            await db.collection('schools').add({ name: school.name, createdAt: FieldValue.serverTimestamp() });
+        }
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function deleteSchool(schoolId: string) {
+    const db = getAdminDb();
+    try {
+        await db.collection('schools').doc(schoolId).delete();
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function bulkUpdateStudentSchool(userIds: string[], schoolId: string, schoolName: string) {
+    const db = getAdminDb();
+    const batch = db.batch();
+    try {
+        userIds.forEach(uid => {
+            batch.update(db.collection('users').doc(uid), { schoolId, schoolName });
+        });
+        await batch.commit();
+        return { success: true, count: userIds.length };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+// ==========================================
+// VERİ DIŞA AKTARMA (JSON EXPORT)
+// ==========================================
+
+export async function exportAllData(type: string, filters: any) {
+    const db = getAdminDb();
+    let collectionName = '';
+    switch (type) {
+        case 'users': collectionName = 'users'; break;
+        case 'curriculum': collectionName = 'courses'; break;
+        case 'questions': collectionName = 'questions'; break;
+        case 'examQuestions': collectionName = 'examQuestions'; break;
+        case 'activity-items': collectionName = 'activityItems'; break;
+        case 'scoreEvents': collectionName = 'scoreEvents'; break;
+        default: collectionName = type;
+    }
+
+    try {
+        let q: FirebaseFirestore.Query = db.collection(collectionName);
+        
+        // Basit filtreleme (Gerekirse genişletilebilir)
+        if (filters.classId && filters.classId !== 'all' && type === 'users') {
+             // User tablosunda classId yok, className üzerinden veya manuel filtreleme gerekir
+        }
+
+        const snap = await q.get();
+        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return serialize(data);
+    } catch (error) {
+        console.error("Export error:", error);
+        throw error;
+    }
+}
+
+// ==========================================
+// STATİK SİTE EXPORT FONKSİYONU
 // ==========================================
 
 export async function exportStaticAdvanced(
@@ -43,13 +150,10 @@ export async function exportStaticAdvanced(
   const publicPath = path.join(process.cwd(), 'public');
   const curriculumPath = path.join(publicPath, 'curriculum');
   
-  // Klasörlerin listesi
   const dirs = ['ozetler', 'yazilacaklar', 'flows', 'questions', 'activityItems'];
   
   try {
-      // Ana klasörü oluştur
       await fs.mkdir(curriculumPath, { recursive: true });
-      // Alt klasörleri oluştur
       for (const d of dirs) {
         await fs.mkdir(path.join(curriculumPath, d), { recursive: true });
       }
@@ -238,5 +342,3 @@ function processCoursesForManifest(courseList: any[], units: any[], topics: any[
         return processedUnits.length > 0 ? { id: course.id, title: course.title, units: processedUnits } : null;
     }).filter(Boolean);
 }
-
-// ... Diğer admin aksiyonları (deleteUser, getAnnouncements vs) devam eder
