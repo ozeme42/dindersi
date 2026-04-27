@@ -5,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown, Palette, Minimize2 } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown, Palette, Minimize2, XOctagon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { format, startOfDay } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { useAuth } from '@/context/auth-context';
 
@@ -57,7 +57,6 @@ const StatusButton = ({ status, onClick }: { status: '+' | '-' | 'o' | null, onC
     )
 }
 
-// SÜTUN DÜZENLEYİCİ DİYALOG
 function ColumnEditorDialog({
     isOpen,
     onOpenChange,
@@ -140,10 +139,8 @@ export default function ScaleDetailPage() {
     const [isColumnEditorOpen, setIsColumnEditorOpen] = useState(false);
     const { toast } = useToast();
 
-    // --- OTURUM MANTIĞI ---
     const [activeSessionId, setActiveSessionId] = useState<string>("1");
 
-    // --- ÖDEV ATA STATE'LERİ ---
     const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
     const [assignmentTitle, setAssignmentTitle] = useState('');
     const [assignmentDueDate, setAssignmentDueDate] = useState<Date | undefined>();
@@ -532,22 +529,19 @@ export default function ScaleDetailPage() {
                          <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Puanlar otomatik kaydedilmez, "Kaydet"e basın.</div>
                     </CardHeader>
                     <CardContent className="p-0">
-                        {/* 
-                          GÜNCELLEME: Tabloya dondurulmuş (sticky) hücreler eklendi.
-                          1. Dış div'e max yükseklik ve overflow-auto eklendi.
-                          2. Header sticky top yapıldı.
-                          3. İlk sütun (Öğrenci) sticky left yapıldı.
-                        */}
-                        <div className="border rounded-md overflow-auto max-h-[70vh] custom-scrollbar">
+                        <div className="relative max-h-[70vh] overflow-auto custom-scrollbar bg-slate-900/50">
                             {students.length > 0 ? (
                                <Table className="min-w-[1000px] border-separate border-spacing-0">
-                                    <TableHeader className="sticky top-0 z-30 bg-slate-800 shadow-md">
-                                        <TableRow className="border-white/5 hover:bg-transparent">
-                                            <TableHead className="min-w-48 sticky left-0 top-0 bg-slate-800 z-40 text-slate-300 font-bold text-base border-r border-white/10">Öğrenci</TableHead>
+                                    <TableHeader>
+                                        <TableRow className="hover:bg-transparent">
+                                            {/* bunlar sabit olacak kaymayacak */}
+                                            <TableHead className="sticky top-0 left-0 z-[60] min-w-48 bg-slate-800 text-slate-300 font-bold text-base border-b border-r border-white/10 outline outline-1 outline-white/5">
+                                                Öğrenci
+                                            </TableHead>
                                             
                                             {(scale.type === 'checklist' || scale.type === 'points') && (
                                                 (scale.columns || []).map(col => (
-                                                    <TableHead key={col.id} className="w-32 text-center text-slate-400 font-medium border-x border-white/5 bg-slate-800">
+                                                    <TableHead key={col.id} className="sticky top-0 z-[50] w-32 bg-slate-800 text-center text-slate-400 font-medium border-b border-r border-white/10 outline outline-1 outline-white/5">
                                                         <span className="inline-block whitespace-nowrap text-xs font-bold uppercase tracking-wider">{col.name}</span>
                                                     </TableHead>
                                                 ))
@@ -555,16 +549,16 @@ export default function ScaleDetailPage() {
                                             
                                             {scale.type === 'tally' && (
                                                 <>
-                                                    <TableHead className="w-40 text-center text-emerald-400 bg-slate-800">ART+ (Başarı)</TableHead>
-                                                    <TableHead className="w-40 text-center text-red-400 bg-slate-800">EKSİ- (Gelişim)</TableHead>
+                                                    <TableHead className="sticky top-0 z-[50] w-40 bg-slate-800 text-center text-emerald-400 border-b border-r border-white/10 outline outline-1 outline-white/5">ART+ (Başarı)</TableHead>
+                                                    <TableHead className="sticky top-0 z-[50] w-40 bg-slate-800 text-center text-red-400 border-b border-r border-white/10 outline outline-1 outline-white/5">EKSİ- (Gelişim)</TableHead>
                                                 </>
                                             )}
 
-                                            <TableHead className="w-32 text-center text-emerald-400 font-black border-l border-white/10 bg-slate-800">
+                                            <TableHead className="sticky top-0 z-[50] w-32 bg-slate-800 text-center text-emerald-400 font-black border-b border-r border-white/10 outline outline-1 outline-white/5">
                                                 {scale.type === 'points' ? 'OTURUM TOPLAMI' : 'OTURUM BAŞARISI'}
                                             </TableHead>
-                                            <TableHead className="w-32 text-center text-indigo-400 font-black border-l border-white/10 bg-slate-800">GENEL NOT</TableHead>
-                                            <TableHead className="min-w-64 border-l border-white/5 text-slate-300 bg-slate-800">Notlar</TableHead>
+                                            <TableHead className="sticky top-0 z-[50] w-32 bg-slate-800 text-center text-indigo-400 font-black border-b border-r border-white/10 outline outline-1 outline-white/5">GENEL NOT</TableHead>
+                                            <TableHead className="sticky top-0 z-[50] min-w-64 bg-slate-800 border-b border-white/10 text-slate-300 outline outline-1 outline-white/5">Notlar</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     
@@ -574,15 +568,14 @@ export default function ScaleDetailPage() {
                                             const sessionData = getStudentDataAtSession(student.uid) || {};
                                             const studentAvg = calculateStudentAverage(student.uid);
                                             
-                                            // Aktif oturum toplamı (Puanlı ölçek için)
                                             const currentSessionTotal = scale.type === 'points' 
                                                 ? Object.values(sessionData.values || {}).reduce((a, b) => a + (b || 0), 0)
                                                 : null;
 
                                             return (
-                                                <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
+                                                <TableRow key={student.uid} className="hover:bg-white/5 transition-colors group">
                                                     
-                                                    <TableCell className="sticky left-0 bg-slate-900 z-10 border-r border-white/10 group-hover:bg-slate-800 transition-colors">
+                                                    <TableCell className="sticky left-0 z-[40] bg-slate-900 border-b border-r border-white/10 group-hover:bg-slate-800 transition-colors shadow-[1px_0px_0px_0px_rgba(255,255,255,0.05)]">
                                                         <div className="flex items-center gap-3">
                                                             <UserAvatar user={student} className="h-9 w-9 border-2 border-slate-700 group-hover:border-purple-400" />
                                                             <div className="flex flex-col min-w-0">
@@ -595,7 +588,7 @@ export default function ScaleDetailPage() {
                                                     
                                                     {scale.type === 'checklist' && (
                                                         (scale.columns || []).map(col => (
-                                                            <TableCell key={col.id} className="text-center bg-transparent border-r border-white/5">
+                                                            <TableCell key={col.id} className="text-center bg-transparent border-b border-r border-white/5">
                                                                 <StatusButton
                                                                     status={sessionData.statuses?.[col.id] || null}
                                                                     onClick={() => handleChecklistChange(student.uid, col.id)}
@@ -606,7 +599,7 @@ export default function ScaleDetailPage() {
 
                                                     {scale.type === 'points' && (
                                                          (scale.columns || []).map(col => (
-                                                            <TableCell key={col.id} className="text-center bg-transparent border-r border-white/5">
+                                                            <TableCell key={col.id} className="text-center bg-transparent border-b border-r border-white/5">
                                                                 <Input 
                                                                     type="number"
                                                                     min="0"
@@ -621,14 +614,14 @@ export default function ScaleDetailPage() {
 
                                                     {scale.type === 'tally' && (
                                                         <>
-                                                            <TableCell className="text-center bg-transparent border-x border-white/5">
+                                                            <TableCell className="text-center bg-transparent border-b border-r border-white/5">
                                                                 <div className="flex items-center justify-center gap-2 bg-emerald-900/30 p-1 rounded-lg">
                                                                     <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', Math.max(0, (sessionData.plus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
                                                                     <span className="font-bold text-lg text-white">{sessionData.plus || 0}</span>
                                                                     <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', (sessionData.plus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
                                                                 </div>
                                                             </TableCell>
-                                                            <TableCell className="text-center bg-transparent border-r border-white/5">
+                                                            <TableCell className="text-center bg-transparent border-b border-r border-white/5">
                                                                 <div className="flex items-center justify-center gap-2 bg-red-900/30 p-1 rounded-lg">
                                                                     <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400" onClick={() => handleTallyChange(student.uid, 'minus', Math.max(0, (sessionData.minus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
                                                                     <span className="font-bold text-lg text-white">{sessionData.minus || 0}</span>
@@ -638,8 +631,7 @@ export default function ScaleDetailPage() {
                                                         </>
                                                     )}
                                                     
-                                                    {/* OTURUM TOPLAMI SÜTUNU */}
-                                                    <TableCell className="text-center bg-slate-950/30 border-l border-white/10 font-bold">
+                                                    <TableCell className="text-center bg-slate-950/30 border-b border-r border-white/10 font-bold">
                                                         {scale.type === 'points' ? (
                                                             <span className="text-2xl font-black text-cyan-400 drop-shadow-sm">{currentSessionTotal}</span>
                                                         ) : (
@@ -647,8 +639,7 @@ export default function ScaleDetailPage() {
                                                         )}
                                                     </TableCell>
                                                     
-                                                    {/* GENEL NOT (ORTALAMA) SÜTUNU */}
-                                                    <TableCell className="text-center bg-slate-900/50 border-l border-white/10 group-hover:bg-slate-800/80 transition-colors">
+                                                    <TableCell className="text-center bg-slate-900/50 border-b border-r border-white/10 group-hover:bg-slate-800/80 transition-colors">
                                                         <div className="flex flex-col items-center">
                                                             <span className={cn("text-2xl font-black transition-colors", studentAvg !== null ? "text-indigo-400" : "text-slate-700")}>
                                                                 {studentAvg !== null ? studentAvg : "-"}
@@ -661,7 +652,7 @@ export default function ScaleDetailPage() {
                                                         </div>
                                                     </TableCell>
                                                     
-                                                    <TableCell className="min-w-64 border-l border-white/5">
+                                                    <TableCell className="min-w-64 border-b border-white/10">
                                                         <Input 
                                                             type="text" 
                                                             placeholder="Gözlem..." 
