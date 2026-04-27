@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
@@ -532,16 +532,22 @@ export default function ScaleDetailPage() {
                          <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Puanlar otomatik kaydedilmez, "Kaydet"e basın.</div>
                     </CardHeader>
                     <CardContent className="p-0">
-                        <div className="border rounded-md overflow-x-auto">
+                        {/* 
+                          GÜNCELLEME: Tabloya dondurulmuş (sticky) hücreler eklendi.
+                          1. Dış div'e max yükseklik ve overflow-auto eklendi.
+                          2. Header sticky top yapıldı.
+                          3. İlk sütun (Öğrenci) sticky left yapıldı.
+                        */}
+                        <div className="border rounded-md overflow-auto max-h-[70vh] custom-scrollbar">
                             {students.length > 0 ? (
-                               <Table className="min-w-[1000px] border-collapse">
-                                    <TableHeader className="bg-slate-800/80">
+                               <Table className="min-w-[1000px] border-separate border-spacing-0">
+                                    <TableHeader className="sticky top-0 z-30 bg-slate-800 shadow-md">
                                         <TableRow className="border-white/5 hover:bg-transparent">
-                                            <TableHead className="min-w-48 sticky left-0 bg-slate-800/90 z-20 text-slate-300 font-bold text-base border-r border-white/5">Öğrenci</TableHead>
+                                            <TableHead className="min-w-48 sticky left-0 top-0 bg-slate-800 z-40 text-slate-300 font-bold text-base border-r border-white/10">Öğrenci</TableHead>
                                             
                                             {(scale.type === 'checklist' || scale.type === 'points') && (
                                                 (scale.columns || []).map(col => (
-                                                    <TableHead key={col.id} className="w-32 text-center text-slate-400 font-medium border-x border-white/5">
+                                                    <TableHead key={col.id} className="w-32 text-center text-slate-400 font-medium border-x border-white/5 bg-slate-800">
                                                         <span className="inline-block whitespace-nowrap text-xs font-bold uppercase tracking-wider">{col.name}</span>
                                                     </TableHead>
                                                 ))
@@ -549,16 +555,16 @@ export default function ScaleDetailPage() {
                                             
                                             {scale.type === 'tally' && (
                                                 <>
-                                                    <TableHead className="w-40 text-center text-emerald-400">ART+ (Başarı)</TableHead>
-                                                    <TableHead className="w-40 text-center text-red-400">EKSİ- (Gelişim)</TableHead>
+                                                    <TableHead className="w-40 text-center text-emerald-400 bg-slate-800">ART+ (Başarı)</TableHead>
+                                                    <TableHead className="w-40 text-center text-red-400 bg-slate-800">EKSİ- (Gelişim)</TableHead>
                                                 </>
                                             )}
 
-                                            <TableHead className="w-32 text-center text-emerald-400 font-black border-l border-white/10 bg-slate-800/50">
+                                            <TableHead className="w-32 text-center text-emerald-400 font-black border-l border-white/10 bg-slate-800">
                                                 {scale.type === 'points' ? 'OTURUM TOPLAMI' : 'OTURUM BAŞARISI'}
                                             </TableHead>
-                                            <TableHead className="w-32 text-center text-indigo-400 font-black border-l border-white/10">GENEL NOT</TableHead>
-                                            <TableHead className="min-w-64 border-l border-white/5 text-slate-300">Notlar</TableHead>
+                                            <TableHead className="w-32 text-center text-indigo-400 font-black border-l border-white/10 bg-slate-800">GENEL NOT</TableHead>
+                                            <TableHead className="min-w-64 border-l border-white/5 text-slate-300 bg-slate-800">Notlar</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     
@@ -576,7 +582,7 @@ export default function ScaleDetailPage() {
                                             return (
                                                 <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
                                                     
-                                                    <TableCell className="sticky left-0 bg-slate-900/90 z-10 border-r border-white/5 group-hover:bg-slate-800/90 transition-colors">
+                                                    <TableCell className="sticky left-0 bg-slate-900 z-10 border-r border-white/10 group-hover:bg-slate-800 transition-colors">
                                                         <div className="flex items-center gap-3">
                                                             <UserAvatar user={student} className="h-9 w-9 border-2 border-slate-700 group-hover:border-purple-400" />
                                                             <div className="flex flex-col min-w-0">
@@ -655,7 +661,7 @@ export default function ScaleDetailPage() {
                                                         </div>
                                                     </TableCell>
                                                     
-                                                    <TableCell className="min-w-64">
+                                                    <TableCell className="min-w-64 border-l border-white/5">
                                                         <Input 
                                                             type="text" 
                                                             placeholder="Gözlem..." 
