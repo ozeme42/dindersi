@@ -46,8 +46,8 @@ export function YazilacaklarDisplayPage() {
         setIsLoading(true);
         setError(null);
         try {
-            // Hiyerarşik başlık bilgisini canlı veritabanından çek (isStatic: false)
-            const { classGroups, error: fetchError } = await getCurriculumForSelection('yazilacaklar', false);
+            // Hiyerarşik başlık bilgisini statik dosyadan çek (isStatic: true)
+            const { classGroups, error: fetchError } = await getCurriculumForSelection('yazilacaklar', true);
             if (fetchError) throw new Error(fetchError);
             
             let foundTopic = null;
@@ -69,7 +69,7 @@ export function YazilacaklarDisplayPage() {
                 setTopicTitle((foundTopic as any).title);
             }
 
-            // İçerik verisini statik dosyadan çekmeye devam et (İçerik büyük olduğu için statik dosya daha verimli)
+            // İçerik verisini statik dosyadan çek
             const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
             if (!res.ok) {
                 throw new Error('Bu konu için yazılacak notlar bulunamadı.');

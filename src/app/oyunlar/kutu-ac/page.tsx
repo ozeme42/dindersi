@@ -12,7 +12,7 @@ function KutuAcPage() {
             gameIcon={Package}
             gamePath="kutu-ac"
             dataType="games"
-            isStatic={false}
+            isStatic={true}
         />
     );
 }

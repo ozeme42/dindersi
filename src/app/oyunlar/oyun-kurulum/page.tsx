@@ -14,6 +14,7 @@ function OyunKurulumWrapper() {
             gameIcon={Gamepad2}
             targetPath="oyunlar"
             dataType="games"
+            isStatic={true}
         />
     );
 }

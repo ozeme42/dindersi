@@ -12,7 +12,7 @@ function IlimHazinesiPage() {
             gameIcon={BookOpen}
             gamePath="ilim-hazinesi"
             dataType="games"
-            isStatic={false}
+            isStatic={true}
         />
     );
 }

@@ -12,12 +12,11 @@ function AdamAsmacaPage() {
             gameIcon={Skull}
             gamePath="adam-asmaca"
             dataType="games"
-            isStatic={false}
+            isStatic={true}
         />
     );
 }
 
-// Renamed AdamAsmacaSuspense to Page and made it a standard component
 export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>

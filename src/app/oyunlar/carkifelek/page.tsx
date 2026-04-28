@@ -12,7 +12,7 @@ function CarkifelekPage() {
             gameIcon={Star}
             gamePath="carkifelek"
             dataType="games"
-            isStatic={false}
+            isStatic={true}
         />
     );
 }

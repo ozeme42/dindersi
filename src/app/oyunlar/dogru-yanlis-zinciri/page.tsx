@@ -12,7 +12,7 @@ function DogruYanlisZinciriPage() {
             gameIcon={Link2}
             gamePath="dogru-yanlis-zinciri"
             dataType="games"
-            isStatic={false}
+            isStatic={true}
         />
     );
 }

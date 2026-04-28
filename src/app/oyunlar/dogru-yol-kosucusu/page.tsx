@@ -12,7 +12,7 @@ function DogruYolKosucusuPage() {
             gameIcon={Footprints}
             gamePath="dogru-yol-kosucusu"
             dataType="games"
-            isStatic={false}
+            isStatic={true}
         />
     );
 }

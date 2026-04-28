@@ -12,7 +12,7 @@ function BilBakalimPage() {
             gameIcon={Lightbulb}
             gamePath="bil-bakalim"
             dataType="games"
-            isStatic={false}
+            isStatic={true}
         />
     );
 }
