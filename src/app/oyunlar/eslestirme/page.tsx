@@ -12,7 +12,7 @@ function EslestirmePage() {
             gameIcon={Puzzle}
             gamePath="eslestirme"
             dataType="games"
-            isStatic={true}
+            isStatic={false}
         />
     );
 }

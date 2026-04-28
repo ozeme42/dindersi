@@ -12,7 +12,7 @@ function HafizaKartlariPage() {
             gameIcon={Layers}
             gamePath="hafiza-kartlari"
             dataType="games"
-            isStatic={true}
+            isStatic={false}
         />
     );
 }

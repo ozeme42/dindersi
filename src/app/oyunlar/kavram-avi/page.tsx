@@ -12,7 +12,7 @@ function KavramAviPage() {
             gameIcon={Crosshair}
             gamePath="kavram-avi"
             dataType="games"
-            isStatic={true}
+            isStatic={false}
         />
     );
 }

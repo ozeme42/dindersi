@@ -12,7 +12,7 @@ function KavramYarismasiPage() {
             gameIcon={BrainCircuit}
             gamePath="kavram-yarismasi"
             dataType="games"
-            isStatic={true}
+            isStatic={false}
         />
     );
 }

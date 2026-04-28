@@ -12,7 +12,7 @@ function AcikUcluCevaplaPage() {
             gameIcon={Pencil}
             gamePath="acik-uclu-cevapla"
             dataType="games"
-            isStatic={true}
+            isStatic={false}
         />
     );
 }

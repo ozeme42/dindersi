@@ -12,7 +12,7 @@ function MilyonerPage() {
             gameIcon={Trophy}
             gamePath="milyoner-yarismasi"
             dataType="games"
-            isStatic={true}
+            isStatic={false}
         />
     );
 }

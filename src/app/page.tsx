@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -12,11 +13,10 @@ export default function Home() {
   const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
-    // Statik modda veya giriş yapılmamışsa manifest.json'dan çek (Performans için)
+    // Müfredat yapısını canlı veritabanından (isStatic: false) çekiyoruz
     if (!loading) {
       setDataLoading(true);
-      // isStatic: true parametresi ile manifest.json dosyasını okumasını sağlıyoruz
-      getCurriculumForSelection('ozetler', true)
+      getCurriculumForSelection('ozetler', false)
         .then(res => {
           if (res.classGroups) {
             setClassGroups(res.classGroups as any);
@@ -24,7 +24,7 @@ export default function Home() {
           setDataLoading(false);
         })
         .catch(err => {
-          console.error("Failed to fetch curriculum from manifest:", err);
+          console.error("Failed to fetch curriculum from database:", err);
           setDataLoading(false);
         });
     }

@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { Suspense } from 'react';
@@ -11,7 +12,7 @@ function CarkifelekPage() {
             gameIcon={Star}
             gamePath="carkifelek"
             dataType="games"
-            isStatic={true}
+            isStatic={false}
         />
     );
 }

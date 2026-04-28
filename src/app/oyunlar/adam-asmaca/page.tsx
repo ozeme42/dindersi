@@ -12,7 +12,7 @@ function AdamAsmacaPage() {
             gameIcon={Skull}
             gamePath="adam-asmaca"
             dataType="games"
-            isStatic={true}
+            isStatic={false}
         />
     );
 }

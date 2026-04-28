@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
@@ -45,8 +46,8 @@ export function YazilacaklarDisplayPage() {
         setIsLoading(true);
         setError(null);
         try {
-            // Hiyerarşik başlık bilgisini statik manifestten çek
-            const { classGroups, error: fetchError } = await getCurriculumForSelection('yazilacaklar', true);
+            // Hiyerarşik başlık bilgisini canlı veritabanından çek (isStatic: false)
+            const { classGroups, error: fetchError } = await getCurriculumForSelection('yazilacaklar', false);
             if (fetchError) throw new Error(fetchError);
             
             let foundTopic = null;
@@ -68,7 +69,7 @@ export function YazilacaklarDisplayPage() {
                 setTopicTitle((foundTopic as any).title);
             }
 
-            // İçerik verisini statik dosyadan çek (Dosyadan gelmesi istendi)
+            // İçerik verisini statik dosyadan çekmeye devam et (İçerik büyük olduğu için statik dosya daha verimli)
             const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
             if (!res.ok) {
                 throw new Error('Bu konu için yazılacak notlar bulunamadı.');

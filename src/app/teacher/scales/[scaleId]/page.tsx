@@ -5,9 +5,8 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown, Palette, Minimize2, XOctagon } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown, Palette, Minimize2, Printer } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { UserAvatar } from '@/components/user-avatar';
@@ -29,31 +28,37 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { format, isValid } from 'date-fns';
+import { format, startOfDay } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { useAuth } from '@/context/auth-context';
 
 const StatusButton = ({ status, onClick }: { status: '+' | '-' | 'o' | null, onClick: () => void }) => {
     const statusMap = {
-        '+': { icon: Check, color: 'bg-emerald-600 hover:bg-emerald-500' },
-        '-': { icon: X, color: 'bg-red-600 hover:bg-red-500' },
-        'o': { icon: ClipboardList, color: 'bg-yellow-600 hover:bg-yellow-500' },
+        '+': { icon: Check, color: 'bg-emerald-600 hover:bg-emerald-500 text-white', text: '✓' },
+        '-': { icon: X, color: 'bg-red-600 hover:bg-red-500 text-white', text: '✗' },
+        'o': { icon: ClipboardList, color: 'bg-yellow-500 hover:bg-yellow-400 text-black', text: 'O' },
     };
 
     if (!status) {
         return (
-            <Button size="icon" variant="ghost" className="h-10 w-10 border border-white/10 text-slate-400 hover:bg-white/10 hover:text-white" onClick={onClick}>
-                <ChevronsUpDown className="h-5 w-5" />
-            </Button>
+            <>
+                <Button size="icon" variant="ghost" className="h-10 w-10 border border-white/10 text-slate-400 hover:bg-white/10 hover:text-white print-hide" onClick={onClick}>
+                    <ChevronsUpDown className="h-5 w-5" />
+                </Button>
+                <span className="print-show">-</span>
+            </>
         );
     }
     
     const Icon = statusMap[status].icon;
     
     return (
-        <Button size="icon" variant="default" className={cn("h-10 w-10 text-white shadow-md", statusMap[status].color)} onClick={onClick}>
-            <Icon className="h-6 w-6" />
-        </Button>
+        <>
+            <Button size="icon" variant="default" className={cn("h-10 w-10 shadow-md print-hide", statusMap[status].color)} onClick={onClick}>
+                <Icon className="h-6 w-6" />
+            </Button>
+            <span className="print-show font-bold">{statusMap[status].text}</span>
+        </>
     )
 }
 
@@ -415,6 +420,10 @@ export default function ScaleDetailPage() {
         setIsSaving(false);
     };
 
+    const printPage = () => {
+        window.print();
+    };
+
     if (isLoading) {
         return <div className="flex justify-center items-center h-full py-20 bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
     }
@@ -425,22 +434,69 @@ export default function ScaleDetailPage() {
     
      const getScoreColorClass = (score: number | null) => {
         if (score === null) return "bg-slate-600";
-        if (score >= 85) return "bg-emerald-600";
-        if (score >= 70) return "bg-yellow-600 text-black";
-        if (score >= 50) return "bg-orange-600";
-        return "bg-red-600";
+        if (score >= 85) return "bg-emerald-500 text-white";
+        if (score >= 70) return "bg-yellow-500 text-black";
+        if (score >= 50) return "bg-orange-500 text-white";
+        return "bg-red-500 text-white";
     }
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-             <div className="fixed inset-0 pointer-events-none z-0">
+            {/* SAF TABLO YAZDIRMA CSS'İ */}
+            <style media="print">{`
+                @page { size: portrait; margin: 10mm; }
+                body { background: white !important; color: black !important; }
+                
+                /* Tüm UI elemanlarını gizle */
+                .print-hide { display: none !important; }
+                
+                /* Ekran için gizli olan, print için gösterilecek yazılar */
+                .print-show { display: block !important; color: black !important; text-align: center; }
+                span.print-show { display: inline-block !important; }
+                
+                /* Container ve kart stillerini tamamen sıfırla */
+                .min-h-screen, .max-w-\\[98\\%\\] { padding: 0 !important; margin: 0 !important; max-width: 100% !important; min-height: auto !important; background: transparent !important; }
+                .card-wrapper { border: none !important; box-shadow: none !important; border-radius: 0 !important; background: transparent !important; margin: 0 !important; padding: 0 !important; }
+                
+                /* Tabloyu dümdüz siyah-beyaz çizgilere çevir */
+                .table-wrapper { overflow: visible !important; max-height: none !important; background: transparent !important; }
+                table { width: 100% !important; border-collapse: collapse !important; border: 1px solid black !important; margin: 0 !important; }
+                th, td { 
+                    border: 1px solid black !important; 
+                    padding: 4px !important; 
+                    color: black !important; 
+                    background: transparent !important; 
+                    font-size: 12pt !important; 
+                    position: static !important; /* Sticky iptal */
+                    text-align: center !important;
+                }
+                th:first-child, td:first-child { text-align: left !important; }
+                th { font-weight: bold !important; }
+                
+                /* Inputları düz yazıya çevir */
+                input { border: none !important; background: transparent !important; color: black !important; text-align: center !important; font-size: 12pt !important; font-weight: normal !important; padding: 0 !important; width: 100% !important; }
+                input::placeholder { color: transparent !important; }
+                td input[type="text"] { text-align: left !important; }
+                
+                /* Gereksiz boşlukları sil */
+                * { box-shadow: none !important; text-shadow: none !important; border-radius: 0 !important; }
+            `}</style>
+
+            {/* Ekran için normalde gizli, CSS ile yönetilecek print sınıfı */}
+            <style>{`
+                .print-show { display: none; }
+            `}</style>
+
+             <div className="fixed inset-0 pointer-events-none z-0 print-hide">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
                 <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
             </div>
 
-            <div className="max-w-7xl mx-auto relative z-10 space-y-8">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="max-w-[98%] mx-auto relative z-10 space-y-6">
+                
+                {/* YAZDIRMADA GİZLENECEK ÜST BAR */}
+                <div className="flex items-center justify-between border-b border-white/10 pb-4 print-hide">
                      <Button asChild variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl">
                         <Link href="/teacher/scales">
                             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -459,6 +515,11 @@ export default function ScaleDetailPage() {
                                 <Settings className="mr-2 h-4 w-4" /> Sütunlar
                             </Button>
                         )}
+                        
+                        <Button variant="outline" onClick={printPage} size="sm" className="border-indigo-500/30 text-indigo-300 hover:text-white hover:bg-indigo-500/20">
+                            <Printer className="mr-2 h-4 w-4" /> Yazdır
+                        </Button>
+
                         <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4" />}
                             Değişiklikleri Kaydet
@@ -466,7 +527,8 @@ export default function ScaleDetailPage() {
                     </div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* YAZDIRMADA GİZLENECEK KARTLAR */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 print-hide">
                     <Card className="md:col-span-2 bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
                         <CardHeader className="pb-4">
                             <CardTitle className="text-2xl font-black text-white">{scale.name.split(' (')[0]?.trim() || 'Ölçek Başlığı'}</CardTitle>
@@ -521,48 +583,59 @@ export default function ScaleDetailPage() {
                     </Card>
                 </div>
                 
-                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden rounded-[2rem]">
-                    <CardHeader className="bg-slate-800/40 border-b border-white/5 py-3 px-6 flex flex-row items-center justify-between">
+                {/* SADECE YAZDIRILACAK TABLO ALANI */}
+                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden rounded-[2rem] card-wrapper">
+                    
+                    {/* KART BAŞLIĞI YAZDIRMADA GİZLİ */}
+                    <CardHeader className="bg-slate-800/40 border-b border-white/5 py-3 px-6 flex flex-row items-center justify-between print-hide">
                          <div className="flex items-center gap-2">
                             <span className="text-sm font-black text-indigo-400">{activeSessionId}. Değerlendirme Oturumu</span>
                          </div>
                          <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Puanlar otomatik kaydedilmez, "Kaydet"e basın.</div>
                     </CardHeader>
-                    <CardContent className="p-0">
-                        <div className="relative max-h-[70vh] overflow-auto custom-scrollbar bg-slate-900/50">
+                    
+                    <CardContent className="p-0 card-wrapper">
+                        {/* Tablo sadece print ekranında plain text olacak */}
+                        <div className="relative max-h-[75vh] overflow-auto custom-scrollbar bg-slate-900/50 table-wrapper">
+                            {/* Yazdırılırken Sayfanın Başına Ölçek Başlığı Ekle */}
+                            <h2 className="print-show text-2xl font-bold mb-4 text-left">{scale.name.split(' (')[0]?.trim()} - {course?.title} {branch && `(${branch})`}</h2>
+
                             {students.length > 0 ? (
-                               <Table className="min-w-[1000px] border-separate border-spacing-0">
-                                    <TableHeader>
-                                        <TableRow className="hover:bg-transparent">
-                                            {/* bunlar sabit olacak kaymayacak */}
-                                            <TableHead className="sticky top-0 left-0 z-[60] min-w-48 bg-slate-800 text-slate-300 font-bold text-base border-b border-r border-white/10 outline outline-1 outline-white/5">
+                                <table className="w-full border-separate border-spacing-0 text-left">
+                                    <thead>
+                                        <tr>
+                                            <th className="sticky top-0 left-0 z-[60] bg-slate-800 text-slate-300 font-bold text-sm px-4 py-2 border-b border-r border-white/10 min-w-[200px] shadow-[1px_1px_0px_0px_rgba(255,255,255,0.05)]">
                                                 Öğrenci
-                                            </TableHead>
+                                            </th>
                                             
                                             {(scale.type === 'checklist' || scale.type === 'points') && (
                                                 (scale.columns || []).map(col => (
-                                                    <TableHead key={col.id} className="sticky top-0 z-[50] w-32 bg-slate-800 text-center text-slate-400 font-medium border-b border-r border-white/10 outline outline-1 outline-white/5">
+                                                    <th key={col.id} className="sticky top-0 z-[50] bg-slate-800 text-center text-slate-400 font-medium px-2 py-2 border-b border-r border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)] w-24">
                                                         <span className="inline-block whitespace-nowrap text-xs font-bold uppercase tracking-wider">{col.name}</span>
-                                                    </TableHead>
+                                                    </th>
                                                 ))
                                             )}
                                             
                                             {scale.type === 'tally' && (
                                                 <>
-                                                    <TableHead className="sticky top-0 z-[50] w-40 bg-slate-800 text-center text-emerald-400 border-b border-r border-white/10 outline outline-1 outline-white/5">ART+ (Başarı)</TableHead>
-                                                    <TableHead className="sticky top-0 z-[50] w-40 bg-slate-800 text-center text-red-400 border-b border-r border-white/10 outline outline-1 outline-white/5">EKSİ- (Gelişim)</TableHead>
+                                                    <th className="sticky top-0 z-[50] bg-slate-800 text-center text-emerald-400 px-2 py-2 text-sm border-b border-r border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)] w-20">ART+</th>
+                                                    <th className="sticky top-0 z-[50] bg-slate-800 text-center text-red-400 px-2 py-2 text-sm border-b border-r border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)] w-20">EKSİ-</th>
                                                 </>
                                             )}
 
-                                            <TableHead className="sticky top-0 z-[50] w-32 bg-slate-800 text-center text-emerald-400 font-black border-b border-r border-white/10 outline outline-1 outline-white/5">
-                                                {scale.type === 'points' ? 'OTURUM TOPLAMI' : 'OTURUM BAŞARISI'}
-                                            </TableHead>
-                                            <TableHead className="sticky top-0 z-[50] w-32 bg-slate-800 text-center text-indigo-400 font-black border-b border-r border-white/10 outline outline-1 outline-white/5">GENEL NOT</TableHead>
-                                            <TableHead className="sticky top-0 z-[50] min-w-64 bg-slate-800 border-b border-white/10 text-slate-300 outline outline-1 outline-white/5">Notlar</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
+                                            <th className="sticky top-0 z-[50] bg-slate-800 text-center text-emerald-400 font-black px-2 py-2 text-sm border-b border-r border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)] w-20">
+                                                {scale.type === 'points' ? 'OTURUM' : 'BAŞARI'}
+                                            </th>
+                                            <th className="sticky top-0 z-[50] bg-slate-800 text-center text-indigo-400 font-black px-2 py-2 text-sm border-b border-r border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)] w-20">
+                                                GENEL
+                                            </th>
+                                            <th className="sticky top-0 z-[50] bg-slate-800 text-slate-300 px-4 py-2 text-sm border-b border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)] min-w-[200px]">
+                                                Notlar
+                                            </th>
+                                        </tr>
+                                    </thead>
                                     
-                                    <TableBody>
+                                    <tbody>
                                         {students.map(student => {
                                             const studentEntry = entries[student.uid] || { history: {}, note: '' };
                                             const sessionData = getStudentDataAtSession(student.uid) || {};
@@ -573,180 +646,190 @@ export default function ScaleDetailPage() {
                                                 : null;
 
                                             return (
-                                                <TableRow key={student.uid} className="hover:bg-white/5 transition-colors group">
+                                                <tr key={student.uid} className="hover:bg-white/5 transition-colors group">
                                                     
-                                                    <TableCell className="sticky left-0 z-[40] bg-slate-900 border-b border-r border-white/10 group-hover:bg-slate-800 transition-colors shadow-[1px_0px_0px_0px_rgba(255,255,255,0.05)]">
+                                                    <td className="sticky left-0 z-[40] bg-slate-900 border-b border-r border-white/10 px-4 py-2 group-hover:bg-slate-800 transition-colors shadow-[1px_0px_0px_0px_rgba(255,255,255,0.05)]">
                                                         <div className="flex items-center gap-3">
-                                                            <UserAvatar user={student} className="h-9 w-9 border-2 border-slate-700 group-hover:border-purple-400" />
+                                                            <UserAvatar user={student} className="h-9 w-9 border-2 border-slate-700 group-hover:border-purple-400 print-hide" />
                                                             <div className="flex flex-col min-w-0">
-                                                                <span className="font-bold text-white truncate">{student.displayName}</span>
-                                                                <span className="text-[10px] text-slate-500 font-mono">{student.class}</span>
-                                                                {studentAvg !== null && <span className="text-[9px] font-black text-indigo-400 uppercase">Not: {studentAvg}</span>}
+                                                                <span className="font-bold text-base text-white truncate print-text-black">{student.displayName}</span>
+                                                                {/* Sınıf ve Rozet yazdırmada gizli */}
+                                                                <div className="flex items-center gap-2 mt-0.5 print-hide">
+                                                                    <span className="text-[10px] text-slate-400 font-mono">{student.class}</span>
+                                                                    {studentAvg !== null && (
+                                                                        <Badge className={cn("text-xs font-black px-2 py-0 shadow-sm border-0", getScoreColorClass(studentAvg))}>
+                                                                            Not: {studentAvg}
+                                                                        </Badge>
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </TableCell>
+                                                    </td>
                                                     
                                                     {scale.type === 'checklist' && (
                                                         (scale.columns || []).map(col => (
-                                                            <TableCell key={col.id} className="text-center bg-transparent border-b border-r border-white/5">
+                                                            <td key={col.id} className="text-center p-2 border-b border-r border-white/5 bg-transparent">
                                                                 <StatusButton
                                                                     status={sessionData.statuses?.[col.id] || null}
                                                                     onClick={() => handleChecklistChange(student.uid, col.id)}
                                                                 />
-                                                            </TableCell>
+                                                            </td>
                                                         ))
                                                     )}
 
                                                     {scale.type === 'points' && (
                                                          (scale.columns || []).map(col => (
-                                                            <TableCell key={col.id} className="text-center bg-transparent border-b border-r border-white/5">
+                                                            <td key={col.id} className="text-center p-2 border-b border-r border-white/5 bg-transparent">
                                                                 <Input 
                                                                     type="number"
                                                                     min="0"
                                                                     value={sessionData.values?.[col.id] ?? ""}
                                                                     onChange={(e) => handlePointsChange(student.uid, col.id, parseInt(e.target.value) || 0)}
-                                                                    className="w-20 mx-auto bg-slate-800 border-white/10 text-center font-bold text-lg h-10 focus:ring-cyan-500/50 focus:border-cyan-500"
+                                                                    className="w-20 mx-auto bg-slate-950 border-white/20 text-center font-black text-lg text-cyan-300 h-10 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] placeholder:text-slate-700"
                                                                     placeholder="-"
                                                                 />
-                                                            </TableCell>
+                                                            </td>
                                                         ))
                                                     )}
 
                                                     {scale.type === 'tally' && (
                                                         <>
-                                                            <TableCell className="text-center bg-transparent border-b border-r border-white/5">
-                                                                <div className="flex items-center justify-center gap-2 bg-emerald-900/30 p-1 rounded-lg">
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', Math.max(0, (sessionData.plus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
-                                                                    <span className="font-bold text-lg text-white">{sessionData.plus || 0}</span>
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400" onClick={() => handleTallyChange(student.uid, 'plus', (sessionData.plus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
+                                                            <td className="text-center p-2 border-b border-r border-white/5 bg-transparent">
+                                                                <div className="flex items-center justify-center gap-1 bg-emerald-900/30 p-1 rounded-lg print-wrapper">
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400 print-hide" onClick={() => handleTallyChange(student.uid, 'plus', Math.max(0, (sessionData.plus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
+                                                                    <span className="font-black text-xl text-emerald-300 w-6 print-text-black">{sessionData.plus || 0}</span>
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-emerald-400 print-hide" onClick={() => handleTallyChange(student.uid, 'plus', (sessionData.plus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
                                                                 </div>
-                                                            </TableCell>
-                                                            <TableCell className="text-center bg-transparent border-b border-r border-white/5">
-                                                                <div className="flex items-center justify-center gap-2 bg-red-900/30 p-1 rounded-lg">
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400" onClick={() => handleTallyChange(student.uid, 'minus', Math.max(0, (sessionData.minus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
-                                                                    <span className="font-bold text-lg text-white">{sessionData.minus || 0}</span>
-                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400" onClick={() => handleTallyChange(student.uid, 'minus', (sessionData.minus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
+                                                            </td>
+                                                            <td className="text-center p-2 border-b border-r border-white/5 bg-transparent">
+                                                                <div className="flex items-center justify-center gap-1 bg-red-900/30 p-1 rounded-lg print-wrapper">
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400 print-hide" onClick={() => handleTallyChange(student.uid, 'minus', Math.max(0, (sessionData.minus || 0) - 1))}><Minus className="h-4 w-4"/></Button>
+                                                                    <span className="font-black text-xl text-red-300 w-6 print-text-black">{sessionData.minus || 0}</span>
+                                                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-red-400 print-hide" onClick={() => handleTallyChange(student.uid, 'minus', (sessionData.minus || 0) + 1)}><Plus className="h-4 w-4"/></Button>
                                                                 </div>
-                                                            </TableCell>
+                                                            </td>
                                                         </>
                                                     )}
                                                     
-                                                    <TableCell className="text-center bg-slate-950/30 border-b border-r border-white/10 font-bold">
+                                                    <td className="text-center p-2 bg-slate-950/40 border-b border-r border-white/10 font-bold">
                                                         {scale.type === 'points' ? (
-                                                            <span className="text-2xl font-black text-cyan-400 drop-shadow-sm">{currentSessionTotal}</span>
+                                                            <span className="text-2xl font-black text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">{currentSessionTotal}</span>
                                                         ) : (
                                                             <span className="text-slate-500">-</span>
                                                         )}
-                                                    </TableCell>
+                                                    </td>
                                                     
-                                                    <TableCell className="text-center bg-slate-900/50 border-b border-r border-white/10 group-hover:bg-slate-800/80 transition-colors">
+                                                    <td className="text-center p-2 bg-slate-900/60 border-b border-r border-white/10 group-hover:bg-slate-800/90 transition-colors">
                                                         <div className="flex flex-col items-center">
-                                                            <span className={cn("text-2xl font-black transition-colors", studentAvg !== null ? "text-indigo-400" : "text-slate-700")}>
+                                                            <span className={cn("text-2xl font-black transition-colors drop-shadow-md", studentAvg !== null ? "text-indigo-400" : "text-slate-700")}>
                                                                 {studentAvg !== null ? studentAvg : "-"}
                                                             </span>
                                                             {studentAvg !== null && scale.type === 'checklist' && (
-                                                                <div className="w-16 h-1 bg-slate-800 rounded-full mt-1 overflow-hidden">
+                                                                <div className="w-16 h-1.5 bg-slate-800 rounded-full mt-1 overflow-hidden shadow-inner print-hide">
                                                                     <div className={cn("h-full transition-all", getScoreColorClass(studentAvg))} style={{ width: `${studentAvg}%` }} />
                                                                 </div>
                                                             )}
                                                         </div>
-                                                    </TableCell>
+                                                    </td>
                                                     
-                                                    <TableCell className="min-w-64 border-b border-white/10">
+                                                    <td className="p-2 border-b border-white/10">
                                                         <Input 
                                                             type="text" 
-                                                            placeholder="Gözlem..." 
+                                                            placeholder="Gözlem ve Notlar..." 
                                                             value={studentEntry.note || ''} 
                                                             onChange={e => handleNoteChange(student.uid, e.target.value)} 
-                                                            className="bg-slate-900 border-white/10 text-white h-9 text-sm"
+                                                            className="bg-slate-950 border-white/10 text-white h-10 text-sm focus:ring-indigo-500"
                                                         />
-                                                    </TableCell>
-                                                </TableRow>
+                                                    </td>
+                                                </tr>
                                             )
                                         })}
-                                    </TableBody>
-                                </Table>
+                                    </tbody>
+                                </table>
                             ) : (
-                                <p className="text-center h-24 text-slate-500 flex items-center justify-center font-medium">Öğrenci bulunamadı.</p>
+                                <p className="text-center h-24 text-slate-500 flex items-center justify-center font-medium text-base">Öğrenci bulunamadı.</p>
                             )}
                         </div>
                     </CardContent>
                 </Card>
             </div>
             
-            <ColumnEditorDialog
-                isOpen={isColumnEditorOpen}
-                onOpenChange={setIsColumnEditorOpen}
-                columns={scale.columns || []}
-                scaleType={scale.type}
-                onSave={handleSaveColumns}
-                isSaving={isSaving}
-            />
+            {/* MODALLAR YAZDIRMADA GİZLİ */}
+            <div className="print-hide">
+                <ColumnEditorDialog
+                    isOpen={isColumnEditorOpen}
+                    onOpenChange={setIsColumnEditorOpen}
+                    columns={scale.columns || []}
+                    scaleType={scale.type}
+                    onSave={handleSaveColumns}
+                    isSaving={isSaving}
+                />
 
-            <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
-                <DialogContent className="max-w-2xl bg-slate-900 border-white/10 text-white">
-                    <DialogHeader>
-                        <DialogTitle className="text-xl font-bold text-indigo-400">Ödev Olarak Ata</DialogTitle>
-                        <DialogDescription className="text-slate-400">
-                            "{unit?.title}" ünitesindeki konuları öğrencilere atayın.
-                        </DialogDescription>
-                    </DialogHeader>
-                    
-                    <div className="py-4 space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="assignment-title" className="text-slate-300">Ödev Başlığı</Label>
-                            <Input id="assignment-title" value={assignmentTitle} onChange={e => setAssignmentTitle(e.target.value)} placeholder={`${unit?.title} Ödevi`} className="bg-slate-950 border-white/10 text-white"/>
+                <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
+                    <DialogContent className="max-w-2xl bg-slate-900 border-white/10 text-white">
+                        <DialogHeader>
+                            <DialogTitle className="text-xl font-bold text-indigo-400">Ödev Olarak Ata</DialogTitle>
+                            <DialogDescription className="text-slate-400">
+                                "{unit?.title}" ünitesindeki konuları öğrencilere atayın.
+                            </DialogDescription>
+                        </DialogHeader>
+                        
+                        <div className="py-4 space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="assignment-title" className="text-slate-300">Ödev Başlığı</Label>
+                                <Input id="assignment-title" value={assignmentTitle} onChange={e => setAssignmentTitle(e.target.value)} placeholder={`${unit?.title} Ödevi`} className="bg-slate-950 border-white/10 text-white"/>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label className="text-slate-300">Öğrenciler ({selectedStudentUids.size})</Label>
+                                    <ScrollArea className="h-48 border border-white/10 rounded-md bg-slate-950/50 p-2">
+                                        <div className="flex items-center space-x-2 p-1 border-b border-white/10 bg-slate-900/50">
+                                            <Checkbox 
+                                                id="assign-all-students"
+                                                checked={selectedStudentUids.size === students.length && students.length > 0}
+                                                onCheckedChange={(checked) => {
+                                                    if (checked) setSelectedStudentUids(new Set(students.map(s => s.uid)))
+                                                    else setSelectedStudentUids(new Set())
+                                                }}
+                                                className="border-white/20 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                                            />
+                                            <label htmlFor="assign-all-students" className="text-sm font-bold text-white">Tümünü Seç</label>
+                                        </div>
+                                        <div className="space-y-1 pt-1">
+                                            {students.map(student => (
+                                                <div key={student.uid} className="flex items-center space-x-2 p-1 hover:bg-white/5 rounded">
+                                                    <Checkbox id={`assign-student-${student.uid}`} checked={selectedStudentUids.has(student.uid)} onCheckedChange={() => setSelectedStudentUids(prev => { const newSet = new Set(prev); if (newSet.has(student.uid)) newSet.delete(student.uid); else newSet.add(student.uid); return newSet; })} className="border-white/20 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"/>
+                                                    <label htmlFor={`assign-student-${student.uid}`} className="text-sm text-slate-300">{student.displayName}</label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </ScrollArea>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label className="text-slate-300">Son Teslim Tarihi</Label>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button variant="outline" className={cn("w-full justify-start text-left font-normal h-10 bg-slate-950 border-white/10 text-white hover:bg-slate-900", !assignmentDueDate && "text-muted-foreground")}>
+                                                <CalendarIcon className="mr-2 h-4 w-4 text-rose-400" />
+                                                {assignmentDueDate ? format(assignmentDueDate, "PPP", { locale: tr }) : <span>Tarih seçin</span>}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0 bg-slate-900 border-white/10 text-white"><Calendar mode="single" selected={assignmentDueDate} onSelect={setAssignmentDueDate} initialFocus /></PopoverContent>
+                                    </Popover>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label className="text-slate-300">Öğrenciler ({selectedStudentUids.size})</Label>
-                                <ScrollArea className="h-48 border border-white/10 rounded-md bg-slate-950/50 p-2">
-                                    <div className="flex items-center space-x-2 p-1 border-b border-white/10 bg-slate-900/50">
-                                        <Checkbox 
-                                            id="assign-all-students"
-                                            checked={selectedStudentUids.size === students.length && students.length > 0}
-                                            onCheckedChange={(checked) => {
-                                                if (checked) setSelectedStudentUids(new Set(students.map(s => s.uid)))
-                                                else setSelectedStudentUids(new Set())
-                                            }}
-                                            className="border-white/20 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
-                                        />
-                                        <label htmlFor="assign-all-students" className="text-sm font-bold text-white">Tümünü Seç</label>
-                                    </div>
-                                    <div className="space-y-1 pt-1">
-                                        {students.map(student => (
-                                            <div key={student.uid} className="flex items-center space-x-2 p-1 hover:bg-white/5 rounded">
-                                                <Checkbox id={`assign-student-${student.uid}`} checked={selectedStudentUids.has(student.uid)} onCheckedChange={() => setSelectedStudentUids(prev => { const newSet = new Set(prev); if (newSet.has(student.uid)) newSet.delete(student.uid); else newSet.add(student.uid); return newSet; })} className="border-white/20 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"/>
-                                                <label htmlFor={`assign-student-${student.uid}`} className="text-sm text-slate-300">{student.displayName}</label>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </ScrollArea>
-                            </div>
-                            <div className="space-y-2">
-                                <Label className="text-slate-300">Son Teslim Tarihi</Label>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button variant="outline" className={cn("w-full justify-start text-left font-normal h-10 bg-slate-950 border-white/10 text-white hover:bg-slate-900", !assignmentDueDate && "text-muted-foreground")}>
-                                            <CalendarIcon className="mr-2 h-4 w-4 text-rose-400" />
-                                            {assignmentDueDate ? format(assignmentDueDate, "PPP", { locale: tr }) : <span>Tarih seçin</span>}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0 bg-slate-900 border-white/10 text-white"><Calendar mode="single" selected={assignmentDueDate} onSelect={setAssignmentDueDate} initialFocus /></PopoverContent>
-                                </Popover>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <DialogFooter className="border-t border-white/10 pt-4">
-                        <DialogClose asChild><Button variant="ghost" className="text-slate-400 hover:bg-white/5">İptal</Button></DialogClose>
-                        <Button onClick={handleCreateAssignment} disabled={isSaving || selectedStudentUids.size === 0} className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20">
-                            {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />} Ödevi Ata
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+                        <DialogFooter className="border-t border-white/10 pt-4">
+                            <DialogClose asChild><Button variant="ghost" className="text-slate-400 hover:bg-white/5">İptal</Button></DialogClose>
+                            <Button onClick={handleCreateAssignment} disabled={isSaving || selectedStudentUids.size === 0} className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20">
+                                {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />} Ödevi Ata
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            </div>
         </div>
     );
 }
