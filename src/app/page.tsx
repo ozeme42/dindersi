@@ -13,10 +13,11 @@ export default function Home() {
   const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
-    // Müfredat yapısını canlı veritabanından (isStatic: false) çekiyoruz
+    // HIZLI AÇILIŞ İÇİN: isStatic parametresi 'true' yapıldı.
+    // Bu sayede veritabanı yerine 'public/curriculum/manifest.json' dosyası kullanılır.
     if (!loading) {
       setDataLoading(true);
-      getCurriculumForSelection('ozetler', false)
+      getCurriculumForSelection('ozetler', true) // isStatic: true olarak değiştirildi
         .then(res => {
           if (res.classGroups) {
             setClassGroups(res.classGroups as any);
@@ -24,7 +25,7 @@ export default function Home() {
           setDataLoading(false);
         })
         .catch(err => {
-          console.error("Failed to fetch curriculum from database:", err);
+          console.error("Failed to fetch curriculum from static manifest:", err);
           setDataLoading(false);
         });
     }
