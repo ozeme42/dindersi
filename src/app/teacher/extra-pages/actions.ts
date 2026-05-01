@@ -30,12 +30,11 @@ function serializeDoc(data: any) {
 
 /**
  * Tüm ekstra sayfaları getirir.
- * @param onlyPublished Sadece yayınlanmış olanları mı getirsin?
  */
 export async function getExtraPages(onlyPublished: boolean = false) {
   try {
     const db = getAdminDb();
-    // Geriye dönük uyumluluk için orderBy kullanmıyoruz (alanı olmayan dökümanlar kaybolmasın diye)
+    // Sıralama yapmadan çekiyoruz (eski dökümanlar kaybolmasın diye)
     const snapshot = await db.collection('extraPages').get();
     
     let pages = snapshot.docs.map(doc => {
@@ -44,12 +43,14 @@ export async function getExtraPages(onlyPublished: boolean = false) {
         id: doc.id,
         category: data.category || 'Genel',
         isPublished: data.isPublished !== undefined ? data.isPublished : true,
+        title: data.title || 'İsimsiz Sayfa',
+        htmlContent: data.htmlContent || '',
         ...serializeDoc(data)
       };
-    }) as ExtraPage[];
+    });
 
     // Tarihe göre azalan (en yeni en üstte) sıralama (bellekte)
-    pages.sort((a, b) => {
+    pages.sort((a: any, b: any) => {
       const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
       const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
       return dateB - dateA;
@@ -86,7 +87,7 @@ export async function getExtraPage(id: string) {
         category: data?.category || 'Genel',
         isPublished: data?.isPublished !== undefined ? data.isPublished : true,
         ...serializeDoc(data) 
-      } as ExtraPage 
+      } 
     };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -102,7 +103,7 @@ export async function saveExtraPage(id: string | null, data: any) {
     const pageData = {
       title: data.title,
       description: data.description || "",
-      htmlContent: data.htmlContent, // Eskiden 'content' olarak adlandırılmış olabilir, 'htmlContent' olarak standardize ettik
+      htmlContent: data.htmlContent,
       category: data.category || 'Genel',
       isPublished: data.isPublished,
       updatedAt: FieldValue.serverTimestamp(),

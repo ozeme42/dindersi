@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { getExtraPages, saveExtraPage, deleteExtraPage, renameExtraPageCategory } from './actions';
+import { getExtraPages, saveExtraPage, deleteExtraPage, renameExtraPageCategory } from '@/app/teacher/extra-pages/actions';
 import Link from 'next/link';
 
 export default function ExtraPagesManagement() {
@@ -44,13 +44,16 @@ export default function ExtraPagesManagement() {
 
     const { toast } = useToast();
 
-    // Benzersiz kategorileri al
     const categories = Array.from(new Set(pages.map(p => p.category || 'Genel'))).sort();
 
     const fetchPages = async () => {
         setIsLoading(true);
         const res = await getExtraPages();
-        if (res.success) setPages(res.pages || []);
+        if (res.success) {
+            setPages(res.data || []);
+        } else {
+            toast({ title: "Hata", description: res.error, variant: "destructive" });
+        }
         setIsLoading(false);
     };
 
@@ -91,7 +94,6 @@ export default function ExtraPagesManagement() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm("Bu sayfayı silmek istediğinize emin misiniz?")) return;
         const res = await deleteExtraPage(id);
         if (res.success) {
             toast({ title: "Silindi", description: "Sayfa başarıyla kaldırıldı." });
@@ -106,8 +108,6 @@ export default function ExtraPagesManagement() {
 
     return (
         <div className="container mx-auto p-4 md:p-8 space-y-8 min-h-screen bg-slate-50/50">
-            
-            {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4">
                     <div className="p-3 bg-indigo-100 rounded-2xl text-indigo-600">
@@ -128,7 +128,6 @@ export default function ExtraPagesManagement() {
                 </div>
             </div>
 
-            {/* Toolbar */}
             <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -141,7 +140,6 @@ export default function ExtraPagesManagement() {
                 </div>
             </div>
 
-            {/* List */}
             {isLoading ? (
                 <div className="flex justify-center py-20"><Loader2 className="h-10 w-10 animate-spin text-indigo-500" /></div>
             ) : filteredPages.length > 0 ? (
@@ -200,7 +198,6 @@ export default function ExtraPagesManagement() {
                 </div>
             )}
 
-            {/* Create/Edit Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem]">
                     <DialogHeader>
@@ -292,7 +289,6 @@ export default function ExtraPagesManagement() {
                 </DialogContent>
             </Dialog>
 
-            {/* Category Management Dialog */}
             <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
                 <DialogContent className="max-w-md rounded-[2rem]">
                     <DialogHeader>
@@ -333,7 +329,6 @@ export default function ExtraPagesManagement() {
     );
 }
 
-// Kategori Düzenleme Bileşeni
 function CategoryItem({ name, onRename }: { name: string, onRename: (newName: string) => Promise<void> }) {
     const [isEditing, setIsEditing] = useState(false);
     const [newName, setNewName] = useState(name);
@@ -378,4 +373,8 @@ function CategoryItem({ name, onRename }: { name: string, onRename: (newName: st
             )}
         </div>
     );
+}
+
+function CategoryRenameDialog({ oldName, onRename }: { oldName: string, onRename: (newName: string) => Promise<void> }) {
+    return null;
 }
