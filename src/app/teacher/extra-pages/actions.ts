@@ -13,6 +13,7 @@ export type ExtraPage = {
   isPublished: boolean;
   createdAt?: any;
   updatedAt?: any;
+  description?: string;
 };
 
 // Firestore verisini düz JS objesine çevirir (Tarihleri serialize eder)
@@ -34,22 +35,20 @@ function serializeDoc(data: any) {
 export async function getExtraPages(onlyPublished: boolean = false) {
   try {
     const db = getAdminDb();
-    // ÖNEMLİ: orderBy kullanmıyoruz çünkü alanı olmayan eski dökümanlar listeden düşer.
-    // Tüm dökümanları çekip JS tarafında sıralayacağız.
+    // Geriye dönük uyumluluk için orderBy kullanmıyoruz (alanı olmayan dökümanlar kaybolmasın diye)
     const snapshot = await db.collection('extraPages').get();
     
     let pages = snapshot.docs.map(doc => {
       const data = doc.data();
       return {
         id: doc.id,
-        // Varsayılan değerler: Eski dökümanlarda kategori veya yayın durumu yoksa hatasız çalışsın.
         category: data.category || 'Genel',
         isPublished: data.isPublished !== undefined ? data.isPublished : true,
         ...serializeDoc(data)
       };
     }) as ExtraPage[];
 
-    // Tarihe göre azalan (en yeni en üstte) sıralama
+    // Tarihe göre azalan (en yeni en üstte) sıralama (bellekte)
     pages.sort((a, b) => {
       const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
       const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -97,19 +96,20 @@ export async function getExtraPage(id: string) {
 /**
  * Sayfayı kaydeder veya günceller.
  */
-export async function saveExtraPage(data: ExtraPage) {
+export async function saveExtraPage(id: string | null, data: any) {
   try {
     const db = getAdminDb();
     const pageData = {
       title: data.title,
-      content: data.content,
+      description: data.description || "",
+      htmlContent: data.htmlContent, // Eskiden 'content' olarak adlandırılmış olabilir, 'htmlContent' olarak standardize ettik
       category: data.category || 'Genel',
       isPublished: data.isPublished,
       updatedAt: FieldValue.serverTimestamp(),
     };
 
-    if (data.id) {
-      await db.collection('extraPages').doc(data.id).update(pageData);
+    if (id) {
+      await db.collection('extraPages').doc(id).update(pageData);
     } else {
       (pageData as any).createdAt = FieldValue.serverTimestamp();
       await db.collection('extraPages').add(pageData);

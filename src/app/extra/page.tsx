@@ -1,184 +1,202 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Loader2, ArrowLeft, BookOpen, Search, Filter, Layers } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { 
+    Loader2, ArrowLeft, Globe, Search, Tag, 
+    FileText, ChevronRight, LayoutGrid, Info
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { getExtraPages, type ExtraPage } from '@/app/teacher/extra-pages/actions';
 import Link from 'next/link';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getExtraPages } from '@/app/teacher/extra-pages/actions';
 
 const MagnificentLightBackground = () => (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-50">
         <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-indigo-50/40 rounded-full blur-[100px]" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-sky-50/40 rounded-full blur-[100px]" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-emerald-50/40 rounded-full blur-[100px]" />
     </div>
 );
 
 export default function ExtraPagesGallery() {
-    const [pages, setPages] = useState<ExtraPage[]>([]);
+    const [pages, setPages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [activeTab, setActiveTab] = useState("all");
+    const [activeCategory, setActiveCategory] = useState("all");
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const load = async () => {
-            const res = await getExtraPages(true);
-            if (res.success && res.data) {
-                setPages(res.data);
-            } else {
-                setError(res.error || "Dökümanlar yüklenemedi. Lütfen daha sonra tekrar deneyin.");
+        const fetchContent = async () => {
+            setIsLoading(true);
+            const result = await getExtraPages(true); // Sadece yayınlanmışları getir
+            if (result.success && result.data) {
+                setPages(result.data);
+            } else if (!result.success) {
+                setError(result.error || "İçerik yüklenirken bir hata oluştu.");
             }
             setIsLoading(false);
         };
-        load();
+        fetchContent();
     }, []);
 
-    // Benzersiz kategorileri saptar
-    const categories = ["all", ...Array.from(new Set(pages.map(p => p.category || "Genel").filter(Boolean)))];
+    // Dinamik Kategoriler
+    const categories = useMemo(() => {
+        const cats = new Set<string>();
+        pages.forEach(p => { if (p.category) cats.add(p.category); });
+        return Array.from(cats).sort();
+    }, [pages]);
 
-    const filteredPages = pages.filter(page => {
-        const matchesSearch = page.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCategory = activeTab === "all" || (page.category || "Genel") === activeTab;
-        return matchesSearch && matchesCategory;
-    });
+    // Filtreleme Mantığı
+    const filteredPages = useMemo(() => {
+        return pages.filter(p => {
+            const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                p.description?.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesCategory = activeCategory === 'all' || p.category === activeCategory;
+            return matchesSearch && matchesCategory;
+        });
+    }, [pages, searchTerm, activeCategory]);
 
     if (isLoading) {
         return (
-            <div className="h-screen bg-slate-50 flex flex-col items-center justify-center gap-4">
-                <Loader2 className="h-12 w-12 animate-spin text-indigo-600" />
-                <p className="text-slate-500 font-medium animate-pulse">Dökümanlar Hazırlanıyor...</p>
+            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center gap-4">
+                <Loader2 className="h-12 w-12 animate-spin text-indigo-500"/>
+                <p className="text-slate-500 font-bold animate-pulse">Dökümanlar Hazırlanıyor...</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col relative selection:bg-indigo-100">
+        <div className="min-h-screen bg-[#f8fafc] flex flex-col relative overflow-x-hidden font-sans">
             <MagnificentLightBackground />
             
-            {/* HEADER */}
+            {/* Header */}
             <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shadow-sm">
                 <div className="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex items-center gap-4 w-full md:w-auto">
+                    <div className="flex items-center gap-5 w-full md:w-auto">
                         <Link href="/">
-                            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-100">
-                                <ArrowLeft className="h-5 w-5 text-slate-600" />
-                            </Button>
+                            <button className="group relative flex items-center justify-center h-12 px-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300">
+                                <ArrowLeft className="h-5 w-5 text-slate-600 group-hover:-translate-x-1 transition-transform" />
+                                <span className="ml-2 font-black text-xs uppercase tracking-widest text-slate-600">ANA SAYFA</span>
+                            </button>
                         </Link>
-                        <div>
-                            <h1 className="text-2xl font-black text-slate-900 tracking-tight">Özel Dökümanlar</h1>
-                            <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-widest">Ekstra İçerik Kütüphanesi</p>
+                        <div className="hidden md:block h-8 w-[1px] bg-slate-200 mx-2" />
+                        <div className="flex flex-col">
+                            <h1 className="text-2xl font-black text-slate-800 tracking-tighter">Özel Dökümanlar</h1>
+                            <p className="text-[10px] text-indigo-500 font-black uppercase tracking-widest">Ek Kaynaklar ve Bilgilendirme</p>
                         </div>
                     </div>
 
-                    <div className="relative w-full md:w-80 group">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                    <div className="relative w-full md:w-80">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                         <Input 
                             placeholder="Döküman ara..." 
-                            className="pl-10 h-11 bg-white border-slate-200 rounded-xl focus:ring-indigo-500/20 transition-all shadow-sm"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-10 bg-slate-100 border-none rounded-xl focus-visible:ring-indigo-500"
                         />
                     </div>
                 </div>
-
-                {/* KATEGORİ SEKMELERİ */}
-                {categories.length > 2 && (
-                    <div className="border-t border-slate-100 bg-white/50 px-6 py-2">
-                        <div className="container mx-auto overflow-x-auto no-scrollbar">
-                            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                                <TabsList className="bg-transparent h-auto p-0 flex gap-2">
-                                    {categories.map((cat) => (
-                                        <TabsTrigger 
-                                            key={cat} 
-                                            value={cat}
-                                            className={cn(
-                                                "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border-2 border-transparent",
-                                                "data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md",
-                                                "data-[state=inactive]:text-slate-500 data-[state=inactive]:hover:bg-slate-100"
-                                            )}
-                                        >
-                                            {cat === "all" ? "Tümü" : cat}
-                                        </TabsTrigger>
-                                    ))}
-                                </TabsList>
-                            </Tabs>
-                        </div>
-                    </div>
-                )}
             </header>
 
-            <main className="flex-1 container mx-auto p-6 relative z-10 pb-32">
+            <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-8 relative z-10">
+                
                 {error ? (
-                    <div className="max-w-md mx-auto mt-20 text-center bg-white p-8 rounded-3xl border border-red-100 shadow-xl">
-                        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Filter className="h-8 w-8 text-red-500" />
-                        </div>
-                        <h2 className="text-xl font-bold text-slate-900 mb-2">Hata Oluştu</h2>
-                        <p className="text-slate-500 text-sm mb-6">{error}</p>
-                        <Button onClick={() => window.location.reload()} className="bg-slate-900 text-white w-full rounded-xl">Tekrar Dene</Button>
+                     <div className="bg-red-50 border border-red-100 p-8 rounded-3xl text-center max-w-md mx-auto shadow-xl">
+                        <Info className="h-12 w-12 text-red-500 mx-auto mb-4" />
+                        <p className="text-red-700 font-bold">{error}</p>
+                        <Button variant="outline" onClick={() => window.location.reload()} className="mt-4 border-red-200 text-red-600">Tekrar Dene</Button>
                     </div>
-                ) : filteredPages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-32 text-center">
-                        <div className="bg-slate-100 p-8 rounded-full mb-6">
-                            <Layers className="h-12 w-12 text-slate-300" />
-                        </div>
-                        <h2 className="text-xl font-bold text-slate-800">Döküman Bulunamadı</h2>
-                        <p className="text-slate-500 max-w-xs mt-2">Arama kriterlerinize uygun döküman bulunmuyor veya henüz hiç döküman eklenmemiş.</p>
+                ) : pages.length === 0 ? (
+                    <div className="text-center py-20 bg-white/50 rounded-[3rem] border-2 border-dashed border-slate-200">
+                        <Globe className="h-16 w-16 text-slate-300 mx-auto mb-4" />
+                        <p className="text-slate-600 font-bold text-xl">Henüz döküman eklenmemiş.</p>
+                        <p className="text-slate-400 text-sm mt-1">Bu bölüm yakında güncellenecektir.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in zoom-in-95 duration-500">
-                        {filteredPages.map((page) => (
-                            <Link key={page.id} href={`/extra/${page.id}`}>
-                                <div className="group bg-white rounded-[2rem] border border-slate-200 p-6 h-full flex flex-col shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300 relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <Badge className="bg-indigo-100 text-indigo-600 border-none">GÖRÜNTÜLE</Badge>
-                                    </div>
-                                    
-                                    <div className="mb-4">
-                                        <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-tighter border-indigo-100 text-indigo-500 bg-indigo-50/50">
-                                            {page.category || "Genel"}
-                                        </Badge>
-                                    </div>
-
-                                    <h3 className="text-xl font-bold text-slate-900 leading-tight mb-4 group-hover:text-indigo-600 transition-colors">
-                                        {page.title}
-                                    </h3>
-                                    
-                                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
-                                        <div className="flex items-center gap-2 text-slate-400">
-                                            <BookOpen className="h-4 w-4" />
-                                            <span className="text-[11px] font-medium uppercase tracking-widest">Döküman</span>
-                                        </div>
-                                        <div className="h-8 w-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                                            <ArrowLeft className="h-4 w-4 rotate-180" />
-                                        </div>
-                                    </div>
+                    <>
+                        {/* KATEGORİ MENÜSÜ (Sekmeler) */}
+                        {categories.length > 0 && (
+                            <div className="flex justify-center">
+                                <div className="p-1.5 bg-white border border-slate-200 rounded-2xl shadow-md flex items-center gap-1 overflow-x-auto no-scrollbar max-w-full">
+                                    <button 
+                                        onClick={() => setActiveCategory('all')}
+                                        className={cn(
+                                            "px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                                            activeCategory === 'all' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200" : "text-slate-500 hover:bg-slate-50 hover:text-indigo-600"
+                                        )}
+                                    >
+                                        Tümü
+                                    </button>
+                                    {categories.map(cat => (
+                                        <button 
+                                            key={cat}
+                                            onClick={() => setActiveCategory(cat)}
+                                            className={cn(
+                                                "px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                                                activeCategory === cat ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200" : "text-slate-500 hover:bg-slate-50 hover:text-indigo-600"
+                                            )}
+                                        >
+                                            {cat}
+                                        </button>
+                                    ))}
                                 </div>
-                            </Link>
-                        ))}
-                    </div>
+                            </div>
+                        )}
+
+                        {/* DÖKÜMAN LİSTESİ */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                            {filteredPages.length > 0 ? filteredPages.map((page) => (
+                                <Link href={`/extra/${page.id}`} key={page.id} className="group">
+                                    <Card className="h-full rounded-[2.5rem] border-slate-200 hover:border-indigo-300 hover:shadow-2xl transition-all duration-500 bg-white relative overflow-hidden flex flex-col">
+                                        <div className="absolute top-0 left-0 w-full h-1.5 bg-indigo-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500" />
+                                        
+                                        <CardHeader className="pb-4">
+                                            <div className="flex justify-between items-start mb-2">
+                                                <Badge variant="secondary" className="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border-none font-black text-[10px] uppercase tracking-wider px-3">
+                                                    {page.category || 'Genel'}
+                                                </Badge>
+                                                <div className="p-2 bg-slate-50 rounded-xl text-slate-400 group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-colors">
+                                                    <FileText className="h-5 w-5" />
+                                                </div>
+                                            </div>
+                                            <CardTitle className="text-xl md:text-2xl font-black text-slate-800 leading-tight group-hover:text-indigo-600 transition-colors line-clamp-2">
+                                                {page.title}
+                                            </CardTitle>
+                                        </CardHeader>
+
+                                        <CardContent className="flex-grow">
+                                            <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">
+                                                {page.description || "Bu döküman hakkında ek bilgi bulunmuyor."}
+                                            </p>
+                                        </CardContent>
+
+                                        <CardFooter className="pt-4 border-t border-slate-50 bg-slate-50/30 flex items-center justify-between group-hover:bg-indigo-50/30 transition-colors">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Görüntüle</span>
+                                            <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all duration-300">
+                                                <ChevronRight className="h-4 w-4" />
+                                            </div>
+                                        </CardFooter>
+                                    </Card>
+                                </Link>
+                            )) : (
+                                <div className="col-span-full py-20 text-center bg-white/50 rounded-3xl border-2 border-dashed border-slate-200">
+                                    <LayoutGrid className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+                                    <h3 className="text-lg font-bold text-slate-700">Sonuç Bulunamadı</h3>
+                                    <p className="text-slate-500 text-sm">Arama kriterlerinize uygun döküman bulunmuyor.</p>
+                                </div>
+                            )}
+                        </div>
+                    </>
                 )}
             </main>
 
-            <footer className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none">
-                <div className="container mx-auto flex justify-center">
-                    <div className="bg-white/80 backdrop-blur-md px-6 py-3 rounded-full border border-slate-200 shadow-lg pointer-events-auto flex items-center gap-4">
-                        <div className="flex -space-x-2">
-                             {[1,2,3].map(i => (
-                                 <div key={i} className="h-6 w-6 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center">
-                                     <div className="h-full w-full rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 opacity-20" />
-                                 </div>
-                             ))}
-                        </div>
-                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                            {pages.length} TOPLAM DÖKÜMAN
-                        </p>
-                    </div>
+            {/* Footer Alanı */}
+            <footer className="mt-auto py-8 border-t border-slate-200 bg-white/80">
+                <div className="container mx-auto px-6 text-center">
+                    <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em]">Din Dersi Atölyesi &copy; {new Date().getFullYear()}</p>
                 </div>
             </footer>
         </div>
