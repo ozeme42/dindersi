@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -21,8 +20,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { getExtraPages, saveExtraPage, deleteExtraPage, renameExtraPageCategory } from '@/app/teacher/extra-pages/actions';
+import { 
+    getExtraPages, saveExtraPage, deleteExtraPage, 
+    renameExtraPageCategory, deleteExtraPageCategory 
+} from '@/app/teacher/extra-pages/actions';
 import Link from 'next/link';
+import { 
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
+    AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger 
+} from "@/components/ui/alert-dialog";
 
 export default function ExtraPagesManagement() {
     const [pages, setPages] = useState<any[]>([]);
@@ -98,6 +104,20 @@ export default function ExtraPagesManagement() {
         if (res.success) {
             toast({ title: "Silindi", description: "Sayfa başarıyla kaldırıldı." });
             fetchPages();
+        }
+    };
+
+    const handleCategoryDelete = async (name: string) => {
+        if (name === 'Genel') {
+            toast({ title: "Hata", description: "'Genel' kategorisi silinemez.", variant: "destructive" });
+            return;
+        }
+        const res = await deleteExtraPageCategory(name);
+        if (res.success) {
+            toast({ title: "Başarılı", description: "Kategori silindi ve içerikler 'Genel' altına taşındı." });
+            fetchPages();
+        } else {
+            toast({ title: "Hata", description: res.error, variant: "destructive" });
         }
     };
 
@@ -295,7 +315,7 @@ export default function ExtraPagesManagement() {
                         <DialogTitle className="flex items-center gap-2">
                             <Settings2 className="h-5 w-5 text-indigo-600" /> Kategorileri Yönet
                         </DialogTitle>
-                        <DialogDescription>Mevcut kategori isimlerini toplu olarak güncelleyin.</DialogDescription>
+                        <DialogDescription>Mevcut kategori isimlerini güncelleyin veya kaldırın.</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         {categories.length > 0 ? (
@@ -313,6 +333,7 @@ export default function ExtraPagesManagement() {
                                                 toast({ title: "Hata", description: res.error, variant: "destructive" });
                                             }
                                         }} 
+                                        onDelete={() => handleCategoryDelete(cat)}
                                     />
                                 ))}
                             </div>
@@ -329,7 +350,13 @@ export default function ExtraPagesManagement() {
     );
 }
 
-function CategoryItem({ name, onRename }: { name: string, onRename: (newName: string) => Promise<void> }) {
+function CategoryItem({ 
+    name, onRename, onDelete 
+}: { 
+    name: string, 
+    onRename: (newName: string) => Promise<void>,
+    onDelete: () => Promise<void>
+}) {
     const [isEditing, setIsEditing] = useState(false);
     const [newName, setNewName] = useState(name);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -366,15 +393,35 @@ function CategoryItem({ name, onRename }: { name: string, onRename: (newName: st
             ) : (
                 <>
                     <span className="text-sm font-semibold text-slate-700">{name}</span>
-                    <Button size="icon" variant="ghost" onClick={() => setIsEditing(true)} className="h-8 w-8 opacity-0 group-hover:opacity-100 text-slate-400 hover:text-indigo-600">
-                        <Edit2 className="h-3.5 w-3.5" />
-                    </Button>
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button size="icon" variant="ghost" onClick={() => setIsEditing(true)} className="h-8 w-8 text-slate-400 hover:text-indigo-600">
+                            <Edit2 className="h-3.5 w-3.5" />
+                        </Button>
+                        
+                        {name !== 'Genel' && (
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-400 hover:text-red-600">
+                                        <Trash2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Kategoriyi Sil</AlertDialogTitle>
+                                        <AlertDialogDescription className="text-slate-400">
+                                            "{name}" kategorisini silmek istediğinize emin misiniz? Bu kategorideki tüm dökümanlar "Genel" kategorisine taşınacaktır.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel className="bg-transparent text-slate-400">İptal</AlertDialogCancel>
+                                        <AlertDialogAction onClick={onDelete} className="bg-red-600 hover:bg-red-500">Evet, Sil</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        )}
+                    </div>
                 </>
             )}
         </div>
     );
-}
-
-function CategoryRenameDialog({ oldName, onRename }: { oldName: string, onRename: (newName: string) => Promise<void> }) {
-    return null;
 }

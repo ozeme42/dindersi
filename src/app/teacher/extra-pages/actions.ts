@@ -1,4 +1,3 @@
-
 'use server';
 
 import { getAdminDb } from '@/lib/firebase-admin';
@@ -34,7 +33,6 @@ function serializeDoc(data: any) {
 export async function getExtraPages(onlyPublished: boolean = false) {
   try {
     const db = getAdminDb();
-    // Sıralama yapmadan çekiyoruz (eski dökümanlar kaybolmasın diye)
     const snapshot = await db.collection('extraPages').get();
     
     let pages = snapshot.docs.map(doc => {
@@ -44,12 +42,10 @@ export async function getExtraPages(onlyPublished: boolean = false) {
         category: data.category || 'Genel',
         isPublished: data.isPublished !== undefined ? data.isPublished : true,
         title: data.title || 'İsimsiz Sayfa',
-        htmlContent: data.htmlContent || '',
         ...serializeDoc(data)
       };
     });
 
-    // Tarihe göre azalan (en yeni en üstte) sıralama (bellekte)
     pages.sort((a: any, b: any) => {
       const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
       const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -150,6 +146,30 @@ export async function renameExtraPageCategory(oldName: string, newName: string) 
     const batch = db.batch();
     snapshot.docs.forEach(doc => {
       batch.update(doc.ref, { category: newName });
+    });
+    
+    await batch.commit();
+    revalidatePath('/extra');
+    revalidatePath('/teacher/extra-pages');
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Bir kategoriyi siler (O kategorideki sayfaları 'Genel' kategorisine taşır).
+ */
+export async function deleteExtraPageCategory(categoryName: string) {
+  if (categoryName === 'Genel') return { success: false, error: "'Genel' kategorisi silinemez." };
+  
+  try {
+    const db = getAdminDb();
+    const snapshot = await db.collection('extraPages').where('category', '==', categoryName).get();
+    
+    const batch = db.batch();
+    snapshot.docs.forEach(doc => {
+      batch.update(doc.ref, { category: 'Genel' });
     });
     
     await batch.commit();
