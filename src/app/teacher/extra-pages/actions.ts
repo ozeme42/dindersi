@@ -2,32 +2,65 @@
 'use server';
 
 import { getAdminDb } from '@/lib/firebase-admin';
+import { FieldValue } from 'firebase-admin/firestore';
 import { revalidatePath } from 'next/cache';
+
+export type ExtraPage = {
+  id?: string;
+  title: string;
+  content: string;
+  category: string;
+  isPublished: boolean;
+  createdAt?: any;
+  updatedAt?: any;
+};
+
+// Firestore verisini düz JS objesine çevirir (Tarihleri serialize eder)
+function serializeDoc(data: any) {
+  if (!data) return data;
+  const serialized = { ...data };
+  for (const key in serialized) {
+    if (serialized[key] && typeof serialized[key].toDate === 'function') {
+      serialized[key] = serialized[key].toDate().toISOString();
+    }
+  }
+  return serialized;
+}
 
 /**
  * Tüm ekstra sayfaları getirir.
+ * @param onlyPublished Sadece yayınlanmış olanları mı getirsin?
  */
-export async function getExtraPages(onlyPublished = false) {
+export async function getExtraPages(onlyPublished: boolean = false) {
   try {
     const db = getAdminDb();
-    let query = db.collection('extraPages').orderBy('createdAt', 'desc');
+    // ÖNEMLİ: orderBy kullanmıyoruz çünkü alanı olmayan eski dökümanlar listeden düşer.
+    // Tüm dökümanları çekip JS tarafında sıralayacağız.
+    const snapshot = await db.collection('extraPages').get();
     
-    if (onlyPublished) {
-      query = query.where('isPublished', '==', true);
-    }
-    
-    const snap = await query.get();
-    const pages = snap.docs.map(doc => {
+    let pages = snapshot.docs.map(doc => {
       const data = doc.data();
       return {
         id: doc.id,
-        ...data,
-        createdAt: data.createdAt?.toDate()?.toISOString() || null,
-        updatedAt: data.updatedAt?.toDate()?.toISOString() || null,
+        // Varsayılan değerler: Eski dökümanlarda kategori veya yayın durumu yoksa hatasız çalışsın.
+        category: data.category || 'Genel',
+        isPublished: data.isPublished !== undefined ? data.isPublished : true,
+        ...serializeDoc(data)
       };
+    }) as ExtraPage[];
+
+    // Tarihe göre azalan (en yeni en üstte) sıralama
+    pages.sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA;
     });
-    
-    return { success: true, pages };
+
+    if (onlyPublished) {
+      pages = pages.filter(p => p.isPublished === true);
+    }
+
+    return { success: true, data: pages };
   } catch (error: any) {
     console.error("Error fetching extra pages:", error);
     return { success: false, error: error.message };
@@ -35,26 +68,26 @@ export async function getExtraPages(onlyPublished = false) {
 }
 
 /**
- * Tek bir sayfayı ID üzerinden getirir.
+ * ID ile tek bir sayfa getirir.
  */
 export async function getExtraPage(id: string) {
   try {
     const db = getAdminDb();
-    const doc = await db.collection('extraPages').doc(id).get();
+    const docSnap = await db.collection('extraPages').doc(id).get();
     
-    if (!doc.exists) {
-      return { success: false, error: "Sayfa bulunamadı." };
+    if (!docSnap.exists) {
+      return { success: false, error: 'Sayfa bulunamadı.' };
     }
-    
-    const data = doc.data();
-    return {
-      success: true,
-      page: {
-        id: doc.id,
-        ...data,
-        createdAt: data?.createdAt?.toDate()?.toISOString() || null,
-        updatedAt: data?.updatedAt?.toDate()?.toISOString() || null,
-      }
+
+    const data = docSnap.data();
+    return { 
+      success: true, 
+      data: { 
+        id: docSnap.id, 
+        category: data?.category || 'Genel',
+        isPublished: data?.isPublished !== undefined ? data.isPublished : true,
+        ...serializeDoc(data) 
+      } as ExtraPage 
     };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -64,24 +97,24 @@ export async function getExtraPage(id: string) {
 /**
  * Sayfayı kaydeder veya günceller.
  */
-export async function saveExtraPage(id: string | null, data: any) {
+export async function saveExtraPage(data: ExtraPage) {
   try {
     const db = getAdminDb();
-    const col = db.collection('extraPages');
-    
-    const docData = {
-      ...data,
+    const pageData = {
+      title: data.title,
+      content: data.content,
       category: data.category || 'Genel',
-      updatedAt: new Date(),
-      createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
+      isPublished: data.isPublished,
+      updatedAt: FieldValue.serverTimestamp(),
     };
 
-    if (id) {
-      await col.doc(id).update(docData);
+    if (data.id) {
+      await db.collection('extraPages').doc(data.id).update(pageData);
     } else {
-      await col.add(docData);
+      (pageData as any).createdAt = FieldValue.serverTimestamp();
+      await db.collection('extraPages').add(pageData);
     }
-    
+
     revalidatePath('/extra');
     revalidatePath('/teacher/extra-pages');
     return { success: true };
@@ -97,7 +130,6 @@ export async function deleteExtraPage(id: string) {
   try {
     const db = getAdminDb();
     await db.collection('extraPages').doc(id).delete();
-    
     revalidatePath('/extra');
     revalidatePath('/teacher/extra-pages');
     return { success: true };
@@ -107,20 +139,19 @@ export async function deleteExtraPage(id: string) {
 }
 
 /**
- * Bir kategorinin adını tüm sayfalarda toplu olarak değiştirir.
+ * Bir kategorinin adını toplu olarak değiştirir.
  */
 export async function renameExtraPageCategory(oldName: string, newName: string) {
   try {
     const db = getAdminDb();
-    const batch = db.batch();
-    const snap = await db.collection('extraPages').where('category', '==', oldName).get();
+    const snapshot = await db.collection('extraPages').where('category', '==', oldName).get();
     
-    snap.docs.forEach(doc => {
+    const batch = db.batch();
+    snapshot.docs.forEach(doc => {
       batch.update(doc.ref, { category: newName });
     });
     
     await batch.commit();
-    
     revalidatePath('/extra');
     revalidatePath('/teacher/extra-pages');
     return { success: true };
