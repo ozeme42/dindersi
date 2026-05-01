@@ -1,24 +1,26 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { 
     Loader2, ArrowLeft, BookOpen, Columns, Gamepad2, 
-    Download, Plus, Minus, GripHorizontal, ChevronDown, Settings2, 
-    RefreshCcw, ZoomIn, ZoomOut, Maximize2, Minimize2, 
+    Plus, Minus, GripHorizontal, ChevronDown, Settings2, 
+    Maximize2, Minimize2, 
     Search, Crosshair, Shuffle, Lightbulb, 
     Puzzle, Skull, Target, Link2, Pencil, 
     Package, Wind, Coins, BrainCircuit, Milestone, Book, MousePointerClick,
-    Sparkles, Trophy, Star, Zap, Play, Users, Swords, Crown
+    Sparkles, Trophy, Star, Zap, Play, Users, Swords, Crown, Download, Maximize, Minimize
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from 'next/link';
-import type { YazilacaklarContent } from '@/lib/types';
+import type { YazilacaklarContent, ActivityItem, Topic } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 
-// --- ORTAK ARKA PLAN ---
+// --- ARKA PLAN ---
 const MagnificentLightBackground = () => (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-50">
         <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-200/40 rounded-full blur-[120px] animate-pulse-slow mix-blend-multiply" />
@@ -96,41 +98,78 @@ const DraggableToolbar = ({ onPlus, onMinus, onDownload, onFullscreen, isFullscr
 };
 
 // =================================================================================================
-// 1. BİLEŞEN: ÖZET (Araç çubuğu kaldırıldı)
+// 1. BİLEŞEN: ÖZET
 // =================================================================================================
-const SummaryTab = ({ topicId, title }: { topicId: string, title: string }) => {
+const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, unitId: string, topicId: string, title: string }) => {
     const [htmlContent, setHtmlContent] = useState<string | null>(null);
-    const [zoomLevel, setZoomLevel] = useState(1.0);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
-        fetch(`/curriculum/ozetler/${topicId}.html`).then(res => res.text()).then(setHtmlContent).catch(console.error);
+        const fetchHtml = async () => {
+            try {
+                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+                const topicSnap = await getDoc(topicRef);
+                if (topicSnap.exists()) {
+                    setHtmlContent(topicSnap.data().htmlContent || '<p class="text-center p-8">Özet içeriği henüz eklenmemiş.</p>');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        };
+        fetchHtml();
+
         const handleFullscreenChange = () => setIsFullscreen(document.fullscreenElement === containerRef.current);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    }, [topicId]);
+    }, [courseId, unitId, topicId]);
 
-    const getZoomedHtml = () => htmlContent ? htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; }</style>` : '';
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) containerRef.current?.requestFullscreen();
+        else document.exitFullscreen();
+    };
+
+    const getFinalHtml = () => htmlContent ? `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <script src="https://cdn.tailwindcss.com"></script>
+            <style>
+                body { padding: 20px; font-family: sans-serif; background-color: white; }
+                img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 1rem 0; }
+            </style>
+        </head>
+        <body>
+            ${htmlContent}
+        </body>
+        </html>
+    ` : '';
     
     useEffect(() => {
-        if (iframeRef.current && htmlContent) iframeRef.current.srcdoc = getZoomedHtml();
-    }, [zoomLevel, htmlContent]);
+        if (iframeRef.current && htmlContent) iframeRef.current.srcdoc = getFinalHtml();
+    }, [htmlContent]);
 
-    if (!htmlContent) return <div className="flex justify-center p-12"><Loader2 className="h-10 w-10 animate-spin text-violet-500"/></div>;
+    if (htmlContent === null) return <div className="flex justify-center p-12"><Loader2 className="h-10 w-10 animate-spin text-violet-500"/></div>;
 
     return (
         <div ref={containerRef} className={cn("w-full relative flex flex-col bg-white transition-all duration-300", isFullscreen ? "fixed inset-0 z-[100] h-screen w-screen" : "h-[calc(100vh-90px)] border-t border-slate-200")}>
+            <div className="absolute top-4 right-4 z-20">
+                <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="bg-slate-100/80 hover:bg-white text-slate-600 rounded-full h-10 w-10 shadow-lg backdrop-blur-sm border border-slate-200 transition-transform hover:scale-110">
+                    {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+                </Button>
+            </div>
             <iframe ref={iframeRef} className="w-full h-full border-0 block bg-white" title={title} sandbox="allow-scripts allow-same-origin allow-popups allow-forms" />
         </div>
     );
 };
 
 // =================================================================================================
-// 2. BİLEŞEN: NOTLAR (MOBİL UYUMLU + MASAÜSTÜ KORUMALI)
+// 2. BİLEŞEN: NOTLAR
 // =================================================================================================
-const NotesTab = ({ topicId, topicTitle }: { topicId: string, topicTitle: string }) => {
+const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string, unitId: string, topicId: string, topicTitle: string }) => {
     const [content, setContent] = useState<YazilacaklarContent | null>(null);
     const [fontSize, setFontSize] = useState(1.0); 
     const [isDownloading, setIsDownloading] = useState(false);
@@ -161,11 +200,40 @@ const NotesTab = ({ topicId, topicTitle }: { topicId: string, topicTitle: string
     ];
 
     useEffect(() => {
-        fetch(`/curriculum/yazilacaklar/${topicId}.json`).then(res => res.json()).then(setContent).catch(console.error);
+        const fetchData = async () => {
+            try {
+                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+                const topicSnap = await getDoc(topicRef);
+                
+                if (topicSnap.exists()) {
+                    const topicData = topicSnap.data();
+                    
+                    // Tanımları ayrı koleksiyondan çek
+                    const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
+                    const querySnapshot = await getDocs(q);
+                    const definitions = querySnapshot.docs.map(doc => {
+                        const item = doc.data();
+                        return {
+                            concept: item.content.term || '',
+                            definition: item.content.definition || ''
+                        };
+                    }).filter(item => item.concept && item.definition);
+
+                    setContent({
+                        conceptDefinitions: definitions,
+                        notes: topicData.writingContent?.notes || []
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        };
+        fetchData();
+
         const handleFullscreenChange = () => setIsFullscreen(document.fullscreenElement === mainContentRef.current);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    }, [topicId]);
+    }, [courseId, unitId, topicId]);
 
     const handleDownloadPDF = async () => {
         if (!content) return;
@@ -263,10 +331,9 @@ const NotesTab = ({ topicId, topicTitle }: { topicId: string, topicTitle: string
 };
 
 // =================================================================================================
-// 3. BİLEŞEN: ETKİNLİKLER (GELİŞMİŞ OYUN SALONU)
+// 3. BİLEŞEN: ETKİNLİKLER
 // =================================================================================================
 const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }: any) => {
-    // Canlı, neon ve doygun renkler
     const vibrantGradientMap: Record<string, string> = {
         purple: "from-violet-600 via-purple-600 to-fuchsia-600 shadow-violet-500/40",
         amber: "from-amber-500 via-orange-500 to-red-500 shadow-amber-500/40",
@@ -304,15 +371,13 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
         { href: '/oyunlar/balon-avcisi', label: 'Balon Avcısı', icon: Target, color: 'rose' },
     ];
 
-    // Takım oyunlarını ayır
-    // DEĞİŞİKLİK BURADA: carkifelek eklendi
     const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek'];
     const teamGames = activityTypes.filter(a => teamGameSlugs.includes(a.href.split('/').pop() || ''));
     const soloGames = activityTypes.filter(a => !teamGameSlugs.includes(a.href.split('/').pop() || ''));
 
     const GameCard = ({ activity, isTeam = false }: { activity: any, isTeam?: boolean }) => {
         const Icon = activity.icon;
-        const gameUrl = `${activity.href}/oyun?${new URLSearchParams({ courseId, courseName, unitId, unitName, topicId, topicName, isStatic: 'true' })}`;
+        const gameUrl = `${activity.href}/oyun?${new URLSearchParams({ courseId, courseName, unitId, unitName, topicId, topicName, isStatic: 'false' })}`;
         
         return (
             <Link href={gameUrl} className={cn("group relative perspective-1000", isTeam ? "col-span-1 md:col-span-2 lg:col-span-1 h-64" : "h-56")}>
@@ -321,28 +386,19 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
                     vibrantGradientMap[activity.color],
                     isTeam && "border-amber-300/50 shadow-amber-500/20"
                 )}>
-                    {/* Arka Plan Efektleri */}
                     <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/20 to-transparent opacity-50" />
-                    
-                    {/* Arka Planda Dönen Dev İkon */}
                     <Icon className={cn("absolute -right-8 -bottom-8 text-white opacity-10 rotate-12 group-hover:rotate-45 transition-transform duration-700", isTeam ? "w-56 h-56" : "w-40 h-40")} />
-                    
-                    {/* Takım Modu Özel İkonlar */}
                     {isTeam && (
                         <div className="absolute top-4 right-4 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-1 border border-white/10">
                             <Users className="w-3 h-3" /> TAKIM MODU
                         </div>
                     )}
-
-                    {/* Merkez İkon (Yüzen Animasyon) */}
                     <div className="relative z-10 mb-4 transform transition-transform duration-500 group-hover:scale-110">
                         <div className={cn("rounded-2xl bg-white/20 backdrop-blur-sm border border-white/40 shadow-lg flex items-center justify-center animate-float", isTeam ? "w-24 h-24" : "w-20 h-20")}>
-                            <Icon className={cn("text-white drop-shadow-md", isTeam ? "w-12 h-12" : "w-10 h-10")} />
+                            <Icon className={cn("text-white drop-shadow-md", isTeam ? "w-12 h-12" : "h-10 w-10")} />
                         </div>
                     </div>
-
-                    {/* Metin ve Buton Alanı */}
                     <div className="relative z-10 text-center w-full px-4">
                         <h3 className={cn("font-black text-white uppercase tracking-tight drop-shadow-md mb-2 leading-none", isTeam ? "text-2xl" : "text-lg")}>
                             {activity.label}
@@ -353,11 +409,7 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
                             </div>
                         </div>
                     </div>
-
-                    {/* Parlama Efekti */}
                     <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none transform -translate-x-full group-hover:translate-x-full" style={{ transitionDuration: '1s' }} />
-                
-                    {/* Rozet (Varsa) */}
                     {activity.badge && (
                         <div className="absolute top-0 right-0">
                             <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[9px] font-black px-2 py-1 rounded-bl-xl shadow-lg">
@@ -372,7 +424,6 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
 
     return (
         <div className="max-w-[1800px] mx-auto p-6 space-y-12 pb-32 relative z-10">
-            {/* Animasyonlu Başlık Alanı */}
             <div className="flex flex-col items-center justify-center space-y-4 py-8 relative">
                 <div className="absolute inset-0 bg-indigo-500/5 blur-[100px] rounded-full" />
                 <div className="relative inline-block">
@@ -383,8 +434,6 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
                     <Zap className="absolute -bottom-2 -left-8 w-10 h-10 text-cyan-400 animate-bounce" fill="currentColor" />
                 </div>
             </div>
-
-            {/* BÖLÜM 1: BİREYSEL ALIŞTIRMALAR */}
             <div className="space-y-6">
                 <div className="flex items-center gap-3 border-b-2 border-slate-200 pb-2">
                     <Crown className="w-8 h-8 text-indigo-500" />
@@ -396,8 +445,6 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
                     ))}
                 </div>
             </div>
-
-            {/* BÖLÜM 2: SINIF İÇİ MÜCADELE (VS MODU) */}
             <div className="space-y-6">
                 <div className="flex items-center gap-3 border-b-2 border-slate-200 pb-2">
                     <Swords className="w-8 h-8 text-rose-500" />
@@ -448,11 +495,8 @@ export default function TopicPage() {
                             <p className="text-[10px] text-indigo-500 font-black uppercase tracking-widest">{courseName} / {unitName}</p>
                         </div>
                     </div>
-                    {/* MOBİL UYUMLU RENKLİ SEKMELER */}
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto overflow-x-auto no-scrollbar">
                         <TabsList className="bg-slate-100/80 p-1.5 rounded-full border border-slate-200 h-auto grid grid-cols-3 md:flex gap-2 shadow-inner w-full md:w-auto">
-                            
-                            {/* ÖZET SEKME */}
                             <TabsTrigger 
                                 value="ozet" 
                                 className="rounded-full px-2 md:px-6 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-violet-500/30 data-[state=active]:bg-gradient-to-r from-violet-600 to-purple-600 hover:bg-white/50"
@@ -460,8 +504,6 @@ export default function TopicPage() {
                                 <BookOpen className="h-3 w-3 md:h-4 md:w-4 relative z-10"/> 
                                 <span className="relative z-10">Özet</span>
                             </TabsTrigger>
-
-                            {/* NOTLAR SEKME */}
                             <TabsTrigger 
                                 value="notlar" 
                                 className="rounded-full px-2 md:px-6 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/30 data-[state=active]:bg-gradient-to-r from-blue-600 to-cyan-600 hover:bg-white/50"
@@ -469,8 +511,6 @@ export default function TopicPage() {
                                 <Columns className="h-3 w-3 md:h-4 md:w-4 relative z-10"/> 
                                 <span className="relative z-10">Notlar</span>
                             </TabsTrigger>
-
-                            {/* OYUN SEKME */}
                             <TabsTrigger 
                                 value="etkinlikler" 
                                 className="rounded-full px-2 md:px-6 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/30 data-[state=active]:bg-gradient-to-r from-emerald-500 to-green-500 hover:bg-white/50"
@@ -478,15 +518,14 @@ export default function TopicPage() {
                                 <Gamepad2 className="h-3 w-3 md:h-4 md:w-4 relative z-10"/> 
                                 <span className="relative z-10">Oyun</span>
                             </TabsTrigger>
-                        
                         </TabsList>
                     </Tabs>
                 </div>
             </header>
             <main className="flex-1 w-full relative z-10">
                 <Tabs value={activeTab} className="w-full h-full">
-                    <TabsContent value="ozet" className="m-0 focus:outline-none"><SummaryTab topicId={topicId} title={topicName} /></TabsContent>
-                    <TabsContent value="notlar" className="m-0 focus:outline-none"><NotesTab topicId={topicId} topicTitle={topicName} /></TabsContent>
+                    <TabsContent value="ozet" className="m-0 focus:outline-none"><SummaryTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} /></TabsContent>
+                    <TabsContent value="notlar" className="m-0 focus:outline-none"><NotesTab courseId={courseId} unitId={unitId} topicId={topicId} topicTitle={topicName} /></TabsContent>
                     <TabsContent value="etkinlikler" className="m-0 focus:outline-none"><GamesTab courseName={courseName} unitName={unitName} topicName={topicName} courseId={courseId} unitId={unitId} topicId={topicId} /></TabsContent>
                 </Tabs>
             </main>

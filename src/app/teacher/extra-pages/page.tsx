@@ -1,280 +1,381 @@
+
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-    Loader2, Globe, Plus, Search, Trash2, FileEdit, Eye, EyeOff, Save, ArrowLeft, FileText, Tag
+    Plus, Search, Edit2, Trash2, Globe, Eye, EyeOff, 
+    Loader2, MoreVertical, LayoutGrid, Tag, Settings2,
+    ChevronRight, Save, X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { getExtraPages, saveExtraPage, deleteExtraPage, toggleExtraPagePublish, type ExtraPage } from './actions';
-import Link from 'next/link';
-import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { 
+    Dialog, DialogContent, DialogHeader, DialogTitle, 
+    DialogTrigger, DialogFooter, DialogDescription 
+} from '@/components/ui/dialog';
+import { 
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
+    DropdownMenuTrigger, DropdownMenuSeparator 
+} from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { useToast } from '@/hooks/use-toast';
+import { getExtraPages, saveExtraPage, deleteExtraPage, renameExtraPageCategory } from './actions';
+import Link from 'next/link';
 
 export default function ExtraPagesManagement() {
-    const [pages, setPages] = useState<ExtraPage[]>([]);
+    const [pages, setPages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchArea] = useState("");
+    
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
+    
+    const [editingPage, setEditingPage] = useState<any>(null);
+    const [formData, setFormData] = useState({
+        title: "",
+        description: "",
+        category: "",
+        htmlContent: "",
+        isPublished: true
+    });
+
     const { toast } = useToast();
 
-    const [editingPage, setEditingPage] = useState<Partial<ExtraPage> | null>(null);
+    // Benzersiz kategorileri al
+    const categories = Array.from(new Set(pages.map(p => p.category || 'Genel'))).sort();
 
-    const fetchPages = useCallback(async () => {
+    const fetchPages = async () => {
         setIsLoading(true);
-        try {
-            const result = await getExtraPages();
-            if (result.success && result.data) {
-                setPages(result.data);
-            } else {
-                toast({ title: "Hata", description: result.error || "Sayfalar yüklenemedi.", variant: "destructive" });
-            }
-        } catch (e) {
-            toast({ title: "Bağlantı Hatası", variant: "destructive" });
-        }
+        const res = await getExtraPages();
+        if (res.success) setPages(res.pages || []);
         setIsLoading(false);
-    }, [toast]);
+    };
 
-    useEffect(() => {
-        fetchPages();
-    }, [fetchPages]);
+    useEffect(() => { fetchPages(); }, []);
+
+    const handleOpenDialog = (page: any = null) => {
+        if (page) {
+            setEditingPage(page);
+            setFormData({
+                title: page.title,
+                description: page.description || "",
+                category: page.category || "Genel",
+                htmlContent: page.htmlContent || "",
+                isPublished: page.isPublished ?? true
+            });
+        } else {
+            setEditingPage(null);
+            setFormData({ title: "", description: "", category: "Genel", htmlContent: "", isPublished: true });
+        }
+        setIsDialogOpen(true);
+    };
 
     const handleSave = async () => {
-        if (!editingPage?.title || !editingPage?.htmlContent) {
-            toast({ title: "Eksik Bilgi", description: "Başlık ve HTML içeriği zorunludur.", variant: "destructive" });
+        if (!formData.title || !formData.htmlContent) {
+            toast({ title: "Hata", description: "Başlık ve İçerik alanları zorunludur.", variant: "destructive" });
             return;
         }
         setIsSaving(true);
-        const result = await saveExtraPage(editingPage);
-        if (result.success) {
-            toast({ title: "Başarılı", description: "Sayfa kaydedildi." });
-            setEditingPage(null);
+        const res = await saveExtraPage(editingPage?.id || null, formData);
+        if (res.success) {
+            toast({ title: "Başarılı", description: "Sayfa başarıyla kaydedildi." });
+            setIsDialogOpen(false);
             fetchPages();
         } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
+            toast({ title: "Hata", description: res.error, variant: "destructive" });
         }
         setIsSaving(false);
     };
 
     const handleDelete = async (id: string) => {
-        const result = await deleteExtraPage(id);
-        if (result.success) {
-            toast({ title: "Başarılı", description: "Sayfa silindi." });
-            fetchPages();
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-    };
-
-    const handleTogglePublish = async (id: string, state: boolean) => {
-        const result = await toggleExtraPagePublish(id, state);
-        if (result.success) {
+        if (!confirm("Bu sayfayı silmek istediğinize emin misiniz?")) return;
+        const res = await deleteExtraPage(id);
+        if (res.success) {
+            toast({ title: "Silindi", description: "Sayfa başarıyla kaldırıldı." });
             fetchPages();
         }
     };
 
     const filteredPages = pages.filter(p => 
         p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        p.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.category?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden font-sans selection:bg-cyan-500/30">
-            <div className="fixed inset-0 pointer-events-none z-0 opacity-30">
-                <div className="absolute top-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-cyan-900/20 rounded-full blur-[150px]" />
-            </div>
-
-            <div className="max-w-7xl mx-auto relative z-10 space-y-8">
-                {/* Header */}
-                <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/10 pb-8 gap-4">
-                     <div className="flex items-center gap-4">
-                        <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white bg-white/5 rounded-xl h-12 w-12">
-                            <Link href="/teacher"><ArrowLeft className="h-6 w-6"/></Link>
-                        </Button>
-                        <div>
-                            <h1 className="text-4xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
-                                <div className="p-2 bg-cyan-500/20 rounded-xl border border-cyan-500/30">
-                                    <Globe className="h-8 w-8 text-cyan-400" />
-                                </div>
-                                Ekstra Sayfalar
-                            </h1>
-                            <p className="text-slate-400 mt-1">Herhangi bir sınıf veya derse bağlı olmayan özel dökümanlar.</p>
-                        </div>
-                     </div>
-                     <Button onClick={() => setEditingPage({ title: '', description: '', category: 'Genel', htmlContent: '', isPublished: true })} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 px-6 rounded-xl shadow-lg">
-                        <Plus className="mr-2 h-5 w-5" /> Yeni Sayfa Oluştur
+        <div className="container mx-auto p-4 md:p-8 space-y-8 min-h-screen bg-slate-50/50">
+            
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm">
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-indigo-100 rounded-2xl text-indigo-600">
+                        <Globe className="h-6 w-6" />
+                    </div>
+                    <div>
+                        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Ekstra Sayfalar</h1>
+                        <p className="text-slate-500 text-sm">Bağımsız dökümanları ve özel içerikleri yönetin.</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Button onClick={() => setIsCategoryDialogOpen(true)} variant="outline" className="rounded-xl gap-2">
+                        <Tag className="h-4 w-4" /> Kategorileri Düzenle
+                    </Button>
+                    <Button onClick={() => handleOpenDialog()} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2 shadow-lg shadow-indigo-200">
+                        <Plus className="h-4 w-4" /> Yeni Sayfa
                     </Button>
                 </div>
+            </div>
 
-                {editingPage ? (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in zoom-in-95 duration-300">
-                        <Card className="bg-slate-900/60 border-white/10 shadow-2xl">
-                            <CardHeader>
-                                <CardTitle className="text-white">Sayfa Bilgileri</CardTitle>
-                                <CardDescription>Gezinme listesinde görünecek detaylar.</CardDescription>
+            {/* Toolbar */}
+            <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <Input 
+                        placeholder="Sayfa adı veya kategori ara..." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchArea(e.target.value)}
+                        className="pl-10 bg-slate-50 border-none rounded-xl focus-visible:ring-indigo-500"
+                    />
+                </div>
+            </div>
+
+            {/* List */}
+            {isLoading ? (
+                <div className="flex justify-center py-20"><Loader2 className="h-10 w-10 animate-spin text-indigo-500" /></div>
+            ) : filteredPages.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredPages.map((page) => (
+                        <Card key={page.id} className="group overflow-hidden rounded-[2rem] border-slate-200 hover:shadow-xl transition-all duration-300">
+                            <CardHeader className="pb-4">
+                                <div className="flex justify-between items-start mb-2">
+                                    <Badge variant={page.isPublished ? "default" : "secondary"} className={page.isPublished ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100" : "bg-slate-100 text-slate-500"}>
+                                        {page.isPublished ? <><Eye className="h-3 w-3 mr-1" /> Yayında</> : <><EyeOff className="h-3 w-3 mr-1" /> Taslak</>}
+                                    </Badge>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <MoreVertical className="h-4 w-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="rounded-xl w-40">
+                                            <DropdownMenuItem onClick={() => handleOpenDialog(page)} className="gap-2 cursor-pointer">
+                                                <Edit2 className="h-4 w-4" /> Düzenle
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild className="gap-2 cursor-pointer">
+                                                <Link href={`/extra/${page.id}`} target="_blank">
+                                                    <Globe className="h-4 w-4" /> Görüntüle
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem onClick={() => handleDelete(page.id)} className="gap-2 cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50">
+                                                <Trash2 className="h-4 w-4" /> Sil
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                                <CardTitle className="text-xl line-clamp-1 group-hover:text-indigo-600 transition-colors">{page.title}</CardTitle>
+                                <CardDescription className="flex items-center gap-1 mt-1">
+                                    <Tag className="h-3 w-3" /> {page.category || 'Genel'}
+                                </CardDescription>
                             </CardHeader>
-                            <CardContent className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label>Sayfa Başlığı</Label>
+                            <CardContent>
+                                <p className="text-sm text-slate-500 line-clamp-2 min-h-[2.5rem]">
+                                    {page.description || "Açıklama belirtilmemiş."}
+                                </p>
+                                <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-medium uppercase tracking-wider">
+                                    <span>Güncelleme: {page.updatedAt ? new Date(page.updatedAt).toLocaleDateString('tr-TR') : '-'}</span>
+                                    <ChevronRight className="h-4 w-4 text-indigo-300 group-hover:translate-x-1 transition-transform" />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-200">
+                    <LayoutGrid className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-slate-900">Sonuç Bulunamadı</h3>
+                    <p className="text-slate-500 max-w-xs mx-auto mt-1">Arama kriterlerinize uygun sayfa bulunamadı veya henüz sayfa eklemediniz.</p>
+                </div>
+            )}
+
+            {/* Create/Edit Dialog */}
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem]">
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl">{editingPage ? "Sayfayı Düzenle" : "Yeni Sayfa Oluştur"}</DialogTitle>
+                        <DialogDescription>HTML kodu kullanarak zengin içerikli bir döküman hazırlayın.</DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-6 py-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-slate-700">Sayfa Başlığı</label>
+                                <Input 
+                                    value={formData.title} 
+                                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                                    placeholder="Örn: Rehberlik İlkeleri"
+                                    className="rounded-xl"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-slate-700">Kategori</label>
+                                <div className="flex gap-2">
+                                    <div className="relative flex-1">
                                         <Input 
-                                            value={editingPage.title} 
-                                            onChange={e => setEditingPage({...editingPage, title: e.target.value})}
-                                            className="bg-slate-950 border-white/10 text-white h-11"
-                                            placeholder="Örn: Rehberlik Dökümanı"
+                                            value={formData.category} 
+                                            onChange={(e) => setFormData({...formData, category: e.target.value})}
+                                            placeholder="Kategori yazın veya seçin..."
+                                            className="rounded-xl pr-10"
                                         />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Kategori (Ana Grup)</Label>
-                                        <div className="relative">
-                                            <Tag className="absolute left-3 top-3 h-5 w-5 text-slate-500" />
-                                            <Input 
-                                                value={editingPage.category} 
-                                                onChange={e => setEditingPage({...editingPage, category: e.target.value})}
-                                                className="bg-slate-950 border-white/10 text-white h-11 pl-10"
-                                                placeholder="Örn: Rehberlik"
-                                            />
+                                        <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-slate-400 hover:text-indigo-600">
+                                                        <Tag className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end" className="w-48 rounded-xl">
+                                                    <div className="px-2 py-1.5 text-[10px] font-bold text-slate-400 uppercase">Mevcut Kategoriler</div>
+                                                    {categories.length > 0 ? categories.map(cat => (
+                                                        <DropdownMenuItem key={cat} onClick={() => setFormData({...formData, category: cat})} className="cursor-pointer">
+                                                            {cat}
+                                                        </DropdownMenuItem>
+                                                    )) : <div className="px-2 py-2 text-xs text-slate-500 italic">Kategori yok</div>}
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label>Açıklama (Kısa)</Label>
-                                    <Textarea 
-                                        value={editingPage.description} 
-                                        onChange={e => setEditingPage({...editingPage, description: e.target.value})}
-                                        className="bg-slate-950 border-white/10 text-white"
-                                        placeholder="Gezinme ekranında görünecek kısa alt metin..."
-                                    />
-                                </div>
-                                <div className="flex items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-white/5">
-                                    <div className="space-y-0.5">
-                                        <Label>Yayınla</Label>
-                                        <p className="text-xs text-slate-500">Sayfa ziyaretçilere açık olsun mu?</p>
-                                    </div>
-                                    <Switch 
-                                        checked={editingPage.isPublished} 
-                                        onCheckedChange={v => setEditingPage({...editingPage, isPublished: v})}
-                                    />
-                                </div>
-                            </CardContent>
-                            <CardFooter className="justify-between border-t border-white/5 pt-6">
-                                <Button variant="ghost" onClick={() => setEditingPage(null)} className="text-slate-400 hover:text-white">İptal</Button>
-                                <Button onClick={handleSave} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-500 text-white px-8">
-                                    {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>}
-                                    Sayfayı Kaydet
-                                </Button>
-                            </CardFooter>
-                        </Card>
-
-                        <Card className="bg-slate-900/60 border-white/10 shadow-2xl flex flex-col">
-                            <CardHeader>
-                                <CardTitle className="text-white">HTML İçeriği</CardTitle>
-                                <CardDescription>Sayfanın asıl gövdesini oluşturacak HTML kodu.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="flex-1 flex flex-col">
-                                <Textarea 
-                                    value={editingPage.htmlContent} 
-                                    onChange={e => setEditingPage({...editingPage, htmlContent: e.target.value})}
-                                    className="flex-1 min-h-[400px] bg-slate-950 border-white/10 text-cyan-100 font-mono text-xs leading-relaxed"
-                                    placeholder="<!DOCTYPE html>..."
-                                />
-                            </CardContent>
-                        </Card>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        <div className="relative max-w-md">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-                            <Input 
-                                placeholder="Sayfa, kategori veya açıklama ara..." 
-                                value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
-                                className="bg-slate-900 border-white/10 text-white pl-10 h-11 rounded-xl"
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-700">Kısa Açıklama</label>
+                            <Textarea 
+                                value={formData.description} 
+                                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                                placeholder="Liste ekranında görünecek kısa özet..."
+                                className="rounded-xl resize-none h-20"
                             />
                         </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {isLoading ? (
-                                Array.from({ length: 3 }).map((_, i) => (
-                                    <div key={i} className="h-48 rounded-3xl bg-slate-900/50 animate-pulse border border-white/5" />
-                                ))
-                            ) : filteredPages.length > 0 ? (
-                                filteredPages.map(page => (
-                                    <Card key={page.id} className="bg-slate-900/60 border-white/10 shadow-xl overflow-hidden group hover:border-cyan-500/30 transition-all">
-                                        <CardHeader className="pb-3 border-b border-white/5 bg-slate-900/50">
-                                            <div className="flex justify-between items-start gap-2">
-                                                <div className="space-y-1">
-                                                     <Badge variant="outline" className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-[9px] px-2">{page.category || 'Genel'}</Badge>
-                                                     <CardTitle className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-1">{page.title}</CardTitle>
-                                                </div>
-                                                {!page.isPublished && <Badge variant="destructive" className="text-[9px] h-4">TASLAK</Badge>}
-                                            </div>
-                                            <CardDescription className="line-clamp-2 text-xs h-8">{page.description || 'Açıklama belirtilmemiş.'}</CardDescription>
-                                        </CardHeader>
-                                        <CardContent className="py-4 flex flex-col gap-2">
-                                            <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono">
-                                                <FileText className="w-3 h-3"/>
-                                                <span>HTML: {page.htmlContent.length.toLocaleString()} karakter</span>
-                                            </div>
-                                            <div className="text-[10px] text-slate-600">
-                                                Oluşturma: {page.createdAt ? format(new Date(page.createdAt), 'd MMM yyyy', { locale: tr }) : '-'}
-                                            </div>
-                                        </CardContent>
-                                        <CardFooter className="bg-black/20 p-3 flex justify-between gap-2">
-                                            <div className="flex gap-1">
-                                                <Button size="icon" variant="ghost" onClick={() => handleTogglePublish(page.id, page.isPublished)} className="h-8 w-8 text-slate-400 hover:text-white">
-                                                    {page.isPublished ? <Eye className="h-4 w-4"/> : <EyeOff className="h-4 w-4 text-amber-500"/>}
-                                                </Button>
-                                                <Button size="icon" variant="ghost" onClick={() => setEditingPage(page)} className="h-8 w-8 text-slate-400 hover:text-emerald-400">
-                                                    <FileEdit className="h-4 w-4"/>
-                                                </Button>
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-500 hover:text-red-400">
-                                                            <Trash2 className="h-4 w-4"/>
-                                                        </Button>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>Sayfayı Sil</AlertDialogTitle>
-                                                            <AlertDialogDescription className="text-slate-400">
-                                                                "{page.title}" dökümanı kalıcı olarak silinecektir. Emin misiniz?
-                                                            </AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300">İptal</AlertDialogCancel>
-                                                            <AlertDialogAction onClick={() => handleDelete(page.id)} className="bg-red-600 hover:bg-red-500 text-white">Evet, Sil</AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
-                                            </div>
-                                            <Button asChild size="sm" variant="outline" className="h-8 bg-white/5 border-white/10 text-xs font-bold text-white hover:bg-white/10">
-                                                <Link href={`/extra/${page.id}`} target="_blank">Görüntüle</Link>
-                                            </Button>
-                                        </CardFooter>
-                                    </Card>
-                                ))
-                            ) : (
-                                <div className="col-span-full py-20 border-2 border-dashed border-slate-800 rounded-[2.5rem] bg-slate-900/30 text-center">
-                                    <Globe className="h-16 w-16 mx-auto text-slate-700 opacity-20 mb-4" />
-                                    <p className="text-slate-500">Henüz döküman eklenmemiş.</p>
-                                </div>
-                            )}
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-bold text-slate-700">HTML İçeriği</label>
+                                <Badge variant="outline" className="text-[10px] uppercase">Tailwind CSS Desteklenir</Badge>
+                            </div>
+                            <Textarea 
+                                value={formData.htmlContent} 
+                                onChange={(e) => setFormData({...formData, htmlContent: e.target.value})}
+                                placeholder="<div class='p-4 bg-blue-50'>...</div>"
+                                className="rounded-xl font-mono text-sm h-64 border-indigo-100 focus-visible:ring-indigo-500"
+                            />
+                        </div>
+                        <div className="flex items-center gap-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <input 
+                                type="checkbox" 
+                                id="isPublished"
+                                checked={formData.isPublished}
+                                onChange={(e) => setFormData({...formData, isPublished: e.target.checked})}
+                                className="h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                            />
+                            <label htmlFor="isPublished" className="text-sm font-semibold text-slate-700 cursor-pointer">
+                                Bu sayfayı hemen yayınla (Ziyaretçiler görebilsin)
+                            </label>
                         </div>
                     </div>
-                )}
-            </div>
+                    <DialogFooter className="gap-2">
+                        <Button variant="ghost" onClick={() => setIsDialogOpen(false)} className="rounded-xl">İptal</Button>
+                        <Button onClick={handleSave} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl min-w-[120px]">
+                            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Save className="h-4 w-4 mr-2" /> Kaydet</>}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Category Management Dialog */}
+            <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
+                <DialogContent className="max-w-md rounded-[2rem]">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <Settings2 className="h-5 w-5 text-indigo-600" /> Kategorileri Yönet
+                        </DialogTitle>
+                        <DialogDescription>Mevcut kategori isimlerini toplu olarak güncelleyin.</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                        {categories.length > 0 ? (
+                            <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
+                                {categories.map(cat => (
+                                    <CategoryItem 
+                                        key={cat} 
+                                        name={cat} 
+                                        onRename={async (newName) => {
+                                            const res = await renameExtraPageCategory(cat, newName);
+                                            if (res.success) {
+                                                toast({ title: "Başarılı", description: "Kategori adı güncellendi." });
+                                                fetchPages();
+                                            } else {
+                                                toast({ title: "Hata", description: res.error, variant: "destructive" });
+                                            }
+                                        }} 
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-8 text-slate-400 italic">Henüz kategori bulunmuyor.</div>
+                        )}
+                    </div>
+                    <DialogFooter>
+                        <Button onClick={() => setIsCategoryDialogOpen(false)} className="w-full rounded-xl">Kapat</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+}
+
+// Kategori Düzenleme Bileşeni
+function CategoryItem({ name, onRename }: { name: string, onRename: (newName: string) => Promise<void> }) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [newName, setNewName] = useState(name);
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const handleSave = async () => {
+        if (!newName.trim() || newName === name) {
+            setIsEditing(false);
+            return;
+        }
+        setIsProcessing(true);
+        await onRename(newName.trim());
+        setIsProcessing(false);
+        setIsEditing(false);
+    };
+
+    return (
+        <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 group">
+            {isEditing ? (
+                <div className="flex items-center gap-2 w-full">
+                    <Input 
+                        value={newName} 
+                        onChange={(e) => setNewName(e.target.value)}
+                        className="h-8 rounded-lg text-sm"
+                        autoFocus
+                        onKeyDown={(e) => e.key === 'Enter' && handleSave()}
+                    />
+                    <Button size="icon" variant="ghost" onClick={handleSave} disabled={isProcessing} className="h-8 w-8 text-emerald-600 hover:bg-emerald-50">
+                        {isProcessing ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+                    </Button>
+                    <Button size="icon" variant="ghost" onClick={() => { setIsEditing(false); setNewName(name); }} className="h-8 w-8 text-slate-400">
+                        <X className="h-3.5 w-3.5" />
+                    </Button>
+                </div>
+            ) : (
+                <>
+                    <span className="text-sm font-semibold text-slate-700">{name}</span>
+                    <Button size="icon" variant="ghost" onClick={() => setIsEditing(true)} className="h-8 w-8 opacity-0 group-hover:opacity-100 text-slate-400 hover:text-indigo-600">
+                        <Edit2 className="h-3.5 w-3.5" />
+                    </Button>
+                </>
+            )}
         </div>
     );
 }

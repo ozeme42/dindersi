@@ -444,21 +444,21 @@
                 {
                   "id": "Lo5XBOdDV8gW1cIZh9GU",
                   "title": "2. Peltek Harfler",
-                  "hasOzetContent": false,
+                  "hasOzetContent": true,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
                 },
                 {
-                  "id": "VCqxu13X4OsflTpqawOQ",
+                  "id": "ZlTdsHQ6o8sWDNd5Qz9I",
                   "title": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
-                  "hasOzetContent": false,
+                  "hasOzetContent": true,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
                 },
                 {
                   "id": "cONSl3a3UxrS7TmLpCcQ",
                   "title": "3. Bakara Suresinin 84-105. Ayetleri",
-                  "hasOzetContent": false,
+                  "hasOzetContent": true,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
                 }
@@ -816,6 +816,13 @@
               "hasUnitOzet": true,
               "hasFlowContent": false,
               "topics": []
+            },
+            {
+              "id": "e5TNkkij3WOXadlPI4jC",
+              "title": "4. ÜNİTE İSLAM VE GÜNLÜK HAYAT",
+              "hasUnitOzet": true,
+              "hasFlowContent": false,
+              "topics": []
             }
           ]
         },
@@ -823,6 +830,35 @@
           "id": "XboyC5jGWhYxh8RHYtrC",
           "title": "SİYER",
           "units": [
+            {
+              "id": "3yBH0rGtnkkWFijmZn5h",
+              "title": "5. Ünite: Sahabeden Örnek Davranışlar",
+              "hasUnitOzet": true,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "I3cxlwVaU0XovoGuzR7Z",
+                  "title": "3. Sahabenin Azmi ve Fedakârlığı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "RvvZOsI8Vu8juxnufoGV",
+                  "title": "2. Sahabenin Yardımlaşma ve Dayanışması",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "Zg3pqvcjkb84lYwys9cK",
+                  "title": "1. Sahabenin Cesaret ve Sadakati",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
             {
               "id": "C0M499utiLGh647x2cnp",
               "title": "1. Ünite: Peygamberimizin Mekke Yılları",
@@ -965,6 +1001,35 @@
                 {
                   "id": "j6SRG6k46LEhS3ZKt29J",
                   "title": "4. Çevre Bilinci ve Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "SNRLm7EECvhhjiBUXsNH",
+              "title": "1. ÜNİTE Peygamberimizin Medine Yılları",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "JbuNTNSHvYAlwDZqqo6Q",
+                  "title": "1. Peygamberimizin Çocukluk ve Gençlik Yılları",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "Ldxz2qifEx1ZJqkIGu49",
+                  "title": "3. Peygamberimizin Medine Yılları",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "hW1cysRnSTzDimYTupHG",
+                  "title": "2. Peygamberimizin Mekke Yılları ve Hicret",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
