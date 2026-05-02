@@ -1,25 +1,27 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { 
     Folder, FileText, Search, ArrowLeft, ChevronRight, 
-    MonitorPlay, Loader2, Home, LayoutGrid, List,
-    Calendar, Tag, Clock
+    Loader2, Clock, Grid, List as ListIcon, 
+    LayoutGrid, Calendar, Filter, ArrowUpLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { 
+    Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription 
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { getExtraPages } from '@/app/teacher/extra-pages/actions';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
-export default function ExtraPagesExplorer() {
+export default function ExtraPagesGallery() {
     const [pages, setPages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [activeCategory, setActiveCategory] = useState<string | null>(null);
+    const [currentFolder, setCurrentFolder] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
     const { toast } = useToast();
@@ -37,226 +39,221 @@ export default function ExtraPagesExplorer() {
 
     useEffect(() => { fetchPages(); }, []);
 
-    // Kategorilere göre grupla
-    const categoriesMap = useMemo(() => {
-        const groups: Record<string, any[]> = {};
-        pages.forEach(page => {
-            const cat = page.category || 'Genel';
-            if (!groups[cat]) groups[cat] = [];
-            groups[cat].push(page);
-        });
-        return groups;
+    // Kategorileri (Klasörleri) belirle
+    const categories = useMemo(() => {
+        const cats = Array.from(new Set(pages.map(p => p.category || 'Genel')));
+        return cats.sort();
     }, [pages]);
 
-    const categories = Object.keys(categoriesMap).sort();
-
     // Filtreleme mantığı
-    const filteredItems = useMemo(() => {
-        let list = activeCategory ? categoriesMap[activeCategory] : [];
+    const filteredContent = useMemo(() => {
+        let result = pages;
+        
+        // Arama varsa klasör yapısını bozup tüm dökümanları göster
         if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            if (!activeCategory) {
-                // Root'tayken arama yapılıyorsa tüm sayfalarda ara
-                return pages.filter(p => p.title.toLowerCase().includes(term));
-            }
-            return list.filter(p => p.title.toLowerCase().includes(term));
+            return result.filter(p => 
+                p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                p.description?.toLowerCase().includes(searchTerm.toLowerCase())
+            );
         }
-        return list;
-    }, [activeCategory, categoriesMap, searchTerm, pages]);
 
-    const isSearchingAll = searchTerm && !activeCategory;
+        // Klasör içindeysek sadece o kategoriyi göster
+        if (currentFolder) {
+            return result.filter(p => (p.category || 'Genel') === currentFolder);
+        }
+
+        // Ana dizindeysek döküman gösterme (sadece klasörler görünecek)
+        return [];
+    }, [pages, searchTerm, currentFolder]);
+
+    if (isLoading) {
+        return (
+            <div className="flex h-screen w-full items-center justify-center bg-slate-50">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="h-12 w-12 animate-spin text-indigo-600" />
+                    <p className="text-slate-500 font-medium animate-pulse">Dosya Sistemi Hazırlanıyor...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans text-slate-900 pb-20">
-            {/* Arka Plan Efekti */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-                <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-indigo-100/50 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-sky-100/50 rounded-full blur-[120px]" />
+        <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20 selection:bg-indigo-100">
+            {/* Arkaplan Süslemeleri */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[100px]" />
+                <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-sky-500/5 rounded-full blur-[100px]" />
             </div>
 
-            {/* Üst Bar */}
-            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 shadow-sm">
-                <div className="container mx-auto px-6 h-20 flex items-center justify-between gap-4">
+            {/* Header */}
+            <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-slate-200 shadow-sm">
+                <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                        <Link href="/" className="p-2 hover:bg-slate-100 rounded-xl transition-colors">
-                            <Home className="h-6 w-6 text-slate-600" />
+                        <Link href="/">
+                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-slate-100">
+                                <ArrowLeft className="h-5 w-5 text-slate-600" />
+                            </Button>
                         </Link>
-                        <div className="h-6 w-px bg-slate-200" />
-                        <h1 className="text-xl font-black tracking-tight text-slate-800 uppercase flex items-center gap-2">
-                            <MonitorPlay className="h-6 w-6 text-indigo-600" />
-                            Döküman Arşivi
-                        </h1>
+                        <div className="flex flex-col">
+                            <h1 className="text-xl font-black text-slate-900 tracking-tight uppercase leading-none">Döküman Arşivi</h1>
+                            <p className="text-[10px] text-indigo-600 font-black uppercase tracking-widest mt-1">Dosya Gezgini</p>
+                        </div>
                     </div>
 
-                    <div className="flex-1 max-w-md relative hidden md:block">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                        <Input 
-                            placeholder="Dosyalarda ara..." 
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 bg-slate-100 border-none rounded-xl focus-visible:ring-indigo-500 h-11"
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => setViewMode('grid')}
-                            className={cn("rounded-lg", viewMode === 'grid' && "bg-indigo-50 text-indigo-600")}
-                        >
-                            <LayoutGrid className="h-5 w-5" />
-                        </Button>
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => setViewMode('list')}
-                            className={cn("rounded-lg", viewMode === 'list' && "bg-indigo-50 text-indigo-600")}
-                        >
-                            <List className="h-5 w-5" />
-                        </Button>
+                    <div className="flex items-center gap-3 w-full md:w-auto">
+                        <div className="relative flex-1 md:w-80">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                            <Input 
+                                placeholder="Dökümanlarda ara..." 
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="pl-10 bg-slate-100 border-none rounded-xl h-11 focus-visible:ring-indigo-500"
+                            />
+                        </div>
+                        <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                            <Button 
+                                variant={viewMode === 'grid' ? 'secondary' : 'ghost'} 
+                                size="icon" 
+                                onClick={() => setViewMode('grid')}
+                                className={cn("h-9 w-9 rounded-lg", viewMode === 'grid' && "bg-white shadow-sm")}
+                            >
+                                <Grid className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                                variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
+                                size="icon" 
+                                onClick={() => setViewMode('list')}
+                                className={cn("h-9 w-9 rounded-lg", viewMode === 'list' && "bg-white shadow-sm")}
+                            >
+                                <ListIcon className="h-4 w-4" />
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </header>
 
-            <main className="container mx-auto px-6 py-8 relative z-10 flex-grow">
-                {/* Gezgin Başlığı ve Geri Butonu */}
-                <div className="flex items-center gap-3 mb-8">
-                    {activeCategory && (
-                        <Button 
-                            variant="ghost" 
-                            onClick={() => setActiveCategory(null)}
-                            className="bg-white border border-slate-200 rounded-xl hover:bg-slate-50 shadow-sm"
-                        >
-                            <ArrowLeft className="h-5 w-5 mr-2" /> Üst Dizine Dön
-                        </Button>
+            <main className="container mx-auto px-4 py-8 relative z-10">
+                {/* Breadcrumb / Navigation */}
+                <div className="flex items-center gap-2 mb-8 p-3 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-x-auto no-scrollbar">
+                    <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => { setCurrentFolder(null); setSearchTerm(""); }}
+                        className={cn("h-8 rounded-lg font-bold text-xs gap-1.5", !currentFolder ? "bg-indigo-50 text-indigo-700" : "text-slate-500")}
+                    >
+                        <LayoutGrid className="h-3.5 w-3.5" /> KÖK DİZİN
+                    </Button>
+                    
+                    {currentFolder && (
+                        <>
+                            <ChevronRight className="h-4 w-4 text-slate-300 shrink-0" />
+                            <Badge className="bg-indigo-600 text-white hover:bg-indigo-600 px-3 py-1 rounded-lg font-bold shadow-md shadow-indigo-200 animate-in slide-in-from-left-2">
+                                <Folder className="h-3 w-3 mr-1.5 fill-white/20" /> {currentFolder.toUpperCase()}
+                            </Badge>
+                        </>
                     )}
-                    <nav className="flex items-center text-sm font-bold text-slate-400 uppercase tracking-widest overflow-x-auto no-scrollbar">
-                        <span className={cn("cursor-pointer hover:text-indigo-600 transition-colors", !activeCategory && "text-indigo-600")}>ARŞİV</span>
-                        {activeCategory && (
-                            <>
-                                <ChevronRight className="h-4 w-4 mx-2 shrink-0" />
-                                <span className="text-slate-800 whitespace-nowrap">{activeCategory}</span>
-                            </>
-                        )}
-                        {searchTerm && (
-                            <>
-                                <ChevronRight className="h-4 w-4 mx-2 shrink-0" />
-                                <span className="text-indigo-600 whitespace-nowrap italic">Arama: {searchTerm}</span>
-                            </>
-                        )}
-                    </nav>
                 </div>
 
-                {isLoading ? (
-                    <div className="flex flex-col items-center justify-center py-32 gap-4">
-                        <Loader2 className="h-12 w-12 animate-spin text-indigo-600" />
-                        <p className="text-slate-500 font-medium">Dosyalar listeleniyor...</p>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        {/* KATEGORİ KLASÖRLERİ (Sadece Root'tayken göster) */}
-                        {!activeCategory && !searchTerm && (
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 animate-in fade-in slide-in-from-bottom-4">
+                {/* Explorer View */}
+                <div className="space-y-10">
+                    {/* KLASÖRLER (Sadece ana dizindeyken veya arama yokken görünür) */}
+                    {!currentFolder && !searchTerm && (
+                        <div className="space-y-4">
+                            <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Kategoriler</h2>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                                 {categories.map(cat => (
                                     <button 
                                         key={cat}
-                                        onClick={() => setActiveCategory(cat)}
-                                        className="group flex flex-col items-center gap-3 p-4 rounded-[2rem] hover:bg-white hover:shadow-xl transition-all duration-300 active:scale-95"
+                                        onClick={() => setCurrentFolder(cat)}
+                                        className="group relative flex flex-col items-center justify-center p-6 bg-white rounded-[2rem] border border-slate-200 hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-300"
                                     >
-                                        <div className="relative">
-                                            <Folder className="h-24 w-24 text-amber-400 fill-amber-400/20 group-hover:fill-amber-400/40 transition-all drop-shadow-sm" />
-                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm px-2 py-0.5 rounded-full border border-amber-200 text-[10px] font-black text-amber-700">
-                                                {categoriesMap[cat].length}
-                                            </div>
+                                        <div className="relative mb-4">
+                                            <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full scale-0 group-hover:scale-100 transition-transform" />
+                                            <Folder className="h-16 w-16 text-indigo-500 fill-indigo-500/10 group-hover:fill-indigo-500/20 group-hover:scale-110 transition-all duration-300" />
                                         </div>
-                                        <span className="text-sm font-black text-slate-700 uppercase tracking-tight text-center line-clamp-2">
-                                            {cat}
-                                        </span>
+                                        <span className="font-black text-xs text-slate-700 group-hover:text-indigo-700 uppercase tracking-wider text-center line-clamp-1">{cat}</span>
+                                        <Badge variant="secondary" className="absolute top-2 right-2 text-[9px] bg-slate-100 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
+                                            {pages.filter(p => (p.category || 'Genel') === cat).length}
+                                        </Badge>
                                     </button>
                                 ))}
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* DOSYA LİSTESİ (Kategori içindeyken veya arama yaparken göster) */}
-                        {(activeCategory || searchTerm) && (
-                            <div className={cn(
-                                "animate-in fade-in slide-in-from-bottom-4 duration-500",
-                                viewMode === 'grid' 
-                                    ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" 
-                                    : "flex flex-col gap-2"
-                            )}>
-                                {filteredItems.length > 0 ? filteredItems.map((page) => (
-                                    viewMode === 'grid' ? (
-                                        <Link key={page.id} href={`/extra/${page.id}`}>
-                                            <Card className="group h-full rounded-[2rem] border-slate-200 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-white hover:-translate-y-1">
-                                                <div className="relative aspect-video w-full bg-slate-50 flex items-center justify-center border-b border-slate-100">
-                                                    <FileText className="h-16 w-16 text-indigo-200 group-hover:text-indigo-400 transition-colors" />
-                                                    {isSearchingAll && (
-                                                        <Badge variant="secondary" className="absolute top-2 right-2 text-[10px] bg-white/80 backdrop-blur-sm">
-                                                            {page.category}
-                                                        </Badge>
-                                                    )}
-                                                </div>
-                                                <CardHeader className="p-5">
-                                                    <CardTitle className="text-base font-bold text-slate-800 line-clamp-2 group-hover:text-indigo-600 transition-colors leading-tight">
-                                                        {page.title}
-                                                    </CardTitle>
-                                                    <CardDescription className="text-[11px] font-medium text-slate-400 flex items-center gap-1 mt-1 uppercase">
-                                                        <Clock className="h-3 w-3" /> {page.updatedAt ? new Date(page.updatedAt).toLocaleDateString('tr-TR') : 'YENİ'}
-                                                    </CardDescription>
-                                                </CardHeader>
-                                            </Card>
-                                        </Link>
-                                    ) : (
-                                        <Link key={page.id} href={`/extra/${page.id}`}>
-                                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all group">
-                                                <div className="p-3 bg-slate-50 rounded-xl group-hover:bg-white transition-colors">
-                                                    <FileText className="h-6 w-6 text-indigo-400" />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <h3 className="font-bold text-slate-800 truncate">{page.title}</h3>
-                                                    <div className="flex items-center gap-3 mt-0.5">
-                                                        {isSearchingAll && <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">{page.category}</span>}
-                                                        <span className="text-[10px] text-slate-400 font-medium">{page.updatedAt ? new Date(page.updatedAt).toLocaleDateString('tr-TR') : 'YENİ'}</span>
-                                                    </div>
-                                                </div>
-                                                <ArrowRight className="h-5 w-5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
-                                            </div>
-                                        </Link>
-                                    )
-                                )) : (
-                                    <div className="col-span-full py-20 text-center bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
-                                        <FileText className="h-16 w-16 text-slate-200 mx-auto mb-4" />
-                                        <h3 className="text-xl font-bold text-slate-800">Dosya Bulunamadı</h3>
-                                        <p className="text-slate-500 mt-1">Arama kriterlerinize uygun döküman mevcut değil.</p>
-                                    </div>
+                    {/* DOSYALAR */}
+                    {(currentFolder || searchTerm) && (
+                        <div className="space-y-4 animate-in fade-in duration-500">
+                            <div className="flex items-center justify-between ml-2">
+                                <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">
+                                    {searchTerm ? `ARAMA SONUÇLARI (${filteredContent.length})` : `DÖKÜMANLAR (${filteredContent.length})`}
+                                </h2>
+                                {currentFolder && !searchTerm && (
+                                    <Button variant="ghost" size="sm" onClick={() => setCurrentFolder(null)} className="h-7 text-[10px] font-black text-indigo-600 hover:bg-indigo-50">
+                                        <ArrowUpLeft className="h-3 w-3 mr-1" /> ÜST DİZİNE DÖN
+                                    </Button>
                                 )}
                             </div>
-                        )}
-                    </div>
-                )}
+
+                            {filteredContent.length > 0 ? (
+                                <div className={cn(
+                                    "grid gap-4",
+                                    viewMode === 'grid' ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1"
+                                )}>
+                                    {filteredContent.map(page => (
+                                        <Link key={page.id} href={`/extra/${page.id}`}>
+                                            <Card className={cn(
+                                                "group h-full border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden",
+                                                viewMode === 'list' && "flex flex-row items-center p-1"
+                                            )}>
+                                                <CardHeader className={cn("relative", viewMode === 'list' ? "p-4 space-y-0" : "pb-4")}>
+                                                    <div className={cn(
+                                                        "flex items-center gap-3",
+                                                        viewMode === 'list' ? "" : "flex-col text-center"
+                                                    )}>
+                                                        <div className="p-3 bg-slate-50 rounded-2xl text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+                                                            <FileText className="h-8 w-8" />
+                                                        </div>
+                                                        <div className={viewMode === 'list' ? "flex-1" : "space-y-1"}>
+                                                            <CardTitle className="text-base font-bold text-slate-800 line-clamp-1 group-hover:text-indigo-700 transition-colors">
+                                                                {page.title}
+                                                            </CardTitle>
+                                                            <CardDescription className="text-[11px] font-medium text-slate-400 flex items-center gap-1 mt-1 uppercase">
+                                                                <Clock className="h-3 w-3" /> {page.updatedAt ? new Date(page.updatedAt).toLocaleDateString('tr-TR') : 'YENİ'}
+                                                            </CardDescription>
+                                                        </div>
+                                                    </div>
+                                                </CardHeader>
+                                                {viewMode === 'grid' && (
+                                                    <>
+                                                        <CardContent className="pb-4">
+                                                            <p className="text-xs text-slate-500 line-clamp-2 min-h-[2.5rem]">
+                                                                {page.description || "Döküman içeriğini görüntülemek için tıklayın."}
+                                                            </p>
+                                                        </CardContent>
+                                                        <CardFooter className="pt-4 border-t border-slate-50 bg-slate-50/30 flex items-center justify-between">
+                                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{page.category || 'Genel'}</span>
+                                                            <div className="flex items-center text-[10px] font-black text-indigo-600 group-hover:translate-x-1 transition-transform">
+                                                                GÖRÜNTÜLE <ChevronRight className="h-3 w-3 ml-0.5" />
+                                                            </div>
+                                                        </CardFooter>
+                                                    </>
+                                                )}
+                                            </Card>
+                                        </Link>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-200">
+                                    <FileText className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+                                    <h3 className="text-lg font-semibold text-slate-900">Dosya Bulunamadı</h3>
+                                    <p className="text-slate-500 max-w-xs mx-auto mt-1">Bu klasör henüz boş veya arama kriterine uygun dosya yok.</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
             </main>
         </div>
     );
-}
-
-function ArrowRight(props: any) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-        </svg>
-    )
 }
