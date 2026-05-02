@@ -64,6 +64,20 @@ export async function getExtraPages(onlyPublished: boolean = false) {
 }
 
 /**
+ * Tek bir sayfayı ID ile getirir.
+ */
+export async function getExtraPage(id: string) {
+  try {
+    const db = getAdminDb();
+    const doc = await db.collection('extraPages').doc(id).get();
+    if (!doc.exists) return { success: false, error: "Döküman bulunamadı." };
+    return { success: true, data: { id: doc.id, ...serializeDoc(doc.data()) } };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+/**
  * Sayfayı kaydeder veya günceller.
  */
 export async function saveExtraPage(id: string | null, data: any) {
