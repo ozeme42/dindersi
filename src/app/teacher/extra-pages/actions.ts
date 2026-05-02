@@ -64,33 +64,6 @@ export async function getExtraPages(onlyPublished: boolean = false) {
 }
 
 /**
- * ID ile tek bir sayfa getirir.
- */
-export async function getExtraPage(id: string) {
-  try {
-    const db = getAdminDb();
-    const docSnap = await db.collection('extraPages').doc(id).get();
-    
-    if (!docSnap.exists) {
-      return { success: false, error: 'Sayfa bulunamadı.' };
-    }
-
-    const data = docSnap.data();
-    return { 
-      success: true, 
-      data: { 
-        id: docSnap.id, 
-        category: data?.category || 'Genel',
-        isPublished: data?.isPublished !== undefined ? data.isPublished : true,
-        ...serializeDoc(data) 
-      } 
-    };
-  } catch (error: any) {
-    return { success: false, error: error.message };
-  }
-}
-
-/**
  * Sayfayı kaydeder veya günceller.
  */
 export async function saveExtraPage(id: string | null, data: any) {
@@ -136,22 +109,55 @@ export async function deleteExtraPage(id: string) {
 }
 
 /**
- * Bir kategorinin adını toplu olarak değiştirir.
+ * Bir sayfayı başka bir kategoriye/klasöre taşır.
+ */
+export async function moveExtraPage(id: string, newCategory: string) {
+  try {
+    const db = getAdminDb();
+    await db.collection('extraPages').doc(id).update({ 
+      category: newCategory,
+      updatedAt: FieldValue.serverTimestamp()
+    });
+    revalidatePath('/extra');
+    revalidatePath('/teacher/extra-pages');
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Bir kategorinin adını toplu olarak değiştirir (Alt yollar dahil).
  */
 export async function renameExtraPageCategory(oldName: string, newName: string) {
   try {
     const db = getAdminDb();
-    const snapshot = await db.collection('extraPages').where('category', '==', oldName).get();
+    const snapshot = await db.collection('extraPages').get();
     
     const batch = db.batch();
+    let count = 0;
+
     snapshot.docs.forEach(doc => {
-      batch.update(doc.ref, { category: newName });
+      const cat = doc.data().category || 'Genel';
+      
+      // Tam eşleşme veya alt klasör eşleşmesi (A -> B olursa A/C -> B/C olur)
+      if (cat === oldName) {
+        batch.update(doc.ref, { category: newName });
+        count++;
+      } else if (cat.startsWith(oldName + '/')) {
+        const updatedCat = newName + cat.substring(oldName.length);
+        batch.update(doc.ref, { category: updatedCat });
+        count++;
+      }
     });
     
-    await batch.commit();
+    if (count > 0) {
+      await batch.commit();
+    }
+    
     revalidatePath('/extra');
     revalidatePath('/teacher/extra-pages');
-    return { success: true };
+    return { success: true, count };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
@@ -165,17 +171,26 @@ export async function deleteExtraPageCategory(categoryName: string) {
   
   try {
     const db = getAdminDb();
-    const snapshot = await db.collection('extraPages').where('category', '==', categoryName).get();
+    const snapshot = await db.collection('extraPages').get();
     
     const batch = db.batch();
+    let count = 0;
+
     snapshot.docs.forEach(doc => {
-      batch.update(doc.ref, { category: 'Genel' });
+      const cat = doc.data().category || 'Genel';
+      if (cat === categoryName || cat.startsWith(categoryName + '/')) {
+        batch.update(doc.ref, { category: 'Genel' });
+        count++;
+      }
     });
     
-    await batch.commit();
+    if (count > 0) {
+      await batch.commit();
+    }
+    
     revalidatePath('/extra');
     revalidatePath('/teacher/extra-pages');
-    return { success: true };
+    return { success: true, count };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
