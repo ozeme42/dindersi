@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { 
     Dialog, DialogContent, DialogHeader, DialogTitle, 
-    DialogTrigger, DialogFooter, DialogDescription, DialogClose
+    DialogFooter, DialogDescription, DialogClose
 } from '@/components/ui/dialog';
 import { 
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
@@ -30,6 +30,7 @@ import {
     AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger 
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 export default function ExtraPagesManagement() {
     const [pages, setPages] = useState<any[]>([]);
@@ -254,7 +255,7 @@ export default function ExtraPagesManagement() {
                 <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem]">
                     <DialogHeader>
                         <DialogTitle className="text-2xl">{editingPage ? "Sayfayı Düzenle" : "Yeni Sayfa Oluştur"}</DialogTitle>
-                        <DialogDescription>Alt klasörler için '/' karakterini kullanın (Örn: Rehberlik/LGS).</DialogDescription>
+                        <DialogDescription>Alt klasörler için '/' karakterini kullanın (Örn: Rehberlik/Sınav Hazırlık/LGS).</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-6 py-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -275,7 +276,7 @@ export default function ExtraPagesManagement() {
                                                 <div className="px-2 py-1.5 text-[10px] font-bold text-slate-400 uppercase">Mevcut Klasörler</div>
                                                 {allCategories.map(cat => (
                                                     <DropdownMenuItem key={cat} onClick={() => setFormData({...formData, category: cat})} className="cursor-pointer text-xs">
-                                                        <Folder className="h-3 w-3 mr-2 text-amber-500" /> {cat}
+                                                        <Folder className="h-3.5 w-3.5 mr-2 text-amber-500" /> {cat}
                                                     </DropdownMenuItem>
                                                 ))}
                                             </DropdownMenuContent>
