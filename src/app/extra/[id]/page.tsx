@@ -1,73 +1,85 @@
-
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
-import { 
-    Loader2, ArrowLeft, Plus, Minus, Maximize, 
-    Minimize, Globe, Tag, Clock, Share2, 
-    Printer, Maximize2, Minimize2
-} from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Loader2, ArrowLeft, Plus, Minus, Maximize, Minimize, Type, Printer, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { getExtraPage } from '@/app/teacher/extra-pages/actions';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { FullscreenToggle } from '@/components/fullscreen-toggle';
 
-export default function ExtraPageDisplay() {
+export default function ExtraPageViewer() {
     const params = useParams();
+    const router = useRouter();
     const id = params.id as string;
-    
-    const [page, setPage] = useState<any>(null);
+
+    const [content, setContent] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [zoomLevel, setZoomLevel] = useState(1.1);
+    const [error, setError] = useState<string | null>(null);
+    const [zoomLevel, setZoomLevel] = useState(1.0);
     const [isFullscreen, setIsFullscreen] = useState(false);
     
     const containerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const fetchPage = async () => {
-            setIsLoading(true);
-            const res = await getExtraPage(id);
-            if (res.success) {
-                setPage(res.data);
-            }
-            setIsLoading(false);
-        };
-        fetchPage();
-
-        const handleFs = () => setIsFullscreen(!!document.fullscreenElement);
-        document.addEventListener('fullscreenchange', handleFs);
-        return () => document.removeEventListener('fullscreenchange', handleFs);
+    const fetchContent = useCallback(async () => {
+        if (!id) return;
+        setIsLoading(true);
+        const res = await getExtraPage(id);
+        if (res.success) {
+            setContent(res.data);
+        } else {
+            setError(res.error || "İçerik yüklenemedi.");
+        }
+        setIsLoading(false);
     }, [id]);
+
+    useEffect(() => {
+        fetchContent();
+        
+        const handleFS = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handleFS);
+        return () => document.removeEventListener('fullscreenchange', handleFS);
+    }, [fetchContent]);
+
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            containerRef.current?.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    };
+
+    const handlePrint = () => {
+        window.print();
+    };
 
     if (isLoading) {
         return (
-            <div className="h-screen bg-slate-50 flex items-center justify-center">
-                <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
+            <div className="h-screen w-screen flex flex-col items-center justify-center bg-slate-50 gap-4">
+                <Loader2 className="h-12 w-12 animate-spin text-indigo-600" />
+                <p className="text-slate-500 font-bold animate-pulse uppercase tracking-widest text-xs">İçerik Hazırlanıyor</p>
             </div>
         );
     }
 
-    if (!page) {
+    if (error || !content) {
         return (
-            <div className="h-screen bg-slate-50 flex flex-col items-center justify-center p-8 text-center">
-                <div className="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-200 max-w-md">
-                    <h2 className="text-2xl font-black text-slate-800 mb-4">Döküman Bulunamadı</h2>
-                    <p className="text-slate-500 mb-8">Aradığınız sayfa silinmiş veya taşınmış olabilir.</p>
-                    <Link href="/extra" className="w-full">
-                        <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl h-12">
-                            <ArrowLeft className="mr-2 h-5 w-5" /> Arşive Dön
-                        </Button>
-                    </Link>
+            <div className="h-screen w-screen flex items-center justify-center bg-slate-50 p-6">
+                <div className="bg-white p-10 rounded-[2.5rem] border border-red-100 shadow-2xl text-center max-w-md w-full">
+                    <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 text-red-500">
+                        <ArrowLeft className="h-10 w-10" />
+                    </div>
+                    <h2 className="text-2xl font-black text-slate-900 mb-2">HATA</h2>
+                    <p className="text-slate-500 mb-8">{error || "Döküman bulunamadı."}</p>
+                    <Button asChild className="w-full bg-slate-900 hover:bg-slate-800 h-14 rounded-2xl text-lg">
+                        <Link href="/extra">Arşive Geri Dön</Link>
+                    </Button>
                 </div>
             </div>
         );
     }
 
-    // Iframe içine basılacak güvenli HTML yapısı
-    // Tailwind desteği ve zoom ayarı eklendi
-    const safeHtml = `
+    const safeHtmlDocument = `
         <!DOCTYPE html>
         <html lang="tr">
         <head>
@@ -75,102 +87,91 @@ export default function ExtraPageDisplay() {
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <script src="https://cdn.tailwindcss.com"></script>
             <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
                 body { 
                     zoom: ${zoomLevel}; 
                     transform-origin: top center; 
-                    padding: 2rem; 
-                    font-family: system-ui, -apple-system, sans-serif; 
+                    padding: 40px; 
+                    font-family: 'Inter', sans-serif; 
+                    margin: 0;
                     background-color: white;
                     color: #1e293b;
                     line-height: 1.6;
                 }
-                img { max-width: 100%; height: auto; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-                h1 { font-weight: 800; font-size: 2.5rem; margin-bottom: 1.5rem; color: #1e1b4b; border-bottom: 4px solid #4f46e5; padding-bottom: 0.5rem; display: inline-block; }
-                h2 { font-weight: 700; font-size: 1.8rem; margin-top: 2rem; margin-bottom: 1rem; color: #4338ca; }
-                p { margin-bottom: 1.25rem; text-align: justify; }
-                ul, ol { margin-bottom: 1.25rem; padding-left: 1.5rem; }
-                li { margin-bottom: 0.5rem; }
+                @media print {
+                    body { padding: 0; zoom: 1 !important; }
+                    .no-print { display: none !important; }
+                }
+                img { max-width: 100%; height: auto; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+                h1, h2, h3 { color: #4f46e5; font-weight: 800; margin-top: 1.5em; margin-bottom: 0.5em; }
+                p { margin-bottom: 1.2em; text-align: justify; }
+                ul, ol { padding-left: 1.5em; margin-bottom: 1.2em; }
+                li { margin-bottom: 0.5em; }
             </style>
         </head>
-        <body class="prose prose-slate max-w-none">
-            ${page.htmlContent}
+        <body>
+            ${content.htmlContent}
         </body>
         </html>
     `;
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col relative overflow-hidden font-sans">
-            
+        <div className="h-screen w-screen bg-slate-100 flex flex-col overflow-hidden relative selection:bg-indigo-100">
             {/* Header / Toolbar */}
-            <header className={cn(
-                "flex-shrink-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 transition-all duration-300",
-                isFullscreen ? "h-0 p-0 overflow-hidden border-0" : "p-4"
-            )}>
-                <div className="container mx-auto flex items-center justify-between gap-4">
+            <header className="flex-shrink-0 bg-white border-b border-slate-200 z-30 shadow-sm no-print">
+                <div className="container mx-auto px-6 h-20 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4 overflow-hidden">
-                        <Link href="/extra">
-                            <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 hover:bg-slate-100">
-                                <ArrowLeft className="h-5 w-5 text-slate-600" />
-                            </Button>
-                        </Link>
+                        <Button variant="ghost" size="icon" asChild className="rounded-xl h-12 w-12 hover:bg-slate-100">
+                            <Link href="/extra"><ArrowLeft className="h-6 w-6 text-slate-600"/></Link>
+                        </Button>
+                        <div className="h-8 w-px bg-slate-200" />
                         <div className="overflow-hidden">
-                            <h1 className="text-lg font-black text-slate-900 truncate leading-tight uppercase tracking-tight">
-                                {page.title}
-                            </h1>
-                            <div className="flex items-center gap-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-                                <span className="flex items-center gap-1 text-indigo-600">
-                                    <Tag className="h-3 w-3" /> {page.category || 'Genel'}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                    <Clock className="h-3 w-3" /> {page.updatedAt ? new Date(page.updatedAt).toLocaleDateString('tr-TR') : 'YENİ'}
-                                </span>
+                            <h1 className="text-xl font-black text-slate-900 truncate uppercase tracking-tight">{content.title}</h1>
+                            <div className="flex items-center gap-2 mt-0.5">
+                                <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 border-none text-[10px] font-bold uppercase">{content.category}</Badge>
+                                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{content.updatedAt ? new Date(content.updatedAt).toLocaleDateString('tr-TR') : 'YENİ'}</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {/* Zoom Kontrolleri */}
+                        {/* Zoom Controls */}
                         <div className="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200 mr-2">
-                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-lg">
-                                <Minus className="h-4 w-4" />
-                            </Button>
-                            <span className="text-[10px] font-black text-slate-500 w-12 text-center uppercase">
-                                {Math.round(zoomLevel * 100)}%
-                            </span>
-                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(3, z + 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-lg">
-                                <Plus className="h-4 w-4" />
-                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-9 w-9 text-slate-600 hover:bg-white rounded-lg"><Minus className="h-4 w-4"/></Button>
+                            <div className="flex items-center justify-center w-14 gap-1">
+                                <Type className="h-3 w-3 text-slate-400" />
+                                <span className="text-xs font-black text-slate-600">{Math.round(zoomLevel * 100)}%</span>
+                            </div>
+                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-9 w-9 text-slate-600 hover:bg-white rounded-lg"><Plus className="h-4 w-4"/></Button>
                         </div>
 
-                        <Button variant="outline" size="icon" onClick={() => window.print()} className="h-10 w-10 rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50">
+                        <Button variant="outline" size="icon" onClick={handlePrint} className="h-11 w-11 rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50">
                             <Printer className="h-5 w-5" />
                         </Button>
                         
-                        <FullscreenToggle elementRef={containerRef} className="bg-indigo-600 text-white hover:bg-indigo-700 border-0 h-10 w-10 rounded-xl shadow-lg shadow-indigo-200" />
+                        <Button variant="outline" size="icon" onClick={toggleFullscreen} className="h-11 w-11 rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50">
+                            {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+                        </Button>
                     </div>
                 </div>
             </header>
 
-            {/* İçerik Alanı - TAM SAYFA */}
+            {/* Content Area */}
             <main ref={containerRef} className={cn(
-                "flex-grow relative z-10 transition-all duration-300 bg-white",
-                isFullscreen ? "fixed inset-0 h-screen w-screen" : "h-[calc(100vh-81px)]"
+                "flex-grow relative overflow-hidden bg-slate-100 transition-all duration-500",
+                isFullscreen ? "p-0" : "p-4 md:p-8"
             )}>
-                {/* Fullscreen ikonu sadece tam ekrandayken sağ üstte yüzer vaziyette görünsün */}
-                {isFullscreen && (
-                    <div className="absolute top-4 right-4 z-[100] opacity-0 hover:opacity-100 transition-opacity">
-                         <Button onClick={() => document.exitFullscreen()} variant="outline" size="icon" className="h-12 w-12 rounded-full bg-white/80 border-slate-200 shadow-xl">
-                            <Minimize2 className="h-6 w-6 text-slate-700" />
-                         </Button>
-                    </div>
-                )}
-
-                <iframe 
-                    srcDoc={safeHtml} 
-                    className="w-full h-full border-0 bg-white"
-                    title={page.title}
-                    sandbox="allow-scripts allow-same-origin allow-popups"
-                />
+                <div className={cn(
+                    "w-full h-full mx-auto max-w-6xl shadow-2xl transition-all duration-500 overflow-hidden",
+                    isFullscreen ? "rounded-none" : "rounded-3xl border-4 border-white ring-1 ring-slate-200"
+                )}>
+                    <iframe 
+                        srcDoc={safeHtmlDocument} 
+                        className="w-full h-full border-0 bg-white" 
+                        sandbox="allow-scripts allow-same-origin allow-popups"
+                        title={content.title}
+                    />
+                </div>
             </main>
         </div>
     );
