@@ -209,13 +209,13 @@ export default function ExtraPagesManagement() {
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end" className="rounded-xl w-44">
-                                            <DropdownMenuItem onClick={() => handleOpenDialog(page)} className="gap-2 cursor-pointer text-sm font-medium">
+                                            <DropdownMenuItem onClick={() => handleOpenDialog(page)} className="gap-2 cursor-pointer text-sm font-medium text-slate-700">
                                                 <Edit2 className="h-4 w-4" /> Düzenle
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => { setMovingPage(page); setIsMoveDialogOpen(true); }} className="gap-2 cursor-pointer text-sm font-medium">
+                                            <DropdownMenuItem onClick={() => { setMovingPage(page); setIsMoveDialogOpen(true); }} className="gap-2 cursor-pointer text-sm font-medium text-slate-700">
                                                 <Move className="h-4 w-4" /> Başka Klasöre Taşı
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem asChild className="gap-2 cursor-pointer text-sm font-medium">
+                                            <DropdownMenuItem asChild className="gap-2 cursor-pointer text-sm font-medium text-slate-700">
                                                 <Link href={`/extra/${page.id}`} target="_blank">
                                                     <Globe className="h-4 w-4" /> Görüntüle
                                                 </Link>
@@ -253,21 +253,21 @@ export default function ExtraPagesManagement() {
 
             {/* Sayfa Düzenleme/Ekleme Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem] bg-white text-slate-900">
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem] bg-white text-slate-900 border-none">
                     <DialogHeader>
-                        <DialogTitle className="text-2xl">{editingPage ? "Sayfayı Düzenle" : "Yeni Sayfa Oluştur"}</DialogTitle>
-                        <DialogDescription>Alt klasörler için '/' karakterini kullanın (Örn: Rehberlik/Sınav Hazırlık/LGS).</DialogDescription>
+                        <DialogTitle className="text-2xl font-black text-slate-900 uppercase tracking-tight">{editingPage ? "Sayfayı Düzenle" : "Yeni Sayfa Oluştur"}</DialogTitle>
+                        <DialogDescription className="text-slate-500">Alt klasörler için '/' karakterini kullanın (Örn: Rehberlik/Sınav Hazırlık/LGS).</DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-6 py-4 text-slate-900">
+                    <div className="grid gap-6 py-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">Sayfa Başlığı</label>
-                                <Input value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Örn: Rehberlik İlkeleri" className="rounded-xl border-slate-200 text-slate-900" />
+                                <label className="text-sm font-bold text-slate-700 uppercase tracking-widest ml-1">Sayfa Başlığı</label>
+                                <Input value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Örn: Rehberlik İlkeleri" className="rounded-xl border-slate-200 h-11 text-slate-900" />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">Kategori Yolu (Klasör/Alt Klasör)</label>
+                                <label className="text-sm font-bold text-slate-700 uppercase tracking-widest ml-1">Kategori Yolu</label>
                                 <div className="relative">
-                                    <Input value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Örn: Rehberlik/Materyal" className="rounded-xl pr-10 border-slate-200 text-slate-900" />
+                                    <Input value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Örn: Rehberlik/Materyal" className="rounded-xl pr-10 border-slate-200 h-11 text-slate-900" />
                                     <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
@@ -276,7 +276,7 @@ export default function ExtraPagesManagement() {
                                             <DropdownMenuContent align="end" className="w-64 max-h-[300px] overflow-y-auto rounded-xl">
                                                 <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-bold text-slate-400 uppercase">Mevcut Klasörler</DropdownMenuLabel>
                                                 {allCategories.map(cat => (
-                                                    <DropdownMenuItem key={cat} onClick={() => setFormData({...formData, category: cat})} className="cursor-pointer text-xs">
+                                                    <DropdownMenuItem key={cat} onClick={() => setFormData({...formData, category: cat})} className="cursor-pointer text-xs font-medium text-slate-700">
                                                         <Folder className="h-3.5 w-3.5 mr-2 text-amber-500" /> {cat}
                                                     </DropdownMenuItem>
                                                 ))}
@@ -287,22 +287,22 @@ export default function ExtraPagesManagement() {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700">Kısa Açıklama</label>
+                            <label className="text-sm font-bold text-slate-700 uppercase tracking-widest ml-1">Kısa Açıklama</label>
                             <Textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Kısa özet..." className="rounded-xl h-20 border-slate-200 text-slate-900" />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700">HTML İçeriği</label>
+                            <label className="text-sm font-bold text-slate-700 uppercase tracking-widest ml-1">HTML İçeriği</label>
                             <Textarea value={formData.htmlContent} onChange={(e) => setFormData({...formData, htmlContent: e.target.value})} placeholder="<div class='p-4'>...</div>" className="rounded-xl font-mono text-sm h-64 border-slate-200 text-slate-900" />
                         </div>
-                        <div className="flex items-center gap-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
                             <input type="checkbox" id="isPublished" checked={formData.isPublished} onChange={(e) => setFormData({...formData, isPublished: e.target.checked})} className="h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
-                            <label htmlFor="isPublished" className="text-sm font-semibold text-slate-700 cursor-pointer">Hemen yayınla</label>
+                            <label htmlFor="isPublished" className="text-sm font-black text-slate-700 cursor-pointer uppercase tracking-tight">Hemen yayınla</label>
                         </div>
                     </div>
-                    <DialogFooter>
-                        <Button variant="ghost" onClick={() => setIsDialogOpen(false)} className="rounded-xl">İptal</Button>
-                        <Button onClick={handleSave} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl min-w-[120px]">
-                            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Kaydet"}
+                    <DialogFooter className="bg-slate-50 p-4 -mx-6 -mb-6 mt-4 border-t border-slate-100 rounded-b-[2rem]">
+                        <Button variant="ghost" onClick={() => setIsDialogOpen(false)} className="rounded-xl font-bold text-slate-500">İptal</Button>
+                        <Button onClick={handleSave} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl min-w-[120px] font-bold shadow-lg shadow-indigo-100">
+                            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Değişiklikleri Kaydet"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -310,35 +310,38 @@ export default function ExtraPagesManagement() {
 
             {/* Klasör/Kategori Yönetimi Dialog */}
             <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
-                <DialogContent className="max-w-md rounded-[2rem] bg-white text-slate-900">
+                <DialogContent className="max-w-md rounded-[2rem] bg-white text-slate-900 border-none shadow-2xl">
                     <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2 font-bold text-slate-900"><Settings2 className="h-5 w-5 text-indigo-600" /> Klasörleri Yönet</DialogTitle>
-                        <DialogDescription>Klasör adlarını güncelleyin. Alt klasörler otomatik taşınır.</DialogDescription>
+                        <DialogTitle className="flex items-center gap-3 text-2xl font-black text-slate-900 uppercase tracking-tight">
+                            <Settings2 className="h-6 w-6 text-indigo-600" /> 
+                            Klasör Yönetimi
+                        </DialogTitle>
+                        <DialogDescription className="text-slate-500">Klasör adlarını güncelleyin. Alt klasörler otomatik taşınır.</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <ScrollArea className="max-h-[50vh] pr-4">
                             {allCategories.map(cat => (
-                                <div key={cat} className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-100 mb-2 group">
-                                    <span className="text-xs font-bold text-slate-700 flex items-center gap-2">
-                                        <Folder className="h-3.5 w-3.5 text-amber-500" /> {cat}
+                                <div key={cat} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 mb-2 group hover:border-indigo-200 transition-all">
+                                    <span className="text-xs font-black text-slate-700 flex items-center gap-2 uppercase tracking-tight">
+                                        <Folder className="h-4 w-4 text-amber-500 fill-current" /> {cat}
                                     </span>
                                     <div className="flex items-center gap-1">
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
-                                                <Button size="icon" variant="ghost" className="h-7 w-7 text-slate-400 hover:text-red-600">
-                                                    <Trash2 className="h-3.5 w-3.5" />
+                                                <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-full">
+                                                    <Trash2 className="h-4 w-4" />
                                                 </Button>
                                             </AlertDialogTrigger>
-                                            <AlertDialogContent className="bg-white border-slate-200 text-slate-900 rounded-2xl">
+                                            <AlertDialogContent className="bg-white border-slate-200 text-slate-900 rounded-[2rem] border-none shadow-2xl">
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle className="font-bold text-red-600">Klasörü Sil</AlertDialogTitle>
+                                                    <AlertDialogTitle className="font-black text-2xl text-red-600 uppercase tracking-tight">Klasörü Sil</AlertDialogTitle>
                                                     <AlertDialogDescription className="text-slate-500">
                                                         "{cat}" klasörünü ve varsa alt klasörlerini silmek istediğinize emin misiniz? Dökümanlar "Genel" klasörüne taşınacaktır.
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel className="bg-transparent text-slate-500">İptal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => handleCategoryDelete(cat)} className="bg-red-600 hover:bg-red-500 text-white border-none">Sil ve Taşı</AlertDialogAction>
+                                                <AlertDialogFooter className="bg-slate-50 p-4 -mx-6 -mb-6 mt-4 border-t border-slate-100">
+                                                    <AlertDialogCancel className="bg-transparent text-slate-500 font-bold">İptal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={() => handleCategoryDelete(cat)} className="bg-red-600 hover:bg-red-700 text-white border-none rounded-xl font-bold px-6">Sil ve Taşı</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
@@ -352,37 +355,40 @@ export default function ExtraPagesManagement() {
 
             {/* Taşıma Dialog */}
             <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
-                <DialogContent className="max-w-md rounded-[2rem] bg-white text-slate-900">
+                <DialogContent className="max-w-md rounded-[2rem] bg-white text-slate-900 border-none shadow-2xl">
                     <DialogHeader>
-                        <DialogTitle className="font-bold text-slate-900">Dökümanı Taşı</DialogTitle>
-                        <DialogDescription>"{movingPage?.title}" dökümanı için yeni bir yol seçin veya yazın.</DialogDescription>
+                        <DialogTitle className="font-black text-2xl text-slate-900 uppercase tracking-tight">Klasöre Taşı</DialogTitle>
+                        <DialogDescription className="text-slate-500">"{movingPage?.title}" dökümanı için hedef klasör seçin.</DialogDescription>
                     </DialogHeader>
                     <div className="py-4 space-y-4">
-                        <Input 
-                            value={movingPage?.category || ""} 
-                            onChange={(e) => setMovingPage({...movingPage, category: e.target.value})}
-                            placeholder="Yeni kategori yolu..."
-                            className="rounded-xl border-slate-200"
-                        />
-                        <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">Mevcut Klasörler</div>
-                        <ScrollArea className="h-48 border border-slate-100 rounded-xl p-2 bg-slate-50">
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Hedef Yol</label>
+                            <Input 
+                                value={movingPage?.category || ""} 
+                                onChange={(e) => setMovingPage({...movingPage, category: e.target.value})}
+                                placeholder="Yeni kategori yolu..."
+                                className="rounded-xl border-slate-200 h-11 text-slate-900"
+                            />
+                        </div>
+                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 ml-1">Mevcut Klasörler</div>
+                        <ScrollArea className="h-48 border border-slate-100 rounded-xl p-2 bg-slate-50 shadow-inner">
                             {allCategories.map(cat => (
                                 <button 
                                     key={cat} 
                                     onClick={() => setMovingPage({...movingPage, category: cat})}
                                     className={cn(
-                                        "w-full text-left p-2 rounded-lg text-xs transition-colors hover:bg-indigo-50 flex items-center gap-2",
-                                        movingPage?.category === cat ? "bg-indigo-100 text-indigo-700 font-bold" : "text-slate-600"
+                                        "w-full text-left p-2.5 rounded-lg text-xs transition-colors hover:bg-white hover:shadow-sm flex items-center gap-2 mb-1 uppercase font-bold",
+                                        movingPage?.category === cat ? "bg-indigo-600 text-white shadow-md" : "text-slate-600"
                                     )}
                                 >
-                                    <Folder className="h-3.5 w-3.5 text-amber-500" /> {cat}
+                                    <Folder className={cn("h-3.5 w-3.5", movingPage?.category === cat ? "text-white" : "text-amber-500")} /> {cat}
                                 </button>
                             ))}
                         </ScrollArea>
                     </div>
-                    <DialogFooter>
-                        <Button variant="ghost" onClick={() => setIsMoveDialogOpen(false)} className="rounded-xl">İptal</Button>
-                        <Button onClick={() => handleMove(movingPage.category)} disabled={isSaving} className="bg-indigo-600 text-white rounded-xl min-w-[120px]">
+                    <DialogFooter className="bg-slate-50 p-4 -mx-6 -mb-6 mt-4 border-t border-slate-100 rounded-b-[2rem]">
+                        <Button variant="ghost" onClick={() => setIsMoveDialogOpen(false)} className="rounded-xl font-bold text-slate-500">İptal</Button>
+                        <Button onClick={() => handleMove(movingPage.category)} disabled={isSaving} className="bg-indigo-600 text-white rounded-xl min-w-[120px] font-bold shadow-lg shadow-indigo-100">
                             {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Taşımayı Onayla"}
                         </Button>
                     </DialogFooter>
