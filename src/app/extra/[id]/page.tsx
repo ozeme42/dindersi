@@ -1,16 +1,20 @@
 
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { 
-    ArrowLeft, Loader2, Maximize2, Minimize2, 
-    Plus, Minus, Printer, Share2, Globe, Clock, FileText 
+    ArrowLeft, Maximize, Minimize, Minus, Plus, 
+    Loader2, Globe, FileText, Clock, Share2, Printer
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { 
+    Card, CardContent, CardHeader, CardTitle, 
+    CardDescription, CardFooter 
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import { getExtraPage } from '@/app/teacher/extra-pages/actions';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
@@ -20,87 +24,79 @@ export default function ExtraPageViewer() {
     const router = useRouter();
     const [page, setPage] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [zoomLevel, setZoomLevel] = useState(1);
+    const [error, setError] = useState<string | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    
+    const [zoomLevel, setZoomLevel] = useState(1.1);
     const contentRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const fetchPage = async () => {
-            if (!params.id) return;
-            setIsLoading(true);
-            const res = await getExtraPage(params.id as string);
-            if (res.success) {
-                setPage(res.data);
-            }
-            setIsLoading(false);
-        };
-        fetchPage();
-    }, [params.id]);
+    const fetchData = useCallback(async () => {
+        if (!params?.id) return;
+        setIsLoading(true);
+        const res = await getExtraPage(params.id as string);
+        if (res.success) {
+            setPage(res.data);
+        } else {
+            setError(res.error || "İçerik yüklenemedi.");
+        }
+        setIsLoading(false);
+    }, [params?.id]);
 
-    // Döküman içindeki scriptleri çalıştıran güvenli sistem
+    useEffect(() => { fetchData(); }, [fetchData]);
+
+    // Script Runner: HTML içeriğindeki script'leri güvenli bir şekilde çalıştırır
     useEffect(() => {
-        if (page?.htmlContent && contentRef.current) {
-            // Önce global uyumluluk fonksiyonlarını tanımlayalım
-            (window as any).go = (n: number) => window.history.go(n);
-            
-            // Mevcut scriptleri temizle
-            const scripts = contentRef.current.querySelectorAll('script');
+        if (page?.htmlContent && typeof window !== 'undefined') {
+            // go(-1) uyumluluğu
+            (window as any).go = (n: number) => {
+                if (n === -1) router.back();
+            };
+
+            const container = contentRef.current;
+            if (!container) return;
+
+            const scripts = container.querySelectorAll('script');
             scripts.forEach(oldScript => {
                 const newScript = document.createElement('script');
-                // Scriptleri IIFE ile sarmalayarak 'Identifier already declared' hatasını önlüyoruz
-                newScript.textContent = `(function(){ try { ${oldScript.textContent} } catch(e){ console.error('Script Error:', e); } })();`;
-                document.body.appendChild(newScript);
-                // Çalıştıktan sonra temizle (DOM kirletmemek için)
-                setTimeout(() => document.body.removeChild(newScript), 100);
+                // SyntaxError (Redeclaration) önlemek için korumalı kapsama al
+                newScript.textContent = `(function(){ try { ${oldScript.textContent} } catch(e){ console.warn('Script error:', e); } })();`;
+                oldScript.parentNode?.replaceChild(newScript, oldScript);
             });
 
-            // DOM'un yerleşmesi için kısa bir bekleyişten sonra init fonksiyonlarını çağır
+            // DOM hazır olduğunda init fonksiyonunu tetikle
             setTimeout(() => {
-                try {
-                    if (typeof (window as any).initAdimAdim === 'function') {
-                        (window as any).initAdimAdim();
-                    }
-                } catch (e) {
-                    console.warn("Init function error (silent):", e);
+                if (typeof (window as any).initAdimAdim === 'function') {
+                    try { (window as any).initAdimAdim(); } catch(e) {}
                 }
-            }, 300);
+            }, 100);
         }
-    }, [page?.htmlContent]);
+    }, [page?.htmlContent, router]);
 
-    const handlePrint = () => window.print();
-
-    const handleShare = () => {
-        if (navigator.share) {
-            navigator.share({
-                title: page?.title,
-                url: window.location.href
-            });
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+            setIsFullscreen(true);
         } else {
-            navigator.clipboard.writeText(window.location.href);
-            alert("Bağlantı kopyalandı!");
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+                setIsFullscreen(false);
+            }
         }
     };
 
     if (isLoading) {
         return (
-            <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-50 gap-4">
-                <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
-                <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">İçerik Yükleniyor</p>
+            <div className="flex h-screen w-full items-center justify-center bg-white">
+                <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
             </div>
         );
     }
 
-    if (!page) {
+    if (error || !page) {
         return (
-            <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-50 p-6 text-center">
-                <div className="bg-white p-12 rounded-[3rem] shadow-xl border border-slate-200 max-w-md">
-                    <XCircle className="h-20 w-20 text-red-400 mx-auto mb-6" />
-                    <h1 className="text-2xl font-black text-slate-900 mb-2">SAYFA BULUNAMADI</h1>
-                    <p className="text-slate-500 mb-8">İstediğiniz içerik kaldırılmış veya taşınmış olabilir.</p>
-                    <Button asChild className="rounded-2xl h-14 w-full bg-slate-900 text-white hover:bg-slate-800">
-                        <Link href="/extra">Döküman Merkezi'ne Dön</Link>
-                    </Button>
+            <div className="flex h-screen items-center justify-center p-8 text-center bg-slate-50">
+                <div className="max-w-md space-y-4">
+                    <p className="text-red-500 font-bold text-lg">{error || "Sayfa bulunamadı."}</p>
+                    <Button asChild className="rounded-xl"><Link href="/extra">Geri Dön</Link></Button>
                 </div>
             </div>
         );
@@ -108,91 +104,85 @@ export default function ExtraPageViewer() {
 
     return (
         <div className={cn(
-            "min-h-screen bg-slate-50 font-sans transition-all duration-500",
-            isFullscreen ? "fixed inset-0 z-[100] overflow-y-auto bg-white p-0" : "p-4 md:p-8"
+            "min-h-screen transition-colors duration-500",
+            isFullscreen ? "bg-white p-0" : "bg-slate-50 p-4 md:p-8"
         )}>
-            {/* Navigasyon Bar */}
-            {!isFullscreen && (
-                <div className="container mx-auto mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="flex items-center gap-4">
-                         <Button variant="ghost" size="icon" asChild className="rounded-full h-12 w-12 bg-white shadow-md hover:bg-slate-50 border border-slate-100">
-                            <Link href="/extra"><ArrowLeft className="h-6 w-6 text-slate-600" /></Link>
-                         </Button>
+            {/* Üst Kontrol Paneli */}
+            <div className={cn(
+                "sticky top-0 z-50 mb-6 transition-all",
+                isFullscreen ? "bg-white/90 border-b p-2" : "bg-white/80 backdrop-blur-md rounded-3xl border border-white shadow-lg p-4 max-w-7xl mx-auto"
+            )}>
+                <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                         {!isFullscreen && (
+                            <Button variant="ghost" size="icon" asChild className="rounded-full h-10 w-10 hover:bg-slate-100">
+                                <Link href="/extra"><ArrowLeft className="h-5 w-5" /></Link>
+                            </Button>
+                         )}
                          <div className="min-w-0">
-                            <h1 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tight truncate max-w-[60vw]">
-                                {page.title}
-                            </h1>
-                            <div className="flex items-center gap-4 mt-1">
-                                <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-100 font-bold">
-                                    {page.category || 'Genel'}
-                                </Badge>
-                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                    <Clock className="h-3 w-3" />
-                                    {page.updatedAt ? format(new Date(page.updatedAt), 'dd MMMM yyyy', { locale: tr }) : '-'}
-                                </div>
-                            </div>
+                             <h1 className={cn("font-black text-slate-900 uppercase truncate leading-none", isFullscreen ? "text-base" : "text-xl md:text-2xl")}>
+                                 {page.title}
+                             </h1>
+                             {!isFullscreen && (
+                                 <div className="flex items-center gap-3 mt-1.5 overflow-hidden">
+                                     <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 border-indigo-100 text-[9px] uppercase tracking-widest">{page.category || 'Genel'}</Badge>
+                                     <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-bold whitespace-nowrap">
+                                         <Clock className="h-3 w-3" /> {page.updatedAt ? format(new Date(page.updatedAt), 'd MMMM yyyy', { locale: tr }) : '-'}
+                                     </div>
+                                 </div>
+                             )}
                          </div>
                     </div>
-                    
-                    <div className="flex items-center gap-2 bg-white/80 backdrop-blur-md p-1.5 rounded-[2rem] border border-slate-200 shadow-lg">
-                        <div className="flex items-center bg-slate-100 rounded-2xl p-1 border border-slate-200">
-                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-9 w-9 text-slate-600 hover:bg-white rounded-xl"><Minus className="h-4 w-4"/></Button>
-                            <span className="text-[10px] font-black text-slate-500 w-12 text-center">%{Math.round(zoomLevel * 100)}</span>
-                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(3, z + 0.1))} className="h-9 w-9 text-slate-600 hover:bg-white rounded-xl"><Plus className="h-4 w-4"/></Button>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                        {/* Zoom Kontrolleri */}
+                        <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200">
+                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.8, z - 0.1))} className="h-8 w-8 hover:bg-white text-slate-500 rounded-lg"><Minus className="h-4 w-4"/></Button>
+                            <span className="text-[10px] font-black text-slate-400 w-10 text-center">{Math.round(zoomLevel * 100)}%</span>
+                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 hover:bg-white text-slate-500 rounded-lg"><Plus className="h-4 w-4"/></Button>
                         </div>
-                        <div className="w-px h-8 bg-slate-200 mx-1" />
-                        <Button onClick={handlePrint} variant="ghost" size="icon" className="h-11 w-11 rounded-full text-slate-600 hover:bg-slate-100"><Printer className="h-5 w-5"/></Button>
-                        <Button onClick={handleShare} variant="ghost" size="icon" className="h-11 w-11 rounded-full text-slate-600 hover:bg-slate-100"><Share2 className="h-5 w-5"/></Button>
+                        
+                        <Button variant="ghost" size="icon" onClick={() => window.print()} className="h-10 w-10 rounded-xl text-slate-500 hover:bg-slate-100"><Printer className="h-5 w-5"/></Button>
+                        <Button variant="ghost" size="icon" onClick={() => {
+                            navigator.share({ title: page.title, url: window.location.href }).catch(() => {});
+                        }} className="h-10 w-10 rounded-xl text-slate-500 hover:bg-slate-100 sm:flex hidden"><Share2 className="h-5 w-5"/></Button>
+                        
                         <Button 
-                            onClick={() => setIsFullscreen(!isFullscreen)} 
+                            onClick={toggleFullscreen} 
                             className={cn(
-                                "h-11 w-11 rounded-full shadow-lg transition-all",
-                                isFullscreen ? "bg-red-500 hover:bg-red-600 text-white" : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                                "h-11 px-5 rounded-xl font-bold gap-2 shadow-lg transition-all",
+                                isFullscreen ? "bg-slate-900 text-white" : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
                             )}
                         >
-                            {isFullscreen ? <Minimize2 className="h-5 w-5"/> : <Maximize2 className="h-5 w-5"/>}
+                            {isFullscreen ? <><Minimize className="h-5 w-5" /> Çık</> : <><Maximize className="h-5 w-5" /> Tam Ekran</>}
                         </Button>
                     </div>
                 </div>
-            )}
+            </div>
 
-            {/* İçerik Kartı */}
+            {/* İçerik Alanı */}
             <div className={cn(
                 "transition-all duration-500",
-                isFullscreen ? "bg-white" : "container mx-auto pb-20"
+                isFullscreen ? "bg-white" : "container mx-auto"
             )}>
                 <Card className={cn(
                     "w-full transition-all border-none bg-white",
-                    isFullscreen ? "rounded-none" : "rounded-[3rem] shadow-2xl p-6 md:p-12 min-h-[85vh] border border-slate-100"
+                    isFullscreen ? "rounded-none" : "rounded-[2.5rem] shadow-2xl p-6 md:p-12 min-h-[80vh]"
                 )}>
-                    <div 
-                        ref={contentRef}
-                        className="prose prose-slate prose-lg max-w-none prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-a:text-indigo-600 prose-img:rounded-3xl prose-img:shadow-xl"
-                        style={{ 
-                            zoom: zoomLevel,
-                            transformOrigin: 'top center'
-                        }}
-                        dangerouslySetInnerHTML={{ __html: page.htmlContent }}
-                    />
+                    <CardContent className="p-0">
+                        <div 
+                            ref={contentRef}
+                            style={{ 
+                                zoom: zoomLevel,
+                                fontSize: '1.1rem',
+                                lineHeight: '1.7'
+                            }}
+                            className="prose prose-slate max-w-none prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-a:text-indigo-600 prose-img:rounded-3xl prose-img:shadow-2xl"
+                            dangerouslySetInnerHTML={{ __html: page.htmlContent }}
+                        />
+                    </CardContent>
                 </Card>
             </div>
-
-            {/* Tam Ekran Kapatma Butonu (Floating) */}
-            {isFullscreen && (
-                <div className="fixed bottom-8 right-8 z-[110] animate-in fade-in slide-in-from-bottom-4">
-                    <Button 
-                        onClick={() => setIsFullscreen(false)} 
-                        className="h-16 w-16 rounded-full bg-slate-900/90 text-white shadow-2xl backdrop-blur-md hover:bg-slate-800"
-                    >
-                        <Minimize2 className="h-8 w-8" />
-                    </Button>
-                </div>
-            )}
         </div>
     );
 }
-
-// XCircle ikonu için eksik import tanımı
-const XCircle = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
-);
