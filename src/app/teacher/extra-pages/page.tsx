@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -208,19 +209,19 @@ export default function ExtraPagesManagement() {
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end" className="rounded-xl w-44">
-                                            <DropdownMenuItem onClick={() => handleOpenDialog(page)} className="gap-2 cursor-pointer">
+                                            <DropdownMenuItem onClick={() => handleOpenDialog(page)} className="gap-2 cursor-pointer text-sm font-medium">
                                                 <Edit2 className="h-4 w-4" /> Düzenle
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => { setMovingPage(page); setIsMoveDialogOpen(true); }} className="gap-2 cursor-pointer">
+                                            <DropdownMenuItem onClick={() => { setMovingPage(page); setIsMoveDialogOpen(true); }} className="gap-2 cursor-pointer text-sm font-medium">
                                                 <Move className="h-4 w-4" /> Başka Klasöre Taşı
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem asChild className="gap-2 cursor-pointer">
+                                            <DropdownMenuItem asChild className="gap-2 cursor-pointer text-sm font-medium">
                                                 <Link href={`/extra/${page.id}`} target="_blank">
                                                     <Globe className="h-4 w-4" /> Görüntüle
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
-                                            <DropdownMenuItem onClick={() => handleDelete(page.id)} className="gap-2 cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50">
+                                            <DropdownMenuItem onClick={() => handleDelete(page.id)} className="gap-2 cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 text-sm font-medium">
                                                 <Trash2 className="h-4 w-4" /> Sil
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
@@ -311,21 +312,38 @@ export default function ExtraPagesManagement() {
             <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
                 <DialogContent className="max-w-md rounded-[2rem]">
                     <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2"><Settings2 className="h-5 w-5 text-indigo-600" /> Klasörleri Yönet</DialogTitle>
+                        <DialogTitle className="flex items-center gap-2 font-bold text-slate-900"><Settings2 className="h-5 w-5 text-indigo-600" /> Klasörleri Yönet</DialogTitle>
                         <DialogDescription>Klasör adlarını güncelleyin. Alt klasörler otomatik taşınır.</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <ScrollArea className="max-h-[50vh] pr-4">
                             {allCategories.map(cat => (
-                                <CategoryManagementItem 
-                                    key={cat} 
-                                    name={cat} 
-                                    onRename={async (newName) => {
-                                        const res = await renameExtraPageCategory(cat, newName);
-                                        if (res.success) { fetchPages(); toast({ title: "Güncellendi", description: `${res.count} öğe taşındı.` }); }
-                                    }} 
-                                    onDelete={() => handleCategoryDelete(cat)}
-                                />
+                                <div key={cat} className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-100 mb-2 group">
+                                    <span className="text-xs font-bold text-slate-700 flex items-center gap-2">
+                                        <Folder className="h-3.5 w-3.5 text-amber-500" /> {cat}
+                                    </span>
+                                    <div className="flex items-center gap-1">
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button size="icon" variant="ghost" className="h-7 w-7 text-slate-400 hover:text-red-600">
+                                                    <Trash2 className="h-3.5 w-3.5" />
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent className="bg-white border-slate-200 text-slate-900 rounded-2xl">
+                                                <AlertDialogHeader>
+                                                    <RadixAlertDialogTitle className="font-bold text-red-600">Klasörü Sil</RadixAlertDialogTitle>
+                                                    <AlertDialogDescription className="text-slate-500">
+                                                        "{cat}" klasörünü ve varsa alt klasörlerini silmek istediğinize emin misiniz? Dökümanlar "Genel" klasörüne taşınacaktır.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel className="bg-transparent text-slate-500">İptal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={() => handleCategoryDelete(cat)} className="bg-red-600 hover:bg-red-500 text-white">Sil ve Taşı</AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    </div>
+                                </div>
                             ))}
                         </ScrollArea>
                     </div>
@@ -336,7 +354,7 @@ export default function ExtraPagesManagement() {
             <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
                 <DialogContent className="max-w-md rounded-[2rem]">
                     <DialogHeader>
-                        <DialogTitle>Dökümanı Taşı</DialogTitle>
+                        <DialogTitle className="font-bold text-slate-900">Dökümanı Taşı</DialogTitle>
                         <DialogDescription>"{movingPage?.title}" dökümanı için yeni bir yol seçin veya yazın.</DialogDescription>
                     </DialogHeader>
                     <div className="py-4 space-y-4">
@@ -363,8 +381,10 @@ export default function ExtraPagesManagement() {
                         </ScrollArea>
                     </div>
                     <DialogFooter>
-                        <Button variant="ghost" onClick={() => setIsMoveDialogOpen(false)}>İptal</Button>
-                        <Button onClick={() => handleMove(movingPage.category)} className="bg-indigo-600 text-white rounded-xl">Taşımayı Onayla</Button>
+                        <Button variant="ghost" onClick={() => setIsMoveDialogOpen(false)} className="rounded-xl">İptal</Button>
+                        <Button onClick={() => handleMove(movingPage.category)} disabled={isSaving} className="bg-indigo-600 text-white rounded-xl min-w-[120px]">
+                            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Taşımayı Onayla"}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -372,39 +392,3 @@ export default function ExtraPagesManagement() {
     );
 }
 
-function CategoryManagementItem({ name, onRename, onDelete }: { name: string, onRename: (n: string) => Promise<void>, onDelete: () => Promise<void> }) {
-    const [isEditing, setIsEditing] = useState(false);
-    const [newName, setNewName] = useState(name);
-    const handleSave = async () => {
-        if (!newName.trim() || newName === name) { setIsEditing(false); return; }
-        await onRename(newName.trim());
-        setIsEditing(false);
-    };
-    return (
-        <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-100 mb-2 group">
-            {isEditing ? (
-                <div className="flex items-center gap-1 w-full">
-                    <Input value={newName} onChange={e => setNewName(e.target.value)} className="h-8 rounded-lg text-xs" autoFocus onKeyDown={e => e.key === 'Enter' && handleSave()} />
-                    <Button size="icon" variant="ghost" onClick={handleSave} className="h-8 w-8 text-emerald-600"><Save className="h-4 w-4" /></Button>
-                    <Button size="icon" variant="ghost" onClick={() => { setIsEditing(false); setNewName(name); }} className="h-8 w-8 text-slate-400"><X className="h-4 w-4" /></Button>
-                </div>
-            ) : (
-                <>
-                    <span className="text-xs font-bold text-slate-700 flex items-center gap-2"><Folder className="h-3.5 w-3.5 text-amber-500" /> {name}</span>
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button size="icon" variant="ghost" onClick={() => setIsEditing(true)} className="h-7 w-7 text-slate-400 hover:text-indigo-600"><Edit2 className="h-3.5 w-3.5" /></Button>
-                        {name !== 'Genel' && (
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild><Button size="icon" variant="ghost" className="h-7 w-7 text-slate-400 hover:text-red-600"><Trash2 className="h-3.5 w-3.5" /></Button></AlertDialogTrigger>
-                                <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                                    <AlertDialogHeader><AlertDialogTitle>Klasörü Sil</AlertDialogTitle><AlertDialogDescription className="text-slate-400">"{name}" klasörünü ve varsa alt klasörlerini silmek istediğinize emin misiniz? Dökümanlar "Genel" klasörüne taşınacaktır.</AlertDialogDescription></AlertDialogHeader>
-                                    <AlertDialogFooter><AlertDialogCancel className="bg-transparent text-slate-400">İptal</AlertDialogCancel><AlertDialogAction onClick={onDelete} className="bg-red-600 hover:bg-red-500">Sil ve Taşı</AlertDialogAction></AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        )}
-                    </div>
-                </>
-            )}
-        </div>
-    );
-}
