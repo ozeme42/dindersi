@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 export type ExtraPage = {
   id?: string;
   title: string;
-  content: string;
+  htmlContent: string;
   category: string;
   isPublished: boolean;
   createdAt?: any;
@@ -29,6 +29,7 @@ function serializeDoc(data: any) {
 
 /**
  * Tüm ekstra sayfaları getirir.
+ * In-memory sorting kullanıyoruz çünkü Firestore'da alanı eksik olan dökümanlar listeden düşebiliyor.
  */
 export async function getExtraPages(onlyPublished: boolean = false) {
   try {
@@ -46,6 +47,7 @@ export async function getExtraPages(onlyPublished: boolean = false) {
       };
     });
 
+    // Bellekte sıralama (Yeni en üstte)
     pages.sort((a: any, b: any) => {
       const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
       const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -141,7 +143,7 @@ export async function moveExtraPage(id: string, newCategory: string) {
 }
 
 /**
- * Bir kategorinin adını toplu olarak değiştirir (Alt yollar dahil).
+ * Bir kategorinin adını toplu olarak değiştirir.
  */
 export async function renameExtraPageCategory(oldName: string, newName: string) {
   try {
@@ -153,8 +155,6 @@ export async function renameExtraPageCategory(oldName: string, newName: string) 
 
     snapshot.docs.forEach(doc => {
       const cat = doc.data().category || 'Genel';
-      
-      // Tam eşleşme veya alt klasör eşleşmesi (A -> B olursa A/C -> B/C olur)
       if (cat === oldName) {
         batch.update(doc.ref, { category: newName });
         count++;
@@ -169,8 +169,6 @@ export async function renameExtraPageCategory(oldName: string, newName: string) 
       await batch.commit();
     }
     
-    revalidatePath('/extra');
-    revalidatePath('/teacher/extra-pages');
     return { success: true, count };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -178,18 +176,15 @@ export async function renameExtraPageCategory(oldName: string, newName: string) 
 }
 
 /**
- * Bir kategoriyi siler (O kategorideki sayfaları 'Genel' kategorisine taşır).
+ * Bir kategoriyi siler (Sayfaları 'Genel' altına taşır).
  */
 export async function deleteExtraPageCategory(categoryName: string) {
   if (categoryName === 'Genel') return { success: false, error: "'Genel' kategorisi silinemez." };
-  
   try {
     const db = getAdminDb();
     const snapshot = await db.collection('extraPages').get();
-    
     const batch = db.batch();
     let count = 0;
-
     snapshot.docs.forEach(doc => {
       const cat = doc.data().category || 'Genel';
       if (cat === categoryName || cat.startsWith(categoryName + '/')) {
@@ -197,13 +192,7 @@ export async function deleteExtraPageCategory(categoryName: string) {
         count++;
       }
     });
-    
-    if (count > 0) {
-      await batch.commit();
-    }
-    
-    revalidatePath('/extra');
-    revalidatePath('/teacher/extra-pages');
+    if (count > 0) await batch.commit();
     return { success: true, count };
   } catch (error: any) {
     return { success: false, error: error.message };
