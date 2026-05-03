@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -330,7 +331,7 @@ export default function ExtraPagesManagement() {
                                             </AlertDialogTrigger>
                                             <AlertDialogContent className="bg-white border-slate-200 text-slate-900 rounded-2xl">
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle className="font-bold text-red-600 text-xl">Klasörü Sil</AlertDialogTitle>
+                                                    <AlertDialogTitle className="font-bold text-red-600">Klasörü Sil</AlertDialogTitle>
                                                     <AlertDialogDescription className="text-slate-500">
                                                         "{cat}" klasörünü ve varsa alt klasörlerini silmek istediğinize emin misiniz? Dökümanlar "Genel" klasörüne taşınacaktır.
                                                     </AlertDialogDescription>
@@ -390,3 +391,4 @@ export default function ExtraPagesManagement() {
         </div>
     );
 }
+
