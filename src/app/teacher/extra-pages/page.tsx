@@ -5,7 +5,7 @@ import {
     Plus, Search, Edit2, Trash2, Globe, Eye, EyeOff, 
     Loader2, MoreVertical, LayoutGrid, Tag, Settings2,
     ChevronRight, Save, X, Move, FolderPlus, Folder,
-    ArrowLeft, Home, Clock
+    ArrowLeft, Home, Clock, FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,7 +29,7 @@ import Link from 'next/link';
 import { 
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
     AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, 
-    AlertDialogTitle, AlertDialogTrigger 
+    AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
