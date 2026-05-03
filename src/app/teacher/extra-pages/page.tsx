@@ -4,7 +4,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { 
     Plus, Search, Edit2, Trash2, Globe, Eye, EyeOff, 
     Loader2, MoreVertical, LayoutGrid, Tag, Settings2,
-    ChevronRight, Save, X, Move, FolderPlus, Folder
+    ChevronRight, Save, X, Move, FolderPlus, Folder,
+    ArrowLeft, Home, Clock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,10 +28,13 @@ import {
 import Link from 'next/link';
 import { 
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
-    AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger 
+    AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, 
+    AlertDialogTitle as RadixAlertDialogTitle, AlertDialogTrigger 
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { tr } from 'date-fns/locale';
 
 export default function ExtraPagesManagement() {
     const [pages, setPages] = useState<any[]>([]);
@@ -54,7 +58,6 @@ export default function ExtraPagesManagement() {
 
     const { toast } = useToast();
 
-    // Kategorileri hiyerarşik olarak topla
     const allCategories = useMemo(() => {
         const cats = new Set<string>();
         pages.forEach(p => {
@@ -157,9 +160,9 @@ export default function ExtraPagesManagement() {
         <div className="container mx-auto p-4 md:p-8 space-y-8 min-h-screen bg-slate-50/50 font-sans text-slate-900">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-indigo-100 rounded-2xl text-indigo-600">
-                        <Globe className="h-6 w-6" />
-                    </div>
+                    <Button variant="ghost" size="icon" asChild className="rounded-full h-11 w-11 hover:bg-slate-100">
+                        <Link href="/teacher"><ArrowLeft className="h-6 w-6 text-slate-600" /></Link>
+                    </Button>
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Ekstra Sayfalar Yönetimi</h1>
                         <p className="text-slate-500 text-sm">İnteraktif dökümanları ve klasörleri yönetin.</p>
@@ -223,7 +226,7 @@ export default function ExtraPagesManagement() {
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>
-                                <CardTitle className="text-xl line-clamp-1 group-hover:text-indigo-600 transition-colors">{page.title}</CardTitle>
+                                <CardTitle className="text-xl line-clamp-1 group-hover:text-indigo-600 transition-colors uppercase font-black">{page.title}</CardTitle>
                                 <CardDescription className="flex items-center gap-1 mt-1 text-[10px] uppercase font-bold tracking-tight">
                                     <Folder className="h-3 w-3 text-amber-500" /> {page.category || 'Genel'}
                                 </CardDescription>
@@ -234,7 +237,7 @@ export default function ExtraPagesManagement() {
                                 </p>
                             </CardContent>
                             <CardFooter className="pt-4 border-t border-slate-50 flex items-center justify-between text-[10px] text-slate-400 font-medium uppercase tracking-wider">
-                                <span>GÜNCELLEME: {page.updatedAt ? new Date(page.updatedAt).toLocaleDateString('tr-TR') : '-'}</span>
+                                <span>GÜNCELLEME: {page.updatedAt ? format(new Date(page.updatedAt), 'dd.MM.yyyy', { locale: tr }) : '-'}</span>
                                 <ChevronRight className="h-4 w-4 text-indigo-300" />
                             </CardFooter>
                         </Card>
@@ -327,9 +330,9 @@ export default function ExtraPagesManagement() {
                                         </AlertDialogTrigger>
                                         <AlertDialogContent className="bg-white border-slate-200 text-slate-900 rounded-[2rem]">
                                             <AlertDialogHeader>
-                                                <AlertDialogTitle className="font-bold text-red-600">Klasörü Sil</AlertDialogTitle>
+                                                <RadixAlertDialogTitle className="font-bold text-red-600">Klasörü Sil</RadixAlertDialogTitle>
                                                 <AlertDialogDescription className="text-slate-500">
-                                                    "{cat}" klasörü silinsin mi? Dökümanlar "Genel" altına taşınır.
+                                                    "{cat}" klasörünü ve varsa alt klasörlerini silmek istediğinize emin misiniz? Dökümanlar "Genel" klasörüne taşınacaktır.
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
