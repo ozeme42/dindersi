@@ -15,7 +15,6 @@ export type ExtraPage = {
   description?: string;
 };
 
-// Firestore verisini düz JS objesine çevirir (Tarihleri serialize eder)
 function serializeDoc(data: any) {
   if (!data) return data;
   const serialized = { ...data };
@@ -27,12 +26,10 @@ function serializeDoc(data: any) {
   return serialized;
 }
 
-/**
- * Tüm ekstra sayfaları getirir.
- */
 export async function getExtraPages(onlyPublished: boolean = false) {
   try {
     const db = getAdminDb();
+    // NOT: Tüm dökümanları çekip bellekte işliyoruz ki eksik alanı olan dökümanlar Firestore query filtresine takılıp kaybolmasın.
     const snapshot = await db.collection('extraPages').get();
     
     let pages = snapshot.docs.map(doc => {
@@ -46,7 +43,6 @@ export async function getExtraPages(onlyPublished: boolean = false) {
       };
     });
 
-    // Bellekte sıralama (Yeni en üstte)
     pages.sort((a: any, b: any) => {
       const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
       const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -64,9 +60,6 @@ export async function getExtraPages(onlyPublished: boolean = false) {
   }
 }
 
-/**
- * Tek bir sayfayı ID ile getirir.
- */
 export async function getExtraPage(id: string) {
   try {
     const db = getAdminDb();
@@ -78,9 +71,6 @@ export async function getExtraPage(id: string) {
   }
 }
 
-/**
- * Sayfayı kaydeder veya günceller.
- */
 export async function saveExtraPage(id: string | null, data: any) {
   try {
     const db = getAdminDb();
@@ -101,31 +91,23 @@ export async function saveExtraPage(id: string | null, data: any) {
     }
 
     revalidatePath('/extra');
-    revalidatePath('/teacher/extra-pages');
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
 
-/**
- * Sayfayı siler.
- */
 export async function deleteExtraPage(id: string) {
   try {
     const db = getAdminDb();
     await db.collection('extraPages').doc(id).delete();
     revalidatePath('/extra');
-    revalidatePath('/teacher/extra-pages');
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
 
-/**
- * Bir sayfayı başka bir kategoriye/klasöre taşır.
- */
 export async function moveExtraPage(id: string, newCategory: string) {
   try {
     const db = getAdminDb();
@@ -134,65 +116,7 @@ export async function moveExtraPage(id: string, newCategory: string) {
       updatedAt: FieldValue.serverTimestamp()
     });
     revalidatePath('/extra');
-    revalidatePath('/teacher/extra-pages');
     return { success: true };
-  } catch (error: any) {
-    return { success: false, error: error.message };
-  }
-}
-
-/**
- * Bir kategorinin adını toplu olarak değiştirir.
- */
-export async function renameExtraPageCategory(oldName: string, newName: string) {
-  try {
-    const db = getAdminDb();
-    const snapshot = await db.collection('extraPages').get();
-    
-    const batch = db.batch();
-    let count = 0;
-
-    snapshot.docs.forEach(doc => {
-      const cat = doc.data().category || 'Genel';
-      if (cat === oldName) {
-        batch.update(doc.ref, { category: newName });
-        count++;
-      } else if (cat.startsWith(oldName + '/')) {
-        const updatedCat = newName + cat.substring(oldName.length);
-        batch.update(doc.ref, { category: updatedCat });
-        count++;
-      }
-    });
-    
-    if (count > 0) {
-      await batch.commit();
-    }
-    
-    return { success: true, count };
-  } catch (error: any) {
-    return { success: false, error: error.message };
-  }
-}
-
-/**
- * Bir kategoriyi siler (Sayfaları 'Genel' altına taşır).
- */
-export async function deleteExtraPageCategory(categoryName: string) {
-  if (categoryName === 'Genel') return { success: false, error: "'Genel' kategorisi silinemez." };
-  try {
-    const db = getAdminDb();
-    const snapshot = await db.collection('extraPages').get();
-    const batch = db.batch();
-    let count = 0;
-    snapshot.docs.forEach(doc => {
-      const cat = doc.data().category || 'Genel';
-      if (cat === categoryName || cat.startsWith(categoryName + '/')) {
-        batch.update(doc.ref, { category: 'Genel' });
-        count++;
-      }
-    });
-    if (count > 0) await batch.commit();
-    return { success: true, count };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
