@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -10,14 +9,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { 
     Dialog, DialogContent, DialogHeader, DialogTitle, 
     DialogFooter, DialogDescription, DialogClose
 } from '@/components/ui/dialog';
 import { 
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
-    DropdownMenuTrigger, DropdownMenuSeparator 
+    DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -158,14 +157,14 @@ export default function ExtraPagesManagement() {
     );
 
     return (
-        <div className="container mx-auto p-4 md:p-8 space-y-8 min-h-screen bg-slate-50/50">
+        <div className="container mx-auto p-4 md:p-8 space-y-8 min-h-screen bg-slate-50/50 font-sans">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4">
                     <div className="p-3 bg-indigo-100 rounded-2xl text-indigo-600">
                         <Globe className="h-6 w-6" />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Ekstra Sayfalar</h1>
+                        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Ekstra Sayfalar Yönetimi</h1>
                         <p className="text-slate-500 text-sm">Alt klasörler oluşturun ve dökümanları taşıyın.</p>
                     </div>
                 </div>
@@ -253,28 +252,28 @@ export default function ExtraPagesManagement() {
 
             {/* Sayfa Düzenleme/Ekleme Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem]">
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem] bg-white text-slate-900">
                     <DialogHeader>
                         <DialogTitle className="text-2xl">{editingPage ? "Sayfayı Düzenle" : "Yeni Sayfa Oluştur"}</DialogTitle>
                         <DialogDescription>Alt klasörler için '/' karakterini kullanın (Örn: Rehberlik/Sınav Hazırlık/LGS).</DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-6 py-4">
+                    <div className="grid gap-6 py-4 text-slate-900">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-slate-700">Sayfa Başlığı</label>
-                                <Input value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Örn: Rehberlik İlkeleri" className="rounded-xl" />
+                                <Input value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Örn: Rehberlik İlkeleri" className="rounded-xl border-slate-200 text-slate-900" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-slate-700">Kategori Yolu (Klasör/Alt Klasör)</label>
                                 <div className="relative">
-                                    <Input value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Örn: Rehberlik/Materyal" className="rounded-xl pr-10" />
+                                    <Input value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Örn: Rehberlik/Materyal" className="rounded-xl pr-10 border-slate-200 text-slate-900" />
                                     <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-slate-400 hover:text-indigo-600"><Tag className="h-4 w-4" /></Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" className="w-64 max-h-[300px] overflow-y-auto rounded-xl">
-                                                <div className="px-2 py-1.5 text-[10px] font-bold text-slate-400 uppercase">Mevcut Klasörler</div>
+                                                <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-bold text-slate-400 uppercase">Mevcut Klasörler</DropdownMenuLabel>
                                                 {allCategories.map(cat => (
                                                     <DropdownMenuItem key={cat} onClick={() => setFormData({...formData, category: cat})} className="cursor-pointer text-xs">
                                                         <Folder className="h-3.5 w-3.5 mr-2 text-amber-500" /> {cat}
@@ -288,11 +287,11 @@ export default function ExtraPagesManagement() {
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-700">Kısa Açıklama</label>
-                            <Textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Kısa özet..." className="rounded-xl h-20" />
+                            <Textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Kısa özet..." className="rounded-xl h-20 border-slate-200 text-slate-900" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-700">HTML İçeriği</label>
-                            <Textarea value={formData.htmlContent} onChange={(e) => setFormData({...formData, htmlContent: e.target.value})} placeholder="<div class='p-4'>...</div>" className="rounded-xl font-mono text-sm h-64" />
+                            <Textarea value={formData.htmlContent} onChange={(e) => setFormData({...formData, htmlContent: e.target.value})} placeholder="<div class='p-4'>...</div>" className="rounded-xl font-mono text-sm h-64 border-slate-200 text-slate-900" />
                         </div>
                         <div className="flex items-center gap-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
                             <input type="checkbox" id="isPublished" checked={formData.isPublished} onChange={(e) => setFormData({...formData, isPublished: e.target.checked})} className="h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
@@ -310,7 +309,7 @@ export default function ExtraPagesManagement() {
 
             {/* Klasör/Kategori Yönetimi Dialog */}
             <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
-                <DialogContent className="max-w-md rounded-[2rem]">
+                <DialogContent className="max-w-md rounded-[2rem] bg-white text-slate-900">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2 font-bold text-slate-900"><Settings2 className="h-5 w-5 text-indigo-600" /> Klasörleri Yönet</DialogTitle>
                         <DialogDescription>Klasör adlarını güncelleyin. Alt klasörler otomatik taşınır.</DialogDescription>
@@ -331,14 +330,14 @@ export default function ExtraPagesManagement() {
                                             </AlertDialogTrigger>
                                             <AlertDialogContent className="bg-white border-slate-200 text-slate-900 rounded-2xl">
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle className="font-bold text-red-600">Klasörü Sil</AlertDialogTitle>
+                                                    <AlertDialogTitle className="font-bold text-red-600 text-xl">Klasörü Sil</AlertDialogTitle>
                                                     <AlertDialogDescription className="text-slate-500">
                                                         "{cat}" klasörünü ve varsa alt klasörlerini silmek istediğinize emin misiniz? Dökümanlar "Genel" klasörüne taşınacaktır.
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                     <AlertDialogCancel className="bg-transparent text-slate-500">İptal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => handleCategoryDelete(cat)} className="bg-red-600 hover:bg-red-500 text-white">Sil ve Taşı</AlertDialogAction>
+                                                    <AlertDialogAction onClick={() => handleCategoryDelete(cat)} className="bg-red-600 hover:bg-red-500 text-white border-none">Sil ve Taşı</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
@@ -352,7 +351,7 @@ export default function ExtraPagesManagement() {
 
             {/* Taşıma Dialog */}
             <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
-                <DialogContent className="max-w-md rounded-[2rem]">
+                <DialogContent className="max-w-md rounded-[2rem] bg-white text-slate-900">
                     <DialogHeader>
                         <DialogTitle className="font-bold text-slate-900">Dökümanı Taşı</DialogTitle>
                         <DialogDescription>"{movingPage?.title}" dökümanı için yeni bir yol seçin veya yazın.</DialogDescription>
@@ -362,10 +361,10 @@ export default function ExtraPagesManagement() {
                             value={movingPage?.category || ""} 
                             onChange={(e) => setMovingPage({...movingPage, category: e.target.value})}
                             placeholder="Yeni kategori yolu..."
-                            className="rounded-xl"
+                            className="rounded-xl border-slate-200"
                         />
                         <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">Mevcut Klasörler</div>
-                        <ScrollArea className="h-48 border rounded-xl p-2 bg-slate-50">
+                        <ScrollArea className="h-48 border border-slate-100 rounded-xl p-2 bg-slate-50">
                             {allCategories.map(cat => (
                                 <button 
                                     key={cat} 
