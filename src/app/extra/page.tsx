@@ -3,278 +3,271 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
-    Loader2, Globe, Home, Settings, Search, ArrowRight, 
-    Clock, Folder, LayoutGrid, List, ChevronRight, AlertTriangle
+    Globe, Search, ArrowRight, Clock, LayoutGrid, 
+    List, Grid3X3, ChevronRight, Home, Settings, Loader2,
+    Folder, FolderOpen, ArrowLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { 
-    Card, CardContent, CardHeader, CardTitle, 
-    CardDescription, CardFooter 
-} from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { getExtraPages } from '@/app/teacher/extra-pages/actions';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
-import Link from 'next/link';
-import { getExtraPages } from '@/app/teacher/extra-pages/actions';
+import { cn } from '@/lib/utils';
 
 export default function ExtraPagesExplorer() {
     const [pages, setPages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [currentPath, setCurrentPath] = useState<string[]>([]); // Kategori yolu (Klasör navigasyonu)
+    const [currentPath, setCurrentPath] = useState<string[]>([]); // Klasör navigasyonu
 
-    // Açılışta cihaz tipine göre görünüm belirle
     useEffect(() => {
+        // Cihaz algılama: Mobilde liste, masaüstünde ızgara varsayılan
         if (window.innerWidth < 768) {
             setViewMode('list');
         }
+
+        const fetchPages = async () => {
+            setIsLoading(true);
+            const res = await getExtraPages(true); // Sadece yayınlanmış olanlar
+            if (res.success) {
+                setPages(res.data || []);
+            }
+            setIsLoading(false);
+        };
+        fetchPages();
     }, []);
 
-    const fetchPages = async () => {
-        setIsLoading(true);
-        const res = await getExtraPages(true); // Sadece yayında olanları getir
-        if (res.success) {
-            setPages(res.data || []);
-        }
-        setIsLoading(false);
-    };
-
-    useEffect(() => { fetchPages(); }, []);
-
-    // Kategorileri ve dosyaları mevcut yola göre filtrele
-    const { currentFolders, currentFiles } = useMemo(() => {
+    // Kategorileri hiyerarşik yapıya sok (Mevcut dizindeki klasörler ve dosyalar)
+    const currentDirectory = useMemo(() => {
         const pathStr = currentPath.join('/');
-        const folders = new Set<string>();
+        
+        const items = new Set<string>();
         const files: any[] = [];
 
-        pages.forEach(page => {
-            const cat = page.category || 'Genel';
-            
-            // Arama yapılıyorsa klasör yapısını yoksay, direkt dosyaları göster
-            if (searchTerm) {
-                if (page.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                    cat.toLowerCase().includes(searchTerm.toLowerCase())) {
-                    files.push(page);
+        pages.forEach(p => {
+            const cat = p.category || 'Genel';
+            if (pathStr === "") {
+                // Ana dizindeyiz
+                const rootPart = cat.split('/')[0];
+                if (cat.includes('/')) {
+                    items.add(rootPart);
+                } else {
+                    if (cat === "Genel") files.push(p);
+                    else items.add(cat);
                 }
-                return;
-            }
-
-            // Normal klasör gezintisi
-            if (cat === pathStr || (pathStr === "" && cat === "Genel")) {
-                files.push(page);
-            } else if (pathStr === "" && cat !== "Genel") {
-                folders.add(cat.split('/')[0]);
-            } else if (cat.startsWith(pathStr + '/')) {
-                const relativePath = cat.slice(pathStr.length + 1);
-                folders.add(relativePath.split('/')[0]);
+            } else {
+                // Alt dizindeyiz
+                if (cat.startsWith(pathStr + '/')) {
+                    const subPath = cat.substring(pathStr.length + 1);
+                    const nextPart = subPath.split('/')[0];
+                    if (subPath.includes('/')) {
+                        items.add(nextPart);
+                    } else {
+                        items.add(nextPart);
+                    }
+                } else if (cat === pathStr) {
+                    files.push(p);
+                }
             }
         });
 
-        return { 
-            currentFolders: Array.from(folders).sort(), 
-            currentFiles: files.sort((a, b) => a.title.localeCompare(b.title, 'tr')) 
+        return {
+            folders: Array.from(items).sort(),
+            files: files.sort((a, b) => a.title.localeCompare(b.title, 'tr'))
         };
-    }, [pages, currentPath, searchTerm]);
+    }, [pages, currentPath]);
 
-    const navigateTo = (folder: string) => {
+    const filteredFiles = currentDirectory.files.filter(f => 
+        f.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleFolderClick = (folder: string) => {
         setCurrentPath([...currentPath, folder]);
-        setSearchTerm("");
     };
 
-    const goBack = () => {
+    const handleBack = () => {
         setCurrentPath(currentPath.slice(0, -1));
     };
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8">
-                <Loader2 className="h-12 w-12 animate-spin text-indigo-600 mb-4" />
-                <p className="text-slate-500 font-bold animate-pulse uppercase tracking-widest text-xs">Materyaller Yükleniyor</p>
+            <div className="flex h-screen w-full items-center justify-center bg-slate-50">
+                <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900 pb-32">
-            
-            {/* Üst Header */}
-            <div className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-                <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-5">
-                        <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl text-white shadow-lg shadow-indigo-200">
-                            <Globe className="h-7 w-7" />
-                        </div>
-                        <div>
-                            <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight uppercase leading-none">Döküman Merkezi</h1>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Eğitim Materyalleri ve Kaynaklar</p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <div className="hidden md:flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-                            <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => setViewMode('grid')}
-                                className={cn("rounded-lg h-9 w-10 p-0", viewMode === 'grid' ? "bg-white shadow-sm text-indigo-600" : "text-slate-400")}
-                            >
-                                <LayoutGrid className="h-5 w-5" />
-                            </Button>
-                            <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => setViewMode('list')}
-                                className={cn("rounded-lg h-9 w-10 p-0", viewMode === 'list' ? "bg-white shadow-sm text-indigo-600" : "text-slate-400")}
-                            >
-                                <List className="h-5 w-5" />
-                            </Button>
-                        </div>
-                        <Button asChild variant="outline" className="rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50 gap-2 h-11 px-5">
-                            <Link href="/teacher/extra-pages"><Settings className="h-4 w-4" /> Yönet</Link>
-                        </Button>
-                        <Button asChild variant="ghost" size="icon" className="rounded-full h-11 w-11 hover:bg-slate-100">
-                            <Link href="/"><Home className="h-6 w-6 text-slate-500" /></Link>
-                        </Button>
-                    </div>
-                </div>
+        <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
+            {/* Arka Plan Işımaları */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-100/50 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-sky-100/50 rounded-full blur-[120px]" />
             </div>
 
-            <div className="container mx-auto px-4 py-8 space-y-8">
-                
-                {/* Arama ve Navigasyon */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-5 rounded-[2rem] border border-slate-200 shadow-sm">
-                    <div className="flex flex-wrap items-center gap-2">
-                         <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => setCurrentPath([])}
-                            className={cn("rounded-full px-4 font-bold text-xs uppercase tracking-wider", currentPath.length === 0 ? "bg-indigo-600 text-white" : "text-slate-500 hover:bg-slate-100")}
-                         >
-                            Kök Dizin
-                         </Button>
-                         {currentPath.map((part, i) => (
-                             <React.Fragment key={i}>
-                                 <ChevronRight className="h-4 w-4 text-slate-300" />
-                                 <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    onClick={() => setCurrentPath(currentPath.slice(0, i + 1))}
-                                    className="rounded-full px-4 font-bold text-xs uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100"
-                                 >
-                                    {part}
-                                 </Button>
-                             </React.Fragment>
-                         ))}
+            <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-200">
+                <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                        <div className="p-2.5 bg-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-200">
+                            <Globe className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-black tracking-tight uppercase">Döküman Merkezi</h1>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ekstra Materyaller</p>
+                        </div>
                     </div>
 
-                    <div className="relative w-full md:w-80">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                        <Input 
-                            placeholder="Dosya veya klasör ara..." 
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 bg-slate-50 border-none rounded-2xl h-11 focus-visible:ring-indigo-500 text-sm"
-                        />
+                    <div className="flex items-center gap-3 w-full md:w-auto">
+                        <div className="relative flex-1 md:w-64">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                            <Input 
+                                placeholder="Dosya ara..." 
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="pl-10 bg-slate-100/50 border-none rounded-xl focus-visible:ring-indigo-500 h-10"
+                            />
+                        </div>
+                        <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
+                            <Button 
+                                variant={viewMode === 'grid' ? 'secondary' : 'ghost'} 
+                                size="icon" 
+                                onClick={() => setViewMode('grid')}
+                                className={cn("h-8 w-8 rounded-lg", viewMode === 'grid' ? "bg-white shadow-sm" : "text-slate-400")}
+                            >
+                                <Grid3X3 className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                                variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
+                                size="icon" 
+                                onClick={() => setViewMode('list')}
+                                className={cn("h-8 w-8 rounded-lg", viewMode === 'list' ? "bg-white shadow-sm" : "text-slate-400")}
+                            >
+                                <List className="h-4 w-4" />
+                            </Button>
+                        </div>
                     </div>
                 </div>
+            </header>
 
-                {/* --- KLASÖRLER --- */}
-                {currentFolders.length > 0 && !searchTerm && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                        {currentFolders.map(folder => (
-                            <button 
-                                key={folder}
-                                onClick={() => navigateTo(folder)}
-                                className="group flex flex-col items-center justify-center p-6 bg-white rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300 transition-all hover:-translate-y-1"
+            <main className="container mx-auto px-4 py-8 relative z-10">
+                {/* Breadcrumb / Navigasyon */}
+                <div className="flex items-center gap-2 mb-8 bg-white/60 p-3 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto whitespace-nowrap scrollbar-hide">
+                    <Button variant="ghost" size="sm" onClick={() => setCurrentPath([])} className={cn("rounded-lg gap-2 h-8", currentPath.length === 0 ? "bg-indigo-50 text-indigo-700 font-bold" : "text-slate-500")}>
+                        <Home className="h-4 w-4" /> Ana Dizin
+                    </Button>
+                    {currentPath.map((folder, i) => (
+                        <React.Fragment key={i}>
+                            <ChevronRight className="h-4 w-4 text-slate-300 shrink-0" />
+                            <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => setCurrentPath(currentPath.slice(0, i + 1))}
+                                className={cn("rounded-lg h-8", i === currentPath.length - 1 ? "bg-indigo-50 text-indigo-700 font-bold" : "text-slate-500")}
                             >
-                                <div className="p-4 bg-amber-50 rounded-2xl mb-3 transition-transform group-hover:scale-110">
-                                    <Folder className="h-8 w-8 text-amber-500 fill-amber-500/20" />
+                                {folder}
+                            </Button>
+                        </React.Fragment>
+                    ))}
+                </div>
+
+                {/* İçerik Alanı */}
+                {currentDirectory.folders.length === 0 && filteredFiles.length === 0 ? (
+                    <div className="text-center py-20 bg-white rounded-[2.5rem] border-2 border-dashed border-slate-200 shadow-inner">
+                        <Folder className="h-16 w-16 text-slate-200 mx-auto mb-4" />
+                        <h3 className="text-lg font-bold text-slate-400">Bu klasör boş görünüyor.</h3>
+                        {currentPath.length > 0 && (
+                            <Button onClick={handleBack} variant="link" className="mt-2 text-indigo-600">Geri Dön</Button>
+                        )}
+                    </div>
+                ) : (
+                    <div className={cn(
+                        "grid gap-4 md:gap-6",
+                        viewMode === 'grid' ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" : "grid-cols-1"
+                    )}>
+                        {/* Klasörler */}
+                        {currentDirectory.folders.map(folder => (
+                            <button
+                                key={folder}
+                                onClick={() => handleFolderClick(folder)}
+                                className={cn(
+                                    "group relative flex items-center gap-4 transition-all duration-300 text-left",
+                                    viewMode === 'grid' 
+                                        ? "flex-col justify-center p-6 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-indigo-200" 
+                                        : "p-4 bg-white/80 rounded-2xl border border-slate-200 shadow-sm hover:bg-white hover:border-indigo-300"
+                                )}
+                            >
+                                <div className={cn(
+                                    "flex items-center justify-center rounded-2xl transition-transform group-hover:scale-110",
+                                    viewMode === 'grid' ? "w-16 h-16 bg-amber-50 text-amber-500" : "w-10 h-10 bg-amber-100 text-amber-600"
+                                )}>
+                                    <FolderOpen className={viewMode === 'grid' ? "h-8 w-8" : "h-5 w-5"} fill="currentColor" fillOpacity={0.2} />
                                 </div>
-                                <span className="font-black text-xs text-slate-700 uppercase tracking-tight text-center line-clamp-1">{folder}</span>
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="font-bold text-slate-800 truncate">{folder}</h3>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Klasör</p>
+                                </div>
+                                {viewMode === 'list' && <ChevronRight className="h-5 w-5 text-slate-300" />}
                             </button>
                         ))}
-                    </div>
-                )}
 
-                {/* --- DOSYALAR (IZGARA GÖRÜNÜMÜ) --- */}
-                {viewMode === 'grid' ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {currentFiles.map((item) => (
-                            <Link key={item.id} href={`/extra/${item.id}`} className="group block">
-                                <Card className="h-full rounded-[2rem] border-slate-200 group-hover:border-indigo-400 group-hover:shadow-2xl transition-all duration-300 overflow-hidden bg-white">
-                                    <CardHeader className="pb-4 relative">
-                                        <div className="absolute top-4 right-4">
-                                            <div className="p-2 bg-slate-50 rounded-xl text-slate-400 group-hover:text-indigo-600 transition-colors">
-                                                <FileText className="h-5 w-5" />
+                        {/* Dosyalar */}
+                        {filteredFiles.map(page => (
+                            <Link 
+                                key={page.id} 
+                                href={`/extra/${page.id}`}
+                                className="group block"
+                            >
+                                <Card className={cn(
+                                    "h-full overflow-hidden transition-all duration-300 group-hover:shadow-2xl border-slate-200 group-hover:border-indigo-400",
+                                    viewMode === 'grid' ? "rounded-3xl flex flex-col" : "rounded-2xl flex flex-row items-center p-2"
+                                )}>
+                                    <div className={cn(
+                                        "flex items-center justify-center shrink-0",
+                                        viewMode === 'grid' ? "h-24 bg-indigo-50 text-indigo-500 group-hover:bg-indigo-600 group-hover:text-white transition-colors" : "w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 ml-2"
+                                    )}>
+                                        <FileText className={viewMode === 'grid' ? "h-10 w-10" : "h-6 w-6"} />
+                                    </div>
+                                    
+                                    <div className={cn("flex-1", viewMode === 'grid' ? "p-5" : "px-4")}>
+                                        <h3 className="font-bold text-slate-900 line-clamp-1 group-hover:text-indigo-600 transition-colors">{page.title}</h3>
+                                        <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">{page.description || 'Döküman içeriği'}</p>
+                                        
+                                        {viewMode === 'list' && (
+                                            <div className="flex items-center gap-3 mt-2 text-[9px] font-bold text-slate-400 uppercase tracking-tighter">
+                                                <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {page.updatedAt ? format(new Date(page.updatedAt), 'dd.MM.yyyy') : '-'}</span>
                                             </div>
-                                        </div>
-                                        <Badge variant="outline" className="bg-slate-50 text-slate-500 text-[9px] font-black uppercase mb-2 border-slate-100">
-                                            {item.category?.split('/').pop() || 'Genel'}
-                                        </Badge>
-                                        <CardTitle className="text-xl font-bold text-slate-800 leading-tight group-hover:text-indigo-600 transition-colors">
-                                            {item.title}
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-slate-500 line-clamp-3 min-h-[3rem]">
-                                            {item.description || "Bu döküman için açıklama belirtilmemiş."}
-                                        </p>
-                                    </CardContent>
-                                    <CardFooter className="pt-4 border-t border-slate-50 flex items-center justify-between bg-slate-50/50">
-                                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400">
-                                            <Clock className="h-3 w-3" />
-                                            {item.updatedAt ? format(new Date(item.updatedAt), 'dd.MM.yyyy', { locale: tr }) : '-'}
-                                        </div>
-                                        <div className="bg-slate-900 text-white p-1.5 rounded-lg opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2 transition-all">
+                                        )}
+                                    </div>
+
+                                    <div className={cn(
+                                        "flex items-center justify-center transition-all",
+                                        viewMode === 'grid' ? "p-4 pt-0 opacity-0 group-hover:opacity-100" : "px-4"
+                                    )}>
+                                        <div className="bg-slate-900 text-white p-1.5 rounded-lg">
                                             <ArrowRight className="h-4 w-4" />
                                         </div>
-                                    </CardFooter>
+                                    </div>
                                 </Card>
                             </Link>
                         ))}
                     </div>
-                ) : (
-                    /* --- DOSYALAR (LİSTE GÖRÜNÜMÜ) --- */
-                    <div className="space-y-3">
-                        {currentFiles.map((item) => (
-                            <Link key={item.id} href={`/extra/${item.id}`} className="group block">
-                                <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:shadow-lg transition-all group">
-                                    <div className="p-3 bg-slate-50 rounded-xl text-slate-400 group-hover:text-indigo-600 transition-colors">
-                                        <FileText className="h-6 w-6" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="font-bold text-slate-800 group-hover:text-indigo-600 truncate">{item.title}</h3>
-                                        <p className="text-xs text-slate-400 truncate">{item.description || "Açıklama yok."}</p>
-                                    </div>
-                                    <div className="hidden sm:flex flex-col items-end gap-1 px-4 border-l border-slate-100">
-                                        <Badge variant="outline" className="text-[9px] font-black uppercase bg-slate-50 text-slate-400">
-                                            {item.category?.split('/').pop() || 'Genel'}
-                                        </Badge>
-                                        <span className="text-[9px] font-bold text-slate-300">{item.updatedAt ? format(new Date(item.updatedAt), 'dd MMMM', { locale: tr }) : '-'}</span>
-                                    </div>
-                                    <ArrowRight className="h-5 w-5 text-slate-300 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all mr-2" />
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
                 )}
-
-                {/* Boş Durum */}
-                {currentFolders.length === 0 && currentFiles.length === 0 && (
-                    <div className="text-center py-32 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
-                        <AlertTriangle className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-                        <h3 className="text-xl font-bold text-slate-800">İçerik Bulunamadı</h3>
-                        <p className="text-slate-400 mt-2">Bu klasörde henüz yayınlanmış bir döküman yok.</p>
-                        <Button variant="link" onClick={() => setCurrentPath([])} className="mt-4 text-indigo-600 font-bold">
-                            Tüm Dökümanlara Dön
-                        </Button>
-                    </div>
-                )}
-            </div>
+            </main>
         </div>
     );
 }
 
+// Eksik ikonların el ile tanımlanması (Referans hatalarını önlemek için)
+const FileText = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <line x1="10" y1="9" x2="8" y2="9" />
+    </svg>
+);
