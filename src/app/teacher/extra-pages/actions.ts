@@ -29,7 +29,6 @@ function serializeDoc(data: any) {
 
 /**
  * Tüm ekstra sayfaları getirir.
- * In-memory sorting kullanıyoruz çünkü Firestore'da alanı eksik olan dökümanlar listeden düşebiliyor.
  */
 export async function getExtraPages(onlyPublished: boolean = false) {
   try {
