@@ -1,20 +1,19 @@
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
 import { 
-    Globe, Search, ArrowRight, Folder, FolderOpen, 
-    LayoutGrid, List, Clock, ChevronRight, Home, 
-    Loader2, Settings, ArrowLeft
+    Search, ArrowLeft, ArrowRight, Globe, FileText, 
+    LayoutGrid, List, Clock, Folder, ChevronRight, 
+    Home, Settings, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
-import Link from 'next/link';
 import { getExtraPages } from '@/app/teacher/extra-pages/actions';
 
 export default function ExtraPagesExplorer() {
@@ -22,108 +21,110 @@ export default function ExtraPagesExplorer() {
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [currentPath, setCurrentPath] = useState<string[]>([]);
+    const [currentPath, setCurrentPath] = useState<string[]>([]); // Hiyerarşik gezinme
 
-    // Cihaz tipine göre varsayılan görünümü belirle
+    // Başlangıçta cihaz tipine göre varsayılan görünümü ayarla
     useEffect(() => {
         if (window.innerWidth < 768) {
             setViewMode('list');
         }
+        fetchPages();
     }, []);
 
     const fetchPages = async () => {
         setIsLoading(true);
-        const res = await getExtraPages(true); // Sadece yayındakileri getir
+        const res = await getExtraPages(true); // Sadece yayınlanmış olanlar
         if (res.success) {
             setPages(res.data || []);
         }
         setIsLoading(false);
     };
 
-    useEffect(() => {
-        fetchPages();
-    }, []);
-
-    // Hiyerarşik klasör yapısını filtrele
-    const currentFolderContent = useMemo(() => {
+    // Mevcut klasördeki öğeleri (klasörler ve dosyalar) belirle
+    const currentItems = useMemo(() => {
         const pathStr = currentPath.join('/');
         
-        // Bu klasördeki sayfalar
-        const items = pages.filter(p => {
-            const cat = p.category || 'Genel';
-            if (currentPath.length === 0) {
-                return !cat.includes('/'); // Ana dizin öğeleri
-            }
-            return cat.startsWith(pathStr + '/') && cat.split('/').length === currentPath.length + 1;
-        });
+        // 1. Önce bu path altındaki klasörleri bul
+        const folders = new Set<string>();
+        const files: any[] = [];
 
-        // Bu klasördeki alt klasörler
-        const subFolders = new Set<string>();
         pages.forEach(p => {
             const cat = p.category || 'Genel';
-            if (currentPath.length === 0) {
-                if (cat.includes('/')) subFolders.add(cat.split('/')[0]);
-            } else if (cat.startsWith(pathStr + '/') && cat.split('/').length > currentPath.length + 1) {
-                subFolders.add(cat.split('/')[currentPath.length]);
+            if (pathStr === "") {
+                // Ana dizindeyiz
+                const rootPart = cat.split('/')[0];
+                if (cat.includes('/')) {
+                    folders.add(rootPart);
+                } else {
+                    files.push(p);
+                }
+            } else if (cat === pathStr) {
+                // Tam olarak bu klasördeki dosyalar
+                files.push(p);
+            } else if (cat.startsWith(pathStr + '/')) {
+                // Bu klasörün altındaki klasörler
+                const relativePart = cat.substring(pathStr.length + 1);
+                const nextFolder = relativePart.split('/')[0];
+                folders.add(nextFolder);
             }
         });
 
-        return {
-            files: items.sort((a, b) => a.title.localeCompare(b.title, 'tr')),
-            folders: Array.from(subFolders).sort()
-        };
-    }, [pages, currentPath]);
+        const folderItems = Array.from(folders).sort().map(f => ({
+            id: `folder-${f}`,
+            title: f,
+            type: 'folder'
+        }));
 
-    const handleFolderClick = (folderName: string) => {
+        const fileItems = files
+            .filter(f => f.title.toLowerCase().includes(searchTerm.toLowerCase()))
+            .map(f => ({ ...f, type: 'file' }));
+
+        return [...folderItems, ...fileItems];
+    }, [pages, currentPath, searchTerm]);
+
+    const navigateToFolder = (folderName: string) => {
         setCurrentPath([...currentPath, folderName]);
+        setSearchTerm("");
     };
 
-    const navigateTo = (index: number) => {
+    const navigateBack = (index: number) => {
         setCurrentPath(currentPath.slice(0, index + 1));
     };
 
-    const goHome = () => setCurrentPath([]);
-
-    if (isLoading) {
-        return (
-            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center gap-4">
-                <Loader2 className="h-12 w-12 animate-spin text-indigo-600" />
-                <p className="text-slate-500 font-medium animate-pulse">Dökümanlar Hazırlanıyor...</p>
-            </div>
-        );
-    }
+    const goToRoot = () => setCurrentPath([]);
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-20 font-sans">
-            {/* Header */}
-            <header className="sticky top-0 z-30 w-full bg-white/80 backdrop-blur-xl border-b border-slate-200">
+        <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20 selection:bg-indigo-100">
+            {/* Arka Plan Efekti */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-indigo-100/50 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-sky-100/50 rounded-full blur-[120px]" />
+            </div>
+
+            {/* Üst Bar */}
+            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200">
                 <div className="container mx-auto px-4 h-20 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-5">
-                        <Link href="/" className="p-2.5 bg-indigo-50 rounded-xl text-indigo-600 hover:bg-indigo-100 transition-colors">
-                            <Home className="h-6 w-6" />
+                    <div className="flex items-center gap-4">
+                        <Link href="/">
+                            <Button variant="ghost" size="icon" className="rounded-full hover:bg-slate-100">
+                                <ArrowLeft className="h-5 w-5" />
+                            </Button>
                         </Link>
-                        <div>
-                            <h1 className="text-2xl font-black text-slate-900 tracking-tight uppercase leading-none">Döküman Merkezi</h1>
-                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Materyal ve Rehberlik Arşivi</p>
+                        <div className="flex items-center gap-3">
+                            <div className="p-2.5 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-200 hidden sm:flex">
+                                <Globe className="h-5 w-5" />
+                            </div>
+                            <h1 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">Dökümanlar</h1>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                        <div className="relative hidden md:block">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                            <Input 
-                                placeholder="Döküman ara..." 
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-10 bg-slate-100 border-none rounded-xl w-64 focus-visible:ring-indigo-500"
-                            />
-                        </div>
-                        <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+                    <div className="flex items-center gap-2">
+                        <div className="hidden md:flex bg-slate-100 p-1 rounded-xl border border-slate-200 mr-2">
                             <Button 
                                 variant={viewMode === 'grid' ? 'secondary' : 'ghost'} 
                                 size="icon" 
                                 onClick={() => setViewMode('grid')}
-                                className={cn("h-9 w-9 rounded-lg", viewMode === 'grid' && "bg-white shadow-sm")}
+                                className={cn("h-9 w-9 rounded-lg transition-all", viewMode === 'grid' && "bg-white shadow-sm")}
                             >
                                 <LayoutGrid className="h-4 w-4" />
                             </Button>
@@ -131,145 +132,123 @@ export default function ExtraPagesExplorer() {
                                 variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
                                 size="icon" 
                                 onClick={() => setViewMode('list')}
-                                className={cn("h-9 w-9 rounded-lg", viewMode === 'list' && "bg-white shadow-sm")}
+                                className={cn("h-9 w-9 rounded-lg transition-all", viewMode === 'list' && "bg-white shadow-sm")}
                             >
                                 <List className="h-4 w-4" />
                             </Button>
+                        </div>
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                            <Input 
+                                placeholder="Ara..." 
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="pl-9 bg-slate-50 border-slate-200 rounded-xl w-32 sm:w-48 md:w-64 focus-visible:ring-indigo-500"
+                            />
                         </div>
                     </div>
                 </div>
             </header>
 
-            <main className="container mx-auto px-4 py-8 space-y-8">
-                {/* Breadcrumb / Path Navigation */}
-                <nav className="flex items-center gap-2 text-sm overflow-x-auto no-scrollbar py-2">
-                    <button 
-                        onClick={goHome}
-                        className={cn(
-                            "flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors",
-                            currentPath.length === 0 ? "bg-indigo-600 text-white font-bold" : "text-slate-500 hover:bg-slate-200"
-                        )}
-                    >
-                        <FolderOpen className="h-4 w-4" /> Ana Dizin
+            <main className="container mx-auto px-4 py-8 relative z-10">
+                {/* Breadcrumb Navigasyon */}
+                <div className="flex items-center gap-2 mb-8 bg-white p-3 px-5 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto whitespace-nowrap scrollbar-hide">
+                    <button onClick={goToRoot} className="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors">
+                        <Home className="h-4 w-4" /> KÖK DİZİN
                     </button>
-                    {currentPath.map((folder, idx) => (
-                        <div key={idx} className="flex items-center gap-2 shrink-0">
+                    {currentPath.map((part, i) => (
+                        <div key={i} className="flex items-center gap-2">
                             <ChevronRight className="h-4 w-4 text-slate-300" />
                             <button 
-                                onClick={() => navigateTo(idx)}
+                                onClick={() => navigateBack(i)}
                                 className={cn(
-                                    "px-3 py-1.5 rounded-lg transition-colors font-medium",
-                                    idx === currentPath.length - 1 ? "bg-indigo-600 text-white font-bold" : "text-slate-500 hover:bg-slate-200"
+                                    "text-sm font-bold uppercase tracking-tight transition-colors",
+                                    i === currentPath.length - 1 ? "text-indigo-600" : "text-slate-500 hover:text-indigo-600"
                                 )}
                             >
-                                {folder}
+                                {part}
                             </button>
                         </div>
                     ))}
-                </nav>
-
-                {/* Content Area */}
-                <div className={cn(
-                    viewMode === 'grid' 
-                        ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" 
-                        : "flex flex-col gap-3"
-                )}>
-                    {/* Folders First */}
-                    {currentFolderContent.folders.map((folderName) => (
-                        <button
-                            key={folderName}
-                            onClick={() => handleFolderClick(folderName)}
-                            className={cn(
-                                "group text-left transition-all duration-300",
-                                viewMode === 'grid'
-                                    ? "bg-white p-6 rounded-[2rem] border border-slate-200 hover:border-indigo-300 hover:shadow-xl hover:-translate-y-1"
-                                    : "bg-white p-4 rounded-2xl border border-slate-200 hover:border-indigo-300 flex items-center justify-between"
-                            )}
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-amber-50 rounded-2xl text-amber-500 group-hover:scale-110 transition-transform">
-                                    <Folder className="h-6 w-6 fill-current" />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-slate-800">{folderName}</h3>
-                                    {viewMode === 'grid' && <p className="text-[10px] text-slate-400 font-black uppercase mt-1">Klasör</p>}
-                                </div>
-                            </div>
-                            {viewMode === 'list' && <ChevronRight className="h-5 w-5 text-slate-300" />}
-                        </button>
-                    ))}
-
-                    {/* Files */}
-                    {currentFolderContent.files.map((item) => (
-                        <Link 
-                            key={item.id} 
-                            href={`/extra/${item.id}`}
-                            className="group block"
-                        >
-                            {viewMode === 'grid' ? (
-                                <Card className="h-full rounded-[2rem] border-slate-200 group-hover:border-indigo-300 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 overflow-hidden bg-white">
-                                    <CardHeader className="pb-4">
-                                        <div className="p-2.5 bg-indigo-50 w-fit rounded-xl text-indigo-600 mb-3 group-hover:scale-110 transition-transform">
-                                            <FileText className="h-5 w-5" />
-                                        </div>
-                                        <CardTitle className="text-xl leading-tight group-hover:text-indigo-600 transition-colors">{item.title}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-slate-500 line-clamp-2 min-h-[2.5rem]">
-                                            {item.description || "İçeriği görüntülemek için tıklayın."}
-                                        </p>
-                                    </CardContent>
-                                    <CardFooter className="pt-4 border-t border-slate-50 flex justify-between items-center bg-slate-50/30">
-                                        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                            <Clock className="h-3 w-3" />
-                                            {item.updatedAt ? format(new Date(item.updatedAt), 'dd.MM.yyyy', { locale: tr }) : '-'}
-                                        </div>
-                                        <div className="bg-slate-900 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
-                                            <ArrowRight className="h-4 w-4" />
-                                        </div>
-                                    </CardFooter>
-                                </Card>
-                            ) : (
-                                <div className="bg-white p-4 rounded-2xl border border-slate-200 group-hover:border-indigo-300 flex items-center justify-between transition-all hover:shadow-md">
-                                    <div className="flex items-center gap-4">
-                                        <div className="p-2.5 bg-indigo-50 rounded-xl text-indigo-600">
-                                            <FileText className="h-5 w-5" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">{item.title}</h3>
-                                            <p className="text-xs text-slate-400 truncate max-w-[200px] sm:max-w-md">{item.description}</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-4">
-                                        <div className="hidden sm:flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase">
-                                            <Clock className="h-3 w-3" />
-                                            {item.updatedAt ? format(new Date(item.updatedAt), 'dd.MM.yyyy', { locale: tr }) : '-'}
-                                        </div>
-                                        <div className="bg-indigo-600 text-white p-2 rounded-xl group-hover:bg-indigo-700 transition-colors">
-                                            <ArrowRight className="h-4 w-4" />
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </Link>
-                    ))}
                 </div>
 
-                {/* Empty State */}
-                {currentFolderContent.files.length === 0 && currentFolderContent.folders.length === 0 && (
+                {isLoading ? (
+                    <div className="flex flex-col items-center justify-center py-20 gap-4">
+                        <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
+                        <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">İçerikler Yükleniyor...</p>
+                    </div>
+                ) : currentItems.length > 0 ? (
+                    <div className={cn(
+                        "grid gap-4",
+                        viewMode === 'grid' ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-1"
+                    )}>
+                        {currentItems.map((item) => (
+                            item.type === 'folder' ? (
+                                <button
+                                    key={item.id}
+                                    onClick={() => navigateToFolder(item.title)}
+                                    className={cn(
+                                        "group flex items-center p-5 bg-white border-2 border-slate-100 rounded-3xl transition-all hover:border-indigo-500 hover:shadow-xl text-left",
+                                        viewMode === 'list' && "py-4"
+                                    )}
+                                >
+                                    <div className="p-3 bg-amber-50 text-amber-500 rounded-2xl group-hover:scale-110 transition-transform mr-4">
+                                        <Folder className="h-6 w-6 fill-current" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="font-black text-slate-900 uppercase tracking-tight truncate">{item.title}</h3>
+                                        <p className="text-[10px] text-slate-400 font-bold uppercase mt-0.5">Klasör</p>
+                                    </div>
+                                    <ArrowRight className="h-5 w-5 text-slate-300 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all" />
+                                </button>
+                            ) : (
+                                <Link href={`/extra/${item.id}`} key={item.id} className="block group">
+                                    <Card className={cn(
+                                        "h-full overflow-hidden border-2 border-slate-100 rounded-3xl transition-all group-hover:border-indigo-500 group-hover:shadow-2xl bg-white",
+                                        viewMode === 'list' && "flex flex-row items-center p-1"
+                                    )}>
+                                        <CardHeader className={cn("pb-4", viewMode === 'list' && "p-4 shrink-0")}>
+                                            <div className="p-2.5 bg-indigo-50 w-fit rounded-xl text-indigo-600 group-hover:scale-110 transition-transform">
+                                                <FileText className="h-5 w-5" />
+                                            </div>
+                                        </CardHeader>
+                                        <div className={cn("flex flex-col flex-1 min-w-0", viewMode === 'list' && "flex-row items-center justify-between pr-6")}>
+                                            <CardContent className={cn("pb-2", viewMode === 'list' && "p-0 pr-4")}>
+                                                <CardTitle className="text-lg leading-tight group-hover:text-indigo-600 transition-colors truncate">{item.title}</CardTitle>
+                                                {viewMode === 'grid' && (
+                                                    <p className="text-xs text-slate-500 mt-2 line-clamp-2 h-8">
+                                                        {item.description || "Döküman içeriğini görüntülemek için tıklayın."}
+                                                    </p>
+                                                )}
+                                            </CardContent>
+                                            <CardFooter className={cn("pt-4 border-t border-slate-50 flex items-center justify-between bg-slate-50/30", viewMode === 'list' && "border-none bg-transparent pt-0")}>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-tighter">
+                                                        <Clock className="h-3 w-3" />
+                                                        {item.updatedAt ? format(new Date(item.updatedAt), 'dd.MM.yyyy', { locale: tr }) : '-'}
+                                                    </div>
+                                                </div>
+                                                <div className="bg-slate-900 text-white p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all">
+                                                    <ArrowRight className="h-4 w-4" />
+                                                </div>
+                                            </CardFooter>
+                                        </div>
+                                    </Card>
+                                </Link>
+                            )
+                        ))}
+                    </div>
+                ) : (
                     <div className="text-center py-32 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
-                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
-                            <Folder className="h-10 w-10" />
+                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <FileText className="h-10 w-10 text-slate-300" />
                         </div>
-                        <h2 className="text-xl font-bold text-slate-800">Klasör Boş</h2>
-                        <p className="text-slate-500 mt-2">Bu kategoride henüz döküman bulunmuyor.</p>
-                        <Button onClick={goHome} variant="link" className="mt-4 text-indigo-600 font-bold">
-                            Ana Dizine Dön
-                        </Button>
+                        <h3 className="text-2xl font-black text-slate-800 uppercase tracking-tight">Döküman Bulunamadı</h3>
+                        <p className="text-slate-400 mt-2">Bu klasörde henüz yayınlanmış bir içerik yok.</p>
+                        <Button onClick={goToRoot} variant="link" className="mt-4 text-indigo-600 font-bold">Kök Dizine Dön</Button>
                     </div>
                 )}
             </main>
         </div>
     );
 }
-

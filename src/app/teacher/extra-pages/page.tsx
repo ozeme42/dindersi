@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -23,7 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { 
     getExtraPages, saveExtraPage, deleteExtraPage, 
-    renameExtraPageCategory, deleteExtraPageCategory, moveExtraPage 
+    deleteExtraPageCategory, moveExtraPage 
 } from '@/app/teacher/extra-pages/actions';
 import Link from 'next/link';
 import { 
@@ -61,7 +60,6 @@ export default function ExtraPagesManagement() {
         pages.forEach(p => {
             const cat = p.category || 'Genel';
             cats.add(cat);
-            // Parçaları da ekle (A/B/C -> A, A/B, A/B/C)
             const parts = cat.split('/');
             let current = "";
             parts.forEach((part, i) => {
@@ -145,10 +143,8 @@ export default function ExtraPagesManagement() {
         if (name === 'Genel') return;
         const res = await deleteExtraPageCategory(name);
         if (res.success) {
-            toast({ title: "Başarılı", description: `Kategori ve alt kategorileri temizlendi. ${res.count} sayfa 'Genel' altına taşındı.` });
+            toast({ title: "Başarılı", description: `Kategori temizlendi.` });
             fetchPages();
-        } else {
-            toast({ title: "Hata", description: res.error, variant: "destructive" });
         }
     };
 
@@ -158,7 +154,7 @@ export default function ExtraPagesManagement() {
     );
 
     return (
-        <div className="container mx-auto p-4 md:p-8 space-y-8 min-h-screen bg-slate-50/50 font-sans">
+        <div className="container mx-auto p-4 md:p-8 space-y-8 min-h-screen bg-slate-50/50 font-sans text-slate-900">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4">
                     <div className="p-3 bg-indigo-100 rounded-2xl text-indigo-600">
@@ -166,14 +162,14 @@ export default function ExtraPagesManagement() {
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Ekstra Sayfalar Yönetimi</h1>
-                        <p className="text-slate-500 text-sm">Alt klasörler oluşturun ve dökümanları taşıyın.</p>
+                        <p className="text-slate-500 text-sm">İnteraktif dökümanları ve klasörleri yönetin.</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button onClick={() => setIsCategoryDialogOpen(true)} variant="outline" className="rounded-xl gap-2">
-                        <Settings2 className="h-4 w-4" /> Klasör Yönetimi
+                    <Button onClick={() => setIsCategoryDialogOpen(true)} variant="outline" className="rounded-xl gap-2 h-11">
+                        <Settings2 className="h-4 w-4" /> Klasörler
                     </Button>
-                    <Button onClick={() => handleOpenDialog()} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2 shadow-lg shadow-indigo-200">
+                    <Button onClick={() => handleOpenDialog()} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2 shadow-lg h-11">
                         <Plus className="h-4 w-4" /> Yeni Sayfa
                     </Button>
                 </div>
@@ -186,7 +182,7 @@ export default function ExtraPagesManagement() {
                         placeholder="Sayfa adı veya yol ara..." 
                         value={searchTerm}
                         onChange={(e) => setSearchArea(e.target.value)}
-                        className="pl-10 bg-slate-50 border-none rounded-xl focus-visible:ring-indigo-500"
+                        className="pl-10 bg-slate-50 border-none rounded-xl focus-visible:ring-indigo-500 h-11"
                     />
                 </div>
             </div>
@@ -196,7 +192,7 @@ export default function ExtraPagesManagement() {
             ) : filteredPages.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredPages.map((page) => (
-                        <Card key={page.id} className="group overflow-hidden rounded-[2rem] border-slate-200 hover:shadow-xl transition-all duration-300">
+                        <Card key={page.id} className="group overflow-hidden rounded-[2rem] border-slate-200 hover:shadow-xl transition-all duration-300 bg-white">
                             <CardHeader className="pb-4">
                                 <div className="flex justify-between items-start mb-2">
                                     <Badge variant={page.isPublished ? "default" : "secondary"} className={page.isPublished ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100" : "bg-slate-100 text-slate-500"}>
@@ -209,19 +205,19 @@ export default function ExtraPagesManagement() {
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end" className="rounded-xl w-44">
-                                            <DropdownMenuItem onClick={() => handleOpenDialog(page)} className="gap-2 cursor-pointer text-sm font-medium text-slate-700">
+                                            <DropdownMenuItem onClick={() => handleOpenDialog(page)} className="gap-2 cursor-pointer text-sm font-medium">
                                                 <Edit2 className="h-4 w-4" /> Düzenle
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => { setMovingPage(page); setIsMoveDialogOpen(true); }} className="gap-2 cursor-pointer text-sm font-medium text-slate-700">
-                                                <Move className="h-4 w-4" /> Başka Klasöre Taşı
+                                            <DropdownMenuItem onClick={() => { setMovingPage(page); setIsMoveDialogOpen(true); }} className="gap-2 cursor-pointer text-sm font-medium">
+                                                <Move className="h-4 w-4" /> Klasöre Taşı
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem asChild className="gap-2 cursor-pointer text-sm font-medium text-slate-700">
+                                            <DropdownMenuItem asChild className="gap-2 cursor-pointer text-sm font-medium">
                                                 <Link href={`/extra/${page.id}`} target="_blank">
                                                     <Globe className="h-4 w-4" /> Görüntüle
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
-                                            <DropdownMenuItem onClick={() => handleDelete(page.id)} className="gap-2 cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 text-sm font-medium">
+                                            <DropdownMenuItem onClick={() => handleDelete(page.id)} className="gap-2 cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 font-bold">
                                                 <Trash2 className="h-4 w-4" /> Sil
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
@@ -236,18 +232,18 @@ export default function ExtraPagesManagement() {
                                 <p className="text-sm text-slate-500 line-clamp-2 min-h-[2.5rem]">
                                     {page.description || "Açıklama belirtilmemiş."}
                                 </p>
-                                <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-medium uppercase tracking-wider">
-                                    <span>GÜNCELLEME: {page.updatedAt ? new Date(page.updatedAt).toLocaleDateString('tr-TR') : '-'}</span>
-                                    <ChevronRight className="h-4 w-4 text-indigo-300 group-hover:translate-x-1 transition-transform" />
-                                </div>
                             </CardContent>
+                            <CardFooter className="pt-4 border-t border-slate-50 flex items-center justify-between text-[10px] text-slate-400 font-medium uppercase tracking-wider">
+                                <span>GÜNCELLEME: {page.updatedAt ? new Date(page.updatedAt).toLocaleDateString('tr-TR') : '-'}</span>
+                                <ChevronRight className="h-4 w-4 text-indigo-300" />
+                            </CardFooter>
                         </Card>
                     ))}
                 </div>
             ) : (
                 <div className="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-200">
                     <LayoutGrid className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-slate-900">Döküman Bulunamadı</h3>
+                    <h3 className="text-lg font-semibold">Döküman Bulunamadı</h3>
                 </div>
             )}
 
@@ -255,28 +251,27 @@ export default function ExtraPagesManagement() {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem] bg-white text-slate-900 border-none">
                     <DialogHeader>
-                        <DialogTitle className="text-2xl font-black text-slate-900 uppercase tracking-tight">{editingPage ? "Sayfayı Düzenle" : "Yeni Sayfa Oluştur"}</DialogTitle>
-                        <DialogDescription className="text-slate-500">Alt klasörler için '/' karakterini kullanın (Örn: Rehberlik/Sınav Hazırlık/LGS).</DialogDescription>
+                        <DialogTitle className="text-2xl font-black uppercase tracking-tight">{editingPage ? "Sayfayı Düzenle" : "Yeni Sayfa Oluştur"}</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-6 py-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-slate-700 uppercase tracking-widest ml-1">Sayfa Başlığı</label>
-                                <Input value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Örn: Rehberlik İlkeleri" className="rounded-xl border-slate-200 h-11 text-slate-900" />
+                                <Input value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Örn: Rehberlik İlkeleri" className="rounded-xl border-slate-200 h-11" />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 uppercase tracking-widest ml-1">Kategori Yolu</label>
+                                <label className="text-sm font-bold text-slate-700 uppercase tracking-widest ml-1">Klasör Yolu</label>
                                 <div className="relative">
-                                    <Input value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Örn: Rehberlik/Materyal" className="rounded-xl pr-10 border-slate-200 h-11 text-slate-900" />
+                                    <Input value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Örn: Rehberlik/LGS" className="rounded-xl pr-10 border-slate-200 h-11" />
                                     <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-slate-400 hover:text-indigo-600"><Tag className="h-4 w-4" /></Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" className="w-64 max-h-[300px] overflow-y-auto rounded-xl">
-                                                <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-bold text-slate-400 uppercase">Mevcut Klasörler</DropdownMenuLabel>
+                                                <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-bold text-slate-400 uppercase">Mevcutlar</DropdownMenuLabel>
                                                 {allCategories.map(cat => (
-                                                    <DropdownMenuItem key={cat} onClick={() => setFormData({...formData, category: cat})} className="cursor-pointer text-xs font-medium text-slate-700">
+                                                    <DropdownMenuItem key={cat} onClick={() => setFormData({...formData, category: cat})} className="cursor-pointer text-xs font-medium">
                                                         <Folder className="h-3.5 w-3.5 mr-2 text-amber-500" /> {cat}
                                                     </DropdownMenuItem>
                                                 ))}
@@ -288,11 +283,11 @@ export default function ExtraPagesManagement() {
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-700 uppercase tracking-widest ml-1">Kısa Açıklama</label>
-                            <Textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Kısa özet..." className="rounded-xl h-20 border-slate-200 text-slate-900" />
+                            <Textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Kısa özet..." className="rounded-xl h-20 border-slate-200" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-700 uppercase tracking-widest ml-1">HTML İçeriği</label>
-                            <Textarea value={formData.htmlContent} onChange={(e) => setFormData({...formData, htmlContent: e.target.value})} placeholder="<div class='p-4'>...</div>" className="rounded-xl font-mono text-sm h-64 border-slate-200 text-slate-900" />
+                            <Textarea value={formData.htmlContent} onChange={(e) => setFormData({...formData, htmlContent: e.target.value})} placeholder="HTML kodu buraya..." className="rounded-xl font-mono text-xs h-96 border-slate-200" />
                         </div>
                         <div className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
                             <input type="checkbox" id="isPublished" checked={formData.isPublished} onChange={(e) => setFormData({...formData, isPublished: e.target.checked})} className="h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
@@ -300,8 +295,8 @@ export default function ExtraPagesManagement() {
                         </div>
                     </div>
                     <DialogFooter className="bg-slate-50 p-4 -mx-6 -mb-6 mt-4 border-t border-slate-100 rounded-b-[2rem]">
-                        <Button variant="ghost" onClick={() => setIsDialogOpen(false)} className="rounded-xl font-bold text-slate-500">İptal</Button>
-                        <Button onClick={handleSave} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl min-w-[120px] font-bold shadow-lg shadow-indigo-100">
+                        <Button variant="ghost" onClick={() => setIsDialogOpen(false)} className="rounded-xl font-bold text-slate-500 h-11 px-6">İptal</Button>
+                        <Button onClick={handleSave} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl min-w-[120px] font-bold shadow-lg h-11 px-8">
                             {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Değişiklikleri Kaydet"}
                         </Button>
                     </DialogFooter>
@@ -312,40 +307,37 @@ export default function ExtraPagesManagement() {
             <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
                 <DialogContent className="max-w-md rounded-[2rem] bg-white text-slate-900 border-none shadow-2xl">
                     <DialogHeader>
-                        <DialogTitle className="flex items-center gap-3 text-2xl font-black text-slate-900 uppercase tracking-tight">
+                        <DialogTitle className="flex items-center gap-3 text-2xl font-black uppercase tracking-tight">
                             <Settings2 className="h-6 w-6 text-indigo-600" /> 
-                            Klasör Yönetimi
+                            Klasörler
                         </DialogTitle>
-                        <DialogDescription className="text-slate-500">Klasör adlarını güncelleyin. Alt klasörler otomatik taşınır.</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <ScrollArea className="max-h-[50vh] pr-4">
                             {allCategories.map(cat => (
-                                <div key={cat} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 mb-2 group hover:border-indigo-200 transition-all">
+                                <div key={cat} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 mb-2">
                                     <span className="text-xs font-black text-slate-700 flex items-center gap-2 uppercase tracking-tight">
                                         <Folder className="h-4 w-4 text-amber-500 fill-current" /> {cat}
                                     </span>
-                                    <div className="flex items-center gap-1">
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-full">
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent className="bg-white border-slate-200 text-slate-900 rounded-[2rem] border-none shadow-2xl">
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle className="font-black text-2xl text-red-600 uppercase tracking-tight">Klasörü Sil</AlertDialogTitle>
-                                                    <AlertDialogDescription className="text-slate-500">
-                                                        "{cat}" klasörünü ve varsa alt klasörlerini silmek istediğinize emin misiniz? Dökümanlar "Genel" klasörüne taşınacaktır.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter className="bg-slate-50 p-4 -mx-6 -mb-6 mt-4 border-t border-slate-100">
-                                                    <AlertDialogCancel className="bg-transparent text-slate-500 font-bold">İptal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => handleCategoryDelete(cat)} className="bg-red-600 hover:bg-red-700 text-white border-none rounded-xl font-bold px-6">Sil ve Taşı</AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </div>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-400 hover:text-red-600">
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent className="bg-white border-slate-200 text-slate-900 rounded-[2rem]">
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle className="font-bold text-red-600">Klasörü Sil</AlertDialogTitle>
+                                                <AlertDialogDescription className="text-slate-500">
+                                                    "{cat}" klasörü silinsin mi? Dökümanlar "Genel" altına taşınır.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel className="bg-transparent text-slate-500">İptal</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => handleCategoryDelete(cat)} className="bg-red-600 hover:bg-red-700 text-white border-none rounded-xl font-bold">Sil ve Taşı</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </div>
                             ))}
                         </ScrollArea>
@@ -357,8 +349,7 @@ export default function ExtraPagesManagement() {
             <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
                 <DialogContent className="max-w-md rounded-[2rem] bg-white text-slate-900 border-none shadow-2xl">
                     <DialogHeader>
-                        <DialogTitle className="font-black text-2xl text-slate-900 uppercase tracking-tight">Klasöre Taşı</DialogTitle>
-                        <DialogDescription className="text-slate-500">"{movingPage?.title}" dökümanı için hedef klasör seçin.</DialogDescription>
+                        <DialogTitle className="font-black text-2xl uppercase tracking-tight">Klasöre Taşı</DialogTitle>
                     </DialogHeader>
                     <div className="py-4 space-y-4">
                         <div className="space-y-1">
@@ -367,18 +358,17 @@ export default function ExtraPagesManagement() {
                                 value={movingPage?.category || ""} 
                                 onChange={(e) => setMovingPage({...movingPage, category: e.target.value})}
                                 placeholder="Yeni kategori yolu..."
-                                className="rounded-xl border-slate-200 h-11 text-slate-900"
+                                className="rounded-xl border-slate-200 h-11"
                             />
                         </div>
-                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 ml-1">Mevcut Klasörler</div>
                         <ScrollArea className="h-48 border border-slate-100 rounded-xl p-2 bg-slate-50 shadow-inner">
                             {allCategories.map(cat => (
                                 <button 
                                     key={cat} 
                                     onClick={() => setMovingPage({...movingPage, category: cat})}
                                     className={cn(
-                                        "w-full text-left p-2.5 rounded-lg text-xs transition-colors hover:bg-white hover:shadow-sm flex items-center gap-2 mb-1 uppercase font-bold",
-                                        movingPage?.category === cat ? "bg-indigo-600 text-white shadow-md" : "text-slate-600"
+                                        "w-full text-left p-2.5 rounded-lg text-xs transition-colors hover:bg-white flex items-center gap-2 mb-1 uppercase font-bold",
+                                        movingPage?.category === cat ? "bg-indigo-600 text-white" : "text-slate-600"
                                     )}
                                 >
                                     <Folder className={cn("h-3.5 w-3.5", movingPage?.category === cat ? "text-white" : "text-amber-500")} /> {cat}
@@ -387,9 +377,9 @@ export default function ExtraPagesManagement() {
                         </ScrollArea>
                     </div>
                     <DialogFooter className="bg-slate-50 p-4 -mx-6 -mb-6 mt-4 border-t border-slate-100 rounded-b-[2rem]">
-                        <Button variant="ghost" onClick={() => setIsMoveDialogOpen(false)} className="rounded-xl font-bold text-slate-500">İptal</Button>
-                        <Button onClick={() => handleMove(movingPage.category)} disabled={isSaving} className="bg-indigo-600 text-white rounded-xl min-w-[120px] font-bold shadow-lg shadow-indigo-100">
-                            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Taşımayı Onayla"}
+                        <Button variant="ghost" onClick={() => setIsMoveDialogOpen(false)} className="rounded-xl font-bold h-11 px-6">İptal</Button>
+                        <Button onClick={() => handleMove(movingPage.category)} disabled={isSaving} className="bg-indigo-600 text-white rounded-xl min-w-[120px] font-bold h-11 px-8 shadow-lg">
+                            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Taşı"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -397,4 +387,3 @@ export default function ExtraPagesManagement() {
         </div>
     );
 }
-
