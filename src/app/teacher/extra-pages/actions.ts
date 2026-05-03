@@ -1,4 +1,3 @@
-
 'use server';
 
 import { getAdminDb } from '@/lib/firebase-admin';
@@ -30,8 +29,8 @@ function serializeDoc(data: any) {
 export async function getExtraPages(onlyPublished: boolean = false) {
   try {
     const db = getAdminDb();
-    // Not: Firestore index kısıtlamalarına takılmamak için tüm dökümanları çekip bellekte işliyoruz.
-    // Bu sayede alanı eksik olan eski dökümanlar kaybolmuyor.
+    // Not: Firestore kısıtlamalarına takılmamak için tümünü çekip bellekte işliyoruz.
+    // Bu sayede alanı eksik olan eski dökümanlar listeden kaybolmuyor.
     const snapshot = await db.collection('extraPages').get();
     
     let pages = snapshot.docs.map(doc => {
@@ -68,7 +67,16 @@ export async function getExtraPage(id: string) {
     const db = getAdminDb();
     const doc = await db.collection('extraPages').doc(id).get();
     if (!doc.exists) return { success: false, error: "Döküman bulunamadı." };
-    return { success: true, data: { id: doc.id, ...serializeDoc(doc.data()) } };
+    const data = doc.data();
+    return { 
+        success: true, 
+        data: { 
+            id: doc.id, 
+            isPublished: data?.isPublished !== undefined ? data.isPublished : true,
+            category: data?.category || 'Genel',
+            ...serializeDoc(data) 
+        } 
+    };
   } catch (error: any) {
     console.error("Error fetching single extra page:", error);
     return { success: false, error: error.message };
