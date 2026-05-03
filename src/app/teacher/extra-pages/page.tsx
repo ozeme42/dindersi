@@ -29,7 +29,7 @@ import Link from 'next/link';
 import { 
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
     AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, 
-    AlertDialogTitle as RadixAlertDialogTitle, AlertDialogTrigger 
+    AlertDialogTitle, AlertDialogTrigger 
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -330,7 +330,7 @@ export default function ExtraPagesManagement() {
                                         </AlertDialogTrigger>
                                         <AlertDialogContent className="bg-white border-slate-200 text-slate-900 rounded-[2rem]">
                                             <AlertDialogHeader>
-                                                <RadixAlertDialogTitle className="font-bold text-red-600">Klasörü Sil</RadixAlertDialogTitle>
+                                                <AlertDialogTitle className="font-bold text-red-600">Klasörü Sil</AlertDialogTitle>
                                                 <AlertDialogDescription className="text-slate-500">
                                                     "{cat}" klasörünü ve varsa alt klasörlerini silmek istediğinize emin misiniz? Dökümanlar "Genel" klasörüne taşınacaktır.
                                                 </AlertDialogDescription>
