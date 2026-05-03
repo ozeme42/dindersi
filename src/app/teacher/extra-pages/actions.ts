@@ -29,7 +29,8 @@ function serializeDoc(data: any) {
 export async function getExtraPages(onlyPublished: boolean = false) {
   try {
     const db = getAdminDb();
-    // NOT: Tüm dökümanları çekip bellekte işliyoruz ki eksik alanı olan dökümanlar Firestore query filtresine takılıp kaybolmasın.
+    // NOT: İndeks kısıtlamalarına takılmamak için tüm dökümanları çekip bellekte işliyoruz.
+    // Bu sayede alanı eksik olan eski dökümanlar kaybolmuyor.
     const snapshot = await db.collection('extraPages').get();
     
     let pages = snapshot.docs.map(doc => {
@@ -43,6 +44,7 @@ export async function getExtraPages(onlyPublished: boolean = false) {
       };
     });
 
+    // Tarihe göre sırala
     pages.sort((a: any, b: any) => {
       const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
       const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -120,4 +122,51 @@ export async function moveExtraPage(id: string, newCategory: string) {
   } catch (error: any) {
     return { success: false, error: error.message };
   }
+}
+
+export async function renameExtraPageCategory(oldName: string, newName: string) {
+    try {
+        const db = getAdminDb();
+        const batch = db.batch();
+        const snapshot = await db.collection('extraPages').get();
+        
+        let count = 0;
+        snapshot.docs.forEach(doc => {
+            const cat = doc.data().category || 'Genel';
+            if (cat === oldName || cat.startsWith(oldName + '/')) {
+                const newCat = cat.replace(oldName, newName);
+                batch.update(doc.ref, { category: newCat });
+                count++;
+            }
+        });
+        
+        await batch.commit();
+        revalidatePath('/extra');
+        return { success: true, count };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function deleteExtraPageCategory(categoryName: string) {
+    try {
+        const db = getAdminDb();
+        const batch = db.batch();
+        const snapshot = await db.collection('extraPages').get();
+        
+        let count = 0;
+        snapshot.docs.forEach(doc => {
+            const cat = doc.data().category || 'Genel';
+            if (cat === categoryName || cat.startsWith(categoryName + '/')) {
+                batch.update(doc.ref, { category: 'Genel' });
+                count++;
+            }
+        });
+        
+        await batch.commit();
+        revalidatePath('/extra');
+        return { success: true, count };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
 }

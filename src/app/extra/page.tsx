@@ -2,209 +2,221 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
-    Folder, FileText, ChevronRight, Search, 
-    ArrowLeft, LayoutGrid, Clock, ChevronLeft,
-    Loader2, MoreVertical, Globe, BookOpen
+    Folder, FileText, ChevronRight, Search, ArrowLeft, 
+    LayoutGrid, BookOpen, Clock, Loader2, Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
-    Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter 
+    Card, CardContent, CardHeader, CardTitle, 
+    CardDescription, CardFooter 
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 import { getExtraPages } from '@/app/teacher/extra-pages/actions';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
-export default function ExtraPagesExplorer() {
+export default function ExtraPagesGallery() {
     const [pages, setPages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentPath, setCurrentPath] = useState<string[]>([]); // Klasör yolu hiyerarşisi
     const [searchTerm, setSearchTerm] = useState("");
-    const [currentPath, setCurrentPath] = useState<string[]>([]); // Klasör hiyerarşisi
 
     useEffect(() => {
         const fetchPages = async () => {
             setIsLoading(true);
-            const res = await getExtraPages(true); // Sadece yayınlananları getir
-            if (res.success) setPages(res.data || []);
+            const res = await getExtraPages(true); // Sadece yayındakileri getir
+            if (res.success) {
+                setPages(res.data || []);
+            }
             setIsLoading(false);
         };
         fetchPages();
     }, []);
 
-    // Hiyerarşik Veri İşleme
-    const explorerData = useMemo(() => {
-        const folders = new Set<string>();
-        const files: any[] = [];
+    // Mevcut konumdaki içeriği belirle
+    const currentDirectoryContent = useMemo(() => {
+        const currentPathStr = currentPath.join('/');
         
-        const pathString = currentPath.join('/');
+        // Klasörleri ve Dosyaları ayıkla
+        const subDirs = new Set<string>();
+        const filesAtCurrentLevel: any[] = [];
 
         pages.forEach(page => {
-            const category = page.category || 'Genel';
+            const cat = page.category || 'Genel';
             
-            // Arama varsa hiyerarşiyi görmezden gelip tüm sonuçları göster
+            // Arama yapılıyorsa hiyerarşiyi görmezden gel
             if (searchTerm) {
                 if (page.title.toLowerCase().includes(searchTerm.toLowerCase())) {
-                    files.push(page);
+                    filesAtCurrentLevel.push(page);
                 }
                 return;
             }
 
-            if (category === pathString || (pathString === "" && category === "Genel")) {
-                // Bu seviyedeki dosyalar
-                files.push(page);
-            } else if (pathString === "" && !category.includes('/')) {
-                // Ana dizindeki klasörler
-                if (category !== "Genel") folders.add(category);
-            } else if (category.startsWith(pathString + (pathString ? '/' : ''))) {
-                // Alt klasörler
-                const relativePath = pathString ? category.substring(pathString.length + 1) : category;
-                const nextFolderName = relativePath.split('/')[0];
-                if (nextFolderName) folders.add(nextFolderName);
+            if (currentPath.length === 0) {
+                // Kök dizindeyiz
+                const rootPart = cat.split('/')[0];
+                if (cat.includes('/')) {
+                    subDirs.add(rootPart);
+                } else if (cat === 'Genel' || !cat) {
+                    filesAtCurrentLevel.push(page);
+                } else {
+                    subDirs.add(rootPart);
+                }
+            } else {
+                // Bir klasörün içindeyiz
+                if (cat.startsWith(currentPathStr + '/')) {
+                    const relativePath = cat.substring(currentPathStr.length + 1);
+                    const nextPart = relativePath.split('/')[0];
+                    if (relativePath.includes('/')) {
+                        subDirs.add(nextPart);
+                    } else {
+                        subDirs.add(nextPart);
+                    }
+                } else if (cat === currentPathStr) {
+                    filesAtCurrentLevel.push(page);
+                }
             }
         });
 
         return {
-            folders: Array.from(folders).sort(),
-            files: files.sort((a, b) => a.title.localeCompare(b.title, 'tr'))
+            folders: Array.from(subDirs).sort(),
+            files: filesAtCurrentLevel.sort((a, b) => a.title.localeCompare(b.title, 'tr'))
         };
     }, [pages, currentPath, searchTerm]);
 
-    const handleFolderClick = (folderName: string) => {
+    const navigateToFolder = (folderName: string) => {
         setCurrentPath([...currentPath, folderName]);
+        setSearchTerm("");
     };
 
-    const handleBack = () => {
-        setCurrentPath(currentPath.slice(0, -1));
-    };
-
-    const navigateToBreadcrumb = (index: number) => {
-        setCurrentPath(currentPath.slice(0, index + 1));
+    const goBack = () => {
+        setCurrentPath(prev => prev.slice(0, -1));
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-indigo-100 relative pb-20">
+        <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
             {/* Arka Plan Efekti */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-indigo-50/40 rounded-full blur-[100px]" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-sky-50/40 rounded-full blur-[100px]" />
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-indigo-100/50 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-sky-100/50 rounded-full blur-[120px]" />
             </div>
 
-            <main className="container mx-auto p-4 md:p-8 space-y-6 relative z-10">
+            <div className="container mx-auto p-4 md:p-8 relative z-10 space-y-6">
                 
                 {/* Header */}
-                <div className="bg-white/80 backdrop-blur-xl border border-slate-200 p-6 rounded-[2rem] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white/80 backdrop-blur-xl p-6 rounded-[2.5rem] border border-white shadow-xl">
+                    <div className="flex items-center gap-5">
                         <Link href="/">
-                            <Button variant="ghost" size="icon" className="rounded-full h-12 w-12 hover:bg-slate-100">
-                                <ArrowLeft className="h-6 w-6 text-slate-600" />
-                            </Button>
+                            <div className="p-3 bg-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-200 hover:scale-105 transition-transform">
+                                <Home className="h-6 w-6" />
+                            </div>
                         </Link>
                         <div>
-                            <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">Döküman Merkezi</h1>
-                            <p className="text-slate-500 text-sm font-medium">Rehberlik, materyal ve duyurular.</p>
+                            <h1 className="text-3xl font-black text-slate-900 tracking-tight uppercase">Döküman Merkezi</h1>
+                            <p className="text-slate-500 font-medium text-sm">Rehberlik, duyurular ve yardımcı materyaller.</p>
                         </div>
                     </div>
+
                     <div className="relative w-full md:w-80">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                         <Input 
-                            placeholder="Dosyalarda ara..." 
+                            placeholder="Dosya ara..." 
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 bg-slate-100 border-none rounded-2xl h-11 focus-visible:ring-indigo-500"
+                            className="pl-10 bg-slate-100/50 border-none rounded-2xl h-12 focus-visible:ring-indigo-500 shadow-inner"
                         />
                     </div>
                 </div>
 
                 {/* Navigasyon & Breadcrumb */}
                 {!searchTerm && (
-                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-                        <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => setCurrentPath([])}
-                            className={cn("rounded-full font-bold", currentPath.length === 0 ? "bg-indigo-600 text-white hover:bg-indigo-600" : "text-slate-500")}
-                        >
-                            <Home className="h-4 w-4 mr-1.5" /> Ana Dizin
-                        </Button>
-                        {currentPath.map((part, i) => (
-                            <React.Fragment key={i}>
-                                <ChevronRight className="h-4 w-4 text-slate-300 shrink-0" />
-                                <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    onClick={() => navigateToBreadcrumb(i)}
-                                    className={cn("rounded-full font-bold", i === currentPath.length - 1 ? "bg-indigo-100 text-indigo-700" : "text-slate-500")}
-                                >
-                                    {part}
-                                </Button>
-                            </React.Fragment>
-                        ))}
+                    <div className="flex items-center gap-3 px-4">
+                        {currentPath.length > 0 && (
+                            <Button variant="ghost" size="icon" onClick={goBack} className="rounded-full h-10 w-10 hover:bg-indigo-50 text-indigo-600">
+                                <ArrowLeft className="h-5 w-5" />
+                            </Button>
+                        )}
+                        <div className="flex items-center gap-1 text-sm font-bold text-slate-400 uppercase tracking-widest">
+                            <span className={cn("hover:text-indigo-600 cursor-pointer transition-colors", currentPath.length === 0 ? "text-indigo-600" : "")} onClick={() => setCurrentPath([])}>KÖK DİZİN</span>
+                            {currentPath.map((part, i) => (
+                                <React.Fragment key={i}>
+                                    <ChevronRight className="h-4 w-4" />
+                                    <span 
+                                        className={cn("hover:text-indigo-600 cursor-pointer transition-colors", i === currentPath.length - 1 ? "text-indigo-600" : "")}
+                                        onClick={() => setCurrentPath(currentPath.slice(0, i + 1))}
+                                    >
+                                        {part}
+                                    </span>
+                                </React.Fragment>
+                            ))}
+                        </div>
                     </div>
                 )}
 
-                {/* Explorer Grid */}
+                {/* GALERİ ALANI */}
                 {isLoading ? (
-                    <div className="flex justify-center py-20"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>
+                    <div className="flex justify-center py-20">
+                        <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
+                    </div>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                         
-                        {/* Geri Dön Klasörü */}
-                        {!searchTerm && currentPath.length > 0 && (
-                            <button 
-                                onClick={handleBack}
-                                className="group flex flex-col items-center justify-center p-6 rounded-3xl bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-xl transition-all duration-300 text-center"
-                            >
-                                <div className="p-4 bg-slate-100 rounded-2xl text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-500 transition-colors">
-                                    <ChevronLeft className="h-10 w-10" />
-                                </div>
-                                <span className="mt-3 font-bold text-xs text-slate-500 uppercase">Üst Klasör</span>
-                            </button>
-                        )}
-
                         {/* Klasörler */}
-                        {explorerData.folders.map(folderName => (
+                        {!searchTerm && currentDirectoryContent.folders.map((folder) => (
                             <button 
-                                key={folderName}
-                                onClick={() => handleFolderClick(folderName)}
-                                className="group flex flex-col items-center justify-center p-6 rounded-3xl bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-xl transition-all duration-300 text-center"
+                                key={folder}
+                                onClick={() => navigateToFolder(folder)}
+                                className="group flex flex-col items-center gap-3 p-6 rounded-[2rem] bg-white border border-slate-200 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
                             >
-                                <div className="p-4 bg-amber-50 rounded-2xl text-amber-500 group-hover:scale-110 transition-transform shadow-sm">
-                                    <Folder className="h-10 w-10 fill-current" />
+                                <div className="relative">
+                                    <div className="absolute inset-0 bg-amber-400 blur-2xl opacity-0 group-hover:opacity-20 transition-opacity" />
+                                    <Folder className="h-16 w-16 text-amber-500 fill-amber-500/10 group-hover:fill-amber-500/20 transition-all" />
                                 </div>
-                                <span className="mt-3 font-black text-xs text-slate-700 uppercase line-clamp-1">{folderName}</span>
+                                <span className="font-black text-slate-700 text-sm uppercase tracking-tight text-center line-clamp-1">{folder}</span>
                             </button>
                         ))}
 
                         {/* Dosyalar */}
-                        {explorerData.files.map(page => (
-                            <Link 
-                                key={page.id} 
-                                href={`/extra/${page.id}`}
-                                className="group flex flex-col items-center justify-center p-6 rounded-3xl bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-xl transition-all duration-300 text-center relative overflow-hidden"
-                            >
-                                <div className="p-4 bg-indigo-50 rounded-2xl text-indigo-600 group-hover:scale-110 transition-transform shadow-sm">
-                                    <FileText className="h-10 w-10" />
-                                </div>
-                                <span className="mt-3 font-bold text-xs text-slate-800 uppercase line-clamp-2 leading-tight h-8 flex items-center">{page.title}</span>
-                                <div className="absolute top-2 right-2">
-                                     {page.isNew && <Badge className="bg-rose-500 text-[8px] h-4 px-1.5 border-none">YENİ</Badge>}
-                                </div>
+                        {currentDirectoryContent.files.map((page) => (
+                            <Link key={page.id} href={`/extra/${page.id}`}>
+                                <Card className="group h-full rounded-[2rem] border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden flex flex-col">
+                                    <CardHeader className="p-5 pb-2">
+                                        <div className="p-3 bg-sky-50 rounded-2xl w-fit mb-3 group-hover:bg-sky-100 transition-colors">
+                                            <FileText className="h-6 w-6 text-sky-600" />
+                                        </div>
+                                        <CardTitle className="text-lg font-black text-slate-800 leading-tight line-clamp-2 min-h-[3.5rem] group-hover:text-indigo-600 transition-colors uppercase tracking-tighter">
+                                            {page.title}
+                                        </CardTitle>
+                                        <CardDescription className="text-[10px] font-bold text-slate-400 flex items-center gap-1 mt-1 uppercase tracking-widest">
+                                            <Clock className="h-3 w-3" /> {page.updatedAt ? new Date(page.updatedAt).toLocaleDateString('tr-TR') : 'YENİ'}
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="px-5 pb-5 mt-auto">
+                                        <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed italic">
+                                            {page.description || "Döküman içeriğini görüntülemek için tıklayın."}
+                                        </p>
+                                    </CardContent>
+                                    <CardFooter className="bg-slate-50/50 p-3 flex justify-end items-center border-t border-slate-100">
+                                        <div className="flex items-center gap-1 text-[10px] font-black text-indigo-600 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                            AÇ <ChevronRight className="h-3 w-3" />
+                                        </div>
+                                    </CardFooter>
+                                </Card>
                             </Link>
                         ))}
 
-                        {explorerData.folders.length === 0 && explorerData.files.length === 0 && (
-                            <div className="col-span-full py-20 text-center">
-                                <LayoutGrid className="h-12 w-12 text-slate-200 mx-auto mb-4" />
-                                <p className="text-slate-400 font-medium">Bu klasörde döküman bulunamadı.</p>
+                        {/* Boş Durum */}
+                        {currentDirectoryContent.folders.length === 0 && currentDirectoryContent.files.length === 0 && (
+                            <div className="col-span-full py-32 text-center flex flex-col items-center bg-white/50 rounded-[3rem] border-2 border-dashed border-slate-200">
+                                <LayoutGrid className="h-16 w-16 text-slate-200 mb-4" />
+                                <h3 className="text-xl font-bold text-slate-400">Bu klasör boş.</h3>
+                                <p className="text-slate-300 text-sm mt-1 font-medium">Henüz bir döküman eklenmemiş.</p>
                             </div>
                         )}
                     </div>
                 )}
-
-            </main>
+            </div>
         </div>
     );
 }
-
-const Home = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;

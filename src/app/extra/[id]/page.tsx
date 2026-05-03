@@ -1,157 +1,192 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { 
-    Loader2, ArrowLeft, Printer, Minus, Plus, 
-    Maximize2, Minimize2, Calendar, Folder, FileText,
-    Download
+    Loader2, ArrowLeft, Printer, Plus, Minus, Maximize2, 
+    Minimize2, FileText, Clock, Share2, BookOpen
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { getExtraPage } from '@/app/teacher/extra-pages/actions';
 import Link from 'next/link';
 
-function ExtraPageViewer() {
+export default function ExtraPageViewer() {
     const params = useParams();
     const router = useRouter();
     const id = params.id as string;
-    
-    const [content, setContent] = useState<any>(null);
+
+    const [content, setContent] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [zoomLevel, setZoomLevel] = useState(1);
+    const [zoomLevel, setZoomLevel] = useState(100);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    
-    const contentRef = useRef<HTMLDivElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const viewerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchPage = async () => {
-            if (!id) return;
             setIsLoading(true);
             const res = await getExtraPage(id);
             if (res.success) {
                 setContent(res.data);
+            } else {
+                setError(res.error || "Döküman bulunamadı.");
             }
             setIsLoading(false);
         };
         fetchPage();
-        
-        const handleFS = () => setIsFullscreen(!!document.fullscreenElement);
-        document.addEventListener('fullscreenchange', handleFS);
-        return () => document.removeEventListener('fullscreenchange', handleFS);
+
+        const handleFs = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handleFs);
+        return () => document.removeEventListener('fullscreenchange', handleFs);
     }, [id]);
 
-    // Scriptleri yürütme (showSection, initAdimAdim gibi fonksiyonlar için)
+    // HTML içindeki scriptleri güvenli bir şekilde çalıştıran efekt
     useEffect(() => {
-        if (!isLoading && content?.htmlContent && contentRef.current) {
-            const scripts = contentRef.current.querySelectorAll('script');
+        if (!content?.htmlContent) return;
+
+        const timer = setTimeout(() => {
+            const div = document.createElement('div');
+            div.innerHTML = content.htmlContent;
+            const scripts = div.querySelectorAll('script');
+
             scripts.forEach(oldScript => {
                 const newScript = document.createElement('script');
-                // Değişken çakışmalarını (SyntaxError) önlemek için her scripti bir blok içine alıyoruz
-                const scriptBody = `(function() { 
-                    try { 
-                        ${oldScript.innerHTML} 
-                    } catch(e) { console.error('Script Error:', e); } 
-                })();`;
-                newScript.textContent = scriptBody;
+                const code = oldScript.innerText;
+                
+                // HATA ÇÖZÜMÜ: 'Identifier already declared' hatasını önlemek için kodları blok kapsamına alıyoruz.
+                // showSection gibi fonksiyonları ise global (window) kapsamına bağlıyoruz.
+                newScript.text = `
+                    (function() {
+                        try {
+                            // Fonksiyonları pencereye (global) bağla
+                            const functionRegex = /function\\s+([a-zA-Z0-9_]+)\\s*\\(/g;
+                            let match;
+                            let modifiedCode = \`${code.replace(/`/g, '\\`').replace(/\${/g, '\\${')}\`;
+                            
+                            while ((match = functionRegex.exec(modifiedCode)) !== null) {
+                                const funcName = match[1];
+                                // Eğer fonksiyon window'da yoksa veya override edilmek isteniyorsa:
+                                // modifiedCode += "\\n window." + funcName + " = " + funcName + ";";
+                            }
+
+                            // Doğrudan eval kullanarak window kapsamında çalıştır (Daha riskli ama onclick="showSection()" için gerekli)
+                            window.eval(\`${code.replace(/`/g, '\\`').replace(/\${/g, '\\${')}\`);
+                            
+                            // Ekstra: Eğer initAdimAdim varsa otomatik çağır
+                            if (typeof window.initAdimAdim === 'function') window.initAdimAdim();
+                        } catch (e) {
+                            console.warn("Script runner warning:", e);
+                        }
+                    })();
+                `;
                 document.body.appendChild(newScript);
-                // Çalıştıktan sonra DOM'u temizle
+                // Script çalıştıktan sonra temizle (DOM'u kirletmemek için)
                 document.body.removeChild(newScript);
             });
-            
-            // Eğer döküman içinde otomatik tetiklenmesi gereken bir başlangıç fonksiyonu varsa burada çağrılabilir
-            try {
-                if (typeof (window as any).initAdimAdim === 'function') (window as any).initAdimAdim();
-            } catch(e) {}
-        }
-    }, [isLoading, content]);
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, [content]);
 
     const handlePrint = () => window.print();
-    const toggleFullscreen = () => {
-        if (!document.fullscreenElement) containerRef.current?.requestFullscreen();
-        else document.exitFullscreen();
-    };
 
-    if (isLoading) return <div className="h-screen flex flex-col items-center justify-center bg-slate-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /><p className="mt-4 text-slate-500 font-medium">Döküman Hazırlanıyor...</p></div>;
+    if (isLoading) return <div className="h-screen flex flex-col items-center justify-center bg-slate-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /><p className="mt-4 text-slate-400 font-medium animate-pulse">Döküman Yükleniyor...</p></div>;
 
-    if (!content) return <div className="h-screen flex flex-col items-center justify-center p-8 bg-slate-50 text-center"><div className="bg-white p-8 rounded-3xl border border-red-100 shadow-xl max-w-md"><h2 className="text-xl font-bold text-slate-900 mb-2">Döküman Bulunamadı</h2><p className="text-slate-500 mb-6">Aradığınız sayfa silinmiş veya taşınmış olabilir.</p><Button asChild className="rounded-xl px-8 bg-slate-900"><Link href="/extra">Geri Dön</Link></Button></div></div>;
+    if (error || !content) {
+        return (
+            <div className="h-screen flex items-center justify-center p-8 bg-slate-50">
+                <Card className="max-w-md w-full p-8 text-center rounded-[2rem] border-red-100 shadow-2xl">
+                    <div className="p-4 bg-red-50 rounded-2xl w-fit mx-auto mb-6 text-red-500"><AlertTriangle className="h-10 w-10" /></div>
+                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight mb-2">HATA OLUŞTU</h2>
+                    <p className="text-slate-500 mb-8 font-medium">{error || "Bu döküman görüntülenemiyor."}</p>
+                    <Button asChild className="w-full h-12 bg-slate-900 rounded-xl"><Link href="/extra"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link></Button>
+                </Card>
+            </div>
+        );
+    }
 
     return (
-        <div ref={containerRef} className="min-h-screen bg-slate-50 flex flex-col font-sans relative overflow-x-hidden">
-            <style jsx global>{`
-                @media print {
-                    .print-hidden { display: none !important; }
-                    body { background: white !important; padding: 0 !important; }
-                    .prose { max-width: none !important; width: 100% !important; font-size: 12pt !important; }
-                }
-                .prose { color: #1e293b; max-width: none; }
-                .prose h1 { color: #0f172a; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
-                .prose img { border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); margin: 2rem auto; }
-                .prose blockquote { border-left-color: #6366f1; background: #f8fafc; padding: 1.5rem; border-radius: 0 1rem 1rem 0; font-style: italic; }
+        <div className={cn("min-h-screen bg-slate-50 flex flex-col font-sans", isFullscreen ? "bg-white" : "")}>
+            
+            {/* PRINT CSS */}
+            <style media="print">{`
+                @page { size: auto; margin: 20mm; }
+                .no-print { display: none !important; }
+                body { background: white !important; padding: 0 !important; }
+                .content-area { padding: 0 !important; box-shadow: none !important; border: none !important; }
             `}</style>
 
-            {/* Üst Bar */}
-            <header className="flex-shrink-0 sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 px-4 md:px-8 py-3 flex items-center justify-between shadow-sm print-hidden">
-                <div className="flex items-center gap-4 overflow-hidden">
-                    <Link href="/extra">
-                        <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 hover:bg-slate-100">
-                            <ArrowLeft className="h-5 w-5 text-slate-600" />
+            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 no-print">
+                <div className="container mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-4">
+                    
+                    <div className="flex items-center gap-4 min-w-0">
+                        <Button variant="ghost" size="icon" onClick={() => router.back()} className="rounded-xl h-10 w-10 text-slate-400 hover:text-indigo-600 shrink-0">
+                            <ArrowLeft className="h-6 w-6" />
                         </Button>
-                    </Link>
-                    <div className="overflow-hidden">
-                        <h1 className="text-lg font-black text-slate-900 truncate uppercase tracking-tight">{content.title}</h1>
-                        <div className="flex items-center gap-2 mt-0.5">
-                            <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 border-none text-[10px] font-bold uppercase">{content.category}</Badge>
-                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{content.updatedAt ? new Date(content.updatedAt).toLocaleDateString('tr-TR') : 'YENİ'}</span>
+                        <div className="min-w-0 overflow-hidden">
+                            <h1 className="text-xl font-black text-slate-900 truncate uppercase tracking-tight">{content.title}</h1>
+                            <div className="flex items-center gap-2 mt-0.5">
+                                <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 border-none text-[10px] font-bold uppercase tracking-tight">{content.category || 'Genel'}</Badge>
+                                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{content.updatedAt ? new Date(content.updatedAt).toLocaleDateString('tr-TR') : 'YENİ'}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="flex items-center gap-2">
-                    <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200">
-                        <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-lg"><Minus className="h-4 w-4"/></Button>
-                        <span className="text-[10px] font-black text-slate-500 w-10 text-center">{Math.round(zoomLevel * 100)}%</span>
-                        <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-lg"><Plus className="h-4 w-4"/></Button>
+                    <div className="flex items-center gap-2 shrink-0">
+                        <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 mr-2">
+                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(prev => Math.max(50, prev - 10))} className="h-8 w-8 rounded-lg text-slate-500 hover:bg-white"><Minus className="h-4 w-4" /></Button>
+                            <span className="text-[10px] font-black text-slate-400 w-12 text-center uppercase tracking-tighter">{zoomLevel}%</span>
+                            <Button variant="ghost" size="icon" onClick={() => setZoomLevel(prev => Math.min(250, prev + 10))} className="h-8 w-8 rounded-lg text-slate-500 hover:bg-white"><Plus className="h-4 w-4" /></Button>
+                        </div>
+
+                        <Button variant="outline" size="icon" onClick={handlePrint} className="rounded-xl h-10 w-10 border-slate-200 text-slate-500 hover:bg-slate-50" title="Yazdır">
+                            <Printer className="h-5 w-5" />
+                        </Button>
+                        
+                        <FullscreenToggle elementRef={viewerRef} className="rounded-xl h-10 w-10 border-slate-200 text-slate-500 hover:bg-slate-50" />
                     </div>
-                    <Button variant="outline" size="icon" onClick={handlePrint} className="h-10 w-10 rounded-xl text-slate-600 border-slate-200 hover:bg-slate-100"><Printer className="h-5 w-5"/></Button>
-                    <Button variant="outline" size="icon" onClick={toggleFullscreen} className="h-10 w-10 rounded-xl bg-indigo-600 text-white border-none hover:bg-indigo-700 shadow-md">
-                        {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
-                    </Button>
                 </div>
             </header>
 
-            {/* İçerik Alanı */}
-            <main className="flex-grow relative z-10 w-full overflow-y-auto">
+            <main ref={viewerRef} className={cn("flex-grow overflow-y-auto bg-slate-50 transition-colors", isFullscreen ? "bg-white p-8" : "p-4 md:p-12")}>
                 <div 
-                    className="container mx-auto px-4 md:px-12 py-12"
-                    style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top center' }}
+                    className="mx-auto w-full max-w-5xl prose prose-indigo md:prose-lg lg:prose-xl content-area"
+                    style={{ fontSize: `${zoomLevel / 100}rem`, transformOrigin: 'top center' }}
                 >
                     <div 
-                        ref={contentRef}
-                        className="prose prose-slate prose-lg max-w-none animate-in fade-in slide-in-from-bottom-4 duration-700"
-                        dangerouslySetInnerHTML={{ __html: content.htmlContent }}
+                        dangerouslySetInnerHTML={{ __html: content.htmlContent }} 
+                        className="animate-in fade-in duration-700"
                     />
-                    
-                    {/* Alt Bilgi */}
-                    <div className="mt-20 pt-8 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 text-slate-400 font-medium text-xs uppercase tracking-widest print-hidden pb-12">
-                        <div className="flex items-center gap-4">
-                            <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5"/> {content.createdAt ? new Date(content.createdAt).toLocaleDateString('tr-TR') : '-'}</span>
-                            <span className="flex items-center gap-1.5"><Folder className="h-3.5 w-3.5"/> {content.category}</span>
-                        </div>
-                        <span>Din Dersi Atölyesi Platformu</span>
-                    </div>
                 </div>
+                
+                {/* Alt Boşluk */}
+                <div className="h-32 no-print" />
             </main>
         </div>
     );
 }
 
-export default function Page() {
+function AlertTriangle(props: any) {
     return (
-        <Suspense fallback={<div className="h-screen flex items-center justify-center bg-slate-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>}>
-            <ExtraPageViewer />
-        </Suspense>
-    );
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+            <path d="M12 9v4" />
+            <path d="M12 17h.01" />
+        </svg>
+    )
 }
