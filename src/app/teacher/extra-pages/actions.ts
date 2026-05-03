@@ -29,7 +29,7 @@ function serializeDoc(data: any) {
 export async function getExtraPages(onlyPublished: boolean = false) {
   try {
     const db = getAdminDb();
-    // NOT: İndeks kısıtlamalarına takılmamak için tüm dökümanları çekip bellekte işliyoruz.
+    // Not: Firestore index kısıtlamalarına takılmamak için tüm dökümanları çekip bellekte işliyoruz.
     // Bu sayede alanı eksik olan eski dökümanlar kaybolmuyor.
     const snapshot = await db.collection('extraPages').get();
     
@@ -69,6 +69,7 @@ export async function getExtraPage(id: string) {
     if (!doc.exists) return { success: false, error: "Döküman bulunamadı." };
     return { success: true, data: { id: doc.id, ...serializeDoc(doc.data()) } };
   } catch (error: any) {
+    console.error("Error fetching single extra page:", error);
     return { success: false, error: error.message };
   }
 }
