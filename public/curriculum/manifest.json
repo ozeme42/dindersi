@@ -925,6 +925,63 @@
               ]
             }
           ]
+        },
+        {
+          "id": "gpq2vTVj1bGDx7rcFJaY",
+          "title": "Kuran-ı Kerim",
+          "units": [
+            {
+              "id": "NslHDgkQ00RYFdUMEIiq",
+              "title": "2. ÜNİTE: KUR'AN-I KERİM'İ GÜZEL OKUMA",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "8XclbJO7kh9xMa9neqF6",
+                  "title": "2. Tecvit Bilgisi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "DfiS046CJeUxpxjkjnMH",
+                  "title": "1. Okunacak Sure ve Ayetler",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "o35jyAnmlpnbctae84RV",
+                  "title": "3. Ezberlenecek Dualar, Sureler ve Anlamları",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "msqJYw3ckVTRyYuf9ss5",
+              "title": "1. ÜNİTE: KUR'AN-I KERİM'İ TANIYALIM",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "6d0INrzlzU8uzwQgrYTM",
+                  "title": "2. Kur'an'ın Mesajını Anlıyorum",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "boS1oBIqIGLq1IabkWbQ",
+                  "title": "1. Kur'an-ı Kerim'in İslam Dinindeki Yeri ve Önemi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            }
+          ]
         }
       ]
     },
