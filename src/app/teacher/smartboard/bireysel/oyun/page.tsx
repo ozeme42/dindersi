@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, Suspense, useMemo } from "react";
@@ -425,6 +426,7 @@ function IndividualCompetitionComponent() {
                     onOpenChange={setIsAddStudentOpen} 
                     onAdd={handleAddGuest} 
                     isSaving={isAddingStudent} 
+                    poolClassName=""
                 />
             </div>
         );
@@ -455,9 +457,9 @@ function IndividualCompetitionComponent() {
                     </div>
                 </header>
 
-                {/* Ana İçerik: Liderlik Tablosu Grid */}
+                {/* Ana İçerik: Liderlik Tablosu Grid (DÜZELTİLDİ: Max 4 Sütun) */}
                 <div className="flex-1 bg-slate-900/30 rounded-2xl border border-white/5 p-4 overflow-y-auto custom-scrollbar min-h-0 relative">
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                         {sortedCompetitors.map((comp, idx) => (
                             <LeaderboardCard 
                                 key={comp.uid} 
