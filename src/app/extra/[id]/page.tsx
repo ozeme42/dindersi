@@ -41,12 +41,14 @@ export default function ExtraPageViewer() {
             inlineCode = inlineCode.replace(/(?:let|const)\s+/g, 'var ');
             
             // 2. Fonksiyon tanımlarını yakalayıp window'a bağla (onclick="selectGrade()" gibi yapılar için şart)
-            // selectGrade, showSoru, checkSoru vb. tüm dinamik fonksiyonlar için çalışır.
             inlineCode = inlineCode.replace(/function\s+([a-zA-Z0-9_]+)\s*\(/g, 'window.$1 = function (');
             
             // Yaygın kullanılan navigasyon ve UI fonksiyonlarını global kapsama (window) bağla
             const wrappedCode = `
                 (function() {
+                    // Tailwind CDN Polyfill
+                    window.tailwind = window.tailwind || { config: {} };
+
                     window.showSection = window.showSection || function(id) {
                         const sections = document.querySelectorAll('.page-section');
                         sections.forEach(s => s.style.display = 'none');

@@ -22,6 +22,7 @@ export default function ExtraPagesExplorer() {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [currentPath, setCurrentPath] = useState<string>("");
 
+    // Cihaz algılama: Mobilde varsayılan liste modu
     useEffect(() => {
         if (typeof window !== 'undefined') {
             if (window.innerWidth < 768) {
