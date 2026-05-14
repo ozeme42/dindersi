@@ -439,7 +439,7 @@ export default function ExtraPagesManagement() {
                     </div>
                     <DialogFooter className="p-4 pt-0">
                         <Button variant="ghost" onClick={() => setIsMoveDialogOpen(false)}>İptal</Button>
-                        <Button onClick={() => handleMove(movingPage.category)} disabled={isSaving} className="bg-blue-600 text-white rounded-xl px-6">Taşı</Button>
+                        <Button onClick={handleMove} disabled={isSaving} className="bg-blue-600 text-white rounded-xl px-6">Taşı</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

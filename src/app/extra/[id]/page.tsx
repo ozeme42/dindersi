@@ -35,11 +35,16 @@ export default function ExtraPageViewer() {
             const newScript = document.createElement('script');
             Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
             
-            // Script içindeki let/const tanımları SyntaxError (already declared) yaratmasın diye var ile değiştiriyoruz.
             let inlineCode = oldScript.innerHTML;
+            
+            // 1. let/const tanımları SyntaxError (already declared) yaratmasın diye var ile değiştiriyoruz.
             inlineCode = inlineCode.replace(/(?:let|const)\s+/g, 'var ');
             
-            // Yaygın kullanılan fonksiyonları global kapsama (window) bağla
+            // 2. Fonksiyon tanımlarını yakalayıp window'a bağla (onclick="selectGrade()" gibi yapılar için şart)
+            // selectGrade, showSoru, checkSoru vb. tüm dinamik fonksiyonlar için çalışır.
+            inlineCode = inlineCode.replace(/function\s+([a-zA-Z0-9_]+)\s*\(/g, 'window.$1 = function (');
+            
+            // Yaygın kullanılan navigasyon ve UI fonksiyonlarını global kapsama (window) bağla
             const wrappedCode = `
                 (function() {
                     window.showSection = window.showSection || function(id) {
@@ -84,7 +89,6 @@ export default function ExtraPageViewer() {
             const res = await getExtraPage(id);
             if (res.success) {
                 setPage(res.data);
-                // Eğer bu bir link ise otomatik yönlendir
                 if (res.data?.htmlContent?.startsWith('URL::')) {
                     window.location.href = res.data.htmlContent.replace('URL::', '');
                     return;
@@ -101,7 +105,6 @@ export default function ExtraPageViewer() {
         return () => document.removeEventListener('fullscreenchange', handleFS);
     }, [id]);
 
-    // İçerik yüklendiğinde scriptleri çalıştır
     useEffect(() => {
         if (!isLoading && page && contentRef.current) {
             executeInlineScripts(contentRef.current);
@@ -139,7 +142,6 @@ export default function ExtraPageViewer() {
             "w-full flex flex-col bg-white transition-all duration-300",
             isFullscreen ? "h-screen overflow-hidden" : "min-h-screen"
         )}>
-            {/* Üst Araç Çubuğu */}
             {!isFullscreen && (
                 <header className="w-full z-50 bg-white/95 backdrop-blur-md shrink-0 border-b border-slate-200">
                     <div className="w-full px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -181,7 +183,6 @@ export default function ExtraPageViewer() {
                 </header>
             )}
 
-            {/* İÇERİK ALANI - FRAMELESS (DOĞRUDAN DOM) */}
             <main className="flex-grow w-full relative bg-white block overflow-y-auto custom-scrollbar">
                 <div 
                     ref={contentRef}
@@ -191,7 +192,6 @@ export default function ExtraPageViewer() {
                 />
             </main>
                 
-            {/* Alt Bilgi Alanı */}
             {!isFullscreen && (
                 <footer className="w-full px-6 py-3 border-t border-slate-100 flex items-center justify-center shrink-0 bg-white">
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">
@@ -200,7 +200,6 @@ export default function ExtraPageViewer() {
                 </footer>
             )}
 
-            {/* Tam Ekrandan Çıkış Butonu (Mobil/Akıllı Tahta İçin) */}
             {isFullscreen && (
                 <div className="fixed bottom-6 right-6 z-[100] animate-in fade-in slide-in-from-bottom-4">
                     <Button 
