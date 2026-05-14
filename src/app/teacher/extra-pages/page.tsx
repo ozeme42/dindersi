@@ -5,7 +5,8 @@ import {
     Plus, Search, Edit2, Trash2, Globe, Eye, EyeOff, 
     Loader2, MoreVertical, LayoutGrid, Tag, Settings2,
     ChevronRight, Folder, ArrowLeft, FileText, HardDrive, 
-    FolderOpen, Settings, CornerDownRight, Link2, ExternalLink
+    FolderOpen, Settings, CornerDownRight, Link2, ExternalLink,
+    Save
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -396,7 +397,7 @@ export default function ExtraPagesManagement() {
             </Dialog>
 
             <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
-                <DialogContent className="max-w-md rounded-3xl">
+                <DialogContent className="max-w-md rounded-3xl bg-white text-slate-900">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2"><FolderOpen className="h-5 w-5 text-blue-500" /> Klasör Listesi</DialogTitle>
                     </DialogHeader>
@@ -421,7 +422,7 @@ export default function ExtraPagesManagement() {
             </Dialog>
 
             <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
-                <DialogContent className="max-w-md rounded-3xl">
+                <DialogContent className="max-w-md rounded-3xl bg-white text-slate-900">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2"><Settings className="h-5 w-5 text-blue-500" /> Konumu Değiştir</DialogTitle>
                     </DialogHeader>

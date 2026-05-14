@@ -54,13 +54,16 @@ export default function ExtraPageViewer() {
                         if(el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
                     };
                     window.changeTextSize = window.changeTextSize || function(delta) {
-                        const content = document.getElementById('content-area');
+                        const content = document.getElementById('content-area') || document.body;
                         if (content) {
                             let currentSize = parseFloat(window.getComputedStyle(content).fontSize);
                             content.style.fontSize = (currentSize + delta) + 'px';
                         }
                     };
-                    window.go = window.go || function(n) { history.go(n); };
+                    window.go = window.go || function(n) { 
+                        if (typeof n === 'number') history.go(n);
+                        else window.location.href = n;
+                    };
                     
                     try {
                         ${inlineCode}
@@ -71,7 +74,7 @@ export default function ExtraPageViewer() {
             `;
             
             newScript.innerHTML = wrappedCode;
-            oldScript.parentNode?.replaceChild(newScript, oldScript);
+            document.body.appendChild(newScript);
         });
     }, []);
 
