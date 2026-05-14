@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { 
     Loader2, ArrowLeft, Clock, Plus, Minus, Printer, FileText, 
     Maximize2, Minimize2 
