@@ -37,7 +37,7 @@ export default function ExtraPageViewer() {
             
             // Script içindeki let/const tanımları SyntaxError (already declared) yaratmasın diye var ile değiştiriyoruz.
             let inlineCode = oldScript.innerHTML;
-            inlineCode = inlineCode.replace(/let\s+/g, 'var ').replace(/const\s+/g, 'var ');
+            inlineCode = inlineCode.replace(/(?:let|const)\s+/g, 'var ');
             
             // Yaygın kullanılan fonksiyonları global kapsama (window) bağla
             const wrappedCode = `
@@ -182,7 +182,7 @@ export default function ExtraPageViewer() {
             <main className="flex-grow w-full relative bg-white block overflow-y-auto custom-scrollbar">
                 <div 
                     ref={contentRef}
-                    className="w-full h-full transition-transform duration-200 ease-out origin-top"
+                    className="w-full h-full transition-transform duration-200 ease-out origin-top p-4 md:p-10"
                     style={{ transform: `scale(${zoomLevel})` }}
                     dangerouslySetInnerHTML={{ __html: page.htmlContent }}
                 />
