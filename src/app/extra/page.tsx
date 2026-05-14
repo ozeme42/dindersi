@@ -78,7 +78,6 @@ export default function ExtraPagesExplorer() {
         return { currentFolders: folders, currentFiles: files };
     }, [pages, currentPath, searchTerm]);
 
-    // RENK VE İKON BELİRLEYİCİ - Tasarımı canlandıran ana fonksiyon
     const getFileTheme = (title: string, isLink: boolean) => {
         const lowerTitle = title.toLowerCase();
         
@@ -119,18 +118,14 @@ export default function ExtraPagesExplorer() {
 
     return (
         <div className="min-h-screen bg-slate-50/50 font-sans text-slate-900 pb-20 relative selection:bg-indigo-100 selection:text-indigo-900">
-            
-            {/* Animasyonlu Canlı Arka Plan (Mesh Gradient) */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-indigo-200/30 rounded-full blur-[100px] mix-blend-multiply animate-pulse duration-[10000ms]" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-sky-200/30 rounded-full blur-[100px] mix-blend-multiply" />
-                <div className="absolute top-[20%] right-[10%] w-[30vw] h-[30vw] bg-fuchsia-200/20 rounded-full blur-[100px] mix-blend-multiply" />
             </div>
 
             <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-3xl border-b border-slate-200 shadow-sm">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        
                         <div className="flex items-center gap-3 w-full md:w-auto">
                             <Button variant="outline" size="icon" asChild className="rounded-2xl h-11 w-11 bg-white hover:bg-slate-50 border-slate-200 text-slate-600 shadow-sm transition-all flex-shrink-0">
                                 <Link href="/"><ArrowLeft className="h-5 w-5" /></Link>
@@ -190,7 +185,6 @@ export default function ExtraPagesExplorer() {
                             {pathParts.map((part, index) => {
                                 const pathToHere = pathParts.slice(0, index + 1).join('/');
                                 const isLast = index === pathParts.length - 1;
-                                
                                 return (
                                     <React.Fragment key={pathToHere}>
                                         <ChevronRightIcon className="h-4 w-4 text-slate-300 flex-shrink-0" />
@@ -222,7 +216,6 @@ export default function ExtraPagesExplorer() {
                     </div>
                 ) : (
                     <div className="space-y-10">
-                        
                         {searchTerm && (
                             <h2 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-3">
                                 <Search className="h-6 w-6 text-indigo-500" />
@@ -231,7 +224,6 @@ export default function ExtraPagesExplorer() {
                             </h2>
                         )}
 
-                        {/* KLASÖRLER */}
                         {!searchTerm && currentFolders.length > 0 && (
                             <section>
                                 <h3 className="text-xs font-black text-slate-400 mb-5 uppercase tracking-widest flex items-center gap-2 ml-1">
@@ -270,7 +262,6 @@ export default function ExtraPagesExplorer() {
                             </section>
                         )}
 
-                        {/* DOSYALAR VE LİNKLER */}
                         {(searchTerm || currentFiles.length > 0) && (
                             <section>
                                 {!searchTerm && (
@@ -298,26 +289,15 @@ export default function ExtraPagesExplorer() {
                                                 )}>
                                                     {viewMode === 'grid' ? (
                                                         <>
-                                                            <div className={cn(
-                                                                "h-36 flex items-center justify-center p-6 relative overflow-hidden bg-gradient-to-br",
-                                                                theme.gradient
-                                                            )}>
-                                                                {/* Dekoratif Arka Plan Halkaları */}
+                                                            <div className={cn("h-36 flex items-center justify-center p-6 relative overflow-hidden bg-gradient-to-br", theme.gradient)}>
                                                                 <div className="absolute top-[-20%] right-[-10%] w-24 h-24 rounded-full bg-white/40 blur-xl" />
                                                                 <div className="absolute bottom-[-20%] left-[-10%] w-20 h-20 rounded-full bg-white/40 blur-xl" />
-                                                                
-                                                                <div className={cn(
-                                                                    "w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg bg-white relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3",
-                                                                    theme.text
-                                                                )}>
+                                                                <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg bg-white relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3", theme.text)}>
                                                                     {theme.icon}
                                                                 </div>
                                                             </div>
                                                             <CardContent className="flex-grow p-6">
-                                                                <CardTitle className={cn(
-                                                                    "text-lg leading-tight transition-colors font-black tracking-tight mb-2 line-clamp-2", 
-                                                                    theme.text.replace('text-', 'group-hover:text-')
-                                                                )}>
+                                                                <CardTitle className={cn("text-lg leading-tight transition-colors font-black tracking-tight mb-2 line-clamp-2", theme.text.replace('text-', 'group-hover:text-'))}>
                                                                     {item.title}
                                                                 </CardTitle>
                                                                 <p className="text-sm font-medium text-slate-500 line-clamp-2 leading-relaxed">
@@ -325,35 +305,21 @@ export default function ExtraPagesExplorer() {
                                                                 </p>
                                                             </CardContent>
                                                             <CardFooter className="px-6 py-4 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
-                                                                <Badge variant="secondary" className={cn(
-                                                                    "text-[10px] font-black uppercase tracking-widest rounded-md px-2.5 py-1 border-none",
-                                                                    theme.badgeBg, theme.badgeText
-                                                                )}>
+                                                                <Badge variant="secondary" className={cn("text-[10px] font-black uppercase tracking-widest rounded-md px-2.5 py-1 border-none", theme.badgeBg, theme.badgeText)}>
                                                                     {isExternalLink ? 'Bağlantı' : 'Döküman'}
                                                                 </Badge>
-                                                                <div className={cn(
-                                                                    "h-8 w-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm transition-all",
-                                                                    theme.bg.replace('bg-', 'group-hover:bg-'),
-                                                                    theme.text.replace('text-', 'group-hover:text-'),
-                                                                    "text-slate-400 group-hover:border-transparent"
-                                                                )}>
-                                                                    {isExternalLink ? <ExternalLink className="h-4 w-4 ml-0.5" /> : <ChevronRightIcon className="h-4 w-4 ml-0.5" />}
+                                                                <div className={cn("h-8 w-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm transition-all", theme.text.replace('text-', 'group-hover:text-'), "text-slate-400 group-hover:border-transparent")}>
+                                                                    {isExternalLink ? <ExternalLink className="h-4 w-4" /> : <ChevronRightIcon className="h-4 w-4 ml-0.5" />}
                                                                 </div>
                                                             </CardFooter>
                                                         </>
                                                     ) : (
                                                         <>
-                                                            <div className={cn(
-                                                                "w-14 h-14 rounded-xl flex items-center justify-center mr-5 p-3 transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3",
-                                                                theme.bg, theme.text
-                                                            )}>
+                                                            <div className={cn("w-14 h-14 rounded-xl flex items-center justify-center mr-5 p-3 transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3", theme.bg, theme.text)}>
                                                                 {theme.icon}
                                                             </div>
                                                             <div className="flex-1 min-w-0 pr-6">
-                                                                <h3 className={cn(
-                                                                    "font-black text-slate-800 transition-colors truncate text-lg tracking-tight", 
-                                                                    theme.text.replace('text-', 'group-hover:text-')
-                                                                )}>
+                                                                <h3 className={cn("font-black text-slate-800 transition-colors truncate text-lg tracking-tight", theme.text.replace('text-', 'group-hover:text-'))}>
                                                                     {item.title}
                                                                 </h3>
                                                                 <div className="flex items-center gap-3 mt-1.5">
@@ -365,13 +331,8 @@ export default function ExtraPagesExplorer() {
                                                                     </span>
                                                                 </div>
                                                             </div>
-                                                            <div className={cn(
-                                                                "h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center transition-all ml-2 flex-shrink-0", 
-                                                                theme.bg.replace('bg-', 'group-hover:bg-'),
-                                                                theme.text.replace('text-', 'group-hover:text-'),
-                                                                "text-slate-300"
-                                                            )}>
-                                                                {isExternalLink ? <ExternalLink className="h-5 w-5 ml-0.5" /> : <ChevronRightIcon className="h-5 w-5 ml-0.5" />}
+                                                            <div className={cn("h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center transition-all ml-2 flex-shrink-0", theme.text.replace('text-', 'group-hover:text-'), "text-slate-300")}>
+                                                                {isExternalLink ? <ExternalLink className="h-5 w-5" /> : <ChevronRightIcon className="h-5 w-5 ml-0.5" />}
                                                             </div>
                                                         </>
                                                     )}
@@ -395,20 +356,17 @@ export default function ExtraPagesExplorer() {
                                             <Search className="h-10 w-10 text-slate-400 -rotate-12" />
                                         </div>
                                         <h3 className="text-xl font-black tracking-tight text-slate-800">Sonuç Bulunamadı</h3>
-                                        <p className="text-slate-500 font-medium mt-2">Bu klasörde aradığınız kriterlere uygun içerik yok.</p>
                                     </div>
                                 )}
                             </section>
                         )}
 
-                        {/* Boş Klasör Uyarı Ekranı */}
                         {!searchTerm && currentFolders.length === 0 && currentFiles.length === 0 && (
                             <div className="py-32 text-center bg-white/60 backdrop-blur-xl rounded-[3rem] border border-slate-200/60 shadow-xl shadow-sky-500/5">
                                 <div className="w-28 h-28 bg-gradient-to-br from-sky-100 to-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-sky-100">
                                     <Folder className="h-14 w-14 fill-sky-400 text-sky-500 drop-shadow-sm" />
                                 </div>
                                 <h3 className="text-2xl font-black text-slate-800 tracking-tight mb-2">Bu Klasör Bomboş</h3>
-                                <p className="text-slate-500 font-medium">Buraya henüz bir dosya, video veya test eklenmemiş.</p>
                                 {currentPath !== "" && (
                                     <Button 
                                         variant="outline" 

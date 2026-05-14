@@ -5,12 +5,6 @@ src/public/
 .next/
 node_modules/
 .idx/
-src/context/
-src/hooks/
-src/lib/
-src/app/actions/
 src/app/curriculum/
-src/app/extra/
 src/app/leaderboard/
 src/app/oyunlar/
-src/app/extra/

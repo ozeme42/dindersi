@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { 
-    Loader2, ArrowLeft, Clock, Plus, Minus, Printer, FileText, ChevronRight
+    Loader2, ArrowLeft, Clock, Plus, Minus, Printer, FileText, ChevronRight, 
+    Maximize2, Minimize2, ExternalLink
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
@@ -25,35 +27,22 @@ export default function ExtraPageViewer() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     
     const containerRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
 
-    // Dışarıdan gelen sunumu güvenli bir kapsüle (sandbox) alıyoruz.
-    const iframeContent = useMemo(() => {
-        if (!page?.htmlContent) return "";
-        
-        return `
-            <!DOCTYPE html>
-            <html lang="tr">
-            <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <style>
-                    /* TAM EKRAN VE TAM GENİŞLİK AYARLARI BURADA */
-                    html, body { 
-                        width: 100%; 
-                        height: 100%; 
-                        margin: 0; 
-                        padding: 0; 
-                        font-family: system-ui, sans-serif; 
-                        overflow-x: hidden; 
-                    }
-                    /* Özel kaydırma çubuğu */
-                    ::-webkit-scrollbar { width: 8px; height: 8px; }
-                    ::-webkit-scrollbar-track { background: #f1f1f1; }
-                    ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
-                    ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
-                </style>
-                <script>
-                    window.go = window.go || function(n) { history.go(n); };
+    // GÜVENLİ SCRİPT YÜRÜTÜCÜ: HTML içindeki scriptleri React ortamında çalıştırır.
+    const executeInlineScripts = useCallback((containerElement: HTMLElement) => {
+        const scripts = containerElement.querySelectorAll('script');
+        scripts.forEach((oldScript) => {
+            const newScript = document.createElement('script');
+            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+            
+            // Script içindeki let/const tanımları SyntaxError yaratmasın diye var ile değiştiriyoruz (kapsam sorunu çözümü)
+            let inlineCode = oldScript.innerHTML;
+            inlineCode = inlineCode.replace(/let\s+/g, 'var ').replace(/const\s+/g, 'var ');
+            
+            // Yaygın kullanılan fonksiyonları global kapsama (window) bağla
+            const wrappedCode = `
+                (function() {
                     window.showSection = window.showSection || function(id) {
                         const sections = document.querySelectorAll('.page-section');
                         sections.forEach(s => s.style.display = 'none');
@@ -65,14 +54,16 @@ export default function ExtraPageViewer() {
                         const el = document.getElementById(id);
                         if(el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
                     };
-                </script>
-            </head>
-            <body>
-                ${page.htmlContent}
-            </body>
-            </html>
-        `;
-    }, [page]);
+                    window.go = window.go || function(n) { history.go(n); };
+                    
+                    ${inlineCode}
+                })();
+            `;
+            
+            newScript.innerHTML = wrappedCode;
+            oldScript.parentNode?.replaceChild(newScript, oldScript);
+        });
+    }, []);
 
     useEffect(() => {
         const fetchPage = async () => {
@@ -80,8 +71,13 @@ export default function ExtraPageViewer() {
             const res = await getExtraPage(id);
             if (res.success) {
                 setPage(res.data);
+                // Eğer bu bir link ise otomatik yönlendir
+                if (res.data?.htmlContent?.startsWith('URL::')) {
+                    window.location.href = res.data.htmlContent.replace('URL::', '');
+                    return;
+                }
             } else {
-                setError(res.error || "İstediğiniz döküman bulunamadı veya henüz eklenmemiş.");
+                setError(res.error || "Döküman bulunamadı.");
             }
             setIsLoading(false);
         };
@@ -92,26 +88,33 @@ export default function ExtraPageViewer() {
         return () => document.removeEventListener('fullscreenchange', handleFS);
     }, [id]);
 
+    // İçerik yüklendiğinde scriptleri çalıştır
+    useEffect(() => {
+        if (!isLoading && page && contentRef.current) {
+            executeInlineScripts(contentRef.current);
+        }
+    }, [isLoading, page, executeInlineScripts]);
+
     if (isLoading) {
         return (
-            <div className="h-[100dvh] w-full bg-white flex flex-col items-center justify-center gap-4">
-                <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
-                <p className="text-slate-500 font-medium">İçerik Yükleniyor...</p>
+            <div className="h-[100dvh] w-full bg-slate-950 flex flex-col items-center justify-center gap-4">
+                <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+                <p className="text-slate-500 font-bold tracking-widest uppercase text-xs animate-pulse">Yükleniyor...</p>
             </div>
         );
     }
 
     if (error || !page) {
         return (
-            <div className="h-[100dvh] w-full bg-white flex flex-col items-center justify-center p-8 text-center">
-                <div className="bg-white border border-red-100 p-10 rounded-3xl max-w-md shadow-xl w-full">
-                    <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <FileText className="h-8 w-8 text-red-400" />
+            <div className="h-[100dvh] w-full bg-slate-950 flex flex-col items-center justify-center p-8 text-center">
+                <div className="bg-slate-900 border border-white/10 p-10 rounded-3xl max-w-md shadow-2xl">
+                    <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-red-500">
+                        <FileText className="h-8 w-8" />
                     </div>
-                    <p className="text-slate-800 text-lg font-bold mb-2">Döküman Bulunamadı</p>
-                    <p className="text-slate-500 text-sm mb-8">{error || "Hata Oluştu"}</p>
+                    <p className="text-white text-lg font-bold mb-2">Hata Oluştu</p>
+                    <p className="text-slate-400 text-sm mb-8">{error || "Döküman okunamadı."}</p>
                     <Button asChild size="lg" className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl">
-                        <Link href="/extra"><ArrowLeft className="mr-2 h-5 w-5" /> Dosyalara Dön</Link>
+                        <Link href="/extra"><ArrowLeft className="mr-2 h-5 w-5" /> Geri Dön</Link>
                     </Button>
                 </div>
             </div>
@@ -120,94 +123,81 @@ export default function ExtraPageViewer() {
 
     return (
         <div ref={containerRef} className={cn(
-            "w-full flex flex-col bg-white selection:bg-blue-100",
+            "w-full flex flex-col bg-white transition-all duration-300",
             isFullscreen ? "h-screen overflow-hidden" : "min-h-screen"
         )}>
-            
-            {/* Üst Araç Çubuğu - Tam ekranda gizlenir */}
+            {/* Üst Araç Çubuğu */}
             {!isFullscreen && (
-                <header className="w-full z-50 transition-all duration-500 bg-white/95 backdrop-blur-md shrink-0 border-b border-slate-200">
+                <header className="w-full z-50 bg-white/95 backdrop-blur-md shrink-0 border-b border-slate-200">
                     <div className="w-full px-4 sm:px-6 h-16 flex items-center justify-between">
-                        <div className="flex items-center gap-3 overflow-hidden w-full md:w-auto">
-                            <Button variant="ghost" size="icon" asChild className="rounded-xl flex-shrink-0 hover:bg-slate-100 transition-colors">
+                        <div className="flex items-center gap-3 overflow-hidden">
+                            <Button variant="ghost" size="icon" asChild className="rounded-xl hover:bg-slate-100">
                                 <Link href="/extra"><ArrowLeft className="h-5 w-5 text-slate-700" /></Link>
                             </Button>
                             
                             <div className="flex flex-col min-w-0">
-                                <div className="flex items-center gap-2">
-                                    <FileText className="h-4 w-4 text-blue-500 hidden sm:block flex-shrink-0" />
-                                    <h1 className="font-bold tracking-tight text-slate-800 truncate text-base lg:text-lg">
-                                        {page.title}
-                                    </h1>
-                                </div>
-                                <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
-                                    <span className="font-medium text-blue-600">{page.category ? page.category.split('/')[0] : 'Genel'}</span>
-                                    {page.category && page.category.includes('/') && (
-                                        <>
-                                            <ChevronRight className="h-3 w-3 text-slate-400" />
-                                            <span>{page.category.split('/')[1]}</span>
-                                        </>
-                                    )}
+                                <h1 className="font-bold tracking-tight text-slate-800 truncate text-base lg:text-lg">
+                                    {page.title}
+                                </h1>
+                                <div className="flex items-center gap-2 mt-0.5">
+                                    <Badge variant="outline" className="bg-indigo-50 text-indigo-600 border-indigo-100 text-[10px] font-black uppercase">
+                                        {page.category || 'Genel'}
+                                    </Badge>
+                                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
+                                        <Clock className="h-2.5 w-2.5" />
+                                        {page.updatedAt ? format(new Date(page.updatedAt), 'd MMMM yyyy', { locale: tr }) : '-'}
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                            <div className="hidden sm:flex items-center bg-slate-50 rounded-lg p-1 border border-slate-200 mr-2">
-                                <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-8 w-8 text-slate-500 hover:text-blue-600 hover:bg-white rounded-md">
-                                    <Minus className="h-4 w-4"/>
-                                </Button>
+                        <div className="flex items-center gap-2">
+                            <div className="hidden sm:flex items-center bg-slate-50 rounded-lg p-1 border border-slate-200">
+                                <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-8 w-8 text-slate-500 hover:bg-white"><Minus className="h-4 w-4"/></Button>
                                 <span className="text-xs font-semibold text-slate-600 w-12 text-center tabular-nums">{Math.round(zoomLevel * 100)}%</span>
-                                <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 text-slate-500 hover:text-blue-600 hover:bg-white rounded-md">
-                                    <Plus className="h-4 w-4"/>
-                                </Button>
+                                <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 text-slate-500 hover:bg-white"><Plus className="h-4 w-4"/></Button>
                             </div>
 
-                            <Button 
-                                variant="outline" 
-                                onClick={() => window.print()} 
-                                className="hidden md:flex h-10 items-center gap-2 rounded-xl bg-white border-slate-200 text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                            >
+                            <Button variant="outline" onClick={() => window.print()} className="hidden md:flex h-10 items-center gap-2 rounded-xl bg-white border-slate-200 text-slate-600 hover:bg-blue-50 hover:text-blue-600">
                                 <Printer className="h-4 w-4" /> Yazdır
                             </Button>
 
-                            <FullscreenToggle elementRef={containerRef} className="bg-white border-slate-200 text-slate-600 h-10 w-10 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-colors" />
+                            <FullscreenToggle elementRef={containerRef} className="bg-white border-slate-200 text-slate-600 h-10 w-10 rounded-xl hover:bg-blue-50" />
                         </div>
                     </div>
                 </header>
             )}
 
-            {/* İÇERİK ALANI - TAM ALAN KULLANIMI (ABSOLUTE INSET-0) */}
-            <main className="flex-grow w-full relative bg-[#f8f9fa] block">
+            {/* İÇERİK ALANI - FRAMELESS (DOĞRUDAN DOM) */}
+            <main className="flex-grow w-full relative bg-white block overflow-y-auto custom-scrollbar">
                 <div 
-                    className="absolute inset-0 w-full h-full transition-transform duration-200 ease-out block"
-                    style={{ 
-                        transform: `scale(${zoomLevel})`, 
-                        transformOrigin: 'top center' 
-                    }}
-                >
-                    <iframe
-                        srcDoc={iframeContent}
-                        title={page.title}
-                        className="w-full h-full border-none bg-transparent block"
-                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"
-                    />
-                </div>
+                    ref={contentRef}
+                    className="w-full h-full transition-transform duration-200 ease-out origin-top"
+                    style={{ transform: `scale(${zoomLevel})` }}
+                    dangerouslySetInnerHTML={{ __html: page.htmlContent }}
+                />
             </main>
                 
-            {/* Alt Bilgi Alanı - Tam ekranda gizlenir */}
+            {/* Alt Bilgi Alanı */}
             {!isFullscreen && (
-                <footer className="w-full px-6 py-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-white z-10 mt-auto">
-                    <div className="flex items-center gap-3">
-                        <Clock className="h-4 w-4 text-slate-400" />
-                        <span className="text-xs font-medium text-slate-500">
-                            Son Güncelleme: {page.updatedAt ? format(new Date(page.updatedAt), 'd MMMM yyyy HH:mm', { locale: tr }) : '-'}
-                        </span>
-                    </div>
-                    <div className="text-xs text-slate-400">
-                        Döküman ID: <span className="font-mono text-slate-500">{page.id.substring(0, 8)}...</span>
-                    </div>
+                <footer className="w-full px-6 py-3 border-t border-slate-100 flex items-center justify-center shrink-0 bg-white">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">
+                        dindersiatolyesi.com döküman merkezi
+                    </p>
                 </footer>
+            )}
+
+            {/* Tam Ekrandan Çıkış Butonu (Mobil/Akıllı Tahta İçin) */}
+            {isFullscreen && (
+                <div className="fixed bottom-6 right-6 z-[100] animate-in fade-in slide-in-from-bottom-4">
+                    <Button 
+                        size="lg" 
+                        onClick={() => document.exitFullscreen()} 
+                        className="h-12 px-6 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold border border-red-400/30"
+                    >
+                        <Minimize2 className="mr-2 h-5 w-5" /> Çıkış
+                    </Button>
+                </div>
             )}
         </div>
     );
