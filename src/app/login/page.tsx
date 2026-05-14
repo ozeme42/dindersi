@@ -127,21 +127,24 @@ export default function LoginPage() {
       
       <div className="w-full max-w-md animate-in zoom-in-95 duration-500">
         
-        {/* LOGO AREA - Islamic Icon Applied */}
+        {/* LOGO AREA - Quran Icon (Rehal) */}
         <div className="text-center mb-8">
             <div className="bg-cyan-500/20 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-4 ring-4 ring-cyan-500/10 shadow-[0_0_40px_rgba(6,182,212,0.3)] rotate-3">
                 <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-14 w-14 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
-                    <path d="M32 4.5L34.5 12.5H29.5L32 4.5Z" fill="currentColor"/>
-                    <path d="M32 12V18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M18 28C18 20.268 24.268 14 32 14C39.732 14 46 20.268 46 28H18Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
-                    <path d="M12 60V28C12 28 12 24 16 24H48C52 24 52 28 52 28V60" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M4 60H60" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M26 60V48C26 44.6863 28.6863 42 32 42C35.3137 42 38 44.6863 38 48V60" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 28L10 8L12 4L14 8L12 28Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="1"/>
-                    <path d="M52 28L54 8L52 4L50 8L52 28Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="1"/>
+                    {/* Rehal (Book Stand) */}
+                    <path d="M12 48L32 36L52 48" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 32L32 44L52 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    {/* Open Book Pages */}
+                    <path d="M32 36V12C32 12 24 10 12 14V38C24 34 32 36 32 36Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M32 36V12C32 12 40 10 52 14V38C40 34 32 36 32 36Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    {/* Calligraphic Lines on Pages */}
+                    <path d="M18 20H26" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M18 26H26" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M38 20H46" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M38 26H46" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
             </div>
-            <h1 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-sm">
+            <h1 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-sm uppercase">
                 DİNDERSİ ATÖLYESİ
             </h1>
             <p className="text-indigo-200/60 font-medium mt-2">Maceraya kaldığın yerden devam et.</p>
