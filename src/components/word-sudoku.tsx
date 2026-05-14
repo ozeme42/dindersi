@@ -1,286 +1,267 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { 
-    Trophy, RefreshCw, HelpCircle, CheckCircle2, 
-    AlertCircle, Sparkles, BrainCircuit, Lightbulb, 
-    RotateCcw, Info
+    RefreshCw, Lightbulb, Trophy, AlertCircle, 
+    CheckCircle2, HelpCircle, Sparkles, Brain, RotateCcw
 } from 'lucide-react';
-import { playSound } from '@/lib/audio-service';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import confetti from 'canvas-confetti';
 
-const WORDS = ['SAYGI', 'SEVGİ', 'SABIR', 'İHLAS'];
-
-// 4x4 Sudoku Desenleri
-const PATTERNS = [
-    [
-        [0, 1, 2, 3],
-        [2, 3, 0, 1],
-        [1, 0, 3, 2],
-        [3, 2, 1, 0]
-    ],
-    [
-        [3, 0, 1, 2],
-        [1, 2, 3, 0],
-        [0, 3, 2, 1],
-        [2, 1, 0, 3]
-    ]
-];
+// Kelime Sudoku Ayarları
+const WORDS = ["SEVGİ", "SAYGI", "SABIR", "İHLAS"];
+const GRID_SIZE = 4;
 
 type Difficulty = 'easy' | 'medium' | 'hard';
 
 export function WordSudoku() {
-    const [grid, setGrid] = useState<(number | null)[][]>([]);
-    const [initialGrid, setInitialGrid] = useState<boolean[][]>([]);
-    const [solution, setSetSolution] = useState<number[][]>([]);
+    const [grid, setGrid] = useState<(string | null)[][]>(Array(4).fill(null).map(() => Array(4).fill(null)));
+    const [initialIndices, setInitialIndices] = useState<Set<string>>(new Set());
     const [difficulty, setDifficulty] = useState<Difficulty>('easy');
-    const [status, setStatus] = useState<'playing' | 'checking' | 'solved' | 'error'>('playing');
-    const [hintsRemaining, setHintsRemaining] = useState(3);
-    const [showErrors, setShowErrors] = useState(false);
+    const [hintsLeft, setHintsLeft] = useState(3);
+    const [isSolved, setIsAllSolved] = useState(false);
+    const [errors, setErrors] = useState<Set<string>>(new Set());
 
-    // Yeni oyun başlatma
-    const generateNewGame = useCallback((level: Difficulty = difficulty) => {
-        // Rastgele bir desen seç
-        const basePattern = PATTERNS[Math.floor(Math.random() * PATTERNS.length)];
-        
-        // Kelimeleri karıştır
-        const shuffledWordIndices = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
-        
-        // Çözümü oluştur
-        const newSolution = basePattern.map(row => row.map(cell => shuffledWordIndices[cell]));
-        setSetSolution(newSolution);
+    // Geçerli bir sudoku tahtası oluşturur
+    const generatePuzzle = useCallback((diff: Difficulty) => {
+        // Basit bir 4x4 latin kare şablonu
+        const base = [
+            [0, 1, 2, 3],
+            [2, 3, 0, 1],
+            [1, 0, 3, 2],
+            [3, 2, 1, 0]
+        ];
 
-        // Zorluğa göre hücreleri boşalt
-        const prefilledCount = level === 'easy' ? 8 : level === 'medium' ? 6 : 4;
-        const newGrid: (number | null)[][] = newSolution.map(row => [...row].map(() => null));
-        const newInitialGrid: boolean[][] = newSolution.map(row => [...row].map(() => false));
+        // Satır ve sütunları rastgele karıştır (Sudoku kurallarını bozmaz)
+        const shuffle = (arr: number[]) => [...arr].sort(() => Math.random() - 0.5);
+        const rowOrder = shuffle([0, 1, 2, 3]);
+        const colOrder = shuffle([0, 1, 2, 3]);
+        const wordOrder = shuffle([0, 1, 2, 3]);
+
+        const fullGrid = Array(4).fill(null).map((_, r) => 
+            Array(4).fill(null).map((_, c) => WORDS[wordOrder[base[rowOrder[r]][colOrder[c]]]])
+        );
+
+        // Zorluğa göre hücreleri gizle
+        const newGrid = fullGrid.map(row => [...row]);
+        const newInitialIndices = new Set<string>();
+        const visibleCount = diff === 'easy' ? 8 : diff === 'medium' ? 6 : 4;
         
-        let filled = 0;
-        while (filled < prefilledCount) {
-            const r = Math.floor(Math.random() * 4);
-            const c = Math.floor(Math.random() * 4);
-            if (newGrid[r][c] === null) {
-                newGrid[r][c] = newSolution[r][c];
-                newInitialGrid[r][c] = true;
-                filled++;
+        const positions = [];
+        for(let r=0; r<4; r++) for(let c=0; c<4; c++) positions.push([r, c]);
+        const shuffledPos = positions.sort(() => Math.random() - 0.5);
+
+        for(let i=0; i<16; i++) {
+            const [r, c] = shuffledPos[i];
+            if (i < visibleCount) {
+                newInitialIndices.add(`${r}-${c}`);
+            } else {
+                (newGrid[r] as any)[c] = null;
             }
         }
 
         setGrid(newGrid);
-        setInitialGrid(newInitialGrid);
-        setStatus('playing');
-        setHintsRemaining(3);
-        setShowErrors(false);
-        playSound('start');
-    }, [difficulty]);
+        setInitialIndices(newInitialIndices);
+        setHintsLeft(3);
+        setIsAllSolved(false);
+        setErrors(new Set());
+    }, []);
 
     useEffect(() => {
-        generateNewGame();
-    }, [generateNewGame]);
-
-    const handleCellClick = (r: number, c: number) => {
-        if (initialGrid[r][c] || status === 'solved') return;
-
-        const nextGrid = grid.map(row => [...row]);
-        const currentValue = nextGrid[r][c];
-        
-        // 0 -> 1 -> 2 -> 3 -> null döngüsü
-        if (currentValue === null) nextGrid[r][c] = 0;
-        else if (currentValue === 3) nextGrid[r][c] = null;
-        else nextGrid[r][c] = currentValue + 1;
-
-        setGrid(nextGrid);
-        playSound('pop');
-    };
+        generatePuzzle(difficulty);
+    }, [difficulty, generatePuzzle]);
 
     const checkSolution = () => {
-        const isComplete = grid.every(row => row.every(cell => cell !== null));
-        if (!isComplete) {
-            toast({ title: "Eksik Kareler", description: "Lütfen tüm boşlukları doldurun.", variant: "destructive" });
-            return;
-        }
+        const newErrors = new Set<string>();
+        let complete = true;
 
-        const isCorrect = grid.every((row, r) => row.every((cell, c) => cell === solution[r][c]));
-
-        if (isCorrect) {
-            setStatus('solved');
-            playSound('win');
-        } else {
-            setStatus('error');
-            setShowErrors(true);
-            playSound('incorrect');
-            setTimeout(() => setStatus('playing'), 2000);
-        }
-    };
-
-    const useHint = () => {
-        if (hintsRemaining <= 0 || status === 'solved') return;
-
-        // Rastgele boş veya yanlış bir kare bul
-        const targets: {r: number, c: number}[] = [];
-        grid.forEach((row, r) => row.forEach((cell, c) => {
-            if (!initialGrid[r][c] && cell !== solution[r][c]) {
-                targets.push({r, c});
+        for(let r=0; r<4; r++) {
+            for(let c=0; c<4; c++) {
+                const val = grid[r][c];
+                if (!val) {
+                    complete = false;
+                    continue;
+                }
+                
+                // Satır kontrolü
+                for(let i=0; i<4; i++) if(i !== c && grid[r][i] === val) newErrors.add(`${r}-${c}`);
+                // Sütun kontrolü
+                for(let i=0; i<4; i++) if(i !== r && grid[i][c] === val) newErrors.add(`${r}-${c}`);
+                // 2x2 Blok kontrolü
+                const startR = Math.floor(r/2)*2;
+                const startC = Math.floor(c/2)*2;
+                for(let i=startR; i<startR+2; i++) {
+                    for(let j=startC; j<startC+2; j++) {
+                        if((i !== r || j !== c) && grid[i][j] === val) newErrors.add(`${r}-${c}`);
+                    }
+                }
             }
-        }));
+        }
 
-        if (targets.length > 0) {
-            const random = targets[Math.floor(Math.random() * targets.length)];
-            const nextGrid = grid.map(row => [...row]);
-            nextGrid[random.r][random.c] = solution[random.r][random.c];
-            setGrid(nextGrid);
-            setHintsRemaining(prev => prev - 1);
-            playSound('hint');
+        setErrors(newErrors);
+        if (complete && newErrors.size === 0) {
+            setIsAllSolved(true);
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#4f46e5', '#10b981', '#f59e0b']
+            });
         }
     };
 
-    const isCellInvalid = (r: number, c: number) => {
-        if (!showErrors || initialGrid[r][c] || grid[r][c] === null) return false;
-        return grid[r][c] !== solution[r][c];
+    const handleCellClick = (r: number, c: number) => {
+        if (initialIndices.has(`${r}-${c}`) || isSolved) return;
+
+        const currentVal = grid[r][c];
+        const currentIndex = currentVal ? WORDS.indexOf(currentVal) : -1;
+        const nextIndex = (currentIndex + 1);
+        
+        const newGrid = [...grid];
+        newGrid[r][c] = nextIndex < WORDS.length ? WORDS[nextIndex] : null;
+        setGrid(newGrid);
+        
+        // Hata varsa temizle ve yeniden kontrol et
+        if (errors.has(`${r}-${c}`)) {
+            const nextErrors = new Set(errors);
+            nextErrors.delete(`${r}-${c}`);
+            setErrors(nextErrors);
+        }
     };
 
     return (
-        <Card className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-2xl rounded-[3rem] overflow-hidden">
+        <Card className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-2xl rounded-[3rem] overflow-hidden animate-in fade-in zoom-in duration-500">
             <CardHeader className="bg-indigo-600 p-8 text-white relative">
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('/noise.png')] opacity-10 pointer-events-none" />
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
                     <div className="flex items-center gap-4">
                         <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
-                            <BrainCircuit className="w-8 h-8 text-white" />
+                            <Brain className="w-8 h-8 text-white" />
                         </div>
                         <div>
-                            <CardTitle className="text-3xl font-black uppercase tracking-tighter">Kelime Sudoku</CardTitle>
-                            <CardDescription className="text-indigo-100 font-medium">Değerlerimizi sütun ve satırlara doğru yerleştir.</CardDescription>
+                            <CardTitle className="text-3xl font-black tracking-tight uppercase">Kelime Sudoku</CardTitle>
+                            <CardDescription className="text-indigo-100 font-medium">Satır, sütun ve 2x2 bloklarda her kelime bir kez olmalı.</CardDescription>
                         </div>
                     </div>
-                    
-                    <div className="flex bg-indigo-800/50 p-1.5 rounded-2xl border border-white/10">
-                        {(['easy', 'medium', 'hard'] as Difficulty[]).map((level) => (
-                            <button
-                                key={level}
-                                onClick={() => { setDifficulty(level); generateNewGame(level); }}
+                    <div className="flex items-center gap-2 bg-black/20 p-1.5 rounded-2xl border border-white/10">
+                        {(['easy', 'medium', 'hard'] as const).map((d) => (
+                            <Button 
+                                key={d}
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => setDifficulty(d)}
                                 className={cn(
-                                    "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                                    difficulty === level ? "bg-white text-indigo-600 shadow-lg" : "text-indigo-200 hover:text-white"
+                                    "rounded-xl px-4 font-bold text-[10px] uppercase tracking-widest h-9 transition-all",
+                                    difficulty === d ? "bg-white text-indigo-600 shadow-lg" : "text-white/60 hover:text-white hover:bg-white/10"
                                 )}
                             >
-                                {level === 'easy' ? 'Kolay' : level === 'medium' ? 'Orta' : 'Zor'}
-                            </button>
+                                {d === 'easy' ? 'Kolay' : d === 'medium' ? 'Orta' : 'Zor'}
+                            </Button>
                         ))}
                     </div>
                 </div>
             </CardHeader>
 
-            <CardContent className="p-8 md:p-12">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                    
-                    {/* SUDOKU GRID */}
-                    <div className="lg:col-span-7 flex justify-center">
-                        <div className="grid grid-cols-4 gap-2 md:gap-3 p-3 bg-slate-100 rounded-[2rem] border-4 border-slate-200 shadow-inner w-full max-w-[450px] aspect-square">
-                            {grid.map((row, r) => row.map((cell, c) => (
-                                <button
-                                    key={`${r}-${c}`}
-                                    onClick={() => handleCellClick(r, c)}
-                                    className={cn(
-                                        "relative rounded-2xl flex items-center justify-center transition-all duration-300 font-black text-[10px] md:text-sm select-none border-b-4 active:border-b-0 active:translate-y-1",
-                                        initialGrid[r][c] 
-                                            ? "bg-slate-800 border-slate-900 text-white cursor-not-allowed shadow-md" 
-                                            : cell === null
-                                                ? "bg-white border-slate-200 text-transparent hover:bg-indigo-50"
-                                                : isCellInvalid(r, c)
-                                                    ? "bg-red-500 border-red-700 text-white animate-shake-game"
-                                                    : "bg-indigo-500 border-indigo-700 text-white shadow-lg",
-                                        status === 'solved' && "bg-emerald-500 border-emerald-700 pointer-events-none"
-                                    )}
-                                >
-                                    {cell !== null ? WORDS[cell] : ''}
-                                    
-                                    {/* Bölge Çizgileri (4x4 Sudoku için orta bölücüler) */}
-                                    {c === 1 && <div className="absolute -right-2 top-0 bottom-0 w-1 bg-slate-300 pointer-events-none hidden" />}
-                                    {r === 1 && <div className="absolute -bottom-2 left-0 right-0 h-1 bg-slate-300 pointer-events-none hidden" />}
-                                </button>
-                            )))}
-                        </div>
-                    </div>
+            <CardContent className="p-8 md:p-12 flex flex-col lg:flex-row items-center justify-center gap-12">
+                {/* SUDOKU GRID */}
+                <div className="relative group">
+                    <div className="absolute -inset-4 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 blur-2xl rounded-[4rem] group-hover:opacity-100 transition-opacity opacity-0" />
+                    <div className="grid grid-cols-4 gap-2 bg-slate-200 p-2 rounded-[2rem] shadow-inner relative z-10">
+                        {grid.map((row, r) => (
+                            row.map((cell, c) => {
+                                const isInitial = initialIndices.has(`${r}-${c}`);
+                                const hasError = errors.has(`${r}-${c}`);
+                                const isRightBorder = c === 1;
+                                const isBottomBorder = r === 1;
 
-                    {/* CONTROLS & INFO */}
-                    <div className="lg:col-span-5 space-y-8">
-                        <div className="space-y-4">
-                            <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                                <Info className="w-4 h-4" /> Kurallar
-                            </h4>
-                            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-3">
-                                <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                                    <span className="text-indigo-600 font-bold">•</span> Her satırda her kelime <strong>yalnızca 1 kez</strong> bulunmalıdır.
-                                </p>
-                                <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                                    <span className="text-indigo-600 font-bold">•</span> Her sütunda her kelime <strong>yalnızca 1 kez</strong> bulunmalıdır.
-                                </p>
-                                <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                                    <span className="text-indigo-600 font-bold">•</span> Boş karelere tıklayarak kelimeleri değiştirin.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col gap-3">
-                            {status === 'solved' ? (
-                                <div className="bg-emerald-50 border-2 border-emerald-200 p-6 rounded-[2rem] text-center animate-pop-in">
-                                    <Trophy className="w-12 h-12 text-emerald-500 mx-auto mb-3" />
-                                    <h3 className="text-2xl font-black text-emerald-700 uppercase">Tebrikler!</h3>
-                                    <p className="text-emerald-600 font-medium mb-6">Mükemmel bir odaklanma.</p>
-                                    <Button onClick={() => generateNewGame()} className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold">
-                                        YENİ OYUN <RotateCcw className="ml-2 w-4 h-4" />
-                                    </Button>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <Button 
-                                            variant="outline" 
-                                            onClick={useHint} 
-                                            disabled={hintsRemaining <= 0 || status === 'solved'}
-                                            className="h-16 flex-col gap-1 rounded-2xl border-slate-200 hover:bg-amber-50 hover:border-amber-300 text-slate-600 hover:text-amber-700 transition-all"
-                                        >
-                                            <Lightbulb className={cn("w-5 h-5", hintsRemaining > 0 ? "text-amber-500" : "text-slate-300")} />
-                                            <span className="text-[10px] font-black uppercase">İpucu ({hintsRemaining})</span>
-                                        </Button>
-                                        <Button 
-                                            variant="outline" 
-                                            onClick={() => generateNewGame()} 
-                                            className="h-16 flex-col gap-1 rounded-2xl border-slate-200 hover:bg-indigo-50 hover:text-indigo-700 transition-all"
-                                        >
-                                            <RefreshCw className="w-5 h-5 text-indigo-500" />
-                                            <span className="text-[10px] font-black uppercase">Yenile</span>
-                                        </Button>
-                                    </div>
-                                    <Button 
-                                        onClick={checkSolution}
-                                        disabled={status === 'solved'}
+                                return (
+                                    <div 
+                                        key={`${r}-${c}`}
+                                        onClick={() => handleCellClick(r, c)}
                                         className={cn(
-                                            "h-16 rounded-2xl text-lg font-black uppercase tracking-widest shadow-xl transition-all",
-                                            status === 'error' ? "bg-red-600 hover:bg-red-500" : "bg-indigo-600 hover:bg-indigo-500"
+                                            "w-16 h-16 sm:w-24 sm:h-24 flex items-center justify-center rounded-2xl text-[10px] sm:text-xs font-black transition-all duration-300 cursor-pointer select-none border-2",
+                                            isInitial 
+                                                ? "bg-slate-100 border-slate-300 text-slate-400 cursor-not-allowed" 
+                                                : cell 
+                                                    ? "bg-white border-white shadow-md text-indigo-600 scale-100 hover:scale-105 active:scale-95" 
+                                                    : "bg-slate-50/50 border-dashed border-slate-300 hover:bg-white",
+                                            hasError && "bg-red-50 border-red-500 text-red-600 animate-shake-game",
+                                            isSolved && "bg-emerald-50 border-emerald-500 text-emerald-600",
+                                            isRightBorder && "mr-1",
+                                            isBottomBorder && "mb-1"
                                         )}
                                     >
-                                        {status === 'checking' ? <Loader2 className="animate-spin" /> : 
-                                         status === 'error' ? <AlertCircle className="mr-2" /> : <CheckCircle2 className="mr-2" />}
-                                        {status === 'error' ? 'HATA VAR!' : 'KONTROL ET'}
-                                    </Button>
-                                </>
-                            )}
-                        </div>
+                                        <span className="drop-shadow-sm">{cell || ""}</span>
+                                    </div>
+                                )
+                            })
+                        ))}
                     </div>
+                </div>
+
+                {/* KONTROLLER & BİLGİ */}
+                <div className="flex flex-col gap-6 w-full max-w-sm">
+                    {isSolved ? (
+                        <div className="bg-emerald-50 border-2 border-emerald-200 rounded-[2rem] p-8 text-center space-y-4 animate-in zoom-in-95 duration-500">
+                            <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-lg shadow-emerald-200">
+                                <Trophy className="w-8 h-8 text-white" />
+                            </div>
+                            <h3 className="text-2xl font-black text-emerald-900 uppercase">TEBRİKLER!</h3>
+                            <p className="text-emerald-700 font-medium">Zekan ve dikkatinle bulmacayı kusursuzca çözdün.</p>
+                            <Button onClick={() => generatePuzzle(difficulty)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-12 font-bold uppercase tracking-widest">YENİ BULMACA</Button>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-center">
+                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Kelimeler</span>
+                                    <div className="flex flex-wrap justify-center gap-1">
+                                        {WORDS.map(w => <Badge key={w} variant="outline" className="text-[8px] border-indigo-100 bg-white">{w}</Badge>)}
+                                    </div>
+                                </div>
+                                <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-center">
+                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">İpucu</span>
+                                    <div className="flex justify-center gap-1">
+                                        {Array.from({length: 3}).map((_, i) => (
+                                            <Lightbulb key={i} className={cn("w-4 h-4", i < hintsLeft ? "text-amber-500 fill-amber-500" : "text-slate-200")} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-4 border-t border-slate-100">
+                                <Button 
+                                    onClick={checkSolution}
+                                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white h-14 rounded-2xl text-lg font-black shadow-xl shadow-indigo-200 transition-all hover:-translate-y-1 active:translate-y-0"
+                                >
+                                    <CheckCircle2 className="mr-2 h-6 w-6" /> KONTROL ET
+                                </Button>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <Button variant="outline" onClick={() => generatePuzzle(difficulty)} className="rounded-xl h-12 border-slate-200 text-slate-600 font-bold">
+                                        <RotateCcw className="mr-2 h-4 w-4" /> SIFIRLA
+                                    </Button>
+                                    <Button variant="outline" onClick={() => {
+                                        if (hintsLeft > 0) {
+                                            toast({ title: "Gelecek Özellik", description: "İpucu sistemi bir sonraki güncellemede eklenecek!" });
+                                        }
+                                    }} className="rounded-xl h-12 border-slate-200 text-slate-600 font-bold">
+                                        <HelpCircle className="mr-2 h-4 w-4" /> YARDIM
+                                    </Button>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             </CardContent>
 
-            <CardFooter className="bg-slate-50 p-6 border-t border-slate-100 flex justify-center gap-6">
-                {WORDS.map((word, i) => (
-                    <div key={word} className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-indigo-500 shadow-sm" />
-                        <span className="text-[10px] font-black text-slate-500 tracking-wider uppercase">{word}</span>
-                    </div>
-                ))}
+            <CardFooter className="bg-slate-50/50 p-4 flex justify-center border-t border-slate-100">
+                 <div className="flex items-center gap-2 text-slate-400">
+                    <Sparkles className="w-3 h-3" />
+                    <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Din Dersi Atölyesi Zeka Köşesi</span>
+                 </div>
             </CardFooter>
         </Card>
     );
