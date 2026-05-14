@@ -180,6 +180,15 @@ export default function ExtraPagesManagement() {
         return catPath.split('/').pop() || 'Genel';
     };
 
+    const handleCategoryDelete = async (categoryName: string) => {
+        if(!confirm(`"${categoryName}" klasörünü silmek istediğinize emin misiniz? İçindeki dökümanlar "Genel" klasörüne taşınacaktır.`)) return;
+        const res = await deleteExtraPageCategory(categoryName);
+        if (res.success) {
+            toast({ title: "Klasör Silindi", description: `${res.count} döküman "Genel" klasörüne taşındı.` });
+            fetchPages();
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#F4F5F7] font-sans text-slate-900 pb-20 relative">
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">

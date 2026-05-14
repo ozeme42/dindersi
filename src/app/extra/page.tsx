@@ -176,7 +176,7 @@ export default function ExtraPagesExplorer() {
                         <div className="flex items-center gap-1.5 mt-5 text-sm font-medium text-slate-600 overflow-x-auto no-scrollbar pb-1">
                             <button 
                                 onClick={() => setCurrentPath("")}
-                                className={cn("flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all whitespace-nowrap", currentPath === "" ? "text-indigo-700 bg-indigo-100 font-bold shadow-sm" : "bg-white border border-slate-200 hover:bg-slate-50")}
+                                className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all whitespace-nowrap", currentPath === "" ? "text-indigo-700 bg-indigo-100 font-bold shadow-sm" : "bg-white border border-slate-200 hover:bg-slate-50")}
                             >
                                 <Home className="h-4 w-4" />
                                 <span>Ana Dizin</span>

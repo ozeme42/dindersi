@@ -168,7 +168,7 @@ export default function ExtraPageViewer() {
                                 <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 text-slate-500 hover:bg-white"><Plus className="h-4 w-4"/></Button>
                             </div>
 
-                            <Button variant="outline" onClick={() => window.print()} className="hidden md:flex h-10 items-center gap-2 rounded-xl bg-white border-slate-200 text-slate-600 hover:bg-blue-50 hover:text-blue-600">
+                            <Button variant="outline" onClick={() => window.print()} className="hidden md:flex h-10 items-center gap-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-blue-50 hover:text-blue-600">
                                 <Printer className="h-4 w-4" /> Yazdır
                             </Button>
 

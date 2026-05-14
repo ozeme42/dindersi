@@ -147,7 +147,6 @@ export default function LoginPage() {
             <h1 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-sm uppercase">
                 DİNDERSİ ATÖLYESİ
             </h1>
-            <p className="text-indigo-200/60 font-medium mt-2">Maceraya kaldığın yerden devam et.</p>
         </div>
 
         <GlassCard className="p-8">
