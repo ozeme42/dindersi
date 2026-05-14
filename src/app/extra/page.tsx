@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { 
     FileText, Search, LayoutGrid, List, ArrowLeft, Loader2, 
     Folder, Home, ChevronRight as ChevronRightIcon,
-    FileImage, FileCode, FileVideo, HardDrive, Link2, ExternalLink,
+    FileImage, Link2, ExternalLink,
     PlayCircle, Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

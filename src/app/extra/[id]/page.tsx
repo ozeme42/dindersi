@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { 
-    Loader2, ArrowLeft, Clock, Plus, Minus, Printer, FileText, ChevronRight, 
-    Maximize2, Minimize2, ExternalLink
+    Loader2, ArrowLeft, Clock, Plus, Minus, Printer, FileText, 
+    Maximize2, Minimize2 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -17,7 +17,6 @@ import Link from 'next/link';
 
 export default function ExtraPageViewer() {
     const params = useParams();
-    const router = useRouter();
     const id = params.id as string;
 
     const [page, setPage] = useState<any>(null);
@@ -36,7 +35,7 @@ export default function ExtraPageViewer() {
             const newScript = document.createElement('script');
             Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
             
-            // Script içindeki let/const tanımları SyntaxError yaratmasın diye var ile değiştiriyoruz (kapsam sorunu çözümü)
+            // Script içindeki let/const tanımları SyntaxError (already declared) yaratmasın diye var ile değiştiriyoruz.
             let inlineCode = oldScript.innerHTML;
             inlineCode = inlineCode.replace(/let\s+/g, 'var ').replace(/const\s+/g, 'var ');
             
@@ -54,9 +53,20 @@ export default function ExtraPageViewer() {
                         const el = document.getElementById(id);
                         if(el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
                     };
+                    window.changeTextSize = window.changeTextSize || function(delta) {
+                        const content = document.getElementById('content-area');
+                        if (content) {
+                            let currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+                            content.style.fontSize = (currentSize + delta) + 'px';
+                        }
+                    };
                     window.go = window.go || function(n) { history.go(n); };
                     
-                    ${inlineCode}
+                    try {
+                        ${inlineCode}
+                    } catch(e) {
+                        console.error("Döküman script hatası:", e);
+                    }
                 })();
             `;
             

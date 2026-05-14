@@ -1,11 +1,10 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Info, Gamepad2, User, Lock, ArrowLeft, LogIn, UserPlus } from 'lucide-react';
+import { Loader2, Info, User, Lock, ArrowLeft, LogIn, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
@@ -131,7 +130,13 @@ export default function LoginPage() {
         {/* LOGO AREA */}
         <div className="text-center mb-8">
             <div className="bg-cyan-500/20 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 ring-4 ring-cyan-500/10 shadow-[0_0_30px_rgba(6,182,212,0.4)] rotate-3">
-                <Gamepad2 className="h-10 w-10 text-cyan-400" />
+                {/* Dini Simge (Cami/Kubbe Silüeti) */}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-10 w-10 text-cyan-400">
+                  <path d="M3 20h18" />
+                  <path d="M6 20v-5a6 6 0 1 1 12 0v5" />
+                  <path d="M12 9V3" />
+                  <path d="M10 5h4" />
+                </svg>
             </div>
             <h1 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-sm">
                 DİNDERSİ ATÖLYESİ
