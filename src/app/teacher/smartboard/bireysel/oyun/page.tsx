@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, Suspense, useMemo } from "react";
+import { useState, useEffect, Suspense, useMemo, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,11 @@ import { Badge } from "@/components/ui/badge";
 import { 
     ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, 
     Check, Trash2, Users, Shuffle, PartyPopper, 
-    Trophy, MonitorPlay, Save, Plus, Award,
+    Trophy, MonitorPlay, Plus, Award,
     UserPlus, X, User, Settings2, Sparkles, Flag, Lock, Medal
 } from "lucide-react";
 import Link from "next/link";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { getQuestionsFromBank, type GetQuizOutput } from "@/lib/quiz-actions";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
@@ -113,13 +113,16 @@ const SetupStudentItem = ({ student, isSelected, onClick }: { student: UserProfi
 );
 
 // Yeni Öğrenci Ekleme Dialogu
-function AddStudentDialog({ isOpen, onOpenChange, onAdd, isSaving }: { isOpen: boolean, onOpenChange: (open: boolean) => void, onAdd: (name: string) => void, isSaving: boolean }) {
+function AddStudentDialog({ isOpen, onOpenChange, onAdd, isSaving, poolClassName }: { isOpen: boolean, onOpenChange: (open: boolean) => void, onAdd: (name: string, className: string) => void, isSaving: boolean, poolClassName: string }) {
     const [displayName, setDisplayName] = useState('');
-    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); onAdd(displayName); setDisplayName(''); }
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); onAdd(displayName, poolClassName); setDisplayName(''); }
     return (
         <Dialog open={isOpen} onOpenChange={(open) => { if (!open) { setDisplayName('') }; onOpenChange(open); }}>
             <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-md">
-                <DialogHeader><DialogTitle>Yeni Yarışmacı Ekle</DialogTitle><DialogDescription>Havuza geçici öğrenci ekleyin.</DialogDescription></DialogHeader>
+                <DialogHeader>
+                    <DialogTitle>Yeni Yarışmacı Ekle</DialogTitle>
+                    <DialogDescription>Havuza geçici öğrenci ekleyin.</DialogDescription>
+                </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4 py-4">
                     <div className="space-y-2"><Label>Ad Soyad</Label><Input value={displayName} onChange={e => setDisplayName(e.target.value)} required className="bg-slate-950 border-white/10 text-white" /></div>
                     <DialogFooter><Button type="submit" disabled={isSaving || !displayName.trim()} className="bg-cyan-600 hover:bg-cyan-500 text-white">{isSaving ? <Loader2 className="animate-spin" /> : "Ekle"}</Button></DialogFooter>
@@ -155,6 +158,7 @@ function IndividualCompetitionComponent() {
 
     // Dialogs
     const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
+    const [newGuestName, setNewGuestName] = useState("");
     const [isAddingStudent, setIsAddingStudent] = useState(false);
 
     // Configs
@@ -231,10 +235,9 @@ function IndividualCompetitionComponent() {
         setSelectedStudents(prev => prev.filter(s => s.uid !== uid));
     };
 
-    const handleAddGuest = async (name: string) => {
+    const handleAddGuest = async (name: string, className: string) => {
         if (!name.trim()) return;
         setIsAddingStudent(true);
-        const className = currentClass ? `${currentClass.name} - ${selectedBranch === 'all' ? 'A' : selectedBranch} (Havuz)` : SUMMER_SCHOOL_CLASS_NAME;
         const res = await addStudentToClass(name, className);
         if (res.success && res.newUser) {
             setStudentPool(prev => [...prev, res.newUser!]);
@@ -250,11 +253,10 @@ function IndividualCompetitionComponent() {
             toast({ title: "Uyarı", description: "En az 1 yarışmacı seçmelisiniz.", variant: "destructive" });
             return;
         }
-        // Yarışmacıları oluştur (Puanları 0 başlar, renkler atanır)
         const gameComps: GameCompetitor[] = selectedStudents.map((s, idx) => ({ 
             ...s, 
             score: 0,
-            colorIndex: idx // Herkese unique renk indexi ver
+            colorIndex: idx 
         }));
         setCompetitors(gameComps);
         setGamePhase('playing');
@@ -263,10 +265,7 @@ function IndividualCompetitionComponent() {
 
     // --- GAMEPLAY FONKSİYONLARI ---
 
-    // Skor Tablosu (Puan sırasına göre)
     const sortedCompetitors = useMemo(() => [...competitors].sort((a,b) => b.score - a.score), [competitors]);
-    
-    // Aktif Öğrenci Bilgisi
     const activeCompetitor = useMemo(() => competitors.find(c => c.uid === activeCompetitorId), [competitors, activeCompetitorId]);
 
     const handleRandomStudent = () => {
@@ -292,7 +291,7 @@ function IndividualCompetitionComponent() {
         setCompetitors(newCompetitors);
         setAnsweredQuestions([...answeredQuestions, qNum]);
         setOpenedQuestion(null);
-        setActiveCompetitorId(null); // Cevaptan sonra seçimi kaldır ve soru ekranını kapat
+        setActiveCompetitorId(null);
 
         if (winnerFound) {
             setWinner(winnerFound);
@@ -318,8 +317,8 @@ function IndividualCompetitionComponent() {
     if (isLoading) return <div className="h-screen flex items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>;
     if (error) return <div className="h-screen flex items-center justify-center text-red-400 bg-slate-950">{error}</div>;
 
-    // --- 1. EKRAN: KURULUM ---
     if (gamePhase === 'setup') {
+        const poolClassName = currentClass ? `${currentClass.name} - ${selectedBranch === 'all' ? 'A' : selectedBranch} (Havuz)` : SUMMER_SCHOOL_CLASS_NAME;
         return (
             <div className="min-h-screen bg-slate-950 text-white p-6 font-sans">
                 <div className="max-w-7xl mx-auto flex items-center justify-between mb-8">
@@ -335,8 +334,6 @@ function IndividualCompetitionComponent() {
                 </div>
 
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 h-[calc(100vh-140px)]">
-                    
-                    {/* SOL: HAVUZ */}
                     <Card className="bg-slate-900/50 border-white/10 flex flex-col overflow-hidden">
                         <CardHeader className="pb-3 border-b border-white/5 bg-slate-900">
                             <CardTitle className="text-lg flex justify-between items-center">
@@ -373,7 +370,6 @@ function IndividualCompetitionComponent() {
                         </CardContent>
                     </Card>
 
-                    {/* SAĞ: SEÇİLENLER */}
                     <Card className="bg-slate-900/50 border-white/10 flex flex-col overflow-hidden shadow-2xl">
                         <CardHeader className="pb-3 border-b border-white/5 bg-slate-900">
                             <CardTitle className="text-lg flex justify-between items-center text-cyan-300">
@@ -426,17 +422,15 @@ function IndividualCompetitionComponent() {
                     onOpenChange={setIsAddStudentOpen} 
                     onAdd={handleAddGuest} 
                     isSaving={isAddingStudent} 
-                    poolClassName=""
+                    poolClassName={poolClassName}
                 />
             </div>
         );
     }
 
-    // --- 2. EKRAN: OYUN ---
     if (gamePhase === 'playing') {
         return (
             <div className={cn("min-h-screen bg-slate-950 text-white p-4 flex flex-col overflow-hidden font-sans", isFullscreen ? "p-0" : "")}>
-                {/* Üst Bar */}
                 <header className="shrink-0 h-16 flex items-center justify-between bg-slate-900/80 backdrop-blur border-b border-white/10 px-6 rounded-2xl shadow-lg mb-4">
                     <div className="flex items-center gap-4">
                         <div className="p-2 bg-cyan-600 rounded-lg"><User className="text-white h-5 w-5" /></div>
@@ -457,7 +451,6 @@ function IndividualCompetitionComponent() {
                     </div>
                 </header>
 
-                {/* Ana İçerik: Liderlik Tablosu Grid (DÜZELTİLDİ: Max 4 Sütun) */}
                 <div className="flex-1 bg-slate-900/30 rounded-2xl border border-white/5 p-4 overflow-y-auto custom-scrollbar min-h-0 relative">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                         {sortedCompetitors.map((comp, idx) => (
@@ -471,10 +464,8 @@ function IndividualCompetitionComponent() {
                     </div>
                 </div>
 
-                {/* Soru Seçim Modalı (Öğrenci Seçildiğinde Açılır) */}
                 <Dialog open={!!activeCompetitorId && !openedQuestion} onOpenChange={(open) => !open && setActiveCompetitorId(null)}>
                     <DialogContent className="bg-slate-900 border-white/10 text-white max-w-5xl h-[80vh] flex flex-col p-0 overflow-hidden">
-                        
                         <div className="p-6 border-b border-white/10 bg-slate-950 flex items-center justify-between">
                             <div className="flex items-center gap-4">
                                 {activeCompetitor && (
@@ -484,17 +475,22 @@ function IndividualCompetitionComponent() {
                                     </Avatar>
                                 )}
                                 <div>
-                                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                                        {activeCompetitor?.displayName}
-                                        <span className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400 font-normal">Soru Seçiyor</span>
-                                    </h2>
+                                    <DialogHeader className="text-left space-y-0">
+                                        <DialogTitle className="text-xl font-bold text-white flex items-center gap-2">
+                                            {activeCompetitor?.displayName}
+                                            <span className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400 font-normal">Soru Seçiyor</span>
+                                        </DialogTitle>
+                                        <DialogDescription className="sr-only">
+                                            Yarışmacının soru kutularından birini seçmesi için sunulan panel.
+                                        </DialogDescription>
+                                    </DialogHeader>
                                 </div>
                             </div>
                             <Button variant="ghost" onClick={() => setActiveCompetitorId(null)} className="text-slate-400 hover:text-white"><X className="h-6 w-6"/></Button>
                         </div>
 
                         <ScrollArea className="flex-1 p-6 bg-slate-900/50">
-                            <div className="grid grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
+                            <div className="grid grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 pb-8">
                                 {questions.map((q, i) => {
                                     const qNum = i + 1;
                                     const isAnswered = answeredQuestions.includes(qNum);
@@ -520,11 +516,10 @@ function IndividualCompetitionComponent() {
                     </DialogContent>
                 </Dialog>
 
-                {/* Soru Ekranı (Modal) */}
                 {openedQuestion && (
                     <QuestionDialog
                         isOpen={!!openedQuestion}
-                        onClose={() => { setOpenedQuestion(null); setActiveCompetitorId(null); }} // Soru bitince her şeyi kapat
+                        onClose={() => { setOpenedQuestion(null); setActiveCompetitorId(null); }} 
                         questionData={openedQuestion}
                         onAnswer={handleAnswer}
                         timerDuration={questionTimer}
@@ -538,7 +533,6 @@ function IndividualCompetitionComponent() {
         );
     }
 
-    // --- 3. EKRAN: BİTİŞ ---
     if (gamePhase === 'finished') {
         return (
             <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 text-center">
