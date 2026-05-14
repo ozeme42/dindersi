@@ -1,182 +1,202 @@
-
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
-    Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter 
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-    Heart, Sparkles, BrainCircuit, Scale, Trophy, Lightbulb, 
-    RotateCcw, Trash2, Settings, CheckCircle2, XCircle, Info, Star
+    Trophy, RotateCcw, Lightbulb, CheckCircle2, AlertCircle, 
+    Lock, BrainCircuit, Heart, Sparkles, Star, Trash2, 
+    HelpCircle, Check, ShieldCheck
 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import canvasConfetti from 'canvas-confetti';
+import confetti from 'canvas-confetti';
 
-// --- KATEGORİLER VE KELİME GRUPLARI ---
+// --- KATEGORİLER VE KELİMELER ---
 const CATEGORIES = [
-    { id: 'degerler', name: 'Değerler', icon: Heart, words: ["SEVGİ", "SAYGI", "SABIR", "İHLAS"], color: "text-rose-500", bg: "bg-rose-50" },
-    { id: 'ibadetler', name: 'İbadetler', icon: Sparkles, words: ["NAMAZ", "ORUÇ", "HAC", "ZEKAT"], color: "text-amber-500", bg: "bg-amber-50" },
-    { id: 'kavramlar', name: 'Kavramlar', icon: BrainCircuit, words: ["İMAN", "İSLAM", "İHSAN", "TEVHİD"], color: "text-indigo-500", bg: "bg-indigo-50" },
-    { id: 'ahlak', name: 'Ahlak', icon: Scale, words: ["ADALET", "DOĞRU", "ŞEFKAT", "EDEP"], color: "text-emerald-500", bg: "bg-emerald-50" },
+    { 
+        id: 'values', 
+        name: 'Değerler', 
+        icon: Heart, 
+        words: ['SEVGİ', 'SAYGI', 'SABIR', 'İHLAS'],
+        color: 'text-rose-500',
+        bg: 'bg-rose-500/10'
+    },
+    { 
+        id: 'worship', 
+        name: 'İbadetler', 
+        icon: Sparkles, 
+        words: ['NAMAZ', 'ORUÇ', 'HAC', 'ZEKAT'],
+        color: 'text-emerald-500',
+        bg: 'bg-emerald-500/10'
+    },
+    { 
+        id: 'concepts', 
+        name: 'Kavramlar', 
+        icon: BrainCircuit, 
+        words: ['İMAN', 'İSLAM', 'İHSAN', 'TEVHİD'],
+        color: 'text-indigo-500',
+        bg: 'bg-indigo-500/10'
+    },
+    { 
+        id: 'virtues', 
+        name: 'Ahlak', 
+        icon: ShieldCheck, 
+        words: ['ADALET', 'DOĞRU', 'ŞEFKAT', 'EDEP'],
+        color: 'text-amber-500',
+        bg: 'bg-amber-500/10'
+    }
 ];
 
-const LEVELS = [
-    { id: 'easy', name: 'Kolay', hints: 8 },
-    { id: 'medium', name: 'Orta', hints: 6 },
-    { id: 'hard', name: 'Zor', hints: 4 },
-];
-
-type Cell = {
-    value: string | null;
-    isFixed: boolean;
-    isError?: boolean;
+// 4x4 Örnek Şablonlar (0: Boş, 1-4: Kelime İndeksi)
+const PUZZLES = {
+    easy: [
+        [1, 0, 0, 4],
+        [0, 0, 3, 0],
+        [0, 2, 0, 0],
+        [4, 0, 0, 1]
+    ],
+    medium: [
+        [0, 2, 0, 0],
+        [0, 0, 1, 0],
+        [0, 4, 0, 0],
+        [1, 0, 0, 2]
+    ],
+    hard: [
+        [0, 0, 3, 0],
+        [4, 0, 0, 0],
+        [0, 0, 0, 1],
+        [0, 2, 0, 0]
+    ]
 };
 
 export function WordSudoku() {
-    const [category, setCategory] = useState(CATEGORIES[0]);
-    const [level, setLevel] = useState(LEVELS[0]);
-    const [grid, setGrid] = useState<Cell[][]>([]);
-    const [solution, setSolution] = useState<string[][]>([]);
+    const [selectedCat, setSelectedCat] = useState(CATEGORIES[0]);
+    const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
+    const [grid, setGrid] = useState<number[][]>([]);
+    const [initialGrid, setInitialGrid] = useState<number[][]>([]);
     const [isSolved, setIsSolved] = useState(false);
-    const [hintsLeft, setHintsLeft] = useState(3);
+    const [hintsUsed, setHintsUsed] = useState(0);
+    const [errors, setErrors] = useState<Set<string>>(new Set());
 
-    // --- SUDOKU MANTIĞI ---
-    const generatePuzzle = useCallback(() => {
-        // 4x4 Temel Geçerli Sudoku Şablonu (Sayılar 0-3 arası)
-        const base = [
-            [0, 1, 2, 3],
-            [2, 3, 0, 1],
-            [1, 0, 3, 2],
-            [3, 2, 1, 0]
-        ];
+    // Oyunu Başlat
+    const initGame = useCallback(() => {
+        const template = PUZZLES[difficulty];
+        const newGrid = template.map(row => [...row]);
+        setGrid(newGrid);
+        setInitialGrid(template.map(row => [...row]));
+        setIsSolved(false);
+        setHintsUsed(0);
+        setErrors(new Set());
+    }, [difficulty]);
 
-        // Kelimeleri karıştır
-        const shuffledWords = [...category.words].sort(() => Math.random() - 0.5);
+    useEffect(() => {
+        initGame();
+    }, [initGame]);
+
+    // Hücreye tıklandığında kelimeyi değiştir (Döngüsel)
+    const handleCellClick = (r: number, c: number) => {
+        if (initialGrid[r][c] !== 0 || isSolved) return;
+
+        const nextVal = (grid[r][c] % 4) + 1;
+        const newGrid = grid.map((row, ri) => 
+            row.map((val, ci) => ri === r && ci === c ? nextVal : val)
+        );
         
-        // Şablonu kelimelere dök
-        const solved = base.map(row => row.map(index => shuffledWords[index]));
-        setSolution(solved);
+        setGrid(newGrid);
+        validateCell(r, c, nextVal, newGrid);
+    };
 
-        // Seviyeye göre hücreleri gizle
-        const newGrid: Cell[][] = solved.map(row => row.map(val => ({ value: val, isFixed: true })));
-        const cellsToRemove = 16 - (level.id === 'easy' ? 8 : level.id === 'medium' ? 6 : 4);
-        
-        let removed = 0;
-        while (removed < cellsToRemove) {
-            const r = Math.floor(Math.random() * 4);
-            const c = Math.floor(Math.random() * 4);
-            if (newGrid[r][c].isFixed) {
-                newGrid[r][c].value = null;
-                newGrid[r][c].isFixed = false;
-                removed++;
+    // Hücre doğrulaması (Satır, Sütun, 2x2 Blok kontrolü)
+    const validateCell = (r: number, c: number, val: number, currentGrid: number[][]) => {
+        const newErrors = new Set(errors);
+        const cellId = `${r}-${c}`;
+        newErrors.delete(cellId);
+
+        // Satır kontrolü
+        for (let i = 0; i < 4; i++) {
+            if (i !== c && currentGrid[r][i] === val) newErrors.add(cellId);
+        }
+        // Sütun kontrolü
+        for (let i = 0; i < 4; i++) {
+            if (i !== r && currentGrid[i][c] === val) newErrors.add(cellId);
+        }
+        // 2x2 Blok kontrolü
+        const startR = Math.floor(r / 2) * 2;
+        const startC = Math.floor(c / 2) * 2;
+        for (let i = startR; i < startR + 2; i++) {
+            for (let j = startC; j < startC + 2; j++) {
+                if ((i !== r || j !== c) && currentGrid[i][j] === val) newErrors.add(cellId);
             }
         }
 
-        setGrid(newGrid);
-        setIsSolved(false);
-        setHintsLeft(3);
-    }, [category, level]);
-
-    useEffect(() => {
-        generatePuzzle();
-    }, [generatePuzzle]);
-
-    const handleCellClick = (r: number, c: number) => {
-        if (grid[r][c].isFixed || isSolved) return;
-
-        setGrid(prev => {
-            const newGrid = prev.map(row => [...row]);
-            const currentVal = newGrid[r][c].value;
-            const currentIndex = currentVal ? category.words.indexOf(currentVal) : -1;
-            const nextIndex = (currentIndex + 1) % (category.words.length + 1);
-            
-            newGrid[r][c].value = nextIndex === category.words.length ? null : category.words[nextIndex];
-            newGrid[r][c].isError = false;
-            return newGrid;
-        });
+        setErrors(newErrors);
     };
 
+    // Tümünü Kontrol Et
     const checkSolution = () => {
-        let hasError = false;
-        const newGrid = grid.map((row, r) => row.map((cell, c) => {
-            if (cell.value && cell.value !== solution[r][c]) {
-                hasError = true;
-                return { ...cell, isError: true };
-            }
-            return { ...cell, isError: false };
-        }));
+        const isComplete = grid.every(row => row.every(cell => cell !== 0));
+        if (!isComplete) {
+            toast({ title: "Eksik Var!", description: "Lütfen tüm boşlukları doldurun.", variant: "destructive" });
+            return;
+        }
 
-        setGrid(newGrid);
-
-        const isFull = newGrid.every(row => row.every(cell => cell.value !== null));
-        if (isFull && !hasError) {
+        if (errors.size === 0) {
             setIsSolved(true);
-            canvasConfetti({
+            confetti({
                 particleCount: 150,
                 spread: 70,
                 origin: { y: 0.6 },
-                colors: ['#6366f1', '#a855f7', '#ec4899']
+                colors: ['#4f46e5', '#10b981', '#fbbf24']
             });
-        } else if (hasError) {
-            // Hata varsa ses çalabiliriz (opsiyonel)
+        } else {
+            toast({ title: "Hatalar Var", description: "Bazı kelimeler kurallara uymuyor.", variant: "destructive" });
         }
     };
 
-    const getHint = () => {
-        if (hintsLeft <= 0 || isSolved) return;
-        
-        const emptyCells: {r: number, c: number}[] = [];
-        grid.forEach((row, r) => row.forEach((cell, c) => {
-            if (!cell.value) emptyCells.push({r, c});
-        }));
-
-        if (emptyCells.length > 0) {
-            const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-            setGrid(prev => {
-                const n = prev.map(row => [...row]);
-                n[randomCell.r][randomCell.c].value = solution[randomCell.r][randomCell.c];
-                n[randomCell.r][randomCell.c].isFixed = true; // İpucu sabitlensin
-                return n;
-            });
-            setHintsLeft(prev => prev - 1);
-        }
+    const toast = ({ title, description, variant }: any) => {
+        // Basit bir toast simülasyonu veya sistem toast'u buraya bağlanabilir
+        console.log(`${title}: ${description}`);
     };
 
     return (
-        <Card className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-2xl rounded-[3rem] overflow-hidden transition-all duration-500">
-            <CardHeader className="bg-indigo-600 p-6 md:p-10 text-white relative">
+        <Card className="bg-white/90 backdrop-blur-xl border border-white/60 shadow-2xl rounded-[2.5rem] overflow-hidden">
+            <CardHeader className="bg-indigo-600 p-8 text-white relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('/noise.png')] opacity-10 pointer-events-none" />
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
-                    <div className="space-y-2 text-center md:text-left">
-                        <Badge className="bg-indigo-400/30 text-white border-white/20 px-3 py-1 mb-2 uppercase tracking-widest text-[10px] font-black">Zeka Köşesi</Badge>
-                        <CardTitle className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic">Kelime Sudoku</CardTitle>
-                        <CardDescription className="text-indigo-100 font-medium text-base">Satır, sütun ve 2x2 bloklarda kelimeleri çakışmadan dizin.</CardDescription>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <div className="bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 flex gap-1">
-                            {LEVELS.map(l => (
-                                <Button 
-                                    key={l.id} 
-                                    onClick={() => setLevel(l)} 
-                                    variant={level.id === l.id ? 'default' : 'ghost'}
-                                    className={cn(
-                                        "rounded-xl h-10 px-4 font-bold text-xs uppercase transition-all",
-                                        level.id === l.id ? "bg-white text-indigo-600 shadow-lg" : "text-white/60 hover:text-white hover:bg-white/10"
-                                    )}
-                                >
-                                    {l.name}
-                                </Button>
-                            ))}
+                    <div className="flex items-center gap-5">
+                        <div className="p-4 bg-white/20 rounded-2xl backdrop-blur-md border border-white/30 shadow-lg">
+                            <BrainCircuit className="w-10 h-10 text-white" />
                         </div>
+                        <div>
+                            <CardTitle className="text-3xl font-black tracking-tight uppercase">Kelime Sudoku</CardTitle>
+                            <CardDescription className="text-indigo-100 font-medium opacity-90">
+                                Her satır, sütun ve 2x2'lik blokta kelimeler sadece bir kez geçmeli.
+                            </CardDescription>
+                        </div>
+                    </div>
+                    <div className="flex bg-black/20 p-1.5 rounded-2xl border border-white/10">
+                        {(['easy', 'medium', 'hard'] as const).map(d => (
+                            <button
+                                key={d}
+                                onClick={() => setDifficulty(d)}
+                                className={cn(
+                                    "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                                    difficulty === d ? "bg-white text-indigo-600 shadow-lg" : "text-white/60 hover:text-white"
+                                )}
+                            >
+                                {d === 'easy' ? 'KOLAY' : d === 'medium' ? 'ORTA' : 'ZOR'}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </CardHeader>
 
-            <CardContent className="p-6 md:p-10">
-                <div className="flex flex-col lg:flex-row gap-10">
-                    {/* SOL: Kontroller */}
+            <CardContent className="p-8 lg:p-12">
+                <div className="flex flex-col lg:flex-row gap-12 items-start justify-center">
+                    
+                    {/* SOL: AYARLAR VE KATEGORİLER */}
                     <div className="w-full lg:w-72 space-y-6">
                         <section className="space-y-3">
                             <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Kelime Grubu</Label>
@@ -184,105 +204,149 @@ export function WordSudoku() {
                                 {CATEGORIES.map(cat => (
                                     <button
                                         key={cat.id}
-                                        onClick={() => setCategory(cat)}
+                                        onClick={() => { setSelectedCat(cat); initGame(); }}
                                         className={cn(
-                                            "flex items-center gap-4 p-4 rounded-2xl border-2 transition-all text-left group",
-                                            category.id === cat.id 
-                                                ? "bg-white border-indigo-500 shadow-xl shadow-indigo-500/10" 
-                                                : "bg-slate-50 border-transparent hover:border-slate-200"
+                                            "flex items-center gap-3 p-3.5 rounded-2xl border-2 transition-all text-left group",
+                                            selectedCat.id === cat.id 
+                                                ? `${cat.border || 'border-indigo-500'} ${cat.bg} ${cat.color}` 
+                                                : "border-slate-100 bg-white text-slate-400 hover:border-slate-200"
                                         )}
                                     >
-                                        <div className={cn("p-2.5 rounded-xl transition-colors", category.id === cat.id ? "bg-indigo-500 text-white" : "bg-white text-slate-400 group-hover:text-indigo-500")}>
-                                            <cat.icon className="w-5 h-5" />
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className={cn("font-bold text-sm", category.id === cat.id ? "text-slate-900" : "text-slate-500")}>{cat.name}</span>
-                                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{cat.words.slice(0, 2).join(', ')}...</span>
-                                        </div>
+                                        <cat.icon className={cn("w-5 h-5", selectedCat.id === cat.id ? "animate-pulse" : "opacity-50")} />
+                                        <span className="font-bold text-sm uppercase tracking-tight">{cat.name}</span>
                                     </button>
                                 ))}
                             </div>
                         </section>
 
-                        <div className="pt-4 space-y-3 border-t border-slate-100">
-                             <Button 
-                                onClick={getHint} 
-                                disabled={hintsLeft <= 0 || isSolved}
-                                variant="outline" 
-                                className="w-full h-14 rounded-2xl border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 font-bold gap-3"
-                            >
-                                <Lightbulb className={cn("w-5 h-5", hintsLeft > 0 ? "fill-amber-400" : "")} />
-                                İpucu Al ({hintsLeft})
-                            </Button>
-
-                            <Button 
-                                onClick={generatePuzzle} 
-                                variant="ghost" 
-                                className="w-full h-12 rounded-2xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 font-bold text-xs gap-2"
-                            >
-                                <RotateCcw className="w-4 h-4" /> Yeni Oyun Karıştır
-                            </Button>
-                        </div>
+                        <section className="p-5 rounded-3xl bg-slate-50 border border-slate-100 space-y-3">
+                            <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-wider">
+                                <Lightbulb className="w-4 h-4" /> Kelime Anahtarı
+                            </div>
+                            <div className="grid grid-cols-1 gap-2">
+                                {selectedCat.words.map((w, i) => (
+                                    <div key={i} className="flex items-center gap-3 text-sm font-bold text-slate-600 bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
+                                        <span className="w-6 h-6 flex items-center justify-center bg-slate-100 rounded text-[10px] text-slate-400">{i + 1}</span>
+                                        {w}
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
                     </div>
 
-                    {/* SAĞ: Sudoku Izgarası */}
-                    <div className="flex-1 flex flex-col items-center justify-center">
-                        <div className="bg-slate-900 p-2 md:p-4 rounded-[2.5rem] shadow-2xl relative">
-                            {/* Ana Izgara */}
-                            <div className="grid grid-cols-4 gap-1 md:gap-2">
-                                {grid.map((row, rIndex) => (
-                                    row.map((cell, cIndex) => (
-                                        <div 
-                                            key={`${rIndex}-${cIndex}`}
-                                            onClick={() => handleCellClick(rIndex, cIndex)}
-                                            className={cn(
-                                                "relative flex items-center justify-center border-2 transition-all duration-300",
-                                                "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-xl md:rounded-2xl",
-                                                "text-[9px] sm:text-[10px] md:text-xs font-black text-center select-none uppercase tracking-tighter",
-                                                cell.isFixed ? "bg-slate-800 text-slate-500 border-white/5" : "bg-white cursor-pointer hover:bg-indigo-50 border-white/10",
-                                                // Blok Sınırları (2x2)
-                                                cIndex === 1 && "mr-2 md:mr-4",
-                                                rIndex === 1 && "mb-2 md:mb-4",
-                                                // Durumlar
-                                                cell.isError && "bg-red-100 border-red-500 text-red-600 animate-shake-game",
-                                                isSolved && !cell.isFixed && "text-indigo-600 font-bold"
-                                            )}
-                                        >
-                                            <div className="px-1 break-words leading-tight">
-                                                {cell.value || ""}
-                                            </div>
-                                            {cell.isFixed && !isSolved && (
-                                                <div className="absolute top-1.5 right-2 opacity-20"><Lock className="w-2.5 h-2.5" /></div>
-                                            )}
-                                        </div>
-                                    ))
+                    {/* ORTA: SUDOKU GRİD */}
+                    <div className="relative">
+                        <div className="bg-slate-900 p-4 rounded-[2.5rem] shadow-2xl border-4 border-slate-800">
+                            <div className="grid grid-cols-4 gap-0">
+                                {grid.map((row, r) => (
+                                    row.map((val, c) => {
+                                        const isFixed = initialGrid[r][c] !== 0;
+                                        const isError = errors.has(`${r}-${c}`);
+                                        const word = val === 0 ? '' : selectedCat.words[val - 1];
+                                        
+                                        // Blok Sınırları İçin Stratejik Boşluklar
+                                        const marginRight = (c === 1) ? 'mr-4' : 'mr-1.5';
+                                        const marginBottom = (r === 1) ? 'mb-4' : 'mb-1.5';
+                                        const isLastCol = c === 3;
+                                        const isLastRow = r === 3;
+
+                                        return (
+                                            <button
+                                                key={`${r}-${c}`}
+                                                onClick={() => handleCellClick(r, c)}
+                                                disabled={isFixed || isSolved}
+                                                className={cn(
+                                                    "w-20 h-20 md:w-24 md:h-24 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 text-center relative",
+                                                    !isLastCol && marginRight,
+                                                    !isLastRow && marginBottom,
+                                                    isFixed 
+                                                        ? "bg-slate-800 text-slate-400 cursor-not-allowed border border-white/5" 
+                                                        : "bg-white text-slate-800 hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 shadow-md",
+                                                    isError && "bg-red-50 text-red-600 border-red-200 animate-shake-game",
+                                                    isSolved && "border-emerald-500 bg-emerald-50 text-emerald-700"
+                                                )}
+                                            >
+                                                {isFixed && <Lock className="w-3 h-3 absolute top-2 right-2 opacity-30" />}
+                                                <span className={cn(
+                                                    "font-black tracking-tighter transition-all leading-tight",
+                                                    word.length > 5 ? "text-[10px] md:text-xs" : "text-xs md:text-sm"
+                                                )}>
+                                                    {word}
+                                                </span>
+                                            </button>
+                                        );
+                                    })
                                 ))}
                             </div>
                         </div>
 
-                        {/* Alt Bilgi */}
-                        <div className="mt-8 flex items-center gap-6">
-                            <div className="flex items-center gap-2 text-slate-400 text-xs font-medium">
-                                <Info className="w-4 h-4" />
-                                <span>Değiştirmek için hücrelere tıklayın.</span>
+                        {/* Kazanan Rozeti */}
+                        {isSolved && (
+                            <div className="absolute -top-6 -right-6 animate-tada z-20">
+                                <div className="bg-yellow-400 p-4 rounded-full shadow-2xl border-4 border-white">
+                                    <Trophy className="w-10 h-10 text-yellow-900" />
+                                </div>
                             </div>
+                        )}
+                    </div>
+
+                    {/* SAĞ: KONTROL VE SKOR */}
+                    <div className="w-full lg:w-64 space-y-4">
+                        <Card className="bg-indigo-50 border-indigo-100 shadow-sm rounded-[2rem]">
+                            <CardContent className="p-6 text-center">
+                                <div className="p-3 bg-white rounded-2xl inline-block mb-3 shadow-sm border border-indigo-100">
+                                    <Trophy className="w-8 h-8 text-indigo-500" />
+                                </div>
+                                <h4 className="font-black text-indigo-900 uppercase text-xs tracking-widest mb-1">Durum</h4>
+                                <p className="text-3xl font-black text-indigo-600 tabular-nums">
+                                    {grid.flat().filter(v => v !== 0).length} / 16
+                                </p>
+                            </CardContent>
+                        </Card>
+
+                        <div className="space-y-3">
                             <Button 
-                                onClick={checkSolution}
+                                onClick={checkSolution} 
                                 disabled={isSolved}
-                                className="h-14 px-10 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-lg shadow-xl shadow-indigo-600/20"
+                                className="w-full h-16 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-lg shadow-xl shadow-indigo-200 group"
                             >
-                                <CheckCircle2 className="mr-2 h-6 w-6" /> KONTROL ET
+                                {isSolved ? (
+                                    <>TAMAMLANDI <Check className="ml-2 w-6 h-6" /></>
+                                ) : (
+                                    <>KONTROL ET <CheckCircle2 className="ml-2 w-6 h-6 group-hover:scale-110 transition-transform" /></>
+                                )}
+                            </Button>
+                            
+                            <Button 
+                                variant="outline" 
+                                onClick={initGame}
+                                className="w-full h-14 rounded-2xl border-2 border-slate-200 text-slate-600 font-bold hover:bg-slate-50"
+                            >
+                                <RotateCcw className="mr-2 w-5 h-5" /> YENİDEN BAŞLAT
+                            </Button>
+
+                            <Button 
+                                variant="ghost" 
+                                onClick={() => { if(confirm('Tüm ilerlemeniz silinecek. Emin misiniz?')) initGame(); }}
+                                className="w-full h-12 text-rose-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl text-xs font-bold"
+                            >
+                                <Trash2 className="w-4 h-4 mr-2" /> Temizle ve Baştan Başla
                             </Button>
                         </div>
                     </div>
+
                 </div>
             </CardContent>
 
-            {/* BAŞARI MESAJI */}
             {isSolved && (
-                <div className="bg-emerald-500 p-4 text-center text-white font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 animate-in slide-in-from-bottom-full duration-500">
-                    <Trophy className="w-6 h-6" /> TEBRİKLER! BULMACAYI ÇÖZDÜNÜZ <Trophy className="w-6 h-6" />
-                </div>
+                <CardFooter className="bg-emerald-500 p-6 flex flex-col items-center justify-center text-white text-center gap-2 animate-in slide-in-from-bottom-full duration-700">
+                    <div className="flex items-center gap-4">
+                        <PartyPopper className="w-10 h-10 animate-bounce" />
+                        <h3 className="text-3xl font-black tracking-tighter uppercase">TEBRİKLER!</h3>
+                        <PartyPopper className="w-10 h-10 animate-bounce" />
+                    </div>
+                    <p className="font-bold text-emerald-100">Bulmacayı hatasız bir şekilde tamamladın!</p>
+                </CardFooter>
             )}
         </Card>
     );
