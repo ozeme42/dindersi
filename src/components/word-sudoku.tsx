@@ -1,353 +1,339 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
-    Trophy, RotateCcw, Lightbulb, CheckCircle2, AlertCircle, 
-    Lock, BrainCircuit, Heart, Sparkles, Star, Trash2, 
-    HelpCircle, Check, ShieldCheck
+    Trash2, Heart, Sparkles, BrainCircuit, BookOpen, 
+    RefreshCw, Trophy, Lock, Lightbulb, Check, Palette,
+    ChevronRight, Info
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 import confetti from 'canvas-confetti';
 
 // --- KATEGORİLER VE KELİMELER ---
 const CATEGORIES = [
-    { 
-        id: 'values', 
-        name: 'Değerler', 
-        icon: Heart, 
-        words: ['SEVGİ', 'SAYGI', 'SABIR', 'İHLAS'],
-        color: 'text-rose-500',
-        bg: 'bg-rose-500/10'
-    },
-    { 
-        id: 'worship', 
-        name: 'İbadetler', 
-        icon: Sparkles, 
-        words: ['NAMAZ', 'ORUÇ', 'HAC', 'ZEKAT'],
-        color: 'text-emerald-500',
-        bg: 'bg-emerald-500/10'
-    },
-    { 
-        id: 'concepts', 
-        name: 'Kavramlar', 
-        icon: BrainCircuit, 
-        words: ['İMAN', 'İSLAM', 'İHSAN', 'TEVHİD'],
-        color: 'text-indigo-500',
-        bg: 'bg-indigo-500/10'
-    },
-    { 
-        id: 'virtues', 
-        name: 'Ahlak', 
-        icon: ShieldCheck, 
-        words: ['ADALET', 'DOĞRU', 'ŞEFKAT', 'EDEP'],
-        color: 'text-amber-500',
-        bg: 'bg-amber-500/10'
-    }
+    { id: 'values', name: 'Değerler', words: ['SEVGİ', 'SAYGI', 'SABIR', 'İHLAS'], icon: Heart, color: 'text-rose-500', bg: 'bg-rose-50' },
+    { id: 'worship', name: 'İbadetler', words: ['NAMAZ', 'ORUÇ', 'HAC', 'ZEKAT'], icon: Sparkles, color: 'text-amber-500', bg: 'bg-amber-50' },
+    { id: 'concepts', name: 'Kavramlar', words: ['İMAN', 'İSLAM', 'İHSAN', 'TEVHİD'], icon: BrainCircuit, color: 'text-indigo-500', bg: 'bg-indigo-50' },
+    { id: 'virtues', name: 'Ahlak', words: ['ADALET', 'DOĞRU', 'ŞEFKAT', 'EDEP'], icon: BookOpen, color: 'text-emerald-500', bg: 'bg-emerald-50' },
 ];
 
-// 4x4 Örnek Şablonlar (0: Boş, 1-4: Kelime İndeksi)
-const PUZZLES = {
-    easy: [
-        [1, 0, 0, 4],
-        [0, 0, 3, 0],
-        [0, 2, 0, 0],
-        [4, 0, 0, 1]
-    ],
-    medium: [
-        [0, 2, 0, 0],
-        [0, 0, 1, 0],
-        [0, 4, 0, 0],
-        [1, 0, 0, 2]
-    ],
-    hard: [
-        [0, 0, 3, 0],
-        [4, 0, 0, 0],
-        [0, 0, 0, 1],
-        [0, 2, 0, 0]
-    ]
+const DIFFICULTIES = [
+    { id: 'easy', name: 'Kolay', emptyCells: 4 },
+    { id: 'medium', name: 'Orta', emptyCells: 7 },
+    { id: 'hard', name: 'Zor', emptyCells: 10 },
+];
+
+// --- SUDOKU MANTIĞI ---
+const isValid = (board: string[][], row: number, col: number, word: string) => {
+    for (let x = 0; x < 4; x++) if (board[row][x] === word) return false;
+    for (let x = 0; x < 4; x++) if (board[x][col] === word) return false;
+    let startRow = row - (row % 2), startCol = col - (col % 2);
+    for (let i = 0; i < 2; i++)
+        for (let j = 0; j < 2; j++)
+            if (board[i + startRow][j + startCol] === word) return false;
+    return true;
+};
+
+const solveSudoku = (board: string[][], words: string[]): boolean => {
+    for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 4; col++) {
+            if (board[row][col] === '') {
+                for (let word of words) {
+                    if (isValid(board, row, col, word)) {
+                        board[row][col] = word;
+                        if (solveSudoku(board, words)) return true;
+                        board[row][col] = '';
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+};
+
+const generateBoard = (words: string[], emptyCells: number) => {
+    let board = Array(4).fill(null).map(() => Array(4).fill(''));
+    solveSudoku(board, [...words].sort(() => Math.random() - 0.5));
+    const solution = board.map(row => [...row]);
+    let count = 0;
+    while (count < emptyCells) {
+        let r = Math.floor(Math.random() * 4), c = Math.floor(Math.random() * 4);
+        if (board[r][c] !== '') { board[r][c] = ''; count++; }
+    }
+    return { initial: board, solution };
 };
 
 export function WordSudoku() {
-    const [selectedCat, setSelectedCat] = useState(CATEGORIES[0]);
-    const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
-    const [grid, setGrid] = useState<number[][]>([]);
-    const [initialGrid, setInitialGrid] = useState<number[][]>([]);
-    const [isSolved, setIsSolved] = useState(false);
+    const { toast } = useToast();
+    const [category, setCategory] = useState(CATEGORIES[0]);
+    const [difficulty, setDifficulty] = useState(DIFFICULTIES[0]);
+    const [board, setBoard] = useState<string[][]>([]);
+    const [solution, setSolution] = useState<string[][]>([]);
+    const [initialBoard, setInitialBoard] = useState<string[][]>([]);
     const [hintsUsed, setHintsUsed] = useState(0);
-    const [errors, setErrors] = useState<Set<string>>(new Set());
+    const [isComplete, setIsAllComplete] = useState(false);
 
-    // Oyunu Başlat
     const initGame = useCallback(() => {
-        const template = PUZZLES[difficulty];
-        const newGrid = template.map(row => [...row]);
-        setGrid(newGrid);
-        setInitialGrid(template.map(row => [...row]));
-        setIsSolved(false);
+        const { initial, solution } = generateBoard(category.words, difficulty.emptyCells);
+        setBoard(initial);
+        setInitialBoard(initial.map(r => [...row]));
+        setSolution(solution);
         setHintsUsed(0);
-        setErrors(new Set());
-    }, [difficulty]);
+        setIsAllComplete(false);
+    }, [category, difficulty]);
 
-    useEffect(() => {
-        initGame();
-    }, [initGame]);
+    useEffect(() => { initGame(); }, [initGame]);
 
-    // Hücreye tıklandığında kelimeyi değiştir (Döngüsel)
     const handleCellClick = (r: number, c: number) => {
-        if (initialGrid[r][c] !== 0 || isSolved) return;
-
-        const nextVal = (grid[r][c] % 4) + 1;
-        const newGrid = grid.map((row, ri) => 
-            row.map((val, ci) => ri === r && ci === c ? nextVal : val)
-        );
-        
-        setGrid(newGrid);
-        validateCell(r, c, nextVal, newGrid);
+        if (initialBoard[r][c] !== '' || isComplete) return;
+        const currentWord = board[r][c];
+        const currentIndex = category.words.indexOf(currentWord);
+        const nextWord = currentIndex === category.words.length - 1 ? '' : category.words[currentIndex + 1];
+        const newBoard = board.map((row, ri) => row.map((col, ci) => (ri === r && ci === c ? nextWord : col)));
+        setBoard(newBoard);
+        playSound('pop');
     };
 
-    // Hücre doğrulaması (Satır, Sütun, 2x2 Blok kontrolü)
-    const validateCell = (r: number, c: number, val: number, currentGrid: number[][]) => {
-        const newErrors = new Set(errors);
-        const cellId = `${r}-${c}`;
-        newErrors.delete(cellId);
+    const playSound = (type: 'pop' | 'correct' | 'win') => {
+        // Sistem sesleri çalınabilir
+    };
 
-        // Satır kontrolü
-        for (let i = 0; i < 4; i++) {
-            if (i !== c && currentGrid[r][i] === val) newErrors.add(cellId);
-        }
-        // Sütun kontrolü
-        for (let i = 0; i < 4; i++) {
-            if (i !== r && currentGrid[i][c] === val) newErrors.add(cellId);
-        }
-        // 2x2 Blok kontrolü
-        const startR = Math.floor(r / 2) * 2;
-        const startC = Math.floor(c / 2) * 2;
-        for (let i = startR; i < startR + 2; i++) {
-            for (let j = startC; j < startC + 2; j++) {
-                if ((i !== r || j !== c) && currentGrid[i][j] === val) newErrors.add(cellId);
+    const checkSolution = () => {
+        let correct = true;
+        for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+                if (board[r][c] !== solution[r][c]) correct = false;
             }
         }
-
-        setErrors(newErrors);
-    };
-
-    // Tümünü Kontrol Et
-    const checkSolution = () => {
-        const isComplete = grid.every(row => row.every(cell => cell !== 0));
-        if (!isComplete) {
-            toast({ title: "Eksik Var!", description: "Lütfen tüm boşlukları doldurun.", variant: "destructive" });
-            return;
-        }
-
-        if (errors.size === 0) {
-            setIsSolved(true);
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#4f46e5', '#10b981', '#fbbf24']
-            });
+        if (correct) {
+            setIsAllComplete(true);
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            toast({ title: "Tebrikler!", description: "Bulmacayı başarıyla çözdünüz!" });
         } else {
-            toast({ title: "Hatalar Var", description: "Bazı kelimeler kurallara uymuyor.", variant: "destructive" });
+            toast({ title: "Henüz Bitmedi", description: "Bazı kelimeler yanlış yerleşmiş olabilir.", variant: "destructive" });
         }
     };
 
-    const toast = ({ title, description, variant }: any) => {
-        // Basit bir toast simülasyonu veya sistem toast'u buraya bağlanabilir
-        console.log(`${title}: ${description}`);
+    const giveHint = () => {
+        if (hintsUsed >= 3 || isComplete) return;
+        let emptyCells: [number, number][] = [];
+        board.forEach((row, r) => row.forEach((val, c) => { if (val === '') emptyCells.push([r, c]); }));
+        if (emptyCells.length > 0) {
+            const [r, c] = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            const newBoard = board.map((row, ri) => row.map((col, ci) => (ri === r && ci === c ? solution[r][c] : col)));
+            setBoard(newBoard);
+            setHintsUsed(prev => prev + 1);
+        }
     };
 
     return (
-        <Card className="bg-white/90 backdrop-blur-xl border border-white/60 shadow-2xl rounded-[2.5rem] overflow-hidden">
-            <CardHeader className="bg-indigo-600 p-8 text-white relative overflow-hidden">
+        <Card className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-2xl rounded-[2.5rem] overflow-hidden">
+            <CardHeader className="bg-indigo-600 p-6 text-white relative">
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('/noise.png')] opacity-10 pointer-events-none" />
-                <div className="flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
-                    <div className="flex items-center gap-5">
-                        <div className="p-4 bg-white/20 rounded-2xl backdrop-blur-md border border-white/30 shadow-lg">
-                            <BrainCircuit className="w-10 h-10 text-white" />
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+                            <category.icon className="w-8 h-8 text-white" />
                         </div>
                         <div>
-                            <CardTitle className="text-3xl font-black tracking-tight uppercase">Kelime Sudoku</CardTitle>
-                            <CardDescription className="text-indigo-100 font-medium opacity-90">
-                                Her satır, sütun ve 2x2'lik blokta kelimeler sadece bir kez geçmeli.
-                            </CardDescription>
+                            <CardTitle className="text-2xl font-black uppercase tracking-tight">Kelime Sudoku</CardTitle>
+                            <CardDescription className="text-indigo-100 font-medium">Zihnini aç, kavramları yerleştir!</CardDescription>
                         </div>
                     </div>
-                    <div className="flex bg-black/20 p-1.5 rounded-2xl border border-white/10">
-                        {(['easy', 'medium', 'hard'] as const).map(d => (
+                    <div className="flex gap-2 bg-black/20 p-1 rounded-xl">
+                        {DIFFICULTIES.map(d => (
                             <button
-                                key={d}
+                                key={d.id}
                                 onClick={() => setDifficulty(d)}
                                 className={cn(
-                                    "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-                                    difficulty === d ? "bg-white text-indigo-600 shadow-lg" : "text-white/60 hover:text-white"
+                                    "px-4 py-1.5 rounded-lg text-xs font-black uppercase transition-all",
+                                    difficulty.id === d.id ? "bg-white text-indigo-600 shadow-sm" : "text-white/60 hover:text-white"
                                 )}
                             >
-                                {d === 'easy' ? 'KOLAY' : d === 'medium' ? 'ORTA' : 'ZOR'}
+                                {d.name}
                             </button>
                         ))}
                     </div>
                 </div>
             </CardHeader>
 
-            <CardContent className="p-8 lg:p-12">
-                <div className="flex flex-col lg:flex-row gap-12 items-start justify-center">
+            <CardContent className="p-6 md:p-8">
+                <div className="flex flex-col lg:flex-row gap-10 items-start justify-center">
                     
-                    {/* SOL: AYARLAR VE KATEGORİLER */}
-                    <div className="w-full lg:w-72 space-y-6">
+                    {/* SOL PANEL: AYARLAR */}
+                    <div className="w-full lg:w-64 space-y-6 shrink-0">
                         <section className="space-y-3">
                             <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Kelime Grubu</Label>
                             <div className="grid grid-cols-1 gap-2">
                                 {CATEGORIES.map(cat => (
                                     <button
                                         key={cat.id}
-                                        onClick={() => { setSelectedCat(cat); initGame(); }}
+                                        onClick={() => setCategory(cat)}
                                         className={cn(
-                                            "flex items-center gap-3 p-3.5 rounded-2xl border-2 transition-all text-left group",
-                                            selectedCat.id === cat.id 
-                                                ? `${cat.border || 'border-indigo-500'} ${cat.bg} ${cat.color}` 
-                                                : "border-slate-100 bg-white text-slate-400 hover:border-slate-200"
+                                            "flex items-center gap-3 p-3 rounded-2xl border-2 transition-all text-left group",
+                                            category.id === cat.id 
+                                                ? "bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm" 
+                                                : "bg-white border-slate-100 text-slate-400 hover:border-indigo-100 hover:bg-slate-50"
                                         )}
                                     >
-                                        <cat.icon className={cn("w-5 h-5", selectedCat.id === cat.id ? "animate-pulse" : "opacity-50")} />
-                                        <span className="font-bold text-sm uppercase tracking-tight">{cat.name}</span>
+                                        <div className={cn("p-2 rounded-xl transition-colors", category.id === cat.id ? "bg-white" : "bg-slate-50 group-hover:bg-white")}>
+                                            <cat.icon className="w-4 h-4" />
+                                        </div>
+                                        <span className="font-bold text-sm">{cat.name}</span>
                                     </button>
                                 ))}
                             </div>
                         </section>
 
-                        <section className="p-5 rounded-3xl bg-slate-50 border border-slate-100 space-y-3">
-                            <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-wider">
-                                <Lightbulb className="w-4 h-4" /> Kelime Anahtarı
+                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+                            <div className="flex justify-between items-center text-xs font-bold text-slate-500 uppercase">
+                                <span>İpucu Hakkı</span>
+                                <span className="text-indigo-600">{3 - hintsUsed} / 3</span>
                             </div>
-                            <div className="grid grid-cols-1 gap-2">
-                                {selectedCat.words.map((w, i) => (
-                                    <div key={i} className="flex items-center gap-3 text-sm font-bold text-slate-600 bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
-                                        <span className="w-6 h-6 flex items-center justify-center bg-slate-100 rounded text-[10px] text-slate-400">{i + 1}</span>
+                            <Progress value={((3 - hintsUsed) / 3) * 100} className="h-1.5" />
+                            <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={giveHint} 
+                                disabled={hintsUsed >= 3 || isComplete}
+                                className="w-full h-10 rounded-xl bg-white border-slate-200 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600"
+                            >
+                                <Lightbulb className="w-4 h-4 mr-2" /> İpucu Kullan
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* ORTA: OYUN ALANI */}
+                    <div className="flex-1 flex flex-col items-center max-w-md w-full">
+                        <div className="w-full aspect-square bg-slate-200 p-1.5 rounded-[2rem] shadow-inner relative grid grid-cols-2 grid-rows-2 gap-2 border-4 border-slate-300/50">
+                            {/* 4x4 Grid - 2x2 Blokları simüle etmek için 2x2 ana grid içinde 2x2 alt gridler kullanıyoruz */}
+                            {[0, 1, 2, 3].map((blockIdx) => {
+                                const startR = Math.floor(blockIdx / 2) * 2;
+                                const startC = (blockIdx % 2) * 2;
+                                return (
+                                    <div key={blockIdx} className="grid grid-cols-2 grid-rows-2 gap-1.5 bg-white/40 p-1.5 rounded-2xl">
+                                        {[0, 1, 2, 3].map((cellIdx) => {
+                                            const r = startR + Math.floor(cellIdx / 2);
+                                            const c = startC + (cellIdx % 2);
+                                            const val = board[r][c];
+                                            const isFixed = initialBoard[r][c] !== '';
+                                            
+                                            return (
+                                                <button
+                                                    key={`${r}-${c}`}
+                                                    onClick={() => handleCellClick(r, c)}
+                                                    className={cn(
+                                                        "w-full h-full aspect-square rounded-xl flex items-center justify-center transition-all duration-300 relative group overflow-hidden",
+                                                        isFixed 
+                                                            ? "bg-slate-100 text-slate-800 cursor-not-allowed border-2 border-slate-200 shadow-sm" 
+                                                            : val 
+                                                                ? "bg-white text-indigo-600 border-2 border-indigo-200 shadow-md hover:border-indigo-400 active:scale-95" 
+                                                                : "bg-white/80 hover:bg-white border-2 border-dashed border-slate-200 hover:border-indigo-200"
+                                                    )}
+                                                >
+                                                    <span className={cn(
+                                                        "font-black tracking-tighter transition-transform group-hover:scale-110",
+                                                        val.length > 5 ? "text-[10px] md:text-xs" : "text-xs md:text-sm"
+                                                    )}>
+                                                        {val}
+                                                    </span>
+                                                    {isFixed && (
+                                                        <div className="absolute top-1 right-1 opacity-20">
+                                                            <Lock className="w-2 h-2" />
+                                                        </div>
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="w-full mt-8 flex flex-col sm:flex-row gap-3">
+                            <Button 
+                                onClick={checkSolution} 
+                                disabled={isComplete}
+                                className="flex-1 h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl text-lg font-black shadow-xl shadow-indigo-900/20"
+                            >
+                                <Check className="w-6 h-6 mr-2" /> KONTROL ET
+                            </Button>
+                            <Button 
+                                variant="outline" 
+                                onClick={initGame} 
+                                className="h-14 px-6 border-slate-200 text-slate-600 hover:bg-slate-50 rounded-2xl"
+                            >
+                                <RefreshCw className={cn("w-5 h-5", isLoading && "animate-spin")} />
+                            </Button>
+                        </div>
+                        
+                        <Button 
+                            variant="ghost" 
+                            onClick={initGame}
+                            className="w-full h-12 mt-4 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl text-xs font-bold"
+                        >
+                            <Trash2 className="w-4 h-4 mr-2" /> Tümünü Temizle ve Yeni Başla
+                        </Button>
+                    </div>
+
+                    {/* SAĞ: KELİME ANAHTARI */}
+                    <div className="w-full lg:w-48 space-y-4 shrink-0">
+                         <section className="bg-white rounded-3xl border border-slate-100 p-5 shadow-sm space-y-4">
+                            <div className="flex items-center gap-2 text-indigo-600">
+                                <Palette className="w-4 h-4" />
+                                <span className="text-[10px] font-black uppercase tracking-wider">Kullanılacaklar</span>
+                            </div>
+                            <div className="flex flex-wrap lg:flex-col gap-2">
+                                {category.words.map(w => (
+                                    <div key={w} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-50 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                        <div className="w-2 h-2 rounded-full bg-indigo-400" />
                                         {w}
                                     </div>
                                 ))}
                             </div>
-                        </section>
-                    </div>
+                         </section>
 
-                    {/* ORTA: SUDOKU GRİD */}
-                    <div className="relative">
-                        <div className="bg-slate-900 p-4 rounded-[2.5rem] shadow-2xl border-4 border-slate-800">
-                            <div className="grid grid-cols-4 gap-0">
-                                {grid.map((row, r) => (
-                                    row.map((val, c) => {
-                                        const isFixed = initialGrid[r][c] !== 0;
-                                        const isError = errors.has(`${r}-${c}`);
-                                        const word = val === 0 ? '' : selectedCat.words[val - 1];
-                                        
-                                        // Blok Sınırları İçin Stratejik Boşluklar
-                                        const marginRight = (c === 1) ? 'mr-4' : 'mr-1.5';
-                                        const marginBottom = (r === 1) ? 'mb-4' : 'mb-1.5';
-                                        const isLastCol = c === 3;
-                                        const isLastRow = r === 3;
-
-                                        return (
-                                            <button
-                                                key={`${r}-${c}`}
-                                                onClick={() => handleCellClick(r, c)}
-                                                disabled={isFixed || isSolved}
-                                                className={cn(
-                                                    "w-20 h-20 md:w-24 md:h-24 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 text-center relative",
-                                                    !isLastCol && marginRight,
-                                                    !isLastRow && marginBottom,
-                                                    isFixed 
-                                                        ? "bg-slate-800 text-slate-400 cursor-not-allowed border border-white/5" 
-                                                        : "bg-white text-slate-800 hover:bg-slate-50 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 shadow-md",
-                                                    isError && "bg-red-50 text-red-600 border-red-200 animate-shake-game",
-                                                    isSolved && "border-emerald-500 bg-emerald-50 text-emerald-700"
-                                                )}
-                                            >
-                                                {isFixed && <Lock className="w-3 h-3 absolute top-2 right-2 opacity-30" />}
-                                                <span className={cn(
-                                                    "font-black tracking-tighter transition-all leading-tight",
-                                                    word.length > 5 ? "text-[10px] md:text-xs" : "text-xs md:text-sm"
-                                                )}>
-                                                    {word}
-                                                </span>
-                                            </button>
-                                        );
-                                    })
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Kazanan Rozeti */}
-                        {isSolved && (
-                            <div className="absolute -top-6 -right-6 animate-tada z-20">
-                                <div className="bg-yellow-400 p-4 rounded-full shadow-2xl border-4 border-white">
-                                    <Trophy className="w-10 h-10 text-yellow-900" />
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* SAĞ: KONTROL VE SKOR */}
-                    <div className="w-full lg:w-64 space-y-4">
-                        <Card className="bg-indigo-50 border-indigo-100 shadow-sm rounded-[2rem]">
-                            <CardContent className="p-6 text-center">
-                                <div className="p-3 bg-white rounded-2xl inline-block mb-3 shadow-sm border border-indigo-100">
-                                    <Trophy className="w-8 h-8 text-indigo-500" />
-                                </div>
-                                <h4 className="font-black text-indigo-900 uppercase text-xs tracking-widest mb-1">Durum</h4>
-                                <p className="text-3xl font-black text-indigo-600 tabular-nums">
-                                    {grid.flat().filter(v => v !== 0).length} / 16
-                                </p>
-                            </CardContent>
-                        </Card>
-
-                        <div className="space-y-3">
-                            <Button 
-                                onClick={checkSolution} 
-                                disabled={isSolved}
-                                className="w-full h-16 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-lg shadow-xl shadow-indigo-200 group"
-                            >
-                                {isSolved ? (
-                                    <>TAMAMLANDI <Check className="ml-2 w-6 h-6" /></>
-                                ) : (
-                                    <>KONTROL ET <CheckCircle2 className="ml-2 w-6 h-6 group-hover:scale-110 transition-transform" /></>
-                                )}
-                            </Button>
-                            
-                            <Button 
-                                variant="outline" 
-                                onClick={initGame}
-                                className="w-full h-14 rounded-2xl border-2 border-slate-200 text-slate-600 font-bold hover:bg-slate-50"
-                            >
-                                <RotateCcw className="mr-2 w-5 h-5" /> YENİDEN BAŞLAT
-                            </Button>
-
-                            <Button 
-                                variant="ghost" 
-                                onClick={() => { if(confirm('Tüm ilerlemeniz silinecek. Emin misiniz?')) initGame(); }}
-                                className="w-full h-12 text-rose-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl text-xs font-bold"
-                            >
-                                <Trash2 className="w-4 h-4 mr-2" /> Temizle ve Baştan Başla
-                            </Button>
-                        </div>
+                         <div className="p-5 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-3xl border border-indigo-100 text-center space-y-2">
+                            <Info className="w-5 h-5 text-indigo-400 mx-auto" />
+                            <p className="text-[10px] text-indigo-700 font-medium leading-relaxed">Her satırda, sütunda ve 2x2'lik blokta kelimelerden sadece 1 adet olmalıdır.</p>
+                         </div>
                     </div>
 
                 </div>
             </CardContent>
 
-            {isSolved && (
-                <CardFooter className="bg-emerald-500 p-6 flex flex-col items-center justify-center text-white text-center gap-2 animate-in slide-in-from-bottom-full duration-700">
-                    <div className="flex items-center gap-4">
-                        <PartyPopper className="w-10 h-10 animate-bounce" />
-                        <h3 className="text-3xl font-black tracking-tighter uppercase">TEBRİKLER!</h3>
-                        <PartyPopper className="w-10 h-10 animate-bounce" />
+            {isComplete && (
+                <div className="absolute inset-0 z-50 bg-indigo-600/10 backdrop-blur-sm flex flex-col items-center justify-center p-8 animate-in fade-in duration-500">
+                    <div className="bg-white p-10 rounded-[3rem] shadow-2xl text-center border-4 border-emerald-400 max-w-sm w-full transform scale-110">
+                        <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <Trophy className="w-12 h-12 text-emerald-600" />
+                        </div>
+                        <h3 className="text-3xl font-black text-slate-900 mb-2 uppercase">HARİKA!</h3>
+                        <p className="text-slate-500 font-medium mb-8">Tüm kavramları doğru yerleştirdin.</p>
+                        <Button onClick={initGame} className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold">
+                            YENİ OYUN BAŞLAT
+                        </Button>
                     </div>
-                    <p className="font-bold text-emerald-100">Bulmacayı hatasız bir şekilde tamamladın!</p>
-                </CardFooter>
+                </div>
             )}
         </Card>
+    );
+}
+
+function Progress({ value, className }: { value: number, className?: string }) {
+    return (
+        <div className={cn("w-full bg-slate-200 rounded-full overflow-hidden", className)}>
+            <div 
+                className="h-full bg-indigo-500 transition-all duration-500" 
+                style={{ width: `${value}%` }}
+            />
+        </div>
     );
 }
