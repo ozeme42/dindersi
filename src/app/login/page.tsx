@@ -168,7 +168,7 @@ export default function LoginPage() {
                     <Info className="h-5 w-5 text-yellow-400 shrink-0 mt-0.5" />
                     <div>
                         <h4 className="font-bold text-yellow-300 text-sm">Onay Bekleniyor</h4>
-                        <p className="text-xs text-yellow-200/70 mt-1">
+                        <p className="text-xs text-red-200/70 mt-1">
                            Hesabınız henüz öğretmeniniz tarafından onaylanmamış. Lütfen daha sonra tekrar deneyin.
                         </p>
                     </div>
@@ -243,12 +243,6 @@ export default function LoginPage() {
 
             </form>
         </GlassCard>
-        
-        {/* Footer Text */}
-        <p className="text-center text-indigo-300/30 text-xs mt-8 font-mono">
-            PRESS START TO BEGIN
-        </p>
-
       </div>
     </div>
   );
