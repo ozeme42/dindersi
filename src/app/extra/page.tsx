@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -6,7 +7,7 @@ import {
     Folder, Home, ChevronRight as ChevronRightIcon,
     FileImage, Link2, ExternalLink,
     PlayCircle, Sparkles, BrainCircuit, BookOpen,
-    RotateCcw, KeyRound, Gamepad2 // Yeni ikonlar eklendi
+    RotateCcw, KeyRound, Gamepad2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,7 +20,7 @@ import { getExtraPages } from '@/app/teacher/extra-pages/actions';
 
 // OYUN BİLEŞENLERİ
 import { WordSudoku } from '@/components/word-sudoku';
-import { CryptoGame } from '@/components/crypto-game'; // Şifreli Çark bileşeni
+import { CryptoGame } from '@/components/crypto-game';
 
 // Zeka Köşesi Oyun Listesi
 const GAMES = [
@@ -169,9 +170,12 @@ export default function ExtraPagesExplorer() {
 
     return (
         <div className="min-h-screen bg-slate-50/50 font-sans text-slate-900 pb-20 relative selection:bg-indigo-100 selection:text-indigo-900">
-            {/* Arka plan efektleri */}
+            {/* Arka plan efektleri - duration-10000ms belirsizliği için explicit özellik kullanıldı */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-indigo-200/30 rounded-full blur-[100px] mix-blend-multiply animate-pulse duration-[10000ms]" />
+                <div 
+                    className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-indigo-200/30 rounded-full blur-[100px] mix-blend-multiply animate-pulse" 
+                    style={{ animationDuration: '10000ms' }} 
+                />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-sky-200/30 rounded-full blur-[100px] mix-blend-multiply" />
             </div>
 
@@ -234,7 +238,6 @@ export default function ExtraPagesExplorer() {
                             </div>
                         </div>
 
-                        {/* Klasör Navigasyonu (Eski Kod) */}
                         {!searchTerm && (
                             <div className="flex items-center gap-1.5 text-sm font-medium text-slate-600 overflow-x-auto no-scrollbar pb-1">
                                 <button onClick={() => setCurrentPath("")} className={cn("flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all whitespace-nowrap", currentPath === "" ? "text-indigo-700 bg-indigo-100 font-bold shadow-sm" : "bg-white border border-slate-200 hover:bg-slate-50")}>
@@ -262,7 +265,6 @@ export default function ExtraPagesExplorer() {
                             </div>
                         ) : (
                             <div className="space-y-10">
-                                {/* Döküman Listeleme Kısmı Aynen Bırakıldı... (Yukarıdaki Kodun Aynısı) */}
                                 {searchTerm && (
                                     <h2 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-3">
                                         <Search className="h-6 w-6 text-indigo-500" /> "{searchTerm}" için sonuçlar
@@ -354,7 +356,6 @@ export default function ExtraPagesExplorer() {
                     <TabsContent value="puzzles" className="m-0 animate-in fade-in slide-in-from-bottom-4 duration-500 w-full">
                         <div className="w-full space-y-8 py-6">
                             
-                            {/* OYUN SEÇİLMEDİYSE MENÜYÜ GÖSTER */}
                             {!activeGame ? (
                                 <div className="animate-in fade-in duration-500">
                                     <div className="text-center space-y-4 max-w-4xl mx-auto mb-12">
@@ -369,7 +370,6 @@ export default function ExtraPagesExplorer() {
                                         </p>
                                     </div>
 
-                                    {/* Oyun Kartları Grid'i */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
                                         {GAMES.map((game) => {
                                             const Icon = game.icon;
@@ -416,7 +416,6 @@ export default function ExtraPagesExplorer() {
                                     </div>
                                 </div>
                             ) : (
-                                /* OYUN SEÇİLDİYSE OYUNU GÖSTER */
                                 <div className="w-full animate-in zoom-in-95 duration-500">
                                     <div className="max-w-6xl mx-auto mb-6 flex justify-between items-center">
                                         <Button 
@@ -431,7 +430,6 @@ export default function ExtraPagesExplorer() {
                                         </Badge>
                                     </div>
                                     
-                                    {/* SEÇİLEN OYUNUN RENDER EDİLMESİ */}
                                     <div className="w-full flex justify-center">
                                         {activeGame === 'sudoku' && <WordSudoku />}
                                         {activeGame === 'crypto' && <CryptoGame />}

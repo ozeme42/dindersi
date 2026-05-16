@@ -1,4 +1,6 @@
+
 import type { ShopItem } from './types';
+import Link from 'next/link';
 
 // 1. LUCIDE İKONLARI (Genişletildi ve Eksikler Eklendi)
 import { 
@@ -9,8 +11,7 @@ import {
     Anchor, Compass, Feather, Lightbulb, Microscope, Gavel,
     Stethoscope, UtensilsCrossed, Target, Skull, Braces,
     Code2, Fingerprint, Plane, Trophy, Medal,
-    // Eksik olanlar için Lucide karşılıkları eklendi:
-    Pencil, Telescope, Siren, ChefHat, Glasses // Police, Doctor, Chef, Spy için
+    Pencil, Telescope, Siren, ChefHat, Glasses 
 } from 'lucide-react';
 
 // 2. SADECE HARF ROZETLERİNİ ESKİ YERİNDEN TUTUYORUZ
@@ -132,9 +133,9 @@ const MysticBookBadge = () => (
     </div>
 );
 const DigitalFingerprintBadge = () => (
-    <div className="relative w-full h-full flex items-center justify-center">
+    <Link href="/student/profil" className="relative w-full h-full flex items-center justify-center transition-transform hover:scale-110">
         <Fingerprint className="w-full h-full text-blue-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.7)]" />
-    </div>
+    </Link>
 );
 const CyberSkullBadge = () => (
     <div className="relative w-full h-full flex items-center justify-center">
@@ -179,7 +180,6 @@ const EliteGamerBadge = () => (
     </div>
 );
 
-// --- Düzeltilen Eksik Bileşenler (Lucide İkonları Kullanılıyor) ---
 const GlowingPencilBadge = () => <Pencil className="w-3/4 h-3/4 text-yellow-300 drop-shadow-[0_0_8px_rgba(253,224,71,0.7)]" />;
 const GlowingTelescopeBadge = () => <Telescope className="w-3/4 h-3/4 text-indigo-300 drop-shadow-[0_0_8px_rgba(165,180,252,0.7)]" />;
 const GlowingPoliceBadge = () => <Siren className="w-3/4 h-3/4 text-blue-300 drop-shadow-[0_0_8px_rgba(147,197,253,0.7)]" />;
@@ -191,9 +191,6 @@ const GlowingCompassBadge = () => <Compass className="w-3/4 h-3/4 text-amber-300
 
 // --- MAĞAZA LİSTESİ ---
 export const SHOP_ITEMS: ShopItem[] = [
-    // ==========================================
-    // 1. YENİ EKLENEN & PREMİUM ÇERÇEVELER
-    // ==========================================
     {
         id: 'frame_cyber_glitch_v2',
         name: 'Siber Hata v2',
@@ -226,10 +223,6 @@ export const SHOP_ITEMS: ShopItem[] = [
         assetUrl: 'linear-gradient(120deg, #00ff87, #60efff, #0061ff, #60efff, #00ff87)',
         description: 'Kuzey ışıklarının büyüleyici dansı.',
     },
-
-    // ==========================================
-    // 2. YENİ EKLENEN & PREMİUM ROZETLER
-    // ==========================================
     {
         id: 'badge_diamond_v2',
         name: 'Kusursuz Elmas',
@@ -262,10 +255,6 @@ export const SHOP_ITEMS: ShopItem[] = [
         description: 'Daha parlak, daha dikkat çekici.',
         component: NeonSignBadge,
     },
-
-    // ==========================================
-    // 3. YENİDEN TASARLANAN MEVCUT ROZETLER
-    // ==========================================
     { id: 'badge_crown', name: 'Kraliyet Tacı', price: 5000, type: 'avatarBadge', description: 'Gerçek liderler için altın parıltı.', component: NeoCrownBadge },
     { id: 'badge_shield', name: 'Plazma Kalkanı', price: 750, type: 'avatarBadge', description: 'Enerji yüklü koruma.', component: PlasmaShieldBadge },
     { id: 'badge_bolt', name: 'Elektrik Yıldırımı', price: 800, type: 'avatarBadge', description: 'Yüksek voltajlı enerji.', component: ElectricBoltBadge },
@@ -285,8 +274,6 @@ export const SHOP_ITEMS: ShopItem[] = [
     { id: 'badge_chef', name: 'Usta Şef', price: 900, type: 'avatarBadge', description: 'Lezzet ustası.', component: GlowingChefBadge },
     { id: 'badge_spy', name: 'Gizli Ajan', price: 1600, type: 'avatarBadge', description: 'Gölgelerin içinde.', component: GlowingSpyBadge },
     { id: 'badge_compass', name: 'Altın Pusula', price: 1300, type: 'avatarBadge', description: 'Doğru yönü bul.', component: GlowingCompassBadge },
-    
-    // Cyber Rozetler (Eksik olmasın diye tekrar ekliyoruz)
     { id: 'badge_cyber_guardian', name: 'Siber Muhafız', price: 800, type: 'avatarBadge', description: 'Sistemi koruyan güç.', component: CyberGuardianBadge },
     { id: 'badge_code_master', name: 'Kod Ustası', price: 1500, type: 'avatarBadge', description: 'Dijital dünyanın dilini konuşanlar.', component: CodeMasterBadge },
     { id: 'badge_legendary_leader', name: 'Efsanevi Lider', price: 3000, type: 'avatarBadge', description: 'Savaş meydanlarının kralı.', component: LegendaryLeaderBadge },
@@ -298,11 +285,6 @@ export const SHOP_ITEMS: ShopItem[] = [
     { id: 'badge_neon_sign', name: 'Neon', price: 2200, type: 'avatarBadge', description: 'Işıltı.', component: NeonSignBadge },
     { id: 'badge_samurai', name: 'Samuray', price: 3000, type: 'avatarBadge', description: 'Güç.', component: SamuraiBadge },
     { id: 'badge_binary', name: 'Binary', price: 1800, type: 'avatarBadge', description: 'Kod.', component: BinaryBadge },
-
-
-    // ==========================================
-    // 4. MEVCUT ÇERÇEVELER
-    // ==========================================
     {
         id: 'frame_rainbow',
         name: 'Gökkuşağı Sınırı',
@@ -447,10 +429,6 @@ export const SHOP_ITEMS: ShopItem[] = [
         type: 'avatarFrame',
         assetUrl: 'linear-gradient(45deg, rgba(255,0,0,0.4), rgba(255,165,0,0.4), rgba(255,255,0,0.4), rgba(0,128,0,0.4), rgba(0,0,255,0.4), rgba(75,0,130,0.4), rgba(238,130,238,0.4))',
     },
-
-    // ==========================================
-    // 5. HARF ROZETLERİ (DEĞİŞİKLİK YOK)
-    // ==========================================
     { id: 'badge_letter_a', name: 'Harf Rozeti - A', price: 300, type: 'avatarBadge', description: 'Profilini A harfiyle süsle.', component: LetterABadge },
     { id: 'badge_letter_b', name: 'Harf Rozeti - B', price: 300, type: 'avatarBadge', description: 'Profilini B harfiyle süsle.', component: LetterBBadge },
     { id: 'badge_letter_c', name: 'Harf Rozeti - C', price: 300, type: 'avatarBadge', description: 'Profilini C harfiyle süsle.', component: LetterCBadge },

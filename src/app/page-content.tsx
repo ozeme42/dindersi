@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -138,7 +139,6 @@ export const SiteFooter = () => {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-2">
-            {/* DİĞER BUTONU (Küçük ve Buraya Taşındı) */}
             <Link 
                 href="/extra"
                 className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-100 transition-all duration-300 shadow-sm focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none"
@@ -375,11 +375,9 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
         <div className="flex flex-col min-h-screen bg-[#f8fafc] font-sans text-slate-900 relative selection:bg-emerald-100">
              <MagnificentLightBackground />
 
-             {/* Boşluklar space-y-10'dan space-y-5'e düşürüldü */}
              <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-5 relative z-10 pb-20">
                 
                 {/* --- HEADER --- */}
-                {/* Alt boşluk pb-6'dan pb-4'e düşürüldü */}
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pb-4 border-b border-slate-200/60 animate-in fade-in slide-in-from-top-4 duration-700 relative z-30">
                     <div className="flex items-center gap-4">
                          <div className="relative h-14 w-14 overflow-hidden rounded-2xl shadow-sm border border-slate-100 bg-white group">
@@ -390,7 +388,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                              />
                          </div>
-                         <div className="flex flex-col -gap-0.5"> {/* Dikey hizalama */}
+                         <div className="flex flex-col -gap-0.5">
                              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tighter leading-none drop-shadow-sm select-none">
                                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-700">
                                      Din Dersi Atölyesi
@@ -442,12 +440,8 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 ) : (
                     <>
                         {/* --- FİLTRELEME MENÜSÜ --- */}
-                        {/* pt-4'ten pt-2'ye düşürüldü */}
                         <div className="sticky top-4 z-50 flex justify-center animate-in fade-in slide-in-from-top-8 duration-500 px-2 sm:px-0 pt-2">
-                            {/* Mobil Seçim */}
                             <div className="md:hidden w-full flex flex-col gap-3 p-3 bg-white/95 backdrop-blur-md border border-slate-200 rounded-3xl shadow-lg">
-                                
-                                {/* Mobil Sınıf Seçimi (Koyu İndigo Çerçeve) */}
                                 <div className="flex items-center gap-2 p-1.5 relative border-2 border-indigo-500 shadow-sm shadow-indigo-100 bg-white rounded-2xl">
                                     <div className="flex flex-col items-center justify-center pl-2 pr-3 border-r border-indigo-100">
                                         <Layers className="w-4 h-4 text-indigo-500" />
@@ -466,7 +460,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                     <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none rounded-r-2xl" />
                                 </div>
 
-                                {/* Mobil Ders Seçimi (Koyu Zümrüt Çerçeve) */}
                                 <div className="flex items-center gap-2 p-1.5 relative border-2 border-emerald-500 shadow-sm shadow-emerald-100 bg-white rounded-2xl">
                                     <div className="flex flex-col items-center justify-center pl-2 pr-3 border-r border-emerald-100">
                                         <Library className="w-4 h-4 text-emerald-500" />
@@ -487,10 +480,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                 </div>
                             </div>
 
-                            {/* Masaüstü Seçim */}
                             <div className="hidden md:flex flex-row items-center gap-4">
-                                
-                                {/* Masaüstü Sınıf Seçimi (Koyu İndigo Çerçeve) */}
                                 <div className="flex items-center gap-2 p-1.5 pr-2 bg-white border-2 border-indigo-500 rounded-2xl shadow-md shadow-indigo-100/50 hover:shadow-lg hover:shadow-indigo-200/50 transition-shadow">
                                     <div className="flex flex-col items-center justify-center px-4 border-r border-indigo-100">
                                         <span className="text-[10px] font-bold text-indigo-600 uppercase">Sınıf</span>
@@ -507,7 +497,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                     </div>
                                 </div>
 
-                                {/* Masaüstü Ders Seçimi (Koyu Zümrüt Çerçeve) */}
                                 <div className="flex items-center gap-2 p-1.5 pr-2 bg-white border-2 border-emerald-500 rounded-2xl shadow-md shadow-emerald-100/50 hover:shadow-lg hover:shadow-emerald-200/50 transition-shadow">
                                     <div className="flex flex-col items-center justify-center px-4 border-r border-emerald-100">
                                         <span className="text-[10px] font-bold text-emerald-600 uppercase">Ders</span>
@@ -528,9 +517,8 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                             </div>
                         </div>
 
-                        {/* --- İÇERİK GRID ALANI --- (gap-3 sm:gap-4 xl:gap-5 ile boşluklar daraltıldı) */}
+                        {/* --- İÇERİK GRID ALANI --- */}
                         <div className={cn("mt-2 transition-all duration-500", gridConfig.wrapper)}>
-                            {/* Kartlar arası boşluk (gap) daraltıldı */}
                             <div className={cn("grid gap-3 sm:gap-4 xl:gap-5 animate-in zoom-in-95 duration-500 items-start", gridConfig.grid)}>
                                 {activeCourseData && (activeCourseData.units || []).sort((a: PublicUnit, b: PublicUnit) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((unit, index) => {
                                     const theme = getUnitTheme(index);
@@ -538,8 +526,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                     
                                     return (
                                         <div key={unit.id} className="bg-white rounded-[2rem] border border-slate-200 shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300 relative z-10">
-                                            
-                                            {/* Ünite Başlık Alanı (Canlı Gradient) */}
                                             <div className={cn("relative p-5 sm:p-6 bg-gradient-to-br", theme.headerFrom, theme.headerTo)}>
                                                 <div className="flex items-center justify-between mb-3">
                                                     <div className="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-white/20 text-white backdrop-blur-sm shadow-sm">
@@ -551,7 +537,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                 </h3>
                                             </div>
 
-                                            {/* Ünite Özeti Butonu (Açık Ton) */}
                                             {unit.hasUnitOzet && (
                                                 <div className="px-4 pt-4 pb-1 relative z-10">
                                                     <Link 
@@ -569,7 +554,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                 </div>
                                             )}
 
-                                            {/* Konu Listesi (Sade ve Renkli Çerçeveli) */}
                                             <div className="p-4 flex flex-col gap-2.5 relative z-10">
                                                 {unit.topics.length > 0 ? (
                                                     unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((topic) => (
@@ -608,8 +592,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
                 {/* --- GÜNÜN AYETİ VE HADİSİ --- */}
                 <div className="mt-12 pt-8 border-t border-slate-200/60 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700 px-2 sm:px-0 max-w-[110rem] mx-auto w-full relative z-10">
-                    
-                    {/* Ayet Kartı */}
                     <div className="relative overflow-hidden bg-white/80 backdrop-blur-xl border border-emerald-100 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow group">
                         <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10">
                             <Quote className="w-24 h-24 text-emerald-600 rotate-180" />
@@ -632,7 +614,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                         </div>
                     </div>
 
-                    {/* Hadis Kartı */}
                     <div className="relative overflow-hidden bg-white/80 backdrop-blur-xl border border-indigo-100 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow group">
                         <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10">
                             <Quote className="w-24 h-24 text-indigo-600 rotate-180" />
