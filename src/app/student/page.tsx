@@ -1,166 +1,129 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { 
-    Loader2, Star, User, BookOpen, Trophy, 
-    LogOut, Settings, LayoutDashboard, Sparkles, 
-    Gamepad2, ClipboardList, Target, ShieldCheck,
-    Fingerprint
-} from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
-import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import { 
+    Card, CardContent, CardHeader, CardTitle, CardDescription 
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { 
+    LogOut, User, Star, GraduationCap, LayoutDashboard, 
+    Gamepad2, BookOpen, Settings, Loader2 
+} from 'lucide-react';
 import { UserAvatar } from '@/components/user-avatar';
 import Link from 'next/link';
 
 export default function StudentDashboard() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const { toast } = useToast();
+    const { user, loading } = useAuth();
+    const router = useRouter();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.replace('/login');
-    }
-  }, [user, loading, router]);
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            router.push('/login');
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
+    };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      toast({ title: "Başarılı", description: "Oturumunuz kapatıldı." });
-      router.push('/login');
-    } catch (error) {
-      toast({ title: "Hata", description: "Çıkış yapılırken bir hata oluştu.", variant: "destructive" });
-    }
-  };
-
-  if (loading || !user) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-slate-950">
-        <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 selection:bg-indigo-500/30">
-      
-      {/* Üst Navigasyon Barı */}
-      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-white/10 px-6 py-4">
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-600 rounded-lg">
-                <LayoutDashboard className="h-6 w-6 text-white" />
+    if (loading) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-slate-950">
+                <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
             </div>
-            <h1 className="text-xl font-black uppercase tracking-tight hidden sm:block">Öğrenci Paneli</h1>
-          </div>
-          
-          <div className="flex items-center gap-4">
-             <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
-                <span className="font-bold text-sm">{user.score || 0} XP</span>
-             </div>
-             <Button variant="ghost" size="icon" onClick={handleLogout} className="text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-full h-10 w-10">
-                <LogOut className="h-5 w-5" />
-             </Button>
-          </div>
-        </div>
-      </header>
+        );
+    }
 
-      <main className="container mx-auto p-4 sm:p-6 md:p-8 space-y-8 pb-24">
-        
-        {/* PROFiL KARTI */}
-        <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md overflow-hidden relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-            <CardContent className="p-8 flex flex-col md:flex-row items-center gap-8">
-              <UserAvatar user={user} className="h-24 w-24 border-4 border-white/20 shadow-xl" />
-              <div className="flex-1 text-center md:text-left space-y-2">
-                <Badge className="bg-white/20 text-white border-none hover:bg-white/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                  Öğrenci Profili
-                </Badge>
-                <h2 className="text-3xl font-black tracking-tight">{user.displayName}</h2>
-                <div className="flex flex-wrap justify-center md:justify-start gap-4 text-slate-400 font-medium">
-                  <div className="flex items-center gap-2"><Target className="h-4 w-4" /> {user.class || 'Sınıf Belirtilmedi'}</div>
-                  <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> {user.schoolName || 'Okul Belirtilmedi'}</div>
-                </div>
-              </div>
-              <Button asChild variant="outline" className="border-white/10 hover:bg-white/5 text-slate-300">
-                  <Link href="/student/profil"><Settings className="mr-2 h-4 w-4"/> Profili Düzenle</Link>
-              </Button>
-            </CardContent>
-        </Card>
+    if (!user) {
+        router.replace('/login');
+        return null;
+    }
 
-        {/* HIZLI BAĞLANTILAR */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Link href="/student/soru-bankasi" className="group">
-                <Card className="h-full bg-slate-900/40 border-white/5 hover:border-indigo-500/50 transition-all hover:-translate-y-1">
-                    <CardHeader>
-                        <div className="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                            <Gamepad2 className="h-6 w-6 text-indigo-400" />
+    return (
+        <div className="min-h-screen bg-slate-950 text-white p-4 md:p-8 font-sans">
+            <div className="max-w-6xl mx-auto space-y-8">
+                {/* Header */}
+                <header className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-indigo-500/20 rounded-xl border border-indigo-500/30">
+                            <LayoutDashboard className="h-6 w-6 text-indigo-400" />
                         </div>
-                        <CardTitle>Soru Bankası</CardTitle>
-                        <CardDescription>Konu testlerini çöz ve puan kazan.</CardDescription>
-                    </CardHeader>
-                </Card>
-            </Link>
-
-            <Link href="/student/liderlik" className="group">
-                <Card className="h-full bg-slate-900/40 border-white/5 hover:border-yellow-500/50 transition-all hover:-translate-y-1">
-                    <CardHeader>
-                        <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                            <Trophy className="h-6 w-6 text-yellow-400" />
-                        </div>
-                        <CardTitle>Liderlik Tablosu</CardTitle>
-                        <CardDescription>Sıralamanı gör ve rakiplerinle yarış.</CardDescription>
-                    </CardHeader>
-                </Card>
-            </Link>
-
-            <Link href="/student/magaza" className="group">
-                <Card className="h-full bg-slate-900/40 border-white/5 hover:border-emerald-500/50 transition-all hover:-translate-y-1">
-                    <CardHeader>
-                        <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                            <Sparkles className="h-6 w-6 text-emerald-400" />
-                        </div>
-                        <CardTitle>Mağaza</CardTitle>
-                        <CardDescription>XP'lerinle yeni rozetler ve çerçeveler al.</CardDescription>
-                    </CardHeader>
-                </Card>
-            </Link>
-        </div>
-
-        {/* ÇIKIŞ BUTONU (ALT) */}
-        <div className="pt-8 flex justify-center">
-            <AlertDialog>
-                <AlertDialogTrigger asChild>
-                    <Button variant="ghost" className="text-slate-500 hover:text-red-400 hover:bg-red-500/10 font-bold px-8 h-14 rounded-2xl">
-                        <LogOut className="mr-3 h-6 w-6" /> Güvenli Çıkış Yap
+                        <h1 className="text-2xl font-black tracking-tight uppercase">Öğrenci Paneli</h1>
+                    </div>
+                    <Button 
+                        variant="ghost" 
+                        onClick={handleLogout}
+                        className="text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl"
+                    >
+                        <LogOut className="h-5 w-5 mr-2" /> Çıkış Yap
                     </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className="bg-slate-900 border-white/10 text-white rounded-3xl">
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Oturumu Kapat</AlertDialogTitle>
-                        <AlertDialogDescription className="text-slate-400">
-                            Yolculuğuna ara vermek istediğinden emin misin? Tüm ilerlemen kaydedildi.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5">İptal</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleLogout} className="bg-red-600 hover:bg-red-500 text-white font-bold border-none">
-                            Evet, Çıkış Yap
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-        </div>
+                </header>
 
-      </main>
-    </div>
-  );
+                {/* Profile Card */}
+                <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md overflow-hidden relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-50" />
+                    <CardHeader className="relative z-10 flex flex-col md:flex-row items-center gap-6 p-8">
+                        <UserAvatar user={user} className="h-24 w-24 border-4 border-white/10 shadow-2xl" />
+                        <div className="flex-1 text-center md:text-left space-y-2">
+                            <Badge className="bg-indigo-600 hover:bg-indigo-500 text-white border-none px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                Öğrenci Profili
+                            </Badge>
+                            <h2 className="text-3xl font-black tracking-tight">{user.displayName}</h2>
+                            <div className="flex flex-wrap justify-center md:justify-start gap-4 text-slate-400 font-medium">
+                                <div className="flex items-center gap-2">
+                                    <GraduationCap className="h-4 w-4" />
+                                    <span>{user.class || 'Sınıf Bilgisi Yok'}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-amber-400">
+                                    <Star className="h-4 w-4 fill-amber-400" />
+                                    <span className="font-bold">{user.score || 0} Puan</span>
+                                </div>
+                            </div>
+                        </div>
+                        <Button asChild variant="outline" className="border-white/10 text-white hover:bg-white/10 rounded-xl px-6 h-12">
+                            <Link href="/student/profil">Profili Düzenle</Link>
+                        </Button>
+                    </CardHeader>
+                </Card>
+
+                {/* Quick Access */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <QuickAction icon={Gamepad2} label="Oyunlar" color="bg-pink-500" href="/student/oyunlar" />
+                    <QuickAction icon={BookOpen} label="Ders Notları" color="bg-emerald-500" href="/" />
+                    <QuickAction icon={Star} label="Mağaza" color="bg-amber-500" href="/student/magaza" />
+                    <QuickAction icon={Settings} label="Ayarlar" color="bg-slate-500" href="/student/ayarlar" />
+                </div>
+                
+                {/* Logout Footer for Mobile */}
+                <div className="md:hidden pt-8">
+                    <Button 
+                        variant="destructive" 
+                        onClick={handleLogout}
+                        className="w-full h-14 text-lg font-bold rounded-2xl shadow-xl shadow-red-900/20"
+                    >
+                        <LogOut className="h-6 w-6 mr-3" /> GÜVENLİ ÇIKIŞ
+                    </Button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function QuickAction({ icon: Icon, label, color, href }: { icon: any, label: string, color: string, href: string }) {
+    return (
+        <Link href={href}>
+            <Card className="bg-slate-900/40 border-white/5 hover:border-white/20 transition-all hover:-translate-y-1 group">
+                <CardContent className="flex flex-col items-center justify-center p-6 space-y-3">
+                    <div className={cn("p-3 rounded-2xl text-white shadow-lg transition-transform group-hover:scale-110", color)}>
+                        <Icon className="h-6 w-6" />
+                    </div>
+                    <span className="font-bold text-sm text-slate-300 group-hover:text-white transition-colors">{label}</span>
+                </CardContent>
+            </Card>
+        </Link>
+    );
 }

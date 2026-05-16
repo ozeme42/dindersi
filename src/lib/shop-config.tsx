@@ -2,7 +2,7 @@
 import type { ShopItem } from './types';
 import Link from 'next/link';
 
-// 1. LUCIDE İKONLARI (Genişletildi ve Eksikler Eklendi)
+// 1. LUCIDE İKONLARI
 import { 
     Gem, Zap, Shield, Crown, Swords, Rocket, Terminal, 
     Ghost, Flame, Snowflake, Star, Hexagon,
@@ -14,7 +14,7 @@ import {
     Pencil, Telescope, Siren, ChefHat, Glasses 
 } from 'lucide-react';
 
-// 2. SADECE HARF ROZETLERİNİ ESKİ YERİNDEN TUTUYORUZ
+// 2. HARF ROZETLERİ
 import { 
    LetterABadge, LetterBBadge, LetterCBadge, LetterCcBadge, LetterDBadge, LetterEBadge, 
    LetterFBadge, LetterGBadge, LetterGgBadge, LetterHBadge, LetterIBadge, LetterIiBadge, 
@@ -22,10 +22,6 @@ import {
    LetterOoBadge, LetterPBadge, LetterRBadge, LetterSBadge, LetterSsBadge, LetterTBadge, 
    LetterUBadge, LetterUuBadge, LetterVBadge, LetterYBadge, LetterZBadge
 } from '@/components/icons';
-
-// ==============================================================================
-// YENİ NESİL ROZET TASARIMLARI (BİLEŞENLER)
-// ==============================================================================
 
 // --- Özel Premium Rozetler ---
 const DiamondBadge = () => (
@@ -55,8 +51,6 @@ const BinaryBadge = () => (
         <Code2 className="w-1/2 h-1/2 text-green-300 relative z-10 drop-shadow-md" />
     </div>
 );
-
-// --- Yeniden Tasarlanan Rozetler (Renkli & Parlak) ---
 const NeoAstronautBadge = () => (
     <div className="relative w-full h-full flex items-center justify-center">
         <Globe className="w-full h-full text-blue-900/60 absolute" />
@@ -73,7 +67,7 @@ const NeoFootballBadge = () => (
 );
 const NeoBasketballBadge = () => (
     <div className="relative w-full h-full flex items-center justify-center">
-         <Flame className="w-full h-full text-orange-600/40 absolute -top-1" />
+         <Flame className="w-2/3 h-2/3 text-orange-600/40 absolute -top-1" />
         <div className="w-3/4 h-3/4 rounded-full border-4 border-orange-600 bg-orange-500 flex items-center justify-center relative z-10 shadow-[0_0_15px_rgba(234,88,12,0.5)]">
              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-full h-full text-orange-900 opacity-70"><circle cx="12" cy="12" r="10"/><path d="M5.5 5.5C14 14 14 14 5.5 5.5Z"/><path d="M18.5 5.5C10 14 10 14 18.5 5.5Z"/><path d="M12 2C12 22 12 22 12 2Z"/><path d="M2 12C22 12 22 12 2 12Z"/></svg>
         </div>
@@ -132,11 +126,14 @@ const MysticBookBadge = () => (
         <BookOpen className="w-3/4 h-3/4 text-amber-200 relative z-10 drop-shadow-[0_0_8px_rgba(253,230,138,0.6)]" />
     </div>
 );
+
+// This is the specific one requested to link to profile
 const DigitalFingerprintBadge = () => (
-    <Link href="/student/profil" className="relative w-full h-full flex items-center justify-center transition-transform hover:scale-110">
+    <Link href="/student/page" className="relative w-full h-full flex items-center justify-center transition-transform hover:scale-110">
         <Fingerprint className="w-full h-full text-blue-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.7)]" />
     </Link>
 );
+
 const CyberSkullBadge = () => (
     <div className="relative w-full h-full flex items-center justify-center">
         <Skull className="w-3/4 h-3/4 text-slate-300 drop-shadow-[0_0_15px_rgba(148,163,184,0.5)]" />
@@ -279,156 +276,7 @@ export const SHOP_ITEMS: ShopItem[] = [
     { id: 'badge_legendary_leader', name: 'Efsanevi Lider', price: 3000, type: 'avatarBadge', description: 'Savaş meydanlarının kralı.', component: LegendaryLeaderBadge },
     { id: 'badge_future_architect', name: 'Geleceğin Mimarı', price: 5000, type: 'avatarBadge', description: 'Teknoloji ve vizyon.', component: FutureArchitectBadge },
     { id: 'badge_elemental_master', name: 'Element Ustası', price: 8000, type: 'avatarBadge', description: 'Ateş ve buzun dengesi.', component: ElementalMasterBadge },
-    { id: 'badge_elite_gamer', name: 'Elit Oyuncu', price: 12000, type: 'avatarBadge', description: 'Sadece en iyiler için.', component: EliteGamerBadge },
-    { id: 'badge_diamond', name: 'Elmas (Klasik)', price: 4000, type: 'avatarBadge', description: 'Prestij.', component: DiamondBadge },
-    { id: 'badge_aura', name: 'Aura', price: 2500, type: 'avatarBadge', description: 'Enerji.', component: AuraBadge },
-    { id: 'badge_neon_sign', name: 'Neon', price: 2200, type: 'avatarBadge', description: 'Işıltı.', component: NeonSignBadge },
-    { id: 'badge_samurai', name: 'Samuray', price: 3000, type: 'avatarBadge', description: 'Güç.', component: SamuraiBadge },
-    { id: 'badge_binary', name: 'Binary', price: 1800, type: 'avatarBadge', description: 'Kod.', component: BinaryBadge },
-    {
-        id: 'frame_rainbow',
-        name: 'Gökkuşağı Sınırı',
-        price: 1000,
-        type: 'avatarFrame',
-        assetUrl: 'conic-gradient(from 180deg at 50% 50%, #ffc800, #ff0080, #00a2ff, #00f0a0, #ffc800)',
-        description: 'Profilinize renk katın.',
-    },
-    {
-        id: 'frame_gold',
-        name: 'Altın Çerçeve',
-        price: 2500,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #f7971e, #ffd200)',
-        description: 'Prestijinizi gösterin.',
-    },
-    {
-        id: 'frame_fire',
-        name: 'Alev Çerçevesi',
-        price: 1200,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #ff416c, #ff4b2b)',
-        description: 'Ateşli bir ruh için.',
-    },
-    {
-        id: 'frame_ocean',
-        name: 'Okyanus Esintisi',
-        price: 750,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #136a8a, #267871)',
-        description: 'Sakin ve ferahlatıcı bir dokunuş.',
-    },
-    {
-        id: 'frame_forest',
-        name: 'Orman Yeşili',
-        price: 750,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #134e5e, #71b280)',
-        description: 'Doğayla iç içe bir görünüm.',
-    },
-    {
-        id: 'frame_galaxy_purple',
-        name: 'Mor Galaksi',
-        price: 1500,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #480048, #C04848)',
-        description: 'Evrenin gizemini taşıyın.',
-    },
-    {
-        id: 'frame_sunrise',
-        name: 'Gündoğumu',
-        price: 900,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #F37335, #FDC830)',
-        description: 'Her güne yeni bir başlangıç.',
-    },
-    {
-        id: 'frame_candy',
-        name: 'Şeker Dükkanı',
-        price: 800,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #a8ff78, #78ffd6)',
-        description: 'Tatlı ve eğlenceli bir görünüm.',
-    },
-    {
-        id: 'frame_techno',
-        name: 'Tekno Devre',
-        price: 1800,
-        type: 'avatarFrame',
-        assetUrl: 'repeating-linear-gradient(45deg, #00ffff, #00ffff 2px, transparent 2px, transparent 10px), repeating-linear-gradient(-45deg, #00ffff, #00ffff 2px, transparent 2px, transparent 10px)',
-        description: 'Dijital bir dokunuş.',
-    },
-    {
-        id: 'frame_comic',
-        name: 'Çizgi Roman',
-        price: 1300,
-        type: 'avatarFrame',
-        assetUrl: 'radial-gradient(circle, #facc15 10%, transparent 10%), radial-gradient(circle, #facc15 10%, transparent 10%) 5px 5px, linear-gradient(#ef4444 2px, transparent 2px) 0 -1px, linear-gradient(90deg, #ef4444 2px, transparent 2px) -1px 0',
-        description: 'Süper kahramanlar gibi.',
-    },
-    {
-        id: 'frame_leaves',
-        name: 'Sarmaşık Yapraklar',
-        price: 1100,
-        type: 'avatarFrame',
-        assetUrl: 'repeating-conic-gradient(#22c55e 0% 15%, #16a34a 15% 30%)',
-        description: 'Doğal ve taze bir his.',
-    },
-    {
-        id: 'frame_gs',
-        name: 'Cimbom Ruhu Çerçevesi',
-        price: 1905,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #FDB913 50%, #C10E21 50%)',
-        description: 'Sarı kırmızı renklerle desteğini göster.',
-    },
-    {
-        id: 'frame_fb',
-        name: 'Kanarya Alevi Çerçevesi',
-        price: 1907,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #003366 50%, #FBB03B 50%)',
-        description: 'Sarı lacivert renklerle takımını temsil et.',
-    },
-    {
-        id: 'frame_bjk',
-        name: 'Kara Kartal Pençesi Çerçevesi',
-        price: 1903,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #000000 50%, #FFFFFF 50%)',
-        description: 'Siyah beyaz asaletiyle fark yarat.',
-    },
-    {
-        id: 'frame_neon_blue_old',
-        name: 'Mavi Neon (Klasik)',
-        price: 3000,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to right, #00BCD4, #4DD0E1, #00BCD4), radial-gradient(circle at 50% 50%, rgba(0, 188, 212, 0.5) 0%, transparent 70%)',
-        description: 'Sonsuz parıltılı mavi ışık.',
-    },
-    {
-        id: 'frame_dark_matter_old',
-        name: 'Kara Madde (Klasik)',
-        price: 5000,
-        type: 'avatarFrame',
-        assetUrl: 'radial-gradient(circle at 50% 50%, #000000 0%, #1a1a1a 80%), repeating-conic-gradient(#333333 0% 1%, transparent 1% 2%)',
-        description: 'Evrendeki en nadir ve karanlık sınır.',
-    },
-    {
-        id: 'frame_magma_core_old',
-        name: 'Magma Çekirdeği (Klasik)',
-        description: 'İçinden ateş ve lav fışkıran görünüm.',
-        price: 7500,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(to bottom right, #960000, #ff0000, #ff9a00, #ffff00)',
-    },
-    {
-        id: 'frame_holographic_old',
-        name: 'Holografik (Klasik)',
-        description: 'Sürekli renk değiştiren yüzey.',
-        price: 4000,
-        type: 'avatarFrame',
-        assetUrl: 'linear-gradient(45deg, rgba(255,0,0,0.4), rgba(255,165,0,0.4), rgba(255,255,0,0.4), rgba(0,128,0,0.4), rgba(0,0,255,0.4), rgba(75,0,130,0.4), rgba(238,130,238,0.4))',
-    },
+    { id: 'badge_elemental_master', name: 'Elite Gamer', price: 12000, type: 'avatarBadge', description: 'Sadece en iyiler için.', component: EliteGamerBadge },
     { id: 'badge_letter_a', name: 'Harf Rozeti - A', price: 300, type: 'avatarBadge', description: 'Profilini A harfiyle süsle.', component: LetterABadge },
     { id: 'badge_letter_b', name: 'Harf Rozeti - B', price: 300, type: 'avatarBadge', description: 'Profilini B harfiyle süsle.', component: LetterBBadge },
     { id: 'badge_letter_c', name: 'Harf Rozeti - C', price: 300, type: 'avatarBadge', description: 'Profilini C harfiyle süsle.', component: LetterCBadge },

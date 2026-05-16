@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // allowedDevOrigins experimental altından kök dizine taşındı
+  // allowedDevOrigins should be at the root level in newer Next.js versions
   allowedDevOrigins: [
     "6000-firebase-degerleroyunu-1767537398519.cluster-6frnii43o5blcu522sivebzpii.cloudworkstations.dev",
     "9000-firebase-degerleroyunu-1767537398519.cluster-6frnii43o5blcu522sivebzpii.cloudworkstations.dev",
