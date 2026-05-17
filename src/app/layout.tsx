@@ -5,16 +5,9 @@ import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { Providers } from '@/components/providers';
 import { BottomNavBar } from '@/components/bottom-nav-bar';
+import { RemoteCursor } from '@/components/remote-cursor';
 import { Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
-
-// Metadata can still be exported from a client component layout in Next.js 13+
-// but it's often better to move it to the page level if the layout is client-side.
-// For now, we'll keep it here as it might still work depending on the Next.js version.
-// export const metadata: Metadata = {
-//   title: 'Değerler Oyunu',
-//   description: 'Değerler Oyunu - Eğlenerek Değerlerimizi Öğrenelim',
-// };
 
 export default function RootLayout({
   children,
@@ -34,6 +27,7 @@ export default function RootLayout({
           <Providers>
               {children}
               <Toaster />
+              <RemoteCursor />
               <Suspense fallback={<div className="fixed bottom-0 left-0 right-0 h-[70px] bg-slate-950 flex items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-white"/></div>}>
                 <BottomNavBar />
               </Suspense>
