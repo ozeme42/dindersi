@@ -15,6 +15,44 @@ import {
 } from "firebase/firestore";
 import type { Course, Unit, Topic, UserProgress } from "@/lib/types";
 
+// --- SUNUCU TARAFLI SERİLEŞTİRİCİ ---
+// Firebase Timestamp objelerini ve diğer karmaşık yapıları Client'a geçmeden önce 
+// Next.js'in kabul edeceği saf (plain) string veya objelere dönüştürür.
+function serializeData(data: any): any {
+  if (data === null || data === undefined) return data;
+  
+  // Aktif Firestore Timestamp objesi ise
+  if (typeof data === 'object' && typeof data.toDate === 'function') {
+    return data.toDate().toISOString();
+  }
+  
+  // Raw Timestamp formatında gelmişse
+  if (typeof data === 'object' && 'seconds' in data && 'nanoseconds' in data) {
+    return new Date(data.seconds * 1000).toISOString();
+  }
+
+  // JS Date objesi ise
+  if (data instanceof Date) {
+    return data.toISOString();
+  }
+
+  // Array ise içindeki tüm elemanları gez
+  if (Array.isArray(data)) {
+    return data.map(serializeData);
+  }
+
+  // Obje ise içindeki tüm key'leri gez
+  if (typeof data === 'object') {
+    const newData: any = {};
+    for (const key of Object.keys(data)) {
+      newData[key] = serializeData(data[key]);
+    }
+    return newData;
+  }
+  
+  return data;
+}
+
 // 1. Öğrencinin sınıfına ait dersleri ve içeriklerini getir
 export async function getStudentCurriculum(classId: string) {
   try {
@@ -47,7 +85,8 @@ export async function getStudentCurriculum(classId: string) {
       courses.push({ ...courseData, units });
     }
 
-    return courses;
+    // KRİTİK NOKTA: Veriyi Client'a göndermeden önce serileştiriyoruz.
+    return serializeData(courses);
   } catch (error) {
     console.error("Müfredat hatası:", error);
     return [];
@@ -61,7 +100,8 @@ export async function getUserTopicProgress(userId: string) {
     const docSnap = await getDoc(docRef);
     
     if (docSnap.exists()) {
-      return docSnap.data() as UserProgress;
+      // KRİTİK NOKTA: İlerleme verisini de serileştiriyoruz.
+      return serializeData(docSnap.data() as UserProgress);
     }
     return {};
   } catch (error) {
@@ -89,6 +129,7 @@ export async function getUserTopicGameScores(userId: string, topicId: string) {
             }
         });
         
+        // Puanlar sadece sayı olduğu için burada serileştirmeye gerek yok
         return scores;
     } catch (error) {
         console.error("Skorlar çekilemedi", error);
@@ -96,7 +137,7 @@ export async function getUserTopicGameScores(userId: string, topicId: string) {
     }
 }
 
-// 4. Bölüm Sonu Ödülünü Al, Puanı İşle ve KONUYU TAMAMLANDI SAY (DÜZELTİLEN KISIM)
+// 4. Bölüm Sonu Ödülünü Al, Puanı İşle ve KONUYU TAMAMLANDI SAY
 export async function claimTopicRewardAction(userId: string, topicId: string, reward: number, topicTitle: string) {
   try {
     // 1. Kontrol: Bu ödül daha önce alınmış mı?
@@ -141,14 +182,13 @@ export async function claimTopicRewardAction(userId: string, topicId: string, re
       });
 
       // C: KRİTİK KISIM - Konuyu 'Tamamlandı' olarak işaretle
-      // Bu sayede bir sonraki konunun kilidi açılacak.
       transaction.set(userProgressRef, {
         [topicId]: {
-            completionCount: increment(1), // Tamamlanma sayısını artır
+            completionCount: increment(1), 
             completed: true,
             lastCompletedAt: serverTimestamp()
         }
-      }, { merge: true }); // Diğer konuların verisini silmemek için merge: true
+      }, { merge: true }); 
     });
 
     return { success: true };

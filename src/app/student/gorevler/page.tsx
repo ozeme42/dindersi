@@ -19,18 +19,31 @@ import { useToast } from '@/hooks/use-toast';
 import Confetti from 'react-dom-confetti';
 
 // --- SABİTLER ---
-// PUAN BURADA 10.000 OLARAK GÜNCELLENDİ
 const TOPIC_REWARD = 10000;
 
-// --- YARDIMCI FONKSİYON: FIREBASE VERİSİNİ TEMİZLEME ---
+// --- YARDIMCI FONKSİYON: FIREBASE VERİSİNİ TEMİZLEME (GÜÇLENDİRİLDİ) ---
 const serializeFirebaseData = (data: any): any => {
   if (data === null || data === undefined) return data;
+  
+  // Eğer objenin toDate fonksiyonu varsa (Aktif Firestore Timestamp objesiyse)
+  if (typeof data === 'object' && typeof data.toDate === 'function') {
+    return data.toDate().toISOString();
+  }
+  
+  // Raw Timestamp formunda ({seconds, nanoseconds}) geldiyse
   if (typeof data === 'object' && 'seconds' in data && 'nanoseconds' in data) {
     return new Date(data.seconds * 1000).toISOString();
   }
+
+  // Standart JS Date objesiyse
+  if (data instanceof Date) {
+    return data.toISOString();
+  }
+
   if (Array.isArray(data)) {
     return data.map(serializeFirebaseData);
   }
+
   if (typeof data === 'object') {
     const newData: any = {};
     Object.keys(data).forEach(key => {
@@ -38,6 +51,7 @@ const serializeFirebaseData = (data: any): any => {
     });
     return newData;
   }
+  
   return data;
 };
 
@@ -114,7 +128,7 @@ export default function StudentMissionsPage() {
             const mergedProgress = { ...(progressData || {}) };
 
             rewardsSnap.forEach(doc => {
-                const data = doc.data();
+                const data = serializeFirebaseData(doc.data());
                 const topicId = data.context; 
                 if (topicId) {
                     if (!mergedProgress[topicId]) {
@@ -125,8 +139,9 @@ export default function StudentMissionsPage() {
                 }
             });
 
-            setCourses(serializeFirebaseData(coursesDataRaw));
-            setGlobalProgress(mergedProgress);
+            // Gelen veriyi güvenle serileştir
+            setCourses(serializeFirebaseData(coursesDataRaw) || []);
+            setGlobalProgress(serializeFirebaseData(mergedProgress) || {});
         }
     } catch (e) { 
         console.error("Veri yenileme hatası:", e); 

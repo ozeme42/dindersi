@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { 
     Trophy, Star, Gamepad2, ShoppingCart, Columns, LayoutTemplate, 
     FileCog, Crown, Award, Target, Sparkles, Map, Swords, Backpack,
@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where, orderBy, Timestamp, onSnapshot, doc, getDoc } from "firebase/firestore";
-import type { Course, UserProfile, SchoolClass } from "@/lib/types";
+import type { UserProfile } from "@/lib/types";
 import { getStudentExams } from "@/app/student/deneme/actions";
 import { forceStreakCheck } from "@/app/student/actions"; 
 
@@ -47,7 +47,8 @@ function HardestWorkersToday() {
                     const data = doc.data();
                     const uid = data.userId;
                     const points = Number(data.points) || 0;
-                    if (points > 1000) return; 
+                    
+                    // LİMİT KALDIRILDI: Artık 1000'den büyük puanlar da hesaba dahil edilecek
                     if(uid) {
                         userScores[uid] = (userScores[uid] || 0) + points;
                     }
@@ -146,8 +147,7 @@ const DashboardCardButton = ({ href, icon, title, subtitle, colorClass, badge }:
 }
 
 function PageContent() {
-  // logout fonksiyonunu useAuth'tan çekiyoruz
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [liveScore, setLiveScore] = useState(0);
@@ -162,11 +162,10 @@ function PageContent() {
         if (logout) {
             await logout();
         } else {
-            // Eğer auth context'inizde logout yoksa standart firebase çıkışı yedeği:
             const { getAuth, signOut } = await import('firebase/auth');
             await signOut(getAuth());
         }
-        router.push('/login'); // Çıkıştan sonra yönlendirilecek sayfa
+        router.push('/login');
     } catch (error) {
         console.error("Çıkış yapılırken bir hata oluştu:", error);
     }
@@ -174,7 +173,7 @@ function PageContent() {
 
   // CANLI PUAN DİNLEYİCİSİ
   useEffect(() => {
-    if (!user?.uid) return;
+    if (loading || !user?.uid) return;
     const unsubscribe = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
         if (docSnap.exists()) {
             const userData = docSnap.data();
@@ -183,25 +182,31 @@ function PageContent() {
         }
     });
     return () => unsubscribe();
-  }, [user]);
+  }, [user, loading]);
 
-  // STREAK KONTROLÜ (useEffect ile güvenli çağrı)
+  // STREAK KONTROLÜ
   useEffect(() => {
     const checkStreak = async () => {
-        if (!user?.uid) return;
+        if (loading || !user?.uid) return;
         try {
             const res = await forceStreakCheck(user.uid);
             setCanSpinWheel(res.canSpinWheel);
         } catch(e) { console.error(e); }
     };
     checkStreak();
-  }, [user]);
+  }, [user, loading]);
 
   // VERİLERİ ÇEK
   useEffect(() => {
     async function fetchData() {
-      if (!user?.uid) { setIsLoading(false); return; };
+      if (loading) return; 
+      if (!user?.uid) { 
+          setIsLoading(false); 
+          router.push('/login'); 
+          return; 
+      };
 
+      setIsLoading(true);
       try {
         const now = new Date();
         const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -246,9 +251,9 @@ function PageContent() {
       } catch (error) { console.error(error); } finally { setIsLoading(false); }
     }
     fetchData();
-  }, [user]);
+  }, [user, loading, router]);
 
-  if (isLoading) return <div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>;
+  if (loading || isLoading) return <div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>;
 
   const level = Math.floor(liveScore / 1000) + 1;
   const progressToNextLevel = ((liveScore % 1000) / 1000) * 100;
