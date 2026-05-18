@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { Providers } from '@/components/providers';
 import { BottomNavBar } from '@/components/bottom-nav-bar';
-import { RemoteCursor } from '@/components/remote-cursor';
 import { Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
 
@@ -27,7 +26,6 @@ export default function RootLayout({
           <Providers>
               {children}
               <Toaster />
-              <RemoteCursor />
               <Suspense fallback={<div className="fixed bottom-0 left-0 right-0 h-[70px] bg-slate-950 flex items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-white"/></div>}>
                 <BottomNavBar />
               </Suspense>
