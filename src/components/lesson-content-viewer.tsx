@@ -24,7 +24,6 @@ import Image from "next/image";
 import Link from 'next/link';
 import { playSound } from "@/lib/audio-service";
 import { useAuth } from "@/context/auth-context";
-import { motion, AnimatePresence } from "framer-motion";
 
 // --- TİP TANIMLAMALARI ---
 type LocalProgress = {
@@ -152,8 +151,7 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
     }, [isMaximized, onToggleMaximize]);
 
     return (
-        <motion.div 
-            layout
+        <div 
             className={cn(
                 "relative flex flex-col items-center justify-center bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200 transition-all duration-500 ease-in-out",
                 isMaximized 
@@ -188,7 +186,7 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
                     priority
                 />
             </div>
-        </motion.div>
+        </div>
     );
 }
 
@@ -216,17 +214,14 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
 
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-4xl mx-auto")}>
-             <motion.div 
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className={cn(
+             <div className={cn(
                 "p-4 rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 flex-shrink-0 w-full text-center", 
                 isTeacher ? "py-4 mb-6 mt-2" : "p-3 md:p-6 mb-4"
             )}>
                 <h2 className={cn("font-black text-slate-800", 
                     isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl")
                 )}>{step.title}</h2>
-            </motion.div>
+            </div>
 
             <div className={cn("w-full grid gap-4 pb-24", isTeacher ? "grid-cols-1 md:grid-cols-2 gap-8" : "grid-cols-1")}>
                 {step.questions.map((q, index) => {
@@ -237,14 +232,8 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                     const theme = colorThemes[index % colorThemes.length];
 
                     return (
-                        <motion.div 
-                            key={index} 
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: index * 0.1 }}
-                            whileHover={{ scale: isAnswered ? 1 : 1.02 }}
-                            className={cn(
-                            "rounded-3xl border-2 shadow-lg flex flex-col justify-between overflow-hidden backdrop-blur-md",
+                        <div key={index} className={cn(
+                            "rounded-3xl border-2 shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
                             isTeacher ? "p-6 min-h-[14rem]" : "p-4 min-h-[10rem]",
                             isAnswered 
                                 ? (isCorrect ? "border-emerald-400 bg-emerald-50" : "border-red-400 bg-red-50") 
@@ -260,40 +249,36 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                             </div>
 
                             <div className="flex gap-4 mt-auto">
-                                <motion.div whileTap={{ scale: 0.95 }} className="flex-1 flex">
-                                    <Button
-                                        onClick={() => !isAnswered && onAnswer(index, true)}
-                                        disabled={isAnswered}
-                                        className={cn(
-                                            "w-full font-bold rounded-xl transition-all shadow-sm",
-                                            isTeacher ? "h-16 text-xl" : "h-10 text-base",
-                                            isAnswered && userAnswer.answer === true 
-                                                ? (userAnswer.isCorrect ? "bg-emerald-500 hover:bg-emerald-600 opacity-100 text-white" : "bg-red-500 hover:bg-red-600 opacity-100 text-white")
-                                                : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200",
-                                            isAnswered && userAnswer.answer !== true && "opacity-30 grayscale"
-                                        )}
-                                    >
-                                        <CheckCircle className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-4 w-4")} /> Doğru
-                                    </Button>
-                                </motion.div>
-                                <motion.div whileTap={{ scale: 0.95 }} className="flex-1 flex">
-                                    <Button
-                                        onClick={() => !isAnswered && onAnswer(index, false)}
-                                        disabled={isAnswered}
-                                        className={cn(
-                                            "w-full font-bold rounded-xl transition-all shadow-sm",
-                                            isTeacher ? "h-16 text-xl" : "h-10 text-base",
-                                            isAnswered && userAnswer.answer === false 
-                                                ? (userAnswer.isCorrect ? "bg-emerald-500 hover:bg-emerald-600 opacity-100 text-white" : "bg-red-500 hover:bg-red-600 opacity-100 text-white")
-                                                : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200",
-                                            isAnswered && userAnswer.answer !== false && "opacity-30 grayscale"
-                                        )}
-                                    >
-                                        <XCircle className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-4 w-4")} /> Yanlış
-                                    </Button>
-                                </motion.div>
+                                <Button
+                                    onClick={() => !isAnswered && onAnswer(index, true)}
+                                    disabled={isAnswered}
+                                    className={cn(
+                                        "flex-1 font-bold rounded-xl transition-all shadow-sm",
+                                        isTeacher ? "h-16 text-xl" : "h-10 text-base",
+                                        isAnswered && userAnswer.answer === true 
+                                            ? (userAnswer.isCorrect ? "bg-emerald-500 hover:bg-emerald-600 opacity-100 text-white" : "bg-red-500 hover:bg-red-600 opacity-100 text-white")
+                                            : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200",
+                                        isAnswered && userAnswer.answer !== true && "opacity-30 grayscale"
+                                    )}
+                                >
+                                    <CheckCircle className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-4 w-4")} /> Doğru
+                                </Button>
+                                <Button
+                                    onClick={() => !isAnswered && onAnswer(index, false)}
+                                    disabled={isAnswered}
+                                    className={cn(
+                                        "flex-1 font-bold rounded-xl transition-all shadow-sm",
+                                        isTeacher ? "h-16 text-xl" : "h-10 text-base",
+                                        isAnswered && userAnswer.answer === false 
+                                            ? (userAnswer.isCorrect ? "bg-emerald-500 hover:bg-emerald-600 opacity-100 text-white" : "bg-red-500 hover:bg-red-600 opacity-100 text-white")
+                                            : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200",
+                                        isAnswered && userAnswer.answer !== false && "opacity-30 grayscale"
+                                    )}
+                                >
+                                    <XCircle className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-4 w-4")} /> Yanlış
+                                </Button>
                             </div>
-                        </motion.div>
+                        </div>
                     );
                 })}
             </div>
@@ -339,12 +324,19 @@ function ContentListPlayer({
       
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
     
+    // Dekoratif İkonlar
     const decoIcons = [
-        { left: Sparkles, right: Sparkles }, { left: Star, right: Star }, { left: Zap, right: Zap },
-        { left: Crown, right: Crown }, { left: Gem, right: Gem }, { left: Flame, right: Flame },
-        { left: Feather, right: Feather }, { left: Quote, right: Quote }
+        { left: Sparkles, right: Sparkles },
+        { left: Star, right: Star },
+        { left: Zap, right: Zap },
+        { left: Crown, right: Crown },
+        { left: Gem, right: Gem },
+        { left: Flame, right: Flame },
+        { left: Feather, right: Feather },
+        { left: Quote, right: Quote }
     ];
 
+    // Renk Temaları
     const styles = [
         { bg: 'bg-blue-50/90', border: 'border-blue-100', circleBorder: 'border-blue-400', numberColor: 'text-blue-600', textColor: 'text-blue-700', iconColor: 'text-blue-400' },
         { bg: 'bg-rose-50/90', border: 'border-rose-100', circleBorder: 'border-rose-400', numberColor: 'text-rose-600', textColor: 'text-rose-700', iconColor: 'text-rose-400' },
@@ -372,10 +364,8 @@ function ContentListPlayer({
 
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-7xl mx-auto")}>
-            <motion.div 
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className={cn(
+            {/* BAŞLIK */}
+            <div className={cn(
                 "relative z-20 p-6 rounded-3xl shadow-lg bg-white border border-slate-100 flex-shrink-0 w-full max-w-4xl text-center mb-8 overflow-hidden", 
                 isTeacher ? "py-6 mt-2" : "p-4 md:p-8"
             )}>
@@ -388,7 +378,7 @@ function ContentListPlayer({
                     <Sparkles className="text-yellow-400 h-6 w-6 md:h-8 md:w-8 animate-pulse" />
                 </div>
                 <div className="absolute left-6 md:left-1/2 bottom-[-10px] w-4 h-4 bg-slate-300 rounded-full md:-translate-x-1/2 border-2 border-white z-20"></div>
-            </motion.div>
+            </div>
               
              <div className={cn(
                  "relative w-full pb-24", 
@@ -411,14 +401,12 @@ function ContentListPlayer({
                         const isLastItem = index === visibleSentences.length - 1;
 
                         return (
-                            <motion.div 
-                                initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                            <div 
                                 key={index} 
                                 ref={isLastItem ? scrollRef : null}
                                 className={cn(
-                                "relative flex items-center w-full group",
+                                "relative flex items-center w-full",
+                                isTeacher ? "animate-in zoom-in slide-in-from-bottom-4 duration-500" : "animate-in slide-in-from-bottom-2 duration-500",
                                 isLeft ? "md:flex-row md:justify-end" : "md:flex-row-reverse md:justify-end",
                                 "flex-row justify-start" 
                             )}>
@@ -478,7 +466,7 @@ function ContentListPlayer({
                                         <RightIcon className={cn("w-5 h-5 md:w-6 md:h-6 flex-shrink-0 opacity-60", style.iconColor)} />
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         )
                     })}
                 </div>
@@ -503,9 +491,9 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
 
     return (
         <div className={cn('flex flex-col h-full w-full items-center justify-start p-2', isTeacher ? "max-w-[98%] mx-auto pt-4" : "max-w-6xl mx-auto justify-center")}>
-            <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className={cn("p-4 rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 flex-shrink-0 mb-8 w-full text-center")}>
+            <div className={cn("p-4 rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 flex-shrink-0 mb-8 w-full text-center")}>
                 <h2 className={cn("font-black text-slate-800", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
-            </motion.div>
+            </div>
              
             <div className={cn(
                 "w-full flex-grow grid gap-6", 
@@ -516,27 +504,20 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
                 {items.map((item, index) => {
                     const style = cardStyles[index % cardStyles.length];
                     return (
-                        <motion.div 
-                            key={index}
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: index * 0.1 }}
-                        >
-                            <Card className={cn(
-                                "border-2 transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-105", 
-                                style.bg,
-                                style.border,
-                                style.hoverBorder,
-                                isTeacher ? 'min-h-[180px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
-                            )}>
-                                <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
-                                    <CardTitle className={cn("font-black uppercase tracking-wider transition-colors", style.title, isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg"))}>{item.concept}</CardTitle>
-                                </CardHeader>
-                                <CardContent className={cn("text-slate-700 font-bold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
-                                    {item.definition}
-                                </CardContent>
-                            </Card>
-                        </motion.div>
+                        <Card key={index} className={cn(
+                            "border-2 transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-105", 
+                            style.bg,
+                            style.border,
+                            style.hoverBorder,
+                            isTeacher ? 'min-h-[180px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
+                        )}>
+                            <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
+                                <CardTitle className={cn("font-black uppercase tracking-wider transition-colors", style.title, isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg"))}>{item.concept}</CardTitle>
+                            </CardHeader>
+                            <CardContent className={cn("text-slate-700 font-bold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
+                                {item.definition}
+                            </CardContent>
+                        </Card>
                     )
                 })}
             </div>
@@ -564,22 +545,17 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
 
     return (
         <div className={cn("w-full p-4 flex flex-col justify-start", isTeacher ? "max-w-full pt-6" : "max-w-6xl mx-auto justify-center")}>
-             <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
+             <div className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
                  <h2 className={cn("font-black text-center text-slate-800 drop-shadow-sm uppercase tracking-wide", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
-             </motion.div>
+             </div>
             <div className={cn("grid gap-6 pb-32", isTeacher ? "grid-cols-3 lg:grid-cols-4 gap-8" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5")}>
                 {step.cards.map((card, index) => {
                     const theme = FLASHCARD_THEMES[index % FLASHCARD_THEMES.length];
                     return (
-                        <motion.div
+                        <div
                             key={index}
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: index * 0.05 }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
                             className={cn(
-                                "rounded-3xl [perspective:1000px] cursor-pointer group transition-transform duration-300",
+                                "rounded-3xl [perspective:1000px] cursor-pointer group hover:scale-105 transition-transform duration-300",
                                 isTeacher ? "min-h-[14rem]" : (isFullscreen ? "min-h-[12rem]" : "min-h-[9rem]")
                             )}
                             onClick={() => onCardFlip(index, 'anagramFlashcard')}
@@ -613,7 +589,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
                                     </h3>
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     );
                 })}
             </div>
@@ -632,27 +608,21 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
 
     return (
         <div className={cn("w-full p-4 flex flex-col justify-start", isTeacher ? "max-w-full pt-6" : "max-w-6xl mx-auto justify-center")}>
-            <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
+            <div className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
                 <h2 className={cn("font-black text-center text-slate-800 drop-shadow-sm uppercase tracking-wider", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
-            </motion.div>
+            </div>
             <div className={cn("grid gap-8 pb-32", isTeacher ? "grid-cols-2 lg:grid-cols-3" : (isFullscreen ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"))}>
                 {step.cards.map((card, index) => (
-                    <motion.div
+                    <FlashcardItem
                         key={index}
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                    >
-                        <FlashcardItem
-                            term={card.term}
-                            definition={card.definition}
-                            isFlipped={flippedCards.has(index)}
-                            onFlip={() => onCardFlip(index, 'flashcard')}
-                            theme={FLASHCARD_THEMES[index % FLASHCARD_THEMES.length]}
-                            isFullscreen={isFullscreen}
-                            isTeacher={isTeacher}
-                        />
-                    </motion.div>
+                        term={card.term}
+                        definition={card.definition}
+                        isFlipped={flippedCards.has(index)}
+                        onFlip={() => onCardFlip(index, 'flashcard')}
+                        theme={FLASHCARD_THEMES[index % FLASHCARD_THEMES.length]}
+                        isFullscreen={isFullscreen}
+                        isTeacher={isTeacher}
+                    />
                 ))}
             </div>
         </div>
@@ -661,11 +631,9 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
 
 const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFullscreen, isTeacher }: { term: string, definition: string, isFlipped: boolean, onFlip: () => void, theme: any, isFullscreen?: boolean, isTeacher?: boolean }) => {
     return (
-        <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+        <div
             className={cn(
-                "rounded-3xl [perspective:1000px] cursor-pointer group transition-transform duration-300",
+                "rounded-3xl [perspective:1000px] cursor-pointer group hover:scale-105 transition-transform duration-300",
                 isTeacher ? "min-h-[20rem]" : "min-h-[12rem]"
             )}
             onClick={onFlip}
@@ -690,11 +658,11 @@ const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFullscree
                     <p className={cn("font-bold leading-relaxed", isTeacher ? "text-2xl" : (isFullscreen ? "text-lg" : "text-sm md:text-base"))}>{definition}</p>
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 };
 
-// 7. AnagramGame
+// 7. GÜNCELLENMİŞ AnagramGame
 function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNext, isTeacher, isFullscreen }: { step: AnagramStep, onAnswer: (answer: string) => void, answer: { answer: string, isCorrect: boolean } | null, isAnswerRevealed: boolean, onCorrectAndNext: () => void, isTeacher?: boolean, isFullscreen?: boolean }) {
     
     const targetWords = useMemo(() => step.correctAnswer.split(' '), [step.correctAnswer]);
@@ -761,13 +729,13 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
             "space-y-4 md:space-y-8 flex flex-col items-center mx-auto p-4 w-full",
             isTeacher ? "max-w-full justify-center" : "max-w-5xl justify-center"
         )}>
-            <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="bg-white/80 p-4 md:p-10 rounded-3xl border border-white shadow-xl backdrop-blur-xl w-full max-w-5xl text-center">
+            <div className="bg-white/60 p-4 md:p-10 rounded-3xl border border-white shadow-xl backdrop-blur-md w-full max-w-5xl text-center">
                  <p className={cn("font-bold italic text-slate-700", isTeacher ? "text-3xl leading-snug" : "text-lg md:text-2xl")}>"{step.definition}"</p>
-            </motion.div>
+            </div>
              
             {/* CEVAP ALANI */}
             <div className={cn(
-                "flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 p-4 md:p-8 rounded-3xl bg-white/60 backdrop-blur-md border border-white/50 shadow-inner w-full max-w-6xl", 
+                "flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 p-4 md:p-8 rounded-3xl bg-white/40 border border-white/50 shadow-inner w-full max-w-6xl", 
                 isTeacher ? "min-h-[12rem]" : "min-h-[8rem]"
             )}>
                 {targetWords.map((word, wordIndex) => (
@@ -776,11 +744,11 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                             const letterObj = constructedLetters[globalCharIndex];
                             globalCharIndex++;
 
+                            // DÜZELTME: Harf varsa veya cevap gösteriliyorsa kart görünür olmalı
                             const showCard = letterObj || isAnswerRevealed;
 
                             return (
-                                <motion.div 
-                                    layout
+                                <div 
                                     key={`${wordIndex}-${charIndex}`} 
                                     onClick={() => letterObj && !isAnswerRevealed && handleConstructedClick(letterObj)} 
                                     className={cn(
@@ -789,6 +757,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                         showCard
                                             ? cn(
                                                 "bg-white active:translate-y-1 active:border-b-0",
+                                                // Cevap açıldıysa YEŞİL, değilse İNDİGO
                                                 isAnswerRevealed 
                                                     ? "bg-emerald-100 text-emerald-600 border-emerald-300" 
                                                     : "text-indigo-600 border-indigo-200"
@@ -797,7 +766,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                     )}
                                 >
                                     {letterObj ? letterObj.letter : (isAnswerRevealed ? char : '')}
-                                </motion.div>
+                                </div>
                             );
                         })}
                     </div>
@@ -806,41 +775,31 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
 
             {/* BANKA */}
             {!isAnswerRevealed ? (
-                <motion.div layout className="flex flex-wrap justify-center gap-2 md:gap-3 p-2 md:p-4">
-                    <AnimatePresence>
+                <div className="flex flex-wrap justify-center gap-2 md:gap-3 p-2 md:p-4">
                     {bankLetters.map((item, index) => {
                         const colorClass = letterColors[index % letterColors.length];
                         return (
-                            <motion.div
-                                key={item.id}
-                                layout
-                                initial={{ scale: 0.8, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1, x: shakingLetterId === item.id ? [-10, 10, -10, 10, 0] : 0 }}
-                                exit={{ scale: 0, opacity: 0 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                            <Button 
+                                key={item.id} 
+                                onClick={() => handleLetterClick(item)} 
+                                className={cn(
+                                    "font-black border-b-4 active:border-b-0 active:translate-y-1 transition-all duration-100 shadow-lg",
+                                    colorClass,
+                                    isTeacher ? "h-20 w-16 text-4xl rounded-2xl border-b-8" : "h-12 w-10 text-xl md:h-16 md:w-14 md:text-3xl md:border-b-8",
+                                    shakingLetterId === item.id && "animate-shake bg-red-500 border-red-700 text-white hover:bg-red-600 !bg-none"
+                                )}
                             >
-                                <Button 
-                                    onClick={() => handleLetterClick(item)} 
-                                    className={cn(
-                                        "font-black border-b-4 active:border-b-0 active:translate-y-1 transition-all duration-100 shadow-lg",
-                                        colorClass,
-                                        isTeacher ? "h-20 w-16 text-4xl rounded-2xl border-b-8" : "h-12 w-10 text-xl md:h-16 md:w-14 md:text-3xl md:border-b-8",
-                                        shakingLetterId === item.id && "bg-red-500 border-red-700 text-white hover:bg-red-600 !bg-none"
-                                    )}
-                                >
-                                    {item.letter}
-                                </Button>
-                            </motion.div>
+                                {item.letter}
+                            </Button>
                         )
                     })}
-                    </AnimatePresence>
-                </motion.div>
+                </div>
             ) : (
-                 <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center mt-6">
+                 <div className="text-center mt-6 animate-in slide-in-from-bottom-4">
                     <Button onClick={onCorrectAndNext} className={cn("font-bold text-white transition-all transform hover:scale-105 bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200/50 shadow-lg", isTeacher ? "h-16 px-10 text-xl rounded-2xl" : "h-12 px-6 text-lg rounded-xl")}>
                         Harika! Sonraki <ArrowRight className="ml-3 h-5 w-5"/>
                     </Button>
-                 </motion.div>
+                 </div>
             )}
         </div>
     );
@@ -885,10 +844,10 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
 
     if (isFinished) {
         return (
-            <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex flex-col items-center justify-center h-full text-center text-slate-800">
+            <div className="flex flex-col items-center justify-center h-full text-center text-slate-800">
                 <CheckCircle2 className="h-16 w-16 text-emerald-500 mb-4"/>
                 <h3 className="text-2xl font-bold">Tüm kelimeler tamamlandı!</h3>
-            </motion.div>
+            </div>
         );
     }
     
@@ -897,7 +856,7 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
     return (
         <div className="w-full h-full flex flex-col justify-center relative">
              <div className="flex justify-between items-center px-4 mb-2 md:mb-4">
-                 <div className="text-slate-500 font-bold uppercase tracking-widest text-xs md:text-sm bg-white/50 px-3 py-1 rounded-full shadow-sm">
+                 <div className="text-slate-500 font-bold uppercase tracking-widest text-xs md:text-sm bg-white/50 px-3 py-1 rounded-full">
                     Kelime {currentCardIndex + 1} / {step.cards.length}
                 </div>
                 {isTeacher && !answerState[currentCardIndex] && (
@@ -912,30 +871,20 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
                 )}
              </div>
             
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={currentCardIndex}
-                    initial={{ x: 50, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: -50, opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                >
-                    <AnagramGame 
-                        step={{...currentCard, title: step.title}} 
-                        onAnswer={handleAnswer}
-                        answer={answerState[currentCardIndex]}
-                        isAnswerRevealed={!!answerState[currentCardIndex]}
-                        onCorrectAndNext={handleNext} 
-                        isTeacher={isTeacher}
-                        isFullscreen={isFullscreen}
-                    />
-                </motion.div>
-            </AnimatePresence>
+            <AnagramGame 
+                step={{...currentCard, title: step.title}} 
+                onAnswer={handleAnswer}
+                answer={answerState[currentCardIndex]}
+                isAnswerRevealed={!!answerState[currentCardIndex]}
+                onCorrectAndNext={handleNext} 
+                isTeacher={isTeacher}
+                isFullscreen={isFullscreen}
+            />
         </div>
     )
 }
 
-// 8. SentenceScrambleGame
+// 8. SentenceScrambleGame (GÜNCELLENDİ: BİTİŞ KONTROLÜ)
 function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnswerRevealed }: { step: SentenceScrambleStep, onAnswer: (answer: string) => void, onCorrectAndNext: () => void, answer?: { answer: string, isCorrect: boolean } | null, isAnswerRevealed: boolean }) {
     const isTeacher = useTeacherMode();
     const initialWords = useMemo(() => step.scrambledSentence.split(' ').map((word, index) => ({ id: index, word })), [step.scrambledSentence]);
@@ -983,67 +932,56 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
 
     useEffect(() => {
         if (answer?.isCorrect) {
-            const timeoutId = setTimeout(() => { onCorrectAndNext(); }, 1500);
+            const timeoutId = setTimeout(() => { onCorrectAndNext(); }, 1500); // Süre biraz uzatıldı
             return () => clearTimeout(timeoutId);
         }
     }, [answer, onCorrectAndNext]);
 
     return (
         <div className={cn("space-y-8 text-center mx-auto p-4", isTeacher ? "max-w-full justify-start pt-10" : "max-w-4xl justify-center")}>
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={cn("text-slate-600 font-bold drop-shadow-sm", isTeacher ? "text-3xl" : "text-xl md:text-2xl")}>Kelimeleri doğru sıraya dizerek cümleyi oluşturun.</motion.p>
+            <p className={cn("text-slate-500 font-medium", isTeacher ? "text-2xl" : "text-lg md:text-xl")}>Kelimeleri doğru sıraya dizerek cümleyi oluşturun.</p>
              
-             <div className={cn("flex flex-wrap justify-center items-center gap-4 bg-white/70 backdrop-blur-xl border border-white shadow-inner p-8 rounded-3xl", isTeacher ? "min-h-[12rem]" : "min-h-[6rem] md:min-h-[10rem]")}>
-                <AnimatePresence>
+             <div className={cn("flex flex-wrap justify-center items-center gap-4 bg-white/50 border border-white shadow-inner p-8 rounded-3xl", isTeacher ? "min-h-[12rem]" : "min-h-[6rem] md:min-h-[10rem]")}>
                 {constructedWords.map((wordObj, i) => (
-                    <motion.div 
-                        layout
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
+                    <div 
                         key={wordObj.id} 
                         className={cn(
-                            "rounded-xl font-bold shadow-md border-b-4",
+                            "rounded-xl font-bold shadow-md animate-in zoom-in duration-300 border-b-4",
                             wordColors[wordObj.id % wordColors.length], 
                             isTeacher ? "text-2xl px-6 py-3 rounded-2xl border-b-8" : "px-4 py-2 md:px-6 md:py-3 md:text-lg md:rounded-2xl md:border-b-4 text-sm"
                         )}
                     >
                         {wordObj.word}
-                    </motion.div>
+                    </div>
                 ))}
-                </AnimatePresence>
                 {constructedWords.length === 0 && <span className={cn("text-slate-400 italic", isTeacher ? "text-xl" : "text-sm md:text-base")}>Cümleniz burada görünecek...</span>}
             </div>
 
             {isAnswerRevealed ? (
-                 <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center mt-10">
-                    <div className={cn("inline-flex items-center gap-4 bg-emerald-100 text-emerald-700 rounded-full border border-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.3)]", isTeacher ? "px-8 py-4" : "px-6 py-3 md:px-8 md:py-4")}>
+                 <div className="text-center mt-10 animate-in slide-in-from-bottom-4">
+                    <div className={cn("inline-flex items-center gap-4 bg-emerald-100 text-emerald-700 rounded-full border border-emerald-200", isTeacher ? "px-8 py-4" : "px-6 py-3 md:px-8 md:py-4")}>
                         <CheckCircle2 className={cn(isTeacher ? "h-10 w-10" : "h-6 w-6")}/>
                         <span className={cn("font-bold", isTeacher ? "text-2xl" : "text-lg")}>Harika, doğru cümle!</span>
                     </div>
-                </motion.div>
+                </div>
             ) : (
-                <motion.div layout className="flex flex-wrap justify-center gap-4 p-2">
-                    <AnimatePresence>
+                <div className="flex flex-wrap justify-center gap-4 p-2">
                     {bankWords.map((item, index) => (
-                        <motion.div
+                        <div
                             key={item.id}
-                            layout
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1, x: mistakenWordId === item.id ? [-10, 10, -10, 10, 0] : 0 }}
-                            exit={{ scale: 0, opacity: 0 }}
                             onClick={() => handleWordClick(item)}
                             className={cn(
                                 "font-bold rounded-2xl transition-all duration-200 border-b-8 active:border-b-0 active:translate-y-2 shadow-lg cursor-pointer flex items-center justify-center hover:-translate-y-1",
                                 wordColors[item.id % wordColors.length],
                                 isTeacher ? "text-2xl h-20 px-6" : "text-lg h-16 px-6 md:text-xl md:h-16 md:px-8",
-                                mistakenWordId === item.id && "bg-red-500 border-red-700 text-white hover:bg-red-600 !bg-none"
+                                mistakenWordId === item.id && "animate-shake bg-red-500 border-red-700 text-white hover:bg-red-600 !bg-none"
                             )}
                         >
                             {mistakenWordId === item.id && <X className="h-8 w-8 mr-2" />}
                             {item.word}
-                        </motion.div>
+                        </div>
                     ))}
-                    </AnimatePresence>
-                </motion.div>
+                </div>
             )}
         </div>
     );
@@ -1101,28 +1039,32 @@ function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, 
     );
 }
 
-// 10. DrawingCanvas (Aynı bırakılmıştır, Teacher modu odaklı olduğu için dokunmadım)
+// 10. DrawingCanvas (GELİŞMİŞ - TEK TANIM)
 function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
     const isTeacher = useTeacherMode();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isPenMode, setIsPenMode] = useState(false);
-    const [isPaletteVisible, setIsPaletteVisible] = useState(true); 
+    const [isPaletteVisible, setIsPaletteVisible] = useState(true); // YENİ: Palet görünürlük kontrolü
     
+    // Araçlar: 'pen', 'highlighter', 'eraser'
     const [tool, setTool] = useState<'pen' | 'highlighter' | 'eraser'>('pen');
-    const [color, setColor] = useState('#facc15');
-    const [lineWidth, setLineWidth] = useState(4);
+    const [color, setColor] = useState('#facc15'); // Varsayılan Kırmızı
+    const [lineWidth, setLineWidth] = useState(4); // Varsayılan orta kalınlık
     const [history, setHistory] = useState<ImageData[]>([]);
     
+    // Sayfa bazlı hafıza
     const savedDrawings = useRef<{ [key: number]: ImageData }>({});
     const prevStepIndexRef = useRef(stepIndex);
     
     const [isDrawing, setIsDrawing] = useState(false);
     const lastPos = useRef<{ x: number, y: number } | null>(null);
 
+    // Palet görünürlüğünü resetle
     useEffect(() => {
         if (isPenMode) setIsPaletteVisible(true);
     }, [isPenMode]);
 
+    // Canvas Boyutlandırma
     useEffect(() => {
         const handleResize = () => {
             if (canvasRef.current) {
@@ -1146,17 +1088,25 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Sayfa Değişimi Yönetimi
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (canvas && ctx) {
+            // 1. Önceki sayfanın çizimini kaydet
             savedDrawings.current[prevStepIndexRef.current] = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            // 2. Ekranı temizle
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            setHistory([]); 
+            setHistory([]); // Yeni sayfa için undo geçmişini sıfırla
+
+            // 3. Yeni sayfanın çizimi varsa geri yükle
             if (savedDrawings.current[stepIndex]) {
                 ctx.putImageData(savedDrawings.current[stepIndex], 0, 0);
+                // Geri yüklenen hali history'nin ilk elemanı yap
                 setHistory([savedDrawings.current[stepIndex]]);
             }
+
             prevStepIndexRef.current = stepIndex;
         }
     }, [stepIndex]);
@@ -1167,6 +1117,8 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
+
+        // Maksimum 10 adım geri alma
         if (history.length > 10) {
             setHistory(prev => [...prev.slice(1), ctx.getImageData(0, 0, canvas.width, canvas.height)]);
         } else {
@@ -1188,11 +1140,13 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
     const clearCanvas = () => {
         const canvas = canvasRef.current;
         if (canvas) {
-            saveHistory(); 
+            saveHistory(); // Temizlemeden önce kaydet
             const ctx = canvas.getContext('2d');
             ctx?.clearRect(0, 0, canvas.width, canvas.height);
         }
     };
+
+    // --- ÇİZİM MANTIĞI ---
 
     const getCoords = (e: React.MouseEvent | React.TouchEvent) => {
         if ('touches' in e) {
@@ -1205,6 +1159,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
     const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
         if (!isPenMode) return;
         
+        // Geçmişi kaydet
         saveHistory();
 
         const { x, y } = getCoords(e);
@@ -1214,6 +1169,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (canvas && ctx) {
+            // NOKTA KOYMA: Tıklanır tıklanmaz oraya bir daire çiz
             ctx.beginPath();
             ctx.arc(x, y, lineWidth / 2, 0, Math.PI * 2);
             
@@ -1222,9 +1178,9 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
                 ctx.fillStyle = 'rgba(0,0,0,1)';
                 ctx.globalAlpha = 1.0;
             } else if (tool === 'highlighter') {
-                ctx.globalCompositeOperation = 'multiply'; 
+                ctx.globalCompositeOperation = 'multiply'; // Fosforlu kalem için multiply
                 ctx.fillStyle = color;
-                ctx.globalAlpha = 0.5; 
+                ctx.globalAlpha = 0.5; // Şeffaflık
             } else {
                 ctx.globalCompositeOperation = 'source-over';
                 ctx.fillStyle = color;
@@ -1234,6 +1190,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
             ctx.fill();
             ctx.closePath();
             
+            // Çizgi devamı için path başlat
             ctx.beginPath();
             ctx.moveTo(x, y);
         }
@@ -1241,12 +1198,13 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
 
     const draw = (e: React.MouseEvent | React.TouchEvent) => {
         if (!isDrawing || !isPenMode || !lastPos.current || !canvasRef.current) return;
-        e.preventDefault(); 
+        e.preventDefault(); // Kaydırmayı engelle
         const ctx = canvasRef.current.getContext('2d');
         if (!ctx) return;
 
         const { x, y } = getCoords(e);
 
+        // Araç Ayarları
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.lineWidth = lineWidth;
@@ -1255,10 +1213,10 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
             ctx.globalCompositeOperation = 'destination-out';
             ctx.globalAlpha = 1.0;
         } else if (tool === 'highlighter') {
-            ctx.globalCompositeOperation = 'multiply'; 
+            ctx.globalCompositeOperation = 'multiply'; // Fosforlu kalem
             ctx.strokeStyle = color;
             ctx.globalAlpha = 0.5; 
-            ctx.lineWidth = lineWidth * 3; 
+            ctx.lineWidth = lineWidth * 3; // Highlighter daha kalın olsun
         } else {
             ctx.globalCompositeOperation = 'source-over';
             ctx.strokeStyle = color;
@@ -1276,8 +1234,8 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
         lastPos.current = null;
         const ctx = canvasRef.current?.getContext('2d');
         if(ctx) {
-             ctx.globalCompositeOperation = 'source-over'; 
-             ctx.globalAlpha = 1.0; 
+             ctx.globalCompositeOperation = 'source-over'; // Reset
+             ctx.globalAlpha = 1.0; // Reset alpha
              ctx.closePath();
         }
     };
@@ -1286,6 +1244,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
 
     return (
         <>
+            {/* Canvas Katmanı */}
             <canvas
                 ref={canvasRef}
                 className={cn(
@@ -1301,6 +1260,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
                 onTouchEnd={stopDrawing}
             />
 
+            {/* Araç Çubuğu - YUKARI TAŞINDI VE KÜÇÜLTÜLDÜ */}
             <div className="fixed bottom-32 right-4 z-[101] flex flex-col items-end gap-3">
                 
                 {isPenMode && (
@@ -1308,6 +1268,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
                         {isPaletteVisible ? (
                             <div className="flex flex-col items-center gap-2 bg-white/95 p-2 rounded-xl border border-slate-200 shadow-xl animate-in slide-in-from-bottom-5 fade-in zoom-in backdrop-blur-sm w-44">
                                 
+                                {/* Header - Küçültme Butonu */}
                                 <div className="w-full flex justify-between items-center border-b border-slate-200 pb-2 mb-1 px-1">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Araçlar</span>
                                     <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full hover:bg-slate-100 text-slate-400" onClick={() => setIsPaletteVisible(false)}>
@@ -1315,6 +1276,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
                                     </Button>
                                 </div>
 
+                                {/* Renk Seçimi */}
                                 <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-lg mb-1 w-full">
                                     {['#000000', '#ef4444', '#22c55e', '#3b82f6', '#facc15', '#a855f7'].map((c) => (
                                         <button
@@ -1329,6 +1291,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
                                     ))}
                                 </div>
 
+                                {/* Kalınlık Ayarı */}
                                 <div className="flex gap-2 items-center justify-center w-full pb-2 border-b border-slate-200">
                                      <button onClick={() => setLineWidth(4)} className={cn("w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 4 && "bg-slate-700")}>
                                         <div className="w-1 h-1 bg-white rounded-full" />
@@ -1341,6 +1304,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
                                      </button>
                                 </div>
 
+                                {/* Araçlar */}
                                 <div className="flex flex-col gap-1.5 w-full">
                                      <Button 
                                         variant={tool === 'pen' ? 'default' : 'ghost'} 
@@ -1370,6 +1334,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
 
                                 <div className="h-[1px] w-full bg-slate-200"></div>
 
+                                {/* Aksiyonlar */}
                                 <div className="flex gap-2 w-full justify-between px-1">
                                     <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleUndo} title="Geri Al" disabled={history.length === 0}>
                                         <Undo className="w-3 h-3" />
@@ -1394,6 +1359,7 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
                     </>
                 )}
 
+                {/* Ana Toggle Butonu - KÜÇÜLTÜLDÜ */}
                 <Button
                     onClick={() => setIsPenMode(!isPenMode)}
                     className={cn(
@@ -1495,7 +1461,7 @@ export function StepContent({
                 const embedUrl = getEmbedUrl(videoStep.url);
                 return (
                     <div className="w-full h-full flex flex-col items-center justify-center p-4">
-                        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={cn("w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-black", isTeacher ? "max-w-5xl" : "max-w-6xl")}>
+                        <div className={cn("w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-black", isTeacher ? "max-w-5xl" : "max-w-6xl")}>
                             <iframe 
                                 src={embedUrl} 
                                 title={videoStep.title} 
@@ -1503,7 +1469,7 @@ export function StepContent({
                                 allowFullScreen 
                                 className="w-full h-full"
                             ></iframe>
-                        </motion.div>
+                        </div>
                          {videoStep.description && <p className={cn("mt-6 text-center text-slate-600 font-medium max-w-5xl", isTeacher ? "text-3xl" : "text-lg")}>{videoStep.description}</p>}
                     </div>
                 );
@@ -1518,10 +1484,10 @@ export function StepContent({
                 ];
                 return (
                     <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4", isTeacher ? "max-w-full pt-8" : "max-w-3xl justify-center")}>
-                        <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className={cn("rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 mb-8 text-center relative overflow-hidden", isTeacher ? "p-8" : "p-10")}>
+                        <div className={cn("rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 mb-8 text-center relative overflow-hidden", isTeacher ? "p-8" : "p-10")}>
                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-400 to-blue-500" />
                           <h3 className={cn("font-bold text-slate-800 leading-relaxed drop-shadow-sm", isTeacher ? "text-4xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{mcqStep.question}</h3>
-                        </motion.div>
+                        </div>
                         <div className={cn("grid gap-6", isTeacher ? "grid-cols-2" : "grid-cols-1")}>
                             {mcqStep.options.map((option, index) => {
                                 const isCorrect = option === mcqStep.correctAnswer;
@@ -1529,38 +1495,31 @@ export function StepContent({
                                 const colorClass = optionColors[index % optionColors.length];
 
                                 return (
-                                    <motion.div
+                                    <Button
                                         key={index}
-                                        whileHover={!answer ? { scale: 1.02 } : {}}
-                                        whileTap={!answer ? { scale: 0.98 } : {}}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: index * 0.1 }}
+                                        variant="default"
+                                        className={cn(
+                                            "h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 transform",
+                                            "font-medium shadow-sm",
+                                            isTeacher ? "text-3xl p-8" : (isFullscreen ? "p-6 text-xl" : "p-6 text-lg"),
+                                            !answer ? colorClass : "",
+                                            !answer && "hover:scale-[1.01] hover:shadow-lg",
+                                            answer && isCorrect ? "bg-emerald-500 border-emerald-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] scale-[1.02] z-10" : "",
+                                            answer && isSelected && !isCorrect ? "bg-red-500 border-red-600 text-white animate-shake" : "",
+                                            answer && !isSelected && !isCorrect ? "bg-slate-50 border-transparent text-slate-400 opacity-50" : ""
+                                        )}
+                                        onClick={() => onAnswer(option)}
+                                        disabled={!!answer}
                                     >
-                                        <Button
-                                            variant="default"
-                                            className={cn(
-                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300",
-                                                "font-medium shadow-sm",
-                                                isTeacher ? "text-3xl p-8" : (isFullscreen ? "p-6 text-xl" : "p-6 text-lg"),
-                                                !answer ? colorClass : "",
-                                                answer && isCorrect ? "bg-emerald-500 border-emerald-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10" : "",
-                                                answer && isSelected && !isCorrect ? "bg-red-500 border-red-600 text-white" : "",
-                                                answer && !isSelected && !isCorrect ? "bg-slate-50 border-transparent text-slate-400 opacity-50" : ""
-                                            )}
-                                            onClick={() => onAnswer(option)}
-                                            disabled={!!answer}
-                                        >
-                                                <span className={cn(
-                                                    "flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", 
-                                                    isTeacher ? "h-14 w-14 text-2xl" : "h-8 w-8 text-sm",
-                                                    !answer ? "bg-white/50 border-black/5" : "bg-white/20 border-white/20"
-                                                )}>
-                                                    {String.fromCharCode(65 + index)}
-                                                </span>
-                                                <span className="flex-1">{option}</span>
-                                        </Button>
-                                    </motion.div>
+                                            <span className={cn(
+                                                "flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", 
+                                                isTeacher ? "h-14 w-14 text-2xl" : "h-8 w-8 text-sm",
+                                                !answer ? "bg-white/50 border-black/5" : "bg-white/20 border-white/20"
+                                            )}>
+                                                {String.fromCharCode(65 + index)}
+                                            </span>
+                                            <span className="flex-1">{option}</span>
+                                    </Button>
                                 );
                             })}
                         </div>
@@ -1572,7 +1531,7 @@ export function StepContent({
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
                 return (
                     <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4 text-center", isTeacher ? "max-w-5xl pt-10" : "max-w-4xl justify-center")}>
-                          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={cn(
+                          <div className={cn(
                              "rounded-3xl shadow-xl backdrop-blur-xl mb-10 relative overflow-hidden transition-all duration-500",
                              "bg-white border-2 border-slate-100",
                              "shadow-[0_0_30px_rgba(168,85,247,0.1)]",
@@ -1580,38 +1539,30 @@ export function StepContent({
                            )}>
                              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 to-pink-500" />
                              <h3 className={cn("font-bold text-slate-800 leading-relaxed drop-shadow-sm", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{tfStep.statement}</h3>
-                        </motion.div>
+                        </div>
                         <div className="flex gap-8 justify-center">
-                            {["Doğru", "Yanlış"].map((option, index) => {
+                            {["Doğru", "Yanlış"].map((option) => {
                                 const isSelected = answer?.answer === option;
                                 const isCorrect = option === correctOption;
                                 return (
-                                    <motion.div
+                                    <Button
                                         key={option}
-                                        whileHover={!answer ? { scale: 1.05 } : {}}
-                                        whileTap={!answer ? { scale: 0.95 } : {}}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: index * 0.2 }}
+                                        className={cn(
+                                            "font-bold rounded-[2rem] transition-all duration-300 transform shadow-lg border-b-8 active:border-b-0 active:translate-y-2",
+                                            isTeacher ? "h-40 w-64 text-4xl" : "h-32 w-48 text-2xl border-b-8",
+                                            !answer && (option === "Doğru" ? "bg-white border-slate-200 text-green-600 hover:bg-green-50" : "bg-white border-slate-200 text-red-600 hover:bg-red-50"),
+                                            answer && isCorrect && "bg-green-500 border-green-700 text-white scale-105 z-10 shadow-[0_0_30px_rgba(34,197,94,0.4)]",
+                                            answer && isSelected && !isCorrect && "bg-red-500 border-red-700 text-white animate-shake",
+                                            answer && !isSelected && !isCorrect && "opacity-30 grayscale scale-95"
+                                        )}
+                                        onClick={() => onAnswer(option)}
+                                        disabled={!!answer}
                                     >
-                                        <Button
-                                            className={cn(
-                                                "font-bold rounded-[2rem] transition-all duration-300 shadow-xl border-b-8 active:border-b-0 active:translate-y-2",
-                                                isTeacher ? "h-40 w-64 text-4xl" : "h-32 w-48 text-2xl border-b-8",
-                                                !answer && (option === "Doğru" ? "bg-white border-slate-200 text-green-600 hover:bg-green-50" : "bg-white border-slate-200 text-red-600 hover:bg-red-50"),
-                                                answer && isCorrect && "bg-green-500 border-green-700 text-white scale-105 z-10 shadow-[0_0_30px_rgba(34,197,94,0.4)]",
-                                                answer && isSelected && !isCorrect && "bg-red-500 border-red-700 text-white",
-                                                answer && !isSelected && !isCorrect && "opacity-30 grayscale scale-95"
-                                            )}
-                                            onClick={() => onAnswer(option)}
-                                            disabled={!!answer}
-                                        >
-                                                <div className="flex flex-col items-center gap-4">
-                                                    {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/>}
-                                                    {option}
-                                                </div>
-                                        </Button>
-                                    </motion.div>
+                                            <div className="flex flex-col items-center gap-4">
+                                                {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/>}
+                                                {option}
+                                            </div>
+                                    </Button>
                                 );
                             })}
                         </div>
@@ -1628,34 +1579,20 @@ export function StepContent({
                 ];
                 return (
                     <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-5xl justify-center")}>
-                        <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className={cn("rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 mb-10 relative overflow-hidden", isTeacher ? "p-10" : "p-10")}>
+                        <div className={cn("rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 mb-10 relative overflow-hidden", isTeacher ? "p-10" : "p-10")}>
                              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-amber-400 to-orange-500" />
                           <h3 className={cn("font-bold text-slate-800 leading-relaxed tracking-wide", isTeacher ? "text-5xl" : (isFullscreen ? "text-4xl" : "text-2xl md:text-3xl"))}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
-                        </motion.div>
+                        </div>
                         <div className={cn("grid gap-6", isTeacher ? "grid-cols-2 gap-8" : "grid-cols-1 sm:grid-cols-2 gap-6")}>
                             {(fitbStep.options || []).map((option, index) => {
                                 const isCorrect = option === fitbStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
                                 const colorClass = optionColors[index % optionColors.length];
                                 return (
-                                    <motion.div
-                                        key={index}
-                                        whileHover={!answer ? { scale: 1.02 } : {}}
-                                        whileTap={!answer ? { scale: 0.98 } : {}}
-                                        initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: index * 0.1 }}
-                                    >
-                                        <Button 
-                                            variant="default" 
-                                            className={cn("w-full font-bold rounded-2xl border-2 active:border-b-0 active:translate-y-1 transition-all duration-200 shadow-sm", isTeacher ? "h-24 text-3xl" : "h-20 text-xl", !answer ? colorClass : "", answer && isCorrect ? "bg-emerald-500 border-emerald-700 text-white shadow-lg scale-[1.01] z-10" : "", answer && isSelected && !isCorrect ? "bg-red-500 border-red-700 text-white" : "", answer && !isSelected && !isCorrect ? "bg-slate-100 border-transparent text-slate-400 opacity-50" : "")} 
-                                            onClick={() => onAnswer(option)} 
-                                            disabled={!!answer}
-                                        >
+                                    <Button key={index} variant="default" className={cn("font-bold rounded-2xl border-2 active:border-b-0 active:translate-y-1 transition-all duration-200 transform shadow-sm", isTeacher ? "h-24 text-3xl" : "h-20 text-xl", !answer ? colorClass : "", !answer && "hover:scale-[1.01] hover:shadow-lg", answer && isCorrect ? "bg-emerald-500 border-emerald-700 text-white shadow-lg scale-[1.01] z-10" : "", answer && isSelected && !isCorrect ? "bg-red-500 border-red-700 text-white animate-shake" : "", answer && !isSelected && !isCorrect ? "bg-slate-100 border-transparent text-slate-400 opacity-50" : "")} onClick={() => onAnswer(option)} disabled={!!answer}>
                                             <span className={cn("flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", isTeacher ? "h-12 w-12 text-xl" : "h-8 w-8 text-sm", !answer ? "bg-white/50 border-black/5" : "bg-white/20 border-white/20")}>{String.fromCharCode(65 + index)}</span>
                                             {option}
-                                        </Button>
-                                    </motion.div>
+                                    </Button>
                                 );
                             })}
                         </div>
@@ -1673,6 +1610,7 @@ export function StepContent({
                 return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} />;
             
             default: 
+                // Bilinmeyen tip gelirse beyaz ekran yerine uyarı basar
                 return (
                     <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-50 text-slate-800">
                         <AlertTriangle className="h-16 w-16 text-yellow-500 mb-4" />
@@ -1725,8 +1663,9 @@ export function LessonContentViewer({
       
     const [showResumeDialog, setShowResumeDialog] = useState(false);
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
-    const [hideUI, setHideUI] = useState(false); 
+    const [hideUI, setHideUI] = useState(false); // UI Gizleme State'i
 
+    // Steps ve CurrentStep tanımları
     const steps = useMemo(() => {
         if (!topic) return [];
         return topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
@@ -1734,6 +1673,7 @@ export function LessonContentViewer({
 
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
 
+    // Görsel veya HTML Slide adımı mı?
     const isImmersiveStep = ['visual', 'htmlSlide'].includes(currentStep?.type || '');
     const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
 
@@ -1745,6 +1685,7 @@ export function LessonContentViewer({
         }
     }, [currentStep, isVisualMaximized]);
 
+    // Resume Dialog Mantığı
     useEffect(() => {
         if (topic) {
             const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
@@ -1779,6 +1720,7 @@ export function LessonContentViewer({
         }
     }, [currentStepIndex, topic, user?.uid]);
 
+    // UI Gizleme/Gösterme Efekti: Her adım değişiminde GÖRÜNÜR yap
     useEffect(() => {
         setHideUI(false); 
     }, [currentStepIndex]);
@@ -1807,6 +1749,7 @@ export function LessonContentViewer({
                     const currentAnswers = internalProgress.answers[currentStepIndex] || {};
                     if (!currentAnswers.completed) {
                         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true, score: score } };
+                        // BURADA DEĞİŞİKLİK YAPILDI: Eğer dışarıdan score gelmiyorsa varsayılan olarak 100 ekle
                         setInternalProgress(prev => ({ score: prev.score + (score > 0 ? score : 100), answers: newAnswers }));
                         toast({ title: "Tebrikler!", description: `Puanın: ${score}`, className: "bg-green-500 border-none text-white" });
                         playSound('win');
@@ -1822,6 +1765,7 @@ export function LessonContentViewer({
 
     useEffect(() => { if (topic) onProgressUpdate(topic.id, internalProgress); }, [internalProgress, onProgressUpdate, topic]);
 
+    // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     
     const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized);
@@ -1889,7 +1833,7 @@ export function LessonContentViewer({
         if (internalProgress.answers[currentStepIndex] !== undefined) return;
         let isCorrect = false;
         let points = 0;
-        
+        // BURADA DEĞİŞİKLİKLER YAPILDI: Tüm puanlar 100'e sabitlendi
         if (currentStep.type === 'mcq' || currentStep.type === 'fitb') {
             isCorrect = answer === (currentStep as McqStep).correctAnswer;
             points = isCorrect ? 100 : 0;
@@ -1950,6 +1894,7 @@ export function LessonContentViewer({
         if (!currentStep || currentStep.type !== 'trueFalseList') return;
         const answersForStep = internalProgress.answers[currentStepIndex];
         const correctCount = Object.values(answersForStep || {}).filter((a: any) => a.isCorrect).length;
+        // BURADA DEĞİŞİKLİK YAPILDI: Her doğru cevap için 20 yerine 100 puan
         const points = correctCount * 100;
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { ...answersForStep, completed: true } };
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
@@ -1978,20 +1923,18 @@ export function LessonContentViewer({
 
     if (isFinished) {
          return (
-             <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring" }} className="h-full flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-800 gap-6">
-                 <PartyPopper className="h-24 w-24 text-yellow-500" />
-                 <h1 className="text-5xl font-black bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">Ders Tamamlandı!</h1>
-                 <p className="text-3xl text-cyan-600 font-bold bg-white/50 px-8 py-4 rounded-3xl shadow-sm border border-cyan-100">Toplam Puan: {internalProgress.score}</p>
-                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-2xl px-12 py-8 rounded-3xl shadow-xl shadow-cyan-500/30">
-                        {completeButtonText || 'Bitir ve Çık'}
-                    </Button>
-                 </motion.div>
-             </motion.div>
+             <div className="h-full flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-800 gap-6">
+                 <PartyPopper className="h-20 w-20 text-yellow-500 animate-bounce" />
+                 <h1 className="text-4xl font-black">Ders Tamamlandı!</h1>
+                 <p className="text-2xl text-cyan-600 font-bold">Toplam Puan: {internalProgress.score}</p>
+                 <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-cyan-600 hover:bg-cyan-500 text-white text-xl px-10 py-6 rounded-2xl shadow-lg">
+                     {completeButtonText || 'Bitir'}
+                 </Button>
+             </div>
          )
     }
       
-    if (!currentStep) return <div className="text-slate-500 flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2 w-8 h-8"/> Yükleniyor...</div>;
+    if (!currentStep) return <div className="text-slate-500 flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
 
     const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
     let showContinueButton = false;
@@ -2006,26 +1949,26 @@ export function LessonContentViewer({
          }
         showContinueButton = revealedSentencesCount < totalItems;
     }
+    
+    // YÜZEN BUTON MANTIĞI KALDIRILDI
 
     return (
-      <div className="h-full w-full flex flex-col overflow-hidden relative bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-purple-50">
+      <div className="h-full w-full flex flex-col bg-slate-50 overflow-hidden relative">
         
         <DrawingCanvas stepIndex={currentStepIndex} />
 
         {showResumeDialog && (
-            <div className="absolute inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
-                <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-                    <Card className="w-full max-w-sm bg-white border-none text-slate-800 shadow-2xl rounded-3xl overflow-hidden">
-                        <CardHeader className="bg-slate-50 border-b border-slate-100">
-                            <CardTitle className="flex items-center gap-3 text-xl"><History className="h-7 w-7 text-indigo-500" />Kaldığın Yerden Devam Et</CardTitle>
-                            <CardDescription className="text-base mt-2">Daha önce bu konuda <strong className="text-indigo-600">{savedStepIndex! + 1}. adıma</strong> kadar gelmişsin.</CardDescription>
-                        </CardHeader>
-                        <CardFooter className="flex flex-col gap-3 p-6">
-                            <Button onClick={handleResume} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white text-lg py-6 rounded-xl shadow-md">Evet, Devam Et</Button>
-                            <Button onClick={handleRestart} variant="ghost" className="w-full text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl py-6">Hayır, Baştan Başla</Button>
-                        </CardFooter>
-                    </Card>
-                </motion.div>
+            <div className="absolute inset-0 z-[60] bg-white/60 backdrop-blur-md flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
+                <Card className="w-full max-w-sm bg-white border-slate-200 text-slate-800 shadow-2xl animate-in zoom-in-95">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-xl"><History className="h-6 w-6 text-cyan-500" />Kaldığın Yerden Devam Et</CardTitle>
+                        <CardDescription>Daha önce bu konuda <strong>{savedStepIndex! + 1}. adıma</strong> kadar gelmişsin.</CardDescription>
+                    </CardHeader>
+                    <CardFooter className="flex flex-col gap-3">
+                        <Button onClick={handleResume} className="w-full bg-cyan-500 hover:bg-cyan-600 text-white text-lg py-6 rounded-xl shadow-md">Evet, Devam Et</Button>
+                        <Button onClick={handleRestart} variant="ghost" className="w-full text-slate-500 hover:text-slate-800 hover:bg-slate-100">Hayır, Baştan Başla</Button>
+                    </CardFooter>
+                </Card>
             </div>
         )}
 
@@ -2033,51 +1976,40 @@ export function LessonContentViewer({
         <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
              {!isFullWidthStep && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
-                     <div className="absolute top-[10%] left-[10%] w-[30rem] h-[30rem] bg-cyan-300/20 rounded-full blur-[100px]" />
-                     <div className="absolute bottom-[10%] right-[10%] w-[30rem] h-[30rem] bg-purple-300/20 rounded-full blur-[100px]" />
+                     <div className="absolute top-[20%] left-[20%] w-64 h-64 bg-blue-300/30 rounded-full blur-[80px]" />
+                     <div className="absolute bottom-[20%] right-[20%] w-64 h-64 bg-purple-300/30 rounded-full blur-[80px]" />
                  </div>
              )}
 
            <div className={cn("relative z-10 w-full h-full flex flex-col justify-start", !isFullWidthStep && "py-4 md:py-8 px-4")}>
-              <AnimatePresence mode="wait">
-                  <motion.div
-                      key={currentStepIndex}
-                      initial={{ opacity: 0, x: 50, scale: 0.98 }}
-                      animate={{ opacity: 1, x: 0, scale: 1 }}
-                      exit={{ opacity: 0, x: -50, scale: 0.98 }}
-                      transition={{ type: 'spring', stiffness: 260, damping: 25 }}
-                      className="w-full h-full"
-                  >
-                      <StepContent 
-                        step={currentStep}
-                        answer={internalProgress.answers[currentStepIndex]}
-                        onAnswer={handleAnswer}
-                        onCorrectAndNext={() => setTimeout(handleNext, 1000)}
-                        stepAnswers={internalProgress.answers[currentStepIndex]}
-                        topic={topic}
-                        courseId={courseId}
-                        unitId={unitId}
-                        courseTitle={courseTitle}
-                        unitTitle={unitTitle}
-                        isFullscreen={isFullscreen}
-                        revealedSentencesCount={revealedSentencesCount}
-                        flippedCards={flippedCards}
-                        flippedAnagramCards={flippedAnagramCards}
-                        onCardFlip={handleCardFlip}
-                        onSlideScrolledToEnd={handleSlideScrolledToEnd}
-                        onMultiAnswer={handleLocalMultiAnswer}
-                        onAllTfAnswered={handleLocalAllTfAnswered}
-                        onAnimationStart={() => setIsAnimating(true)}
-                        onAnimationEnd={() => setIsAnimating(false)}
-                        isVisualMaximized={isVisualMaximized}
-                        onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
-                      />
-                  </motion.div>
-              </AnimatePresence>
+              <StepContent 
+                step={currentStep}
+                answer={internalProgress.answers[currentStepIndex]}
+                onAnswer={handleAnswer}
+                onCorrectAndNext={() => setTimeout(handleNext, 1000)}
+                stepAnswers={internalProgress.answers[currentStepIndex]}
+                topic={topic}
+                courseId={courseId}
+                unitId={unitId}
+                courseTitle={courseTitle}
+                unitTitle={unitTitle}
+                isFullscreen={isFullscreen}
+                revealedSentencesCount={revealedSentencesCount}
+                flippedCards={flippedCards}
+                flippedAnagramCards={flippedAnagramCards}
+                onCardFlip={handleCardFlip}
+                onSlideScrolledToEnd={handleSlideScrolledToEnd}
+                onMultiAnswer={handleLocalMultiAnswer}
+                onAllTfAnswered={handleLocalAllTfAnswered}
+                onAnimationStart={() => setIsAnimating(true)}
+                onAnimationEnd={() => setIsAnimating(false)}
+                isVisualMaximized={isVisualMaximized}
+                onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
+              />
            </div>
         </div>
         
-        {/* AÇMA TUŞU */}
+        {/* AÇMA TUŞU (Bar gizliyken görünür) - isTeacher ve hideUI true ise görünür */}
         {isTeacher && hideUI && (
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-5 fade-in">
                  <Button 
@@ -2086,24 +2018,27 @@ export function LessonContentViewer({
                          setHideUI(false);
                     }}
                     size="icon"
-                    className="rounded-full w-12 h-12 bg-white shadow-2xl border border-slate-200 hover:bg-slate-50 text-slate-700 hover:scale-110 transition-all"
+                    className="rounded-full w-12 h-12 bg-white/90 shadow-xl border border-slate-200 hover:bg-white text-slate-700 hover:scale-110 transition-all"
                  >
                     <ChevronUp className="w-6 h-6" />
                  </Button>
             </div>
         )}
 
-        {/* ALT BAR (YÜZEN DİNAMİK ADA TASARIMI) */}
+        {/* ALT BAR */}
         <div className={cn(
-            "fixed z-50 transition-all duration-500 ease-in-out flex items-center justify-between",
-            hideUI ? "bottom-[-100px] opacity-0 pointer-events-none" : "bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 opacity-100",
-            "bg-white/80 backdrop-blur-xl border border-white/60 shadow-[0_10px_40px_-10px_rgba(79,70,229,0.15)]",
-            "rounded-[2rem] px-4 md:px-6 py-3 min-w-[320px] md:min-w-[400px] max-w-[90vw]"
+            "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300 ease-in-out",
+            // GİZLEME CLASS MANTIĞI:
+            hideUI ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-12 px-4 opacity-100",
+            // GLASSMORPHISM & STYLE:
+            !hideUI && "bg-white/90 backdrop-blur-xl border-t border-slate-200/60 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)]",
+            // POSITION:
+            "relative"
         )} onClick={(e) => e.stopPropagation()}>
             
-            {/* GİZLEME BUTONU */}
+            {/* GİZLEME BUTONU (Sadece Öğretmen & Bar Açıkken) */}
             {isTeacher && !hideUI && (
-                <div className="absolute -top-4 right-6 z-40">
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-40">
                     <Button 
                         onClick={() => setHideUI(true)}
                         size="sm"
@@ -2115,68 +2050,65 @@ export function LessonContentViewer({
             )}
 
             {/* SOL: Geri Butonu + İlerleme */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-1">
                 <Button 
                     variant="ghost" 
-                    size="icon" 
+                    size="sm" 
                     onClick={handlePrev} 
                     disabled={currentStepIndex === 0} 
-                    className="rounded-full h-10 w-10 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors border-0"
+                    className={cn(
+                        "rounded-full h-8 px-4 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors border-0", 
+                        "font-medium text-xs md:text-sm"
+                    )}
                 >
-                    <ArrowLeft className="h-5 w-5" />
+                    <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
+                    Geri
                 </Button>
                 
-                <div className="hidden sm:flex flex-col gap-1 w-24 md:w-32">
-                    <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500 ease-out" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div>
+                <div className="hidden md:flex items-center gap-2">
+                    <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-blue-400 to-indigo-500 transition-all duration-500 ease-out" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div>
                     </div>
-                    <span className="text-slate-400 text-[10px] font-bold text-center uppercase tracking-wider">{currentStepIndex + 1} / {steps.length} Adım</span>
+                    <span className="text-slate-400 text-[10px] font-bold">{currentStepIndex + 1}/{steps.length}</span>
                 </div>
             </div>
 
-            {/* ORTA: Dinamik Puan Rozeti */}
-            <div className="flex-1 flex justify-center mx-4">
-                <motion.div 
-                    key={internalProgress.score}
-                    initial={{ scale: 1 }}
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 0.3 }}
-                    className="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-200 text-amber-700 rounded-full shadow-inner"
-                >
-                    <Trophy className="w-4 h-4 text-amber-500" />
-                    <span className="text-sm md:text-base font-black tracking-tight">{internalProgress.score}</span>
-                </motion.div>
+            {/* ORTA: Puan Rozeti */}
+            <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-100 text-amber-700 rounded-full shadow-sm">
+                    <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                    <span className="text-xs font-black tracking-tight">{internalProgress.score}</span>
+                </div>
             </div>
 
             {/* SAĞ: Aksiyonlar */}
-            <div className="flex gap-3 justify-end items-center">
+            <div className="flex gap-3 flex-1 justify-end items-center">
+                
                 {isTeacher && (
                     <Button 
                         variant="ghost" 
                         size="sm" 
                         onClick={handleNext} 
-                        className="text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors h-10 rounded-full text-sm font-medium hidden sm:flex"
+                        className="text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors h-8 px-3 rounded-full text-xs font-medium"
                         title="Bu adımı zorla geç"
                     >
                         Atla
                     </Button>
                 )}
 
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button 
-                        size="sm" 
-                        onClick={handleContinueOrNext} 
-                        disabled={!isNextButtonEnabled || (isAnimating && !isTeacher)}
-                        className={cn(
-                            "bg-slate-900 hover:bg-slate-800 text-white shadow-lg transition-all h-10 rounded-full", 
-                            showContinueButton ? "px-6" : "px-6",
-                            "text-sm font-bold tracking-wide"
-                        )}
-                    >
-                        {showContinueButton ? "Devam" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "İleri")}
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                </motion.div>
+                <Button 
+                    size="sm" 
+                    onClick={handleContinueOrNext} 
+                    disabled={!isNextButtonEnabled || (isAnimating && !isTeacher)}
+                    className={cn(
+                        "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-lg shadow-indigo-200 transition-all h-8 rounded-full transform hover:-translate-y-0.5 active:translate-y-0", 
+                        showContinueButton ? "px-5" : "px-5",
+                        "text-xs md:text-sm font-bold tracking-wide"
+                    )}
+                >
+                    {showContinueButton ? "Devam" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "İleri")}
+                    <ArrowRight className="ml-1.5 h-3.5 w-3.5 opacity-80" />
+                </Button>
             </div>
         </div>
       </div>

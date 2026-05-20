@@ -3,11 +3,11 @@
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
-import { submitSoruBankasiScore } from '@/app/student/soru-bankasi/actions';
-import type { Question, GetQuizInput } from '@/lib/types'; // GetQuizOutput gerekmiyorsa sildim
+import { submitSoruBankasiScore, updateTopicTestProgress } from '@/app/student/soru-bankasi/actions'; 
+import type { Question, GetQuizInput } from '@/lib/types'; 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, ArrowLeft, BrainCircuit, PartyPopper, Repeat, Home } from 'lucide-react';
+import { Loader2, ArrowRight, ArrowLeft, BrainCircuit, PartyPopper, Repeat, Home, FastForward } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -23,10 +23,10 @@ function QuizGame() {
     const searchParams = useSearchParams();
     const { toast } = useToast();
 
-    // Parametreleri al
     const courseId = searchParams.get('courseId');
     const topicId = searchParams.get('topicId');
     const difficulty = searchParams.get('difficulty')?.split(',');
+    const testIndex = parseInt(searchParams.get('testIndex') || '0');
 
     const [isLoading, setIsLoading] = useState(true);
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -100,31 +100,98 @@ function QuizGame() {
         }
     }
     
-    // Geri Dönüş Linki Oluşturma (Topic filtresinden kurtulmak için)
     const getBackLink = () => {
         return courseId ? `/student/soru-bankasi/${courseId}` : '/student/soru-bankasi';
     };
 
-    const handleSaveAndExit = async () => {
-        // Eğer kullanıcı öğrenci değilse veya puanı yoksa direkt çık
-        if (!user || user.role !== 'student' || score <= 0 || isSubmitting) {
-            router.push(getBackLink());
-            return;
+    // İlerleme ve Puanı Kaydeden Ortak Fonksiyon
+    const saveProgressAndScore = async () => {
+        if (!user) return false;
+        
+        try {
+            // 1. İlerleme Çubukları İçin Kayıt
+            if (courseId && topicId && difficulty) {
+                const diffString = difficulty[0]?.toLowerCase() || '';
+                let difficultyKey: 'easy' | 'medium' | 'hard' = 'easy';
+                if (diffString === 'orta') difficultyKey = 'medium';
+                if (diffString === 'zor') difficultyKey = 'hard';
+
+                const isPassed = (correctCount / questions.length) >= 0.5;
+
+                await updateTopicTestProgress(
+                    user.uid,
+                    courseId,
+                    topicId,
+                    difficultyKey,
+                    testIndex,
+                    {
+                        score: score,
+                        status: isPassed ? 'passed' : 'failed',
+                        correctAnswers: correctCount,
+                        totalQuestions: questions.length,
+                        date: new Date().toISOString()
+                    } as any
+                );
+            }
+
+            // 2. Profile Puan Ekleme
+            if (score > 0) {
+                const contextName = `${searchParams.get('courseName') || courseId} - ${searchParams.get('topicName') || topicId}`;
+                await submitSoruBankasiScore(user.uid, score, contextName);
+            }
+            return true;
+        } catch (err) {
+            console.error("Kayıt işlemi sırasında hata:", err);
+            return false;
         }
+    };
+
+    // 1. BUTON: KAYDET VE LİSTEYE DÖN
+    const handleSaveAndExit = async () => {
+        // user.role === 'student' ŞARTINI KALDIRDIM. ARTIK HERKES TEST EDEBİLİR.
+        if (!user || isSubmitting) return; 
 
         setIsSubmitting(true);
-        const context = `${searchParams.get('courseName') || ''} - ${searchParams.get('topicName') || ''}`;
-        const result = await submitSoruBankasiScore(user.uid, score, context);
+        const success = await saveProgressAndScore();
         
-        if (result.success) {
-            toast({ title: "Başarılı!", description: "Puanların kaydedildi." });
+        if (success) {
+            toast({ title: "Tebrikler!", description: `Sonuçlar kaydedildi. ${score} puan kazandın.` });
         } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
+            toast({ title: "Hata", description: "İşlem sırasında bir hata oluştu.", variant: "destructive" });
+        }
+
+        setIsSubmitting(false);
+        router.push(getBackLink());
+    };
+
+    // 2. YENİ BUTON: KAYDET VE SONRAKİ TESTE GEÇ
+    const handleSaveAndContinue = async () => {
+        if (!user || isSubmitting) return;
+
+        setIsSubmitting(true);
+        const success = await saveProgressAndScore();
+        
+        if (success) {
+            toast({ title: "Kaydedildi!", description: `${score} puan eklendi. Sıradaki teste geçiliyor...` });
+            
+            // Sonraki teste geçmek için URL parametrelerini güncelle
+            const nextIndex = testIndex + 1;
+            const currentParams = new URLSearchParams(searchParams.toString());
+            currentParams.set('testIndex', nextIndex.toString());
+            
+            // Ekranı sıfırla
+            setIsFinished(false);
+            setCurrentQuestionIndex(0);
+            setScore(0);
+            setCorrectCount(0);
+            setAnswers([]);
+            
+            // Yeni test verilerini çekmek için URL'i değiştir
+            router.push(`?${currentParams.toString()}`);
+        } else {
+            toast({ title: "Hata", description: "Veriler kaydedilemedi.", variant: "destructive" });
         }
         setIsSubmitting(false);
-        
-        // Buradaki yönlendirme artık temiz bir URL'e gidiyor (query params olmadan)
-        router.push(getBackLink());
     };
 
     const handleRestart = () => {
@@ -161,7 +228,7 @@ function QuizGame() {
              <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8">
                 <Alert className="max-w-lg">
                     <AlertTitle>Soru Bulunamadı</AlertTitle>
-                    <AlertDescription>Bu kriterlere uygun soru bulunamadı. Lütfen filtrelerinizi değiştirerek tekrar deneyin.</AlertDescription>
+                    <AlertDescription>Sıradaki test için yeterli soru bulunmuyor veya testi bitirdin.</AlertDescription>
                     <div className="mt-4">
                         <Button asChild variant="outline">
                             <Link href={getBackLink()}><ArrowLeft className="mr-2 h-4 w-4"/>Listeye Dön</Link>
@@ -185,14 +252,22 @@ function QuizGame() {
                         <p className="text-4xl md:text-5xl font-bold text-primary">{correctCount} / {questions.length}</p>
                         <p className="text-base md:text-lg">Kazandığın Puan: <span className="font-bold">{score}</span></p>
                     </CardContent>
-                    <CardFooter className="flex-col sm:flex-row gap-2">
-                        <Button onClick={handleRestart} className="w-full">
-                           <Repeat className="mr-2 h-4 w-4" /> Tekrar Çöz
+                    {/* YENİ EKLENEN BUTONLAR */}
+                    <CardFooter className="flex-col gap-3">
+                        <Button onClick={handleSaveAndContinue} className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isSubmitting}>
+                             {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <FastForward className="mr-2 h-4 w-4"/>}
+                             {isSubmitting ? "Kaydediliyor..." : "Kaydet ve Devam Et"}
                         </Button>
-                        <Button onClick={handleSaveAndExit} className="w-full" variant="outline" disabled={isSubmitting}>
-                             {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Home className="mr-2 h-4 w-4"/>}
-                             {isSubmitting ? "Kaydediliyor..." : "Kaydet ve Listeye Dön"}
-                        </Button>
+
+                        <div className="flex flex-col sm:flex-row gap-2 w-full">
+                            <Button onClick={handleRestart} className="w-full" variant="secondary">
+                            <Repeat className="mr-2 h-4 w-4" /> Tekrar Çöz
+                            </Button>
+                            <Button onClick={handleSaveAndExit} className="w-full" variant="outline" disabled={isSubmitting}>
+                                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Home className="mr-2 h-4 w-4"/>}
+                                {isSubmitting ? "..." : "Kaydet ve Çık"}
+                            </Button>
+                        </div>
                     </CardFooter>
                 </Card>
             </div>
@@ -212,7 +287,8 @@ function QuizGame() {
                     <div className="flex items-center gap-4 pt-2">
                         <span className="text-xs md:text-sm text-muted-foreground">Soru {currentQuestionIndex + 1} / {questions.length}</span>
                         <Progress value={((currentQuestionIndex + 1) / questions.length) * 100} className="w-full" />
-                         {user?.role === 'student' && <span className="text-xs md:text-sm font-semibold text-primary">Puan: {score}</span>}
+                         {/* Burada da sadece öğrenci görsün kısıtlamasını kaldırdım ki puanı test ederken ekranda görebil */}
+                         <span className="text-xs md:text-sm font-semibold text-primary">Puan: {score}</span>
                     </div>
                 </CardHeader>
                 <CardContent className="py-6 space-y-8">
@@ -232,7 +308,6 @@ function QuizGame() {
                      {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
                         const answerValue = option === 'Doğru';
                         const isSelected = currentAnswer === answerValue;
-                        // HATA DÜZELTİLDİ: 'question' yerine 'currentQuestion' kullanıldı
                         const isCorrect = (currentQuestion.isTrue ?? (currentQuestion.correctAnswer === 'Doğru')) === answerValue;
                         
                         return (

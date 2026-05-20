@@ -6,16 +6,15 @@ import {
   updateDoc, 
   increment, 
   collection, 
-  setDoc, // setDoc eklendi
+  setDoc, 
   serverTimestamp, 
   writeBatch, 
   query, 
   where, 
-  getDocs, 
   getCountFromServer,
   getDoc
 } from 'firebase/firestore';
-import { revalidatePath } from 'next/cache'; // KRİTİK: Cache temizleme için gerekli
+import { revalidatePath } from 'next/cache'; 
 import type { Course, Question, QuestionBankProgress, TestResult, QuestionBankStats } from '@/lib/types';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import fs from 'fs/promises';
@@ -55,7 +54,7 @@ export async function getQuestionBankProgress(courseId: string, userId: string):
         const docSnap = await getDoc(progressRef);
         
         if (docSnap.exists()) {
-            return docSnap.data() as QuestionBankProgress;
+            return JSON.parse(JSON.stringify(docSnap.data())) as QuestionBankProgress;
         }
         return {};
     } catch (error) {
@@ -115,7 +114,6 @@ export async function getQuestionCounts(topicId: string): Promise<{ easy: number
 
         const counts = { easy: 0, medium: 0, hard: 0 };
         questions.forEach(question => {
-            // Hem Türkçe hem İngilizce key kontrolü (garanti olsun)
             const d = question.difficulty?.toLowerCase();
             if (d === 'kolay' || d === 'easy') counts.easy++;
             else if (d === 'orta' || d === 'medium') counts.medium++;
@@ -133,7 +131,7 @@ export async function getQuestionCounts(topicId: string): Promise<{ easy: number
     }
 }
 
-// 5. İLERLEMEYİ KAYDET (DÜZELTİLEN FONKSİYON)
+// 5. İLERLEMEYİ VE PUANI KAYDET (GÜNCELLENDİ)
 export async function updateTopicTestProgress(
     userId: string, 
     courseId: string, 
@@ -143,35 +141,40 @@ export async function updateTopicTestProgress(
     result: TestResult
 ): Promise<{ success: boolean; error?: string }> {
     try {
+        const batch = writeBatch(db);
         const progressRef = doc(db, 'users', userId, 'questionBankProgress', courseId);
+        const userRef = doc(db, 'users', userId);
         
-        // Önce doküman var mı kontrol et
-        const docSnap = await getDoc(progressRef);
-        
-        // Nokta notasyonu yolu (Örn: "ilahi-kitaplar.easy.0")
-        // Bu yöntem, diğer verileri silmeden sadece o hücreyi günceller.
-        const fieldPath = `${topicId}.${difficultyKey}.${testIndex}`;
-
-        // result objesini temizle (undefined değerler hataya yol açabilir)
+        // Firestore'a gönderirken objeyi saf hale getiriyoruz
         const safeResult = JSON.parse(JSON.stringify(result));
 
-        if (!docSnap.exists()) {
-            // Doküman yoksa oluştur (setDoc)
-            await setDoc(progressRef, {
-                [topicId]: {
-                    [difficultyKey]: {
-                        [testIndex]: safeResult
-                    }
+        // 1. İlerleme Kaydı
+        batch.set(progressRef, {
+            [topicId]: {
+                [difficultyKey]: {
+                    [testIndex]: safeResult
                 }
-            });
-        } else {
-            // Doküman varsa güncelle (updateDoc - Dot Notation)
-            await updateDoc(progressRef, {
-                [fieldPath]: safeResult
+            }
+        }, { merge: true });
+
+        // 2. Puan Güncelleme (Eğer skor varsa)
+        if (result.score > 0) {
+            batch.set(userRef, { score: increment(result.score) }, { merge: true });
+
+            // 3. Puan Hareketi Kaydı
+            const eventRef = doc(collection(db, 'scoreEvents'));
+            batch.set(eventRef, {
+                userId: userId,
+                points: result.score,
+                timestamp: serverTimestamp(),
+                gameType: 'Soru Bankası',
+                context: `${topicId} - ${difficultyKey} - Test ${testIndex + 1}`,
+                completed: result.status === 'passed'
             });
         }
         
-        // KRİTİK: Next.js Cache'ini temizle ki sayfa yenilenince güncel veri gelsin
+        await batch.commit();
+
         revalidatePath(`/student/soru-bankasi/${courseId}`);
         revalidatePath('/student/soru-bankasi');
 
@@ -182,12 +185,11 @@ export async function updateTopicTestProgress(
     }
 }
 
-// 6. PUAN GÖNDER
+// 6. PUAN GÖNDER (Yedek olarak bırakıldı)
 export async function submitSoruBankasiScore(userId: string, score: number, context: string): Promise<{ success: boolean; error?: string }> {
     if (!userId || score <= 0) return { success: true };
     
     try {
-        // Puan limiti kontrolü (Günde/Toplamda 10 deneme sınırı vb.)
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
@@ -197,15 +199,14 @@ export async function submitSoruBankasiScore(userId: string, score: number, cont
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         const attemptCount = attemptsSnapshot.data().count;
 
-        // İstersen limiti buradan açabilir veya artırabilirsin
         if (attemptCount >= 50) { 
             return { success: false, error: "Puan limiti aşıldı." };
         }
 
         const batch = writeBatch(db);
-        
         const userRef = doc(db, 'users', userId);
-        batch.update(userRef, { score: increment(score) });
+        
+        batch.set(userRef, { score: increment(score) }, { merge: true });
 
         const eventRef = doc(collection(db, 'scoreEvents'));
         batch.set(eventRef, {
@@ -218,7 +219,6 @@ export async function submitSoruBankasiScore(userId: string, score: number, cont
         });
 
         await batch.commit();
-
         return { success: true };
     } catch (error: any) {
         console.error("Error submitting Soru Bankasi score:", error);
@@ -238,9 +238,6 @@ export async function getCourseLeaderboard(courseId: string, studentClass: strin
             return { rank: 0, total: 0 };
         }
         
-        // Not: Gerçek bir uygulamada bu kadar çok okuma maliyetli olabilir.
-        // Leaderboard için ayrı bir koleksiyon tutmak daha iyidir.
-        // Şimdilik mevcut yapıya uyumlu bırakıldı.
         const progressPromises = studentIds.map(uid => getQuestionBankProgress(courseId, uid));
         const allProgress = await Promise.all(progressPromises);
 
@@ -269,22 +266,6 @@ export async function getCourseLeaderboard(courseId: string, studentClass: strin
     }
 }
 
-export async function getPreviousTestAttemptCount(userId: string, context: string): Promise<number> {
-    try {
-         const attemptsQuery = query(
-            collection(db, 'scoreEvents'),
-            where('userId', '==', userId),
-            where('gameType', '==', 'Soru Bankası'),
-            where('context', '==', context)
-        );
-        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        return attemptsSnapshot.data().count;
-    } catch (error) {
-        return 0;
-    }
-}
-
-// Placeholder to satisfy student dashboard import
 export async function getCourseQuestionBankStats(courseId: string, userId: string): Promise<QuestionBankStats> {
      const progress = await getQuestionBankProgress(courseId, userId);
      const courseResult = await getCourseForSoruBankasi(courseId);
