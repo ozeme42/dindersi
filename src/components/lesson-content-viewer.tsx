@@ -18,8 +18,10 @@ import type {
     HtmlSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, 
     ConceptExplanationStep, ObjectiveListStep, VideoStep, Question, AnagramGameStep 
 } from "@/lib/types";
-import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Image from "next/image";
 import Link from 'next/link';
 import { playSound } from "@/lib/audio-service";
@@ -80,61 +82,64 @@ function getEmbedUrl(url: string): string {
 const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, onComplete?: () => void, speed?: number }) => {
     const [displayedContent, setDisplayedContent] = useState('');
     const [isCompleted, setIsCompleted] = useState(false);
+    const currentIndexRef = useRef(0);
+    const onCompleteRef = useRef(onComplete);
+
+    useEffect(() => {
+        onCompleteRef.current = onComplete;
+    }, [onComplete]);
       
     useEffect(() => {
         setDisplayedContent('');
         setIsCompleted(false);
+        currentIndexRef.current = 0;
     }, [content]);
 
     useEffect(() => {
         if (isCompleted) return;
 
-        let currentIndex = 0;
-        if (displayedContent === content) {
-            setIsCompleted(true);
-            if (onComplete) onComplete();
-            return;
-        }
-
         const intervalId = setInterval(() => {
-            if (currentIndex >= content.length) {
+            if (currentIndexRef.current >= content.length) {
                 clearInterval(intervalId);
                 setIsCompleted(true);
-                if (onComplete) onComplete();
+                if (onCompleteRef.current) onCompleteRef.current();
                 return;
             }
-            let char = content.charAt(currentIndex);
-            let nextChunk = char;
+            
+            let char = content.charAt(currentIndexRef.current);
             if (char === '<') {
-                const closingIndex = content.indexOf('>', currentIndex);
+                const closingIndex = content.indexOf('>', currentIndexRef.current);
                 if (closingIndex !== -1) {
-                    nextChunk = content.substring(currentIndex, closingIndex + 1);
-                    currentIndex = closingIndex;
+                    currentIndexRef.current = closingIndex + 1;
+                } else {
+                    currentIndexRef.current++;
                 }
+            } else {
+                currentIndexRef.current++;
             }
-            setDisplayedContent((prev) => prev + nextChunk);
-            currentIndex++;
+            
+            setDisplayedContent(content.substring(0, currentIndexRef.current));
         }, speed);
 
         return () => clearInterval(intervalId);
-    }, [content, speed, onComplete, isCompleted]); 
+    }, [content, speed, isCompleted]); 
 
     if (isCompleted) {
-        return <div dangerouslySetInnerHTML={{ __html: content }} />;
+        return <div className="highlight-text" dangerouslySetInnerHTML={{ __html: content }} />;
     }
-    return <div dangerouslySetInnerHTML={{ __html: displayedContent }} />;
+    return <div className="highlight-text" dangerouslySetInnerHTML={{ __html: displayedContent }} />;
 };
 
 // --- ORTAK RENK TEMALARI ---
 const FLASHCARD_THEMES = [
-    { front: 'bg-rose-50 border-rose-200 text-rose-900', back: 'bg-rose-500 border-rose-600 text-white' },
-    { front: 'bg-blue-50 border-blue-200 text-blue-900', back: 'bg-blue-500 border-blue-600 text-white' },
-    { front: 'bg-emerald-50 border-emerald-200 text-emerald-900', back: 'bg-emerald-500 border-emerald-600 text-white' },
-    { front: 'bg-amber-50 border-amber-200 text-amber-900', back: 'bg-amber-500 border-amber-600 text-white' },
-    { front: 'bg-purple-50 border-purple-200 text-purple-900', back: 'bg-purple-500 border-purple-600 text-white' },
-    { front: 'bg-cyan-50 border-cyan-200 text-cyan-900', back: 'bg-cyan-500 border-cyan-600 text-white' },
-    { front: 'bg-indigo-50 border-indigo-200 text-indigo-900', back: 'bg-indigo-500 border-indigo-600 text-white' },
-    { front: 'bg-orange-50 border-orange-200 text-orange-900', back: 'bg-orange-500 border-orange-600 text-white' },
+    { front: 'bg-gradient-to-br from-rose-50 to-rose-100/50 border-rose-300 text-rose-950', back: 'bg-gradient-to-br from-rose-500 to-rose-600 border-rose-700 text-white shadow-[0_0_25px_rgba(225,29,72,0.4)]' },
+    { front: 'bg-gradient-to-br from-blue-50 to-blue-100/50 border-blue-300 text-blue-950', back: 'bg-gradient-to-br from-blue-500 to-blue-600 border-blue-700 text-white shadow-[0_0_25px_rgba(37,99,235,0.4)]' },
+    { front: 'bg-gradient-to-br from-emerald-50 to-emerald-100/50 border-emerald-300 text-emerald-950', back: 'bg-gradient-to-br from-emerald-500 to-emerald-600 border-emerald-700 text-white shadow-[0_0_25px_rgba(5,150,105,0.4)]' },
+    { front: 'bg-gradient-to-br from-amber-50 to-amber-100/50 border-amber-300 text-amber-950', back: 'bg-gradient-to-br from-amber-500 to-amber-600 border-amber-700 text-white shadow-[0_0_25px_rgba(217,119,6,0.4)]' },
+    { front: 'bg-gradient-to-br from-purple-50 to-purple-100/50 border-purple-300 text-purple-950', back: 'bg-gradient-to-br from-purple-500 to-purple-600 border-purple-700 text-white shadow-[0_0_25px_rgba(147,51,234,0.4)]' },
+    { front: 'bg-gradient-to-br from-cyan-50 to-cyan-100/50 border-cyan-300 text-cyan-950', back: 'bg-gradient-to-br from-cyan-500 to-cyan-600 border-cyan-700 text-white shadow-[0_0_25px_rgba(8,145,178,0.4)]' },
+    { front: 'bg-gradient-to-br from-indigo-50 to-indigo-100/50 border-indigo-300 text-indigo-950', back: 'bg-gradient-to-br from-indigo-500 to-indigo-600 border-indigo-700 text-white shadow-[0_0_25px_rgba(79,70,229,0.4)]' },
+    { front: 'bg-gradient-to-br from-orange-50 to-orange-100/50 border-orange-300 text-orange-950', back: 'bg-gradient-to-br from-orange-500 to-orange-600 border-orange-700 text-white shadow-[0_0_25px_rgba(234,88,12,0.4)]' },
 ];
 
 // --- 1. VisualPlayer ---
@@ -302,6 +307,16 @@ function ContentListPlayer({
 }) {
     const isTeacher = useTeacherMode();
     const scrollRef = useRef<HTMLDivElement>(null);
+    
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [prevCount, setPrevCount] = useState(0);
+
+    useEffect(() => {
+        if (isTeacher && revealedSentencesCount > prevCount && revealedSentencesCount > 0) {
+            setIsModalOpen(true);
+        }
+        setPrevCount(revealedSentencesCount);
+    }, [revealedSentencesCount, prevCount, isTeacher]);
       
     const sentences = useMemo(() => {
         let items: string[] = [];
@@ -338,14 +353,14 @@ function ContentListPlayer({
 
     // Renk Temaları
     const styles = [
-        { bg: 'bg-blue-50/90', border: 'border-blue-100', circleBorder: 'border-blue-400', numberColor: 'text-blue-600', textColor: 'text-blue-700', iconColor: 'text-blue-400' },
-        { bg: 'bg-rose-50/90', border: 'border-rose-100', circleBorder: 'border-rose-400', numberColor: 'text-rose-600', textColor: 'text-rose-700', iconColor: 'text-rose-400' },
-        { bg: 'bg-amber-50/90', border: 'border-amber-100', circleBorder: 'border-amber-400', numberColor: 'text-amber-600', textColor: 'text-amber-700', iconColor: 'text-amber-400' },
-        { bg: 'bg-emerald-50/90', border: 'border-emerald-100', circleBorder: 'border-emerald-400', numberColor: 'text-emerald-600', textColor: 'text-emerald-700', iconColor: 'text-emerald-400' },
-        { bg: 'bg-purple-50/90', border: 'border-purple-100', circleBorder: 'border-purple-400', numberColor: 'text-purple-600', textColor: 'text-purple-700', iconColor: 'text-purple-400' },
-        { bg: 'bg-cyan-50/90', border: 'border-cyan-100', circleBorder: 'border-cyan-400', numberColor: 'text-cyan-600', textColor: 'text-cyan-700', iconColor: 'text-cyan-400' },
-        { bg: 'bg-indigo-50/90', border: 'border-indigo-100', circleBorder: 'border-indigo-400', numberColor: 'text-indigo-600', textColor: 'text-indigo-700', iconColor: 'text-indigo-400' },
-        { bg: 'bg-orange-50/90', border: 'border-orange-100', circleBorder: 'border-orange-400', numberColor: 'text-orange-600', textColor: 'text-orange-700', iconColor: 'text-orange-400' },
+        { bg: 'bg-gradient-to-br from-blue-50/95 to-white/90', border: 'border-blue-200', circleBorder: 'border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]', numberColor: 'text-blue-600', textColor: 'text-blue-800', iconColor: 'text-blue-500' },
+        { bg: 'bg-gradient-to-br from-rose-50/95 to-white/90', border: 'border-rose-200', circleBorder: 'border-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.3)]', numberColor: 'text-rose-600', textColor: 'text-rose-800', iconColor: 'text-rose-500' },
+        { bg: 'bg-gradient-to-br from-amber-50/95 to-white/90', border: 'border-amber-200', circleBorder: 'border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)]', numberColor: 'text-amber-600', textColor: 'text-amber-800', iconColor: 'text-amber-500' },
+        { bg: 'bg-gradient-to-br from-emerald-50/95 to-white/90', border: 'border-emerald-200', circleBorder: 'border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]', numberColor: 'text-emerald-600', textColor: 'text-emerald-800', iconColor: 'text-emerald-500' },
+        { bg: 'bg-gradient-to-br from-purple-50/95 to-white/90', border: 'border-purple-200', circleBorder: 'border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.3)]', numberColor: 'text-purple-600', textColor: 'text-purple-800', iconColor: 'text-purple-500' },
+        { bg: 'bg-gradient-to-br from-cyan-50/95 to-white/90', border: 'border-cyan-200', circleBorder: 'border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]', numberColor: 'text-cyan-600', textColor: 'text-cyan-800', iconColor: 'text-cyan-500' },
+        { bg: 'bg-gradient-to-br from-indigo-50/95 to-white/90', border: 'border-indigo-200', circleBorder: 'border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.3)]', numberColor: 'text-indigo-600', textColor: 'text-indigo-800', iconColor: 'text-indigo-500' },
+        { bg: 'bg-gradient-to-br from-orange-50/95 to-white/90', border: 'border-orange-200', circleBorder: 'border-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.3)]', numberColor: 'text-orange-600', textColor: 'text-orange-800', iconColor: 'text-orange-500' },
     ];
 
     useEffect(() => {
@@ -362,11 +377,35 @@ function ContentListPlayer({
         }
     }, [revealedSentencesCount]);
 
+    const latestSentence = sentences[revealedSentencesCount - 1];
+
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-7xl mx-auto")}>
+            {isModalOpen && latestSentence && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/90 backdrop-blur-xl p-4 animate-in fade-in zoom-in duration-500" onClick={() => setIsModalOpen(false)}>
+                    <div className="relative bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 w-full max-w-5xl p-8 md:p-16 rounded-[3rem] shadow-[0_0_80px_rgba(168,85,247,0.4)] flex flex-col items-center text-center transform transition-all border-4 border-white/20" onClick={(e) => e.stopPropagation()}>
+                        <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-colors">
+                            <X className="h-8 w-8" />
+                        </button>
+                        
+                        <div className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight py-12 max-h-[70vh] overflow-y-auto drop-shadow-xl">
+                             <TypewriterText 
+                                content={latestSentence} 
+                                onComplete={() => onAnimationEnd?.()} 
+                                speed={150} 
+                             />
+                        </div>
+                        
+                        <Button size="lg" onClick={() => setIsModalOpen(false)} className="mt-8 h-16 px-12 text-2xl font-black rounded-2xl bg-white text-purple-700 hover:bg-slate-100 shadow-2xl transform transition-transform hover:scale-110 active:scale-95">
+                            Devam Et
+                        </Button>
+                    </div>
+                </div>
+            )}
+            
             {/* BAŞLIK */}
             <div className={cn(
-                "relative z-20 p-6 rounded-3xl shadow-lg bg-white border border-slate-100 flex-shrink-0 w-full max-w-4xl text-center mb-8 overflow-hidden", 
+                "relative z-20 p-6 rounded-3xl shadow-lg bg-white border border-slate-100 flex-shrink-0 w-full max-w-full text-center mb-8 overflow-hidden", 
                 isTeacher ? "py-6 mt-2" : "p-4 md:p-8"
             )}>
                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"></div>
@@ -381,23 +420,17 @@ function ContentListPlayer({
             </div>
               
              <div className={cn(
-                 "relative w-full pb-24", 
-                 isTeacher ? "pb-32" : "pb-16"
+                 "relative w-full pb-24 flex flex-col items-center", 
+                 isTeacher ? "mt-4" : "mt-2"
              )}>
-                <div className="absolute left-[29px] md:left-1/2 -top-6 bottom-0 w-1.5 bg-gradient-to-b from-slate-300 via-slate-300 to-transparent md:-translate-x-1/2 z-0 rounded-full" />
-
                 <div className={cn(
-                    "grid gap-8",
-                    "grid-cols-1 md:grid-cols-2"
+                    "grid grid-cols-1 lg:grid-cols-2 w-full max-w-full px-2 md:px-4 gap-4 md:gap-6 pt-2 items-stretch"
                 )}>
                     {visibleSentences.map((sentence, index) => {
                         const style = styles[index % styles.length]; 
                         const icons = decoIcons[index % decoIcons.length];
-                        const LeftIcon = icons.left;
-                        const RightIcon = icons.right;
 
                         const shouldAnimate = isTeacher && index === visibleSentences.length - 1; 
-                        const isLeft = index % 2 === 0;
                         const isLastItem = index === visibleSentences.length - 1;
 
                         return (
@@ -405,52 +438,27 @@ function ContentListPlayer({
                                 key={index} 
                                 ref={isLastItem ? scrollRef : null}
                                 className={cn(
-                                "relative flex items-center w-full",
-                                isTeacher ? "animate-in zoom-in slide-in-from-bottom-4 duration-500" : "animate-in slide-in-from-bottom-2 duration-500",
-                                isLeft ? "md:flex-row md:justify-end" : "md:flex-row-reverse md:justify-end",
-                                "flex-row justify-start" 
-                            )}>
-                                <div className={cn(
-                                    "absolute h-1 bg-slate-300 z-0 hidden md:block",
-                                    isLeft ? "right-[-20px] w-12" : "left-[-20px] w-12"
-                                )}></div>
-
-                                <div className={cn(
-                                    "flex-shrink-0 flex items-center justify-center rounded-full bg-white border-[4px] shadow-sm z-20 w-14 h-14 md:w-16 md:h-16 transition-transform duration-300 group-hover:scale-110 relative",
-                                    style.circleBorder, 
-                                    "mr-4",
-                                    !isTeacher && (isLeft 
-                                        ? "md:mr-[-32px] md:translate-x-[50%]" 
-                                        : "md:ml-[-32px] md:translate-x-[-50%]" 
-                                    )
+                                    "relative w-full flex-shrink-0 z-10",
+                                    isTeacher ? "animate-in slide-in-from-bottom-8 duration-500" : "animate-in slide-in-from-bottom-4 duration-500"
                                 )}>
-                                    <span className={cn("font-black text-xl md:text-2xl", style.numberColor)}>
-                                        {index + 1}
-                                    </span>
-                                </div>
-
+                                
                                 <div className={cn(
-                                    "relative flex-1 p-5 md:p-6 rounded-3xl border shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full flex items-center",
-                                    style.bg, style.border,
-                                    !isTeacher && (isLeft ? "md:mr-12" : "md:ml-12")
+                                    "relative w-full h-full py-4 px-6 md:py-6 md:px-8 rounded-2xl border-2 border-b-[6px] border-r-[4px] shadow-sm hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col md:flex-row justify-start items-center text-left backdrop-blur-xl gap-4",
+                                    style.bg, style.border
                                 )}>
+                                    {/* Dairesel Sıra Numarası (Sol Tarafta Sabit) */}
                                     <div className={cn(
-                                        "absolute top-1/2 -translate-y-1/2 w-5 h-5 rotate-45 border-b border-l",
-                                        style.bg, style.border,
-                                        "left-[-10px] border-r-0 border-t-0",
-                                        !isTeacher && (isLeft 
-                                            ? "md:left-auto md:right-[-10px] md:border-l-0 md:border-b-0 md:border-r md:border-t"
-                                            : "md:left-[-10px] md:border-r-0 md:border-t-0"
-                                        )
-                                    )}></div>
-
-                                    <div className={cn(
-                                        "leading-relaxed font-black break-words w-full flex items-center gap-3", 
-                                        style.textColor, 
-                                        isTeacher ? "text-3xl" : "text-base md:text-lg lg:text-xl" 
+                                        "flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center bg-white/90 backdrop-blur-md border-2 shadow-sm",
+                                        style.circleBorder
                                     )}>
-                                        <LeftIcon className={cn("w-5 h-5 md:w-6 md:h-6 flex-shrink-0 opacity-60", style.iconColor)} />
-                                        
+                                        <span className={cn("font-black text-lg md:text-xl", style.numberColor)}>{index + 1}</span>
+                                    </div>
+
+                                    <div className={cn(
+                                        "leading-relaxed font-black break-words flex-1 drop-shadow-sm z-10 relative", 
+                                        style.textColor, 
+                                        isTeacher ? "text-2xl md:text-3xl tracking-wide" : "text-xl md:text-2xl lg:text-3xl tracking-wide" 
+                                    )}>
                                         <span className="flex-1">
                                             {shouldAnimate ? (
                                                 <TypewriterText 
@@ -462,8 +470,6 @@ function ContentListPlayer({
                                                 <div dangerouslySetInnerHTML={{ __html: sentence }} />
                                             )}
                                         </span>
-
-                                        <RightIcon className={cn("w-5 h-5 md:w-6 md:h-6 flex-shrink-0 opacity-60", style.iconColor)} />
                                     </div>
                                 </div>
                             </div>
@@ -496,10 +502,10 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
             </div>
              
             <div className={cn(
-                "w-full flex-grow grid gap-6", 
+                "w-full flex-grow grid gap-4 md:gap-6", 
                 isTeacher 
-                    ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 content-start" 
-                    : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                    ? "grid-cols-2 content-start" 
+                    : "grid-cols-2"
             )}>
                 {items.map((item, index) => {
                     const style = cardStyles[index % cardStyles.length];
@@ -560,35 +566,42 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
                             )}
                             onClick={() => onCardFlip(index, 'anagramFlashcard')}
                         >
-                            <div
+                            <motion.div
                                 className={cn(
-                                    "relative w-full h-full text-center transition-transform duration-700 [transform-style:preserve-3d]",
-                                    flippedCards.has(index) && "[transform:rotateY(180deg)]"
+                                    "relative w-full h-full text-center [transform-style:preserve-3d]"
                                 )}
+                                initial={false}
+                                animate={{ rotateY: flippedCards.has(index) ? 180 : 0 }}
+                                transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
                             >
                                 {/* Front */}
-                                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-xl border-b-8 flex flex-wrap items-center justify-center p-4 backdrop-blur-md", theme.front)}>
+                                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-t border-l border-white/60 border-b-8 flex flex-wrap items-center justify-center p-4 backdrop-blur-xl", theme.front)}>
                                     <h3 
-                                        className="font-black tracking-widest break-all drop-shadow-sm uppercase text-slate-700"
+                                        className="font-black tracking-[0.2em] break-all drop-shadow-sm uppercase mix-blend-color-burn opacity-80"
                                         style={{ fontSize: getDynamicFontSize(card.scrambledWord) }}
                                     >
                                         {card.scrambledWord}
                                     </h3>
+                                    {!isTeacher && (
+                                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center justify-center bg-white/40 px-3 py-1 rounded-full shadow-sm border border-white/50 backdrop-blur-md">
+                                            <span className="text-[8px] opacity-75 uppercase tracking-[0.2em] font-extrabold mix-blend-multiply">Çevir</span>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Back */}
                                 <div className={cn(
-                                    "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-3xl shadow-xl border-b-8 flex flex-wrap items-center justify-center p-4 break-words overflow-hidden",
+                                    "absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-t border-l border-white/30 border-b-8 flex flex-wrap items-center justify-center p-4 break-words overflow-hidden backdrop-blur-xl",
                                     theme.back
-                                )}>
+                                )} style={{ transform: "rotateY(180deg)" }}>
                                     <h3 
-                                        className="font-black break-all drop-shadow-md uppercase"
+                                        className="font-black break-all drop-shadow-lg uppercase tracking-wider text-white"
                                         style={{ fontSize: getDynamicFontSize(card.correctAnswer) }}
                                     >
                                         {card.correctAnswer}
                                     </h3>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
                     );
                 })}
@@ -638,26 +651,32 @@ const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFullscree
             )}
             onClick={onFlip}
         >
-            <div
+            <motion.div
                 className={cn(
-                    "relative w-full h-full text-center transition-transform duration-700 [transform-style:preserve-3d]",
-                    isFlipped && "[transform:rotateY(180deg)]"
+                    "relative w-full h-full text-center [transform-style:preserve-3d]"
                 )}
+                initial={false}
+                animate={{ rotateY: isFlipped ? 180 : 0 }}
+                transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
             >
                 {/* Front */}
-                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-xl border-b-8 flex flex-col items-center justify-center p-6 backdrop-blur-md transition-all", theme.front)}>
-                    <h3 className={cn("font-black uppercase", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl" : "text-xl"))}>{term}</h3>
-                    {!isTeacher && <p className="mt-4 text-[10px] md:text-xs opacity-60 uppercase tracking-widest font-bold border-t border-current pt-2 w-full">Çevir</p>}
+                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-t border-l border-white/60 border-b-8 flex flex-col items-center justify-center p-6 backdrop-blur-xl transition-all", theme.front)}>
+                    <h3 className={cn("font-black uppercase tracking-wider drop-shadow-sm", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl md:text-3xl"))}>{term}</h3>
+                    {!isTeacher && (
+                        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center justify-center bg-white/40 px-5 py-1.5 rounded-full shadow-sm border border-white/50 backdrop-blur-md">
+                            <span className="text-[9px] md:text-[11px] opacity-75 uppercase tracking-[0.3em] font-extrabold mix-blend-multiply">Dokun & Çevir</span>
+                        </div>
+                    )}
                 </div>
 
                 {/* Back */}
                 <div className={cn(
-                    "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-3xl shadow-xl border-b-8 flex flex-col items-center justify-center p-6",
+                    "absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-t border-l border-white/30 border-b-8 flex flex-col items-center justify-center p-8 backdrop-blur-xl",
                     theme.back 
-                )}>
-                    <p className={cn("font-bold leading-relaxed", isTeacher ? "text-2xl" : (isFullscreen ? "text-lg" : "text-sm md:text-base"))}>{definition}</p>
+                )} style={{ transform: "rotateY(180deg)" }}>
+                    <p className={cn("font-semibold leading-relaxed tracking-wide drop-shadow-md", isTeacher ? "text-3xl" : (isFullscreen ? "text-xl" : "text-base md:text-lg"))}>{definition}</p>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };
@@ -1057,14 +1076,14 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
     const prevStepIndexRef = useRef(stepIndex);
     
     const [isDrawing, setIsDrawing] = useState(false);
-    const lastPos = useRef<{ x: number, y: number } | null>(null);
+    const pointsRef = useRef<{ x: number, y: number }[]>([]);
 
     // Palet görünürlüğünü resetle
     useEffect(() => {
         if (isPenMode) setIsPaletteVisible(true);
     }, [isPenMode]);
 
-    // Canvas Boyutlandırma
+    // Canvas Boyutlandırma (High DPI desteği)
     useEffect(() => {
         const handleResize = () => {
             if (canvasRef.current) {
@@ -1075,11 +1094,18 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
                     try { savedData = context.getImageData(0,0, canvas.width, canvas.height); } catch(e){}
                 }
 
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+                const dpr = window.devicePixelRatio || 1;
+                canvas.style.width = window.innerWidth + 'px';
+                canvas.style.height = window.innerHeight + 'px';
+                
+                canvas.width = window.innerWidth * dpr;
+                canvas.height = window.innerHeight * dpr;
 
-                if (savedData && context) {
-                    context.putImageData(savedData, 0, 0);
+                if (context) {
+                    context.scale(dpr, dpr);
+                    if (savedData) {
+                        context.putImageData(savedData, 0, 0);
+                    }
                 }
             }
         };
@@ -1093,17 +1119,13 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (canvas && ctx) {
-            // 1. Önceki sayfanın çizimini kaydet
+            const dpr = window.devicePixelRatio || 1;
             savedDrawings.current[prevStepIndexRef.current] = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-            // 2. Ekranı temizle
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            setHistory([]); // Yeni sayfa için undo geçmişini sıfırla
-
-            // 3. Yeni sayfanın çizimi varsa geri yükle
+            ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+            setHistory([]);
+            
             if (savedDrawings.current[stepIndex]) {
                 ctx.putImageData(savedDrawings.current[stepIndex], 0, 0);
-                // Geri yüklenen hali history'nin ilk elemanı yap
                 setHistory([savedDrawings.current[stepIndex]]);
             }
 
@@ -1142,101 +1164,113 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
         if (canvas) {
             saveHistory(); // Temizlemeden önce kaydet
             const ctx = canvas.getContext('2d');
-            ctx?.clearRect(0, 0, canvas.width, canvas.height);
+            const dpr = window.devicePixelRatio || 1;
+            ctx?.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
         }
     };
 
-    // --- ÇİZİM MANTIĞI ---
+    // --- GELİŞMİŞ ÇİZİM MANTIĞI ---
 
-    const getCoords = (e: React.MouseEvent | React.TouchEvent) => {
-        if ('touches' in e) {
-            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        } else {
-            return { x: (e as React.MouseEvent).clientX, y: (e as React.MouseEvent).clientY };
-        }
+    const getCoords = (e: React.PointerEvent) => {
+        return { x: e.clientX, y: e.clientY };
     };
 
-    const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
-        if (!isPenMode) return;
+    const applyToolSettings = (ctx: CanvasRenderingContext2D, pressure: number) => {
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
         
-        // Geçmişi kaydet
-        saveHistory();
+        let dynamicWidth = lineWidth;
+        // Basınç duyarlılığı (tablet/kalem için), mouse pressure genelde 0.5'tir
+        if (pressure && pressure !== 0.5) {
+             dynamicWidth = lineWidth * (pressure * 2.5);
+        }
 
+        if (tool === 'eraser') {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.lineWidth = dynamicWidth * 3;
+            ctx.globalAlpha = 1.0;
+        } else if (tool === 'highlighter') {
+            ctx.globalCompositeOperation = 'multiply';
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.globalAlpha = 0.4;
+            ctx.lineWidth = dynamicWidth * 4;
+        } else {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.globalAlpha = 1.0;
+            ctx.lineWidth = dynamicWidth;
+        }
+    };
+
+    const startDrawing = (e: React.PointerEvent) => {
+        if (!isPenMode) return;
+        (e.target as HTMLElement).setPointerCapture(e.pointerId);
+        saveHistory();
+        
         const { x, y } = getCoords(e);
         setIsDrawing(true);
-        lastPos.current = { x, y };
+        pointsRef.current = [{ x, y }];
 
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (canvas && ctx) {
-            // NOKTA KOYMA: Tıklanır tıklanmaz oraya bir daire çiz
+            applyToolSettings(ctx, e.pressure);
+            
+            // Nokta koyma efekti
             ctx.beginPath();
-            ctx.arc(x, y, lineWidth / 2, 0, Math.PI * 2);
-            
-            if (tool === 'eraser') {
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.fillStyle = 'rgba(0,0,0,1)';
-                ctx.globalAlpha = 1.0;
-            } else if (tool === 'highlighter') {
-                ctx.globalCompositeOperation = 'multiply'; // Fosforlu kalem için multiply
-                ctx.fillStyle = color;
-                ctx.globalAlpha = 0.5; // Şeffaflık
-            } else {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.fillStyle = color;
-                ctx.globalAlpha = 1.0;
-            }
-            
+            ctx.arc(x, y, ctx.lineWidth / 2, 0, Math.PI * 2);
             ctx.fill();
-            ctx.closePath();
             
-            // Çizgi devamı için path başlat
             ctx.beginPath();
             ctx.moveTo(x, y);
         }
     };
 
-    const draw = (e: React.MouseEvent | React.TouchEvent) => {
-        if (!isDrawing || !isPenMode || !lastPos.current || !canvasRef.current) return;
-        e.preventDefault(); // Kaydırmayı engelle
+    const draw = (e: React.PointerEvent) => {
+        if (!isDrawing || !isPenMode || !canvasRef.current) return;
+        
         const ctx = canvasRef.current.getContext('2d');
         if (!ctx) return;
 
         const { x, y } = getCoords(e);
+        pointsRef.current.push({ x, y });
+        const pts = pointsRef.current;
 
-        // Araç Ayarları
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.lineWidth = lineWidth;
+        applyToolSettings(ctx, e.pressure);
 
-        if (tool === 'eraser') {
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.globalAlpha = 1.0;
-        } else if (tool === 'highlighter') {
-            ctx.globalCompositeOperation = 'multiply'; // Fosforlu kalem
-            ctx.strokeStyle = color;
-            ctx.globalAlpha = 0.5; 
-            ctx.lineWidth = lineWidth * 3; // Highlighter daha kalın olsun
+        if (pts.length >= 3) {
+            const last2 = pts[pts.length - 2];
+            const last1 = pts[pts.length - 1];
+            // Kavisli pürüzsüz çizim (Quadratic Curve)
+            const xc = (last2.x + last1.x) / 2;
+            const yc = (last2.y + last1.y) / 2;
+
+            ctx.quadraticCurveTo(last2.x, last2.y, xc, yc);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(xc, yc);
         } else {
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.strokeStyle = color;
-            ctx.globalAlpha = 1.0;
+             // Sadece iki nokta varken düz çizgi
+             ctx.lineTo(x, y);
+             ctx.stroke();
+             ctx.beginPath();
+             ctx.moveTo(x, y);
         }
-
-        ctx.lineTo(x, y);
-        ctx.stroke();
-
-        lastPos.current = { x, y };
     };
 
-    const stopDrawing = () => {
+    const stopDrawing = (e: React.PointerEvent) => {
+        if (!isDrawing) return;
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
         setIsDrawing(false);
-        lastPos.current = null;
+        pointsRef.current = [];
         const ctx = canvasRef.current?.getContext('2d');
         if(ctx) {
-             ctx.globalCompositeOperation = 'source-over'; // Reset
-             ctx.globalAlpha = 1.0; // Reset alpha
              ctx.closePath();
+             ctx.globalCompositeOperation = 'source-over';
+             ctx.globalAlpha = 1.0;
         }
     };
 
@@ -1248,16 +1282,14 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
             <canvas
                 ref={canvasRef}
                 className={cn(
-                    "fixed inset-0 z-[100] touch-none",
+                    "fixed inset-0 z-[100]",
                     isPenMode ? "pointer-events-auto cursor-crosshair" : "pointer-events-none"
                 )}
-                onMouseDown={startDrawing}
-                onMouseMove={draw}
-                onMouseUp={stopDrawing}
-                onMouseLeave={stopDrawing}
-                onTouchStart={startDrawing}
-                onTouchMove={draw}
-                onTouchEnd={stopDrawing}
+                style={{ touchAction: 'none' }}
+                onPointerDown={startDrawing}
+                onPointerMove={draw}
+                onPointerUp={stopDrawing}
+                onPointerCancel={stopDrawing}
             />
 
             {/* Araç Çubuğu - YUKARI TAŞINDI VE KÜÇÜLTÜLDÜ */}
@@ -1376,6 +1408,180 @@ function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
     );
 }
 
+// --- 11. ConceptMapPlayer (Dallanmış Ağaç) ---
+function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep, isFullscreen: boolean }) {
+    const isTeacher = useTeacherMode();
+    const { nodes, edges } = step.mapData || { nodes: [], edges: [] };
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const [positions, setPositions] = useState<Record<string, { x: number, y: number }>>({});
+    
+    // Ağacı oluştururken merkeze alacağımız düğümü bul
+    const rootNode = nodes.find(n => n.isCentral) || nodes[0];
+
+    useEffect(() => {
+        if (!rootNode) return;
+        
+        const newPos: Record<string, { x: number, y: number }> = {};
+        const W = 800; 
+        const H = 600; 
+        
+        newPos[rootNode.id] = { x: W / 2, y: H / 2 };
+
+        const l1Edges = edges.filter(e => e.from === rootNode.id || e.to === rootNode.id);
+        const l1Ids = l1Edges.map(e => e.from === rootNode.id ? e.to : e.from);
+        
+        const R1 = 180; 
+        l1Ids.forEach((id, i) => {
+            const angle = i * ((2 * Math.PI) / l1Ids.length);
+            newPos[id] = { 
+                x: (W / 2) + Math.cos(angle) * R1, 
+                y: (H / 2) + Math.sin(angle) * R1 
+            };
+            
+            const l2Edges = edges.filter(e => (e.from === id || e.to === id) && !newPos[e.from] && !newPos[e.to]);
+            const l2Ids = l2Edges.map(e => e.from === id ? e.to : e.from);
+            
+            const R2 = 140; 
+            l2Ids.forEach((l2Id, j) => {
+                const spread = Math.PI / 1.5; 
+                const startAngle = angle - (spread / 2);
+                const stepAngle = l2Ids.length > 1 ? spread / (l2Ids.length - 1) : 0;
+                const finalAngle = startAngle + (j * stepAngle);
+                
+                newPos[l2Id] = {
+                    x: newPos[id].x + Math.cos(finalAngle) * R2,
+                    y: newPos[id].y + Math.sin(finalAngle) * R2
+                };
+            });
+        });
+        
+        nodes.forEach(n => {
+            if (!newPos[n.id]) {
+                const angle = Math.random() * 2 * Math.PI;
+                newPos[n.id] = { 
+                    x: (W / 2) + Math.cos(angle) * 280, 
+                    y: (H / 2) + Math.sin(angle) * 280 
+                };
+            }
+        });
+        
+        setPositions(newPos);
+    }, [step]);
+
+    if (!rootNode || Object.keys(positions).length === 0) return null;
+
+    return (
+        <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-6xl mx-auto")}>
+            <div className={cn(
+                "relative z-20 p-6 rounded-[2rem] shadow-lg bg-white border border-slate-100 flex-shrink-0 w-full text-center mb-6", 
+                isTeacher ? "py-6 mt-2" : "p-4 md:p-8"
+            )}>
+                 <h2 className={cn("font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 drop-shadow-sm", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>
+                     {step.title}
+                 </h2>
+            </div>
+
+            <div className="w-full overflow-x-auto pb-6 px-4 custom-scrollbar flex justify-center">
+                <div ref={containerRef} className="relative min-w-[800px] w-[800px] h-[600px] bg-slate-50/80 backdrop-blur-md rounded-[3rem] border-4 border-white shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden">
+                    {/* SVG Çizgiler */}
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 800 600">
+                        {edges.map((edge, idx) => {
+                            const fromPos = positions[edge.from];
+                            const toPos = positions[edge.to];
+                            if (!fromPos || !toPos) return null;
+                            
+                            const dx = toPos.x - fromPos.x;
+                            const dy = toPos.y - fromPos.y;
+                            const cx = fromPos.x + dx/2 - dy/4; 
+                            const cy = fromPos.y + dy/2 + dx/4;
+
+                            return (
+                                <g key={idx}>
+                                    <path 
+                                        d={`M ${fromPos.x} ${fromPos.y} Q ${cx} ${cy} ${toPos.x} ${toPos.y}`}
+                                        fill="none"
+                                        stroke="url(#edgeGradient)"
+                                        strokeWidth="4"
+                                        strokeDasharray="8,6"
+                                        className="opacity-60 drop-shadow-sm"
+                                    />
+                                    {edge.label && (
+                                        <g transform={`translate(${fromPos.x + dx/2}, ${fromPos.y + dy/2 - 15})`}>
+                                            <rect x="-40" y="-10" width="80" height="20" rx="10" fill="white" className="drop-shadow-sm" />
+                                            <text x="0" y="4" textAnchor="middle" className="fill-indigo-600 text-[10px] font-black uppercase tracking-widest">
+                                                {edge.label}
+                                            </text>
+                                        </g>
+                                    )}
+                                </g>
+                            );
+                        })}
+                        <defs>
+                            <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#a5b4fc" />
+                                <stop offset="100%" stopColor="#c084fc" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+
+                    {/* Sürüklenebilir Düğümler */}
+                    {nodes.map((node, idx) => {
+                        const pos = positions[node.id];
+                        if (!pos) return null;
+                        const isCenter = node.id === rootNode.id;
+                        
+                        return (
+                            <motion.div
+                                key={node.id}
+                                drag
+                                dragConstraints={containerRef}
+                                dragElastic={0.1}
+                                dragMomentum={false}
+                                onDrag={(e, info) => {
+                                    setPositions(prev => ({ 
+                                        ...prev, 
+                                        [node.id]: { x: prev[node.id].x + info.delta.x, y: prev[node.id].y + info.delta.y } 
+                                    }));
+                                }}
+                                whileDrag={{ scale: 1.1, zIndex: 50, cursor: 'grabbing', boxShadow: '0 25px 50px rgba(0,0,0,0.2)' }}
+                                initial={{ opacity: 0, scale: 0 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ 
+                                    opacity: { duration: 0.5, delay: idx * 0.1 },
+                                    scale: { duration: 0.5, delay: idx * 0.1, type: "spring", bounce: 0.4 },
+                                }}
+                                style={{
+                                    position: 'absolute',
+                                    left: pos.x,
+                                    top: pos.y,
+                                    x: '-50%',
+                                    y: '-50%',
+                                }}
+                                className={cn(
+                                    "pointer-events-auto cursor-grab flex items-center justify-center text-center p-4 md:p-5 rounded-[2rem] border-2 backdrop-blur-xl transition-colors select-none",
+                                    isCenter 
+                                        ? "bg-gradient-to-br from-indigo-500 to-purple-600 border-purple-300 text-white shadow-[0_10px_30px_rgba(168,85,247,0.5)] min-w-[150px] min-h-[70px] z-20 border-b-[8px]" 
+                                        : "bg-white/95 border-slate-200 text-slate-800 shadow-[0_10px_20px_rgba(0,0,0,0.08)] min-w-[120px] min-h-[60px] hover:border-indigo-300 hover:shadow-[0_15px_30px_rgba(99,102,241,0.3)] z-10 border-b-[6px]"
+                                )}
+                            >
+                                <motion.div
+                                    animate={{ y: [0, -5, 0] }}
+                                    transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, ease: "easeInOut" }}
+                                >
+                                    <span className={cn("font-black tracking-wider break-words", isCenter ? "text-xl drop-shadow-md" : "text-sm md:text-base")}>
+                                        {node.label}
+                                    </span>
+                                </motion.div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // --- ANA BİLEŞEN: StepContent ---
 
 export function StepContent({ 
@@ -1455,7 +1661,7 @@ export function StepContent({
             case 'trueFalseList':
                  return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
             case 'conceptMap':
-                 return <div className="text-center p-8 text-slate-500 text-lg">Kavram haritası bu görünümde desteklenmiyor.</div>; 
+                 return <ConceptMapPlayer step={step as ConceptMapStep} isFullscreen={isFullscreen} />; 
             case 'video': {
                 const videoStep = step as VideoStep;
                 const embedUrl = getEmbedUrl(videoStep.url);
@@ -1495,31 +1701,40 @@ export function StepContent({
                                 const colorClass = optionColors[index % optionColors.length];
 
                                 return (
-                                    <Button
+                                    <motion.div 
                                         key={index}
-                                        variant="default"
+                                        whileHover={!answer ? { scale: 1.02 } : {}}
+                                        whileTap={!answer ? { scale: 0.98 } : {}}
                                         className={cn(
-                                            "h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 transform",
-                                            "font-medium shadow-sm",
-                                            isTeacher ? "text-3xl p-8" : (isFullscreen ? "p-6 text-xl" : "p-6 text-lg"),
-                                            !answer ? colorClass : "",
-                                            !answer && "hover:scale-[1.01] hover:shadow-lg",
-                                            answer && isCorrect ? "bg-emerald-500 border-emerald-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] scale-[1.02] z-10" : "",
-                                            answer && isSelected && !isCorrect ? "bg-red-500 border-red-600 text-white animate-shake" : "",
-                                            answer && !isSelected && !isCorrect ? "bg-slate-50 border-transparent text-slate-400 opacity-50" : ""
+                                            "w-full h-full",
+                                            answer && isSelected && !isCorrect && "animate-shake"
                                         )}
-                                        onClick={() => onAnswer(option)}
-                                        disabled={!!answer}
                                     >
-                                            <span className={cn(
-                                                "flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", 
-                                                isTeacher ? "h-14 w-14 text-2xl" : "h-8 w-8 text-sm",
-                                                !answer ? "bg-white/50 border-black/5" : "bg-white/20 border-white/20"
-                                            )}>
-                                                {String.fromCharCode(65 + index)}
-                                            </span>
-                                            <span className="flex-1">{option}</span>
-                                    </Button>
+                                        <Button
+                                            variant="default"
+                                            className={cn(
+                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 transform",
+                                                "font-medium shadow-sm",
+                                                isTeacher ? "text-3xl p-8" : (isFullscreen ? "p-6 text-xl" : "p-6 text-lg"),
+                                                !answer ? colorClass : "",
+                                                !answer && "hover:shadow-lg",
+                                                answer && isCorrect ? "bg-emerald-500 border-emerald-600 text-white shadow-[0_0_30px_rgba(16,185,129,0.8)] z-10" : "",
+                                                answer && isSelected && !isCorrect ? "bg-red-500 border-red-600 text-white" : "",
+                                                answer && !isSelected && !isCorrect ? "bg-slate-50 border-transparent text-slate-400 opacity-50" : ""
+                                            )}
+                                            onClick={() => onAnswer(option)}
+                                            disabled={!!answer}
+                                        >
+                                                <span className={cn(
+                                                    "flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", 
+                                                    isTeacher ? "h-14 w-14 text-2xl" : "h-8 w-8 text-sm",
+                                                    !answer ? "bg-white/50 border-black/5" : "bg-white/20 border-white/20"
+                                                )}>
+                                                    {String.fromCharCode(65 + index)}
+                                                </span>
+                                                <span className="flex-1">{option}</span>
+                                        </Button>
+                                    </motion.div>
                                 );
                             })}
                         </div>
@@ -1545,24 +1760,30 @@ export function StepContent({
                                 const isSelected = answer?.answer === option;
                                 const isCorrect = option === correctOption;
                                 return (
-                                    <Button
+                                    <motion.div 
                                         key={option}
-                                        className={cn(
-                                            "font-bold rounded-[2rem] transition-all duration-300 transform shadow-lg border-b-8 active:border-b-0 active:translate-y-2",
-                                            isTeacher ? "h-40 w-64 text-4xl" : "h-32 w-48 text-2xl border-b-8",
-                                            !answer && (option === "Doğru" ? "bg-white border-slate-200 text-green-600 hover:bg-green-50" : "bg-white border-slate-200 text-red-600 hover:bg-red-50"),
-                                            answer && isCorrect && "bg-green-500 border-green-700 text-white scale-105 z-10 shadow-[0_0_30px_rgba(34,197,94,0.4)]",
-                                            answer && isSelected && !isCorrect && "bg-red-500 border-red-700 text-white animate-shake",
-                                            answer && !isSelected && !isCorrect && "opacity-30 grayscale scale-95"
-                                        )}
-                                        onClick={() => onAnswer(option)}
-                                        disabled={!!answer}
+                                        whileHover={!answer ? { scale: 1.05 } : {}}
+                                        whileTap={!answer ? { scale: 0.95 } : {}}
+                                        className={cn(answer && isSelected && !isCorrect && "animate-shake")}
                                     >
-                                            <div className="flex flex-col items-center gap-4">
-                                                {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/>}
-                                                {option}
-                                            </div>
-                                    </Button>
+                                        <Button
+                                            className={cn(
+                                                "font-bold rounded-[2rem] transition-all duration-300 transform shadow-lg border-b-8 active:border-b-0 active:translate-y-2",
+                                                isTeacher ? "h-40 w-64 text-4xl" : "h-32 w-48 text-2xl border-b-8",
+                                                !answer && (option === "Doğru" ? "bg-white border-slate-200 text-green-600 hover:bg-green-50" : "bg-white border-slate-200 text-red-600 hover:bg-red-50"),
+                                                answer && isCorrect && "bg-green-500 border-green-700 text-white shadow-[0_0_30px_rgba(34,197,94,0.6)] z-10",
+                                                answer && isSelected && !isCorrect && "bg-red-500 border-red-700 text-white",
+                                                answer && !isSelected && !isCorrect && "opacity-30 grayscale"
+                                            )}
+                                            onClick={() => onAnswer(option)}
+                                            disabled={!!answer}
+                                        >
+                                                <div className="flex flex-col items-center gap-4">
+                                                    {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/>}
+                                                    {option}
+                                                </div>
+                                        </Button>
+                                    </motion.div>
                                 );
                             })}
                         </div>
@@ -1657,6 +1878,7 @@ export function LessonContentViewer({
     const [internalProgress, setInternalProgress] = useState<LocalProgress>(() => ({ answers: {}, score: 0 }));
     
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    const [direction, setDirection] = useState(1);
     const [isFinished, setIsFinished] = useState(false);
     
     const [isVisualMaximized, setIsVisualMaximized] = useState(false);
@@ -1815,7 +2037,9 @@ export function LessonContentViewer({
                 setInternalProgress(prev => ({...prev, answers: newAnswers }));
             }
         }
+        
         if (currentStepIndex < steps.length - 1) {
+            setDirection(1);
             setCurrentStepIndex(currentStepIndex + 1);
             setRevealedSentencesCount(1);
             setFlippedCards(new Set());
@@ -1847,7 +2071,21 @@ export function LessonContentViewer({
              isCorrect = (answer as string) === (currentStep as SentenceScrambleStep).correctSentence;
              points = isCorrect ? 100 : 0;
         }
-        if (isCorrect) playSound('correct'); else playSound('incorrect');
+        if (isCorrect) {
+            playSound('correct');
+            import('canvas-confetti').then((confettiModule) => {
+                const confetti = confettiModule.default;
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#10B981', '#FBBF24', '#3B82F6', '#8B5CF6'],
+                    zIndex: 9999
+                });
+            }).catch(err => console.error("Confetti error:", err));
+        } else {
+            playSound('incorrect');
+        }
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { answer, isCorrect } };
         const newScore = internalProgress.score + points;
         setInternalProgress({ answers: newAnswers, score: newScore });
@@ -1877,7 +2115,12 @@ export function LessonContentViewer({
         }
     }, [currentStepIndex, internalProgress]);
 
-    const handlePrev = () => { if(currentStepIndex > 0) setCurrentStepIndex(prev => prev - 1); };
+    const handlePrev = () => { 
+        if(currentStepIndex > 0) {
+            setDirection(-1);
+            setCurrentStepIndex(prev => prev - 1); 
+        }
+    };
 
     const handleLocalMultiAnswer = (questionIndex: number, selectedAnswer: boolean) => {
         if (!currentStep || currentStep.type !== 'trueFalseList') return;
@@ -1981,9 +2224,19 @@ export function LessonContentViewer({
                  </div>
              )}
 
-           <div className={cn("relative z-10 w-full h-full flex flex-col justify-start", !isFullWidthStep && "py-4 md:py-8 px-4")}>
-              <StepContent 
-                step={currentStep}
+           <div className={cn("relative z-10 w-full h-full flex flex-col justify-start", !isFullWidthStep && "py-4 md:py-8 px-4 lg:px-8")}>
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                    key={currentStepIndex}
+                    custom={direction}
+                    initial={{ opacity: 0, x: direction * 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: direction * -50 }}
+                    transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                    className="w-full h-full flex flex-col items-center justify-start"
+                >
+                  <StepContent 
+                    step={currentStep}
                 answer={internalProgress.answers[currentStepIndex]}
                 onAnswer={handleAnswer}
                 onCorrectAndNext={() => setTimeout(handleNext, 1000)}
@@ -2006,6 +2259,8 @@ export function LessonContentViewer({
                 isVisualMaximized={isVisualMaximized}
                 onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
               />
+                </motion.div>
+              </AnimatePresence>
            </div>
         </div>
         
@@ -2028,87 +2283,84 @@ export function LessonContentViewer({
         {/* ALT BAR */}
         <div className={cn(
             "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300 ease-in-out",
-            // GİZLEME CLASS MANTIĞI:
-            hideUI ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-12 px-4 opacity-100",
-            // GLASSMORPHISM & STYLE:
+            hideUI ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-10 px-3 opacity-100",
             !hideUI && "bg-white/90 backdrop-blur-xl border-t border-slate-200/60 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)]",
-            // POSITION:
             "relative"
         )} onClick={(e) => e.stopPropagation()}>
             
             {/* GİZLEME BUTONU (Sadece Öğretmen & Bar Açıkken) */}
             {isTeacher && !hideUI && (
-                <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-40">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40">
                     <Button 
                         onClick={() => setHideUI(true)}
                         size="sm"
-                        className="h-6 w-10 rounded-t-lg rounded-b-none bg-white/90 border-t border-x border-slate-200 hover:bg-white shadow-sm"
+                        className="h-5 w-8 rounded-t-md rounded-b-none bg-white/90 border-t border-x border-slate-200 hover:bg-white shadow-sm"
                     >
-                        <ChevronDown className="h-4 w-4 text-slate-500" />
+                        <ChevronDown className="h-3 w-3 text-slate-500" />
                     </Button>
                 </div>
             )}
 
-            {/* SOL: Geri Butonu + İlerleme */}
-            <div className="flex items-center gap-3 flex-1">
-                <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={handlePrev} 
-                    disabled={currentStepIndex === 0} 
-                    className={cn(
-                        "rounded-full h-8 px-4 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors border-0", 
-                        "font-medium text-xs md:text-sm"
-                    )}
-                >
-                    <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
-                    Geri
-                </Button>
-                
-                <div className="hidden md:flex items-center gap-2">
-                    <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-blue-400 to-indigo-500 transition-all duration-500 ease-out" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div>
-                    </div>
-                    <span className="text-slate-400 text-[10px] font-bold">{currentStepIndex + 1}/{steps.length}</span>
-                </div>
-            </div>
-
-            {/* ORTA: Puan Rozeti */}
-            <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-100 text-amber-700 rounded-full shadow-sm">
-                    <Trophy className="w-3.5 h-3.5 text-amber-500" />
-                    <span className="text-xs font-black tracking-tight">{internalProgress.score}</span>
-                </div>
-            </div>
-
-            {/* SAĞ: Aksiyonlar */}
-            <div className="flex gap-3 flex-1 justify-end items-center">
-                
-                {isTeacher && (
-                    <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        onClick={handleNext} 
-                        className="text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors h-8 px-3 rounded-full text-xs font-medium"
-                        title="Bu adımı zorla geç"
-                    >
-                        Atla
+            <div className="flex gap-2">
+                 <Button variant="ghost" size="icon" onClick={handlePrev} disabled={currentStepIndex === 0} className="rounded-full w-8 h-8 text-slate-500 hover:text-slate-800 hover:bg-slate-100"><ArrowLeft className="w-4 h-4"/></Button>
+                 {isTeacher && (
+                    <Button variant="outline" size="sm" onClick={() => window.location.reload()} className="h-8 px-3 text-xs font-bold text-slate-500 hover:text-slate-800 rounded-full border-slate-200">
+                        <Repeat className="w-3 h-3 mr-1"/> Yenile
                     </Button>
-                )}
+                 )}
+            </div>
 
-                <Button 
-                    size="sm" 
-                    onClick={handleContinueOrNext} 
-                    disabled={!isNextButtonEnabled || (isAnimating && !isTeacher)}
-                    className={cn(
-                        "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-lg shadow-indigo-200 transition-all h-8 rounded-full transform hover:-translate-y-0.5 active:translate-y-0", 
-                        showContinueButton ? "px-5" : "px-5",
-                        "text-xs md:text-sm font-bold tracking-wide"
-                    )}
-                >
-                    {showContinueButton ? "Devam" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "İleri")}
-                    <ArrowRight className="ml-1.5 h-3.5 w-3.5 opacity-80" />
-                </Button>
+            <div className="flex items-center justify-center gap-3 bg-slate-100/50 px-3 py-1.5 rounded-full">
+                <Select value={currentStepIndex.toString()} onValueChange={(val) => {
+                     const targetIndex = parseInt(val, 10);
+                     if (!isNaN(targetIndex)) setCurrentStepIndex(targetIndex);
+                }}>
+                    <SelectTrigger className="h-6 px-2 py-0 bg-transparent border-0 shadow-none text-[11px] font-bold text-slate-500 hover:text-slate-800 focus:ring-0 focus:ring-offset-0 w-auto gap-1">
+                        <SelectValue placeholder={`${currentStepIndex + 1} / ${steps.length}`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {steps.map((s, i) => (
+                            <SelectItem key={i} value={i.toString()}>
+                                Sayfa {i + 1}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <div className="flex items-center gap-1">
+                    {steps.map((_, idx) => (
+                        <div key={idx} className={cn("h-1 rounded-full transition-all duration-500", idx === currentStepIndex ? "w-5 bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]" : (internalProgress.answers[idx]?.completed ? "w-1.5 bg-emerald-400" : "w-1 bg-slate-200"))} />
+                    ))}
+                </div>
+            </div>
+
+            <div className="flex gap-1.5 items-center">
+                 {/* Puan Rozeti */}
+                 <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-100 text-amber-700 rounded-full shadow-sm mr-2">
+                     <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                     <div className="relative h-4 w-6 overflow-hidden">
+                         <AnimatePresence mode="popLayout">
+                             <motion.span
+                                 key={internalProgress.score}
+                                 initial={{ y: 20, opacity: 0 }}
+                                 animate={{ y: 0, opacity: 1 }}
+                                 exit={{ y: -20, opacity: 0 }}
+                                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                 className="absolute inset-0 text-xs font-black tracking-tight text-center"
+                             >
+                                 {internalProgress.score}
+                             </motion.span>
+                         </AnimatePresence>
+                     </div>
+                 </div>
+
+                 {isTeacher && (
+                     <Button variant="ghost" size="sm" onClick={handleNext} className="h-8 px-3 text-xs font-bold text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-full transition-colors">
+                         Atla
+                     </Button>
+                 )}
+                 <Button onClick={handleContinueOrNext} disabled={!isNextButtonEnabled || currentStepIndex === steps.length - 1 && isFinished} className={cn("h-8 px-5 rounded-full text-xs font-bold shadow-sm transition-all duration-300", isNextButtonEnabled ? "bg-purple-600 hover:bg-purple-700 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5" : "bg-slate-100 text-slate-400")}>
+                      {currentStepIndex === steps.length - 1 ? (completeButtonText || 'Bitir') : 'Devam Et'}
+                 </Button>
             </div>
         </div>
       </div>

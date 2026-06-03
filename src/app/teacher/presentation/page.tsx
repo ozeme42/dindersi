@@ -125,40 +125,47 @@ function PresentationPageContent() {
         <main 
             ref={mainContentRef} 
             className={cn(
-                "h-screen w-screen bg-slate-50 text-slate-900 overflow-hidden flex flex-col font-sans relative transition-colors duration-500",
-                !isFullscreen && "p-4 md:p-6"
+                "h-screen w-screen bg-slate-100/50 text-slate-900 overflow-hidden flex flex-col font-sans relative transition-colors duration-500",
+                !isFullscreen && "p-4 md:p-6 lg:p-8"
             )}
         >
-             {/* Arka Plan Efektleri (Light Mode Uyumlu) */}
-             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-300/20 rounded-full blur-[150px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-300/20 rounded-full blur-[150px]" />
+             {/* Modern Animated Ambient Background */}
+             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-fuchsia-400/20 rounded-full blur-[120px] mix-blend-multiply animate-pulse" style={{ animationDuration: '8s' }} />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-cyan-400/20 rounded-full blur-[120px] mix-blend-multiply animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
+                <div className="absolute top-[20%] left-[30%] w-[40vw] h-[40vw] bg-amber-300/10 rounded-full blur-[100px] mix-blend-multiply animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }} />
             </div>
 
-            {/* Header / Üst Bar */}
+            {/* Header / Üst Bar - Glassmorphism */}
             <header className={cn(
-                "flex-shrink-0 z-20 flex items-center justify-between transition-all duration-300",
+                "flex-shrink-0 z-20 flex items-center justify-between transition-all duration-500 ease-out",
                 isFullscreen 
-                    ? "absolute top-0 left-0 right-0 p-2 bg-white/80 backdrop-blur-md border-b border-slate-200 opacity-0 hover:opacity-100 focus-within:opacity-100 shadow-sm" 
-                    : "mb-4 bg-white/60 backdrop-blur-xl border border-slate-200 rounded-2xl p-4 shadow-sm"
+                    ? "absolute top-0 left-0 right-0 p-4 bg-white/40 backdrop-blur-2xl border-b border-white/50 opacity-0 hover:opacity-100 focus-within:opacity-100 shadow-sm transform -translate-y-2 hover:translate-y-0" 
+                    : "mb-6 bg-white/60 backdrop-blur-2xl border border-white/80 rounded-[2rem] p-4 px-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
             )}>
-                <div className="flex items-center gap-4 overflow-hidden">
-                    <div className={cn("p-2.5 rounded-xl shadow-md flex-shrink-0 transition-all", isFullscreen ? "bg-transparent shadow-none p-0" : "bg-white border border-slate-100")}>
-                        <Presentation className={cn("text-purple-600", isFullscreen ? "h-5 w-5" : "h-6 w-6")}/>
+                <div className="flex items-center gap-5 overflow-hidden">
+                    <div className={cn(
+                        "flex items-center justify-center shadow-inner transition-all duration-300", 
+                        isFullscreen ? "bg-transparent p-0" : "bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-2xl"
+                    )}>
+                        <Presentation className={cn("text-white", isFullscreen ? "h-6 w-6 text-purple-600" : "h-7 w-7")}/>
                     </div>
-                    <div className="overflow-hidden">
-                        <h1 className={cn("font-black tracking-tight text-slate-800 uppercase truncate leading-none", isFullscreen ? "text-lg" : "text-2xl")}>
+                    <div className="overflow-hidden flex flex-col justify-center">
+                        <h1 className={cn(
+                            "font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-800 to-slate-600 uppercase truncate leading-tight drop-shadow-sm", 
+                            isFullscreen ? "text-xl" : "text-3xl"
+                        )}>
                             {content.title}
                         </h1>
-                        {!isFullscreen && <p className="text-xs text-slate-500 font-bold mt-1 truncate tracking-wide">{courseName} • {unitName}</p>}
+                        {!isFullscreen && <p className="text-sm text-slate-500 font-bold mt-0.5 truncate tracking-wider uppercase opacity-80">{courseName} <span className="mx-1 text-purple-400">•</span> {unitName}</p>}
                     </div>
                 </div>
                  
-                 <div className="flex items-center gap-3 flex-shrink-0">
-                    <FullscreenToggle elementRef={mainContentRef} className="bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-10 w-10 rounded-xl shadow-sm" />
+                 <div className="flex items-center gap-4 flex-shrink-0">
+                    <FullscreenToggle elementRef={mainContentRef} className="bg-white/80 backdrop-blur-md border border-white text-slate-600 hover:text-purple-600 hover:bg-white h-12 w-12 rounded-2xl shadow-sm transition-all hover:scale-105 hover:shadow-md" />
                     {!isFullscreen && (
-                        <Button asChild variant="ghost" size="icon" className="text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl h-10 w-10">
-                            <Link href="/teacher/ders-akisi"><ArrowLeft className="h-5 w-5" /></Link>
+                        <Button asChild variant="ghost" size="icon" className="bg-white/80 backdrop-blur-md border border-white text-slate-600 hover:text-rose-600 hover:bg-white rounded-2xl h-12 w-12 transition-all hover:scale-105 hover:shadow-md">
+                            <Link href="/teacher/ders-akisi"><ArrowLeft className="h-6 w-6" /></Link>
                         </Button>
                     )}
                  </div>
@@ -167,11 +174,11 @@ function PresentationPageContent() {
             {/* İçerik Alanı */}
             <div className="flex-grow flex flex-col min-h-0 relative z-10">
                  <div className={cn(
-                    "w-full h-full overflow-hidden transition-all duration-300",
-                    // Fullscreen değilse kağıt/kart efekti ver
+                    "w-full h-full overflow-hidden transition-all duration-500 ease-in-out",
+                    // Fullscreen değilse şık kart efekti ver
                     isFullscreen 
-                        ? "rounded-none bg-white" 
-                        : "rounded-3xl border-4 border-white shadow-2xl bg-white ring-1 ring-slate-200/50"
+                        ? "rounded-none bg-transparent" 
+                        : "rounded-[3rem] border-4 border-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] bg-white/90 backdrop-blur-md ring-1 ring-slate-900/5"
                 )}>
                     <LessonContentViewer
                         topic={content as Topic}

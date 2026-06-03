@@ -348,4 +348,24 @@
 }
 .swing-animation { transform-origin: 140px 20px; animation: swing 3s ease-in-out infinite; }
 
-    
+/* Highlight / Fosforlu Kalem Animasyonu */
+@keyframes highlight-draw {
+    from { background-size: 0% 100%; }
+    to { background-size: 100% 100%; }
+}
+.animate-highlight, 
+.prose strong, 
+.prose b, 
+.prose mark,
+.highlight-text strong,
+.highlight-text b {
+    background-image: linear-gradient(120deg, rgba(250, 204, 21, 0.4) 0%, rgba(253, 224, 71, 0.2) 100%);
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    animation: highlight-draw 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    animation-delay: 0.5s; /* Metin biraz yazıldıktan sonra çizilsin */
+    padding: 0 4px;
+    border-radius: 4px;
+    color: inherit;
+    display: inline;
+}
