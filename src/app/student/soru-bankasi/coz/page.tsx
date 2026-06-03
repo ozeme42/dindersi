@@ -18,7 +18,7 @@ import { addQuestionToReviewList } from '@/app/student/tekrar-et/actions';
 import { useAuth } from '@/context/auth-context';
 
 function QuizGame() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
     const { toast } = useToast();
@@ -39,8 +39,10 @@ function QuizGame() {
     
     const [score, setScore] = useState(0);
     const [correctCount, setCorrectCount] = useState(0);
+    const [correctQuestionIds, setCorrectQuestionIds] = useState<string[]>([]);
 
     const fetchQuestions = useCallback(async () => {
+        if (authLoading) return;
         if (!topicId || !difficulty) {
             setError("Geçersiz test parametreleri.");
             setIsLoading(false);
@@ -56,6 +58,8 @@ function QuizGame() {
             questionCount: parseInt(searchParams.get('questionCount') || '10'),
             difficulty: difficulty,
             questionTypes: searchParams.get('questionTypes')?.split(','),
+            excludeSolvedByUserId: user?.uid,
+            isStatic: true,
         };
         const result = await getQuestionsFromBank(params as any);
         if (result.error) {
@@ -64,7 +68,7 @@ function QuizGame() {
             setQuestions(result.questions as Question[]);
         }
         setIsLoading(false);
-    }, [searchParams, difficulty, topicId, courseId]);
+    }, [searchParams, difficulty, topicId, courseId, user, authLoading]);
 
     useEffect(() => {
         fetchQuestions();
@@ -84,6 +88,9 @@ function QuizGame() {
             playSound('correct');
             setScore(s => s + 10);
             setCorrectCount(c => c + 1);
+            if (question.id) {
+                setCorrectQuestionIds(prev => [...prev, question.id]);
+            }
         } else {
             playSound('incorrect');
             if (user?.role === 'student' && question) {
@@ -130,7 +137,8 @@ function QuizGame() {
                         correctAnswers: correctCount,
                         totalQuestions: questions.length,
                         date: new Date().toISOString()
-                    } as any
+                    } as any,
+                    correctQuestionIds
                 );
             }
 
@@ -184,6 +192,7 @@ function QuizGame() {
             setCurrentQuestionIndex(0);
             setScore(0);
             setCorrectCount(0);
+            setCorrectQuestionIds([]);
             setAnswers([]);
             
             // Yeni test verilerini çekmek için URL'i değiştir
@@ -199,77 +208,79 @@ function QuizGame() {
         setCurrentQuestionIndex(0);
         setScore(0);
         setCorrectCount(0);
+        setCorrectQuestionIds([]);
         setAnswers([]);
         fetchQuestions();
     };
 
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /> <span className="ml-2">Sorular Yükleniyor...</span></div>;
+        return <div className="flex h-screen w-full items-center justify-center bg-[#09071a] text-white"><Loader2 className="h-10 w-10 animate-spin text-cyan-500" /> <span className="ml-4 font-bold text-xl">Test Yükleniyor...</span></div>;
     }
     
     if (error) {
         return (
-            <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8">
-                <Alert variant="destructive" className="max-w-lg">
-                    <AlertTitle>Hata!</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                     <div className="mt-4">
-                        <Button asChild variant="outline">
-                            <Link href={getBackLink()}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link>
-                        </Button>
-                    </div>
-                </Alert>
+            <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-[#09071a]">
+                <div className="max-w-lg w-full bg-rose-950 border-2 border-rose-500/50 rounded-3xl p-6 md:p-8 text-center shadow-[0_0_30px_rgba(244,63,94,0.2)]">
+                    <h2 className="text-2xl font-black text-white mb-2">Hata!</h2>
+                    <p className="text-rose-200 mb-6 font-medium">{error}</p>
+                    <Link href={getBackLink()} className="inline-flex items-center justify-center w-full px-6 py-4 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-2xl transition-all active:scale-95">
+                        <ArrowLeft className="mr-2 h-5 w-5"/> Geri Dön
+                    </Link>
+                </div>
             </div>
         );
     }
     
     if (questions.length === 0) {
         return (
-             <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8">
-                <Alert className="max-w-lg">
-                    <AlertTitle>Soru Bulunamadı</AlertTitle>
-                    <AlertDescription>Sıradaki test için yeterli soru bulunmuyor veya testi bitirdin.</AlertDescription>
-                    <div className="mt-4">
-                        <Button asChild variant="outline">
-                            <Link href={getBackLink()}><ArrowLeft className="mr-2 h-4 w-4"/>Listeye Dön</Link>
-                        </Button>
-                    </div>
-                </Alert>
+             <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-[#09071a]">
+                <div className="max-w-lg w-full bg-[#161233] border-2 border-[#2b245e] rounded-3xl p-6 md:p-8 text-center shadow-xl">
+                    <h2 className="text-2xl font-black text-white mb-2">Test Bulunamadı</h2>
+                    <p className="text-slate-300 mb-6 font-medium">Sıradaki test için yeterli soru bulunmuyor veya testi bitirdin.</p>
+                    <Link href={getBackLink()} className="inline-flex items-center justify-center w-full px-6 py-4 bg-[#2b245e] hover:bg-[#393075] text-white font-bold rounded-2xl transition-all active:scale-95">
+                        <ArrowLeft className="mr-2 h-5 w-5"/> Listeye Dön
+                    </Link>
+                </div>
             </div>
         )
     }
 
     if(isFinished) {
         return (
-             <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8">
-                <Card className="w-full text-center max-w-md">
-                    <CardHeader>
-                        <div className="mx-auto bg-amber-100 rounded-full p-3 w-fit"><PartyPopper className="h-10 w-10 text-amber-500"/></div>
-                        <CardTitle className="font-headline text-2xl md:text-3xl mt-4">Alıştırma Bitti!</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <p className="text-lg md:text-xl">Sonucun:</p>
-                        <p className="text-4xl md:text-5xl font-bold text-primary">{correctCount} / {questions.length}</p>
-                        <p className="text-base md:text-lg">Kazandığın Puan: <span className="font-bold">{score}</span></p>
-                    </CardContent>
-                    {/* YENİ EKLENEN BUTONLAR */}
-                    <CardFooter className="flex-col gap-3">
-                        <Button onClick={handleSaveAndContinue} className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isSubmitting}>
-                             {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <FastForward className="mr-2 h-4 w-4"/>}
-                             {isSubmitting ? "Kaydediliyor..." : "Kaydet ve Devam Et"}
-                        </Button>
+             <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-[#09071a]">
+                <div className="w-full max-w-md bg-[#161233] border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] rounded-[2.5rem] p-6 md:p-8 text-center overflow-hidden relative">
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500" />
+                    <div className="mx-auto bg-[#070514] border-2 border-emerald-500/30 rounded-full p-4 w-fit shadow-[0_0_30px_rgba(16,185,129,0.2)] mb-6 mt-2">
+                        <PartyPopper className="h-10 w-10 md:h-12 md:w-12 text-emerald-400"/>
+                    </div>
+                    <h2 className="font-black text-3xl md:text-4xl mt-4 text-white drop-shadow-md">Alıştırma Bitti!</h2>
+                    
+                    <div className="my-8 space-y-4 md:space-y-6 bg-[#070514] border-2 border-[#2b245e] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] rounded-3xl p-6">
+                        <p className="text-slate-400 font-bold uppercase tracking-wider text-sm">Sonucun</p>
+                        <p className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">{correctCount} <span className="text-2xl text-slate-500">/ {questions.length}</span></p>
+                        
+                        <div className="h-px bg-white/10 w-full" />
+                        
+                        <p className="text-base md:text-lg text-slate-300 font-medium">Kazandığın Puan: <span className="font-black text-emerald-400 text-xl ml-2">+{score}</span></p>
+                    </div>
 
-                        <div className="flex flex-col sm:flex-row gap-2 w-full">
-                            <Button onClick={handleRestart} className="w-full" variant="secondary">
-                            <Repeat className="mr-2 h-4 w-4" /> Tekrar Çöz
-                            </Button>
-                            <Button onClick={handleSaveAndExit} className="w-full" variant="outline" disabled={isSubmitting}>
-                                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Home className="mr-2 h-4 w-4"/>}
-                                {isSubmitting ? "..." : "Kaydet ve Çık"}
-                            </Button>
+                    <div className="flex flex-col gap-3 mt-8">
+                        <button onClick={handleSaveAndContinue} disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-4 rounded-2xl shadow-[0_4px_20px_rgba(79,70,229,0.4)] transition-all active:scale-95 disabled:opacity-50">
+                             {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin"/> : <FastForward className="h-5 w-5"/>}
+                             {isSubmitting ? "KAYDEDİLİYOR..." : "KAYDET VE DEVAM ET"}
+                        </button>
+
+                        <div className="flex gap-3 w-full">
+                            <button onClick={handleRestart} className="flex-1 flex items-center justify-center gap-2 bg-[#1a1638] hover:bg-[#201b45] border border-[#2b245e] text-slate-200 font-bold py-3.5 rounded-2xl transition-all active:scale-95">
+                            <Repeat className="h-4 w-4" /> TEKRAR
+                            </button>
+                            <button onClick={handleSaveAndExit} disabled={isSubmitting} className="flex-1 flex items-center justify-center gap-2 bg-[#1a1638] hover:bg-rose-950/40 border border-[#2b245e] hover:border-rose-500/50 text-slate-200 font-bold py-3.5 rounded-2xl transition-all active:scale-95 disabled:opacity-50">
+                                {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin"/> : <Home className="h-4 w-4"/>}
+                                ÇIK
+                            </button>
                         </div>
-                    </CardFooter>
-                </Card>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -278,53 +289,110 @@ function QuizGame() {
     const currentAnswer = answers[currentQuestionIndex];
 
     return (
-        <div className="w-full h-full min-h-screen flex items-center justify-center p-2 sm:p-6 md:p-8 pb-24 md:pb-8">
-            <Card className="w-full max-w-2xl">
-                <CardHeader>
-                     <div className="flex justify-between items-center">
-                        <CardTitle className="flex items-center gap-2 font-headline text-2xl md:text-3xl"><BrainCircuit className="text-blue-500 h-7 w-7 md:h-8 md:w-8"/> Soru Çöz</CardTitle>
+        <div className="w-full h-full min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 md:p-8 pb-24 md:pb-8 bg-[#09071a]">
+            <div className="w-full max-w-3xl flex flex-col gap-4">
+                
+                {/* Header Area */}
+                <div className="flex justify-between items-center px-2">
+                    <h2 className="flex items-center gap-3 font-black text-2xl md:text-3xl text-white drop-shadow-md tracking-wide">
+                        <BrainCircuit className="text-cyan-400 h-8 w-8 drop-shadow-[0_0_15px_rgba(34,211,238,0.6)]"/> 
+                        Test Çöz
+                    </h2>
+                    <div className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 shadow-lg flex items-center">
+                         <span className="text-sm font-bold text-emerald-300">Puan: <span className="text-white ml-1">{score}</span></span>
                     </div>
-                    <div className="flex items-center gap-4 pt-2">
-                        <span className="text-xs md:text-sm text-muted-foreground">Soru {currentQuestionIndex + 1} / {questions.length}</span>
-                        <Progress value={((currentQuestionIndex + 1) / questions.length) * 100} className="w-full" />
-                         {/* Burada da sadece öğrenci görsün kısıtlamasını kaldırdım ki puanı test ederken ekranda görebil */}
-                         <span className="text-xs md:text-sm font-semibold text-primary">Puan: {score}</span>
+                </div>
+
+                <div className="flex items-center gap-4 bg-[#161233] p-4 rounded-3xl border border-white/10 shadow-lg">
+                    <span className="text-sm font-bold text-slate-300 whitespace-nowrap">Soru {currentQuestionIndex + 1} / {questions.length}</span>
+                    <Progress value={((currentQuestionIndex + 1) / questions.length) * 100} className="w-full h-3 bg-white/10 [&>div]:bg-gradient-to-r [&>div]:from-cyan-500 [&>div]:to-blue-500" />
+                </div>
+
+                {/* Soru Kartı */}
+                <div className="w-full bg-[#161233] rounded-[2rem] p-4 md:p-8 border border-white/10 shadow-xl flex flex-col gap-6 md:gap-8">
+                    {/* Soru Metni */}
+                    <div className="bg-[#070514] border-2 border-[#2b245e] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] p-5 md:p-8 rounded-[1.5rem]">
+                        <p className="text-lg md:text-2xl font-bold text-white leading-relaxed">{currentQuestion.text}</p>
                     </div>
-                </CardHeader>
-                <CardContent className="py-6 space-y-8">
-                    <div className="text-center bg-background/50 border-2 border-primary/20 p-4 md:p-6 rounded-lg shadow-inner">
-                        <p className="text-lg md:text-xl font-semibold">{currentQuestion.text}</p>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
-                    {currentQuestion.type === 'Çoktan Seçmeli' && (currentQuestion.options || []).map(option => {
+
+                    {/* Şıklar */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                    {currentQuestion.type === 'Çoktan Seçmeli' && (currentQuestion.options || []).map((option, i) => {
                         const isSelected = currentAnswer === option;
                         const isCorrect = currentQuestion.correctAnswer === option;
+                        const isAnswered = !!currentAnswer;
+
+                        let btnClass = "border-[#2b245e] bg-[#1a1638] text-slate-200 hover:bg-[#201b45] hover:border-indigo-500/50";
+                        if (isAnswered) {
+                            if (isCorrect) btnClass = "bg-emerald-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.3)]";
+                            else if (isSelected) btnClass = "bg-rose-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.3)]";
+                            else btnClass = "border-white/5 bg-white/5 text-slate-500 opacity-50";
+                        }
+
                         return (
-                            <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
-                                {option}
-                            </Button>
+                            <button 
+                                key={option} 
+                                className={cn("h-auto min-h-[4rem] px-4 py-4 md:px-5 text-left font-bold rounded-2xl border-2 transition-all duration-300", 
+                                    isAnswered ? "cursor-default" : "cursor-pointer active:scale-95",
+                                    btnClass
+                                )} 
+                                onClick={() => handleAnswer(option)} 
+                                disabled={isAnswered}
+                            >
+                                <div className="flex gap-4 items-center">
+                                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-sm border border-white/10 shadow-sm">{String.fromCharCode(65 + i)}</span>
+                                    <span className="text-base md:text-lg">{option}</span>
+                                </div>
+                            </button>
                         );
                     })}
-                     {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
+                     {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map((option, i) => {
                         const answerValue = option === 'Doğru';
                         const isSelected = currentAnswer === answerValue;
                         const isCorrect = (currentQuestion.isTrue ?? (currentQuestion.correctAnswer === 'Doğru')) === answerValue;
+                        const isAnswered = !!currentAnswer;
                         
+                        let btnClass = "border-[#2b245e] bg-[#1a1638] text-slate-200 hover:bg-[#201b45] hover:border-indigo-500/50";
+                        if (isAnswered) {
+                            if (isCorrect) btnClass = "bg-emerald-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.3)]";
+                            else if (isSelected) btnClass = "bg-rose-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.3)]";
+                            else btnClass = "border-white/5 bg-white/5 text-slate-500 opacity-50";
+                        }
+
                         return (
-                            <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
-                                {option}
-                            </Button>
+                            <button 
+                                key={option} 
+                                className={cn("h-auto min-h-[4rem] px-5 py-4 text-center font-bold rounded-2xl border-2 transition-all duration-300", 
+                                    isAnswered ? "cursor-default" : "cursor-pointer active:scale-95",
+                                    btnClass
+                                )} 
+                                onClick={() => handleAnswer(answerValue)} 
+                                disabled={isAnswered}
+                            >
+                                <span className="text-lg md:text-xl">{option}</span>
+                            </button>
                         );
                     })}
                     </div>
-                </CardContent>
-                <CardFooter className="flex justify-end">
-                    <Button onClick={handleNext} disabled={!currentAnswer}>
-                        {currentQuestionIndex === questions.length - 1 ? 'Testi Bitir' : 'Sonraki Soru'}
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                </CardFooter>
-            </Card>
+                </div>
+
+                {/* Footer */}
+                <div className="flex justify-end mt-2 w-full">
+                    <button 
+                        onClick={handleNext} 
+                        disabled={!currentAnswer}
+                        className={cn(
+                            "flex w-full md:w-auto items-center justify-center gap-2 px-8 py-4 font-black rounded-2xl transition-all duration-300",
+                            currentAnswer 
+                                ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-[0_4px_20px_rgba(79,70,229,0.4)] hover:scale-105 active:scale-95" 
+                                : "bg-[#161233] border border-white/10 text-slate-500 opacity-50 cursor-not-allowed"
+                        )}
+                    >
+                        {currentQuestionIndex === questions.length - 1 ? 'TESTİ BİTİR' : 'SONRAKİ SORU'}
+                        <ArrowRight className="h-5 w-5" />
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

@@ -53,9 +53,8 @@ export async function addScore(userId: string, score: number, context: string): 
     const attemptsSnapshot = await getCountFromServer(attemptsQuery);
     const attemptCount = attemptsSnapshot.data().count;
 
-    if (attemptCount >= MAX_ATTEMPTS_PER_CONTEXT) {
-      return { success: false, error: "Bu konudan daha fazla puan kazanamazsınız (Maksimum deneme limiti)." };
-    }
+    // Milyoner yarışmasında puan limiti yoktur (kullanıcı talebi)
+    // Sadece spam kontrolü veya ek kurallar eklenebilir.
 
     await runTransaction(db, async (transaction) => {
       const userDoc = await transaction.get(userRef);

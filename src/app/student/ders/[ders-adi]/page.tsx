@@ -4,8 +4,6 @@
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 
 export default function CourseRedirectPage() {
     const router = useRouter();
@@ -17,18 +15,27 @@ export default function CourseRedirectPage() {
         if (courseId) {
             const findFirstUnitAndRedirect = async () => {
                 try {
-                    // Get the first unit of the course to redirect to its map page
-                    const unitsRef = collection(db, `courses/${courseId}/units`);
-                    const q = query(unitsRef, orderBy("title"), limit(1));
-                    const querySnapshot = await getDocs(q);
+                    const res = await fetch('/curriculum/manifest.json');
+                    if (!res.ok) throw new Error("Manifest bulunamadı.");
+                    const manifest = await res.json();
+                    
+                    let targetCourse = null;
+                    for (const group of manifest.classGroups) {
+                        const found = group.courses.find((c: any) => c.id === courseId);
+                        if (found) {
+                            targetCourse = found;
+                            break;
+                        }
+                    }
 
-                    if (!querySnapshot.empty) {
-                        const firstUnitId = querySnapshot.docs[0].id;
+                    if (targetCourse && targetCourse.units && targetCourse.units.length > 0) {
+                        // Üniteleri ismine göre sırala
+                        const sortedUnits = targetCourse.units.sort((a: any, b: any) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+                        const firstUnitId = sortedUnits[0].id;
                         router.replace(`/student/ders/${courseId}/${firstUnitId}`);
                     } else {
-                        // If no units, maybe redirect to a course-specific page or show an error
+                        // Eğer ünite yoksa hata ver ve yönlendir
                          setError("Bu derste henüz ünite bulunmuyor.");
-                         // Fallback redirect
                          router.replace(`/student/soru-bankasi`);
                     }
                 } catch (err) {

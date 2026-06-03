@@ -165,3 +165,47 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
 
     return { streakUpdated: true, newStreak, canSpinWheel: newCanSpin, currentStreak: newStreak };
 }
+
+// 4. Oyunlara Özel Konu Oynanma Sayılarını Getir
+export async function getUserGamePlayCounts(userId: string, gameType: string, gamePath: string): Promise<Record<string, number>> {
+    if (!userId) return {};
+    try {
+        // gameType ve gamePath varyasyonlarını belirle (Örn: Gol Kralı / Yazı Tura eşleşmesi için)
+        const typesToSearch = [gameType];
+        if (gamePath === 'yazi-tura' && !typesToSearch.includes('Yazı Tura')) typesToSearch.push('Yazı Tura');
+        if (gamePath === 'hedefi-vur' && !typesToSearch.includes('Hedefi Vur')) typesToSearch.push('Hedefi Vur');
+        
+        let allDocs: any[] = [];
+        
+        // Firestore'da 'in' sorgusu en fazla 10 eleman alır, burada 2-3 tane var, sorun yok.
+        // Güvenli olması için her type için ayrı sorgu atıp birleştiriyoruz
+        for (const type of typesToSearch) {
+            const q = query(
+                collection(db, 'scoreEvents'),
+                where('userId', '==', userId),
+                where('gameType', '==', type)
+            );
+            const snap = await getDocs(q);
+            snap.docs.forEach(d => allDocs.push(d.data()));
+        }
+
+        const counts: Record<string, number> = {};
+        
+        // Her eventin context'inde geçen konu adlarını tespit edeceğiz.
+        // Context string formatı oyuna göre değişir (örn: "Çarkıfelek - İman ve İslam" veya "Kelime Avı - Din > İman")
+        allDocs.forEach(event => {
+            const contextStr = event.context || '';
+            // Burada context üzerinden direkt sayım yapıyoruz. Frontend'te topic title ile bu sonucu eşleştireceğiz.
+            // Sayacı topicId değil, direkt context cümlesi olarak tutalım. Frontend bunu filter yapacak.
+            if (!counts[contextStr]) {
+                counts[contextStr] = 0;
+            }
+            counts[contextStr]++;
+        });
+
+        return counts;
+    } catch (error) {
+        console.error("Error fetching game play counts:", error);
+        return {};
+    }
+}

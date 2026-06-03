@@ -11,6 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
 import type { Course, Unit, Topic } from "@/lib/types";
+import { StudentOyunKurulum } from "@/components/student-oyun-kurulum";
 
 // Firebase Bağlantıları
 import { db } from '@/lib/firebase';
@@ -124,6 +125,19 @@ export function OyunKurulum({
     const [isLoading, setIsLoading] = useState(true);
     const [isRedirecting, setIsRedirecting] = useState(false); 
     
+    // Öğrenci ise yeni kurumu göster
+    if (user?.role === 'student' && dataType === 'games') {
+        return <StudentOyunKurulum 
+            pageTitle={initialPageTitle} 
+            gameName={gameName} 
+            gamePath={gamePath} 
+            pageIcon={PageIconProp} 
+            gameIcon={gameIcon} 
+            isStatic={isStatic} 
+            studentClassId={studentClassId} 
+        />;
+    }
+
     // Firestore'dan gelecek sınıf bilgisi state'i
     const [dbUserClass, setDbUserClass] = useState<string | null>(null);
     const [isClassFetching, setIsClassFetching] = useState(true);

@@ -413,112 +413,163 @@ function MilyonerGame() {
 
     return (
         <div ref={mainContainerRef} className="min-h-screen flex flex-col md:flex-row text-white overflow-hidden bg-[#000022] font-sans relative">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a5c_0%,_#000022_100%)] -z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-[#020617] to-[#0f172a] -z-10"></div>
+            {/* HAREKETLİ ARKA PLAN (Oyunlar Sayfası Estetiği) */}
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" style={{ opacity: 0.03 }}/>
+                <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse-slow" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
+            </div>
             
             <style>{`
-                .hex-box { clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%); }
-                .hex-box::before { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; background: #000033; clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%); z-index: -1; }
                 .answer-correct { animation: blink 0.5s 3; }
-                @keyframes blink { 0%, 100% { background-color: #059669; } 50% { background-color: #34d399; } }
+                @keyframes blink { 0%, 100% { background-color: #10b981; } 50% { background-color: #34d399; } }
+                .scrollbar-hide::-webkit-scrollbar { display: none; }
+                .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
             
             {/* TAM EKRAN BUTONU */}
             <div className="absolute top-4 right-4 z-50">
-                 <FullscreenToggle elementRef={mainContainerRef} className="bg-white/10 hover:bg-white/20 text-white rounded-full p-2" />
+                 <FullscreenToggle elementRef={mainContainerRef} className="bg-white/10 hover:bg-white/20 text-white rounded-full p-2 backdrop-blur-md" />
             </div>
 
-            <div className="flex-1 flex flex-col justify-between p-4 md:p-8 relative z-10 flex-grow overflow-y-auto">
+            {/* ANA OYUN ALANI */}
+            <div className="flex-1 flex flex-col justify-between p-4 pt-16 md:p-8 relative z-10 flex-grow overflow-y-auto">
                 
-                <div className="flex justify-between items-start mb-8">
+                {/* ÜST BAR: JOKERLER VE ÇEKİL */}
+                <div className="flex justify-between items-start mb-6">
                     {revealState === 'none' && (
-                        <button onClick={withdraw} className="px-4 py-2 border border-red-500 text-red-400 rounded hover:bg-red-900/50 transition-colors text-sm font-bold">
+                        <button onClick={withdraw} className="px-4 py-2 border-2 border-rose-500/50 bg-rose-500/10 text-rose-300 rounded-2xl hover:bg-rose-500/20 hover:border-rose-500 hover:text-white transition-all text-xs md:text-sm font-black shadow-[0_0_15px_rgba(244,63,94,0.2)]">
                             ÇEKİL
                         </button>
                     )}
                     
-                    {isMission && <span className="px-3 py-1 bg-indigo-900 border border-indigo-500 rounded-full text-xs font-bold text-indigo-300">GÖREV MODU</span>}
+                    {isMission && <span className="px-4 py-1.5 bg-indigo-900/60 border border-indigo-500/50 rounded-full text-xs font-black text-indigo-300 shadow-[0_0_10px_rgba(99,102,241,0.3)]">GÖREV MODU</span>}
 
-                    <div className="flex gap-4">
-                        <button onClick={useFiftyFifty} disabled={!lifelines.fifty} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="%50">
-                            <span className="text-sm">50:50</span>
-                            {!lifelines.fifty && <X className="absolute text-red-600 w-full h-full" />}
+                    <div className="flex gap-2 md:gap-3 ml-auto">
+                        <button onClick={useFiftyFifty} disabled={!lifelines.fifty} className="w-12 h-12 md:w-14 md:h-14 rounded-2xl border-b-[4px] border-yellow-600 bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center font-black text-yellow-950 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(234,179,8,0.4)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all relative" title="%50">
+                            <span className="text-sm md:text-base">50:50</span>
+                            {!lifelines.fifty && <X className="absolute text-red-700 w-8 h-8 drop-shadow-md" />}
                         </button>
-                        <button onClick={usePhone} disabled={!lifelines.phone} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="Telefon">
-                            <Phone size={20} />
-                            {!lifelines.phone && <X className="absolute text-red-600 w-full h-full" />}
+                        <button onClick={usePhone} disabled={!lifelines.phone} className="w-12 h-12 md:w-14 md:h-14 rounded-2xl border-b-[4px] border-cyan-600 bg-gradient-to-br from-cyan-400 to-cyan-500 flex items-center justify-center font-black text-cyan-950 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(6,182,212,0.4)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all relative" title="Telefon">
+                            <Phone className="w-6 h-6 md:w-7 md:h-7" />
+                            {!lifelines.phone && <X className="absolute text-red-700 w-8 h-8 drop-shadow-md" />}
                         </button>
-                        <button onClick={useAudience} disabled={!lifelines.audience} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="Seyirci">
-                            <Users size={20} />
-                            {!lifelines.audience && <X className="absolute text-red-600 w-full h-full" />}
+                        <button onClick={useAudience} disabled={!lifelines.audience} className="w-12 h-12 md:w-14 md:h-14 rounded-2xl border-b-[4px] border-fuchsia-600 bg-gradient-to-br from-fuchsia-400 to-fuchsia-500 flex items-center justify-center font-black text-fuchsia-950 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(217,70,239,0.4)] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all relative" title="Seyirci">
+                            <Users className="w-6 h-6 md:w-7 md:h-7" />
+                            {!lifelines.audience && <X className="absolute text-red-700 w-8 h-8 drop-shadow-md" />}
                         </button>
                     </div>
                 </div>
 
-                <div className="flex-1 flex flex-col items-center justify-center">
-                    <div className="hex-box w-full min-h-[120px] px-12 py-6 mb-8 bg-gradient-to-b from-[#1e3c72] to-[#2a5298] border-2 border-[#d4af37] flex items-center justify-center text-center shadow-[0_0_15px_rgba(212,175,55,0.3)] relative z-10">
-                        <h2 className="text-lg md:text-2xl font-bold text-white leading-relaxed z-20">
+                {/* SORU KUTUSU */}
+                <div className="flex-1 flex flex-col items-center justify-center w-full max-w-4xl mx-auto z-10">
+                    <div className="w-full min-h-[140px] px-6 py-8 md:px-10 md:py-10 mb-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] flex items-center justify-center text-center shadow-[0_8px_32px_rgba(0,0,0,0.3)] relative">
+                        {/* İç Işıltı */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent rounded-[2.5rem]"></div>
+                        {/* Numara */}
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-black text-sm md:text-base px-6 py-1.5 rounded-full shadow-lg border border-white/20">
+                            SORU {qIndex + 1}
+                        </div>
+                        <h2 className="text-xl md:text-2xl lg:text-3xl font-black text-white leading-relaxed drop-shadow-md z-10">
                             {currentQ.text}
                         </h2>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 w-full">
+                {/* CEVAP SEÇENEKLERİ */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 w-full max-w-4xl mx-auto z-10">
                     {(currentQ.options || []).map((opt, idx) => {
-                        let bgClass = "bg-gradient-to-r from-[#000044] via-[#1e3c72] to-[#000044]";
-                        let borderClass = "border-gray-500";
-                        let textClass = "text-white";
-                        if (revealState === 'selected' && selectedOption === opt) { bgClass = "bg-[#d97706]"; borderClass = "border-white"; }
+                        let bgClass = "bg-white/5 hover:bg-white/10";
+                        let borderClass = "border-white/10 border-b-white/20";
+                        let textClass = "text-slate-200 hover:text-white";
+                        let badgeClass = "text-indigo-400 bg-indigo-500/10";
+
+                        if (revealState === 'selected' && selectedOption === opt) { 
+                            bgClass = "bg-amber-500"; 
+                            borderClass = "border-amber-400 border-b-amber-700";
+                            textClass = "text-white";
+                            badgeClass = "text-amber-900 bg-white/20";
+                        }
                         if (revealState === 'revealed') {
-                            if (opt === currentQ.correctAnswer) { bgClass = "bg-[#059669] answer-correct"; borderClass = "border-[#34d399]"; } 
-                            else if (opt === selectedOption) { bgClass = "bg-[#dc2626]"; borderClass = "border-[#f87171]"; }
+                            if (opt === currentQ.correctAnswer) { 
+                                bgClass = "bg-emerald-500 answer-correct"; 
+                                borderClass = "border-emerald-400 border-b-emerald-700"; 
+                                textClass = "text-white";
+                                badgeClass = "text-emerald-900 bg-white/20";
+                            } else if (opt === selectedOption) { 
+                                bgClass = "bg-rose-500"; 
+                                borderClass = "border-rose-400 border-b-rose-700";
+                                textClass = "text-white";
+                                badgeClass = "text-rose-900 bg-white/20";
+                            }
                         }
 
-                        if (eliminatedOptions.includes(opt)) { return <div key={idx} className="h-[52px] md:h-[60px]"></div>; }
+                        if (eliminatedOptions.includes(opt)) { return <div key={idx} className="h-[64px] md:h-[76px]"></div>; }
+                        
                         return (
-                            <button key={idx} onClick={() => handleOptionSelect(opt)} disabled={revealState !== 'none'} className={`py-3 px-6 text-left flex items-center rounded-full border hover:border-white hover:text-yellow-300 transition-all ${bgClass} ${borderClass} ${textClass} h-auto justify-start`}>
-                                <span className="text-[#d4af37] font-bold mr-3 w-6 text-lg">{String.fromCharCode(65 + idx)}:</span>
-                                <span className="flex-1 font-semibold">{opt}</span>
+                            <button 
+                                key={idx} 
+                                onClick={() => handleOptionSelect(opt)} 
+                                disabled={revealState !== 'none'} 
+                                className={cn(
+                                    "relative px-4 py-4 md:px-6 md:py-5 text-left flex items-center rounded-2xl border-2 transition-all duration-300 w-full outline-none",
+                                    "border-b-[6px] active:border-b-2 active:translate-y-1 shadow-lg",
+                                    bgClass, borderClass, textClass
+                                )}
+                            >
+                                <div className={cn("flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center font-black mr-3 md:mr-4 transition-colors", badgeClass)}>
+                                    {String.fromCharCode(65 + idx)}
+                                </div>
+                                <span className="flex-1 font-bold text-sm md:text-lg leading-tight">{opt}</span>
                             </button>
                         );
                     })}
                 </div>
             </div>
 
-            <div className="w-full md:w-64 bg-blue-900/30 border-l-0 md:border-l border-blue-800 p-4 flex flex-col justify-center order-last md:order-last pb-24 md:pb-4">
-                <div className="grid grid-cols-5 md:flex md:flex-col-reverse gap-2">
+            {/* ÖDÜL MERDİVENİ */}
+            <div className="w-full md:w-72 bg-black/40 backdrop-blur-xl border-b md:border-b-0 md:border-l border-white/10 p-4 flex flex-col justify-center order-first md:order-last z-20 shadow-2xl">
+                <div className="flex md:flex-col-reverse gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-hide snap-x">
                     {MONEY_LEVELS.slice(0, questions.length).map((money, idx) => (
                         <div key={idx} className={cn(
-                            "flex justify-center items-center px-3 py-1 text-sm font-mono rounded-md text-center",
-                            idx === qIndex ? 'bg-[#d4af37] text-[#000033] font-bold scale-105 shadow-lg text-base' : 'text-[#d4af37]',
-                            "border border-transparent",
-                            idx === qIndex && "border-white"
+                            "flex-shrink-0 snap-center flex justify-center items-center px-4 py-2 md:py-3 rounded-xl transition-all duration-300 font-black",
+                            idx === qIndex 
+                                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-yellow-950 scale-105 shadow-[0_0_20px_rgba(245,158,11,0.5)] border border-yellow-200 md:-ml-4' 
+                                : (idx < qIndex ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-white/5 text-slate-400 border border-white/5')
                         )}>
-                            <span>{money}</span>
+                            <div className="flex items-center gap-2">
+                                <span className={cn("text-xs opacity-60 hidden md:inline-block", idx === qIndex && "text-yellow-800")}>{idx + 1}.</span>
+                                <span className="text-sm md:text-lg">{money} Puan</span>
+                            </div>
                         </div>
                     ))}
                 </div>
             </div>
 
             {modalContent && (
-                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 backdrop-blur-sm" onClick={() => setModalContent(null)}>
-                    <div className="bg-[#000033] border-2 border-[#d4af37] p-6 rounded-xl max-w-sm w-full shadow-[0_0_20px_rgba(212,175,55,0.5)]" onClick={e => e.stopPropagation()}>
-                        <div className="flex items-center gap-3 mb-4 border-b border-[#d4af37] pb-2">
-                            {modalContent.icon}
-                            <h3 className="text-xl font-bold text-[#d4af37]">{modalContent.title}</h3>
+                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 backdrop-blur-md" onClick={() => setModalContent(null)}>
+                    <div className="bg-slate-900 border-2 border-indigo-500/50 p-6 rounded-3xl max-w-sm w-full shadow-[0_0_40px_rgba(99,102,241,0.3)] relative overflow-hidden" onClick={e => e.stopPropagation()}>
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent -z-10"></div>
+                        <div className="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
+                            <div className="p-3 bg-indigo-500/20 rounded-2xl border border-indigo-500/30">
+                                {modalContent.icon}
+                            </div>
+                            <h3 className="text-xl font-black text-white">{modalContent.title}</h3>
                         </div>
-                        {modalContent.text && <p className="text-white whitespace-pre-line text-lg leading-relaxed">{modalContent.text}</p>}
+                        {modalContent.text && <p className="text-slate-300 whitespace-pre-line text-lg leading-relaxed font-medium">{modalContent.text}</p>}
                         {modalContent.chartData && (
-                            <div className="flex justify-around items-end h-40 gap-2 pt-4 bg-blue-900/30 rounded-lg p-4">
+                            <div className="flex justify-around items-end h-48 gap-3 pt-4 bg-black/30 rounded-2xl p-5 border border-white/5">
                                 {modalContent.chartData.map((data: {name: string, value: number}, i: number) => (
                                     <div key={i} className="flex flex-col items-center w-1/4 h-full justify-end group">
-                                        <div className="text-xs text-yellow-300 mb-1 font-bold">{data.value}%</div>
-                                        <div className="w-full bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t transition-all duration-500" style={{ height: `${data.value}%` }}></div>
-                                        <div className="text-sm font-bold mt-2 text-yellow-500">{data.name}</div>
+                                        <div className="text-sm text-yellow-400 mb-2 font-black">{data.value}%</div>
+                                        <div className="w-full bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t-xl transition-all duration-1000 ease-out border-t-2 border-yellow-300" style={{ height: `${data.value}%` }}></div>
+                                        <div className="text-xs font-black mt-3 text-white truncate w-full text-center">{String.fromCharCode(65 + i)}</div>
                                     </div>
                                 ))}
                             </div>
                         )}
-                        <button onClick={() => setModalContent(null)} className="mt-6 w-full py-2 bg-blue-700 hover:bg-blue-600 text-white rounded text-sm font-bold transition-colors">
+                        <button onClick={() => setModalContent(null)} className="mt-8 w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-base font-black transition-all active:scale-95 shadow-lg shadow-indigo-600/30">
                             TAMAM
                         </button>
                     </div>

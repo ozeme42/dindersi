@@ -415,6 +415,7 @@ export type GetQuizInput = {
     difficulty?: string[];
     questionTypes?: string[];
     isStatic?: boolean;
+    excludeSolvedByUserId?: string;
 };
 
 export type GetQuizOutput = {

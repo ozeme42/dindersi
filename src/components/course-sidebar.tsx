@@ -3,10 +3,9 @@
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import type { Course, Topic, Unit } from '@/lib/types';
-import { Lock, Check, Play, Workflow, ArrowLeft } from 'lucide-react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Button } from '@/components/ui/button';
+import { Lock, Check, Play, Workflow, ChevronRight, Sparkles, Star, ArrowLeft, BookOpen, BookText, BookCheck, GraduationCap, Library } from 'lucide-react';
 import Link from 'next/link';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 interface CourseSidebarProps {
     course: Course;
@@ -15,7 +14,7 @@ interface CourseSidebarProps {
     onSelectUnitFlow?: (unit: Unit) => void;
     isTopicUnlocked: (topicId: string) => boolean;
     isTopicCompleted: (topicId: string) => boolean;
-    topicProgress?: { [topicId: string]: any }; 
+    topicProgress?: { [topicId: string]: any };
     testCounts?: { [topicId: string]: { easy: number, medium: number, hard: number } | null };
 }
 
@@ -28,174 +27,237 @@ export function CourseSidebar({
     isTopicCompleted,
     testCounts,
 }: CourseSidebarProps) {
-    
     const activeRef = useRef<HTMLDivElement>(null);
 
-    // Aktif konu değiştiğinde scrol'u oraya kaydır
     useEffect(() => {
         if (activeRef.current) {
             activeRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }, [activeTopic]);
 
-    // 1. Üniteleri Numarasına Göre Sırala (Görüntü İçin)
     const sortedUnits = React.useMemo(() => {
         if (!course?.units) return [];
-        return [...course.units].sort((a, b) => 
+        return [...course.units].sort((a, b) =>
             (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })
         );
     }, [course]);
 
+    const totalProgress = calculateTotalProgress(course, isTopicCompleted);
+    const allTopics = course.units?.flatMap(u => u.topics || []) || [];
+    const completedCount = allTopics.filter(t => isTopicCompleted(t.id)).length;
+
     return (
-        <div className="h-full flex flex-col bg-slate-950 border-r border-white/5 select-none">
-            {/* Header */}
-            <div className="p-4 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between gap-2">
+        <div className="h-full flex flex-col bg-[#09071a] select-none">
+
+            {/* ══ GERİ BUTONU + DERS BAŞLIĞI ══ */}
+            <div className="relative px-4 py-3 flex items-center gap-3 border-b border-white/8 bg-[#09071a]/90 backdrop-blur-xl shrink-0">
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
+                <Link href="/student/soru-bankasi" className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all shrink-0 flex items-center justify-center">
+                    <ArrowLeft className="w-4 h-4" />
+                </Link>
                 <div className="flex-1 min-w-0">
-                    <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Ders İçeriği</h3>
-                    <h2 className="font-bold text-white text-lg leading-tight line-clamp-1">{course.title}</h2>
+                    <p className="text-slate-500 text-[9px] font-black uppercase tracking-[0.2em] leading-none mb-0.5">Ders</p>
+                    <h2 className="font-black text-white text-sm truncate leading-none flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                        {course.title}
+                    </h2>
                 </div>
-                 <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl flex-shrink-0">
-                    <Link href="/student/soru-bankasi"><ArrowLeft className="h-5 w-5"/></Link>
-                </Button>
             </div>
 
-            {/* List */}
-            <div className="overflow-y-auto flex-grow custom-scrollbar">
-                <div className="p-4 pb-20">
-                    <Accordion type="multiple" defaultValue={sortedUnits.map(u => u.id)} className="space-y-6">
+            {/* ══ İLERLEME ÖZET KARTI ══ */}
+            <div className="relative px-4 pt-4 pb-3 border-b border-white/8 bg-[#09071a]/80 backdrop-blur-xl shrink-0">
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
+
+                {/* İlerleme bar */}
+                <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Ders İlerlemesi</span>
+                    </div>
+                    <span className="text-[10px] font-black text-white tabular-nums">
+                        {completedCount}<span className="text-slate-600">/{allTopics.length}</span>
+                    </span>
+                </div>
+                <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                    <div
+                        className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(168,85,247,0.5)] transition-all duration-1000 ease-out"
+                        style={{ width: `${totalProgress}%` }}
+                    />
+                </div>
+                <div className="flex items-center gap-3 mt-2.5">
+                    <span className="flex items-center gap-1 text-[9px] font-bold text-slate-500">
+                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_4px_rgba(129,140,248,0.8)]" />
+                        Aktif
+                    </span>
+                    <span className="flex items-center gap-1 text-[9px] font-bold text-slate-500">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)]" />
+                        Bitti
+                    </span>
+                    <span className="flex items-center gap-1 text-[9px] font-bold text-slate-500">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-600" />
+                        Kilitli
+                    </span>
+                </div>
+            </div>
+
+            {/* ══ KONU LİSTESİ ══ */}
+            <div className="overflow-y-auto flex-grow" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(99,102,241,0.2) transparent' }}>
+                <div className="p-3 pb-24 space-y-2">
+                    <Accordion type="multiple" defaultValue={sortedUnits.map(u => u.id)}>
                         {sortedUnits.map((unit, unitIndex) => {
-                             
-                             // 2. Konuları Numarasına Göre Sırala (Görüntü İçin)
-                             const sortedTopics = (unit.topics || []).sort((a, b) => 
+                            const sortedTopics = (unit.topics || []).sort((a, b) =>
                                 (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })
                             );
+                            const unitCompleted = sortedTopics.every(t => isTopicCompleted(t.id));
+                            const unitStarted = sortedTopics.some(t => isTopicCompleted(t.id));
 
                             return (
-                            <AccordionItem key={unit.id} value={unit.id} className="border-none">
-                                
-                                <AccordionTrigger className="py-3 px-4 mb-4 bg-slate-900/80 hover:bg-slate-800 rounded-xl border border-white/5 text-slate-200 hover:text-white transition-all hover:no-underline group">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 group-hover:border-indigo-500/50 transition-colors">
-                                            <span className="text-xs font-bold text-indigo-400">{unitIndex + 1}</span>
-                                        </div>
-                                        <span className="font-semibold text-sm text-left">{unit.title}</span>
-                                    </div>
-                                </AccordionTrigger>
+                                <AccordionItem key={unit.id} value={unit.id} className="border-none mb-2">
 
-                                <AccordionContent className="pt-0 pb-2 pl-2">
-                                    {(onSelectUnitFlow && (unit as any).hasFlowContent) && (
-                                        <div className="relative pl-6 pb-2 mb-2">
-                                             <div className="absolute left-[-5px] top-0 bottom-0 w-2.5 flex items-center">
-                                                <div className="w-2.5 h-full border-l-2 border-slate-800 -translate-x-px" />
+                                    {/* Ünite Başlığı */}
+                                    <AccordionTrigger className={cn(
+                                        "py-0 px-0 hover:no-underline group/trigger"
+                                    )}>
+                                        <div className={cn(
+                                            "w-full flex items-center gap-3 px-3 py-3 rounded-2xl border transition-all duration-300",
+                                            unitCompleted
+                                                ? "bg-emerald-950/30 border-emerald-500/25 hover:border-emerald-500/40"
+                                                : unitStarted
+                                                    ? "bg-indigo-950/30 border-indigo-500/20 hover:border-indigo-500/40"
+                                                    : "bg-white/3 border-white/8 hover:bg-white/5 hover:border-white/12"
+                                        )}>
+                                            {/* Numara rozeti */}
+                                            <div className={cn(
+                                                "w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border font-black text-sm transition-all",
+                                                unitCompleted
+                                                    ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
+                                                    : unitStarted
+                                                        ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-300"
+                                                        : "bg-white/5 border-white/10 text-slate-500"
+                                            )}>
+                                                {unitCompleted ? <GraduationCap className="w-4 h-4 text-emerald-400" /> : unitIndex + 1}
                                             </div>
-                                            <button 
-                                                onClick={() => onSelectUnitFlow(unit)}
-                                                className="w-full text-left p-3 rounded-xl border transition-all duration-300 flex items-center justify-between group/card relative overflow-hidden bg-purple-900/20 border-purple-500/50 hover:bg-purple-800/40 hover:border-purple-400/80"
-                                            >
-                                                <div className="flex items-center gap-3 min-w-0">
-                                                    <div className="shrink-0 text-purple-400">
-                                                        <Workflow className="w-4 h-4" />
-                                                    </div>
-                                                    <span className="text-sm font-bold truncate text-white">
-                                                        Ünite Akışını Başlat
-                                                    </span>
-                                                </div>
-                                            </button>
+                                            <span className={cn(
+                                                "font-black text-sm text-left flex-1 leading-tight",
+                                                unitCompleted ? "text-emerald-200" : unitStarted ? "text-indigo-200" : "text-slate-300"
+                                            )}>
+                                                {unit.title}
+                                            </span>
                                         </div>
-                                    )}
+                                    </AccordionTrigger>
 
-                                    <div className="relative border-l-2 border-slate-800 ml-4 space-y-1">
-                                            {sortedTopics.map((topic) => {
+                                    <AccordionContent className="pt-2 pb-0 pl-2">
+
+                                        {/* Ünite akışı */}
+                                        {(onSelectUnitFlow && (unit as any).hasFlowContent) && (
+                                            <div className="mb-2 ml-2">
+                                                <button
+                                                    onClick={() => onSelectUnitFlow(unit)}
+                                                    className="w-full text-left px-4 py-3 rounded-2xl border transition-all duration-300 flex items-center gap-3 group/flow bg-violet-950/30 border-violet-500/30 hover:bg-violet-900/40 hover:border-violet-400/50 active:scale-[0.98]"
+                                                >
+                                                    <div className="w-8 h-8 rounded-xl bg-violet-500/20 border border-violet-500/40 flex items-center justify-center shrink-0">
+                                                        <Library className="w-4 h-4 text-violet-300" />
+                                                    </div>
+                                                    <span className="text-sm font-black text-violet-200">Ünite Akışını Başlat</span>
+                                                    <ChevronRight className="w-4 h-4 text-violet-400 ml-auto group-hover/flow:translate-x-0.5 transition-transform" />
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {/* Konular: Dikey zincir */}
+                                        <div className="relative ml-4 pl-4 border-l-2 border-white/5 space-y-1.5">
+                                            {sortedTopics.map((topic, topicIndex) => {
                                                 const isUnlocked = isTopicUnlocked(topic.id);
                                                 const isCompleted = isTopicCompleted(topic.id);
-                                                
-                                                // Konu erişilebilir mi? (Kilidi açıksa VEYA zaten bitmişse)
                                                 const isAccessible = isUnlocked || isCompleted;
-
                                                 const isActive = activeTopic?.id === topic.id;
-                                                
                                                 const topicTestCounts = testCounts ? testCounts[topic.id] : null;
                                                 const hasTests = topicTestCounts ? (topicTestCounts.easy > 0 || topicTestCounts.medium > 0 || topicTestCounts.hard > 0) : true;
 
                                                 return (
-                                                    <div 
-                                                        key={topic.id} 
+                                                    <div
+                                                        key={topic.id}
                                                         ref={isActive ? activeRef : null}
-                                                        className="relative pl-6 py-2 group/topic"
+                                                        className="relative"
                                                     >
-                                                        {/* Sol Taraftaki Bağlantı Çizgisi ve Nokta */}
+                                                        {/* Zincir noktası */}
                                                         <div className={cn(
-                                                            "absolute left-[-5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-all duration-300 z-10 box-content",
-                                                            isActive 
-                                                                ? "bg-cyan-500 border-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)] scale-125" 
-                                                                : isCompleted 
-                                                                    ? "bg-slate-900 border-emerald-500" 
-                                                                    : isAccessible 
-                                                                        ? "bg-slate-900 border-slate-500 group-hover/topic:border-white" // Sıradaki ama seçili değil
-                                                                        : "bg-slate-900 border-slate-700" // Kilitli
-                                                        )}>
-                                                                {isCompleted && !isActive && (
-                                                                    <div className="absolute inset-0 flex items-center justify-center">
-                                                                        <div className="w-1 h-1 bg-emerald-500 rounded-full" />
-                                                                    </div>
-                                                                )}
-                                                        </div>
+                                                            "absolute -left-[21px] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 transition-all duration-300 z-10",
+                                                            isActive
+                                                                ? "bg-indigo-500 border-indigo-300 shadow-[0_0_10px_rgba(99,102,241,0.9)] scale-125"
+                                                                : isCompleted
+                                                                    ? "bg-emerald-500 border-emerald-300 shadow-[0_0_8px_rgba(52,211,153,0.6)]"
+                                                                    : isAccessible
+                                                                        ? "bg-slate-800 border-slate-500"
+                                                                        : "bg-slate-900 border-slate-700"
+                                                        )} />
 
                                                         {/* Konu Butonu */}
                                                         <button
                                                             onClick={() => isAccessible && onSelectTopic(topic)}
                                                             disabled={!isAccessible || !hasTests}
                                                             className={cn(
-                                                                "w-full text-left p-3 rounded-xl border transition-all duration-300 flex items-center justify-between group/card relative overflow-hidden",
-                                                                isActive 
-                                                                    ? "bg-cyan-950/30 border-cyan-500/50 shadow-[0_0_15px_rgba(8,145,178,0.1)]" 
+                                                                "w-full text-left px-3 py-2.5 rounded-2xl border transition-all duration-200 flex items-center gap-3 group/card relative overflow-hidden active:scale-[0.97]",
+                                                                isActive
+                                                                    ? "bg-indigo-950/50 border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.15)]"
                                                                     : isCompleted
-                                                                        ? "bg-emerald-950/10 border-emerald-500/20 hover:bg-emerald-900/20 hover:border-emerald-500/40" // Biten konular yeşilimsi
+                                                                        ? "bg-emerald-950/20 border-emerald-500/20 hover:bg-emerald-950/30 hover:border-emerald-500/35"
                                                                         : !isAccessible || !hasTests
-                                                                            ? "bg-transparent border-transparent opacity-50 cursor-not-allowed" 
-                                                                            : "bg-slate-900/20 border-white/5 hover:bg-slate-800 hover:border-white/10"
+                                                                            ? "bg-transparent border-transparent opacity-40 cursor-not-allowed"
+                                                                            : "bg-white/3 border-white/6 hover:bg-white/6 hover:border-white/12"
                                                             )}
                                                         >
-                                                            {isActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />}
+                                                            {/* Aktif sol çizgi */}
+                                                            {isActive && (
+                                                                <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)] rounded-full" />
+                                                            )}
 
-                                                            <div className="flex items-center gap-3 min-w-0">
-                                                                <div className={cn(
-                                                                    "shrink-0 transition-colors",
-                                                                    isActive ? "text-cyan-400" : isCompleted ? "text-emerald-500" : !isAccessible ? "text-slate-600" : "text-slate-400"
-                                                                )}>
-                                                                    {!isAccessible ? <Lock className="w-4 h-4" /> : isCompleted ? <Check className="w-4 w-4" /> : <Play className="w-4 w-4 fill-current" />}
-                                                                </div>
-                                                                <div className="flex flex-col min-w-0">
-                                                                    <span className={cn(
-                                                                        "text-sm font-medium truncate pr-2 transition-colors",
-                                                                        isActive ? "text-white" : isCompleted ? "text-emerald-100/80" : !isAccessible ? "text-slate-500" : "text-slate-300 group-hover/card:text-white"
-                                                                    )}>
-                                                                        {topic.title}
-                                                                    </span>
-                                                                    {!hasTests && isAccessible && (
-                                                                         <span className="text-[10px] text-red-500 font-bold">Soru Yok</span>
-                                                                    )}
-                                                                </div>
+                                                            {/* Durum ikonu */}
+                                                            <div className={cn(
+                                                                "w-7 h-7 rounded-xl flex items-center justify-center border shrink-0 transition-all",
+                                                                isActive
+                                                                    ? "bg-indigo-500/25 border-indigo-500/50 text-indigo-300"
+                                                                    : isCompleted
+                                                                        ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-400"
+                                                                        : !isAccessible
+                                                                            ? "bg-transparent border-slate-800 text-slate-600"
+                                                                            : "bg-white/5 border-white/10 text-slate-400"
+                                                            )}>
+                                                                {!isAccessible
+                                                                    ? <Lock className="w-3.5 h-3.5" />
+                                                                    : isCompleted && !isActive
+                                                                        ? <BookCheck className="w-3.5 h-3.5" />
+                                                                        : <BookText className="w-3.5 h-3.5" />
+                                                                }
                                                             </div>
+
+                                                            {/* Başlık */}
+                                                            <div className="flex flex-col min-w-0 flex-1">
+                                                                <span className={cn(
+                                                                    "text-sm font-bold truncate leading-tight transition-colors",
+                                                                    isActive ? "text-white" : isCompleted ? "text-emerald-100/80" : !isAccessible ? "text-slate-600" : "text-slate-300 group-hover/card:text-white"
+                                                                )}>
+                                                                    {topic.title}
+                                                                </span>
+                                                                {!hasTests && isAccessible && (
+                                                                    <span className="text-[9px] text-rose-500 font-black uppercase tracking-wide">Soru Yok</span>
+                                                                )}
+                                                            </div>
+
+                                                            {/* Aktif ok */}
+                                                            {isActive && (
+                                                                <ChevronRight className="w-4 h-4 text-indigo-400 shrink-0" />
+                                                            )}
                                                         </button>
                                                     </div>
                                                 );
                                             })}
-                                    </div>
-                                </AccordionContent>
-                            </AccordionItem>
-                        )})}
+                                        </div>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            );
+                        })}
                     </Accordion>
-                </div>
-            </div>
-
-            {/* Footer */}
-            <div className="p-4 border-t border-white/5 bg-slate-900/80 backdrop-blur-md text-[10px] text-slate-500 flex justify-between items-center">
-                <span>İlerleme: %{calculateTotalProgress(course, isTopicCompleted)}</span>
-                <div className="flex gap-3">
-                    <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500"></div> Aktif</span>
-                    <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div> Bitti</span>
-                    <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-slate-600"></div> Kilitli</span>
                 </div>
             </div>
         </div>

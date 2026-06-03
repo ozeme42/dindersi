@@ -3,13 +3,13 @@
 
 import React, { Suspense } from 'react';
 import { OyunKurulum } from '@/components/oyun-kurulum';
-import { Coins, Loader2 } from 'lucide-react';
+import { Trophy, Loader2 } from 'lucide-react';
 
 function YaziTuraPage() {
     return (
         <OyunKurulum 
-            gameName="Yazı Tura"
-            gameIcon={Coins}
+            gameName="Gol Kralı"
+            gameIcon={Trophy}
             gamePath="yazi-tura"
             dataType="games"
             isStatic={true}

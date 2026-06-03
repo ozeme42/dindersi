@@ -6,7 +6,7 @@ import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/
 import path from 'path';
 import fs from 'fs/promises';
 import { db } from "@/lib/firebase"; 
-import { collection, query, where, getDocs, limit as firestoreLimit, Query, and, collectionGroup } from "firebase/firestore";
+import { collection, query, where, getDocs, limit as firestoreLimit, Query, and, collectionGroup, doc, getDoc } from "firebase/firestore";
 
 // This is a type guard to check if an object is a valid Question.
 function isQuestion(obj: any): obj is Question {
@@ -15,12 +15,12 @@ function isQuestion(obj: any): obj is Question {
 
 // Centralized function to fetch questions - DYNAMIC DB-BASED
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
-    const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes, isStatic } = params;
+    const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes, isStatic = true, excludeSolvedByUserId } = params;
 
     // Eğer statik mod ise, getStaticQuestionsForGame'i çağır
     if (isStatic) {
         // Here, we call a new function dedicated to reading static files for both questions and activities
-        const staticItems = await getStaticGameData({ topicId });
+        const staticItems = await getStaticGameData({ courseId, unitId, topicId });
         
         let filteredItems: (Question | ActivityItem)[] = staticItems;
 
@@ -44,10 +44,41 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             });
         }
 
+        if (excludeSolvedByUserId) {
+            try {
+                const solvedRef = doc(db, 'users', excludeSolvedByUserId, 'questionBankProgress', 'solved');
+                const solvedSnap = await getDoc(solvedRef);
+                if (solvedSnap.exists()) {
+                    const solvedIds: string[] = solvedSnap.data()?.ids || [];
+                    if (solvedIds.length > 0) {
+                        filteredItems = filteredItems.filter(q => {
+                            if ('id' in q && q.id) {
+                                return !solvedIds.includes(q.id);
+                            }
+                            // Generate a simple hash/id for static items without ID based on their text
+                            const textId = 'text' in q ? q.text : ('term' in q ? q.term : '');
+                            return !solvedIds.includes(textId); // Just a fallback if static items lack 'id'
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error("Error fetching solved questions for filtering:", e);
+            }
+        }
+
         const shuffled = filteredItems.sort(() => 0.5 - Math.random());
         const selectedItems = shuffled.slice(0, questionCount);
 
-        return { questions: JSON.parse(JSON.stringify(selectedItems)) };
+        const itemsWithShuffledOptions = selectedItems.map(question => {
+            if ('type' in question && (question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma' || question.type === 'mcq' || question.type === 'fitb') && 'options' in question && question.options) {
+                const newOptions = [...question.options];
+                newOptions.sort(() => Math.random() - 0.5);
+                return { ...question, options: newOptions };
+            }
+            return question;
+        });
+
+        return { questions: JSON.parse(JSON.stringify(itemsWithShuffledOptions)) };
     }
     
     // --- DYNAMIC DB LOGIC ---
@@ -82,10 +113,26 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         
         const querySnapshot = await getDocs(q);
         
-        const allQuestions = querySnapshot.docs.map(doc => {
+        let allQuestions = querySnapshot.docs.map(doc => {
             const data = doc.data();
             return { id: doc.id, ...data } as Question | ActivityItem;
         });
+
+        // KULLANICININ DAHA ÖNCE ÇÖZDÜĞÜ SORULARI FİLTRELE
+        if (excludeSolvedByUserId) {
+            try {
+                const solvedRef = doc(db, 'users', excludeSolvedByUserId, 'questionBankProgress', 'solved');
+                const solvedSnap = await getDoc(solvedRef);
+                if (solvedSnap.exists()) {
+                    const solvedIds: string[] = solvedSnap.data()?.ids || [];
+                    if (solvedIds.length > 0) {
+                        allQuestions = allQuestions.filter(q => !solvedIds.includes(q.id));
+                    }
+                }
+            } catch (e) {
+                console.error("Error fetching solved questions for filtering:", e);
+            }
+        }
 
         const shuffled = allQuestions.sort(() => 0.5 - Math.random());
         const selectedQuestions = shuffled.slice(0, questionCount);
@@ -178,6 +225,37 @@ export async function getStaticGameData(params: {
             console.error("Error reading manifest to get topics for unit:", e);
         }
         return allUnitItems;
+    } else if (params.courseId && params.courseId !== 'all') {
+        let allCourseItems: (ActivityItem | Question)[] = [];
+        try {
+            const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+            const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+            const manifest = JSON.parse(manifestContent);
+            
+            let targetCourse;
+            for (const group of manifest.classGroups) {
+                const foundCourse = group.courses.find((c: any) => c.id === params.courseId);
+                if (foundCourse) {
+                    targetCourse = foundCourse;
+                    break;
+                }
+            }
+
+            if (targetCourse && targetCourse.units) {
+                const allTopicIds: string[] = [];
+                for (const unit of targetCourse.units) {
+                    if (unit.topics) {
+                        allTopicIds.push(...unit.topics.map((t: any) => t.id));
+                    }
+                }
+                const topicDataPromises = allTopicIds.map(id => readDataForTopic(id));
+                const allTopicsData = await Promise.all(topicDataPromises);
+                allCourseItems = allTopicsData.flat();
+            }
+        } catch(e) {
+            console.error("Error reading manifest to get topics for course:", e);
+        }
+        return allCourseItems;
     }
 
     return [];

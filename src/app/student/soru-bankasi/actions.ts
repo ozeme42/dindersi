@@ -12,7 +12,8 @@ import {
   query, 
   where, 
   getCountFromServer,
-  getDoc
+  getDoc,
+  arrayUnion
 } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache'; 
 import type { Course, Question, QuestionBankProgress, TestResult, QuestionBankStats } from '@/lib/types';
@@ -138,7 +139,8 @@ export async function updateTopicTestProgress(
     topicId: string, 
     difficultyKey: 'easy' | 'medium' | 'hard', 
     testIndex: number, 
-    result: TestResult
+    result: TestResult,
+    solvedQuestionIds?: string[]
 ): Promise<{ success: boolean; error?: string }> {
     try {
         const batch = writeBatch(db);
@@ -171,6 +173,14 @@ export async function updateTopicTestProgress(
                 context: `${topicId} - ${difficultyKey} - Test ${testIndex + 1}`,
                 completed: result.status === 'passed'
             });
+        }
+        
+        // 4. Çözülen (doğru bilinen) soruları havuza ekle
+        if (solvedQuestionIds && solvedQuestionIds.length > 0) {
+            const solvedRef = doc(db, 'users', userId, 'questionBankProgress', 'solved');
+            batch.set(solvedRef, {
+                ids: arrayUnion(...solvedQuestionIds)
+            }, { merge: true });
         }
         
         await batch.commit();

@@ -11,27 +11,27 @@ import {
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 
-// --- RENK PALETİ VE EFEKTLER ---
-const colorStyles: Record<string, { bg: string, border: string, shadow: string, icon: string, glow: string }> = {
-    purple: { bg: "from-purple-600/20 to-purple-900/40", border: "border-purple-500/30", shadow: "group-hover:shadow-purple-500/40", icon: "text-purple-400", glow: "bg-purple-500" },
-    amber:  { bg: "from-amber-500/20 to-amber-900/40", border: "border-amber-500/30", shadow: "group-hover:shadow-amber-500/40", icon: "text-amber-400", glow: "bg-amber-500" },
-    pink:   { bg: "from-pink-500/20 to-pink-900/40", border: "border-pink-500/30", shadow: "group-hover:shadow-pink-500/40", icon: "text-pink-400", glow: "bg-pink-500" },
-    teal:   { bg: "from-teal-500/20 to-teal-900/40", border: "border-teal-500/30", shadow: "group-hover:shadow-teal-500/40", icon: "text-teal-400", glow: "bg-teal-500" },
-    indigo: { bg: "from-indigo-500/20 to-indigo-900/40", border: "border-indigo-500/30", shadow: "group-hover:shadow-indigo-500/40", icon: "text-indigo-400", glow: "bg-indigo-500" },
-    cyan:   { bg: "from-cyan-500/20 to-cyan-900/40", border: "border-cyan-500/30", shadow: "group-hover:shadow-cyan-500/40", icon: "text-cyan-400", glow: "bg-cyan-500" },
-    blue:   { bg: "from-blue-600/20 to-blue-900/40", border: "border-blue-500/30", shadow: "group-hover:shadow-blue-500/40", icon: "text-blue-400", glow: "bg-blue-500" },
-    orange: { bg: "from-orange-500/20 to-orange-900/40", border: "border-orange-500/30", shadow: "group-hover:shadow-orange-500/40", icon: "text-orange-400", glow: "bg-orange-500" },
-    sky:    { bg: "from-sky-500/20 to-sky-900/40", border: "border-sky-500/30", shadow: "group-hover:shadow-sky-500/40", icon: "text-sky-400", glow: "bg-sky-500" },
-    rose:   { bg: "from-rose-500/20 to-rose-900/40", border: "border-rose-500/30", shadow: "group-hover:shadow-rose-500/40", icon: "text-rose-400", glow: "bg-rose-500" },
-    emerald:{ bg: "from-emerald-500/20 to-emerald-900/40", border: "border-emerald-500/30", shadow: "group-hover:shadow-emerald-500/40", icon: "text-emerald-400", glow: "bg-emerald-500" },
-    lime:   { bg: "from-lime-500/20 to-lime-900/40", border: "border-lime-500/30", shadow: "group-hover:shadow-lime-500/40", icon: "text-lime-400", glow: "bg-lime-500" },
-    red:    { bg: "from-red-500/20 to-red-900/40", border: "border-red-500/30", shadow: "group-hover:shadow-red-500/40", icon: "text-red-400", glow: "bg-red-500" },
-    yellow: { bg: "from-yellow-500/20 to-yellow-900/40", border: "border-yellow-500/30", shadow: "group-hover:shadow-yellow-500/40", icon: "text-yellow-400", glow: "bg-yellow-500" },
-    green:  { bg: "from-green-500/20 to-green-900/40", border: "border-green-500/30", shadow: "group-hover:shadow-green-500/40", icon: "text-green-400", glow: "bg-green-500" },
-    fuchsia:{ bg: "from-fuchsia-500/20 to-fuchsia-900/40", border: "border-fuchsia-500/30", shadow: "group-hover:shadow-fuchsia-500/40", icon: "text-fuchsia-400", glow: "bg-fuchsia-500" },
-    slate:  { bg: "from-slate-500/20 to-slate-900/40", border: "border-slate-500/30", shadow: "group-hover:shadow-slate-500/40", icon: "text-slate-400", glow: "bg-slate-500" },
-    violet: { bg: "from-violet-500/20 to-violet-900/40", border: "border-violet-500/30", shadow: "group-hover:shadow-violet-500/40", icon: "text-violet-400", glow: "bg-violet-500" },
-    zinc:   { bg: "from-zinc-500/20 to-zinc-900/40", border: "border-zinc-500/30", shadow: "group-hover:shadow-zinc-500/40", icon: "text-zinc-400", glow: "bg-zinc-500" },
+// --- RENK PALETİ VE EFEKTLER (3D MOBİL OYUN TARZI) ---
+const colorStyles: Record<string, { bg: string, border: string, shadow: string, icon: string, text: string }> = {
+    purple: { bg: "from-purple-500 to-violet-600", border: "border-purple-400 border-b-purple-800", shadow: "shadow-purple-500/50", icon: "text-white", text: "text-white" },
+    amber:  { bg: "from-amber-400 to-orange-500", border: "border-amber-300 border-b-orange-700", shadow: "shadow-orange-500/50", icon: "text-white", text: "text-white" },
+    pink:   { bg: "from-pink-400 to-rose-500", border: "border-pink-300 border-b-rose-700", shadow: "shadow-rose-500/50", icon: "text-white", text: "text-white" },
+    teal:   { bg: "from-teal-400 to-emerald-500", border: "border-teal-300 border-b-emerald-800", shadow: "shadow-teal-500/50", icon: "text-white", text: "text-white" },
+    indigo: { bg: "from-indigo-400 to-blue-600", border: "border-indigo-300 border-b-blue-800", shadow: "shadow-blue-500/50", icon: "text-white", text: "text-white" },
+    cyan:   { bg: "from-cyan-400 to-sky-500", border: "border-cyan-300 border-b-sky-700", shadow: "shadow-cyan-500/50", icon: "text-white", text: "text-white" },
+    blue:   { bg: "from-blue-500 to-indigo-600", border: "border-blue-400 border-b-indigo-800", shadow: "shadow-blue-500/50", icon: "text-white", text: "text-white" },
+    orange: { bg: "from-orange-400 to-red-500", border: "border-orange-300 border-b-red-700", shadow: "shadow-orange-500/50", icon: "text-white", text: "text-white" },
+    sky:    { bg: "from-sky-400 to-blue-500", border: "border-sky-300 border-b-blue-700", shadow: "shadow-sky-500/50", icon: "text-white", text: "text-white" },
+    rose:   { bg: "from-rose-400 to-red-500", border: "border-rose-300 border-b-red-800", shadow: "shadow-rose-500/50", icon: "text-white", text: "text-white" },
+    emerald:{ bg: "from-emerald-400 to-green-500", border: "border-emerald-300 border-b-green-800", shadow: "shadow-emerald-500/50", icon: "text-white", text: "text-white" },
+    lime:   { bg: "from-lime-400 to-green-500", border: "border-lime-300 border-b-green-700", shadow: "shadow-lime-500/50", icon: "text-white", text: "text-white" },
+    red:    { bg: "from-red-400 to-rose-600", border: "border-red-300 border-b-rose-800", shadow: "shadow-red-500/50", icon: "text-white", text: "text-white" },
+    yellow: { bg: "from-yellow-400 to-amber-500", border: "border-yellow-300 border-b-amber-700", shadow: "shadow-yellow-500/50", icon: "text-white", text: "text-white" },
+    green:  { bg: "from-green-400 to-emerald-600", border: "border-green-300 border-b-emerald-800", shadow: "shadow-green-500/50", icon: "text-white", text: "text-white" },
+    fuchsia:{ bg: "from-fuchsia-400 to-purple-500", border: "border-fuchsia-300 border-b-purple-700", shadow: "shadow-fuchsia-500/50", icon: "text-white", text: "text-white" },
+    slate:  { bg: "from-slate-500 to-slate-700", border: "border-slate-400 border-b-slate-800", shadow: "shadow-slate-500/50", icon: "text-white", text: "text-white" },
+    violet: { bg: "from-violet-400 to-purple-600", border: "border-violet-300 border-b-purple-800", shadow: "shadow-violet-500/50", icon: "text-white", text: "text-white" },
+    zinc:   { bg: "from-zinc-400 to-zinc-600", border: "border-zinc-300 border-b-zinc-800", shadow: "shadow-zinc-500/50", icon: "text-white", text: "text-white" },
 };
 
 const activityTypes = [
@@ -59,13 +59,16 @@ const activityTypes = [
 
 // --- HAREKETLİ ARKA PLAN ---
 const AnimatedBackground = () => (
-    <div className="fixed inset-0 pointer-events-none z-0 bg-[#020617] overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" style={{ opacity: 0.05 }}/>
-        
+    <div className="fixed inset-0 pointer-events-none z-0 bg-[#0b0f19] overflow-hidden">
         {/* Hareketli "Orb"lar */}
-        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-cyan-600/20 rounded-full blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
-        <div className="absolute top-[40%] left-[30%] w-[300px] h-[300px] bg-fuchsia-600/10 rounded-full blur-[100px] animate-pulse-slow delay-2000" />
+        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse-slow" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
+        <div className="absolute top-[40%] left-[30%] w-[400px] h-[400px] bg-fuchsia-600/15 rounded-full blur-[100px] animate-pulse-slow delay-2000" />
+        
+        {/* Oyun Desenleri (Gamepad vs arka planda uçuşan) */}
+        <div className="absolute top-1/4 left-10 opacity-5 rotate-12"><Gamepad2 className="w-32 h-32 text-white" /></div>
+        <div className="absolute bottom-1/4 right-20 opacity-5 -rotate-12"><Trophy className="w-40 h-40 text-white" /></div>
+        <div className="absolute top-1/2 left-2/3 opacity-5 rotate-45"><Star className="w-24 h-24 text-white" /></div>
     </div>
 );
 
@@ -73,65 +76,62 @@ const AnimatedBackground = () => (
 const GameCard = ({ activity, index }: { activity: typeof activityTypes[0], index: number }) => {
     const Icon = activity.icon;
     const styles = colorStyles[activity.color] || colorStyles['slate'];
+    const isPopular = activity.badge === 'POPÜLER';
 
     return (
         <Link 
             href={`${activity.href}?gameName=${encodeURIComponent(activity.label)}&gamePath=${activity.href.substring(8)}`} 
-            className="group relative block h-full animate-in fade-in zoom-in-50 duration-500 fill-mode-backwards"
-            style={{ animationDelay: `${index * 50}ms` }}
+            className={cn(
+                "group relative block h-full animate-in fade-in zoom-in-50 duration-500 fill-mode-backwards outline-none focus-visible:ring-4 focus-visible:ring-white/50 rounded-[2rem]",
+                isPopular ? "col-span-2 sm:col-span-2" : "col-span-1"
+            )}
+            style={{ animationDelay: `${index * 40}ms` }}
         >
-            {/* Kartın Kendisi */}
+            {/* Kartın Kendisi (3D Buton Efekti) */}
             <div className={cn(
-                "relative h-32 sm:h-40 overflow-hidden rounded-[1.5rem] border backdrop-blur-xl transition-all duration-500",
-                "bg-gradient-to-br hover:scale-[1.03] hover:-translate-y-1 shadow-xl",
+                "relative w-full h-full min-h-[140px] sm:min-h-[160px] rounded-[2rem] border-2 transition-all duration-300 ease-out",
+                "bg-gradient-to-br shadow-xl hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02]",
+                "border-b-[8px] active:border-b-2 active:translate-y-2", 
                 styles.bg,
                 styles.border,
                 styles.shadow
             )}>
                 
-                {/* Arkaplan Deseni & Işıltı */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
-                    <div className={cn("absolute -bottom-10 -right-10 w-32 h-32 blur-2xl rounded-full opacity-60", styles.glow)}></div>
-                </div>
+                {/* Işıltı Efekti */}
+                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-[2rem]"></div>
+                <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent rounded-t-[2rem] opacity-50"></div>
 
-                {/* Büyük Arkaplan İkonu (Dekoratif) */}
+                {/* Büyük Arkaplan İkonu */}
                 <Icon className={cn(
-                    "absolute -right-6 -bottom-6 w-28 h-28 opacity-5 rotate-12 transition-transform duration-700 ease-out",
-                    "group-hover:rotate-0 group-hover:scale-110 group-hover:opacity-10",
+                    "absolute -right-4 -bottom-4 w-28 h-28 opacity-20 rotate-12 transition-transform duration-500",
+                    "group-hover:rotate-0 group-hover:scale-110",
                     styles.icon
                 )} />
 
                 {/* İçerik */}
-                <div className="relative z-10 h-full flex flex-col items-center justify-center text-center p-4">
+                <div className="relative z-10 h-full flex flex-col items-center justify-center text-center p-4 gap-3">
                     
                     {/* İkon Kutusu */}
                     <div className={cn(
-                        "relative mb-3 p-3 rounded-2xl bg-black/20 border border-white/5 transition-all duration-500 group-hover:bg-black/40 group-hover:border-white/20 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]",
-                        "group-hover:scale-110"
+                        "relative p-3 sm:p-4 rounded-[1.5rem] bg-white/20 backdrop-blur-sm border border-white/40 shadow-[0_8px_16px_rgba(0,0,0,0.2)] transition-transform duration-500",
+                        "group-hover:scale-110 group-hover:rotate-6"
                     )}>
-                        <Icon className={cn("w-7 h-7 sm:w-8 sm:h-8 transition-colors duration-300", styles.icon, "group-hover:text-white")} />
-                        {/* İkon Parıltısı */}
-                        <div className={cn("absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-50 blur-lg transition-opacity duration-300", styles.glow)}></div>
+                        <Icon className={cn("w-8 h-8 sm:w-10 sm:h-10 drop-shadow-md", styles.icon)} />
                     </div>
 
                     {/* Başlık */}
-                    <h3 className="font-black text-sm sm:text-base text-white/90 leading-tight group-hover:text-white transition-colors">
+                    <h3 className={cn(
+                        "font-black text-sm sm:text-base md:text-lg leading-tight drop-shadow-md",
+                        styles.text
+                    )}>
                         {activity.label}
                     </h3>
-
-                    {/* Hover'da Çıkan "Oyna" Butonu */}
-                    <div className="absolute bottom-0 left-0 w-full h-10 bg-black/40 backdrop-blur-md border-t border-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex items-center justify-center gap-2">
-                        <span className="text-[10px] font-bold text-white uppercase tracking-widest flex items-center gap-1">
-                            Oyna <Play className="w-3 h-3 fill-current" />
-                        </span>
-                    </div>
                 </div>
 
-                {/* Rozet (Varsa) */}
+                {/* Rozet (POPÜLER/YENİ) */}
                 {activity.badge && (
-                    <div className="absolute top-0 right-0">
-                        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[9px] font-black px-2 py-1 rounded-bl-xl shadow-lg">
+                    <div className="absolute -top-3 -right-3 rotate-12 group-hover:rotate-6 transition-transform z-20">
+                        <div className="bg-yellow-400 text-yellow-900 text-[10px] sm:text-xs font-black px-3 py-1.5 rounded-2xl shadow-lg border-2 border-yellow-200">
                             {activity.badge}
                         </div>
                     </div>
@@ -179,8 +179,8 @@ export default function StudentActivitiesPage() {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
-                {activityTypes.sort((a,b) => a.label.localeCompare(b.label, 'tr')).map((activity, index) => (
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+                {activityTypes.map((activity, index) => (
                     <GameCard key={activity.href} activity={activity} index={index} />
                 ))}
             </div>

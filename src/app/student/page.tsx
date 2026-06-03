@@ -4,24 +4,23 @@ import React, { useState, useEffect, Suspense } from "react";
 import { 
     Trophy, Star, Gamepad2, ShoppingCart, Columns, LayoutTemplate, 
     FileCog, Crown, Award, Target, Sparkles, Map, Swords, Backpack,
-    Loader2, ArrowRight, Flame, Gift, Timer, School, Compass, LogOut 
+    Loader2, ArrowRight, Flame, Gift, Timer, School, Compass, LogOut,
+    Home, User, ChevronRight, Zap, BookOpen, Lock
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where, orderBy, Timestamp, onSnapshot, doc, getDoc } from "firebase/firestore";
 import type { UserProfile } from "@/lib/types";
 import { getStudentExams } from "@/app/student/deneme/actions";
 import { forceStreakCheck } from "@/app/student/actions"; 
-
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// --- TASARIMI KORUNAN: GÜNLÜK LİDERLİK TABLOSU ---
+// ===================== GÜNLÜK LİDERLİK =====================
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -33,119 +32,167 @@ function HardestWorkersToday() {
                 const now = new Date();
                 const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
                 const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-
-                const q = query(
-                    collection(db, 'scoreEvents'),
-                    where('timestamp', '>=', Timestamp.fromDate(startOfDay)),
-                    where('timestamp', '<=', Timestamp.fromDate(endOfDay))
-                );
-                
+                const q = query(collection(db, 'scoreEvents'), where('timestamp', '>=', Timestamp.fromDate(startOfDay)), where('timestamp', '<=', Timestamp.fromDate(endOfDay)));
                 const snapshot = await getDocs(q);
                 const userScores: Record<string, number> = {};
-
-                snapshot.docs.forEach(doc => {
-                    const data = doc.data();
-                    const uid = data.userId;
-                    const points = Number(data.points) || 0;
-                    
-                    // LİMİT KALDIRILDI: Artık 1000'den büyük puanlar da hesaba dahil edilecek
-                    if(uid) {
-                        userScores[uid] = (userScores[uid] || 0) + points;
-                    }
+                snapshot.docs.forEach(d => {
+                    const data = d.data(); const uid = data.userId; const points = Number(data.points) || 0;
+                    if(uid) userScores[uid] = (userScores[uid] || 0) + points;
                 });
-
-                const sortedEntries = Object.entries(userScores)
-                    .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-                    .slice(0, 3);
-
+                const sortedEntries = Object.entries(userScores).sort(([,a],[,b]) => b-a).slice(0,3);
                 const topUsers: UserProfile[] = [];
                 for (const [uid, calculatedDailyScore] of sortedEntries) {
                     if(calculatedDailyScore <= 0) continue;
                     const userDoc = await getDoc(doc(db, 'users', uid));
-                    if (userDoc.exists()) {
-                        const userData = userDoc.data() as UserProfile;
-                        topUsers.push({ 
-                            ...userData, 
-                            uid, 
-                            score: calculatedDailyScore 
-                        }); 
-                    }
+                    if(userDoc.exists()) topUsers.push({ ...userDoc.data() as UserProfile, uid, score: calculatedDailyScore });
                 }
                 setDailyTop(topUsers);
-            } catch (error) {
-                console.error("Günlük liderlik hatası:", error);
-            } finally {
-                setIsLoading(false);
-            }
+            } catch(e) { console.error(e); } finally { setIsLoading(false); }
         };
         fetchDailyTop();
     }, []);
-    
-    const rankIcons: { [key: number]: React.ReactNode } = {
-        0: <Crown className="h-6 w-6 text-yellow-300 drop-shadow-md" />,
-        1: <Award className="h-6 w-6 text-slate-300 drop-shadow-md" />,
-        2: <Award className="h-6 w-6 text-orange-400 drop-shadow-md" />,
-    };
+
+    const rankConfig = [
+        { label: '🥇', color: 'from-yellow-400 to-amber-600', text: 'text-yellow-300', glow: 'shadow-[0_0_20px_rgba(251,191,36,0.4)]' },
+        { label: '🥈', color: 'from-slate-300 to-slate-500', text: 'text-slate-300', glow: '' },
+        { label: '🥉', color: 'from-orange-400 to-orange-600', text: 'text-orange-300', glow: '' },
+    ];
 
     return (
-        <Card className="bg-gradient-to-b from-slate-900/80 to-slate-950/80 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl overflow-hidden relative">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
-            <div className="p-4 border-b border-white/5 flex items-center gap-3 bg-white/5">
-                <div className="p-2 bg-amber-500/20 rounded-lg border border-amber-500/30"><Trophy className="h-5 w-5 text-amber-400" /></div>
-                <h3 className="font-bold text-white text-lg tracking-wide uppercase">Günün Efsaneleri</h3>
+        <section>
+            <div className="flex items-center justify-between mb-4 px-1">
+                <h2 className="text-white font-black text-sm uppercase tracking-[0.15em] flex items-center gap-2">
+                    <span className="w-1 h-4 bg-amber-400 rounded-full inline-block" />
+                    Günün Efsaneleri
+                </h2>
+                <Link href="/leaderboard" className="text-indigo-400 text-xs font-bold flex items-center gap-0.5 hover:text-indigo-300 transition-colors">
+                    Tümü <ChevronRight className="h-3 w-3" />
+                </Link>
             </div>
-            <div className="p-4">
+            <div className="rounded-3xl overflow-hidden border border-white/8 bg-gradient-to-b from-slate-900/90 to-slate-950/90 backdrop-blur-2xl shadow-2xl divide-y divide-white/5">
                 {isLoading ? (
-                    <div className="space-y-3">{[1, 2, 3].map((i) => <Skeleton key={i} className="h-14 w-full rounded-xl bg-white/5" />)}</div>
-                ) : dailyTop.length > 0 ? (
-                    <div className="space-y-3">
-                        {dailyTop.map((student, index) => (
-                            <div key={student.uid || index} className="flex items-center justify-between p-3 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition-colors border border-white/5 group">
-                                <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 flex items-center justify-center bg-black/40 rounded-lg border border-white/10">{rankIcons[index]}</div>
-                                    <div className="flex items-center gap-3">
-                                         <UserAvatar user={student} className="w-10 h-10 border-2 border-white/10"/>
-                                         <div>
-                                             <p className="font-bold text-white text-sm">{student.displayName}</p>
-                                             <p className="text-white/40 text-xs font-mono">Bugün</p>
-                                         </div>
-                                    </div>
-                                </div>
-                                <div className="bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20">
-                                    <p className="font-bold text-amber-400 text-sm">+{student.score} XP</p>
-                                </div>
+                    [1,2,3].map(i => <div key={i} className="p-4"><Skeleton className="h-14 w-full rounded-2xl bg-white/5" /></div>)
+                ) : dailyTop.length > 0 ? dailyTop.map((student, i) => (
+                    <div key={student.uid || i} className={cn("flex items-center justify-between px-5 py-4 hover:bg-white/3 transition-colors group", i === 0 && "bg-amber-500/5")}>
+                        <div className="flex items-center gap-4">
+                            <span className="text-2xl">{rankConfig[i].label}</span>
+                            <div className="relative">
+                                <UserAvatar user={student} className={cn("w-11 h-11 border-2 border-white/10", i === 0 && "border-amber-500/50 shadow-[0_0_12px_rgba(251,191,36,0.3)]")}/>
                             </div>
-                        ))}
+                            <div>
+                                <p className="font-black text-white text-sm">{student.displayName}</p>
+                                <p className="text-white/30 text-xs font-medium">Bugün</p>
+                            </div>
+                        </div>
+                        <div className={cn("px-4 py-1.5 rounded-full border", i === 0 ? "bg-amber-500/15 border-amber-500/30" : "bg-white/5 border-white/10")}>
+                            <p className={cn("font-black text-sm tabular-nums", rankConfig[i].text)}>+{student.score} XP</p>
+                        </div>
                     </div>
-                ) : ( <div className="text-center py-8"><p className="text-white/40 text-sm">Bugün henüz kimse puan kazanmadı.</p></div> )}
+                )) : (
+                    <div className="text-center py-10"><p className="text-white/30 text-sm">Bugün henüz kimse puan kazanmadı.</p></div>
+                )}
             </div>
-        </Card>
-    )
+        </section>
+    );
 }
 
-// --- TASARIMI KORUNAN: STANDART BUTON KARTI ---
-const DashboardCardButton = ({ href, icon, title, subtitle, colorClass, badge }: { href: string, icon: React.ReactNode, title: string, subtitle?: string, colorClass: string, badge?: number }) => {
-     const colors: {[key: string]: string} = {
-        "sky": "from-sky-500 to-blue-600 border-sky-600 shadow-sky-900/40", 
-        "rose": "from-rose-500 to-pink-600 border-rose-600 shadow-rose-900/40",
-        "orange": "from-orange-500 to-amber-600 border-orange-600 shadow-orange-900/40", 
-        "indigo": "from-indigo-500 to-violet-600 border-indigo-600 shadow-indigo-900/40",
-        "emerald": "from-emerald-500 to-green-600 border-emerald-600 shadow-emerald-900/40", 
-        "violet": "from-violet-500 to-purple-600 border-violet-600 shadow-violet-900/40",
-        "teal": "from-teal-500 to-cyan-600 border-teal-600 shadow-teal-900/40",
-     }
-     return (
-        <Button asChild className={cn("relative w-full h-auto flex flex-col md:flex-row items-center justify-center md:justify-start gap-3 p-4 rounded-2xl transition-all duration-300 group overflow-hidden border-b-[6px] active:border-b-0 active:translate-y-[6px] bg-gradient-to-br text-white shadow-xl", colors[colorClass])}>
-            <Link href={href} className="w-full">
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm shadow-inner shrink-0">{React.cloneElement(icon as React.ReactElement, { className: "h-6 w-6 text-white" })}</div>
-                <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1 min-w-0"><span className="font-black text-lg uppercase tracking-wide leading-tight">{title}</span>{subtitle && <span className="text-[11px] font-medium opacity-80 leading-tight">{subtitle}</span>}</div>
-                {badge && badge > 0 && (<div className="absolute top-2 right-2 flex h-6 min-w-[24px] px-1.5 items-center justify-center rounded-full bg-white text-red-600 text-xs font-black shadow-lg animate-bounce z-10">{badge}</div>)}
-            </Link>
-        </Button>
-     )
+// ===================== ALT MENÜ =====================
+function BottomNav({ examBadge }: { examBadge: number }) {
+    const pathname = usePathname();
+    const tabs = [
+        { href: '/student', icon: Home, label: 'Ana Sayfa' },
+        { href: '/student/soru-bankasi', icon: Map, label: 'Harita' },
+        { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
+        { href: '/student/shop', icon: ShoppingCart, label: 'Mağaza' },
+        { href: '/student/profile', icon: User, label: 'Profil' },
+    ];
+    return (
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50">
+            {/* blur bg */}
+            <div className="absolute inset-0 bg-[#0a081e]/90 backdrop-blur-2xl border-t border-white/8" />
+            <div className="relative flex items-end justify-around px-2 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 12px)' }}>
+                {tabs.map(tab => {
+                    const isActive = pathname === tab.href;
+                    const Icon = tab.icon;
+                    return (
+                        <Link key={tab.href} href={tab.href} className="flex flex-col items-center justify-center gap-1 px-3 py-1 relative min-w-[60px] group">
+                            {isActive && (
+                                <span className="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-indigo-400 rounded-full shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
+                            )}
+                            <div className={cn(
+                                "w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-300",
+                                isActive
+                                    ? "bg-indigo-600/30 border border-indigo-500/50 text-indigo-300 shadow-[0_0_20px_rgba(99,102,241,0.3)] scale-110"
+                                    : "text-slate-600 group-hover:text-slate-400"
+                            )}>
+                                <Icon className="h-5 w-5" />
+                                {tab.href === '/student/deneme' && examBadge > 0 && (
+                                    <span className="absolute top-0 right-0 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border border-slate-950">{examBadge}</span>
+                                )}
+                            </div>
+                            <span className={cn("text-[10px] font-bold transition-colors leading-none", isActive ? "text-indigo-400" : "text-slate-600")}>{tab.label}</span>
+                        </Link>
+                    );
+                })}
+            </div>
+        </nav>
+    );
 }
 
+function DesktopSidebar({ examBadge, handleLogout }: { examBadge: number, handleLogout: () => void }) {
+    const pathname = usePathname();
+    const tabs = [
+        { href: '/student', icon: Home, label: 'Ana Sayfa' },
+        { href: '/student/soru-bankasi', icon: Map, label: 'Macera Haritası' },
+        { href: '/student/gorevler', icon: Compass, label: 'Görev Yolculuğu' },
+        { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
+        { href: '/student/shop', icon: ShoppingCart, label: 'Mağaza' },
+        { href: '/student/profile', icon: User, label: 'Profil' },
+    ];
+    return (
+        <aside className="hidden md:flex flex-col fixed top-0 left-0 w-72 h-screen bg-[#0a081e]/90 backdrop-blur-2xl border-r border-white/8 z-50 p-6 overflow-y-auto">
+            <div className="flex items-center gap-3 mb-10 mt-2 px-2">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <Sparkles className="w-7 h-7 text-white" />
+                </div>
+                <h1 className="text-2xl font-black text-white tracking-wide leading-tight">Din Dersi<br/><span className="text-emerald-400">Atölyesi</span></h1>
+            </div>
+            
+            <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 px-2">Ana Menü</div>
+            <nav className="flex-1 flex flex-col gap-2">
+                {tabs.map(tab => {
+                    const isActive = pathname === tab.href;
+                    const Icon = tab.icon;
+                    return (
+                        <Link key={tab.href} href={tab.href} className={cn(
+                            "flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 font-bold",
+                            isActive 
+                                ? "bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
+                                : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
+                        )}>
+                            <div className="relative">
+                                <Icon className={cn("w-6 h-6 transition-transform", isActive && "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)] scale-110")} />
+                                {tab.href === '/student/deneme' && examBadge > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border border-slate-950">{examBadge}</span>
+                                )}
+                            </div>
+                            <span className="text-base">{tab.label}</span>
+                        </Link>
+                    );
+                })}
+            </nav>
+
+            <div className="mt-auto pt-6 border-t border-white/5">
+                <Button onClick={handleLogout} variant="ghost" className="w-full justify-start gap-4 px-4 py-4 h-auto text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-2xl transition-colors font-bold border border-transparent">
+                    <LogOut className="w-6 h-6" />
+                    <span className="text-base">Çıkış Yap</span>
+                </Button>
+            </div>
+        </aside>
+    );
+}
+
+// ===================== ANA SAYFA =====================
 function PageContent() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
@@ -156,272 +203,373 @@ function PageContent() {
   const [canSpinWheel, setCanSpinWheel] = useState(false);
   const [localStreak, setLocalStreak] = useState(0);
 
-  // Çıkış Yapma Fonksiyonu
   const handleLogout = async () => {
     try {
-        if (logout) {
-            await logout();
-        } else {
-            const { getAuth, signOut } = await import('firebase/auth');
-            await signOut(getAuth());
-        }
+        if (logout) await logout();
+        else { const { getAuth, signOut } = await import('firebase/auth'); await signOut(getAuth()); }
         router.push('/login');
-    } catch (error) {
-        console.error("Çıkış yapılırken bir hata oluştu:", error);
-    }
+    } catch(e) { console.error(e); }
   };
 
-  // CANLI PUAN DİNLEYİCİSİ
   useEffect(() => {
     if (loading || !user?.uid) return;
-    const unsubscribe = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
-        if (docSnap.exists()) {
-            const userData = docSnap.data();
-            setLiveScore(userData.score || 0);
-            setLocalStreak(userData.currentStreak || 0);
-        }
+    const unsub = onSnapshot(doc(db, "users", user.uid), (s) => {
+        if(s.exists()) { setLiveScore(s.data().score || 0); setLocalStreak(s.data().currentStreak || 0); }
     });
-    return () => unsubscribe();
+    return () => unsub();
   }, [user, loading]);
 
-  // STREAK KONTROLÜ
   useEffect(() => {
-    const checkStreak = async () => {
+    const check = async () => {
         if (loading || !user?.uid) return;
-        try {
-            const res = await forceStreakCheck(user.uid);
-            setCanSpinWheel(res.canSpinWheel);
-        } catch(e) { console.error(e); }
+        try { const res = await forceStreakCheck(user.uid); setCanSpinWheel(res.canSpinWheel); } catch(e) {}
     };
-    checkStreak();
+    check();
   }, [user, loading]);
 
-  // VERİLERİ ÇEK
   useEffect(() => {
     async function fetchData() {
-      if (loading) return; 
-      if (!user?.uid) { 
-          setIsLoading(false); 
-          router.push('/login'); 
-          return; 
-      };
-
+      if (loading) return;
+      if (!user?.uid) { setIsLoading(false); router.push('/login'); return; }
       setIsLoading(true);
       try {
         const now = new Date();
         const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-
-        const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot, todayScoreSnapshot] = await Promise.all([
+        const [, allCoursesSnapshot, allUsersSnapshot, examsSnapshot, todayScoreSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
           getDocs(query(collection(db, "users"), where("role", "==", "student"))),
           getStudentExams(user.uid),
-          getDocs(query(collection(db, 'scoreEvents'), 
-            where('userId', '==', user.uid), 
-            where('timestamp', '>=', Timestamp.fromDate(startOfDay)), 
-            where('timestamp', '<=', Timestamp.fromDate(endOfDay))
-          ))
+          getDocs(query(collection(db, 'scoreEvents'), where('userId', '==', user.uid), where('timestamp', '>=', Timestamp.fromDate(startOfDay)), where('timestamp', '<=', Timestamp.fromDate(endOfDay))))
         ]);
-        
-        if (examsSnapshot.success && examsSnapshot.data) {
+        if(examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter((a: any) => !a.solvedEvent).length;
             setExamStats({ pending, solved: examsSnapshot.data.length - pending });
         }
-
-        const todayTotalScore = todayScoreSnapshot.docs.reduce((sum, doc) => sum + (doc.data().points || 0), 0);
-        const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
-        const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
-        
-        let classRank = 0; let branchRank = 0;
+        const todayTotal = todayScoreSnapshot.docs.reduce((s, d) => s + (d.data().points || 0), 0);
+        const allStudents = allUsersSnapshot.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile & {uid: string}));
+        const sorted = [...allStudents].sort((a,b) => (b.score||0)-(a.score||0));
+        let classRank = 0, branchRank = 0;
         if(user.class) {
-            const gradeName = user.class.split(' - ')[0];
-            classRank = allStudents.filter(s => s.class?.startsWith(gradeName)).sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
-            branchRank = allStudents.filter(s => s.class === user.class).sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
+            const grade = user.class.split(' - ')[0];
+            classRank = allStudents.filter(s => s.class?.startsWith(grade)).sort((a,b) => (b.score||0)-(a.score||0)).findIndex(s => s.uid === user.uid) + 1;
+            branchRank = allStudents.filter(s => s.class === user.class).sort((a,b) => (b.score||0)-(a.score||0)).findIndex(s => s.uid === user.uid) + 1;
         }
-
-        setStats({ 
-            totalCourses: allCoursesSnapshot.size, 
-            generalRank: sortedAllStudents.findIndex(s => s.uid === user.uid) + 1, 
-            classRank, 
-            branchRank, 
-            todayScore: todayTotalScore 
-        });
-
-      } catch (error) { console.error(error); } finally { setIsLoading(false); }
+        setStats({ totalCourses: allCoursesSnapshot.size, generalRank: sorted.findIndex(s => s.uid === user.uid)+1, classRank, branchRank, todayScore: todayTotal });
+      } catch(e) { console.error(e); } finally { setIsLoading(false); }
     }
     fetchData();
   }, [user, loading, router]);
 
-  if (loading || isLoading) return <div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>;
+  if (loading || isLoading) return (
+    <div className="flex h-screen w-full items-center justify-center bg-[#09071a]">
+        <div className="flex flex-col items-center gap-5">
+            <div className="relative w-20 h-20">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-700 opacity-30 blur-xl animate-pulse" />
+                <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-600/30 to-purple-700/30 border border-indigo-500/30 flex items-center justify-center">
+                    <Sparkles className="h-9 w-9 text-indigo-400 animate-spin" style={{ animationDuration: '3s' }} />
+                </div>
+            </div>
+            <p className="text-indigo-300/60 font-bold text-xs tracking-[0.3em] uppercase animate-pulse">Yükleniyor</p>
+        </div>
+    </div>
+  );
 
   const level = Math.floor(liveScore / 1000) + 1;
   const progressToNextLevel = ((liveScore % 1000) / 1000) * 100;
+  const xpToNextLevel = 1000 - (liveScore % 1000);
   const dailyGoal = 500;
   const progressToDailyGoal = Math.min((stats.todayScore / dailyGoal) * 100, 100);
   const isGoalReached = stats.todayScore >= dailyGoal;
-  const daysToNextSpin = 7 - (localStreak % 7);
 
   return (
-    <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-indigo-500/30">
-      <div className="fixed inset-0 pointer-events-none z-0"><div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/20 rounded-full blur-[150px]" /><div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px]" /></div>
+    <div className="min-h-screen bg-[#09071a] text-white font-sans overflow-x-hidden">
 
-      <div className="max-w-6xl mx-auto space-y-8 relative z-10">
-           {/* Profil Kartı */}
-           <div className="relative w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group">
-               {/* ÇIKIŞ YAP BUTONU */}
-               <Button
-                   onClick={handleLogout}
-                   variant="ghost"
-                   size="icon"
-                   className="absolute top-4 right-4 md:top-6 md:right-6 z-20 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-colors"
-                   title="Çıkış Yap"
-               >
-                   <LogOut className="h-5 w-5" />
-               </Button>
-               
-               <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl z-0"></div>
-               <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-8">
-                   <div className="relative shrink-0">
-                       <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-1.5 bg-gradient-to-br from-amber-300 via-yellow-500 to-orange-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]">
-                            <div className="w-full h-full rounded-full overflow-hidden border-4 border-slate-900 bg-slate-800"><UserAvatar user={user} className="w-full h-full" /></div>
-                       </div>
-                       <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-black py-1.5 px-4 rounded-full border border-indigo-500 shadow-lg whitespace-nowrap flex items-center gap-2">
-                            <Sparkles className="h-3 w-3 text-yellow-400 fill-yellow-400"/> SEVİYE {level}
-                       </div>
-                   </div>
+        {/* ════════ ARKA PLAN ════════ */}
+        <div className="fixed inset-0 pointer-events-none z-0">
+            <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-indigo-900/30 rounded-full blur-[140px]" />
+            <div className="absolute top-1/3 -right-20 w-[400px] h-[400px] bg-fuchsia-900/20 rounded-full blur-[120px]" />
+            <div className="absolute bottom-1/4 -left-20 w-[350px] h-[350px] bg-cyan-900/15 rounded-full blur-[120px]" />
+            {/* Grid pattern */}
+            <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.5) 1px,transparent 1px)', backgroundSize: '40px 40px' }} />
+        </div>
 
-                   <div className="flex-1 text-center md:text-left w-full pt-4 md:pt-0">
-                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
-                           <div>
-                               <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md pr-8 md:pr-0">{user?.displayName}</h1>
-                               <div className="flex items-center flex-wrap justify-center md:justify-start gap-x-3 gap-y-1 mt-3 text-slate-300 font-medium">
-                                   <span className="flex items-center gap-2"><Backpack className="h-4 w-4 text-indigo-400" />{user?.class || 'Sınıfsız'}</span>
-                                   {user?.schoolName && <><span className="text-slate-600">•</span><span className="flex items-center gap-2"><School className="h-4 w-4 text-cyan-400" />{user.schoolName}</span></>}
-                                   <span className="hidden md:inline text-slate-600">•</span>
-                                   <span className="hidden md:inline text-indigo-300">{stats.totalCourses} Ders</span>
-                               </div>
-                           </div>
-                           <div className="grid grid-cols-2 gap-3 md:flex md:items-center md:gap-4 mt-4 md:mt-0">
-                               <div className="relative group overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-black/60 p-3 md:p-4 flex flex-col items-center justify-center gap-1 shadow-xl">
-                                   <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity"><Trophy className="w-12 h-12 text-amber-500" /></div>
-                                   <div className="flex items-center gap-2 mb-1">
-                                       <div className="p-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 shadow-inner"><Star className="w-3.5 h-3.5 text-amber-300 fill-amber-300 animate-pulse" /></div>
-                                       <span className="text-[10px] font-bold text-amber-200/80 uppercase tracking-widest">TOPLAM XP</span>
-                                   </div>
-                                   <div className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-amber-200 tabular-nums tracking-tight">{liveScore.toLocaleString()}</div>
-                               </div>
-                               <div className="relative group overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-br from-orange-500/10 to-black/60 p-3 md:p-4 flex flex-col items-center justify-center gap-1 shadow-xl">
-                                   <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity"><Flame className="w-12 h-12 text-orange-500" /></div>
-                                   <div className="flex items-center gap-2 mb-1">
-                                       <div className="p-1.5 rounded-lg bg-orange-500/20 border border-orange-500/40 shadow-inner"><Flame className="w-3.5 h-3.5 text-orange-400 fill-orange-500" /></div>
-                                       <span className="text-[10px] font-bold text-orange-200/80 uppercase tracking-widest">GÜNLÜK SERİ</span>
-                                   </div>
-                                   <div className="flex items-baseline gap-1"><span className="text-lg sm:text-lg md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-orange-200 tabular-nums tracking-tight">{localStreak}</span><span className="text-xs font-bold text-orange-400/60 uppercase">Gün</span></div>
-                               </div>
-                           </div>
-                       </div>
-                       <div className="mt-6">
-                           <div className="flex justify-between text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide"><span>İlerleme</span><span>{Math.floor(progressToNextLevel)}%</span></div>
-                           <div className="h-4 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative"><div className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-1000 ease-out" style={{ width: `${progressToNextLevel}%` }} /></div>
-                       </div>
-                   </div>
-               </div>
-           </div>
-           
-           {/* GÜNLÜK GÖREV KARTI */}
-            <div className="relative w-full rounded-3xl p-[1px] bg-gradient-to-r from-emerald-500/50 via-slate-500/30 to-indigo-500/50 shadow-2xl group overflow-hidden">
-                <div className={cn("absolute inset-0 opacity-20 transition-all duration-1000", isGoalReached ? "bg-emerald-600 blur-xl" : "bg-slate-900")}></div>
-                <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-[23px] p-6 md:p-8 overflow-hidden">
-                    <div className="absolute -right-6 -top-6 text-white/5 rotate-12 pointer-events-none"><Target className="w-48 h-48" /></div>
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12">
-                        <div className="flex items-center gap-5 w-full md:w-auto z-10">
-                            <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center border-2 shadow-2xl transition-all duration-500", isGoalReached ? "bg-emerald-500/20 border-emerald-500 text-emerald-400" : "bg-slate-800 border-slate-700 text-slate-400")}>
-                                {isGoalReached ? <Crown className="w-8 h-8 animate-bounce" /> : <Target className="w-8 h-8" />}
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-black text-white tracking-wide uppercase flex items-center gap-2">GÜNLÜK HEDEF {isGoalReached && <span className="text-[10px] bg-emerald-500 text-black px-2 py-0.5 rounded-full font-bold animate-pulse">TAMAMLANDI</span>}</h3>
-                                <div className="flex items-baseline gap-1 mt-1"><span className={cn("text-2xl font-bold tabular-nums", isGoalReached ? "text-emerald-400" : "text-white")}>{stats.todayScore}</span><span className="text-sm font-medium text-slate-500">/ {dailyGoal} XP</span></div>
+        {/* ════════ YAPIŞIK ÜST BAR ════════ */}
+        <header className="sticky top-0 z-40 md:ml-72">
+            <div className="absolute inset-0 bg-[#09071a]/70 backdrop-blur-2xl border-b border-white/5" />
+            <div className="relative w-full max-w-lg md:max-w-7xl mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between gap-3">
+                {/* Avatar */}
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="relative shrink-0">
+                        <div className="w-11 h-11 rounded-2xl p-[2px] bg-gradient-to-br from-amber-400 via-orange-500 to-rose-600 shadow-[0_0_16px_rgba(251,146,60,0.4)]">
+                            <div className="w-full h-full rounded-[14px] overflow-hidden border-[1.5px] border-slate-900 bg-slate-900">
+                                <UserAvatar user={user} className="w-full h-full" />
                             </div>
                         </div>
-                        <div className="flex-1 w-full z-10">
-                            <div className="flex justify-between text-xs font-bold text-slate-400 mb-2 tracking-wider"><span>İLERLEME DURUMU</span><span className={cn(isGoalReached ? "text-emerald-400" : "text-white")}>{Math.floor(progressToDailyGoal)}%</span></div>
-                            <div className="h-5 w-full bg-slate-950 rounded-full border border-white/10 p-1 relative shadow-inner"><div className={cn("h-full rounded-full relative overflow-hidden transition-all duration-1000 ease-out flex items-center justify-end pr-1", isGoalReached ? "bg-gradient-to-r from-emerald-500 to-green-400 shadow-[0_0_20px_rgba(16,185,129,0.6)]" : "bg-gradient-to-r from-indigo-500 to-blue-500")} style={{ width: `${progressToDailyGoal}%` }}><div className="absolute inset-0 w-full h-full bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:1rem_1rem] animate-[progress-stripes_1s_linear_infinite]" /><div className="h-full w-2 bg-white/50 blur-[2px] rounded-full absolute right-0" /></div></div>
-                            {isGoalReached && !canSpinWheel && (<div className="flex items-center justify-center md:justify-start gap-1.5 mt-2.5"><Gift className="w-3 h-3 text-pink-500" /><p className="text-[11px] font-medium text-slate-400">Hediye çarkına son <span className="text-pink-400 font-bold">{daysToNextSpin}</span> gün!</p></div>)}
+                        <div className="absolute -bottom-1.5 -right-1.5 bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-[1.5px] border-[#09071a] leading-none shadow-lg">
+                            Sv.{level}
                         </div>
-                        <div className="w-full md:w-auto z-10 flex justify-end">
-                            {canSpinWheel ? (
-                                <Button asChild className="w-full md:w-auto h-12 bg-gradient-to-r from-pink-600 via-rose-500 to-orange-500 hover:from-pink-500 hover:to-orange-400 text-white font-black border-2 border-white/20 shadow-[0_0_30px_rgba(236,72,153,0.5)] animate-[pulse_2s_infinite]"><Link href="/student/wheel" className="flex items-center gap-2 px-6"><Gift className="h-6 w-6 animate-bounce" /><span className="tracking-wide uppercase">ÇARKI ÇEVİR!</span></Link></Button>
-                            ) : isGoalReached ? (
-                                <div className="w-full md:w-auto h-12 px-6 bg-slate-800/80 rounded-xl border border-white/10 flex items-center justify-center gap-3 text-emerald-400 shadow-lg"><Timer className="h-5 w-5" /><div className="text-left leading-tight"><span className="block text-xs font-bold text-slate-400 uppercase">Sonraki Görev</span><span className="font-bold text-sm">YARIN BEKLENİYORSUN</span></div></div>
-                            ) : (
-                                <div className="w-full md:w-auto h-12 px-6 bg-slate-800 rounded-xl border border-slate-700/50 flex items-center justify-center gap-3 text-slate-400 group-hover:bg-slate-700/80 transition-colors"><div className="relative"><div className="h-2 w-2 rounded-full bg-slate-500 animate-ping absolute inset-0 opacity-75"></div><div className="h-2 w-2 rounded-full bg-slate-400 relative"></div></div><span className="font-bold text-sm uppercase">{Math.max(0, dailyGoal - stats.todayScore)} XP KALDI</span></div>
+                    </div>
+                    <div className="min-w-0">
+                        <p className="text-slate-500 text-[10px] font-bold leading-none mb-1 uppercase tracking-wider">Hoş geldin</p>
+                        <p className="text-white font-black text-sm truncate leading-none">{user?.displayName}</p>
+                    </div>
+                </div>
+                {/* Stats pills */}
+                <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex items-center gap-1.5 bg-gradient-to-r from-orange-500/15 to-amber-500/10 border border-orange-500/20 rounded-xl px-3 py-1.5 shadow-[0_0_12px_rgba(249,115,22,0.15)]">
+                        <Flame className="h-3.5 w-3.5 text-orange-400 fill-orange-500" />
+                        <span className="font-black text-white text-sm tabular-nums leading-none">{localStreak}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 bg-gradient-to-r from-amber-500/15 to-yellow-500/10 border border-amber-500/20 rounded-xl px-3 py-1.5 shadow-[0_0_12px_rgba(245,158,11,0.15)]">
+                        <Zap className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
+                        <span className="font-black text-amber-300 text-sm tabular-nums leading-none">{liveScore.toLocaleString()}</span>
+                    </div>
+                    <Button onClick={handleLogout} variant="ghost" size="icon" className="w-8 h-8 text-slate-600 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-colors">
+                        <LogOut className="h-4 w-4" />
+                    </Button>
+                </div>
+            </div>
+        </header>
+
+        {/* ════════ ANA İÇERİK ════════ */}
+        <main className="w-full max-w-lg md:max-w-7xl mx-auto px-4 md:px-8 pt-5 pb-36 md:ml-72 space-y-6 md:space-y-8 relative z-10">
+
+            {/* ── BÜYÜK PROFİL HERO KARTI ── */}
+            <section className="relative rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_80px_rgba(99,102,241,0.3)] group">
+                {/* Gradyan arka plan */}
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 via-purple-900/60 to-slate-900/90 transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(99,102,241,0.3),transparent_60%)]" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-400/50 to-transparent" />
+                
+                {/* İçerik */}
+                <div className="relative p-5 md:p-8 space-y-6 md:space-y-0 md:flex md:items-center md:gap-8">
+                    
+                    {/* Masaüstü Sol Bölüm: Sınıf & Okul & Genel Seviye */}
+                    <div className="flex-1 space-y-4">
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <span className="flex items-center gap-1.5 text-indigo-300 text-xs md:text-sm font-bold bg-indigo-500/10 border border-indigo-500/20 rounded-full px-3 py-1">
+                                <Backpack className="h-3 w-3 md:h-4 md:w-4" />{user?.class || 'Sınıfsız'}
+                            </span>
+                            {user?.schoolName && (
+                                <span className="flex items-center gap-1.5 text-cyan-300 text-xs md:text-sm font-bold bg-cyan-500/10 border border-cyan-500/20 rounded-full px-3 py-1">
+                                    <School className="h-3 w-3 md:h-4 md:w-4" />{user.schoolName}
+                                </span>
                             )}
                         </div>
+
+                        {/* Seviye barı */}
+                        <div>
+                            <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
+                                        <Sparkles className="h-3.5 w-3.5 md:h-4 md:w-4 text-indigo-400" />
+                                    </div>
+                                    <span className="text-white font-black text-sm md:text-base">Seviye {level}</span>
+                                </div>
+                                <span className="text-slate-400 text-xs md:text-sm font-medium tabular-nums">{xpToNextLevel} XP kaldı</span>
+                            </div>
+                            <div className="h-2.5 md:h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                <div
+                                    className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full shadow-[0_0_12px_rgba(168,85,247,0.6)] transition-all duration-1000"
+                                    style={{ width: `${progressToNextLevel}%` }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Günlük hedef */}
+                    <div className={cn("flex-1 rounded-2xl p-4 md:p-5 border transition-colors", isGoalReached ? "bg-emerald-500/10 border-emerald-500/25" : "bg-white/3 border-white/8")}>
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                                {isGoalReached
+                                    ? <Crown className="h-4 w-4 md:h-5 md:w-5 text-emerald-400 animate-bounce" />
+                                    : <Target className="h-4 w-4 md:h-5 md:w-5 text-slate-400" />
+                                }
+                                <span className={cn("font-black text-sm md:text-base", isGoalReached ? "text-emerald-300" : "text-white")}>
+                                    Günlük Hedef
+                                    {isGoalReached && <span className="ml-2 text-[9px] md:text-[10px] bg-emerald-500 text-black px-1.5 py-0.5 rounded-full font-black">✓ TAMAM</span>}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className={cn("font-black text-sm md:text-base tabular-nums", isGoalReached ? "text-emerald-400" : "text-white")}>
+                                    {stats.todayScore}<span className="text-slate-500 font-medium">/{dailyGoal}</span>
+                                </span>
+                                {canSpinWheel && (
+                                    <Button asChild size="sm" className="h-7 md:h-8 px-3 bg-gradient-to-r from-pink-600 to-orange-500 font-black text-xs md:text-sm border-0 animate-pulse shadow-[0_0_20px_rgba(236,72,153,0.5)] rounded-xl">
+                                        <Link href="/student/wheel"><Gift className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1" />Çark!</Link>
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+                        <div className="h-2.5 md:h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                            <div
+                                className={cn("h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden", isGoalReached ? "bg-gradient-to-r from-emerald-500 to-green-400 shadow-[0_0_12px_rgba(16,185,129,0.5)]" : "bg-gradient-to-r from-amber-500 to-orange-400")}
+                                style={{ width: `${progressToDailyGoal}%` }}
+                            >
+                                <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:14px_14px] animate-[progress-stripes_1s_linear_infinite]" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Sıralama rozetleri */}
+                    <div className="flex-1 grid grid-cols-3 gap-2.5 md:gap-4">
+                        {[
+                            { label: '🌍 Genel', value: stats.generalRank },
+                            { label: '🏫 Sınıf', value: stats.classRank },
+                            { label: '🏆 Şube', value: stats.branchRank },
+                        ].map(item => (
+                            <div key={item.label} className="bg-black/30 rounded-2xl p-3 md:p-4 border border-white/8 flex flex-col items-center justify-center gap-0.5 md:gap-1 backdrop-blur-sm shadow-inner">
+                                <span className="text-white font-black text-xl md:text-3xl tabular-nums">#{item.value || '-'}</span>
+                                <span className="text-slate-500 text-[9px] md:text-xs uppercase tracking-wider font-bold">{item.label}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
-            </div>
-         
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-             <Link href="/student/soru-bankasi" className="group block h-full">
-                <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-sky-900 to-blue-900 border border-sky-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col transition-transform duration-300">
-                    <div className="flex justify-between items-start mb-6"><div className="p-4 bg-sky-500/20 rounded-2xl border border-sky-400/30"><Map className="h-8 w-8 text-sky-300" /></div></div>
-                    <h2 className="text-3xl font-black text-white mb-2">Macera <span className="text-sky-400">Haritası</span></h2>
-                    <p className="text-sky-100/70 font-medium mb-8">Soruları çöz ve ilerle.</p>
-                    <div className="mt-auto flex items-center gap-2 text-white font-bold text-lg">Hemen Başla <ArrowRight className="h-5 w-5" /></div>
-                </div>
-             </Link>
-             
-             <Link href="/leaderboard" className="group block h-full">
-                <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-orange-900 border border-amber-500/30 shadow-2xl hover:scale-[1.02] p-8 flex flex-col transition-transform duration-300">
-                    <div className="flex justify-between items-start mb-6"><div className="p-4 bg-amber-500/20 rounded-2xl border border-amber-400/30"><Trophy className="h-8 w-8 text-amber-300" /></div></div>
-                    <h2 className="text-3xl font-black text-white mb-2">Şöhret <span className="text-amber-400">Salonu</span></h2>
-                    <div className="mt-auto grid grid-cols-3 gap-3">
-                        <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.generalRank}</span><span className="text-[10px] text-amber-200/60 uppercase tracking-tighter">Genel</span></div>
-                        <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.classRank}</span><span className="text-[10px] text-amber-200/60 uppercase tracking-tighter">Sınıf</span></div>
-                        <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center"><span className="text-2xl font-black text-white">#{stats.branchRank}</span><span className="text-[10px] text-amber-200/60 uppercase tracking-tighter">Şube</span></div>
-                    </div>
-                </div>
-             </Link>
-         </div>
+            </section>
 
-         <Link href="/student/gorevler" className="group block w-full mt-6">
-            <div className="relative w-full rounded-3xl overflow-hidden bg-gradient-to-br from-fuchsia-900 to-purple-900 border border-fuchsia-500/30 shadow-2xl hover:scale-[1.01] transition-transform duration-300 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="flex items-center gap-6">
-                    <div className="p-5 bg-fuchsia-500/20 rounded-2xl border border-fuchsia-400/30 shrink-0"><Compass className="h-10 w-10 text-fuchsia-300" /></div>
-                    <div><h2 className="text-3xl font-black text-white mb-1">Görev <span className="text-fuchsia-400">Yolculuğu</span></h2><p className="text-fuchsia-100/70 font-medium">Oyunlaştırılmış müfredat ile seviye atla.</p></div>
-                </div>
-                <div className="flex items-center gap-2 text-white font-bold text-lg bg-fuchsia-600/20 px-6 py-3 rounded-xl border border-fuchsia-500/50 group-hover:bg-fuchsia-600/40 transition-colors">Yolculuğa Çık <ArrowRight className="h-5 w-5" /></div>
-            </div>
-         </Link>
+            <div className="md:grid md:grid-cols-12 md:gap-8 space-y-6 md:space-y-0">
+                {/* SOL KOLON: Ana Görevler ve Keşfet */}
+                <div className="md:col-span-8 space-y-6 md:space-y-8">
+                    {/* ── BÜYÜK İŞLEM KARTLARI ── */}
+            <section>
+                <h2 className="text-white font-black text-xs uppercase tracking-[0.2em] mb-3 px-1 flex items-center gap-2">
+                    <span className="w-1 h-3.5 bg-indigo-400 rounded-full" />Başla
+                </h2>
+                <div className="space-y-3">
+                    {/* Macera Haritası */}
+                    <Link href="/student/soru-bankasi">
+                        <div className="group relative rounded-3xl overflow-hidden border border-sky-500/30 shadow-[0_12px_40px_rgba(14,165,233,0.3)] active:scale-[0.98] transition-all duration-200 cursor-pointer">
+                            <div className="absolute inset-0 bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700" />
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.2),transparent_55%)]" />
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/25 rounded-b-3xl" />
+                            {/* Dekoratif ikon */}
+                            <div className="absolute -right-4 -bottom-4 opacity-10">
+                                <Map className="w-32 h-32" />
+                            </div>
+                            <div className="relative p-5 flex items-center gap-4">
+                                <div className="w-16 h-16 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0 shadow-inner backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+                                    <Map className="h-8 w-8 text-white drop-shadow-lg" />
+                                </div>
+                                <div className="flex-1">
+                                    <p className="font-black text-white text-2xl leading-tight drop-shadow-md">Macera Haritası</p>
+                                    <p className="text-sky-200/70 text-sm font-semibold mt-0.5">Soruları çöz, bölgeleri aç</p>
+                                </div>
+                                <div className="w-10 h-10 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 group-hover:translate-x-1 transition-transform duration-300">
+                                    <ArrowRight className="h-5 w-5 text-white" />
+                                </div>
+                            </div>
+                        </div>
+                    </Link>
 
-         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-               <DashboardCardButton href="/oyunlar" icon={<Gamepad2 />} title="Etkinlikler" subtitle="Arcade Oyunlar" colorClass="sky" />
-               <DashboardCardButton href="/student/yarismalar" icon={<Swords />} title="Arena" subtitle="Çok Oyunculu Yarış" colorClass="rose" />
-               <DashboardCardButton href="/student/yazilacaklar" icon={<Columns />} title="Panolar" subtitle="Notlarım" colorClass="orange" />
-               <DashboardCardButton href="/student/ozetler" icon={<LayoutTemplate />} title="Özetler" subtitle="Ders Notları" colorClass="indigo" />
-               <DashboardCardButton href="/student/shop" icon={<ShoppingCart />} title="Mağaza" subtitle="Puan Harca" colorClass="emerald" />
-               <DashboardCardButton href="/student/deneme" icon={<FileCog />} title="Denemeler" subtitle="Sınav Merkezi" colorClass="violet" badge={examStats.pending} />
-         </div>
-         
-         <HardestWorkersToday />
-      </div>
-      
-      <style jsx global>{`
-        @keyframes progress-stripes {
-          0% { background-position: 1rem 0; }
-          100% { background-position: 0 0; }
-        }
-      `}</style>
+                    {/* Görev Yolculuğu */}
+                    <Link href="/student/gorevler">
+                        <div className="group relative rounded-3xl overflow-hidden border border-fuchsia-500/30 shadow-[0_12px_40px_rgba(192,38,211,0.3)] active:scale-[0.98] transition-all duration-200 cursor-pointer">
+                            <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-600 via-purple-700 to-violet-800" />
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.18),transparent_55%)]" />
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/25 rounded-b-3xl" />
+                            <div className="absolute -right-4 -bottom-4 opacity-10">
+                                <Compass className="w-32 h-32" />
+                            </div>
+                            <div className="relative p-5 flex items-center gap-4">
+                                <div className="w-16 h-16 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0 shadow-inner backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+                                    <Compass className="h-8 w-8 text-white drop-shadow-lg" />
+                                </div>
+                                <div className="flex-1">
+                                    <p className="font-black text-white text-2xl leading-tight drop-shadow-md">Görev Yolculuğu</p>
+                                    <p className="text-fuchsia-200/70 text-sm font-semibold mt-0.5">Müfredatı gamifike et</p>
+                                </div>
+                                <div className="w-10 h-10 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 group-hover:translate-x-1 transition-transform duration-300">
+                                    <ArrowRight className="h-5 w-5 text-white" />
+                                </div>
+                            </div>
+                        </div>
+                    </Link>
+                </div>
+            </section>
+
+            {/* ── KÜÇÜK KARTLAR ── */}
+            <section>
+                <h2 className="text-white font-black text-xs uppercase tracking-[0.2em] mb-3 px-1 flex items-center gap-2">
+                    <span className="w-1 h-3.5 bg-fuchsia-400 rounded-full" />Keşfet
+                </h2>
+                <div className="grid grid-cols-2 gap-3">
+                    {[
+                        { href:"/oyunlar", icon: <Gamepad2 className="h-6 w-6"/>, title:"Etkinlikler", sub:"Arcade Oyunlar", from:"from-cyan-500", to:"to-blue-600", glow:"rgba(6,182,212,0.35)", border:"border-cyan-500/30", badge:0 },
+                        { href:"/student/deneme", icon: <FileCog className="h-6 w-6"/>, title:"Denemeler", sub:"Sınav Merkezi", from:"from-violet-500", to:"to-purple-600", glow:"rgba(139,92,246,0.35)", border:"border-violet-500/30", badge:examStats.pending },
+                        { href:"/student/ders-notlari", icon: <BookOpen className="h-6 w-6"/>, title:"Ders Notları", sub:"Panolar & Özetler", from:"from-indigo-500", to:"to-blue-600", glow:"rgba(99,102,241,0.35)", border:"border-indigo-500/30", badge:0 },
+                        { href:"/student/shop", icon: <ShoppingCart className="h-6 w-6"/>, title:"Mağaza", sub:"Puan Harca", from:"from-emerald-500", to:"to-green-600", glow:"rgba(16,185,129,0.35)", border:"border-emerald-500/30", badge:0 },
+                    ].map(card => (
+                        <Link key={card.href} href={card.href}>
+                            <div className={cn("group relative rounded-3xl overflow-hidden border active:scale-[0.96] transition-all duration-150 cursor-pointer", card.border)} style={{ boxShadow: `0 8px 30px ${card.glow}` }}>
+                                <div className={cn("absolute inset-0 bg-gradient-to-br opacity-90", card.from, card.to)} />
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.18),transparent_60%)]" />
+                                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                                <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/25 rounded-b-3xl" />
+                                <div className="relative p-4 flex flex-col gap-3">
+                                    <div className="w-12 h-12 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shadow-inner shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                        {card.icon}
+                                    </div>
+                                    <div>
+                                        <p className="font-black text-white text-lg leading-tight">{card.title}</p>
+                                        <p className="text-white/60 text-xs font-semibold mt-0.5">{card.sub}</p>
+                                    </div>
+                                </div>
+                                {card.badge > 0 && (
+                                    <div className="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-black min-w-[22px] h-[22px] px-1 rounded-full flex items-center justify-center shadow-[0_0_12px_rgba(239,68,68,0.6)] animate-bounce border border-red-400/50">
+                                        {card.badge}
+                                    </div>
+                                )}
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </section>
+
+                </div>
+
+                {/* SAĞ KOLON: Günün Efsaneleri */}
+                <div className="md:col-span-4 space-y-6 md:space-y-8">
+                    {/* ── GÜNÜN EFSANELERİ ── */}
+                    <HardestWorkersToday />
+                </div>
+            </div>
+
+        </main>
+
+        {/* MASAÜSTÜ YAN MENÜ */}
+        <DesktopSidebar examBadge={examStats.pending} handleLogout={handleLogout} />
+
+        {/* MOBİL ALT MENÜ */}
+        <BottomNav examBadge={examStats.pending} />
+
+        <style jsx global>{`
+            body { background-color: #09071a; }
+            @keyframes progress-stripes {
+                0% { background-position: 14px 0; }
+                100% { background-position: 0 0; }
+            }
+        `}</style>
     </div>
   );
 }
 
-// KRİTİK: Next.js ana bileşen olarak dışa aktarılmalı
 export default function StudentDashboard() {
   return (
-    <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>}>
+    <Suspense fallback={
+        <div className="flex h-screen w-full items-center justify-center bg-[#09071a]">
+            <div className="relative w-20 h-20">
+                <div className="absolute inset-0 rounded-2xl bg-indigo-600/20 blur-xl animate-pulse" />
+                <div className="relative w-20 h-20 rounded-2xl bg-indigo-900/30 border border-indigo-500/20 flex items-center justify-center">
+                    <Sparkles className="h-9 w-9 text-indigo-400 animate-spin" style={{ animationDuration: '3s' }} />
+                </div>
+            </div>
+        </div>
+    }>
       <PageContent />
     </Suspense>
-  )
+  );
 }

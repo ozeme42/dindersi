@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { getCarkifelekQuestions, submitCarkifelekScoreAction } from '../actions';
 import type { Question } from "@/lib/types";
-import { Loader2, ArrowLeft, Trophy, Zap, CheckCircle2, X, Sparkles, Flame, Skull, Gift, CircleOff, Users, Clock, Timer, Crown, PartyPopper, Home } from "lucide-react";
+import { Loader2, ArrowLeft, Trophy, Zap, CheckCircle2, X, Sparkles, Flame, Skull, Gift, CircleOff, Users, User, Target, Clock, Timer as TimerIcon, Crown, PartyPopper, Home, Bomb, Ghost, Swords } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { playSound } from '@/lib/audio-service';
@@ -15,7 +15,7 @@ import Confetti from 'react-dom-confetti';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 // --- DİLİM AYARLARI ---
-type SliceType = 'easy' | 'hard' | '2x' | 'pass' | 'bankrupt' | 'joker';
+type SliceType = 'easy' | 'hard' | '2x' | 'pass' | 'bankrupt' | 'joker' | 'sabotage' | 'steal' | 'duel';
 
 interface WheelSlice {
     label: string;
@@ -30,10 +30,12 @@ const SLICES: WheelSlice[] = [
     { label: 'KOLAY', type: 'easy', color: '#3B82F6', textColor: 'white', points: 10, icon: Sparkles }, 
     { label: 'ZOR', type: 'hard', color: '#EC4899', textColor: 'white', points: 20, icon: Flame },   
     { label: '2x PUAN', type: '2x', color: '#F59E0B', textColor: 'white', points: 40, icon: Zap },      
-    { label: 'PAS', type: 'pass', color: '#64748B', textColor: 'white', points: 0, icon: CircleOff },        
-    { label: 'KOLAY', type: 'easy', color: '#0EA5E9', textColor: 'white', points: 10, icon: Sparkles }, 
+    { label: 'BOMBA', type: 'sabotage', color: '#9333EA', textColor: 'white', points: 0, icon: Bomb },        
+    { label: 'HIRSIZ', type: 'steal', color: '#14B8A6', textColor: 'white', points: 0, icon: Ghost }, 
     { label: 'İFLAS', type: 'bankrupt', color: '#EF4444', textColor: 'white', points: 0, icon: Skull },   
-    { label: 'ZOR', type: 'hard', color: '#8B5CF6', textColor: 'white', points: 20, icon: Flame },   
+    { label: 'KOLAY', type: 'easy', color: '#0EA5E9', textColor: 'white', points: 10, icon: Sparkles }, 
+    { label: 'PAS', type: 'pass', color: '#64748B', textColor: 'white', points: 0, icon: CircleOff },        
+    { label: 'DÜELLO', type: 'duel', color: '#F43F5E', textColor: 'white', points: 50, icon: Swords },        
     { label: 'JOKER', type: 'joker', color: '#10B981', textColor: 'white', points: 50, icon: Gift },     
 ];
 
@@ -64,18 +66,6 @@ const wheelStyles = `
     overflow: hidden;
     transition: transform 4s cubic-bezier(0.15, 0.85, 0.35, 1.05); 
     border: 2px solid white;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
-    background: conic-gradient(
-      from 0deg,
-      #3B82F6 0deg 45deg,
-      #EC4899 45deg 90deg,
-      #F59E0B 90deg 135deg,
-      #64748B 135deg 180deg,
-      #0EA5E9 180deg 225deg,
-      #EF4444 225deg 270deg,
-      #8B5CF6 270deg 315deg,
-      #10B981 315deg 360deg
-    );
   }
 
   @media (min-width: 768px) {
@@ -151,6 +141,17 @@ const wheelStyles = `
   @media (min-width: 768px) {
     .center-knob { width: 70px; height: 70px; border-width: 6px; }
   }
+
+  .shake-animation {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  }
+
+  @keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+  }
 `;
 
 export function CarkifelekGameClient() {
@@ -161,7 +162,7 @@ export function CarkifelekGameClient() {
 
     const [score, setScore] = useState(0);
     const [rotation, setRotation] = useState(0);
-    const [gameState, setGameState] = useState<'loading' | 'setup' | 'idle' | 'spinning' | 'result' | 'question' | 'feedback' | 'finished'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'setup' | 'idle' | 'spinning' | 'result' | 'question' | 'feedback' | 'finished' | 'sabotage_select' | 'duel_question'>('loading');
     
     // Oyun Verileri
     const [questionsEasy, setQuestionsEasy] = useState<Question[]>([]);
@@ -170,11 +171,17 @@ export function CarkifelekGameClient() {
     const [currentSlice, setCurrentSlice] = useState<WheelSlice | null>(null);
     const [feedback, setFeedback] = useState<'correct' | 'wrong' | 'timeout' | null>(null);
     
-    // Takım Modu State'leri
+    // Rekabetçi Mod State'leri
     const [gameMode, setGameMode] = useState<'single' | 'team'>('single');
     const [teamCount, setTeamCount] = useState<number>(2);
     const [teamScores, setTeamScores] = useState<number[]>([0, 0, 0, 0, 0]);
     const [currentTeamTurn, setCurrentTeamTurn] = useState<number>(0);
+    const [streak, setStreak] = useState<number[]>([0, 0, 0, 0, 0]); // Kombo için
+    
+    const [sabotageTarget, setSabotageTarget] = useState<number | null>(null);
+    const [stealInfo, setStealInfo] = useState<{from: number, amount: number} | null>(null);
+    const [duelEliminatedTeams, setDuelEliminatedTeams] = useState<number[]>([]);
+    const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
     // Diğer State'ler
     const [isSaving, setIsSaving] = useState(false);
@@ -185,6 +192,20 @@ export function CarkifelekGameClient() {
 
     const gameContext = `Çarkıfelek - ${searchParams.get('topicName') || 'Genel'}`;
     const backUrl = '/oyunlar/carkifelek';
+
+    const activeSlices = SLICES.map(slice => {
+        if (slice.type === 'duel' && gameMode === 'team' && teamCount > 3) {
+            // Düello desteklenmediğinde JOKER yerine ZOR yapalım ki 2 tane JOKER olmasın
+            return { label: 'ZOR', type: 'hard' as SliceType, color: '#F43F5E', textColor: 'white', points: 20, icon: Flame };
+        }
+        return slice;
+    });
+
+    const wheelGradientStops = activeSlices.map((slice, i) => {
+        const start = i * SLICE_DEGREE;
+        const end = start + SLICE_DEGREE;
+        return `${slice.color} ${start}deg ${end}deg`;
+    }).join(', ');
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -233,13 +254,17 @@ export function CarkifelekGameClient() {
     const handleTimeout = () => {
         playSound('incorrect');
         setFeedback('timeout');
+        
+        // Timeout penalty for Sabotage
+        if (currentSlice?.type === 'sabotage' && sabotageTarget !== null) {
+            const newScores = [...teamScores];
+            newScores[sabotageTarget] = Math.max(0, newScores[sabotageTarget] - 30);
+            setTeamScores(newScores);
+        }
+
         setTimeout(() => {
             setFeedback(null);
-            setGameState('idle');
-            // Sırayı değiştir (Takım moduysa)
-            if (gameMode === 'team') {
-                setCurrentTeamTurn((prev) => (prev + 1) % teamCount);
-            }
+            nextTurn();
         }, 2500);
     };
 
@@ -247,8 +272,20 @@ export function CarkifelekGameClient() {
         setGameMode(mode);
         setTeamCount(count);
         setTeamScores(new Array(count).fill(0));
+        setStreak(new Array(count).fill(0));
         setCurrentTeamTurn(0);
         setScore(0);
+        setGameState('idle');
+    };
+
+    const nextTurn = () => {
+        setSabotageTarget(null);
+        setStealInfo(null);
+        setSelectedOption(null);
+        setDuelEliminatedTeams([]);
+        if (gameMode === 'team') {
+            setCurrentTeamTurn((prev) => (prev + 1) % teamCount);
+        }
         setGameState('idle');
     };
 
@@ -258,14 +295,15 @@ export function CarkifelekGameClient() {
         playSound('coin-flip'); 
 
         const winningIndex = Math.floor(Math.random() * TOTAL_SLICES);
-        const winningSlice = SLICES[winningIndex];
+        const winningSlice = activeSlices[winningIndex];
         
         const sliceCenterAngle = (winningIndex * SLICE_DEGREE) + (SLICE_DEGREE / 2);
         const currentFullRotations = Math.floor(rotation / 360);
-        const targetRotation = ((currentFullRotations + 5) * 360) - sliceCenterAngle;
         
-        // Rastgelelik ekle (hep aynı yerde durmasın)
-        const jitter = Math.floor(Math.random() * 20) - 10;
+        const spins = 5 + Math.floor(Math.random() * 6);
+        const targetRotation = ((currentFullRotations + spins) * 360) - sliceCenterAngle;
+        
+        const jitter = Math.floor(Math.random() * 34) - 17;
         const finalRotation = targetRotation + jitter;
 
         setRotation(finalRotation);
@@ -278,26 +316,22 @@ export function CarkifelekGameClient() {
     };
 
     const processSliceResult = (slice: WheelSlice) => {
-        // Pas veya İflas durumunda sıra değişmeli
-        const nextTurn = () => {
-            if (gameMode === 'team') {
-                setCurrentTeamTurn((prev) => (prev + 1) % teamCount);
-            }
-            setGameState('idle');
-        };
-
         if (slice.type === 'pass') {
+            playSound('lose');
             setGameState('result');
             setTimeout(nextTurn, 2500);
         } else if (slice.type === 'bankrupt') {
-            playSound('lose');
+            playSound('lose'); // TODO: Add dramatic shatter sound
             if (gameMode === 'single') {
                 setScore(0);
             } else {
-                // Takım modunda sadece o takımın puanını sıfırla
                 const newScores = [...teamScores];
                 newScores[currentTeamTurn] = 0;
                 setTeamScores(newScores);
+                // Reset streak
+                const newStreaks = [...streak];
+                newStreaks[currentTeamTurn] = 0;
+                setStreak(newStreaks);
             }
             setGameState('result');
             setTimeout(nextTurn, 3000);
@@ -314,16 +348,61 @@ export function CarkifelekGameClient() {
             setGameState('result');
             setTimeout(() => { 
                 setShowConfetti(false); 
-                // Jokerde sıra değişmez, tekrar çevirir (opsiyonel, burada sıra değişiyor yapalım)
                 nextTurn();
             }, 3000);
+        } else if (slice.type === 'steal') {
+            playSound('win'); 
+            if (gameMode === 'team') {
+                // Lideri bul (kendisi hariç)
+                let highestScore = -1;
+                let targetIdx = -1;
+                teamScores.forEach((s, idx) => {
+                    if (idx !== currentTeamTurn && s > highestScore) {
+                        highestScore = s;
+                        targetIdx = idx;
+                    }
+                });
+                
+                if (targetIdx !== -1 && highestScore > 0) {
+                    const amount = Math.min(30, highestScore);
+                    const newScores = [...teamScores];
+                    newScores[targetIdx] -= amount;
+                    newScores[currentTeamTurn] += amount;
+                    setTeamScores(newScores);
+                    setStealInfo({ from: targetIdx, amount });
+                } else {
+                    setStealInfo(null); // Çalınacak puan yok
+                }
+            } else {
+                setScore(s => s + 30); // Teklide bedava 30 puan
+            }
+            setGameState('result');
+            setTimeout(nextTurn, 4000);
+            
+        } else if (slice.type === 'sabotage') {
+            if (gameMode === 'team') {
+                setGameState('sabotage_select');
+            } else {
+                setGameState('result'); // Teklide pas gibi davranır
+                setTimeout(nextTurn, 2500);
+            }
+        } else if (slice.type === 'duel') {
+            if (gameMode === 'team') {
+                const q = questionsHard[Math.floor(Math.random() * questionsHard.length)] || questionsEasy[Math.floor(Math.random() * questionsEasy.length)];
+                setCurrentQuestion(q);
+                setGameState('duel_question');
+            } else {
+                setScore(s => s + 50); // Teklide bedava 50 puan
+                setGameState('result');
+                setTimeout(nextTurn, 2500);
+            }
         } else {
-            // Soru sorma aşaması
+            // Soru sorma aşaması (KOLAY, ZOR, 2x)
             const pool = slice.type === 'easy' ? questionsEasy : questionsHard;
             const finalPool = slice.type === '2x' ? questionsHard : pool;
             
             if (finalPool.length === 0) {
-                // Soru kalmadıysa puan verip geç
+                // Soru kalmadıysa bedava puan ver
                 if (gameMode === 'single') setScore(s => s + slice.points);
                 else {
                     const newScores = [...teamScores];
@@ -343,37 +422,62 @@ export function CarkifelekGameClient() {
     const handleAnswer = (option: string) => {
         if (!currentQuestion || !currentSlice) return;
         
+        setSelectedOption(option);
         const isCorrect = option === currentQuestion.correctAnswer;
         
         if (isCorrect) {
             playSound('correct');
             setFeedback('correct');
             
-            let pointsToAdd = currentSlice.points;
-            if (currentSlice.type === '2x') pointsToAdd = 40; 
-            
-            if (gameMode === 'single') {
-                setScore(prev => prev + pointsToAdd);
-            } else {
+            if (currentSlice.type === 'sabotage' && sabotageTarget !== null) {
                 const newScores = [...teamScores];
-                newScores[currentTeamTurn] += pointsToAdd;
+                newScores[sabotageTarget] += 30; // Hedef kurtuldu ve puanı aldı
                 setTeamScores(newScores);
+            } else {
+                let pointsToAdd = currentSlice.points;
+                if (currentSlice.type === '2x') pointsToAdd = 40; 
+                
+                if (gameMode === 'single') {
+                    setScore(prev => prev + pointsToAdd);
+                } else {
+                    const newScores = [...teamScores];
+                    const newStreaks = [...streak];
+                    
+                    // Streak (Kombo) kontrolü
+                    const isCombo = newStreaks[currentTeamTurn] >= 2; // 3. cevapta x1.5
+                    const multiplier = isCombo ? 1.5 : 1;
+                    
+                    newScores[currentTeamTurn] += Math.floor(pointsToAdd * multiplier);
+                    newStreaks[currentTeamTurn] += 1;
+                    
+                    setTeamScores(newScores);
+                    setStreak(newStreaks);
+                }
             }
             setShowConfetti(true);
         } else {
             playSound('incorrect');
             setFeedback('wrong');
+            
+            if (currentSlice.type === 'sabotage' && sabotageTarget !== null) {
+                const newScores = [...teamScores];
+                newScores[sabotageTarget] = Math.max(0, newScores[sabotageTarget] - 30); // Hedef patladı
+                setTeamScores(newScores);
+            } else {
+                if (gameMode === 'team') {
+                    const newStreaks = [...streak];
+                    newStreaks[currentTeamTurn] = 0; // Kombo sıfırlandı
+                    setStreak(newStreaks);
+                }
+            }
         }
 
         setTimeout(() => {
             setFeedback(null);
+            setSelectedOption(null);
             setShowConfetti(false);
-            setGameState('idle');
-            // Her cevap sonrası sıra değişir
-            if (gameMode === 'team') {
-                setCurrentTeamTurn((prev) => (prev + 1) % teamCount);
-            }
-        }, 2000);
+            nextTurn();
+        }, 4000);
     };
 
     const handleSaveAndExit = async () => {
@@ -398,79 +502,86 @@ export function CarkifelekGameClient() {
     // --- SETUP EKRANI ---
     if (gameState === 'setup') {
         return (
-            <div className="h-screen w-full flex items-center justify-center bg-slate-950 p-4 relative overflow-hidden">
-                {/* Arka Plan Efektleri */}
-                <div className="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] bg-purple-600/30 rounded-full blur-[100px]" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-blue-600/30 rounded-full blur-[100px]" />
+            <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-950 p-4 md:p-8 relative overflow-hidden font-sans">
+                {/* Background FX */}
+                <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-rose-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
 
-                <Card className="w-full max-w-lg bg-slate-900/90 border-slate-800 text-white shadow-2xl relative z-10 backdrop-blur-xl">
-                    <CardHeader className="text-center">
-                        <CardTitle className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Çarkıfelek</CardTitle>
-                        <CardDescription className="text-slate-400 text-lg">Oyun modunu seçerek başla!</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex flex-col gap-6 p-8">
-                        {gameMode === 'single' ? (
-                            <div className="grid grid-cols-1 gap-4">
-                                <Button 
-                                    onClick={() => handleStartGame('single')} 
-                                    className="h-24 text-2xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-lg hover:shadow-blue-500/25 rounded-2xl transition-all hover:scale-[1.02] border border-white/10"
-                                >
-                                    <div className="flex flex-col items-center">
-                                        <span className="flex items-center gap-3"><Users className="h-8 w-8" /> Tek Kişilik</span>
-                                        <span className="text-sm font-normal opacity-80 text-blue-100">Puanın kaydedilir</span>
-                                    </div>
-                                </Button>
-                                <Button 
-                                    onClick={() => setGameMode('team')} 
-                                    variant="outline"
-                                    className="h-24 text-2xl font-black border-2 border-slate-700 bg-slate-800/50 hover:bg-slate-800 text-slate-300 hover:text-white rounded-2xl transition-all hover:scale-[1.02]"
-                                >
-                                    <div className="flex flex-col items-center">
-                                        <span className="flex items-center gap-3"><Users className="h-8 w-8" /> Takım Oyunu</span>
-                                        <span className="text-sm font-normal opacity-60">Sınıf içi etkinlik</span>
-                                    </div>
-                                </Button>
-                            </div>
-                        ) : (
-                            <div className="animate-in slide-in-from-right fade-in duration-300">
-                                <div className="text-center mb-6">
-                                    <h3 className="text-xl font-bold text-white mb-2">Kaç Takım Yarışacak?</h3>
-                                    <p className="text-slate-400 text-sm">Takım sayısını belirleyin</p>
+                <div className="relative z-10 w-full max-w-sm md:max-w-md flex flex-col items-center gap-8">
+                    {/* Game Title Logo Style */}
+                    <div className="text-center mb-6">
+                        <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-slate-400 drop-shadow-[0_10px_10px_rgba(0,0,0,0.8)] tracking-tighter uppercase italic transform -rotate-2 leading-none">
+                            Kaos<br/><span className="text-transparent bg-clip-text bg-gradient-to-b from-rose-400 to-rose-600">Çarkı</span>
+                        </h1>
+                    </div>
+
+                    {gameMode === 'single' ? (
+                        <div className="flex flex-col gap-5 w-full">
+                            <button 
+                                onClick={() => handleStartGame('single')} 
+                                className="group relative w-full bg-gradient-to-b from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 border-b-[8px] border-blue-900 rounded-[2rem] p-5 md:p-6 transition-all active:border-b-[2px] active:translate-y-[6px] shadow-2xl flex items-center gap-5"
+                            >
+                                <div className="w-16 h-16 md:w-20 md:h-20 bg-white/20 rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform">
+                                    <User className="w-8 h-8 md:w-10 md:h-10 text-white drop-shadow-md" />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4 mb-6">
-                                    {[2, 3, 4, 5].map(num => (
-                                        <Button
-                                            key={num}
-                                            onClick={() => handleStartGame('team', num)}
-                                            className={cn(
-                                                "h-20 text-3xl font-black border-b-4 active:border-b-0 active:translate-y-1 transition-all rounded-xl",
-                                                "bg-slate-800 border-slate-950 text-white hover:bg-indigo-600 hover:border-indigo-800"
-                                            )}
-                                        >
-                                            {num}
-                                        </Button>
-                                    ))}
+                                <div className="text-left flex-1">
+                                    <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide drop-shadow-md mb-1 leading-none">Tek Kişilik</h2>
+                                    <p className="text-blue-200 text-xs md:text-sm font-bold opacity-90 uppercase tracking-wider">Kendi rekorunu kır</p>
                                 </div>
-                                <Button onClick={() => setGameMode('single')} variant="ghost" className="w-full text-slate-400 hover:text-white hover:bg-white/5">
-                                    <ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön
-                                </Button>
+                            </button>
+
+                            <button 
+                                onClick={() => setGameMode('team')} 
+                                className="group relative w-full bg-gradient-to-b from-rose-500 to-rose-700 hover:from-rose-400 hover:to-rose-600 border-b-[8px] border-rose-900 rounded-[2rem] p-5 md:p-6 transition-all active:border-b-[2px] active:translate-y-[6px] shadow-2xl flex items-center gap-5"
+                            >
+                                <div className="w-16 h-16 md:w-20 md:h-20 bg-white/20 rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform">
+                                    <Users className="w-8 h-8 md:w-10 md:h-10 text-white drop-shadow-md" />
+                                </div>
+                                <div className="text-left flex-1">
+                                    <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide drop-shadow-md mb-1 leading-none">Takım Savaşı</h2>
+                                    <p className="text-rose-200 text-xs md:text-sm font-bold opacity-90 uppercase tracking-wider">Sınıfı birbirine kat!</p>
+                                </div>
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="w-full flex flex-col gap-6 animate-in slide-in-from-right fade-in duration-300">
+                            <div className="text-center">
+                                <h2 className="text-3xl md:text-4xl font-black text-white uppercase drop-shadow-md tracking-widest">Kaç Takım?</h2>
                             </div>
-                        )}
-                    </CardContent>
-                </Card>
+                            
+                            <div className="grid grid-cols-2 gap-4 md:gap-5">
+                                {[2, 3, 4, 5].map(num => (
+                                    <button
+                                        key={num}
+                                        onClick={() => handleStartGame('team', num)}
+                                        className="relative bg-gradient-to-b from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 border-b-[8px] border-purple-900 rounded-3xl h-24 md:h-32 flex items-center justify-center text-5xl md:text-6xl font-black text-white transition-all active:border-b-[2px] active:translate-y-[6px] shadow-xl group"
+                                    >
+                                        <span className="drop-shadow-lg group-hover:scale-110 transition-transform">{num}</span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button 
+                                onClick={() => setGameMode('single')} 
+                                className="mt-2 flex items-center justify-center gap-2 text-slate-400 hover:text-white font-bold uppercase tracking-widest text-sm py-4 transition-colors"
+                            >
+                                <ArrowLeft className="w-5 h-5" /> GERİ DÖN
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         );
     }
 
     if (gameState === 'finished') {
-        // --- BİTİŞ EKRANI (Tekli ve Takımlı Ayrımı) ---
          return (
              <div className="h-screen w-full flex flex-col items-center justify-center p-4 bg-slate-950 text-white gap-8 relative overflow-hidden">
                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-black to-black opacity-80" />
                  <PartyPopper className="h-24 w-24 text-yellow-500 animate-bounce relative z-10" />
                  
                  <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 relative z-10 drop-shadow-lg text-center">
-                     {gameMode === 'single' ? "Oyun Bitti!" : "Kazanan Belli Oldu!"}
+                     {gameMode === 'single' ? "Oyun Bitti!" : "Büyük Savaş Sona Erdi!"}
                  </h1>
                  
                  {gameMode === 'single' ? (
@@ -483,8 +594,6 @@ export function CarkifelekGameClient() {
                             <Button onClick={() => window.location.reload()} variant="outline" className="h-14 px-8 text-lg border-slate-700 text-slate-300 hover:bg-slate-800 w-full">
                                 Tekrar Oyna
                             </Button>
-                            
-                            {/* Giriş yapmışsa Kaydet, yapmamışsa Ana Sayfa */}
                             {user ? (
                                 <Button onClick={handleSaveAndExit} disabled={isSaving || isScoreSaved} className="h-14 px-8 text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-900/20 w-full">
                                     {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Çık"}
@@ -506,17 +615,16 @@ export function CarkifelekGameClient() {
                              </CardHeader>
                              <CardContent className="p-0 overflow-y-auto custom-scrollbar">
                                  <div className="flex flex-col">
-                                     {/* Kazananı Bul */}
                                      {(() => {
                                          const maxScore = Math.max(...teamScores);
                                          const winners = teamScores.map((s, i) => s === maxScore ? i + 1 : null).filter(Boolean);
                                          
                                          return (
                                              <div className="p-6 md:p-8 text-center bg-gradient-to-b from-slate-800/50 to-transparent flex-shrink-0">
-                                                 <h2 className="text-2xl md:text-4xl font-black text-yellow-400 mb-2 drop-shadow-md leading-tight">
-                                                     {winners.length > 1 ? "Berabere!" : `TEBRİKLER ${winners[0]}. TAKIM!`}
+                                                 <h2 className="text-3xl md:text-5xl font-black text-yellow-400 mb-2 drop-shadow-md leading-tight italic">
+                                                     {winners.length > 1 ? "BERABERLİK!" : `TEBRİKLER ${winners[0]}. TAKIM!`}
                                                  </h2>
-                                                 <p className="text-slate-400 text-sm md:text-base">Harika bir yarışmaydı!</p>
+                                                 <p className="text-slate-400 text-sm md:text-lg">Kıyasıya bir rekabet oldu!</p>
                                              </div>
                                          )
                                      })()}
@@ -526,18 +634,18 @@ export function CarkifelekGameClient() {
                                             const isWinner = score === Math.max(...teamScores) && score > 0;
                                             return (
                                                 <div key={index} className={cn(
-                                                    "flex justify-between items-center p-3 md:p-4 rounded-xl font-bold text-lg transition-all",
+                                                    "flex justify-between items-center p-4 md:p-5 rounded-2xl font-bold text-lg transition-all",
                                                     isWinner 
-                                                        ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/50 text-yellow-200 scale-[1.02] shadow-lg" 
+                                                        ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-2 border-yellow-500/50 text-yellow-200 scale-[1.02] shadow-[0_0_30px_rgba(234,179,8,0.2)]" 
                                                         : "bg-slate-800/50 border border-slate-700/50 text-slate-400"
                                                 )}>
-                                                    <div className="flex items-center gap-3">
-                                                        <span className={cn("w-8 h-8 rounded-full flex items-center justify-center text-sm", isWinner ? "bg-yellow-500 text-black" : "bg-slate-700 text-white")}>
+                                                    <div className="flex items-center gap-4">
+                                                        <span className={cn("w-10 h-10 rounded-full flex items-center justify-center text-lg font-black", isWinner ? "bg-yellow-500 text-black shadow-lg" : "bg-slate-700 text-white")}>
                                                             {index + 1}
                                                         </span>
-                                                        <span>{index + 1}. Takım</span>
+                                                        <span className="text-xl">{index + 1}. Takım</span>
                                                     </div>
-                                                    <span className="font-mono text-xl">{score} P</span>
+                                                    <span className="font-black text-2xl md:text-3xl">{score} P</span>
                                                 </div>
                                             );
                                         })}
@@ -545,20 +653,14 @@ export function CarkifelekGameClient() {
                                  </div>
                              </CardContent>
                          </Card>
-                         <div className="mt-4 md:mt-8 flex flex-col gap-3 justify-center flex-shrink-0 pb-4 w-full max-w-sm mx-auto">
-                            <Button onClick={() => window.location.reload()} className="h-12 md:h-14 px-8 md:px-10 text-lg md:text-xl font-bold rounded-full bg-white text-slate-900 hover:bg-slate-200 shadow-xl w-full">
-                                Yeni Oyun Başlat
+                         <div className="mt-4 md:mt-8 flex flex-col md:flex-row gap-4 justify-center flex-shrink-0 pb-4 w-full max-w-lg mx-auto">
+                            <Button onClick={() => window.location.reload()} className="flex-1 h-14 text-xl font-black rounded-xl bg-white text-slate-900 hover:bg-slate-200 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                                Rövanş Maçı
                             </Button>
                             
-                            {user ? (
-                                <Button onClick={() => router.push(backUrl)} variant="outline" className="h-12 md:h-14 px-8 text-lg font-bold border-slate-700 text-slate-300 hover:bg-slate-800 w-full">
-                                    <ArrowLeft className="mr-2 h-5 w-5" /> Oyun Menüsüne Dön
-                                </Button>
-                            ) : (
-                                <Button onClick={() => router.push('/')} variant="ghost" className="text-slate-400 hover:text-white w-full">
-                                    <Home className="mr-2 h-5 w-5" /> Ana Sayfa
-                                </Button>
-                            )}
+                            <Button onClick={() => router.push(backUrl)} variant="outline" className="flex-1 h-14 text-lg font-bold border-slate-700 text-slate-300 hover:bg-slate-800 rounded-xl">
+                                Ana Menüye Dön
+                            </Button>
                          </div>
                      </div>
                  )}
@@ -566,76 +668,192 @@ export function CarkifelekGameClient() {
          )
     }
 
+    const currentStreakValue = gameMode === 'team' ? streak[currentTeamTurn] : 0;
+    const isComboActive = currentStreakValue >= 2;
+
     return (
-        <div className="min-h-screen bg-slate-950 text-white overflow-hidden flex flex-col relative font-sans select-none pb-20 md:pb-0">
+        <div className={cn("min-h-screen text-white overflow-hidden flex flex-col relative font-sans select-none pb-20 md:pb-0 transition-colors duration-500",
+            currentSlice?.type === 'bankrupt' && gameState === 'result' ? "bg-red-950 shake-animation" : "bg-slate-950"
+        )}>
             <style jsx global>{wheelStyles}</style>
 
             {/* --- ARKA PLAN --- */}
-            <div className="fixed inset-0 pointer-events-none">
+            <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-black to-black" />
-                <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[80px] animate-pulse" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[80px] animate-pulse delay-700" />
+                <div className={cn("absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full blur-[100px] transition-colors duration-1000", isComboActive ? "bg-orange-600/40 animate-pulse" : "bg-purple-600/20")} />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px] animate-pulse delay-700" />
             </div>
 
-            {/* --- HUD --- */}
-            {/* Mobilde Column (Üst alta), Masaüstünde Row (Sağ Sol) ve Aralıklı */}
-            <div className="relative z-20 p-2 md:p-4 flex flex-col md:flex-row justify-between items-start md:items-center max-w-[95%] mx-auto w-full gap-2 pointer-events-none">
-                
-                {/* Sol Üst: Çıkış Butonu */}
-                <div className="pointer-events-auto flex items-center justify-between w-full md:w-auto">
-                    <Button variant="ghost" className="text-slate-400 hover:text-white" onClick={() => setGameState('finished')}>
-                        <ArrowLeft className="mr-2 h-5 w-5" /> <span className="hidden md:inline">Bitir</span>
-                    </Button>
+            {/* --- SABOTAJ SEÇİM EKRANI --- */}
+            {gameState === 'sabotage_select' && (
+                <div className="absolute inset-0 z-[100] bg-black/90 flex flex-col items-center justify-center p-4 animate-in zoom-in-95 duration-300">
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/40 via-transparent to-transparent pointer-events-none" />
+                    <Bomb className="w-24 h-24 text-purple-500 animate-pulse mb-6 drop-shadow-[0_0_30px_rgba(168,85,247,0.5)]" />
+                    <h2 className="text-4xl md:text-6xl font-black text-purple-400 mb-4 uppercase tracking-tighter drop-shadow-lg text-center italic">HEDEFİNİ SEÇ!</h2>
+                    <p className="text-slate-300 mb-10 text-xl md:text-2xl text-center max-w-xl font-bold bg-purple-900/30 px-6 py-3 rounded-full border border-purple-500/30">
+                        Zor soruyu kime kitleyeceksin? Yanlış bilirlerse <span className="text-red-400">-30 Puan</span> kaybedecekler!
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl">
+                        {teamScores.map((_, idx) => {
+                            if (idx === currentTeamTurn) return null;
+                            return (
+                                <button 
+                                    key={idx}
+                                    onClick={() => {
+                                        playSound('click');
+                                        setSabotageTarget(idx);
+                                        const pool = questionsHard;
+                                        const q = pool[Math.floor(Math.random() * pool.length)] || questionsEasy[0];
+                                        setCurrentQuestion(q);
+                                        setGameState('question');
+                                    }}
+                                    className="group bg-slate-900 hover:bg-purple-600 border-2 border-purple-500/50 p-6 rounded-2xl transition-all shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:scale-105 hover:-translate-y-2 flex items-center justify-between"
+                                >
+                                    <span className="text-2xl md:text-3xl font-black text-white">{idx + 1}. TAKIM</span>
+                                    <Target className="w-8 h-8 text-purple-400 group-hover:text-white" />
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
+            {/* --- DÜELLO EKRANI --- */}
+            {gameState === 'duel_question' && currentQuestion && (
+                <div className="absolute inset-0 z-[100] bg-slate-950 flex flex-col animate-in fade-in duration-500 overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rose-900/20 via-slate-950 to-slate-950 pointer-events-none" />
                     
-                    {/* Mobilde Tekli Mod Skoru */}
-                    {gameMode === 'single' && (
-                        <div className="md:hidden bg-slate-900/80 border border-white/10 px-4 py-1.5 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md">
-                            <Trophy className="h-4 w-4 text-yellow-400" />
-                            <span className="text-lg font-mono font-black text-white">{score}</span>
+                    {/* Üst Kısım: Soru */}
+                    <div className="relative z-10 p-6 md:p-10 border-b-4 border-rose-900/50 bg-slate-900/80 shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col items-center shrink-0">
+                        <div className="flex items-center gap-4 mb-4">
+                            <Swords className="w-10 h-10 md:w-12 md:h-12 text-rose-500 animate-pulse" />
+                            <h2 className="text-3xl md:text-5xl font-black text-rose-400 uppercase tracking-tighter drop-shadow-lg italic">DÜELLO ZAMANI</h2>
+                            <Swords className="w-10 h-10 md:w-12 md:h-12 text-rose-500 animate-pulse" />
                         </div>
-                    )}
+                        <h3 className="text-2xl md:text-4xl font-black text-white text-center leading-snug max-w-5xl drop-shadow-md">
+                            {currentQuestion.text}
+                        </h3>
+                    </div>
+                    
+                    {/* Alt Kısım: Takım Alanları (Split Screen) */}
+                    <div className={cn(
+                        "flex-1 relative z-10 w-full h-full grid gap-2 p-2",
+                        teamCount === 2 ? "grid-cols-2" :
+                        teamCount === 3 ? "grid-cols-3" :
+                        teamCount === 4 ? "grid-cols-2 grid-rows-2" :
+                        "grid-cols-3 grid-rows-2" // 5 veya 6 takımsa
+                    )}>
+                        {Array.from({ length: teamCount }).map((_, idx) => {
+                            const isEliminated = duelEliminatedTeams.includes(idx);
+                            // Renk paleti
+                            const teamColors = [
+                                "from-blue-900/80 to-blue-950 border-blue-500/50 hover:border-blue-400",
+                                "from-red-900/80 to-red-950 border-red-500/50 hover:border-red-400",
+                                "from-green-900/80 to-green-950 border-green-500/50 hover:border-green-400",
+                                "from-yellow-900/80 to-yellow-950 border-yellow-500/50 hover:border-yellow-400",
+                                "from-purple-900/80 to-purple-950 border-purple-500/50 hover:border-purple-400",
+                                "from-pink-900/80 to-pink-950 border-pink-500/50 hover:border-pink-400"
+                            ];
+                            const colorClass = teamColors[idx % teamColors.length];
+
+                            return (
+                                <div key={idx} className={cn(
+                                    "relative rounded-3xl border-4 overflow-hidden flex flex-col p-4 md:p-6 transition-all duration-300",
+                                    isEliminated ? "bg-slate-900 border-slate-800 opacity-40 grayscale" : `bg-gradient-to-br ${colorClass} shadow-2xl`
+                                )}>
+                                    {isEliminated && (
+                                        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                                            <X className="w-32 h-32 text-red-500 drop-shadow-lg" />
+                                        </div>
+                                    )}
+                                    <div className="text-center mb-4 shrink-0">
+                                        <h4 className="text-2xl md:text-3xl font-black text-white/90 drop-shadow-md">{idx + 1}. TAKIM</h4>
+                                        <p className="text-white/50 text-sm font-bold uppercase tracking-widest">Senin Bölgen</p>
+                                    </div>
+                                    <div className="flex-1 flex flex-col gap-3 justify-center">
+                                        {currentQuestion.options?.map((opt, optIdx) => (
+                                            <button
+                                                key={optIdx}
+                                                disabled={isEliminated}
+                                                onClick={() => {
+                                                    if (opt === currentQuestion.correctAnswer) {
+                                                        playSound('win');
+                                                        const newScores = [...teamScores];
+                                                        newScores[idx] += 50;
+                                                        setTeamScores(newScores);
+                                                        setShowConfetti(true);
+                                                        setGameState('result');
+                                                        setTimeout(() => {
+                                                            setShowConfetti(false);
+                                                            nextTurn();
+                                                        }, 4000);
+                                                    } else {
+                                                        playSound('incorrect');
+                                                        const newEliminated = [...duelEliminatedTeams, idx];
+                                                        setDuelEliminatedTeams(newEliminated);
+                                                        if (newEliminated.length >= teamCount) {
+                                                            // Herkes elendi
+                                                            setGameState('result');
+                                                            setTimeout(nextTurn, 2500);
+                                                        }
+                                                    }
+                                                }}
+                                                className={cn(
+                                                    "flex-1 min-h-[60px] rounded-xl font-bold text-lg md:text-xl transition-all shadow-md active:scale-95 border-2 flex items-center justify-center p-3",
+                                                    isEliminated ? "bg-slate-800 text-slate-500 border-slate-700" : "bg-black/40 text-white border-white/20 hover:bg-white/20 hover:border-white/50 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                                                )}
+                                            >
+                                                {opt}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
+            {/* --- HUD --- */}
+            <div className="relative z-20 p-2 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-4 pointer-events-none">
+                
+                <div className="pointer-events-auto flex items-center gap-4">
+                    <Button variant="ghost" className="text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-full h-12 w-12 p-0 shadow-lg backdrop-blur-md border border-white/10" onClick={() => setGameState('finished')}>
+                        <ArrowLeft className="h-6 w-6" />
+                    </Button>
                 </div>
 
-                {/* --- SKORBOARD (SAĞ TARAFA YASLI & DİKEY - MASAÜSTÜ) --- */}
+                {/* --- SKORBOARD --- */}
                 {gameMode === 'team' && (
-                    <div className="pointer-events-auto w-full md:w-auto md:fixed md:right-6 md:top-1/2 md:transform md:-translate-y-1/2 z-30 transition-all duration-500">
-                        {/* Mobilde Yatay Scroll, Masaüstünde Dikey Liste */}
-                        <div className={cn(
-                            "bg-slate-900/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl p-2",
-                            "flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible no-scrollbar"
-                        )}>
-                            {/* Başlık (Sadece Masaüstü) */}
-                            <div className="hidden md:flex items-center justify-center p-2 border-b border-white/5 mb-2">
-                                <Trophy className="h-5 w-5 text-yellow-500 mr-2" />
-                                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">SKORLAR</span>
-                            </div>
-
+                    <div className="pointer-events-auto w-full md:w-auto z-30 transition-all duration-500 absolute top-4 right-4 md:right-8">
+                        <div className="bg-slate-900/80 backdrop-blur-md rounded-[2rem] border border-white/10 shadow-2xl p-2 md:p-3 flex gap-2">
                             {teamScores.slice(0, teamCount).map((s, i) => {
                                 const isCurrentTurn = currentTeamTurn === i;
                                 const isLeader = s === Math.max(...teamScores) && s > 0;
 
                                 return (
                                     <div key={i} className={cn(
-                                        "flex flex-col items-center justify-center rounded-xl transition-all duration-500 relative min-w-[70px] md:min-w-[100px]",
+                                        "flex flex-col items-center justify-center rounded-2xl transition-all duration-500 relative min-w-[70px] md:min-w-[100px]",
                                         isCurrentTurn 
-                                            ? "bg-gradient-to-br from-indigo-600 to-violet-700 text-white shadow-lg scale-105 md:scale-110 z-10 py-3 md:py-4 border border-indigo-400/50" 
-                                            : "bg-slate-800/40 text-slate-400 border border-transparent py-2 md:py-3 hover:bg-slate-800/60"
+                                            ? "bg-gradient-to-b from-indigo-600 to-indigo-800 text-white shadow-[0_0_20px_rgba(79,70,229,0.5)] scale-110 z-10 py-3 md:py-4 border-2 border-indigo-400" 
+                                            : "bg-slate-800/40 text-slate-400 border border-transparent py-2 md:py-3"
                                     )}>
-                                        {/* Lider Tacı */}
                                         {isLeader && (
                                             <div className="absolute -top-3 md:-top-4 -right-1 md:-right-2 animate-bounce z-20">
                                                 <Crown className="w-5 h-5 md:w-6 md:h-6 text-yellow-400 fill-yellow-400 drop-shadow-lg" />
                                             </div>
                                         )}
-                                        
+                                        {isComboActive && isCurrentTurn && (
+                                            <div className="absolute -bottom-3 animate-pulse z-20">
+                                                <Flame className="w-6 h-6 text-orange-500 fill-orange-500 drop-shadow-[0_0_10px_rgba(249,115,22,0.8)]" />
+                                            </div>
+                                        )}
                                         <div className="flex items-center gap-1.5 mb-1">
-                                            <span className={cn("w-2 h-2 rounded-full", isCurrentTurn ? "bg-green-400 animate-pulse" : "bg-slate-600")}></span>
-                                            <span className={cn("text-[9px] md:text-[10px] font-black uppercase tracking-wider", isCurrentTurn ? "text-indigo-100" : "text-slate-500")}>
+                                            <span className={cn("text-[10px] md:text-xs font-black uppercase tracking-wider", isCurrentTurn ? "text-indigo-200" : "text-slate-500")}>
                                                 TAKIM {i + 1}
                                             </span>
                                         </div>
-                                        
-                                        <span className={cn("font-mono font-black leading-none", isCurrentTurn ? "text-2xl md:text-4xl drop-shadow-md" : "text-lg md:text-2xl")}>
+                                        <span className={cn("font-black leading-none", isCurrentTurn ? "text-3xl md:text-4xl drop-shadow-md" : "text-xl md:text-2xl")}>
                                             {s}
                                         </span>
                                     </div>
@@ -645,12 +863,12 @@ export function CarkifelekGameClient() {
                     </div>
                 )}
 
-                {/* --- TEKLİ MOD SKORU (Masaüstü) --- */}
+                {/* --- TEKLİ MOD SKORU --- */}
                 {gameMode === 'single' && (
-                    <div className="hidden md:block pointer-events-auto">
-                        <div className="bg-slate-900/80 border border-white/10 px-6 py-3 rounded-full shadow-xl flex items-center gap-3 backdrop-blur-md">
-                            <Trophy className="h-6 w-6 text-yellow-400" />
-                            <span className="text-2xl font-mono font-black text-white tracking-widest">{score}</span>
+                    <div className="pointer-events-auto absolute top-4 right-4 md:right-8">
+                        <div className="bg-slate-900/80 border border-white/10 px-8 py-4 rounded-full shadow-2xl flex items-center gap-4 backdrop-blur-md">
+                            <Trophy className="h-8 w-8 text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]" />
+                            <span className="text-3xl font-black text-white tracking-widest">{score}</span>
                         </div>
                     </div>
                 )}
@@ -659,29 +877,40 @@ export function CarkifelekGameClient() {
             {/* --- OYUN ALANI --- */}
             <div className="flex-grow flex flex-col items-center justify-center relative z-10 p-2 overflow-hidden min-h-[500px]">
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                    <Confetti active={showConfetti} config={{ elementCount: 150, spread: 360, startVelocity: 30 }} />
+                    <Confetti active={showConfetti} config={{ elementCount: 300, spread: 360, startVelocity: 40, colors: ['#facc15', '#f43f5e', '#3b82f6', '#10b981'] }} />
                 </div>
 
-                {/* SIRA GÖSTERGESİ (Takım Modu - Çark Üstü) */}
+                {/* SIRA GÖSTERGESİ */}
                 {gameMode === 'team' && gameState === 'idle' && (
-                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 animate-in slide-in-from-top-4 fade-in w-full text-center">
-                        <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-2 rounded-full shadow-2xl">
-                            <span className="text-slate-300 text-sm font-bold uppercase tracking-wider">Sıra:</span>
-                            <span className="text-xl font-black text-white flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-indigo-500 animate-pulse" />
-                                {currentTeamTurn + 1}. TAKIM
-                            </span>
-                        </div>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 z-30 animate-in slide-in-from-top-10 fade-in duration-500 w-full text-center mt-10 md:mt-0">
+                        {isComboActive ? (
+                            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-600 to-red-600 border border-orange-400 px-8 py-3 rounded-full shadow-[0_0_30px_rgba(234,88,12,0.5)] animate-pulse">
+                                <Flame className="w-6 h-6 text-yellow-300" />
+                                <span className="text-xl md:text-2xl font-black text-white tracking-widest italic">{currentTeamTurn + 1}. TAKIM ALEV ALDI! (x1.5 Puan)</span>
+                                <Flame className="w-6 h-6 text-yellow-300" />
+                            </div>
+                        ) : (
+                            <div className="inline-flex items-center gap-4 bg-slate-900/80 backdrop-blur-xl border border-white/10 px-8 py-3 rounded-full shadow-2xl">
+                                <span className="text-slate-400 text-sm font-bold uppercase tracking-widest">Sıra Kimde?</span>
+                                <span className="text-2xl font-black text-white flex items-center gap-3">
+                                    <div className="w-4 h-4 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_10px_rgba(99,102,241,0.8)]" />
+                                    {currentTeamTurn + 1}. TAKIM
+                                </span>
+                            </div>
+                        )}
                     </div>
                 )}
 
                 {/* --- ÇARK --- */}
-                <div className={cn("transition-all duration-700 transform origin-center mt-8 md:mt-0", gameState === 'question' || gameState === 'feedback' ? "scale-0 opacity-0" : "scale-100 opacity-100")}>
+                <div className={cn("transition-all duration-700 transform origin-center mt-16 md:mt-0", gameState === 'question' || gameState === 'feedback' || gameState === 'sabotage_select' || gameState === 'duel_question' ? "scale-0 opacity-0" : "scale-100 opacity-100")}>
                     <div className="wheel-wrapper">
                         <div className="pointer"></div>
 
-                        <div className="wheel-container" style={{ transform: `rotate(${rotation}deg)` }}>
-                            {SLICES.map((slice, index) => {
+                        <div className="wheel-container" style={{ 
+                            transform: `rotate(${rotation}deg)`,
+                            background: `conic-gradient(from 0deg, ${wheelGradientStops})`
+                        }}>
+                            {activeSlices.map((slice, index) => {
                                 const angle = index * SLICE_DEGREE + (SLICE_DEGREE / 2);
                                 const Icon = slice.icon;
                                 
@@ -711,160 +940,176 @@ export function CarkifelekGameClient() {
 
                 {/* --- KONTROL BUTONU --- */}
                 {gameState === 'idle' && (
-                    <div className="mt-8 md:mt-12 animate-in slide-in-from-bottom-8 fade-in duration-500 z-30">
+                    <div className="mt-8 md:mt-16 animate-in slide-in-from-bottom-10 fade-in duration-500 z-30">
                         <button 
                             onClick={spinWheel}
-                            className="group relative px-10 md:px-16 py-4 md:py-6 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full font-black text-lg md:text-2xl text-white shadow-[0_0_50px_rgba(124,58,237,0.5)] hover:scale-105 transition-transform active:scale-95 border-4 border-white/20"
+                            className={cn("group relative px-12 md:px-20 py-5 md:py-8 rounded-full font-black text-xl md:text-3xl text-white shadow-[0_0_50px_rgba(124,58,237,0.5)] hover:scale-105 transition-all active:scale-95 border-4",
+                                isComboActive ? "bg-gradient-to-r from-orange-500 to-red-600 border-yellow-400 shadow-[0_0_50px_rgba(249,115,22,0.8)]" : "bg-gradient-to-r from-purple-600 to-indigo-600 border-white/20"
+                            )}
                         >
-                            <span className="relative z-10 flex items-center gap-3">
-                                {gameMode === 'team' ? `${currentTeamTurn + 1}. TAKIM ÇEVİR!` : "ÇEVİR!"} <Zap className="w-5 h-5 md:w-6 md:h-6 fill-white" />
+                            <span className="relative z-10 flex items-center gap-3 md:gap-4 drop-shadow-md">
+                                {isComboActive && <Flame className="w-6 h-6 md:w-8 md:h-8 fill-yellow-300 text-yellow-300" />}
+                                {gameMode === 'team' ? `${currentTeamTurn + 1}. TAKIM ÇEVİR!` : "ÇARKI ÇEVİR!"} 
+                                {!isComboActive && <Zap className="w-6 h-6 md:w-8 md:h-8 fill-white" />}
                             </span>
                         </button>
                     </div>
                 )}
 
-                {/* --- SONUÇ MESAJI (Pas, İflas, Joker) --- */}
+                {/* --- SONUÇ MESAJI (Pas, İflas, Joker, Steal, Düello Sonucu) --- */}
                 {gameState === 'result' && currentSlice && (
-                    <div className="absolute inset-0 flex items-center justify-center z-30 px-4">
-                        <div className="bg-slate-900/95 border border-white/20 p-8 md:p-10 rounded-[2rem] shadow-2xl backdrop-blur-xl w-full max-w-sm text-center animate-in zoom-in duration-300">
-                            <div className="mb-4 flex justify-center">
-                                <div className="p-4 rounded-full bg-white/10">
-                                    <currentSlice.icon className="w-12 h-12 md:w-16 md:h-16" style={{ color: currentSlice.color }} />
+                    <div className="absolute inset-0 flex items-center justify-center z-[110] px-4">
+                        <div className={cn("bg-slate-900/95 border p-8 md:p-12 rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.8)] backdrop-blur-xl w-full max-w-md text-center animate-in zoom-in-75 duration-300",
+                            currentSlice.type === 'bankrupt' ? "border-red-500/50" : "border-white/20"
+                        )}>
+                            <div className="mb-8 flex justify-center">
+                                <div className="p-6 rounded-full bg-white/5 shadow-inner">
+                                    <currentSlice.icon className={cn("w-20 h-20 md:w-24 md:h-24", currentSlice.type === 'bankrupt' && "animate-bounce")} style={{ color: currentSlice.color }} />
                                 </div>
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-black mb-4 uppercase tracking-tighter" style={{ color: currentSlice.color }}>
+                            <h2 className="text-5xl md:text-6xl font-black mb-6 uppercase tracking-tighter drop-shadow-lg italic" style={{ color: currentSlice.color }}>
                                 {currentSlice.label}
                             </h2>
-                            <p className="text-slate-300 text-base md:text-lg font-medium">
-                                {currentSlice.type === 'pass' && "Bu turu pas geçiyorsun."}
-                                {currentSlice.type === 'bankrupt' && "Eyvah! Puanlar gitti."}
-                                {currentSlice.type === 'joker' && "Şanslısın! +50 Puan kazandın."}
+                            <p className="text-slate-200 text-xl md:text-2xl font-bold leading-relaxed">
+                                {currentSlice.type === 'pass' && "Bu turu pas geçiyorsun. Sıra diğer takımda."}
+                                {currentSlice.type === 'bankrupt' && "Eyvah! Puanlar sıfırlandı. Çok yazık!"}
+                                {currentSlice.type === 'joker' && "Şanslısın! Hiçbir şey yapmadan +50 Puan kaptın!"}
+                                {currentSlice.type === 'duel' && "Büyük kapışma sona erdi! (50 Puan)"}
+                                {currentSlice.type === 'sabotage' && "Bomba patladı!"}
+                                {currentSlice.type === 'steal' && stealInfo 
+                                    ? `İnanılmaz! Lider olan ${stealInfo.from + 1}. Takım'dan ${stealInfo.amount} puan çaldın!` 
+                                    : (currentSlice.type === 'steal' && "Çalacak puanı olan rakip yoktu...")}
                             </p>
                         </div>
                     </div>
                 )}
 
-                {/* --- SORU MODALI --- */}
+                {/* --- NORMAL SORU MODALI --- */}
                 {(gameState === 'question' || gameState === 'feedback') && currentQuestion && currentSlice && (
-                    <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300">
-                        {/* fixed ve yüksek z-index ile ekranı kaplar */}
+                    <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in zoom-in-95 duration-300">
                         <div className={cn(
-                            "bg-slate-900 border border-white/10 rounded-[2rem] p-6 md:p-10 w-full max-w-3xl shadow-2xl relative overflow-hidden flex flex-col transition-all max-h-[85dvh]", // Mobilde taşmayı önlemek için max-h ve dvh
-                            feedback === 'correct' && "border-green-500/50 shadow-[0_0_50px_rgba(16,185,129,0.2)]",
-                            feedback === 'wrong' && "border-red-500/50 shadow-[0_0_50px_rgba(239,68,68,0.2)]"
+                            "bg-slate-900 border-2 rounded-[3rem] p-6 md:p-12 w-full max-w-4xl shadow-2xl relative overflow-hidden flex flex-col transition-all max-h-[90dvh]",
+                            feedback === 'correct' ? "border-emerald-500 shadow-[0_0_100px_rgba(16,185,129,0.3)]" : 
+                            feedback === 'wrong' ? "border-rose-500 shadow-[0_0_100px_rgba(244,63,94,0.3)]" : 
+                            "border-white/10"
                         )}>
                             
                             {/* Header: Kategori, Puan, Timer */}
-                            <div className="flex justify-between items-center mb-6 md:mb-8 flex-shrink-0">
-                                <div className="flex gap-2">
-                                    <span className="text-xs font-bold px-3 py-1.5 rounded-full uppercase text-white shadow-md flex items-center gap-2" style={{ backgroundColor: currentSlice.color }}>
-                                        <currentSlice.icon className="w-3 h-3" /> {currentSlice.label}
-                                    </span>
-                                    <span className="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-3 py-1.5 rounded-full text-xs font-bold">
-                                        +{currentSlice.type === '2x' ? 40 : currentSlice.points} P
-                                    </span>
+                            <div className="flex justify-between items-start md:items-center mb-8 flex-shrink-0 flex-col md:flex-row gap-4">
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex gap-3">
+                                        <span className="text-sm font-black px-4 py-2 rounded-full uppercase text-white shadow-lg flex items-center gap-2" style={{ backgroundColor: currentSlice.color }}>
+                                            <currentSlice.icon className="w-4 h-4" /> {currentSlice.label}
+                                        </span>
+                                        {currentSlice.type !== 'sabotage' && (
+                                            <span className="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-4 py-2 rounded-full text-sm font-black flex items-center gap-1">
+                                                +{currentSlice.type === '2x' ? 40 : currentSlice.points} P
+                                                {isComboActive && <Flame className="w-4 h-4 text-orange-400" />}
+                                            </span>
+                                        )}
+                                    </div>
+                                    {currentSlice.type === 'sabotage' && sabotageTarget !== null && (
+                                        <span className="text-sm font-black text-rose-400 bg-rose-500/20 border border-rose-500/50 px-4 py-2 rounded-full animate-pulse flex items-center gap-2">
+                                            <Bomb className="w-4 h-4" /> CEVAPLAMA SIRASI: {sabotageTarget + 1}. TAKIM (Yanlış -30P)
+                                        </span>
+                                    )}
                                 </div>
 
                                 {/* Timer */}
-                                {timeLeft !== null && (
+                                {timeLeft !== null && feedback === null && (
                                     <div className={cn(
-                                        "flex items-center gap-2 px-4 py-2 rounded-full font-black text-xl transition-all shadow-lg",
-                                        timeLeft <= 5 ? "bg-red-600 text-white animate-pulse" : "bg-slate-800 text-white border border-slate-700"
+                                        "flex items-center gap-3 px-6 py-3 rounded-full font-black text-3xl transition-all shadow-xl self-end md:self-auto",
+                                        timeLeft <= 5 ? "bg-red-600 text-white animate-pulse" : "bg-slate-800 text-white border-2 border-slate-700"
                                     )}>
-                                        <Clock className="w-5 h-5" />
+                                        <TimerIcon className="w-6 h-6" />
                                         {timeLeft}
                                     </div>
                                 )}
                             </div>
                             
                             {/* Scrollable Content Container */}
-                            <div className="overflow-y-auto custom-scrollbar flex-1 -mr-2 pr-2">
+                            <div className="overflow-y-auto custom-scrollbar flex-1 -mr-4 pr-4">
                                 {/* Soru Metni */}
-                                <div className="mb-8 md:mb-10 text-center">
-                                    <h3 className="text-xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 leading-tight drop-shadow-sm">
+                                <div className="mb-10 md:mb-12 text-center">
+                                    <h3 className="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300 leading-snug drop-shadow-md">
                                         {currentQuestion.text}
                                     </h3>
                                 </div>
 
                                 {/* Süre Doldu Mesajı */}
                                 {feedback === 'timeout' && (
-                                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/90 backdrop-blur-sm animate-in fade-in">
+                                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-md animate-in zoom-in">
                                         <div className="text-center">
-                                            <TimerIcon className="w-20 h-20 text-red-500 mx-auto mb-4 animate-bounce" />
-                                            <h2 className="text-4xl font-black text-white">SÜRE DOLDU!</h2>
+                                            <TimerIcon className="w-24 h-24 text-red-500 mx-auto mb-6 animate-bounce" />
+                                            <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter">SÜRE DOLDU!</h2>
                                         </div>
                                     </div>
                                 )}
 
+                                {/* Geri Bildirim Banner'ı (Doğru/Yanlış) */}
+                                {feedback && feedback !== 'timeout' && (
+                                    <div className="absolute top-0 left-0 w-full z-50 flex flex-col items-center justify-center p-4 animate-in slide-in-from-top-10 duration-300">
+                                        {feedback === 'correct' ? (
+                                            <div className="bg-emerald-500/90 text-white px-8 py-3 rounded-full font-black text-2xl md:text-3xl shadow-[0_10px_40px_rgba(16,185,129,0.5)] flex items-center gap-3 backdrop-blur-md">
+                                                <CheckCircle2 className="w-8 h-8" /> DOĞRU CEVAP!
+                                            </div>
+                                        ) : (
+                                            <div className="bg-rose-500/90 text-white px-8 py-3 rounded-full font-black text-2xl md:text-3xl shadow-[0_10px_40px_rgba(244,63,94,0.5)] flex items-center gap-3 backdrop-blur-md">
+                                                <X className="w-8 h-8" /> YANLIŞ CEVAP!
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
                                 {/* Seçenekler */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 pb-16">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 pb-6 mt-8 relative z-10">
                                     {currentQuestion.options?.map((opt, idx) => {
-                                        let btnStyle = "bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300"; // Varsayılan
+                                        const isSelected = selectedOption === opt;
+                                        const isCorrect = opt === currentQuestion.correctAnswer;
+                                        let btnClass = "bg-slate-800/80 border-slate-700 text-slate-200 hover:border-indigo-500 hover:bg-slate-800";
                                         
-                                        // Cevap Verildiğinde Renkler
-                                        if (feedback) {
-                                            if (opt === currentQuestion.correctAnswer) {
-                                                btnStyle = "bg-emerald-600 border-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10";
-                                            } else if (feedback === 'wrong' && opt !== currentQuestion.correctAnswer) {
-                                                btnStyle = "bg-slate-800/50 text-slate-600 border-transparent opacity-50";
+                                        if (feedback !== null) {
+                                            if (isCorrect) {
+                                                btnClass = "bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-[0_0_30px_rgba(16,185,129,0.4)] transform scale-[1.02] z-10";
+                                            } else if (isSelected) {
+                                                btnClass = "bg-rose-500/20 border-rose-500 text-rose-300 shadow-[0_0_30px_rgba(244,63,94,0.4)]";
+                                            } else {
+                                                btnClass = "bg-slate-900 border-slate-800 text-slate-600 opacity-50";
                                             }
-                                        } else {
-                                            // Hover Efekti (Cevap verilmediyse)
-                                            btnStyle += " hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 hover:-translate-y-1";
                                         }
 
                                         return (
                                             <button
                                                 key={idx}
-                                                disabled={feedback !== null}
                                                 onClick={() => handleAnswer(opt)}
+                                                disabled={feedback !== null}
                                                 className={cn(
-                                                    "relative overflow-hidden py-4 px-5 md:py-5 md:px-6 rounded-2xl font-bold text-base md:text-xl border-2 transition-all duration-300 group text-left",
-                                                    btnStyle
+                                                    "group relative overflow-hidden py-6 px-8 rounded-2xl font-bold text-lg md:text-xl transition-all duration-300 border-2 text-left flex items-center",
+                                                    feedback === null && "shadow-lg hover:shadow-xl hover:scale-[1.02]",
+                                                    btnClass,
+                                                    feedback !== null && !isCorrect && !isSelected && "cursor-not-allowed transform-none"
                                                 )}
                                             >
-                                                <div className="relative z-10 flex items-center gap-4">
-                                                    <span className={cn(
-                                                        "w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black border flex-shrink-0",
-                                                        feedback && opt === currentQuestion.correctAnswer 
-                                                            ? "bg-white text-emerald-600 border-white" 
-                                                            : "bg-slate-700 text-slate-400 border-slate-600 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-500"
-                                                    )}>
-                                                        {String.fromCharCode(65 + idx)}
-                                                    </span>
-                                                    <span className="leading-snug">{opt}</span>
-                                                </div>
-                                                
-                                                {/* Arkaplan Gradyan Efekti */}
-                                                {!feedback && <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/0 via-indigo-600/0 to-indigo-600/0 group-hover:from-indigo-600/10 group-hover:via-purple-600/10 group-hover:to-blue-600/10 transition-all duration-500" />}
+                                                <span className={cn("w-10 h-10 rounded-xl flex items-center justify-center mr-6 font-black shrink-0 border transition-colors",
+                                                    feedback !== null ? (isCorrect ? "bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.5)]" : isSelected ? "bg-rose-500 text-white border-rose-400" : "bg-black/20 text-slate-600 border-white/5") : "bg-black/40 text-indigo-400 group-hover:text-indigo-300 border-white/5"
+                                                )}>
+                                                    {String.fromCharCode(65 + idx)}
+                                                </span>
+                                                {opt}
                                             </button>
                                         );
                                     })}
                                 </div>
                             </div>
-
-                            {/* Geri Bildirim */}
-                            {feedback && feedback !== 'timeout' && (
-                                <div className={cn(
-                                    "absolute bottom-0 left-0 right-0 p-4 text-center border-t border-white/10 animate-in slide-in-from-bottom-full duration-300",
-                                    feedback === 'correct' ? "bg-emerald-900/90" : "bg-red-900/90"
-                                )}>
-                                    <span className="text-lg md:text-xl font-black text-white flex items-center justify-center gap-3">
-                                        {feedback === 'correct' ? <CheckCircle2 className="w-6 h-6 md:w-8 md:h-8" /> : <X className="w-6 h-6 md:w-8 md:h-8" />}
-                                        {feedback === 'correct' ? 'HARİKA, DOĞRU CEVAP!' : 'MAALESEF YANLIŞ!'}
-                                    </span>
-                                </div>
-                            )}
                         </div>
                     </div>
                 )}
-
             </div>
         </div>
     );
 }
 
-export default function CarkifelekPageWrapper() {
+export default function CarkifelekGamePage() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-purple-500" /></div>}>
             <CarkifelekGameClient/>

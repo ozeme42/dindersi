@@ -131,15 +131,15 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
 };
 
 // --- ORTAK RENK TEMALARI ---
-const FLASHCARD_THEMES = [
-    { front: 'bg-gradient-to-br from-rose-50 to-rose-100/50 border-rose-300 text-rose-950', back: 'bg-gradient-to-br from-rose-500 to-rose-600 border-rose-700 text-white shadow-[0_0_25px_rgba(225,29,72,0.4)]' },
-    { front: 'bg-gradient-to-br from-blue-50 to-blue-100/50 border-blue-300 text-blue-950', back: 'bg-gradient-to-br from-blue-500 to-blue-600 border-blue-700 text-white shadow-[0_0_25px_rgba(37,99,235,0.4)]' },
-    { front: 'bg-gradient-to-br from-emerald-50 to-emerald-100/50 border-emerald-300 text-emerald-950', back: 'bg-gradient-to-br from-emerald-500 to-emerald-600 border-emerald-700 text-white shadow-[0_0_25px_rgba(5,150,105,0.4)]' },
-    { front: 'bg-gradient-to-br from-amber-50 to-amber-100/50 border-amber-300 text-amber-950', back: 'bg-gradient-to-br from-amber-500 to-amber-600 border-amber-700 text-white shadow-[0_0_25px_rgba(217,119,6,0.4)]' },
-    { front: 'bg-gradient-to-br from-purple-50 to-purple-100/50 border-purple-300 text-purple-950', back: 'bg-gradient-to-br from-purple-500 to-purple-600 border-purple-700 text-white shadow-[0_0_25px_rgba(147,51,234,0.4)]' },
-    { front: 'bg-gradient-to-br from-cyan-50 to-cyan-100/50 border-cyan-300 text-cyan-950', back: 'bg-gradient-to-br from-cyan-500 to-cyan-600 border-cyan-700 text-white shadow-[0_0_25px_rgba(8,145,178,0.4)]' },
-    { front: 'bg-gradient-to-br from-indigo-50 to-indigo-100/50 border-indigo-300 text-indigo-950', back: 'bg-gradient-to-br from-indigo-500 to-indigo-600 border-indigo-700 text-white shadow-[0_0_25px_rgba(79,70,229,0.4)]' },
-    { front: 'bg-gradient-to-br from-orange-50 to-orange-100/50 border-orange-300 text-orange-950', back: 'bg-gradient-to-br from-orange-500 to-orange-600 border-orange-700 text-white shadow-[0_0_25px_rgba(234,88,12,0.4)]' },
+export const FLASHCARD_THEMES = [
+    { front: 'bg-gradient-to-br from-rose-950 to-rose-900 border-rose-500/50 text-white drop-shadow-md', back: 'bg-gradient-to-br from-rose-600 to-rose-700 border-rose-400/60 text-white shadow-[0_0_20px_rgba(225,29,72,0.3)]' },
+    { front: 'bg-gradient-to-br from-sky-950 to-blue-900 border-sky-500/50 text-white drop-shadow-md', back: 'bg-gradient-to-br from-sky-600 to-blue-700 border-sky-400/60 text-white shadow-[0_0_20px_rgba(14,165,233,0.3)]' },
+    { front: 'bg-gradient-to-br from-emerald-950 to-green-900 border-emerald-500/50 text-white drop-shadow-md', back: 'bg-gradient-to-br from-emerald-600 to-green-700 border-emerald-400/60 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)]' },
+    { front: 'bg-gradient-to-br from-amber-950 to-orange-900 border-amber-500/50 text-white drop-shadow-md', back: 'bg-gradient-to-br from-amber-600 to-orange-700 border-amber-400/60 text-white shadow-[0_0_20px_rgba(245,158,11,0.3)]' },
+    { front: 'bg-gradient-to-br from-violet-950 to-purple-900 border-violet-500/50 text-white drop-shadow-md', back: 'bg-gradient-to-br from-violet-600 to-purple-700 border-violet-400/60 text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]' },
+    { front: 'bg-gradient-to-br from-cyan-950 to-teal-900 border-cyan-500/50 text-white drop-shadow-md', back: 'bg-gradient-to-br from-cyan-600 to-teal-700 border-cyan-400/60 text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]' },
+    { front: 'bg-gradient-to-br from-indigo-950 to-blue-900 border-indigo-500/50 text-white drop-shadow-md', back: 'bg-gradient-to-br from-indigo-600 to-blue-700 border-indigo-400/60 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]' },
+    { front: 'bg-gradient-to-br from-orange-950 to-red-900 border-orange-500/50 text-white drop-shadow-md', back: 'bg-gradient-to-br from-orange-600 to-red-700 border-orange-400/60 text-white shadow-[0_0_20px_rgba(249,115,22,0.3)]' },
 ];
 
 // --- 1. VisualPlayer ---
@@ -209,22 +209,23 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     }, [allAnswered, isCompleted, onAllAnswered]);
 
     const colorThemes = [
-        { card: 'border-cyan-200 bg-cyan-50 hover:bg-cyan-100', number: 'text-cyan-600' },
-        { card: 'border-purple-200 bg-purple-50 hover:bg-purple-100', number: 'text-purple-600' },
-        { card: 'border-amber-200 bg-amber-50 hover:bg-amber-100', number: 'text-amber-600' },
-        { card: 'border-rose-200 bg-rose-50 hover:bg-rose-100', number: 'text-rose-600' },
-        { card: 'border-lime-200 bg-lime-50 hover:bg-lime-100', number: 'text-lime-600' },
-        { card: 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100', number: 'text-indigo-600' },
+        { card: 'border-cyan-500/30 bg-cyan-950/40 hover:bg-cyan-950/60', number: 'text-cyan-400' },
+        { card: 'border-violet-500/30 bg-violet-950/40 hover:bg-violet-950/60', number: 'text-violet-400' },
+        { card: 'border-amber-500/30 bg-amber-950/40 hover:bg-amber-950/60', number: 'text-amber-400' },
+        { card: 'border-rose-500/30 bg-rose-950/40 hover:bg-rose-950/60', number: 'text-rose-400' },
+        { card: 'border-emerald-500/30 bg-emerald-950/40 hover:bg-emerald-950/60', number: 'text-emerald-400' },
+        { card: 'border-indigo-500/30 bg-indigo-950/40 hover:bg-indigo-950/60', number: 'text-indigo-400' },
     ];
 
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-4xl mx-auto")}>
              <div className={cn(
-                "p-4 rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 flex-shrink-0 w-full text-center", 
-                isTeacher ? "py-4 mb-6 mt-2" : "p-3 md:p-6 mb-4"
+                "relative p-3 md:p-5 rounded-2xl border border-white/10 bg-[#161233] flex-shrink-0 w-full text-center overflow-hidden shadow-lg",
+                isTeacher ? "py-4 mb-6 mt-2" : "mb-3 md:mb-4"
             )}>
-                <h2 className={cn("font-black text-slate-800", 
-                    isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl")
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+                <h2 className={cn("font-black text-white",
+                    isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl")
                 )}>{step.title}</h2>
             </div>
 
@@ -238,50 +239,52 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
 
                     return (
                         <div key={index} className={cn(
-                            "rounded-3xl border-2 shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
-                            isTeacher ? "p-6 min-h-[14rem]" : "p-4 min-h-[10rem]",
-                            isAnswered 
-                                ? (isCorrect ? "border-emerald-400 bg-emerald-50" : "border-red-400 bg-red-50") 
-                                : `border-slate-100 ${theme.card}`
+                            "rounded-2xl border-2 shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
+                            isTeacher ? "p-6 min-h-[14rem]" : "p-3 md:p-4 min-h-[8rem] md:min-h-[10rem]",
+                            isAnswered
+                                ? (isCorrect ? "border-emerald-500/60 bg-emerald-950/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "border-rose-500/60 bg-rose-950/50 shadow-[0_0_20px_rgba(244,63,94,0.2)]")
+                                : `${theme.card} border`
                         )}>
-                            <div className="flex gap-4 mb-6">
-                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-xl", isAnswered ? "text-slate-800" : theme.number)}>
+                            <div className="flex gap-3 md:gap-4 mb-4 md:mb-6">
+                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-lg md:text-xl", isAnswered ? "text-white" : theme.number)}>
                                     {index + 1}.
                                 </span>
-                                <p className={cn("font-bold text-slate-700 leading-relaxed", isTeacher ? "text-2xl" : "text-base")}>
+                                <p className={cn("font-bold text-slate-200 leading-relaxed", isTeacher ? "text-2xl" : "text-sm md:text-base")}>
                                     {q.statement}
                                 </p>
                             </div>
 
-                            <div className="flex gap-4 mt-auto">
-                                <Button
+                            <div className="flex gap-2 md:gap-3 mt-auto">
+                                <button
                                     onClick={() => !isAnswered && onAnswer(index, true)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-bold rounded-xl transition-all shadow-sm",
-                                        isTeacher ? "h-16 text-xl" : "h-10 text-base",
-                                        isAnswered && userAnswer.answer === true 
-                                            ? (userAnswer.isCorrect ? "bg-emerald-500 hover:bg-emerald-600 opacity-100 text-white" : "bg-red-500 hover:bg-red-600 opacity-100 text-white")
-                                            : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200",
-                                        isAnswered && userAnswer.answer !== true && "opacity-30 grayscale"
+                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-1.5 md:gap-2",
+                                        isTeacher ? "h-14 text-lg" : "h-9 md:h-11 text-[11px] md:text-sm",
+                                        isAnswered && userAnswer.answer === true
+                                            ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
+                                            : isAnswered && userAnswer.answer !== true
+                                                ? "bg-white/3 border-white/5 text-slate-600 opacity-30"
+                                                : "bg-emerald-950/60 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60 hover:border-emerald-400/60"
                                     )}
                                 >
-                                    <CheckCircle className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-4 w-4")} /> Doğru
-                                </Button>
-                                <Button
+                                    <CheckCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 md:h-4 md:w-4")} /> Doğru
+                                </button>
+                                <button
                                     onClick={() => !isAnswered && onAnswer(index, false)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-bold rounded-xl transition-all shadow-sm",
-                                        isTeacher ? "h-16 text-xl" : "h-10 text-base",
-                                        isAnswered && userAnswer.answer === false 
-                                            ? (userAnswer.isCorrect ? "bg-emerald-500 hover:bg-emerald-600 opacity-100 text-white" : "bg-red-500 hover:bg-red-600 opacity-100 text-white")
-                                            : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200",
-                                        isAnswered && userAnswer.answer !== false && "opacity-30 grayscale"
+                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-1.5 md:gap-2",
+                                        isTeacher ? "h-14 text-lg" : "h-9 md:h-11 text-[11px] md:text-sm",
+                                        isAnswered && userAnswer.answer === false
+                                            ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
+                                            : isAnswered && userAnswer.answer !== false
+                                                ? "bg-white/3 border-white/5 text-slate-600 opacity-30"
+                                                : "bg-rose-950/60 border-rose-500/40 text-rose-300 hover:bg-rose-900/60 hover:border-rose-400/60"
                                     )}
                                 >
-                                    <XCircle className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-4 w-4")} /> Yanlış
-                                </Button>
+                                    <XCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 md:h-4 md:w-4")} /> Yanlış
+                                </button>
                             </div>
                         </div>
                     );
@@ -292,7 +295,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
 }
 
 // 3. ContentListPlayer
-function ContentListPlayer({ 
+export function ContentListPlayer({ 
     step, 
     revealedSentencesCount, 
     isFullscreen, 
@@ -353,14 +356,14 @@ function ContentListPlayer({
 
     // Renk Temaları
     const styles = [
-        { bg: 'bg-gradient-to-br from-blue-50/95 to-white/90', border: 'border-blue-200', circleBorder: 'border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]', numberColor: 'text-blue-600', textColor: 'text-blue-800', iconColor: 'text-blue-500' },
-        { bg: 'bg-gradient-to-br from-rose-50/95 to-white/90', border: 'border-rose-200', circleBorder: 'border-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.3)]', numberColor: 'text-rose-600', textColor: 'text-rose-800', iconColor: 'text-rose-500' },
-        { bg: 'bg-gradient-to-br from-amber-50/95 to-white/90', border: 'border-amber-200', circleBorder: 'border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)]', numberColor: 'text-amber-600', textColor: 'text-amber-800', iconColor: 'text-amber-500' },
-        { bg: 'bg-gradient-to-br from-emerald-50/95 to-white/90', border: 'border-emerald-200', circleBorder: 'border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]', numberColor: 'text-emerald-600', textColor: 'text-emerald-800', iconColor: 'text-emerald-500' },
-        { bg: 'bg-gradient-to-br from-purple-50/95 to-white/90', border: 'border-purple-200', circleBorder: 'border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.3)]', numberColor: 'text-purple-600', textColor: 'text-purple-800', iconColor: 'text-purple-500' },
-        { bg: 'bg-gradient-to-br from-cyan-50/95 to-white/90', border: 'border-cyan-200', circleBorder: 'border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]', numberColor: 'text-cyan-600', textColor: 'text-cyan-800', iconColor: 'text-cyan-500' },
-        { bg: 'bg-gradient-to-br from-indigo-50/95 to-white/90', border: 'border-indigo-200', circleBorder: 'border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.3)]', numberColor: 'text-indigo-600', textColor: 'text-indigo-800', iconColor: 'text-indigo-500' },
-        { bg: 'bg-gradient-to-br from-orange-50/95 to-white/90', border: 'border-orange-200', circleBorder: 'border-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.3)]', numberColor: 'text-orange-600', textColor: 'text-orange-800', iconColor: 'text-orange-500' },
+        { bg: 'bg-gradient-to-br from-sky-950/60 to-blue-900/30', border: 'border-sky-500/30', circleBorder: 'border-sky-400/60 shadow-[0_0_12px_rgba(14,165,233,0.3)]', numberColor: 'text-sky-400', textColor: 'text-sky-100', iconColor: 'text-sky-400' },
+        { bg: 'bg-gradient-to-br from-rose-950/60 to-pink-900/30', border: 'border-rose-500/30', circleBorder: 'border-rose-400/60 shadow-[0_0_12px_rgba(244,63,94,0.3)]', numberColor: 'text-rose-400', textColor: 'text-rose-100', iconColor: 'text-rose-400' },
+        { bg: 'bg-gradient-to-br from-amber-950/60 to-orange-900/30', border: 'border-amber-500/30', circleBorder: 'border-amber-400/60 shadow-[0_0_12px_rgba(245,158,11,0.3)]', numberColor: 'text-amber-400', textColor: 'text-amber-100', iconColor: 'text-amber-400' },
+        { bg: 'bg-gradient-to-br from-emerald-950/60 to-green-900/30', border: 'border-emerald-500/30', circleBorder: 'border-emerald-400/60 shadow-[0_0_12px_rgba(16,185,129,0.3)]', numberColor: 'text-emerald-400', textColor: 'text-emerald-100', iconColor: 'text-emerald-400' },
+        { bg: 'bg-gradient-to-br from-violet-950/60 to-purple-900/30', border: 'border-violet-500/30', circleBorder: 'border-violet-400/60 shadow-[0_0_12px_rgba(139,92,246,0.3)]', numberColor: 'text-violet-400', textColor: 'text-violet-100', iconColor: 'text-violet-400' },
+        { bg: 'bg-gradient-to-br from-cyan-950/60 to-teal-900/30', border: 'border-cyan-500/30', circleBorder: 'border-cyan-400/60 shadow-[0_0_12px_rgba(6,182,212,0.3)]', numberColor: 'text-cyan-400', textColor: 'text-cyan-100', iconColor: 'text-cyan-400' },
+        { bg: 'bg-gradient-to-br from-indigo-950/60 to-blue-900/30', border: 'border-indigo-500/30', circleBorder: 'border-indigo-400/60 shadow-[0_0_12px_rgba(99,102,241,0.3)]', numberColor: 'text-indigo-400', textColor: 'text-indigo-100', iconColor: 'text-indigo-400' },
+        { bg: 'bg-gradient-to-br from-orange-950/60 to-red-900/30', border: 'border-orange-500/30', circleBorder: 'border-orange-400/60 shadow-[0_0_12px_rgba(249,115,22,0.3)]', numberColor: 'text-orange-400', textColor: 'text-orange-100', iconColor: 'text-orange-400' },
     ];
 
     useEffect(() => {
@@ -405,18 +408,17 @@ function ContentListPlayer({
             
             {/* BAŞLIK */}
             <div className={cn(
-                "relative z-20 p-6 rounded-3xl shadow-lg bg-white border border-slate-100 flex-shrink-0 w-full max-w-full text-center mb-8 overflow-hidden", 
-                isTeacher ? "py-6 mt-2" : "p-4 md:p-8"
+                "relative z-20 rounded-2xl border border-white/10 bg-[#161233] flex-shrink-0 w-full max-w-full text-center mb-6 overflow-hidden shadow-lg",
+                isTeacher ? "py-6 mt-2 px-6" : "p-4 md:p-6"
             )}>
-                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"></div>
-                 <div className="flex items-center justify-center gap-4">
-                    <Sparkles className="text-yellow-400 h-6 w-6 md:h-8 md:w-8 animate-pulse" />
-                    <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600", 
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+                <div className="flex items-center justify-center gap-3">
+                    <Sparkles className="text-purple-400 h-5 w-5 animate-pulse" />
+                    <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300",
                         isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl")
                     )}>{step.title}</h2>
-                    <Sparkles className="text-yellow-400 h-6 w-6 md:h-8 md:w-8 animate-pulse" />
+                    <Sparkles className="text-purple-400 h-5 w-5 animate-pulse" />
                 </div>
-                <div className="absolute left-6 md:left-1/2 bottom-[-10px] w-4 h-4 bg-slate-300 rounded-full md:-translate-x-1/2 border-2 border-white z-20"></div>
             </div>
               
              <div className={cn(
@@ -443,29 +445,27 @@ function ContentListPlayer({
                                 )}>
                                 
                                 <div className={cn(
-                                    "relative w-full h-full py-4 px-6 md:py-6 md:px-8 rounded-2xl border-2 border-b-[6px] border-r-[4px] shadow-sm hover:shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col md:flex-row justify-start items-center text-left backdrop-blur-xl gap-4",
+                                    "relative w-full h-full p-3 md:py-5 md:px-6 rounded-2xl border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 flex flex-row justify-start items-center text-left gap-3 md:gap-4 backdrop-blur-xl",
                                     style.bg, style.border
                                 )}>
-                                    {/* Dairesel Sıra Numarası (Sol Tarafta Sabit) */}
+                                    {/* Parlak üst çizgi */}
+                                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                                    {/* Numara rozeti */}
                                     <div className={cn(
-                                        "flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center bg-white/90 backdrop-blur-md border-2 shadow-sm",
+                                        "flex-shrink-0 w-8 h-8 md:w-13 md:h-13 rounded-lg md:rounded-xl flex items-center justify-center bg-black/30 border-2",
                                         style.circleBorder
                                     )}>
-                                        <span className={cn("font-black text-lg md:text-xl", style.numberColor)}>{index + 1}</span>
+                                        <span className={cn("font-black text-sm md:text-lg", style.numberColor)}>{index + 1}</span>
                                     </div>
 
                                     <div className={cn(
-                                        "leading-relaxed font-black break-words flex-1 drop-shadow-sm z-10 relative", 
-                                        style.textColor, 
-                                        isTeacher ? "text-2xl md:text-3xl tracking-wide" : "text-xl md:text-2xl lg:text-3xl tracking-wide" 
+                                        "leading-relaxed font-bold break-words flex-1 z-10 relative",
+                                        style.textColor,
+                                        isTeacher ? "text-2xl md:text-3xl tracking-wide" : "text-[13px] md:text-xl tracking-wide"
                                     )}>
                                         <span className="flex-1">
                                             {shouldAnimate ? (
-                                                <TypewriterText 
-                                                    content={sentence} 
-                                                    onComplete={() => onAnimationEnd?.()} 
-                                                    speed={40} 
-                                                />
+                                                <TypewriterText content={sentence} onComplete={() => onAnimationEnd?.()} speed={40} />
                                             ) : (
                                                 <div dangerouslySetInnerHTML={{ __html: sentence }} />
                                             )}
@@ -482,50 +482,66 @@ function ContentListPlayer({
 }
 
 // 4. ConceptExplanationPlayer
-function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string }) {
+export function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string }) {
     if (!items || items.length === 0) return null;
     const isTeacher = useTeacherMode();
     
     const cardStyles = [
-        { bg: 'bg-white hover:bg-blue-50', border: 'border-blue-100', title: 'text-blue-600', hoverBorder: 'hover:border-blue-300' },
-        { bg: 'bg-white hover:bg-rose-50', border: 'border-rose-100', title: 'text-rose-600', hoverBorder: 'hover:border-rose-300' },
-        { bg: 'bg-white hover:bg-amber-50', border: 'border-amber-100', title: 'text-amber-600', hoverBorder: 'hover:border-amber-300' },
-        { bg: 'bg-white hover:bg-emerald-50', border: 'border-emerald-100', title: 'text-emerald-600', hoverBorder: 'hover:border-emerald-300' },
-        { bg: 'bg-white hover:bg-purple-50', border: 'border-purple-100', title: 'text-purple-600', hoverBorder: 'hover:border-purple-300' },
-        { bg: 'bg-white hover:bg-cyan-50', border: 'border-cyan-100', title: 'text-cyan-600', hoverBorder: 'hover:border-cyan-300' },
+        { bg: 'bg-sky-950/50 hover:bg-sky-900/60', border: 'border-sky-500/30', title: 'text-sky-300', hoverBorder: 'hover:border-sky-400/60' },
+        { bg: 'bg-rose-950/50 hover:bg-rose-900/60', border: 'border-rose-500/30', title: 'text-rose-300', hoverBorder: 'hover:border-rose-400/60' },
+        { bg: 'bg-amber-950/50 hover:bg-amber-900/60', border: 'border-amber-500/30', title: 'text-amber-300', hoverBorder: 'hover:border-amber-400/60' },
+        { bg: 'bg-emerald-950/50 hover:bg-emerald-900/60', border: 'border-emerald-500/30', title: 'text-emerald-300', hoverBorder: 'hover:border-emerald-400/60' },
+        { bg: 'bg-violet-950/50 hover:bg-violet-900/60', border: 'border-violet-500/30', title: 'text-violet-300', hoverBorder: 'hover:border-violet-400/60' },
+        { bg: 'bg-cyan-950/50 hover:bg-cyan-900/60', border: 'border-cyan-500/30', title: 'text-cyan-300', hoverBorder: 'hover:border-cyan-400/60' },
     ];
 
     return (
         <div className={cn('flex flex-col h-full w-full items-center justify-start p-2', isTeacher ? "max-w-[98%] mx-auto pt-4" : "max-w-6xl mx-auto justify-center")}>
-            <div className={cn("p-4 rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 flex-shrink-0 mb-8 w-full text-center")}>
-                <h2 className={cn("font-black text-slate-800", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
+            <div className={cn("relative p-4 rounded-2xl border border-white/10 bg-[#161233] flex-shrink-0 mb-6 w-full text-center overflow-hidden shadow-lg")}>
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+                <h2 className={cn("font-black text-white", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
             </div>
              
             <div className={cn(
                 "w-full flex-grow grid gap-4 md:gap-6", 
                 isTeacher 
-                    ? "grid-cols-2 content-start" 
-                    : "grid-cols-2"
+                    ? "grid-cols-1 md:grid-cols-2 content-start" 
+                    : "grid-cols-1 md:grid-cols-2"
             )}>
-                {items.map((item, index) => {
-                    const style = cardStyles[index % cardStyles.length];
-                    return (
-                        <Card key={index} className={cn(
-                            "border-2 transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-105", 
-                            style.bg,
-                            style.border,
-                            style.hoverBorder,
-                            isTeacher ? 'min-h-[180px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
-                        )}>
-                            <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
-                                <CardTitle className={cn("font-black uppercase tracking-wider transition-colors", style.title, isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg"))}>{item.concept}</CardTitle>
-                            </CardHeader>
-                            <CardContent className={cn("text-slate-700 font-bold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
-                                {item.definition}
-                            </CardContent>
-                        </Card>
-                    )
-                })}
+                {(() => {
+                    let conceptIndex = 1;
+                    return items.map((item, index) => {
+                        if (item.concept === '[BAŞLIK]') {
+                            return (
+                                <div key={index} className="col-span-1 md:col-span-2 mt-6 mb-1 flex items-center gap-4 w-full">
+                                    <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent flex-1" />
+                                    <h3 className="text-lg md:text-2xl font-black text-cyan-400 tracking-wider uppercase drop-shadow-md text-center px-2">{item.definition}</h3>
+                                    <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent flex-1" />
+                                </div>
+                            );
+                        }
+                        
+                        const style = cardStyles[(conceptIndex - 1) % cardStyles.length];
+                        const currentNum = conceptIndex++;
+                        
+                        return (
+                            <Card key={index} className={cn(
+                                "border-2 transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-[1.02] backdrop-blur-xl",
+                                style.bg,
+                                style.border,
+                                style.hoverBorder,
+                                isTeacher ? 'min-h-[180px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
+                            )}>
+                                <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
+                                    <CardTitle className={cn("font-black uppercase tracking-wider transition-colors", style.title, isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg"))}>{currentNum}. {item.concept}</CardTitle>
+                                </CardHeader>
+                                <CardContent className={cn("text-slate-300 font-semibold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
+                                    {item.definition}
+                                </CardContent>
+                            </Card>
+                        )
+                    })
+                })()}
             </div>
         </div>
     );
@@ -575,23 +591,23 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
                                 transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
                             >
                                 {/* Front */}
-                                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-t border-l border-white/60 border-b-8 flex flex-wrap items-center justify-center p-4 backdrop-blur-xl", theme.front)}>
+                                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-wrap items-center justify-center p-4", theme.front)}>
                                     <h3 
-                                        className="font-black tracking-[0.2em] break-all drop-shadow-sm uppercase mix-blend-color-burn opacity-80"
+                                        className="font-black tracking-[0.2em] break-all drop-shadow-md uppercase text-white"
                                         style={{ fontSize: getDynamicFontSize(card.scrambledWord) }}
                                     >
                                         {card.scrambledWord}
                                     </h3>
                                     {!isTeacher && (
-                                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center justify-center bg-white/40 px-3 py-1 rounded-full shadow-sm border border-white/50 backdrop-blur-md">
-                                            <span className="text-[8px] opacity-75 uppercase tracking-[0.2em] font-extrabold mix-blend-multiply">Çevir</span>
+                                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center justify-center bg-white/30 px-3 py-1 rounded-full shadow-sm border border-white/50 backdrop-blur-md">
+                                            <span className="text-[8px] text-white uppercase tracking-[0.2em] font-extrabold">Çevir</span>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Back */}
                                 <div className={cn(
-                                    "absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-t border-l border-white/30 border-b-8 flex flex-wrap items-center justify-center p-4 break-words overflow-hidden backdrop-blur-xl",
+                                    "absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-wrap items-center justify-center p-4 break-words overflow-hidden",
                                     theme.back
                                 )} style={{ transform: "rotateY(180deg)" }}>
                                     <h3 
@@ -642,7 +658,7 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
     );
 }
 
-const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFullscreen, isTeacher }: { term: string, definition: string, isFlipped: boolean, onFlip: () => void, theme: any, isFullscreen?: boolean, isTeacher?: boolean }) => {
+export const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFullscreen, isTeacher }: { term: string, definition: string, isFlipped: boolean, onFlip: () => void, theme: any, isFullscreen?: boolean, isTeacher?: boolean }) => {
     return (
         <div
             className={cn(
@@ -660,21 +676,21 @@ const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFullscree
                 transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
             >
                 {/* Front */}
-                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-t border-l border-white/60 border-b-8 flex flex-col items-center justify-center p-6 backdrop-blur-xl transition-all", theme.front)}>
-                    <h3 className={cn("font-black uppercase tracking-wider drop-shadow-sm", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl md:text-3xl"))}>{term}</h3>
+                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl border shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-col items-center justify-center p-6 transition-all", theme.front)}>
+                    <h3 className={cn("font-black uppercase tracking-wider drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl md:text-3xl"))}>{term}</h3>
                     {!isTeacher && (
-                        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center justify-center bg-white/40 px-5 py-1.5 rounded-full shadow-sm border border-white/50 backdrop-blur-md">
-                            <span className="text-[9px] md:text-[11px] opacity-75 uppercase tracking-[0.3em] font-extrabold mix-blend-multiply">Dokun & Çevir</span>
+                        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center justify-center bg-black/20 px-5 py-1.5 rounded-full border border-white/20 backdrop-blur-md">
+                            <span className="text-[9px] md:text-[11px] text-white/60 uppercase tracking-[0.3em] font-black">Dokun & Çevir</span>
                         </div>
                     )}
                 </div>
 
                 {/* Back */}
                 <div className={cn(
-                    "absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-t border-l border-white/30 border-b-8 flex flex-col items-center justify-center p-8 backdrop-blur-xl",
-                    theme.back 
+                    "absolute w-full h-full [backface-visibility:hidden] rounded-3xl border shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-col items-center justify-center p-8",
+                    theme.back
                 )} style={{ transform: "rotateY(180deg)" }}>
-                    <p className={cn("font-semibold leading-relaxed tracking-wide drop-shadow-md", isTeacher ? "text-3xl" : (isFullscreen ? "text-xl" : "text-base md:text-lg"))}>{definition}</p>
+                    <p className={cn("font-bold leading-relaxed tracking-wide drop-shadow-md text-white", isTeacher ? "text-3xl" : (isFullscreen ? "text-xl" : "text-base md:text-lg"))}>{definition}</p>
                 </div>
             </motion.div>
         </div>
@@ -912,12 +928,12 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
     const [mistakenWordId, setMistakenWordId] = useState<number | null>(null);
 
     const wordColors = [
-        'bg-white text-rose-600 border-rose-200',
-        'bg-white text-blue-600 border-blue-200',
-        'bg-white text-green-600 border-green-200',
-        'bg-white text-orange-600 border-orange-200',
-        'bg-white text-sky-600 border-sky-200',
-        'bg-white text-purple-600 border-purple-200',
+        'bg-rose-950 text-rose-100 border-rose-500 shadow-md hover:bg-rose-900',
+        'bg-cyan-950 text-cyan-100 border-cyan-500 shadow-md hover:bg-cyan-900',
+        'bg-emerald-950 text-emerald-100 border-emerald-500 shadow-md hover:bg-emerald-900',
+        'bg-amber-950 text-amber-100 border-amber-500 shadow-md hover:bg-amber-900',
+        'bg-violet-950 text-violet-100 border-violet-500 shadow-md hover:bg-violet-900',
+        'bg-sky-950 text-sky-100 border-sky-500 shadow-md hover:bg-sky-900',
     ];
 
     useEffect(() => {
@@ -957,46 +973,50 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
     }, [answer, onCorrectAndNext]);
 
     return (
-        <div className={cn("space-y-8 text-center mx-auto p-4", isTeacher ? "max-w-full justify-start pt-10" : "max-w-4xl justify-center")}>
-            <p className={cn("text-slate-500 font-medium", isTeacher ? "text-2xl" : "text-lg md:text-xl")}>Kelimeleri doğru sıraya dizerek cümleyi oluşturun.</p>
+        <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] gap-4 md:gap-6 p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-4xl")}>
+            <div className="text-center">
+                <p className={cn("text-slate-200 font-bold bg-[#161233] px-5 py-2 rounded-full inline-block border border-white/10 shadow-lg", isTeacher ? "text-2xl" : "text-sm md:text-base")}>
+                    Kelimeleri doğru sıraya dizerek cümleyi oluşturun.
+                </p>
+            </div>
              
-             <div className={cn("flex flex-wrap justify-center items-center gap-4 bg-white/50 border border-white shadow-inner p-8 rounded-3xl", isTeacher ? "min-h-[12rem]" : "min-h-[6rem] md:min-h-[10rem]")}>
+             <div className={cn("relative flex flex-wrap justify-center content-center gap-2 md:gap-5 bg-[#070514] border-2 border-[#2b245e] shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] p-4 md:p-10 rounded-3xl", isTeacher ? "min-h-[12rem]" : "min-h-[7rem] md:min-h-[12rem]")}>
                 {constructedWords.map((wordObj, i) => (
                     <div 
                         key={wordObj.id} 
                         className={cn(
-                            "rounded-xl font-bold shadow-md animate-in zoom-in duration-300 border-b-4",
+                            "rounded-xl md:rounded-2xl font-black animate-in zoom-in duration-300 border-b-2 md:border-b-[6px]",
                             wordColors[wordObj.id % wordColors.length], 
-                            isTeacher ? "text-2xl px-6 py-3 rounded-2xl border-b-8" : "px-4 py-2 md:px-6 md:py-3 md:text-lg md:rounded-2xl md:border-b-4 text-sm"
+                            isTeacher ? "text-2xl px-6 py-3 border-b-[6px]" : "px-3 py-1.5 md:px-8 md:py-4 md:text-2xl text-sm"
                         )}
                     >
                         {wordObj.word}
                     </div>
                 ))}
-                {constructedWords.length === 0 && <span className={cn("text-slate-400 italic", isTeacher ? "text-xl" : "text-sm md:text-base")}>Cümleniz burada görünecek...</span>}
+                {constructedWords.length === 0 && <span className={cn("text-slate-500 font-medium italic absolute", isTeacher ? "text-xl" : "text-sm md:text-xl")}>Cümleniz burada görünecek...</span>}
             </div>
 
             {isAnswerRevealed ? (
-                 <div className="text-center mt-10 animate-in slide-in-from-bottom-4">
-                    <div className={cn("inline-flex items-center gap-4 bg-emerald-100 text-emerald-700 rounded-full border border-emerald-200", isTeacher ? "px-8 py-4" : "px-6 py-3 md:px-8 md:py-4")}>
-                        <CheckCircle2 className={cn(isTeacher ? "h-10 w-10" : "h-6 w-6")}/>
-                        <span className={cn("font-bold", isTeacher ? "text-2xl" : "text-lg")}>Harika, doğru cümle!</span>
+                 <div className="text-center mt-6 md:mt-10 animate-in slide-in-from-bottom-4">
+                    <div className={cn("inline-flex items-center gap-3 md:gap-4 bg-emerald-500/20 text-emerald-300 rounded-full border border-emerald-500/40 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.3)]", isTeacher ? "px-8 py-4" : "px-6 py-2.5 md:px-8 md:py-4")}>
+                        <CheckCircle2 className={cn(isTeacher ? "h-10 w-10" : "h-5 w-5 md:h-6 w-6")}/>
+                        <span className={cn("font-black", isTeacher ? "text-2xl" : "text-sm md:text-lg")}>Harika, doğru cümle!</span>
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-wrap justify-center gap-4 p-2">
+                <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-2">
                     {bankWords.map((item, index) => (
                         <div
                             key={item.id}
                             onClick={() => handleWordClick(item)}
                             className={cn(
-                                "font-bold rounded-2xl transition-all duration-200 border-b-8 active:border-b-0 active:translate-y-2 shadow-lg cursor-pointer flex items-center justify-center hover:-translate-y-1",
+                                "font-black rounded-xl md:rounded-[1.25rem] transition-all duration-200 border-b-[3px] md:border-b-[8px] active:border-b-0 active:translate-y-1 md:active:translate-y-2 cursor-pointer flex items-center justify-center hover:-translate-y-0.5 md:hover:-translate-y-1",
                                 wordColors[item.id % wordColors.length],
-                                isTeacher ? "text-2xl h-20 px-6" : "text-lg h-16 px-6 md:text-xl md:h-16 md:px-8",
-                                mistakenWordId === item.id && "animate-shake bg-red-500 border-red-700 text-white hover:bg-red-600 !bg-none"
+                                isTeacher ? "text-2xl h-16 px-6" : "text-sm h-10 px-4 md:text-3xl md:h-20 md:px-10",
+                                mistakenWordId === item.id && "animate-shake bg-rose-500 border-rose-700 text-white shadow-none hover:bg-rose-500 hover:border-rose-700"
                             )}
                         >
-                            {mistakenWordId === item.id && <X className="h-8 w-8 mr-2" />}
+                            {mistakenWordId === item.id && <X className={cn("mr-1.5", isTeacher ? "h-8 w-8" : "h-4 w-4 md:h-6 md:w-6")} />}
                             {item.word}
                         </div>
                     ))}
@@ -1683,56 +1703,63 @@ export function StepContent({
             case 'mcq': {
                 const mcqStep = step as McqStep;
                 const optionColors = [
-                    'border-cyan-200 bg-cyan-50 hover:bg-cyan-100 text-cyan-700', 
-                    'border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700', 
-                    'border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-700', 
-                    'border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700'
+                    'border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-200',
+                    'border-violet-500/40 bg-violet-950/40 hover:bg-violet-900/50 text-violet-200',
+                    'border-amber-500/40 bg-amber-950/40 hover:bg-amber-900/50 text-amber-200',
+                    'border-rose-500/40 bg-rose-950/40 hover:bg-rose-900/50 text-rose-200'
+                ];
+                const optionGlows = [
+                    '0_0_20px_rgba(6,182,212,0.15)',
+                    '0_0_20px_rgba(139,92,246,0.15)',
+                    '0_0_20px_rgba(245,158,11,0.15)',
+                    '0_0_20px_rgba(244,63,94,0.15)',
                 ];
                 return (
-                    <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4", isTeacher ? "max-w-full pt-8" : "max-w-3xl justify-center")}>
-                        <div className={cn("rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 mb-8 text-center relative overflow-hidden", isTeacher ? "p-8" : "p-10")}>
-                           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-400 to-blue-500" />
-                          <h3 className={cn("font-bold text-slate-800 leading-relaxed drop-shadow-sm", isTeacher ? "text-4xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{mcqStep.question}</h3>
+                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] p-4", isTeacher ? "max-w-full pt-8" : "max-w-3xl")}>
+                        {/* Soru Kutusu */}
+                        <div className={cn("relative rounded-3xl border border-white/10 bg-[#161233] mb-4 md:mb-6 text-center overflow-hidden shadow-lg", isTeacher ? "p-8" : "p-4 md:p-8")}>
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+                            <h3 className={cn("font-black text-white leading-relaxed", isTeacher ? "text-4xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl"))}>{mcqStep.question}</h3>
                         </div>
-                        <div className={cn("grid gap-6", isTeacher ? "grid-cols-2" : "grid-cols-1")}>
+                        {/* Şıklar */}
+                        <div className={cn("grid gap-3", isTeacher ? "grid-cols-2 gap-5" : "grid-cols-1")}>
                             {mcqStep.options.map((option, index) => {
                                 const isCorrect = option === mcqStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
                                 const colorClass = optionColors[index % optionColors.length];
+                                const glow = optionGlows[index % optionGlows.length];
 
                                 return (
-                                    <motion.div 
+                                    <motion.div
                                         key={index}
-                                        whileHover={!answer ? { scale: 1.02 } : {}}
+                                        whileHover={!answer ? { scale: 1.02, y: -2 } : {}}
                                         whileTap={!answer ? { scale: 0.98 } : {}}
-                                        className={cn(
-                                            "w-full h-full",
-                                            answer && isSelected && !isCorrect && "animate-shake"
-                                        )}
+                                        className={cn("w-full h-full", answer && isSelected && !isCorrect && "animate-shake")}
                                     >
                                         <Button
                                             variant="default"
                                             className={cn(
-                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 transform",
-                                                "font-medium shadow-sm",
-                                                isTeacher ? "text-3xl p-8" : (isFullscreen ? "p-6 text-xl" : "p-6 text-lg"),
+                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300",
+                                                "font-bold",
+                                                isTeacher ? "text-2xl p-6" : (isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base"),
                                                 !answer ? colorClass : "",
-                                                !answer && "hover:shadow-lg",
-                                                answer && isCorrect ? "bg-emerald-500 border-emerald-600 text-white shadow-[0_0_30px_rgba(16,185,129,0.8)] z-10" : "",
-                                                answer && isSelected && !isCorrect ? "bg-red-500 border-red-600 text-white" : "",
-                                                answer && !isSelected && !isCorrect ? "bg-slate-50 border-transparent text-slate-400 opacity-50" : ""
+                                                answer && isCorrect ? "bg-emerald-500/30 border-emerald-400 text-white shadow-[0_0_25px_rgba(16,185,129,0.4)]" : "",
+                                                answer && isSelected && !isCorrect ? "bg-rose-500/30 border-rose-400 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]" : "",
+                                                answer && !isSelected && !isCorrect ? "bg-white/3 border-white/5 text-slate-600 opacity-30" : ""
                                             )}
+                                            style={!answer ? { boxShadow: `${glow}` } : {}}
                                             onClick={() => onAnswer(option)}
                                             disabled={!!answer}
                                         >
-                                                <span className={cn(
-                                                    "flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", 
-                                                    isTeacher ? "h-14 w-14 text-2xl" : "h-8 w-8 text-sm",
-                                                    !answer ? "bg-white/50 border-black/5" : "bg-white/20 border-white/20"
-                                                )}>
-                                                    {String.fromCharCode(65 + index)}
-                                                </span>
-                                                <span className="flex-1">{option}</span>
+                                            <span className={cn(
+                                                "flex shrink-0 items-center justify-center rounded-lg md:rounded-xl font-black border mr-3 md:mr-4",
+                                                isTeacher ? "h-12 w-12 text-xl" : "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm",
+                                                !answer ? "bg-black/20 border-white/20" : "bg-white/10 border-white/20"
+                                            )}>
+                                                {String.fromCharCode(65 + index)}
+                                            </span>
+                                            <span className="flex-1">{option}</span>
                                         </Button>
                                     </motion.div>
                                 );
@@ -1745,41 +1772,42 @@ export function StepContent({
                 const tfStep = step as TfStep;
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
                 return (
-                    <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4 text-center", isTeacher ? "max-w-5xl pt-10" : "max-w-4xl justify-center")}>
-                          <div className={cn(
-                             "rounded-3xl shadow-xl backdrop-blur-xl mb-10 relative overflow-hidden transition-all duration-500",
-                             "bg-white border-2 border-slate-100",
-                             "shadow-[0_0_30px_rgba(168,85,247,0.1)]",
-                             isTeacher ? "p-10" : "p-10"
-                           )}>
-                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 to-pink-500" />
-                             <h3 className={cn("font-bold text-slate-800 leading-relaxed drop-shadow-sm", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{tfStep.statement}</h3>
+                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] p-4 text-center", isTeacher ? "max-w-5xl pt-10" : "max-w-4xl")}>
+                        {/* İfade Kutusu */}
+                        <div className={cn(
+                            "relative rounded-3xl border border-white/10 bg-[#161233] mb-6 md:mb-8 overflow-hidden shadow-lg",
+                            isTeacher ? "p-10" : "p-4 md:p-10"
+                        )}>
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+                            <h3 className={cn("font-black text-white leading-relaxed", isTeacher ? "text-5xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-2xl"))}>{tfStep.statement}</h3>
                         </div>
-                        <div className="flex gap-8 justify-center">
+                        <div className="flex gap-5 justify-center">
                             {["Doğru", "Yanlış"].map((option) => {
                                 const isSelected = answer?.answer === option;
                                 const isCorrect = option === correctOption;
+                                const isTrue = option === "Doğru";
                                 return (
-                                    <motion.div 
+                                    <motion.div
                                         key={option}
-                                        whileHover={!answer ? { scale: 1.05 } : {}}
-                                        whileTap={!answer ? { scale: 0.95 } : {}}
+                                        whileHover={!answer ? { scale: 1.06, y: -4 } : {}}
+                                        whileTap={!answer ? { scale: 0.94 } : {}}
                                         className={cn(answer && isSelected && !isCorrect && "animate-shake")}
                                     >
                                         <Button
                                             className={cn(
-                                                "font-bold rounded-[2rem] transition-all duration-300 transform shadow-lg border-b-8 active:border-b-0 active:translate-y-2",
-                                                isTeacher ? "h-40 w-64 text-4xl" : "h-32 w-48 text-2xl border-b-8",
-                                                !answer && (option === "Doğru" ? "bg-white border-slate-200 text-green-600 hover:bg-green-50" : "bg-white border-slate-200 text-red-600 hover:bg-red-50"),
-                                                answer && isCorrect && "bg-green-500 border-green-700 text-white shadow-[0_0_30px_rgba(34,197,94,0.6)] z-10",
-                                                answer && isSelected && !isCorrect && "bg-red-500 border-red-700 text-white",
-                                                answer && !isSelected && !isCorrect && "opacity-30 grayscale"
+                                                "font-black rounded-3xl transition-all duration-300 border-2 border-b-[4px] md:border-b-[6px] active:border-b-0 active:translate-y-1 shadow-xl",
+                                                isTeacher ? "h-36 w-56 text-3xl" : "h-20 w-28 text-lg md:h-32 md:w-48 md:text-2xl",
+                                                !answer && isTrue && "bg-emerald-950/60 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/70 shadow-[0_8px_24px_rgba(16,185,129,0.2)]",
+                                                !answer && !isTrue && "bg-rose-950/60 border-rose-500/50 text-rose-300 hover:bg-rose-900/70 shadow-[0_8px_24px_rgba(244,63,94,0.2)]",
+                                                answer && isCorrect && "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_30px_rgba(16,185,129,0.6)]",
+                                                answer && isSelected && !isCorrect && "bg-rose-500 border-rose-400 text-white shadow-[0_0_20px_rgba(244,63,94,0.5)]",
+                                                answer && !isSelected && !isCorrect && "opacity-20 grayscale border-white/5"
                                             )}
                                             onClick={() => onAnswer(option)}
                                             disabled={!!answer}
                                         >
-                                                <div className="flex flex-col items-center gap-4">
-                                                    {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/>}
+                                                <div className="flex flex-col items-center gap-2 md:gap-4">
+                                                    {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-6 w-6 md:h-8 md:w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-6 w-6 md:h-8 md:w-8")}/>}
                                                     {option}
                                                 </div>
                                         </Button>
@@ -1793,27 +1821,63 @@ export function StepContent({
             case 'fitb': {
                 const fitbStep = step as FitbStep;
                 const optionColors = [
-                    'border-cyan-200 bg-cyan-50 hover:bg-cyan-100 text-cyan-700', 
-                    'border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700', 
-                    'border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-700', 
-                    'border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700'
+                    'border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-200',
+                    'border-violet-500/40 bg-violet-950/40 hover:bg-violet-900/50 text-violet-200',
+                    'border-amber-500/40 bg-amber-950/40 hover:bg-amber-900/50 text-amber-200',
+                    'border-rose-500/40 bg-rose-950/40 hover:bg-rose-900/50 text-rose-200'
+                ];
+                const optionGlows = [
+                    '0_0_20px_rgba(6,182,212,0.15)',
+                    '0_0_20px_rgba(139,92,246,0.15)',
+                    '0_0_20px_rgba(245,158,11,0.15)',
+                    '0_0_20px_rgba(244,63,94,0.15)',
                 ];
                 return (
-                    <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-5xl justify-center")}>
-                        <div className={cn("rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 mb-10 relative overflow-hidden", isTeacher ? "p-10" : "p-10")}>
-                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-amber-400 to-orange-500" />
-                          <h3 className={cn("font-bold text-slate-800 leading-relaxed tracking-wide", isTeacher ? "text-5xl" : (isFullscreen ? "text-4xl" : "text-2xl md:text-3xl"))}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
+                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-5xl")}>
+                        <div className={cn("relative rounded-3xl border border-white/10 bg-[#161233] mb-6 md:mb-8 text-center overflow-hidden shadow-lg", isTeacher ? "p-10" : "p-4 md:p-10")}>
+                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
+                             <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+                          <h3 className={cn("font-black text-white leading-relaxed tracking-wide", isTeacher ? "text-5xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl"))}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
                         </div>
-                        <div className={cn("grid gap-6", isTeacher ? "grid-cols-2 gap-8" : "grid-cols-1 sm:grid-cols-2 gap-6")}>
+                        <div className={cn("grid gap-3", isTeacher ? "grid-cols-2 gap-5" : "grid-cols-1 sm:grid-cols-2")}>
                             {(fitbStep.options || []).map((option, index) => {
                                 const isCorrect = option === fitbStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
                                 const colorClass = optionColors[index % optionColors.length];
+                                const glow = optionGlows[index % optionGlows.length];
+                                
                                 return (
-                                    <Button key={index} variant="default" className={cn("font-bold rounded-2xl border-2 active:border-b-0 active:translate-y-1 transition-all duration-200 transform shadow-sm", isTeacher ? "h-24 text-3xl" : "h-20 text-xl", !answer ? colorClass : "", !answer && "hover:scale-[1.01] hover:shadow-lg", answer && isCorrect ? "bg-emerald-500 border-emerald-700 text-white shadow-lg scale-[1.01] z-10" : "", answer && isSelected && !isCorrect ? "bg-red-500 border-red-700 text-white animate-shake" : "", answer && !isSelected && !isCorrect ? "bg-slate-100 border-transparent text-slate-400 opacity-50" : "")} onClick={() => onAnswer(option)} disabled={!!answer}>
-                                            <span className={cn("flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", isTeacher ? "h-12 w-12 text-xl" : "h-8 w-8 text-sm", !answer ? "bg-white/50 border-black/5" : "bg-white/20 border-white/20")}>{String.fromCharCode(65 + index)}</span>
-                                            {option}
-                                    </Button>
+                                    <motion.div
+                                        key={index}
+                                        whileHover={!answer ? { scale: 1.02, y: -2 } : {}}
+                                        whileTap={!answer ? { scale: 0.98 } : {}}
+                                        className={cn("w-full h-full", answer && isSelected && !isCorrect && "animate-shake")}
+                                    >
+                                        <Button
+                                            variant="default"
+                                            className={cn(
+                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300",
+                                                "font-bold",
+                                                isTeacher ? "text-2xl p-6" : (isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base"),
+                                                !answer ? colorClass : "",
+                                                answer && isCorrect ? "bg-emerald-500/30 border-emerald-400 text-white shadow-[0_0_25px_rgba(16,185,129,0.4)]" : "",
+                                                answer && isSelected && !isCorrect ? "bg-rose-500/30 border-rose-400 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]" : "",
+                                                answer && !isSelected && !isCorrect ? "bg-white/3 border-white/5 text-slate-600 opacity-30" : ""
+                                            )}
+                                            style={!answer ? { boxShadow: `${glow}` } : {}}
+                                            onClick={() => onAnswer(option)}
+                                            disabled={!!answer}
+                                        >
+                                            <span className={cn(
+                                                "flex shrink-0 items-center justify-center rounded-lg md:rounded-xl font-black border mr-3 md:mr-4",
+                                                isTeacher ? "h-12 w-12 text-xl" : "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm",
+                                                !answer ? "bg-black/20 border-white/20" : "bg-white/10 border-white/20"
+                                            )}>
+                                                {String.fromCharCode(65 + index)}
+                                            </span>
+                                            <span className="flex-1">{option}</span>
+                                        </Button>
+                                    </motion.div>
                                 );
                             })}
                         </div>
@@ -2165,16 +2229,46 @@ export function LessonContentViewer({
     };
 
     if (isFinished) {
-         return (
-             <div className="h-full flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-800 gap-6">
-                 <PartyPopper className="h-20 w-20 text-yellow-500 animate-bounce" />
-                 <h1 className="text-4xl font-black">Ders Tamamlandı!</h1>
-                 <p className="text-2xl text-cyan-600 font-bold">Toplam Puan: {internalProgress.score}</p>
-                 <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-cyan-600 hover:bg-cyan-500 text-white text-xl px-10 py-6 rounded-2xl shadow-lg">
-                     {completeButtonText || 'Bitir'}
-                 </Button>
-             </div>
-         )
+        return (
+            <div className="h-full flex flex-col items-center justify-center p-6 bg-[#09071a] text-white gap-6 relative overflow-hidden">
+                {/* Arka plan efektleri */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-emerald-900/30 rounded-full blur-[120px]" />
+                    <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-indigo-900/20 rounded-full blur-[100px]" />
+                </div>
+                <div className="relative flex flex-col items-center gap-6">
+                    {/* Tamamlandı ikonu */}
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-emerald-500/20 blur-2xl rounded-full animate-pulse" />
+                        <div className="relative w-28 h-28 rounded-3xl bg-gradient-to-br from-emerald-500/30 to-green-600/20 border border-emerald-500/30 flex items-center justify-center shadow-[0_0_40px_rgba(16,185,129,0.3)]">
+                            <PartyPopper className="h-14 w-14 text-emerald-400" />
+                        </div>
+                    </div>
+                    <div className="text-center">
+                        <p className="text-emerald-400 text-xs font-black uppercase tracking-[0.3em] mb-2">Tebrikler!</p>
+                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">Ders Tamamlandı!</h1>
+                    </div>
+                    {/* Puan kartı */}
+                    <div className="relative rounded-2xl overflow-hidden border border-amber-500/30 shadow-[0_0_30px_rgba(245,158,11,0.2)]">
+                        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/15 to-orange-600/10" />
+                        <div className="relative px-10 py-5 flex flex-col items-center gap-1">
+                            <div className="flex items-center gap-2 mb-1">
+                                <Trophy className="w-5 h-5 text-amber-400" />
+                                <span className="text-amber-300 text-xs font-black uppercase tracking-widest">Toplam Puan</span>
+                            </div>
+                            <span className="text-5xl font-black text-white tabular-nums">{internalProgress.score}</span>
+                        </div>
+                    </div>
+                    <Button
+                        onClick={() => onTopicComplete(topic!.id, internalProgress.score)}
+                        className="relative h-14 px-10 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white font-black text-lg border-0 shadow-[0_8px_30px_rgba(16,185,129,0.4)] active:scale-[0.97] transition-all duration-200 overflow-hidden"
+                    >
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_60%)]" />
+                        <span className="relative">{completeButtonText || 'Bitir & Devam Et'}</span>
+                    </Button>
+                </div>
+            </div>
+        );
     }
       
     if (!currentStep) return <div className="text-slate-500 flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
@@ -2196,31 +2290,47 @@ export function LessonContentViewer({
     // YÜZEN BUTON MANTIĞI KALDIRILDI
 
     return (
-      <div className="h-full w-full flex flex-col bg-slate-50 overflow-hidden relative">
+      <div className="h-full w-full flex flex-col bg-[#09071a] overflow-hidden relative">
         
         <DrawingCanvas stepIndex={currentStepIndex} />
 
         {showResumeDialog && (
-            <div className="absolute inset-0 z-[60] bg-white/60 backdrop-blur-md flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
-                <Card className="w-full max-w-sm bg-white border-slate-200 text-slate-800 shadow-2xl animate-in zoom-in-95">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-xl"><History className="h-6 w-6 text-cyan-500" />Kaldığın Yerden Devam Et</CardTitle>
-                        <CardDescription>Daha önce bu konuda <strong>{savedStepIndex! + 1}. adıma</strong> kadar gelmişsin.</CardDescription>
-                    </CardHeader>
-                    <CardFooter className="flex flex-col gap-3">
-                        <Button onClick={handleResume} className="w-full bg-cyan-500 hover:bg-cyan-600 text-white text-lg py-6 rounded-xl shadow-md">Evet, Devam Et</Button>
-                        <Button onClick={handleRestart} variant="ghost" className="w-full text-slate-500 hover:text-slate-800 hover:bg-slate-100">Hayır, Baştan Başla</Button>
-                    </CardFooter>
-                </Card>
+            <div className="absolute inset-0 z-[60] bg-[#09071a]/80 backdrop-blur-xl flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
+                <div className="relative w-full max-w-sm animate-in zoom-in-95 duration-300">
+                    {/* Glow */}
+                    <div className="absolute inset-0 bg-indigo-600/10 blur-2xl rounded-3xl" />
+                    <div className="relative rounded-3xl border border-white/10 bg-[#0d0b22]/90 backdrop-blur-2xl overflow-hidden shadow-2xl">
+                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+                        <div className="p-6 flex flex-col gap-5">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center">
+                                    <History className="h-6 w-6 text-indigo-400" />
+                                </div>
+                                <div>
+                                    <h3 className="font-black text-white text-lg leading-tight">Kaldığın Yerden Devam Et</h3>
+                                    <p className="text-slate-400 text-sm mt-0.5">{savedStepIndex! + 1}. adıma kadar gelmişsin.</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <button onClick={handleResume} className="w-full h-12 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black text-base shadow-[0_4px_20px_rgba(99,102,241,0.4)] hover:opacity-90 active:scale-[0.98] transition-all border border-white/10">
+                                    Devam Et
+                                </button>
+                                <button onClick={handleRestart} className="w-full h-11 rounded-2xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 font-bold text-sm transition-all active:scale-[0.98]">
+                                    Baştan Başla
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         )}
 
         {/* --- İÇERİK ALANI --- */}
-        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
+        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-900 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
              {!isFullWidthStep && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
-                     <div className="absolute top-[20%] left-[20%] w-64 h-64 bg-blue-300/30 rounded-full blur-[80px]" />
-                     <div className="absolute bottom-[20%] right-[20%] w-64 h-64 bg-purple-300/30 rounded-full blur-[80px]" />
+                     <div className="absolute top-[10%] left-[10%] w-72 h-72 bg-indigo-900/20 rounded-full blur-[100px]" />
+                     <div className="absolute bottom-[10%] right-[10%] w-72 h-72 bg-violet-900/15 rounded-full blur-[100px]" />
                  </div>
              )}
 
@@ -2280,87 +2390,142 @@ export function LessonContentViewer({
             </div>
         )}
 
-        {/* ALT BAR */}
-        <div className={cn(
-            "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300 ease-in-out",
-            hideUI ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-10 px-3 opacity-100",
-            !hideUI && "bg-white/90 backdrop-blur-xl border-t border-slate-200/60 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)]",
-            "relative"
-        )} onClick={(e) => e.stopPropagation()}>
-            
-            {/* GİZLEME BUTONU (Sadece Öğretmen & Bar Açıkken) */}
+        {/* ══ ALT NAVİGASYON BARI ══ */}
+        <div
+            className={cn(
+                "flex-shrink-0 z-30 transition-all duration-300 ease-in-out relative",
+                hideUI ? "h-0 p-0 overflow-hidden opacity-0 pointer-events-none" : "opacity-100"
+            )}
+            onClick={(e) => e.stopPropagation()}
+        >
+            {/* Öğretmen gizle butonu */}
             {isTeacher && !hideUI && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40">
-                    <Button 
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-40">
+                    <Button
                         onClick={() => setHideUI(true)}
                         size="sm"
-                        className="h-5 w-8 rounded-t-md rounded-b-none bg-white/90 border-t border-x border-slate-200 hover:bg-white shadow-sm"
+                        className="h-5 w-10 rounded-t-lg rounded-b-none bg-[#09071a]/90 border-t border-x border-white/10 hover:bg-white/5 shadow-sm"
                     >
                         <ChevronDown className="h-3 w-3 text-slate-500" />
                     </Button>
                 </div>
             )}
 
-            <div className="flex gap-2">
-                 <Button variant="ghost" size="icon" onClick={handlePrev} disabled={currentStepIndex === 0} className="rounded-full w-8 h-8 text-slate-500 hover:text-slate-800 hover:bg-slate-100"><ArrowLeft className="w-4 h-4"/></Button>
-                 {isTeacher && (
-                    <Button variant="outline" size="sm" onClick={() => window.location.reload()} className="h-8 px-3 text-xs font-bold text-slate-500 hover:text-slate-800 rounded-full border-slate-200">
-                        <Repeat className="w-3 h-3 mr-1"/> Yenile
-                    </Button>
-                 )}
-            </div>
+            {/* Blur arka plan */}
+            <div className="absolute inset-0 bg-[#09071a]/80 backdrop-blur-2xl border-t border-white/8" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
 
-            <div className="flex items-center justify-center gap-3 bg-slate-100/50 px-3 py-1.5 rounded-full">
-                <Select value={currentStepIndex.toString()} onValueChange={(val) => {
-                     const targetIndex = parseInt(val, 10);
-                     if (!isNaN(targetIndex)) setCurrentStepIndex(targetIndex);
-                }}>
-                    <SelectTrigger className="h-6 px-2 py-0 bg-transparent border-0 shadow-none text-[11px] font-bold text-slate-500 hover:text-slate-800 focus:ring-0 focus:ring-offset-0 w-auto gap-1">
-                        <SelectValue placeholder={`${currentStepIndex + 1} / ${steps.length}`} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {steps.map((s, i) => (
-                            <SelectItem key={i} value={i.toString()}>
-                                Sayfa {i + 1}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-                <div className="flex items-center gap-1">
-                    {steps.map((_, idx) => (
-                        <div key={idx} className={cn("h-1 rounded-full transition-all duration-500", idx === currentStepIndex ? "w-5 bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]" : (internalProgress.answers[idx]?.completed ? "w-1.5 bg-emerald-400" : "w-1 bg-slate-200"))} />
-                    ))}
+            <div className="relative flex items-center justify-between gap-3 px-4 py-3">
+
+                {/* SOL: Geri + Yenile */}
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={handlePrev}
+                        disabled={currentStepIndex === 0}
+                        className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                    </button>
+                    {isTeacher && (
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="h-9 px-3 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 flex items-center gap-1.5 text-xs font-bold transition-all active:scale-95"
+                        >
+                            <Repeat className="w-3 h-3" /> Yenile
+                        </button>
+                    )}
                 </div>
-            </div>
 
-            <div className="flex gap-1.5 items-center">
-                 {/* Puan Rozeti */}
-                 <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-100 text-amber-700 rounded-full shadow-sm mr-2">
-                     <Trophy className="w-3.5 h-3.5 text-amber-500" />
-                     <div className="relative h-4 w-6 overflow-hidden">
-                         <AnimatePresence mode="popLayout">
-                             <motion.span
-                                 key={internalProgress.score}
-                                 initial={{ y: 20, opacity: 0 }}
-                                 animate={{ y: 0, opacity: 1 }}
-                                 exit={{ y: -20, opacity: 0 }}
-                                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                 className="absolute inset-0 text-xs font-black tracking-tight text-center"
-                             >
-                                 {internalProgress.score}
-                             </motion.span>
-                         </AnimatePresence>
-                     </div>
-                 </div>
+                {/* ORTA: İlerleme noktaları + sayfa seçici */}
+                <div className="flex-1 flex flex-col items-center gap-1.5">
+                    {/* Nokta barı */}
+                    <div className="flex items-center gap-1 max-w-[200px] overflow-hidden">
+                        {steps.map((_, idx) => (
+                            <div
+                                key={idx}
+                                className={cn(
+                                    "rounded-full transition-all duration-500",
+                                    idx === currentStepIndex
+                                        ? "h-2 w-5 bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.7)]"
+                                        : internalProgress.answers[idx]?.completed
+                                            ? "h-1.5 w-1.5 bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.6)]"
+                                            : "h-1.5 w-1.5 bg-white/15"
+                                )}
+                            />
+                        ))}
+                    </div>
+                    {/* Sayfa seçici / gösterge */}
+                    {isTeacher ? (
+                        <Select value={currentStepIndex.toString()} onValueChange={(val) => {
+                            const targetIndex = parseInt(val, 10);
+                            if (!isNaN(targetIndex)) setCurrentStepIndex(targetIndex);
+                        }}>
+                            <SelectTrigger className="h-5 px-2 py-0 bg-transparent border-0 shadow-none text-[10px] font-bold text-slate-500 hover:text-slate-300 focus:ring-0 focus:ring-offset-0 w-auto gap-1">
+                                <SelectValue placeholder={`${currentStepIndex + 1} / ${steps.length}`} />
+                            </SelectTrigger>
+                            <SelectContent className="bg-[#0d0b22] border-white/10">
+                                {steps.map((s, i) => (
+                                    <SelectItem key={i} value={i.toString()} className="text-slate-300">
+                                        Sayfa {i + 1}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    ) : (
+                        <div className="h-5 px-2 py-0 flex items-center justify-center text-[11px] font-bold text-slate-400">
+                            Sayfa {currentStepIndex + 1} / {steps.length}
+                        </div>
+                    )}
+                </div>
 
-                 {isTeacher && (
-                     <Button variant="ghost" size="sm" onClick={handleNext} className="h-8 px-3 text-xs font-bold text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-full transition-colors">
-                         Atla
-                     </Button>
-                 )}
-                 <Button onClick={handleContinueOrNext} disabled={!isNextButtonEnabled || currentStepIndex === steps.length - 1 && isFinished} className={cn("h-8 px-5 rounded-full text-xs font-bold shadow-sm transition-all duration-300", isNextButtonEnabled ? "bg-purple-600 hover:bg-purple-700 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5" : "bg-slate-100 text-slate-400")}>
-                      {currentStepIndex === steps.length - 1 ? (completeButtonText || 'Bitir') : 'Devam Et'}
-                 </Button>
+                {/* SAĞ: Puan + Atla + Devam */}
+                <div className="flex items-center gap-2">
+                    {/* Puan rozeti */}
+                    <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-xl shadow-[0_0_10px_rgba(245,158,11,0.15)]">
+                        <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                        <div className="relative h-4 w-6 overflow-hidden">
+                            <AnimatePresence mode="popLayout">
+                                <motion.span
+                                    key={internalProgress.score}
+                                    initial={{ y: 16, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: -16, opacity: 0 }}
+                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                    className="absolute inset-0 text-xs font-black text-amber-300 text-center"
+                                >
+                                    {internalProgress.score}
+                                </motion.span>
+                            </AnimatePresence>
+                        </div>
+                    </div>
+
+                    {isTeacher && (
+                        <button
+                            onClick={handleNext}
+                            className="h-9 px-3 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 text-xs font-bold transition-all active:scale-95"
+                        >
+                            Atla
+                        </button>
+                    )}
+
+                    <button
+                        onClick={handleContinueOrNext}
+                        disabled={!isNextButtonEnabled || (currentStepIndex === steps.length - 1 && isFinished)}
+                        className={cn(
+                            "h-9 px-5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden border",
+                            isNextButtonEnabled
+                                ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-white/10 shadow-[0_4px_20px_rgba(99,102,241,0.4)] hover:shadow-[0_4px_25px_rgba(99,102,241,0.55)]"
+                                : "bg-white/5 text-slate-600 border-white/5 cursor-not-allowed"
+                        )}
+                    >
+                        {isNextButtonEnabled && (
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_60%)]" />
+                        )}
+                        <span className="relative">
+                            {currentStepIndex === steps.length - 1 ? (completeButtonText || 'Bitir') : 'Devam Et'}
+                        </span>
+                    </button>
+                </div>
             </div>
         </div>
       </div>

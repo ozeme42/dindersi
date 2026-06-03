@@ -28,11 +28,11 @@ const POINTS_PER_QUESTION = 100;
 
 // --- ARKA PLAN EFEKTLERİ ---
 const MissionBackground = () => (
-    <div className="fixed inset-0 pointer-events-none z-0 bg-[#020617] overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" style={{ opacity: 0.05 }}/>
-        <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
-        <div className="absolute top-[40%] left-[50%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px] mix-blend-screen" />
+    <div className="fixed inset-0 pointer-events-none z-0 bg-[#09071a] overflow-hidden">
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-indigo-900/30 rounded-full blur-[150px]" />
+        <div className="absolute top-1/2 -right-20 w-[400px] h-[400px] bg-violet-900/20 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 -left-20 w-[350px] h-[350px] bg-cyan-900/15 rounded-full blur-[110px]" />
+        <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.5) 1px,transparent 1px)', backgroundSize: '40px 40px' }} />
     </div>
 );
 
@@ -99,7 +99,7 @@ function PageContent() {
     const fetchCourseData = useCallback(async () => {
         if (!courseId) return;
         setIsLoading(true);
-        setView(startTopicIdFromUrl || unitIdFromUrl ? 'content' : 'map');
+        setView('map');
 
         try {
             const [progressSnap, manifestRes] = await Promise.all([
@@ -171,25 +171,33 @@ function PageContent() {
     useEffect(() => {
         if (isLoading || allTopicsInOrder.length === 0 || activeContent) return;
 
-        const selectAndFetchContent = async (content: Topic | Unit) => {
+        // Mobilde sadece içeriği preload et, view'i değiştirme.
+        // URL'den gelen bir konu varsa hem içeriği yükle hem de content view'e geç.
+        const preloadContent = async (content: Topic | Unit) => {
             const steps = await fetchStepsForContent(content.id);
             setActiveContent({ ...content, steps });
+            // Sadece URL'den gelen konu varsa otomatik content view aç
+            if (startTopicIdFromUrl) {
+                setView('content');
+            }
         };
         
         if (startTopicIdFromUrl) {
             const initialTopic = allTopicsInOrder.find(t => t.id === startTopicIdFromUrl);
             if (initialTopic) {
-                selectAndFetchContent(initialTopic);
+                preloadContent(initialTopic);
                 return;
             }
         }
         
+        // Otomatik konu seçimi — sadece preload, view değişmez
         const firstUncompletedUnlockedTopic = allTopicsInOrder.find(t => isTopicUnlocked(t.id) && !isTopicCompleted(t.id));
-
-        if (firstUncompletedUnlockedTopic) {
-            selectAndFetchContent(firstUncompletedUnlockedTopic);
-        } else {
-            selectAndFetchContent(allTopicsInOrder[allTopicsInOrder.length - 1]);
+        const targetTopic = firstUncompletedUnlockedTopic || allTopicsInOrder[allTopicsInOrder.length - 1];
+        if (targetTopic) {
+            fetchStepsForContent(targetTopic.id).then(steps => {
+                setActiveContent({ ...targetTopic, steps });
+                // View 'map' kalır — kullanıcı tıklayınca açılır
+            });
         }
         
     }, [isLoading, allTopicsInOrder, activeContent, isTopicUnlocked, isTopicCompleted, startTopicIdFromUrl]);
@@ -387,22 +395,30 @@ function PageContent() {
 
 
     if (isLoading) {
-         return (
-            <div className="flex h-screen items-center justify-center bg-slate-950 text-white">
-                <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="h-16 w-16 animate-spin text-cyan-500" />
-                    <span className="text-lg font-medium text-slate-400 animate-pulse">Ders Yükleniyor...</span>
+        return (
+            <div className="flex h-screen items-center justify-center bg-[#09071a] text-white">
+                <div className="fixed inset-0 pointer-events-none">
+                    <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-indigo-900/30 rounded-full blur-[130px]" />
+                </div>
+                <div className="relative flex flex-col items-center gap-5">
+                    <div className="relative w-20 h-20">
+                        <div className="absolute inset-0 rounded-2xl bg-indigo-600/20 blur-xl animate-pulse" />
+                        <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-900/60 to-purple-900/60 border border-indigo-500/30 flex items-center justify-center shadow-2xl">
+                            <BookOpen className="h-9 w-9 text-indigo-400" />
+                        </div>
+                    </div>
+                    <p className="text-indigo-300/60 font-black text-xs tracking-[0.3em] uppercase animate-pulse">Ders Yükleniyor</p>
                 </div>
             </div>
-        )
+        );
     }
 
     if (!course) {
-        return <div className="flex h-screen items-center justify-center text-slate-400 bg-slate-950">Ders bulunamadı.</div>
+        return <div className="flex h-screen items-center justify-center text-slate-500 bg-[#09071a] font-bold">Ders bulunamadı.</div>;
     }
     
     return (
-        <div className="flex flex-col h-[100dvh] bg-slate-950 overflow-hidden relative selection:bg-cyan-500/30">
+        <div className="flex flex-col h-[100dvh] bg-[#09071a] overflow-hidden relative selection:bg-indigo-500/30">
              
              <MissionBackground />
 
@@ -410,18 +426,23 @@ function PageContent() {
                 
                 {/* --- SIDEBAR --- */}
                 <div className={cn(
-                    "md:w-80 lg:w-96 flex-shrink-0 border-r border-white/5 bg-slate-900/50 backdrop-blur-md flex flex-col relative overflow-hidden transition-all duration-300",
+                    "md:w-80 lg:w-96 flex-shrink-0 border-r border-white/8 bg-[#0d0b22]/80 backdrop-blur-xl flex flex-col relative overflow-hidden transition-all duration-300",
                     view === 'content' ? 'hidden md:flex h-full' : 'flex h-full w-full',
                     isFullscreen && 'hidden'
                 )}>
-                    <div className="p-4 border-b border-white/5 flex items-center justify-between bg-slate-900/50">
-                        <h2 className="font-bold text-white text-lg flex items-center gap-2">
-                            <BookOpen className="w-5 h-5 text-indigo-400" />
-                            {course.title}
-                        </h2>
-                        <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white">
-                            <a href="/student"><ArrowLeft className="w-5 h-5" /></a>
+                    {/* Sidebar header */}
+                    <div className="relative p-4 border-b border-white/8 flex items-center gap-3 bg-[#09071a]/60 backdrop-blur-xl shrink-0">
+                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
+                        <Button asChild variant="ghost" size="icon" className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all shrink-0">
+                            <a href="/student/soru-bankasi"><ArrowLeft className="w-4 h-4" /></a>
                         </Button>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-slate-500 text-[9px] font-black uppercase tracking-[0.2em] leading-none mb-0.5">Ders</p>
+                            <h2 className="font-black text-white text-sm truncate leading-none flex items-center gap-1.5">
+                                <BookOpen className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                                {course.title}
+                            </h2>
+                        </div>
                     </div>
                     
                     <MemoizedSidebar
@@ -429,11 +450,7 @@ function PageContent() {
                         activeTopic={activeContentData?.type === 'topic' ? activeContent : null}
                         onSelectTopic={(topic) => handleSelectContent(topic)}
                         onSelectUnitFlow={(unit) => handleSelectContent(unit)}
-                        isTopicUnlocked={(topicIndex, unitIndex) => {
-                             const unit = (course.units || [])[unitIndex];
-                             const topic = unit?.topics?.[topicIndex];
-                             return topic ? isTopicUnlocked(topic.id) : false;
-                        }}
+                        isTopicUnlocked={isTopicUnlocked}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={localProgressMap}
                         testCounts={EMPTY_TEST_COUNTS} 
@@ -448,25 +465,26 @@ function PageContent() {
                     
                     {/* MOBİL BAŞLIK */}
                     {!isFullscreen && view === 'content' && (
-                        <div className="md:hidden flex items-center justify-between p-3 bg-slate-900/90 backdrop-blur-xl border-b border-white/10 z-20 shrink-0 shadow-lg">
+                        <div className="md:hidden relative flex items-center justify-between px-3 py-2.5 bg-[#09071a]/80 backdrop-blur-2xl border-b border-white/8 z-20 shrink-0">
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
                             <Button 
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => setView('map')}
-                                className="text-indigo-300 hover:text-white hover:bg-indigo-500/20 gap-1"
+                                className="h-9 px-3 rounded-xl bg-white/5 border border-white/10 text-indigo-300 hover:text-white hover:bg-indigo-500/15 gap-1.5 font-black text-xs"
                             >
-                                <ChevronLeft className="h-5 w-5" />
-                                <span className="font-bold">Dersler</span>
+                                <ChevronLeft className="h-4 w-4" />
+                                Dersler
                             </Button>
                             
-                            <div className="flex items-center gap-2 overflow-hidden px-2">
-                                <GraduationCap className="w-4 h-4 text-cyan-400 shrink-0" />
-                                <p className="font-bold text-sm text-white truncate">
+                            <div className="flex items-center gap-1.5 overflow-hidden px-2">
+                                <GraduationCap className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                                <p className="font-black text-xs text-white truncate">
                                     {activeContentData?.data.title}
                                 </p>
                             </div>
                             
-                            <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800/50 text-slate-300 h-9 w-9 rounded-lg hover:bg-slate-700 hover:text-white transition-colors" />
+                            <FullscreenToggle elementRef={mainContentRef} className="bg-white/5 border border-white/10 text-slate-400 h-9 w-9 rounded-xl hover:bg-white/10 hover:text-white transition-colors" />
                         </div>
                     )}
                     
@@ -507,7 +525,16 @@ function PageContent() {
 
 export default function Page() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>}>
+        <Suspense fallback={
+            <div className="flex h-screen items-center justify-center bg-[#09071a]">
+                <div className="relative w-16 h-16">
+                    <div className="absolute inset-0 rounded-2xl bg-indigo-600/20 blur-xl animate-pulse" />
+                    <div className="relative w-16 h-16 rounded-2xl bg-indigo-900/30 border border-indigo-500/20 flex items-center justify-center">
+                        <BookOpen className="h-7 w-7 text-indigo-400" />
+                    </div>
+                </div>
+            </div>
+        }>
             <PageContent />
         </Suspense>
     );
