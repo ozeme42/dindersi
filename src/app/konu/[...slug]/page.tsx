@@ -8,7 +8,7 @@ import {
     Maximize2, Minimize2, 
     Search, Crosshair, Shuffle, Lightbulb, 
     Puzzle, Skull, Target, Link2, Pencil, 
-    Package, Wind, Coins, BrainCircuit, Milestone, Book, MousePointerClick,
+    Package, Wind, Coins, BrainCircuit, Milestone, Book, MousePointerClick, Grid3x3,
     Sparkles, Trophy, Star, Zap, Play, Users, Swords, Crown, Download, Maximize, Minimize
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -369,9 +369,10 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
         { href: '/oyunlar/labirent', label: 'Labirent', icon: Milestone, color: 'sky' },
         { href: '/oyunlar/tornado', label: 'Tornado', icon: Wind, color: 'teal' },
         { href: '/oyunlar/balon-avcisi', label: 'Balon Avcısı', icon: Target, color: 'rose' },
+        { href: '/oyunlar/anagram-duvari', label: 'Anagram Duvarı', icon: Grid3x3, color: 'amber', badge: 'YENİ' },
     ];
 
-    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek'];
+    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek', 'anagram-duvari'];
     const teamGames = activityTypes.filter(a => teamGameSlugs.includes(a.href.split('/').pop() || ''));
     const soloGames = activityTypes.filter(a => !teamGameSlugs.includes(a.href.split('/').pop() || ''));
 
