@@ -2,7 +2,7 @@
 
 import { getAdminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache';
 
 export type ExtraPage = {
   id?: string;
@@ -27,6 +27,7 @@ function serializeDoc(data: any) {
 }
 
 export async function getExtraPages(onlyPublished: boolean = false) {
+  noStore();
   try {
     const db = getAdminDb();
     // Not: Firestore kısıtlamalarına takılmamak için tümünü çekip bellekte işliyoruz.
@@ -63,6 +64,7 @@ export async function getExtraPages(onlyPublished: boolean = false) {
 }
 
 export async function getExtraPage(id: string) {
+  noStore();
   try {
     const db = getAdminDb();
     const doc = await db.collection('extraPages').doc(id).get();
