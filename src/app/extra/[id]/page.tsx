@@ -27,64 +27,7 @@ export default function ExtraPageViewer() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     
     const containerRef = useRef<HTMLDivElement>(null);
-    const contentRef = useRef<HTMLDivElement>(null);
-
-    // GÜVENLİ SCRİPT YÜRÜTÜCÜ: HTML içindeki scriptleri React ortamında çalıştırır.
-    const executeInlineScripts = useCallback((containerElement: HTMLElement) => {
-        const scripts = containerElement.querySelectorAll('script');
-        scripts.forEach((oldScript) => {
-            const newScript = document.createElement('script');
-            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-            
-            let inlineCode = oldScript.innerHTML;
-            
-            // 1. let/const tanımları SyntaxError (already declared) yaratmasın diye var ile değiştiriyoruz.
-            inlineCode = inlineCode.replace(/(?:let|const)\s+/g, 'var ');
-            
-            // 2. Fonksiyon tanımlarını yakalayıp window'a bağla (onclick="selectGrade()" gibi yapılar için şart)
-            inlineCode = inlineCode.replace(/function\s+([a-zA-Z0-9_]+)\s*\(/g, 'window.$1 = function (');
-            
-            // Yaygın kullanılan navigasyon ve UI fonksiyonlarını global kapsama (window) bağla
-            const wrappedCode = `
-                (function() {
-                    // Tailwind CDN Polyfill
-                    window.tailwind = window.tailwind || { config: {} };
-
-                    window.showSection = window.showSection || function(id) {
-                        const sections = document.querySelectorAll('.page-section');
-                        sections.forEach(s => s.style.display = 'none');
-                        const target = document.getElementById(id);
-                        if(target) target.style.display = 'block';
-                        window.scrollTo(0,0);
-                    };
-                    window.toggleAccordion = window.toggleAccordion || function(id) {
-                        const el = document.getElementById(id);
-                        if(el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
-                    };
-                    window.changeTextSize = window.changeTextSize || function(delta) {
-                        const content = document.getElementById('content-area') || document.body;
-                        if (content) {
-                            let currentSize = parseFloat(window.getComputedStyle(content).fontSize);
-                            content.style.fontSize = (currentSize + delta) + 'px';
-                        }
-                    };
-                    window.go = window.go || function(n) { 
-                        if (typeof n === 'number') history.go(n);
-                        else window.location.href = n;
-                    };
-                    
-                    try {
-                        ${inlineCode}
-                    } catch(e) {
-                        console.error("Döküman script hatası:", e);
-                    }
-                })();
-            `;
-            
-            newScript.innerHTML = wrappedCode;
-            document.body.appendChild(newScript);
-        });
-    }, []);
+    const iframeRef = useRef<HTMLIFrameElement>(null);
 
     useEffect(() => {
         const fetchPage = async () => {
@@ -109,10 +52,71 @@ export default function ExtraPageViewer() {
     }, [id]);
 
     useEffect(() => {
-        if (!isLoading && page && contentRef.current) {
-            executeInlineScripts(contentRef.current);
+        if (!isLoading && page && iframeRef.current) {
+            let finalHtml = page.htmlContent;
+            
+            // If it doesn't have a doctype, it might be a fragment, wrap it
+            if (!finalHtml.toLowerCase().includes('<!doctype html>')) {
+                 finalHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <script src="https://cdn.tailwindcss.com"></script>
+                        <style>
+                            body { font-family: sans-serif; background-color: white; margin: 0; padding: 20px; }
+                        </style>
+                    </head>
+                    <body>
+                        ${finalHtml}
+                    </body>
+                    </html>
+                `;
+            }
+
+            // Inject utilities and zoom logic
+            const injection = `
+                <style>
+                    body { zoom: ${zoomLevel}; transform-origin: top center; transition: zoom 0.2s ease-out; }
+                </style>
+                <script>
+                    window.tailwind = window.tailwind || { config: {} };
+                    window.showSection = window.showSection || function(id) {
+                        const sections = document.querySelectorAll('.page-section');
+                        sections.forEach(s => s.style.display = 'none');
+                        const target = document.getElementById(id);
+                        if(target) target.style.display = 'block';
+                        window.scrollTo(0,0);
+                    };
+                    window.toggleAccordion = window.toggleAccordion || function(id) {
+                        const el = document.getElementById(id);
+                        if(el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+                    };
+                    window.changeTextSize = window.changeTextSize || function(delta) {
+                        const content = document.getElementById('content-area') || document.body;
+                        if (content) {
+                            let currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+                            content.style.fontSize = (currentSize + delta) + 'px';
+                        }
+                    };
+                    window.go = window.go || function(n) { 
+                        if (typeof n === 'number') history.go(n);
+                        else window.location.href = n;
+                    };
+                </script>
+            `;
+
+            // Append injection before </body> if exists, else just append it
+            if (finalHtml.includes('</body>')) {
+                finalHtml = finalHtml.replace('</body>', injection + '</body>');
+            } else {
+                finalHtml += injection;
+            }
+
+            iframeRef.current.srcdoc = finalHtml;
         }
-    }, [isLoading, page, executeInlineScripts]);
+    }, [isLoading, page, zoomLevel]);
 
     if (isLoading) {
         return (
@@ -142,8 +146,8 @@ export default function ExtraPageViewer() {
 
     return (
         <div ref={containerRef} className={cn(
-            "w-full flex flex-col bg-white transition-all duration-300",
-            isFullscreen ? "h-screen overflow-hidden" : "min-h-screen"
+            "w-full h-[100dvh] flex flex-col bg-white transition-all duration-300",
+            isFullscreen ? "overflow-hidden" : ""
         )}>
             {!isFullscreen && (
                 <header className="w-full z-50 bg-white/95 backdrop-blur-md shrink-0 border-b border-slate-200">
@@ -186,12 +190,12 @@ export default function ExtraPageViewer() {
                 </header>
             )}
 
-            <main className="flex-grow w-full relative bg-white block overflow-y-auto custom-scrollbar">
-                <div 
-                    ref={contentRef}
-                    className="w-full h-full transition-transform duration-200 ease-out origin-top p-4 md:p-10"
-                    style={{ transform: `scale(${zoomLevel})` }}
-                    dangerouslySetInnerHTML={{ __html: page.htmlContent }}
+            <main className="flex-1 w-full relative bg-white overflow-hidden">
+                <iframe 
+                    ref={iframeRef}
+                    title={page?.title || "Extra Content"}
+                    className="absolute inset-0 w-full h-full border-0 bg-white"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
                 />
             </main>
                 
