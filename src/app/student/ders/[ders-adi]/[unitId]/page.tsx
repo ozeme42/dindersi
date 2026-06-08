@@ -386,7 +386,7 @@ function PageContent() {
 
                     <div className="flex-grow overflow-y-auto relative h-full scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
                         {activeContentData ? (
-                            <div className={cn("w-full h-full", isDark ? "dark" : "")}>
+                            <div className={cn("w-full h-full", theme === "dark" ? "dark" : "")}>
                                 <LessonContentViewer
                                     topic={activeContentData.data}
                                     courseId={course.id}
