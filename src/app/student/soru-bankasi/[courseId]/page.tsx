@@ -551,21 +551,91 @@ function QuestionBankCoursePageComponent() {
                                 </div>
                             )}
                         </div>
-                        <div className="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-full px-3 py-1.5 flex-shrink-0">
-                            <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
-                            <span className="text-xs font-black text-yellow-400">{TOPIC_REWARD.toLocaleString()}</span>
+                        <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/25 rounded-full px-3 py-1.5 flex-shrink-0">
+                            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                            <span className="text-xs font-black text-amber-400">Ünite başı 10.000 XP</span>
                         </div>
                     </div>
                 </div>
 
                 {/* CONTENT */}
                 <div className="px-4 pb-32 pt-6 max-w-2xl mx-auto space-y-10">
-                    {sortedUnits.map((unit) => (
+                    {sortedUnits.map((unit) => {
+                            // Unit tamamlanma durumunu hesapla
+                            const unitTopics = unit.topics || [];
+                            const allUnitTopicsCompleted = unitTopics.length > 0 && unitTopics.every(t => isTopicCompleted(t.id));
+                            const completedTopicsCount = unitTopics.filter(t => isTopicCompleted(t.id)).length;
+                            const unitProgressPct = unitTopics.length > 0 ? Math.round((completedTopicsCount / unitTopics.length) * 100) : 0;
+
+                            return (
                         <div key={unit.id}>
-                            {/* Unit header */}
-                            <div className="flex items-center gap-3 mb-4 px-1">
-                                <div className="h-5 w-1 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full flex-shrink-0" />
-                                <h2 className="text-sm font-black text-white uppercase tracking-widest">{unit.title}</h2>
+                            {/* Unit header — Ödül Kartı */}
+                            <div className={cn(
+                                "relative rounded-3xl border overflow-hidden mb-4 p-4",
+                                allUnitTopicsCompleted
+                                    ? "bg-gradient-to-r from-amber-950/60 to-yellow-950/40 border-amber-500/30"
+                                    : "bg-gradient-to-r from-indigo-950/60 to-purple-950/40 border-indigo-500/20"
+                            )}>
+                                {/* Glow line top */}
+                                <div className={cn(
+                                    "absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r",
+                                    allUnitTopicsCompleted
+                                        ? "from-transparent via-amber-400/60 to-transparent"
+                                        : "from-transparent via-indigo-500/40 to-transparent"
+                                )} />
+
+                                <div className="flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className={cn(
+                                            "w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 border",
+                                            allUnitTopicsCompleted
+                                                ? "bg-amber-500/20 border-amber-500/30 text-amber-400"
+                                                : "bg-indigo-500/10 border-indigo-500/20 text-indigo-400"
+                                        )}>
+                                            {allUnitTopicsCompleted 
+                                                ? <Trophy className="w-5 h-5" />
+                                                : <BookOpen className="w-5 h-5" />}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h2 className="text-sm font-black text-white uppercase tracking-wider truncate">{unit.title}</h2>
+                                            <p className="text-[11px] font-medium text-slate-500 mt-0.5">
+                                                {allUnitTopicsCompleted 
+                                                    ? '✓ Ünite tamamlandı!'
+                                                    : `${completedTopicsCount}/${unitTopics.length} konu tamamlandı`}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* XP Reward Badge */}
+                                    <div className={cn(
+                                        "flex flex-col items-center justify-center rounded-2xl border px-3 py-2 flex-shrink-0",
+                                        allUnitTopicsCompleted
+                                            ? "bg-amber-500/15 border-amber-500/30"
+                                            : "bg-indigo-500/10 border-indigo-500/20"
+                                    )}>
+                                        <div className="flex items-center gap-1">
+                                            <Star className={cn("w-3.5 h-3.5 fill-current", allUnitTopicsCompleted ? "text-amber-400" : "text-indigo-400")} />
+                                            <span className={cn("text-base font-black", allUnitTopicsCompleted ? "text-amber-300" : "text-indigo-300")}>
+                                                10.000
+                                            </span>
+                                        </div>
+                                        <span className={cn("text-[9px] font-bold uppercase tracking-wider mt-0.5", allUnitTopicsCompleted ? "text-amber-500" : "text-indigo-500")}>
+                                            {allUnitTopicsCompleted ? 'XP Kazanıldı' : 'XP Ödülü'}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Progress bar */}
+                                {!allUnitTopicsCompleted && unitTopics.length > 0 && (
+                                    <div className="mt-3">
+                                        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700"
+                                                style={{ width: `${unitProgressPct}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Topics */}
@@ -670,7 +740,8 @@ function QuestionBankCoursePageComponent() {
                                 })}
                             </div>
                         </div>
-                    ))}
+                            );
+                        })}
                 </div>
             </div>
 
