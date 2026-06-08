@@ -354,6 +354,7 @@ function PageContent() {
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={localProgressMap}
                         testCounts={EMPTY_TEST_COUNTS}
+                        theme={theme}
                     />
                 </div>
 
