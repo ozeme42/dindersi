@@ -29,7 +29,7 @@ import {
 } from 'lucide-react';
 
 const difficultyMap = { 'Kolay': 'easy', 'Orta': 'medium', 'Zor': 'hard' } as const;
-const TOPIC_REWARD = 10000;
+const UNIT_REWARD = 10000; // Üniteyi tamamen bitirince verilen bonus
 const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
 // =================================================================
@@ -465,8 +465,11 @@ function QuestionBankCoursePageComponent() {
         passed: boolean, correctCount: number, totalQuestions: number, action: 'next' | 'close' = 'close'
     ) => {
         if (!user || !activeTest) return;
-        let finalScore = score;
+        let finalScore = score; // Test puanı her zaman eklenir
+
+        // Ünite tamamlama bonusu: tüm konular bittiyse +10.000
         if (passed) {
+            // Bu test sonucu eklendikten sonra aktif konunun tamamlanıp tamamlanmadığını hesapla
             const counts = testCounts[activeTest.topic.id];
             const totalTestsNeeded = Math.ceil((counts?.easy || 0) / 10) + Math.ceil((counts?.medium || 0) / 10) + Math.ceil((counts?.hard || 0) / 10);
             let passedCountSoFar = 0;
@@ -478,9 +481,27 @@ function QuestionBankCoursePageComponent() {
                 });
             }
             const wasAlreadyPassed = currentProgress?.[difficultyMap[difficulty]]?.[testIndex]?.status === 'passed';
-            if (!wasAlreadyPassed && (passedCountSoFar + 1) >= totalTestsNeeded) {
-                finalScore += TOPIC_REWARD;
-                playSound('level-up'); 
+            const thisTopicNowCompleted = !wasAlreadyPassed && (passedCountSoFar + 1) >= totalTestsNeeded;
+
+            if (thisTopicNowCompleted) {
+                // Bu konunun ait olduğu üniteyi bul
+                const parentUnit = sortedUnits.find(u => u.topics?.some((t: any) => t.id === activeTest.topic.id));
+                if (parentUnit) {
+                    // Ünitedeki diğer tüm konuların tamamlanıp tamamlanmadığını kontrol et
+                    const otherTopicsAllDone = (parentUnit.topics || []).every((t: any) => {
+                        if (t.id === activeTest.topic.id) return true; // Bu konuyu tamamlandı say
+                        return isTopicCompleted(t.id);
+                    });
+
+                    if (otherTopicsAllDone) {
+                        // Ünite daha önce tamamlanmamıştı — bonus ver!
+                        const wasUnitAlreadyDone = (parentUnit.topics || []).every((t: any) => isTopicCompleted(t.id));
+                        if (!wasUnitAlreadyDone) {
+                            finalScore += UNIT_REWARD;
+                            playSound('level-up');
+                        }
+                    }
+                }
             }
         }
 
