@@ -2,6 +2,7 @@
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { useTheme } from "@/context/theme-provider";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
 import { BookOpen, Loader2, ArrowLeft, ChevronLeft, GraduationCap, Sun, Moon } from "lucide-react";
