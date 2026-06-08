@@ -22,6 +22,7 @@ import { getExtraPages } from '@/app/teacher/extra-pages/actions';
 import { WordSudoku } from '@/components/word-sudoku';
 import { CryptoGame } from '@/components/crypto-game';
 import { NoiseMeter } from '@/components/noise-meter';
+import { ResfebeGame } from '@/components/resfebe-game';
 
 // Zeka Köşesi Oyun Listesi
 const GAMES = [
@@ -57,9 +58,9 @@ const GAMES = [
         title: 'İslami Resfebe', 
         desc: 'Görsellerle anlatılan gizli kelimeleri çöz.', 
         icon: Sparkles, 
-        color: 'text-slate-400', 
-        bg: 'bg-slate-100',
-        active: false 
+        color: 'text-amber-600', 
+        bg: 'bg-amber-100',
+        active: true 
     },
     { 
         id: 'analoji', 
@@ -444,6 +445,7 @@ export default function ExtraPagesExplorer() {
                                         {activeGame === 'sudoku' && <WordSudoku />}
                                         {activeGame === 'crypto' && <CryptoGame />}
                                         {activeGame === 'silence' && <NoiseMeter />}
+                                        {activeGame === 'resfebe' && <ResfebeGame />}
                                     </div>
                                 </div>
                             )}
