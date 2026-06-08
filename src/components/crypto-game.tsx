@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
     Maximize, Minimize, Sparkles, PartyPopper, Eye, KeyRound, 
-    RotateCcw, ZoomIn, ZoomOut, Hash, Smile, Type
+    RotateCcw, ZoomIn, ZoomOut, Hash, Smile, Type, List
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import confetti from 'canvas-confetti';
@@ -285,8 +285,9 @@ export function CryptoGame() {
                 <CardFooter className="bg-white p-3 md:p-4 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-200 flex-shrink-0 z-20 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
                     <div className="flex w-full md:w-auto items-center gap-2">
                         <Select value={currentPhraseIdx.toString()} onValueChange={(v) => initGame(parseInt(v))}>
-                            <SelectTrigger className="w-full md:w-[280px] h-12 rounded-xl bg-slate-50 border-slate-200 font-bold text-slate-700">
-                                <SelectValue placeholder="Söz Seçin..." />
+                            <SelectTrigger className="w-auto px-4 h-12 rounded-xl bg-slate-50 hover:bg-slate-100 border-slate-200 font-bold text-slate-700 transition-colors flex gap-2">
+                                <List className="w-5 h-5 text-slate-500" />
+                                <span className="hidden md:inline">Söz Seç</span>
                             </SelectTrigger>
                             <SelectContent className="max-h-[300px]">
                                 {PHRASES.map((p, i) => (
