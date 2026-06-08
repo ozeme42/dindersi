@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/context/theme-provider";
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, getDoc, query, orderBy } from "firebase/firestore";
@@ -174,7 +174,7 @@ export default function SoruBankasiPage() {
     const { user } = useAuth();
     const [courses, setCourses] = useState<EnrichedCourse[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const { theme: globalTheme, setTheme: setGlobalTheme } = useTheme();
+    const { themeMode: globalTheme, setThemeMode: setGlobalTheme } = useTheme();
     const [theme, setTheme] = useState<Theme>('dark');
 
     // Persist theme
