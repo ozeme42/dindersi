@@ -125,7 +125,7 @@ export function NoiseMeter() {
                 } else {
                     setElapsedTime((prev) => {
                         const next = prev + 1;
-                        if (next >= targetTime) {
+                        if (targetTime > 0 && next >= targetTime) {
                             handleSuccess();
                             return targetTime;
                         }
@@ -159,7 +159,14 @@ export function NoiseMeter() {
         return () => stopListening();
     }, [stopListening]);
 
-    const progressPercentage = Math.min(100, (elapsedTime / targetTime) * 100);
+    const progressPercentage = targetTime === 0 ? 100 : Math.min(100, (elapsedTime / targetTime) * 100);
+
+    const formatTime = (totalSeconds: number) => {
+        const m = Math.floor(totalSeconds / 60);
+        const s = totalSeconds % 60;
+        if (m > 0) return `${m}:${s.toString().padStart(2, '0')}`;
+        return s.toString();
+    };
 
     return (
         <div 
@@ -293,18 +300,18 @@ export function NoiseMeter() {
                                             cx="50" cy="50" r="45" 
                                             className={cn(
                                                 "fill-none stroke-[8] stroke-linecap-round transition-all duration-1000",
-                                                isNoisy && isListening ? "stroke-red-500" : "stroke-indigo-500"
+                                                isNoisy && isListening ? "stroke-red-500" : (targetTime === 0 ? "stroke-emerald-500 opacity-50" : "stroke-indigo-500")
                                             )} 
                                             strokeDasharray="283" 
-                                            strokeDashoffset={283 - (283 * progressPercentage) / 100}
+                                            strokeDashoffset={targetTime === 0 ? 0 : 283 - (283 * progressPercentage) / 100}
                                         />
                                     </svg>
                                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
                                         <span className={cn("text-5xl md:text-7xl font-black tabular-nums tracking-tighter", isFullscreen ? "text-white" : "text-slate-800")}>
-                                            {targetTime - elapsedTime}
+                                            {targetTime === 0 ? formatTime(elapsedTime) : formatTime(targetTime - elapsedTime)}
                                         </span>
                                         <span className={cn("text-xs md:text-sm font-bold uppercase tracking-widest mt-1", isFullscreen ? "text-slate-400" : "text-slate-400")}>
-                                            Saniye Kaldı
+                                            {targetTime === 0 ? (elapsedTime > 59 ? "Dakika Geçti" : "Saniye Geçti") : (targetTime - elapsedTime > 59 ? "Dakika Kaldı" : "Saniye Kaldı")}
                                         </span>
                                     </div>
                                 </div>
@@ -346,19 +353,19 @@ export function NoiseMeter() {
                             <VolumeX className="w-4 h-4" /> Hedef Süre
                         </label>
                         <div className="flex gap-2">
-                            {[30, 60, 120, 300].map(time => (
+                            {[0, 60, 180, 300, 600, 900].map(time => (
                                 <button
                                     key={time}
                                     onClick={() => !isListening && setTargetTime(time)}
                                     disabled={isListening}
                                     className={cn(
-                                        "flex-1 py-2 rounded-lg font-bold text-sm transition-colors border disabled:opacity-50",
+                                        "flex-1 py-2 px-1 rounded-lg font-bold text-[11px] md:text-sm transition-colors border disabled:opacity-50",
                                         targetTime === time 
                                             ? "bg-indigo-500 text-white border-indigo-600" 
                                             : (isFullscreen ? "bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700" : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50")
                                     )}
                                 >
-                                    {time >= 60 ? `${time/60} Dk` : `${time} Sn`}
+                                    {time === 0 ? "Süresiz" : time >= 60 ? `${time/60} Dk` : `${time} Sn`}
                                 </button>
                             ))}
                         </div>
