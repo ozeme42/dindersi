@@ -11,24 +11,20 @@ export function getAdminApp() {
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
 
-  if (!projectId || !clientEmail || !privateKeyRaw) {
-    console.error("Firebase Admin initialization failed: Missing environment variables.");
-    // In a serverless environment, sometimes retrying helps if envs are slow to load.
-    // However, throwing an error is generally safer to prevent undefined behavior.
-    throw new Error("Firebase Admin initialization failed: Missing .env.local variables.");
+  if (privateKeyRaw) {
+    const privateKey = privateKeyRaw.replace(/\\n/g, '\n');
+    const serviceAccount: ServiceAccount = {
+      projectId,
+      clientEmail,
+      privateKey,
+    };
+    return initializeApp({
+      credential: cert(serviceAccount),
+    });
   }
 
-  const privateKey = privateKeyRaw.replace(/\\n/g, '\n');
-
-  const serviceAccount: ServiceAccount = {
-    projectId,
-    clientEmail,
-    privateKey,
-  };
-
-  return initializeApp({
-    credential: cert(serviceAccount),
-  });
+  // Fallback to Application Default Credentials (ADC) for production environments like Firebase App Hosting
+  return initializeApp();
 }
 
 
