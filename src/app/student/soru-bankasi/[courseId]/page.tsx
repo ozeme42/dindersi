@@ -25,8 +25,10 @@ import {
     Loader2, CheckCircle2, Lock, PlayCircle, Trophy, 
     ShieldCheck, Shield, ShieldAlert, CheckCheck,
     BookOpen, ChevronLeft, Star, Bug, X, Zap, Target, 
-    ArrowRight, Check, Sparkles, Flame, XCircle
+    ArrowRight, Check, Sparkles, Flame, XCircle, Sun, Moon, LayoutGrid
 } from 'lucide-react';
+
+type Theme = 'dark' | 'light';
 
 const difficultyMap = { 'Kolay': 'easy', 'Orta': 'medium', 'Zor': 'hard' } as const;
 const UNIT_REWARD = 10000; // Üniteyi tamamen bitirince verilen bonus
@@ -389,9 +391,21 @@ function QuestionBankCoursePageComponent() {
     const [topicProgress, setTopicProgress] = useState<QuestionBankProgress>({});
     const [testCounts, setTestCounts] = useState<{ [topicId: string]: { easy: number; medium: number; hard: number; } }>({});
     const [classRank, setClassRank] = useState<{rank: number; total: number} | null>(null);
+    const [theme, setTheme] = useState<Theme>('dark');
 
     const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
     const [activeTest, setActiveTest] = useState<{ topic: Topic, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number } | null>(null);
+
+    // Persist theme
+    useEffect(() => {
+        const saved = localStorage.getItem('sb-theme') as Theme | null;
+        if (saved) setTheme(saved);
+    }, []);
+    const toggleTheme = () => {
+        const next: Theme = theme === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        localStorage.setItem('sb-theme', next);
+    };
 
     useEffect(() => {
         if (!user?.uid || !courseId) return;
@@ -547,22 +561,24 @@ function QuestionBankCoursePageComponent() {
     }
 
     return (
-        <div className="min-h-screen bg-[#09071a] text-slate-100 relative font-sans overflow-x-hidden">
+        <div className={cn("min-h-screen font-sans transition-colors duration-300 relative", theme === 'dark' ? 'bg-[#09071a] text-slate-100' : 'bg-slate-50 text-slate-900')}>
             {/* Background */}
-            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                <div className="absolute top-[-15%] left-[10%] w-[500px] h-[500px] bg-indigo-600/8 rounded-full blur-[100px]" />
-                <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-purple-600/8 rounded-full blur-[100px]" />
-            </div>
+            {theme === 'dark' && (
+                <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                    <div className="absolute top-[-15%] left-[10%] w-[500px] h-[500px] bg-indigo-600/8 rounded-full blur-[100px]" />
+                    <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-purple-600/8 rounded-full blur-[100px]" />
+                </div>
+            )}
 
             <div className="relative z-10">
                 {/* HEADER */}
-                <div className="sticky top-0 z-30 bg-[#09071a]/90 backdrop-blur-xl border-b border-white/5 px-4 pt-5 pb-4">
-                    <div className="flex items-center gap-3 max-w-2xl mx-auto">
-                        <Link href="/student/soru-bankasi" className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors group flex-shrink-0">
+                <div className={cn("sticky top-0 z-30 backdrop-blur-xl border-b px-4 pt-5 pb-4", theme === 'dark' ? 'bg-[#09071a]/90 border-white/5' : 'bg-white/90 border-slate-200')}>
+                    <div className="flex items-center gap-3 max-w-7xl mx-auto">
+                        <Link href="/student/soru-bankasi" className="flex items-center gap-1 transition-colors group flex-shrink-0" style={{ color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                         </Link>
                         <div className="flex-1 min-w-0">
-                            <h1 className="text-lg font-black text-white truncate">
+                            <h1 className={cn("text-lg font-black truncate", theme === 'dark' ? 'text-white' : 'text-slate-900')}>
                                 {course?.title || 'Yükleniyor...'}
                             </h1>
                             {classRank && (
@@ -572,17 +588,22 @@ function QuestionBankCoursePageComponent() {
                                 </div>
                             )}
                         </div>
-                        <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/25 rounded-full px-3 py-1.5 flex-shrink-0">
-                            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                            <span className="text-xs font-black text-amber-400">Ünite başı 10.000 XP</span>
+                        <div className="flex items-center gap-2">
+                            <div className={cn("flex items-center gap-1.5 rounded-full px-3 py-1.5", theme === 'dark' ? 'bg-amber-500/10 border border-amber-500/25' : 'bg-amber-50 border border-amber-200')}>
+                                <Star className={cn("w-3.5 h-3.5 fill-current", theme === 'dark' ? 'text-amber-400' : 'text-amber-500')} />
+                                <span className={cn("text-xs font-black", theme === 'dark' ? 'text-amber-400' : 'text-amber-600')}>Ünite başı 10.000 XP</span>
+                            </div>
+                            {/* Theme toggle */}
+                            <button onClick={toggleTheme} className={cn("w-9 h-9 rounded-2xl border transition-all flex items-center justify-center flex-shrink-0", theme === 'dark' ? 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10' : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200')}>
+                                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                {/* CONTENT */}
-                <div className="px-4 pb-32 pt-6 max-w-2xl mx-auto space-y-10">
+                {/* CONTENT — desktop: wider max-width */}
+                <div className="px-4 md:px-8 pb-32 pt-6 max-w-7xl mx-auto space-y-6">
                     {sortedUnits.map((unit) => {
-                            // Unit tamamlanma durumunu hesapla
                             const unitTopics = unit.topics || [];
                             const allUnitTopicsCompleted = unitTopics.length > 0 && unitTopics.every(t => isTopicCompleted(t.id));
                             const completedTopicsCount = unitTopics.filter(t => isTopicCompleted(t.id)).length;
@@ -595,7 +616,9 @@ function QuestionBankCoursePageComponent() {
                                 "relative rounded-3xl border overflow-hidden mb-4 p-4",
                                 allUnitTopicsCompleted
                                     ? "bg-gradient-to-r from-amber-950/60 to-yellow-950/40 border-amber-500/30"
-                                    : "bg-gradient-to-r from-indigo-950/60 to-purple-950/40 border-indigo-500/20"
+                                    : theme === 'dark'
+                                        ? "bg-gradient-to-r from-indigo-950/60 to-purple-950/40 border-indigo-500/20"
+                                        : "bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200"
                             )}>
                                 {/* Glow line top */}
                                 <div className={cn(
@@ -618,8 +641,8 @@ function QuestionBankCoursePageComponent() {
                                                 : <BookOpen className="w-5 h-5" />}
                                         </div>
                                         <div className="min-w-0">
-                                            <h2 className="text-sm font-black text-white uppercase tracking-wider truncate">{unit.title}</h2>
-                                            <p className="text-[11px] font-medium text-slate-500 mt-0.5">
+                                            <h2 className={cn("text-sm font-black uppercase tracking-wider truncate", theme === 'dark' ? 'text-white' : (allUnitTopicsCompleted ? 'text-amber-900' : 'text-indigo-900'))}>{unit.title}</h2>
+                                            <p className={cn("text-[11px] font-medium mt-0.5", theme === 'dark' ? 'text-slate-500' : 'text-slate-400')}>
                                                 {allUnitTopicsCompleted 
                                                     ? '✓ Ünite tamamlandı!'
                                                     : `${completedTopicsCount}/${unitTopics.length} konu tamamlandı`}
@@ -686,13 +709,15 @@ function QuestionBankCoursePageComponent() {
                                             onClick={() => unlocked && setSelectedTopic(topic)}
                                             disabled={!unlocked}
                                             className={cn(
-                                                "w-full text-left rounded-3xl border-2 p-4 transition-all duration-300 relative overflow-hidden",
-                                                completed
-                                                    ? "border-emerald-500/30 bg-emerald-950/20 active:scale-[0.99]"
-                                                    : unlocked
-                                                    ? "border-white/8 bg-[#161233]/60 hover:border-indigo-500/30 hover:bg-[#1e1a45]/60 active:scale-[0.99]"
-                                                    : "border-white/4 bg-[#161233]/30 opacity-50 cursor-not-allowed grayscale"
-                                            )}
+                                        "w-full text-left rounded-3xl border-2 p-4 transition-all duration-300 relative overflow-hidden",
+                                        completed
+                                            ? "border-emerald-500/30 bg-emerald-950/20 active:scale-[0.99]"
+                                            : unlocked
+                                            ? theme === 'dark'
+                                                ? "border-white/8 bg-[#161233]/60 hover:border-indigo-500/30 hover:bg-[#1e1a45]/60 active:scale-[0.99]"
+                                                : "border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50/50 active:scale-[0.99]"
+                                            : "border-white/4 bg-[#161233]/30 opacity-50 cursor-not-allowed grayscale"
+                                    )}
                                         >
                                             {/* Shimmer on completed */}
                                             {completed && (
@@ -720,9 +745,9 @@ function QuestionBankCoursePageComponent() {
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-2 mb-0.5">
                                                         <p className={cn("text-base font-black truncate",
-                                                            completed ? "text-emerald-300" :
-                                                            unlocked ? "text-white" : "text-slate-600"
-                                                        )}>
+                                                    completed ? "text-emerald-300" :
+                                                    unlocked ? (theme === 'dark' ? 'text-white' : 'text-slate-800') : "text-slate-600"
+                                                )}>
                                                             {topic.title}
                                                         </p>
                                                     </div>
@@ -768,10 +793,10 @@ function QuestionBankCoursePageComponent() {
 
             {/* TOPIC DETAIL DIALOG */}
             <Dialog open={!!selectedTopic} onOpenChange={(open) => !open && setSelectedTopic(null)}>
-                <DialogContent className="bg-[#09071a]/98 backdrop-blur-xl border border-white/8 text-white max-w-lg max-h-[85dvh] w-[95vw] overflow-hidden flex flex-col p-0 shadow-2xl rounded-3xl">
-                    <DialogHeader className="px-5 pt-5 pb-4 border-b border-white/5 relative overflow-hidden shrink-0">
+                <DialogContent className={cn("backdrop-blur-xl border text-white max-w-lg max-h-[85dvh] w-[95vw] overflow-hidden flex flex-col p-0 shadow-2xl rounded-3xl", theme === 'dark' ? 'bg-[#09071a]/98 border-white/8' : 'bg-white border-slate-200')}>
+                    <DialogHeader className={cn("px-5 pt-5 pb-4 border-b relative overflow-hidden shrink-0", theme === 'dark' ? 'border-white/5' : 'border-slate-100')}>
                         <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/10 to-purple-900/10 pointer-events-none" />
-                        <DialogTitle className="text-lg font-black text-white relative z-10 flex items-center gap-3">
+                        <DialogTitle className={cn("text-lg font-black relative z-10 flex items-center gap-3", theme === 'dark' ? 'text-white' : 'text-slate-900')}>
                             <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center flex-shrink-0">
                                 <BookOpen className="h-4 w-4 text-indigo-400" />
                             </div>
