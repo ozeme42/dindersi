@@ -56,6 +56,7 @@ export function NoiseMeter() {
             audioContextRef.current.close().catch(console.error);
             audioContextRef.current = null;
         }
+        analyserRef.current = null;
         setVolume(0);
     }, []);
 
@@ -92,19 +93,22 @@ export function NoiseMeter() {
     };
 
     const updateVolume = () => {
-        if (!analyserRef.current || !isListening) return;
+        if (!analyserRef.current) return;
 
         const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(dataArray);
 
         let sum = 0;
+        let max = 0;
         for (let i = 0; i < dataArray.length; i++) {
             sum += dataArray[i];
+            if (dataArray[i] > max) max = dataArray[i];
         }
         
-        // Average and scale to 0-100 roughly
+        // Daha iyi ses algılaması için ortalama ve anlık en yüksek sesin birleşimi
         const average = sum / dataArray.length;
-        const scaledVolume = Math.min(100, Math.round(average * 1.5));
+        const calculated = (average * 1.5) + (max * 0.4);
+        const scaledVolume = Math.min(100, Math.round(calculated));
         
         setVolume(scaledVolume);
         
