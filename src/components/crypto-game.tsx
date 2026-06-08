@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { 
     Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter 
 } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -21,7 +22,16 @@ const PHRASES = [
     { text: "CENNET ANNELERİN AYAKLARI ALTINDADIR", category: "Hadis-i Şerif" },
     { text: "BİLMEYENLER BİLENLERE SORSUN", category: "Ayet-i Kerime" },
     { text: "SABIR İMANIN YARISIDIR", category: "Özlü Söz" },
-    { text: "HAYASIZLIKTAN VE KÖTÜLÜKTEN ALIKOYAR", category: "Ayet-i Kerime" }
+    { text: "HAYASIZLIKTAN VE KÖTÜLÜKTEN ALIKOYAR", category: "Ayet-i Kerime" },
+    { text: "SİZİN EN HAYIRLINIZ KURANI ÖĞRENEN VE ÖĞRETENİNİZDİR", category: "Hadis-i Şerif" },
+    { text: "MÜMİNLER ANCAK KARDEŞTİRLER", category: "Ayet-i Kerime" },
+    { text: "ŞÜPHESİZ ALLAH ADALETİ VE İYİLİĞİ EMREDER", category: "Ayet-i Kerime" },
+    { text: "KİM BİR İYİLİK YAPARSA ONUN ON KATI SEVAP VARDIR", category: "Ayet-i Kerime" },
+    { text: "BANA BİR HARF ÖĞRETENİN KIRK YIL KÖLESİ OLURUM", category: "Hz. Ali" },
+    { text: "İNSANLARIN EN HAYIRLISI İNSANLARA FAYDALI OLANDIR", category: "Hadis-i Şerif" },
+    { text: "HİÇ ÖLMEYECEK GİBİ DÜNYA İÇİN YARIN ÖLECEK GİBİ AHİRET İÇİN ÇALIŞ", category: "Hadis-i Şerif" },
+    { text: "BİZİ ALDATAN BİZDEN DEĞİLDİR", category: "Hadis-i Şerif" },
+    { text: "ALLAHIN RAHMETİNDEN ÜMİT KESMEYİN", category: "Ayet-i Kerime" }
 ];
 
 const TURKISH_ALPHABET = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split('');
@@ -36,11 +46,13 @@ type CipherType = 'antik' | 'sayilar' | 'emojiler';
 type CipherMap = Record<string, string>;
 
 export function CryptoGame() {
+    const [currentPhraseIdx, setCurrentPhraseIdx] = useState(0);
     const [currentPhrase, setCurrentPhrase] = useState(PHRASES[0]);
     const [cipherType, setCipherType] = useState<CipherType>('antik');
     const [cipherMap, setCipherMap] = useState<CipherMap>({});
     
     const [isRevealed, setIsRevealed] = useState(false);
+    const [solvedIndices, setSolvedIndices] = useState<number[]>([]);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [zoomLevel, setZoomLevel] = useState(1.0); 
 
@@ -63,9 +75,10 @@ export function CryptoGame() {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
-    const initGame = useCallback(() => {
-        const randomPhrase = PHRASES[Math.floor(Math.random() * PHRASES.length)];
-        setCurrentPhrase(randomPhrase);
+    const initGame = useCallback((phraseIdx?: number) => {
+        const idx = phraseIdx !== undefined ? phraseIdx : Math.floor(Math.random() * PHRASES.length);
+        setCurrentPhraseIdx(idx);
+        setCurrentPhrase(PHRASES[idx]);
 
         const symbolsToUse = [...CIPHER_SETS[cipherType]].sort(() => Math.random() - 0.5);
         const newCipherMap: CipherMap = {};
@@ -98,6 +111,9 @@ export function CryptoGame() {
 
     const handleReveal = () => {
         setIsRevealed(true);
+        if (!solvedIndices.includes(currentPhraseIdx)) {
+            setSolvedIndices(prev => [...prev, currentPhraseIdx]);
+        }
         playSound('win');
         confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
     };
@@ -266,31 +282,49 @@ export function CryptoGame() {
                     </div>
                 </CardContent>
 
-                <CardFooter className="bg-white p-3 md:p-4 flex justify-between items-center border-t border-slate-200 flex-shrink-0 z-20 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
-                    <Button 
-                        onClick={initGame}
-                        variant="outline"
-                        className="h-12 px-6 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold rounded-xl border-slate-200 transition-colors"
-                    >
-                        <RotateCcw className="w-5 h-5 md:mr-2" /> <span className="hidden md:inline">Yeni Şifre</span>
-                    </Button>
+                <CardFooter className="bg-white p-3 md:p-4 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-200 flex-shrink-0 z-20 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
+                    <div className="flex w-full md:w-auto items-center gap-2">
+                        <Select value={currentPhraseIdx.toString()} onValueChange={(v) => initGame(parseInt(v))}>
+                            <SelectTrigger className="w-full md:w-[280px] h-12 rounded-xl bg-slate-50 border-slate-200 font-bold text-slate-700">
+                                <SelectValue placeholder="Söz Seçin..." />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[300px]">
+                                {PHRASES.map((p, i) => (
+                                    <SelectItem key={i} value={i.toString()} className="font-semibold text-slate-700 cursor-pointer">
+                                        <div className="flex items-center justify-between w-full pr-2">
+                                            <span className="truncate max-w-[200px]">{p.text}</span>
+                                            {solvedIndices.includes(i) && <span className="text-emerald-500 font-black ml-2">✓</span>}
+                                        </div>
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <Button 
+                            onClick={() => initGame()}
+                            variant="outline"
+                            className="h-12 w-12 md:w-auto md:px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold rounded-xl border-indigo-200 transition-colors flex-shrink-0"
+                            title="Rastgele"
+                        >
+                            <RotateCcw className="w-5 h-5 md:mr-2" /> <span className="hidden md:inline">Rastgele</span>
+                        </Button>
+                    </div>
                     
-                    <div className="flex-1 flex justify-center px-4">
+                    <div className="flex-1 w-full flex justify-center">
                         {!isRevealed ? (
                             <Button 
                                 onClick={handleReveal}
-                                className="h-14 px-8 md:px-16 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base md:text-xl uppercase tracking-widest rounded-full shadow-[0_5px_20px_rgba(16,185,129,0.4)] hover:scale-105 transition-all"
+                                className="h-14 w-full md:w-auto px-8 md:px-16 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base md:text-xl uppercase tracking-widest rounded-full shadow-[0_5px_20px_rgba(16,185,129,0.4)] hover:scale-105 transition-all"
                             >
                                 <Eye className="w-5 h-5 mr-2" /> CEVABI GÖSTER
                             </Button>
                         ) : (
-                            <div className="h-14 px-8 md:px-16 bg-emerald-100 text-emerald-800 font-black text-base md:text-xl uppercase tracking-widest rounded-full flex items-center shadow-inner">
+                            <div className="h-14 w-full md:w-auto px-8 md:px-16 bg-emerald-100 text-emerald-800 font-black text-base md:text-xl uppercase tracking-widest rounded-full flex items-center justify-center shadow-inner">
                                 <PartyPopper className="w-5 h-5 mr-2 text-emerald-600" /> ŞİFRE ÇÖZÜLDÜ
                             </div>
                         )}
                     </div>
 
-                    <Badge variant="outline" className="hidden sm:flex text-[10px] uppercase font-bold text-slate-400 bg-slate-50 h-8 items-center border-slate-200">
+                    <Badge variant="outline" className="hidden lg:flex text-[10px] uppercase font-bold text-slate-400 bg-slate-50 h-8 items-center border-slate-200 flex-shrink-0">
                         {currentPhrase.category}
                     </Badge>
                 </CardFooter>
