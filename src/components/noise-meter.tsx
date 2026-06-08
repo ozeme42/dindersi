@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Maximize, Minimize, Settings2, Play, Square, VolumeX, Mic, MicOff, AlertTriangle } from 'lucide-react';
 import { cn } from "@/lib/utils";
