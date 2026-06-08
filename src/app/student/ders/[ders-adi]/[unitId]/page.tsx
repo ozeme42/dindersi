@@ -325,8 +325,11 @@ function PageContent() {
                     {/* Sidebar header — ders adı burada TEK bir kez gösteriliyor */}
                     <div className={cn("relative p-4 border-b flex items-center gap-3 shrink-0", headerBg)}>
                         {theme === 'dark' && <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />}
-                        <Button asChild variant="ghost" size="icon" className={cn("w-9 h-9 rounded-xl border transition-all shrink-0", backBtnCls)}>
-                            <a href="/student/soru-bankasi"><ArrowLeft className="w-4 h-4" /></a>
+                        <Button asChild variant="ghost" size="sm" className={cn("h-9 px-3 rounded-xl border transition-all shrink-0 gap-1.5", backBtnCls)}>
+                            <Link href="/student/soru-bankasi">
+                                <ArrowLeft className="w-4 h-4" />
+                                <span className="font-black text-xs hidden sm:inline">Geri</span>
+                            </Link>
                         </Button>
                         <div className="flex-1 min-w-0">
                             <p className={cn("text-[9px] font-black uppercase tracking-[0.2em] leading-none mb-0.5", subColor)}>Ders</p>
