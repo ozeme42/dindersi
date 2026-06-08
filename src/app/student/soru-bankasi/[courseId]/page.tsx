@@ -4,7 +4,6 @@ import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
-// --- ACTION IMPORTS ---
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import { 
   getCourseForSoruBankasi, 
@@ -15,41 +14,26 @@ import {
 } from '@/app/student/soru-bankasi/actions';
 import { addQuestionToReviewList } from '@/app/student/tekrar-et/actions';
 
-// --- TYPES & UTILS ---
 import type { Course, Topic, Question, QuestionBankProgress, TestResult } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
 
-// --- UI COMPONENTS ---
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Progress } from '@/components/ui/progress';
 import { 
-  Loader2, ArrowLeft, CheckCircle2, Lock, PlayCircle, Trophy, 
-  ShieldCheck, Shield, ShieldAlert, CheckCheck, XCircle, 
-  BookOpen, ChevronLeft, Star, Bug, X, Zap, Target, ArrowRight, Check, Sparkles
+    Loader2, CheckCircle2, Lock, PlayCircle, Trophy, 
+    ShieldCheck, Shield, ShieldAlert, CheckCheck,
+    BookOpen, ChevronLeft, Star, Bug, X, Zap, Target, 
+    ArrowRight, Check, Sparkles, Flame, XCircle
 } from 'lucide-react';
 
-// --- SABİTLER ---
 const difficultyMap = { 'Kolay': 'easy', 'Orta': 'medium', 'Zor': 'hard' } as const;
-// ÖDÜL BURADA 10.000 OLARAK GÜNCELLENDİ
-const TOPIC_REWARD = 10000; 
-
-// --- ARKA PLAN EFEKTİ ---
-const MissionBackground = () => (
-    <div className="fixed inset-0 pointer-events-none z-0 bg-[#020617] overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" style={{ opacity: 0.05 }}/>
-        <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
-    </div>
-);
+const TOPIC_REWARD = 10000;
+const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
 // =================================================================
-// 1. SORU ÇÖZME EKRANI (OVERLAY)
+// 1. TEST ÇÖZME EKRANI (OVERLAY) — Premium Mobil Tasarım
 // =================================================================
 function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack }: any) {
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -64,7 +48,8 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
     
     const [score, setScore] = useState(0);
     const [correctCount, setCorrectCount] = useState(0);
-    const [streak, setStreak] = useState(0); 
+    const [streak, setStreak] = useState(0);
+    const [maxStreak, setMaxStreak] = useState(0);
 
     const PASS_THRESHOLD = 0.7;
     const QUESTION_POINT = 50;
@@ -75,27 +60,18 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
             setIsLoading(true);
             try {
                 const result = await getQuestionsFromBank({ 
-                    topicId: topic.id, 
-                    difficulty: [], 
-                    questionCount: 500, 
-                    isStatic: true 
+                    topicId: topic.id, difficulty: [], questionCount: 500, isStatic: true 
                 });
-                
                 if (!isMounted) return;
-
                 if (result.error || !result.questions) {
                     setError(result.error || "Sorular yüklenemedi.");
                 } else {
                     const allRawQuestions = result.questions as Question[];
-                    const targetDifficulty = difficulty; 
-                    const targetDifficultyEng = difficultyMap[difficulty as keyof typeof difficultyMap]; 
-
+                    const targetDifficultyEng = difficultyMap[difficulty as keyof typeof difficultyMap];
                     const filteredQuestions = allRawQuestions.filter(q => {
                         const qDiff = q.difficulty ? q.difficulty.toLowerCase().trim() : '';
-                        return qDiff === targetDifficulty.toLowerCase() || 
-                               qDiff === targetDifficultyEng.toLowerCase();
+                        return qDiff === difficulty.toLowerCase() || qDiff === targetDifficultyEng.toLowerCase();
                     });
-
                     const sortedQuestions = filteredQuestions.sort((a,b) => (a.text || '').localeCompare(b.text || '', 'tr'));
                     const startIndex = testIndex * 10;
                     const selectedQuestions = sortedQuestions.slice(startIndex, startIndex + 10);
@@ -136,7 +112,9 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
             const bonus = (streak + 1) % 3 === 0 ? 10 : 0;
             setScore(s => s + QUESTION_POINT + bonus);
             setCorrectCount(c => c + 1);
-            setStreak(s => s + 1);
+            const newStreak = streak + 1;
+            setStreak(newStreak);
+            setMaxStreak(m => Math.max(m, newStreak));
         } else {
             playSound('incorrect');
             setStreak(0);
@@ -151,185 +129,247 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
         await onComplete(difficulty, testIndex, score, hasPassed, correctCount, questions.length, action);
     };
 
-    if (isLoading) return <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-sm"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
+    // LOADING
+    if (isLoading) return (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-4 bg-[#09071a]">
+            <div className="relative">
+                <div className="w-16 h-16 rounded-full border-4 border-indigo-500/20 border-t-indigo-500 animate-spin" />
+                <Sparkles className="absolute inset-0 m-auto w-6 h-6 text-indigo-400" />
+            </div>
+            <p className="text-slate-400 font-bold text-xs uppercase tracking-widest animate-pulse">Sorular Yükleniyor...</p>
+        </div>
+    );
     
+    // ERROR
     if (error) return (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-8 bg-slate-950 text-center gap-4">
-            <div className="p-4 bg-red-500/10 rounded-full"><Bug className="w-12 h-12 text-red-500" /></div>
-            <p className="text-white text-lg font-medium">{error}</p>
-            <Button onClick={onBack} variant="outline" className="mt-4">Geri Dön</Button>
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 bg-[#09071a] text-center gap-4">
+            <div className="p-5 bg-rose-500/10 rounded-3xl border border-rose-500/20">
+                <Bug className="w-10 h-10 text-rose-400" />
+            </div>
+            <p className="text-white font-bold">{error}</p>
+            <Button onClick={onBack} className="mt-2 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-2xl px-8">
+                Geri Dön
+            </Button>
         </div>
     );
 
     const currentQuestion = questions[currentIndex];
-    const progressPercent = ((currentIndex + (answers[currentIndex] !== null ? 1 : 0)) / questions.length) * 100;
+    const isAnswered = answers[currentIndex] !== null && answers[currentIndex] !== undefined;
+    const progress = ((currentIndex + (isAnswered ? 1 : 0)) / questions.length) * 100;
 
+    // RESULTS SCREEN
     if (isFinished) {
         const hasPassed = (correctCount / questions.length) >= PASS_THRESHOLD;
-        const successRate = (correctCount / questions.length) * 100;
+        const successRate = Math.round((correctCount / questions.length) * 100);
+        const grade = successRate >= 90 ? { label: 'Mükemmel!', emoji: '🏆', color: 'from-yellow-400 to-amber-500', glow: 'shadow-[0_0_60px_rgba(251,191,36,0.25)]' }
+            : successRate >= 70 ? { label: 'Geçtin!', emoji: '⭐', color: 'from-emerald-400 to-teal-500', glow: 'shadow-[0_0_60px_rgba(16,185,129,0.25)]' }
+            : { label: 'Tekrar Dene', emoji: '💪', color: 'from-rose-400 to-pink-500', glow: 'shadow-[0_0_40px_rgba(244,63,94,0.2)]' };
 
         return (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#020617] animate-in fade-in duration-300">
-                <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/20 rounded-full blur-[120px]" />
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#09071a] overflow-y-auto">
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className={cn("absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full blur-3xl opacity-20 bg-gradient-to-r", grade.color)} />
                 </div>
 
-                <Card className="w-full max-w-md bg-slate-900/90 border-white/10 shadow-2xl relative z-10 backdrop-blur-xl">
-                    <CardContent className="pt-10 pb-8 px-8 text-center flex flex-col items-center gap-6">
-                        <div className={cn("w-24 h-24 rounded-full flex items-center justify-center mb-2 shadow-2xl ring-4 transition-all duration-500", 
-                            hasPassed ? "bg-gradient-to-br from-yellow-400 to-orange-500 ring-yellow-500/20" : "bg-slate-800 ring-slate-700"
-                        )}>
-                            {hasPassed ? <Trophy className="w-12 h-12 text-white animate-bounce" /> : <Target className="w-12 h-12 text-slate-400" />}
+                <div className="relative w-full max-w-sm flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 py-6">
+                    {/* Score card */}
+                    <div className={cn("w-full rounded-[2rem] p-7 text-center bg-[#161233] border border-white/10 relative overflow-hidden", grade.glow)}>
+                        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r" style={{ backgroundImage: `linear-gradient(to right, transparent, ${hasPassed ? '#10b981' : '#f43f5e'}, transparent)` }} />
+                        <div className="text-5xl mb-3">{grade.emoji}</div>
+                        <h2 className={cn("text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r mb-1", grade.color)}>{grade.label}</h2>
+                        <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-5">{topic.title} · {difficulty}</p>
+                        <div className="flex items-end justify-center gap-1 mb-1">
+                            <span className={cn("text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r", grade.color)}>{successRate}</span>
+                            <span className="text-2xl font-black text-slate-500 mb-2">%</span>
                         </div>
+                        <p className="text-slate-500 text-sm">{correctCount} doğru · {questions.length - correctCount} yanlış</p>
+                    </div>
 
-                        <div>
-                            <h2 className="text-3xl font-black text-white mb-2">{hasPassed ? "TEBRİKLER!" : "TEST TAMAMLANDI"}</h2>
-                            <p className={cn("text-lg font-medium", hasPassed ? "text-yellow-400" : "text-slate-400")}>
-                                {hasPassed ? "Harika bir iş çıkardın!" : "Biraz daha çalışmalısın."}
-                            </p>
+                    {/* Stats */}
+                    <div className="grid grid-cols-3 gap-2.5">
+                        <div className="bg-[#161233] border border-white/8 rounded-2xl p-3.5 text-center">
+                            <Zap className="w-4 h-4 text-amber-400 mx-auto mb-1" />
+                            <p className="text-lg font-black text-white">+{score}</p>
+                            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Puan</p>
                         </div>
-
-                        <div className="grid grid-cols-2 gap-4 w-full">
-                            <div className="bg-slate-800/50 p-4 rounded-2xl border border-white/5 flex flex-col items-center">
-                                <span className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Başarı</span>
-                                <span className={cn("text-2xl font-black", hasPassed ? "text-green-400" : "text-red-400")}>%{successRate.toFixed(0)}</span>
-                            </div>
-                            <div className="bg-slate-800/50 p-4 rounded-2xl border border-white/5 flex flex-col items-center">
-                                <span className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Puan</span>
-                                <span className="text-2xl font-black text-cyan-400">{score}</span>
-                            </div>
+                        <div className="bg-[#161233] border border-white/8 rounded-2xl p-3.5 text-center">
+                            <Flame className="w-4 h-4 text-orange-400 mx-auto mb-1" />
+                            <p className="text-lg font-black text-white">{maxStreak}</p>
+                            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Seri</p>
                         </div>
+                        <div className="bg-[#161233] border border-white/8 rounded-2xl p-3.5 text-center">
+                            <Trophy className="w-4 h-4 text-cyan-400 mx-auto mb-1" />
+                            <p className="text-lg font-black text-white">{hasPassed ? '✓' : '✗'}</p>
+                            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">{hasPassed ? 'Geçti' : 'Kaldı'}</p>
+                        </div>
+                    </div>
 
-                        <div className="w-full space-y-3 mt-2">
-                            {hasPassed && (
-                                <Button 
-                                    onClick={() => handleFinish('next')} 
-                                    disabled={isSaving} 
-                                    className="w-full h-14 text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-lg shadow-green-900/30 rounded-xl transition-all hover:scale-[1.02]"
-                                >
-                                    {isSaving ? <Loader2 className="animate-spin" /> : <span className="flex items-center gap-2">Sıradaki Test <ArrowRight className="w-5 h-5"/></span>}
-                                </Button>
-                            )}
-                            
-                            <Button 
-                                onClick={() => handleFinish('close')} 
-                                disabled={isSaving} 
-                                variant="outline" 
-                                className="w-full h-14 text-lg font-bold border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-xl"
+                    {/* Actions */}
+                    <div className="flex flex-col gap-2.5 mt-1">
+                        {hasPassed && (
+                            <button
+                                onClick={() => handleFinish('next')}
+                                disabled={isSaving}
+                                className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black rounded-2xl shadow-[0_8px_25px_rgba(99,102,241,0.35)] transition-all active:scale-95 disabled:opacity-50 text-sm uppercase tracking-wider"
                             >
-                                {isSaving ? <Loader2 className="animate-spin" /> : (hasPassed ? "Listeye Dön" : "Sonucu Kaydet ve Çık")}
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
+                                {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
+                                {isSaving ? 'Kaydediliyor...' : 'Sonraki Test'}
+                            </button>
+                        )}
+                        <button
+                            onClick={() => handleFinish('close')}
+                            disabled={isSaving}
+                            className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#1a1638] border border-white/8 hover:bg-[#201b45] text-slate-300 font-bold rounded-2xl transition-all active:scale-95 disabled:opacity-50 text-sm"
+                        >
+                            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
+                            {hasPassed ? 'Listeye Dön' : 'Sonucu Kaydet & Çık'}
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     }
 
+    // QUIZ SCREEN
     return (
-        <div className="fixed inset-0 z-[100] flex flex-col bg-[#020617] text-white overflow-hidden">
-            <div className="flex-shrink-0 px-4 py-4 md:py-6 bg-slate-900/50 backdrop-blur-md border-b border-white/5 relative z-20">
-                <div className="max-w-4xl mx-auto w-full flex items-center justify-between gap-4">
-                    <Button onClick={onBack} size="icon" variant="ghost" className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/10 text-slate-300">
-                        <X className="w-5 h-5" />
-                    </Button>
+        <div className="fixed inset-0 z-[100] flex flex-col bg-[#09071a] text-white overflow-hidden">
+            {/* BG glow */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[250px] bg-indigo-600/10 rounded-full blur-3xl" />
+            </div>
 
-                    <div className="flex-1 flex flex-col gap-2 max-w-md">
-                        <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
-                            <span>Soru {currentIndex + 1} / {questions.length}</span>
-                            <span className="text-cyan-400 flex items-center gap-1"><Zap className="w-3 h-3 fill-current"/> {score} XP</span>
+            {/* TOP BAR */}
+            <div className="relative z-10 flex-shrink-0 px-4 pt-5 pb-3">
+                <div className="flex items-center justify-between mb-3">
+                    <button onClick={onBack} className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors group p-1">
+                        <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                        <span className="text-sm font-bold">Çık</span>
+                    </button>
+
+                    <div className="flex items-center gap-2">
+                        {streak >= 3 && (
+                            <div className="flex items-center gap-1 bg-orange-500/10 border border-orange-500/20 rounded-full px-2.5 py-1">
+                                <Flame className="w-3 h-3 text-orange-400" />
+                                <span className="text-xs font-black text-orange-400">{streak}</span>
+                            </div>
+                        )}
+                        <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
+                            <Zap className="w-3.5 h-3.5 text-amber-400" />
+                            <span className="text-sm font-black text-white">{score}</span>
                         </div>
-                        <Progress value={progressPercent} className="h-2 bg-slate-800" indicatorClassName="bg-gradient-to-r from-cyan-500 to-blue-600 transition-all duration-500" />
+                        <div className={cn("px-3 py-1.5 rounded-full border text-xs font-bold",
+                            difficulty === 'Kolay' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
+                            difficulty === 'Orta' ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' :
+                            'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                        )}>
+                            {difficulty}
+                        </div>
                     </div>
+                </div>
 
-                    <div className="hidden md:flex items-center justify-center h-10 px-4 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-bold text-sm">
-                        {difficulty}
+                {/* Progress */}
+                <div className="flex items-center gap-3">
+                    <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700 ease-out"
+                            style={{ width: `${progress}%` }}
+                        />
                     </div>
+                    <span className="text-xs font-bold text-slate-500 flex-shrink-0 tabular-nums">
+                        {currentIndex + 1}/{questions.length}
+                    </span>
                 </div>
             </div>
 
-            <div className="flex-grow overflow-y-auto relative p-4 flex flex-col items-center">
-                <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                    <div className="absolute top-[10%] left-[50%] -translate-x-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[100px]" />
+            {/* QUESTION AREA */}
+            <div className="relative z-10 flex-1 overflow-y-auto px-4 pb-6 pt-3 flex flex-col gap-4">
+                {/* Question number */}
+                <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center flex-shrink-0">
+                        <span className="text-[10px] font-black text-indigo-400">{currentIndex + 1}</span>
+                    </div>
+                    <div className="h-px flex-1 bg-white/5" />
+                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">{topic.title}</span>
                 </div>
 
-                <div className="w-full max-w-3xl relative z-10 flex flex-col gap-8 justify-start md:justify-center min-h-[50vh] pt-12 md:pt-0 pb-32">
-                    
-                    <div className="text-center space-y-6">
-                        <Badge variant="outline" className="border-indigo-500/30 bg-indigo-500/10 text-indigo-300 py-1.5 px-4 rounded-full text-xs tracking-widest shadow-[0_0_15px_-3px_rgba(99,102,241,0.4)]">
-                            <Sparkles className="w-3 h-3 mr-2 inline-block"/> {topic.title}
-                        </Badge>
-                        <h2 className="text-xl md:text-3xl font-bold leading-relaxed text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-100 to-indigo-300 drop-shadow-2xl">
-                            {currentQuestion?.text}
-                        </h2>
-                    </div>
+                {/* Question text */}
+                <div className="bg-[#161233]/80 border border-white/8 rounded-3xl p-5 backdrop-blur-sm shadow-xl">
+                    <p className="text-base md:text-xl font-bold text-white leading-relaxed">
+                        {currentQuestion?.text}
+                    </p>
+                </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                        {(currentQuestion?.type === 'Doğru/Yanlış' ? ["Doğru", "Yanlış"] : currentQuestion?.options || []).map((opt, idx) => {
-                            const isSelected = answers[currentIndex] === (currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt);
-                            const isAnswered = answers[currentIndex] !== null && answers[currentIndex] !== undefined;
-                            
-                            let statusClass = "bg-slate-800/40 border-white/5 hover:border-indigo-500/30 hover:bg-slate-800/80 text-slate-300";
-                            let iconStyle = "border-white/10 text-slate-500 bg-white/5";
-                            let iconContent = <span className="text-sm font-bold">{String.fromCharCode(65 + idx)}</span>;
+                {/* Options */}
+                <div className="flex flex-col gap-2.5">
+                    {(currentQuestion?.type === 'Doğru/Yanlış'
+                        ? ["Doğru", "Yanlış"]
+                        : currentQuestion?.options || []
+                    ).map((opt, idx) => {
+                        const answerVal = currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt;
+                        const isSelected = answers[currentIndex] === answerVal;
+                        let isCorrect = false;
+                        if (currentQuestion?.type === 'Doğru/Yanlış') {
+                            isCorrect = (opt === 'Doğru') === (currentQuestion.correctAnswer === 'Doğru');
+                        } else {
+                            isCorrect = opt === currentQuestion?.correctAnswer;
+                        }
 
-                            if (isAnswered) {
-                                let isCorrect = false;
-                                if(currentQuestion.type === 'Doğru/Yanlış') isCorrect = (opt === 'Doğru') === (currentQuestion.correctAnswer === 'Doğru');
-                                else isCorrect = opt === currentQuestion.correctAnswer;
+                        let style = 'border-white/8 bg-[#161233]/60 text-slate-200 hover:bg-[#1e1a45] hover:border-indigo-500/30 active:scale-[0.98] cursor-pointer';
+                        let letterStyle = 'bg-white/5 border-white/10 text-slate-400';
+                        let icon = null;
 
-                                if (isCorrect) {
-                                    statusClass = "bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-[0_0_30px_-10px_rgba(16,185,129,0.3)] ring-1 ring-emerald-500/50";
-                                    iconStyle = "bg-emerald-500 border-emerald-500 text-black";
-                                    iconContent = <Check className="w-4 h-4" />;
-                                } else if (isSelected && !isCorrect) {
-                                    statusClass = "bg-rose-500/10 border-rose-500 text-rose-400 opacity-90";
-                                    iconStyle = "bg-rose-500 border-rose-500 text-white";
-                                    iconContent = <X className="w-4 h-4" />;
-                                } else {
-                                    statusClass = "opacity-40 grayscale bg-slate-900 border-transparent";
-                                }
+                        if (isAnswered) {
+                            if (isCorrect) {
+                                style = 'border-emerald-500/50 bg-emerald-950/50 text-white shadow-[0_0_20px_rgba(16,185,129,0.15)] cursor-default';
+                                letterStyle = 'bg-emerald-500 border-emerald-400 text-white';
+                                icon = <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />;
                             } else if (isSelected) {
-                                statusClass = "bg-indigo-600/20 border-indigo-500 text-indigo-300";
+                                style = 'border-rose-500/50 bg-rose-950/50 text-white shadow-[0_0_20px_rgba(244,63,94,0.1)] cursor-default';
+                                letterStyle = 'bg-rose-500 border-rose-400 text-white';
+                                icon = <XCircle className="w-5 h-5 text-rose-400 flex-shrink-0" />;
+                            } else {
+                                style = 'border-white/4 bg-white/3 text-slate-600 cursor-default';
+                                letterStyle = 'bg-white/3 border-white/5 text-slate-700';
                             }
+                        }
 
-                            return (
-                                <button
-                                    key={idx}
-                                    disabled={isAnswered}
-                                    onClick={() => handleAnswer(currentQuestion?.type === 'Doğru/Yanlış' ? opt === 'Doğru' : opt)}
-                                    className={cn(
-                                        "relative group flex items-center gap-4 p-4 md:p-5 w-full text-left rounded-2xl border-2 transition-all duration-300 active:scale-[0.98]",
-                                        statusClass
-                                    )}
-                                >
-                                    <div className={cn("w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors", iconStyle)}>
-                                        {iconContent}
-                                    </div>
-                                    <span className="text-base md:text-lg font-medium leading-tight">{opt.toString()}</span>
-                                </button>
-                            );
-                        })}
-                    </div>
+                        return (
+                            <button
+                                key={idx}
+                                disabled={isAnswered}
+                                onClick={() => handleAnswer(answerVal)}
+                                className={cn(
+                                    'w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl border-2 text-left transition-all duration-250 font-semibold',
+                                    style
+                                )}
+                            >
+                                <span className={cn('flex-shrink-0 w-8 h-8 rounded-xl border-2 flex items-center justify-center text-xs font-black transition-all', letterStyle)}>
+                                    {currentQuestion?.type === 'Doğru/Yanlış' ? (opt === 'Doğru' ? '✓' : '✗') : OPTION_LETTERS[idx]}
+                                </span>
+                                <span className="flex-1 text-sm md:text-base leading-snug">{opt.toString()}</span>
+                                {icon}
+                            </button>
+                        );
+                    })}
                 </div>
-            </div>
 
-            <div className="flex-shrink-0 p-4 bg-slate-900/80 backdrop-blur-xl border-t border-white/5 relative z-20 safe-area-bottom">
-                <div className="max-w-3xl mx-auto flex justify-end">
-                    <Button 
-                        onClick={() => currentIndex < questions.length - 1 ? setCurrentIndex(prev => prev + 1) : setIsFinished(true)} 
-                        disabled={answers[currentIndex] === null}
-                        size="lg"
+                {/* Next button */}
+                <div className="mt-auto pt-2">
+                    <button
+                        onClick={() => currentIndex < questions.length - 1 ? setCurrentIndex(prev => prev + 1) : setIsFinished(true)}
+                        disabled={!isAnswered}
                         className={cn(
-                            "rounded-xl px-8 font-bold text-lg h-14 shadow-lg transition-all w-full md:w-auto",
-                            answers[currentIndex] !== null 
-                                ? "bg-cyan-600 hover:bg-cyan-500 text-white shadow-cyan-500/25 hover:scale-105" 
-                                : "bg-slate-800 text-slate-500"
+                            'w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition-all duration-300',
+                            isAnswered
+                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-[0_8px_25px_rgba(99,102,241,0.35)] active:scale-[0.98]'
+                                : 'bg-white/4 border border-white/5 text-slate-600 cursor-not-allowed'
                         )}
                     >
-                        {currentIndex === questions.length - 1 ? "Sonucu Gör" : "Sonraki Soru"}
-                        <ArrowRight className="ml-2 w-5 h-5" />
-                    </Button>
+                        {currentIndex === questions.length - 1
+                            ? <><Trophy className="w-4 h-4" /> Sonucu Gör</>
+                            : <>Sonraki Soru <ArrowRight className="w-4 h-4" /></>
+                        }
+                    </button>
                 </div>
             </div>
         </div>
@@ -337,7 +377,7 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
 }
 
 // =================================================================
-// 2. ANA SAYFA BİLEŞENİ
+// 2. KONU LİSTESİ — Premium Mobil Tasarım
 // =================================================================
 function QuestionBankCoursePageComponent() {
     const params = useParams();
@@ -372,13 +412,10 @@ function QuestionBankCoursePageComponent() {
                 
                 const newCounts: any = {};
                 allTopics.forEach((t, i) => {
-                    if (counts[i] && (counts[i].easy > 0 || counts[i].medium > 0 || counts[i].hard > 0)) {
-                         newCounts[t.id] = counts[i];
-                    } else {
-                         newCounts[t.id] = { easy: 50, medium: 50, hard: 50 };
-                    }
+                    newCounts[t.id] = (counts[i] && (counts[i].easy > 0 || counts[i].medium > 0 || counts[i].hard > 0))
+                        ? counts[i]
+                        : { easy: 50, medium: 50, hard: 50 };
                 });
-                
                 setTestCounts(newCounts);
             } catch (e: any) { console.error(e); } finally { setIsLoading(false); }
         };
@@ -413,36 +450,25 @@ function QuestionBankCoursePageComponent() {
             const total = Math.ceil((counts[key] || 0) / 10);
             if (total === 0) return true;
             return Object.values(progress?.[key] || {}).filter(res => res.status === 'passed').length >= total;
-        }
+        };
         return checkLevel('easy') && checkLevel('medium') && checkLevel('hard');
     }, [topicProgress, testCounts]);
 
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         const idx = allSortedTopics.findIndex(t => t.id === topicId);
-        if (idx <= 0) return true; 
+        if (idx <= 0) return true;
         return isTopicCompleted(allSortedTopics[idx - 1].id);
     }, [isTopicCompleted, allSortedTopics]);
 
     const handleTestComplete = async (
-        difficulty: 'Kolay' | 'Orta' | 'Zor', 
-        testIndex: number, 
-        score: number, 
-        passed: boolean, 
-        correctCount: number, 
-        totalQuestions: number,
-        action: 'next' | 'close' = 'close'
+        difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number, score: number,
+        passed: boolean, correctCount: number, totalQuestions: number, action: 'next' | 'close' = 'close'
     ) => {
         if (!user || !activeTest) return;
-        
         let finalScore = score;
-
         if (passed) {
             const counts = testCounts[activeTest.topic.id];
-            const totalTestsNeeded = 
-                Math.ceil((counts?.easy || 0) / 10) + 
-                Math.ceil((counts?.medium || 0) / 10) + 
-                Math.ceil((counts?.hard || 0) / 10);
-
+            const totalTestsNeeded = Math.ceil((counts?.easy || 0) / 10) + Math.ceil((counts?.medium || 0) / 10) + Math.ceil((counts?.hard || 0) / 10);
             let passedCountSoFar = 0;
             const currentProgress = topicProgress[activeTest.topic.id];
             if (currentProgress) {
@@ -451,7 +477,6 @@ function QuestionBankCoursePageComponent() {
                     passedCountSoFar += Object.values(currentProgress[diffKey] || {}).filter(r => r.status === 'passed').length;
                 });
             }
-
             const wasAlreadyPassed = currentProgress?.[difficultyMap[difficulty]]?.[testIndex]?.status === 'passed';
             if (!wasAlreadyPassed && (passedCountSoFar + 1) >= totalTestsNeeded) {
                 finalScore += TOPIC_REWARD;
@@ -460,7 +485,6 @@ function QuestionBankCoursePageComponent() {
         }
 
         const result: TestResult = { status: passed ? 'passed' : 'failed', correct: correctCount, total: totalQuestions, score: finalScore };
-        
         setTopicProgress(prev => ({ 
             ...prev, 
             [activeTest.topic.id]: { 
@@ -471,21 +495,22 @@ function QuestionBankCoursePageComponent() {
                 } 
             } 
         }));
-        
         await updateTopicTestProgress(user.uid, courseId, activeTest.topic.id, difficultyMap[difficulty], testIndex, result);
-
         if (action === 'next' && passed) {
-            setActiveTest({
-                topic: activeTest.topic,
-                difficulty: difficulty,
-                testIndex: testIndex + 1
-            });
+            setActiveTest({ topic: activeTest.topic, difficulty, testIndex: testIndex + 1 });
         } else {
             setActiveTest(null);
         }
     };
 
-    if (isLoading) return <div className="flex h-screen items-center justify-center bg-slate-950 text-white"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
+    if (isLoading) return (
+        <div className="flex h-screen items-center justify-center bg-[#09071a]">
+            <div className="relative">
+                <div className="w-14 h-14 rounded-full border-4 border-indigo-500/20 border-t-indigo-500 animate-spin" />
+                <BookOpen className="absolute inset-0 m-auto w-5 h-5 text-indigo-400" />
+            </div>
+        </div>
+    );
 
     if (activeTest) {
         return (
@@ -501,115 +526,145 @@ function QuestionBankCoursePageComponent() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8 relative font-sans overflow-x-hidden">
-            <MissionBackground />
-            
-            <div className="relative z-10 max-w-6xl mx-auto">
-                <div className="flex items-center gap-4 mb-8">
-                    <Button variant="ghost" asChild className="hover:bg-white/10 text-slate-300">
-                        <Link href="/student/soru-bankasi"><ChevronLeft className="mr-2 h-5 w-5"/> Derslere Dön</Link>
-                    </Button>
-                    <div className="flex-1">
-                        <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 tracking-tight">
-                             {course?.title || "Ders Yükleniyor"}
-                        </h2>
-                        {classRank && (
-                             <div className="flex items-center gap-2 mt-1">
-                                <Badge variant="outline" className="border-yellow-500/30 text-yellow-400 bg-yellow-500/10 text-[10px] tracking-widest uppercase">
-                                    <Trophy className="w-3 h-3 mr-1" /> Sınıf Sıralaması: #{classRank.rank}
-                                </Badge>
-                             </div>
-                        )}
+        <div className="min-h-screen bg-[#09071a] text-slate-100 relative font-sans overflow-x-hidden">
+            {/* Background */}
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <div className="absolute top-[-15%] left-[10%] w-[500px] h-[500px] bg-indigo-600/8 rounded-full blur-[100px]" />
+                <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-purple-600/8 rounded-full blur-[100px]" />
+            </div>
+
+            <div className="relative z-10">
+                {/* HEADER */}
+                <div className="sticky top-0 z-30 bg-[#09071a]/90 backdrop-blur-xl border-b border-white/5 px-4 pt-5 pb-4">
+                    <div className="flex items-center gap-3 max-w-2xl mx-auto">
+                        <Link href="/student/soru-bankasi" className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors group flex-shrink-0">
+                            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                        </Link>
+                        <div className="flex-1 min-w-0">
+                            <h1 className="text-lg font-black text-white truncate">
+                                {course?.title || 'Yükleniyor...'}
+                            </h1>
+                            {classRank && (
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                    <Trophy className="w-3 h-3 text-amber-400" />
+                                    <span className="text-xs font-bold text-amber-400">Sınıf Sıralaması: #{classRank.rank}</span>
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-full px-3 py-1.5 flex-shrink-0">
+                            <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
+                            <span className="text-xs font-black text-yellow-400">{TOPIC_REWARD.toLocaleString()}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div className="space-y-16 pb-40">
+                {/* CONTENT */}
+                <div className="px-4 pb-32 pt-6 max-w-2xl mx-auto space-y-10">
                     {sortedUnits.map((unit) => (
-                        <div key={unit.id} className="relative">
-                            <div className="flex items-center gap-3 mb-8 pl-2">
-                                <div className="h-8 w-1.5 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"/>
-                                <h3 className="text-2xl font-black text-white uppercase tracking-wider">{unit.title}</h3>
+                        <div key={unit.id}>
+                            {/* Unit header */}
+                            <div className="flex items-center gap-3 mb-4 px-1">
+                                <div className="h-5 w-1 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full flex-shrink-0" />
+                                <h2 className="text-sm font-black text-white uppercase tracking-widest">{unit.title}</h2>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {unit.topics.map((topic) => {
+                            {/* Topics */}
+                            <div className="flex flex-col gap-3">
+                                {unit.topics.map((topic, topicIdx) => {
                                     const unlocked = isTopicUnlocked(topic.id);
                                     const completed = isTopicCompleted(topic.id);
                                     const counts = testCounts[topic.id];
-                                    const totalQuestions = counts ? (counts.easy + counts.medium + counts.hard) : 150; 
-                                    const unitTopicIndex = unit.topics.indexOf(topic) + 1;
+                                    const totalQ = counts ? (counts.easy + counts.medium + counts.hard) : 150;
+
+                                    // Calculate overall progress
+                                    const totalTests = counts
+                                        ? Math.ceil(counts.easy / 10) + Math.ceil(counts.medium / 10) + Math.ceil(counts.hard / 10)
+                                        : 15;
+                                    let passedTests = 0;
+                                    const prog = topicProgress[topic.id];
+                                    if (prog) {
+                                        ['easy', 'medium', 'hard'].forEach(d => {
+                                            passedTests += Object.values(prog[d as 'easy'|'medium'|'hard'] || {}).filter(r => r.status === 'passed').length;
+                                        });
+                                    }
+                                    const progressPct = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
 
                                     return (
-                                        <button 
+                                        <button
                                             key={topic.id}
                                             onClick={() => unlocked && setSelectedTopic(topic)}
                                             disabled={!unlocked}
                                             className={cn(
-                                                "group relative text-left h-full transition-all duration-300",
-                                                unlocked ? "opacity-100 hover:-translate-y-2" : "opacity-60 cursor-not-allowed grayscale"
+                                                "w-full text-left rounded-3xl border-2 p-4 transition-all duration-300 relative overflow-hidden",
+                                                completed
+                                                    ? "border-emerald-500/30 bg-emerald-950/20 active:scale-[0.99]"
+                                                    : unlocked
+                                                    ? "border-white/8 bg-[#161233]/60 hover:border-indigo-500/30 hover:bg-[#1e1a45]/60 active:scale-[0.99]"
+                                                    : "border-white/4 bg-[#161233]/30 opacity-50 cursor-not-allowed grayscale"
                                             )}
                                         >
-                                            {!unlocked && (
-                                                <div className="absolute inset-0 z-20 bg-slate-950/50 backdrop-blur-[1px] rounded-[1.8rem] flex items-center justify-center border-2 border-slate-800">
-                                                    <div className="bg-slate-900/90 p-3 rounded-full border border-slate-700 shadow-xl">
-                                                        <Lock className="w-6 h-6 text-slate-500" />
-                                                    </div>
-                                                </div>
+                                            {/* Shimmer on completed */}
+                                            {completed && (
+                                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/5 to-transparent pointer-events-none" />
                                             )}
-                                            {unlocked && <div className="absolute -inset-0.5 bg-gradient-to-br from-indigo-500/40 to-purple-600/40 rounded-[2rem] opacity-0 group-hover:opacity-100 blur transition duration-500" />}
 
-                                            <Card className={cn(
-                                                "relative h-full border-slate-800 transition-all duration-300 rounded-[1.8rem] overflow-hidden flex flex-col",
-                                                unlocked ? "bg-[#0f172a]/90 backdrop-blur-sm hover:border-indigo-500/50" : "bg-slate-900"
-                                            )}>
-                                                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                                                    <BookOpen className="w-24 h-24 text-white -rotate-12" />
+                                            <div className="flex items-center gap-3.5">
+                                                {/* Icon */}
+                                                <div className={cn(
+                                                    "w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 border",
+                                                    completed ? "bg-emerald-500/15 border-emerald-500/30" :
+                                                    unlocked ? "bg-indigo-500/10 border-indigo-500/20" :
+                                                    "bg-white/3 border-white/8"
+                                                )}>
+                                                    {completed ? (
+                                                        <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                                                    ) : unlocked ? (
+                                                        <BookOpen className="w-6 h-6 text-indigo-400" />
+                                                    ) : (
+                                                        <Lock className="w-5 h-5 text-slate-600" />
+                                                    )}
                                                 </div>
 
-                                                <CardContent className="p-6 flex flex-col h-full relative z-10">
-                                                    <div className="flex items-start justify-between mb-4">
-                                                        <div className={cn(
-                                                            "h-8 px-3 rounded-lg flex items-center justify-center font-bold text-xs transition-colors border",
-                                                            completed 
-                                                                ? "bg-green-500/20 text-green-400 border-green-500/30" 
-                                                                : "bg-slate-800 text-slate-400 border-slate-700"
+                                                {/* Info */}
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center gap-2 mb-0.5">
+                                                        <p className={cn("text-base font-black truncate",
+                                                            completed ? "text-emerald-300" :
+                                                            unlocked ? "text-white" : "text-slate-600"
                                                         )}>
-                                                                {completed ? <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3"/> TAMAMLANDI</span> : `KONU ${unitTopicIndex}`}
-                                                        </div>
-                                                        <div className="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/30 px-2 py-1 rounded text-[10px] font-bold text-yellow-400">
-                                                              <Star className="w-3 h-3 fill-current" />
-                                                              <span>{TOPIC_REWARD.toLocaleString()} XP</span>
-                                                        </div>
+                                                            {topic.title}
+                                                        </p>
                                                     </div>
-
-                                                    <h4 className={cn("font-black text-xl mb-3 line-clamp-2 leading-tight transition-colors", unlocked ? "text-white group-hover:text-indigo-300" : "text-slate-500")}>
-                                                        {topic.title}
-                                                    </h4>
-                                                    
-                                                    <p className="text-xs text-slate-500 font-medium mb-4">
-                                                        Toplam {totalQuestions} Soru
+                                                    <p className="text-xs text-slate-600 font-medium">
+                                                        {totalQ} soru · {passedTests}/{totalTests} test
                                                     </p>
-
-                                                    <div className="mt-auto pt-4">
-                                                        <div className={cn(
-                                                            "w-full h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all",
-                                                            unlocked 
-                                                                ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg group-hover:shadow-indigo-500/25" 
-                                                                : "bg-slate-800 text-slate-600"
-                                                        )}>
-                                                                {unlocked ? (
-                                                                    <span className="flex items-center gap-2">
-                                                                        {completed ? "Tekrar Çöz" : "Teste Başla"} <PlayCircle className="w-3.5 h-3.5" />
-                                                                    </span>
-                                                                ) : (
-                                                                    <span className="flex items-center gap-2">
-                                                                        <Lock className="w-3.5 h-3.5" /> Kilitli
-                                                                    </span>
+                                                    {/* Mini progress bar */}
+                                                    {unlocked && totalTests > 0 && (
+                                                        <div className="mt-2 h-1 bg-white/5 rounded-full overflow-hidden">
+                                                            <div
+                                                                className={cn("h-full rounded-full transition-all duration-500",
+                                                                    completed ? "bg-emerald-500" : "bg-gradient-to-r from-indigo-500 to-purple-500"
                                                                 )}
+                                                                style={{ width: `${progressPct}%` }}
+                                                            />
                                                         </div>
-                                                    </div>
-                                                </CardContent>
-                                            </Card>
+                                                    )}
+                                                </div>
+
+                                                {/* Right arrow / lock */}
+                                                <div className="flex-shrink-0">
+                                                    {unlocked ? (
+                                                        <div className={cn(
+                                                            "w-9 h-9 rounded-2xl flex items-center justify-center",
+                                                            completed ? "bg-emerald-500/15 text-emerald-400" : "bg-indigo-500/10 text-indigo-400"
+                                                        )}>
+                                                            <ArrowRight className="w-4 h-4" />
+                                                        </div>
+                                                    ) : (
+                                                        <Lock className="w-4 h-4 text-slate-700" />
+                                                    )}
+                                                </div>
+                                            </div>
                                         </button>
                                     );
                                 })}
@@ -619,92 +674,93 @@ function QuestionBankCoursePageComponent() {
                 </div>
             </div>
 
+            {/* TOPIC DETAIL DIALOG */}
             <Dialog open={!!selectedTopic} onOpenChange={(open) => !open && setSelectedTopic(null)}>
-                <DialogContent className="bg-[#020617]/95 backdrop-blur-xl border-slate-800 text-white max-w-4xl max-h-[85dvh] w-[95vw] overflow-hidden flex flex-col p-0 shadow-2xl rounded-3xl">
-                    <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-gradient-to-r from-indigo-900/20 to-purple-900/20 relative overflow-hidden shrink-0">
-                         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-                         <DialogTitle className="text-2xl font-black flex items-center gap-3 text-white relative z-10">
-                            <div className="p-2 bg-indigo-500/20 rounded-lg border border-indigo-500/30">
-                                <BookOpen className="h-6 w-6 text-indigo-400"/>
+                <DialogContent className="bg-[#09071a]/98 backdrop-blur-xl border border-white/8 text-white max-w-lg max-h-[85dvh] w-[95vw] overflow-hidden flex flex-col p-0 shadow-2xl rounded-3xl">
+                    <DialogHeader className="px-5 pt-5 pb-4 border-b border-white/5 relative overflow-hidden shrink-0">
+                        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/10 to-purple-900/10 pointer-events-none" />
+                        <DialogTitle className="text-lg font-black text-white relative z-10 flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center flex-shrink-0">
+                                <BookOpen className="h-4 w-4 text-indigo-400" />
                             </div>
-                            {selectedTopic?.title}
-                         </DialogTitle>
-                         <p className="relative z-10 text-slate-400 text-sm mt-1">Seviyeleri sırasıyla tamamla.</p>
+                            <span className="truncate">{selectedTopic?.title}</span>
+                        </DialogTitle>
+                        <p className="relative z-10 text-slate-500 text-xs mt-1 pl-12">Seviyeleri sırasıyla tamamla</p>
                     </DialogHeader>
                     
-                    <div className="flex-1 overflow-y-auto w-full p-6 pb-40">
-                        {selectedTopic && (
-                            <div className="grid grid-cols-1 gap-6">
-                                {(['Kolay', 'Orta', 'Zor'] as const).map(level => {
-                                    const levelKey = difficultyMap[level];
-                                    const counts = testCounts[selectedTopic.id]?.[levelKey] || 0;
-                                    const safeCounts = counts > 0 ? counts : 50;
-                                    const numTests = Math.ceil(safeCounts / 10);
-                                    
-                                    const isLevelUnlocked = () => {
-                                        if (level === 'Kolay') return true;
-                                        const prevDiff = level === 'Orta' ? 'easy' : 'medium';
-                                        
-                                        const prevCounts = testCounts[selectedTopic.id]?.[prevDiff] || 0;
-                                        const safePrevCounts = prevCounts > 0 ? prevCounts : 50;
-                                        const totalPrev = Math.ceil(safePrevCounts / 10);
-                                        
-                                        const passedPrev = Object.values(topicProgress[selectedTopic.id]?.[prevDiff] || {}).filter(r => r.status === 'passed').length;
-                                        return passedPrev >= totalPrev;
-                                    }
-                                    const levelLocked = !isLevelUnlocked();
+                    <div className="flex-1 overflow-y-auto w-full p-4 space-y-3 pb-6">
+                        {selectedTopic && (['Kolay', 'Orta', 'Zor'] as const).map(level => {
+                            const levelKey = difficultyMap[level];
+                            const counts = testCounts[selectedTopic.id]?.[levelKey] || 0;
+                            const safeCounts = counts > 0 ? counts : 50;
+                            const numTests = Math.ceil(safeCounts / 10);
+                            
+                            const isLevelUnlocked = () => {
+                                if (level === 'Kolay') return true;
+                                const prevDiff = level === 'Orta' ? 'easy' : 'medium';
+                                const prevCounts = testCounts[selectedTopic.id]?.[prevDiff] || 0;
+                                const safePrevCounts = prevCounts > 0 ? prevCounts : 50;
+                                const totalPrev = Math.ceil(safePrevCounts / 10);
+                                const passedPrev = Object.values(topicProgress[selectedTopic.id]?.[prevDiff] || {}).filter(r => r.status === 'passed').length;
+                                return passedPrev >= totalPrev;
+                            };
+                            const levelLocked = !isLevelUnlocked();
 
-                                    return (
-                                        <div key={level} className={cn(
-                                            "rounded-[2rem] border p-6 transition-all duration-500 relative overflow-hidden",
-                                            levelLocked ? "bg-slate-900/30 border-white/5 grayscale opacity-60" : "bg-slate-900/60 border-white/10"
-                                        )}>
-                                            <div className="flex items-center gap-4 mb-6 relative z-10">
-                                                <div className={cn("p-3 rounded-xl shadow-lg", 
-                                                    level === 'Kolay' ? "bg-emerald-500/20 text-emerald-400" : 
-                                                    level === 'Orta' ? "bg-amber-500/20 text-amber-400" : 
-                                                    "bg-red-500/20 text-red-400"
-                                                )}>
-                                                    {level === 'Kolay' ? <ShieldCheck className="w-6 h-6"/> : level === 'Orta' ? <Shield className="w-6 h-6"/> : <ShieldAlert className="w-6 h-6"/>}
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-xl font-black text-white">{level} Seviye</h3>
-                                                    <p className="text-xs text-slate-400 font-medium">{levelLocked ? "Önceki seviyeyi tamamla" : `${numTests} Test Mevcut`}</p>
-                                                </div>
-                                                {levelLocked && <Lock className="ml-auto w-6 h-6 text-slate-600" />}
-                                            </div>
-                                            
-                                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 relative z-10">
-                                                {Array.from({ length: numTests }).map((_, i) => {
-                                                    const res = topicProgress[selectedTopic.id]?.[levelKey]?.[i];
-                                                    const tLocked = levelLocked || (i > 0 && topicProgress[selectedTopic.id]?.[levelKey]?.[i-1]?.status !== 'passed');
-                                                    
-                                                    return (
-                                                        <Button 
-                                                            key={i} 
-                                                            disabled={tLocked} 
-                                                            onClick={() => {
-                                                                setActiveTest({ topic: selectedTopic, difficulty: level, testIndex: i });
-                                                            }}
-                                                            className={cn(
-                                                                "h-14 rounded-xl border-2 font-bold relative overflow-hidden transition-all",
-                                                                res?.status === 'passed' 
-                                                                    ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20" 
-                                                                    : tLocked 
-                                                                        ? "bg-slate-950 border-white/5 text-slate-700" 
-                                                                        : "bg-slate-800 border-white/10 text-white hover:border-cyan-500 hover:bg-slate-700"
-                                                            )}
-                                                        >
-                                                                {tLocked ? <Lock className="w-4 h-4" /> : res?.status === 'passed' ? <span className="flex items-center gap-1"><CheckCheck className="w-4 h-4"/> #{i+1}</span> : `Test ${i+1}`}
-                                                        </Button>
-                                                    );
-                                                })}
-                                            </div>
+                            const levelConfig = {
+                                'Kolay': { icon: <ShieldCheck className="w-5 h-5" />, color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20', pillColor: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' },
+                                'Orta':  { icon: <Shield className="w-5 h-5" />, color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20', pillColor: 'bg-amber-500/10 border-amber-500/20 text-amber-400' },
+                                'Zor':   { icon: <ShieldAlert className="w-5 h-5" />, color: 'text-rose-400', bg: 'bg-rose-500/10 border-rose-500/20', pillColor: 'bg-rose-500/10 border-rose-500/20 text-rose-400' },
+                            }[level];
+
+                            return (
+                                <div key={level} className={cn(
+                                    "rounded-2xl border p-4 transition-all duration-300",
+                                    levelLocked ? "bg-white/2 border-white/4 opacity-50" : "bg-[#161233]/60 border-white/8"
+                                )}>
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <div className={cn("w-9 h-9 rounded-xl border flex items-center justify-center", levelConfig.bg, levelConfig.color)}>
+                                            {levelLocked ? <Lock className="w-4 h-4" /> : levelConfig.icon}
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        )}
+                                        <div className="flex-1">
+                                            <p className="font-black text-sm text-white">{level} Seviye</p>
+                                            <p className="text-[11px] text-slate-500">{levelLocked ? 'Önceki seviyeyi tamamla' : `${numTests} test mevcut`}</p>
+                                        </div>
+                                        {!levelLocked && (
+                                            <div className={cn("px-2.5 py-1 rounded-full border text-[10px] font-bold", levelConfig.pillColor)}>
+                                                {level}
+                                            </div>
+                                        )}
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                                        {Array.from({ length: numTests }).map((_, i) => {
+                                            const res = topicProgress[selectedTopic.id]?.[levelKey]?.[i];
+                                            const tLocked = levelLocked || (i > 0 && topicProgress[selectedTopic.id]?.[levelKey]?.[i-1]?.status !== 'passed');
+                                            
+                                            return (
+                                                <button
+                                                    key={i}
+                                                    disabled={tLocked}
+                                                    onClick={() => { setActiveTest({ topic: selectedTopic, difficulty: level, testIndex: i }); setSelectedTopic(null); }}
+                                                    className={cn(
+                                                        "h-12 rounded-xl border-2 font-bold text-sm transition-all active:scale-95",
+                                                        res?.status === 'passed'
+                                                            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                                                            : tLocked
+                                                            ? "bg-white/2 border-white/5 text-slate-700 cursor-not-allowed"
+                                                            : "bg-[#1a1638] border-white/10 text-white hover:border-indigo-500/50 hover:bg-indigo-500/10"
+                                                    )}
+                                                >
+                                                    {tLocked ? <Lock className="w-3.5 h-3.5 mx-auto text-slate-700" /> :
+                                                     res?.status === 'passed' ? <CheckCheck className="w-4 h-4 mx-auto" /> :
+                                                     i + 1}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </DialogContent>
             </Dialog>
@@ -714,7 +770,11 @@ function QuestionBankCoursePageComponent() {
 
 export default function Page() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="animate-spin text-cyan-500" /></div>}>
+        <Suspense fallback={
+            <div className="flex h-screen items-center justify-center bg-[#09071a]">
+                <Loader2 className="animate-spin text-indigo-500 w-8 h-8" />
+            </div>
+        }>
             <QuestionBankCoursePageComponent />
         </Suspense>
     );
