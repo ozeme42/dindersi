@@ -5,17 +5,20 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import { submitSoruBankasiScore, updateTopicTestProgress } from '@/app/student/soru-bankasi/actions'; 
 import type { Question, GetQuizInput } from '@/lib/types'; 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, ArrowLeft, BrainCircuit, PartyPopper, Repeat, Home, FastForward } from 'lucide-react';
+import { 
+    Loader2, ArrowRight, ArrowLeft, BrainCircuit, PartyPopper, Repeat, 
+    Home, FastForward, CheckCircle2, XCircle, ChevronLeft, Zap, Target, 
+    Trophy, Flame 
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { playSound } from '@/lib/audio-service';
 import { useToast } from '@/hooks/use-toast';
 import { addQuestionToReviewList } from '@/app/student/tekrar-et/actions';
 import { useAuth } from '@/context/auth-context';
+
+const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
 function QuizGame() {
     const { user, loading: authLoading } = useAuth();
@@ -40,6 +43,8 @@ function QuizGame() {
     const [score, setScore] = useState(0);
     const [correctCount, setCorrectCount] = useState(0);
     const [correctQuestionIds, setCorrectQuestionIds] = useState<string[]>([]);
+    const [streak, setStreak] = useState(0);
+    const [maxStreak, setMaxStreak] = useState(0);
 
     const fetchQuestions = useCallback(async () => {
         if (authLoading) return;
@@ -84,15 +89,19 @@ function QuizGame() {
         const question = questions[currentQuestionIndex];
         const isCorrect = answer === question.correctAnswer || (question.type === 'Doğru/Yanlış' && (answer ? "Doğru" : "Yanlış") === question.correctAnswer);
 
-        if(isCorrect) {
+        if (isCorrect) {
             playSound('correct');
             setScore(s => s + 10);
             setCorrectCount(c => c + 1);
+            const newStreak = streak + 1;
+            setStreak(newStreak);
+            setMaxStreak(m => Math.max(m, newStreak));
             if (question.id) {
                 setCorrectQuestionIds(prev => [...prev, question.id]);
             }
         } else {
             playSound('incorrect');
+            setStreak(0);
             if (user?.role === 'student' && question) {
                 addQuestionToReviewList(user.uid, question as Question);
             }
@@ -105,97 +114,68 @@ function QuizGame() {
         } else {
             setIsFinished(true);
         }
-    }
+    };
     
     const getBackLink = () => {
         return courseId ? `/student/soru-bankasi/${courseId}` : '/student/soru-bankasi';
     };
 
-    // İlerleme ve Puanı Kaydeden Ortak Fonksiyon
     const saveProgressAndScore = async () => {
         if (!user) return false;
-        
         try {
-            // 1. İlerleme Çubukları İçin Kayıt
             if (courseId && topicId && difficulty) {
                 const diffString = difficulty[0]?.toLowerCase() || '';
                 let difficultyKey: 'easy' | 'medium' | 'hard' = 'easy';
                 if (diffString === 'orta') difficultyKey = 'medium';
                 if (diffString === 'zor') difficultyKey = 'hard';
-
                 const isPassed = (correctCount / questions.length) >= 0.5;
-
                 await updateTopicTestProgress(
-                    user.uid,
-                    courseId,
-                    topicId,
-                    difficultyKey,
-                    testIndex,
-                    {
-                        score: score,
-                        status: isPassed ? 'passed' : 'failed',
-                        correctAnswers: correctCount,
-                        totalQuestions: questions.length,
-                        date: new Date().toISOString()
-                    } as any,
+                    user.uid, courseId, topicId, difficultyKey, testIndex,
+                    { score, status: isPassed ? 'passed' : 'failed', correctAnswers: correctCount, totalQuestions: questions.length, date: new Date().toISOString() } as any,
                     correctQuestionIds
                 );
             }
-
-            // 2. Profile Puan Ekleme
             if (score > 0) {
                 const contextName = `${searchParams.get('courseName') || courseId} - ${searchParams.get('topicName') || topicId}`;
                 await submitSoruBankasiScore(user.uid, score, contextName);
             }
             return true;
         } catch (err) {
-            console.error("Kayıt işlemi sırasında hata:", err);
+            console.error("Kayıt sırasında hata:", err);
             return false;
         }
     };
 
-    // 1. BUTON: KAYDET VE LİSTEYE DÖN
     const handleSaveAndExit = async () => {
-        // user.role === 'student' ŞARTINI KALDIRDIM. ARTIK HERKES TEST EDEBİLİR.
         if (!user || isSubmitting) return; 
-
         setIsSubmitting(true);
         const success = await saveProgressAndScore();
-        
         if (success) {
             toast({ title: "Tebrikler!", description: `Sonuçlar kaydedildi. ${score} puan kazandın.` });
         } else {
             toast({ title: "Hata", description: "İşlem sırasında bir hata oluştu.", variant: "destructive" });
         }
-
         setIsSubmitting(false);
         router.push(getBackLink());
     };
 
-    // 2. YENİ BUTON: KAYDET VE SONRAKİ TESTE GEÇ
     const handleSaveAndContinue = async () => {
         if (!user || isSubmitting) return;
-
         setIsSubmitting(true);
         const success = await saveProgressAndScore();
-        
         if (success) {
             toast({ title: "Kaydedildi!", description: `${score} puan eklendi. Sıradaki teste geçiliyor...` });
-            
-            // Sonraki teste geçmek için URL parametrelerini güncelle
             const nextIndex = testIndex + 1;
             const currentParams = new URLSearchParams(searchParams.toString());
             currentParams.set('testIndex', nextIndex.toString());
-            
-            // Ekranı sıfırla
             setIsFinished(false);
             setCurrentQuestionIndex(0);
             setScore(0);
             setCorrectCount(0);
             setCorrectQuestionIds([]);
             setAnswers([]);
-            
-            // Yeni test verilerini çekmek için URL'i değiştir
+            setStreak(0);
+            setMaxStreak(0);
             router.push(`?${currentParams.toString()}`);
         } else {
             toast({ title: "Hata", description: "Veriler kaydedilemedi.", variant: "destructive" });
@@ -210,186 +190,313 @@ function QuizGame() {
         setCorrectCount(0);
         setCorrectQuestionIds([]);
         setAnswers([]);
+        setStreak(0);
+        setMaxStreak(0);
         fetchQuestions();
     };
 
+    // ── LOADING ──────────────────────────────────────────────────────────────
     if (isLoading) {
-        return <div className="flex h-screen w-full items-center justify-center bg-[#09071a] text-white"><Loader2 className="h-10 w-10 animate-spin text-cyan-500" /> <span className="ml-4 font-bold text-xl">Test Yükleniyor...</span></div>;
+        return (
+            <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-[#09071a]">
+                <div className="relative">
+                    <div className="w-20 h-20 rounded-full border-4 border-indigo-500/20 border-t-indigo-500 animate-spin" />
+                    <BrainCircuit className="absolute inset-0 m-auto w-8 h-8 text-indigo-400" />
+                </div>
+                <p className="text-slate-400 font-bold text-sm uppercase tracking-widest animate-pulse">Test Yükleniyor...</p>
+            </div>
+        );
     }
     
+    // ── ERROR ────────────────────────────────────────────────────────────────
     if (error) {
         return (
-            <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-[#09071a]">
-                <div className="max-w-lg w-full bg-rose-950 border-2 border-rose-500/50 rounded-3xl p-6 md:p-8 text-center shadow-[0_0_30px_rgba(244,63,94,0.2)]">
-                    <h2 className="text-2xl font-black text-white mb-2">Hata!</h2>
-                    <p className="text-rose-200 mb-6 font-medium">{error}</p>
-                    <Link href={getBackLink()} className="inline-flex items-center justify-center w-full px-6 py-4 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-2xl transition-all active:scale-95">
-                        <ArrowLeft className="mr-2 h-5 w-5"/> Geri Dön
+            <div className="min-h-screen flex items-center justify-center p-4 bg-[#09071a]">
+                <div className="w-full max-w-sm bg-rose-950/80 border border-rose-500/30 rounded-3xl p-8 text-center backdrop-blur-xl">
+                    <XCircle className="w-16 h-16 text-rose-400 mx-auto mb-4" />
+                    <h2 className="text-xl font-black text-white mb-2">Bir Hata Oluştu</h2>
+                    <p className="text-rose-300/80 mb-6 text-sm">{error}</p>
+                    <Link href={getBackLink()} className="flex items-center justify-center gap-2 w-full py-3.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-2xl transition-all active:scale-95">
+                        <ArrowLeft className="w-4 h-4" /> Geri Dön
                     </Link>
                 </div>
             </div>
         );
     }
     
+    // ── EMPTY ────────────────────────────────────────────────────────────────
     if (questions.length === 0) {
         return (
-             <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-[#09071a]">
-                <div className="max-w-lg w-full bg-[#161233] border-2 border-[#2b245e] rounded-3xl p-6 md:p-8 text-center shadow-xl">
-                    <h2 className="text-2xl font-black text-white mb-2">Test Bulunamadı</h2>
-                    <p className="text-slate-300 mb-6 font-medium">Sıradaki test için yeterli soru bulunmuyor veya testi bitirdin.</p>
-                    <Link href={getBackLink()} className="inline-flex items-center justify-center w-full px-6 py-4 bg-[#2b245e] hover:bg-[#393075] text-white font-bold rounded-2xl transition-all active:scale-95">
-                        <ArrowLeft className="mr-2 h-5 w-5"/> Listeye Dön
+            <div className="min-h-screen flex items-center justify-center p-4 bg-[#09071a]">
+                <div className="w-full max-w-sm bg-[#161233] border border-white/10 rounded-3xl p-8 text-center">
+                    <Target className="w-16 h-16 text-slate-500 mx-auto mb-4" />
+                    <h2 className="text-xl font-black text-white mb-2">Soru Bulunamadı</h2>
+                    <p className="text-slate-400 mb-6 text-sm">Tüm soruları çözdün veya yeterli soru yok.</p>
+                    <Link href={getBackLink()} className="flex items-center justify-center gap-2 w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl transition-all active:scale-95">
+                        <ArrowLeft className="w-4 h-4" /> Listeye Dön
                     </Link>
                 </div>
             </div>
-        )
+        );
     }
 
-    if(isFinished) {
+    // ── FINISHED SCREEN ──────────────────────────────────────────────────────
+    if (isFinished) {
+        const percentage = Math.round((correctCount / questions.length) * 100);
+        const isPassed = percentage >= 50;
+        const grade = percentage >= 85 ? { label: 'Mükemmel!', emoji: '🏆', color: 'from-yellow-400 to-amber-500', glow: 'shadow-[0_0_60px_rgba(251,191,36,0.3)]' }
+            : percentage >= 70 ? { label: 'Harika!', emoji: '⭐', color: 'from-emerald-400 to-teal-500', glow: 'shadow-[0_0_60px_rgba(16,185,129,0.3)]' }
+            : percentage >= 50 ? { label: 'İyi İş!', emoji: '👍', color: 'from-blue-400 to-indigo-500', glow: 'shadow-[0_0_60px_rgba(99,102,241,0.3)]' }
+            : { label: 'Tekrar Dene', emoji: '💪', color: 'from-rose-400 to-pink-500', glow: 'shadow-[0_0_60px_rgba(244,63,94,0.2)]' };
+
         return (
-             <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-[#09071a]">
-                <div className="w-full max-w-md bg-[#161233] border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] rounded-[2.5rem] p-6 md:p-8 text-center overflow-hidden relative">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500" />
-                    <div className="mx-auto bg-[#070514] border-2 border-emerald-500/30 rounded-full p-4 w-fit shadow-[0_0_30px_rgba(16,185,129,0.2)] mb-6 mt-2">
-                        <PartyPopper className="h-10 w-10 md:h-12 md:w-12 text-emerald-400"/>
-                    </div>
-                    <h2 className="font-black text-3xl md:text-4xl mt-4 text-white drop-shadow-md">Alıştırma Bitti!</h2>
-                    
-                    <div className="my-8 space-y-4 md:space-y-6 bg-[#070514] border-2 border-[#2b245e] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] rounded-3xl p-6">
-                        <p className="text-slate-400 font-bold uppercase tracking-wider text-sm">Sonucun</p>
-                        <p className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">{correctCount} <span className="text-2xl text-slate-500">/ {questions.length}</span></p>
+            <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#09071a] relative overflow-hidden">
+                {/* BG glow */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className={cn("absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full blur-3xl opacity-20 bg-gradient-to-r", grade.color)} />
+                </div>
+
+                <div className="relative w-full max-w-sm flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    {/* Score Circle */}
+                    <div className={cn("w-full rounded-[2rem] p-8 text-center bg-[#161233] border border-white/10 relative overflow-hidden", grade.glow)}>
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r via-white/10 from-transparent to-transparent" />
+                        <div className={cn("absolute top-0 left-0 right-0 h-1 bg-gradient-to-r", grade.color)} style={{ width: `${percentage}%` }} />
                         
-                        <div className="h-px bg-white/10 w-full" />
+                        <div className="text-6xl mb-3">{grade.emoji}</div>
+                        <h2 className={cn("text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r mb-1", grade.color)}>{grade.label}</h2>
+                        <p className="text-slate-500 text-sm font-bold uppercase tracking-widest mb-6">Test Tamamlandı</p>
                         
-                        <p className="text-base md:text-lg text-slate-300 font-medium">Kazandığın Puan: <span className="font-black text-emerald-400 text-xl ml-2">+{score}</span></p>
+                        <div className="flex items-end justify-center gap-1 mb-2">
+                            <span className={cn("text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r", grade.color)}>{percentage}</span>
+                            <span className="text-3xl font-black text-slate-500 mb-2">%</span>
+                        </div>
+                        <p className="text-slate-400 text-sm font-medium">{correctCount} doğru / {questions.length - correctCount} yanlış</p>
                     </div>
 
-                    <div className="flex flex-col gap-3 mt-8">
-                        <button onClick={handleSaveAndContinue} disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-4 rounded-2xl shadow-[0_4px_20px_rgba(79,70,229,0.4)] transition-all active:scale-95 disabled:opacity-50">
-                             {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin"/> : <FastForward className="h-5 w-5"/>}
-                             {isSubmitting ? "KAYDEDİLİYOR..." : "KAYDET VE DEVAM ET"}
+                    {/* Stats Row */}
+                    <div className="grid grid-cols-3 gap-3">
+                        <div className="bg-[#161233] border border-white/8 rounded-2xl p-4 text-center">
+                            <Zap className="w-5 h-5 text-amber-400 mx-auto mb-1.5" />
+                            <p className="text-xl font-black text-white">+{score}</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Puan</p>
+                        </div>
+                        <div className="bg-[#161233] border border-white/8 rounded-2xl p-4 text-center">
+                            <Flame className="w-5 h-5 text-orange-400 mx-auto mb-1.5" />
+                            <p className="text-xl font-black text-white">{maxStreak}</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Seri</p>
+                        </div>
+                        <div className="bg-[#161233] border border-white/8 rounded-2xl p-4 text-center">
+                            <Trophy className="w-5 h-5 text-cyan-400 mx-auto mb-1.5" />
+                            <p className="text-xl font-black text-white">{isPassed ? '✓' : '✗'}</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{isPassed ? 'Geçti' : 'Kaldı'}</p>
+                        </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-col gap-2.5">
+                        <button
+                            onClick={handleSaveAndContinue}
+                            disabled={isSubmitting}
+                            className="w-full flex items-center justify-center gap-2.5 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black rounded-2xl shadow-[0_8px_30px_rgba(99,102,241,0.35)] transition-all active:scale-95 disabled:opacity-50 text-sm uppercase tracking-wider"
+                        >
+                            {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <FastForward className="w-5 h-5" />}
+                            {isSubmitting ? 'Kaydediliyor...' : 'Kaydet & Sonraki Test'}
                         </button>
-
-                        <div className="flex gap-3 w-full">
-                            <button onClick={handleRestart} className="flex-1 flex items-center justify-center gap-2 bg-[#1a1638] hover:bg-[#201b45] border border-[#2b245e] text-slate-200 font-bold py-3.5 rounded-2xl transition-all active:scale-95">
-                            <Repeat className="h-4 w-4" /> TEKRAR
+                        <div className="grid grid-cols-2 gap-2.5">
+                            <button
+                                onClick={handleRestart}
+                                className="flex items-center justify-center gap-2 py-3.5 bg-[#1a1638] border border-white/8 hover:bg-[#201b45] text-slate-300 font-bold rounded-2xl transition-all active:scale-95 text-sm"
+                            >
+                                <Repeat className="w-4 h-4" /> Tekrar
                             </button>
-                            <button onClick={handleSaveAndExit} disabled={isSubmitting} className="flex-1 flex items-center justify-center gap-2 bg-[#1a1638] hover:bg-rose-950/40 border border-[#2b245e] hover:border-rose-500/50 text-slate-200 font-bold py-3.5 rounded-2xl transition-all active:scale-95 disabled:opacity-50">
-                                {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin"/> : <Home className="h-4 w-4"/>}
-                                ÇIK
+                            <button
+                                onClick={handleSaveAndExit}
+                                disabled={isSubmitting}
+                                className="flex items-center justify-center gap-2 py-3.5 bg-[#1a1638] border border-white/8 hover:bg-rose-950/40 hover:border-rose-500/30 text-slate-300 font-bold rounded-2xl transition-all active:scale-95 disabled:opacity-50 text-sm"
+                            >
+                                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Home className="w-4 h-4" />}
+                                Çık
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
+    // ── QUIZ SCREEN ──────────────────────────────────────────────────────────
     const currentQuestion = questions[currentQuestionIndex];
     const currentAnswer = answers[currentQuestionIndex];
+    const isAnswered = currentAnswer !== undefined && currentAnswer !== null;
+    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
     return (
-        <div className="w-full h-full min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 md:p-8 pb-24 md:pb-8 bg-[#09071a]">
-            <div className="w-full max-w-3xl flex flex-col gap-4">
-                
-                {/* Header Area */}
-                <div className="flex justify-between items-center px-2">
-                    <h2 className="flex items-center gap-3 font-black text-2xl md:text-3xl text-white drop-shadow-md tracking-wide">
-                        <BrainCircuit className="text-cyan-400 h-8 w-8 drop-shadow-[0_0_15px_rgba(34,211,238,0.6)]"/> 
-                        Test Çöz
-                    </h2>
-                    <div className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 shadow-lg flex items-center">
-                         <span className="text-sm font-bold text-emerald-300">Puan: <span className="text-white ml-1">{score}</span></span>
+        <div className="min-h-screen flex flex-col bg-[#09071a] relative overflow-hidden">
+            {/* Background radial glow */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-indigo-600/10 rounded-full blur-3xl" />
+            </div>
+
+            {/* ── TOP BAR ── */}
+            <div className="relative z-10 flex-shrink-0 px-4 pt-safe-top pt-4">
+                <div className="flex items-center justify-between mb-3">
+                    {/* Back + title */}
+                    <Link href={getBackLink()} className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors group">
+                        <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                        <span className="text-sm font-bold">Geri</span>
+                    </Link>
+
+                    {/* Score pill */}
+                    <div className="flex items-center gap-2">
+                        {streak >= 3 && (
+                            <div className="flex items-center gap-1 bg-orange-500/10 border border-orange-500/20 rounded-full px-3 py-1">
+                                <Flame className="w-3.5 h-3.5 text-orange-400" />
+                                <span className="text-xs font-black text-orange-400">{streak}</span>
+                            </div>
+                        )}
+                        <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
+                            <Zap className="w-3.5 h-3.5 text-amber-400" />
+                            <span className="text-sm font-black text-white">{score}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4 bg-[#161233] p-4 rounded-3xl border border-white/10 shadow-lg">
-                    <span className="text-sm font-bold text-slate-300 whitespace-nowrap">Soru {currentQuestionIndex + 1} / {questions.length}</span>
-                    <Progress value={((currentQuestionIndex + 1) / questions.length) * 100} className="w-full h-3 bg-white/10 [&>div]:bg-gradient-to-r [&>div]:from-cyan-500 [&>div]:to-blue-500" />
+                {/* Progress bar */}
+                <div className="flex items-center gap-3 mb-1">
+                    <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700 ease-out"
+                            style={{ width: `${progress}%` }}
+                        />
+                    </div>
+                    <span className="text-xs font-bold text-slate-500 tabular-nums flex-shrink-0">
+                        {currentQuestionIndex + 1}/{questions.length}
+                    </span>
+                </div>
+            </div>
+
+            {/* ── QUESTION CARD ── */}
+            <div className="relative z-10 flex-1 flex flex-col px-4 pb-6 pt-4 gap-4 overflow-y-auto">
+
+                {/* Question number badge */}
+                <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center flex-shrink-0">
+                        <span className="text-[11px] font-black text-indigo-400">{currentQuestionIndex + 1}</span>
+                    </div>
+                    <div className="h-px flex-1 bg-white/5" />
                 </div>
 
-                {/* Soru Kartı */}
-                <div className="w-full bg-[#161233] rounded-[2rem] p-4 md:p-8 border border-white/10 shadow-xl flex flex-col gap-6 md:gap-8">
-                    {/* Soru Metni */}
-                    <div className="bg-[#070514] border-2 border-[#2b245e] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] p-5 md:p-8 rounded-[1.5rem]">
-                        <p className="text-lg md:text-2xl font-bold text-white leading-relaxed">{currentQuestion.text}</p>
-                    </div>
+                {/* Question text */}
+                <div className="bg-[#161233]/80 border border-white/8 rounded-3xl p-5 backdrop-blur-sm shadow-xl">
+                    <p className="text-base md:text-xl font-bold text-white leading-relaxed">
+                        {currentQuestion.text}
+                    </p>
+                </div>
 
-                    {/* Şıklar */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                {/* Options */}
+                <div className="flex flex-col gap-2.5">
                     {currentQuestion.type === 'Çoktan Seçmeli' && (currentQuestion.options || []).map((option, i) => {
                         const isSelected = currentAnswer === option;
                         const isCorrect = currentQuestion.correctAnswer === option;
-                        const isAnswered = !!currentAnswer;
 
-                        let btnClass = "border-[#2b245e] bg-[#1a1638] text-slate-200 hover:bg-[#201b45] hover:border-indigo-500/50";
+                        let style = 'border-white/8 bg-[#161233]/60 text-slate-200 hover:bg-[#1e1a45] hover:border-indigo-500/30 active:scale-[0.98]';
+                        let letterStyle = 'bg-white/5 border-white/10 text-slate-400';
+                        let icon = null;
+
                         if (isAnswered) {
-                            if (isCorrect) btnClass = "bg-emerald-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.3)]";
-                            else if (isSelected) btnClass = "bg-rose-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.3)]";
-                            else btnClass = "border-white/5 bg-white/5 text-slate-500 opacity-50";
+                            if (isCorrect) {
+                                style = 'border-emerald-500/50 bg-emerald-950/50 text-white shadow-[0_0_25px_rgba(16,185,129,0.2)]';
+                                letterStyle = 'bg-emerald-500 border-emerald-400 text-white';
+                                icon = <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />;
+                            } else if (isSelected) {
+                                style = 'border-rose-500/50 bg-rose-950/50 text-white shadow-[0_0_25px_rgba(244,63,94,0.15)]';
+                                letterStyle = 'bg-rose-500 border-rose-400 text-white';
+                                icon = <XCircle className="w-5 h-5 text-rose-400 flex-shrink-0" />;
+                            } else {
+                                style = 'border-white/4 bg-white/3 text-slate-600';
+                                letterStyle = 'bg-white/3 border-white/5 text-slate-600';
+                            }
                         }
 
                         return (
-                            <button 
-                                key={option} 
-                                className={cn("h-auto min-h-[4rem] px-4 py-4 md:px-5 text-left font-bold rounded-2xl border-2 transition-all duration-300", 
-                                    isAnswered ? "cursor-default" : "cursor-pointer active:scale-95",
-                                    btnClass
-                                )} 
-                                onClick={() => handleAnswer(option)} 
+                            <button
+                                key={option}
+                                onClick={() => handleAnswer(option)}
                                 disabled={isAnswered}
+                                className={cn(
+                                    'w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl border-2 text-left transition-all duration-250 font-semibold',
+                                    isAnswered ? 'cursor-default' : 'cursor-pointer',
+                                    style
+                                )}
                             >
-                                <div className="flex gap-4 items-center">
-                                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-sm border border-white/10 shadow-sm">{String.fromCharCode(65 + i)}</span>
-                                    <span className="text-base md:text-lg">{option}</span>
-                                </div>
+                                <span className={cn('flex-shrink-0 w-8 h-8 rounded-xl border flex items-center justify-center text-xs font-black transition-all', letterStyle)}>
+                                    {OPTION_LETTERS[i]}
+                                </span>
+                                <span className="flex-1 text-sm md:text-base leading-snug">{option}</span>
+                                {icon}
                             </button>
                         );
                     })}
-                     {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map((option, i) => {
-                        const answerValue = option === 'Doğru';
-                        const isSelected = currentAnswer === answerValue;
-                        const isCorrect = (currentQuestion.isTrue ?? (currentQuestion.correctAnswer === 'Doğru')) === answerValue;
-                        const isAnswered = !!currentAnswer;
-                        
-                        let btnClass = "border-[#2b245e] bg-[#1a1638] text-slate-200 hover:bg-[#201b45] hover:border-indigo-500/50";
-                        if (isAnswered) {
-                            if (isCorrect) btnClass = "bg-emerald-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.3)]";
-                            else if (isSelected) btnClass = "bg-rose-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.3)]";
-                            else btnClass = "border-white/5 bg-white/5 text-slate-500 opacity-50";
-                        }
 
-                        return (
-                            <button 
-                                key={option} 
-                                className={cn("h-auto min-h-[4rem] px-5 py-4 text-center font-bold rounded-2xl border-2 transition-all duration-300", 
-                                    isAnswered ? "cursor-default" : "cursor-pointer active:scale-95",
-                                    btnClass
-                                )} 
-                                onClick={() => handleAnswer(answerValue)} 
-                                disabled={isAnswered}
-                            >
-                                <span className="text-lg md:text-xl">{option}</span>
-                            </button>
-                        );
-                    })}
-                    </div>
+                    {currentQuestion.type === 'Doğru/Yanlış' && (
+                        <div className="grid grid-cols-2 gap-3">
+                            {["Doğru", "Yanlış"].map((option) => {
+                                const answerValue = option === 'Doğru';
+                                const isSelected = currentAnswer === answerValue;
+                                const isCorrect = (currentQuestion.isTrue ?? (currentQuestion.correctAnswer === 'Doğru')) === answerValue;
+
+                                let style = 'border-white/8 bg-[#161233]/60 text-slate-200 hover:bg-[#1e1a45] hover:border-indigo-500/30 active:scale-[0.98]';
+                                let icon = null;
+
+                                if (isAnswered) {
+                                    if (isCorrect) {
+                                        style = 'border-emerald-500/50 bg-emerald-950/50 text-white shadow-[0_0_25px_rgba(16,185,129,0.2)]';
+                                        icon = <CheckCircle2 className="w-5 h-5 text-emerald-400" />;
+                                    } else if (isSelected) {
+                                        style = 'border-rose-500/50 bg-rose-950/50 text-white shadow-[0_0_25px_rgba(244,63,94,0.15)]';
+                                        icon = <XCircle className="w-5 h-5 text-rose-400" />;
+                                    } else {
+                                        style = 'border-white/4 bg-white/3 text-slate-600';
+                                    }
+                                }
+
+                                return (
+                                    <button
+                                        key={option}
+                                        onClick={() => handleAnswer(answerValue)}
+                                        disabled={isAnswered}
+                                        className={cn(
+                                            'flex flex-col items-center justify-center gap-2 py-6 rounded-2xl border-2 transition-all duration-250 font-bold',
+                                            isAnswered ? 'cursor-default' : 'cursor-pointer',
+                                            style
+                                        )}
+                                    >
+                                        {icon}
+                                        <span className="text-lg">{option}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
 
-                {/* Footer */}
-                <div className="flex justify-end mt-2 w-full">
-                    <button 
-                        onClick={handleNext} 
-                        disabled={!currentAnswer}
+                {/* Next button */}
+                <div className="mt-auto pt-2">
+                    <button
+                        onClick={handleNext}
+                        disabled={!isAnswered}
                         className={cn(
-                            "flex w-full md:w-auto items-center justify-center gap-2 px-8 py-4 font-black rounded-2xl transition-all duration-300",
-                            currentAnswer 
-                                ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-[0_4px_20px_rgba(79,70,229,0.4)] hover:scale-105 active:scale-95" 
-                                : "bg-[#161233] border border-white/10 text-slate-500 opacity-50 cursor-not-allowed"
+                            'w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition-all duration-300',
+                            isAnswered
+                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-[0_8px_30px_rgba(99,102,241,0.35)] hover:shadow-[0_8px_40px_rgba(99,102,241,0.5)] active:scale-[0.98]'
+                                : 'bg-white/4 border border-white/5 text-slate-600 cursor-not-allowed'
                         )}
                     >
-                        {currentQuestionIndex === questions.length - 1 ? 'TESTİ BİTİR' : 'SONRAKİ SORU'}
-                        <ArrowRight className="h-5 w-5" />
+                        {currentQuestionIndex === questions.length - 1 ? (
+                            <>Testi Bitir <Trophy className="w-4 h-4" /></>
+                        ) : (
+                            <>Sonraki Soru <ArrowRight className="w-4 h-4" /></>
+                        )}
                     </button>
                 </div>
             </div>
@@ -399,8 +506,12 @@ function QuizGame() {
 
 export default function SoruCozOyunPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
+        <Suspense fallback={
+            <div className="flex h-screen items-center justify-center bg-[#09071a]">
+                <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
+            </div>
+        }>
             <QuizGame />
         </Suspense>
-    )
+    );
 }
