@@ -16,6 +16,7 @@ interface CourseSidebarProps {
     isTopicCompleted: (topicId: string) => boolean;
     topicProgress?: { [topicId: string]: any };
     testCounts?: { [topicId: string]: { easy: number, medium: number, hard: number } | null };
+    theme?: 'dark' | 'light';
 }
 
 export function CourseSidebar({
@@ -26,6 +27,7 @@ export function CourseSidebar({
     isTopicUnlocked,
     isTopicCompleted,
     testCounts,
+    theme = 'dark',
 }: CourseSidebarProps) {
     const activeRef = useRef<HTMLDivElement>(null);
 
@@ -46,27 +48,61 @@ export function CourseSidebar({
     const allTopics = course.units?.flatMap(u => u.topics || []) || [];
     const completedCount = allTopics.filter(t => isTopicCompleted(t.id)).length;
 
-    return (
-        <div className="h-full flex flex-col bg-[#09071a] select-none">
+    // --- TEMA RENKLERİ ---
+    const isDark = theme === 'dark';
+    const mainBg = isDark ? "bg-[#09071a]" : "bg-white";
+    const headerBg = isDark ? "bg-[#09071a]/80 border-white/8" : "bg-slate-50 border-slate-200";
+    const textColor = isDark ? "text-white" : "text-slate-900";
+    const subColor = isDark ? "text-slate-400" : "text-slate-500";
+    const progressBarBg = isDark ? "bg-black/40 border-white/5" : "bg-slate-200 border-slate-300";
+    
+    // Ünite başlığı renkleri
+    const unitCompletedBg = isDark ? "bg-emerald-950/30 border-emerald-500/25 hover:border-emerald-500/40" : "bg-emerald-50 border-emerald-200 hover:border-emerald-300";
+    const unitStartedBg = isDark ? "bg-indigo-950/30 border-indigo-500/20 hover:border-indigo-500/40" : "bg-indigo-50 border-indigo-200 hover:border-indigo-300";
+    const unitDefaultBg = isDark ? "bg-white/3 border-white/8 hover:bg-white/5 hover:border-white/12" : "bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300";
+    
+    const unitCompletedText = isDark ? "text-emerald-200" : "text-emerald-700";
+    const unitStartedText = isDark ? "text-indigo-200" : "text-indigo-700";
+    const unitDefaultText = isDark ? "text-slate-300" : "text-slate-700";
 
-            {/* ══ GERİ BUTONU + DERS BAŞLIĞI ══ */}
-            <div className="relative px-4 py-3 flex items-center gap-3 border-b border-white/8 bg-[#09071a]/90 backdrop-blur-xl shrink-0">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
-                <Link href="/student/soru-bankasi" className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all shrink-0 flex items-center justify-center">
-                    <ArrowLeft className="w-4 h-4" />
-                </Link>
-                <div className="flex-1 min-w-0">
-                    <p className="text-slate-500 text-[9px] font-black uppercase tracking-[0.2em] leading-none mb-0.5">Ders</p>
-                    <h2 className="font-black text-white text-sm truncate leading-none flex items-center gap-1.5">
-                        <BookOpen className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                        {course.title}
-                    </h2>
-                </div>
-            </div>
+    const unitCompletedBadge = isDark ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300" : "bg-emerald-100 border-emerald-300 text-emerald-700";
+    const unitStartedBadge = isDark ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-300" : "bg-indigo-100 border-indigo-300 text-indigo-700";
+    const unitDefaultBadge = isDark ? "bg-white/5 border-white/10 text-slate-500" : "bg-slate-100 border-slate-200 text-slate-500";
+
+    // Akış butonu renkleri
+    const flowBg = isDark ? "bg-violet-950/30 border-violet-500/30 hover:bg-violet-900/40 hover:border-violet-400/50" : "bg-violet-50 border-violet-200 hover:bg-violet-100 hover:border-violet-300";
+    const flowBadge = isDark ? "bg-violet-500/20 border-violet-500/40" : "bg-violet-200 border-violet-300";
+    const flowText = isDark ? "text-violet-200" : "text-violet-700";
+
+    // Konu renkleri
+    const topicLine = isDark ? "border-white/5" : "border-slate-200";
+    
+    const topicActiveDot = isDark ? "bg-indigo-500 border-indigo-300 shadow-[0_0_10px_rgba(99,102,241,0.9)]" : "bg-indigo-500 border-indigo-300 shadow-[0_0_10px_rgba(99,102,241,0.5)]";
+    const topicCompletedDot = isDark ? "bg-emerald-500 border-emerald-300 shadow-[0_0_8px_rgba(52,211,153,0.6)]" : "bg-emerald-500 border-emerald-300 shadow-[0_0_8px_rgba(52,211,153,0.4)]";
+    const topicAccessibleDot = isDark ? "bg-slate-800 border-slate-500" : "bg-white border-slate-400";
+    const topicLockedDot = isDark ? "bg-slate-900 border-slate-700" : "bg-slate-100 border-slate-300";
+
+    const topicActiveBg = isDark ? "bg-indigo-950/50 border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.15)]" : "bg-indigo-50 border-indigo-300 shadow-[0_0_10px_rgba(99,102,241,0.1)]";
+    const topicCompletedBg = isDark ? "bg-emerald-950/20 border-emerald-500/20 hover:bg-emerald-950/30 hover:border-emerald-500/35" : "bg-emerald-50/50 border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300";
+    const topicLockedBg = "bg-transparent border-transparent opacity-40 cursor-not-allowed";
+    const topicDefaultBg = isDark ? "bg-white/3 border-white/6 hover:bg-white/6 hover:border-white/12" : "bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300";
+
+    const topicActiveBadge = isDark ? "bg-indigo-500/25 border-indigo-500/50 text-indigo-300" : "bg-indigo-100 border-indigo-300 text-indigo-600";
+    const topicCompletedBadge = isDark ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-400" : "bg-emerald-100 border-emerald-300 text-emerald-600";
+    const topicLockedBadge = isDark ? "bg-transparent border-slate-800 text-slate-600" : "bg-transparent border-slate-300 text-slate-400";
+    const topicDefaultBadge = isDark ? "bg-white/5 border-white/10 text-slate-400" : "bg-slate-100 border-slate-200 text-slate-500";
+
+    const topicActiveText = isDark ? "text-white" : "text-slate-900";
+    const topicCompletedText = isDark ? "text-emerald-100/80" : "text-emerald-700";
+    const topicLockedText = isDark ? "text-slate-600" : "text-slate-400";
+    const topicDefaultText = isDark ? "text-slate-300 group-hover/card:text-white" : "text-slate-600 group-hover/card:text-slate-900";
+
+    return (
+        <div className={cn("h-full flex flex-col select-none", mainBg)}>
 
             {/* ══ İLERLEME ÖZET KARTI ══ */}
-            <div className="relative px-4 pt-4 pb-3 border-b border-white/8 bg-[#09071a]/80 backdrop-blur-xl shrink-0">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
+            <div className={cn("relative px-4 pt-4 pb-3 border-b shrink-0", headerBg, isDark && "backdrop-blur-xl")}>
+                {isDark && <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />}
 
                 {/* İlerleme bar */}
                 <div className="flex items-center justify-between mb-2">
@@ -74,11 +110,11 @@ export function CourseSidebar({
                         <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Ders İlerlemesi</span>
                     </div>
-                    <span className="text-[10px] font-black text-white tabular-nums">
-                        {completedCount}<span className="text-slate-600">/{allTopics.length}</span>
+                    <span className={cn("text-[10px] font-black tabular-nums", textColor)}>
+                        {completedCount}<span className={subColor}>/{allTopics.length}</span>
                     </span>
                 </div>
-                <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                <div className={cn("h-2 w-full rounded-full overflow-hidden border", progressBarBg)}>
                     <div
                         className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(168,85,247,0.5)] transition-all duration-1000 ease-out"
                         style={{ width: `${totalProgress}%` }}
@@ -94,7 +130,7 @@ export function CourseSidebar({
                         Bitti
                     </span>
                     <span className="flex items-center gap-1 text-[9px] font-bold text-slate-500">
-                        <div className="w-1.5 h-1.5 rounded-full bg-slate-600" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-400" />
                         Kilitli
                     </span>
                 </div>
@@ -120,26 +156,18 @@ export function CourseSidebar({
                                     )}>
                                         <div className={cn(
                                             "w-full flex items-center gap-3 px-3 py-3 rounded-2xl border transition-all duration-300",
-                                            unitCompleted
-                                                ? "bg-emerald-950/30 border-emerald-500/25 hover:border-emerald-500/40"
-                                                : unitStarted
-                                                    ? "bg-indigo-950/30 border-indigo-500/20 hover:border-indigo-500/40"
-                                                    : "bg-white/3 border-white/8 hover:bg-white/5 hover:border-white/12"
+                                            unitCompleted ? unitCompletedBg : unitStarted ? unitStartedBg : unitDefaultBg
                                         )}>
                                             {/* Numara rozeti */}
                                             <div className={cn(
                                                 "w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border font-black text-sm transition-all",
-                                                unitCompleted
-                                                    ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
-                                                    : unitStarted
-                                                        ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-300"
-                                                        : "bg-white/5 border-white/10 text-slate-500"
+                                                unitCompleted ? unitCompletedBadge : unitStarted ? unitStartedBadge : unitDefaultBadge
                                             )}>
-                                                {unitCompleted ? <GraduationCap className="w-4 h-4 text-emerald-400" /> : unitIndex + 1}
+                                                {unitCompleted ? <GraduationCap className={cn("w-4 h-4", isDark ? "text-emerald-400" : "text-emerald-600")} /> : unitIndex + 1}
                                             </div>
                                             <span className={cn(
                                                 "font-black text-sm text-left flex-1 leading-tight",
-                                                unitCompleted ? "text-emerald-200" : unitStarted ? "text-indigo-200" : "text-slate-300"
+                                                unitCompleted ? unitCompletedText : unitStarted ? unitStartedText : unitDefaultText
                                             )}>
                                                 {unit.title}
                                             </span>
@@ -153,19 +181,19 @@ export function CourseSidebar({
                                             <div className="mb-2 ml-2">
                                                 <button
                                                     onClick={() => onSelectUnitFlow(unit)}
-                                                    className="w-full text-left px-4 py-3 rounded-2xl border transition-all duration-300 flex items-center gap-3 group/flow bg-violet-950/30 border-violet-500/30 hover:bg-violet-900/40 hover:border-violet-400/50 active:scale-[0.98]"
+                                                    className={cn("w-full text-left px-4 py-3 rounded-2xl border transition-all duration-300 flex items-center gap-3 group/flow active:scale-[0.98]", flowBg)}
                                                 >
-                                                    <div className="w-8 h-8 rounded-xl bg-violet-500/20 border border-violet-500/40 flex items-center justify-center shrink-0">
-                                                        <Library className="w-4 h-4 text-violet-300" />
+                                                    <div className={cn("w-8 h-8 rounded-xl border flex items-center justify-center shrink-0", flowBadge)}>
+                                                        <Library className={cn("w-4 h-4", isDark ? "text-violet-300" : "text-violet-600")} />
                                                     </div>
-                                                    <span className="text-sm font-black text-violet-200">Ünite Akışını Başlat</span>
-                                                    <ChevronRight className="w-4 h-4 text-violet-400 ml-auto group-hover/flow:translate-x-0.5 transition-transform" />
+                                                    <span className={cn("text-sm font-black", flowText)}>Ünite Akışını Başlat</span>
+                                                    <ChevronRight className={cn("w-4 h-4 ml-auto group-hover/flow:translate-x-0.5 transition-transform", isDark ? "text-violet-400" : "text-violet-500")} />
                                                 </button>
                                             </div>
                                         )}
 
                                         {/* Konular: Dikey zincir */}
-                                        <div className="relative ml-4 pl-4 border-l-2 border-white/5 space-y-1.5">
+                                        <div className={cn("relative ml-4 pl-4 border-l-2 space-y-1.5", topicLine)}>
                                             {sortedTopics.map((topic, topicIndex) => {
                                                 const isUnlocked = isTopicUnlocked(topic.id);
                                                 const isCompleted = isTopicCompleted(topic.id);
@@ -183,13 +211,7 @@ export function CourseSidebar({
                                                         {/* Zincir noktası */}
                                                         <div className={cn(
                                                             "absolute -left-[21px] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 transition-all duration-300 z-10",
-                                                            isActive
-                                                                ? "bg-indigo-500 border-indigo-300 shadow-[0_0_10px_rgba(99,102,241,0.9)] scale-125"
-                                                                : isCompleted
-                                                                    ? "bg-emerald-500 border-emerald-300 shadow-[0_0_8px_rgba(52,211,153,0.6)]"
-                                                                    : isAccessible
-                                                                        ? "bg-slate-800 border-slate-500"
-                                                                        : "bg-slate-900 border-slate-700"
+                                                            isActive ? `${topicActiveDot} scale-125` : isCompleted ? topicCompletedDot : isAccessible ? topicAccessibleDot : topicLockedDot
                                                         )} />
 
                                                         {/* Konu Butonu */}
@@ -198,13 +220,7 @@ export function CourseSidebar({
                                                             disabled={!isAccessible || !hasTests}
                                                             className={cn(
                                                                 "w-full text-left px-3 py-2.5 rounded-2xl border transition-all duration-200 flex items-center gap-3 group/card relative overflow-hidden active:scale-[0.97]",
-                                                                isActive
-                                                                    ? "bg-indigo-950/50 border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.15)]"
-                                                                    : isCompleted
-                                                                        ? "bg-emerald-950/20 border-emerald-500/20 hover:bg-emerald-950/30 hover:border-emerald-500/35"
-                                                                        : !isAccessible || !hasTests
-                                                                            ? "bg-transparent border-transparent opacity-40 cursor-not-allowed"
-                                                                            : "bg-white/3 border-white/6 hover:bg-white/6 hover:border-white/12"
+                                                                isActive ? topicActiveBg : isCompleted ? topicCompletedBg : !isAccessible || !hasTests ? topicLockedBg : topicDefaultBg
                                                             )}
                                                         >
                                                             {/* Aktif sol çizgi */}
@@ -215,13 +231,7 @@ export function CourseSidebar({
                                                             {/* Durum ikonu */}
                                                             <div className={cn(
                                                                 "w-7 h-7 rounded-xl flex items-center justify-center border shrink-0 transition-all",
-                                                                isActive
-                                                                    ? "bg-indigo-500/25 border-indigo-500/50 text-indigo-300"
-                                                                    : isCompleted
-                                                                        ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-400"
-                                                                        : !isAccessible
-                                                                            ? "bg-transparent border-slate-800 text-slate-600"
-                                                                            : "bg-white/5 border-white/10 text-slate-400"
+                                                                isActive ? topicActiveBadge : isCompleted ? topicCompletedBadge : !isAccessible ? topicLockedBadge : topicDefaultBadge
                                                             )}>
                                                                 {!isAccessible
                                                                     ? <Lock className="w-3.5 h-3.5" />
@@ -235,7 +245,7 @@ export function CourseSidebar({
                                                             <div className="flex flex-col min-w-0 flex-1">
                                                                 <span className={cn(
                                                                     "text-sm font-bold truncate leading-tight transition-colors",
-                                                                    isActive ? "text-white" : isCompleted ? "text-emerald-100/80" : !isAccessible ? "text-slate-600" : "text-slate-300 group-hover/card:text-white"
+                                                                    isActive ? topicActiveText : isCompleted ? topicCompletedText : !isAccessible ? topicLockedText : topicDefaultText
                                                                 )}>
                                                                     {topic.title}
                                                                 </span>
