@@ -2,6 +2,7 @@
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useTheme } from "next-themes";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
 import { BookOpen, Loader2, ArrowLeft, ChevronLeft, GraduationCap, Sun, Moon } from "lucide-react";
 import type { Course, Topic, Unit, UserProgress, LessonStep } from "@/lib/types";
@@ -42,6 +43,7 @@ function PageContent() {
     const mainContentRef = useRef<HTMLElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const { theme: globalTheme, setTheme: setGlobalTheme } = useTheme();
     const [theme, setTheme] = useState<Theme>('dark');
 
     const startTopicIdFromUrl = useMemo(() => searchParams.get('topicId'), [searchParams]);
@@ -50,11 +52,15 @@ function PageContent() {
     // Persist theme
     useEffect(() => {
         const saved = localStorage.getItem('sb-theme') as Theme | null;
-        if (saved) setTheme(saved);
-    }, []);
+        if (saved) {
+            setTheme(saved);
+            setGlobalTheme(saved);
+        }
+    }, [setGlobalTheme]);
     const toggleTheme = () => {
         const next: Theme = theme === 'dark' ? 'light' : 'dark';
         setTheme(next);
+        setGlobalTheme(next);
         localStorage.setItem('sb-theme', next);
     };
 

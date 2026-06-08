@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, getDoc, query, orderBy } from "firebase/firestore";
@@ -173,16 +174,21 @@ export default function SoruBankasiPage() {
     const { user } = useAuth();
     const [courses, setCourses] = useState<EnrichedCourse[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { theme: globalTheme, setTheme: setGlobalTheme } = useTheme();
     const [theme, setTheme] = useState<Theme>('dark');
 
     // Persist theme
     useEffect(() => {
         const saved = localStorage.getItem('sb-theme') as Theme | null;
-        if (saved) setTheme(saved);
-    }, []);
+        if (saved) {
+            setTheme(saved);
+            setGlobalTheme(saved);
+        }
+    }, [setGlobalTheme]);
     const toggleTheme = () => {
         const next: Theme = theme === 'dark' ? 'light' : 'dark';
         setTheme(next);
+        setGlobalTheme(next);
         localStorage.setItem('sb-theme', next);
     };
 
