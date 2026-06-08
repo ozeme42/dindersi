@@ -2111,9 +2111,11 @@ export function LessonContentViewer({
             setIsAnimating(false);
             setIsVisualMaximized(false); 
         } else {
+            const finalScore = internalProgress.score + 10000;
+            setInternalProgress(prev => ({ ...prev, score: finalScore }));
             setIsFinished(true);
             playSound('win');
-            onTopicComplete(topic!.id, internalProgress.score);
+            onTopicComplete(topic!.id, finalScore);
         }
     }, [currentStep, currentStepIndex, steps.length, internalProgress, onTopicComplete, topic, user?.uid]);
 
@@ -2259,6 +2261,11 @@ export function LessonContentViewer({
                             <span className="text-5xl font-black text-slate-900 dark:text-white tabular-nums">{internalProgress.score}</span>
                         </div>
                     </div>
+                    {/* Ünite Tamamlama Ödülü */}
+                    <div className="relative overflow-hidden border border-emerald-500/40 bg-emerald-500/10 rounded-xl px-6 py-3 shadow-[0_0_20px_rgba(16,185,129,0.15)] flex items-center justify-center gap-2 mb-2 animate-bounce">
+                        <Sparkles className="w-5 h-5 text-emerald-400" />
+                        <span className="text-emerald-300 font-black text-sm tracking-widest uppercase">Ünite Tamamlama Ödülü: +10.000 XP</span>
+                    </div>
                     <Button
                         onClick={() => onTopicComplete(topic!.id, internalProgress.score)}
                         className="relative h-14 px-10 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-900 dark:text-white font-black text-lg border-0 shadow-[0_8px_30px_rgba(16,185,129,0.4)] active:scale-[0.97] transition-all duration-200 overflow-hidden"
@@ -2266,6 +2273,10 @@ export function LessonContentViewer({
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_60%)]" />
                         <span className="relative">{completeButtonText || 'Bitir & Devam Et'}</span>
                     </Button>
+                    <a href="/student/soru-bankasi" className="mt-4 px-6 py-2 rounded-xl font-bold text-slate-500 hover:text-slate-700 hover:bg-slate-200/50 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-white/5 transition-all flex items-center justify-center gap-2">
+                        <ArrowLeft className="w-4 h-4" />
+                        Soru Bankasına Dön
+                    </a>
                 </div>
             </div>
         );
