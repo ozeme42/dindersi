@@ -99,6 +99,190 @@ const PUZZLES = [
         ],
         answer: 'MELEK',
         explanation: 'M + Elek = Melek'
+    },
+    {
+        id: 11,
+        items: [
+            { type: 'text', value: 'K', hint: 'Harfi' },
+            { type: 'emoji', value: '🏠', hint: 'Ev' },
+            { type: 'text', value: 'SER', hint: 'Hecesi' }
+        ],
+        answer: 'KEVSER',
+        explanation: 'K + Ev + Ser = Kevser'
+    },
+    {
+        id: 12,
+        items: [
+            { type: 'emoji', value: '🎀', hint: 'Kurdele (Kur)' },
+            { type: 'emoji', value: '⌚', hint: 'Saat (An)' }
+        ],
+        answer: 'KURAN',
+        explanation: 'Kur + An = Kuran'
+    },
+    {
+        id: 13,
+        items: [
+            { type: 'text', value: 'HA', hint: 'Hecesi' },
+            { type: 'emoji', value: '🦷', hint: 'Diş' }
+        ],
+        answer: 'HADİS',
+        explanation: 'Ha + Diş = Hadis'
+    },
+    {
+        id: 14,
+        items: [
+            { type: 'text', value: 'BER', hint: 'Hecesi' },
+            { type: 'emoji', value: '🐎', hint: 'At' }
+        ],
+        answer: 'BERAT',
+        explanation: 'Ber + At = Berat'
+    },
+    {
+        id: 15,
+        items: [
+            { type: 'emoji', value: '🤫', hint: 'Sır' },
+            { type: 'emoji', value: '🐎', hint: 'At' }
+        ],
+        answer: 'SIRAT',
+        explanation: 'Sır + At = Sırat'
+    },
+    {
+        id: 16,
+        items: [
+            { type: 'text', value: 'ŞEY', hint: 'Kelimesi' },
+            { type: 'emoji', value: '🌅', hint: 'Tan Vakti (Tan)' }
+        ],
+        answer: 'ŞEYTAN',
+        explanation: 'Şey + Tan = Şeytan'
+    },
+    {
+        id: 17,
+        items: [
+            { type: 'emoji', value: '🗺️', hint: 'İl Haritası (İl)' },
+            { type: 'text', value: 'AHİ', hint: 'Hecesi' }
+        ],
+        answer: 'İLAHİ',
+        explanation: 'İl + Ahi = İlahi'
+    },
+    {
+        id: 18,
+        items: [
+            { type: 'text', value: 'SA', hint: 'Hecesi' },
+            { type: 'emoji', value: '🗻', hint: 'Dağ (Da)' },
+            { type: 'text', value: 'KA', hint: 'Hecesi' }
+        ],
+        answer: 'SADAKA',
+        explanation: 'Sa + Da + Ka = Sadaka'
+    },
+    {
+        id: 19,
+        items: [
+            { type: 'text', value: 'RAHM', hint: 'Hecesi' },
+            { type: 'emoji', value: '🥩', hint: 'Et' }
+        ],
+        answer: 'RAHMET',
+        explanation: 'Rahm + Et = Rahmet'
+    },
+    {
+        id: 20,
+        items: [
+            { type: 'text', value: 'S', hint: 'Harfi' },
+            { type: 'emoji', value: '👑', hint: 'Kraliçe (Ece)' },
+            { type: 'text', value: 'DE', hint: 'Hecesi' }
+        ],
+        answer: 'SECDE',
+        explanation: 'S + Ece + De = Secde'
+    },
+    {
+        id: 21,
+        items: [
+            { type: 'text', value: 'NE', hint: 'Hecesi' },
+            { type: 'emoji', value: '1️⃣', hint: 'Bir (Bi)' }
+        ],
+        answer: 'NEBİ',
+        explanation: 'Ne + Bi = Nebi'
+    },
+    {
+        id: 22,
+        items: [
+            { type: 'text', value: 'MİR', hint: 'Hecesi' },
+            { type: 'emoji', value: '🔓', hint: 'Açık Kilit (Aç)' }
+        ],
+        answer: 'MİRAÇ',
+        explanation: 'Mir + Aç = Miraç'
+    },
+    {
+        id: 23,
+        items: [
+            { type: 'emoji', value: '🌊', hint: 'Sel' },
+            { type: 'text', value: 'AM', hint: 'Hecesi' }
+        ],
+        answer: 'SELAM',
+        explanation: 'Sel + Am = Selam'
+    },
+    {
+        id: 24,
+        items: [
+            { type: 'text', value: 'H', hint: 'Harfi' },
+            { type: 'emoji', value: '🔍', hint: 'Arama Büyüteci (Aram)' }
+        ],
+        answer: 'HARAM',
+        explanation: 'H + Aram = Haram'
+    },
+    {
+        id: 25,
+        items: [
+            { type: 'text', value: 'Z', hint: 'Harfi' },
+            { type: 'emoji', value: '💡', hint: 'Fikir (İkir)' }
+        ],
+        answer: 'ZİKİR',
+        explanation: 'Z + İkir = Zikir'
+    },
+    {
+        id: 26,
+        items: [
+            { type: 'emoji', value: '❤️', hint: 'Sevgi (Sev)' },
+            { type: 'text', value: 'AP', hint: 'Hecesi' }
+        ],
+        answer: 'SEVAP',
+        explanation: 'Sev + Ap = Sevap'
+    },
+    {
+        id: 27,
+        items: [
+            { type: 'text', value: 'KIYAM', hint: 'Kelimesi' },
+            { type: 'emoji', value: '🥩', hint: 'Et' }
+        ],
+        answer: 'KIYAMET',
+        explanation: 'Kıyam + Et = Kıyamet'
+    },
+    {
+        id: 28,
+        items: [
+            { type: 'text', value: 'CEM', hint: 'Hecesi' },
+            { type: 'text', value: 'A', hint: 'Harfi' },
+            { type: 'emoji', value: '🐎', hint: 'At' }
+        ],
+        answer: 'CEMAAT',
+        explanation: 'Cem + A + At = Cemaat'
+    },
+    {
+        id: 29,
+        items: [
+            { type: 'text', value: 'SOHB', hint: 'Hecesi' },
+            { type: 'emoji', value: '🥩', hint: 'Et' }
+        ],
+        answer: 'SOHBET',
+        explanation: 'Sohb + Et = Sohbet'
+    },
+    {
+        id: 30,
+        items: [
+            { type: 'text', value: 'HEL', hint: 'Hecesi' },
+            { type: 'text', value: 'AL', hint: 'Al (Kırmızı)' }
+        ],
+        answer: 'HELAL',
+        explanation: 'Hel + Al = Helal'
     }
 ];
 
