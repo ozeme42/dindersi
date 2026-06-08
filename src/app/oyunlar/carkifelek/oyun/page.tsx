@@ -15,7 +15,7 @@ import Confetti from 'react-dom-confetti';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 // --- DİLİM AYARLARI ---
-type SliceType = 'easy' | 'hard' | '2x' | 'pass' | 'bankrupt' | 'joker' | 'sabotage' | 'steal' | 'duel';
+type SliceType = 'easy' | 'hard' | '2x' | 'pass' | 'bankrupt' | 'joker' | 'sabotage' | 'steal';
 
 interface WheelSlice {
     label: string;
@@ -35,7 +35,7 @@ const SLICES: WheelSlice[] = [
     { label: 'İFLAS', type: 'bankrupt', color: '#EF4444', textColor: 'white', points: 0, icon: Skull },   
     { label: 'KOLAY', type: 'easy', color: '#0EA5E9', textColor: 'white', points: 10, icon: Sparkles }, 
     { label: 'PAS', type: 'pass', color: '#64748B', textColor: 'white', points: 0, icon: CircleOff },        
-    { label: 'DÜELLO', type: 'duel', color: '#F43F5E', textColor: 'white', points: 50, icon: Swords },        
+    { label: 'ZOR', type: 'hard', color: '#F43F5E', textColor: 'white', points: 20, icon: Flame },        
     { label: 'JOKER', type: 'joker', color: '#10B981', textColor: 'white', points: 50, icon: Gift },     
 ];
 
@@ -162,7 +162,7 @@ export function CarkifelekGameClient() {
 
     const [score, setScore] = useState(0);
     const [rotation, setRotation] = useState(0);
-    const [gameState, setGameState] = useState<'loading' | 'setup' | 'idle' | 'spinning' | 'result' | 'question' | 'feedback' | 'finished' | 'sabotage_select' | 'duel_question'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'setup' | 'idle' | 'spinning' | 'result' | 'question' | 'feedback' | 'finished' | 'sabotage_select'>('loading');
     
     // Oyun Verileri
     const [questionsEasy, setQuestionsEasy] = useState<Question[]>([]);
@@ -180,7 +180,6 @@ export function CarkifelekGameClient() {
     
     const [sabotageTarget, setSabotageTarget] = useState<number | null>(null);
     const [stealInfo, setStealInfo] = useState<{from: number, amount: number} | null>(null);
-    const [duelEliminatedTeams, setDuelEliminatedTeams] = useState<number[]>([]);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
     // Diğer State'ler
@@ -193,15 +192,7 @@ export function CarkifelekGameClient() {
     const gameContext = `Çarkıfelek - ${searchParams.get('topicName') || 'Genel'}`;
     const backUrl = '/oyunlar/carkifelek';
 
-    const activeSlices = SLICES.map(slice => {
-        if (slice.type === 'duel' && gameMode === 'team' && teamCount > 3) {
-            // Düello desteklenmediğinde JOKER yerine ZOR yapalım ki 2 tane JOKER olmasın
-            return { label: 'ZOR', type: 'hard' as SliceType, color: '#F43F5E', textColor: 'white', points: 20, icon: Flame };
-        }
-        return slice;
-    });
-
-    const wheelGradientStops = activeSlices.map((slice, i) => {
+    const wheelGradientStops = SLICES.map((slice, i) => {
         const start = i * SLICE_DEGREE;
         const end = start + SLICE_DEGREE;
         return `${slice.color} ${start}deg ${end}deg`;
@@ -282,7 +273,6 @@ export function CarkifelekGameClient() {
         setSabotageTarget(null);
         setStealInfo(null);
         setSelectedOption(null);
-        setDuelEliminatedTeams([]);
         if (gameMode === 'team') {
             setCurrentTeamTurn((prev) => (prev + 1) % teamCount);
         }
@@ -384,16 +374,6 @@ export function CarkifelekGameClient() {
                 setGameState('sabotage_select');
             } else {
                 setGameState('result'); // Teklide pas gibi davranır
-                setTimeout(nextTurn, 2500);
-            }
-        } else if (slice.type === 'duel') {
-            if (gameMode === 'team') {
-                const q = questionsHard[Math.floor(Math.random() * questionsHard.length)] || questionsEasy[Math.floor(Math.random() * questionsEasy.length)];
-                setCurrentQuestion(q);
-                setGameState('duel_question');
-            } else {
-                setScore(s => s + 50); // Teklide bedava 50 puan
-                setGameState('result');
                 setTimeout(nextTurn, 2500);
             }
         } else {
@@ -718,102 +698,6 @@ export function CarkifelekGameClient() {
                 </div>
             )}
 
-            {/* --- DÜELLO EKRANI --- */}
-            {gameState === 'duel_question' && currentQuestion && (
-                <div className="absolute inset-0 z-[100] bg-slate-950 flex flex-col animate-in fade-in duration-500 overflow-hidden">
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rose-900/20 via-slate-950 to-slate-950 pointer-events-none" />
-                    
-                    {/* Üst Kısım: Soru */}
-                    <div className="relative z-10 p-6 md:p-10 border-b-4 border-rose-900/50 bg-slate-900/80 shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col items-center shrink-0">
-                        <div className="flex items-center gap-4 mb-4">
-                            <Swords className="w-10 h-10 md:w-12 md:h-12 text-rose-500 animate-pulse" />
-                            <h2 className="text-3xl md:text-5xl font-black text-rose-400 uppercase tracking-tighter drop-shadow-lg italic">DÜELLO ZAMANI</h2>
-                            <Swords className="w-10 h-10 md:w-12 md:h-12 text-rose-500 animate-pulse" />
-                        </div>
-                        <h3 className="text-2xl md:text-4xl font-black text-white text-center leading-snug max-w-5xl drop-shadow-md">
-                            {currentQuestion.text}
-                        </h3>
-                    </div>
-                    
-                    {/* Alt Kısım: Takım Alanları (Split Screen) */}
-                    <div className={cn(
-                        "flex-1 relative z-10 w-full h-full grid gap-2 p-2",
-                        teamCount === 2 ? "grid-cols-2" :
-                        teamCount === 3 ? "grid-cols-3" :
-                        teamCount === 4 ? "grid-cols-2 grid-rows-2" :
-                        "grid-cols-3 grid-rows-2" // 5 veya 6 takımsa
-                    )}>
-                        {Array.from({ length: teamCount }).map((_, idx) => {
-                            const isEliminated = duelEliminatedTeams.includes(idx);
-                            // Renk paleti
-                            const teamColors = [
-                                "from-blue-900/80 to-blue-950 border-blue-500/50 hover:border-blue-400",
-                                "from-red-900/80 to-red-950 border-red-500/50 hover:border-red-400",
-                                "from-green-900/80 to-green-950 border-green-500/50 hover:border-green-400",
-                                "from-yellow-900/80 to-yellow-950 border-yellow-500/50 hover:border-yellow-400",
-                                "from-purple-900/80 to-purple-950 border-purple-500/50 hover:border-purple-400",
-                                "from-pink-900/80 to-pink-950 border-pink-500/50 hover:border-pink-400"
-                            ];
-                            const colorClass = teamColors[idx % teamColors.length];
-
-                            return (
-                                <div key={idx} className={cn(
-                                    "relative rounded-3xl border-4 overflow-hidden flex flex-col p-4 md:p-6 transition-all duration-300",
-                                    isEliminated ? "bg-slate-900 border-slate-800 opacity-40 grayscale" : `bg-gradient-to-br ${colorClass} shadow-2xl`
-                                )}>
-                                    {isEliminated && (
-                                        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-                                            <X className="w-32 h-32 text-red-500 drop-shadow-lg" />
-                                        </div>
-                                    )}
-                                    <div className="text-center mb-4 shrink-0">
-                                        <h4 className="text-2xl md:text-3xl font-black text-white/90 drop-shadow-md">{idx + 1}. TAKIM</h4>
-                                        <p className="text-white/50 text-sm font-bold uppercase tracking-widest">Senin Bölgen</p>
-                                    </div>
-                                    <div className="flex-1 flex flex-col gap-3 justify-center">
-                                        {currentQuestion.options?.map((opt, optIdx) => (
-                                            <button
-                                                key={optIdx}
-                                                disabled={isEliminated}
-                                                onClick={() => {
-                                                    if (opt === currentQuestion.correctAnswer) {
-                                                        playSound('win');
-                                                        const newScores = [...teamScores];
-                                                        newScores[idx] += 50;
-                                                        setTeamScores(newScores);
-                                                        setShowConfetti(true);
-                                                        setGameState('result');
-                                                        setTimeout(() => {
-                                                            setShowConfetti(false);
-                                                            nextTurn();
-                                                        }, 4000);
-                                                    } else {
-                                                        playSound('incorrect');
-                                                        const newEliminated = [...duelEliminatedTeams, idx];
-                                                        setDuelEliminatedTeams(newEliminated);
-                                                        if (newEliminated.length >= teamCount) {
-                                                            // Herkes elendi
-                                                            setGameState('result');
-                                                            setTimeout(nextTurn, 2500);
-                                                        }
-                                                    }
-                                                }}
-                                                className={cn(
-                                                    "flex-1 min-h-[60px] rounded-xl font-bold text-lg md:text-xl transition-all shadow-md active:scale-95 border-2 flex items-center justify-center p-3",
-                                                    isEliminated ? "bg-slate-800 text-slate-500 border-slate-700" : "bg-black/40 text-white border-white/20 hover:bg-white/20 hover:border-white/50 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-                                                )}
-                                            >
-                                                {opt}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            )}
-
             {/* --- HUD --- */}
             <div className="relative z-20 p-2 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-4 pointer-events-none">
                 
@@ -902,7 +786,7 @@ export function CarkifelekGameClient() {
                 )}
 
                 {/* --- ÇARK --- */}
-                <div className={cn("transition-all duration-700 transform origin-center mt-16 md:mt-0", gameState === 'question' || gameState === 'feedback' || gameState === 'sabotage_select' || gameState === 'duel_question' ? "scale-0 opacity-0" : "scale-100 opacity-100")}>
+                <div className={cn("transition-all duration-700 transform origin-center mt-16 md:mt-0", gameState === 'question' || gameState === 'feedback' || gameState === 'sabotage_select' ? "scale-0 opacity-0" : "scale-100 opacity-100")}>
                     <div className="wheel-wrapper">
                         <div className="pointer"></div>
 
@@ -910,7 +794,7 @@ export function CarkifelekGameClient() {
                             transform: `rotate(${rotation}deg)`,
                             background: `conic-gradient(from 0deg, ${wheelGradientStops})`
                         }}>
-                            {activeSlices.map((slice, index) => {
+                            {SLICES.map((slice, index) => {
                                 const angle = index * SLICE_DEGREE + (SLICE_DEGREE / 2);
                                 const Icon = slice.icon;
                                 
@@ -956,7 +840,7 @@ export function CarkifelekGameClient() {
                     </div>
                 )}
 
-                {/* --- SONUÇ MESAJI (Pas, İflas, Joker, Steal, Düello Sonucu) --- */}
+                {/* --- SONUÇ MESAJI (Pas, İflas, Joker, Steal) --- */}
                 {gameState === 'result' && currentSlice && (
                     <div className="absolute inset-0 flex items-center justify-center z-[110] px-4">
                         <div className={cn("bg-slate-900/95 border p-8 md:p-12 rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.8)] backdrop-blur-xl w-full max-w-md text-center animate-in zoom-in-75 duration-300",
@@ -974,7 +858,6 @@ export function CarkifelekGameClient() {
                                 {currentSlice.type === 'pass' && "Bu turu pas geçiyorsun. Sıra diğer takımda."}
                                 {currentSlice.type === 'bankrupt' && "Eyvah! Puanlar sıfırlandı. Çok yazık!"}
                                 {currentSlice.type === 'joker' && "Şanslısın! Hiçbir şey yapmadan +50 Puan kaptın!"}
-                                {currentSlice.type === 'duel' && "Büyük kapışma sona erdi! (50 Puan)"}
                                 {currentSlice.type === 'sabotage' && "Bomba patladı!"}
                                 {currentSlice.type === 'steal' && stealInfo 
                                     ? `İnanılmaz! Lider olan ${stealInfo.from + 1}. Takım'dan ${stealInfo.amount} puan çaldın!` 
