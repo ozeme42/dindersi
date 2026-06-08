@@ -7,7 +7,7 @@ import {
     Folder, Home, ChevronRight as ChevronRightIcon,
     FileImage, Link2, ExternalLink,
     PlayCircle, Sparkles, BrainCircuit, BookOpen,
-    RotateCcw, KeyRound, Gamepad2
+    RotateCcw, KeyRound, Gamepad2, Mic
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +21,7 @@ import { getExtraPages } from '@/app/teacher/extra-pages/actions';
 // OYUN BİLEŞENLERİ
 import { WordSudoku } from '@/components/word-sudoku';
 import { CryptoGame } from '@/components/crypto-game';
+import { NoiseMeter } from '@/components/noise-meter';
 
 // Zeka Köşesi Oyun Listesi
 const GAMES = [
@@ -40,6 +41,15 @@ const GAMES = [
         icon: KeyRound, 
         color: 'text-emerald-600', 
         bg: 'bg-emerald-100',
+        active: true 
+    },
+    { 
+        id: 'silence', 
+        title: 'Sessizlik Barometresi', 
+        desc: 'Sınıfın ses seviyesini ölçün, odağı artırın.', 
+        icon: Mic, 
+        color: 'text-rose-600', 
+        bg: 'bg-rose-100',
         active: true 
     },
     { 
@@ -433,6 +443,7 @@ export default function ExtraPagesExplorer() {
                                     <div className="w-full flex justify-center">
                                         {activeGame === 'sudoku' && <WordSudoku />}
                                         {activeGame === 'crypto' && <CryptoGame />}
+                                        {activeGame === 'silence' && <NoiseMeter />}
                                     </div>
                                 </div>
                             )}
