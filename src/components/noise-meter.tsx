@@ -105,9 +105,9 @@ export function NoiseMeter() {
             if (dataArray[i] > max) max = dataArray[i];
         }
         
-        // Daha iyi ses algılaması için ortalama ve anlık en yüksek sesin birleşimi
+        // Daha iyi ses algılaması için ortalama ve anlık en yüksek sesin birleşimi (Hassasiyet hafif düşürüldü)
         const average = sum / dataArray.length;
-        const calculated = (average * 1.5) + (max * 0.4);
+        const calculated = (average * 1.2) + (max * 0.2);
         const scaledVolume = Math.min(100, Math.round(calculated));
         
         setVolume(scaledVolume);
