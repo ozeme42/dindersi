@@ -23,6 +23,7 @@ import { WordSudoku } from '@/components/word-sudoku';
 import { CryptoGame } from '@/components/crypto-game';
 import { NoiseMeter } from '@/components/noise-meter';
 import { ResfebeGame } from '@/components/resfebe-game';
+import { CrosswordGame } from '@/components/crossword-game';
 
 // Zeka Köşesi Oyun Listesi
 const GAMES = [
@@ -60,6 +61,15 @@ const GAMES = [
         icon: Sparkles, 
         color: 'text-amber-600', 
         bg: 'bg-amber-100',
+        active: true 
+    },
+    { 
+        id: 'cengel', 
+        title: 'Çengel Bulmaca', 
+        desc: 'Tahtadan soruları okuyun, sınıfça kareleri doldurun.', 
+        icon: LayoutGrid, 
+        color: 'text-fuchsia-600', 
+        bg: 'bg-fuchsia-100',
         active: true 
     },
     { 
@@ -446,6 +456,7 @@ export default function ExtraPagesExplorer() {
                                         {activeGame === 'crypto' && <CryptoGame />}
                                         {activeGame === 'silence' && <NoiseMeter />}
                                         {activeGame === 'resfebe' && <ResfebeGame />}
+                                        {activeGame === 'cengel' && <CrosswordGame />}
                                     </div>
                                 </div>
                             )}

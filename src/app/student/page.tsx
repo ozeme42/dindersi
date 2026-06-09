@@ -5,7 +5,7 @@ import {
     Trophy, Star, Gamepad2, ShoppingCart, Columns, LayoutTemplate, 
     FileCog, Crown, Award, Target, Sparkles, Map, Swords, Backpack,
     Loader2, ArrowRight, Flame, Gift, Timer, School, Compass, LogOut,
-    Home, User, ChevronRight, Zap, BookOpen, Lock
+    Home, User, ChevronRight, Zap, BookOpen, Lock, Globe2, Users
 } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
@@ -337,94 +337,142 @@ function PageContent() {
         <main className="w-full max-w-lg md:max-w-7xl mx-auto px-4 md:px-8 pt-5 pb-36 md:ml-72 space-y-6 md:space-y-8 relative z-10">
 
             {/* ── BÜYÜK PROFİL HERO KARTI ── */}
-            <section className="relative rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_80px_rgba(99,102,241,0.3)] group">
-                {/* Gradyan arka plan */}
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 via-purple-900/60 to-slate-900/90 transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(99,102,241,0.3),transparent_60%)]" />
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-400/50 to-transparent" />
+            <section className="relative rounded-[2.5rem] overflow-hidden border border-white/10 p-[2px] group shadow-[0_20px_80px_rgba(99,102,241,0.2)] hover:shadow-[0_20px_80px_rgba(99,102,241,0.4)] transition-shadow duration-700">
+                {/* Animasyonlu Dış Çerçeve */}
+                <div className="absolute inset-0 bg-[conic-gradient(from_0deg_at_50%_50%,rgba(99,102,241,0.5)_0%,rgba(168,85,247,0.5)_33%,rgba(6,182,212,0.5)_66%,rgba(99,102,241,0.5)_100%)] opacity-30 group-hover:opacity-60 animate-[spin_6s_linear_infinite]" />
                 
-                {/* İçerik */}
-                <div className="relative p-5 md:p-8 space-y-6 md:space-y-0 md:flex md:items-center md:gap-8">
+                <div className="relative bg-[#0b0f1e]/90 backdrop-blur-3xl rounded-[2.4rem] overflow-hidden h-full">
+                    {/* İç aydınlatmalar */}
+                    <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-500/20 blur-[100px] rounded-full pointer-events-none" />
+                    <div className="absolute bottom-0 right-0 w-64 h-64 bg-fuchsia-500/10 blur-[80px] rounded-full pointer-events-none" />
+                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                     
-                    {/* Masaüstü Sol Bölüm: Sınıf & Okul & Genel Seviye */}
-                    <div className="flex-1 space-y-4">
-                        <div className="flex items-center gap-2 flex-wrap">
-                            <span className="flex items-center gap-1.5 text-indigo-300 text-xs md:text-sm font-bold bg-indigo-500/10 border border-indigo-500/20 rounded-full px-3 py-1">
-                                <Backpack className="h-3 w-3 md:h-4 md:w-4" />{user?.class || 'Sınıfsız'}
-                            </span>
-                            {user?.schoolName && (
-                                <span className="flex items-center gap-1.5 text-cyan-300 text-xs md:text-sm font-bold bg-cyan-500/10 border border-cyan-500/20 rounded-full px-3 py-1">
-                                    <School className="h-3 w-3 md:h-4 md:w-4" />{user.schoolName}
-                                </span>
-                            )}
-                        </div>
-
-                        {/* Seviye barı */}
-                        <div>
-                            <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
-                                        <Sparkles className="h-3.5 w-3.5 md:h-4 md:w-4 text-indigo-400" />
-                                    </div>
-                                    <span className="text-white font-black text-sm md:text-base">Seviye {level}</span>
+                    <div className="relative p-6 md:p-8 flex flex-col xl:flex-row gap-8 xl:gap-12 items-center">
+                        
+                        {/* SOL KISIM: Seviye ve Bilgiler */}
+                        <div className="w-full xl:w-5/12 space-y-8">
+                            {/* Okul & Sınıf Etiketleri */}
+                            <div className="flex flex-wrap items-center gap-3">
+                                <div className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-400/20 rounded-full px-4 py-2 backdrop-blur-md shadow-inner">
+                                    <Backpack className="w-4 h-4 text-indigo-400" />
+                                    <span className="text-white font-black text-xs md:text-sm tracking-wide uppercase">{user?.class || 'Sınıfsız'}</span>
                                 </div>
-                                <span className="text-slate-400 text-xs md:text-sm font-medium tabular-nums">{xpToNextLevel} XP kaldı</span>
-                            </div>
-                            <div className="h-2.5 md:h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                <div
-                                    className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full shadow-[0_0_12px_rgba(168,85,247,0.6)] transition-all duration-1000"
-                                    style={{ width: `${progressToNextLevel}%` }}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Günlük hedef */}
-                    <div className={cn("flex-1 rounded-2xl p-4 md:p-5 border transition-colors", isGoalReached ? "bg-emerald-500/10 border-emerald-500/25" : "bg-white/3 border-white/8")}>
-                        <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                                {isGoalReached
-                                    ? <Crown className="h-4 w-4 md:h-5 md:w-5 text-emerald-400 animate-bounce" />
-                                    : <Target className="h-4 w-4 md:h-5 md:w-5 text-slate-400" />
-                                }
-                                <span className={cn("font-black text-sm md:text-base", isGoalReached ? "text-emerald-300" : "text-white")}>
-                                    Günlük Hedef
-                                    {isGoalReached && <span className="ml-2 text-[9px] md:text-[10px] bg-emerald-500 text-black px-1.5 py-0.5 rounded-full font-black">✓ TAMAM</span>}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className={cn("font-black text-sm md:text-base tabular-nums", isGoalReached ? "text-emerald-400" : "text-white")}>
-                                    {stats.todayScore}<span className="text-slate-500 font-medium">/{dailyGoal}</span>
-                                </span>
-                                {canSpinWheel && (
-                                    <Button asChild size="sm" className="h-7 md:h-8 px-3 bg-gradient-to-r from-pink-600 to-orange-500 font-black text-xs md:text-sm border-0 animate-pulse shadow-[0_0_20px_rgba(236,72,153,0.5)] rounded-xl">
-                                        <Link href="/student/wheel"><Gift className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1" />Çark!</Link>
-                                    </Button>
+                                {user?.schoolName && (
+                                    <div className="flex items-center gap-2 bg-cyan-500/10 border border-cyan-400/20 rounded-full px-4 py-2 backdrop-blur-md shadow-inner">
+                                        <School className="w-4 h-4 text-cyan-400" />
+                                        <span className="text-white font-black text-xs md:text-sm tracking-wide truncate max-w-[200px] md:max-w-none">{user.schoolName}</span>
+                                    </div>
                                 )}
                             </div>
-                        </div>
-                        <div className="h-2.5 md:h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                            <div
-                                className={cn("h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden", isGoalReached ? "bg-gradient-to-r from-emerald-500 to-green-400 shadow-[0_0_12px_rgba(16,185,129,0.5)]" : "bg-gradient-to-r from-amber-500 to-orange-400")}
-                                style={{ width: `${progressToDailyGoal}%` }}
-                            >
-                                <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:14px_14px] animate-[progress-stripes_1s_linear_infinite]" />
-                            </div>
-                        </div>
-                    </div>
 
-                    {/* Sıralama rozetleri */}
-                    <div className="flex-1 grid grid-cols-3 gap-2.5 md:gap-4">
-                        {[
-                            { label: '🌍 Genel', value: stats.generalRank },
-                            { label: '🏫 Sınıf', value: stats.classRank },
-                            { label: '🏆 Şube', value: stats.branchRank },
-                        ].map(item => (
-                            <div key={item.label} className="bg-black/30 rounded-2xl p-3 md:p-4 border border-white/8 flex flex-col items-center justify-center gap-0.5 md:gap-1 backdrop-blur-sm shadow-inner">
-                                <span className="text-white font-black text-xl md:text-3xl tabular-nums">#{item.value || '-'}</span>
-                                <span className="text-slate-500 text-[9px] md:text-xs uppercase tracking-wider font-bold">{item.label}</span>
+                            {/* Seviye Barı Büyük */}
+                            <div className="relative">
+                                <div className="flex items-end justify-between mb-4">
+                                    <div>
+                                        <p className="text-indigo-400/80 text-[10px] font-black uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                                            <Sparkles className="w-3 h-3" /> Mevcut Seviye
+                                        </p>
+                                        <div className="flex items-baseline gap-3">
+                                            <span className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-200 to-indigo-400 drop-shadow-md">
+                                                {level}
+                                            </span>
+                                            <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.3)] animate-pulse">
+                                                <Crown className="w-4 h-4 text-indigo-300" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className="text-white/50 text-[10px] md:text-xs font-black uppercase tracking-widest block mb-1">Sonraki Seviyeye</span>
+                                        <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 shadow-inner">
+                                            <span className="text-xl md:text-2xl font-black text-white tabular-nums">{xpToNextLevel} <span className="text-xs text-indigo-400">XP</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Glowing Progress */}
+                                <div className="h-4 w-full bg-black/40 rounded-full overflow-hidden border border-white/10 p-[2px] shadow-inner">
+                                    <div
+                                        className="h-full rounded-full transition-all duration-1000 ease-out relative"
+                                        style={{ 
+                                            width: `${progressToNextLevel}%`, 
+                                            background: 'linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #6366f1)',
+                                            backgroundSize: '200% 100%', 
+                                            animation: 'progress-stripes 3s linear infinite'
+                                        }}
+                                    >
+                                        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.4)_50%,rgba(255,255,255,0)_100%)] animate-[progress-stripes_2s_infinite]" />
+                                    </div>
+                                </div>
                             </div>
-                        ))}
+                        </div>
+
+                        {/* ORTA KISIM: Ayırıcı Çizgi */}
+                        <div className="hidden xl:block w-px h-40 bg-gradient-to-b from-transparent via-white/20 to-transparent shrink-0" />
+                        <div className="xl:hidden w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent shrink-0" />
+
+                        {/* SAĞ KISIM: Günlük Hedef & Rozetler */}
+                        <div className="w-full xl:w-7/12 flex flex-col gap-6">
+                            
+                            {/* Günlük Hedef Box */}
+                            <div className={cn(
+                                "relative rounded-3xl overflow-hidden border p-5 md:p-6 flex flex-col sm:flex-row items-center justify-between gap-6",
+                                isGoalReached ? "bg-emerald-950/30 border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.15)]" : "bg-slate-900/60 border-white/10 shadow-inner"
+                            )}>
+                                {isGoalReached && <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent animate-pulse" />}
+                                
+                                <div className="relative z-10 flex items-center gap-5 w-full sm:w-auto">
+                                    <div className={cn(
+                                        "w-14 h-14 rounded-2xl flex items-center justify-center border-2 shrink-0 transition-transform duration-500",
+                                        isGoalReached ? "bg-emerald-500/20 border-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.4)] scale-110" : "bg-white/5 border-white/20"
+                                    )}>
+                                        <Target className={cn("w-7 h-7", isGoalReached ? "text-emerald-400" : "text-white/60")} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-white font-black text-lg md:text-xl flex items-center gap-2 tracking-tight">
+                                            Günlük Hedef
+                                            {isGoalReached && <span className="bg-emerald-500 text-slate-900 text-[10px] px-2 py-0.5 rounded-full uppercase font-black tracking-widest shadow-sm">Tamam</span>}
+                                        </h3>
+                                        <p className="text-white/50 text-xs font-bold mt-1 uppercase tracking-widest">Bugün Toplanan XP</p>
+                                    </div>
+                                </div>
+
+                                <div className="relative z-10 w-full sm:w-auto flex flex-col sm:items-end gap-3">
+                                    <div className="flex items-baseline gap-1 bg-black/30 px-4 py-2 rounded-xl border border-white/5 w-fit">
+                                        <span className={cn("text-3xl font-black tabular-nums tracking-tighter", isGoalReached ? "text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" : "text-white")}>{stats.todayScore}</span>
+                                        <span className="text-white/40 font-bold text-sm">/{dailyGoal}</span>
+                                    </div>
+                                    {canSpinWheel ? (
+                                        <Button asChild size="sm" className="w-full sm:w-auto h-10 px-6 bg-gradient-to-r from-orange-500 to-rose-600 font-black text-sm border-0 animate-pulse shadow-[0_0_20px_rgba(244,63,94,0.4)] rounded-xl hover:scale-105 transition-transform">
+                                            <Link href="/student/wheel"><Gift className="w-5 h-5 mr-2" />Ödül Çarkı!</Link>
+                                        </Button>
+                                    ) : (
+                                        <div className="h-2 w-full sm:w-32 bg-black/60 rounded-full overflow-hidden border border-white/5">
+                                            <div 
+                                                className={cn("h-full rounded-full transition-all duration-1000", isGoalReached ? "bg-gradient-to-r from-emerald-500 to-green-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]" : "bg-gradient-to-r from-indigo-500 to-cyan-400")}
+                                                style={{ width: `${progressToDailyGoal}%` }}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Rozetler Grid */}
+                            <div className="grid grid-cols-3 gap-3 md:gap-4">
+                                {[
+                                    { label: 'Dünya Geneli', value: stats.generalRank, icon: <Globe2 className="w-5 h-5 text-sky-400" />, color: "border-sky-500/30 bg-sky-950/30 hover:bg-sky-900/40 hover:border-sky-400/50 hover:shadow-[0_0_20px_rgba(56,189,248,0.2)]" },
+                                    { label: 'Okul Sıralaması', value: stats.classRank, icon: <School className="w-5 h-5 text-fuchsia-400" />, color: "border-fuchsia-500/30 bg-fuchsia-950/30 hover:bg-fuchsia-900/40 hover:border-fuchsia-400/50 hover:shadow-[0_0_20px_rgba(232,121,249,0.2)]" },
+                                    { label: 'Sınıf Şubesi', value: stats.branchRank, icon: <Users className="w-5 h-5 text-amber-400" />, color: "border-amber-500/30 bg-amber-950/30 hover:bg-amber-900/40 hover:border-amber-400/50 hover:shadow-[0_0_20px_rgba(251,191,36,0.2)]" },
+                                ].map(item => (
+                                    <div key={item.label} className={cn("rounded-3xl p-4 md:p-5 border backdrop-blur-md flex flex-col items-center justify-center text-center gap-2 transition-all duration-300", item.color)}>
+                                        <div className="p-2.5 bg-black/30 rounded-2xl mb-1 shadow-inner border border-white/5">{item.icon}</div>
+                                        <span className="text-white font-black text-2xl md:text-3xl tabular-nums drop-shadow-md">#{item.value || '-'}</span>
+                                        <span className="text-white/60 text-[9px] md:text-[11px] uppercase tracking-widest font-black leading-tight">{item.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </section>
