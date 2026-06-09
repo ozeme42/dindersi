@@ -28,6 +28,7 @@ export const playableActivities = [
   { href: '/oyunlar/tornado', label: 'Tornado' },
   { href: '/oyunlar/dogru-yol-kosucusu', label: 'Doğru Yol Koşucusu' },
   { href: '/oyunlar/balon-avcisi', label: 'Balon Avcısı' },
+  { href: '/oyunlar/siber-sifre-kirici', label: 'Siber Şifre Kırıcı' },
 ];
 
 const DEFAULT_POINTS = {

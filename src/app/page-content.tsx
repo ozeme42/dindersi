@@ -653,10 +653,6 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') return <LoggedOutPage classGroups={classGroups || []} />;
     
     if (user) {
-        if (user.role === 'student') {
-             router.replace('/student');
-             return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="h-10 w-10 animate-spin text-emerald-500" /></div>;
-        }
         return <LoggedInDashboard user={user} />;
     }
     

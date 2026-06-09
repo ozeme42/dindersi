@@ -9,7 +9,7 @@ import {
     Search, Crosshair, Shuffle, Lightbulb, 
     Puzzle, Skull, Target, Link2, Pencil, 
     Package, Wind, Coins, BrainCircuit, Milestone, Book, MousePointerClick, Grid3x3,
-    Sparkles, Trophy, Star, Zap, Play, Users, Swords, Crown, Download, Maximize, Minimize
+    Sparkles, Trophy, Star, Zap, Play, Users, Swords, Crown, Download, Maximize, Minimize, Castle, Rocket, Shield
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -370,9 +370,13 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
         { href: '/oyunlar/tornado', label: 'Tornado', icon: Wind, color: 'teal' },
         { href: '/oyunlar/balon-avcisi', label: 'Balon Avcısı', icon: Target, color: 'rose' },
         { href: '/oyunlar/anagram-duvari', label: 'Anagram Duvarı', icon: Grid3x3, color: 'amber', badge: 'YENİ' },
+        { href: '/oyunlar/tirmanma-yarisi', label: 'Tırmanma Yarışı', icon: Swords, color: 'red', badge: 'YENİ' },
+        { href: '/oyunlar/fetih-oyunu', label: 'Fetih Oyunu', icon: Castle, color: 'emerald', badge: 'YENİ' },
+        { href: '/oyunlar/uzay-savunmasi', label: 'Uzay Savunması', icon: Rocket, color: 'blue', badge: 'YENİ' },
+        { href: '/oyunlar/siber-sifre-kirici', label: 'Siber Şifre Kırıcı', icon: Shield, color: 'green', badge: 'YENİ' },
     ];
 
-    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek', 'anagram-duvari'];
+    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek', 'anagram-duvari', 'tirmanma-yarisi', 'fetih-oyunu', 'uzay-savunmasi'];
     const teamGames = activityTypes.filter(a => teamGameSlugs.includes(a.href.split('/').pop() || ''));
     const soloGames = activityTypes.filter(a => !teamGameSlugs.includes(a.href.split('/').pop() || ''));
 

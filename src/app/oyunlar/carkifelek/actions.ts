@@ -15,14 +15,12 @@ export type CarkifelekQuestions = {
 export async function getCarkifelekQuestions(params: GetQuizInput): Promise<{ questions: CarkifelekQuestions | null; error?: string }> {
     noStore();
     try {
-        const fetchFunction = params.isStatic ? getStaticGameData : (p: GetQuizInput) => getQuestionsFromBank(p).then(r => r.questions);
-
         const easyParams: GetQuizInput = { ...params, difficulty: ['Kolay'], questionTypes: ['mcq'], questionCount: 20 };
         const hardParams: GetQuizInput = { ...params, difficulty: ['Zor'], questionTypes: ['mcq'], questionCount: 20 };
 
-        // Cast to Question[] as we know the type we're fetching
-        const easyResult = (await fetchFunction(easyParams)) as Question[];
-        const hardResult = (await fetchFunction(hardParams)) as Question[];
+        // getQuestionsFromBank handles isStatic filtering internally
+        const easyResult = (await getQuestionsFromBank(easyParams)).questions as Question[];
+        const hardResult = (await getQuestionsFromBank(hardParams)).questions as Question[];
 
         if (easyResult.length < 1 || hardResult.length < 1) {
             return { questions: null, error: "Bu konu için yeterli sayıda kolay ve zor soru bulunamadı." };

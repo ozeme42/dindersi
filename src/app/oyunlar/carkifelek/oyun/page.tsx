@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense, useRef } from 'react';
+import { useState, useEffect, Suspense, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { getCarkifelekQuestions, submitCarkifelekScoreAction } from '../actions';
@@ -190,7 +190,17 @@ export function CarkifelekGameClient() {
     const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
     const gameContext = `Çarkıfelek - ${searchParams.get('topicName') || 'Genel'}`;
-    const backUrl = '/oyunlar/carkifelek';
+    
+    const backUrl = useMemo(() => {
+        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
+        if (courseId && unitId && topicId) {
+            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
+        }
+        if (user) {
+            return user.role === 'teacher' || user.role === 'superadmin' ? '/teacher' : '/student';
+        }
+        return '/oyunlar/carkifelek';
+    }, [searchParams, user]);
 
     const wheelGradientStops = SLICES.map((slice, i) => {
         const start = i * SLICE_DEGREE;
@@ -205,6 +215,7 @@ export function CarkifelekGameClient() {
                 courseId: searchParams.get('courseId') || undefined,
                 unitId: searchParams.get('unitId') || undefined,
                 topicId: searchParams.get('topicId') || undefined,
+                isStatic: searchParams.get('isStatic') === 'true',
             };
             const { questions, error } = await getCarkifelekQuestions(params);
             if (error || !questions) {

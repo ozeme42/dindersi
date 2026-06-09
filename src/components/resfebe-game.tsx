@@ -214,20 +214,21 @@ const PUZZLES = [
     {
         id: 23,
         items: [
-            { type: 'emoji', value: '🌊', hint: 'Sel' },
-            { type: 'text', value: 'AM', hint: 'Hecesi' }
+            { type: 'text', value: 'İH', hint: 'Hecesi' },
+            { type: 'emoji', value: '🛞', hint: 'Araba Lastiği (Las)' }
         ],
-        answer: 'SELAM',
-        explanation: 'Sel + Am = Selam'
+        answer: 'İHLAS',
+        explanation: 'İh + Las = İhlas'
     },
     {
         id: 24,
         items: [
-            { type: 'text', value: 'H', hint: 'Harfi' },
-            { type: 'emoji', value: '🔍', hint: 'Arama Büyüteci (Aram)' }
+            { type: 'emoji', value: '👨‍🍳', hint: 'Aşçı (Şef)' },
+            { type: 'text', value: 'A', hint: 'Harfi' },
+            { type: 'emoji', value: '🐎', hint: 'At' }
         ],
-        answer: 'HARAM',
-        explanation: 'H + Aram = Haram'
+        answer: 'ŞEFAAT',
+        explanation: 'Şef + A + At = Şefaat'
     },
     {
         id: 25,
@@ -283,6 +284,73 @@ const PUZZLES = [
         ],
         answer: 'HELAL',
         explanation: 'Hel + Al = Helal'
+    },
+    {
+        id: 31,
+        items: [
+            { type: 'emoji', value: '🍳', hint: 'Tava' },
+            { type: 'text', value: 'F', hint: 'Harfi' }
+        ],
+        answer: 'TAVAF',
+        explanation: 'Tava + F = Tavaf'
+    },
+    {
+        id: 32,
+        items: [
+            { type: 'emoji', value: '🎵', hint: 'Mi Notası' },
+            { type: 'text', value: 'NA', hint: 'Hecesi' },
+            { type: 'emoji', value: '🎵', hint: 'Re Notası' }
+        ],
+        answer: 'MİNARE',
+        explanation: 'Mi + Na + Re = Minare'
+    },
+    {
+        id: 33,
+        items: [
+            { type: 'text', value: 'Z', hint: 'Harfi' },
+            { type: 'emoji', value: '🍼', hint: 'Bebek Emziği (Em)' },
+            { type: 'text', value: 'Z', hint: 'Harfi' },
+            { type: 'emoji', value: '🍼', hint: 'Bebek Emziği (Em)' }
+        ],
+        answer: 'ZEMZEM',
+        explanation: 'Z + Em + Z + Em = Zemzem'
+    },
+    {
+        id: 34,
+        items: [
+            { type: 'text', value: 'İF', hint: 'Hecesi' },
+            { type: 'emoji', value: '🪮', hint: 'Tarak (Tar)' }
+        ],
+        answer: 'İFTAR',
+        explanation: 'İf + Tar = İftar'
+    },
+    {
+        id: 35,
+        items: [
+            { type: 'text', value: 'SÜN', hint: 'Hecesi' },
+            { type: 'emoji', value: '🌐', hint: 'İnternet / Ağ (Net)' }
+        ],
+        answer: 'SÜNNET',
+        explanation: 'Sün + Net = Sünnet'
+    },
+    {
+        id: 36,
+        items: [
+            { type: 'text', value: 'F', hint: 'Harfi' },
+            { type: 'emoji', value: '🥩', hint: 'Et' },
+            { type: 'text', value: 'VA', hint: 'Hecesi' }
+        ],
+        answer: 'FETVA',
+        explanation: 'F + Et + Va = Fetva'
+    },
+    {
+        id: 37,
+        items: [
+            { type: 'text', value: 'C', hint: 'Harfi' },
+            { type: 'emoji', value: '🍇', hint: 'Üzüm (Üz)' }
+        ],
+        answer: 'CÜZ',
+        explanation: 'C + Üz = Cüz'
     }
 ];
 

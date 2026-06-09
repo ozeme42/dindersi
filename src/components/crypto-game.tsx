@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
     Maximize, Minimize, Sparkles, PartyPopper, Eye, KeyRound, 
-    RotateCcw, ZoomIn, ZoomOut, Hash, Smile, Type, List
+    RotateCcw, ZoomIn, ZoomOut, Hash, Smile, Type, List, Timer, AlertCircle, MoreHorizontal,
+    ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import confetti from 'canvas-confetti';
@@ -31,7 +32,14 @@ const PHRASES = [
     { text: "İNSANLARIN EN HAYIRLISI İNSANLARA FAYDALI OLANDIR", category: "Hadis-i Şerif" },
     { text: "HİÇ ÖLMEYECEK GİBİ DÜNYA İÇİN YARIN ÖLECEK GİBİ AHİRET İÇİN ÇALIŞ", category: "Hadis-i Şerif" },
     { text: "BİZİ ALDATAN BİZDEN DEĞİLDİR", category: "Hadis-i Şerif" },
-    { text: "ALLAHIN RAHMETİNDEN ÜMİT KESMEYİN", category: "Ayet-i Kerime" }
+    { text: "ALLAHIN RAHMETİNDEN ÜMİT KESMEYİN", category: "Ayet-i Kerime" },
+    { text: "EY İMAN EDENLER RÜKU EDİN SECDE EDİN RABBİNİZE KULLUK EDİN VE HAYIR İŞLEYİN Kİ KURTULUŞA ERESİNİZ", category: "Ayet-i Kerime" },
+    { text: "KİM ZERRE AĞIRLIĞINCA HAYIR YAPMIŞSA ONU GÖRÜR KİM DE ZERRE AĞIRLIĞINCA ŞER İŞLEMİŞSE ONU GÖRÜR", category: "Ayet-i Kerime" },
+    { text: "ŞÜPHESİZ ALLAH KENDİSİNE KARŞI GELMEKTEN SAKINANLAR VE İYİLİK YAPANLARLA BERABERDİR", category: "Ayet-i Kerime" },
+    { text: "SİZDEN BİRİNİZ KENDİSİ İÇİN İSTEDİĞİNİ KARDEŞİ İÇİN DE İSTEMEDİKÇE GERÇEK ANLAMDA İMAN ETMİŞ OLMAZ", category: "Hadis-i Şerif" },
+    { text: "MÜMİNLERİN İMAN BAKIMINDAN EN MÜKEMMELİ AHLAKI EN GÜZEL OLANIDIR", category: "Hadis-i Şerif" },
+    { text: "HAKSIZLIK KARŞISINDA SUSAN DİLSİZ ŞEYTANDIR", category: "Hadis-i Şerif" },
+    { text: "İŞİ EHLİNE VERMEYİNCE KIYAMETİ BEKLEYİN", category: "Hadis-i Şerif" }
 ];
 
 const TURKISH_ALPHABET = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split('');
@@ -39,10 +47,11 @@ const TURKISH_ALPHABET = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split('');
 const CIPHER_SETS = {
     antik: ['α','β','γ','δ','ε','ζ','η','θ','λ','μ','π','ρ','σ','τ','φ','ω','∆','Ω','∞','§','¶','¥','£','★','♠','♣','♥','♦','☀'],
     sayilar: Array.from({length: 80}, (_, i) => (i + 10).toString()), // 10-89 arası sayılar
-    emojiler: ['😀','🚀','🐱','🍕','🎸','⚽','🚗','⭐','🍎','🎈','🌈','🌞','🌙','🔥','💧','⚡','❄','👑','💎','🔔','💡','📚','🎨','🎭','🧩','🎲','🎯','🏆','🥇']
+    emojiler: ['😀','🚀','🐱','🍕','🎸','⚽','🚗','⭐','🍎','🎈','🌈','🌞','🌙','🔥','💧','⚡','❄','👑','💎','🔔','💡','📚','🎨','🎭','🧩','🎲','🎯','🏆','🥇'],
+    mors: ['.-', '-...', '-.-.', '-..', '.', '..-.', '--.', '....', '..', '.---', '-.-', '.-..', '--', '-.', '---', '.--.', '--.-', '.-.', '...', '-', '..-', '...-', '.--', '-..-', '-.--', '--..', '.-.-', '---.', '..--']
 };
 
-type CipherType = 'antik' | 'sayilar' | 'emojiler';
+type CipherType = 'antik' | 'sayilar' | 'emojiler' | 'mors';
 type CipherMap = Record<string, string>;
 
 export function CryptoGame() {
@@ -55,6 +64,10 @@ export function CryptoGame() {
     const [solvedIndices, setSolvedIndices] = useState<number[]>([]);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [zoomLevel, setZoomLevel] = useState(1.0); 
+
+    const [selectedTime, setSelectedTime] = useState<number>(0);
+    const [timeLeft, setTimeLeft] = useState<number | null>(null);
+    const [isTimeUp, setIsTimeUp] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -75,7 +88,7 @@ export function CryptoGame() {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
-    const initGame = useCallback((phraseIdx?: number) => {
+    const initGame = useCallback((phraseIdx?: number, timeOverride?: number) => {
         const idx = phraseIdx !== undefined ? phraseIdx : Math.floor(Math.random() * PHRASES.length);
         setCurrentPhraseIdx(idx);
         setCurrentPhrase(PHRASES[idx]);
@@ -90,11 +103,36 @@ export function CryptoGame() {
         setCipherMap(newCipherMap);
         setIsRevealed(false);
         setZoomLevel(1.0);
-    }, [cipherType]);
+        
+        const timeToUse = timeOverride !== undefined ? timeOverride : selectedTime;
+        if (timeToUse > 0) {
+            setTimeLeft(timeToUse);
+            setIsTimeUp(false);
+        } else {
+            setTimeLeft(null);
+            setIsTimeUp(false);
+        }
+    }, [cipherType, selectedTime]);
 
     useEffect(() => {
         initGame();
     }, [initGame]);
+
+    useEffect(() => {
+        if (timeLeft === null || timeLeft <= 0 || isRevealed || isTimeUp) return;
+        const interval = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev && prev <= 1) {
+                    clearInterval(interval);
+                    setIsTimeUp(true);
+                    playSound('fail');
+                    return 0;
+                }
+                return prev ? prev - 1 : 0;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [timeLeft, isRevealed, isTimeUp]);
 
     const handleZoomIn = () => setZoomLevel(prev => Math.min(prev + 0.1, 2.5)); 
     const handleZoomOut = () => setZoomLevel(prev => Math.max(prev - 0.1, 0.5)); 
@@ -143,7 +181,7 @@ export function CryptoGame() {
                                 <KeyRound className="h-5 w-5 text-indigo-300" />
                             </div>
                             <div className="hidden md:block">
-                                <CardTitle className="text-xl font-black uppercase tracking-tight text-white">Akıllı Şifre</CardTitle>
+                                <CardTitle className="text-xl font-black uppercase tracking-tight text-white">Akıllı Şifre - Söz {currentPhraseIdx + 1}</CardTitle>
                                 <CardDescription className="text-indigo-200 text-xs">Sembolleri harflerle eşleştir.</CardDescription>
                             </div>
                         </div>
@@ -152,7 +190,8 @@ export function CryptoGame() {
                             {[
                                 { id: 'antik', label: 'Antik', icon: Type },
                                 { id: 'sayilar', label: 'Sayılar', icon: Hash },
-                                { id: 'emojiler', label: 'Emoji', icon: Smile }
+                                { id: 'emojiler', label: 'Emoji', icon: Smile },
+                                { id: 'mors', label: 'Mors', icon: MoreHorizontal }
                             ].map((type) => {
                                 const Icon = type.icon;
                                 const isActive = cipherType === type.id;
@@ -179,6 +218,24 @@ export function CryptoGame() {
                                 <button onClick={handleZoomIn} className="p-2 text-indigo-300 hover:text-white hover:bg-indigo-500/30 transition-colors" title="Harfleri Büyüt"><ZoomIn className="w-4 h-4" /></button>
                             </div>
 
+                            <Select value={selectedTime.toString()} onValueChange={(v) => {
+                                const val = parseInt(v);
+                                setSelectedTime(val);
+                                initGame(currentPhraseIdx, val);
+                            }}>
+                                <SelectTrigger className="w-[110px] bg-indigo-950/50 border-indigo-800/50 text-indigo-100 h-[36px] rounded-xl font-bold focus:ring-0">
+                                    <SelectValue placeholder="Süre" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="0">Süresiz</SelectItem>
+                                    <SelectItem value="60">1 Dakika</SelectItem>
+                                    <SelectItem value="120">2 Dakika</SelectItem>
+                                    <SelectItem value="180">3 Dakika</SelectItem>
+                                    <SelectItem value="300">5 Dakika</SelectItem>
+                                    <SelectItem value="600">10 Dakika</SelectItem>
+                                </SelectContent>
+                            </Select>
+
                             <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="text-indigo-200 hover:text-white hover:bg-white/10 rounded-xl">
                                 {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
                             </Button>
@@ -194,6 +251,20 @@ export function CryptoGame() {
                     
                     <div className="relative z-10 flex flex-col w-full h-full">
                         
+                        {/* SAYAÇ GÖSTERGESİ */}
+                        {timeLeft !== null && (
+                            <div className="flex justify-center mb-4 flex-shrink-0">
+                                <div className={cn(
+                                    "font-black tabular-nums tracking-widest bg-slate-900/60 backdrop-blur-xl px-8 py-3 rounded-2xl border-2 shadow-2xl flex items-center gap-3 transition-colors",
+                                    timeLeft <= 10 && !isTimeUp ? "text-rose-400 border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.3)] animate-pulse" : "text-white border-white/10",
+                                    isTimeUp && "text-rose-500 bg-rose-950/80 border-rose-500"
+                                )} style={{ fontSize: `1.75rem` }}>
+                                    <Timer className={cn("w-7 h-7", isTimeUp ? "text-rose-500" : "text-slate-400")} />
+                                    {isTimeUp ? "SÜRE BİTTİ!" : `${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`}
+                                </div>
+                            </div>
+                        )}
+
                         {/* 1. ŞİFRE ANAHTARI PANELİ (Boyutları Büyütüldü) */}
                         <div className="w-full bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-xl flex-shrink-0 mb-6 p-4">
                             <div className="flex flex-wrap justify-center" style={{ gap: `${0.6 * zoomLevel}rem` }}>
@@ -220,9 +291,25 @@ export function CryptoGame() {
                             </div>
                         </div>
 
-                        {/* 2. GİZLİ METİN ALANI (Ayet/Hadis - Boyutları Hafifçe Küçültüldü) */}
-                        <div className="flex-1 flex items-center justify-center w-full mt-2 pb-12">
-                            <div className="flex flex-wrap justify-center" style={{ gap: `${1.5 * zoomLevel}rem` }}>
+                        {/* 2. GİZLİ METİN ALANI (Ayet/Hadis) */}
+                        <div className="flex-1 flex items-center justify-center w-full mt-2 pb-12 relative">
+                            {isTimeUp && !isRevealed && (
+                                <div className="absolute inset-0 z-30 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm rounded-3xl">
+                                    <div className="bg-rose-950 border border-rose-500/50 p-8 rounded-3xl text-center shadow-[0_0_50px_rgba(244,63,94,0.3)] animate-in zoom-in duration-500">
+                                        <AlertCircle className="w-20 h-20 text-rose-500 mx-auto mb-4 animate-bounce" />
+                                        <h2 className="text-4xl font-black text-white tracking-tighter mb-2">SÜRE DOLDU!</h2>
+                                        <p className="text-rose-200 font-medium mb-6">Şifreyi çözmek için ayrılan süre sona erdi.</p>
+                                        <Button 
+                                            onClick={handleReveal}
+                                            className="h-14 px-8 bg-rose-600 hover:bg-rose-500 text-white font-black text-lg uppercase tracking-widest rounded-full shadow-[0_5px_20px_rgba(244,63,94,0.4)]"
+                                        >
+                                            <Eye className="w-5 h-5 mr-2" /> CEVABI GÖSTER
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className={cn("flex flex-wrap justify-center transition-all duration-700", isTimeUp && !isRevealed ? "opacity-30 blur-sm scale-95" : "")} style={{ gap: `${1.5 * zoomLevel}rem` }}>
                                 {words.map((word, wordIdx) => (
                                     <div key={wordIdx} className="flex" style={{ gap: `${0.4 * zoomLevel}rem` }}>
                                         {word.split('').map((char, charIdx) => {
@@ -284,29 +371,26 @@ export function CryptoGame() {
 
                 <CardFooter className="bg-white p-3 md:p-4 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-200 flex-shrink-0 z-20 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
                     <div className="flex w-full md:w-auto items-center gap-2">
-                        <Select value={currentPhraseIdx.toString()} onValueChange={(v) => initGame(parseInt(v))}>
-                            <SelectTrigger className="w-auto px-4 h-12 rounded-xl bg-slate-50 hover:bg-slate-100 border-slate-200 font-bold text-slate-700 transition-colors flex gap-2">
-                                <List className="w-5 h-5 text-slate-500" />
-                                <span className="hidden md:inline">Söz Seç</span>
-                            </SelectTrigger>
-                            <SelectContent className="max-h-[300px]">
-                                {PHRASES.map((p, i) => (
-                                    <SelectItem key={i} value={i.toString()} className="font-semibold text-slate-700 cursor-pointer">
-                                        <div className="flex items-center justify-between w-full pr-2">
-                                            <span className="truncate max-w-[200px]">{p.text}</span>
-                                            {solvedIndices.includes(i) && <span className="text-emerald-500 font-black ml-2">✓</span>}
-                                        </div>
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
                         <Button 
-                            onClick={() => initGame()}
+                            onClick={() => initGame((currentPhraseIdx - 1 + PHRASES.length) % PHRASES.length)}
                             variant="outline"
-                            className="h-12 w-12 md:w-auto md:px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold rounded-xl border-indigo-200 transition-colors flex-shrink-0"
-                            title="Rastgele"
+                            className="h-12 px-3 md:px-4 bg-slate-50 hover:bg-slate-100 border-slate-200 font-bold text-slate-700 transition-colors"
                         >
-                            <RotateCcw className="w-5 h-5 md:mr-2" /> <span className="hidden md:inline">Rastgele</span>
+                            <ChevronLeft className="w-5 h-5" />
+                            <span className="hidden md:inline ml-1">Önceki</span>
+                        </Button>
+                        
+                        <div className="h-12 px-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center font-black text-slate-700 whitespace-nowrap">
+                            {currentPhraseIdx + 1} / {PHRASES.length}
+                        </div>
+
+                        <Button 
+                            onClick={() => initGame((currentPhraseIdx + 1) % PHRASES.length)}
+                            variant="outline"
+                            className="h-12 px-3 md:px-4 bg-slate-50 hover:bg-slate-100 border-slate-200 font-bold text-slate-700 transition-colors"
+                        >
+                            <span className="hidden md:inline mr-1">Sonraki</span>
+                            <ChevronRight className="w-5 h-5" />
                         </Button>
                     </div>
                     
@@ -334,11 +418,12 @@ export function CryptoGame() {
     );
 }
 
-function playSound(type: 'win') {
+function playSound(type: 'win' | 'fail') {
     if (typeof window === 'undefined') return;
     try {
         const audio = new Audio();
         if (type === 'win') { audio.src = "https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"; audio.volume = 0.5; }
+        if (type === 'fail') { audio.src = "https://assets.mixkit.co/active_storage/sfx/139/139-preview.mp3"; audio.volume = 0.5; }
         audio.play().catch(() => {});
     } catch (e) {
         console.warn("Ses çalınamadı:", e);

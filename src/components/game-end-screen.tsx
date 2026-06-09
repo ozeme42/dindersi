@@ -44,10 +44,12 @@ export function GameEndScreen({
     }, [score, isPassed]);
 
     const handleBackNavigation = () => {
-      if (!isStudent) {
-        router.push('/');
+      if (backUrl) {
+          router.push(backUrl);
+      } else if (!isStudent) {
+          router.push('/');
       } else {
-        router.back();
+          router.push('/student');
       }
     };
 
