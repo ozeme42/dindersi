@@ -96,48 +96,6 @@ function HardestWorkersToday() {
     );
 }
 
-// ===================== ALT MENÜ =====================
-function BottomNav({ examBadge }: { examBadge: number }) {
-    const pathname = usePathname();
-    const tabs = [
-        { href: '/student', icon: Home, label: 'Ana Sayfa' },
-        { href: '/student/soru-bankasi', icon: Map, label: 'Harita' },
-        { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
-        { href: '/student/shop', icon: ShoppingCart, label: 'Mağaza' },
-        { href: '/student/profile', icon: User, label: 'Profil' },
-    ];
-    return (
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50">
-            {/* blur bg */}
-            <div className="absolute inset-0 bg-[#0a081e]/90 backdrop-blur-2xl border-t border-white/8" />
-            <div className="relative flex items-end justify-around px-2 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 12px)' }}>
-                {tabs.map(tab => {
-                    const isActive = pathname === tab.href;
-                    const Icon = tab.icon;
-                    return (
-                        <Link key={tab.href} href={tab.href} className="flex flex-col items-center justify-center gap-1 px-3 py-1 relative min-w-[60px] group">
-                            {isActive && (
-                                <span className="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-indigo-400 rounded-full shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
-                            )}
-                            <div className={cn(
-                                "w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-300",
-                                isActive
-                                    ? "bg-indigo-600/30 border border-indigo-500/50 text-indigo-300 shadow-[0_0_20px_rgba(99,102,241,0.3)] scale-110"
-                                    : "text-slate-600 group-hover:text-slate-400"
-                            )}>
-                                <Icon className="h-5 w-5" />
-                                {tab.href === '/student/deneme' && examBadge > 0 && (
-                                    <span className="absolute top-0 right-0 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border border-slate-950">{examBadge}</span>
-                                )}
-                            </div>
-                            <span className={cn("text-[10px] font-bold transition-colors leading-none", isActive ? "text-indigo-400" : "text-slate-600")}>{tab.label}</span>
-                        </Link>
-                    );
-                })}
-            </div>
-        </nav>
-    );
-}
 
 function DesktopSidebar({ examBadge, handleLogout }: { examBadge: number, handleLogout: () => void }) {
     const pathname = usePathname();
@@ -591,8 +549,6 @@ function PageContent() {
         {/* MASAÜSTÜ YAN MENÜ */}
         <DesktopSidebar examBadge={examStats.pending} handleLogout={handleLogout} />
 
-        {/* MOBİL ALT MENÜ */}
-        <BottomNav examBadge={examStats.pending} />
 
         <style jsx global>{`
             body { background-color: #09071a; }

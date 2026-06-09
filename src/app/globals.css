@@ -103,10 +103,20 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
   }
+  
+  input, textarea, [contenteditable="true"] {
+    user-select: auto;
+    -webkit-user-select: auto;
+  }
+
   body {
     @apply text-foreground;
     background-color: hsl(var(--background));
+    overscroll-behavior-y: none;
   }
 }
 

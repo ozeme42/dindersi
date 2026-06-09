@@ -103,10 +103,13 @@ export function BottomNavBar() {
     return (
         <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
             {/* Arka plan Blur Efekti ve Sınır Çizgisi */}
-            <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl border-t border-white/10 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]" />
+            <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl border-t border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.6)]" />
             
-            {/* Menü İçeriği */}
-            <div className="relative flex items-stretch justify-around h-[70px] pb-2 px-2">
+            {/* Menü İçeriği - Safe area eklenerek */}
+            <div 
+                className="relative flex items-stretch justify-around px-2 pt-2"
+                style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 16px)' }}
+            >
                 {links.map(link => (
                     <NavLink key={link.href} {...link} />
                 ))}
