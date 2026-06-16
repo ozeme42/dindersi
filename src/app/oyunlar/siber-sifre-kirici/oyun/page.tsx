@@ -204,13 +204,13 @@ function SiberSifreKiriciContent() {
                     return next;
                 });
                 
-                setScore(s => s + 50); // Points per letter
+                setScore(s => s + 5); // Points per letter
                 setHackedText(prev => [...prev, `> DECRYPTED SECTOR ${randomIdx} [OK]`].slice(-15));
                 
                 // Check win condition
                 if (unrevealed.length === 1) { // 1 before adding
                     const timeBonus = timeLeft * 5;
-                    setScore(s => s + 50 + timeBonus); // Points per letter + time bonus
+                    setScore(s => s + 5 + timeBonus); // Points per letter + time bonus
                     setHackedText(prev => [...prev, `> TIME BONUS: +${timeBonus}`].slice(-15));
                     setTimeout(() => endGame(true), 500);
                     return;

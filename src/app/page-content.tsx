@@ -20,6 +20,7 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 // --- UI COMPONENTS ---
 import { TeacherMainButtons } from '@/components/teacher-main-buttons';
+import { DailyInspiration } from '@/components/daily-inspiration';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import {
@@ -41,23 +42,6 @@ type PublicUnit = { id: string; title: string; topics: PublicTopic[]; hasUnitOze
 type PublicTopicWithOzet = PublicTopic & { hasOzetContent: boolean };
 type PublicCourse = { id: string; title: string; units: PublicUnit[] };
 export type PublicClass = { name: string; courses: PublicCourse[] };
-
-// --- GÜNLÜK İÇERİKLER (Ayet ve Hadis Havuzu) ---
-const VERSES = [
-    { text: "Şüphesiz Allah, adaleti, iyilik yapmayı, yakınlara yardım etmeyi emreder; hayasızlığı, fenalık ve azgınlığı da yasaklar.", source: "Nahl Suresi, 90" },
-    { text: "İyilikle kötülük bir olmaz. Sen (kötülüğü) en güzel bir şekilde önle. O zaman seninle arasında düşmanlık bulunan kimse, sanki candan bir dost olur.", source: "Fussilet Suresi, 34" },
-    { text: "Kim zerre miktarı hayır yapmışsa onu (karşılığını) görür. Kim de zerre miktarı şer işlemişse onu görür.", source: "Zilzâl Suresi, 7-8" },
-    { text: "İman edip iyi işler yapanlara gelince, elbette biz işini iyi yapanın mükafatını zayi etmeyiz.", source: "Kehf Suresi, 30" },
-    { text: "Gevşemeyin, hüzünlenmeyin. Eğer (gerçekten) iman etmiş kimselerseniz üstün olan sizlersiniz.", source: "Âl-i İmrân Suresi, 139" }
-];
-
-const HADITHS = [
-    { text: "Sizin en hayırlınız, Kur'an'ı öğrenen ve öğreteninizdir.", source: "Buhârî, Fezâilü'l-Kur'ân, 21" },
-    { text: "Kolaylaştırınız, zorlaştırmayınız. Müjdeleyiniz, nefret ettirmeyiniz.", source: "Buhârî, İlim, 11" },
-    { text: "İki nimet vardır ki insanların çoğu onun kıymetini bilmezler: Vücut sağlığı ve boş vakit.", source: "Buhârî, Rikak, 1" },
-    { text: "İnsanların en hayırlısı, insanlara en faydalı olanıdır.", source: "Heysemî, Mecma'u'z-Zevâid, 8/191" },
-    { text: "Müslüman, elinden ve dilinden diğer Müslümanlerin güvende olduğu kimsedir.", source: "Buhârî, Îmân, 4" }
-];
 
 // --- YARDIMCI FONKSİYONLAR ---
 const getCourseDisplayInfo = (name: string) => {
@@ -325,16 +309,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
     const [activeTab, setActiveTab] = useState<string>(classGroups && classGroups.length > 0 ? classGroups[0].name : "");
     const [activeCourseId, setActiveCourseId] = useState<string>("");
 
-    // Günün indeksini belirleme (Her gün 1 artar, ay/yıl fark etmeksizin tutarlı değişir)
-    const dailyIndex = useMemo(() => {
-        const today = new Date();
-        const diff = today.getTime() - new Date(today.getFullYear(), 0, 0).getTime();
-        return Math.floor(diff / (1000 * 60 * 60 * 24));
-    }, []);
-
-    const dailyVerse = VERSES[dailyIndex % VERSES.length];
-    const dailyHadith = HADITHS[dailyIndex % HADITHS.length];
-
     const activeClassData = useMemo(() => {
         return (classGroups || []).find(g => g.name === activeTab);
     }, [classGroups, activeTab]);
@@ -590,51 +564,9 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                     </>
                 )}
 
-                {/* --- GÜNÜN AYETİ VE HADİSİ --- */}
-                <div className="mt-12 pt-8 border-t border-slate-200/60 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700 px-2 sm:px-0 max-w-[110rem] mx-auto w-full relative z-10">
-                    <div className="relative overflow-hidden bg-white/80 backdrop-blur-xl border border-emerald-100 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow group">
-                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10">
-                            <Quote className="w-24 h-24 text-emerald-600 rotate-180" />
-                        </div>
-                        <div className="relative z-10 flex flex-col h-full">
-                            <div className="flex items-center gap-2 mb-3">
-                                <div className="p-1.5 bg-emerald-100 rounded-lg">
-                                    <BookOpen className="w-4 h-4 text-emerald-600" />
-                                </div>
-                                <h2 className="text-sm font-bold text-emerald-700 uppercase tracking-widest">Günün Ayeti</h2>
-                            </div>
-                            <blockquote className="flex-1 text-slate-700 font-medium leading-relaxed italic mb-4 selection:bg-emerald-100">
-                                "{dailyVerse.text}"
-                            </blockquote>
-                            <div className="text-right">
-                                <span className="inline-block px-3 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs font-semibold text-slate-500">
-                                    {dailyVerse.source}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="relative overflow-hidden bg-white/80 backdrop-blur-xl border border-indigo-100 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow group">
-                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10">
-                            <Quote className="w-24 h-24 text-indigo-600 rotate-180" />
-                        </div>
-                        <div className="relative z-10 flex flex-col h-full">
-                            <div className="flex items-center gap-2 mb-3">
-                                <div className="p-1.5 bg-indigo-100 rounded-lg">
-                                    <Sparkles className="w-4 h-4 text-indigo-600" />
-                                </div>
-                                <h2 className="text-sm font-bold text-indigo-700 uppercase tracking-widest">Günün Hadisi</h2>
-                            </div>
-                            <blockquote className="flex-1 text-slate-700 font-medium leading-relaxed italic mb-4 selection:bg-indigo-100">
-                                "{dailyHadith.text}"
-                            </blockquote>
-                            <div className="text-right">
-                                <span className="inline-block px-3 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs font-semibold text-slate-500">
-                                    {dailyHadith.source}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                {/* --- GÜNÜN İLHAMI --- */}
+                <div className="mt-12 pt-8 border-t border-slate-200/60 max-w-[110rem] mx-auto w-full relative z-10 px-2 sm:px-0">
+                    <DailyInspiration />
                 </div>
 
              </main>

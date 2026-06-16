@@ -88,12 +88,12 @@ export function CryptoGame() {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
-    const initGame = useCallback((phraseIdx?: number, timeOverride?: number) => {
-        const idx = phraseIdx !== undefined ? phraseIdx : Math.floor(Math.random() * PHRASES.length);
+    const initGame = useCallback((idx: number, timeOverride?: number, specificCipherType?: CipherType) => {
+        const typeToUse = specificCipherType || cipherType;
         setCurrentPhraseIdx(idx);
         setCurrentPhrase(PHRASES[idx]);
 
-        const symbolsToUse = [...CIPHER_SETS[cipherType]].sort(() => Math.random() - 0.5);
+        const symbolsToUse = [...CIPHER_SETS[typeToUse]].sort(() => Math.random() - 0.5);
         const newCipherMap: CipherMap = {};
         
         TURKISH_ALPHABET.forEach((letter, index) => {
@@ -115,8 +115,10 @@ export function CryptoGame() {
     }, [cipherType, selectedTime]);
 
     useEffect(() => {
-        initGame();
-    }, [initGame]);
+        // Sadece ilk yüklendiğinde 1. söz ile başla
+        initGame(0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (timeLeft === null || timeLeft <= 0 || isRevealed || isTimeUp) return;
@@ -198,7 +200,10 @@ export function CryptoGame() {
                                 return (
                                     <button
                                         key={type.id}
-                                        onClick={() => { setCipherType(type.id as CipherType); }}
+                                        onClick={() => { 
+                                            setCipherType(type.id as CipherType); 
+                                            initGame(currentPhraseIdx, selectedTime, type.id as CipherType);
+                                        }}
                                         className={cn(
                                             "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
                                             isActive ? "bg-indigo-500 text-white shadow-sm" : "text-indigo-300 hover:text-white hover:bg-indigo-800/50"
@@ -218,15 +223,18 @@ export function CryptoGame() {
                                 <button onClick={handleZoomIn} className="p-2 text-indigo-300 hover:text-white hover:bg-indigo-500/30 transition-colors" title="Harfleri Büyüt"><ZoomIn className="w-4 h-4" /></button>
                             </div>
 
-                            <Select value={selectedTime.toString()} onValueChange={(v) => {
-                                const val = parseInt(v);
-                                setSelectedTime(val);
-                                initGame(currentPhraseIdx, val);
-                            }}>
-                                <SelectTrigger className="w-[110px] bg-indigo-950/50 border-indigo-800/50 text-indigo-100 h-[36px] rounded-xl font-bold focus:ring-0">
-                                    <SelectValue placeholder="Süre" />
+                            <Select 
+                                value={selectedTime.toString()} 
+                                onValueChange={(val) => {
+                                    const parsedVal = parseInt(val);
+                                    setSelectedTime(parsedVal);
+                                    initGame(currentPhraseIdx, parsedVal);
+                                }}
+                            >
+                                <SelectTrigger className="w-[120px] bg-indigo-950/50 border border-indigo-800/50 text-indigo-100 h-[36px] rounded-xl font-bold focus:ring-0 hover:bg-indigo-900 transition-colors">
+                                    <SelectValue placeholder="Süre Seç" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-indigo-950 border border-indigo-800 text-indigo-100 font-bold z-[100000]">
                                     <SelectItem value="0">Süresiz</SelectItem>
                                     <SelectItem value="60">1 Dakika</SelectItem>
                                     <SelectItem value="120">2 Dakika</SelectItem>

@@ -296,7 +296,7 @@ export function CarkifelekGameClient() {
         playSound('coin-flip'); 
 
         const winningIndex = Math.floor(Math.random() * TOTAL_SLICES);
-        const winningSlice = activeSlices[winningIndex];
+        const winningSlice = SLICES[winningIndex];
         
         const sliceCenterAngle = (winningIndex * SLICE_DEGREE) + (SLICE_DEGREE / 2);
         const currentFullRotations = Math.floor(rotation / 360);
