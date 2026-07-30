@@ -35,15 +35,12 @@ const serialize = (data: any): any => {
 
 export async function getFlowData(): Promise<EnrichedClass[]> {
     try {
-        const [classesSnap, coursesSnap, unitsSnap, topicsSnap, questionsSnap] = await Promise.all([
+        const [classesSnap, coursesSnap, unitsSnap, topicsSnap] = await Promise.all([
             getDocs(query(collection(db, 'classes'))),
             getDocs(query(collection(db, 'courses'))),
             getDocs(collectionGroup(db, 'units')),
             getDocs(collectionGroup(db, 'topics')),
-            getDocs(collection(db, 'questions')),
         ]);
-
-        const allQuestions = questionsSnap.docs.map(doc => doc.data() as Question);
         
         const topicsByUnit = new Map<string, EnrichedTopic[]>();
         topicsSnap.forEach(doc => {
@@ -73,8 +70,7 @@ export async function getFlowData(): Promise<EnrichedClass[]> {
                 unitsByCourse.get(courseId)!.push({
                     ...unit,
                     hasFlowContent: hasUnitFlow,
-                    topics: topicsForUnit,
-                    questionCount: allQuestions.filter(q => q.unitId === unit.id).length
+                    topics: topicsForUnit
                 });
             }
         });
