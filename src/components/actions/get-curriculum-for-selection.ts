@@ -1,8 +1,6 @@
-
 'use server';
 
-import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { getAdminDb } from "@/lib/firebase-admin";
 import type { Topic, SchoolClass, Course, Unit, UserProfile, ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import fs from 'fs/promises';
@@ -43,10 +41,11 @@ export async function getCurriculumForSelection(
             }
         }
 
+        const db = getAdminDb();
         // --- DİNAMİK VERİ TABANI MANTIĞI ---
         const [classesSnap, coursesSnap] = await Promise.all([
-            getDocs(query(collection(db, "classes"))), 
-            getDocs(collection(db, "courses"))
+            db.collection("classes").get(), 
+            db.collection("courses").get()
         ]);
         
         const allCourses = coursesSnap.docs.map(d => ({ id: d.id, ...d.data() } as Course));
@@ -56,8 +55,8 @@ export async function getCurriculumForSelection(
         let relevantCourses: Course[];
 
         if (userId) {
-            const userDoc = await getDoc(doc(db, "users", userId));
-            if (!userDoc.exists()) return { classGroups: [], error: "Öğrenci bulunamadı." };
+            const userDoc = await db.collection("users").doc(userId).get();
+            if (!userDoc.exists) return { classGroups: [], error: "Öğrenci bulunamadı." };
             const student = userDoc.data() as UserProfile;
             const studentClassName = student.class?.split(' - ')[0];
             const studentClass = allClasses.find(c => c.name === studentClassName);
@@ -68,21 +67,23 @@ export async function getCurriculumForSelection(
 
         const enrichedCourses: EnrichedCourse[] = [];
         for (const course of relevantCourses) {
-            const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`)));
+            const unitsSnapshot = await db.collection(`courses/${course.id}/units`).get();
             const unitsData = unitsSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Unit));
             unitsData.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
 
             const enrichedUnits: EnrichedCourse['units'] = [];
 
             for (const unitDoc of unitsData) {
-                const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`)));
+                const topicsSnapshot = await db.collection(`courses/${course.id}/units/${unitDoc.id}/topics`).get();
                 const topicsData = topicsSnapshot.docs.map(d => ({id: d.id, ...d.data()} as Topic));
                 topicsData.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
                 
                 const topicsWithFlags = await Promise.all(topicsData.map(async (topicData) => {
                     let hasYazilacaklarContent = false;
-                    const definitionsQuery = query(collection(db, "activityItems"), where("topicId", "==", topicData.id), where("type", "==", "definition"));
-                    const definitionsSnapshot = await getDocs(definitionsQuery);
+                    const definitionsSnapshot = await db.collection("activityItems")
+                        .where("topicId", "==", topicData.id)
+                        .where("type", "==", "definition")
+                        .get();
                     hasYazilacaklarContent = !definitionsSnapshot.empty || (topicData.writingContent?.notes?.length || 0) > 0;
                     
                     return {

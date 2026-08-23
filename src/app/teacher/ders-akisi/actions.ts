@@ -2,8 +2,8 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, query, where, orderBy, Timestamp, collectionGroup } from "firebase/firestore";
+import { getAdminDb } from "@/lib/firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
 import type { Topic, Unit, Course, SchoolClass, Question, LessonStep } from "@/lib/types";
 
 // Tip tanımlarını Enriched versiyonları için genişletelim
@@ -35,11 +35,12 @@ const serialize = (data: any): any => {
 
 export async function getFlowData(): Promise<EnrichedClass[]> {
     try {
+        const db = getAdminDb();
         const [classesSnap, coursesSnap, unitsSnap, topicsSnap] = await Promise.all([
-            getDocs(query(collection(db, 'classes'))),
-            getDocs(query(collection(db, 'courses'))),
-            getDocs(collectionGroup(db, 'units')),
-            getDocs(collectionGroup(db, 'topics')),
+            db.collection('classes').get(),
+            db.collection('courses').get(),
+            db.collectionGroup('units').get(),
+            db.collectionGroup('topics').get(),
         ]);
         
         const topicsByUnit = new Map<string, EnrichedTopic[]>();
