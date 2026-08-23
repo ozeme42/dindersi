@@ -1,14 +1,5 @@
 import type {Config} from 'tailwindcss';
 
-const colorNames = ['slate', 'gray', 'zinc', 'neutral', 'stone', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose'];
-const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
-
-// Creates a regex pattern like: /^(bg|text|border)-(slate|gray|...)-(50|100|...)$/
-const colorPattern = new RegExp(
-  `^(bg|text|border|ring|fill|stroke)-(${colorNames.join('|')})-(${shades.join('|')})$`
-);
-
-
 export default {
   darkMode: ['class'],
   content: [
@@ -16,9 +7,6 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   safelist: [
-    {
-      pattern: colorPattern,
-    },
     {
         pattern: /bg-chart-(1|2|3|4|5)/,
     }
