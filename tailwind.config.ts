@@ -21,8 +21,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['"Inter"', 'sans-serif'],
-        headline: ['"Poppins"', 'serif'],
+        body: ['var(--font-inter)', 'sans-serif'],
+        headline: ['var(--font-poppins)', 'serif'],
         code: ['monospace'],
       },
       colors: {
