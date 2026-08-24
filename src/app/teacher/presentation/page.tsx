@@ -14,6 +14,7 @@ import type { Topic, Unit, LessonStep } from '@/lib/types';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { PresentationDrawingBoard } from '@/components/presentation-drawing-board';
+import { PresentationWheelModal } from '@/components/presentation-wheel-modal';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -111,14 +112,8 @@ function PresentationPageContent() {
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-    // 2. Rastgele Öğrenci / Numara Seçici (Lucky Picker)
+    // 2. Rastgele Öğrenci / Şanslı Çark (Presentation Wheel Modal)
     const [isPickerOpen, setIsPickerOpen] = useState(false);
-    const [pickerMode, setPickerMode] = useState<'number' | 'list'>('number');
-    const [minNum, setMinNum] = useState(1);
-    const [maxNum, setMaxNum] = useState(35);
-    const [customNamesText, setCustomNamesText] = useState('Ahmet\nAyşe\nMehmet\nFatma\nAli\nZeynep\nMustafa\nElif');
-    const [pickedResult, setPickedResult] = useState<string | number | null>(null);
-    const [isRolling, setIsRolling] = useState(false);
 
     // 3. Slayt Çekmecesi (Slide Grid Drawer)
     const [isSlideDrawerOpen, setIsSlideDrawerOpen] = useState(false);
@@ -169,46 +164,7 @@ function PresentationPageContent() {
         setIsTimerRunning(true);
     };
 
-    // Random Picker Roll Logic
-    const handleRoll = () => {
-        if (isRolling) return;
-        setIsRolling(true);
-        setPickedResult(null);
 
-        let candidates: (string | number)[] = [];
-        if (pickerMode === 'number') {
-            for (let i = minNum; i <= maxNum; i++) candidates.push(i);
-        } else {
-            candidates = customNamesText.split('\n').map(n => n.trim()).filter(Boolean);
-        }
-
-        if (candidates.length === 0) {
-            setIsRolling(false);
-            return;
-        }
-
-        let rollsCount = 0;
-        const maxRolls = 20;
-        const interval = setInterval(() => {
-            const randomCandidate = candidates[Math.floor(Math.random() * candidates.length)];
-            setPickedResult(randomCandidate);
-            if (isSoundEnabled) {
-                try { playSound('hint'); } catch(e) {}
-            }
-            rollsCount++;
-
-            if (rollsCount >= maxRolls) {
-                clearInterval(interval);
-                const finalWinner = candidates[Math.floor(Math.random() * candidates.length)];
-                setPickedResult(finalWinner);
-                setIsRolling(false);
-                if (isSoundEnabled) {
-                    try { playSound('win'); } catch(e) {}
-                }
-                confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
-            }
-        }, 100);
-    };
 
     // Keyboard Shortcuts
     useEffect(() => {
@@ -826,111 +782,11 @@ function PresentationPageContent() {
                 )}
             </AnimatePresence>
 
-            {/* ══ 2. RASTGELE ÖĞRENCİ SEÇİCİ MODALI ══ */}
-            <AnimatePresence>
-                {isPickerOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xl p-4" onClick={() => setIsPickerOpen(false)}>
-                        <motion.div 
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative w-full max-w-lg p-8 rounded-[2.5rem] bg-white/95 border-2 border-sky-300 shadow-2xl flex flex-col items-center text-center text-slate-900 overflow-hidden"
-                            onClick={e => e.stopPropagation()}
-                        >
-                            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500" />
-                            
-                            <button onClick={() => setIsPickerOpen(false)} className="absolute top-5 right-5 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">
-                                <X className="w-5 h-5" />
-                            </button>
-
-                            <div className="flex items-center gap-2 text-sky-600 font-black uppercase tracking-widest text-xs mb-3">
-                                <Shuffle className="w-4 h-4" /> Rastgele Söz Hakkı & Öğrenci Seçici
-                            </div>
-
-                            {/* Mod Seçimi */}
-                            <div className="flex items-center gap-2 p-1 rounded-xl bg-slate-100 border border-slate-200 mb-5">
-                                <button 
-                                    onClick={() => setPickerMode('number')} 
-                                    className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", pickerMode === 'number' ? "bg-sky-500 text-white font-black shadow-md" : "text-slate-600 hover:text-slate-900")}
-                                >
-                                    Okul Numarası (1-N)
-                                </button>
-                                <button 
-                                    onClick={() => setPickerMode('list')} 
-                                    className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", pickerMode === 'list' ? "bg-sky-500 text-white font-black shadow-md" : "text-slate-600 hover:text-slate-900")}
-                                >
-                                    İsim Listesi
-                                </button>
-                            </div>
-
-                            {/* Seçim Ekranı / Çark Alanı */}
-                            <div className="relative w-full h-44 rounded-3xl bg-gradient-to-br from-sky-50 to-blue-50/70 border-2 border-sky-300 flex flex-col items-center justify-center overflow-hidden shadow-inner my-2">
-                                {pickedResult !== null ? (
-                                    <motion.div 
-                                        key={String(pickedResult)}
-                                        initial={{ scale: 0.5, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        className="flex flex-col items-center gap-2"
-                                    >
-                                        <div className="flex items-center gap-2 text-amber-600 font-black text-xs uppercase tracking-widest">
-                                            <Trophy className="w-4 h-4" /> Seçilen Kişi:
-                                        </div>
-                                        <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 drop-shadow-sm">
-                                            {pickerMode === 'number' ? `No: ${pickedResult}` : pickedResult}
-                                        </div>
-                                    </motion.div>
-                                ) : (
-                                    <div className="flex flex-col items-center gap-2 text-slate-400">
-                                        <Users className="w-10 h-10 stroke-[1.5] text-sky-400" />
-                                        <span className="text-sm font-semibold text-slate-500">Çevirmek için butona basın</span>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Ayarlar Alanı */}
-                            {pickerMode === 'number' ? (
-                                <div className="flex items-center justify-center gap-3 my-4 text-xs font-bold text-slate-700">
-                                    <span>Numara Aralığı:</span>
-                                    <input 
-                                        type="number" 
-                                        value={minNum} 
-                                        onChange={e => setMinNum(Number(e.target.value))}
-                                        className="w-16 h-8 text-center rounded-lg bg-slate-100 border border-slate-300 text-slate-900 font-bold"
-                                    />
-                                    <span>ile</span>
-                                    <input 
-                                        type="number" 
-                                        value={maxNum} 
-                                        onChange={e => setMaxNum(Number(e.target.value))}
-                                        className="w-16 h-8 text-center rounded-lg bg-slate-100 border border-slate-300 text-slate-900 font-bold"
-                                    />
-                                    <span>arası</span>
-                                </div>
-                            ) : (
-                                <div className="w-full my-3">
-                                    <textarea 
-                                        rows={3} 
-                                        value={customNamesText} 
-                                        onChange={e => setCustomNamesText(e.target.value)}
-                                        placeholder="Her satıra bir isim yazın..."
-                                        className="w-full p-3 rounded-xl bg-slate-100 border border-slate-300 text-xs font-medium text-slate-900 focus:outline-none focus:border-sky-500"
-                                    />
-                                </div>
-                            )}
-
-                            {/* Çevir / Seç Butonu */}
-                            <Button
-                                onClick={handleRoll}
-                                disabled={isRolling}
-                                className="w-full h-14 mt-2 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-lg shadow-xl shadow-sky-500/25 active:scale-95 transition-all flex items-center justify-center gap-2"
-                            >
-                                <Sparkles className={cn("w-5 h-5", isRolling && "animate-spin")} />
-                                {isRolling ? 'Seçiliyor...' : 'Rastgele Seç'}
-                            </Button>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
+            {/* ══ 2. ŞANSLI KURA ÇARKI (KAYITLI ÖĞRENCİLER & ÖZEL LİSTE) ══ */}
+            <PresentationWheelModal 
+                isOpen={isPickerOpen} 
+                onClose={() => setIsPickerOpen(false)} 
+            />
 
             {/* ══ 3. SLAYT ÇEKMECESİ (SLIDE GRID OVERVIEW) ══ */}
             <AnimatePresence>
