@@ -1399,26 +1399,54 @@ export const FlashcardItem = ({
         return "text-3xl sm:text-4xl md:text-5xl";
     };
 
+    const getDefFontSize = (defText: string) => {
+        const len = (defText || '').length;
+
+        if (cardScale === 'xl') {
+            if (len > 300) return "text-base sm:text-lg md:text-xl";
+            if (len > 180) return "text-lg sm:text-xl md:text-2xl";
+            if (len > 100) return "text-xl sm:text-2xl md:text-3xl";
+            if (len > 50) return "text-2xl sm:text-3xl md:text-4xl";
+            return "text-3xl sm:text-4xl md:text-5xl";
+        }
+        if (cardScale === 'lg') {
+            if (len > 300) return "text-sm sm:text-base md:text-lg";
+            if (len > 180) return "text-base sm:text-lg md:text-xl";
+            if (len > 100) return "text-lg sm:text-xl md:text-2xl";
+            if (len > 50) return "text-xl sm:text-2xl md:text-3xl";
+            return "text-2xl sm:text-3xl md:text-4xl";
+        }
+        if (cardScale === 'md') {
+            if (len > 300) return "text-xs sm:text-sm md:text-base";
+            if (len > 180) return "text-sm sm:text-base md:text-lg";
+            if (len > 100) return "text-base sm:text-lg md:text-xl";
+            if (len > 50) return "text-lg sm:text-xl md:text-2xl";
+            return "text-xl sm:text-2xl md:text-3xl";
+        }
+        // sm (varsayılan küçük)
+        if (len > 300) return "text-xs sm:text-sm";
+        if (len > 180) return "text-xs sm:text-sm";
+        if (len > 100) return "text-sm sm:text-base";
+        if (len > 50) return "text-base sm:text-lg";
+        return "text-lg sm:text-xl";
+    };
+
     const scaleStyles = {
         sm: { 
-            minHeight: isTeacher ? "min-h-[16rem]" : "min-h-[13rem]",
-            defText: definition.length > 200 ? "text-base sm:text-lg" : (definition.length > 100 ? "text-lg sm:text-xl md:text-2xl" : "text-xl sm:text-2xl md:text-3xl"),
-            padding: "p-5 sm:p-6"
+            minHeight: isTeacher ? "min-h-[17rem]" : "min-h-[14rem]",
+            padding: "p-4 sm:p-5"
         },
         md: { 
-            minHeight: isTeacher ? "min-h-[20rem]" : "min-h-[16rem]",
-            defText: definition.length > 200 ? "text-lg sm:text-xl" : (definition.length > 100 ? "text-xl sm:text-2xl md:text-3xl" : "text-2xl sm:text-3xl md:text-4xl"),
-            padding: "p-6 sm:p-8"
+            minHeight: isTeacher ? "min-h-[21rem]" : "min-h-[17rem]",
+            padding: "p-5 sm:p-6"
         },
         lg: { 
-            minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[20rem]",
-            defText: definition.length > 200 ? "text-xl sm:text-2xl" : (definition.length > 100 ? "text-2xl sm:text-3xl md:text-4xl" : "text-3xl sm:text-4xl md:text-5xl"),
-            padding: "p-8 sm:p-10"
+            minHeight: isTeacher ? "min-h-[25rem]" : "min-h-[21rem]",
+            padding: "p-6 sm:p-8"
         },
         xl: { 
-            minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[24rem]",
-            defText: definition.length > 200 ? "text-2xl sm:text-3xl" : (definition.length > 100 ? "text-3xl sm:text-4xl md:text-5xl" : "text-4xl sm:text-5xl md:text-6xl"),
-            padding: "p-10 sm:p-12"
+            minHeight: isTeacher ? "min-h-[29rem]" : "min-h-[25rem]",
+            padding: "p-8 sm:p-10"
         },
     }[cardScale];
 
@@ -1448,7 +1476,7 @@ export const FlashcardItem = ({
                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                     
                     {/* Kart Üst Başlığı */}
-                    <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center justify-between w-full flex-shrink-0 mb-1">
                         <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                             #{index + 1}
                         </span>
@@ -1469,7 +1497,7 @@ export const FlashcardItem = ({
                     </div>
 
                     {/* Alt İpucu Butonu: SADECE ÇEVİR */}
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center flex-shrink-0 mt-1">
                         <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
                             <RotateCw className="w-3.5 h-3.5" />
                             <span>Çevir</span>
@@ -1489,7 +1517,7 @@ export const FlashcardItem = ({
                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                     
                     {/* Kart Üst Başlığı */}
-                    <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center justify-between w-full flex-shrink-0 mb-1">
                         <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                             #{index + 1}
                         </span>
@@ -1499,18 +1527,18 @@ export const FlashcardItem = ({
                         </div>
                     </div>
 
-                    {/* Doğrudan Kart Üzerinde Yazılan Tanım (Beyaz Kutu Yok) */}
-                    <div className="my-auto py-3 px-2 sm:px-4 text-center w-full flex items-center justify-center">
+                    {/* Doğrudan Kart Üzerinde Yazılan Tanım (Tam metin, dinamik punto, kaydırma destekli) */}
+                    <div className="my-auto py-2 px-2 sm:px-3 text-center w-full flex-1 flex items-center justify-center overflow-y-auto max-h-[68%] scrollbar-thin scrollbar-thumb-white/40 scrollbar-track-transparent">
                         <p className={cn(
-                            "font-bold leading-relaxed tracking-wide text-white drop-shadow-md break-normal whitespace-normal [overflow-wrap:break-word] hyphens-none max-w-full px-1 text-center",
-                            scaleStyles.defText
+                            "font-bold leading-relaxed tracking-wide text-white drop-shadow-md break-normal whitespace-normal [overflow-wrap:break-word] hyphens-none max-w-full px-1 text-center my-auto",
+                            getDefFontSize(definition)
                         )}>
                             {definition}
                         </p>
                     </div>
 
                     {/* Alt İpucu Butonu: SADECE ÇEVİR */}
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center flex-shrink-0 mt-1">
                         <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
                             <RotateCw className="w-3.5 h-3.5" />
                             <span>Çevir</span>
