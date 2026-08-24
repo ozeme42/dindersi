@@ -317,54 +317,49 @@ function PresentationPageContent() {
     return (
         <main 
             ref={mainContentRef} 
-            className={cn(
-                "h-screen w-screen overflow-hidden flex flex-col font-sans relative transition-colors duration-500 select-none",
-                isDarkMode ? "dark bg-[#020617] text-white" : "bg-slate-50 text-slate-900"
-            )}
+            className="h-screen w-screen overflow-hidden flex flex-col font-sans relative select-none dark bg-[#080719] text-white"
         >
-            {/* Ambient Animated Background (Dark Mode Only) */}
-            {isDarkMode && (
-                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                    <motion.div 
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0.45, 0.25], rotate: [0, 90, 0] }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-900/25 blur-[130px]" 
-                    />
-                    <motion.div 
-                        animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.4, 0.2], x: [0, 80, 0] }}
-                        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-900/25 blur-[120px]" 
-                    />
-                    <motion.div 
-                        animate={{ scale: [1, 1.3, 1], opacity: [0.15, 0.35, 0.15], y: [0, -50, 0] }}
-                        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-sky-900/25 blur-[160px]" 
-                    />
-                </div>
-            )}
+            {/* Canlı ve Modern Renkli Arka Plan Işıkları */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                <motion.div 
+                    animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.55, 0.35], rotate: [0, 90, 0] }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-600/20 blur-[140px]" 
+                />
+                <motion.div 
+                    animate={{ scale: [1, 1.35, 1], opacity: [0.3, 0.5, 0.3], x: [0, 80, 0] }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-600/20 blur-[130px]" 
+                />
+                <motion.div 
+                    animate={{ scale: [1, 1.3, 1], opacity: [0.25, 0.45, 0.25], y: [0, -50, 0] }}
+                    transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-cyan-600/18 blur-[160px]" 
+                />
+            </div>
             
-            <div className={cn("absolute inset-0 bg-[url('/grid-pattern.svg')] pointer-events-none", isDarkMode ? "opacity-[0.04]" : "opacity-[0.08]")} />
+            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.05] pointer-events-none" />
 
             {/* ══ ÜST HEADER: Breadcrumb, Saat ve Hızlı Araçlar ══ */}
-            <header className="relative z-30 flex-shrink-0 flex items-center justify-between px-6 py-2.5 bg-white/60 dark:bg-slate-950/60 backdrop-blur-2xl border-b border-slate-200/80 dark:border-white/10 shadow-sm">
+            <header className="relative z-30 flex-shrink-0 flex items-center justify-between px-6 py-2.5 bg-[#09071a]/85 backdrop-blur-2xl border-b border-white/10 shadow-sm text-white">
                 {/* SOL: Breadcrumb */}
                 <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400">
+                    <div className="p-2 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-300">
                         <Presentation className="h-4 w-4" />
                     </div>
                     <div className="flex items-center gap-2 text-xs md:text-sm font-bold">
-                        <span className="text-slate-500 dark:text-slate-400 font-semibold">{courseName || 'Ders'}</span>
-                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                        <span className="text-slate-600 dark:text-slate-300 truncate max-w-[160px] md:max-w-[240px]">{unitName || 'Ünite'}</span>
-                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                        <span className="text-indigo-600 dark:text-indigo-400 font-extrabold truncate max-w-[200px] md:max-w-[320px]">{content.title}</span>
+                        <span className="text-slate-400 font-semibold">{courseName || 'Ders'}</span>
+                        <ChevronRight className="h-3.5 w-3.5 text-slate-500" />
+                        <span className="text-slate-300 truncate max-w-[160px] md:max-w-[240px]">{unitName || 'Ünite'}</span>
+                        <ChevronRight className="h-3.5 w-3.5 text-slate-500" />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 font-extrabold truncate max-w-[200px] md:max-w-[320px]">{content.title}</span>
                     </div>
                 </div>
 
                 {/* ORTA: Canlı Saat & Slayt İlerleme Rozeti */}
                 <div className="hidden sm:flex items-center gap-3">
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono font-bold text-slate-300">
+                        <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse" />
                         <span>{currentTime}</span>
                     </div>
                     {totalStepsCount > 0 && (
@@ -559,20 +554,9 @@ function PresentationPageContent() {
                                     </div>
                                 </div>
 
-                                {/* 3. Tema & Sunum Ayarları */}
+                                {/* 3. Sunum Ayarları */}
                                 <div className="space-y-3 pt-1 border-t border-slate-200 dark:border-white/10">
                                     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Görünüm & Efektler</span>
-                                    
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-0.5">
-                                            <Label className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
-                                                {isDarkMode ? <Moon className="w-3.5 h-3.5 text-indigo-400" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />} 
-                                                Koyu Tema
-                                            </Label>
-                                            <span className="text-[10px] text-slate-400">Akıllı tahta için önerilir.</span>
-                                        </div>
-                                        <Switch checked={isDarkMode} onCheckedChange={setIsDarkMode} />
-                                    </div>
 
                                     <div className="flex items-center justify-between">
                                         <div className="flex flex-col gap-0.5">

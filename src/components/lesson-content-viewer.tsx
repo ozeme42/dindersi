@@ -1362,17 +1362,17 @@ function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep, isFull
                                     y: '-50%',
                                 }}
                                 className={cn(
-                                    "pointer-events-auto cursor-grab flex items-center justify-center text-center p-4 md:p-5 rounded-[2rem] border-2 backdrop-blur-xl transition-colors select-none",
+                                    "pointer-events-auto cursor-grab flex items-center justify-center text-center p-4 md:p-5 rounded-[2rem] border-2 backdrop-blur-xl transition-all select-none",
                                     isCenter 
-                                        ? "bg-gradient-to-br from-indigo-500 to-purple-600 border-purple-300 text-slate-900 dark:text-white shadow-[0_10px_30px_rgba(168,85,247,0.5)] min-w-[150px] min-h-[70px] z-20 border-b-[8px]" 
-                                        : "bg-white/95 border-slate-200 text-slate-800 shadow-[0_10px_20px_rgba(0,0,0,0.08)] min-w-[120px] min-h-[60px] hover:border-indigo-300 hover:shadow-[0_15px_30px_rgba(99,102,241,0.3)] z-10 border-b-[6px]"
+                                        ? "bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 border-purple-300 text-white shadow-[0_0_35px_rgba(168,85,247,0.6)] min-w-[150px] min-h-[70px] z-20 border-b-[8px]" 
+                                        : "bg-slate-900/85 border-cyan-500/40 text-cyan-100 shadow-[0_10px_25px_rgba(0,0,0,0.5)] min-w-[120px] min-h-[60px] hover:border-cyan-400 hover:shadow-[0_0_25px_rgba(6,182,212,0.35)] z-10 border-b-[6px]"
                                 )}
                             >
                                 <motion.div
                                     animate={{ y: [0, -5, 0] }}
                                     transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, ease: "easeInOut" }}
                                 >
-                                    <span className={cn("font-black tracking-wider break-words", isCenter ? "text-xl drop-shadow-md" : "text-sm md:text-base")}>
+                                    <span className={cn("font-black tracking-wider break-words", isCenter ? "text-xl drop-shadow-md text-white" : "text-sm md:text-base text-cyan-100")}>
                                         {node.label}
                                     </span>
                                 </motion.div>
@@ -1489,24 +1489,23 @@ export function StepContent({
             case 'mcq': {
                 const mcqStep = step as McqStep;
                 const optionColors = [
-                    'border-cyan-500/40 bg-cyan-50 dark:bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-200',
-                    'border-violet-500/40 bg-violet-50 dark:bg-violet-950/40 hover:bg-violet-900/50 text-violet-200',
-                    'border-amber-500/40 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-900/50 text-amber-200',
-                    'border-rose-500/40 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-900/50 text-rose-200'
+                    'border-cyan-500/50 bg-cyan-950/50 hover:bg-cyan-900/60 text-cyan-100',
+                    'border-violet-500/50 bg-violet-950/50 hover:bg-violet-900/60 text-violet-100',
+                    'border-amber-500/50 bg-amber-950/50 hover:bg-amber-900/60 text-amber-100',
+                    'border-rose-500/50 bg-rose-950/50 hover:bg-rose-900/60 text-rose-100'
                 ];
                 const optionGlows = [
-                    '0_0_20px_rgba(6,182,212,0.15)',
-                    '0_0_20px_rgba(139,92,246,0.15)',
-                    '0_0_20px_rgba(245,158,11,0.15)',
-                    '0_0_20px_rgba(244,63,94,0.15)',
+                    '0_0_25px_rgba(6,182,212,0.25)',
+                    '0_0_25px_rgba(139,92,246,0.25)',
+                    '0_0_25px_rgba(245,158,11,0.25)',
+                    '0_0_25px_rgba(244,63,94,0.25)',
                 ];
                 return (
                     <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] p-4", isTeacher ? "max-w-full pt-8" : "max-w-3xl")}>
                         {/* Soru Kutusu */}
-                        <div className={cn("relative rounded-3xl border border-slate-200 dark:border-white/10 bg-[#161233] mb-4 md:mb-6 text-center overflow-hidden shadow-lg", isTeacher ? "p-8" : "p-4 md:p-8")}>
-                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-                            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
-                            <h3 className={cn("font-black text-slate-900 dark:text-white leading-relaxed", isTeacher ? "text-4xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl"))}>{mcqStep.question}</h3>
+                        <div className={cn("relative rounded-3xl border border-white/15 bg-slate-900/85 backdrop-blur-2xl mb-4 md:mb-6 text-center overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.6)]", isTeacher ? "p-8" : "p-4 md:p-8")}>
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+                            <h3 className={cn("font-black text-white leading-relaxed", isTeacher ? "text-4xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl"))}>{mcqStep.question}</h3>
                         </div>
                         {/* Şıklar */}
                         <div className={cn("grid gap-3", isTeacher ? "grid-cols-2 gap-5" : "grid-cols-1")}>
@@ -1526,13 +1525,13 @@ export function StepContent({
                                         <Button
                                             variant="default"
                                             className={cn(
-                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300",
+                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 backdrop-blur-md shadow-lg",
                                                 "font-bold",
                                                 isTeacher ? "text-2xl p-6" : (isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base"),
                                                 !answer ? colorClass : "",
-                                                answer && isCorrect ? "bg-emerald-500/30 border-emerald-400 text-slate-900 dark:text-white shadow-[0_0_25px_rgba(16,185,129,0.4)]" : "",
-                                                answer && isSelected && !isCorrect ? "bg-rose-500/30 border-rose-400 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]" : "",
-                                                answer && !isSelected && !isCorrect ? "bg-white/3 border-white/5 text-slate-600 opacity-30" : ""
+                                                answer && isCorrect ? "bg-emerald-500/35 border-emerald-400 text-white shadow-[0_0_30px_rgba(16,185,129,0.5)]" : "",
+                                                answer && isSelected && !isCorrect ? "bg-rose-500/35 border-rose-400 text-white shadow-[0_0_25px_rgba(244,63,94,0.5)]" : "",
+                                                answer && !isSelected && !isCorrect ? "bg-white/5 border-white/5 text-slate-600 opacity-25" : ""
                                             )}
                                             style={!answer ? { boxShadow: `${glow}` } : {}}
                                             onClick={() => onAnswer(option)}
@@ -1541,7 +1540,7 @@ export function StepContent({
                                             <span className={cn(
                                                 "flex shrink-0 items-center justify-center rounded-lg md:rounded-xl font-black border mr-3 md:mr-4",
                                                 isTeacher ? "h-12 w-12 text-xl" : "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm",
-                                                !answer ? "bg-black/20 border-white/20" : "bg-white/10 border-white/20"
+                                                !answer ? "bg-black/40 border-white/20 text-white" : "bg-white/10 border-white/20 text-white"
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
@@ -1561,11 +1560,11 @@ export function StepContent({
                     <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] p-4 text-center", isTeacher ? "max-w-5xl pt-10" : "max-w-4xl")}>
                         {/* İfade Kutusu */}
                         <div className={cn(
-                            "relative rounded-3xl border border-slate-200 dark:border-white/10 bg-[#161233] mb-6 md:mb-8 overflow-hidden shadow-lg",
+                            "relative rounded-3xl border border-white/15 bg-slate-900/85 backdrop-blur-2xl mb-6 md:mb-8 overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.6)]",
                             isTeacher ? "p-10" : "p-4 md:p-10"
                         )}>
-                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-                            <h3 className={cn("font-black text-slate-900 dark:text-white leading-relaxed", isTeacher ? "text-5xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-2xl"))}>{tfStep.statement}</h3>
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent" />
+                            <h3 className={cn("font-black text-white leading-relaxed", isTeacher ? "text-5xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-2xl"))}>{tfStep.statement}</h3>
                         </div>
                         <div className="flex gap-5 justify-center">
                             {["Doğru", "Yanlış"].map((option) => {
@@ -1581,12 +1580,12 @@ export function StepContent({
                                     >
                                         <Button
                                             className={cn(
-                                                "font-black rounded-3xl transition-all duration-300 border-2 border-b-[4px] md:border-b-[6px] active:border-b-0 active:translate-y-1 shadow-xl",
+                                                "font-black rounded-3xl transition-all duration-300 border-2 border-b-[4px] md:border-b-[6px] active:border-b-0 active:translate-y-1 shadow-xl backdrop-blur-md",
                                                 isTeacher ? "h-36 w-56 text-3xl" : "h-20 w-28 text-lg md:h-32 md:w-48 md:text-2xl",
-                                                !answer && isTrue && "bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/70 shadow-[0_8px_24px_rgba(16,185,129,0.2)]",
-                                                !answer && !isTrue && "bg-rose-50 dark:bg-rose-950/60 border-rose-500/50 text-rose-300 hover:bg-rose-900/70 shadow-[0_8px_24px_rgba(244,63,94,0.2)]",
-                                                answer && isCorrect && "bg-emerald-500 border-emerald-400 text-slate-900 dark:text-white shadow-[0_0_30px_rgba(16,185,129,0.6)]",
-                                                answer && isSelected && !isCorrect && "bg-rose-500 border-rose-400 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(244,63,94,0.5)]",
+                                                !answer && isTrue && "bg-emerald-950/60 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/70 shadow-[0_8px_24px_rgba(16,185,129,0.3)]",
+                                                !answer && !isTrue && "bg-rose-950/60 border-rose-500/50 text-rose-300 hover:bg-rose-900/70 shadow-[0_8px_24px_rgba(244,63,94,0.3)]",
+                                                answer && isCorrect && "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_35px_rgba(16,185,129,0.7)]",
+                                                answer && isSelected && !isCorrect && "bg-rose-500 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)]",
                                                 answer && !isSelected && !isCorrect && "opacity-20 grayscale border-white/5"
                                             )}
                                             onClick={() => onAnswer(option)}
@@ -1607,23 +1606,22 @@ export function StepContent({
             case 'fitb': {
                 const fitbStep = step as FitbStep;
                 const optionColors = [
-                    'border-cyan-500/40 bg-cyan-50 dark:bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-200',
-                    'border-violet-500/40 bg-violet-50 dark:bg-violet-950/40 hover:bg-violet-900/50 text-violet-200',
-                    'border-amber-500/40 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-900/50 text-amber-200',
-                    'border-rose-500/40 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-900/50 text-rose-200'
+                    'border-cyan-500/50 bg-cyan-950/50 hover:bg-cyan-900/60 text-cyan-100',
+                    'border-violet-500/50 bg-violet-950/50 hover:bg-violet-900/60 text-violet-100',
+                    'border-amber-500/50 bg-amber-950/50 hover:bg-amber-900/60 text-amber-100',
+                    'border-rose-500/50 bg-rose-950/50 hover:bg-rose-900/60 text-rose-100'
                 ];
                 const optionGlows = [
-                    '0_0_20px_rgba(6,182,212,0.15)',
-                    '0_0_20px_rgba(139,92,246,0.15)',
-                    '0_0_20px_rgba(245,158,11,0.15)',
-                    '0_0_20px_rgba(244,63,94,0.15)',
+                    '0_0_25px_rgba(6,182,212,0.25)',
+                    '0_0_25px_rgba(139,92,246,0.25)',
+                    '0_0_25px_rgba(245,158,11,0.25)',
+                    '0_0_25px_rgba(244,63,94,0.25)',
                 ];
                 return (
                     <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-5xl")}>
-                        <div className={cn("relative rounded-3xl border border-slate-200 dark:border-white/10 bg-[#161233] mb-6 md:mb-8 text-center overflow-hidden shadow-lg", isTeacher ? "p-10" : "p-4 md:p-10")}>
-                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
-                             <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
-                          <h3 className={cn("font-black text-slate-900 dark:text-white leading-relaxed tracking-wide", isTeacher ? "text-5xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl"))}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
+                        <div className={cn("relative rounded-3xl border border-white/15 bg-slate-900/85 backdrop-blur-2xl mb-6 md:mb-8 text-center overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.6)]", isTeacher ? "p-10" : "p-4 md:p-10")}>
+                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
+                          <h3 className={cn("font-black text-white leading-relaxed tracking-wide", isTeacher ? "text-5xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl"))}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
                         </div>
                         <div className={cn("grid gap-3", isTeacher ? "grid-cols-2 gap-5" : "grid-cols-1 sm:grid-cols-2")}>
                             {(fitbStep.options || []).map((option, index) => {
@@ -1642,13 +1640,13 @@ export function StepContent({
                                         <Button
                                             variant="default"
                                             className={cn(
-                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300",
+                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 backdrop-blur-md shadow-lg",
                                                 "font-bold",
                                                 isTeacher ? "text-2xl p-6" : (isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base"),
                                                 !answer ? colorClass : "",
-                                                answer && isCorrect ? "bg-emerald-500/30 border-emerald-400 text-slate-900 dark:text-white shadow-[0_0_25px_rgba(16,185,129,0.4)]" : "",
-                                                answer && isSelected && !isCorrect ? "bg-rose-500/30 border-rose-400 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]" : "",
-                                                answer && !isSelected && !isCorrect ? "bg-white/3 border-white/5 text-slate-600 opacity-30" : ""
+                                                answer && isCorrect ? "bg-emerald-500/35 border-emerald-400 text-white shadow-[0_0_30px_rgba(16,185,129,0.5)]" : "",
+                                                answer && isSelected && !isCorrect ? "bg-rose-500/35 border-rose-400 text-white shadow-[0_0_25px_rgba(244,63,94,0.5)]" : "",
+                                                answer && !isSelected && !isCorrect ? "bg-white/5 border-white/5 text-slate-600 opacity-25" : ""
                                             )}
                                             style={!answer ? { boxShadow: `${glow}` } : {}}
                                             onClick={() => onAnswer(option)}
@@ -1657,7 +1655,7 @@ export function StepContent({
                                             <span className={cn(
                                                 "flex shrink-0 items-center justify-center rounded-lg md:rounded-xl font-black border mr-3 md:mr-4",
                                                 isTeacher ? "h-12 w-12 text-xl" : "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm",
-                                                !answer ? "bg-black/20 border-white/20" : "bg-white/10 border-white/20"
+                                                !answer ? "bg-black/40 border-white/20 text-white" : "bg-white/10 border-white/20 text-white"
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
@@ -2119,32 +2117,32 @@ export function LessonContentViewer({
     // YÜZEN BUTON MANTIĞI KALDIRILDI
 
     return (
-      <div className="h-full w-full flex flex-col bg-slate-50 dark:bg-[#09071a] overflow-hidden relative">
+      <div className="h-full w-full flex flex-col bg-transparent text-white overflow-hidden relative">
         
         <DrawingCanvas stepIndex={currentStepIndex} />
 
         {showResumeDialog && (
-            <div className="absolute inset-0 z-[60] bg-slate-50 dark:bg-[#09071a]/80 backdrop-blur-xl flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
+            <div className="absolute inset-0 z-[60] bg-[#09071a]/80 backdrop-blur-xl flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
                 <div className="relative w-full max-w-sm animate-in zoom-in-95 duration-300">
                     {/* Glow */}
-                    <div className="absolute inset-0 bg-indigo-600/10 blur-2xl rounded-3xl" />
-                    <div className="relative rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0d0b22]/90 backdrop-blur-2xl overflow-hidden shadow-2xl">
-                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+                    <div className="absolute inset-0 bg-indigo-600/15 blur-2xl rounded-3xl" />
+                    <div className="relative rounded-3xl border border-white/15 bg-slate-900/90 backdrop-blur-2xl overflow-hidden shadow-2xl">
+                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-400 to-transparent" />
                         <div className="p-6 flex flex-col gap-5">
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center">
+                                <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
                                     <History className="h-6 w-6 text-indigo-400" />
                                 </div>
                                 <div>
-                                    <h3 className="font-black text-slate-900 dark:text-white text-lg leading-tight">Kaldığın Yerden Devam Et</h3>
-                                    <p className="text-slate-600 dark:text-slate-400 text-sm mt-0.5">{savedStepIndex! + 1}. adıma kadar gelmişsin.</p>
+                                    <h3 className="font-black text-white text-lg leading-tight">Kaldığın Yerden Devam Et</h3>
+                                    <p className="text-slate-400 text-sm mt-0.5">{savedStepIndex! + 1}. adıma kadar gelmişsin.</p>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2">
-                                <button onClick={handleResume} className="w-full h-12 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-slate-900 dark:text-white font-black text-base shadow-[0_4px_20px_rgba(99,102,241,0.4)] hover:opacity-90 active:scale-[0.98] transition-all border border-slate-200 dark:border-white/10">
+                                <button onClick={handleResume} className="w-full h-12 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black text-base shadow-[0_4px_20px_rgba(99,102,241,0.4)] hover:opacity-90 active:scale-[0.98] transition-all border border-white/10">
                                     Devam Et
                                 </button>
-                                <button onClick={handleRestart} className="w-full h-11 rounded-2xl bg-white shadow-sm dark:shadow-none dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/10 font-bold text-sm transition-all active:scale-[0.98]">
+                                <button onClick={handleRestart} className="w-full h-11 rounded-2xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 font-bold text-sm transition-all active:scale-[0.98]">
                                     Baştan Başla
                                 </button>
                             </div>
@@ -2215,7 +2213,7 @@ export function LessonContentViewer({
                          setHideUI(false);
                     }}
                     size="icon"
-                    className="rounded-full w-12 h-12 bg-white/90 shadow-xl border border-slate-200 hover:bg-white text-slate-700 hover:scale-110 transition-all"
+                    className="rounded-full w-12 h-12 bg-slate-900/90 shadow-xl border border-white/15 hover:bg-slate-800 text-white hover:scale-110 transition-all backdrop-blur-xl"
                  >
                     <ChevronUp className="w-6 h-6" />
                  </Button>
@@ -2236,16 +2234,16 @@ export function LessonContentViewer({
                     <Button
                         onClick={() => setHideUI(true)}
                         size="sm"
-                        className="h-5 w-10 rounded-t-lg rounded-b-none bg-slate-50 dark:bg-[#09071a]/90 border-t border-x border-slate-200 dark:border-white/10 hover:bg-white shadow-sm dark:shadow-none dark:bg-white/5 shadow-sm"
+                        className="h-5 w-10 rounded-t-lg rounded-b-none bg-[#09071a]/95 border-t border-x border-white/10 hover:bg-slate-800 text-slate-400 hover:text-white shadow-sm"
                     >
-                        <ChevronDown className="h-3 w-3 text-slate-500" />
+                        <ChevronDown className="h-3 w-3" />
                     </Button>
                 </div>
             )}
 
             {/* Blur arka plan */}
-            <div className="absolute inset-0 bg-slate-50 dark:bg-[#09071a]/80 backdrop-blur-2xl border-t border-white/8" />
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
+            <div className="absolute inset-0 bg-[#09071a]/85 backdrop-blur-2xl border-t border-white/10" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
 
             <div className="relative flex items-center justify-between gap-3 px-4 py-3">
 
@@ -2254,7 +2252,7 @@ export function LessonContentViewer({
                     <button
                         onClick={handlePrev}
                         disabled={currentStepIndex === 0}
-                        className="w-9 h-9 rounded-xl bg-white shadow-sm dark:shadow-none dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95"
+                        className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95"
                     >
                         <ArrowLeft className="w-4 h-4" />
                     </button>
@@ -2262,7 +2260,7 @@ export function LessonContentViewer({
                         <>
                             <button
                                 onClick={() => window.location.reload()}
-                                className="h-9 px-3 rounded-xl bg-white shadow-sm dark:shadow-none dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/10 flex items-center gap-1.5 text-xs font-bold transition-all active:scale-95"
+                                className="h-9 px-3 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 flex items-center gap-1.5 text-xs font-bold transition-all active:scale-95"
                                 title="Sayfayı Yenile"
                             >
                                 <Repeat className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Yenile</span>
