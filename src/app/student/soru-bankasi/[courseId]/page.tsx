@@ -683,6 +683,7 @@ function QuestionBankCoursePageComponent() {
                                         </div>
                                         </div>
                                     )}
+                                </div>
                             </AccordionTrigger>
                             <AccordionContent className="pt-2 pb-6 px-1">
                                 {/* Topics */}

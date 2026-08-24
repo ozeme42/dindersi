@@ -476,7 +476,7 @@ export function ContentListPlayer({
                                     )}>
                                         <span className="flex-1">
                                             {shouldAnimate ? (
-                                                <TypewriterText content={sentence} onComplete={() => onAnimationEnd?.()} speed={40} />
+                                                <TypewriterText content={sentence} onComplete={() => onAnimationEnd?.()} speed={isFastMode ? 5 : 40} />
                                             ) : (
                                                 <div dangerouslySetInnerHTML={{ __html: sentence }} />
                                             )}
@@ -1640,7 +1640,7 @@ export function StepContent({
             case 'content':
             case 'objectiveList':
             case 'accordion':
-                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} />
+                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} isFastMode={isFastMode} />
             case 'conceptExplanation': {
                 return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} />
             }
