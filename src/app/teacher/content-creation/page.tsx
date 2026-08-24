@@ -101,10 +101,13 @@ const colorThemes = [
     { name: 'amber', border: 'border-amber-500/30', text: 'text-amber-300', bg: 'bg-amber-500/10 hover:bg-amber-500/20', hoverBorder: 'hover:border-amber-500/60' },
 ];
 
+// ══ MODÜL SEVİYESİNDE ÖNBELLEK (Sayfalar arası geçişte anında açılma) ══
+let cachedCurriculumData: EnrichedClass[] | null = null;
+
 export default function ContentCreationPage() {
     const router = useRouter();
-    const [curriculum, setCurriculum] = useState<EnrichedClass[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [curriculum, setCurriculum] = useState<EnrichedClass[]>(cachedCurriculumData || []);
+    const [isLoading, setIsLoading] = useState(!cachedCurriculumData);
     const [currentStep, setCurrentStep] = useState(1);
     const [selections, setSelections] = useState({
         classId: '',
@@ -183,111 +186,91 @@ export default function ContentCreationPage() {
         toast({ title: "Başarılı", description: `${newSteps.length} yeni adım akışa eklendi.` });
     };
 
-    const fetchCurriculum = async () => {
-        setIsLoading(true);
+    const fetchCurriculum = async (forceRefresh = false) => {
+        if (!forceRefresh && cachedCurriculumData && cachedCurriculumData.length > 0) {
+            setCurriculum(cachedCurriculumData);
+            setIsLoading(false);
+            return;
+        }
+
+        if (!cachedCurriculumData) {
+            setIsLoading(true);
+        }
+
         try {
             const classesQuery = query(
                 collection(db, 'classes'),
                 orderBy('createdAt', 'asc')
             );
-            const [classesSnapshot, allCoursesSnapshot, allQuestionsSnapshot] = await Promise.all([
+            const [classesSnapshot, allCoursesSnapshot] = await Promise.all([
                 getDocs(classesQuery),
                 getDocs(collection(db, 'courses')),
-                getDocs(collection(db, 'questions')), 
             ]);
-            
-            const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
+
             const allCourses = allCoursesSnapshot.docs.map(
                 (doc) => ({ id: doc.id, ...doc.data() } as Course)
             );
-            const enrichedClasses: EnrichedClass[] = [];
 
-            for (const classDoc of classesSnapshot.docs) {
-                const classData = {
-                    id: classDoc.id,
-                    ...classDoc.data(),
-                } as SchoolClass;
-                const enrichedClass: EnrichedClass = { ...classData, courses: [] };
+            // 1. AŞAMA: Sınıfları ve Dersleri 100ms içinde ekranda göster (Bekleme sıfırlanır)
+            const initialClasses: EnrichedClass[] = classesSnapshot.docs.map(classDoc => {
+                const classData = { id: classDoc.id, ...classDoc.data() } as SchoolClass;
+                const classCourses = allCourses
+                    .filter(course => course.classId === classDoc.id)
+                    .map(course => ({ ...course, units: [] } as EnrichedCourse));
+                return { ...classData, courses: classCourses };
+            });
 
-                const classCourses = allCourses.filter(
-                    (course) => course.classId === classDoc.id
-                );
-                
-                for (const courseData of classCourses) {
-                    const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
+            const generalCourses = allCourses
+                .filter(course => !course.classId)
+                .map(course => ({ ...course, units: [] } as EnrichedCourse));
+
+            if (generalCourses.length > 0) {
+                initialClasses.unshift({
+                    id: 'general',
+                    name: 'Genel',
+                    courses: generalCourses,
+                    createdAt: new Date()
+                } as EnrichedClass);
+            }
+
+            // Sınıfları anında göster
+            setCurriculum(initialClasses);
+            setIsLoading(false);
+
+            // 2. AŞAMA: Tüm Üniteleri ve Konuları paralel (Promise.all) ile eşzamanlı ve çok hızlı çek
+            const enrichCourseUnits = async (course: Course): Promise<EnrichedCourse> => {
+                try {
                     const unitsSnapshot = await getDocs(
-                        query(
-                            collection(db, `courses/${courseData.id}/units`),
-                            orderBy('title')
-                        )
+                        query(collection(db, `courses/${course.id}/units`), orderBy('title'))
                     );
-                    for (const unitDoc of unitsSnapshot.docs) {
+                    const units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
                         const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, hasFlowContent: (unitData.steps || []).length > 0 };
-                        const topicsSnapshot = await getDocs(
-                            query(
-                                collection(
-                                    db,
-                                    `courses/${courseData.id}/units/${unitDoc.id}/topics`
-                                ),
-                                orderBy('title')
-                            )
-                        );
-                        enrichedUnit.topics = topicsSnapshot.docs.map(
-                            (topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic)
-                        );
-                        const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
-                        enrichedUnit.questionCount = unitQuestionCount;
-                        enrichedCourse.units.push(enrichedUnit);
-                    }
-                    enrichedClass.courses.push(enrichedCourse);
+                        try {
+                            const topicsSnapshot = await getDocs(
+                                query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy('title'))
+                            );
+                            const topics = topicsSnapshot.docs.map(tDoc => ({ id: tDoc.id, ...tDoc.data() } as Topic));
+                            return {
+                                ...unitData,
+                                topics,
+                                hasFlowContent: (unitData.steps || []).length > 0
+                            } as EnrichedUnit;
+                        } catch (e) {
+                            return { ...unitData, topics: [], hasFlowContent: (unitData.steps || []).length > 0 } as EnrichedUnit;
+                        }
+                    }));
+                    return { ...course, units };
+                } catch (e) {
+                    return { ...course, units: [] };
                 }
-                enrichedClasses.push(enrichedClass);
-            }
-            
-            const generalCoursesData = allCourses.filter(course => !course.classId);
-            if (generalCoursesData.length > 0) {
-                 const generalCourses: EnrichedCourse[] = [];
-                 for (const courseData of generalCoursesData) {
-                    const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
-                      const unitsSnapshot = await getDocs(
-                        query(
-                            collection(db, `courses/${courseData.id}/units`),
-                            orderBy('title')
-                        )
-                    );
-                    for (const unitDoc of unitsSnapshot.docs) {
-                        const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, hasFlowContent: (unitData.steps || []).length > 0 };
-                        const topicsSnapshot = await getDocs(
-                            query(
-                                collection(
-                                    db,
-                                    `courses/${courseData.id}/units/${unitDoc.id}/topics`
-                                ),
-                                orderBy('title')
-                            )
-                        );
-                        enrichedUnit.topics = topicsSnapshot.docs.map((topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
-                        const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
-                        enrichedUnit.questionCount = unitQuestionCount;
-                        enrichedCourse.units.push(enrichedUnit);
-                    }
-                    generalCourses.push(enrichedCourse);
-                 }
-                 
-                 const generalClass = enrichedClasses.find(c => c.name === "Genel");
-                 if (generalClass) {
-                     generalClass.courses.push(...generalCourses);
-                 } else {
-                     enrichedClasses.unshift({
-                        id: 'general',
-                        name: 'Genel',
-                        courses: generalCourses,
-                        createdAt: new Date()
-                    } as EnrichedClass)
-                 }
-            }
+            };
+
+            const enrichedClasses: EnrichedClass[] = await Promise.all(initialClasses.map(async (cls) => {
+                const coursesWithUnits = await Promise.all(cls.courses.map(enrichCourseUnits));
+                return { ...cls, courses: coursesWithUnits };
+            }));
+
+            cachedCurriculumData = enrichedClasses;
             setCurriculum(enrichedClasses);
         } catch (error) {
             console.error('Error fetching curriculum: ', error);
@@ -413,7 +396,7 @@ export default function ContentCreationPage() {
 
         if (result.success) {
             toast({ title: 'Başarılı', description: `${type} kaydedildi.` });
-            fetchCurriculum();
+            fetchCurriculum(true);
             setDialogState({ isOpen: false, mode: 'add', type: null });
         } else {
             toast({ title: 'Hata', description: result.error, variant: "destructive" });
@@ -430,7 +413,7 @@ export default function ContentCreationPage() {
                 title: 'Başarılı',
                 description: `${deleteDialogState.type} silindi.`,
             });
-            fetchCurriculum();
+            fetchCurriculum(true);
             setDeleteDialogState(null);
         } else {
             toast({ title: 'Hata', description: result.error, variant: "destructive" });
@@ -443,7 +426,7 @@ export default function ContentCreationPage() {
         const result = await togglePublishState(path, currentState);
         if (result.success) {
             toast({ title: 'Başarılı', description: `Durum güncellendi.` });
-            await fetchCurriculum(); 
+            await fetchCurriculum(true); 
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
@@ -463,7 +446,7 @@ export default function ContentCreationPage() {
         );
         if (result.success) {
             toast({ title: "Başarılı", description: `${result.count} öğe eklendi.` });
-            fetchCurriculum();
+            fetchCurriculum(true);
             setBulkAddDialogState({ isOpen: false, type: null });
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
