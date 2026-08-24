@@ -21,6 +21,7 @@ import { playSound } from '@/lib/audio-service';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { 
     Loader2, CheckCircle2, Lock, PlayCircle, Trophy, 
     ShieldCheck, Shield, ShieldAlert, CheckCheck,
@@ -603,6 +604,7 @@ function QuestionBankCoursePageComponent() {
 
                 {/* CONTENT — desktop: wider max-width */}
                 <div className="px-4 md:px-8 pb-32 pt-6 max-w-7xl mx-auto space-y-6">
+                    <Accordion type="multiple" className="w-full space-y-6">
                     {sortedUnits.map((unit) => {
                             const unitTopics = unit.topics || [];
                             const allUnitTopicsCompleted = unitTopics.length > 0 && unitTopics.every(t => isTopicCompleted(t.id));
@@ -610,8 +612,9 @@ function QuestionBankCoursePageComponent() {
                             const unitProgressPct = unitTopics.length > 0 ? Math.round((completedTopicsCount / unitTopics.length) * 100) : 0;
 
                             return (
-                        <div key={unit.id}>
+                        <AccordionItem key={unit.id} value={unit.id} className="border-0 bg-transparent p-0 m-0">
                             {/* Unit header — Ödül Kartı */}
+                            <AccordionTrigger className="hover:no-underline p-0 m-0 block focus:outline-none">
                             <div className={cn(
                                 "relative rounded-3xl border overflow-hidden mb-4 p-4",
                                 allUnitTopicsCompleted
@@ -679,115 +682,116 @@ function QuestionBankCoursePageComponent() {
                                             />
                                         </div>
                                     </div>
-                                )}
-                            </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="pt-2 pb-6 px-1">
+                                {/* Topics */}
+                                <div className="flex flex-col gap-3">
+                                    {unit.topics.map((topic, topicIdx) => {
+                                        const unlocked = isTopicUnlocked(topic.id);
+                                        const completed = isTopicCompleted(topic.id);
+                                        const counts = testCounts[topic.id];
+                                        const totalQ = counts ? (counts.easy + counts.medium + counts.hard) : 150;
 
-                            {/* Topics */}
-                            <div className="flex flex-col gap-3">
-                                {unit.topics.map((topic, topicIdx) => {
-                                    const unlocked = isTopicUnlocked(topic.id);
-                                    const completed = isTopicCompleted(topic.id);
-                                    const counts = testCounts[topic.id];
-                                    const totalQ = counts ? (counts.easy + counts.medium + counts.hard) : 150;
+                                        // Calculate overall progress
+                                        const totalTests = counts
+                                            ? Math.ceil(counts.easy / 10) + Math.ceil(counts.medium / 10) + Math.ceil(counts.hard / 10)
+                                            : 15;
+                                        let passedTests = 0;
+                                        const prog = topicProgress[topic.id];
+                                        if (prog) {
+                                            ['easy', 'medium', 'hard'].forEach(d => {
+                                                passedTests += Object.values(prog[d as 'easy'|'medium'|'hard'] || {}).filter(r => r.status === 'passed').length;
+                                            });
+                                        }
+                                        const progressPct = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
 
-                                    // Calculate overall progress
-                                    const totalTests = counts
-                                        ? Math.ceil(counts.easy / 10) + Math.ceil(counts.medium / 10) + Math.ceil(counts.hard / 10)
-                                        : 15;
-                                    let passedTests = 0;
-                                    const prog = topicProgress[topic.id];
-                                    if (prog) {
-                                        ['easy', 'medium', 'hard'].forEach(d => {
-                                            passedTests += Object.values(prog[d as 'easy'|'medium'|'hard'] || {}).filter(r => r.status === 'passed').length;
-                                        });
-                                    }
-                                    const progressPct = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
+                                        return (
+                                            <button
+                                                key={topic.id}
+                                                onClick={() => unlocked && setSelectedTopic(topic)}
+                                                disabled={!unlocked}
+                                                className={cn(
+                                            "w-full text-left rounded-3xl border-2 p-4 transition-all duration-300 relative overflow-hidden",
+                                            completed
+                                                ? "border-emerald-500/30 bg-emerald-950/20 active:scale-[0.99]"
+                                                : unlocked
+                                                ? theme === 'dark'
+                                                    ? "border-white/8 bg-[#161233]/60 hover:border-indigo-500/30 hover:bg-[#1e1a45]/60 active:scale-[0.99]"
+                                                    : "border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50/50 active:scale-[0.99]"
+                                                : "border-white/4 bg-[#161233]/30 opacity-50 cursor-not-allowed grayscale"
+                                        )}
+                                            >
+                                                {/* Shimmer on completed */}
+                                                {completed && (
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/5 to-transparent pointer-events-none" />
+                                                )}
 
-                                    return (
-                                        <button
-                                            key={topic.id}
-                                            onClick={() => unlocked && setSelectedTopic(topic)}
-                                            disabled={!unlocked}
-                                            className={cn(
-                                        "w-full text-left rounded-3xl border-2 p-4 transition-all duration-300 relative overflow-hidden",
-                                        completed
-                                            ? "border-emerald-500/30 bg-emerald-950/20 active:scale-[0.99]"
-                                            : unlocked
-                                            ? theme === 'dark'
-                                                ? "border-white/8 bg-[#161233]/60 hover:border-indigo-500/30 hover:bg-[#1e1a45]/60 active:scale-[0.99]"
-                                                : "border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50/50 active:scale-[0.99]"
-                                            : "border-white/4 bg-[#161233]/30 opacity-50 cursor-not-allowed grayscale"
-                                    )}
-                                        >
-                                            {/* Shimmer on completed */}
-                                            {completed && (
-                                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/5 to-transparent pointer-events-none" />
-                                            )}
-
-                                            <div className="flex items-center gap-3.5">
-                                                {/* Icon */}
-                                                <div className={cn(
-                                                    "w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 border",
-                                                    completed ? "bg-emerald-500/15 border-emerald-500/30" :
-                                                    unlocked ? "bg-indigo-500/10 border-indigo-500/20" :
-                                                    "bg-white/3 border-white/8"
-                                                )}>
-                                                    {completed ? (
-                                                        <CheckCircle2 className="w-6 h-6 text-emerald-400" />
-                                                    ) : unlocked ? (
-                                                        <BookOpen className="w-6 h-6 text-indigo-400" />
-                                                    ) : (
-                                                        <Lock className="w-5 h-5 text-slate-600" />
-                                                    )}
-                                                </div>
-
-                                                {/* Info */}
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-center gap-2 mb-0.5">
-                                                        <p className={cn("text-base font-black truncate",
-                                                    completed ? "text-emerald-300" :
-                                                    unlocked ? (theme === 'dark' ? 'text-white' : 'text-slate-800') : "text-slate-600"
-                                                )}>
-                                                            {topic.title}
-                                                        </p>
+                                                <div className="flex items-center gap-3.5">
+                                                    {/* Icon */}
+                                                    <div className={cn(
+                                                        "w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 border",
+                                                        completed ? "bg-emerald-500/15 border-emerald-500/30" :
+                                                        unlocked ? "bg-indigo-500/10 border-indigo-500/20" :
+                                                        "bg-white/3 border-white/8"
+                                                    )}>
+                                                        {completed ? (
+                                                            <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                                                        ) : unlocked ? (
+                                                            <BookOpen className="w-6 h-6 text-indigo-400" />
+                                                        ) : (
+                                                            <Lock className="w-5 h-5 text-slate-600" />
+                                                        )}
                                                     </div>
-                                                    <p className="text-xs text-slate-600 font-medium">
-                                                        {totalQ} soru · {passedTests}/{totalTests} test
-                                                    </p>
-                                                    {/* Mini progress bar */}
-                                                    {unlocked && totalTests > 0 && (
-                                                        <div className="mt-2 h-1 bg-white/5 rounded-full overflow-hidden">
-                                                            <div
-                                                                className={cn("h-full rounded-full transition-all duration-500",
-                                                                    completed ? "bg-emerald-500" : "bg-gradient-to-r from-indigo-500 to-purple-500"
-                                                                )}
-                                                                style={{ width: `${progressPct}%` }}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </div>
 
-                                                {/* Right arrow / lock */}
-                                                <div className="flex-shrink-0">
-                                                    {unlocked ? (
-                                                        <div className={cn(
-                                                            "w-9 h-9 rounded-2xl flex items-center justify-center",
-                                                            completed ? "bg-emerald-500/15 text-emerald-400" : "bg-indigo-500/10 text-indigo-400"
-                                                        )}>
-                                                            <ArrowRight className="w-4 h-4" />
+                                                    {/* Info */}
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center gap-2 mb-0.5">
+                                                            <p className={cn("text-base font-black truncate",
+                                                        completed ? "text-emerald-300" :
+                                                        unlocked ? (theme === 'dark' ? 'text-white' : 'text-slate-800') : "text-slate-600"
+                                                    )}>
+                                                                {topic.title}
+                                                            </p>
                                                         </div>
-                                                    ) : (
-                                                        <Lock className="w-4 h-4 text-slate-700" />
-                                                    )}
+                                                        <p className="text-xs text-slate-600 font-medium">
+                                                            {totalQ} soru · {passedTests}/{totalTests} test
+                                                        </p>
+                                                        {/* Mini progress bar */}
+                                                        {unlocked && totalTests > 0 && (
+                                                            <div className="mt-2 h-1 bg-white/5 rounded-full overflow-hidden">
+                                                                <div
+                                                                    className={cn("h-full rounded-full transition-all duration-500",
+                                                                        completed ? "bg-emerald-500" : "bg-gradient-to-r from-indigo-500 to-purple-500"
+                                                                    )}
+                                                                    style={{ width: `${progressPct}%` }}
+                                                                />
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Right arrow / lock */}
+                                                    <div className="flex-shrink-0">
+                                                        {unlocked ? (
+                                                            <div className={cn(
+                                                                "w-9 h-9 rounded-2xl flex items-center justify-center",
+                                                                completed ? "bg-emerald-500/15 text-emerald-400" : "bg-indigo-500/10 text-indigo-400"
+                                                            )}>
+                                                                <ArrowRight className="w-4 h-4" />
+                                                            </div>
+                                                        ) : (
+                                                            <Lock className="w-4 h-4 text-slate-700" />
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
                             );
                         })}
+                    </Accordion>
                 </div>
             </div>
 
