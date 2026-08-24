@@ -27,6 +27,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { playSound } from '@/lib/audio-service';
 
+const noOp = () => {};
+
 function PresentationPageContent() {
     const { user } = useAuth();
     const searchParams = useSearchParams();
