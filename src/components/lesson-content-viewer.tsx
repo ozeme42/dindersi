@@ -589,104 +589,215 @@ export function ContentListPlayer({
     );
 }
 
-// 4. ConceptExplanationPlayer
-export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleCardMode, fontSizeScale = 'normal' }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string, isSingleCardMode?: boolean, fontSizeScale?: 'normal' | 'large' | 'huge' }) {
+// 4. ConceptExplanationPlayer (3D Bilgi Kartı Görünümlü Anahtar Kavramlar)
+export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleCardMode, fontSizeScale = 'normal' }: { items: { concept: string, definition?: string }[], isFullscreen: boolean, title: string, isSingleCardMode?: boolean, fontSizeScale?: 'normal' | 'large' | 'huge' }) {
     if (!items || items.length === 0) return null;
     const isTeacher = useTeacherMode();
-    
-    const cardStyles = [
-        { bg: 'bg-sky-50/95 hover:bg-sky-100/90', border: 'border-2 border-sky-300', title: 'text-sky-800', hoverBorder: 'hover:border-sky-400', glow: 'shadow-md shadow-sky-100/60' },
-        { bg: 'bg-rose-50/95 hover:bg-rose-100/90', border: 'border-2 border-rose-300', title: 'text-rose-800', hoverBorder: 'hover:border-rose-400', glow: 'shadow-md shadow-rose-100/60' },
-        { bg: 'bg-amber-50/95 hover:bg-amber-100/90', border: 'border-2 border-amber-300', title: 'text-amber-800', hoverBorder: 'hover:border-amber-400', glow: 'shadow-md shadow-amber-100/60' },
-        { bg: 'bg-emerald-50/95 hover:bg-emerald-100/90', border: 'border-2 border-emerald-300', title: 'text-emerald-800', hoverBorder: 'hover:border-emerald-400', glow: 'shadow-md shadow-emerald-100/60' },
-        { bg: 'bg-violet-50/95 hover:bg-violet-100/90', border: 'border-2 border-violet-300', title: 'text-violet-800', hoverBorder: 'hover:border-violet-400', glow: 'shadow-md shadow-violet-100/60' },
-        { bg: 'bg-cyan-50/95 hover:bg-cyan-100/90', border: 'border-2 border-cyan-300', title: 'text-cyan-800', hoverBorder: 'hover:border-cyan-400', glow: 'shadow-md shadow-cyan-100/60' },
-    ];
+    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
+    const [customCols, setCustomCols] = useState<number | null>(null);
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.15
-            }
+    const validConcepts = useMemo(() => items.filter(it => it.concept !== '[BAŞLIK]'), [items]);
+    const totalCards = validConcepts.length;
+
+    const getScaleStyles = () => {
+        switch (cardScale) {
+            case 'sm':
+                return {
+                    minHeight: isTeacher ? "min-h-[140px]" : "min-h-[120px]",
+                    fontSize: isTeacher ? "text-xl md:text-2xl" : "text-lg md:text-xl",
+                    padding: "p-4",
+                };
+            case 'lg':
+                return {
+                    minHeight: isTeacher ? "min-h-[260px]" : "min-h-[220px]",
+                    fontSize: isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-2xl md:text-4xl",
+                    padding: "p-6 md:p-8",
+                };
+            case 'xl':
+                return {
+                    minHeight: isTeacher ? "min-h-[340px]" : "min-h-[280px]",
+                    fontSize: isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-3xl md:text-5xl",
+                    padding: "p-8 md:p-10",
+                };
+            case 'md':
+            default:
+                return {
+                    minHeight: isTeacher ? "min-h-[190px]" : "min-h-[160px]",
+                    fontSize: isTeacher ? "text-3xl md:text-4xl" : "text-xl md:text-3xl",
+                    padding: "p-5 md:p-6",
+                };
         }
     };
 
-    const itemVariants = {
-        hidden: { opacity: 0, y: 30, scale: 0.95 },
-        show: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 200, damping: 20 } }
+    const scaleStyles = getScaleStyles();
+
+    const getGridClass = () => {
+        if (customCols === 1) return "grid-cols-1 max-w-3xl mx-auto";
+        if (customCols === 2) return "grid-cols-1 md:grid-cols-2";
+        if (customCols === 3) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+        if (customCols === 4) return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        
+        if (cardScale === 'xl') return "grid-cols-1 md:grid-cols-2";
+        if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2";
+        if (cardScale === 'sm') return isTeacher ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 md:grid-cols-3";
+        return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : (isFullscreen ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2");
     };
 
     return (
-        <div className={cn('flex flex-col h-full w-full items-center justify-start p-2', isTeacher ? "max-w-[98%] mx-auto pt-0" : "max-w-6xl mx-auto justify-center")}>
-            <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={cn("relative rounded-2xl border-2 border-indigo-200 bg-white/95 backdrop-blur-xl flex-shrink-0 mb-3 w-full text-center overflow-hidden shadow-md shadow-indigo-100/50", isTeacher ? "py-2.5 px-6" : "p-3")}
-            >
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 drop-shadow-sm", isTeacher ? "text-2xl md:text-3xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-lg md:text-xl"))}>{title}</h2>
-            </motion.div>
-             <motion.div 
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-                className={cn(
-                "w-full flex-grow grid gap-3 md:gap-4 pb-16", 
-                isTeacher 
-                    ? "grid-cols-1 md:grid-cols-2 content-start" 
-                    : "grid-cols-1 md:grid-cols-2"
-            )}>
+        <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
+            {/* Üst Başlık ve Kontrol Araç Çubuğu */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200">
+                        <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
+                    </div>
+                    <div>
+                        <h2 className="font-black text-slate-800 text-lg md:text-2xl drop-shadow-sm tracking-tight">{title || 'Anahtar Kavramlar'}</h2>
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                            <span>{totalCards} Anahtar Kavram</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Boyut & Izgara Ayarları */}
+                <div className="flex flex-wrap items-center gap-2">
+                    {/* Boyut Ayarı (Zoom) */}
+                    <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={cardScale === 'sm'}
+                            onClick={() => {
+                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
+                                const currIdx = sizes.indexOf(cardScale);
+                                if (currIdx > 0) setCardScale(sizes[currIdx - 1]);
+                            }}
+                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
+                            title="Kartları Küçült"
+                        >
+                            <ZoomOut className="w-4 h-4" />
+                        </Button>
+                        <span className="px-2 text-xs font-black text-slate-700 uppercase tracking-wider min-w-[56px] text-center">
+                            {cardScale === 'sm' ? 'Küçük' : cardScale === 'md' ? 'Normal' : cardScale === 'lg' ? 'Büyük' : 'Dev'}
+                        </span>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={cardScale === 'xl'}
+                            onClick={() => {
+                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
+                                const currIdx = sizes.indexOf(cardScale);
+                                if (currIdx < sizes.length - 1) setCardScale(sizes[currIdx + 1]);
+                            }}
+                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
+                            title="Kartları Büyüt"
+                        >
+                            <ZoomIn className="w-4 h-4" />
+                        </Button>
+                    </div>
+
+                    {/* Sütun Düzeni */}
+                    <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setCustomCols(null)}
+                            className={cn("h-7 px-2.5 rounded-lg text-xs font-bold", customCols === null ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
+                        >
+                            Oto
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setCustomCols(2)}
+                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 2 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
+                        >
+                            2'li
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setCustomCols(3)}
+                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 3 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
+                        >
+                            3'lü
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setCustomCols(4)}
+                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 4 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
+                        >
+                            4'lü
+                        </Button>
+                    </div>
+                </div>
+            </div>
+
+            {/* 3D Kavram Kartları Izgarası */}
+            <div className={cn("grid gap-4 md:gap-6 pb-20 transition-all duration-300", getGridClass())}>
                 {(() => {
-                    let conceptIndex = 1;
+                    let conceptCount = 0;
                     return items.map((item, index) => {
                         if (item.concept === '[BAŞLIK]') {
                             return (
-                                <motion.div variants={itemVariants} key={index} className="col-span-1 md:col-span-2 mt-8 mb-2 flex items-center gap-4 w-full">
-                                    <div className="h-[2px] bg-gradient-to-r from-transparent via-cyan-500/70 to-transparent flex-1" />
-                                    <h3 className="text-2xl md:text-3xl font-black text-cyan-600 tracking-widest uppercase drop-shadow-sm text-center px-4">{item.definition}</h3>
-                                    <div className="h-[2px] bg-gradient-to-r from-transparent via-cyan-500/70 to-transparent flex-1" />
-                                </motion.div>
+                                <div key={index} className="col-span-full mt-4 mb-2 flex items-center gap-4 w-full">
+                                    <div className="h-[2px] bg-gradient-to-r from-transparent via-indigo-500/70 to-transparent flex-1" />
+                                    <h3 className="text-xl md:text-2xl font-black text-indigo-700 tracking-widest uppercase drop-shadow-sm text-center px-4">{item.definition}</h3>
+                                    <div className="h-[2px] bg-gradient-to-r from-transparent via-indigo-500/70 to-transparent flex-1" />
+                                </div>
                             );
                         }
-                        
-                        const style = cardStyles[(conceptIndex - 1) % cardStyles.length];
-                        const currentNum = conceptIndex++;
-                        
+
+                        const currentNum = ++conceptCount;
+                        const theme = FLASHCARD_THEMES[(currentNum - 1) % FLASHCARD_THEMES.length];
+
                         return (
-                            <motion.div variants={itemVariants} key={index} className="h-full">
-                                <Card className={cn(
-                                    "h-full border-2 transition-all duration-300 group shadow-md hover:shadow-xl hover:-translate-y-1 backdrop-blur-xl",
-                                    style.bg,
-                                    style.border,
-                                    style.hoverBorder,
-                                    style.glow,
-                                    isTeacher ? 'min-h-[160px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
-                                )}>
-                                    <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4 pb-2" : "p-3 md:p-4 pb-2 md:pb-3")}>
-                                        <CardTitle className={cn(
-                                            "font-black uppercase tracking-wider transition-colors drop-shadow-sm", 
-                                            style.title, 
-                                            isTeacher 
-                                                ? (fontSizeScale === 'huge' ? "text-2xl md:text-3xl" : (fontSizeScale === 'large' ? "text-xl md:text-2xl" : "text-lg md:text-xl"))
-                                                : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg")
-                                        )}>{currentNum}. {item.concept}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent className={cn(
-                                        "text-slate-800 font-semibold leading-relaxed tracking-wide", 
-                                        isTeacher 
-                                            ? (fontSizeScale === 'huge' ? "text-2xl md:text-3xl p-5 pt-3" : (fontSizeScale === 'large' ? "text-xl md:text-2xl p-4 pt-3" : "text-lg md:text-xl p-4 pt-3"))
-                                            : "p-3 md:p-4 text-sm md:text-base"
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ duration: 0.4, delay: (currentNum - 1) * 0.05 }}
+                                whileHover={{ y: -6, scale: 1.02 }}
+                                className={cn(
+                                    "relative rounded-[2rem] overflow-hidden flex flex-col justify-between select-none shadow-2xl transition-all duration-300",
+                                    theme.card,
+                                    scaleStyles.minHeight,
+                                    scaleStyles.padding
+                                )}
+                            >
+                                {/* Üst Işık Yansıması */}
+                                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+
+                                {/* Kart Üst Bilgisi (Rozetler) */}
+                                <div className="flex items-center justify-between w-full relative z-10">
+                                    <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                                        #{currentNum}
+                                    </span>
+                                    <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2.5 py-0.5 rounded-full border border-white/30 backdrop-blur-md">
+                                        <Sparkles className="w-3 h-3 text-amber-300" /> Kavram
+                                    </div>
+                                </div>
+
+                                {/* Kavram Başlığı - Kartın Merkezini Dolduran Büyük Yazı */}
+                                <div className="my-auto py-4 text-center w-full flex items-center justify-center relative z-10">
+                                    <h3 className={cn(
+                                        "font-black tracking-wider text-white drop-shadow-lg uppercase leading-tight break-words max-w-full",
+                                        scaleStyles.fontSize
                                     )}>
-                                        <div dangerouslySetInnerHTML={{ __html: item.definition }} />
-                                    </CardContent>
-                                </Card>
+                                        {item.concept}
+                                    </h3>
+                                </div>
+
+                                {/* Kart Taban Işıltısı */}
+                                <div className="w-full flex items-center justify-center relative z-10">
+                                    <div className="h-1 w-12 rounded-full bg-white/30 backdrop-blur-md" />
+                                </div>
                             </motion.div>
                         );
                     });
                 })()}
-            </motion.div>
+            </div>
         </div>
     );
 }
