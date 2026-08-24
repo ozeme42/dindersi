@@ -1,22 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { 
     Loader2, Sparkles, Key, Eye, EyeOff, Save, CheckCircle2, 
-    Settings2, Brain, Layers, Check, 
+    Settings2, Brain, Layers, Check, X,
     Flame, Wand2, BookOpen, Puzzle, HelpCircle, FileText, Shuffle, Target
 } from 'lucide-react';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
@@ -153,6 +144,8 @@ export function AiLessonStepGenerationDialog({
 
   const { toast } = useToast();
 
+  if (!isOpen) return null;
+
   const handleClose = () => {
     onOpenChange(false);
   };
@@ -247,7 +240,7 @@ export function AiLessonStepGenerationDialog({
         const activeKey = apiKey.trim() || undefined;
         const activeModel = activeModelId || 'gemini-3.7-flash';
         
-        // 1. Zengin HTML Slayt Üretimi (Ayrı uzman prompt)
+        // 1. Zengin HTML Slayt Üretimi
         if (selectedModules.htmlSlide) {
             try {
                 const result = await generateHtmlSlide({ 
@@ -268,7 +261,7 @@ export function AiLessonStepGenerationDialog({
             }
         }
 
-        // 2. Kavram Haritası (Ayrı şema promptu)
+        // 2. Kavram Haritası
         if (selectedModules.conceptMap) {
             try {
                 const mapData = await generateConceptMap({ 
@@ -468,42 +461,55 @@ export function AiLessonStepGenerationDialog({
     };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-3xl flex flex-col h-auto max-h-[92vh] bg-slate-950 border border-white/10 text-slate-100 shadow-2xl p-0 overflow-hidden rounded-3xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in-0 duration-200">
+      <div 
+        className="relative w-full max-w-3xl max-h-[92vh] flex flex-col bg-slate-950 border border-white/15 text-slate-100 shadow-2xl rounded-3xl overflow-hidden animate-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
-        <DialogHeader className="p-5 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md flex flex-row items-center justify-between">
+        <div className="p-5 pb-4 border-b border-white/10 bg-slate-900/80 backdrop-blur-md flex flex-row items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-gradient-to-br from-purple-500/20 to-rose-500/20 rounded-2xl border border-purple-500/30 text-purple-400">
                 <Flame className="h-5 w-5 text-rose-400 animate-pulse" />
             </div>
             <div>
-                <DialogTitle className="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                <h3 className="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
                     Yapay Zeka Stüdyosu & İçerik Fabrikası
-                </DialogTitle>
-                <DialogDescription className="text-xs text-slate-400">
+                </h3>
+                <p className="text-xs text-slate-400">
                     {topicTitle ? `"${topicTitle}" konusu için zengin interaktif içerikler üretin.` : 'Konu için zengin sunum ve değerlendirme slaytları üretin.'}
-                </DialogDescription>
+                </p>
             </div>
           </div>
 
-          <Button 
-            type="button"
-            variant="outline" 
-            size="sm"
-            onClick={() => setShowSettings(!showSettings)}
-            className={cn(
-                "border-white/10 text-xs font-bold rounded-xl transition-all mr-6",
-                showSettings ? "bg-indigo-600 text-white border-indigo-500 shadow-md" : "bg-slate-900 text-slate-300 hover:bg-slate-800"
-            )}
-          >
-            <Settings2 className="w-3.5 h-3.5 mr-1.5 text-indigo-400" />
-            Model & API
-          </Button>
-        </DialogHeader>
+          <div className="flex items-center gap-2">
+              <Button 
+                type="button"
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowSettings(!showSettings)}
+                className={cn(
+                    "border-white/10 text-xs font-bold rounded-xl transition-all",
+                    showSettings ? "bg-indigo-600 text-white border-indigo-500 shadow-md" : "bg-slate-900 text-slate-300 hover:bg-slate-800"
+                )}
+              >
+                <Settings2 className="w-3.5 h-3.5 mr-1.5 text-indigo-400" />
+                Model & API
+              </Button>
+
+              <button
+                type="button"
+                onClick={handleClose}
+                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+          </div>
+        </div>
 
         {/* Ayarlar Akordiyonu */}
         {showSettings && (
-            <div className="bg-slate-900/90 border-b border-white/10 p-5 space-y-4 animate-in slide-in-from-top-2 duration-200">
+            <div className="bg-slate-900/95 border-b border-white/10 p-5 space-y-4 animate-in slide-in-from-top-2 duration-200 flex-shrink-0">
                 <div className="flex items-center justify-between">
                     <h4 className="text-xs font-black uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
                         <Key className="w-3.5 h-3.5" /> Google AI Studio API Anahtarı & Model Seçimi
@@ -570,7 +576,7 @@ export function AiLessonStepGenerationDialog({
         )}
 
         {/* Ana Form Alanı */}
-        <form onSubmit={handleGenerate} className="p-5 overflow-y-auto max-h-[60vh] space-y-5">
+        <form onSubmit={handleGenerate} className="p-5 overflow-y-auto space-y-5 flex-1 min-h-0">
             {/* Kaynak Metin */}
             <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
@@ -656,11 +662,11 @@ export function AiLessonStepGenerationDialog({
                                         : "bg-slate-900/40 border-white/5 hover:border-white/20 opacity-70 hover:opacity-100"
                                 )}
                             >
-                                <div className="mt-0.5 pointer-events-none">
-                                    <Checkbox 
-                                        checked={isChecked}
-                                        className="border-white/20 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-500"
-                                    />
+                                <div className={cn(
+                                    "mt-0.5 w-4 h-4 rounded border flex items-center justify-center transition-colors",
+                                    isChecked ? "bg-indigo-600 border-indigo-500 text-white" : "border-white/20 bg-slate-950"
+                                )}>
+                                    {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-1.5 mb-0.5">
@@ -677,7 +683,8 @@ export function AiLessonStepGenerationDialog({
                 </div>
             </div>
 
-            <DialogFooter className="p-0 pt-4 flex items-center justify-between sm:justify-between border-t border-white/10">
+            {/* Modal Footer */}
+            <div className="p-0 pt-4 flex items-center justify-between sm:justify-between border-t border-white/10 flex-shrink-0">
                 <span className="text-[11px] text-slate-400">
                     Aktif Model: <span className="font-bold text-indigo-400">{activeModelId}</span>
                 </span>
@@ -704,9 +711,9 @@ export function AiLessonStepGenerationDialog({
                         )}
                     </Button>
                 </div>
-            </DialogFooter>
+            </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }
