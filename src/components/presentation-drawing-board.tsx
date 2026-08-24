@@ -5,7 +5,7 @@ import {
     Pencil, Highlighter, Eraser, MoveRight, Square, Circle, 
     Type, Undo2, Redo2, Trash2, Download, Eye, EyeOff, 
     X, Sparkles, Wand2, Grid, AlignJustify, Palette, ChevronUp,
-    ChevronDown
+    ChevronDown, GripVertical
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -560,19 +560,27 @@ export function PresentationDrawingBoard({
                 </div>
             )}
 
-            {/* ══ ULTRA-MODERN DOKUNMATİK ÇİZİM ARAÇ ÇUBUĞU ══ */}
+            {/* ══ ULTRA-MODERN DOKUNMATİK VE SÜRÜKLENEBİLİR ÇİZİM ARAÇ ÇUBUĞU ══ */}
             <motion.div
-                initial={{ y: toolbarPosition === 'top' ? -50 : 50, opacity: 0 }}
+                drag
+                dragMomentum={false}
+                dragConstraints={containerRef}
+                initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                exit={{ y: toolbarPosition === 'top' ? -50 : 50, opacity: 0 }}
-                className={cn(
-                    "fixed left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 max-w-[95vw]",
-                    toolbarPosition === 'top' ? "top-3" : "bottom-4"
-                )}
+                exit={{ y: 50, opacity: 0 }}
+                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center max-w-[95vw] touch-none"
             >
                 {/* Ana Toolbar Kapsayıcı */}
-                <div className="flex items-center gap-1.5 p-2 rounded-2xl bg-slate-900/95 dark:bg-slate-900/95 backdrop-blur-3xl border-2 border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-white">
+                <div className="flex items-center gap-1.5 p-2 rounded-2xl bg-slate-900/95 dark:bg-slate-900/95 backdrop-blur-3xl border-2 border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-white select-none">
                     
+                    {/* Sürükleme Tutamacı */}
+                    <div 
+                        className="flex items-center justify-center pl-1 pr-1.5 py-2 cursor-grab active:cursor-grabbing text-slate-400 hover:text-white border-r border-white/15"
+                        title="Basılı tutup istediğiniz yere sürükleyin"
+                    >
+                        <GripVertical className="w-5 h-5" />
+                    </div>
+
                     {/* Çizim Araçları Grubu */}
                     <div className="flex items-center gap-1 pr-1.5 border-r border-white/15">
                         <Button
@@ -883,23 +891,13 @@ export function PresentationDrawingBoard({
                         </Button>
                     </div>
 
-                    {/* Konum Değiştir & Kapat */}
-                    <div className="flex items-center gap-1 pl-1">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setToolbarPosition(prev => prev === 'top' ? 'bottom' : 'top')}
-                            className="h-10 w-10 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white"
-                            title={toolbarPosition === 'top' ? "Aşağı Taşı" : "Yukarı Taşı"}
-                        >
-                            {toolbarPosition === 'top' ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
-                        </Button>
-
+                    {/* Kapat Butonu */}
+                    <div className="flex items-center pl-1">
                         <Button
                             variant="ghost"
                             size="sm"
                             onClick={onClose}
-                            className="h-10 px-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs gap-1.5 shadow-md shadow-rose-600/30 transition-all active:scale-95"
+                            className="h-10 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs gap-1.5 shadow-md shadow-rose-600/30 transition-all active:scale-95"
                             title="Çizim Modunu Kapat (Esc / D)"
                         >
                             <X className="w-4 h-4" />
