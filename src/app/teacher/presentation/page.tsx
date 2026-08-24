@@ -208,19 +208,15 @@ function PresentationPageContent() {
         };
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         
-        // Açılınca otomatik tam ekran yapma
+        // Kullanıcı ilk etkileşime girdiğinde (tıklama, tuş) tam ekran yapma
         const enterFullscreen = () => {
             if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(() => {});
             }
         };
-        enterFullscreen();
 
         const handleFirstGesture = () => {
             enterFullscreen();
-            window.removeEventListener('click', handleFirstGesture);
-            window.removeEventListener('keydown', handleFirstGesture);
-            window.removeEventListener('touchstart', handleFirstGesture);
         };
 
         window.addEventListener('click', handleFirstGesture, { once: true });
@@ -262,15 +258,17 @@ function PresentationPageContent() {
                      steps = topicsSnapshot.docs.flatMap(doc => (doc.data().steps || []));
                  }
                  
-                 try {
-                     const flowRes = await fetch(`/curriculum/flows/${contentId}.json`);
-                     if (flowRes.ok) {
-                         const staticSteps = await flowRes.json();
-                         if (staticSteps.length > 0 && steps.length === 0) {
-                            steps = staticSteps;
+                 if (steps.length === 0) {
+                     try {
+                         const flowRes = await fetch(`/curriculum/flows/${contentId}.json`);
+                         if (flowRes.ok) {
+                             const staticSteps = await flowRes.json();
+                             if (staticSteps.length > 0) {
+                                steps = staticSteps;
+                             }
                          }
-                     }
-                 } catch (e) {}
+                     } catch (e) {}
+                 }
                 
                 let finalSteps = steps;
                 if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
