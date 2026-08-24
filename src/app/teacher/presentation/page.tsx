@@ -6,7 +6,7 @@ import {
     Loader2, ArrowLeft, Presentation, Settings, Sun, Moon, LayoutList, 
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
-    Check, Trophy, Volume2, VolumeX, Shuffle
+    ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
