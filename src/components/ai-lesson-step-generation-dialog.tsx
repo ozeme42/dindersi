@@ -12,12 +12,13 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
     Loader2, Sparkles, Wand2, KeyRound, Settings2, ExternalLink, 
-    Check, Eye, EyeOff, ShieldCheck, Zap, Flame 
+    Check, Eye, EyeOff, ShieldCheck, Zap, Flame, Save, Server
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
 import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
+import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
 import type { LessonStep } from '@/lib/types';
 import { Checkbox } from './ui/checkbox';
 import { Badge } from '@/components/ui/badge';
@@ -122,6 +123,8 @@ export function AiLessonStepGenerationDialog({
   const [isCustomModel, setIsCustomModel] = useState(false);
   const [showApiKeyText, setShowApiKeyText] = useState(false);
   const [isKeySaved, setIsKeySaved] = useState(false);
+  const [isSavingSystemKey, setIsSavingSystemKey] = useState(false);
+  const [isSystemPersisted, setIsSystemPersisted] = useState(false);
 
   const { toast } = useToast();
 
@@ -135,22 +138,55 @@ export function AiLessonStepGenerationDialog({
   
   const activityOptions = generationType ? allActivityOptions[generationType] : [];
 
-  // Tarayıcıdan kayıtlı API Anahtarı ve Modeli yükle
+  // Sistemden ve tarayıcıdan kayıtlı API Anahtarı ve Modeli yükle
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-        const savedKey = localStorage.getItem('custom_gemini_api_key') || '';
-        const savedModel = localStorage.getItem('custom_gemini_model') || 'gemini-3.7-flash';
-        setApiKey(savedKey);
-        
-        const isKnown = FREE_GEMINI_MODELS.some(m => m.id === savedModel);
-        if (isKnown) {
-            setSelectedModel(savedModel);
-            setIsCustomModel(false);
-        } else {
-            setSelectedModel('custom');
-            setCustomModelInput(savedModel);
-            setIsCustomModel(true);
+    async function loadConfig() {
+        if (typeof window !== 'undefined') {
+            const localKey = localStorage.getItem('custom_gemini_api_key') || '';
+            const localModel = localStorage.getItem('custom_gemini_model') || '';
+
+            if (localKey) {
+                setApiKey(localKey);
+            }
+            if (localModel) {
+                const isKnown = FREE_GEMINI_MODELS.some(m => m.id === localModel);
+                if (isKnown) {
+                    setSelectedModel(localModel);
+                    setIsCustomModel(false);
+                } else {
+                    setSelectedModel('custom');
+                    setCustomModelInput(localModel);
+                    setIsCustomModel(true);
+                }
+            }
         }
+
+        try {
+            const sysConfig = await getSystemAiConfigAction();
+            if (sysConfig.apiKey) {
+                setIsSystemPersisted(true);
+                if (!apiKey) {
+                    setApiKey(sysConfig.apiKey);
+                }
+            }
+            if (sysConfig.modelName && !selectedModel) {
+                const isKnown = FREE_GEMINI_MODELS.some(m => m.id === sysConfig.modelName);
+                if (isKnown) {
+                    setSelectedModel(sysConfig.modelName);
+                    setIsCustomModel(false);
+                } else {
+                    setSelectedModel('custom');
+                    setCustomModelInput(sysConfig.modelName);
+                    setIsCustomModel(true);
+                }
+            }
+        } catch (e) {
+            console.warn("Could not fetch system AI config:", e);
+        }
+    }
+
+    if (isOpen) {
+        loadConfig();
     }
   }, [isOpen]);
 
@@ -172,16 +208,43 @@ export function AiLessonStepGenerationDialog({
     }
   }, [context, isOpen, form, generationType]);
 
-  const handleSaveApiKey = (keyToSave: string) => {
-    setApiKey(keyToSave);
-    if (typeof window !== 'undefined') {
-        localStorage.setItem('custom_gemini_api_key', keyToSave.trim());
-        setIsKeySaved(true);
-        setTimeout(() => setIsKeySaved(false), 2000);
-        toast({
-            title: "Kaydedildi",
-            description: keyToSave.trim() ? "Gemini API Anahtarınız tarayıcınıza kaydedildi." : "Varsayılan sistem anahtarı kullanılacak.",
+  const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
+
+  // Anahtarı hem tarayıcıya hem de doğrudan Firebase/Sisteme kalıcı olarak kaydet
+  const handleSaveApiKeyToSystem = async () => {
+    setIsSavingSystemKey(true);
+    try {
+        const trimmedKey = apiKey.trim();
+        const trimmedModel = activeModelId;
+
+        // Tarayıcıya kaydet
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('custom_gemini_api_key', trimmedKey);
+            localStorage.setItem('custom_gemini_model', trimmedModel);
+        }
+
+        // Sisteme / Firestore'a kalıcı kaydet
+        const result = await saveSystemAiConfigAction({
+            apiKey: trimmedKey,
+            modelName: trimmedModel,
         });
+
+        setIsKeySaved(true);
+        setIsSystemPersisted(!!trimmedKey);
+        setTimeout(() => setIsKeySaved(false), 3000);
+
+        toast({
+            title: "Sisteme Kaydedildi",
+            description: result.message,
+        });
+    } catch (error: any) {
+        toast({
+            title: "Hata",
+            description: "Kayıt sırasında bir hata oluştu: " + error.message,
+            variant: "destructive",
+        });
+    } finally {
+        setIsSavingSystemKey(false);
     }
   };
 
@@ -194,10 +257,6 @@ export function AiLessonStepGenerationDialog({
         setSelectedModel(modelId);
         if (typeof window !== 'undefined') {
             localStorage.setItem('custom_gemini_model', modelId);
-            toast({
-                title: "Model Güncellendi",
-                description: `Aktif model: ${modelId}`,
-            });
         }
     }
   };
@@ -208,8 +267,6 @@ export function AiLessonStepGenerationDialog({
         localStorage.setItem('custom_gemini_model', customId.trim());
     }
   };
-
-  const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!context) {
@@ -389,10 +446,10 @@ export function AiLessonStepGenerationDialog({
             onClick={() => setShowSettings(!showSettings)}
             className={cn(
                 "border-white/10 text-xs font-bold rounded-xl transition-all mr-6",
-                showSettings ? "bg-indigo-600 text-white border-indigo-500" : "bg-slate-900 text-slate-300 hover:bg-slate-800"
+                showSettings ? "bg-indigo-600 text-white border-indigo-500 shadow-md" : "bg-slate-900 text-slate-300 hover:bg-slate-800"
             )}
           >
-            <Settings2 className="w-3.5 h-3.5 mr-1.5" /> Model & API
+            <Settings2 className="w-3.5 h-3.5 mr-1.5" /> Model & API Ayarları
           </Button>
         </DialogHeader>
 
@@ -435,16 +492,24 @@ export function AiLessonStepGenerationDialog({
                                 </a>
                             </div>
 
-                            {/* API Key Input */}
-                            <div className="space-y-1.5">
-                                <Label className="text-xs text-slate-300 font-bold">Kişisel Gemini API Anahtarınız</Label>
-                                <div className="flex gap-2">
+                            {/* API Key Input + Sisteme Kaydet Butonu */}
+                            <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-xs text-slate-300 font-bold">Google Gemini API Anahtarınız</Label>
+                                    {isSystemPersisted && (
+                                        <Badge variant="outline" className="text-[9px] bg-emerald-500/10 text-emerald-400 border-emerald-500/30 flex items-center gap-1">
+                                            <Server className="w-2.5 h-2.5" /> Sistem Anahtarı Aktif
+                                        </Badge>
+                                    )}
+                                </div>
+                                
+                                <div className="flex flex-col sm:flex-row gap-2">
                                     <div className="relative flex-1">
                                         <Input 
                                             type={showApiKeyText ? "text" : "password"}
                                             value={apiKey}
-                                            onChange={(e) => handleSaveApiKey(e.target.value)}
-                                            placeholder="AIzaSy... (Boş bırakılırsa sistem anahtarı kullanılır)"
+                                            onChange={(e) => setApiKey(e.target.value)}
+                                            placeholder="AIzaSy... (Boş bırakılırsa sistem varsayılanı kullanılır)"
                                             className="bg-slate-950 border-white/10 text-xs font-mono pr-10 rounded-xl"
                                         />
                                         <button
@@ -455,14 +520,25 @@ export function AiLessonStepGenerationDialog({
                                             {showApiKeyText ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                         </button>
                                     </div>
-                                    {isKeySaved && (
-                                        <Badge variant="outline" className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] flex items-center gap-1">
-                                            <Check className="w-3 h-3" /> Kaydedildi
-                                        </Badge>
-                                    )}
+                                    
+                                    <Button
+                                        type="button"
+                                        onClick={handleSaveApiKeyToSystem}
+                                        disabled={isSavingSystemKey}
+                                        className="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs rounded-xl flex items-center gap-1.5 px-4 cursor-pointer"
+                                    >
+                                        {isSavingSystemKey ? (
+                                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                        ) : isKeySaved ? (
+                                            <Check className="w-3.5 h-3.5 text-emerald-300" />
+                                        ) : (
+                                            <Save className="w-3.5 h-3.5" />
+                                        )}
+                                        {isKeySaved ? "Kaydedildi!" : "Sisteme Kaydet"}
+                                    </Button>
                                 </div>
                                 <p className="text-[10px] text-slate-400">
-                                    * API anahtarınız doğrudan tarayıcınızda saklanır ve harici sunuculara aktarılmaz.
+                                    * "Sisteme Kaydet" butonuna tıkladığınızda bu anahtar sunucu ve veritabanına kalıcı olarak işlenir ve tüm sistemin aktif anahtarı haline gelir.
                                 </p>
                             </div>
 

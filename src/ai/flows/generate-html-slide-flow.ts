@@ -14,9 +14,13 @@ export type GenerateHtmlSlideOutput = {
   htmlContent: string;
 };
 
+import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
+
 export async function generateHtmlSlide(input: GenerateHtmlSlideInput): Promise<GenerateHtmlSlideOutput> {
-  const activeKey = input.apiKey?.trim() || process.env.GEMINI_API_KEY || '';
-  const selectedModel = input.modelName?.trim() || 'gemini-3.7-flash';
+  const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
+    apiKey: input.apiKey,
+    modelName: input.modelName,
+  });
 
   if (!activeKey) {
     throw new Error('Gemini API anahtarı bulunamadı.');

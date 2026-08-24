@@ -62,12 +62,16 @@ const moduleInstructions: Record<string, string> = {
   sentenceScrambleQuestions: `- sentenceScrambleQuestions: Karışık kelimeli cümle düzeltme. (Örn: [{ "scrambledSentence": "geldi bugün okula ali", "correctSentence": "ali bugün okula geldi" }])`,
 };
 
+import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
+
 export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
-  const activeKey = input.apiKey?.trim() || process.env.GEMINI_API_KEY || '';
-  const selectedModel = input.modelName?.trim() || 'gemini-3.7-flash';
+  const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
+    apiKey: input.apiKey,
+    modelName: input.modelName,
+  });
 
   if (!activeKey) {
-    throw new Error('Gemini API anahtarı bulunamadı. Lütfen "Model & API Ayarları" bölümünden kendi Google AI Studio API anahtarınızı girin.');
+    throw new Error('Gemini API anahtarı bulunamadı. Lütfen "Model & API Ayarları" bölümünden kendi Google AI Studio API anahtarınızı girip "Sisteme Kaydet"e tıklayın.');
   }
 
   const requestedInstructions = Object.entries(input.modules)
