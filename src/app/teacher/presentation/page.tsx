@@ -136,44 +136,35 @@ function PresentationPageContent() {
     const noOp = () => {};
 
     return (
-        <div className={cn(
-            "h-screen w-screen overflow-hidden flex flex-col font-sans relative transition-colors duration-500",
-            isDarkMode ? "dark bg-[#020617] text-white" : "bg-slate-50 text-slate-900"
-        )}>
+        <main 
+            ref={mainContentRef} 
+            className={cn(
+                "h-screen w-screen overflow-hidden flex flex-col font-sans relative transition-colors duration-500",
+                isDarkMode ? "dark bg-[#020617] text-white" : "bg-slate-50 text-slate-900"
+            )}
+        >
             {/* Ambient Animated Background (Dark Mode Only) */}
             {isDarkMode && (
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                     <motion.div 
-                        animate={{ 
-                            scale: [1, 1.2, 1],
-                            opacity: [0.3, 0.5, 0.3],
-                            rotate: [0, 90, 0]
-                        }}
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3], rotate: [0, 90, 0] }}
                         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                         className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-900/20 blur-[120px]" 
                     />
                     <motion.div 
-                        animate={{ 
-                            scale: [1, 1.5, 1],
-                            opacity: [0.2, 0.4, 0.2],
-                            x: [0, 100, 0]
-                        }}
+                        animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.4, 0.2], x: [0, 100, 0] }}
                         transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
                         className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-900/20 blur-[100px]" 
                     />
                     <motion.div 
-                        animate={{ 
-                            scale: [1, 1.3, 1],
-                            opacity: [0.1, 0.3, 0.1],
-                            y: [0, -50, 0]
-                        }}
+                        animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.3, 0.1], y: [0, -50, 0] }}
                         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
                         className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-sky-900/20 blur-[150px]" 
                     />
                 </div>
             )}
-                <div className={cn("absolute inset-0 bg-[url('/grid-pattern.svg')]", isDarkMode ? "opacity-[0.05]" : "opacity-[0.1]")} />
-            </div>
+            
+            <div className={cn("absolute inset-0 bg-[url('/grid-pattern.svg')]", isDarkMode ? "opacity-[0.05]" : "opacity-[0.1]")} />
 
             {/* İçerik Alanı - Tam Ekran (Full-Bleed) */}
             <div className="flex-grow flex flex-col min-h-0 relative z-10 w-full h-full">
