@@ -132,14 +132,14 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
 
 // --- ORTAK RENK TEMALARI ---
 export const FLASHCARD_THEMES = [
-    { front: 'bg-gradient-to-br from-rose-900/60 to-rose-800/40 border-rose-500/40 text-rose-100', back: 'bg-gradient-to-br from-rose-500 to-rose-600 border-rose-400/50 text-white shadow-[0_0_30px_rgba(225,29,72,0.5)]' },
-    { front: 'bg-gradient-to-br from-sky-900/60 to-blue-800/40 border-sky-500/40 text-sky-100', back: 'bg-gradient-to-br from-sky-500 to-blue-600 border-sky-400/50 text-white shadow-[0_0_30px_rgba(14,165,233,0.5)]' },
-    { front: 'bg-gradient-to-br from-emerald-900/60 to-green-800/40 border-emerald-500/40 text-emerald-100', back: 'bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400/50 text-white shadow-[0_0_30px_rgba(16,185,129,0.5)]' },
-    { front: 'bg-gradient-to-br from-amber-900/60 to-orange-800/40 border-amber-500/40 text-amber-100', back: 'bg-gradient-to-br from-amber-500 to-orange-600 border-amber-400/50 text-white shadow-[0_0_30px_rgba(245,158,11,0.5)]' },
-    { front: 'bg-gradient-to-br from-violet-900/60 to-purple-800/40 border-violet-500/40 text-violet-100', back: 'bg-gradient-to-br from-violet-500 to-purple-600 border-violet-400/50 text-white shadow-[0_0_30px_rgba(139,92,246,0.5)]' },
-    { front: 'bg-gradient-to-br from-cyan-900/60 to-teal-800/40 border-cyan-500/40 text-cyan-100', back: 'bg-gradient-to-br from-cyan-500 to-teal-600 border-cyan-400/50 text-white shadow-[0_0_30px_rgba(6,182,212,0.5)]' },
-    { front: 'bg-gradient-to-br from-indigo-900/60 to-blue-800/40 border-indigo-500/40 text-indigo-100', back: 'bg-gradient-to-br from-indigo-500 to-blue-600 border-indigo-400/50 text-white shadow-[0_0_30px_rgba(99,102,241,0.5)]' },
-    { front: 'bg-gradient-to-br from-orange-900/60 to-red-800/40 border-orange-500/40 text-orange-100', back: 'bg-gradient-to-br from-orange-500 to-red-600 border-orange-400/50 text-white shadow-[0_0_30px_rgba(249,115,22,0.5)]' },
+    { front: 'bg-gradient-to-br from-rose-50 to-rose-100/50 dark:from-rose-900/60 dark:to-rose-800/40 border-rose-200 dark:border-rose-500/40 text-rose-900 dark:text-rose-100', back: 'bg-gradient-to-br from-rose-500 to-rose-600 border-rose-400/50 text-white shadow-[0_0_30px_rgba(225,29,72,0.3)] dark:shadow-[0_0_30px_rgba(225,29,72,0.5)]' },
+    { front: 'bg-gradient-to-br from-sky-50 to-sky-100/50 dark:from-sky-900/60 dark:to-blue-800/40 border-sky-200 dark:border-sky-500/40 text-sky-900 dark:text-sky-100', back: 'bg-gradient-to-br from-sky-500 to-blue-600 border-sky-400/50 text-white shadow-[0_0_30px_rgba(14,165,233,0.3)] dark:shadow-[0_0_30px_rgba(14,165,233,0.5)]' },
+    { front: 'bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-900/60 dark:to-green-800/40 border-emerald-200 dark:border-emerald-500/40 text-emerald-900 dark:text-emerald-100', back: 'bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400/50 text-white shadow-[0_0_30px_rgba(16,185,129,0.3)] dark:shadow-[0_0_30px_rgba(16,185,129,0.5)]' },
+    { front: 'bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-900/60 dark:to-orange-800/40 border-amber-200 dark:border-amber-500/40 text-amber-900 dark:text-amber-100', back: 'bg-gradient-to-br from-amber-500 to-orange-600 border-amber-400/50 text-white shadow-[0_0_30px_rgba(245,158,11,0.3)] dark:shadow-[0_0_30px_rgba(245,158,11,0.5)]' },
+    { front: 'bg-gradient-to-br from-violet-50 to-violet-100/50 dark:from-violet-900/60 dark:to-purple-800/40 border-violet-200 dark:border-violet-500/40 text-violet-900 dark:text-violet-100', back: 'bg-gradient-to-br from-violet-500 to-purple-600 border-violet-400/50 text-white shadow-[0_0_30px_rgba(139,92,246,0.3)] dark:shadow-[0_0_30px_rgba(139,92,246,0.5)]' },
+    { front: 'bg-gradient-to-br from-cyan-50 to-cyan-100/50 dark:from-cyan-900/60 dark:to-teal-800/40 border-cyan-200 dark:border-cyan-500/40 text-cyan-900 dark:text-cyan-100', back: 'bg-gradient-to-br from-cyan-500 to-teal-600 border-cyan-400/50 text-white shadow-[0_0_30px_rgba(6,182,212,0.3)] dark:shadow-[0_0_30px_rgba(6,182,212,0.5)]' },
+    { front: 'bg-gradient-to-br from-indigo-50 to-indigo-100/50 dark:from-indigo-900/60 dark:to-blue-800/40 border-indigo-200 dark:border-indigo-500/40 text-indigo-900 dark:text-indigo-100', back: 'bg-gradient-to-br from-indigo-500 to-blue-600 border-indigo-400/50 text-white shadow-[0_0_30px_rgba(99,102,241,0.3)] dark:shadow-[0_0_30px_rgba(99,102,241,0.5)]' },
+    { front: 'bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-900/60 dark:to-red-800/40 border-orange-200 dark:border-orange-500/40 text-orange-900 dark:text-orange-100', back: 'bg-gradient-to-br from-orange-500 to-red-600 border-orange-400/50 text-white shadow-[0_0_30px_rgba(249,115,22,0.3)] dark:shadow-[0_0_30px_rgba(249,115,22,0.5)]' },
 ];
 
 // --- 1. VisualPlayer ---
@@ -158,9 +158,9 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
     return (
         <div 
             className={cn(
-                "relative flex flex-col items-center justify-center bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200 transition-all duration-500 ease-in-out",
+                "relative flex flex-col items-center justify-center bg-white dark:bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-white/10 transition-all duration-500 ease-in-out",
                 isMaximized 
-                    ? "fixed inset-0 z-[40] w-screen h-screen rounded-none border-0 bg-black" 
+                    ? "fixed inset-0 z-[40] w-screen h-screen rounded-none border-0 bg-black dark:bg-black" 
                     : "w-full h-full"
             )}
         >
@@ -209,22 +209,22 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     }, [allAnswered, isCompleted, onAllAnswered]);
 
     const colorThemes = [
-        { card: 'border-cyan-500/30 bg-cyan-950/40 hover:bg-cyan-950/60', number: 'text-cyan-400' },
-        { card: 'border-violet-500/30 bg-violet-950/40 hover:bg-violet-950/60', number: 'text-violet-400' },
-        { card: 'border-amber-500/30 bg-amber-950/40 hover:bg-amber-950/60', number: 'text-amber-400' },
-        { card: 'border-rose-500/30 bg-rose-950/40 hover:bg-rose-950/60', number: 'text-rose-400' },
-        { card: 'border-emerald-500/30 bg-emerald-950/40 hover:bg-emerald-950/60', number: 'text-emerald-400' },
-        { card: 'border-indigo-500/30 bg-indigo-950/40 hover:bg-indigo-950/60', number: 'text-indigo-400' },
+        { card: 'border-cyan-200 dark:border-cyan-500/30 bg-cyan-50 dark:bg-cyan-950/40 hover:bg-cyan-100/50 dark:hover:bg-cyan-950/60', number: 'text-cyan-600 dark:text-cyan-400' },
+        { card: 'border-violet-200 dark:border-violet-500/30 bg-violet-50 dark:bg-violet-950/40 hover:bg-violet-100/50 dark:hover:bg-violet-950/60', number: 'text-violet-600 dark:text-violet-400' },
+        { card: 'border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100/50 dark:hover:bg-amber-950/60', number: 'text-amber-600 dark:text-amber-400' },
+        { card: 'border-rose-200 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100/50 dark:hover:bg-rose-950/60', number: 'text-rose-600 dark:text-rose-400' },
+        { card: 'border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100/50 dark:hover:bg-emerald-950/60', number: 'text-emerald-600 dark:text-emerald-400' },
+        { card: 'border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100/50 dark:hover:bg-indigo-950/60', number: 'text-indigo-600 dark:text-indigo-400' },
     ];
 
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-4xl mx-auto")}>
              <div className={cn(
-                "relative p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-lg",
+                "relative p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-lg",
                 isTeacher ? "py-4 mb-6 mt-2" : "mb-3 md:mb-4"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn("font-black text-white",
+                <h2 className={cn("font-black text-slate-800 dark:text-white",
                     isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl")
                 )}>{step.title}</h2>
             </div>
@@ -242,14 +242,14 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                             "rounded-2xl border-2 shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
                             isTeacher ? "p-6 min-h-[14rem]" : "p-4 min-h-[10rem]",
                             isAnswered
-                                ? (isCorrect ? "border-emerald-500/60 bg-emerald-950/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "border-rose-500/60 bg-rose-950/50 shadow-[0_0_20px_rgba(244,63,94,0.2)]")
+                                ? (isCorrect ? "border-emerald-500/60 bg-emerald-50 dark:bg-emerald-950/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "border-rose-500/60 bg-rose-50 dark:bg-rose-950/50 shadow-[0_0_20px_rgba(244,63,94,0.2)]")
                                 : `${theme.card} border`
                         )}>
                             <div className="flex gap-4 mb-6">
-                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-xl", isAnswered ? "text-white" : theme.number)}>
+                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-xl", isAnswered ? "text-slate-900 dark:text-white" : theme.number)}>
                                     {index + 1}.
                                 </span>
-                                <p className={cn("font-bold text-slate-200 leading-relaxed", isTeacher ? "text-2xl" : "text-base")}>
+                                <p className={cn("font-bold text-slate-700 dark:text-slate-200 leading-relaxed", isTeacher ? "text-2xl" : "text-base")}>
                                     {q.statement}
                                 </p>
                             </div>
@@ -264,8 +264,8 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                         isAnswered && userAnswer.answer === true
                                             ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== true
-                                                ? "bg-white/3 border-white/5 text-slate-600 opacity-30"
-                                                : "bg-emerald-950/60 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60 hover:border-emerald-400/60"
+                                                ? "bg-slate-100 dark:bg-white/3 border-slate-200 dark:border-white/5 text-slate-400 dark:text-slate-600 opacity-50"
+                                                : "bg-emerald-100/50 dark:bg-emerald-950/60 border-emerald-300/50 dark:border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200/50 dark:hover:bg-emerald-900/60 hover:border-emerald-400/60"
                                     )}
                                 >
                                     <CheckCircle className={cn(isTeacher ? "h-5 w-5" : "h-4 w-4")} /> Doğru
@@ -279,8 +279,8 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                         isAnswered && userAnswer.answer === false
                                             ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== false
-                                                ? "bg-white/3 border-white/5 text-slate-600 opacity-30"
-                                                : "bg-rose-950/60 border-rose-500/40 text-rose-300 hover:bg-rose-900/60 hover:border-rose-400/60"
+                                                ? "bg-slate-100 dark:bg-white/3 border-slate-200 dark:border-white/5 text-slate-400 dark:text-slate-600 opacity-50"
+                                                : "bg-rose-100/50 dark:bg-rose-950/60 border-rose-300/50 dark:border-rose-500/40 text-rose-700 dark:text-rose-300 hover:bg-rose-200/50 dark:hover:bg-rose-900/60 hover:border-rose-400/60"
                                     )}
                                 >
                                     <XCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 md:h-4 md:w-4")} /> Yanlış
@@ -354,16 +354,16 @@ export function ContentListPlayer({
         { left: Quote, right: Quote }
     ];
 
-    // Renk Temaları
+    // Renk Temaları (Adaptive)
     const styles = [
-        { bg: 'bg-gradient-to-br from-sky-950/60 to-blue-900/30', border: 'border-sky-500/30', circleBorder: 'border-sky-400/60 shadow-[0_0_12px_rgba(14,165,233,0.3)]', numberColor: 'text-sky-400', textColor: 'text-sky-100', iconColor: 'text-sky-400' },
-        { bg: 'bg-gradient-to-br from-rose-950/60 to-pink-900/30', border: 'border-rose-500/30', circleBorder: 'border-rose-400/60 shadow-[0_0_12px_rgba(244,63,94,0.3)]', numberColor: 'text-rose-400', textColor: 'text-rose-100', iconColor: 'text-rose-400' },
-        { bg: 'bg-gradient-to-br from-amber-950/60 to-orange-900/30', border: 'border-amber-500/30', circleBorder: 'border-amber-400/60 shadow-[0_0_12px_rgba(245,158,11,0.3)]', numberColor: 'text-amber-400', textColor: 'text-amber-100', iconColor: 'text-amber-400' },
-        { bg: 'bg-gradient-to-br from-emerald-950/60 to-green-900/30', border: 'border-emerald-500/30', circleBorder: 'border-emerald-400/60 shadow-[0_0_12px_rgba(16,185,129,0.3)]', numberColor: 'text-emerald-400', textColor: 'text-emerald-100', iconColor: 'text-emerald-400' },
-        { bg: 'bg-gradient-to-br from-violet-950/60 to-purple-900/30', border: 'border-violet-500/30', circleBorder: 'border-violet-400/60 shadow-[0_0_12px_rgba(139,92,246,0.3)]', numberColor: 'text-violet-400', textColor: 'text-violet-100', iconColor: 'text-violet-400' },
-        { bg: 'bg-gradient-to-br from-cyan-950/60 to-teal-900/30', border: 'border-cyan-500/30', circleBorder: 'border-cyan-400/60 shadow-[0_0_12px_rgba(6,182,212,0.3)]', numberColor: 'text-cyan-400', textColor: 'text-cyan-100', iconColor: 'text-cyan-400' },
-        { bg: 'bg-gradient-to-br from-indigo-950/60 to-blue-900/30', border: 'border-indigo-500/30', circleBorder: 'border-indigo-400/60 shadow-[0_0_12px_rgba(99,102,241,0.3)]', numberColor: 'text-indigo-400', textColor: 'text-indigo-100', iconColor: 'text-indigo-400' },
-        { bg: 'bg-gradient-to-br from-orange-950/60 to-red-900/30', border: 'border-orange-500/30', circleBorder: 'border-orange-400/60 shadow-[0_0_12px_rgba(249,115,22,0.3)]', numberColor: 'text-orange-400', textColor: 'text-orange-100', iconColor: 'text-orange-400' },
+        { bg: 'bg-sky-50 dark:bg-gradient-to-br dark:from-sky-950/60 dark:to-blue-900/30', border: 'border-sky-200 dark:border-sky-500/30', circleBorder: 'border-sky-300 dark:border-sky-400/60 dark:shadow-[0_0_12px_rgba(14,165,233,0.3)]', numberColor: 'text-sky-600 dark:text-sky-400', textColor: 'text-sky-900 dark:text-sky-100', iconColor: 'text-sky-600 dark:text-sky-400' },
+        { bg: 'bg-rose-50 dark:bg-gradient-to-br dark:from-rose-950/60 dark:to-pink-900/30', border: 'border-rose-200 dark:border-rose-500/30', circleBorder: 'border-rose-300 dark:border-rose-400/60 dark:shadow-[0_0_12px_rgba(244,63,94,0.3)]', numberColor: 'text-rose-600 dark:text-rose-400', textColor: 'text-rose-900 dark:text-rose-100', iconColor: 'text-rose-600 dark:text-rose-400' },
+        { bg: 'bg-amber-50 dark:bg-gradient-to-br dark:from-amber-950/60 dark:to-orange-900/30', border: 'border-amber-200 dark:border-amber-500/30', circleBorder: 'border-amber-300 dark:border-amber-400/60 dark:shadow-[0_0_12px_rgba(245,158,11,0.3)]', numberColor: 'text-amber-600 dark:text-amber-400', textColor: 'text-amber-900 dark:text-amber-100', iconColor: 'text-amber-600 dark:text-amber-400' },
+        { bg: 'bg-emerald-50 dark:bg-gradient-to-br dark:from-emerald-950/60 dark:to-green-900/30', border: 'border-emerald-200 dark:border-emerald-500/30', circleBorder: 'border-emerald-300 dark:border-emerald-400/60 dark:shadow-[0_0_12px_rgba(16,185,129,0.3)]', numberColor: 'text-emerald-600 dark:text-emerald-400', textColor: 'text-emerald-900 dark:text-emerald-100', iconColor: 'text-emerald-600 dark:text-emerald-400' },
+        { bg: 'bg-violet-50 dark:bg-gradient-to-br dark:from-violet-950/60 dark:to-purple-900/30', border: 'border-violet-200 dark:border-violet-500/30', circleBorder: 'border-violet-300 dark:border-violet-400/60 dark:shadow-[0_0_12px_rgba(139,92,246,0.3)]', numberColor: 'text-violet-600 dark:text-violet-400', textColor: 'text-violet-900 dark:text-violet-100', iconColor: 'text-violet-600 dark:text-violet-400' },
+        { bg: 'bg-cyan-50 dark:bg-gradient-to-br dark:from-cyan-950/60 dark:to-teal-900/30', border: 'border-cyan-200 dark:border-cyan-500/30', circleBorder: 'border-cyan-300 dark:border-cyan-400/60 dark:shadow-[0_0_12px_rgba(6,182,212,0.3)]', numberColor: 'text-cyan-600 dark:text-cyan-400', textColor: 'text-cyan-900 dark:text-cyan-100', iconColor: 'text-cyan-600 dark:text-cyan-400' },
+        { bg: 'bg-indigo-50 dark:bg-gradient-to-br dark:from-indigo-950/60 dark:to-blue-900/30', border: 'border-indigo-200 dark:border-indigo-500/30', circleBorder: 'border-indigo-300 dark:border-indigo-400/60 dark:shadow-[0_0_12px_rgba(99,102,241,0.3)]', numberColor: 'text-indigo-600 dark:text-indigo-400', textColor: 'text-indigo-900 dark:text-indigo-100', iconColor: 'text-indigo-600 dark:text-indigo-400' },
+        { bg: 'bg-orange-50 dark:bg-gradient-to-br dark:from-orange-950/60 dark:to-red-900/30', border: 'border-orange-200 dark:border-orange-500/30', circleBorder: 'border-orange-300 dark:border-orange-400/60 dark:shadow-[0_0_12px_rgba(249,115,22,0.3)]', numberColor: 'text-orange-600 dark:text-orange-400', textColor: 'text-orange-900 dark:text-orange-100', iconColor: 'text-orange-600 dark:text-orange-400' },
     ];
 
     useEffect(() => {
@@ -391,7 +391,7 @@ export function ContentListPlayer({
                             <X className="h-8 w-8" />
                         </button>
                         
-                        <div className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white leading-tight py-12 max-h-[70vh] overflow-y-auto drop-shadow-xl">
+                        <div className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight py-12 max-h-[70vh] overflow-y-auto drop-shadow-xl">
                              <TypewriterText 
                                 content={latestSentence} 
                                 onComplete={() => onAnimationEnd?.()} 
@@ -408,16 +408,16 @@ export function ContentListPlayer({
             
             {/* BAŞLIK */}
             <div className={cn(
-                "relative z-20 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl flex-shrink-0 w-full max-w-full text-center mb-6 overflow-hidden",
+                "relative z-20 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 w-full max-w-full text-center mb-6 overflow-hidden shadow-lg",
                 isTeacher ? "py-6 mt-2 px-6" : "p-4 md:p-6"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
                 <div className="flex items-center justify-center gap-3">
-                    <Sparkles className="text-purple-400 h-5 w-5 animate-pulse" />
-                    <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300",
+                    <Sparkles className="text-purple-600 dark:text-purple-400 h-5 w-5 animate-pulse" />
+                    <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 to-purple-700 dark:from-indigo-300 dark:to-purple-300",
                         isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl")
                     )}>{step.title}</h2>
-                    <Sparkles className="text-purple-400 h-5 w-5 animate-pulse" />
+                    <Sparkles className="text-purple-600 dark:text-purple-400 h-5 w-5 animate-pulse" />
                 </div>
             </div>
               
@@ -486,19 +486,19 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title }: { items
     const isTeacher = useTeacherMode();
     
     const cardStyles = [
-        { bg: 'bg-sky-950/50 hover:bg-sky-900/60', border: 'border-sky-500/30', title: 'text-sky-300', hoverBorder: 'hover:border-sky-400/60' },
-        { bg: 'bg-rose-950/50 hover:bg-rose-900/60', border: 'border-rose-500/30', title: 'text-rose-300', hoverBorder: 'hover:border-rose-400/60' },
-        { bg: 'bg-amber-950/50 hover:bg-amber-900/60', border: 'border-amber-500/30', title: 'text-amber-300', hoverBorder: 'hover:border-amber-400/60' },
-        { bg: 'bg-emerald-950/50 hover:bg-emerald-900/60', border: 'border-emerald-500/30', title: 'text-emerald-300', hoverBorder: 'hover:border-emerald-400/60' },
-        { bg: 'bg-violet-950/50 hover:bg-violet-900/60', border: 'border-violet-500/30', title: 'text-violet-300', hoverBorder: 'hover:border-violet-400/60' },
-        { bg: 'bg-cyan-950/50 hover:bg-cyan-900/60', border: 'border-cyan-500/30', title: 'text-cyan-300', hoverBorder: 'hover:border-cyan-400/60' },
+        { bg: 'bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100/50 dark:hover:bg-sky-900/60', border: 'border-sky-200 dark:border-sky-500/30', title: 'text-sky-700 dark:text-sky-300', hoverBorder: 'hover:border-sky-300 dark:hover:border-sky-400/60' },
+        { bg: 'bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100/50 dark:hover:bg-rose-900/60', border: 'border-rose-200 dark:border-rose-500/30', title: 'text-rose-700 dark:text-rose-300', hoverBorder: 'hover:border-rose-300 dark:hover:border-rose-400/60' },
+        { bg: 'bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100/50 dark:hover:bg-amber-900/60', border: 'border-amber-200 dark:border-amber-500/30', title: 'text-amber-700 dark:text-amber-300', hoverBorder: 'hover:border-amber-300 dark:hover:border-amber-400/60' },
+        { bg: 'bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100/50 dark:hover:bg-emerald-900/60', border: 'border-emerald-200 dark:border-emerald-500/30', title: 'text-emerald-700 dark:text-emerald-300', hoverBorder: 'hover:border-emerald-300 dark:hover:border-emerald-400/60' },
+        { bg: 'bg-violet-50 dark:bg-violet-950/50 hover:bg-violet-100/50 dark:hover:bg-violet-900/60', border: 'border-violet-200 dark:border-violet-500/30', title: 'text-violet-700 dark:text-violet-300', hoverBorder: 'hover:border-violet-300 dark:hover:border-violet-400/60' },
+        { bg: 'bg-cyan-50 dark:bg-cyan-950/50 hover:bg-cyan-100/50 dark:hover:bg-cyan-900/60', border: 'border-cyan-200 dark:border-cyan-500/30', title: 'text-cyan-700 dark:text-cyan-300', hoverBorder: 'hover:border-cyan-300 dark:hover:border-cyan-400/60' },
     ];
 
     return (
         <div className={cn('flex flex-col h-full w-full items-center justify-start p-2', isTeacher ? "max-w-[98%] mx-auto pt-4" : "max-w-6xl mx-auto justify-center")}>
-            <div className={cn("relative p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl flex-shrink-0 mb-6 w-full text-center overflow-hidden")}>
+            <div className={cn("relative p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 mb-6 w-full text-center overflow-hidden shadow-lg")}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn("font-black text-white", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
+                <h2 className={cn("font-black text-slate-800 dark:text-white", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
             </div>
              
             <div className={cn(
@@ -531,10 +531,10 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title }: { items
                                 style.hoverBorder,
                                 isTeacher ? 'min-h-[180px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
                             )}>
-                                <CardHeader className={cn("border-b border-white/10", isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
+                                <CardHeader className={cn("border-b border-slate-200 dark:border-white/10", isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
                                     <CardTitle className={cn("font-black uppercase tracking-wider transition-colors", style.title, isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg"))}>{currentNum}. {item.concept}</CardTitle>
                                 </CardHeader>
-                                <CardContent className={cn("text-slate-200 font-semibold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
+                                <CardContent className={cn("text-slate-700 dark:text-slate-200 font-semibold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
                                     <div dangerouslySetInnerHTML={{ __html: item.definition }} />
                                 </CardContent>
                             </Card>
@@ -567,7 +567,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     return (
         <div className={cn("w-full p-4 flex flex-col justify-start", isTeacher ? "max-w-full pt-6" : "max-w-6xl mx-auto justify-center")}>
              <div className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
-                 <h2 className={cn("font-black text-center text-slate-800 drop-shadow-sm uppercase tracking-wide", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
+                 <h2 className={cn("font-black text-center text-slate-800 dark:text-white drop-shadow-sm uppercase tracking-wide", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
              </div>
             <div className={cn("grid gap-6 pb-32", isTeacher ? "grid-cols-3 lg:grid-cols-4 gap-8" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5")}>
                 {step.cards.map((card, index) => {
@@ -610,7 +610,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
                                     theme.back
                                 )} style={{ transform: "rotateY(180deg)" }}>
                                     <h3 
-                                        className="font-black break-all drop-shadow-lg uppercase tracking-wider text-slate-900 dark:text-white"
+                                        className="font-black break-all drop-shadow-lg uppercase tracking-wider text-white"
                                         style={{ fontSize: getDynamicFontSize(card.correctAnswer) }}
                                     >
                                         {card.correctAnswer}
@@ -637,7 +637,7 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
     return (
         <div className={cn("w-full p-4 flex flex-col justify-start", isTeacher ? "max-w-full pt-6" : "max-w-6xl mx-auto justify-center")}>
             <div className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
-                <h2 className={cn("font-black text-center text-slate-800 drop-shadow-sm uppercase tracking-wider", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
+                <h2 className={cn("font-black text-center text-slate-800 dark:text-white drop-shadow-sm uppercase tracking-wider", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
             </div>
             <div className={cn("grid gap-8 pb-32", isTeacher ? "grid-cols-2 lg:grid-cols-3" : (isFullscreen ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"))}>
                 {step.cards.map((card, index) => (
@@ -675,11 +675,11 @@ export const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFu
                 transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
             >
                 {/* Front */}
-                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl border shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-col items-center justify-center p-6 transition-all", theme.front)}>
+                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl border shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-col items-center justify-center p-6 transition-all", theme.front)}>
                     <h3 className={cn("font-black uppercase tracking-wider drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl md:text-3xl"))}>{term}</h3>
                     {!isTeacher && (
-                        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center justify-center bg-black/20 px-5 py-1.5 rounded-full border border-white/20 backdrop-blur-md">
-                            <span className="text-[9px] md:text-[11px] text-white/60 uppercase tracking-[0.3em] font-black">Dokun & Çevir</span>
+                        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center justify-center bg-black/5 dark:bg-black/20 px-5 py-1.5 rounded-full border border-black/10 dark:border-white/20 backdrop-blur-md">
+                            <span className="text-[9px] md:text-[11px] text-slate-500 dark:text-white/60 uppercase tracking-[0.3em] font-black">Dokun & Çevir</span>
                         </div>
                     )}
                 </div>
@@ -689,7 +689,7 @@ export const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFu
                     "absolute w-full h-full [backface-visibility:hidden] rounded-3xl border shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-col items-center justify-center p-8",
                     theme.back
                 )} style={{ transform: "rotateY(180deg)" }}>
-                    <p className={cn("font-bold leading-relaxed tracking-wide drop-shadow-md text-slate-900 dark:text-white", isTeacher ? "text-3xl" : (isFullscreen ? "text-xl" : "text-base md:text-lg"))}>{definition}</p>
+                    <p className={cn("font-bold leading-relaxed tracking-wide drop-shadow-md text-white", isTeacher ? "text-3xl" : (isFullscreen ? "text-xl" : "text-base md:text-lg"))}>{definition}</p>
                 </div>
             </motion.div>
         </div>
@@ -711,14 +711,14 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
     const [shakingLetterId, setShakingLetterId] = useState<number | null>(null);
 
     const letterColors = [
-        "bg-white text-rose-600 border-rose-200 hover:border-rose-400",
-        "bg-white text-orange-600 border-orange-200 hover:border-orange-400",
-        "bg-white text-amber-600 border-amber-200 hover:border-amber-400",
-        "bg-white text-emerald-600 border-emerald-200 hover:border-emerald-400",
-        "bg-white text-cyan-600 border-cyan-200 hover:border-cyan-400",
-        "bg-white text-blue-600 border-blue-200 hover:border-blue-400",
-        "bg-white text-indigo-600 border-indigo-200 hover:border-indigo-400",
-        "bg-white text-purple-600 border-purple-200 hover:border-purple-400",
+        "bg-white dark:bg-white/10 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-500/30 hover:border-rose-400 dark:hover:border-rose-400/60",
+        "bg-white dark:bg-white/10 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-500/30 hover:border-orange-400 dark:hover:border-orange-400/60",
+        "bg-white dark:bg-white/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-500/30 hover:border-amber-400 dark:hover:border-amber-400/60",
+        "bg-white dark:bg-white/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/30 hover:border-emerald-400 dark:hover:border-emerald-400/60",
+        "bg-white dark:bg-white/10 text-cyan-600 dark:text-cyan-400 border-cyan-200 dark:border-cyan-500/30 hover:border-cyan-400 dark:hover:border-cyan-400/60",
+        "bg-white dark:bg-white/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/30 hover:border-blue-400 dark:hover:border-blue-400/60",
+        "bg-white dark:bg-white/10 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/30 hover:border-indigo-400 dark:hover:border-indigo-400/60",
+        "bg-white dark:bg-white/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-500/30 hover:border-purple-400 dark:hover:border-purple-400/60",
     ];
 
     useEffect(() => {
@@ -763,13 +763,13 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
             "space-y-4 md:space-y-8 flex flex-col items-center mx-auto p-4 w-full",
             isTeacher ? "max-w-full justify-center" : "max-w-5xl justify-center"
         )}>
-            <div className="bg-white/60 p-4 md:p-10 rounded-3xl border border-white shadow-xl backdrop-blur-md w-full max-w-5xl text-center">
-                 <p className={cn("font-bold italic text-slate-700", isTeacher ? "text-3xl leading-snug" : "text-lg md:text-2xl")}>"{step.definition}"</p>
+            <div className="bg-white/60 dark:bg-white/5 p-4 md:p-10 rounded-3xl border border-white dark:border-white/10 shadow-xl backdrop-blur-md w-full max-w-5xl text-center">
+                 <p className={cn("font-bold italic text-slate-700 dark:text-slate-200", isTeacher ? "text-3xl leading-snug" : "text-lg md:text-2xl")}>"{step.definition}"</p>
             </div>
              
             {/* CEVAP ALANI */}
             <div className={cn(
-                "flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 p-4 md:p-8 rounded-3xl bg-white/40 border border-white/50 shadow-inner w-full max-w-6xl", 
+                "flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 p-4 md:p-8 rounded-3xl bg-white/40 dark:bg-white/5 border border-white/50 dark:border-white/10 shadow-inner w-full max-w-6xl", 
                 isTeacher ? "min-h-[12rem]" : "min-h-[8rem]"
             )}>
                 {targetWords.map((word, wordIndex) => (
@@ -790,13 +790,13 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                         isTeacher ? "h-20 w-16 text-4xl border-b-8" : "h-10 w-8 text-lg md:h-14 md:w-10 md:text-2xl md:border-b-4 text-sm",
                                         showCard
                                             ? cn(
-                                                "bg-white active:translate-y-1 active:border-b-0",
+                                                "bg-white dark:bg-white/10 active:translate-y-1 active:border-b-0",
                                                 // Cevap açıldıysa YEŞİL, değilse İNDİGO
                                                 isAnswerRevealed 
-                                                    ? "bg-emerald-100 text-emerald-600 border-emerald-300" 
-                                                    : "text-indigo-600 border-indigo-200"
+                                                    ? "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-500/30" 
+                                                    : "text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/30"
                                               )
-                                            : "bg-slate-200/50 border-slate-300 text-transparent border-dashed border-2"
+                                            : "bg-slate-200/50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 text-transparent border-dashed border-2"
                                     )}
                                 >
                                     {letterObj ? letterObj.letter : (isAnswerRevealed ? char : '')}

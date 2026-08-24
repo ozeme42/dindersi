@@ -124,7 +124,7 @@ function PresentationPageContent() {
     return (
         <main 
             ref={mainContentRef} 
-            className="h-screen w-screen bg-[#020617] text-white overflow-hidden flex flex-col font-sans relative"
+            className="dark h-screen w-screen bg-[#020617] text-white overflow-hidden flex flex-col font-sans relative"
         >
              {/* Premium Dark Animated Ambient Background */}
              <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#020617]">
