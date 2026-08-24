@@ -581,13 +581,15 @@ export function AiLessonStepGenerationDialog({
             <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                     <Label className="text-xs font-bold text-slate-300">Konu Başlığı / Kaynak Metin</Label>
-                    <span className="text-[10px] text-slate-500">Bu metin AI içeriğinin temelini oluşturur.</span>
+                    <span className="text-[11px] font-bold text-indigo-300 bg-indigo-950/60 border border-indigo-500/30 px-2.5 py-0.5 rounded-full">
+                        {localSourceText.length.toLocaleString('tr-TR')} karakter • {localSourceText.trim().split(/\s+/).filter(Boolean).length} kelime
+                    </span>
                 </div>
                 <Textarea 
                     value={localSourceText}
                     onChange={(e) => setLocalSourceText(e.target.value)}
-                    placeholder="Konu başlığını veya ders kitabı metnini buraya yapıştırın..."
-                    className="min-h-[85px] bg-slate-900 border-white/10 rounded-2xl text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 leading-relaxed"
+                    placeholder="Konu başlığını veya ders kitabı metnini buraya yapıştırın (Uzunluk kısıtlaması yoktur)..."
+                    className="min-h-[140px] max-h-[260px] bg-slate-900 border-white/10 rounded-2xl text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 leading-relaxed font-sans"
                 />
             </div>
 

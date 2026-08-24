@@ -748,26 +748,39 @@ export function TopicEditor({
 
                 {/* ══ KAYNAK METİN AKORDİYONU ══ */}
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-3xl">
-                    <Accordion type="single" collapsible className="w-full">
+                    <Accordion type="single" collapsible defaultValue="source-text" className="w-full">
                         <AccordionItem value="source-text" className="border-b-0">
                             <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/5 transition-colors">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                                        <FileText className="h-5 w-5" />
+                                <div className="flex items-center justify-between w-full pr-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                                            <FileText className="h-5 w-5" />
+                                        </div>
+                                        <div className="flex flex-col items-start text-left">
+                                            <span className="text-base font-black text-white">Kaynak Metin (Yapay Zeka & Özet Temeli)</span>
+                                            <span className="text-xs text-slate-400 font-normal">Bu metin, yapay zekanın konuya özel içerik üretmesi için temel alınır.</span>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col items-start text-left">
-                                        <span className="text-base font-black text-white">Kaynak Metin (Yapay Zeka & Özet Temeli)</span>
-                                        <span className="text-xs text-slate-400 font-normal">Bu metin, yapay zekanın konuya özel içerik üretmesi için temel alınır.</span>
-                                    </div>
+                                    {sourceText && (
+                                        <div className="text-[11px] font-bold text-indigo-300 bg-indigo-950/60 border border-indigo-500/30 px-3 py-1 rounded-full">
+                                            {sourceText.length.toLocaleString('tr-TR')} karakter • {sourceText.trim().split(/\s+/).filter(Boolean).length} kelime
+                                        </div>
+                                    )}
                                 </div>
                             </AccordionTrigger>
                             <AccordionContent className="px-6 pb-6 pt-2 bg-slate-950/40">
                                 <Textarea 
                                     value={sourceText} 
                                     onChange={(e) => setSourceText(e.target.value)}
-                                    placeholder="Ders kitabı metnini, kazanım açıklamalarını veya konu özetini buraya yapıştırın..."
-                                    className="min-h-[130px] text-sm bg-slate-950 border-white/10 text-white focus:border-indigo-500 rounded-2xl leading-relaxed"
+                                    placeholder="Ders kitabı metnini, kazanım açıklamalarını veya konu özetini buraya yapıştırın (Herhangi bir uzunluk sınırı yoktur)..."
+                                    className="min-h-[220px] max-h-[500px] text-sm bg-slate-950 border-white/10 text-white focus:border-indigo-500 rounded-2xl leading-relaxed font-sans"
                                 />
+                                <div className="flex justify-between items-center mt-2 px-1 text-[11px] text-slate-400">
+                                    <span>💡 Metniniz tam olarak kaydedilir. Yapay zeka bu metnin tamamını analiz ederek soru ve slayt üretir.</span>
+                                    <span className="font-mono text-indigo-400">
+                                        {sourceText ? `${sourceText.length} karakter` : 'Metin boş'}
+                                    </span>
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
