@@ -48,6 +48,7 @@ export type LessonContentViewerProps = {
     onAllTfAnswered?: (stepIndex?: number) => void;
     isSingleCardMode?: boolean;
     animationSpeed?: 'off' | 'slow' | 'normal' | 'fast';
+    fontSizeScale?: 'normal' | 'large' | 'huge';
     jumpToStep?: number | null;
     onJumpDone?: () => void;
     onStepIndexChange?: (index: number, total: number) => void;
@@ -201,7 +202,7 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
 }
 
 // --- 2. InteractiveTrueFalseList ---
-function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void }) {
+function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered, fontSizeScale = 'normal' }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void, fontSizeScale?: 'normal' | 'large' | 'huge' }) {
     const isTeacher = useTeacherMode();
     const allAnswered = step.questions.every((_, index) => answers && answers[index] !== undefined);
     
@@ -245,16 +246,21 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                     return (
                         <div key={index} className={cn(
                             "rounded-2xl border-2 shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
-                            isTeacher ? "p-6 min-h-[14rem]" : "p-4 min-h-[10rem]",
+                            isTeacher ? "p-5 min-h-[12rem]" : "p-4 min-h-[10rem]",
                             isAnswered
                                 ? (isCorrect ? "border-emerald-500/60 bg-emerald-50 dark:bg-emerald-950/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "border-rose-500/60 bg-rose-50 dark:bg-rose-950/50 shadow-[0_0_20px_rgba(244,63,94,0.2)]")
                                 : `${theme.card} border`
                         )}>
-                            <div className="flex gap-4 mb-6">
+                            <div className="flex gap-4 mb-4">
                                 <span className={cn("font-black", isTeacher ? "text-2xl" : "text-xl", isAnswered ? "text-slate-900 dark:text-white" : theme.number)}>
                                     {index + 1}.
                                 </span>
-                                <p className={cn("font-bold text-slate-700 dark:text-slate-200 leading-relaxed", isTeacher ? "text-2xl" : "text-base")}>
+                                <p className={cn(
+                                    "font-bold text-slate-700 dark:text-slate-200 leading-relaxed", 
+                                    isTeacher 
+                                        ? (fontSizeScale === 'huge' ? "text-2xl md:text-3xl" : (fontSizeScale === 'large' ? "text-xl md:text-2xl" : "text-lg md:text-xl"))
+                                        : "text-base"
+                                )}>
                                     {q.statement}
                                 </p>
                             </div>
@@ -307,7 +313,8 @@ export function ContentListPlayer({
     onAnimationStart, 
     onAnimationEnd,
     isSingleCardMode,
-    animationSpeed = 'normal'
+    animationSpeed = 'normal',
+    fontSizeScale = 'normal'
 }: { 
     step: ContentStep | ObjectiveListStep | AccordionStep, 
     revealedSentencesCount: number, 
@@ -315,7 +322,8 @@ export function ContentListPlayer({
     onAnimationStart?: () => void, 
     onAnimationEnd?: () => void,
     isSingleCardMode?: boolean,
-    animationSpeed?: 'off' | 'slow' | 'normal' | 'fast'
+    animationSpeed?: 'off' | 'slow' | 'normal' | 'fast',
+    fontSizeScale?: 'normal' | 'large' | 'huge'
 }) {
     const isTeacher = useTeacherMode();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -505,8 +513,8 @@ export function ContentListPlayer({
                                         "leading-relaxed font-bold break-words flex-1 z-10 relative",
                                         style.textColor,
                                         isTeacher 
-                                            ? "text-xl md:text-2xl tracking-normal" 
-                                            : "text-base md:text-lg tracking-normal"
+                                            ? (fontSizeScale === 'huge' ? "text-2xl md:text-3xl lg:text-4xl tracking-wide" : (fontSizeScale === 'large' ? "text-xl md:text-2xl lg:text-3xl tracking-normal" : "text-lg md:text-xl lg:text-2xl tracking-normal"))
+                                            : (fontSizeScale === 'huge' ? "text-lg md:text-xl" : (fontSizeScale === 'large' ? "text-base md:text-lg" : "text-sm md:text-base"))
                                     )}>
                                         <span className="flex-1">
                                             {shouldAnimate && animationSpeed !== 'off' ? (
@@ -527,7 +535,7 @@ export function ContentListPlayer({
 }
 
 // 4. ConceptExplanationPlayer
-export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleCardMode }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string, isSingleCardMode?: boolean }) {
+export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleCardMode, fontSizeScale = 'normal' }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string, isSingleCardMode?: boolean, fontSizeScale?: 'normal' | 'large' | 'huge' }) {
     if (!items || items.length === 0) return null;
     const isTeacher = useTeacherMode();
     
@@ -599,18 +607,22 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleC
                                     style.border,
                                     style.hoverBorder,
                                     style.glow,
-                                    isTeacher ? 'min-h-[200px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
+                                    isTeacher ? 'min-h-[160px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
                                 )}>
-                                    <CardHeader className={cn("border-b", style.border, isTeacher ? "p-5" : "p-3 md:p-4 pb-2 md:pb-3")}>
+                                    <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4 pb-2" : "p-3 md:p-4 pb-2 md:pb-3")}>
                                         <CardTitle className={cn(
                                             "font-black uppercase tracking-wider transition-colors drop-shadow-sm", 
                                             style.title, 
-                                            isTeacher ? "text-3xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg")
+                                            isTeacher 
+                                                ? (fontSizeScale === 'huge' ? "text-2xl md:text-3xl" : (fontSizeScale === 'large' ? "text-xl md:text-2xl" : "text-lg md:text-xl"))
+                                                : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg")
                                         )}>{currentNum}. {item.concept}</CardTitle>
                                     </CardHeader>
                                     <CardContent className={cn(
                                         "text-slate-700 dark:text-slate-200 font-semibold leading-relaxed tracking-wide", 
-                                        isTeacher ? "text-2xl p-6 pt-6" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base"
+                                        isTeacher 
+                                            ? (fontSizeScale === 'huge' ? "text-2xl md:text-3xl p-5 pt-3" : (fontSizeScale === 'large' ? "text-xl md:text-2xl p-4 pt-3" : "text-lg md:text-xl p-4 pt-3"))
+                                            : "p-3 md:p-4 text-sm md:text-base"
                                     )}>
                                         <div dangerouslySetInnerHTML={{ __html: item.definition }} />
                                     </CardContent>
@@ -1688,7 +1700,8 @@ export function StepContent({
     isVisualMaximized,
     onToggleVisualMaximize,
     isSingleCardMode,
-    animationSpeed = 'normal'
+    animationSpeed = 'normal',
+    fontSizeScale = 'normal'
 }: any) {
     const isTeacher = useTeacherMode();
 
@@ -1707,9 +1720,9 @@ export function StepContent({
             case 'content':
             case 'objectiveList':
             case 'accordion':
-                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} />
+                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} />
             case 'conceptExplanation': {
-                return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} isSingleCardMode={isSingleCardMode} />
+                return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} isSingleCardMode={isSingleCardMode} fontSizeScale={fontSizeScale} />
             }
             case 'visual':
                 return (
@@ -1758,7 +1771,7 @@ export function StepContent({
             case 'anagramFlashcard':
                 return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
             case 'trueFalseList':
-                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
+                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} fontSizeScale={fontSizeScale} />;
             case 'conceptMap':
                  return <ConceptMapPlayer step={step as ConceptMapStep} isFullscreen={isFullscreen} />; 
             case 'video': {
@@ -2011,6 +2024,7 @@ export function LessonContentViewer({
     onAllTfAnswered,
     isSingleCardMode,
     animationSpeed = 'normal',
+    fontSizeScale = 'normal',
     jumpToStep,
     onJumpDone,
     onStepIndexChange
@@ -2491,6 +2505,7 @@ export function LessonContentViewer({
                     onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
                     isSingleCardMode={isSingleCardMode}
                     animationSpeed={animationSpeed}
+                    fontSizeScale={fontSizeScale}
               />
                 </motion.div>
               </AnimatePresence>
