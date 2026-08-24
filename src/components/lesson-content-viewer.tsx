@@ -302,7 +302,9 @@ export function ContentListPlayer({
     revealedSentencesCount, 
     isFullscreen, 
     onAnimationStart, 
-    onAnimationEnd 
+    onAnimationEnd,
+    isSingleCardMode,
+    isFastMode
 }: { 
     step: ContentStep | ObjectiveListStep | AccordionStep, 
     revealedSentencesCount: number, 
