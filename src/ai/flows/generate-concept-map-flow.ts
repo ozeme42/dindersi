@@ -28,6 +28,7 @@ const GenerateConceptMapInputSchema = z.object({
 export type GenerateConceptMapInput = z.infer<typeof GenerateConceptMapInputSchema>;
 
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
+import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 
 export async function generateConceptMap(input: GenerateConceptMapInput): Promise<ConceptMapData> {
   const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
@@ -56,16 +57,15 @@ Metin:
 "${input.topicSummary}"
 `;
 
-  const genAI = new GoogleGenerativeAI(activeKey);
-  const model = genAI.getGenerativeModel({
-    model: selectedModel,
+  const text = await runGeminiWithFallback({
+    apiKey: activeKey,
+    primaryModel: selectedModel,
+    prompt,
     generationConfig: {
       responseMimeType: 'application/json',
     },
   });
 
-  const result = await model.generateContent(prompt);
-  const text = result.response.text();
   const cleaned = text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
   return JSON.parse(cleaned);
 }

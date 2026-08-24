@@ -3,6 +3,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
+import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 
 const GenerateHtmlSlideInputSchema = z.object({
   topicSummary: z.string().describe('A summary or title of the topic for which to generate an HTML slide.'),
@@ -52,11 +53,13 @@ KONU / METİN:
    - Tüm metinler pedagojik olarak doğru, zengin ve kusursuz Türkçe olmalıdır.
 `;
 
-  const genAI = new GoogleGenerativeAI(activeKey);
-  const model = genAI.getGenerativeModel({ model: selectedModel });
-  const result = await model.generateContent(prompt);
-  let text = result.response.text();
-  text = text.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+  const rawText = await runGeminiWithFallback({
+    apiKey: activeKey,
+    primaryModel: selectedModel,
+    prompt,
+  });
+
+  let text = rawText.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
 
   return { htmlContent: text };
 }

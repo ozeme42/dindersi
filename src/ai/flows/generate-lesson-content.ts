@@ -7,6 +7,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
+import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 
 const GenerateLessonContentInputSchema = z.object({
   topicSummary: z.string().describe('A summary of the topic for which to generate lesson content.'),
@@ -149,16 +150,14 @@ ${requestedExamples}
 5. SADECE saf JSON nesnesi döndür.
 `;
 
-  const genAI = new GoogleGenerativeAI(activeKey);
-  const model = genAI.getGenerativeModel({
-    model: selectedModel,
+  const text = await runGeminiWithFallback({
+    apiKey: activeKey,
+    primaryModel: selectedModel,
+    prompt,
     generationConfig: {
       responseMimeType: 'application/json',
     },
   });
-
-  const result = await model.generateContent(prompt);
-  const text = result.response.text();
 
   try {
     const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
