@@ -777,7 +777,7 @@ export function ConceptExplanationPlayer({
             <div className={cn("grid gap-4 md:gap-6 pb-20 transition-all duration-300", getGridClass())}>
                 {(() => {
                     let conceptCount = 0;
-                    return items.map((item, index) => {
+                    return validConcepts.map((item, index) => {
                         if (item.concept === '[BAŞLIK]') {
                             return (
                                 <div key={index} className="col-span-full mt-4 mb-2 flex items-center gap-4 w-full">
