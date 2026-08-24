@@ -417,7 +417,7 @@ function PresentationPageContent() {
                                 <ChevronDown className={cn("w-3.5 h-3.5 text-indigo-200 transition-transform duration-200", isToolsOpen && "rotate-180")} />
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent side="bottom" align="end" className="w-80 sm:w-96 p-0 rounded-2xl border-slate-200 dark:border-white/15 shadow-2xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl overflow-hidden z-50">
+                        <PopoverContent side="bottom" align="end" container={mainContentRef.current || undefined} className="w-80 sm:w-96 p-0 rounded-2xl border-slate-200 dark:border-white/15 shadow-2xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl overflow-hidden z-50">
                             {/* Menü Başlığı */}
                             <div className="p-3.5 px-4 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 flex items-center justify-between">
                                 <div className="flex items-center gap-2">

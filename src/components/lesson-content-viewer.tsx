@@ -799,14 +799,14 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
     const [shakingLetterId, setShakingLetterId] = useState<number | null>(null);
 
     const letterColors = [
-        "bg-white dark:bg-white/10 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-500/30 hover:border-rose-400 dark:hover:border-rose-400/60",
-        "bg-white dark:bg-white/10 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-500/30 hover:border-orange-400 dark:hover:border-orange-400/60",
-        "bg-white dark:bg-white/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-500/30 hover:border-amber-400 dark:hover:border-amber-400/60",
-        "bg-white dark:bg-white/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/30 hover:border-emerald-400 dark:hover:border-emerald-400/60",
-        "bg-white dark:bg-white/10 text-cyan-600 dark:text-cyan-400 border-cyan-200 dark:border-cyan-500/30 hover:border-cyan-400 dark:hover:border-cyan-400/60",
-        "bg-white dark:bg-white/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/30 hover:border-blue-400 dark:hover:border-blue-400/60",
-        "bg-white dark:bg-white/10 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/30 hover:border-indigo-400 dark:hover:border-indigo-400/60",
-        "bg-white dark:bg-white/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-500/30 hover:border-purple-400 dark:hover:border-purple-400/60",
+        "bg-white text-rose-600 border-2 border-rose-300 hover:bg-rose-50 shadow-md",
+        "bg-white text-orange-600 border-2 border-orange-300 hover:bg-orange-50 shadow-md",
+        "bg-white text-amber-600 border-2 border-amber-300 hover:bg-amber-50 shadow-md",
+        "bg-white text-emerald-600 border-2 border-emerald-300 hover:bg-emerald-50 shadow-md",
+        "bg-white text-cyan-600 border-2 border-cyan-300 hover:bg-cyan-50 shadow-md",
+        "bg-white text-blue-600 border-2 border-blue-300 hover:bg-blue-50 shadow-md",
+        "bg-white text-indigo-600 border-2 border-indigo-300 hover:bg-indigo-50 shadow-md",
+        "bg-white text-purple-600 border-2 border-purple-300 hover:bg-purple-50 shadow-md",
     ];
 
     useEffect(() => {
@@ -851,13 +851,13 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
             "space-y-4 md:space-y-8 flex flex-col items-center mx-auto p-4 w-full",
             isTeacher ? "max-w-full justify-center" : "max-w-5xl justify-center"
         )}>
-            <div className="bg-white/60 dark:bg-white/5 p-4 md:p-10 rounded-3xl border border-white dark:border-white/10 shadow-xl backdrop-blur-md w-full max-w-5xl text-center">
-                 <p className={cn("font-bold italic text-slate-700 dark:text-slate-200", isTeacher ? "text-3xl leading-snug" : "text-lg md:text-2xl")}>"{step.definition}"</p>
+            <div className="bg-white/95 p-4 md:p-8 rounded-3xl border-2 border-indigo-200 shadow-xl shadow-indigo-100/50 backdrop-blur-md w-full max-w-5xl text-center">
+                 <p className={cn("font-bold italic text-slate-800", isTeacher ? "text-3xl leading-snug" : "text-lg md:text-2xl")}>"{step.definition}"</p>
             </div>
              
             {/* CEVAP ALANI */}
             <div className={cn(
-                "flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 p-4 md:p-8 rounded-3xl bg-white/40 dark:bg-white/5 border border-white/50 dark:border-white/10 shadow-inner w-full max-w-6xl", 
+                "flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 p-4 md:p-8 rounded-3xl bg-white/95 border-2 border-indigo-200 shadow-xl shadow-indigo-100/50 w-full max-w-6xl", 
                 isTeacher ? "min-h-[12rem]" : "min-h-[8rem]"
             )}>
                 {targetWords.map((word, wordIndex) => (
@@ -866,7 +866,6 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                             const letterObj = constructedLetters[globalCharIndex];
                             globalCharIndex++;
 
-                            // DÜZELTME: Harf varsa veya cevap gösteriliyorsa kart görünür olmalı
                             const showCard = letterObj || isAnswerRevealed;
 
                             return (
@@ -878,13 +877,12 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                         isTeacher ? "h-20 w-16 text-4xl border-b-8" : "h-10 w-8 text-lg md:h-14 md:w-10 md:text-2xl md:border-b-4 text-sm",
                                         showCard
                                             ? cn(
-                                                "bg-white dark:bg-white/10 active:translate-y-1 active:border-b-0",
-                                                // Cevap açıldıysa YEŞİL, değilse İNDİGO
+                                                "bg-white active:translate-y-1 active:border-b-0",
                                                 isAnswerRevealed 
-                                                    ? "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-500/30" 
-                                                    : "text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/30"
+                                                    ? "bg-emerald-100 text-emerald-800 border-emerald-400" 
+                                                    : "text-indigo-700 border-indigo-300"
                                               )
-                                            : "bg-slate-200/50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 text-transparent border-dashed border-2"
+                                            : "bg-slate-100 border-slate-300 text-transparent border-dashed border-2"
                                     )}
                                 >
                                     {letterObj ? letterObj.letter : (isAnswerRevealed ? char : '')}
@@ -905,10 +903,10 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                 key={item.id} 
                                 onClick={() => handleLetterClick(item)} 
                                 className={cn(
-                                    "font-black border-b-4 active:border-b-0 active:translate-y-1 transition-all duration-100 shadow-lg",
+                                    "font-black border-b-4 active:border-b-0 active:translate-y-1 transition-all duration-100 shadow-md",
                                     colorClass,
                                     isTeacher ? "h-20 w-16 text-4xl rounded-2xl border-b-8" : "h-12 w-10 text-xl md:h-16 md:w-14 md:text-3xl md:border-b-8",
-                                    shakingLetterId === item.id && "animate-shake bg-red-500 border-red-700 text-slate-900 dark:text-white hover:bg-red-600 !bg-none"
+                                    shakingLetterId === item.id && "!bg-red-500 !border-red-700 !text-white animate-shake"
                                 )}
                             >
                                 {item.letter}
@@ -918,7 +916,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                 </div>
             ) : (
                  <div className="text-center mt-6 animate-in slide-in-from-bottom-4">
-                    <Button onClick={onCorrectAndNext} className={cn("font-bold text-slate-900 dark:text-white transition-all transform hover:scale-105 bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200/50 shadow-lg", isTeacher ? "h-16 px-10 text-xl rounded-2xl" : "h-12 px-6 text-lg rounded-xl")}>
+                    <Button onClick={onCorrectAndNext} className={cn("font-bold text-white transition-all transform hover:scale-105 bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200/50 shadow-lg", isTeacher ? "h-16 px-10 text-xl rounded-2xl" : "h-12 px-6 text-lg rounded-xl")}>
                         Harika! Sonraki <ArrowRight className="ml-3 h-5 w-5"/>
                     </Button>
                  </div>
@@ -1015,12 +1013,14 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
     const [mistakenWordId, setMistakenWordId] = useState<number | null>(null);
 
     const wordColors = [
-        'bg-rose-50 dark:bg-rose-950 text-rose-100 border-rose-500 shadow-md hover:bg-rose-900',
-        'bg-cyan-50 dark:bg-cyan-950 text-cyan-100 border-cyan-500 shadow-md hover:bg-cyan-900',
-        'bg-emerald-50 dark:bg-emerald-950 text-emerald-100 border-emerald-500 shadow-md hover:bg-emerald-900',
-        'bg-amber-50 dark:bg-amber-950 text-amber-100 border-amber-500 shadow-md hover:bg-amber-900',
-        'bg-violet-50 dark:bg-violet-950 text-violet-100 border-violet-500 shadow-md hover:bg-violet-900',
-        'bg-sky-50 dark:bg-sky-950 text-sky-100 border-sky-500 shadow-md hover:bg-sky-900',
+        'bg-sky-500 hover:bg-sky-600 text-white border-2 border-sky-400 border-b-4 md:border-b-8 border-b-sky-700 shadow-lg shadow-sky-500/25',
+        'bg-purple-500 hover:bg-purple-600 text-white border-2 border-purple-400 border-b-4 md:border-b-8 border-b-purple-700 shadow-lg shadow-purple-500/25',
+        'bg-amber-500 hover:bg-amber-600 text-white border-2 border-amber-400 border-b-4 md:border-b-8 border-b-amber-700 shadow-lg shadow-amber-500/25',
+        'bg-emerald-500 hover:bg-emerald-600 text-white border-2 border-emerald-400 border-b-4 md:border-b-8 border-b-emerald-700 shadow-lg shadow-emerald-500/25',
+        'bg-rose-500 hover:bg-rose-600 text-white border-2 border-rose-400 border-b-4 md:border-b-8 border-b-rose-700 shadow-lg shadow-rose-500/25',
+        'bg-cyan-500 hover:bg-cyan-600 text-slate-900 border-2 border-cyan-400 border-b-4 md:border-b-8 border-b-cyan-700 shadow-lg shadow-cyan-500/25',
+        'bg-indigo-500 hover:bg-indigo-600 text-white border-2 border-indigo-400 border-b-4 md:border-b-8 border-b-indigo-700 shadow-lg shadow-indigo-500/25',
+        'bg-orange-500 hover:bg-orange-600 text-white border-2 border-orange-400 border-b-4 md:border-b-8 border-b-orange-700 shadow-lg shadow-orange-500/25',
     ];
 
     useEffect(() => {
@@ -1054,7 +1054,7 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
 
     useEffect(() => {
         if (answer?.isCorrect) {
-            const timeoutId = setTimeout(() => { onCorrectAndNext(); }, 1500); // Süre biraz uzatıldı
+            const timeoutId = setTimeout(() => { onCorrectAndNext(); }, 1500);
             return () => clearTimeout(timeoutId);
         }
     }, [answer, onCorrectAndNext]);
@@ -1062,30 +1062,30 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
     return (
         <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] gap-4 md:gap-6 p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-4xl")}>
             <div className="text-center">
-                <p className={cn("text-slate-200 font-bold bg-[#161233] px-5 py-2 rounded-full inline-block border border-slate-200 dark:border-white/10 shadow-lg", isTeacher ? "text-2xl" : "text-sm md:text-base")}>
+                <p className={cn("text-slate-800 font-black bg-white/95 backdrop-blur-md px-6 py-2.5 rounded-full inline-block border-2 border-indigo-200 shadow-md shadow-indigo-100/50", isTeacher ? "text-2xl" : "text-sm md:text-base")}>
                     Kelimeleri doğru sıraya dizerek cümleyi oluşturun.
                 </p>
             </div>
              
-             <div className={cn("relative flex flex-wrap justify-center content-center gap-2 md:gap-5 bg-[#070514] border-2 border-[#2b245e] shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] p-4 md:p-10 rounded-3xl", isTeacher ? "min-h-[12rem]" : "min-h-[7rem] md:min-h-[12rem]")}>
+             <div className={cn("relative flex flex-wrap justify-center content-center gap-2 md:gap-4 bg-white/95 backdrop-blur-xl border-2 border-indigo-200 shadow-xl shadow-indigo-100/50 p-4 md:p-8 rounded-3xl", isTeacher ? "min-h-[12rem]" : "min-h-[7rem] md:min-h-[12rem]")}>
                 {constructedWords.map((wordObj, i) => (
                     <div 
                         key={wordObj.id} 
                         className={cn(
-                            "rounded-xl md:rounded-2xl font-black animate-in zoom-in duration-300 border-b-2 md:border-b-[6px]",
+                            "rounded-xl md:rounded-2xl font-black animate-in zoom-in duration-200 border-2 border-b-[4px] md:border-b-[6px]",
                             wordColors[wordObj.id % wordColors.length], 
-                            isTeacher ? "text-2xl px-6 py-3 border-b-[6px]" : "px-3 py-1.5 md:px-8 md:py-4 md:text-2xl text-sm"
+                            isTeacher ? "text-2xl px-6 py-3" : "px-3 py-1.5 md:px-8 md:py-4 md:text-2xl text-sm"
                         )}
                     >
                         {wordObj.word}
                     </div>
                 ))}
-                {constructedWords.length === 0 && <span className={cn("text-slate-500 font-medium italic absolute", isTeacher ? "text-xl" : "text-sm md:text-xl")}>Cümleniz burada görünecek...</span>}
+                {constructedWords.length === 0 && <span className={cn("text-slate-400 font-medium italic absolute", isTeacher ? "text-xl" : "text-sm md:text-xl")}>Cümleniz burada görünecek...</span>}
             </div>
 
             {isAnswerRevealed ? (
                  <div className="text-center mt-6 md:mt-10 animate-in slide-in-from-bottom-4">
-                    <div className={cn("inline-flex items-center gap-3 md:gap-4 bg-emerald-500/20 text-emerald-300 rounded-full border border-emerald-500/40 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.3)]", isTeacher ? "px-8 py-4" : "px-6 py-2.5 md:px-8 md:py-4")}>
+                    <div className={cn("inline-flex items-center gap-3 md:gap-4 bg-emerald-500 text-white rounded-full border-2 border-emerald-400 shadow-xl shadow-emerald-500/30", isTeacher ? "px-8 py-4" : "px-6 py-2.5 md:px-8 md:py-4")}>
                         <CheckCircle2 className={cn(isTeacher ? "h-10 w-10" : "h-5 w-5 md:h-6 w-6")}/>
                         <span className={cn("font-black", isTeacher ? "text-2xl" : "text-sm md:text-lg")}>Harika, doğru cümle!</span>
                     </div>
@@ -1097,10 +1097,10 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
                             key={item.id}
                             onClick={() => handleWordClick(item)}
                             className={cn(
-                                "font-black rounded-xl md:rounded-[1.25rem] transition-all duration-200 border-b-[3px] md:border-b-[8px] active:border-b-0 active:translate-y-1 md:active:translate-y-2 cursor-pointer flex items-center justify-center hover:-translate-y-0.5 md:hover:-translate-y-1",
+                                "font-black rounded-xl md:rounded-[1.25rem] transition-all duration-200 active:border-b-0 active:translate-y-1 md:active:translate-y-2 cursor-pointer flex items-center justify-center hover:-translate-y-0.5 md:hover:-translate-y-1 select-none",
                                 wordColors[item.id % wordColors.length],
                                 isTeacher ? "text-2xl h-16 px-6" : "text-sm h-10 px-4 md:text-3xl md:h-20 md:px-10",
-                                mistakenWordId === item.id && "animate-shake bg-rose-500 border-rose-700 text-slate-900 dark:text-white shadow-none hover:bg-rose-500 hover:border-rose-700"
+                                mistakenWordId === item.id && "!bg-rose-600 !border-rose-800 !text-white animate-shake shadow-none"
                             )}
                         >
                             {mistakenWordId === item.id && <X className={cn("mr-1.5", isTeacher ? "h-8 w-8" : "h-4 w-4 md:h-6 md:w-6")} />}
