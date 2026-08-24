@@ -144,16 +144,13 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
     const totalRotationRef = useRef<number>(0);
     const lastTickIndexRef = useRef<number>(-1);
 
-    // Veri Çekme & İlk Sınıfı Otomatik Seçme (Donmayı Önler)
+    // Veri Çekme (Sınıf seçilene kadar kimse gelmez)
     useEffect(() => {
         if (!isOpen) return;
 
         if (cachedClasses && cachedStudents) {
             setAllClasses(cachedClasses);
             setAllStudents(cachedStudents);
-            if (!classFilter && cachedClasses.length > 0) {
-                setClassFilter(cachedClasses[0].id);
-            }
             setIsLoadingData(false);
             return;
         }
@@ -174,11 +171,6 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
 
                 setAllClasses(loadedClasses);
                 setAllStudents(loadedStudents);
-
-                // Donmayı önlemek için varsayılan olarak ilk sınıfı seç
-                if (loadedClasses.length > 0) {
-                    setClassFilter(loadedClasses[0].id);
-                }
             } catch (error) {
                 console.error("Error fetching students for wheel:", error);
             } finally {
@@ -187,7 +179,7 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
         };
 
         fetchInitialData();
-    }, [isOpen, classFilter]);
+    }, [isOpen]);
 
     const selectedClassData = useMemo(() => allClasses.find(c => c.id === classFilter), [classFilter, allClasses]);
 
@@ -584,7 +576,11 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                 )}
                             >
                                 <Flame className={cn("w-6 h-6 mr-1.5 fill-current text-amber-900", isRolling && "animate-bounce")} />
-                                {isRolling ? "Çark Dönüyor..." : "ÇARKI ÇEVİR"}
+                                {isRolling 
+                                    ? "Çark Dönüyor..." 
+                                    : (pickerSource === 'registered' && !classFilter 
+                                        ? "Sınıf Seçiniz" 
+                                        : (totalSlices < 2 ? "En Az 2 Kişi Gerekli" : "ÇARKI ÇEVİR"))}
                             </Button>
                         </div>
 
@@ -594,9 +590,14 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                             isWheelFullscreen ? "p-4 min-h-[440px]" : "p-2 min-h-[320px] md:min-h-[440px]"
                         )}>
                             {totalSlices === 0 ? (
-                                <div className="flex flex-col items-center justify-center text-center p-6 text-slate-400 gap-3">
-                                    <AlertCircle className="w-12 h-12 text-amber-400 animate-pulse" />
-                                    <p className="text-base font-bold text-slate-200">Lütfen bir sınıf seçin veya isim listesi ekleyin.</p>
+                                <div className="flex flex-col items-center justify-center text-center p-8 text-slate-400 gap-4 max-w-md">
+                                    <div className="w-16 h-16 rounded-3xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shadow-lg shadow-indigo-950/50">
+                                        <Users className="w-8 h-8 text-amber-300 animate-pulse" />
+                                    </div>
+                                    <h4 className="text-xl font-black text-white">Sınıf Seçiniz</h4>
+                                    <p className="text-xs text-slate-400 font-medium leading-relaxed">
+                                        Kura çarkını çalıştırmak için lütfen sol taraftaki menüden bir sınıf seçin. Sadece seçtiğiniz sınıfın öğrencileri listelenecektir.
+                                    </p>
                                 </div>
                             ) : (
                                 <div className={cn(
