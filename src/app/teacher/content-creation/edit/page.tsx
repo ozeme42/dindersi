@@ -614,7 +614,7 @@ export function TopicEditor({
 
     const handleOpenLibrary = (filter: any[], multiSelect: boolean, stepType: any, atIndex?: number) => {
         setLibraryConfig({ filter, multiSelect, stepType, targetIndex: atIndex });
-        setIsLibraryPanelOpen(true);
+        setTimeout(() => setIsLibraryPanelOpen(true), 10);
     };
 
     const handleItemsImportedFromLibrary = (importedSteps: LessonStep[]) => {
@@ -861,9 +861,9 @@ export function TopicEditor({
                                     onOpenAi={onOpenAi}
                                     onOpenGameSelector={(idx) => {
                                         setInsertAtIndex(idx);
-                                        setIsGameSelectorOpen(true);
+                                        setTimeout(() => setIsGameSelectorOpen(true), 10);
                                     }}
-                                    onOpenRegisteredAssets={() => setIsRegisteredAssetsOpen(true)}
+                                    onOpenRegisteredAssets={() => setTimeout(() => setIsRegisteredAssetsOpen(true), 10)}
                                 />
 
                                 {steps.length > 0 ? (
@@ -892,9 +892,9 @@ export function TopicEditor({
                                                     onOpenAi={onOpenAi}
                                                     onOpenGameSelector={(idx) => {
                                                         setInsertAtIndex(idx);
-                                                        setIsGameSelectorOpen(true);
+                                                        setTimeout(() => setIsGameSelectorOpen(true), 10);
                                                     }}
-                                                    onOpenRegisteredAssets={() => setIsRegisteredAssetsOpen(true)}
+                                                    onOpenRegisteredAssets={() => setTimeout(() => setIsRegisteredAssetsOpen(true), 10)}
                                                 />
                                             </div>
                                         ))}
@@ -1092,7 +1092,7 @@ function TopicEditorWrapper() {
                 isSaving={isSaving}
                 onOpenAi={(idx) => {
                     setAiTargetIndex(idx);
-                    setIsAIOpen(true);
+                    setTimeout(() => setIsAIOpen(true), 10);
                 }}
             >
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-3xl">
