@@ -1,9 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -102,13 +99,6 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'sentenceScrambleQuestions', label: 'Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
 ];
 
-const formSchema = z.object({
-  sourceText: z.string().min(3, 'Kaynak metin veya konu başlığı en az 3 karakter olmalıdır.'),
-  modules: z.record(z.boolean().optional()).refine(val => Object.values(val).some(v => v), {
-    message: "En az bir içerik türü seçmelisiniz."
-  })
-});
-
 type AiLessonStepGenerationDialogProps = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -128,6 +118,8 @@ export function AiLessonStepGenerationDialog({
   onStepsGenerated,
   generationType,
 }: AiLessonStepGenerationDialogProps) {
+  const [sourceText, setSourceText] = useState('');
+  const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>({});
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [apiKey, setApiKey] = useState('');
@@ -141,23 +133,33 @@ export function AiLessonStepGenerationDialog({
 
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      sourceText: '',
-      modules: {},
-    },
-  });
-
-  const watchedModules = form.watch('modules') || {};
-
-  const contextTopicId = context?.topicId;
-  const contextTopicTitle = context?.topicTitle;
-  const contextSourceText = context?.sourceText;
-
-  // Sistemden kayıtlı API Anahtarı ve Modeli yükle
+  // Dialog açıldığında varsayılan değerleri ayarla
   useEffect(() => {
     if (!isOpen) return;
+
+    if (context) {
+        setSourceText(context.sourceText || context.topicTitle || '');
+    }
+
+    const defaultModules: { [key: string]: boolean } = {};
+    if (generationType === 'anlatim') {
+      defaultModules['htmlSlide'] = true;
+      defaultModules['conceptExplanations'] = true;
+      defaultModules['flashcards'] = true;
+      defaultModules['summary'] = true;
+    } else if (generationType === 'degerlendirme') {
+      defaultModules['trueFalseQuestions'] = true;
+      defaultModules['multipleChoiceQuestions'] = true;
+      defaultModules['fillInTheBlankQuestions'] = true;
+      defaultModules['anagramQuestions'] = true;
+    } else {
+      defaultModules['htmlSlide'] = true;
+      defaultModules['conceptExplanations'] = true;
+      defaultModules['flashcards'] = true;
+      defaultModules['multipleChoiceQuestions'] = true;
+      defaultModules['trueFalseQuestions'] = true;
+    }
+    setSelectedModules(defaultModules);
 
     async function loadConfig() {
         if (typeof window !== 'undefined') {
@@ -201,37 +203,18 @@ export function AiLessonStepGenerationDialog({
     }
 
     loadConfig();
-  }, [isOpen]);
+  }, [isOpen, generationType, context?.topicId]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const defaultModules: { [key: string]: boolean } = {};
-    if (generationType === 'anlatim') {
-      defaultModules['htmlSlide'] = true;
-      defaultModules['conceptExplanations'] = true;
-      defaultModules['flashcards'] = true;
-      defaultModules['summary'] = true;
-    } else if (generationType === 'degerlendirme') {
-      defaultModules['trueFalseQuestions'] = true;
-      defaultModules['multipleChoiceQuestions'] = true;
-      defaultModules['fillInTheBlankQuestions'] = true;
-      defaultModules['anagramQuestions'] = true;
-    } else {
-      defaultModules['htmlSlide'] = true;
-      defaultModules['conceptExplanations'] = true;
-      defaultModules['flashcards'] = true;
-      defaultModules['multipleChoiceQuestions'] = true;
-      defaultModules['trueFalseQuestions'] = true;
-    }
-
-    form.reset({
-      sourceText: contextSourceText || contextTopicTitle || '',
-      modules: defaultModules,
-    });
-  }, [isOpen, contextTopicId, contextTopicTitle, contextSourceText, generationType]);
+  if (!isOpen) return null;
 
   const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
+
+  const toggleModule = (id: string) => {
+    setSelectedModules(prev => ({
+        ...prev,
+        [id]: !prev[id]
+    }));
+  };
 
   // Hazır Şablon Presetleri
   const applyPreset = (preset: 'full' | 'presentation' | 'cards' | 'games' | 'assessment') => {
@@ -255,7 +238,7 @@ export function AiLessonStepGenerationDialog({
         modules['trueFalseQuestions'] = true;
         modules['fillInTheBlankQuestions'] = true;
     }
-    form.setValue('modules', modules);
+    setSelectedModules(modules);
   };
 
   const handleSaveApiKeyToSystem = async () => {
@@ -293,26 +276,37 @@ export function AiLessonStepGenerationDialog({
     }
   };
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const handleGenerate = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!context) {
       toast({ title: "Hata", description: "Geçersiz bağlam.", variant: "destructive" });
       return;
     }
+
+    const trimmedText = sourceText.trim();
+    if (trimmedText.length < 3) {
+      toast({ title: "Uyarı", description: "Lütfen bir konu başlığı veya kaynak metin girin." });
+      return;
+    }
+
+    const hasAnyModule = Object.values(selectedModules).some(v => v);
+    if (!hasAnyModule) {
+      toast({ title: "Uyarı", description: "Lütfen en az bir içerik türü seçin." });
+      return;
+    }
+
     setIsGenerating(true);
-    
     let generatedSteps: LessonStep[] = [];
-    let hasError = false;
 
     try {
-        const inputModules = data.modules as any;
         const activeKey = apiKey.trim() || undefined;
         const activeModel = activeModelId || 'gemini-3.7-flash';
         
         // 1. Zengin HTML Slayt Üretimi (Ayrı uzman prompt)
-        if (inputModules.htmlSlide) {
+        if (selectedModules.htmlSlide) {
             try {
                 const result = await generateHtmlSlide({ 
-                    topicSummary: data.sourceText,
+                    topicSummary: trimmedText,
                     apiKey: activeKey,
                     modelName: activeModel
                 });
@@ -330,10 +324,10 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 2. Kavram Haritası (Ayrı şema promptu)
-        if (inputModules.conceptMap) {
+        if (selectedModules.conceptMap) {
             try {
                 const mapData = await generateConceptMap({ 
-                    topicSummary: data.sourceText,
+                    topicSummary: trimmedText,
                     apiKey: activeKey,
                     modelName: activeModel
                 });
@@ -353,8 +347,8 @@ export function AiLessonStepGenerationDialog({
         // 3. Standart Yapılandırılmış Modüller (Kavramlar, Flashcard, Anagram, Cümle, Test, D/Y, Boşluk)
         const standardModules: GenerateLessonContentInput['modules'] = {};
         let needsStandardCall = false;
-        for (const key in inputModules) {
-            if (key !== 'conceptMap' && key !== 'htmlSlide' && inputModules[key]) {
+        for (const key in selectedModules) {
+            if (key !== 'conceptMap' && key !== 'htmlSlide' && selectedModules[key]) {
                 standardModules[key as keyof typeof standardModules] = true;
                 needsStandardCall = true;
             }
@@ -362,7 +356,7 @@ export function AiLessonStepGenerationDialog({
 
         if (needsStandardCall) {
             const input: GenerateLessonContentInput = {
-                topicSummary: data.sourceText,
+                topicSummary: trimmedText,
                 modules: standardModules,
                 apiKey: activeKey,
                 modelName: activeModel,
@@ -375,7 +369,7 @@ export function AiLessonStepGenerationDialog({
 
         if (generatedSteps.length > 0) {
             onStepsGenerated(generatedSteps);
-            handleClose();
+            onOpenChange(false);
             toast({
                 title: "İçerikler Başarıyla Üretildi! 🎉",
                 description: `${generatedSteps.length} adet zengin slayt sunum akışınıza eklendi.`,
@@ -395,15 +389,9 @@ export function AiLessonStepGenerationDialog({
           description: error.message || "İçerik üretilirken bir sorun oluştu.", 
           variant: "destructive" 
       });
-      hasError = true;
     } finally {
       setIsGenerating(false);
-      if (hasError) onOpenChange(true);
     }
-  };
-  
-  const handleClose = () => {
-    onOpenChange(false);
   };
 
   const mapAIOutputToSteps = (output: GenerateLessonContentOutput): LessonStep[] => {
@@ -535,7 +523,7 @@ export function AiLessonStepGenerationDialog({
     };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-3xl flex flex-col h-auto max-h-[92vh] bg-slate-950 border border-white/10 text-slate-100 shadow-2xl p-0 overflow-hidden rounded-3xl">
         {/* Header */}
         <DialogHeader className="p-5 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md flex flex-row items-center justify-between">
@@ -641,7 +629,7 @@ export function AiLessonStepGenerationDialog({
         )}
 
         {/* Ana Form Alanı */}
-        <form onSubmit={form.handleSubmit(onSubmit)} className="p-5 overflow-y-auto max-h-[60vh] space-y-5">
+        <form onSubmit={handleGenerate} className="p-5 overflow-y-auto max-h-[60vh] space-y-5">
             {/* Kaynak Metin */}
             <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
@@ -649,7 +637,8 @@ export function AiLessonStepGenerationDialog({
                     <span className="text-[10px] text-slate-500">Bu metin AI içeriğinin temelini oluşturur.</span>
                 </div>
                 <Textarea 
-                    {...form.register('sourceText')}
+                    value={sourceText}
+                    onChange={(e) => setSourceText(e.target.value)}
                     placeholder="Konu başlığını veya ders kitabı metnini buraya yapıştırın..."
                     className="min-h-[85px] bg-slate-900 border-white/10 rounded-2xl text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 leading-relaxed"
                 />
@@ -714,11 +703,11 @@ export function AiLessonStepGenerationDialog({
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {ALL_ACTIVITY_OPTIONS.map(opt => {
-                        const isChecked = !!watchedModules[opt.id];
+                        const isChecked = !!selectedModules[opt.id];
                         return (
                             <div 
                                 key={opt.id}
-                                onClick={() => form.setValue(`modules.${opt.id}`, !isChecked)}
+                                onClick={() => toggleModule(opt.id)}
                                 className={cn(
                                     "p-3 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 select-none",
                                     isChecked 
@@ -728,7 +717,7 @@ export function AiLessonStepGenerationDialog({
                             >
                                 <Checkbox 
                                     checked={isChecked}
-                                    onCheckedChange={(checked) => form.setValue(`modules.${opt.id}`, !!checked)}
+                                    onCheckedChange={() => toggleModule(opt.id)}
                                     className="mt-0.5 border-white/20 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-500"
                                 />
                                 <div className="flex-1 min-w-0">
@@ -755,7 +744,7 @@ export function AiLessonStepGenerationDialog({
                     <Button 
                         type="button" 
                         variant="ghost" 
-                        onClick={handleClose} 
+                        onClick={() => onOpenChange(false)} 
                         disabled={isGenerating}
                         className="text-slate-400 hover:text-white text-xs rounded-xl"
                     >
