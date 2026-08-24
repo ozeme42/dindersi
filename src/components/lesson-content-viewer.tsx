@@ -10,7 +10,8 @@ import {
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
-    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Palette, Pencil
+    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Palette, Pencil,
+    RotateCw, ZoomIn, ZoomOut, Grid2X2, Grid3X3
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -139,14 +140,78 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
 
 // --- ORTAK RENK TEMALARI ---
 export const FLASHCARD_THEMES = [
-    { front: 'bg-gradient-to-br from-rose-50 to-pink-100 border-2 border-rose-300 text-rose-950 shadow-md', back: 'bg-gradient-to-br from-rose-500 to-pink-600 border-b-8 border-rose-700 text-white shadow-xl shadow-rose-500/30' },
-    { front: 'bg-gradient-to-br from-sky-50 to-blue-100 border-2 border-sky-300 text-sky-950 shadow-md', back: 'bg-gradient-to-br from-sky-500 to-blue-600 border-b-8 border-blue-700 text-white shadow-xl shadow-sky-500/30' },
-    { front: 'bg-gradient-to-br from-emerald-50 to-teal-100 border-2 border-emerald-300 text-emerald-950 shadow-md', back: 'bg-gradient-to-br from-emerald-500 to-teal-600 border-b-8 border-emerald-700 text-white shadow-xl shadow-emerald-500/30' },
-    { front: 'bg-gradient-to-br from-amber-50 to-orange-100 border-2 border-amber-300 text-amber-950 shadow-md', back: 'bg-gradient-to-br from-amber-500 to-orange-600 border-b-8 border-amber-700 text-white shadow-xl shadow-amber-500/30' },
-    { front: 'bg-gradient-to-br from-violet-50 to-purple-100 border-2 border-violet-300 text-violet-950 shadow-md', back: 'bg-gradient-to-br from-violet-500 to-purple-600 border-b-8 border-purple-700 text-white shadow-xl shadow-violet-500/30' },
-    { front: 'bg-gradient-to-br from-cyan-50 to-teal-100 border-2 border-cyan-300 text-cyan-950 shadow-md', back: 'bg-gradient-to-br from-cyan-500 to-teal-600 border-b-8 border-cyan-700 text-white shadow-xl shadow-cyan-500/30' },
-    { front: 'bg-gradient-to-br from-indigo-50 to-blue-100 border-2 border-indigo-300 text-indigo-950 shadow-md', back: 'bg-gradient-to-br from-indigo-500 to-blue-600 border-b-8 border-indigo-700 text-white shadow-xl shadow-indigo-500/30' },
-    { front: 'bg-gradient-to-br from-orange-50 to-red-100 border-2 border-orange-300 text-orange-950 shadow-md', back: 'bg-gradient-to-br from-orange-500 to-red-600 border-b-8 border-orange-700 text-white shadow-xl shadow-orange-500/30' },
+    { 
+        id: 'sky',
+        front: 'bg-gradient-to-br from-sky-50 via-white to-blue-50/90 border-2 border-sky-300 border-b-[8px] border-b-sky-500 text-sky-950 shadow-xl shadow-sky-500/10 hover:border-sky-400', 
+        back: 'bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 border-2 border-sky-300 border-b-[8px] border-b-blue-800 text-white shadow-2xl shadow-sky-500/30',
+        badge: 'bg-sky-500 text-white',
+        badgeText: 'text-sky-700 bg-sky-100 border border-sky-300',
+        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
+        accentColor: 'text-sky-600',
+    },
+    { 
+        id: 'purple',
+        front: 'bg-gradient-to-br from-purple-50 via-white to-violet-50/90 border-2 border-purple-300 border-b-[8px] border-b-purple-500 text-purple-950 shadow-xl shadow-purple-500/10 hover:border-purple-400', 
+        back: 'bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-600 border-2 border-purple-300 border-b-[8px] border-b-indigo-800 text-white shadow-2xl shadow-purple-500/30',
+        badge: 'bg-purple-500 text-white',
+        badgeText: 'text-purple-700 bg-purple-100 border border-purple-300',
+        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
+        accentColor: 'text-purple-600',
+    },
+    { 
+        id: 'emerald',
+        front: 'bg-gradient-to-br from-emerald-50 via-white to-teal-50/90 border-2 border-emerald-300 border-b-[8px] border-b-emerald-500 text-emerald-950 shadow-xl shadow-emerald-500/10 hover:border-emerald-400', 
+        back: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 border-2 border-emerald-300 border-b-[8px] border-b-teal-800 text-white shadow-2xl shadow-emerald-500/30',
+        badge: 'bg-emerald-500 text-white',
+        badgeText: 'text-emerald-700 bg-emerald-100 border border-emerald-300',
+        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
+        accentColor: 'text-emerald-600',
+    },
+    { 
+        id: 'amber',
+        front: 'bg-gradient-to-br from-amber-50 via-white to-orange-50/90 border-2 border-amber-300 border-b-[8px] border-b-amber-500 text-amber-950 shadow-xl shadow-amber-500/10 hover:border-amber-400', 
+        back: 'bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 border-2 border-amber-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-amber-500/30',
+        badge: 'bg-amber-500 text-white',
+        badgeText: 'text-amber-800 bg-amber-100 border border-amber-300',
+        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
+        accentColor: 'text-amber-600',
+    },
+    { 
+        id: 'rose',
+        front: 'bg-gradient-to-br from-rose-50 via-white to-pink-50/90 border-2 border-rose-300 border-b-[8px] border-b-rose-500 text-rose-950 shadow-xl shadow-rose-500/10 hover:border-rose-400', 
+        back: 'bg-gradient-to-br from-rose-500 via-pink-600 to-red-600 border-2 border-rose-300 border-b-[8px] border-b-rose-800 text-white shadow-2xl shadow-rose-500/30',
+        badge: 'bg-rose-500 text-white',
+        badgeText: 'text-rose-700 bg-rose-100 border border-rose-300',
+        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
+        accentColor: 'text-rose-600',
+    },
+    { 
+        id: 'cyan',
+        front: 'bg-gradient-to-br from-cyan-50 via-white to-teal-50/90 border-2 border-cyan-300 border-b-[8px] border-b-cyan-500 text-cyan-950 shadow-xl shadow-cyan-500/10 hover:border-cyan-400', 
+        back: 'bg-gradient-to-br from-cyan-500 via-teal-600 to-blue-600 border-2 border-cyan-300 border-b-[8px] border-b-cyan-800 text-white shadow-2xl shadow-cyan-500/30',
+        badge: 'bg-cyan-600 text-white',
+        badgeText: 'text-cyan-800 bg-cyan-100 border border-cyan-300',
+        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
+        accentColor: 'text-cyan-700',
+    },
+    { 
+        id: 'indigo',
+        front: 'bg-gradient-to-br from-indigo-50 via-white to-blue-50/90 border-2 border-indigo-300 border-b-[8px] border-b-indigo-500 text-indigo-950 shadow-xl shadow-indigo-500/10 hover:border-indigo-400', 
+        back: 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-700 border-2 border-indigo-300 border-b-[8px] border-b-indigo-900 text-white shadow-2xl shadow-indigo-500/30',
+        badge: 'bg-indigo-500 text-white',
+        badgeText: 'text-indigo-700 bg-indigo-100 border border-indigo-300',
+        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
+        accentColor: 'text-indigo-600',
+    },
+    { 
+        id: 'orange',
+        front: 'bg-gradient-to-br from-orange-50 via-white to-red-50/90 border-2 border-orange-300 border-b-[8px] border-b-orange-500 text-orange-950 shadow-xl shadow-orange-500/10 hover:border-orange-400', 
+        back: 'bg-gradient-to-br from-orange-500 via-red-500 to-rose-600 border-2 border-orange-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-orange-500/30',
+        badge: 'bg-orange-500 text-white',
+        badgeText: 'text-orange-700 bg-orange-100 border border-orange-300',
+        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
+        accentColor: 'text-orange-600',
+    },
 ];
 
 // --- 1. VisualPlayer ---
@@ -634,7 +699,7 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleC
     );
 }
 
-// 5. AnagramFlashcardPlayer
+// 5. AnagramFlashcardPlayer (3D & Büyütme-Küçültme Destekli)
 function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: { 
     step: AnagramFlashcardStep, 
     flippedCards: Set<number>, 
@@ -642,67 +707,242 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     isFullscreen: boolean 
 }) {
     const isTeacher = useTeacherMode();
-    const getDynamicFontSize = (text: string) => {
-        const baseSize = isTeacher ? 3.0 : (isFullscreen ? 2.0 : 1.5); 
-        const maxLength = 8;
-        if (text.length > maxLength) {
-            const reductionFactor = Math.min(1.5, (text.length - maxLength) / 3);
-            return `${Math.max(1.2, baseSize - reductionFactor)}rem`;
+    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
+    const [customCols, setCustomCols] = useState<number | null>(null);
+
+    const totalCards = step.cards?.length || 0;
+    const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
+    const allFlipped = totalCards > 0 && flippedCount === totalCards;
+
+    const handleToggleFlipAll = () => {
+        if (allFlipped) {
+            step.cards.forEach((_, idx) => {
+                if (flippedCards.has(idx)) onCardFlip(idx, 'anagramFlashcard');
+            });
+        } else {
+            step.cards.forEach((_, idx) => {
+                if (!flippedCards.has(idx)) onCardFlip(idx, 'anagramFlashcard');
+            });
         }
-        return `${baseSize}rem`;
+    };
+
+    const scaleStyles = {
+        sm: { minHeight: isTeacher ? "min-h-[14rem]" : "min-h-[10rem]", fontSize: "text-lg md:text-2xl" },
+        md: { minHeight: isTeacher ? "min-h-[18rem]" : "min-h-[13rem]", fontSize: "text-xl md:text-3xl" },
+        lg: { minHeight: isTeacher ? "min-h-[22rem]" : "min-h-[16rem]", fontSize: "text-2xl md:text-4xl" },
+        xl: { minHeight: isTeacher ? "min-h-[26rem]" : "min-h-[19rem]", fontSize: "text-3xl md:text-5xl" },
+    }[cardScale];
+
+    const getGridClass = () => {
+        if (customCols === 2) return "grid-cols-1 sm:grid-cols-2";
+        if (customCols === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+        if (customCols === 4) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
+        
+        // Varsayılan duyarlı grid
+        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2";
+        if (cardScale === 'lg') return isTeacher ? "grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
+        if (cardScale === 'sm') return isTeacher ? "grid-cols-3 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
+        return isTeacher ? "grid-cols-2 lg:grid-cols-4" : (isFullscreen ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4");
     };
 
     return (
-        <div className={cn("w-full p-4 flex flex-col justify-start", isTeacher ? "max-w-full pt-6" : "max-w-6xl mx-auto justify-center")}>
-             <div className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
-                 <h2 className={cn("font-black text-center text-slate-800 dark:text-white drop-shadow-sm uppercase tracking-wide", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
-             </div>
-            <div className={cn("grid gap-6 pb-32", isTeacher ? "grid-cols-3 lg:grid-cols-4 gap-8" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5")}>
+        <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
+            {/* Üst Başlık ve 3D Kontrol Araç Çubuğu */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200">
+                        <Puzzle className="w-5 h-5" />
+                    </div>
+                    <div>
+                        <h2 className="font-black text-slate-800 text-lg md:text-2xl drop-shadow-sm tracking-tight">{step.title}</h2>
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                            <span>{totalCards} Anagram Kartı</span>
+                            <span>•</span>
+                            <span className={cn(flippedCount > 0 ? "text-emerald-600 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Büyütme / Küçültme & Hepsini Çevir Kontrolleri */}
+                <div className="flex flex-wrap items-center gap-2">
+                    {/* Hepsini Çevir Butonu */}
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleToggleFlipAll}
+                        className="h-9 px-3 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+                    >
+                        <RotateCw className={cn("w-3.5 h-3.5", allFlipped && "rotate-180")} />
+                        {allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}
+                    </Button>
+
+                    {/* Boyut Ayarı (Zoom) */}
+                    <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={cardScale === 'sm'}
+                            onClick={() => {
+                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
+                                const currIdx = sizes.indexOf(cardScale);
+                                if (currIdx > 0) setCardScale(sizes[currIdx - 1]);
+                            }}
+                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
+                            title="Kartları Küçült"
+                        >
+                            <ZoomOut className="w-4 h-4" />
+                        </Button>
+                        <span className="px-2 text-xs font-black text-slate-700 uppercase tracking-wider min-w-[56px] text-center">
+                            {cardScale === 'sm' ? 'Küçük' : cardScale === 'md' ? 'Normal' : cardScale === 'lg' ? 'Büyük' : 'Dev'}
+                        </span>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={cardScale === 'xl'}
+                            onClick={() => {
+                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
+                                const currIdx = sizes.indexOf(cardScale);
+                                if (currIdx < sizes.length - 1) setCardScale(sizes[currIdx + 1]);
+                            }}
+                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
+                            title="Kartları Büyüt"
+                        >
+                            <ZoomIn className="w-4 h-4" />
+                        </Button>
+                    </div>
+
+                    {/* Sütun Düzeni */}
+                    <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <button
+                            onClick={() => setCustomCols(2)}
+                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 2 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
+                            title="2 Sütun"
+                        >
+                            2'li
+                        </button>
+                        <button
+                            onClick={() => setCustomCols(3)}
+                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 3 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
+                            title="3 Sütun"
+                        >
+                            3'lü
+                        </button>
+                        <button
+                            onClick={() => setCustomCols(4)}
+                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 4 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
+                            title="4 Sütun"
+                        >
+                            4'lü
+                        </button>
+                        <button
+                            onClick={() => setCustomCols(null)}
+                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === null ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
+                            title="Otomatik Düzen"
+                        >
+                            Oto
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* 3D Anagram Kartları Grid'i */}
+            <div className={cn("grid gap-6 md:gap-8 pb-32 transition-all duration-300", getGridClass())}>
                 {step.cards.map((card, index) => {
                     const theme = FLASHCARD_THEMES[index % FLASHCARD_THEMES.length];
+                    const isFlipped = flippedCards.has(index);
                     return (
                         <div
                             key={index}
                             className={cn(
-                                "rounded-3xl [perspective:1000px] cursor-pointer group hover:scale-105 transition-transform duration-300",
-                                isTeacher ? "min-h-[14rem]" : (isFullscreen ? "min-h-[12rem]" : "min-h-[9rem]")
+                                "rounded-3xl [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
+                                scaleStyles.minHeight
                             )}
                             onClick={() => onCardFlip(index, 'anagramFlashcard')}
                         >
                             <motion.div
-                                className={cn(
-                                    "relative w-full h-full text-center [transform-style:preserve-3d]"
-                                )}
+                                className="relative w-full h-full [transform-style:preserve-3d] transition-all"
                                 initial={false}
-                                animate={{ rotateY: flippedCards.has(index) ? 180 : 0 }}
-                                transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+                                animate={{ rotateY: isFlipped ? 180 : 0 }}
+                                transition={{ duration: 0.6, type: "spring", stiffness: 220, damping: 20 }}
+                                whileHover={{ y: -6, scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                             >
-                                {/* Front */}
-                                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-wrap items-center justify-center p-4", theme.front)}>
-                                    <h3 
-                                        className="font-black tracking-[0.2em] break-all drop-shadow-md uppercase text-slate-900 dark:text-white"
-                                        style={{ fontSize: getDynamicFontSize(card.scrambledWord) }}
-                                    >
-                                        {card.scrambledWord}
-                                    </h3>
-                                    {!isTeacher && (
-                                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center justify-center bg-white/30 px-3 py-1 rounded-full shadow-sm border border-white/50 backdrop-blur-md">
-                                            <span className="text-[8px] text-slate-900 dark:text-white uppercase tracking-[0.2em] font-extrabold">Çevir</span>
+                                {/* ══ ÖN YÜZ (KARIŞIK HARFLER) ══ */}
+                                <div className={cn(
+                                    "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] p-5 md:p-6 flex flex-col justify-between overflow-hidden",
+                                    theme.front
+                                )}>
+                                    {/* Üst Işık Yansıması */}
+                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                    
+                                    {/* Kart Üst Bilgisi */}
+                                    <div className="flex items-center justify-between w-full">
+                                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-slate-900/10 text-slate-800 shadow-sm border border-slate-900/10">
+                                            #{index + 1}
+                                        </span>
+                                        <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-slate-500 bg-white/80 px-2.5 py-0.5 rounded-full border border-slate-200 shadow-sm">
+                                            <Puzzle className="w-3 h-3 text-indigo-500" /> Karışık Harfler
                                         </div>
-                                    )}
+                                    </div>
+
+                                    {/* 3D Harf Kutuları */}
+                                    <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2 my-auto py-2">
+                                        {card.scrambledWord.toLocaleUpperCase('tr-TR').split('').map((char, charIdx) => (
+                                            <div 
+                                                key={charIdx}
+                                                className="w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 rounded-2xl bg-white text-slate-900 font-black flex items-center justify-center text-xl sm:text-2xl md:text-3xl shadow-md border-2 border-slate-200 border-b-[5px] border-b-slate-400 transform transition-transform hover:-translate-y-1"
+                                            >
+                                                {char}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Alt İpucu Butonu */}
+                                    <div className="flex items-center justify-center">
+                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 hover:bg-white text-indigo-900 text-[11px] font-black uppercase tracking-wider border border-indigo-200 shadow-sm transition-all">
+                                            <RotateCw className="w-3.5 h-3.5 text-indigo-600" />
+                                            <span>Dokun & Doğru Yanıtı Gör</span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {/* Back */}
-                                <div className={cn(
-                                    "absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-wrap items-center justify-center p-4 break-words overflow-hidden",
-                                    theme.back
-                                )} style={{ transform: "rotateY(180deg)" }}>
-                                    <h3 
-                                        className="font-black break-all drop-shadow-lg uppercase tracking-wider text-white"
-                                        style={{ fontSize: getDynamicFontSize(card.correctAnswer) }}
-                                    >
-                                        {card.correctAnswer}
-                                    </h3>
+                                {/* ══ ARKA YÜZ (DOĞRU KELİME) ══ */}
+                                <div 
+                                    className={cn(
+                                        "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] p-5 md:p-6 flex flex-col justify-between overflow-hidden",
+                                        theme.back
+                                    )} 
+                                    style={{ transform: "rotateY(180deg)" }}
+                                >
+                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                    
+                                    {/* Kart Üst Bilgisi */}
+                                    <div className="flex items-center justify-between w-full">
+                                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                                            #{index + 1}
+                                        </span>
+                                        <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2.5 py-0.5 rounded-full border border-white/30 backdrop-blur-md">
+                                            <Sparkles className="w-3 h-3 text-amber-300" /> Doğru Yanıt
+                                        </div>
+                                    </div>
+
+                                    {/* Doğru Yanıt Kutusu */}
+                                    <div className="my-auto w-full bg-white/95 rounded-2xl p-4 md:p-6 shadow-inner border-2 border-white text-center flex flex-col items-center justify-center">
+                                        <div className="text-[10px] sm:text-xs uppercase tracking-widest font-black text-slate-400 mb-1">
+                                            ÇÖZÜM:
+                                        </div>
+                                        <div className="font-black text-2xl sm:text-3xl md:text-4xl text-slate-900 tracking-wider break-words drop-shadow-sm">
+                                            {card.correctAnswer}
+                                        </div>
+                                    </div>
+
+                                    {/* Alt İpucu Butonu */}
+                                    <div className="flex items-center justify-center">
+                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white text-[11px] font-black uppercase tracking-wider border border-white/30 backdrop-blur-md transition-all">
+                                            <RotateCw className="w-3.5 h-3.5" />
+                                            <span>Geri Çevir</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </motion.div>
                         </div>
@@ -713,7 +953,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     );
 }
 
-// 6. FlashcardPlayer
+// 6. FlashcardPlayer (3D & Büyütme-Küçültme Destekli)
 function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: { 
     step: FlashcardStep, 
     flippedCards: Set<number>, 
@@ -721,16 +961,144 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
     isFullscreen: boolean 
 }) {
     const isTeacher = useTeacherMode();
+    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
+    const [customCols, setCustomCols] = useState<number | null>(null);
+
+    const totalCards = step.cards?.length || 0;
+    const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
+    const allFlipped = totalCards > 0 && flippedCount === totalCards;
+
+    const handleToggleFlipAll = () => {
+        if (allFlipped) {
+            step.cards.forEach((_, idx) => {
+                if (flippedCards.has(idx)) onCardFlip(idx, 'flashcard');
+            });
+        } else {
+            step.cards.forEach((_, idx) => {
+                if (!flippedCards.has(idx)) onCardFlip(idx, 'flashcard');
+            });
+        }
+    };
+
+    const getGridClass = () => {
+        if (customCols === 1) return "grid-cols-1 max-w-2xl mx-auto";
+        if (customCols === 2) return "grid-cols-1 md:grid-cols-2";
+        if (customCols === 3) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+        if (customCols === 4) return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        
+        // Varsayılan duyarlı grid
+        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 md:grid-cols-2";
+        if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+        if (cardScale === 'sm') return isTeacher ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : (isFullscreen ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3");
+    };
 
     return (
-        <div className={cn("w-full p-4 flex flex-col justify-start", isTeacher ? "max-w-full pt-6" : "max-w-6xl mx-auto justify-center")}>
-            <div className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
-                <h2 className={cn("font-black text-center text-slate-800 dark:text-white drop-shadow-sm uppercase tracking-wider", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
+        <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
+            {/* Üst Başlık ve 3D Kontrol Araç Çubuğu */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200">
+                        <Layers className="w-5 h-5" />
+                    </div>
+                    <div>
+                        <h2 className="font-black text-slate-800 text-lg md:text-2xl drop-shadow-sm tracking-tight">{step.title}</h2>
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                            <span>{totalCards} Bilgi Kartı</span>
+                            <span>•</span>
+                            <span className={cn(flippedCount > 0 ? "text-emerald-600 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Büyütme / Küçültme & Hepsini Çevir Kontrolleri */}
+                <div className="flex flex-wrap items-center gap-2">
+                    {/* Hepsini Çevir Butonu */}
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleToggleFlipAll}
+                        className="h-9 px-3 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+                    >
+                        <RotateCw className={cn("w-3.5 h-3.5", allFlipped && "rotate-180")} />
+                        {allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}
+                    </Button>
+
+                    {/* Boyut Ayarı (Zoom) */}
+                    <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={cardScale === 'sm'}
+                            onClick={() => {
+                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
+                                const currIdx = sizes.indexOf(cardScale);
+                                if (currIdx > 0) setCardScale(sizes[currIdx - 1]);
+                            }}
+                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
+                            title="Kartları Küçült"
+                        >
+                            <ZoomOut className="w-4 h-4" />
+                        </Button>
+                        <span className="px-2 text-xs font-black text-slate-700 uppercase tracking-wider min-w-[56px] text-center">
+                            {cardScale === 'sm' ? 'Küçük' : cardScale === 'md' ? 'Normal' : cardScale === 'lg' ? 'Büyük' : 'Dev'}
+                        </span>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={cardScale === 'xl'}
+                            onClick={() => {
+                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
+                                const currIdx = sizes.indexOf(cardScale);
+                                if (currIdx < sizes.length - 1) setCardScale(sizes[currIdx + 1]);
+                            }}
+                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
+                            title="Kartları Büyüt"
+                        >
+                            <ZoomIn className="w-4 h-4" />
+                        </Button>
+                    </div>
+
+                    {/* Sütun Düzeni */}
+                    <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <button
+                            onClick={() => setCustomCols(2)}
+                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 2 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
+                            title="2 Sütun"
+                        >
+                            2'li
+                        </button>
+                        <button
+                            onClick={() => setCustomCols(3)}
+                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 3 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
+                            title="3 Sütun"
+                        >
+                            3'lü
+                        </button>
+                        <button
+                            onClick={() => setCustomCols(4)}
+                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 4 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
+                            title="4 Sütun"
+                        >
+                            4'lü
+                        </button>
+                        <button
+                            onClick={() => setCustomCols(null)}
+                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === null ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
+                            title="Otomatik Düzen"
+                        >
+                            Oto
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div className={cn("grid gap-8 pb-32", isTeacher ? "grid-cols-2 lg:grid-cols-3" : (isFullscreen ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"))}>
+
+            {/* 3D Bilgi Kartları Grid'i */}
+            <div className={cn("grid gap-6 md:gap-8 pb-32 transition-all duration-300", getGridClass())}>
                 {step.cards.map((card, index) => (
                     <FlashcardItem
                         key={index}
+                        index={index}
                         term={card.term}
                         definition={card.definition}
                         isFlipped={flippedCards.has(index)}
@@ -738,6 +1106,7 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
                         theme={FLASHCARD_THEMES[index % FLASHCARD_THEMES.length]}
                         isFullscreen={isFullscreen}
                         isTeacher={isTeacher}
+                        cardScale={cardScale}
                     />
                 ))}
             </div>
@@ -745,39 +1114,151 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
     );
 }
 
-export const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFullscreen, isTeacher }: { term: string, definition: string, isFlipped: boolean, onFlip: () => void, theme: any, isFullscreen?: boolean, isTeacher?: boolean }) => {
+export const FlashcardItem = ({ 
+    index = 0,
+    term, 
+    definition, 
+    isFlipped, 
+    onFlip, 
+    theme, 
+    isFullscreen, 
+    isTeacher,
+    cardScale = 'md'
+}: { 
+    index?: number,
+    term: string, 
+    definition: string, 
+    isFlipped: boolean, 
+    onFlip: () => void, 
+    theme: any, 
+    isFullscreen?: boolean, 
+    isTeacher?: boolean,
+    cardScale?: 'sm' | 'md' | 'lg' | 'xl'
+}) => {
+    const scaleStyles = {
+        sm: { 
+            minHeight: isTeacher ? "min-h-[16rem]" : "min-h-[12rem]",
+            termText: term.length > 20 ? "text-xl md:text-2xl" : "text-2xl md:text-3xl",
+            defText: definition.length > 150 ? "text-xs md:text-sm" : "text-sm md:text-base",
+            padding: "p-4 md:p-5"
+        },
+        md: { 
+            minHeight: isTeacher ? "min-h-[20rem]" : "min-h-[15rem]",
+            termText: term.length > 20 ? "text-2xl md:text-3xl" : "text-3xl md:text-4xl",
+            defText: definition.length > 150 ? "text-sm md:text-base" : "text-base md:text-lg",
+            padding: "p-5 md:p-6"
+        },
+        lg: { 
+            minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[18rem]",
+            termText: term.length > 20 ? "text-3xl md:text-4xl" : "text-4xl md:text-5xl",
+            defText: definition.length > 150 ? "text-base md:text-lg" : "text-lg md:text-xl",
+            padding: "p-6 md:p-8"
+        },
+        xl: { 
+            minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[22rem]",
+            termText: term.length > 20 ? "text-4xl md:text-5xl" : "text-5xl md:text-6xl",
+            defText: definition.length > 150 ? "text-lg md:text-xl" : "text-xl md:text-2xl",
+            padding: "p-8 md:p-10"
+        },
+    }[cardScale];
+
     return (
         <div
             className={cn(
-                "rounded-3xl [perspective:1000px] cursor-pointer group hover:scale-105 transition-transform duration-300",
-                isTeacher ? "min-h-[20rem]" : "min-h-[12rem]"
+                "rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
+                scaleStyles.minHeight
             )}
             onClick={onFlip}
         >
             <motion.div
-                className={cn(
-                    "relative w-full h-full text-center [transform-style:preserve-3d]"
-                )}
+                className="relative w-full h-full [transform-style:preserve-3d] transition-all"
                 initial={false}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+                transition={{ duration: 0.6, type: "spring", stiffness: 220, damping: 20 }}
+                whileHover={{ y: -6, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
             >
-                {/* Front */}
-                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl border shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-col items-center justify-center p-6 transition-all", theme.front)}>
-                    <h3 className={cn("font-black uppercase tracking-wider drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl md:text-3xl"))}>{term}</h3>
-                    {!isTeacher && (
-                        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center justify-center bg-black/5 dark:bg-black/20 px-5 py-1.5 rounded-full border border-black/10 dark:border-white/20 backdrop-blur-md">
-                            <span className="text-[9px] md:text-[11px] text-slate-500 dark:text-white/60 uppercase tracking-[0.3em] font-black">Dokun & Çevir</span>
+                {/* ══ ÖN YÜZ (KAVRAM & TERİM) ══ */}
+                <div className={cn(
+                    "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] flex flex-col justify-between overflow-hidden",
+                    scaleStyles.padding,
+                    theme.front
+                )}>
+                    {/* Üst Işık Yansıması */}
+                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                    
+                    {/* Kart Üst Başlığı */}
+                    <div className="flex items-center justify-between w-full">
+                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-slate-900/10 text-slate-800 shadow-sm border border-slate-900/10">
+                            #{index + 1}
+                        </span>
+                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-slate-600 bg-white/80 px-3 py-1 rounded-full border border-slate-200 shadow-sm">
+                            <Lightbulb className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                            <span>Kavram Kartı</span>
                         </div>
-                    )}
+                    </div>
+
+                    {/* Ana Terim / Başlık */}
+                    <div className="my-auto py-4 text-center flex flex-col items-center justify-center">
+                        <h3 className={cn(
+                            "font-black tracking-tight text-slate-900 drop-shadow-sm uppercase leading-snug break-words max-w-full",
+                            scaleStyles.termText
+                        )}>
+                            {term}
+                        </h3>
+                    </div>
+
+                    {/* Alt İpucu Butonu */}
+                    <div className="flex items-center justify-center">
+                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 hover:bg-white text-indigo-950 text-xs font-black uppercase tracking-wider border border-indigo-200 shadow-sm transition-all group-hover:shadow-md">
+                            <RotateCw className="w-3.5 h-3.5 text-indigo-600" />
+                            <span>Dokun & Tanımı Gör</span>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Back */}
-                <div className={cn(
-                    "absolute w-full h-full [backface-visibility:hidden] rounded-3xl border shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-b-8 flex flex-col items-center justify-center p-8",
-                    theme.back
-                )} style={{ transform: "rotateY(180deg)" }}>
-                    <p className={cn("font-bold leading-relaxed tracking-wide drop-shadow-md text-white", isTeacher ? "text-3xl" : (isFullscreen ? "text-xl" : "text-base md:text-lg"))}>{definition}</p>
+                {/* ══ ARKA YÜZ (TANIM & AÇIKLAMA) ══ */}
+                <div 
+                    className={cn(
+                        "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] flex flex-col justify-between overflow-hidden",
+                        scaleStyles.padding,
+                        theme.back
+                    )} 
+                    style={{ transform: "rotateY(180deg)" }}
+                >
+                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                    
+                    {/* Kart Üst Başlığı */}
+                    <div className="flex items-center justify-between w-full">
+                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                            #{index + 1}
+                        </span>
+                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
+                            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                            <span>Tanım & Açıklama</span>
+                        </div>
+                    </div>
+
+                    {/* Tanım Kutusu */}
+                    <div className="my-auto w-full max-h-[70%] overflow-y-auto bg-white/95 rounded-2xl p-4 md:p-6 shadow-inner border-2 border-white text-center flex flex-col items-center justify-center">
+                        <div className="text-[10px] sm:text-xs uppercase tracking-widest font-black text-indigo-600 mb-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-100">
+                            {term}
+                        </div>
+                        <p className={cn(
+                            "font-bold leading-relaxed tracking-wide text-slate-800 break-words",
+                            scaleStyles.defText
+                        )}>
+                            {definition}
+                        </p>
+                    </div>
+
+                    {/* Alt İpucu Butonu */}
+                    <div className="flex items-center justify-center">
+                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md transition-all">
+                            <RotateCw className="w-3.5 h-3.5" />
+                            <span>Geri Çevir</span>
+                        </div>
+                    </div>
                 </div>
             </motion.div>
         </div>
