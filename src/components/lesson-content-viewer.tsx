@@ -320,8 +320,11 @@ export function ContentListPlayer({
     const [prevCount, setPrevCount] = useState(0);
 
     useEffect(() => {
-        if (isTeacher && revealedSentencesCount > prevCount && revealedSentencesCount > 0 && !isSingleCardMode) {
-            setIsModalOpen(true);
+        if (isTeacher && revealedSentencesCount > prevCount) {
+             if (isSingleCardMode) {
+                 setIsModalOpen(true);
+                 onAnimationStart?.();
+             }
         }
         setPrevCount(revealedSentencesCount);
     }, [revealedSentencesCount, prevCount, isTeacher, isSingleCardMode]);
@@ -432,15 +435,14 @@ export function ContentListPlayer({
              )}>
                 <div className={cn(
                     "grid w-full max-w-full px-2 md:px-4 gap-4 md:gap-6 pt-2 items-stretch",
-                    isSingleCardMode ? "grid-cols-1 place-items-center" : "grid-cols-1 lg:grid-cols-2"
+                    "grid-cols-1 lg:grid-cols-2"
                 )}>
                     {visibleSentences.map((sentence, index) => {
-                        if (isSingleCardMode && index !== visibleSentences.length - 1) return null;
                         
                         const style = styles[index % styles.length]; 
                         const icons = decoIcons[index % decoIcons.length];
 
-                        const shouldAnimate = isTeacher && index === visibleSentences.length - 1; 
+                        const shouldAnimate = isTeacher && index === visibleSentences.length - 1 && !isSingleCardMode; 
                         const isLastItem = index === visibleSentences.length - 1;
 
                         return (
@@ -454,27 +456,23 @@ export function ContentListPlayer({
                                 
                                 <div className={cn(
                                     "relative w-full h-full py-4 px-5 md:py-5 md:px-6 rounded-2xl border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 flex flex-col md:flex-row justify-start items-center text-left gap-4 backdrop-blur-xl",
-                                    isSingleCardMode ? "md:p-12 min-h-[300px] justify-center items-center text-center max-w-4xl mx-auto" : "",
                                     style.bg, style.border
                                 )}>
                                     {/* Parlak üst çizgi */}
                                     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                                     {/* Numara rozeti */}
-                                    {!isSingleCardMode && (
-                                        <div className={cn(
-                                            "flex-shrink-0 w-11 h-11 md:w-13 md:h-13 rounded-xl flex items-center justify-center bg-black/30 border-2",
-                                            style.circleBorder
-                                        )}>
-                                            <span className={cn("font-black text-lg", style.numberColor)}>{index + 1}</span>
-                                        </div>
-                                    )}
+                                    <div className={cn(
+                                        "flex-shrink-0 w-11 h-11 md:w-13 md:h-13 rounded-xl flex items-center justify-center bg-black/5 dark:bg-black/30 border-2",
+                                        style.circleBorder
+                                    )}>
+                                        <span className={cn("font-black text-lg", style.numberColor)}>{index + 1}</span>
+                                    </div>
                                     <div className={cn(
                                         "leading-relaxed font-bold break-words flex-1 z-10 relative",
-                                        isSingleCardMode ? "text-center" : "",
                                         style.textColor,
                                         isTeacher 
-                                            ? (isSingleCardMode ? "text-4xl md:text-5xl leading-tight tracking-wide" : "text-2xl md:text-3xl tracking-wide") 
-                                            : (isSingleCardMode ? "text-2xl md:text-3xl" : "text-base md:text-xl tracking-wide")
+                                            ? "text-2xl md:text-3xl tracking-wide" 
+                                            : "text-base md:text-xl tracking-wide"
                                     )}>
                                         <span className="flex-1">
                                             {shouldAnimate ? (
@@ -514,14 +512,11 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleC
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
                 <h2 className={cn("font-black text-slate-800 dark:text-white", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
             </div>
-             
-            <div className={cn(
+             <div className={cn(
                 "w-full flex-grow grid gap-4 md:gap-6", 
-                isSingleCardMode 
-                    ? "grid-cols-1 max-w-4xl mx-auto" 
-                    : (isTeacher 
-                        ? "grid-cols-1 md:grid-cols-2 content-start" 
-                        : "grid-cols-1 md:grid-cols-2")
+                isTeacher 
+                    ? "grid-cols-1 md:grid-cols-2 content-start" 
+                    : "grid-cols-1 md:grid-cols-2"
             )}>
                 {(() => {
                     let conceptIndex = 1;
@@ -551,16 +546,12 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleC
                                     <CardTitle className={cn(
                                         "font-black uppercase tracking-wider transition-colors", 
                                         style.title, 
-                                        isTeacher 
-                                            ? (isSingleCardMode ? "text-3xl md:text-4xl" : "text-2xl") 
-                                            : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg")
+                                        isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg")
                                     )}>{currentNum}. {item.concept}</CardTitle>
                                 </CardHeader>
                                 <CardContent className={cn(
                                     "text-slate-700 dark:text-slate-300 font-semibold leading-relaxed", 
-                                    isTeacher 
-                                        ? (isSingleCardMode ? "text-2xl md:text-3xl p-6 pt-6" : "text-xl p-4 pt-4") 
-                                        : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base"
+                                    isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base"
                                 )}>
                                     <div dangerouslySetInnerHTML={{ __html: item.definition }} />
                                 </CardContent>
