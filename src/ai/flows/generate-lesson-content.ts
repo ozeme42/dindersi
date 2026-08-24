@@ -222,8 +222,16 @@ ${requestedExamples}
 
   try {
     const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
-    const parsed = JSON.parse(cleaned);
-    return parsed as GenerateLessonContentOutput;
+    const parsed = JSON.parse(cleaned) as Record<string, any>;
+    
+    // KESİN FİLTRELEME: Sadece öğretmenin açıkça seçtiği modülleri koru, seçilmeyen hiçbir şeyi aktarma!
+    const filtered: Record<string, any> = {};
+    for (const key of requestedKeys) {
+      if (key in parsed && parsed[key] !== undefined && parsed[key] !== null) {
+        filtered[key] = parsed[key];
+      }
+    }
+    return filtered as GenerateLessonContentOutput;
   } catch (parseError) {
     console.error('JSON parse error in generateLessonContent:', text);
     throw new Error('Yapay zeka yanıtı JSON olarak okunamadı: ' + (parseError as any).message);

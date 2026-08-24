@@ -303,7 +303,7 @@ export function AiLessonStepGenerationDialog({
             };
             const result = await generateLessonContent(input);
             if (result && Object.keys(result).length > 0) {
-                generatedSteps.push(...mapAIOutputToSteps(result));
+                generatedSteps.push(...mapAIOutputToSteps(result, selectedModules));
             }
         }
 
@@ -334,11 +334,14 @@ export function AiLessonStepGenerationDialog({
     }
   };
 
-  const mapAIOutputToSteps = (output: GenerateLessonContentOutput): LessonStep[] => {
+  const mapAIOutputToSteps = (
+      output: GenerateLessonContentOutput,
+      activeModules: { [key: string]: boolean } = {}
+  ): LessonStep[] => {
         const newSteps: LessonStep[] = [];
         
         // 1. Öğrenme Hedefleri
-        if (output.learningObjectives && output.learningObjectives.length > 0) {
+        if (activeModules.learningObjectives && output.learningObjectives && output.learningObjectives.length > 0) {
             newSteps.push({ 
                 type: 'objectiveList', 
                 title: '🎯 Öğrenme Hedefleri', 
@@ -348,7 +351,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 2. Konu Özeti (Her Başlık Ayrı Bir Sayfa / Adım Olarak - Cümleler Sunumda Sırayla Ekrana Gelir)
-        if (output.summary && output.summary.length > 0) {
+        if (activeModules.summary && output.summary && output.summary.length > 0) {
             output.summary.forEach((section, idx) => {
                 let sentenceList: string[] = [];
                 if (Array.isArray(section.sentences) && section.sentences.length > 0) {
@@ -379,7 +382,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 2b. İnfografik Karşılaştırma Tablosu
-        if (output.infographicTable && output.infographicTable.columns && output.infographicTable.rows) {
+        if (activeModules.infographicTable && output.infographicTable && output.infographicTable.columns && output.infographicTable.rows) {
             const table = output.infographicTable;
             const tableHtml = `
             <div class="w-full max-w-5xl mx-auto p-4 sm:p-8 space-y-6">
@@ -429,7 +432,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 2c. Süreç & Akış İnfografiği
-        if (output.visualInfographics && output.visualInfographics.items && output.visualInfographics.items.length > 0) {
+        if (activeModules.visualInfographics && output.visualInfographics && output.visualInfographics.items && output.visualInfographics.items.length > 0) {
             const info = output.visualInfographics;
             const cardGradients = [
                 { bg: 'from-sky-950/60 to-slate-900', border: 'border-sky-500/40', text: 'text-sky-300', numBg: 'bg-sky-500/20 text-sky-300 border-sky-400/40' },
@@ -498,7 +501,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 3. Anahtar Çıkarımlar
-        if (output.keyTakeaways && output.keyTakeaways.length > 0) {
+        if (activeModules.keyTakeaways && output.keyTakeaways && output.keyTakeaways.length > 0) {
             newSteps.push({ 
                 type: 'content', 
                 title: '💡 Anahtar Çıkarımlar & İpuçları', 
@@ -508,7 +511,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 4. Kavram Açıklamaları (Kavram Kartları)
-        if (output.conceptExplanations && output.conceptExplanations.length > 0) {
+        if (activeModules.conceptExplanations && output.conceptExplanations && output.conceptExplanations.length > 0) {
             newSteps.push({ 
                 type: 'conceptExplanation', 
                 title: '📌 Temel Kavramlar & Açıklamaları', 
@@ -518,7 +521,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 5. Bilgi Kartları (Flashcards)
-        if (output.flashcards && output.flashcards.length > 0) {
+        if (activeModules.flashcards && output.flashcards && output.flashcards.length > 0) {
             newSteps.push({ 
                 type: 'flashcard', 
                 title: '💡 Bilgi & Hafıza Kartları', 
@@ -528,7 +531,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 6. Anagram / Kelime Oyunu Kartları
-        if (output.anagramQuestions && output.anagramQuestions.length > 0) {
+        if (activeModules.anagramQuestions && output.anagramQuestions && output.anagramQuestions.length > 0) {
             newSteps.push({ 
                 type: 'anagramGame', 
                 title: '🔤 Kelime Dehası (Anagram)', 
@@ -542,7 +545,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 7. Cümle Kurma / Düzeltme
-        if (output.sentenceScrambleQuestions && output.sentenceScrambleQuestions.length > 0) {
+        if (activeModules.sentenceScrambleQuestions && output.sentenceScrambleQuestions && output.sentenceScrambleQuestions.length > 0) {
             output.sentenceScrambleQuestions.forEach((q, idx) => {
                 newSteps.push({ 
                     type: 'sentenceScramble', 
@@ -555,7 +558,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 8. Doğru / Yanlış Listesi
-        if (output.trueFalseQuestions && output.trueFalseQuestions.length > 0) {
+        if (activeModules.trueFalseQuestions && output.trueFalseQuestions && output.trueFalseQuestions.length > 0) {
             newSteps.push({
                 type: 'trueFalseList',
                 title: '✓/✗ Doğru - Yanlış Alıştırması',
@@ -568,7 +571,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 9. Çoktan Seçmeli Test Soruları
-        if (output.multipleChoiceQuestions && output.multipleChoiceQuestions.length > 0) {
+        if (activeModules.multipleChoiceQuestions && output.multipleChoiceQuestions && output.multipleChoiceQuestions.length > 0) {
             output.multipleChoiceQuestions.forEach((q, idx) => {
                 newSteps.push({ 
                     type: 'mcq', 
@@ -582,7 +585,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         // 10. Boşluk Doldurma Soruları
-        if (output.fillInTheBlankQuestions && output.fillInTheBlankQuestions.length > 0) {
+        if (activeModules.fillInTheBlankQuestions && output.fillInTheBlankQuestions && output.fillInTheBlankQuestions.length > 0) {
             output.fillInTheBlankQuestions.forEach((q, idx) => {
                 newSteps.push({ 
                     type: 'fitb', 
