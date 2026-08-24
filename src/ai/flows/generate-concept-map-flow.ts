@@ -1,77 +1,67 @@
-
 'use server';
-/**
- * @fileOverview AI-assisted concept map generation tool.
- *
- * This flow analyzes a given text summary and generates a structured concept map,
- * consisting of nodes (concepts) and edges (relationships).
- */
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
-import { googleAI } from '@genkit-ai/googleai';
+
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { z } from 'zod';
 
 const ConceptMapNodeSchema = z.object({
   id: z.string().describe('A unique identifier for the node (e.g., "concept_1").'),
   label: z.string().describe('The text label for the concept node.'),
-  isCentral: z.boolean().optional().describe('Set to true if this is the main, central topic of the map. Only one node should be central.'),
+  isCentral: z.boolean().optional().describe('Set to true if this is the main, central topic of the map.'),
 });
 
 const ConceptMapEdgeSchema = z.object({
   from: z.string().describe('The ID of the starting node.'),
   to: z.string().describe('The ID of the ending node.'),
-  label: z.string().optional().describe('An optional label describing the relationship (e.g., "is a type of", "leads to").'),
+  label: z.string().optional().describe('An optional label describing the relationship.'),
 });
 
-const ConceptMapOutputSchema = z.object({
-  nodes: z.array(ConceptMapNodeSchema).describe('A list of all concept nodes in the map, typically 5-10 nodes.'),
-  edges: z.array(ConceptMapEdgeSchema).describe('A list of all edges connecting the nodes.'),
-});
-export type ConceptMapData = z.infer<typeof ConceptMapOutputSchema>;
+export type ConceptMapData = {
+  nodes: { id: string; label: string; isCentral?: boolean }[];
+  edges: { from: string; to: string; label?: string }[];
+};
 
 const GenerateConceptMapInputSchema = z.object({
   topicSummary: z.string().describe('A summary of the topic to be mapped.'),
+  apiKey: z.string().optional(),
+  modelName: z.string().optional(),
 });
 export type GenerateConceptMapInput = z.infer<typeof GenerateConceptMapInputSchema>;
 
 export async function generateConceptMap(input: GenerateConceptMapInput): Promise<ConceptMapData> {
-  return generateConceptMapFlow(input);
+  const activeKey = input.apiKey?.trim() || process.env.GEMINI_API_KEY || '';
+  const selectedModel = input.modelName?.trim() || 'gemini-2.5-flash';
+
+  if (!activeKey) {
+    throw new Error('Gemini API anahtarı bulunamadı.');
+  }
+
+  const prompt = `Sen kavram haritası ve bilgi grafiği uzmanısın.
+Aşağıdaki metni analiz ederek Türkçe bir kavram haritası (5-10 düğüm ve aralarındaki ilişkiler) üret.
+SADECE geçerli bir JSON nesnesi üret:
+{
+  "nodes": [
+    { "id": "1", "label": "Merkez Kavram", "isCentral": true },
+    { "id": "2", "label": "Alt Kavram", "isCentral": false }
+  ],
+  "edges": [
+    { "from": "1", "to": "2", "label": "içerir" }
+  ]
 }
 
-const generateConceptMapFlow = ai.defineFlow(
-  {
-    name: 'generateConceptMapFlow',
-    inputSchema: GenerateConceptMapInputSchema,
-    outputSchema: ConceptMapOutputSchema,
-  },
-  async (input) => {
-    
-    const prompt = `You are an expert in creating structured knowledge graphs in Turkish. Analyze the following text and identify the main concepts and their relationships. Generate a concept map with a central topic, related sub-concepts, and the connections between them.
-
-All generated content MUST be in Turkish.
-
-The map should contain between 5 and 10 nodes in total.
-
-Instructions:
-1. Identify the single most important, central concept from the text.
-2. Identify 4 to 9 related key sub-concepts.
-3. Determine the relationships (edges) between these concepts.
-4. Format the output as a JSON object containing a "nodes" array and an "edges" array.
-5. In the "nodes" array, ensure one and only one node is marked as the central topic by setting its "isCentral" property to true. All other nodes should not have this property or have it set to false.
-
-Topic Summary:
+Metin:
 "${input.topicSummary}"
 `;
 
-    const {output} = await ai.generate({
-      model: googleAI.model('gemini-2.5-flash'),
-      prompt: prompt,
-      config: {
-        responseModalities: ['TEXT'],
-      },
-      output: {
-        schema: ConceptMapOutputSchema,
-      }
-    });
-    return output!;
-  }
-);
+  const genAI = new GoogleGenerativeAI(activeKey);
+  const model = genAI.getGenerativeModel({
+    model: selectedModel,
+    generationConfig: {
+      responseMimeType: 'application/json',
+    },
+  });
+
+  const result = await model.generateContent(prompt);
+  const text = result.response.text();
+  const cleaned = text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+  return JSON.parse(cleaned);
+}

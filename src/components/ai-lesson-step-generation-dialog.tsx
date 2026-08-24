@@ -8,7 +8,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Sparkles, Wand2, CheckCircle2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { 
+    Loader2, Sparkles, Wand2, KeyRound, Settings2, ExternalLink, 
+    Check, Eye, EyeOff, ShieldCheck, Zap 
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
 import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
@@ -17,6 +22,45 @@ import type { LessonStep } from '@/lib/types';
 import { Checkbox } from './ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+
+// ══ GÜNCEL ÜCRETSİZ GEMİNİ MODELLERİ LİSTESİ ══
+export const FREE_GEMINI_MODELS = [
+    { 
+        id: 'gemini-2.5-flash', 
+        name: 'Gemini 2.5 Flash', 
+        tag: 'Önerilen • En Yeni & Hızlı', 
+        desc: 'En yeni nesil, Türkçe anlama yeteneği üstün ve tamamen ücretsiz.',
+        badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+    },
+    { 
+        id: 'gemini-2.0-flash', 
+        name: 'Gemini 2.0 Flash', 
+        tag: 'Yüksek Performans', 
+        desc: 'Oldukça hızlı, dengeli ve kararlı ücretsiz model.',
+        badge: 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+    },
+    { 
+        id: 'gemini-1.5-flash', 
+        name: 'Gemini 1.5 Flash', 
+        tag: 'Geniş Bağlam', 
+        desc: 'Hafif, uzun metinleri işleyebilen stabil ücretsiz model.',
+        badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
+    },
+    { 
+        id: 'gemini-1.5-pro', 
+        name: 'Gemini 1.5 Pro', 
+        tag: 'Derin Analiz & Detay', 
+        desc: 'Kapsamlı pedagojik içerik ve derin analiz için ideal.',
+        badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+    },
+    { 
+        id: 'gemini-2.0-flash-thinking-exp-01-21', 
+        name: 'Gemini 2.0 Flash Thinking', 
+        tag: 'Akıl Yürütme (Thinking)', 
+        desc: 'Adım adım düşünerek zor sorular ve kavramlar üreten deneysel model.',
+        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+    },
+];
 
 const allActivityOptions = {
     anlatim: [
@@ -64,6 +108,12 @@ export function AiLessonStepGenerationDialog({
   generationType,
 }: AiLessonStepGenerationDialogProps) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [apiKey, setApiKey] = useState('');
+  const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash');
+  const [showApiKeyText, setShowApiKeyText] = useState(false);
+  const [isKeySaved, setIsKeySaved] = useState(false);
+
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -75,6 +125,16 @@ export function AiLessonStepGenerationDialog({
   });
   
   const activityOptions = generationType ? allActivityOptions[generationType] : [];
+
+  // Tarayıcıdan kayıtlı API Anahtarı ve Modeli yükle
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+        const savedKey = localStorage.getItem('custom_gemini_api_key') || '';
+        const savedModel = localStorage.getItem('custom_gemini_model') || 'gemini-2.5-flash';
+        setApiKey(savedKey);
+        setSelectedModel(savedModel);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (context && isOpen) {
@@ -94,6 +154,30 @@ export function AiLessonStepGenerationDialog({
     }
   }, [context, isOpen, form, generationType]);
 
+  const handleSaveApiKey = (keyToSave: string) => {
+    setApiKey(keyToSave);
+    if (typeof window !== 'undefined') {
+        localStorage.setItem('custom_gemini_api_key', keyToSave.trim());
+        setIsKeySaved(true);
+        setTimeout(() => setIsKeySaved(false), 2000);
+        toast({
+            title: "Kaydedildi",
+            description: keyToSave.trim() ? "Gemini API Anahtarınız tarayıcınıza kaydedildi." : "Varsayılan sistem anahtarı kullanılacak.",
+        });
+    }
+  };
+
+  const handleSelectModel = (modelId: string) => {
+    setSelectedModel(modelId);
+    if (typeof window !== 'undefined') {
+        localStorage.setItem('custom_gemini_model', modelId);
+        toast({
+            title: "Model Güncellendi",
+            description: `Aktif model: ${modelId}`,
+        });
+    }
+  };
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!context) {
       toast({ title: "Hata", description: "Geçersiz bağlam.", variant: "destructive" });
@@ -106,29 +190,41 @@ export function AiLessonStepGenerationDialog({
 
     try {
         const inputModules = data.modules as GenerateLessonContentInput['modules'];
+        const activeKey = apiKey.trim() || undefined;
+        const activeModel = selectedModel || 'gemini-2.5-flash';
         
-        // Handle special AI flows first
+        // Özel akışlar (Kavram Haritası & HTML Slayt)
         if (inputModules.conceptMap) {
             try {
-                const mapData = await generateConceptMap({ topicSummary: data.sourceText });
+                const mapData = await generateConceptMap({ 
+                    topicSummary: data.sourceText,
+                    apiKey: activeKey,
+                    modelName: activeModel
+                });
                 if (mapData && mapData.nodes && mapData.nodes.length > 0) {
                     generatedSteps.push({ type: 'conceptMap', title: 'Kavram Haritası', mapData: mapData });
                 }
             } catch (e) {
-                console.error("Concept map generation error:", e);
+                console.error("Concept map error:", e);
             }
         }
+
         if (inputModules.htmlSlide) {
             try {
-                const result = await generateHtmlSlide({ topicSummary: data.sourceText });
+                const result = await generateHtmlSlide({ 
+                    topicSummary: data.sourceText,
+                    apiKey: activeKey,
+                    modelName: activeModel
+                });
                 if (result && result.htmlContent) {
-                    generatedSteps.push({ type: 'htmlSlide', title: 'İnteraktif HTML Slaytı', htmlContent: result.htmlContent });
+                    generatedSteps.push({ type: 'htmlSlide', title: 'İnteraktif Sunum Slaytı', htmlContent: result.htmlContent });
                 }
             } catch (e) {
-                console.error("HTML slide generation error:", e);
+                console.error("HTML slide error:", e);
             }
         }
         
+        // Standart Modüller
         const standardModules: GenerateLessonContentInput['modules'] = {};
         let needsStandardCall = false;
         for (const key in inputModules) {
@@ -142,9 +238,11 @@ export function AiLessonStepGenerationDialog({
             const input: GenerateLessonContentInput = {
                 topicSummary: data.sourceText,
                 modules: standardModules,
+                apiKey: activeKey,
+                modelName: activeModel,
             };
             const result = await generateLessonContent(input);
-            if (result && Object.keys(result).length > 1) {
+            if (result && Object.keys(result).length > 0) {
                 generatedSteps.push(...mapAIOutputToSteps(result));
             }
         }
@@ -158,7 +256,11 @@ export function AiLessonStepGenerationDialog({
 
     } catch (error: any) {
       console.error("Error generating lesson step:", error);
-      toast({ title: "Hata", description: "İçerik üretilirken bir hata oluştu: " + error.message, variant: "destructive" });
+      toast({ 
+          title: "Hata", 
+          description: error.message || "İçerik üretilirken bir sorun oluştu.", 
+          variant: "destructive" 
+      });
       hasError = true;
     } finally {
       setIsGenerating(false);
@@ -221,20 +323,38 @@ export function AiLessonStepGenerationDialog({
         return newSteps;
     };
 
+  const currentModelMeta = FREE_GEMINI_MODELS.find(m => m.id === selectedModel) || FREE_GEMINI_MODELS[0];
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-2xl flex flex-col h-auto max-h-[90vh] bg-slate-950 border border-white/10 text-slate-100 shadow-2xl p-0 overflow-hidden rounded-3xl">
-        <DialogHeader className="p-6 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md">
-          <DialogTitle className="flex items-center gap-3 text-xl font-black uppercase tracking-tight text-white">
-            <div className="p-2 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 rounded-2xl border border-purple-500/30 text-purple-400">
+      <DialogContent className="sm:max-w-2xl flex flex-col h-auto max-h-[92vh] bg-slate-950 border border-white/10 text-slate-100 shadow-2xl p-0 overflow-hidden rounded-3xl">
+        {/* Header */}
+        <DialogHeader className="p-5 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md flex flex-row items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 rounded-2xl border border-purple-500/30 text-purple-400">
                 <Sparkles className="h-5 w-5" />
             </div>
-            Yapay Zeka ile Sunum & İçerik Üretimi
-          </DialogTitle>
-          <DialogDescription className="text-xs text-slate-400">
-            {generationType === 'anlatim' ? 'Konu anlatımı, kavramlar ve bilgi kartları ' : 'Değerlendirme soruları ve alıştırmalar '}
-            otomatik olarak oluşturulup taslağa eklenecektir.
-          </DialogDescription>
+            <div>
+                <DialogTitle className="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                    Yapay Zeka Stüdyosu
+                </DialogTitle>
+                <DialogDescription className="text-xs text-slate-400">
+                    {generationType === 'anlatim' ? 'Konu Anlatımı, Kavramlar & Bilgi Kartları' : 'Değerlendirme Soruları & Alıştırmalar'}
+                </DialogDescription>
+            </div>
+          </div>
+
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => setShowSettings(!showSettings)}
+            className={cn(
+                "border-white/10 text-xs font-bold rounded-xl transition-all mr-6",
+                showSettings ? "bg-indigo-600 text-white border-indigo-500" : "bg-slate-900 text-slate-300 hover:bg-slate-800"
+            )}
+          >
+            <Settings2 className="w-3.5 h-3.5 mr-1.5" /> Model & API
+          </Button>
         </DialogHeader>
 
         {isGenerating ? (
@@ -244,48 +364,146 @@ export function AiLessonStepGenerationDialog({
                     <Loader2 className="h-14 w-14 animate-spin text-purple-400 relative z-10" />
                 </div>
                 <div>
-                    <h3 className="text-lg font-black text-white mb-1.5">Yapay Zeka İçeriği Üretiyor</h3>
+                    <h3 className="text-lg font-black text-white mb-1.5">
+                        {currentModelMeta.name} ile Üretiliyor...
+                    </h3>
                     <p className="text-xs text-slate-400 max-w-sm">
-                        Kaynak metin taranıyor, pedagojik içerik ve akıllı tahta slaytları hazırlanıyor...
+                        Kaynak metin analiz ediliyor, pedagojik ders adımları ve slaytlar hazırlanıyor...
                     </p>
                 </div>
             </div>
         ) : (
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1 overflow-hidden">
-                 <div className="px-6 py-4 flex-grow overflow-y-auto space-y-5">
-                    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-3.5 flex items-center justify-between">
-                        <div>
-                            <span className="text-[11px] font-bold uppercase text-purple-400 tracking-wider">Hedef Konu</span>
-                            <p className="text-sm font-black text-white">{context?.topicTitle || 'Konu Seçilmedi'}</p>
+                 <div className="px-6 py-4 flex-grow overflow-y-auto space-y-4">
+                    
+                    {/* ⚙️ MODEL & API AYARLARI PANELİ */}
+                    {showSettings && (
+                        <div className="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <KeyRound className="w-4 h-4 text-indigo-400" />
+                                    <span className="text-xs font-black uppercase text-indigo-200 tracking-wider">
+                                        Google AI Studio API & Model Ayarları
+                                    </span>
+                                </div>
+                                <a 
+                                    href="https://aistudio.google.com/app/apikey" 
+                                    target="_blank" 
+                                    rel="noreferrer"
+                                    className="text-[11px] font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 hover:underline"
+                                >
+                                    Ücretsiz API Anahtarı Al <ExternalLink className="w-3 h-3" />
+                                </a>
+                            </div>
+
+                            {/* API Key Input */}
+                            <div className="space-y-1.5">
+                                <Label className="text-xs text-slate-300 font-bold">Kişisel Gemini API Anahtarınız</Label>
+                                <div className="flex gap-2">
+                                    <div className="relative flex-1">
+                                        <Input 
+                                            type={showApiKeyText ? "text" : "password"}
+                                            value={apiKey}
+                                            onChange={(e) => handleSaveApiKey(e.target.value)}
+                                            placeholder="AIzaSy... (Boş bırakılırsa varsayılan anahtar kullanılır)"
+                                            className="bg-slate-950 border-white/10 text-xs font-mono pr-10 rounded-xl"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowApiKeyText(!showApiKeyText)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                                        >
+                                            {showApiKeyText ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                        </button>
+                                    </div>
+                                    {isKeySaved && (
+                                        <Badge variant="outline" className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] flex items-center gap-1">
+                                            <Check className="w-3 h-3" /> Kaydedildi
+                                        </Badge>
+                                    )}
+                                </div>
+                                <p className="text-[10px] text-slate-400">
+                                    * API anahtarınız doğrudan tarayıcınızda saklanır ve harici sunuculara aktarılmaz.
+                                </p>
+                            </div>
+
+                            {/* Model Seçimi */}
+                            <div className="space-y-1.5">
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-xs text-slate-300 font-bold">Kullanılacak Gemini Modeli (Tamamen Ücretsiz)</Label>
+                                    <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                                        <ShieldCheck className="w-3 h-3" /> Ücretsiz Kota Destekli
+                                    </span>
+                                </div>
+                                <Select value={selectedModel} onValueChange={handleSelectModel}>
+                                    <SelectTrigger className="bg-slate-950 border-white/10 text-xs rounded-xl h-10">
+                                        <SelectValue placeholder="Model Seçin" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-slate-950 border-white/15 text-white">
+                                        {FREE_GEMINI_MODELS.map(m => (
+                                            <SelectItem key={m.id} value={m.id} className="py-2 focus:bg-indigo-600">
+                                                <div className="flex flex-col gap-0.5">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="font-black text-xs text-white">{m.name}</span>
+                                                        <Badge variant="outline" className={cn("text-[9px] px-1.5 py-0 border", m.badge)}>
+                                                            {m.tag}
+                                                        </Badge>
+                                                    </div>
+                                                    <span className="text-[10px] text-slate-400">{m.desc}</span>
+                                                </div>
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
-                        <Badge variant="outline" className="text-[10px] text-indigo-300 border-indigo-500/30 bg-indigo-500/10">
-                            {generationType === 'anlatim' ? 'Anlatım Paketi' : 'Değerlendirme Paketi'}
-                        </Badge>
+                    )}
+
+                    {/* Hedef Bilgisi & Aktif Model Rozeti */}
+                    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-3 flex items-center justify-between">
+                        <div>
+                            <span className="text-[10px] font-bold uppercase text-purple-400 tracking-wider">Hedef Konu</span>
+                            <p className="text-sm font-black text-white">{context?.topicTitle || 'Konu Başlığı'}</p>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <Badge variant="outline" className="text-[10px] bg-slate-950 border-white/10 text-slate-300">
+                                <Zap className="w-3 h-3 mr-1 text-yellow-400" /> {currentModelMeta.name}
+                            </Badge>
+                            <Badge variant="outline" className="text-[10px] text-indigo-300 border-indigo-500/30 bg-indigo-500/10">
+                                {generationType === 'anlatim' ? 'Anlatım' : 'Değerlendirme'}
+                            </Badge>
+                        </div>
                     </div>
 
+                    {/* Kaynak Metin */}
                     <Controller
                         name="sourceText"
                         control={form.control}
                         render={({ field, fieldState }) => (
                             <div className="space-y-1.5">
-                                <Label htmlFor='contextText' className="text-xs font-bold text-slate-300 uppercase tracking-wider">Kaynak Metin / Anahtar Bilgiler</Label>
+                                <Label htmlFor='contextText' className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                    Kaynak Metin / Konu Özeti
+                                </Label>
                                 <Textarea 
                                     id="contextText" 
                                     {...field} 
-                                    className="min-h-[110px] bg-slate-950 border-white/10 text-white focus-visible:ring-purple-500 placeholder:text-slate-600 text-xs leading-relaxed rounded-2xl" 
-                                    placeholder="Yapay zekanın veri üretmesi için metin veya anahtar kelimeler girin..."
+                                    className="min-h-[100px] bg-slate-950 border-white/10 text-white focus-visible:ring-purple-500 placeholder:text-slate-600 text-xs leading-relaxed rounded-2xl" 
+                                    placeholder="Yapay zekanın veri üretmesi için konuyla ilgili metin, özet veya anahtar kavramlar..."
                                 />
                                 {fieldState.error && <p className="text-xs text-rose-400 mt-1">{fieldState.error.message}</p>}
                             </div>
                         )}
                     />
                     
+                    {/* Modül Seçimleri */}
                     <Controller
                         name="modules"
                         control={form.control}
                         render={({ field, fieldState }) => (
                             <div className="space-y-2">
-                                <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">Üretilecek İçerik Türleri</Label>
+                                <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                    Üretilecek Modüller
+                                </Label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 {activityOptions.map(item => (
                                     <div 
@@ -318,6 +536,7 @@ export function AiLessonStepGenerationDialog({
                     />
                  </div>
 
+                 {/* Footer */}
                  <DialogFooter className="p-4 px-6 border-t border-white/10 bg-slate-900/80 backdrop-blur-md flex items-center justify-between sm:justify-between">
                     <Button type="button" variant="ghost" onClick={handleClose} className="text-slate-400 hover:text-white rounded-xl">
                         İptal
@@ -326,7 +545,7 @@ export function AiLessonStepGenerationDialog({
                         type="submit" 
                         className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black rounded-xl shadow-lg shadow-purple-950/50 px-6 cursor-pointer text-xs"
                     >
-                        <Wand2 className="mr-2 h-4 w-4 text-yellow-300" /> Üretimi Başlat
+                        <Wand2 className="mr-2 h-4 w-4 text-yellow-300" /> Üretimi Başlat ({currentModelMeta.name})
                     </Button>
                 </DialogFooter>
             </form>
