@@ -149,8 +149,16 @@ export function AiLessonStepGenerationDialog({
     },
   });
 
+  const watchedModules = form.watch('modules') || {};
+
+  const contextTopicId = context?.topicId;
+  const contextTopicTitle = context?.topicTitle;
+  const contextSourceText = context?.sourceText;
+
   // Sistemden kayıtlı API Anahtarı ve Modeli yükle
   useEffect(() => {
+    if (!isOpen) return;
+
     async function loadConfig() {
         if (typeof window !== 'undefined') {
             const localKey = localStorage.getItem('custom_gemini_api_key') || '';
@@ -174,9 +182,9 @@ export function AiLessonStepGenerationDialog({
             const sysConfig = await getSystemAiConfigAction();
             if (sysConfig.apiKey) {
                 setIsSystemPersisted(true);
-                if (!apiKey) setApiKey(sysConfig.apiKey);
+                setApiKey(prev => prev || sysConfig.apiKey || '');
             }
-            if (sysConfig.modelName && !selectedModel) {
+            if (sysConfig.modelName) {
                 const isKnown = FREE_GEMINI_MODELS.some(m => m.id === sysConfig.modelName);
                 if (isKnown) {
                     setSelectedModel(sysConfig.modelName);
@@ -192,38 +200,36 @@ export function AiLessonStepGenerationDialog({
         }
     }
 
-    if (isOpen) {
-        loadConfig();
-    }
+    loadConfig();
   }, [isOpen]);
 
   useEffect(() => {
-    if (context && isOpen) {
-      form.setValue('sourceText', context.sourceText || context.topicTitle || '');
-      
-      // Varsayılan zengin seçimler
-      const defaultModules: { [key: string]: boolean } = {};
-      if (generationType === 'anlatim') {
-        defaultModules['htmlSlide'] = true;
-        defaultModules['conceptExplanations'] = true;
-        defaultModules['flashcards'] = true;
-        defaultModules['summary'] = true;
-      } else if (generationType === 'degerlendirme') {
-        defaultModules['trueFalseQuestions'] = true;
-        defaultModules['multipleChoiceQuestions'] = true;
-        defaultModules['fillInTheBlankQuestions'] = true;
-        defaultModules['anagramQuestions'] = true;
-      } else {
-        // Hepsi
-        defaultModules['htmlSlide'] = true;
-        defaultModules['conceptExplanations'] = true;
-        defaultModules['flashcards'] = true;
-        defaultModules['multipleChoiceQuestions'] = true;
-        defaultModules['trueFalseQuestions'] = true;
-      }
-      form.setValue('modules', defaultModules);
+    if (!isOpen) return;
+
+    const defaultModules: { [key: string]: boolean } = {};
+    if (generationType === 'anlatim') {
+      defaultModules['htmlSlide'] = true;
+      defaultModules['conceptExplanations'] = true;
+      defaultModules['flashcards'] = true;
+      defaultModules['summary'] = true;
+    } else if (generationType === 'degerlendirme') {
+      defaultModules['trueFalseQuestions'] = true;
+      defaultModules['multipleChoiceQuestions'] = true;
+      defaultModules['fillInTheBlankQuestions'] = true;
+      defaultModules['anagramQuestions'] = true;
+    } else {
+      defaultModules['htmlSlide'] = true;
+      defaultModules['conceptExplanations'] = true;
+      defaultModules['flashcards'] = true;
+      defaultModules['multipleChoiceQuestions'] = true;
+      defaultModules['trueFalseQuestions'] = true;
     }
-  }, [context, isOpen, form, generationType]);
+
+    form.reset({
+      sourceText: contextSourceText || contextTopicTitle || '',
+      modules: defaultModules,
+    });
+  }, [isOpen, contextTopicId, contextTopicTitle, contextSourceText, generationType]);
 
   const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
 
@@ -708,7 +714,7 @@ export function AiLessonStepGenerationDialog({
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {ALL_ACTIVITY_OPTIONS.map(opt => {
-                        const isChecked = !!form.watch(`modules.${opt.id}`);
+                        const isChecked = !!watchedModules[opt.id];
                         return (
                             <div 
                                 key={opt.id}
