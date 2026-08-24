@@ -608,6 +608,7 @@ export function ConceptExplanationPlayer({
     fontSizeScale?: 'normal' | 'large' | 'huge' 
 }) {
     const isTeacher = useTeacherMode();
+    const scrollRef = useRef<HTMLDivElement>(null);
     const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('sm');
     const [customCols, setCustomCols] = useState<number | null>(null);
 
@@ -617,6 +618,15 @@ export function ConceptExplanationPlayer({
         else if (fontSizeScale === 'large') setCardScale('lg');
         else if (fontSizeScale === 'normal') setCardScale('sm');
     }, [fontSizeScale]);
+
+    // Yeni kavram kartı açıldığında otomatik olarak aşağı kaydırıp ekrana getirme
+    useEffect(() => {
+        if (revealedSentencesCount > 1 && scrollRef.current) {
+            setTimeout(() => {
+                scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 100);
+        }
+    }, [revealedSentencesCount]);
 
     const validConcepts = useMemo(() => {
         const raw = items || step?.items || step?.cards || [];
@@ -829,13 +839,15 @@ export function ConceptExplanationPlayer({
 
                         const currentNum = ++conceptCount;
                         const theme = FLASHCARD_THEMES[(currentNum - 1) % FLASHCARD_THEMES.length];
+                        const isLatest = index === visibleConcepts.length - 1;
 
                         return (
                             <motion.div
                                 key={index}
+                                ref={isLatest ? scrollRef : null}
                                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ duration: 0.4, delay: (currentNum - 1) * 0.05 }}
+                                transition={{ duration: 0.4, delay: 0.05 }}
                                 whileHover={{ y: -6, scale: 1.02 }}
                                 className={cn(
                                     "relative rounded-[2rem] overflow-hidden flex flex-col justify-between select-none shadow-2xl transition-all duration-300",
