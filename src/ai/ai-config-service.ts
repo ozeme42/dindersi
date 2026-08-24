@@ -14,7 +14,7 @@ declare global {
 export async function saveSystemAiConfigAction(config: { apiKey?: string; modelName?: string }) {
   try {
     const trimmedKey = config.apiKey ? config.apiKey.trim() : '';
-    const trimmedModel = config.modelName ? config.modelName.trim() : 'gemini-3.7-flash';
+    const trimmedModel = config.modelName ? config.modelName.trim() : 'gemini-3.6-flash';
 
     globalThis.__SYSTEM_GEMINI_API_KEY = trimmedKey || undefined;
     globalThis.__SYSTEM_GEMINI_MODEL = trimmedModel;
@@ -47,7 +47,7 @@ export async function getSystemAiConfigAction(): Promise<{ apiKey: string; model
     if (globalThis.__SYSTEM_GEMINI_API_KEY) {
       return {
         apiKey: globalThis.__SYSTEM_GEMINI_API_KEY,
-        modelName: globalThis.__SYSTEM_GEMINI_MODEL || 'gemini-3.7-flash',
+        modelName: globalThis.__SYSTEM_GEMINI_MODEL || 'gemini-3.6-flash',
       };
     }
 
@@ -56,7 +56,7 @@ export async function getSystemAiConfigAction(): Promise<{ apiKey: string; model
     if (doc.exists) {
       const data = doc.data();
       const apiKey = data?.geminiApiKey || '';
-      const modelName = data?.selectedModel || 'gemini-3.7-flash';
+      const modelName = data?.selectedModel || 'gemini-3.6-flash';
       if (apiKey) globalThis.__SYSTEM_GEMINI_API_KEY = apiKey;
       if (modelName) globalThis.__SYSTEM_GEMINI_MODEL = modelName;
       return { apiKey, modelName };
@@ -67,7 +67,7 @@ export async function getSystemAiConfigAction(): Promise<{ apiKey: string; model
 
   return {
     apiKey: globalThis.__SYSTEM_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
-    modelName: globalThis.__SYSTEM_GEMINI_MODEL || 'gemini-3.7-flash',
+    modelName: globalThis.__SYSTEM_GEMINI_MODEL || 'gemini-3.6-flash',
   };
 }
 
@@ -89,7 +89,7 @@ export async function resolveActiveGeminiConfig(overrides?: { apiKey?: string; m
   }
 
   if (!model) {
-    model = 'gemini-3.7-flash';
+    model = 'gemini-3.6-flash';
   }
 
   return { apiKey: key, modelName: model };
