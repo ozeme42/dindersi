@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, Topic, AccordionStep } from '@/lib/types';
+import type { LessonStep, Topic, AccordionStep, ActivityLinkStep } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { 
@@ -12,7 +12,7 @@ import {
     FilePenLine, Eye, Upload, Library, Gamepad2, Shuffle, 
     Puzzle, Layers, Grip, LayersIcon, 
     Video, FileText, Image as ImageIcon, GraduationCap, HelpCircle, Database, EyeOff, 
-    CheckCircle2, XCircle, Copy, ChevronUp, ChevronDown, Plus, Check
+    CheckCircle2, XCircle, Copy, ChevronUp, ChevronDown, Plus, Check, Wand2, Flag
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
@@ -25,6 +25,8 @@ import { StepEditorDialog } from '@/components/step-editor-dialog';
 import { LessonPreviewDialog } from '@/components/lesson-preview-dialog';
 import { BulkStepImportDialog } from '@/components/bulk-step-import-dialog';
 import { LibraryImportDialog } from '@/components/library-import-dialog';
+import { GameSelectorDialog } from '@/components/game-selector-dialog';
+import { RegisteredAssetsDrawer } from '@/components/registered-assets-drawer';
 import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core';
@@ -32,8 +34,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, v
 import { CSS } from '@dnd-kit/utilities';
 import { Input } from '@/components/ui/input';
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
-import { playableActivities } from '@/lib/game-config';
-import { cn, cleanForAnagram } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Badge } from '@/components/ui/badge';
 
 type DraggableLessonStep = LessonStep & { id: string };
@@ -50,7 +51,6 @@ function StepCard({
     onDuplicate,
     onMoveUp,
     onMoveDown,
-    onSplit, 
     onTogglePublish 
 }: { 
     step: LessonStep; 
@@ -63,7 +63,6 @@ function StepCard({
     onDuplicate: () => void;
     onMoveUp: () => void;
     onMoveDown: () => void;
-    onSplit?: () => void;
     onTogglePublish: () => void;
 }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
@@ -71,9 +70,8 @@ function StepCard({
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        opacity: isDragging ? 0.4 : 1,
-        zIndex: isDragging ? 50 : 'auto',
-        position: 'relative' as 'relative',
+        opacity: isDragging ? 0.35 : 1,
+        zIndex: isDragging ? 50 : 1,
     };
 
     const getTypeMeta = () => {
@@ -91,8 +89,9 @@ function StepCard({
             case 'anagramFlashcard': return { label: 'Anagram', color: 'text-fuchsia-400 border-fuchsia-500/30 bg-fuchsia-500/10', icon: <Puzzle className="w-4 h-4 text-fuchsia-400" /> };
             case 'visual': return { label: 'Görsel', color: 'text-teal-400 border-teal-500/30 bg-teal-500/10', icon: <ImageIcon className="w-4 h-4 text-teal-400" /> };
             case 'video': return { label: 'Video', color: 'text-red-400 border-red-500/30 bg-red-500/10', icon: <Video className="w-4 h-4 text-red-400" /> };
-            case 'activityLink': return { label: 'Etkinlik', color: 'text-orange-400 border-orange-500/30 bg-orange-500/10', icon: <Gamepad2 className="w-4 h-4 text-orange-400" /> };
+            case 'activityLink': return { label: 'Oyun', color: 'text-orange-400 border-orange-500/30 bg-orange-500/10', icon: <Gamepad2 className="w-4 h-4 text-orange-400" /> };
             case 'htmlSlide': return { label: 'HTML Slayt', color: 'text-sky-400 border-sky-500/30 bg-sky-500/10', icon: <FileText className="w-4 h-4 text-sky-400" /> };
+            case 'accordion': return { label: 'Özet', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <Layers className="w-4 h-4 text-emerald-400" /> };
             default: return { label: step.type, color: 'text-slate-400 border-white/10 bg-white/5', icon: <BookOpen className="w-4 h-4 text-slate-400" /> };
         }
     };
@@ -140,12 +139,24 @@ function StepCard({
                         </div>
                     </div>
                 );
-            case 'sentenceScramble':
+            case 'tf':
                 return (
-                    <div className="text-xs text-slate-400">
-                        <span className="text-slate-300 font-medium">{(step as any).correctSentence}</span>
+                    <div className="flex items-center gap-2 text-xs text-slate-300">
+                        <span className="truncate max-w-[280px]">{(step as any).statement}</span>
+                        <Badge variant="outline" className={cn("text-[9px] px-1.5 py-0", (step as any).isTrue ? "border-emerald-500/40 text-emerald-400" : "border-rose-500/40 text-rose-400")}>
+                            {(step as any).isTrue ? "Doğru" : "Yanlış"}
+                        </Badge>
                     </div>
                 );
+            case 'fitb':
+                return (
+                    <div className="flex items-center gap-2 text-xs text-slate-300">
+                        <span className="truncate max-w-[240px]">{(step as any).sentenceWithBlank}</span>
+                        <span className="text-amber-400 font-bold text-[10px]">Cevap: {(step as any).correctAnswer}</span>
+                    </div>
+                );
+            case 'sentenceScramble':
+                return <span className="text-xs text-cyan-300 truncate block max-w-[280px]">Düzgün Cümle: {(step as any).correctSentence}</span>;
             case 'anagramGame':
             case 'anagramFlashcard':
                 const anagCards = (step as any).cards || [];
@@ -159,7 +170,14 @@ function StepCard({
             case 'video': 
                 return <span className="text-xs text-rose-400/80 truncate block max-w-[240px]">{(step as any).url || 'Video bağlantısı eklenmemiş'}</span>;
             case 'activityLink':
-                return <span className="text-xs text-orange-300 font-medium">Oyun: {(step as any).activityLabel || (step as any).title}</span>;
+                return (
+                    <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-[10px] bg-orange-500/20 text-orange-300 border-orange-500/40">
+                            🎮 {(step as any).activityLabel || (step as any).title}
+                        </Badge>
+                        <span className="text-xs text-slate-400 font-mono text-[10px]">{(step as any).activityType}</span>
+                    </div>
+                );
             default:
                 return null;
         }
@@ -248,33 +266,21 @@ function StepCard({
                         >
                             {isPublished ? <Eye className="h-4 w-4 text-emerald-400" /> : <EyeOff className="h-4 w-4 text-amber-500" />}
                         </Button>
-                        
+
                         <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="h-8 w-8 text-slate-400 hover:bg-indigo-500/20 hover:text-indigo-300 rounded-lg" 
+                            className="h-8 w-8 text-slate-400 hover:bg-white/10 hover:text-white rounded-lg" 
                             onClick={onDuplicate}
-                            title="Bu Adımı Klonla (Çoğalt)"
+                            title="Klonla (Çoğalt)"
                         >
                             <Copy className="h-4 w-4" />
                         </Button>
 
-                        {step.type === 'accordion' && onSplit && (
-                            <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                className="h-8 w-8 text-slate-400 hover:bg-blue-500/20 hover:text-blue-400 rounded-lg" 
-                                onClick={onSplit} 
-                                title="Akordiyonu Ayrı Adımlara Böl"
-                            >
-                                <LayersIcon className="h-4 w-4" />
-                            </Button>
-                        )}
-
                         <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="h-8 w-8 text-slate-300 hover:bg-emerald-500/20 hover:text-emerald-400 rounded-lg" 
+                            className="h-8 w-8 text-slate-400 hover:bg-white/10 hover:text-white rounded-lg" 
                             onClick={onEdit}
                             title="Düzenle"
                         >
@@ -302,11 +308,15 @@ function InsertStepDivider({
     onAddStep, 
     onOpenLibrary, 
     onOpenAi,
+    onOpenGameSelector,
+    onOpenRegisteredAssets,
     insertIndex 
 }: { 
     onAddStep: (type: LessonStep['type'], title: string, atIndex?: number) => void;
     onOpenLibrary: (filter: any, multiSelect: boolean, stepType: any, atIndex?: number) => void;
     onOpenAi?: () => void;
+    onOpenGameSelector?: (atIndex: number) => void;
+    onOpenRegisteredAssets?: () => void;
     insertIndex: number;
 }) {
     const anlatimOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
@@ -376,6 +386,22 @@ function InsertStepDivider({
                             {opt.label}
                         </DropdownMenuItem>
                     ))}
+
+                    <DropdownMenuSeparator className="bg-white/10 my-1" />
+
+                    <DropdownMenuItem 
+                        onClick={() => onOpenGameSelector?.(insertIndex)}
+                        className="text-xs font-bold text-orange-300 focus:bg-orange-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2"
+                    >
+                        <Gamepad2 className="w-4 h-4 mr-2 text-orange-400" /> 🎮 İnteraktif Oyun Ekle...
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem 
+                        onClick={() => onOpenRegisteredAssets?.()}
+                        className="text-xs font-bold text-cyan-300 focus:bg-cyan-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2"
+                    >
+                        <BookOpen className="w-4 h-4 mr-2 text-cyan-400" /> 📚 Konu Varlıkları Çekmecesi...
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
@@ -401,6 +427,9 @@ export function TopicEditor({
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
+    const [isGameSelectorOpen, setIsGameSelectorOpen] = useState(false);
+    const [isRegisteredAssetsOpen, setIsRegisteredAssetsOpen] = useState(false);
+    const [insertAtIndex, setInsertAtIndex] = useState<number | undefined>(undefined);
     const [libraryConfig, setLibraryConfig] = useState<{ filter: any[]; multiSelect: boolean; stepType: any; targetIndex?: number }>({ filter: [], multiSelect: false, stepType: 'content' });
     
     const { toast } = useToast();
@@ -410,10 +439,11 @@ export function TopicEditor({
     const topicId = searchParams.get('topicId');
     
     const context = useMemo(() => ({
-        courseId,
-        unitId,
-        topicId
-    }), [courseId, unitId, topicId]);
+        courseId: courseId || undefined,
+        unitId: unitId || undefined,
+        topicId: topicId || undefined,
+        topicTitle: title || undefined,
+    }), [courseId, unitId, topicId, title]);
     
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -467,17 +497,17 @@ export function TopicEditor({
             case 'anagramFlashcard': newStep = { type, title: defaultTitle, cards: [{ definition: 'İpucu', scrambledWord: 'AKARNA', correctAnswer: 'ANKARA' }] }; break;
             case 'sentenceScramble': newStep = { type, title: defaultTitle, scrambledSentence: 'bir bu cümledir karışık', correctSentence: 'bu bir karışık cümledir' }; break;
             case 'iframe': newStep = { type, title: defaultTitle, url: 'https://phet.colorado.edu/tr/simulations/list' }; break;
-            case 'htmlSlide': newStep = { type: 'htmlSlide', title: 'İnteraktif Sunum', htmlContent: '<!DOCTYPE html>\n<html lang="tr">\n<head>\n  <title>Başlık</title>\n</head>\n<body>\n  <h1>Merhaba Dünya</h1>\n</body>\n</html>' }; break;
+            case 'htmlSlide': newStep = { type: 'htmlSlide', title: 'İnteraktif Sunum', htmlContent: '<div class="p-8 bg-slate-900 rounded-3xl text-white text-center"><h1 class="text-3xl font-black mb-4">Başlık</h1><p class="text-slate-300">İçerik buraya gelecek.</p></div>' }; break;
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': 
                 newStep = {
                     type: 'activityLink',
                     title: 'Yeni Etkinlik',
-                    activityType: '',
-                    activityLabel: '',
-                    courseId: context?.courseId || undefined,
-                    unitId: context?.unitId || undefined,
-                    topicId: context?.topicId || undefined,
+                    activityType: '/oyunlar/kelime-avi/oyun',
+                    activityLabel: 'Kelime Avı',
+                    courseId: context?.courseId,
+                    unitId: context?.unitId,
+                    topicId: context?.topicId,
                 };
                 break;
             case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Özet', items: [{ id: `item-${Date.now()}`, title: 'Başlık 1', content: 'İçerik 1'}] }; break;
@@ -538,124 +568,76 @@ export function TopicEditor({
         setEditingStep(null);
         toast({ title: "Adım Güncellendi", description: "Değişiklikleri kalıcı yapmak için ana 'Kaydet' butonuna basınız." });
     };
-    
-    const handleAddSteps = (newSteps: LessonStep[], atIndex?: number) => {
-        const newStepsWithIds = addIdToSteps(newSteps);
+
+    const handleAddSteps = (newSteps: LessonStep[]) => {
+        const newStepsWithIds = newSteps.map((step, index) => ({
+            ...step,
+            id: `step-${Date.now()}-${index}-${Math.random()}`
+        }));
+        setSteps(currentSteps => [...currentSteps, ...newStepsWithIds]);
+    };
+
+    const handleAutoBuild10StepFlow = (autoSteps: LessonStep[]) => {
+        const stepsWithIds = autoSteps.map((step, index) => ({
+            ...step,
+            id: `step-${Date.now()}-${index}-${Math.random()}`
+        }));
+        setSteps(stepsWithIds);
+    };
+
+    const handleGameSelected = (gameStep: ActivityLinkStep) => {
+        const stepWithId: DraggableLessonStep = {
+            ...gameStep,
+            id: `step-${Date.now()}-${Math.random()}`
+        };
+
         setSteps(currentSteps => {
-            if (atIndex !== undefined && atIndex >= 0 && atIndex <= currentSteps.length) {
+            if (insertAtIndex !== undefined && insertAtIndex >= 0 && insertAtIndex <= currentSteps.length) {
                 const updated = [...currentSteps];
-                updated.splice(atIndex, 0, ...newStepsWithIds);
+                updated.splice(insertAtIndex, 0, stepWithId);
                 return updated;
             }
-            return [...currentSteps, ...newStepsWithIds];
+            return [...currentSteps, stepWithId];
         });
-        toast({
-            title: "İçerik Eklendi!",
-            description: `${newSteps.length} yeni adım akışa eklendi.`,
-        });
+        setInsertAtIndex(undefined);
+        toast({ title: "Oyun Eklendi", description: `"${gameStep.activityLabel}" oyunu sunum adımı olarak eklendi.` });
     };
-    
+
     const handleOpenLibrary = (filter: any[], multiSelect: boolean, stepType: any, atIndex?: number) => {
         setLibraryConfig({ filter, multiSelect, stepType, targetIndex: atIndex });
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: any[], stepType: any) => {
-        if (importedItems.length === 0) return;
-        
-        let newSteps: LessonStep[] = [];
-        
-        if (stepType === 'visual' && libraryConfig.filter.includes('images')) {
-            newSteps = importedItems.map(item => ({
-                type: 'visual',
-                title: item.title || 'Arşivden Görsel',
-                imageUrl: item.url
-            }));
-        } else if (stepType === 'flashcard') {
-            const cards = importedItems.map(item => ({ 
-                term: item.content?.term || item.title || '', 
-                definition: item.content?.definition || item.definition || ''
-            }));
-            newSteps.push({ type: 'flashcard', title: 'Bilgi Kartları', cards });
-        } else if (stepType === 'anagramGame') {
-            const cards = importedItems.map(item => {
-                const cleanWord = cleanForAnagram(item.content?.term || item.content?.text || '');
-                return {
-                    definition: item.content?.definition || 'Tanım bulunamadı.',
-                    correctAnswer: cleanWord,
-                    scrambledWord: cleanWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5).join('').toLocaleUpperCase('tr-TR'),
-                };
-            });
-            newSteps.push({ type: 'anagramGame', title: 'Kelime Dehası', cards });
-        } else if (stepType === 'anagramFlashcard') {
-            const cards = importedItems.map(item => ({
-                definition: `İpucu: Bu kelime "${item.content?.text || item.content?.term || ''}"`,
-                scrambledWord: (item.content?.text || item.content?.term || '').split('').sort(() => Math.random() - 0.5).join('').toLocaleUpperCase('tr-TR'),
-                correctAnswer: item.content?.text || item.content?.term || ''
-            }));
-            newSteps.push({ type: 'anagramFlashcard', title: 'Anagram Kartları', cards });
-        } else if (stepType === 'sentenceScramble') {
-            const newSentence = importedItems[0]?.content?.text || '';
-            newSteps.push({
-                type: 'sentenceScramble',
-                title: 'Cümle Düzeltme',
-                correctSentence: newSentence,
-                scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
-            });
-        } else if (stepType === 'keyConcepts') {
-            const items = importedItems.map(item => ({
-                concept: item.content?.term || item.content?.text || 'Kavram',
-                definition: item.content?.definition || ''
-            }));
-            newSteps.push({ type: 'conceptExplanation', title: 'Kavram Açıklamaları', items });
-        } else if (stepType === 'questions') {
-            importedItems.forEach(item => {
-                if (item.type === 'Çoktan Seçmeli') newSteps.push({ type: 'mcq', title: item.text, ...item });
-                else if (item.type === 'Doğru/Yanlış') newSteps.push({ type: 'tf', title: item.text, statement: item.text, isTrue: item.correctAnswer === 'Doğru' });
-                else if (item.type === 'Boşluk Doldurma') newSteps.push({ type: 'fitb', title: 'Boşluk Doldurma', sentenceWithBlank: item.text, options: item.options || [], correctAnswer: item.correctAnswer || '' });
-            });
-        }
+    const handleItemsImportedFromLibrary = (importedSteps: LessonStep[]) => {
+        const newStepsWithIds = importedSteps.map((step, index) => ({
+            ...step,
+            id: `step-${Date.now()}-${index}-${Math.random()}`
+        }));
 
-        if (newSteps.length > 0) {
-            handleAddSteps(newSteps, libraryConfig.targetIndex);
-        }
-    };
-    
-    const handleSplitStep = (indexToSplit: number) => {
-        const stepToSplit = steps[indexToSplit];
-        if (stepToSplit.type !== 'accordion') return;
-        
-        const accordionStep = stepToSplit as AccordionStep;
-        
-        if (accordionStep.items && accordionStep.items.length > 0) {
-            const newContentSteps: LessonStep[] = accordionStep.items.map(item => ({
-                type: 'content',
-                title: item.title,
-                content: item.content
-            }));
-            const newStepsWithIds = addIdToSteps(newContentSteps);
-            setSteps(currentSteps => {
-                const newSteps = [...currentSteps];
-                newSteps.splice(indexToSplit, 1, ...newStepsWithIds);
-                return newSteps;
-            });
-            toast({ title: "Akordiyon Bölündü", description: `${newContentSteps.length} ayrı adım oluşturuldu.` });
-        }
+        setSteps(currentSteps => {
+            const targetIdx = libraryConfig.targetIndex;
+            if (targetIdx !== undefined && targetIdx >= 0 && targetIdx <= currentSteps.length) {
+                const updated = [...currentSteps];
+                updated.splice(targetIdx, 0, ...newStepsWithIds);
+                return updated;
+            }
+            return [...currentSteps, ...newStepsWithIds];
+        });
+        setIsLibraryPanelOpen(false);
     };
 
     const anlatimStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
         { label: 'Metin İçeriği', type: 'content', defaultTitle: 'Metin İçeriği' },
-        { label: 'Öğrenme Hedefleri', type: 'objectiveList', defaultTitle: 'Bu Konuda Öğreneceklerimiz' },
+        { label: 'Öğrenme Hedefleri', type: 'objectiveList', defaultTitle: 'Öğrenme Hedefleri' },
         { label: 'Kavram Açıklamaları', type: 'conceptExplanation', defaultTitle: 'Kavram Açıklamaları' },
         { label: 'Bilgi Kartları', type: 'flashcard', defaultTitle: 'Bilgi Kartları' },
-        { label: 'Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
-        { label: 'Kartlar (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
         { label: 'Görsel / Şema', type: 'visual', defaultTitle: 'Görsel' },
-        { label: 'Görsel (Arşivden)', action: () => handleOpenLibrary(['images'], true, 'visual') },
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'İnteraktif HTML Slayt', type: 'htmlSlide', defaultTitle: 'İnteraktif Sunum' },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
-        { label: 'Dış Simülasyon / Sayfa', type: 'iframe', defaultTitle: 'İnteraktif Etkinlik' },
+        { label: 'Veri Bankası: Kavramlar', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
+        { label: 'Veri Bankası: Bilgi Kartları', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
+        { label: 'Arşivden Görsel Ekle', action: () => handleOpenLibrary(['images'], true, 'visual') },
     ];
 
     const degerlendirmeStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
@@ -663,71 +645,84 @@ export function TopicEditor({
         { label: 'Doğru / Yanlış', type: 'tf', defaultTitle: 'Doğru/Yanlış' },
         { label: 'Doğru / Yanlış Listesi', type: 'trueFalseList', defaultTitle: 'Doğru/Yanlış Alıştırması' },
         { label: 'Boşluk Doldurma', type: 'fitb', defaultTitle: 'Boşluk Doldurma' },
-        { label: 'Kelime Dehası', type: 'anagramGame', defaultTitle: 'Kelime Dehası' },
-        { label: 'Cümle Düzeltme', type: 'sentenceScramble', defaultTitle: 'Cümle Düzeltme' },
+        { label: 'Kelime Dehası / Anagram', type: 'anagramGame', defaultTitle: 'Kelime Dehası' },
+        { label: 'Cümle Düzeltme (Karışık Cümle)', type: 'sentenceScramble', defaultTitle: 'Cümle Düzeltme' },
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
-        { label: 'Cümle Düzeltme (Veri Bankası)', action: () => handleOpenLibrary(['sentence'], true, 'sentenceScramble') },
     ];
 
     return (
-        <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-            {/* Arka Plan Efektleri */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
-            </div>
-
-            <div className="max-w-7xl mx-auto relative z-10 space-y-6">
+        <div className="min-h-screen bg-slate-950 text-slate-100 pb-24">
+            <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
                 
-                {/* ══ STÜDYO ÜST ÇUBUK ══ */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/60 backdrop-blur-xl border border-white/10 p-4 sm:p-5 rounded-3xl shadow-xl">
-                    <div className="flex items-center gap-3 w-full sm:w-auto">
-                        <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-2xl h-11 w-11 flex-shrink-0">
-                            <Link href="/teacher/content-creation">
+                {/* ══ STÜDYO ÜST ARAÇ ÇUBUĞU ══ */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/80 backdrop-blur-xl border border-white/10 p-4 sm:p-5 rounded-3xl shadow-2xl sticky top-4 z-40">
+                    <div className="flex items-center gap-3 w-full md:w-auto">
+                        <Link href="/teacher/content-creation">
+                            <Button variant="ghost" size="icon" className="h-10 w-10 text-slate-400 hover:text-white hover:bg-white/10 rounded-2xl">
                                 <ArrowLeft className="h-5 w-5" />
-                            </Link>
-                        </Button>
+                            </Button>
+                        </Link>
                         <div className="flex-1 min-w-0">
-                            <Input 
-                                value={title} 
-                                onChange={(e) => setTitle(e.target.value)} 
-                                className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase drop-shadow-md bg-transparent border-0 h-auto p-0 focus-visible:ring-0 focus-visible:ring-offset-0 truncate" 
+                            <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-black uppercase text-indigo-400 tracking-wider">
+                                    {isUnitFlow ? 'Ünite Akışı Stüdyosu' : 'Sunum & Ders Stüdyosu'}
+                                </span>
+                                <Badge variant="outline" className="text-[9px] bg-slate-950 border-white/10 text-slate-400">
+                                    {steps.length} Slayt
+                                </Badge>
+                            </div>
+                            <Input
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Ders Başlığı..."
+                                className="text-lg sm:text-xl font-black bg-transparent border-0 p-0 h-auto text-white focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-slate-600"
                             />
-                            <p className="text-xs text-slate-400 font-semibold mt-0.5">
-                                Toplam <strong className="text-indigo-300">{steps.length}</strong> adım / slayt
-                            </p>
                         </div>
                     </div>
 
-                    <div className="flex gap-2 flex-wrap items-center w-full sm:w-auto justify-end">
+                    <div className="flex gap-2 flex-wrap items-center w-full md:w-auto justify-end">
+                        
+                        {/* ⚡ 10 Adımlık Otomatik Ders Kur Butonu */}
+                        <Button 
+                            onClick={() => setIsRegisteredAssetsOpen(true)}
+                            className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black rounded-xl text-xs shadow-lg shadow-orange-950/40 border border-white/10 cursor-pointer"
+                        >
+                            <Wand2 className="mr-1.5 h-3.5 w-3.5 text-yellow-200" /> ⚡ 10 Adımlık Dersi Kur
+                        </Button>
+
+                        {/* 📚 Konu Varlıkları Butonu */}
+                        <Button 
+                            variant="outline" 
+                            onClick={() => setIsRegisteredAssetsOpen(true)}
+                            className="border-indigo-500/30 text-indigo-300 hover:text-white hover:bg-indigo-600/20 bg-indigo-950/30 rounded-xl text-xs font-bold"
+                        >
+                            <BookOpen className="mr-1.5 h-3.5 w-3.5 text-indigo-400" /> Konu Varlıkları
+                        </Button>
+
+                        {/* 🎮 Oyun Ekle Butonu */}
+                        <Button 
+                            variant="outline" 
+                            onClick={() => {
+                                setInsertAtIndex(undefined);
+                                setIsGameSelectorOpen(true);
+                            }}
+                            className="border-orange-500/30 text-orange-300 hover:text-white hover:bg-orange-600/20 bg-orange-950/30 rounded-xl text-xs font-bold"
+                        >
+                            <Gamepad2 className="mr-1.5 h-3.5 w-3.5 text-orange-400" /> Oyun Ekle
+                        </Button>
+
                         <Button 
                             variant="secondary" 
                             onClick={() => setIsPreviewOpen(true)} 
                             className="bg-slate-800 text-white hover:bg-slate-700 border border-white/10 shadow-md rounded-xl text-xs font-bold"
                         >
-                            <Eye className="mr-1.5 h-4 w-4 text-cyan-400" /> Önizle
-                        </Button>
-
-                        <Button 
-                            variant="outline" 
-                            onClick={() => handleOpenLibrary(['concept', 'definition', 'sentence', 'questions', 'images'], true, 'content')} 
-                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-transparent rounded-xl text-xs font-bold"
-                        >
-                            <Library className="mr-1.5 h-4 w-4 text-emerald-400" /> Kütüphane
-                        </Button>
-
-                        <Button 
-                            variant="outline" 
-                            onClick={() => setIsBulkImportOpen(true)} 
-                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-transparent rounded-xl text-xs font-bold"
-                        >
-                            <Upload className="mr-1.5 h-4 w-4 text-amber-400" /> Toplu Ekle
+                            <Eye className="mr-1.5 h-3.5 w-3.5 text-cyan-400" /> Önizle
                         </Button>
 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-950/40 rounded-xl text-xs font-black">
-                                    <Sparkles className="mr-1.5 h-4 w-4 text-yellow-300 animate-pulse" /> AI ile Üret
+                                    <Sparkles className="mr-1.5 h-3.5 w-3.5 text-yellow-300 animate-pulse" /> AI ile Üret
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-56 rounded-2xl shadow-2xl p-2 z-50">
@@ -745,7 +740,7 @@ export function TopicEditor({
                             disabled={isSaving} 
                             className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black rounded-xl shadow-lg shadow-emerald-950/50 cursor-pointer disabled:opacity-40 text-xs px-5"
                         >
-                            {isSaving ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" /> : <Save className="mr-1.5 h-4 w-4" />}
+                            {isSaving ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Save className="mr-1.5 h-3.5 w-3.5" />}
                             Kaydet
                         </Button>
                     </div>
@@ -793,7 +788,7 @@ export function TopicEditor({
                             </div>
                         </div>
 
-                        {/* Hızlı Ekleme Butonları */}
+                        {/* Hızlı Ekleme Menüleri */}
                         <div className="flex gap-2 flex-wrap">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -833,85 +828,90 @@ export function TopicEditor({
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="sm" className="border-orange-500/30 text-orange-300 hover:text-white hover:bg-orange-600/20 bg-orange-950/30 rounded-xl font-bold text-xs">
-                                        <Gamepad2 className="mr-1.5 h-3.5 w-3.5" /> Etkinlik Ekle
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-56 max-h-72 overflow-y-auto rounded-2xl shadow-2xl p-1.5 z-50">
-                                    {playableActivities.map(act => (
-                                        <DropdownMenuItem 
-                                            key={act.href} 
-                                            onClick={() => {
-                                                const newStep = {
-                                                    type: 'activityLink',
-                                                    title: `${act.label} Etkinliği`,
-                                                    activityType: act.href,
-                                                    activityLabel: act.label,
-                                                    courseId: context?.courseId || undefined,
-                                                    unitId: context?.unitId || undefined,
-                                                    topicId: context?.topicId || undefined,
-                                                } as any;
-                                                const newStepWithId: DraggableLessonStep = { ...newStep, id: `step-${Date.now()}-${Math.random()}` };
-                                                setSteps(currentSteps => [...currentSteps, newStepWithId]);
-                                            }} 
-                                            className="text-xs font-semibold focus:bg-orange-600 focus:text-white rounded-lg cursor-pointer py-1.5"
-                                        >
-                                            {act.label}
-                                        </DropdownMenuItem>
-                                    ))}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={() => {
+                                    setInsertAtIndex(undefined);
+                                    setIsGameSelectorOpen(true);
+                                }}
+                                className="border-orange-500/30 text-orange-300 hover:text-white hover:bg-orange-600/20 bg-orange-950/30 rounded-xl font-bold text-xs"
+                            >
+                                <Gamepad2 className="mr-1.5 h-3.5 w-3.5" /> Oyun Kataloğu
+                            </Button>
                         </div>
                     </div>
-                    
-                    {/* Sürükle-Bırak Listesi */}
-                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                        <SortableContext items={steps.map(s => s.id)} strategy={verticalListSortingStrategy}>
-                            <div className="space-y-1 pb-24">
+
+                    {/* Dnd-Kit Sortable Adım Listesi */}
+                    <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
+                    >
+                        <SortableContext
+                            items={steps.map(s => s.id)}
+                            strategy={verticalListSortingStrategy}
+                        >
+                            <div className="space-y-0">
+                                {/* En başa adım ekleme çizgisi */}
+                                <InsertStepDivider 
+                                    insertIndex={0}
+                                    onAddStep={handleAddStep}
+                                    onOpenLibrary={handleOpenLibrary}
+                                    onOpenAi={() => onOpenAIGeneration?.('anlatim', { title, sourceText })}
+                                    onOpenGameSelector={(idx) => {
+                                        setInsertAtIndex(idx);
+                                        setIsGameSelectorOpen(true);
+                                    }}
+                                    onOpenRegisteredAssets={() => setIsRegisteredAssetsOpen(true)}
+                                />
+
                                 {steps.length > 0 ? (
                                     <>
-                                        {/* Başa Ekleme Çizgisi */}
-                                        <InsertStepDivider 
-                                            insertIndex={0}
-                                            onAddStep={handleAddStep}
-                                            onOpenLibrary={handleOpenLibrary}
-                                            onOpenAi={() => onOpenAIGeneration?.('anlatim', { title, sourceText })}
-                                        />
-
                                         {steps.map((step, index) => (
                                             <div key={step.id}>
-                                                <StepCard 
+                                                <StepCard
                                                     id={step.id}
+                                                    step={step}
                                                     order={index + 1}
-                                                    step={step} 
                                                     isFirst={index === 0}
                                                     isLast={index === steps.length - 1}
-                                                    onEdit={() => handleOpenEditor(index)} 
+                                                    onEdit={() => handleOpenEditor(index)}
                                                     onDelete={() => handleDeleteStep(index)}
                                                     onDuplicate={() => handleDuplicateStep(index)}
                                                     onMoveUp={() => handleMoveStep(index, 'up')}
                                                     onMoveDown={() => handleMoveStep(index, 'down')}
-                                                    onSplit={step.type === 'accordion' ? () => handleSplitStep(index) : undefined}
                                                     onTogglePublish={() => handleTogglePublishStep(index)}
                                                 />
-
+                                                
                                                 {/* Her adımın ardına araya ekleme çizgisi */}
                                                 <InsertStepDivider 
                                                     insertIndex={index + 1}
                                                     onAddStep={handleAddStep}
                                                     onOpenLibrary={handleOpenLibrary}
                                                     onOpenAi={() => onOpenAIGeneration?.('anlatim', { title, sourceText })}
+                                                    onOpenGameSelector={(idx) => {
+                                                        setInsertAtIndex(idx);
+                                                        setIsGameSelectorOpen(true);
+                                                    }}
+                                                    onOpenRegisteredAssets={() => setIsRegisteredAssetsOpen(true)}
                                                 />
                                             </div>
                                         ))}
                                     </>
                                 ) : (
-                                    <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/40 text-slate-500">
-                                        <PlusCircle className="h-16 w-16 mb-4 opacity-20" />
-                                        <p className="text-xl font-bold">Henüz adım eklenmemiş.</p>
-                                        <p className="text-sm text-slate-600 mt-1">Yukarıdaki butonları veya AI asistanını kullanarak içerik ekleyin.</p>
+                                    <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/40 text-slate-500 text-center p-6">
+                                        <Wand2 className="h-16 w-16 mb-4 text-orange-400 opacity-40 animate-pulse" />
+                                        <p className="text-xl font-bold text-white mb-1">Ders akışı henüz boş.</p>
+                                        <p className="text-xs text-slate-400 max-w-md mb-6">
+                                            Yukarıdaki <strong>"⚡ 10 Adımlık Dersi Kur"</strong> butonuna basarak sistemdeki kayıtlı kavramlar, cümleler, oyun ve AI ile tam ders akışınızı 5 saniyede oluşturabilirsiniz.
+                                        </p>
+                                        <Button
+                                            onClick={() => setIsRegisteredAssetsOpen(true)}
+                                            className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-xs px-6 py-2.5 rounded-2xl shadow-xl shadow-orange-950/50"
+                                        >
+                                            <Wand2 className="w-4 h-4 mr-2 text-yellow-200" /> ⚡ 10 Adımlık Dersi Otomatik Kur
+                                        </Button>
                                     </div>
                                 )}
                             </div>
@@ -919,7 +919,7 @@ export function TopicEditor({
                     </DndContext>
                 </div>
 
-                {/* Modallar */}
+                {/* ══ DİYALOGLAR VE MODALLAR ══ */}
                 <BulkStepImportDialog 
                     isOpen={isBulkImportOpen}
                     onOpenChange={setIsBulkImportOpen}
@@ -934,6 +934,21 @@ export function TopicEditor({
                     config={libraryConfig}
                 />
                 
+                <GameSelectorDialog
+                    isOpen={isGameSelectorOpen}
+                    onOpenChange={setIsGameSelectorOpen}
+                    onGameSelected={handleGameSelected}
+                    context={context}
+                />
+
+                <RegisteredAssetsDrawer
+                    isOpen={isRegisteredAssetsOpen}
+                    onOpenChange={setIsRegisteredAssetsOpen}
+                    onAddSteps={handleAddSteps}
+                    onAutoBuild10StepFlow={handleAutoBuild10StepFlow}
+                    context={context}
+                />
+
                 <StepEditorDialog 
                     isOpen={!!editingStep} 
                     onOpenChange={(isOpen) => !isOpen && setEditingStep(null)}

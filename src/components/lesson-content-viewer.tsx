@@ -2045,26 +2045,39 @@ export function StepContent({
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;
                 const params = new URLSearchParams({
-                    courseId: activityStep.courseId || courseId,
-                    unitId: activityStep.unitId || unitId,
-                    topicId: activityStep.topicId || topic.id,
-                    courseName: courseTitle,
-                    unitName: unitTitle,
-                    topicName: topic.title,
+                    courseId: activityStep.courseId || courseId || '',
+                    unitId: activityStep.unitId || unitId || '',
+                    topicId: activityStep.topicId || topic?.id || '',
+                    courseName: courseTitle || '',
+                    unitName: unitTitle || '',
+                    topicName: topic?.title || '',
                     embedded: 'true', 
                     autoStart: 'true'
                 });
                 const activityUrl = `${activityStep.activityType}?${params.toString()}`;
                 return (
-                    <div className="absolute inset-0 w-full h-full z-40 bg-slate-50">
-                          <iframe
+                    <div className="absolute inset-0 w-full h-full z-40 bg-slate-950 flex flex-col">
+                        <div className="flex items-center justify-between px-4 py-2 bg-slate-900/90 border-b border-white/10 backdrop-blur-md z-50">
+                            <div className="flex items-center gap-2">
+                                <span className="p-1.5 rounded-lg bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                                    <Gamepad2 className="w-4 h-4" />
+                                </span>
+                                <span className="font-bold text-xs text-white">
+                                    {activityStep.activityLabel || activityStep.title}
+                                </span>
+                            </div>
+                            <span className="text-[11px] text-slate-400 hidden sm:inline">
+                                Etkinlik bittiğinde veya sunuma devam etmek için sonraki adıma geçebilirsiniz.
+                            </span>
+                        </div>
+                        <iframe
                              src={activityUrl}
-                             title={activityStep.activityLabel}
-                             className="w-full h-full border-0 bg-white"
+                             title={activityStep.activityLabel || activityStep.title}
+                             className="w-full flex-1 border-0 bg-white"
                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                              allowFullScreen
                              loading="lazy"
-                          />
+                        />
                     </div>
                 );
 
