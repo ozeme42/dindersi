@@ -48,6 +48,8 @@ export type LessonContentViewerProps = {
     onAllTfAnswered?: (stepIndex?: number) => void;
     isSingleCardMode?: boolean;
     animationSpeed?: 'off' | 'slow' | 'normal' | 'fast';
+    activeStepIndex?: number;
+    onStepIndexChange?: (index: number, total: number) => void;
 };
 
 const useTeacherMode = () => {
@@ -1683,7 +1685,7 @@ export function StepContent({
     isVisualMaximized,
     onToggleVisualMaximize,
     isSingleCardMode,
-    isFastMode
+    animationSpeed = 'normal'
 }: any) {
     const isTeacher = useTeacherMode();
 
@@ -1702,7 +1704,7 @@ export function StepContent({
             case 'content':
             case 'objectiveList':
             case 'accordion':
-                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} isFastMode={isFastMode} />
+                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} />
             case 'conceptExplanation': {
                 return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} isSingleCardMode={isSingleCardMode} />
             }
@@ -2005,7 +2007,9 @@ export function LessonContentViewer({
     onMultiAnswer,
     onAllTfAnswered,
     isSingleCardMode,
-    isFastMode
+    animationSpeed = 'normal',
+    activeStepIndex,
+    onStepIndexChange
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     const isTeacher = useTeacherMode();
@@ -2032,6 +2036,17 @@ export function LessonContentViewer({
         if (!topic) return [];
         return topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
     }, [topic, isTeacher]);
+
+    useEffect(() => {
+        if (typeof activeStepIndex === 'number' && activeStepIndex >= 0 && activeStepIndex < steps.length && activeStepIndex !== currentStepIndex) {
+            setDirection(activeStepIndex > currentStepIndex ? 1 : -1);
+            setCurrentStepIndex(activeStepIndex);
+        }
+    }, [activeStepIndex, steps.length, currentStepIndex]);
+
+    useEffect(() => {
+        onStepIndexChange?.(currentStepIndex, steps.length);
+    }, [currentStepIndex, steps.length, onStepIndexChange]);
 
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
 
@@ -2279,11 +2294,14 @@ export function LessonContentViewer({
         if (!currentStep || currentStep.type !== 'trueFalseList') return;
         const answersForStep = internalProgress.answers[currentStepIndex];
         const correctCount = Object.values(answersForStep || {}).filter((a: any) => a.isCorrect).length;
-        // BURADA DEĞİŞİKLİK YAPILDI: Her doğru cevap için 20 yerine 100 puan
         const points = correctCount * 100;
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { ...answersForStep, completed: true } };
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
-    }
+        if (correctCount > 0) {
+            import('canvas-confetti').then(m => m.default({ particleCount: 150, spread: 80, origin: { y: 0.6 } })).catch(() => {});
+            playSound('win');
+        }
+    };
 
     const handleContinueOrNext = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -2456,7 +2474,7 @@ export function LessonContentViewer({
                     isVisualMaximized={isVisualMaximized}
                     onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
                     isSingleCardMode={isSingleCardMode}
-                    isFastMode={isFastMode}
+                    animationSpeed={animationSpeed}
               />
                 </motion.div>
               </AnimatePresence>

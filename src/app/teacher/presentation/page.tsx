@@ -2,7 +2,12 @@
 
 import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Loader2, ArrowLeft, Presentation, Settings, Sun, Moon, LayoutList, Maximize2, X, Zap } from 'lucide-react';
+import { 
+    Loader2, ArrowLeft, Presentation, Settings, Sun, Moon, LayoutList, 
+    Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
+    RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
+    Check, Trophy, Volume2, VolumeX, Shuffle
+} from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Topic, Unit, LessonStep } from '@/lib/types';
@@ -17,7 +22,9 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTheme } from '@/context/theme-provider';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
+import { playSound } from '@/lib/audio-service';
 
 function PresentationPageContent() {
     const { user } = useAuth();
@@ -36,12 +43,163 @@ function PresentationPageContent() {
     // Settings state
     const [isSingleCardMode, setIsSingleCardMode] = useState(false);
     const [animationSpeed, setAnimationSpeed] = useState<'off' | 'slow' | 'normal' | 'fast'>('normal');
-    const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
     const { themeMode, setThemeMode } = useTheme();
     const isDarkMode = themeMode === 'dark';
     const setIsDarkMode = (checked: boolean) => setThemeMode(checked ? 'dark' : 'light');
 
-     useEffect(() => {
+    // Step Tracking & Jump
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    const [totalStepsCount, setTotalStepsCount] = useState(0);
+
+    // Live Clock State
+    const [currentTime, setCurrentTime] = useState<string>('');
+    useEffect(() => {
+        const updateTime = () => {
+            const now = new Date();
+            setCurrentTime(now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+        };
+        updateTime();
+        const interval = setInterval(updateTime, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // ══ TAHTA ARAÇLARI STATE'LERİ ══
+    // 1. Sınıf Sayacı (Classroom Timer)
+    const [isTimerOpen, setIsTimerOpen] = useState(false);
+    const [timerSeconds, setTimerSeconds] = useState(60);
+    const [initialTimerSeconds, setInitialTimerSeconds] = useState(60);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+    // 2. Rastgele Öğrenci / Numara Seçici (Lucky Picker)
+    const [isPickerOpen, setIsPickerOpen] = useState(false);
+    const [pickerMode, setPickerMode] = useState<'number' | 'list'>('number');
+    const [minNum, setMinNum] = useState(1);
+    const [maxNum, setMaxNum] = useState(35);
+    const [customNamesText, setCustomNamesText] = useState('Ahmet\nAyşe\nMehmet\nFatma\nAli\nZeynep\nMustafa\nElif');
+    const [pickedResult, setPickedResult] = useState<string | number | null>(null);
+    const [isRolling, setIsRolling] = useState(false);
+
+    // 3. Slayt Çekmecesi (Slide Grid Drawer)
+    const [isSlideDrawerOpen, setIsSlideDrawerOpen] = useState(false);
+
+    // 4. Tahtayı Karart (Blackout / Freeze Mode)
+    const [isBlackout, setIsBlackout] = useState(false);
+
+    // 5. Ses Efektleri Açık/Kapalı
+    const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+
+    // Timer Effect
+    useEffect(() => {
+        if (isTimerRunning && timerSeconds > 0) {
+            timerRef.current = setInterval(() => {
+                setTimerSeconds(prev => {
+                    if (prev <= 1) {
+                        clearInterval(timerRef.current!);
+                        setIsTimerRunning(false);
+                        if (isSoundEnabled) {
+                            try { playSound('timeUp'); } catch(e) {}
+                        }
+                        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        } else {
+            if (timerRef.current) clearInterval(timerRef.current);
+        }
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, [isTimerRunning, timerSeconds, isSoundEnabled]);
+
+    const formatTimer = (sec: number) => {
+        const m = Math.floor(sec / 60);
+        const s = sec % 60;
+        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    };
+
+    const startTimerPreset = (sec: number) => {
+        setInitialTimerSeconds(sec);
+        setTimerSeconds(sec);
+        setIsTimerRunning(true);
+    };
+
+    // Random Picker Roll Logic
+    const handleRoll = () => {
+        if (isRolling) return;
+        setIsRolling(true);
+        setPickedResult(null);
+
+        let candidates: (string | number)[] = [];
+        if (pickerMode === 'number') {
+            for (let i = minNum; i <= maxNum; i++) candidates.push(i);
+        } else {
+            candidates = customNamesText.split('\n').map(n => n.trim()).filter(Boolean);
+        }
+
+        if (candidates.length === 0) {
+            setIsRolling(false);
+            return;
+        }
+
+        let rollsCount = 0;
+        const maxRolls = 20;
+        const interval = setInterval(() => {
+            const randomCandidate = candidates[Math.floor(Math.random() * candidates.length)];
+            setPickedResult(randomCandidate);
+            if (isSoundEnabled) {
+                try { playSound('hint'); } catch(e) {}
+            }
+            rollsCount++;
+
+            if (rollsCount >= maxRolls) {
+                clearInterval(interval);
+                const finalWinner = candidates[Math.floor(Math.random() * candidates.length)];
+                setPickedResult(finalWinner);
+                setIsRolling(false);
+                if (isSoundEnabled) {
+                    try { playSound('win'); } catch(e) {}
+                }
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+            }
+        }, 100);
+    };
+
+    // Keyboard Shortcuts
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Ignore if typing in input/textarea
+            if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
+                return;
+            }
+
+            if (e.key === 'b' || e.key === 'B') {
+                e.preventDefault();
+                setIsBlackout(prev => !prev);
+            } else if (e.key === 't' || e.key === 'T') {
+                e.preventDefault();
+                setIsTimerOpen(prev => !prev);
+            } else if (e.key === 'r' || e.key === 'R') {
+                e.preventDefault();
+                setIsPickerOpen(prev => !prev);
+            } else if (e.key === 'g' || e.key === 'G') {
+                e.preventDefault();
+                setIsSlideDrawerOpen(prev => !prev);
+            } else if (e.key === 'Escape') {
+                setIsBlackout(false);
+                setIsTimerOpen(false);
+                setIsPickerOpen(false);
+                setIsSlideDrawerOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    useEffect(() => {
         const handleFullscreenChange = () => {
             setIsFullscreen(!!document.fullscreenElement);
         };
@@ -73,13 +231,11 @@ function PresentationPageContent() {
                  const contentId = contentSnap.id;
                  let steps = data.steps || [];
 
-                 // If it's a unit-level presentation without its own steps, aggregate from topics
                  if (!topicId && steps.length === 0) {
                      const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseId}/units/${unitId}/topics`), orderBy("title")));
                      steps = topicsSnapshot.docs.flatMap(doc => (doc.data().steps || []));
                  }
                  
-                 // Static flow fallback
                  try {
                      const flowRes = await fetch(`/curriculum/flows/${contentId}.json`);
                      if (flowRes.ok) {
@@ -88,17 +244,15 @@ function PresentationPageContent() {
                             steps = staticSteps;
                          }
                      }
-                 } catch (e) {
-                     // It's okay if flow file doesn't exist.
-                 }
+                 } catch (e) {}
                 
                 let finalSteps = steps;
-                // If user is not a teacher, filter out unpublished steps
                 if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
                     finalSteps = steps.filter((s: any) => s.isPublished ?? true);
                 }
 
                  setContent({ id: contentId, title: data.title, steps: finalSteps });
+                 setTotalStepsCount(finalSteps.length);
             }
         } catch (error) {
             console.error("Error fetching content for presentation:", error);
@@ -113,33 +267,35 @@ function PresentationPageContent() {
 
     if (isLoading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-slate-50">
-                <Loader2 className="h-12 w-12 animate-spin text-purple-600" />
+            <div className="flex h-screen items-center justify-center bg-slate-950 text-white">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="h-14 w-14 animate-spin text-indigo-500" />
+                    <p className="text-sm font-bold text-slate-400 tracking-widest uppercase animate-pulse">Sunum Yükleniyor...</p>
+                </div>
             </div>
         );
     }
     
     if (!content) {
         return (
-            <div className="flex h-screen items-center justify-center bg-slate-50 text-slate-500">
-                <div className="text-center">
-                    <p className="text-xl font-bold mb-4 text-slate-800">Sunum içeriği bulunamadı.</p>
-                    <Button asChild variant="outline" className="border-slate-300 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-                        <Link href="/teacher/ders-akisi">Geri Dön</Link>
+            <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-400">
+                <div className="text-center p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl">
+                    <p className="text-2xl font-bold mb-4 text-white">Sunum içeriği bulunamadı.</p>
+                    <Button asChild variant="default" className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl">
+                        <Link href="/teacher/ders-akisi">Ders Akışına Dön</Link>
                     </Button>
                 </div>
             </div>
         );
     }
 
-    // Teacher presentation doesn't track progress, so we provide dummy functions.
     const noOp = () => {};
 
     return (
         <main 
             ref={mainContentRef} 
             className={cn(
-                "h-screen w-screen overflow-hidden flex flex-col font-sans relative transition-colors duration-500",
+                "h-screen w-screen overflow-hidden flex flex-col font-sans relative transition-colors duration-500 select-none",
                 isDarkMode ? "dark bg-[#020617] text-white" : "bg-slate-50 text-slate-900"
             )}
         >
@@ -147,26 +303,111 @@ function PresentationPageContent() {
             {isDarkMode && (
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                     <motion.div 
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3], rotate: [0, 90, 0] }}
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0.45, 0.25], rotate: [0, 90, 0] }}
                         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-900/20 blur-[120px]" 
+                        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-900/25 blur-[130px]" 
                     />
                     <motion.div 
-                        animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.4, 0.2], x: [0, 100, 0] }}
+                        animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.4, 0.2], x: [0, 80, 0] }}
                         transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-900/20 blur-[100px]" 
+                        className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-900/25 blur-[120px]" 
                     />
                     <motion.div 
-                        animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.3, 0.1], y: [0, -50, 0] }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-sky-900/20 blur-[150px]" 
+                        animate={{ scale: [1, 1.3, 1], opacity: [0.15, 0.35, 0.15], y: [0, -50, 0] }}
+                        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-sky-900/25 blur-[160px]" 
                     />
                 </div>
             )}
             
-            <div className={cn("absolute inset-0 bg-[url('/grid-pattern.svg')]", isDarkMode ? "opacity-[0.05]" : "opacity-[0.1]")} />
+            <div className={cn("absolute inset-0 bg-[url('/grid-pattern.svg')] pointer-events-none", isDarkMode ? "opacity-[0.04]" : "opacity-[0.08]")} />
 
-            {/* İçerik Alanı - Tam Ekran (Full-Bleed) */}
+            {/* ══ ÜST HEADER: Breadcrumb, Saat ve Hızlı Araçlar ══ */}
+            <header className="relative z-30 flex-shrink-0 flex items-center justify-between px-6 py-2.5 bg-white/60 dark:bg-slate-950/60 backdrop-blur-2xl border-b border-slate-200/80 dark:border-white/10 shadow-sm">
+                {/* SOL: Breadcrumb */}
+                <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400">
+                        <Presentation className="h-4 w-4" />
+                    </div>
+                    <div className="flex items-center gap-2 text-xs md:text-sm font-bold">
+                        <span className="text-slate-500 dark:text-slate-400 font-semibold">{courseName || 'Ders'}</span>
+                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                        <span className="text-slate-600 dark:text-slate-300 truncate max-w-[160px] md:max-w-[240px]">{unitName || 'Ünite'}</span>
+                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                        <span className="text-indigo-600 dark:text-indigo-400 font-extrabold truncate max-w-[200px] md:max-w-[320px]">{content.title}</span>
+                    </div>
+                </div>
+
+                {/* ORTA: Canlı Saat & Slayt İlerleme Rozeti */}
+                <div className="hidden sm:flex items-center gap-3">
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                        <span>{currentTime}</span>
+                    </div>
+                    {totalStepsCount > 0 && (
+                        <button 
+                            onClick={() => setIsSlideDrawerOpen(true)}
+                            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-700 dark:text-purple-300 text-xs font-bold hover:bg-purple-500/20 transition-all active:scale-95"
+                        >
+                            <LayoutGrid className="w-3.5 h-3.5" />
+                            <span>Slayt {currentStepIndex + 1} / {totalStepsCount}</span>
+                        </button>
+                    )}
+                </div>
+
+                {/* SAĞ: Hızlı Kısayol Araçları */}
+                <div className="flex items-center gap-1.5">
+                    <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setIsTimerOpen(prev => !prev)}
+                        className={cn(
+                            "h-8 px-2.5 rounded-lg text-xs font-bold gap-1.5 transition-all",
+                            isTimerRunning 
+                                ? "bg-amber-500/20 text-amber-500 border border-amber-500/40 animate-pulse" 
+                                : "hover:bg-slate-200/60 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300"
+                        )}
+                        title="Geri Sayım Sayacı (T)"
+                    >
+                        <Timer className="w-3.5 h-3.5 text-amber-500" />
+                        <span className="hidden md:inline">{isTimerRunning ? formatTimer(timerSeconds) : 'Sayaç'}</span>
+                    </Button>
+
+                    <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setIsPickerOpen(prev => !prev)}
+                        className="h-8 px-2.5 rounded-lg text-xs font-bold gap-1.5 hover:bg-slate-200/60 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 transition-all"
+                        title="Rastgele Öğrenci Seçici (R)"
+                    >
+                        <Users className="w-3.5 h-3.5 text-sky-500" />
+                        <span className="hidden md:inline">Öğrenci Seç</span>
+                    </Button>
+
+                    <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setIsBlackout(prev => !prev)}
+                        className="h-8 px-2.5 rounded-lg text-xs font-bold gap-1.5 hover:bg-slate-200/60 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 transition-all"
+                        title="Tahtayı Karart (B)"
+                    >
+                        <EyeOff className="w-3.5 h-3.5 text-rose-400" />
+                        <span className="hidden lg:inline">Karart (B)</span>
+                    </Button>
+
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => setIsSoundEnabled(prev => !prev)}
+                        className="h-8 w-8 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-white"
+                        title={isSoundEnabled ? "Ses Efektleri Açık" : "Ses Efektleri Kapalı"}
+                    >
+                        {isSoundEnabled ? <Volume2 className="w-4 h-4 text-emerald-500" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
+                    </Button>
+                </div>
+            </header>
+
+            {/* ══ İÇERİK ALANI: LessonContentViewer ══ */}
             <div className="flex-grow flex flex-col min-h-0 relative z-10 w-full h-full">
                 <LessonContentViewer
                     topic={content as Topic}
@@ -179,102 +420,428 @@ function PresentationPageContent() {
                     onProgressUpdate={noOp}
                     onMultiAnswer={noOp}
                     onAllTfAnswered={noOp}
-                    isFullscreen={true} // Her zaman tam ekran gibi davran
+                    isFullscreen={true}
                     isSingleCardMode={isSingleCardMode}
                     animationSpeed={animationSpeed}
+                    activeStepIndex={currentStepIndex}
+                    onStepIndexChange={(idx, total) => {
+                        setCurrentStepIndex(idx);
+                        setTotalStepsCount(total);
+                    }}
                 />
             </div>
 
-            {/* Floating Dock / Araç Çubuğu (Apple macOS Style) */}
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 opacity-20 hover:opacity-100 focus-within:opacity-100 group">
-                <div className="bg-slate-900/60 dark:bg-slate-900/60 backdrop-blur-3xl border border-white/10 p-3 rounded-[2rem] shadow-2xl flex items-center gap-4 hover:scale-105 transition-transform duration-300">
-                    
-                    <div className="flex items-center gap-3 px-3 pr-6 border-r border-white/10">
-                        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl shadow-inner">
-                            <Presentation className="h-5 w-5 text-white" />
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-sm font-black text-white tracking-wide uppercase">{content.title}</span>
-                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{courseName}</span>
-                        </div>
+            {/* ══ KÖŞE MİNİ SAYAÇ ROZETİ (Sayaç çalışırken modal kapatılırsa) ══ */}
+            {isTimerRunning && !isTimerOpen && (
+                <motion.div 
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="fixed top-16 right-6 z-40 cursor-pointer"
+                    onClick={() => setIsTimerOpen(true)}
+                >
+                    <div className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-amber-500/90 text-slate-950 font-black text-lg shadow-[0_0_30px_rgba(245,158,11,0.5)] border-2 border-white/40 hover:scale-105 transition-transform backdrop-blur-xl animate-pulse">
+                        <Timer className="w-5 h-5 animate-spin" />
+                        <span className="font-mono">{formatTimer(timerSeconds)}</span>
                     </div>
+                </motion.div>
+            )}
 
-                    <div className="flex items-center gap-2 pl-2">
-                        {/* Ayarlar Menüsü */}
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button variant="ghost" size="icon" className="bg-white/5 border border-white/10 text-white hover:bg-white hover:text-slate-900 h-12 w-12 rounded-xl transition-all">
-                                    <Settings className="h-5 w-5" />
+            {/* ══ 1. SINIF GERİ SAYIM SAYACI MODALI ══ */}
+            <AnimatePresence>
+                {isTimerOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-xl p-4" onClick={() => setIsTimerOpen(false)}>
+                        <motion.div 
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-md p-8 rounded-[2.5rem] bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-white/20 shadow-[0_0_60px_rgba(245,158,11,0.3)] flex flex-col items-center text-center text-white overflow-hidden"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500" />
+                            
+                            <button onClick={() => setIsTimerOpen(false)} className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition-colors">
+                                <X className="w-5 h-5" />
+                            </button>
+
+                            <div className="flex items-center gap-2 text-amber-400 font-bold uppercase tracking-widest text-xs mb-4">
+                                <Timer className="w-4 h-4" /> Sınıf Geri Sayım Sayacı
+                            </div>
+
+                            {/* Dev Dijital Ekran */}
+                            <div className="w-full py-8 my-2 rounded-3xl bg-black/50 border border-white/10 flex items-center justify-center shadow-inner">
+                                <span className={cn(
+                                    "font-mono font-black text-6xl md:text-7xl tracking-tighter drop-shadow-lg",
+                                    timerSeconds <= 10 && isTimerRunning ? "text-rose-500 animate-pulse" : "text-amber-400"
+                                )}>
+                                    {formatTimer(timerSeconds)}
+                                </span>
+                            </div>
+
+                            {/* Preset Butonları */}
+                            <div className="grid grid-cols-4 gap-2 w-full mt-4">
+                                {[30, 60, 120, 300].map((sec) => (
+                                    <Button
+                                        key={sec}
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => startTimerPreset(sec)}
+                                        className="h-10 rounded-xl bg-white/5 border-white/10 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs transition-all text-white"
+                                    >
+                                        {sec < 60 ? `${sec}sn` : `${sec / 60}dk`}
+                                    </Button>
+                                ))}
+                            </div>
+
+                            {/* Kontrol Düğmeleri */}
+                            <div className="flex items-center gap-3 w-full mt-6">
+                                <Button
+                                    onClick={() => setIsTimerRunning(prev => !prev)}
+                                    className={cn(
+                                        "flex-1 h-14 rounded-2xl font-black text-lg shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2",
+                                        isTimerRunning 
+                                            ? "bg-rose-500 hover:bg-rose-600 text-white shadow-rose-500/30" 
+                                            : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 shadow-amber-500/30"
+                                    )}
+                                >
+                                    {isTimerRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
+                                    {isTimerRunning ? 'Duraklat' : 'Başlat'}
                                 </Button>
-                            </PopoverTrigger>
-                            <PopoverContent side="top" align="center" className="w-80 p-0 rounded-2xl border-white/10 shadow-2xl bg-slate-950/90 backdrop-blur-3xl mb-4 overflow-hidden">
-                                <div className="p-4 border-b border-white/10 bg-white/5">
-                                    <h4 className="font-bold text-white flex items-center gap-2">
-                                        <Settings className="w-4 h-4 text-purple-400" /> Sunum Ayarları
-                                    </h4>
-                                </div>
-                                <div className="p-4 space-y-6">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-1">
-                                            <Label className="text-white font-semibold flex items-center gap-2">
-                                                {isDarkMode ? <Moon className="w-4 h-4 text-indigo-400" /> : <Sun className="w-4 h-4 text-amber-400" />} 
-                                                Koyu Tema
-                                            </Label>
-                                            <span className="text-xs text-slate-400">Akıllı tahta için önerilir.</span>
-                                        </div>
-                                        <Switch checked={isDarkMode} onCheckedChange={setIsDarkMode} />
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-1">
-                                            <Label className="text-white font-semibold flex items-center gap-2">
-                                                {isSingleCardMode ? <Maximize2 className="w-4 h-4 text-emerald-400" /> : <LayoutList className="w-4 h-4 text-sky-400" />} 
-                                                Tek Kart Modu
-                                            </Label>
-                                            <span className="text-xs text-slate-400">Konu anlatımında dev kart kullan.</span>
-                                        </div>
-                                        <Switch checked={isSingleCardMode} onCheckedChange={setIsSingleCardMode} />
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-1">
-                                            <Label className="text-white font-semibold flex items-center gap-2">
-                                                <Zap className="w-4 h-4 text-amber-400" />
-                                                Animasyon Hızı
-                                            </Label>
-                                            <span className="text-xs text-slate-400">Yazı efektlerinin hızını ayarlar.</span>
-                                        </div>
-                                        <Select value={animationSpeed} onValueChange={(v: any) => setAnimationSpeed(v)}>
-                                            <SelectTrigger className="w-[100px] h-8 bg-white/10 border-white/20 text-white text-xs">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-slate-900 border-white/20 text-white">
-                                                <SelectItem value="off">Kapalı</SelectItem>
-                                                <SelectItem value="slow">Yavaş</SelectItem>
-                                                <SelectItem value="normal">Normal</SelectItem>
-                                                <SelectItem value="fast">Hızlı</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-                            </PopoverContent>
-                        </Popover>
 
-                        <FullscreenToggle elementRef={mainContentRef} className="bg-white/5 border border-white/10 text-white hover:bg-white hover:text-slate-900 h-12 w-12 rounded-xl transition-all" />
-                        
-                        <Button asChild variant="ghost" size="icon" className="bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white rounded-xl h-12 w-12 transition-all">
-                            <Link href="/teacher/ders-akisi"><ArrowLeft className="h-5 w-5" /></Link>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                        setIsTimerRunning(false);
+                                        setTimerSeconds(initialTimerSeconds);
+                                    }}
+                                    className="h-14 w-14 rounded-2xl bg-white/10 border-white/15 hover:bg-white/20 text-white flex items-center justify-center"
+                                    title="Sıfırla"
+                                >
+                                    <RotateCcw className="w-5 h-5" />
+                                </Button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* ══ 2. RASTGELE ÖĞRENCİ SEÇİCİ MODALI ══ */}
+            <AnimatePresence>
+                {isPickerOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-xl p-4" onClick={() => setIsPickerOpen(false)}>
+                        <motion.div 
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-lg p-8 rounded-[2.5rem] bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-white/20 shadow-[0_0_70px_rgba(14,165,233,0.3)] flex flex-col items-center text-center text-white overflow-hidden"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-500" />
+                            
+                            <button onClick={() => setIsPickerOpen(false)} className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition-colors">
+                                <X className="w-5 h-5" />
+                            </button>
+
+                            <div className="flex items-center gap-2 text-sky-400 font-bold uppercase tracking-widest text-xs mb-3">
+                                <Shuffle className="w-4 h-4" /> Rastgele Söz Hakkı & Öğrenci Seçici
+                            </div>
+
+                            {/* Mod Seçimi */}
+                            <div className="flex items-center gap-2 p-1 rounded-xl bg-black/40 border border-white/10 mb-5">
+                                <button 
+                                    onClick={() => setPickerMode('number')} 
+                                    className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", pickerMode === 'number' ? "bg-sky-500 text-slate-950 font-black shadow-md" : "text-slate-400 hover:text-white")}
+                                >
+                                    Okul Numarası (1-N)
+                                </button>
+                                <button 
+                                    onClick={() => setPickerMode('list')} 
+                                    className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", pickerMode === 'list' ? "bg-sky-500 text-slate-950 font-black shadow-md" : "text-slate-400 hover:text-white")}
+                                >
+                                    İsim Listesi
+                                </button>
+                            </div>
+
+                            {/* Seçim Ekranı / Çark Alanı */}
+                            <div className="relative w-full h-44 rounded-3xl bg-black/60 border-2 border-sky-500/30 flex flex-col items-center justify-center overflow-hidden shadow-inner my-2">
+                                <div className="absolute inset-0 bg-gradient-to-t from-sky-500/10 via-transparent to-sky-500/10 pointer-events-none" />
+                                
+                                {pickedResult !== null ? (
+                                    <motion.div 
+                                        key={String(pickedResult)}
+                                        initial={{ scale: 0.5, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        className="flex flex-col items-center gap-2"
+                                    >
+                                        <div className="flex items-center gap-2 text-amber-400 font-black text-xs uppercase tracking-widest">
+                                            <Trophy className="w-4 h-4" /> Seçilen Kişi:
+                                        </div>
+                                        <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-white to-sky-300 drop-shadow-[0_0_20px_rgba(56,189,248,0.6)]">
+                                            {pickerMode === 'number' ? `No: ${pickedResult}` : pickedResult}
+                                        </div>
+                                    </motion.div>
+                                ) : (
+                                    <div className="flex flex-col items-center gap-2 text-slate-500">
+                                        <Users className="w-10 h-10 stroke-[1.5]" />
+                                        <span className="text-sm font-medium">Çevirmek için butona basın</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Ayarlar Alanı */}
+                            {pickerMode === 'number' ? (
+                                <div className="flex items-center justify-center gap-3 my-4 text-xs font-bold">
+                                    <span>Numara Aralığı:</span>
+                                    <input 
+                                        type="number" 
+                                        value={minNum} 
+                                        onChange={e => setMinNum(Number(e.target.value))}
+                                        className="w-16 h-8 text-center rounded-lg bg-white/10 border border-white/20 text-white font-bold"
+                                    />
+                                    <span>ile</span>
+                                    <input 
+                                        type="number" 
+                                        value={maxNum} 
+                                        onChange={e => setMaxNum(Number(e.target.value))}
+                                        className="w-16 h-8 text-center rounded-lg bg-white/10 border border-white/20 text-white font-bold"
+                                    />
+                                    <span>arası</span>
+                                </div>
+                            ) : (
+                                <div className="w-full my-3">
+                                    <textarea 
+                                        rows={3} 
+                                        value={customNamesText} 
+                                        onChange={e => setCustomNamesText(e.target.value)}
+                                        placeholder="Her satıra bir isim yazın..."
+                                        className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-xs font-medium text-white focus:outline-none focus:border-sky-400"
+                                    />
+                                </div>
+                            )}
+
+                            {/* Çevir / Seç Butonu */}
+                            <Button
+                                onClick={handleRoll}
+                                disabled={isRolling}
+                                className="w-full h-14 mt-2 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-lg shadow-[0_0_30px_rgba(14,165,233,0.4)] active:scale-95 transition-all flex items-center justify-center gap-2"
+                            >
+                                <Sparkles className={cn("w-5 h-5", isRolling && "animate-spin")} />
+                                {isRolling ? 'Seçiliyor...' : 'Rastgele Seç'}
+                            </Button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* ══ 3. SLAYT ÇEKMECESİ (SLIDE GRID OVERVIEW) ══ */}
+            <AnimatePresence>
+                {isSlideDrawerOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-950/70 backdrop-blur-xl" onClick={() => setIsSlideDrawerOpen(false)}>
+                        <motion.div 
+                            initial={{ x: '100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '100%' }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className="relative w-full max-w-md h-full bg-slate-900 border-l border-white/10 p-6 flex flex-col text-white shadow-2xl overflow-hidden"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                                <div className="flex items-center gap-2.5">
+                                    <LayoutGrid className="w-5 h-5 text-purple-400" />
+                                    <h3 className="font-black text-lg">Slayt Çekmecesi ({content.steps?.length || 0})</h3>
+                                </div>
+                                <button onClick={() => setIsSlideDrawerOpen(false)} className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white">
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto py-4 space-y-3 pr-1">
+                                {(content.steps || []).map((step, idx) => {
+                                    const isActive = idx === currentStepIndex;
+                                    return (
+                                        <button
+                                            key={idx}
+                                            onClick={() => {
+                                                setCurrentStepIndex(idx);
+                                                setIsSlideDrawerOpen(false);
+                                            }}
+                                            className={cn(
+                                                "w-full text-left p-4 rounded-2xl border-2 transition-all flex items-start gap-3.5 group",
+                                                isActive 
+                                                    ? "bg-purple-500/20 border-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.3)]" 
+                                                    : "bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20"
+                                            )}
+                                        >
+                                            <div className={cn(
+                                                "w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs shrink-0 mt-0.5",
+                                                isActive ? "bg-purple-500 text-white" : "bg-black/30 text-slate-400 group-hover:text-white"
+                                            )}>
+                                                {idx + 1}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-md">
+                                                        {step.type}
+                                                    </span>
+                                                </div>
+                                                <h4 className="font-bold text-sm text-slate-200 truncate group-hover:text-white">
+                                                    {step.title || `Adım ${idx + 1}`}
+                                                </h4>
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* ══ 4. TAHTAYI KARART (BLACKOUT / STAGE FREEZE OVERLAY) ══ */}
+            <AnimatePresence>
+                {isBlackout && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsBlackout(false)}
+                        className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center cursor-pointer select-none"
+                    >
+                        <div className="flex flex-col items-center gap-6 p-8 text-center animate-pulse">
+                            <div className="w-24 h-24 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400">
+                                <EyeOff className="w-12 h-12" />
+                            </div>
+                            <div>
+                                <h2 className="text-3xl md:text-4xl font-black text-white mb-2">Tahta Duraklatıldı</h2>
+                                <p className="text-lg text-slate-400 font-medium">Dikkat Öğretmende 👨‍🏫</p>
+                            </div>
+                            <p className="text-xs text-slate-600 uppercase tracking-widest mt-4">
+                                Devam etmek için ekrana tıklayın veya 'B' tuşuna basın
+                            </p>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* ══ FLOATING DOCK (Apple macOS Style Araç Çubuğu) ══ */}
+            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 opacity-30 hover:opacity-100 focus-within:opacity-100 group">
+                <div className="bg-slate-900/80 dark:bg-slate-900/80 backdrop-blur-3xl border border-white/15 p-2.5 rounded-[2rem] shadow-2xl flex items-center gap-2 hover:scale-105 transition-transform duration-300">
+                    
+                    {/* Sınıf Araçları */}
+                    <div className="flex items-center gap-1.5 pr-2 border-r border-white/15">
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => setIsTimerOpen(true)}
+                            className="bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500 hover:text-slate-950 h-11 w-11 rounded-xl transition-all"
+                            title="Sayaç (T)"
+                        >
+                            <Timer className="h-5 w-5" />
+                        </Button>
+
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => setIsPickerOpen(true)}
+                            className="bg-sky-500/10 border border-sky-500/20 text-sky-400 hover:bg-sky-500 hover:text-white h-11 w-11 rounded-xl transition-all"
+                            title="Rastgele Öğrenci (R)"
+                        >
+                            <Users className="h-5 w-5" />
+                        </Button>
+
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => setIsSlideDrawerOpen(true)}
+                            className="bg-purple-500/10 border border-purple-500/20 text-purple-400 hover:bg-purple-500 hover:text-white h-11 w-11 rounded-xl transition-all"
+                            title="Slayt Çekmecesi (G)"
+                        >
+                            <LayoutGrid className="h-5 w-5" />
+                        </Button>
+
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => setIsBlackout(true)}
+                            className="bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white h-11 w-11 rounded-xl transition-all"
+                            title="Tahtayı Karart (B)"
+                        >
+                            <EyeOff className="h-5 w-5" />
                         </Button>
                     </div>
+
+                    {/* Ayarlar Menüsü */}
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button variant="ghost" size="icon" className="bg-white/5 border border-white/10 text-white hover:bg-white hover:text-slate-900 h-11 w-11 rounded-xl transition-all">
+                                <Settings className="h-5 w-5" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent side="top" align="center" className="w-80 p-0 rounded-2xl border-white/10 shadow-2xl bg-slate-950/95 backdrop-blur-3xl mb-4 overflow-hidden text-white">
+                            <div className="p-4 border-b border-white/10 bg-white/5">
+                                <h4 className="font-bold text-white flex items-center gap-2">
+                                    <Settings className="w-4 h-4 text-purple-400" /> Sunum Ayarları
+                                </h4>
+                            </div>
+                            <div className="p-4 space-y-5">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-col gap-0.5">
+                                        <Label className="text-white font-semibold flex items-center gap-2">
+                                            {isDarkMode ? <Moon className="w-4 h-4 text-indigo-400" /> : <Sun className="w-4 h-4 text-amber-400" />} 
+                                            Koyu Tema
+                                        </Label>
+                                        <span className="text-[11px] text-slate-400">Akıllı tahta için önerilir.</span>
+                                    </div>
+                                    <Switch checked={isDarkMode} onCheckedChange={setIsDarkMode} />
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-col gap-0.5">
+                                        <Label className="text-white font-semibold flex items-center gap-2">
+                                            {isSingleCardMode ? <Maximize2 className="w-4 h-4 text-emerald-400" /> : <LayoutList className="w-4 h-4 text-sky-400" />} 
+                                            Tek Kart Modu
+                                        </Label>
+                                        <span className="text-[11px] text-slate-400">Konu anlatımında dev kart kullan.</span>
+                                    </div>
+                                    <Switch checked={isSingleCardMode} onCheckedChange={setIsSingleCardMode} />
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-col gap-0.5">
+                                        <Label className="text-white font-semibold flex items-center gap-2">
+                                            <Zap className="w-4 h-4 text-amber-400" />
+                                            Animasyon Hızı
+                                        </Label>
+                                        <span className="text-[11px] text-slate-400">Yazı efektlerinin hızını ayarlar.</span>
+                                    </div>
+                                    <Select value={animationSpeed} onValueChange={(v: any) => setAnimationSpeed(v)}>
+                                        <SelectTrigger className="w-[100px] h-8 bg-white/10 border-white/20 text-white text-xs">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent className="bg-slate-900 border-white/20 text-white">
+                                            <SelectItem value="off">Kapalı</SelectItem>
+                                            <SelectItem value="slow">Yavaş</SelectItem>
+                                            <SelectItem value="normal">Normal</SelectItem>
+                                            <SelectItem value="fast">Hızlı</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+
+                    <FullscreenToggle elementRef={mainContentRef} className="bg-white/5 border border-white/10 text-white hover:bg-white hover:text-slate-900 h-11 w-11 rounded-xl transition-all" />
+                    
+                    <Button asChild variant="ghost" size="icon" className="bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white rounded-xl h-11 w-11 transition-all">
+                        <Link href="/teacher/ders-akisi"><ArrowLeft className="h-5 w-5" /></Link>
+                    </Button>
                 </div>
             </div>
         </main>
     );
 }
 
-
 export default function PresentationPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="h-12 w-12 animate-spin text-purple-600" /></div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950 text-white"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>}>
             <PresentationPageContent />
         </Suspense>
-    )
+    );
 }
