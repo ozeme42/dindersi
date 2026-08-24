@@ -1621,7 +1621,8 @@ export function StepContent({
     onAnimationStart, onAnimationEnd,
     isVisualMaximized,
     onToggleVisualMaximize,
-    isSingleCardMode
+    isSingleCardMode,
+    isFastMode
 }: any) {
     const isTeacher = useTeacherMode();
 
