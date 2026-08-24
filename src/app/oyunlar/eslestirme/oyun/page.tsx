@@ -163,6 +163,30 @@ function MatchingGame() {
 
     if (gameState === 'loading') return <div className="flex h-screen w-full items-center justify-center bg-slate-900"><Loader2 className="h-12 w-12 animate-spin text-indigo-400" /></div>;
 
+    if (gameState === 'error') {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 p-6 text-center">
+                <div className="max-w-md w-full p-8 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl space-y-5 backdrop-blur-xl">
+                    <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400">
+                        <XOctagon className="w-8 h-8" />
+                    </div>
+                    <h2 className="text-2xl font-black text-white">Eşleştirme Verisi Bulunamadı</h2>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        {error || "Bu konu için henüz eşleştirilebilir kavram veya tanım verisi eklenmemiş."}
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                        <Button onClick={handleRestart} variant="outline" className="flex-1 border-white/10 text-white hover:bg-white/5">
+                            <RotateCcw className="mr-2 h-4 w-4" /> Tekrar Dene
+                        </Button>
+                        <Button onClick={() => router.push(isMission ? '/student/gorevler' : backUrl)} className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold">
+                            Geri Dön
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     if (gameState === 'finished') {
         return (
             <div className="relative flex items-center justify-center h-screen bg-slate-900">
