@@ -1712,6 +1712,82 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
 // 9. HtmlSlidePlayer
 function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, onSlideScrolledToEnd: () => void }) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
+
+    const fullDocument = useMemo(() => {
+        let content = step.htmlContent || '';
+        
+        if (content.includes('<html') || content.includes('<!DOCTYPE')) {
+            if (!content.includes('tailwindcss')) {
+                content = content.replace('<head>', '<head><script src="https://cdn.tailwindcss.com"></script>');
+            }
+            return content;
+        }
+
+        return `<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#6366f1',
+                        }
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
+                        }
+                    },
+                    animation: {
+                        float: 'float 3.5s ease-in-out infinite',
+                        shimmer: 'shimmer 2.5s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            margin: 0;
+            padding: 16px;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-2 sm:p-6">
+    ${content}
+</body>
+</html>`;
+    }, [step.htmlContent]);
+
     useEffect(() => {
         const iframe = iframeRef.current;
         const handleScroll = () => {
@@ -1748,10 +1824,10 @@ function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, 
     }, [step, onSlideScrolledToEnd]);
 
     return (
-        <div className="w-full h-full bg-white overflow-hidden">
+        <div className="w-full h-full bg-slate-950 overflow-hidden">
             <iframe 
                 ref={iframeRef} 
-                srcDoc={step.htmlContent} 
+                srcDoc={fullDocument} 
                 className="w-full h-full border-0" 
                 title={step.title} 
                 sandbox="allow-scripts allow-same-origin"

@@ -27,30 +27,34 @@ export async function generateHtmlSlide(input: GenerateHtmlSlideInput): Promise<
     throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından API anahtarınızı kaydedin.');
   }
 
-  const prompt = `Sen dünya çapında ödüllü bir eğitim teknolojisi ve sunum tasarımcısısın (Gamma.app, NotebookLM ve Apple Keynote kalitesinde tasarımlar yapıyorsun).
-Görevin: Verilen konu için akıllı tahtada ve mobilde büyüleyici görünen, **zengin, interaktif ve modern Tailwind CSS sınıflarıyla stillendirilmiş tek bir HTML slayt bileşeni** üretmektir.
+  const prompt = `Sen ödüllü bir eğitim teknolojisi, infografik tasarımcısı ve akıllı tahta UI/UX uzmanısın.
+Görevin: Verilen konu için akıllı tahtada öğrencilerin dikkatini anında çekecek, **CANLI, HAREKETLİ, ANİMASYONLU, İNFOGRAFİK VE GÖRSEL OLARAK ÇOK ZENGİN TEK BİR HTML SLAYTI** üretmektir.
 
 KONU / METİN:
 "${input.topicSummary}"
 
 ---
 
-### TASARIM VE İÇERİK REHBERİ:
-1. **Yapı:**
-   - En üstte şık bir Konu Rozeti (Badge), büyük çarpıcı bir Başlık (h1/h2) ve 1-2 cümlelik ilham verici ana fikir.
-   - Ortada **2 veya 3 sütunlu Grid (grid grid-cols-1 md:grid-cols-3 gap-4)** içinde tematik bilgi kartları.
-   - Her kartta: Renkli bir ikon/emoji, belirgin bir alt başlık, 2-3 maddelik temiz açıklamalar veya hap bilgiler.
-   - En altta veya kenarda "💡 Önemli Çıkarım" veya "📌 Hatırla" kutusu (Vurgu kutusu).
-2. **Görsel Stil (Modern Dark / Glassmorphism):**
-   - Arka planlar: \`bg-slate-900/90\`, \`bg-slate-950\`, \`border border-white/10\`, \`backdrop-blur-xl\`, \`rounded-3xl\`.
-   - Kart stilleri: \`bg-gradient-to-br from-indigo-950/50 to-slate-900\`, \`border-indigo-500/30\`, \`hover:border-indigo-400\`, \`shadow-xl\`.
-   - Tipografi: \`text-white\`, \`font-black\`, \`text-slate-300\`, \`tracking-tight\`, \`leading-relaxed\`.
-   - Vurgu renkleri: Indigo, Cyan, Emerald, Amber, Rose ve Violet gradyanları.
-3. **KESİN KURALLAR:**
-   - SADECE \`<div className="...">...</div>\` şeklinde saf HTML içeriği döndür.
-   - Kesinlikle \`<!DOCTYPE html>\`, \`<html>\`, \`<head>\`, \`<body>\` veya \`<script>\` ETİKETİ EKLEME.
-   - Yanıtın başında veya sonunda \`\`\`html veya açıklama metni olmasın, doğrudan ilk \`<div\` ile başlasın.
-   - Tüm metinler pedagojik olarak doğru, zengin ve kusursuz Türkçe olmalıdır.
+### ZENGİN İNFOGRAFİK VE ANİMASYON TASARIM REHBERİ:
+1. **Hareketli & Animasyonlu Başlık:**
+   - \`bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-indigo-300 to-fuchsia-400\` ile parlayan gradyan başlık.
+   - Üstte \`animate-pulse\` ile yanıp sönen veya \`animate-bounce\` ile hareket eden rozetler (Badge).
+2. **Görsel İnfografik Kartları & Akış Diyagramı (Süreç / Karşılaştırma):**
+   - Konunun aşamalarını veya kısımlarını gösteren **Adım Adım İnfografik Akış** (Örn: 1. Adım ➔ 2. Adım ➔ 3. Adım).
+   - Her kart için canlı neon renkler (Cyan, Emerald, Amber, Violet, Rose, Sky).
+   - Kartlarda \`hover:scale-[1.03] transition-all duration-300 hover:shadow-[0_0_25px_rgba(99,102,241,0.35)]\` ile etkileşim efektleri.
+   - İlgili tematik emojiler (🕌, 🤲, 📖, 🔑, ✨, 💡, 🛡️, ⏳, 🎯) ve renkli ikon kutucukları.
+3. **İlgi Çekici İpuçları & İnteraktif Vurgu Alanları:**
+   - "💡 Kritik Hap Bilgi" veya "🎯 Sınav Tüyosu" gibi renkli parlayan paneller.
+   - 2'li veya 3'lü karşılaştırma kutuları (Örn: Farz vs Vacip vs Nafile).
+4. **Pedagojik Dil:**
+   - Ortaokul öğrencileri için kısa, net, anlaşılır ve görsel odaklı metinler.
+
+### KESİN KURALLAR:
+- SADECE \`<div class="...">...</div>\` şeklinde saf HTML içeriği döndür.
+- Kesinlikle \`<!DOCTYPE html>\`, \`<html>\`, \`<head>\`, \`<body>\` veya \`<script>\` ETİKETİ EKLEME (Bunlar otomatik inject edilir).
+- Yanıtın başında veya sonunda \`\`\`html veya açıklama metni olmasın, doğrudan ilk \`<div\` ile başlasın.
+- Tüm Tailwind sınıfları tam ve doğru olsun.
 `;
 
   const rawText = await runGeminiWithFallback({
