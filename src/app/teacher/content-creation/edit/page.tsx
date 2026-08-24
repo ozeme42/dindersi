@@ -314,7 +314,7 @@ function InsertStepDivider({
 }: { 
     onAddStep: (type: LessonStep['type'], title: string, atIndex?: number) => void;
     onOpenLibrary: (filter: any, multiSelect: boolean, stepType: any, atIndex?: number) => void;
-    onOpenAi?: () => void;
+    onOpenAi?: (atIndex: number) => void;
     onOpenGameSelector?: (atIndex: number) => void;
     onOpenRegisteredAssets?: () => void;
     insertIndex: number;
@@ -359,6 +359,15 @@ function InsertStepDivider({
                     </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 rounded-2xl shadow-2xl p-2 z-50">
+                    <DropdownMenuItem 
+                        onClick={() => onOpenAi?.(insertIndex)}
+                        className="text-xs font-black text-yellow-300 focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2 mb-1 bg-indigo-950/50 border border-indigo-500/30"
+                    >
+                        <Sparkles className="w-4 h-4 mr-2 text-yellow-400 animate-pulse" /> ✨ AI Stüdyosu ile Üret...
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator className="bg-white/10 my-1" />
+
                     <DropdownMenuLabel className="text-[11px] font-black uppercase text-indigo-400 tracking-wider px-2 py-1">
                         Anlatım Adımı Ekle
                     </DropdownMenuLabel>
@@ -411,7 +420,7 @@ function InsertStepDivider({
 // ══ ANA KONU DÜZENLEYİCİ BİLEŞENİ ══
 export function TopicEditor({ 
     title, setTitle, steps, setSteps, sourceText, setSourceText, htmlContent, setHtmlContent,
-    onSave, isSaving, isUnitFlow = false, onOpenAIGeneration, children
+    onSave, isSaving, isUnitFlow = false, onOpenAi, children
 }: { 
     title: string, setTitle: (t: string) => void,
     steps: DraggableLessonStep[], setSteps: (s: DraggableLessonStep[] | ((prev: DraggableLessonStep[]) => DraggableLessonStep[])) => void,
@@ -420,7 +429,7 @@ export function TopicEditor({
     onSave: () => Promise<void>,
     isSaving: boolean,
     isUnitFlow?: boolean,
-    onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme', context: { title: string, sourceText: string }) => void;
+    onOpenAi?: (targetIndex?: number) => void;
     children?: React.ReactNode;
 }) {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -719,21 +728,12 @@ export function TopicEditor({
                             <Eye className="mr-1.5 h-3.5 w-3.5 text-cyan-400" /> Önizle
                         </Button>
 
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-950/40 rounded-xl text-xs font-black">
-                                    <Sparkles className="mr-1.5 h-3.5 w-3.5 text-yellow-300 animate-pulse" /> AI ile Üret
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-56 rounded-2xl shadow-2xl p-2 z-50">
-                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('anlatim', { title, sourceText })} className="focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer text-xs font-semibold py-2">
-                                    <FileText className="mr-2 h-4 w-4 text-blue-400" /> Anlatım Adımları Üret
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('degerlendirme', { title, sourceText })} className="focus:bg-purple-600 focus:text-white rounded-lg cursor-pointer text-xs font-semibold py-2">
-                                    <HelpCircle className="mr-2 h-4 w-4 text-purple-400" /> Değerlendirme Soruları Üret
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Button 
+                            onClick={() => onOpenAi?.()}
+                            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-950/40 rounded-xl text-xs font-black cursor-pointer"
+                        >
+                            <Sparkles className="mr-1.5 h-3.5 w-3.5 text-yellow-300 animate-pulse" /> ✨ AI Stüdyosu ile Üret
+                        </Button>
 
                         <Button 
                             onClick={onSave} 
@@ -858,7 +858,7 @@ export function TopicEditor({
                                     insertIndex={0}
                                     onAddStep={handleAddStep}
                                     onOpenLibrary={handleOpenLibrary}
-                                    onOpenAi={() => onOpenAIGeneration?.('anlatim', { title, sourceText })}
+                                    onOpenAi={onOpenAi}
                                     onOpenGameSelector={(idx) => {
                                         setInsertAtIndex(idx);
                                         setIsGameSelectorOpen(true);
@@ -889,7 +889,7 @@ export function TopicEditor({
                                                     insertIndex={index + 1}
                                                     onAddStep={handleAddStep}
                                                     onOpenLibrary={handleOpenLibrary}
-                                                    onOpenAi={() => onOpenAIGeneration?.('anlatim', { title, sourceText })}
+                                                    onOpenAi={onOpenAi}
                                                     onOpenGameSelector={(idx) => {
                                                         setInsertAtIndex(idx);
                                                         setIsGameSelectorOpen(true);
@@ -982,9 +982,8 @@ function TopicEditorWrapper() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     
-    const [aiGenType, setAiGenType] = useState<'anlatim' | 'degerlendirme' | null>(null);
-    const [aiGenContext, setAiGenContext] = useState<{ topicId: string, topicTitle: string, sourceText?: string } | null>(null);
     const [isAIOpen, setIsAIOpen] = useState(false);
+    const [aiTargetIndex, setAiTargetIndex] = useState<number | undefined>(undefined);
     
     const addIdToSteps = (stepsList: LessonStep[]): DraggableLessonStep[] => {
         return stepsList.map((step, index) => ({ 
@@ -1035,15 +1034,22 @@ function TopicEditorWrapper() {
         setIsSaving(false);
     };
     
-    const handleStepsGenerated = (newSteps: LessonStep[]) => {
+    const handleStepsGenerated = (newSteps: LessonStep[], targetIdx?: number) => {
         const newStepsWithIds = newSteps.map((step, index) => ({
             ...step,
             id: `step-${Date.now()}-${index}-${Math.random()}`
         }));
-        setSteps(prev => [...prev, ...newStepsWithIds]);
+        setSteps(currentSteps => {
+            if (targetIdx !== undefined && targetIdx >= 0 && targetIdx <= currentSteps.length) {
+                const updated = [...currentSteps];
+                updated.splice(targetIdx, 0, ...newStepsWithIds);
+                return updated;
+            }
+            return [...currentSteps, ...newStepsWithIds];
+        });
         toast({
-            title: "Yapay Zeka İçeriği Eklendi!",
-            description: `${newSteps.length} yeni adım taslağa eklendi. Kalıcı yapmak için 'Kaydet' butonuna basın.`
+            title: "Yapay Zeka İçeriği Eklendi! 🎉",
+            description: `${newSteps.length} yeni adım eklendi. Kalıcı yapmak için 'Kaydet' butonuna basın.`
         });
     };
 
@@ -1072,12 +1078,9 @@ function TopicEditorWrapper() {
                 htmlContent={htmlContent} setHtmlContent={setHtmlContent}
                 onSave={handleSaveFlow}
                 isSaving={isSaving}
-                onOpenAIGeneration={(type, genCtx) => {
-                    if (topicId) {
-                        setAiGenType(type);
-                        setAiGenContext({ topicId, topicTitle: genCtx.title, sourceText: genCtx.sourceText });
-                        setIsAIOpen(true);
-                    }
+                onOpenAi={(idx) => {
+                    setAiTargetIndex(idx);
+                    setIsAIOpen(true);
                 }}
             >
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-3xl">
@@ -1110,9 +1113,10 @@ function TopicEditorWrapper() {
             <AiLessonStepGenerationDialog
                 isOpen={isAIOpen}
                 onOpenChange={setIsAIOpen}
-                context={aiGenContext}
+                topicTitle={title}
+                sourceText={sourceText}
+                targetIndex={aiTargetIndex}
                 onStepsGenerated={handleStepsGenerated}
-                generationType={aiGenType}
             />
         </>
     );

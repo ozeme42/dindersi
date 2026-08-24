@@ -16,7 +16,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { 
     Loader2, Sparkles, Key, Eye, EyeOff, Save, CheckCircle2, 
-    Settings2, Brain, ChevronDown, ChevronUp, Layers, Check, 
+    Settings2, Brain, ChevronDown, Layers, Check, 
     Flame, Wand2, BookOpen, Puzzle, HelpCircle, FileText, Shuffle, Target
 } from 'lucide-react';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
@@ -54,7 +54,7 @@ export const FREE_GEMINI_MODELS = [
         id: 'gemini-2.0-flash-thinking-exp-01-21',
         name: 'Gemini 2.0 Thinking (Akıl Yürütme)',
         tag: 'Düşünce Zinciri (CoT)',
-        desc: 'Karmaşık LGS mantık ve muhakeme soruları yazımı için derin düşünme modeli.',
+        desc: 'Karmaşık mantık ve muhakeme soruları için derin düşünme modeli.',
         badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
     },
     {
@@ -99,27 +99,36 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'sentenceScrambleQuestions', label: 'Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
 ];
 
+const DEFAULT_MODULES = {
+    htmlSlide: true,
+    conceptExplanations: true,
+    flashcards: true,
+    summary: true,
+    trueFalseQuestions: true,
+    multipleChoiceQuestions: true,
+    fillInTheBlankQuestions: true,
+    anagramQuestions: true,
+};
+
 type AiLessonStepGenerationDialogProps = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  context: {
-    topicId: string;
-    topicTitle: string;
-    sourceText?: string;
-  } | null;
-  onStepsGenerated: (steps: LessonStep[]) => void;
-  generationType: 'anlatim' | 'degerlendirme' | null;
+  topicTitle: string;
+  sourceText: string;
+  targetIndex?: number;
+  onStepsGenerated: (steps: LessonStep[], targetIndex?: number) => void;
 };
 
 export function AiLessonStepGenerationDialog({
   isOpen,
   onOpenChange,
-  context,
+  topicTitle,
+  sourceText,
+  targetIndex,
   onStepsGenerated,
-  generationType,
 }: AiLessonStepGenerationDialogProps) {
-  const [sourceText, setSourceText] = useState('');
-  const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>({});
+  const [localSourceText, setLocalSourceText] = useState('');
+  const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>(DEFAULT_MODULES);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [apiKey, setApiKey] = useState('');
@@ -133,7 +142,7 @@ export function AiLessonStepGenerationDialog({
 
   const { toast } = useToast();
 
-  // Model ve API Ayarlarını ilk yüklemede bir defa yükle
+  // Model & API Ayarlarını yükle
   useEffect(() => {
     async function loadConfig() {
         if (typeof window !== 'undefined') {
@@ -179,34 +188,12 @@ export function AiLessonStepGenerationDialog({
     loadConfig();
   }, []);
 
-  // Dialog açıldığında varsayılan modül seçimlerini ve metni ayarla
+  // Dialog açıldığında kaynak metni ayarla
   useEffect(() => {
-    if (!isOpen) return;
-
-    if (context) {
-        setSourceText(context.sourceText || context.topicTitle || '');
+    if (isOpen) {
+        setLocalSourceText(sourceText || topicTitle || '');
     }
-
-    const defaultModules: { [key: string]: boolean } = {};
-    if (generationType === 'anlatim') {
-      defaultModules['htmlSlide'] = true;
-      defaultModules['conceptExplanations'] = true;
-      defaultModules['flashcards'] = true;
-      defaultModules['summary'] = true;
-    } else if (generationType === 'degerlendirme') {
-      defaultModules['trueFalseQuestions'] = true;
-      defaultModules['multipleChoiceQuestions'] = true;
-      defaultModules['fillInTheBlankQuestions'] = true;
-      defaultModules['anagramQuestions'] = true;
-    } else {
-      defaultModules['htmlSlide'] = true;
-      defaultModules['conceptExplanations'] = true;
-      defaultModules['flashcards'] = true;
-      defaultModules['multipleChoiceQuestions'] = true;
-      defaultModules['trueFalseQuestions'] = true;
-    }
-    setSelectedModules(defaultModules);
-  }, [isOpen]);
+  }, [isOpen, sourceText, topicTitle]);
 
   const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
 
@@ -279,12 +266,8 @@ export function AiLessonStepGenerationDialog({
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!context) {
-      toast({ title: "Hata", description: "Geçersiz bağlam.", variant: "destructive" });
-      return;
-    }
 
-    const trimmedText = sourceText.trim();
+    const trimmedText = localSourceText.trim();
     if (trimmedText.length < 3) {
       toast({ title: "Uyarı", description: "Lütfen bir konu başlığı veya kaynak metin girin." });
       return;
@@ -314,7 +297,7 @@ export function AiLessonStepGenerationDialog({
                 if (result && result.htmlContent) {
                     generatedSteps.push({ 
                         type: 'htmlSlide', 
-                        title: `💻 ${context.topicTitle} İnteraktif Slaytı`, 
+                        title: `💻 ${topicTitle || 'Ders'} İnteraktif Slaytı`, 
                         htmlContent: result.htmlContent,
                         isPublished: true
                     });
@@ -335,7 +318,7 @@ export function AiLessonStepGenerationDialog({
                 if (mapData && mapData.nodes && mapData.nodes.length > 0) {
                     generatedSteps.push({ 
                         type: 'conceptMap', 
-                        title: `🧠 ${context.topicTitle} Kavram Haritası`, 
+                        title: `🧠 ${topicTitle || 'Ders'} Kavram Haritası`, 
                         mapData: mapData,
                         isPublished: true 
                     });
@@ -369,7 +352,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         if (generatedSteps.length > 0) {
-            onStepsGenerated(generatedSteps);
+            onStepsGenerated(generatedSteps, targetIndex);
             onOpenChange(false);
             toast({
                 title: "İçerikler Başarıyla Üretildi! 🎉",
@@ -537,7 +520,7 @@ export function AiLessonStepGenerationDialog({
                     Yapay Zeka Stüdyosu & İçerik Fabrikası
                 </DialogTitle>
                 <DialogDescription className="text-xs text-slate-400">
-                    {context?.topicTitle ? `"${context.topicTitle}" konusu için zengin interaktif içerikler üretin.` : 'Konu için zengin sunum ve değerlendirme slaytları üretin.'}
+                    {topicTitle ? `"${topicTitle}" konusu için zengin interaktif içerikler üretin.` : 'Konu için zengin sunum ve değerlendirme slaytları üretin.'}
                 </DialogDescription>
             </div>
           </div>
@@ -638,8 +621,8 @@ export function AiLessonStepGenerationDialog({
                     <span className="text-[10px] text-slate-500">Bu metin AI içeriğinin temelini oluşturur.</span>
                 </div>
                 <Textarea 
-                    value={sourceText}
-                    onChange={(e) => setSourceText(e.target.value)}
+                    value={localSourceText}
+                    onChange={(e) => setLocalSourceText(e.target.value)}
                     placeholder="Konu başlığını veya ders kitabı metnini buraya yapıştırın..."
                     className="min-h-[85px] bg-slate-900 border-white/10 rounded-2xl text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 leading-relaxed"
                 />
