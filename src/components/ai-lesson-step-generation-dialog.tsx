@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -16,15 +16,14 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { 
     Loader2, Sparkles, Key, Eye, EyeOff, Save, CheckCircle2, 
-    Settings2, Brain, ChevronDown, Layers, Check, 
+    Settings2, Brain, Layers, Check, 
     Flame, Wand2, BookOpen, Puzzle, HelpCircle, FileText, Shuffle, Target
 } from 'lucide-react';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
-import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
+import { saveSystemAiConfigAction } from '@/ai/ai-config-service';
 import type { LessonStep, AnagramGameStep, TrueFalseListStep } from '@/lib/types';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 // Güncel Gemini Modelleri
@@ -131,76 +130,31 @@ export function AiLessonStepGenerationDialog({
   const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>(DEFAULT_MODULES);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [apiKey, setApiKey] = useState('');
-  const [selectedModel, setSelectedModel] = useState('gemini-3.7-flash');
+  
+  const [apiKey, setApiKey] = useState(() => {
+      if (typeof window !== 'undefined') {
+          return localStorage.getItem('custom_gemini_api_key') || '';
+      }
+      return '';
+  });
+  
+  const [selectedModel, setSelectedModel] = useState(() => {
+      if (typeof window !== 'undefined') {
+          return localStorage.getItem('custom_gemini_model') || 'gemini-3.7-flash';
+      }
+      return 'gemini-3.7-flash';
+  });
+
   const [customModelInput, setCustomModelInput] = useState('');
   const [isCustomModel, setIsCustomModel] = useState(false);
   const [showApiKeyText, setShowApiKeyText] = useState(false);
   const [isKeySaved, setIsKeySaved] = useState(false);
   const [isSavingSystemKey, setIsSavingSystemKey] = useState(false);
-  const [isSystemPersisted, setIsSystemPersisted] = useState(false);
 
   const { toast } = useToast();
-  const prevIsOpenRef = React.useRef(false);
 
-  // Model & API Ayarlarını ilk açılışta yükle
-  useEffect(() => {
-    async function loadConfig() {
-        if (typeof window !== 'undefined') {
-            const localKey = localStorage.getItem('custom_gemini_api_key') || '';
-            const localModel = localStorage.getItem('custom_gemini_model') || '';
-
-            if (localKey) setApiKey(localKey);
-            if (localModel) {
-                const isKnown = FREE_GEMINI_MODELS.some(m => m.id === localModel);
-                if (isKnown) {
-                    setSelectedModel(localModel);
-                    setIsCustomModel(false);
-                } else {
-                    setSelectedModel('custom');
-                    setCustomModelInput(localModel);
-                    setIsCustomModel(true);
-                }
-            }
-        }
-
-        try {
-            const sysConfig = await getSystemAiConfigAction();
-            if (sysConfig.apiKey) {
-                setIsSystemPersisted(true);
-                setApiKey(prev => prev || sysConfig.apiKey || '');
-            }
-            if (sysConfig.modelName) {
-                const isKnown = FREE_GEMINI_MODELS.some(m => m.id === sysConfig.modelName);
-                if (isKnown) {
-                    setSelectedModel(sysConfig.modelName);
-                    setIsCustomModel(false);
-                } else {
-                    setSelectedModel('custom');
-                    setCustomModelInput(sysConfig.modelName);
-                    setIsCustomModel(true);
-                }
-            }
-        } catch (e) {
-            console.warn("Could not fetch system AI config:", e);
-        }
-    }
-
-    loadConfig();
-  }, []);
-
-  // Dialog açıldığı anda (kapalıdan açığa geçişte) kaynak metni senkronize et
-  useEffect(() => {
-    if (isOpen && !prevIsOpenRef.current) {
-        setLocalSourceText(sourceText || topicTitle || '');
-    }
-    prevIsOpenRef.current = isOpen;
-  }, [isOpen, sourceText, topicTitle]);
-
-  const handleDialogChange = (open: boolean) => {
-    if (!open) {
-        onOpenChange(false);
-    }
+  const handleClose = () => {
+    onOpenChange(false);
   };
 
   const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
@@ -254,7 +208,6 @@ export function AiLessonStepGenerationDialog({
         });
 
         setIsKeySaved(true);
-        setIsSystemPersisted(!!trimmedKey);
         setTimeout(() => setIsKeySaved(false), 3000);
 
         toast({
@@ -336,7 +289,7 @@ export function AiLessonStepGenerationDialog({
             }
         }
         
-        // 3. Standart Yapılandırılmış Modüller (Kavramlar, Flashcard, Anagram, Cümle, Test, D/Y, Boşluk)
+        // 3. Standart Yapılandırılmış Modüller
         const standardModules: GenerateLessonContentInput['modules'] = {};
         let needsStandardCall = false;
         for (const key in selectedModules) {
@@ -361,7 +314,7 @@ export function AiLessonStepGenerationDialog({
 
         if (generatedSteps.length > 0) {
             onStepsGenerated(generatedSteps, targetIndex);
-            onOpenChange(false);
+            handleClose();
             toast({
                 title: "İçerikler Başarıyla Üretildi! 🎉",
                 description: `${generatedSteps.length} adet zengin slayt sunum akışınıza eklendi.`,
@@ -514,10 +467,8 @@ export function AiLessonStepGenerationDialog({
         return newSteps;
     };
 
-  if (!isOpen) return null;
-
   return (
-    <Dialog open={isOpen} onOpenChange={handleDialogChange}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-3xl flex flex-col h-auto max-h-[92vh] bg-slate-950 border border-white/10 text-slate-100 shadow-2xl p-0 overflow-hidden rounded-3xl">
         {/* Header */}
         <DialogHeader className="p-5 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md flex flex-row items-center justify-between">
@@ -536,6 +487,7 @@ export function AiLessonStepGenerationDialog({
           </div>
 
           <Button 
+            type="button"
             variant="outline" 
             size="sm"
             onClick={() => setShowSettings(!showSettings)}
@@ -556,11 +508,6 @@ export function AiLessonStepGenerationDialog({
                     <h4 className="text-xs font-black uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
                         <Key className="w-3.5 h-3.5" /> Google AI Studio API Anahtarı & Model Seçimi
                     </h4>
-                    {isSystemPersisted && (
-                        <Badge variant="outline" className="text-[10px] bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
-                            ✓ Sistem Anahtarı Aktif
-                        </Badge>
-                    )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -739,7 +686,7 @@ export function AiLessonStepGenerationDialog({
                     <Button 
                         type="button" 
                         variant="ghost" 
-                        onClick={() => onOpenChange(false)} 
+                        onClick={handleClose} 
                         disabled={isGenerating}
                         className="text-slate-400 hover:text-white text-xs rounded-xl"
                     >

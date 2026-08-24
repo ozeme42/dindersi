@@ -1122,14 +1122,16 @@ function TopicEditorWrapper() {
                 </Card>
             </TopicEditor>
 
-            <AiLessonStepGenerationDialog
-                isOpen={isAIOpen}
-                onOpenChange={setIsAIOpen}
-                topicTitle={title}
-                sourceText={sourceText}
-                targetIndex={aiTargetIndex}
-                onStepsGenerated={handleStepsGenerated}
-            />
+            {isAIOpen && (
+                <AiLessonStepGenerationDialog
+                    isOpen={isAIOpen}
+                    onOpenChange={setIsAIOpen}
+                    topicTitle={title}
+                    sourceText={sourceText}
+                    targetIndex={aiTargetIndex}
+                    onStepsGenerated={handleStepsGenerated}
+                />
+            )}
         </>
     );
 }
