@@ -145,8 +145,12 @@ export async function generateLessonContent(input: GenerateLessonContentInput): 
 
   const requestedExamples = requestedKeys.map(k => moduleInstructions[k]).join(',\n\n');
 
-  const prompt = `Sen uzman bir Türk eğitim içerik üreticisi, soru yazarı ve pedagojik ders tasarımcısısın.
-Görevin, aşağıdaki konuyu derinlemesine analiz ederek talep edilen eğitim modüllerini EKSİKSİZ, DOĞRU ve ZENGİN bir şekilde üretmektir.
+  const prompt = `Sen uzman bir Din Kültürü ve Ahlak Bilgisi öğretmeni, eğitim içerik üreticisi ve pedagojik ders tasarımcısısın.
+Görevin, aşağıdaki kaynak metni pedagojik olarak analiz ederek ORTAOKUL ÖĞRENCİLERİNİN (5, 6, 7, 8. SINIF) kolayca anlayabileceği seviyede eğitim modülleri üretmektir.
+
+HEDEF KİTLE VE DİL KURALLARI:
+- Cümleler KISA, NET, SADE ve ANLAŞILIR olmalıdır. Ağdalı, aşırı uzun ve karmaşık cümlelerden kesinlikle kaçın.
+- Her cümle tek bir ana fikri/bilgiyi aktarmalıdır (Hap bilgi niteliğinde).
 
 KONU / KAYNAK METİN:
 "${input.topicSummary}"
@@ -165,12 +169,13 @@ ${requestedExamples}
 
 ### KRİTİK KURALLAR:
 1. SADECE yukarıda istenen alanları (${requestedKeys.join(', ')}) JSON nesnesinde doldur.
-2. "summary" (Konu Özeti): Verilen kaynak metindeki ana konu başlıklarını (3 ila 6 başlık) çıkar. Her başlık için ("title") o başlığa ait metin içeriğini, sunumda sırayla ekrana gelecek 3-5 adet tam, anlaşılır ve eğitici cümle ("sentences") dizisi olarak yaz.
-3. "learningObjectives" (Öğrenme Hedefleri): Konuyla ilgili öğrencinin kazanacağı 3-5 adet açık hedef cümlesi dizisi yaz.
-4. Tüm içerikler pedagojik olarak zengin, anlaşılır, MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
-5. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
-6. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
-7. SADECE saf JSON nesnesi döndür.
+2. "summary" (Konu Özeti / Ders Slaytları): Kaynak metni içeriğin kapsamına göre mantıklı ana başlıklara böl (Sabit bir başlık sınırı YOKTUR; metnin uzunluğuna göre 2, 3, 4, 5, 6 veya daha fazla başlığa serbestçe bölebilirsin). Her başlık ("title") için, ortaokul öğrencisinin rahatça okuyup kavrayabileceği KISA ve ÖZ cümlelerden oluşan bir "sentences" dizisi oluştur.
+3. "learningObjectives" (Öğrenme Hedefleri): Konuyla ilgili öğrencinin kazanacağı 3-5 adet kısa ve net hedef cümlesi yaz.
+4. "conceptExplanations" ve "flashcards": Tanımları ortaokul düzeyine uygun, akılda kalıcı ve kısa tut.
+5. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
+6. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
+7. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
+8. SADECE saf JSON nesnesi döndür.
 `;
 
   const text = await runGeminiWithFallback({

@@ -248,20 +248,133 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     const selectedCourseData = allCourses.find(c => c.id === (editedStep as any).courseId);
     const selectedUnitData = selectedCourseData?.units.find(u => u.id === (editedStep as any).unitId);
 
+    const [contentViewMode, setContentViewMode] = useState<'list' | 'raw'>('list');
+
+    const parseContentSentences = (html: string): string[] => {
+        if (!html || typeof html !== 'string') return [];
+        if (typeof window === 'undefined') return [];
+        try {
+            const doc = new DOMParser().parseFromString(`<div>${html}</div>`, 'text/html');
+            const lis = doc.querySelectorAll('li');
+            if (lis.length > 0) {
+                return Array.from(lis).map(li => li.textContent?.trim() || li.innerHTML.trim()).filter(Boolean);
+            }
+            const ps = doc.querySelectorAll('p');
+            if (ps.length > 0) {
+                return Array.from(ps).map(p => p.textContent?.trim() || p.innerHTML.trim()).filter(Boolean);
+            }
+        } catch (e) {}
+        return html.split('\n').map(s => s.trim()).filter(Boolean);
+    };
+
+    const updateContentSentences = (newSentences: string[]) => {
+        const html = `<ul>${newSentences.map(s => `<li>${s.replace(/^<li>|<\/li>$/g, '')}</li>`).join('')}</ul>`;
+        handleValueChange('content', html);
+    };
+
     const renderEditorFields = () => {
         switch (editedStep.type) {
-            case 'content':
+            case 'content': {
+                const currentContent = (editedStep as any).content || '';
+                const sentences = parseContentSentences(currentContent);
+
                 return (
-                    <div className="space-y-2">
-                        <Label className="text-sm font-bold text-slate-300">Metin İçeriği (HTML / Zengin Metin)</Label>
-                        <Textarea 
-                            value={(editedStep as any).content || ''} 
-                            onChange={(e) => handleValueChange('content', e.target.value)} 
-                            className="min-h-[260px] bg-slate-950 border-white/10 text-white font-mono text-sm leading-relaxed" 
-                            placeholder="Metin içeriğinizi buraya girin. HTML etiketlerini (<p>, <strong>, <ul>, <li> vb.) destekler."
-                        />
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <Label className="text-sm font-bold text-slate-300">
+                                    {contentViewMode === 'list' ? 'Cümle & Madde Listesi (Sunumda Sırayla Ekrana Gelir)' : 'Serbest HTML / Kod Modu'}
+                                </Label>
+                                <p className="text-[11px] text-slate-400">
+                                    {contentViewMode === 'list' 
+                                        ? 'Cümleleri buradan HTML etiketleri olmadan kolayca düzenleyebilir, ekleyebilir veya silebilirsiniz.' 
+                                        : 'Özel HTML veya zengin metin düzenleme.'}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                {contentViewMode === 'list' && (
+                                    <Button 
+                                        type="button"
+                                        size="sm" 
+                                        onClick={() => {
+                                            const updated = [...sentences, 'Yeni açıklama cümlesi...'];
+                                            updateContentSentences(updated);
+                                        }} 
+                                        className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl h-8"
+                                    >
+                                        <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Cümle Ekle
+                                    </Button>
+                                )}
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setContentViewMode(contentViewMode === 'list' ? 'raw' : 'list')}
+                                    className="border-white/10 text-xs text-slate-300 hover:text-white rounded-xl h-8"
+                                >
+                                    {contentViewMode === 'list' ? '📝 Kod / HTML Modu' : '✨ Görsel Cümle Modu'}
+                                </Button>
+                            </div>
+                        </div>
+
+                        {contentViewMode === 'list' ? (
+                            <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+                                {sentences.length > 0 ? (
+                                    sentences.map((sentence, idx) => (
+                                        <div key={`sentence-${idx}`} className="flex items-start gap-2 p-2.5 rounded-xl bg-slate-900 border border-white/10 hover:border-indigo-500/40 transition-colors">
+                                            <span className="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-1 border border-indigo-500/30">
+                                                {idx + 1}
+                                            </span>
+                                            <Textarea
+                                                value={sentence}
+                                                onChange={(e) => {
+                                                    const updated = [...sentences];
+                                                    updated[idx] = e.target.value;
+                                                    updateContentSentences(updated);
+                                                }}
+                                                rows={2}
+                                                className="bg-slate-950 border-white/10 text-white text-xs leading-relaxed rounded-xl flex-1 resize-none min-h-[52px]"
+                                                placeholder={`${idx + 1}. cümle açıklamasını buraya yazın...`}
+                                            />
+                                            <Button 
+                                                type="button"
+                                                variant="ghost" 
+                                                size="icon" 
+                                                onClick={() => {
+                                                    const updated = sentences.filter((_, sIdx) => sIdx !== idx);
+                                                    updateContentSentences(updated);
+                                                }} 
+                                                className="text-slate-500 hover:text-rose-400 h-8 w-8 rounded-lg mt-0.5"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-8 border-2 border-dashed border-white/10 rounded-2xl bg-slate-900/40 p-4">
+                                        <p className="text-xs text-slate-400 mb-3">Bu adım altında henüz cümle bulunmuyor.</p>
+                                        <Button 
+                                            type="button"
+                                            size="sm"
+                                            onClick={() => updateContentSentences(['İlk açıklama cümlesi...'])}
+                                            className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs rounded-xl"
+                                        >
+                                            <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> İlk Cümleyi Ekle
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <Textarea 
+                                value={currentContent} 
+                                onChange={(e) => handleValueChange('content', e.target.value)} 
+                                className="min-h-[260px] bg-slate-950 border-white/10 text-white font-mono text-xs leading-relaxed rounded-2xl" 
+                                placeholder="Metin içeriğinizi buraya girin. HTML etiketlerini (<p>, <strong>, <ul>, <li> vb.) destekler."
+                            />
+                        )}
                     </div>
                 );
+            }
 
             case 'objectiveList':
                 return (
