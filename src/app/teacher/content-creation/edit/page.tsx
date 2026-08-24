@@ -992,34 +992,46 @@ function TopicEditorWrapper() {
         }));
     };
 
-    const fetchTopicData = useCallback(async () => {
+    useEffect(() => {
+        let isMounted = true;
         if (!courseId || !unitId || !topicId) {
             setIsLoading(false);
             return;
         }
-        setIsLoading(true);
-        try {
-            const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-            const topicSnap = await getDoc(topicRef);
-            if (topicSnap.exists()) {
-                const topicData = { id: topicSnap.id, ...topicSnap.data() } as Topic;
-                setTitle(topicData.title || '');
-                setSteps(addIdToSteps(topicData.steps || []));
-                setSourceText(topicData.sourceText || '');
-                setHtmlContent(topicData.htmlContent || '');
-            } else {
-                toast({ title: "Hata", description: "Konu bulunamadı.", variant: "destructive" });
-            }
-        } catch (err: any) {
-            toast({ title: "Hata", description: "Konu yüklenirken sorun oluştu: " + err.message, variant: "destructive" });
-        } finally {
-            setIsLoading(false);
-        }
-    }, [courseId, unitId, topicId, toast]);
 
-    useEffect(() => {
-        fetchTopicData();
-    }, [fetchTopicData]);
+        setIsLoading(true);
+        const load = async () => {
+            try {
+                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+                const topicSnap = await getDoc(topicRef);
+                if (isMounted) {
+                    if (topicSnap.exists()) {
+                        const topicData = { id: topicSnap.id, ...topicSnap.data() } as Topic;
+                        setTitle(topicData.title || '');
+                        setSteps(addIdToSteps(topicData.steps || []));
+                        setSourceText(topicData.sourceText || '');
+                        setHtmlContent(topicData.htmlContent || '');
+                    } else {
+                        toast({ title: "Hata", description: "Konu bulunamadı.", variant: "destructive" });
+                    }
+                }
+            } catch (err: any) {
+                if (isMounted) {
+                    toast({ title: "Hata", description: "Konu yüklenirken sorun oluştu: " + err.message, variant: "destructive" });
+                }
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        load();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [courseId, unitId, topicId]);
 
     const handleSaveFlow = async () => {
         if (!courseId || !unitId || !topicId) return;
