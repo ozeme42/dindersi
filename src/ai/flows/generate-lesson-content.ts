@@ -110,9 +110,9 @@ const moduleInstructions: Record<string, string> = {
     }
   ]`,
   learningObjectives: `"learningObjectives": [
-    "Konunun temel kavramlarını ve anlamını doğru şekilde açıklayabileceksiniz.",
-    "Konuyla ilgili temel ilkeleri günlük yaşam örnekleriyle ilişkilendirebileceksiniz.",
-    "Kazanımları kavrayarak değerlendirme sorularını başarıyla çözebileceksiniz."
+    "Konunun temel kavramlarını ve dini önemini doğru şekilde açıklayabileceksiniz.",
+    "Konuyla ilgili temel hüküm ve çeşitleri birbirinden ayırt edebileceksiniz.",
+    "Kazanımları günlük hayatla ilişkilendirerek örneklendirebileceksiniz."
   ]`,
   keyTakeaways: `"keyTakeaways": [
     "Konu hakkındaki en kritik 1. temel kazanım cümlesi.",
@@ -203,7 +203,7 @@ ${requestedExamples}
 ### KRİTİK KURALLAR:
 1. SADECE yukarıda istenen alanları (${requestedKeys.join(', ')}) JSON nesnesinde doldur.
 2. "summary" (Konu Özeti / Ders Slaytları): Kaynak metni içeriğin kapsamına göre mantıklı ana başlıklara böl (Sabit bir başlık sınırı YOKTUR; metnin uzunluğuna göre 2, 3, 4, 5, 6 veya daha fazla başlığa serbestçe bölebilirsin). Her başlık ("title") için, ortaokul öğrencisinin rahatça okuyup kavrayabileceği KISA ve ÖZ cümlelerden oluşan bir "sentences" dizisi oluştur.
-3. "learningObjectives" (Öğrenme Hedefleri): Konuyla ilgili öğrencinin kazanacağı 3-5 adet kısa ve net hedef cümlesi yaz.
+3. "learningObjectives" (Öğrenme Hedefleri): Doğrudan öğrencinin dersteki kazanımlarını hedefleyen, öğrenciye hitap eden 3-5 adet net kazanım cümlesi yaz. Bütün hedef cümleleri KESİNLİKLE "... açıklayabileceksiniz", "... tanımlayabileceksiniz", "... ayırt edebileceksiniz", "... kavrayabileceksiniz", "... listeleyebileceksiniz", "... örneklendirebileceksiniz" gibi öğrenci merkezli yeterlilik ve gelecek zaman kipiyle bitmelidir. (Örn: "Namazın farz, vacip ve nafile çeşitlerini ayırt edebileceksiniz.").
 4. "conceptExplanations" ve "flashcards": Tanımları ortaokul düzeyine uygun, akılda kalıcı ve kısa tut.
 5. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
 6. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
