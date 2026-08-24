@@ -133,34 +133,8 @@ export function AiLessonStepGenerationDialog({
 
   const { toast } = useToast();
 
-  // Dialog açıldığında varsayılan değerleri ayarla
+  // Model ve API Ayarlarını ilk yüklemede bir defa yükle
   useEffect(() => {
-    if (!isOpen) return;
-
-    if (context) {
-        setSourceText(context.sourceText || context.topicTitle || '');
-    }
-
-    const defaultModules: { [key: string]: boolean } = {};
-    if (generationType === 'anlatim') {
-      defaultModules['htmlSlide'] = true;
-      defaultModules['conceptExplanations'] = true;
-      defaultModules['flashcards'] = true;
-      defaultModules['summary'] = true;
-    } else if (generationType === 'degerlendirme') {
-      defaultModules['trueFalseQuestions'] = true;
-      defaultModules['multipleChoiceQuestions'] = true;
-      defaultModules['fillInTheBlankQuestions'] = true;
-      defaultModules['anagramQuestions'] = true;
-    } else {
-      defaultModules['htmlSlide'] = true;
-      defaultModules['conceptExplanations'] = true;
-      defaultModules['flashcards'] = true;
-      defaultModules['multipleChoiceQuestions'] = true;
-      defaultModules['trueFalseQuestions'] = true;
-    }
-    setSelectedModules(defaultModules);
-
     async function loadConfig() {
         if (typeof window !== 'undefined') {
             const localKey = localStorage.getItem('custom_gemini_api_key') || '';
@@ -203,9 +177,36 @@ export function AiLessonStepGenerationDialog({
     }
 
     loadConfig();
-  }, [isOpen, generationType, context?.topicId]);
+  }, []);
 
-  if (!isOpen) return null;
+  // Dialog açıldığında varsayılan modül seçimlerini ve metni ayarla
+  useEffect(() => {
+    if (!isOpen) return;
+
+    if (context) {
+        setSourceText(context.sourceText || context.topicTitle || '');
+    }
+
+    const defaultModules: { [key: string]: boolean } = {};
+    if (generationType === 'anlatim') {
+      defaultModules['htmlSlide'] = true;
+      defaultModules['conceptExplanations'] = true;
+      defaultModules['flashcards'] = true;
+      defaultModules['summary'] = true;
+    } else if (generationType === 'degerlendirme') {
+      defaultModules['trueFalseQuestions'] = true;
+      defaultModules['multipleChoiceQuestions'] = true;
+      defaultModules['fillInTheBlankQuestions'] = true;
+      defaultModules['anagramQuestions'] = true;
+    } else {
+      defaultModules['htmlSlide'] = true;
+      defaultModules['conceptExplanations'] = true;
+      defaultModules['flashcards'] = true;
+      defaultModules['multipleChoiceQuestions'] = true;
+      defaultModules['trueFalseQuestions'] = true;
+    }
+    setSelectedModules(defaultModules);
+  }, [isOpen]);
 
   const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
 
