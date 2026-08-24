@@ -166,7 +166,7 @@ export function RegisteredAssetsDrawer({
         toast({ title: "Eklendi", description: `${concepts.length} adet bilgi kartı eklendi.` });
     };
 
-    const handleConvertConceptsToAnagrams = () => {
+    const handleConvertConceptsToAnagram = () => {
         if (concepts.length === 0) {
             toast({ 
                 title: "Veritabanında Kayıt Yok", 
