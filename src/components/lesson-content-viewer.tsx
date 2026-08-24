@@ -2037,6 +2037,11 @@ export function LessonContentViewer({
         return topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
     }, [topic, isTeacher]);
 
+    const onStepIndexChangeRef = useRef(onStepIndexChange);
+    useEffect(() => {
+        onStepIndexChangeRef.current = onStepIndexChange;
+    }, [onStepIndexChange]);
+
     useEffect(() => {
         if (typeof activeStepIndex === 'number' && activeStepIndex >= 0 && activeStepIndex < steps.length && activeStepIndex !== currentStepIndex) {
             setDirection(activeStepIndex > currentStepIndex ? 1 : -1);
@@ -2045,8 +2050,8 @@ export function LessonContentViewer({
     }, [activeStepIndex, steps.length, currentStepIndex]);
 
     useEffect(() => {
-        onStepIndexChange?.(currentStepIndex, steps.length);
-    }, [currentStepIndex, steps.length, onStepIndexChange]);
+        onStepIndexChangeRef.current?.(currentStepIndex, steps.length);
+    }, [currentStepIndex, steps.length]);
 
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
 

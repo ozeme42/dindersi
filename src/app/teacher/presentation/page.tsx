@@ -51,6 +51,11 @@ function PresentationPageContent() {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [totalStepsCount, setTotalStepsCount] = useState(0);
 
+    const handleStepIndexChange = useCallback((idx: number, total: number) => {
+        setCurrentStepIndex(prev => (prev !== idx ? idx : prev));
+        setTotalStepsCount(prev => (prev !== total ? total : prev));
+    }, []);
+
     // Live Clock State
     const [currentTime, setCurrentTime] = useState<string>('');
     useEffect(() => {
@@ -424,10 +429,7 @@ function PresentationPageContent() {
                     isSingleCardMode={isSingleCardMode}
                     animationSpeed={animationSpeed}
                     activeStepIndex={currentStepIndex}
-                    onStepIndexChange={(idx, total) => {
-                        setCurrentStepIndex(idx);
-                        setTotalStepsCount(total);
-                    }}
+                    onStepIndexChange={handleStepIndexChange}
                 />
             </div>
 
