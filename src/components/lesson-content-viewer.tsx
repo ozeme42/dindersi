@@ -142,75 +142,67 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
 export const FLASHCARD_THEMES = [
     { 
         id: 'sky',
-        front: 'bg-gradient-to-br from-sky-50 via-white to-blue-50/90 border-2 border-sky-300 border-b-[8px] border-b-sky-500 text-sky-950 shadow-xl shadow-sky-500/10 hover:border-sky-400', 
+        card: 'bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 border-2 border-sky-300 border-b-[8px] border-b-blue-800 text-white shadow-2xl shadow-sky-500/30', 
+        front: 'bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 border-2 border-sky-300 border-b-[8px] border-b-blue-800 text-white shadow-2xl shadow-sky-500/30', 
         back: 'bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 border-2 border-sky-300 border-b-[8px] border-b-blue-800 text-white shadow-2xl shadow-sky-500/30',
-        badge: 'bg-sky-500 text-white',
-        badgeText: 'text-sky-700 bg-sky-100 border border-sky-300',
-        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
-        accentColor: 'text-sky-600',
+        badge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+        btn: 'bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md',
     },
     { 
         id: 'purple',
-        front: 'bg-gradient-to-br from-purple-50 via-white to-violet-50/90 border-2 border-purple-300 border-b-[8px] border-b-purple-500 text-purple-950 shadow-xl shadow-purple-500/10 hover:border-purple-400', 
+        card: 'bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-600 border-2 border-purple-300 border-b-[8px] border-b-indigo-800 text-white shadow-2xl shadow-purple-500/30', 
+        front: 'bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-600 border-2 border-purple-300 border-b-[8px] border-b-indigo-800 text-white shadow-2xl shadow-purple-500/30', 
         back: 'bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-600 border-2 border-purple-300 border-b-[8px] border-b-indigo-800 text-white shadow-2xl shadow-purple-500/30',
-        badge: 'bg-purple-500 text-white',
-        badgeText: 'text-purple-700 bg-purple-100 border border-purple-300',
-        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
-        accentColor: 'text-purple-600',
+        badge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+        btn: 'bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md',
     },
     { 
         id: 'emerald',
-        front: 'bg-gradient-to-br from-emerald-50 via-white to-teal-50/90 border-2 border-emerald-300 border-b-[8px] border-b-emerald-500 text-emerald-950 shadow-xl shadow-emerald-500/10 hover:border-emerald-400', 
+        card: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 border-2 border-emerald-300 border-b-[8px] border-b-teal-800 text-white shadow-2xl shadow-emerald-500/30', 
+        front: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 border-2 border-emerald-300 border-b-[8px] border-b-teal-800 text-white shadow-2xl shadow-emerald-500/30', 
         back: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 border-2 border-emerald-300 border-b-[8px] border-b-teal-800 text-white shadow-2xl shadow-emerald-500/30',
-        badge: 'bg-emerald-500 text-white',
-        badgeText: 'text-emerald-700 bg-emerald-100 border border-emerald-300',
-        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
-        accentColor: 'text-emerald-600',
+        badge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+        btn: 'bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md',
     },
     { 
         id: 'amber',
-        front: 'bg-gradient-to-br from-amber-50 via-white to-orange-50/90 border-2 border-amber-300 border-b-[8px] border-b-amber-500 text-amber-950 shadow-xl shadow-amber-500/10 hover:border-amber-400', 
+        card: 'bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 border-2 border-amber-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-amber-500/30', 
+        front: 'bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 border-2 border-amber-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-amber-500/30', 
         back: 'bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 border-2 border-amber-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-amber-500/30',
-        badge: 'bg-amber-500 text-white',
-        badgeText: 'text-amber-800 bg-amber-100 border border-amber-300',
-        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
-        accentColor: 'text-amber-600',
+        badge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+        btn: 'bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md',
     },
     { 
         id: 'rose',
-        front: 'bg-gradient-to-br from-rose-50 via-white to-pink-50/90 border-2 border-rose-300 border-b-[8px] border-b-rose-500 text-rose-950 shadow-xl shadow-rose-500/10 hover:border-rose-400', 
+        card: 'bg-gradient-to-br from-rose-500 via-pink-600 to-red-600 border-2 border-rose-300 border-b-[8px] border-b-rose-800 text-white shadow-2xl shadow-rose-500/30', 
+        front: 'bg-gradient-to-br from-rose-500 via-pink-600 to-red-600 border-2 border-rose-300 border-b-[8px] border-b-rose-800 text-white shadow-2xl shadow-rose-500/30', 
         back: 'bg-gradient-to-br from-rose-500 via-pink-600 to-red-600 border-2 border-rose-300 border-b-[8px] border-b-rose-800 text-white shadow-2xl shadow-rose-500/30',
-        badge: 'bg-rose-500 text-white',
-        badgeText: 'text-rose-700 bg-rose-100 border border-rose-300',
-        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
-        accentColor: 'text-rose-600',
+        badge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+        btn: 'bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md',
     },
     { 
         id: 'cyan',
-        front: 'bg-gradient-to-br from-cyan-50 via-white to-teal-50/90 border-2 border-cyan-300 border-b-[8px] border-b-cyan-500 text-cyan-950 shadow-xl shadow-cyan-500/10 hover:border-cyan-400', 
+        card: 'bg-gradient-to-br from-cyan-500 via-teal-600 to-blue-600 border-2 border-cyan-300 border-b-[8px] border-b-cyan-800 text-white shadow-2xl shadow-cyan-500/30', 
+        front: 'bg-gradient-to-br from-cyan-500 via-teal-600 to-blue-600 border-2 border-cyan-300 border-b-[8px] border-b-cyan-800 text-white shadow-2xl shadow-cyan-500/30', 
         back: 'bg-gradient-to-br from-cyan-500 via-teal-600 to-blue-600 border-2 border-cyan-300 border-b-[8px] border-b-cyan-800 text-white shadow-2xl shadow-cyan-500/30',
-        badge: 'bg-cyan-600 text-white',
-        badgeText: 'text-cyan-800 bg-cyan-100 border border-cyan-300',
-        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
-        accentColor: 'text-cyan-700',
+        badge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+        btn: 'bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md',
     },
     { 
         id: 'indigo',
-        front: 'bg-gradient-to-br from-indigo-50 via-white to-blue-50/90 border-2 border-indigo-300 border-b-[8px] border-b-indigo-500 text-indigo-950 shadow-xl shadow-indigo-500/10 hover:border-indigo-400', 
+        card: 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-700 border-2 border-indigo-300 border-b-[8px] border-b-indigo-900 text-white shadow-2xl shadow-indigo-500/30', 
+        front: 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-700 border-2 border-indigo-300 border-b-[8px] border-b-indigo-900 text-white shadow-2xl shadow-indigo-500/30', 
         back: 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-700 border-2 border-indigo-300 border-b-[8px] border-b-indigo-900 text-white shadow-2xl shadow-indigo-500/30',
-        badge: 'bg-indigo-500 text-white',
-        badgeText: 'text-indigo-700 bg-indigo-100 border border-indigo-300',
-        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
-        accentColor: 'text-indigo-600',
+        badge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+        btn: 'bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md',
     },
     { 
         id: 'orange',
-        front: 'bg-gradient-to-br from-orange-50 via-white to-red-50/90 border-2 border-orange-300 border-b-[8px] border-b-orange-500 text-orange-950 shadow-xl shadow-orange-500/10 hover:border-orange-400', 
+        card: 'bg-gradient-to-br from-orange-500 via-red-500 to-rose-600 border-2 border-orange-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-orange-500/30', 
+        front: 'bg-gradient-to-br from-orange-500 via-red-500 to-rose-600 border-2 border-orange-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-orange-500/30', 
         back: 'bg-gradient-to-br from-orange-500 via-red-500 to-rose-600 border-2 border-orange-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-orange-500/30',
-        badge: 'bg-orange-500 text-white',
-        badgeText: 'text-orange-700 bg-orange-100 border border-orange-300',
-        backCard: 'bg-white/95 text-slate-800 border-2 border-white/80 shadow-inner',
-        accentColor: 'text-orange-600',
+        badge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+        btn: 'bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md',
     },
 ];
 
@@ -727,10 +719,10 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     };
 
     const scaleStyles = {
-        sm: { minHeight: isTeacher ? "min-h-[14rem]" : "min-h-[10rem]", fontSize: "text-lg md:text-2xl" },
-        md: { minHeight: isTeacher ? "min-h-[18rem]" : "min-h-[13rem]", fontSize: "text-xl md:text-3xl" },
-        lg: { minHeight: isTeacher ? "min-h-[22rem]" : "min-h-[16rem]", fontSize: "text-2xl md:text-4xl" },
-        xl: { minHeight: isTeacher ? "min-h-[26rem]" : "min-h-[19rem]", fontSize: "text-3xl md:text-5xl" },
+        sm: { minHeight: isTeacher ? "min-h-[14rem]" : "min-h-[10rem]", fontSize: "text-xl sm:text-2xl md:text-3xl" },
+        md: { minHeight: isTeacher ? "min-h-[18rem]" : "min-h-[13rem]", fontSize: "text-2xl sm:text-3xl md:text-4xl" },
+        lg: { minHeight: isTeacher ? "min-h-[22rem]" : "min-h-[16rem]", fontSize: "text-3xl sm:text-4xl md:text-5xl" },
+        xl: { minHeight: isTeacher ? "min-h-[26rem]" : "min-h-[19rem]", fontSize: "text-4xl sm:text-5xl md:text-6xl" },
     }[cardScale];
 
     const getGridClass = () => {
@@ -873,35 +865,33 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
                                     theme.front
                                 )}>
                                     {/* Üst Işık Yansıması */}
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                                     
                                     {/* Kart Üst Bilgisi */}
                                     <div className="flex items-center justify-between w-full">
-                                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-slate-900/10 text-slate-800 shadow-sm border border-slate-900/10">
+                                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                                             #{index + 1}
                                         </span>
-                                        <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-slate-500 bg-white/80 px-2.5 py-0.5 rounded-full border border-slate-200 shadow-sm">
-                                            <Puzzle className="w-3 h-3 text-indigo-500" /> Karışık Harfler
+                                        <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2.5 py-0.5 rounded-full border border-white/30 backdrop-blur-md">
+                                            <Puzzle className="w-3 h-3 text-amber-300" /> Karışık Harfler
                                         </div>
                                     </div>
 
-                                    {/* 3D Harf Kutuları */}
-                                    <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2 my-auto py-2">
-                                        {card.scrambledWord.toLocaleUpperCase('tr-TR').split('').map((char, charIdx) => (
-                                            <div 
-                                                key={charIdx}
-                                                className="w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 rounded-2xl bg-white text-slate-900 font-black flex items-center justify-center text-xl sm:text-2xl md:text-3xl shadow-md border-2 border-slate-200 border-b-[5px] border-b-slate-400 transform transition-transform hover:-translate-y-1"
-                                            >
-                                                {char}
-                                            </div>
-                                        ))}
+                                    {/* Karışık Harfler - Kartı Dolduran Büyük Yazı */}
+                                    <div className="my-auto py-4 text-center w-full flex items-center justify-center">
+                                        <div className={cn(
+                                            "font-black tracking-[0.25em] text-white drop-shadow-lg uppercase leading-tight break-words max-w-full",
+                                            scaleStyles.fontSize
+                                        )}>
+                                            {card.scrambledWord}
+                                        </div>
                                     </div>
 
-                                    {/* Alt İpucu Butonu */}
+                                    {/* Alt İpucu Butonu: SADECE ÇEVİR */}
                                     <div className="flex items-center justify-center">
-                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 hover:bg-white text-indigo-900 text-[11px] font-black uppercase tracking-wider border border-indigo-200 shadow-sm transition-all">
-                                            <RotateCw className="w-3.5 h-3.5 text-indigo-600" />
-                                            <span>Dokun & Doğru Yanıtı Gör</span>
+                                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                                            <RotateCw className="w-3.5 h-3.5" />
+                                            <span>Çevir</span>
                                         </div>
                                     </div>
                                 </div>
@@ -914,7 +904,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
                                     )} 
                                     style={{ transform: "rotateY(180deg)" }}
                                 >
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                                     
                                     {/* Kart Üst Bilgisi */}
                                     <div className="flex items-center justify-between w-full">
@@ -926,21 +916,21 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
                                         </div>
                                     </div>
 
-                                    {/* Doğru Yanıt Kutusu */}
-                                    <div className="my-auto w-full bg-white/95 rounded-2xl p-4 md:p-6 shadow-inner border-2 border-white text-center flex flex-col items-center justify-center">
-                                        <div className="text-[10px] sm:text-xs uppercase tracking-widest font-black text-slate-400 mb-1">
-                                            ÇÖZÜM:
-                                        </div>
-                                        <div className="font-black text-2xl sm:text-3xl md:text-4xl text-slate-900 tracking-wider break-words drop-shadow-sm">
+                                    {/* Doğru Yanıt - Doğrudan Kart Üzerinde */}
+                                    <div className="my-auto py-4 text-center w-full flex items-center justify-center">
+                                        <div className={cn(
+                                            "font-black tracking-wider text-white drop-shadow-lg uppercase leading-tight break-words max-w-full",
+                                            scaleStyles.fontSize
+                                        )}>
                                             {card.correctAnswer}
                                         </div>
                                     </div>
 
-                                    {/* Alt İpucu Butonu */}
+                                    {/* Alt İpucu Butonu: SADECE ÇEVİR */}
                                     <div className="flex items-center justify-center">
-                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white text-[11px] font-black uppercase tracking-wider border border-white/30 backdrop-blur-md transition-all">
+                                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
                                             <RotateCw className="w-3.5 h-3.5" />
-                                            <span>Geri Çevir</span>
+                                            <span>Çevir</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1138,27 +1128,27 @@ export const FlashcardItem = ({
     const scaleStyles = {
         sm: { 
             minHeight: isTeacher ? "min-h-[16rem]" : "min-h-[12rem]",
-            termText: term.length > 20 ? "text-xl md:text-2xl" : "text-2xl md:text-3xl",
-            defText: definition.length > 150 ? "text-xs md:text-sm" : "text-sm md:text-base",
-            padding: "p-4 md:p-5"
+            termText: term.length > 25 ? "text-xl sm:text-2xl" : (term.length > 12 ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl"),
+            defText: definition.length > 200 ? "text-xs sm:text-sm" : (definition.length > 100 ? "text-sm sm:text-base" : "text-base sm:text-lg"),
+            padding: "p-4 sm:p-5"
         },
         md: { 
             minHeight: isTeacher ? "min-h-[20rem]" : "min-h-[15rem]",
-            termText: term.length > 20 ? "text-2xl md:text-3xl" : "text-3xl md:text-4xl",
-            defText: definition.length > 150 ? "text-sm md:text-base" : "text-base md:text-lg",
-            padding: "p-5 md:p-6"
+            termText: term.length > 25 ? "text-2xl sm:text-3xl" : (term.length > 12 ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl"),
+            defText: definition.length > 200 ? "text-sm sm:text-base" : (definition.length > 100 ? "text-base sm:text-lg" : "text-lg sm:text-xl"),
+            padding: "p-5 sm:p-6"
         },
         lg: { 
             minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[18rem]",
-            termText: term.length > 20 ? "text-3xl md:text-4xl" : "text-4xl md:text-5xl",
-            defText: definition.length > 150 ? "text-base md:text-lg" : "text-lg md:text-xl",
-            padding: "p-6 md:p-8"
+            termText: term.length > 25 ? "text-3xl sm:text-4xl" : (term.length > 12 ? "text-4xl sm:text-5xl" : "text-5xl sm:text-6xl"),
+            defText: definition.length > 200 ? "text-base sm:text-lg" : (definition.length > 100 ? "text-lg sm:text-xl" : "text-xl sm:text-2xl"),
+            padding: "p-6 sm:p-8"
         },
         xl: { 
             minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[22rem]",
-            termText: term.length > 20 ? "text-4xl md:text-5xl" : "text-5xl md:text-6xl",
-            defText: definition.length > 150 ? "text-lg md:text-xl" : "text-xl md:text-2xl",
-            padding: "p-8 md:p-10"
+            termText: term.length > 25 ? "text-4xl sm:text-5xl" : (term.length > 12 ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"),
+            defText: definition.length > 200 ? "text-lg sm:text-xl" : (definition.length > 100 ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl"),
+            padding: "p-8 sm:p-10"
         },
     }[cardScale];
 
@@ -1189,35 +1179,35 @@ export const FlashcardItem = ({
                     
                     {/* Kart Üst Başlığı */}
                     <div className="flex items-center justify-between w-full">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-slate-900/10 text-slate-800 shadow-sm border border-slate-900/10">
+                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                             #{index + 1}
                         </span>
-                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-slate-600 bg-white/80 px-3 py-1 rounded-full border border-slate-200 shadow-sm">
-                            <Lightbulb className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
+                            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                             <span>Kavram Kartı</span>
                         </div>
                     </div>
 
-                    {/* Ana Terim / Başlık */}
-                    <div className="my-auto py-4 text-center flex flex-col items-center justify-center">
+                    {/* Ana Terim / Başlık - Kartı Dolduran Görünüm */}
+                    <div className="my-auto py-4 px-2 text-center w-full flex items-center justify-center">
                         <h3 className={cn(
-                            "font-black tracking-tight text-slate-900 drop-shadow-sm uppercase leading-snug break-words max-w-full",
+                            "font-black tracking-tight text-white drop-shadow-lg uppercase leading-tight break-words max-w-full",
                             scaleStyles.termText
                         )}>
                             {term}
                         </h3>
                     </div>
 
-                    {/* Alt İpucu Butonu */}
+                    {/* Alt İpucu Butonu: SADECE ÇEVİR */}
                     <div className="flex items-center justify-center">
-                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 hover:bg-white text-indigo-950 text-xs font-black uppercase tracking-wider border border-indigo-200 shadow-sm transition-all group-hover:shadow-md">
-                            <RotateCw className="w-3.5 h-3.5 text-indigo-600" />
-                            <span>Dokun & Tanımı Gör</span>
+                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                            <RotateCw className="w-3.5 h-3.5" />
+                            <span>Çevir</span>
                         </div>
                     </div>
                 </div>
 
-                {/* ══ ARKA YÜZ (TANIM & AÇIKLAMA) ══ */}
+                {/* ══ ARKA YÜZ (TANIM & AÇIKLAMA - DOĞRUDAN KARTIN ÜZERİNDE) ══ */}
                 <div 
                     className={cn(
                         "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] flex flex-col justify-between overflow-hidden",
@@ -1234,29 +1224,26 @@ export const FlashcardItem = ({
                             #{index + 1}
                         </span>
                         <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
-                            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                            <CheckCircle className="w-3.5 h-3.5 text-emerald-300" />
                             <span>Tanım & Açıklama</span>
                         </div>
                     </div>
 
-                    {/* Tanım Kutusu */}
-                    <div className="my-auto w-full max-h-[70%] overflow-y-auto bg-white/95 rounded-2xl p-4 md:p-6 shadow-inner border-2 border-white text-center flex flex-col items-center justify-center">
-                        <div className="text-[10px] sm:text-xs uppercase tracking-widest font-black text-indigo-600 mb-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-100">
-                            {term}
-                        </div>
+                    {/* Doğrudan Kart Üzerinde Yazılan Tanım (Beyaz Kutu Yok) */}
+                    <div className="my-auto py-4 px-2 sm:px-4 text-center w-full flex items-center justify-center">
                         <p className={cn(
-                            "font-bold leading-relaxed tracking-wide text-slate-800 break-words",
+                            "font-bold leading-relaxed tracking-wide text-white drop-shadow-md break-words max-w-full",
                             scaleStyles.defText
                         )}>
                             {definition}
                         </p>
                     </div>
 
-                    {/* Alt İpucu Butonu */}
+                    {/* Alt İpucu Butonu: SADECE ÇEVİR */}
                     <div className="flex items-center justify-center">
-                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md transition-all">
+                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
                             <RotateCw className="w-3.5 h-3.5" />
-                            <span>Geri Çevir</span>
+                            <span>Çevir</span>
                         </div>
                     </div>
                 </div>
