@@ -16,7 +16,7 @@ export type GenerateHtmlSlideOutput = {
 
 export async function generateHtmlSlide(input: GenerateHtmlSlideInput): Promise<GenerateHtmlSlideOutput> {
   const activeKey = input.apiKey?.trim() || process.env.GEMINI_API_KEY || '';
-  const selectedModel = input.modelName?.trim() || 'gemini-2.5-flash';
+  const selectedModel = input.modelName?.trim() || 'gemini-3.7-flash';
 
   if (!activeKey) {
     throw new Error('Gemini API anahtarı bulunamadı.');

@@ -64,7 +64,7 @@ const moduleInstructions: Record<string, string> = {
 
 export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
   const activeKey = input.apiKey?.trim() || process.env.GEMINI_API_KEY || '';
-  const selectedModel = input.modelName?.trim() || 'gemini-2.5-flash';
+  const selectedModel = input.modelName?.trim() || 'gemini-3.7-flash';
 
   if (!activeKey) {
     throw new Error('Gemini API anahtarı bulunamadı. Lütfen "Model & API Ayarları" bölümünden kendi Google AI Studio API anahtarınızı girin.');

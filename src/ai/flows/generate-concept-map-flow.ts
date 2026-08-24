@@ -29,7 +29,7 @@ export type GenerateConceptMapInput = z.infer<typeof GenerateConceptMapInputSche
 
 export async function generateConceptMap(input: GenerateConceptMapInput): Promise<ConceptMapData> {
   const activeKey = input.apiKey?.trim() || process.env.GEMINI_API_KEY || '';
-  const selectedModel = input.modelName?.trim() || 'gemini-2.5-flash';
+  const selectedModel = input.modelName?.trim() || 'gemini-3.7-flash';
 
   if (!activeKey) {
     throw new Error('Gemini API anahtarı bulunamadı.');

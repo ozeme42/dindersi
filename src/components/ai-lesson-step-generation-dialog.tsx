@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
     Loader2, Sparkles, Wand2, KeyRound, Settings2, ExternalLink, 
-    Check, Eye, EyeOff, ShieldCheck, Zap 
+    Check, Eye, EyeOff, ShieldCheck, Zap, Flame 
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
@@ -23,42 +23,49 @@ import { Checkbox } from './ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-// ══ GÜNCEL ÜCRETSİZ GEMİNİ MODELLERİ LİSTESİ ══
+// ══ GÜNCEL ÜCRETSİZ GEMİNİ MODELLERİ LİSTESİ (2026 GÜNCEL) ══
 export const FREE_GEMINI_MODELS = [
     { 
-        id: 'gemini-2.5-flash', 
-        name: 'Gemini 2.5 Flash', 
-        tag: 'Önerilen • En Yeni & Hızlı', 
-        desc: 'En yeni nesil, Türkçe anlama yeteneği üstün ve tamamen ücretsiz.',
-        badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+        id: 'gemini-3.7-flash', 
+        name: 'Gemini 3.7 Flash', 
+        tag: '🔥 En Yeni Amiral Gemisi (Ağustos 2026)', 
+        desc: 'Google\'ın en gelişmiş, hibrit akıl yürütme (thinking) yeteneğine sahip en yeni Flash modeli.',
+        badge: 'bg-rose-500/20 text-rose-300 border-rose-500/40'
     },
     { 
         id: 'gemini-2.0-flash', 
         name: 'Gemini 2.0 Flash', 
-        tag: 'Yüksek Performans', 
-        desc: 'Oldukça hızlı, dengeli ve kararlı ücretsiz model.',
+        tag: '⚡ Yüksek Hız & Kararlı', 
+        desc: 'Oldukça hızlı yanıt süresi ve dengeli pedagojik Türkçe üretimi.',
         badge: 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+    },
+    { 
+        id: 'gemini-2.0-flash-lite', 
+        name: 'Gemini 2.0 Flash-Lite', 
+        tag: '🚀 Ultra Hızlı & Hafif', 
+        desc: 'Saniyeler içinde hızlı soru ve kart üretmek için optimize edilmiştir.',
+        badge: 'bg-teal-500/20 text-teal-300 border-teal-500/40'
+    },
+    { 
+        id: 'gemini-2.0-flash-thinking-exp-01-21', 
+        name: 'Gemini 2.0 Flash Thinking', 
+        tag: '🧠 Düşünerek Akıl Yürütme', 
+        desc: 'Yanıt vermeden önce adım adım akıl yürüten (Chain-of-Thought) gelişmiş model.',
+        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
     },
     { 
         id: 'gemini-1.5-flash', 
         name: 'Gemini 1.5 Flash', 
-        tag: 'Geniş Bağlam', 
-        desc: 'Hafif, uzun metinleri işleyebilen stabil ücretsiz model.',
+        tag: '✨ Geniş Bağlam', 
+        desc: 'Çok uzun metinleri tek seferde analiz edebilen kararlı model.',
         badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
     },
     { 
         id: 'gemini-1.5-pro', 
         name: 'Gemini 1.5 Pro', 
-        tag: 'Derin Analiz & Detay', 
-        desc: 'Kapsamlı pedagojik içerik ve derin analiz için ideal.',
+        tag: '💎 Derin Analiz & Detay', 
+        desc: 'Kapsamlı ve zengin içerikler için yüksek kapasiteli model.',
         badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-    },
-    { 
-        id: 'gemini-2.0-flash-thinking-exp-01-21', 
-        name: 'Gemini 2.0 Flash Thinking', 
-        tag: 'Akıl Yürütme (Thinking)', 
-        desc: 'Adım adım düşünerek zor sorular ve kavramlar üreten deneysel model.',
-        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
     },
 ];
 
@@ -110,7 +117,9 @@ export function AiLessonStepGenerationDialog({
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [apiKey, setApiKey] = useState('');
-  const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash');
+  const [selectedModel, setSelectedModel] = useState('gemini-3.7-flash');
+  const [customModelInput, setCustomModelInput] = useState('');
+  const [isCustomModel, setIsCustomModel] = useState(false);
   const [showApiKeyText, setShowApiKeyText] = useState(false);
   const [isKeySaved, setIsKeySaved] = useState(false);
 
@@ -130,9 +139,18 @@ export function AiLessonStepGenerationDialog({
   useEffect(() => {
     if (typeof window !== 'undefined') {
         const savedKey = localStorage.getItem('custom_gemini_api_key') || '';
-        const savedModel = localStorage.getItem('custom_gemini_model') || 'gemini-2.5-flash';
+        const savedModel = localStorage.getItem('custom_gemini_model') || 'gemini-3.7-flash';
         setApiKey(savedKey);
-        setSelectedModel(savedModel);
+        
+        const isKnown = FREE_GEMINI_MODELS.some(m => m.id === savedModel);
+        if (isKnown) {
+            setSelectedModel(savedModel);
+            setIsCustomModel(false);
+        } else {
+            setSelectedModel('custom');
+            setCustomModelInput(savedModel);
+            setIsCustomModel(true);
+        }
     }
   }, [isOpen]);
 
@@ -168,15 +186,30 @@ export function AiLessonStepGenerationDialog({
   };
 
   const handleSelectModel = (modelId: string) => {
-    setSelectedModel(modelId);
-    if (typeof window !== 'undefined') {
-        localStorage.setItem('custom_gemini_model', modelId);
-        toast({
-            title: "Model Güncellendi",
-            description: `Aktif model: ${modelId}`,
-        });
+    if (modelId === 'custom') {
+        setIsCustomModel(true);
+        setSelectedModel('custom');
+    } else {
+        setIsCustomModel(false);
+        setSelectedModel(modelId);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('custom_gemini_model', modelId);
+            toast({
+                title: "Model Güncellendi",
+                description: `Aktif model: ${modelId}`,
+            });
+        }
     }
   };
+
+  const handleSaveCustomModel = (customId: string) => {
+    setCustomModelInput(customId);
+    if (typeof window !== 'undefined' && customId.trim()) {
+        localStorage.setItem('custom_gemini_model', customId.trim());
+    }
+  };
+
+  const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!context) {
@@ -191,7 +224,7 @@ export function AiLessonStepGenerationDialog({
     try {
         const inputModules = data.modules as GenerateLessonContentInput['modules'];
         const activeKey = apiKey.trim() || undefined;
-        const activeModel = selectedModel || 'gemini-2.5-flash';
+        const activeModel = activeModelId || 'gemini-3.7-flash';
         
         // Özel akışlar (Kavram Haritası & HTML Slayt)
         if (inputModules.conceptMap) {
@@ -323,7 +356,13 @@ export function AiLessonStepGenerationDialog({
         return newSteps;
     };
 
-  const currentModelMeta = FREE_GEMINI_MODELS.find(m => m.id === selectedModel) || FREE_GEMINI_MODELS[0];
+  const currentModelMeta = FREE_GEMINI_MODELS.find(m => m.id === activeModelId) || {
+      id: activeModelId,
+      name: activeModelId,
+      tag: 'Özel Model',
+      desc: 'Kullanıcı tarafından belirlenen model.',
+      badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -331,8 +370,8 @@ export function AiLessonStepGenerationDialog({
         {/* Header */}
         <DialogHeader className="p-5 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md flex flex-row items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 rounded-2xl border border-purple-500/30 text-purple-400">
-                <Sparkles className="h-5 w-5" />
+            <div className="p-2.5 bg-gradient-to-br from-purple-500/20 to-rose-500/20 rounded-2xl border border-purple-500/30 text-purple-400">
+                <Flame className="h-5 w-5 text-rose-400 animate-pulse" />
             </div>
             <div>
                 <DialogTitle className="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
@@ -405,7 +444,7 @@ export function AiLessonStepGenerationDialog({
                                             type={showApiKeyText ? "text" : "password"}
                                             value={apiKey}
                                             onChange={(e) => handleSaveApiKey(e.target.value)}
-                                            placeholder="AIzaSy... (Boş bırakılırsa varsayılan anahtar kullanılır)"
+                                            placeholder="AIzaSy... (Boş bırakılırsa sistem anahtarı kullanılır)"
                                             className="bg-slate-950 border-white/10 text-xs font-mono pr-10 rounded-xl"
                                         />
                                         <button
@@ -428,14 +467,14 @@ export function AiLessonStepGenerationDialog({
                             </div>
 
                             {/* Model Seçimi */}
-                            <div className="space-y-1.5">
+                            <div className="space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <Label className="text-xs text-slate-300 font-bold">Kullanılacak Gemini Modeli (Tamamen Ücretsiz)</Label>
+                                    <Label className="text-xs text-slate-300 font-bold">Kullanılacak Gemini Modeli</Label>
                                     <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
                                         <ShieldCheck className="w-3 h-3" /> Ücretsiz Kota Destekli
                                     </span>
                                 </div>
-                                <Select value={selectedModel} onValueChange={handleSelectModel}>
+                                <Select value={isCustomModel ? 'custom' : selectedModel} onValueChange={handleSelectModel}>
                                     <SelectTrigger className="bg-slate-950 border-white/10 text-xs rounded-xl h-10">
                                         <SelectValue placeholder="Model Seçin" />
                                     </SelectTrigger>
@@ -453,8 +492,25 @@ export function AiLessonStepGenerationDialog({
                                                 </div>
                                             </SelectItem>
                                         ))}
+                                        <SelectItem value="custom" className="py-2 focus:bg-indigo-600 border-t border-white/10">
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-black text-xs text-amber-300">✍️ Özel Model Adı Girin...</span>
+                                            </div>
+                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
+
+                                {isCustomModel && (
+                                    <div className="pt-2 animate-in fade-in">
+                                        <Label className="text-[11px] text-amber-300 font-bold">Özel Model Tanımlayıcısı (ID):</Label>
+                                        <Input 
+                                            value={customModelInput}
+                                            onChange={(e) => handleSaveCustomModel(e.target.value)}
+                                            placeholder="Örn: gemini-3.7-flash, gemini-2.0-pro-exp-02-05..."
+                                            className="mt-1 bg-slate-950 border-amber-500/40 text-xs text-amber-200 rounded-xl"
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
@@ -466,8 +522,8 @@ export function AiLessonStepGenerationDialog({
                             <p className="text-sm font-black text-white">{context?.topicTitle || 'Konu Başlığı'}</p>
                         </div>
                         <div className="flex items-center gap-1.5">
-                            <Badge variant="outline" className="text-[10px] bg-slate-950 border-white/10 text-slate-300">
-                                <Zap className="w-3 h-3 mr-1 text-yellow-400" /> {currentModelMeta.name}
+                            <Badge variant="outline" className="text-[10px] bg-slate-950 border-rose-500/30 text-rose-300 font-black">
+                                <Flame className="w-3 h-3 mr-1 text-rose-400" /> {currentModelMeta.name}
                             </Badge>
                             <Badge variant="outline" className="text-[10px] text-indigo-300 border-indigo-500/30 bg-indigo-500/10">
                                 {generationType === 'anlatim' ? 'Anlatım' : 'Değerlendirme'}
@@ -543,7 +599,7 @@ export function AiLessonStepGenerationDialog({
                     </Button>
                     <Button 
                         type="submit" 
-                        className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black rounded-xl shadow-lg shadow-purple-950/50 px-6 cursor-pointer text-xs"
+                        className="bg-gradient-to-r from-purple-600 via-indigo-600 to-rose-600 hover:from-purple-500 hover:to-rose-500 text-white font-black rounded-xl shadow-lg shadow-purple-950/50 px-6 cursor-pointer text-xs"
                     >
                         <Wand2 className="mr-2 h-4 w-4 text-yellow-300" /> Üretimi Başlat ({currentModelMeta.name})
                     </Button>
