@@ -495,7 +495,7 @@ export function ContentListPlayer({
 }
 
 // 4. ConceptExplanationPlayer
-export function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string }) {
+export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleCardMode }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string, isSingleCardMode?: boolean }) {
     if (!items || items.length === 0) return null;
     const isTeacher = useTeacherMode();
     
@@ -517,9 +517,11 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title }: { items
              
             <div className={cn(
                 "w-full flex-grow grid gap-4 md:gap-6", 
-                isTeacher 
-                    ? "grid-cols-1 md:grid-cols-2 content-start" 
-                    : "grid-cols-1 md:grid-cols-2"
+                isSingleCardMode 
+                    ? "grid-cols-1 max-w-4xl mx-auto" 
+                    : (isTeacher 
+                        ? "grid-cols-1 md:grid-cols-2 content-start" 
+                        : "grid-cols-1 md:grid-cols-2")
             )}>
                 {(() => {
                     let conceptIndex = 1;
@@ -545,10 +547,21 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title }: { items
                                 style.hoverBorder,
                                 isTeacher ? 'min-h-[180px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
                             )}>
-                                <CardHeader className={cn("border-b border-slate-200 dark:border-white/10", isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
-                                    <CardTitle className={cn("font-black uppercase tracking-wider transition-colors", style.title, isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg"))}>{currentNum}. {item.concept}</CardTitle>
+                                <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
+                                    <CardTitle className={cn(
+                                        "font-black uppercase tracking-wider transition-colors", 
+                                        style.title, 
+                                        isTeacher 
+                                            ? (isSingleCardMode ? "text-3xl md:text-4xl" : "text-2xl") 
+                                            : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg")
+                                    )}>{currentNum}. {item.concept}</CardTitle>
                                 </CardHeader>
-                                <CardContent className={cn("text-slate-700 dark:text-slate-200 font-semibold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
+                                <CardContent className={cn(
+                                    "text-slate-700 dark:text-slate-300 font-semibold leading-relaxed", 
+                                    isTeacher 
+                                        ? (isSingleCardMode ? "text-2xl md:text-3xl p-6 pt-6" : "text-xl p-4 pt-4") 
+                                        : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base"
+                                )}>
                                     <div dangerouslySetInnerHTML={{ __html: item.definition }} />
                                 </CardContent>
                             </Card>
@@ -1645,7 +1658,7 @@ export function StepContent({
             case 'accordion':
                  return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} isFastMode={isFastMode} />
             case 'conceptExplanation': {
-                return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} />
+                return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} isSingleCardMode={isSingleCardMode} />
             }
             case 'visual':
                 return (

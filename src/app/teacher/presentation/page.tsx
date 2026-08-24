@@ -15,6 +15,7 @@ import { useAuth } from '@/context/auth-context';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { useTheme } from '@/context/theme-provider';
 
 function PresentationPageContent() {
     const { user } = useAuth();
@@ -31,9 +32,12 @@ function PresentationPageContent() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     
     // Settings state
-    const [isDarkMode, setIsDarkMode] = useState(true);
     const [isSingleCardMode, setIsSingleCardMode] = useState(false);
     const [isFastMode, setIsFastMode] = useState(false);
+    const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
+    const { themeMode, setThemeMode } = useTheme();
+    const isDarkMode = themeMode === 'dark';
+    const setIsDarkMode = (checked: boolean) => setThemeMode(checked ? 'dark' : 'light');
 
      useEffect(() => {
         const handleFullscreenChange = () => {
