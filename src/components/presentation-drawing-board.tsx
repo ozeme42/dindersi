@@ -5,7 +5,7 @@ import {
     Pencil, Highlighter, Eraser, MoveRight, Square, Circle, 
     Type, Undo2, Redo2, Trash2, Download, Eye, EyeOff, 
     X, Sparkles, Wand2, Grid, AlignJustify, Palette, ChevronUp,
-    ChevronDown, GripVertical
+    ChevronDown, GripVertical, Shapes, MoreHorizontal, Minus
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -560,36 +560,36 @@ export function PresentationDrawingBoard({
                 </div>
             )}
 
-            {/* ══ ULTRA-MODERN DOKUNMATİK VE SÜRÜKLENEBİLİR ÇİZİM ARAÇ ÇUBUĞU ══ */}
+            {/* ══ ULTRA-KOMPAKT SÜRÜKLENEBİLİR ÇİZİM ARAÇ ÇUBUĞU ══ */}
             <motion.div
                 drag
                 dragMomentum={false}
                 dragConstraints={containerRef}
-                initial={{ y: 50, opacity: 0 }}
+                initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 50, opacity: 0 }}
-                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center max-w-[95vw] touch-none"
+                exit={{ y: 30, opacity: 0 }}
+                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center touch-none"
             >
-                {/* Ana Toolbar Kapsayıcı */}
-                <div className="flex items-center gap-1.5 p-2 rounded-2xl bg-slate-900/95 dark:bg-slate-900/95 backdrop-blur-3xl border-2 border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-white select-none">
+                {/* Ana Kompakt Kapsayıcı */}
+                <div className="flex items-center gap-1 p-1.5 rounded-2xl bg-slate-900/95 dark:bg-slate-900/95 backdrop-blur-3xl border border-white/20 shadow-[0_0_40px_rgba(0,0,0,0.8)] text-white select-none">
                     
                     {/* Sürükleme Tutamacı */}
                     <div 
-                        className="flex items-center justify-center pl-1 pr-1.5 py-2 cursor-grab active:cursor-grabbing text-slate-400 hover:text-white border-r border-white/15"
-                        title="Basılı tutup istediğiniz yere sürükleyin"
+                        className="flex items-center justify-center px-1 py-1.5 cursor-grab active:cursor-grabbing text-slate-400 hover:text-white border-r border-white/15"
+                        title="Sürüklemek için basılı tutun"
                     >
-                        <GripVertical className="w-5 h-5" />
+                        <GripVertical className="w-4 h-4" />
                     </div>
 
-                    {/* Çizim Araçları Grubu */}
-                    <div className="flex items-center gap-1 pr-1.5 border-r border-white/15">
+                    {/* 1. Ana Araçlar (Kalem, Fosforlu, Lazer, Şekiller, Silgi) */}
+                    <div className="flex items-center gap-0.5 pr-1 border-r border-white/15">
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setTool('pen')}
                             className={cn(
-                                "h-10 w-10 rounded-xl transition-all",
-                                tool === 'pen' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/40" : "text-slate-300 hover:bg-white/10"
+                                "h-9 w-9 rounded-xl transition-all",
+                                tool === 'pen' ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/40" : "text-slate-300 hover:bg-white/10"
                             )}
                             title="Kalem (P)"
                         >
@@ -601,8 +601,8 @@ export function PresentationDrawingBoard({
                             size="icon"
                             onClick={() => setTool('highlighter')}
                             className={cn(
-                                "h-10 w-10 rounded-xl transition-all",
-                                tool === 'highlighter' ? "bg-amber-500 text-slate-950 font-bold shadow-lg shadow-amber-500/40" : "text-slate-300 hover:bg-white/10"
+                                "h-9 w-9 rounded-xl transition-all",
+                                tool === 'highlighter' ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/40" : "text-slate-300 hover:bg-white/10"
                             )}
                             title="Fosforlu Vurgulayıcı (H)"
                         >
@@ -614,72 +614,91 @@ export function PresentationDrawingBoard({
                             size="icon"
                             onClick={() => setTool('laser')}
                             className={cn(
-                                "h-10 w-10 rounded-xl transition-all",
-                                tool === 'laser' ? "bg-rose-600 text-white shadow-lg shadow-rose-500/40 animate-pulse" : "text-slate-300 hover:bg-white/10"
+                                "h-9 w-9 rounded-xl transition-all",
+                                tool === 'laser' ? "bg-rose-600 text-white shadow-md shadow-rose-500/40 animate-pulse" : "text-slate-300 hover:bg-white/10"
                             )}
                             title="Lazer İşaretçi (L)"
                         >
                             <Wand2 className="w-4 h-4 text-rose-300" />
                         </Button>
 
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setTool('arrow')}
-                            className={cn(
-                                "h-10 w-10 rounded-xl transition-all",
-                                tool === 'arrow' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/40" : "text-slate-300 hover:bg-white/10"
-                            )}
-                            title="Ok Çiz (A)"
-                        >
-                            <MoveRight className="w-4 h-4" />
-                        </Button>
-
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setTool('rect')}
-                            className={cn(
-                                "h-10 w-10 rounded-xl transition-all",
-                                tool === 'rect' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/40" : "text-slate-300 hover:bg-white/10"
-                            )}
-                            title="Dikdörtgen Kutu (R)"
-                        >
-                            <Square className="w-4 h-4" />
-                        </Button>
-
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setTool('circle')}
-                            className={cn(
-                                "h-10 w-10 rounded-xl transition-all",
-                                tool === 'circle' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/40" : "text-slate-300 hover:bg-white/10"
-                            )}
-                            title="Çember / Daire (C)"
-                        >
-                            <Circle className="w-4 h-4" />
-                        </Button>
-
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setTool('text')}
-                            className={cn(
-                                "h-10 w-10 rounded-xl transition-all",
-                                tool === 'text' ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/40" : "text-slate-300 hover:bg-white/10"
-                            )}
-                            title="Metin Ekle (T)"
-                        >
-                            <Type className="w-4 h-4" />
-                        </Button>
+                        {/* Şekiller & Metin Açılır Menüsü */}
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className={cn(
+                                        "h-9 w-9 rounded-xl transition-all",
+                                        ['arrow', 'rect', 'circle', 'line', 'text'].includes(tool) ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/40" : "text-slate-300 hover:bg-white/10"
+                                    )}
+                                    title="Şekiller & Metin"
+                                >
+                                    {tool === 'arrow' ? <MoveRight className="w-4 h-4" /> : 
+                                     tool === 'rect' ? <Square className="w-4 h-4" /> :
+                                     tool === 'circle' ? <Circle className="w-4 h-4" /> :
+                                     tool === 'text' ? <Type className="w-4 h-4" /> :
+                                     <Shapes className="w-4 h-4" />}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent side="top" align="center" className="w-48 p-2 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white mb-2">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block px-2 py-1">Şekiller & Metin</span>
+                                <div className="space-y-1">
+                                    <button
+                                        onClick={() => setTool('arrow')}
+                                        className={cn(
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
+                                            tool === 'arrow' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                        )}
+                                    >
+                                        <MoveRight className="w-4 h-4" /> <span>Ok Çiz (A)</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setTool('rect')}
+                                        className={cn(
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
+                                            tool === 'rect' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                        )}
+                                    >
+                                        <Square className="w-4 h-4" /> <span>Dikdörtgen (R)</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setTool('circle')}
+                                        className={cn(
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
+                                            tool === 'circle' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                        )}
+                                    >
+                                        <Circle className="w-4 h-4" /> <span>Çember (C)</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setTool('line')}
+                                        className={cn(
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
+                                            tool === 'line' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                        )}
+                                    >
+                                        <Minus className="w-4 h-4" /> <span>Düz Çizgi</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setTool('text')}
+                                        className={cn(
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all",
+                                            tool === 'text' ? "bg-indigo-600 text-white" : "hover:bg-white/10 text-slate-300"
+                                        )}
+                                    >
+                                        <Type className="w-4 h-4" /> <span>Metin Ekle (T)</span>
+                                    </button>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
 
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setTool('eraser')}
                             className={cn(
-                                "h-10 w-10 rounded-xl transition-all",
+                                "h-9 w-9 rounded-xl transition-all",
                                 tool === 'eraser' ? "bg-slate-700 text-white border border-white/30" : "text-slate-300 hover:bg-white/10"
                             )}
                             title="Silgi (E)"
@@ -688,21 +707,24 @@ export function PresentationDrawingBoard({
                         </Button>
                     </div>
 
-                    {/* Renk & Kalınlık Seçimi */}
-                    <div className="flex items-center gap-1.5 px-1.5 border-r border-white/15">
+                    {/* 2. Renk ve Kalınlık Birleşik Butonu */}
+                    <div className="flex items-center px-1 border-r border-white/15">
                         <Popover>
                             <PopoverTrigger asChild>
                                 <button
-                                    className="h-8 w-8 rounded-full border-2 border-white/40 shadow-inner flex items-center justify-center transition-transform hover:scale-110 active:scale-95"
-                                    style={{ backgroundColor: color }}
-                                    title="Renk Seç"
+                                    className="h-9 px-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 border border-white/10 transition-all"
+                                    title="Renk & Kalınlık Seç"
                                 >
-                                    <div className="w-2.5 h-2.5 rounded-full bg-black/20" />
+                                    <div 
+                                        className="w-4 h-4 rounded-full border border-white/60 shadow-sm"
+                                        style={{ backgroundColor: color }}
+                                    />
+                                    <span className="text-[11px] font-mono">{strokeWidth}px</span>
                                 </button>
                             </PopoverTrigger>
-                            <PopoverContent side="bottom" align="center" className="w-64 p-3 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white">
+                            <PopoverContent side="top" align="center" className="w-64 p-3 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white mb-2">
                                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Renk Paleti</span>
-                                <div className="grid grid-cols-5 gap-2 mb-3">
+                                <div className="grid grid-cols-5 gap-1.5 mb-3">
                                     {PRESET_COLORS.map((c) => (
                                         <button
                                             key={c.value}
@@ -716,119 +738,106 @@ export function PresentationDrawingBoard({
                                         />
                                     ))}
                                 </div>
-                                <div className="flex items-center gap-2 pt-2 border-t border-white/10">
+                                <div className="flex items-center gap-2 pt-2 pb-3 border-t border-white/10">
                                     <span className="text-xs text-slate-400">Özel:</span>
                                     <input 
                                         type="color" 
                                         value={color} 
                                         onChange={(e) => setColor(e.target.value)} 
-                                        className="w-full h-8 bg-transparent border-0 cursor-pointer rounded-lg"
+                                        className="w-full h-7 bg-transparent border-0 cursor-pointer rounded-lg"
+                                    />
+                                </div>
+                                <div className="pt-2 border-t border-white/10">
+                                    <div className="flex justify-between items-center mb-1.5">
+                                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kalınlık</span>
+                                        <span className="text-xs font-bold text-cyan-400">{strokeWidth} px</span>
+                                    </div>
+                                    <div className="grid grid-cols-5 gap-1 mb-2">
+                                        {PRESET_STROKES.map((s) => (
+                                            <button
+                                                key={s.value}
+                                                onClick={() => setStrokeWidth(s.value)}
+                                                className={cn(
+                                                    "py-1 rounded-lg text-xs font-bold transition-all border",
+                                                    strokeWidth === s.value ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
+                                                )}
+                                            >
+                                                {s.value}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <Slider
+                                        value={[strokeWidth]}
+                                        min={1}
+                                        max={40}
+                                        step={1}
+                                        onValueChange={(val) => setStrokeWidth(val[0])}
+                                        className="py-1"
                                     />
                                 </div>
                             </PopoverContent>
                         </Popover>
-
-                        {/* Kalınlık Seçimi Popover */}
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <button 
-                                    className="h-8 px-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1 border border-white/10 transition-all"
-                                    title="Kalınlık Ayarla"
-                                >
-                                    <div className="rounded-full bg-white" style={{ width: strokeWidth, height: strokeWidth }} />
-                                    <span>{strokeWidth}px</span>
-                                </button>
-                            </PopoverTrigger>
-                            <PopoverContent side="bottom" align="center" className="w-56 p-3 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Çizgi Kalınlığı</span>
-                                    <span className="text-xs font-bold text-cyan-400">{strokeWidth} px</span>
-                                </div>
-                                <div className="grid grid-cols-5 gap-1 mb-3">
-                                    {PRESET_STROKES.map((s) => (
-                                        <button
-                                            key={s.value}
-                                            onClick={() => setStrokeWidth(s.value)}
-                                            className={cn(
-                                                "py-1 rounded-lg text-xs font-bold transition-all border",
-                                                strokeWidth === s.value ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
-                                            )}
-                                        >
-                                            {s.value}
-                                        </button>
-                                    ))}
-                                </div>
-                                <Slider
-                                    value={[strokeWidth]}
-                                    min={1}
-                                    max={40}
-                                    step={1}
-                                    onValueChange={(val) => setStrokeWidth(val[0])}
-                                    className="py-2"
-                                />
-                            </PopoverContent>
-                        </Popover>
                     </div>
 
-                    {/* Tahta / Arka Plan Türü */}
-                    <div className="flex items-center gap-1 px-1.5 border-r border-white/15">
+                    {/* 3. Tahta Arka Plan Türü */}
+                    <div className="flex items-center px-0.5 border-r border-white/15">
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl text-slate-300 hover:bg-white/10" title="Tahta Arka Planı">
+                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-slate-300 hover:bg-white/10" title="Tahta Arka Planı">
                                     <Palette className="w-4 h-4" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent side="bottom" align="center" className="w-60 p-3 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white">
-                                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Tahta Modu</span>
-                                <div className="space-y-1.5">
+                            <PopoverContent side="top" align="center" className="w-56 p-2 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white mb-2">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block px-2 py-1">Tahta Modu</span>
+                                <div className="space-y-1">
                                     <button
                                         onClick={() => setSurface('transparent')}
                                         className={cn(
-                                            "w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold border transition-all",
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
                                             surface === 'transparent' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
                                         )}
                                     >
-                                        <Sparkles className="w-4 h-4 text-cyan-400" />
-                                        <span>Şeffaf Sunum Katmanı</span>
+                                        <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                                        <span>Şeffaf Sunum</span>
                                     </button>
                                     <button
                                         onClick={() => setSurface('dark')}
                                         className={cn(
-                                            "w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold border transition-all",
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
                                             surface === 'dark' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
                                         )}
                                     >
-                                        <div className="w-4 h-4 rounded bg-slate-950 border border-slate-700" />
-                                        <span>Siyah / Kara Tahta</span>
+                                        <div className="w-3.5 h-3.5 rounded bg-slate-950 border border-slate-700" />
+                                        <span>Kara Tahta</span>
                                     </button>
                                     <button
                                         onClick={() => setSurface('white')}
                                         className={cn(
-                                            "w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold border transition-all",
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
                                             surface === 'white' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
                                         )}
                                     >
-                                        <div className="w-4 h-4 rounded bg-white" />
+                                        <div className="w-3.5 h-3.5 rounded bg-white" />
                                         <span>Beyaz Tahta</span>
                                     </button>
                                     <button
                                         onClick={() => setSurface('grid')}
                                         className={cn(
-                                            "w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold border transition-all",
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
                                             surface === 'grid' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
                                         )}
                                     >
-                                        <Grid className="w-4 h-4 text-slate-400" />
-                                        <span>Kareli Izgara</span>
+                                        <Grid className="w-3.5 h-3.5 text-slate-400" />
+                                        <span>Kareli Defter</span>
                                     </button>
                                     <button
                                         onClick={() => setSurface('lined')}
                                         className={cn(
-                                            "w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold border transition-all",
+                                            "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all",
                                             surface === 'lined' ? "bg-indigo-600 border-indigo-400 text-white" : "border-white/10 hover:bg-white/10 text-slate-300"
                                         )}
                                     >
-                                        <AlignJustify className="w-4 h-4 text-slate-400" />
+                                        <AlignJustify className="w-3.5 h-3.5 text-slate-400" />
                                         <span>Çizgili Defter</span>
                                     </button>
                                 </div>
@@ -836,14 +845,14 @@ export function PresentationDrawingBoard({
                         </Popover>
                     </div>
 
-                    {/* Geri Al / İleri Al / Temizle / İndir */}
-                    <div className="flex items-center gap-1 px-1.5 border-r border-white/15">
+                    {/* 4. Geri Al & Temizle & Diğer */}
+                    <div className="flex items-center gap-0.5 px-0.5 border-r border-white/15">
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={undo}
                             disabled={historyStep <= 0}
-                            className="h-10 w-10 rounded-xl text-slate-300 hover:bg-white/10 disabled:opacity-20"
+                            className="h-9 w-9 rounded-xl text-slate-300 hover:bg-white/10 disabled:opacity-20"
                             title="Geri Al (Ctrl+Z)"
                         >
                             <Undo2 className="w-4 h-4" />
@@ -852,56 +861,56 @@ export function PresentationDrawingBoard({
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={redo}
-                            disabled={historyStep >= history.length - 1}
-                            className="h-10 w-10 rounded-xl text-slate-300 hover:bg-white/10 disabled:opacity-20"
-                            title="İleri Al (Ctrl+Y)"
-                        >
-                            <Redo2 className="w-4 h-4" />
-                        </Button>
-
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setIsLayerVisible(prev => !prev)}
-                            className={cn("h-10 w-10 rounded-xl transition-all", !isLayerVisible ? "text-amber-400 bg-amber-500/20" : "text-slate-300 hover:bg-white/10")}
-                            title={isLayerVisible ? "Çizimleri Gizle" : "Çizimleri Göster"}
-                        >
-                            {isLayerVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                        </Button>
-
-                        <Button
-                            variant="ghost"
-                            size="icon"
                             onClick={clearCanvas}
-                            className="h-10 w-10 rounded-xl text-rose-400 hover:bg-rose-500/20"
+                            className="h-9 w-9 rounded-xl text-rose-400 hover:bg-rose-500/20"
                             title="Tümünü Temizle"
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
 
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl text-slate-400 hover:bg-white/10" title="Daha Fazla">
+                                    <MoreHorizontal className="w-4 h-4" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent side="top" align="center" className="w-48 p-2 rounded-2xl border-white/20 bg-slate-950/95 backdrop-blur-3xl shadow-2xl text-white mb-2">
+                                <div className="space-y-1">
+                                    <button
+                                        onClick={redo}
+                                        disabled={historyStep >= history.length - 1}
+                                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all text-slate-300"
+                                    >
+                                        <Redo2 className="w-4 h-4" /> <span>İleri Al (Ctrl+Y)</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setIsLayerVisible(prev => !prev)}
+                                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold hover:bg-white/10 transition-all text-slate-300"
+                                    >
+                                        {isLayerVisible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                        <span>{isLayerVisible ? 'Çizimleri Gizle' : 'Çizimleri Göster'}</span>
+                                    </button>
+                                    <button
+                                        onClick={exportDrawing}
+                                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold hover:bg-white/10 transition-all text-emerald-400"
+                                    >
+                                        <Download className="w-4 h-4" /> <span>PNG Olarak İndir</span>
+                                    </button>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+                    </div>
+
+                    {/* 5. Kapat Butonu */}
+                    <div className="flex items-center pl-0.5">
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={exportDrawing}
-                            className="h-10 w-10 rounded-xl text-emerald-400 hover:bg-emerald-500/20"
-                            title="Çizimi PNG Olarak İndir"
-                        >
-                            <Download className="w-4 h-4" />
-                        </Button>
-                    </div>
-
-                    {/* Kapat Butonu */}
-                    <div className="flex items-center pl-1">
-                        <Button
-                            variant="ghost"
-                            size="sm"
                             onClick={onClose}
-                            className="h-10 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs gap-1.5 shadow-md shadow-rose-600/30 transition-all active:scale-95"
+                            className="h-9 w-9 rounded-xl bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/30 transition-all active:scale-95"
                             title="Çizim Modunu Kapat (Esc / D)"
                         >
                             <X className="w-4 h-4" />
-                            <span>Kapat</span>
                         </Button>
                     </div>
                 </div>
