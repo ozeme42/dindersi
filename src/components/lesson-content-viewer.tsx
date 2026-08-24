@@ -225,16 +225,16 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-4xl mx-auto")}>
              <div className={cn(
-                "relative p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-lg",
-                isTeacher ? "py-4 mb-6 mt-2" : "mb-3 md:mb-4"
+                "relative rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-sm",
+                isTeacher ? "py-2.5 px-6 mb-3 mt-0" : "py-2 px-4 mb-2"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
                 <h2 className={cn("font-black text-slate-800 dark:text-white",
-                    isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl")
+                    isTeacher ? "text-2xl md:text-3xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl")
                 )}>{step.title}</h2>
             </div>
 
-            <div className={cn("w-full grid gap-4 pb-24", isTeacher ? "grid-cols-1 md:grid-cols-2 gap-8" : "grid-cols-1")}>
+            <div className={cn("w-full grid gap-3 pb-16", isTeacher ? "grid-cols-1 md:grid-cols-2 gap-4" : "grid-cols-1")}>
                 {step.questions.map((q, index) => {
                     const userAnswer = answers && answers[index];
                     const isAnswered = userAnswer !== undefined;
@@ -447,35 +447,36 @@ export function ContentListPlayer({
             )}
             
             {/* BAŞLIK */}
+            {/* BAŞLIK */}
             <div className={cn(
-                "relative z-20 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 w-full max-w-full text-center mb-6 overflow-hidden shadow-lg",
-                isTeacher ? "py-6 mt-2 px-6" : "p-4 md:p-6"
+                "relative z-20 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 w-full max-w-full text-center overflow-hidden shadow-sm",
+                isTeacher ? "py-2.5 px-5 mb-3 mt-0" : "p-3 md:p-4 mb-3"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-                <div className="flex items-center justify-center gap-3">
-                    <Sparkles className="text-purple-600 dark:text-purple-400 h-5 w-5 animate-pulse" />
+                <div className="flex items-center justify-center gap-2.5">
+                    <Sparkles className="text-purple-600 dark:text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
                     <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 to-purple-700 dark:from-indigo-300 dark:to-purple-300",
-                        isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl")
+                        isTeacher ? "text-2xl md:text-3xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-lg md:text-xl")
                     )}>{step.title}</h2>
-                    <Sparkles className="text-purple-600 dark:text-purple-400 h-5 w-5 animate-pulse" />
+                    <Sparkles className="text-purple-600 dark:text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
                 </div>
             </div>
               
              <div className={cn(
-                 "relative w-full pb-24 flex flex-col items-center", 
-                 isTeacher ? "mt-4" : "mt-2"
+                 "relative w-full pb-16 flex flex-col items-center", 
+                 isTeacher ? "mt-1" : "mt-2"
              )}>
                 <div className={cn(
-                    "grid w-full max-w-full px-2 md:px-4 gap-4 md:gap-6 pt-2 items-stretch",
-                    "grid-cols-1 lg:grid-cols-2"
+                    "grid w-full max-w-full gap-2.5 md:gap-3.5 items-stretch transition-all duration-300",
+                    visibleSentences.length === 1 
+                        ? "grid-cols-1 max-w-4xl" 
+                        : "grid-cols-1 md:grid-cols-2"
                 )}>
                     {visibleSentences.map((sentence, index) => {
-                        
                         const style = styles[index % styles.length]; 
-                        const icons = decoIcons[index % decoIcons.length];
-
                         const shouldAnimate = isTeacher && index === visibleSentences.length - 1 && !isSingleCardMode; 
                         const isLastItem = index === visibleSentences.length - 1;
+                        const isOddLast = visibleSentences.length > 2 && visibleSentences.length % 2 !== 0 && index === visibleSentences.length - 1;
 
                         return (
                             <div 
@@ -483,28 +484,29 @@ export function ContentListPlayer({
                                 ref={isLastItem ? scrollRef : null}
                                 className={cn(
                                     "relative w-full flex-shrink-0 z-10",
-                                    isTeacher ? "animate-in slide-in-from-bottom-8 duration-500" : "animate-in slide-in-from-bottom-4 duration-500"
+                                    isOddLast && "md:col-span-2 md:max-w-3xl md:mx-auto",
+                                    isTeacher ? "animate-in slide-in-from-bottom-4 duration-300" : "animate-in slide-in-from-bottom-2 duration-300"
                                 )}>
                                 
                                 <div className={cn(
-                                    "relative w-full h-full py-4 px-5 md:py-5 md:px-6 rounded-2xl border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 flex flex-col md:flex-row justify-start items-center text-left gap-4 backdrop-blur-xl",
+                                    "relative w-full h-full py-3.5 px-4 md:py-4 md:px-5 rounded-2xl border shadow-md hover:shadow-lg transition-all duration-200 flex flex-row justify-start items-center text-left gap-3.5 backdrop-blur-xl",
                                     style.bg, style.border
                                 )}>
                                     {/* Parlak üst çizgi */}
                                     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                                     {/* Numara rozeti */}
                                     <div className={cn(
-                                        "flex-shrink-0 w-11 h-11 md:w-13 md:h-13 rounded-xl flex items-center justify-center bg-black/5 dark:bg-black/30 border-2",
+                                        "flex-shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-xl flex items-center justify-center bg-black/5 dark:bg-black/30 border-2",
                                         style.circleBorder
                                     )}>
-                                        <span className={cn("font-black text-lg", style.numberColor)}>{index + 1}</span>
+                                        <span className={cn("font-black text-base md:text-lg", style.numberColor)}>{index + 1}</span>
                                     </div>
                                     <div className={cn(
                                         "leading-relaxed font-bold break-words flex-1 z-10 relative",
                                         style.textColor,
                                         isTeacher 
-                                            ? "text-2xl md:text-3xl tracking-wide" 
-                                            : "text-base md:text-xl tracking-wide"
+                                            ? "text-xl md:text-2xl tracking-normal" 
+                                            : "text-base md:text-lg tracking-normal"
                                     )}>
                                         <span className="flex-1">
                                             {shouldAnimate && animationSpeed !== 'off' ? (
@@ -554,21 +556,21 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleC
     };
 
     return (
-        <div className={cn('flex flex-col h-full w-full items-center justify-start p-2', isTeacher ? "max-w-[98%] mx-auto pt-4" : "max-w-6xl mx-auto justify-center")}>
+        <div className={cn('flex flex-col h-full w-full items-center justify-start p-2', isTeacher ? "max-w-[98%] mx-auto pt-0" : "max-w-6xl mx-auto justify-center")}>
             <motion.div 
-                initial={{ opacity: 0, y: -20 }}
+                initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={cn("relative p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 mb-6 w-full text-center overflow-hidden shadow-lg")}
+                className={cn("relative rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 mb-3 w-full text-center overflow-hidden shadow-sm", isTeacher ? "py-2.5 px-6" : "p-3")}
             >
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn("font-black tracking-tight text-slate-800 dark:text-white drop-shadow-md", isTeacher ? "text-4xl md:text-5xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-3xl"))}>{title}</h2>
+                <h2 className={cn("font-black tracking-tight text-slate-800 dark:text-white drop-shadow-sm", isTeacher ? "text-2xl md:text-3xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-lg md:text-xl"))}>{title}</h2>
             </motion.div>
              <motion.div 
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
                 className={cn(
-                "w-full flex-grow grid gap-4 md:gap-6", 
+                "w-full flex-grow grid gap-3 md:gap-4 pb-16", 
                 isTeacher 
                     ? "grid-cols-1 md:grid-cols-2 content-start" 
                     : "grid-cols-1 md:grid-cols-2"
@@ -2445,7 +2447,7 @@ export function LessonContentViewer({
         )}
 
         {/* --- İÇERİK ALANI --- */}
-        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-900 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
+        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-900 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-20' : 'pb-24'}`)}>
              {!isFullWidthStep && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
                      <div className="absolute top-[10%] left-[10%] w-72 h-72 bg-indigo-900/20 rounded-full blur-[100px]" />
@@ -2453,7 +2455,7 @@ export function LessonContentViewer({
                  </div>
              )}
 
-           <div className={cn("relative z-10 w-full h-full flex flex-col justify-start", !isFullWidthStep && "py-4 md:py-8 px-4 lg:px-8")}>
+           <div className={cn("relative z-10 w-full h-full flex flex-col justify-start", !isFullWidthStep && (isTeacher ? "py-2 px-3 md:px-6" : "py-4 md:py-8 px-4 lg:px-8"))}>
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                     key={currentStepIndex}
