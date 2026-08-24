@@ -6,13 +6,14 @@ import {
     Loader2, ArrowLeft, Presentation, Settings, Sun, Moon, LayoutList, 
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
-    ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle
+    ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Topic, Unit, LessonStep } from '@/lib/types';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { PresentationDrawingBoard } from '@/components/presentation-drawing-board';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -101,7 +102,10 @@ function PresentationPageContent() {
     // 4. Tahtayı Karart (Blackout / Freeze Mode)
     const [isBlackout, setIsBlackout] = useState(false);
 
-    // 5. Ses Efektleri Açık/Kapalı
+    // 5. Canlı Çizim & Tahta (Drawing Board Mode)
+    const [isDrawingOpen, setIsDrawingOpen] = useState(false);
+
+    // 6. Ses Efektleri Açık/Kapalı
     const [isSoundEnabled, setIsSoundEnabled] = useState(true);
 
     // Timer Effect
@@ -202,11 +206,15 @@ function PresentationPageContent() {
             } else if (e.key === 'g' || e.key === 'G') {
                 e.preventDefault();
                 setIsSlideDrawerOpen(prev => !prev);
+            } else if (e.key === 'd' || e.key === 'D') {
+                e.preventDefault();
+                setIsDrawingOpen(prev => !prev);
             } else if (e.key === 'Escape') {
                 setIsBlackout(false);
                 setIsTimerOpen(false);
                 setIsPickerOpen(false);
                 setIsSlideDrawerOpen(false);
+                setIsDrawingOpen(false);
             }
         };
 
@@ -384,6 +392,23 @@ function PresentationPageContent() {
                         </button>
                     )}
 
+                    {/* Hızlı Çizim & Tahta Butonu (D) */}
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsDrawingOpen(prev => !prev)}
+                        className={cn(
+                            "h-9 px-3 rounded-xl font-bold text-xs gap-1.5 transition-all border",
+                            isDrawingOpen 
+                                ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/50 shadow-md shadow-cyan-500/20" 
+                                : "bg-white/5 hover:bg-white/10 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10"
+                        )}
+                        title="Canlı Çizim & Not Alma (D)"
+                    >
+                        <Pencil className="w-3.5 h-3.5 text-cyan-400" />
+                        <span className="hidden sm:inline">Çizim (D)</span>
+                    </Button>
+
                     {/* TEK TUŞ SUNUM ARAÇLARI & AYARLAR MENÜSÜ */}
                     <Popover open={isToolsOpen} onOpenChange={setIsToolsOpen}>
                         <PopoverTrigger asChild>
@@ -418,10 +443,23 @@ function PresentationPageContent() {
                             </div>
 
                             <div className="p-4 space-y-4 max-h-[80vh] overflow-y-auto">
-                                {/* 1. Sınıf Araçları 2x2 Izgara */}
+                                {/* 1. Sınıf Araçları Izgara */}
                                 <div className="space-y-1.5">
                                     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tahta Araçları</span>
                                     <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => { setIsDrawingOpen(true); setIsToolsOpen(false); }}
+                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-cyan-500/20 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 transition-all text-left group"
+                                        >
+                                            <div className="p-2 rounded-lg bg-cyan-500/20 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-colors">
+                                                <Pencil className="w-4 h-4" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="font-bold text-xs">Çizim & Not (D)</span>
+                                                <span className="text-[10px] opacity-75">Kalem & Şekiller</span>
+                                            </div>
+                                        </button>
+
                                         <button
                                             onClick={() => { setIsTimerOpen(true); setIsToolsOpen(false); }}
                                             className="flex items-center gap-2.5 p-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 transition-all text-left group"
@@ -463,14 +501,14 @@ function PresentationPageContent() {
 
                                         <button
                                             onClick={() => { setIsBlackout(true); setIsToolsOpen(false); }}
-                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-all text-left group"
+                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-all text-left group col-span-2"
                                         >
                                             <div className="p-2 rounded-lg bg-rose-500/20 group-hover:bg-rose-500 group-hover:text-white transition-colors">
                                                 <EyeOff className="w-4 h-4" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Karart (B)</span>
-                                                <span className="text-[10px] opacity-75">Dikkati topla</span>
+                                                <span className="font-bold text-xs">Tahtayı Karart (B)</span>
+                                                <span className="text-[10px] opacity-75">Dikkati öğretmene topla</span>
                                             </div>
                                         </button>
                                     </div>
@@ -904,6 +942,13 @@ function PresentationPageContent() {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* ══ 5. CANLI ÇİZİM, BEYAZ TAHTA & NOT ALMA ARACI ══ */}
+            <PresentationDrawingBoard
+                isOpen={isDrawingOpen}
+                onClose={() => setIsDrawingOpen(false)}
+                isDarkMode={isDarkMode}
+            />
         </main>
     );
 }
