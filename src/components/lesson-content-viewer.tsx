@@ -48,7 +48,8 @@ export type LessonContentViewerProps = {
     onAllTfAnswered?: (stepIndex?: number) => void;
     isSingleCardMode?: boolean;
     animationSpeed?: 'off' | 'slow' | 'normal' | 'fast';
-    activeStepIndex?: number;
+    jumpToStep?: number | null;
+    onJumpDone?: () => void;
     onStepIndexChange?: (index: number, total: number) => void;
 };
 
@@ -2008,7 +2009,8 @@ export function LessonContentViewer({
     onAllTfAnswered,
     isSingleCardMode,
     animationSpeed = 'normal',
-    activeStepIndex,
+    jumpToStep,
+    onJumpDone,
     onStepIndexChange
 }: LessonContentViewerProps) {
     const { user } = useAuth();
@@ -2042,15 +2044,22 @@ export function LessonContentViewer({
         onStepIndexChangeRef.current = onStepIndexChange;
     }, [onStepIndexChange]);
 
+    // Jump to Step command from parent
     useEffect(() => {
-        if (typeof activeStepIndex === 'number' && activeStepIndex >= 0 && activeStepIndex < steps.length && activeStepIndex !== currentStepIndex) {
-            setDirection(activeStepIndex > currentStepIndex ? 1 : -1);
-            setCurrentStepIndex(activeStepIndex);
+        if (typeof jumpToStep === 'number' && jumpToStep >= 0 && jumpToStep < steps.length && jumpToStep !== currentStepIndex) {
+            setDirection(jumpToStep > currentStepIndex ? 1 : -1);
+            setCurrentStepIndex(jumpToStep);
+            onJumpDone?.();
         }
-    }, [activeStepIndex, steps.length, currentStepIndex]);
+    }, [jumpToStep, steps.length, currentStepIndex, onJumpDone]);
 
+    // Notify parent only when step index or total steps count actually change
+    const prevNotifiedRef = useRef<{ index: number; total: number }>({ index: -1, total: -1 });
     useEffect(() => {
-        onStepIndexChangeRef.current?.(currentStepIndex, steps.length);
+        if (prevNotifiedRef.current.index !== currentStepIndex || prevNotifiedRef.current.total !== steps.length) {
+            prevNotifiedRef.current = { index: currentStepIndex, total: steps.length };
+            onStepIndexChangeRef.current?.(currentStepIndex, steps.length);
+        }
     }, [currentStepIndex, steps.length]);
 
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);

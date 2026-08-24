@@ -50,10 +50,11 @@ function PresentationPageContent() {
     // Step Tracking & Jump
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [totalStepsCount, setTotalStepsCount] = useState(0);
+    const [jumpToStep, setJumpToStep] = useState<number | null>(null);
 
     const handleStepIndexChange = useCallback((idx: number, total: number) => {
-        setCurrentStepIndex(prev => (prev !== idx ? idx : prev));
-        setTotalStepsCount(prev => (prev !== total ? total : prev));
+        setCurrentStepIndex(idx);
+        setTotalStepsCount(total);
     }, []);
 
     // Live Clock State
@@ -428,7 +429,8 @@ function PresentationPageContent() {
                     isFullscreen={true}
                     isSingleCardMode={isSingleCardMode}
                     animationSpeed={animationSpeed}
-                    activeStepIndex={currentStepIndex}
+                    jumpToStep={jumpToStep}
+                    onJumpDone={() => setJumpToStep(null)}
                     onStepIndexChange={handleStepIndexChange}
                 />
             </div>
@@ -663,7 +665,7 @@ function PresentationPageContent() {
                                         <button
                                             key={idx}
                                             onClick={() => {
-                                                setCurrentStepIndex(idx);
+                                                setJumpToStep(idx);
                                                 setIsSlideDrawerOpen(false);
                                             }}
                                             className={cn(
