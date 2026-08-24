@@ -39,6 +39,7 @@ type RegisteredAssetsDrawerProps = {
         unitId?: string;
         topicId?: string;
         topicTitle?: string;
+        sourceText?: string;
     };
 };
 
@@ -129,7 +130,10 @@ export function RegisteredAssetsDrawer({
     // 1-Click Conversions:
     const handleConvertConceptsToExplanation = () => {
         if (concepts.length === 0) {
-            toast({ title: "Veri Yok", description: "Bu konuya ait kayıtlı kavram bulunamadı." });
+            toast({ 
+                title: "Veritabanında Kayıt Yok", 
+                description: "Bu konuya ait önceden girilmiş kavram yok. Lütfen 'AI Stüdyosu' butonunu kullanarak kaynak metninizden anında kavram kartı üretin." 
+            });
             return;
         }
         const step: ConceptExplanationStep = {
@@ -145,7 +149,10 @@ export function RegisteredAssetsDrawer({
 
     const handleConvertConceptsToFlashcards = () => {
         if (concepts.length === 0) {
-            toast({ title: "Veri Yok", description: "Bu konuya ait kayıtlı kavram bulunamadı." });
+            toast({ 
+                title: "Veritabanında Kayıt Yok", 
+                description: "Bu konuya ait önceden girilmiş kavram yok. Lütfen 'AI Stüdyosu' butonunu kullanarak kaynak metninizden 3D Bilgi Kartı üretin." 
+            });
             return;
         }
         const step: FlashcardStep = {
@@ -156,22 +163,24 @@ export function RegisteredAssetsDrawer({
         };
         onAddSteps([step]);
         onOpenChange(false);
-        toast({ title: "Eklendi", description: `${concepts.length} adet bilgi kartı slayt olarak eklendi.` });
+        toast({ title: "Eklendi", description: `${concepts.length} adet bilgi kartı eklendi.` });
     };
 
-    const handleConvertConceptsToAnagram = () => {
+    const handleConvertConceptsToAnagrams = () => {
         if (concepts.length === 0) {
-            toast({ title: "Veri Yok", description: "Bu konuya ait kayıtlı kavram bulunamadı." });
+            toast({ 
+                title: "Veritabanında Kayıt Yok", 
+                description: "Bu konuya ait önceden girilmiş kavram yok. Lütfen 'AI Stüdyosu' ile kaynak metninizden kelime oyunları üretin." 
+            });
             return;
         }
         const step: AnagramGameStep = {
             type: 'anagramGame',
-            title: `🔤 ${context.topicTitle || 'Konu'} Anagram Oyunu`,
+            title: `🔤 Kelime Dehası (${context.topicTitle || 'Konu'})`,
             cards: concepts.map(c => {
-                const letters = c.concept.split('');
-                const scrambled = [...letters].sort(() => Math.random() - 0.5).join('');
+                const scrambled = c.concept.split('').sort(() => Math.random() - 0.5).join('');
                 return {
-                    definition: c.definition || `${c.concept} kavramını bulun.`,
+                    definition: c.definition || `${c.concept} kavramını harfleri doğru sıraya dizerek bulun.`,
                     scrambledWord: scrambled.toLowerCase(),
                     correctAnswer: c.concept
                 };
@@ -180,12 +189,15 @@ export function RegisteredAssetsDrawer({
         };
         onAddSteps([step]);
         onOpenChange(false);
-        toast({ title: "Eklendi", description: `${concepts.length} adet anagram kartı slayt olarak eklendi.` });
+        toast({ title: "Eklendi", description: `${concepts.length} adet anagram kartı eklendi.` });
     };
 
     const handleConvertSentencesToScramble = () => {
         if (sentences.length === 0) {
-            toast({ title: "Veri Yok", description: "Bu konuya ait kayıtlı cümle bulunamadı." });
+            toast({ 
+                title: "Veritabanında Kayıt Yok", 
+                description: "Bu konuya ait önceden girilmiş cümle yok. Lütfen 'AI Stüdyosu' ile kaynak metninizden cümle oyunları üretin." 
+            });
             return;
         }
         const steps: SentenceScrambleStep[] = sentences.map((s, idx) => ({
@@ -202,7 +214,10 @@ export function RegisteredAssetsDrawer({
 
     const handleConvertQuestionsToSteps = () => {
         if (questions.length === 0) {
-            toast({ title: "Veri Yok", description: "Bu konuya ait kayıtlı soru bulunamadı." });
+            toast({ 
+                title: "Veritabanında Kayıt Yok", 
+                description: "Bu konuya ait önceden girilmiş soru yok. Lütfen 'AI Stüdyosu' ile kaynak metninizden soru üretin." 
+            });
             return;
         }
         const newSteps: LessonStep[] = [];
@@ -254,11 +269,12 @@ export function RegisteredAssetsDrawer({
         }
     };
 
-    // ⚡ 10 ADIMLIK İDEAL DERSİ OTOMATİK KURGULA
+    // ⚡ 10 ADIMLIK İDEAL DERSİ OTOMATİK KURGULA (Kayıtlı Varlık + AI Hibrit)
     const handleBuild10StepMasterFlow = async () => {
         setIsBuildingAutoFlow(true);
         try {
             const topicTitle = context.topicTitle || 'Ders Konusu';
+            const textToAnalyze = context.sourceText?.trim() || topicTitle;
             const generatedFlow: LessonStep[] = [];
 
             // AI ile Hedefler, Özet ve HTML Slaytı üret
@@ -272,26 +288,84 @@ export function RegisteredAssetsDrawer({
             ];
             let htmlSlideContent = `<div class="p-8 bg-slate-900 rounded-3xl text-white text-center"><h1 class="text-3xl font-black mb-4">${topicTitle}</h1><p class="text-slate-300">İnteraktif ders sunumuna hoş geldiniz.</p></div>`;
 
+            let fallbackConcepts = concepts;
+            let fallbackSentences = sentences;
+            let fallbackQuestions = questions;
+
             try {
                 const aiResult = await generateLessonContent({
-                    topicSummary: topicTitle,
+                    topicSummary: textToAnalyze,
                     modules: {
                         learningObjectives: true,
                         summary: true,
+                        conceptExplanations: concepts.length === 0,
+                        flashcards: concepts.length === 0,
+                        anagramQuestions: concepts.length === 0,
+                        sentenceScrambleQuestions: sentences.length === 0,
+                        trueFalseQuestions: questions.length === 0,
+                        multipleChoiceQuestions: questions.length === 0,
                     }
                 });
+
                 if (aiResult.learningObjectives && aiResult.learningObjectives.length > 0) {
                     aiObjectives = aiResult.learningObjectives;
                 }
                 if (aiResult.summary && aiResult.summary.length > 0) {
                     aiSummaryItems = aiResult.summary;
                 }
+
+                // AI'dan türetilen kavramlar
+                if (fallbackConcepts.length === 0 && aiResult.conceptExplanations) {
+                    fallbackConcepts = aiResult.conceptExplanations.map((c, idx) => ({
+                        id: `ai_c_${idx}`,
+                        concept: c.concept,
+                        definition: c.definition
+                    }));
+                }
+
+                // AI'dan türetilen cümleler
+                if (fallbackSentences.length === 0 && aiResult.sentenceScrambleQuestions) {
+                    fallbackSentences = aiResult.sentenceScrambleQuestions.map((s, idx) => ({
+                        id: `ai_s_${idx}`,
+                        correctSentence: s.correctSentence,
+                        scrambledSentence: s.scrambledSentence
+                    }));
+                }
+
+                // AI'dan türetilen sorular
+                if (fallbackQuestions.length === 0) {
+                    const aiQs: Question[] = [];
+                    if (aiResult.trueFalseQuestions) {
+                        aiResult.trueFalseQuestions.forEach((tf, idx) => {
+                            aiQs.push({
+                                id: `ai_tf_${idx}`,
+                                type: 'tf',
+                                text: tf.statement,
+                                correctAnswer: tf.isTrue ? 'Doğru' : 'Yanlış',
+                                isTrue: tf.isTrue
+                            } as any);
+                        });
+                    }
+                    if (aiResult.multipleChoiceQuestions) {
+                        aiResult.multipleChoiceQuestions.forEach((mcq, idx) => {
+                            aiQs.push({
+                                id: `ai_mcq_${idx}`,
+                                type: 'mcq',
+                                text: mcq.question,
+                                options: mcq.options,
+                                correctAnswer: mcq.correctAnswer
+                            } as any);
+                        });
+                    }
+                    fallbackQuestions = aiQs;
+                }
+
             } catch (err) {
                 console.warn("AI generation fallback for auto flow:", err);
             }
 
             try {
-                const htmlResult = await generateHtmlSlide({ topicSummary: topicTitle });
+                const htmlResult = await generateHtmlSlide({ topicSummary: textToAnalyze });
                 if (htmlResult && htmlResult.htmlContent) {
                     htmlSlideContent = htmlResult.htmlContent;
                 }
@@ -316,12 +390,12 @@ export function RegisteredAssetsDrawer({
                 isPublished: true
             });
 
-            // 3. KAYITLI KAVRAMLAR
-            if (concepts.length > 0) {
+            // 3. KAVRAMLAR
+            if (fallbackConcepts.length > 0) {
                 generatedFlow.push({
                     type: 'conceptExplanation',
                     title: `📌 ${topicTitle} Kavramları`,
-                    items: concepts.map(c => ({ concept: c.concept, definition: c.definition })),
+                    items: fallbackConcepts.map(c => ({ concept: c.concept, definition: c.definition })),
                     isPublished: true
                 });
             }
@@ -343,21 +417,21 @@ export function RegisteredAssetsDrawer({
             });
 
             // 6. BİLGİ KARTLARI (FLASHCARD)
-            if (concepts.length > 0) {
+            if (fallbackConcepts.length > 0) {
                 generatedFlow.push({
                     type: 'flashcard',
                     title: '💡 Bilgi & Hafıza Kartları',
-                    cards: concepts.map(c => ({ term: c.concept, definition: c.definition })),
+                    cards: fallbackConcepts.map(c => ({ term: c.concept, definition: c.definition })),
                     isPublished: true
                 });
             }
 
             // 7. ANAGRAM BULMACA KARTLARI
-            if (concepts.length > 0) {
+            if (fallbackConcepts.length > 0) {
                 generatedFlow.push({
                     type: 'anagramGame',
                     title: '🔤 Anagram / Kelime Oyunu',
-                    cards: concepts.map(c => {
+                    cards: fallbackConcepts.map(c => {
                         const scrambled = c.concept.split('').sort(() => Math.random() - 0.5).join('');
                         return {
                             definition: c.definition || `${c.concept} kavramını bulun.`,
@@ -370,8 +444,8 @@ export function RegisteredAssetsDrawer({
             }
 
             // 8. CÜMLE KURMA ETKİNLİĞİ
-            if (sentences.length > 0) {
-                sentences.slice(0, 2).forEach((s, idx) => {
+            if (fallbackSentences.length > 0) {
+                fallbackSentences.slice(0, 2).forEach((s, idx) => {
                     generatedFlow.push({
                         type: 'sentenceScramble',
                         title: `🧩 Cümle Kurma ${idx + 1}`,
@@ -395,8 +469,8 @@ export function RegisteredAssetsDrawer({
             } as ActivityLinkStep);
 
             // 10. DEĞERLENDİRME SORULARI
-            if (questions.length > 0) {
-                const tfQ = questions.filter(q => q.type === 'tf');
+            if (fallbackQuestions.length > 0) {
+                const tfQ = fallbackQuestions.filter(q => q.type === 'tf');
                 if (tfQ.length > 0) {
                     generatedFlow.push({
                         type: 'trueFalseList',
@@ -408,7 +482,7 @@ export function RegisteredAssetsDrawer({
                         isPublished: true
                     });
                 }
-                const mcqQ = questions.filter(q => q.type === 'mcq');
+                const mcqQ = fallbackQuestions.filter(q => q.type === 'mcq');
                 if (mcqQ.length > 0) {
                     mcqQ.slice(0, 2).forEach((q: any, i) => {
                         generatedFlow.push({

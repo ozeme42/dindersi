@@ -452,7 +452,8 @@ export function TopicEditor({
         unitId: unitId || undefined,
         topicId: topicId || undefined,
         topicTitle: title || undefined,
-    }), [courseId, unitId, topicId, title]);
+        sourceText: sourceText || undefined,
+    }), [courseId, unitId, topicId, title, sourceText]);
     
     const sensors = useSensors(
         useSensor(PointerSensor, {
