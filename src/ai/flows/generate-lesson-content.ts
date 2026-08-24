@@ -26,6 +26,8 @@ const GenerateLessonContentInputSchema = z.object({
     fillInTheBlankQuestions: z.boolean().optional(),
     anagramQuestions: z.boolean().optional(),
     sentenceScrambleQuestions: z.boolean().optional(),
+    infographicTable: z.boolean().optional(),
+    visualInfographics: z.boolean().optional(),
     visuals: z.boolean().optional(),
     conceptMap: z.boolean().optional(),
     htmlSlide: z.boolean().optional(),
@@ -40,6 +42,18 @@ export type GenerateLessonContentOutput = {
   conceptExplanations?: { concept: string; definition: string }[];
   keyConcepts?: string[];
   flashcards?: { term: string; definition: string }[];
+  infographicTable?: {
+    title: string;
+    description?: string;
+    columns: string[];
+    rows: string[][];
+  };
+  visualInfographics?: {
+    title: string;
+    type?: 'process' | 'comparison' | 'stat-grid' | 'timeline';
+    items: { icon: string; title: string; subtitle?: string; description: string; badge?: string }[];
+    summaryNote?: string;
+  };
   multipleChoiceQuestions?: { question: string; options: string[]; correctAnswer: string }[];
   trueFalseQuestions?: { statement: string; isTrue: boolean }[];
   fillInTheBlankQuestions?: { sentenceWithBlank: string; options: string[]; correctAnswer: string }[];
@@ -50,6 +64,25 @@ export type GenerateLessonContentOutput = {
 };
 
 const moduleInstructions: Record<string, string> = {
+  infographicTable: `"infographicTable": {
+    "title": "Hükümlerine Göre Namaz Çeşitleri Karşılaştırma Tablosu",
+    "description": "Namazların dini hükümleri, vakitleri ve temel özellikleri",
+    "columns": ["Namaz Türü", "Hükmü", "Örnekler", "Kılınış Özelliği"],
+    "rows": [
+      ["Farz Namazlar", "Kesin Farz (Farz-ı Ayn / Kifaye)", "5 Vakit, Cuma, Cenaze", "Özürsüz terk edilemez, sevabı çok büyüktür."],
+      ["Vacip Namazlar", "Kuvvetli Dini Emir", "Vitir, Ramazan & Kurban Bayramı", "Kılınması dinen zorunludur, sevabı yüksektir."],
+      ["Nafile (Sünnet)", "Gönüllü İbadet & Sevap", "Teravih, Kuşluk, Teheccüt", "Peygamberimizin sünnetidir, eksikleri tamamlar."]
+    ]
+  }`,
+  visualInfographics: `"visualInfographics": {
+    "title": "Namaz İbadetinin 3 Temel Boyutu ve Aşamaları",
+    "items": [
+      { "icon": "🌱", "title": "1. Niyet ve Başlangıç", "subtitle": "Manevi Hazırlık", "description": "Dünyevi telaşlardan sıyrılarak yalnız Allah rızası için huzura durulur.", "badge": "İhlas" },
+      { "icon": "🤲", "title": "2. Kıraat ve Rükû", "subtitle": "Huzur ve Saygı", "description": "Kur'an ayetleri okunur, Rabbimizin yüceliği karşısında eğilinir.", "badge": "Tevazu" },
+      { "icon": "✨", "title": "3. Secde ve Selam", "subtitle": "En Yakın An", "description": "Kulun Allah'a en yakın olduğu an olan secde ile tamamlanır.", "badge": "Huzur" }
+    ],
+    "summaryNote": "Namaz, müminin gün içinde düzenli aralıklarla manevi olarak yenilenmesini sağlar."
+  }`,
   summary: `"summary": [
     { 
       "title": "Metindeki 1. Ana Konu Başlığı (Örn: Namaz İbadetinin Anlamı ve Önemi)", 

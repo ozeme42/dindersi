@@ -73,10 +73,12 @@ export type ActivityOption = {
 
 export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     // Anlatım Modülleri
+    { id: 'infographicTable', label: '📊 İnfografik Karşılaştırma Tablosu', description: 'Konunun temel türlerini ve hükümlerini özetleyen renkli infografik tablo', icon: <Layers className="w-4 h-4 text-cyan-400" />, category: 'anlatim' },
+    { id: 'visualInfographics', label: '🔄 Süreç & Akış İnfografiği', description: 'Konunun aşamalarını veya boyutlarını adım adım gösteren görsel infografik diyagram', icon: <Sparkles className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
     { id: 'htmlSlide', label: 'İnteraktif Zengin HTML Slayt', description: 'Gamma / NotebookLM kalitesinde görsel kartlı modern slayt', icon: <FileText className="w-4 h-4 text-sky-400" />, category: 'anlatim' },
     { id: 'conceptExplanations', label: 'Kavram Açıklamaları (Kartlar)', description: 'Konunun 3-5 temel kavramı ve detaylı pedagojik tanımları', icon: <Brain className="w-4 h-4 text-indigo-400" />, category: 'anlatim' },
     { id: 'flashcards', label: '3D Bilgi Kartları (Flashcards)', description: 'Dokunup 3D çevrilen etkileşimli terim-tanım hafıza kartları', icon: <BookOpen className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
-    { id: 'summary', label: 'Konu Özeti (Akordiyon)', description: '3 ana başlık altında toplanmış detaylı konu özeti maddeleri', icon: <Layers className="w-4 h-4 text-yellow-400" />, category: 'anlatim' },
+    { id: 'summary', label: 'Konu Özeti (Slayt Başlıkları)', description: 'Konu ana başlıkları ve her başlık altında kısa açıklama cümleleri', icon: <Layers className="w-4 h-4 text-yellow-400" />, category: 'anlatim' },
     { id: 'learningObjectives', label: 'Öğrenme Hedefleri', description: 'Öğrencinin dersten kazanacağı temel kazanım cümleleri', icon: <Target className="w-4 h-4 text-amber-400" />, category: 'anlatim' },
     { id: 'keyTakeaways', label: 'Anahtar Çıkarımlar & İpuçları', description: 'Dersin en kritik hap bilgileri ve sınav tüyoları', icon: <Sparkles className="w-4 h-4 text-rose-400" />, category: 'anlatim' },
     { id: 'conceptMap', label: 'Kavram Haritası Şeması', description: 'Kavramlar arası ilişkileri gösteren etkileşimli görsel şema', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
@@ -373,6 +375,125 @@ export function AiLessonStepGenerationDialog({
                     content: htmlList,
                     isPublished: true
                 });
+            });
+        }
+
+        // 2b. İnfografik Karşılaştırma Tablosu
+        if (output.infographicTable && output.infographicTable.columns && output.infographicTable.rows) {
+            const table = output.infographicTable;
+            const tableHtml = `
+            <div class="w-full max-w-5xl mx-auto p-4 sm:p-8 space-y-6">
+                <div class="text-center space-y-2">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-black uppercase tracking-wider">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                        📊 Karşılaştırmalı İnfografik Tablo
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-indigo-200 to-fuchsia-300">
+                        ${table.title}
+                    </h2>
+                    ${table.description ? `<p class="text-slate-300 text-sm max-w-2xl mx-auto font-medium">${table.description}</p>` : ''}
+                </div>
+
+                <div class="overflow-x-auto rounded-3xl border border-white/10 bg-slate-900/90 backdrop-blur-xl shadow-2xl">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-white/10 bg-slate-950/80">
+                                ${table.columns.map((col, cIdx) => `
+                                    <th class="p-4 sm:p-5 font-black text-xs sm:text-sm uppercase tracking-wider ${['text-cyan-300', 'text-indigo-300', 'text-emerald-300', 'text-amber-300', 'text-rose-300'][cIdx % 5]}">
+                                        ${col}
+                                    </th>
+                                `).join('')}
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 text-xs sm:text-sm text-slate-200">
+                            ${table.rows.map((row) => `
+                                <tr class="transition-colors hover:bg-slate-800/50">
+                                    ${row.map((cell, cIdx) => `
+                                        <td class="p-4 sm:p-5 ${cIdx === 0 ? 'font-black text-white' : 'font-medium'}">
+                                            ${cell}
+                                        </td>
+                                    `).join('')}
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>`;
+
+            newSteps.push({
+                type: 'htmlSlide',
+                title: `📊 ${table.title || 'İnfografik Tablo'}`,
+                htmlContent: tableHtml,
+                isPublished: true
+            });
+        }
+
+        // 2c. Süreç & Akış İnfografiği
+        if (output.visualInfographics && output.visualInfographics.items && output.visualInfographics.items.length > 0) {
+            const info = output.visualInfographics;
+            const cardGradients = [
+                { bg: 'from-sky-950/60 to-slate-900', border: 'border-sky-500/40', text: 'text-sky-300', numBg: 'bg-sky-500/20 text-sky-300 border-sky-400/40' },
+                { bg: 'from-emerald-950/60 to-slate-900', border: 'border-emerald-500/40', text: 'text-emerald-300', numBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40' },
+                { bg: 'from-amber-950/60 to-slate-900', border: 'border-amber-500/40', text: 'text-amber-300', numBg: 'bg-amber-500/20 text-amber-300 border-amber-400/40' },
+                { bg: 'from-violet-950/60 to-slate-900', border: 'border-violet-500/40', text: 'text-violet-300', numBg: 'bg-violet-500/20 text-violet-300 border-violet-400/40' },
+                { bg: 'from-rose-950/60 to-slate-900', border: 'border-rose-500/40', text: 'text-rose-300', numBg: 'bg-rose-500/20 text-rose-300 border-rose-400/40' },
+            ];
+
+            const infoHtml = `
+            <div class="w-full max-w-5xl mx-auto p-4 sm:p-8 space-y-8">
+                <div class="text-center space-y-2">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/10 to-indigo-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-black uppercase tracking-wider">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        🔄 Süreç & Akış İnfografiği
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-sky-200 to-indigo-300">
+                        ${info.title}
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-${Math.min(info.items.length, 3)} gap-5 relative">
+                    ${info.items.map((item, idx) => {
+                        const style = cardGradients[idx % cardGradients.length];
+                        return `
+                        <div class="relative group rounded-3xl bg-gradient-to-b ${style.bg} border ${style.border} p-6 shadow-xl hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between pb-3 border-b border-white/10">
+                                    <div class="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm border ${style.numBg}">
+                                        ${idx + 1}
+                                    </div>
+                                    <span class="text-2xl">${item.icon || '✨'}</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-black text-white">${item.title}</h3>
+                                    ${item.subtitle ? `<div class="text-xs ${style.text} font-bold uppercase tracking-wider mt-0.5">${item.subtitle}</div>` : ''}
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+                                    ${item.description}
+                                </p>
+                            </div>
+                            ${item.badge ? `
+                            <div class="mt-4 pt-3 border-t border-white/10">
+                                <span class="text-[11px] font-bold ${style.text} bg-black/30 px-2.5 py-1 rounded-full border border-white/10">
+                                    ${item.badge}
+                                </span>
+                            </div>` : ''}
+                        </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                ${info.summaryNote ? `
+                <div class="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex items-center gap-3 text-xs sm:text-sm text-indigo-200">
+                    <span class="text-lg">💡</span>
+                    <span>${info.summaryNote}</span>
+                </div>` : ''}
+            </div>`;
+
+            newSteps.push({
+                type: 'htmlSlide',
+                title: `🔄 ${info.title || 'Süreç İnfografiği'}`,
+                htmlContent: infoHtml,
+                isPublished: true
             });
         }
 
