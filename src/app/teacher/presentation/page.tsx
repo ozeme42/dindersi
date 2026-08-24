@@ -172,16 +172,6 @@ function PresentationPageContent() {
                     />
                 </div>
             )}
-                    <>
-                        <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] bg-indigo-900/20 rounded-full blur-[150px] mix-blend-screen animate-pulse" style={{ animationDuration: '10s' }} />
-                        <div className="absolute bottom-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-purple-900/20 rounded-full blur-[150px] mix-blend-screen animate-pulse" style={{ animationDuration: '14s', animationDelay: '2s' }} />
-                    </>
-                ) : (
-                    <>
-                        <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] bg-sky-200/40 rounded-full blur-[150px] mix-blend-multiply animate-pulse" style={{ animationDuration: '10s' }} />
-                        <div className="absolute bottom-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-indigo-200/40 rounded-full blur-[150px] mix-blend-multiply animate-pulse" style={{ animationDuration: '14s', animationDelay: '2s' }} />
-                    </>
-                )}
                 <div className={cn("absolute inset-0 bg-[url('/grid-pattern.svg')]", isDarkMode ? "opacity-[0.05]" : "opacity-[0.1]")} />
             </div>
 
