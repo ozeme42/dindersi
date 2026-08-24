@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { 
     X, Users, Sparkles, RotateCcw, UserMinus, Trophy, 
-    Check, Maximize2, Minimize2, Volume2, VolumeX, Flame, Zap, AlertCircle
+    Check, Maximize2, Minimize2, Volume2, VolumeX, Flame, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -15,11 +15,11 @@ import { Label } from '@/components/ui/label';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
-// ══ ÖNBELLEK (Modal her açıldığında tekrar yüklenip donma yapmaması için) ══
+// ══ ÖNBELLEK (Modal tekrar açıldığında donmayı önler) ══
 let cachedClasses: SchoolClass[] | null = null;
 let cachedStudents: UserProfile[] | null = null;
 
-// ══ RENK PALETİ (Canlı & Zengin Oyun Teması) ══
+// ══ CANLI OYUN RENK PALETİ ══
 const SLICE_COLORS = [
     { bg: '#2563eb', text: '#ffffff' }, // Royal Blue
     { bg: '#db2777', text: '#ffffff' }, // Magenta Pink
@@ -35,7 +35,7 @@ const SLICE_COLORS = [
     { bg: '#c026d3', text: '#ffffff' }, // Fuchsia
 ];
 
-// ══ WEB AUDIO SYNTHESIZER (Gerçek Zamanlı Tıkırtı & Zafer Sesi) ══
+// ══ SES SENTEZLEYİCİSİ (Web Audio API) ══
 class WheelAudioEngine {
     private ctx: AudioContext | null = null;
     public isMuted: boolean = false;
@@ -54,7 +54,7 @@ class WheelAudioEngine {
         return this.ctx;
     }
 
-    playTick(speedFactor: number = 1) {
+    playTick(intensity: number = 1) {
         if (this.isMuted) return;
         const ctx = this.getContext();
         if (!ctx) return;
@@ -64,10 +64,10 @@ class WheelAudioEngine {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
 
-            const baseFreq = 350 + Math.min(speedFactor * 500, 900);
+            const baseFreq = 300 + Math.min(intensity * 500, 800);
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(baseFreq, now);
-            osc.frequency.exponentialRampToValueAtTime(80, now + 0.03);
+            osc.frequency.exponentialRampToValueAtTime(70, now + 0.03);
 
             gain.gain.setValueAtTime(0.2, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
@@ -88,21 +88,21 @@ class WheelAudioEngine {
         try {
             const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
             notes.forEach((freq, i) => {
-                const now = ctx.currentTime + (i * 0.07);
+                const now = ctx.currentTime + (i * 0.08);
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
 
                 osc.type = i === notes.length - 1 ? 'triangle' : 'sine';
                 osc.frequency.setValueAtTime(freq, now);
 
-                gain.gain.setValueAtTime(0.2, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + (i === notes.length - 1 ? 1.0 : 0.35));
+                gain.gain.setValueAtTime(0.22, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + (i === notes.length - 1 ? 1.2 : 0.35));
 
                 osc.connect(gain);
                 gain.connect(ctx.destination);
 
                 osc.start(now);
-                osc.stop(now + (i === notes.length - 1 ? 1.1 : 0.4));
+                osc.stop(now + (i === notes.length - 1 ? 1.3 : 0.4));
             });
         } catch (e) {}
     }
@@ -135,16 +135,16 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
     const [isRolling, setIsRolling] = useState(false);
     const [winner, setWinner] = useState<{ id: string; name: string; avatarUrl?: string; className?: string } | null>(null);
     const [removedStudentIds, setRemovedStudentIds] = useState<Set<string>>(new Set());
-    const [rotation, setRotation] = useState(0);
-    const [needleAngle, setNeedleAngle] = useState(0);
+    const [needleShake, setNeedleShake] = useState(false);
     const [ledActiveIndex, setLedActiveIndex] = useState(0);
 
-    // Animation Refs
-    const requestRef = useRef<number | null>(null);
-    const totalRotationRef = useRef<number>(0);
-    const lastTickIndexRef = useRef<number>(-1);
+    // DOM & Rotation Refs
+    const wheelContainerRef = useRef<HTMLDivElement | null>(null);
+    const currentRotationRef = useRef<number>(0);
+    const isRollingRef = useRef<boolean>(false);
+    const tickerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Veri Çekme (Sınıf seçilene kadar kimse gelmez)
+    // Veri Çekme
     useEffect(() => {
         if (!isOpen) return;
 
@@ -183,7 +183,7 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
 
     const selectedClassData = useMemo(() => allClasses.find(c => c.id === classFilter), [classFilter, allClasses]);
 
-    // Aktif Sınıfın Öğrencileri (Maksimum 45 kişi - performans garantili)
+    // Aktif Sınıfın Öğrencileri
     const wheelItems = useMemo(() => {
         if (pickerSource === 'registered') {
             if (!selectedClassData) return [];
@@ -221,101 +221,107 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
     const totalSlices = wheelItems.length;
     const sliceAngle = 360 / (totalSlices || 1);
 
-    // LED Işık Animasyonu (Hafif interval)
+    // LED Işık Efekti
     useEffect(() => {
         const interval = setInterval(() => {
             setLedActiveIndex(prev => (prev + 1) % 24);
-        }, isRolling ? 80 : 300);
+        }, isRolling ? 70 : 300);
         return () => clearInterval(interval);
     }, [isRolling]);
 
-    // ══ SİNEMATİK DÖNÜŞ MOTORU ══
+    // Temizleme (Unmount durumunda)
+    useEffect(() => {
+        return () => {
+            if (tickerTimeoutRef.current) clearTimeout(tickerTimeoutRef.current);
+            isRollingRef.current = false;
+        };
+    }, []);
+
+    // ══ GPU-HIZLANDIRMALI & DOĞAL YAVAŞLAYAN ÇARK MOTORU ══
     const spinWheel = useCallback(() => {
-        if (totalSlices < 2) {
+        if (totalSlices < 2 || !wheelContainerRef.current) {
             alert("Çarkı çevirmek için en az 2 öğrenci veya isim gereklidir.");
             return;
         }
-        if (isRolling) return;
+        if (isRollingRef.current) return;
 
+        isRollingRef.current = true;
         setIsRolling(true);
         setWinner(null);
 
-        // Rastgele kazanan belirleme & durulacak tam açı hesabı
+        // 1. Rastgele kazanan dilim ve açı ofseti
         const winningIndex = Math.floor(Math.random() * totalSlices);
-        const randomOffsetInSlice = (Math.random() * 0.7 + 0.15) * sliceAngle;
-        const targetSliceAngleFromZero = (360 - (winningIndex * sliceAngle + randomOffsetInSlice)) % 360;
+        // İbrenin dilimin ortasına yakın düşmesi için güvenli rastgele alan
+        const offsetInSlice = (0.2 + Math.random() * 0.6) * sliceAngle;
+        
+        // 3 o'clock (0 derece) ibre hizasına göre gereken hedef modülo açısı
+        const targetNormalizedAngle = (360 - (winningIndex * sliceAngle + offsetInSlice)) % 360;
 
-        // 6 ile 9 tam tur + hedefe varış açısı
-        const currentRot = totalRotationRef.current % 360;
-        const extraSpins = 360 * (6 + Math.floor(Math.random() * 3));
-        const delta = ((targetSliceAngleFromZero - currentRot + 360) % 360) + extraSpins;
-        const startRot = totalRotationRef.current;
-        const targetRot = startRot + delta;
+        // En az 7 tam tur + hedefe varış
+        const currentMod = currentRotationRef.current % 360;
+        const extraRot = ((targetNormalizedAngle - currentMod + 360) % 360);
+        const fullSpins = 360 * (7 + Math.floor(Math.random() * 2));
+        const finalRotation = currentRotationRef.current + fullSpins + extraRot;
 
-        const totalDuration = 6500 + Math.random() * 800; // ~7 saniye pürüzsüz ve keyifli dönüş
-        const startTime = performance.now();
+        const spinDurationSeconds = 7.2;
 
-        // ══ SAF MONOTONİK YAVAŞLAMA EĞRİSİ (Ease-Out Quartic) ══
-        // Hız baştan sona sürekli ve kesintisiz şekilde azalarak yavaşça ve yumuşakça durur (asla hızlanma yapmaz).
-        const getProgress = (t: number): number => {
-            return 1 - Math.pow(1 - t, 4);
-        };
+        // 2. CSS GPU Geçişi: cubic-bezier(0.15, 0.95, 0.25, 1) ile kusursuz kesintisiz yavaşlama
+        const wheelEl = wheelContainerRef.current;
+        wheelEl.style.transition = `transform ${spinDurationSeconds}s cubic-bezier(0.15, 0.95, 0.25, 1)`;
+        wheelEl.style.transform = `rotate(${finalRotation}deg)`;
 
-        const animate = (now: number) => {
-            const elapsed = now - startTime;
-            const linearProgress = Math.min(elapsed / totalDuration, 1);
-            const curvedProgress = getProgress(linearProgress);
+        currentRotationRef.current = finalRotation;
 
-            const currentAngle = startRot + (targetRot - startRot) * curvedProgress;
-            totalRotationRef.current = currentAngle;
-            setRotation(currentAngle);
+        // 3. Gerçekçi Yavaşlayan Ses ve İbre Titreme Tıkırtısı
+        let delay = 40;
+        const maxDelay = 650;
+        const startTime = Date.now();
+        const durationMs = spinDurationSeconds * 1000;
 
-            const speed = (1 - linearProgress);
+        const scheduleTick = () => {
+            if (!isRollingRef.current) return;
 
-            // İbre çiviye çarptığında bükülme
-            const normalizedAngle = (currentAngle % 360 + 360) % 360;
-            const slicePos = (normalizedAngle / sliceAngle);
-            const currentSliceIdx = Math.floor(slicePos);
-            const offsetInSlice = slicePos - currentSliceIdx;
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / durationMs, 1);
+            const intensity = 1 - progress;
 
-            if (offsetInSlice < 0.35) {
-                const bendRatio = Math.sin((offsetInSlice / 0.35) * Math.PI);
-                const maxDeflection = Math.min(26, 8 + speed * 20);
-                setNeedleAngle(-bendRatio * maxDeflection);
-            } else {
-                setNeedleAngle(0);
-            }
+            audioEngine.playTick(intensity);
 
-            // Tıkırtı Sesi
-            if (currentSliceIdx !== lastTickIndexRef.current) {
-                lastTickIndexRef.current = currentSliceIdx;
-                audioEngine.playTick(speed);
-            }
+            setNeedleShake(true);
+            setTimeout(() => setNeedleShake(false), Math.min(delay * 0.45, 35));
 
-            if (linearProgress < 1) {
-                requestRef.current = requestAnimationFrame(animate);
-            } else {
-                setNeedleAngle(0);
-                setIsRolling(false);
+            // Süre ilerledikçe tıkırtı aralığı kademeli ve yumuşakça artar
+            delay = delay * 1.075 + 3.5;
 
-                const chosenWinner = wheelItems[winningIndex];
-                setWinner(chosenWinner);
-
-                audioEngine.playVictoryFanfare();
-
-                try {
-                    confetti({
-                        particleCount: 150,
-                        spread: 90,
-                        origin: { y: 0.55 },
-                        colors: ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#ffffff']
-                    });
-                } catch (e) {}
+            if (progress < 0.96 && delay < maxDelay) {
+                tickerTimeoutRef.current = setTimeout(scheduleTick, delay);
             }
         };
 
-        requestRef.current = requestAnimationFrame(animate);
-    }, [totalSlices, isRolling, sliceAngle, wheelItems]);
+        scheduleTick();
+
+        // 4. Çark Durduğunda (Tam 7.2 saniye sonra)
+        setTimeout(() => {
+            isRollingRef.current = false;
+            setIsRolling(false);
+            setNeedleShake(false);
+
+            const winningStudent = wheelItems[winningIndex];
+            setWinner(winningStudent);
+
+            audioEngine.playVictoryFanfare();
+
+            try {
+                confetti({
+                    particleCount: 160,
+                    spread: 90,
+                    origin: { y: 0.55 },
+                    colors: ['#f59e0b', '#ec4899', '#3b82f6', '#10b981', '#ffffff']
+                });
+            } catch (e) {}
+        }, durationMs + 50);
+
+    }, [totalSlices, sliceAngle, wheelItems]);
 
     const removeCurrentStudent = () => {
         if (winner) {
@@ -384,7 +390,7 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                 <div className="flex items-center gap-2 text-xs text-slate-400 font-semibold">
                                     <span className="text-amber-300 font-bold">
                                         {pickerSource === 'registered' 
-                                            ? (selectedClassData ? `${selectedClassData.name} ${branchFilter !== 'all' ? `(${branchFilter})` : ''}` : 'Sınıf Seçiniz') 
+                                            ? (selectedClassData ? `${selectedClassData.name} ${branchFilter !== 'all' ? `(${branchFilter})` : ''}` : 'Sınıf Seçimi Bekleniyor') 
                                             : 'Özel Liste'}
                                     </span>
                                     <span>•</span>
@@ -577,7 +583,7 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                             </Button>
                         </div>
 
-                        {/* SAĞ: HAFİF & AKICI DÖNEN ÇARK */}
+                        {/* SAĞ: HAFİF, GPU-HIZLANDIRMALI PÜRÜZSÜZ ÇARK */}
                         <div className={cn(
                             "flex-1 flex items-center justify-center relative bg-slate-950/60 rounded-3xl border border-white/10 overflow-hidden transition-all shadow-inner",
                             isWheelFullscreen ? "p-4 min-h-[440px]" : "p-2 min-h-[320px] md:min-h-[440px]"
@@ -619,16 +625,14 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                         })}
                                     </div>
 
-                                    {/* Dönen Çark */}
+                                    {/* Dönen Çark (GPU-Accelerated Native CSS Transform) */}
                                     <div 
+                                        ref={wheelContainerRef}
                                         className={cn(
-                                            "w-full h-full rounded-full shadow-[0_0_80px_rgba(0,0,0,0.9)] relative overflow-hidden bg-slate-950",
+                                            "w-full h-full rounded-full shadow-[0_0_80px_rgba(0,0,0,0.9)] relative overflow-hidden bg-slate-950 will-change-transform",
                                             isWheelFullscreen ? "border-[14px] border-slate-900" : "border-[10px] border-slate-900"
                                         )}
-                                        style={{
-                                            transform: `rotate(${rotation}deg)`,
-                                            transition: 'none'
-                                        }}
+                                        style={{ transform: 'rotate(0deg)' }}
                                     >
                                         <svg viewBox="-1 -1 2 2" className="w-full h-full">
                                             {wheelItems.map((item, index) => {
@@ -683,12 +687,11 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
 
                                     {/* Mekanik İbre */}
                                     <div 
-                                        className="absolute right-[-14px] md:right-[-20px] top-1/2 -translate-y-1/2 z-30 pointer-events-none filter drop-shadow-[0_4px_12px_rgba(245,158,11,0.8)]"
-                                        style={{
-                                            transform: `translateY(-50%) rotate(${needleAngle}deg)`,
-                                            transformOrigin: '95% 50%',
-                                            transition: needleAngle === 0 ? 'transform 0.08s ease-out' : 'none'
-                                        }}
+                                        className={cn(
+                                            "absolute right-[-14px] md:right-[-20px] top-1/2 -translate-y-1/2 z-30 pointer-events-none filter drop-shadow-[0_4px_12px_rgba(245,158,11,0.8)] transition-transform duration-75",
+                                            needleShake ? "rotate-[-14deg]" : "rotate-0"
+                                        )}
+                                        style={{ transformOrigin: '95% 50%' }}
                                     >
                                         <div className="relative flex items-center">
                                             <div className={cn(
