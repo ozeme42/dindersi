@@ -649,31 +649,57 @@ export function ConceptExplanationPlayer({
     // Sırayla ekrana getirme: revealedSentencesCount kadar kart gösterilir
     const visibleConcepts = validConcepts.slice(0, revealedSentencesCount || 1);
 
+    const getConceptFontSize = (conceptText: string) => {
+        const words = (conceptText || '').trim().split(/\s+/);
+        const maxWordLen = Math.max(...words.map(w => w.length));
+        const totalLen = (conceptText || '').length;
+
+        if (cardScale === 'xl') {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
+            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-4xl md:text-5xl lg:text-6xl";
+            return isTeacher ? "text-6xl md:text-7xl lg:text-8xl" : "text-5xl md:text-6xl lg:text-7xl";
+        }
+        if (cardScale === 'lg') {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-2xl md:text-3xl lg:text-4xl" : "text-xl md:text-2xl lg:text-3xl";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
+            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
+            return isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-4xl md:text-5xl lg:text-6xl";
+        }
+        if (cardScale === 'md') {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xl md:text-2xl lg:text-3xl" : "text-lg md:text-xl lg:text-2xl";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-2xl md:text-3xl lg:text-4xl" : "text-xl md:text-2xl lg:text-3xl";
+            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
+            return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
+        }
+        // sm (varsayılan küçük)
+        if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-lg md:text-xl lg:text-2xl" : "text-base md:text-lg lg:text-xl";
+        if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-xl md:text-2xl lg:text-3xl" : "text-lg md:text-xl lg:text-2xl";
+        if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-2xl md:text-3xl lg:text-4xl" : "text-xl md:text-2xl lg:text-3xl";
+        return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
+    };
+
     const getScaleStyles = () => {
         switch (cardScale) {
             case 'sm':
                 return {
                     minHeight: isTeacher ? "min-h-[140px] md:min-h-[160px]" : "min-h-[120px] md:min-h-[140px]",
-                    fontSize: isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl",
                     padding: "p-5 md:p-6",
                 };
             case 'lg':
                 return {
                     minHeight: isTeacher ? "min-h-[260px] md:min-h-[300px]" : "min-h-[220px] md:min-h-[260px]",
-                    fontSize: isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-4xl md:text-5xl lg:text-6xl",
                     padding: "p-8 md:p-10",
                 };
             case 'xl':
                 return {
                     minHeight: isTeacher ? "min-h-[340px] md:min-h-[380px]" : "min-h-[280px] md:min-h-[320px]",
-                    fontSize: isTeacher ? "text-6xl md:text-7xl lg:text-8xl" : "text-5xl md:text-6xl lg:text-7xl",
                     padding: "p-10 md:p-12",
                 };
             case 'md':
             default:
                 return {
                     minHeight: isTeacher ? "min-h-[200px] md:min-h-[220px]" : "min-h-[160px] md:min-h-[180px]",
-                    fontSize: isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl",
                     padding: "p-6 md:p-8",
                 };
         }
@@ -831,11 +857,11 @@ export function ConceptExplanationPlayer({
                                     </div>
                                 </div>
 
-                                {/* Kavram Başlığı - Kartın Merkezini Dolduran Büyük Yazı */}
-                                <div className="my-auto py-4 text-center w-full flex items-center justify-center relative z-10">
+                                {/* Kavram Başlığı - Kartın Merkezini Dolduran Büyük Yazı (Harf bölünmesi engellendi) */}
+                                <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center relative z-10">
                                     <h3 className={cn(
-                                        "font-black tracking-wider text-white drop-shadow-lg uppercase leading-tight break-words max-w-full",
-                                        scaleStyles.fontSize
+                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full text-center px-1",
+                                        getConceptFontSize(item.concept)
                                     )}>
                                         {item.concept}
                                     </h3>
@@ -889,11 +915,34 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
         }
     };
 
+    const getAnagramFontSize = (wordText: string) => {
+        const len = (wordText || '').replace(/\s+/g, '').length;
+        if (cardScale === 'xl') {
+            if (len > 12) return "text-3xl sm:text-4xl md:text-5xl";
+            if (len > 8) return "text-4xl sm:text-5xl md:text-6xl";
+            return "text-5xl sm:text-6xl md:text-7xl";
+        }
+        if (cardScale === 'lg') {
+            if (len > 12) return "text-2xl sm:text-3xl md:text-4xl";
+            if (len > 8) return "text-3xl sm:text-4xl md:text-5xl";
+            return "text-4xl sm:text-5xl md:text-6xl";
+        }
+        if (cardScale === 'md') {
+            if (len > 12) return "text-xl sm:text-2xl md:text-3xl";
+            if (len > 8) return "text-2xl sm:text-3xl md:text-4xl";
+            return "text-3xl sm:text-4xl md:text-5xl";
+        }
+        // sm (varsayılan)
+        if (len > 12) return "text-lg sm:text-xl md:text-2xl";
+        if (len > 8) return "text-xl sm:text-2xl md:text-3xl";
+        return "text-2xl sm:text-3xl md:text-4xl";
+    };
+
     const scaleStyles = {
-        sm: { minHeight: isTeacher ? "min-h-[15rem]" : "min-h-[12rem]", fontSize: "text-3xl sm:text-4xl md:text-5xl" },
-        md: { minHeight: isTeacher ? "min-h-[19rem]" : "min-h-[15rem]", fontSize: "text-4xl sm:text-5xl md:text-6xl" },
-        lg: { minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[18rem]", fontSize: "text-5xl sm:text-6xl md:text-7xl" },
-        xl: { minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[22rem]", fontSize: "text-6xl sm:text-7xl md:text-8xl" },
+        sm: { minHeight: isTeacher ? "min-h-[15rem]" : "min-h-[12rem]" },
+        md: { minHeight: isTeacher ? "min-h-[19rem]" : "min-h-[15rem]" },
+        lg: { minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[18rem]" },
+        xl: { minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[22rem]" },
     }[cardScale];
 
     const getGridClass = () => {
@@ -975,41 +1024,45 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                     </div>
 
                     {/* Sütun Düzeni */}
-                    <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
-                        <button
-                            onClick={() => setCustomCols(2)}
-                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 2 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
-                            title="2 Sütun"
-                        >
-                            2'li
-                        </button>
-                        <button
-                            onClick={() => setCustomCols(3)}
-                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 3 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
-                            title="3 Sütun"
-                        >
-                            3'lü
-                        </button>
-                        <button
-                            onClick={() => setCustomCols(4)}
-                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 4 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
-                            title="4 Sütun"
-                        >
-                            4'lü
-                        </button>
-                        <button
+                    <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
+                        <Button
+                            variant="ghost"
+                            size="sm"
                             onClick={() => setCustomCols(null)}
-                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === null ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
-                            title="Otomatik Düzen"
+                            className={cn("h-7 px-2.5 rounded-lg text-xs font-bold", customCols === null ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
                         >
                             Oto
-                        </button>
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setCustomCols(2)}
+                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 2 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
+                        >
+                            2'li
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setCustomCols(3)}
+                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 3 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
+                        >
+                            3'lü
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setCustomCols(4)}
+                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 4 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
+                        >
+                            4'lü
+                        </Button>
                     </div>
                 </div>
             </div>
 
-            {/* 3D Anagram Kartları Grid'i */}
-            <div className={cn("grid gap-6 md:gap-8 pb-32 transition-all duration-300", getGridClass())}>
+            {/* 3D Anagram Kartları Izgarası */}
+            <div className={cn("grid gap-4 md:gap-6 pb-20 transition-all duration-300", getGridClass())}>
                 {step.cards.map((card, index) => {
                     const theme = FLASHCARD_THEMES[index % FLASHCARD_THEMES.length];
                     const isFlipped = flippedCards.has(index);
@@ -1048,11 +1101,11 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                         </div>
                                     </div>
 
-                                    {/* Karışık Harfler - Kartı Dolduran Büyük Yazı */}
-                                    <div className="my-auto py-4 text-center w-full flex items-center justify-center">
+                                    {/* Karışık Harfler - Kartı Dolduran Büyük Yazı (Harf bölünmesi engellendi) */}
+                                    <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center">
                                         <div className={cn(
-                                            "font-black tracking-[0.25em] text-white drop-shadow-lg uppercase leading-tight break-words max-w-full",
-                                            scaleStyles.fontSize
+                                            "font-black tracking-widest text-white drop-shadow-lg uppercase leading-tight whitespace-nowrap [word-break:keep-all] hyphens-none max-w-full text-center px-1",
+                                            getAnagramFontSize(card.scrambledWord)
                                         )}>
                                             {card.scrambledWord}
                                         </div>
@@ -1087,11 +1140,11 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                         </div>
                                     </div>
 
-                                    {/* Doğru Yanıt - Doğrudan Kart Üzerinde */}
-                                    <div className="my-auto py-4 text-center w-full flex items-center justify-center">
+                                    {/* Doğru Yanıt - Doğrudan Kart Üzerinde (Harf bölünmesi engellendi) */}
+                                    <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center">
                                         <div className={cn(
-                                            "font-black tracking-wider text-white drop-shadow-lg uppercase leading-tight break-words max-w-full",
-                                            scaleStyles.fontSize
+                                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full text-center px-1",
+                                            getAnagramFontSize(card.correctAnswer)
                                         )}>
                                             {card.correctAnswer}
                                         </div>
@@ -1304,28 +1357,54 @@ export const FlashcardItem = ({
     isTeacher?: boolean,
     cardScale?: 'sm' | 'md' | 'lg' | 'xl'
 }) => {
+    const getTermFontSize = (termText: string) => {
+        const words = (termText || '').trim().split(/\s+/);
+        const maxWordLen = Math.max(...words.map(w => w.length));
+        const totalLen = (termText || '').length;
+
+        if (cardScale === 'xl') {
+            if (maxWordLen > 13 || totalLen > 24) return "text-3xl sm:text-4xl md:text-5xl";
+            if (maxWordLen > 9 || totalLen > 16) return "text-4xl sm:text-5xl md:text-6xl";
+            if (maxWordLen > 5 || totalLen > 10) return "text-5xl sm:text-6xl md:text-7xl";
+            return "text-6xl sm:text-7xl md:text-8xl";
+        }
+        if (cardScale === 'lg') {
+            if (maxWordLen > 13 || totalLen > 24) return "text-2xl sm:text-3xl md:text-4xl";
+            if (maxWordLen > 9 || totalLen > 16) return "text-3xl sm:text-4xl md:text-5xl";
+            if (maxWordLen > 5 || totalLen > 10) return "text-4xl sm:text-5xl md:text-6xl";
+            return "text-5xl sm:text-6xl md:text-7xl";
+        }
+        if (cardScale === 'md') {
+            if (maxWordLen > 13 || totalLen > 24) return "text-xl sm:text-2xl md:text-3xl";
+            if (maxWordLen > 9 || totalLen > 16) return "text-2xl sm:text-3xl md:text-4xl";
+            if (maxWordLen > 5 || totalLen > 10) return "text-3xl sm:text-4xl md:text-5xl";
+            return "text-4xl sm:text-5xl md:text-6xl";
+        }
+        // sm (varsayılan küçük)
+        if (maxWordLen > 13 || totalLen > 24) return "text-lg sm:text-xl md:text-2xl";
+        if (maxWordLen > 9 || totalLen > 16) return "text-xl sm:text-2xl md:text-3xl";
+        if (maxWordLen > 5 || totalLen > 10) return "text-2xl sm:text-3xl md:text-4xl";
+        return "text-3xl sm:text-4xl md:text-5xl";
+    };
+
     const scaleStyles = {
         sm: { 
             minHeight: isTeacher ? "min-h-[16rem]" : "min-h-[13rem]",
-            termText: term.length > 25 ? "text-2xl sm:text-3xl md:text-4xl" : (term.length > 12 ? "text-3xl sm:text-4xl md:text-5xl" : "text-4xl sm:text-5xl md:text-6xl"),
             defText: definition.length > 200 ? "text-base sm:text-lg" : (definition.length > 100 ? "text-lg sm:text-xl md:text-2xl" : "text-xl sm:text-2xl md:text-3xl"),
             padding: "p-5 sm:p-6"
         },
         md: { 
             minHeight: isTeacher ? "min-h-[20rem]" : "min-h-[16rem]",
-            termText: term.length > 25 ? "text-3xl sm:text-4xl md:text-5xl" : (term.length > 12 ? "text-4xl sm:text-5xl md:text-6xl" : "text-5xl sm:text-6xl md:text-7xl"),
             defText: definition.length > 200 ? "text-lg sm:text-xl" : (definition.length > 100 ? "text-xl sm:text-2xl md:text-3xl" : "text-2xl sm:text-3xl md:text-4xl"),
             padding: "p-6 sm:p-8"
         },
         lg: { 
             minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[20rem]",
-            termText: term.length > 25 ? "text-4xl sm:text-5xl md:text-6xl" : (term.length > 12 ? "text-5xl sm:text-6xl md:text-7xl" : "text-6xl sm:text-7xl md:text-8xl"),
             defText: definition.length > 200 ? "text-xl sm:text-2xl" : (definition.length > 100 ? "text-2xl sm:text-3xl md:text-4xl" : "text-3xl sm:text-4xl md:text-5xl"),
             padding: "p-8 sm:p-10"
         },
         xl: { 
             minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[24rem]",
-            termText: term.length > 25 ? "text-5xl sm:text-6xl md:text-7xl" : (term.length > 12 ? "text-6xl sm:text-7xl md:text-8xl" : "text-7xl sm:text-8xl md:text-9xl"),
             defText: definition.length > 200 ? "text-2xl sm:text-3xl" : (definition.length > 100 ? "text-3xl sm:text-4xl md:text-5xl" : "text-4xl sm:text-5xl md:text-6xl"),
             padding: "p-10 sm:p-12"
         },
@@ -1367,11 +1446,11 @@ export const FlashcardItem = ({
                         </div>
                     </div>
 
-                    {/* Ana Terim / Başlık - Kartı Dolduran Görünüm */}
-                    <div className="my-auto py-4 px-2 text-center w-full flex items-center justify-center">
+                    {/* Ana Terim / Başlık - Kartı Dolduran Görünüm (Harf bölünmesi engellendi) */}
+                    <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center">
                         <h3 className={cn(
-                            "font-black tracking-tight text-white drop-shadow-lg uppercase leading-tight break-words max-w-full",
-                            scaleStyles.termText
+                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full px-1 text-center",
+                            getTermFontSize(term)
                         )}>
                             {term}
                         </h3>
@@ -1409,9 +1488,9 @@ export const FlashcardItem = ({
                     </div>
 
                     {/* Doğrudan Kart Üzerinde Yazılan Tanım (Beyaz Kutu Yok) */}
-                    <div className="my-auto py-4 px-2 sm:px-4 text-center w-full flex items-center justify-center">
+                    <div className="my-auto py-3 px-2 sm:px-4 text-center w-full flex items-center justify-center">
                         <p className={cn(
-                            "font-bold leading-relaxed tracking-wide text-white drop-shadow-md break-words max-w-full",
+                            "font-bold leading-relaxed tracking-wide text-white drop-shadow-md break-normal whitespace-normal [overflow-wrap:break-word] hyphens-none max-w-full px-1 text-center",
                             scaleStyles.defText
                         )}>
                             {definition}
@@ -2054,10 +2133,9 @@ export function StepContent({
             );
         }
         
-        // Anahtar Kavramlar / Kavram adımları (objectiveList, conceptExplanation veya başlığında kavram/anahtar geçenler)
+        // SADECE Anahtar Kavramlar / Kavram adımları (Öğrenme hedefleri standart liste olarak cümle cümle kalır)
         const isConceptStep = step.type === 'conceptExplanation' || 
-                              step.type === 'objectiveList' || 
-                              (typeof step.title === 'string' && /kavram|anahtar/i.test(step.title) && step.type !== 'anagramFlashcard' && step.type !== 'conceptMap');
+                              (typeof step.title === 'string' && /kavram|anahtar/i.test(step.title) && step.type !== 'anagramFlashcard' && step.type !== 'conceptMap' && !/hedef|kazan/i.test(step.title) && step.type !== 'objectiveList');
 
         if (isConceptStep) {
             return (
@@ -2075,6 +2153,7 @@ export function StepContent({
 
         switch (step.type) {
             case 'content':
+            case 'objectiveList':
             case 'accordion':
                  return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} />
             case 'visual':
@@ -2710,10 +2789,9 @@ export function LessonContentViewer({
 
         if (!currentStep) return;
 
-        // Anahtar Kavramlar için sırayla ekrana gelme kontrolü
+        // Anahtar Kavramlar için sırayla ekrana gelme kontrolü (Öğrenme hedefleri isContentList bloğunda cümle cümle açılır)
         const isConceptStep = currentStep.type === 'conceptExplanation' || 
-                              currentStep.type === 'objectiveList' || 
-                              (typeof currentStep.title === 'string' && /kavram|anahtar/i.test(currentStep.title) && currentStep.type !== 'anagramFlashcard' && currentStep.type !== 'conceptMap');
+                              (typeof currentStep.title === 'string' && /kavram|anahtar/i.test(currentStep.title) && currentStep.type !== 'anagramFlashcard' && currentStep.type !== 'conceptMap' && !/hedef|kazan/i.test(currentStep.title) && currentStep.type !== 'objectiveList');
 
         if (isConceptStep) {
             const raw = (currentStep as any).items || (currentStep as any).cards || [];
