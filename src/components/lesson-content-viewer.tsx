@@ -10,7 +10,7 @@ import {
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
-    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Minimize2, Palette
+    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Palette, Pencil
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -26,6 +26,7 @@ import Image from "next/image";
 import Link from 'next/link';
 import { playSound } from "@/lib/audio-service";
 import { useAuth } from "@/context/auth-context";
+import { PresentationDrawingBoard } from "@/components/presentation-drawing-board";
 
 // --- TİP TANIMLAMALARI ---
 type LocalProgress = {
@@ -1167,352 +1168,45 @@ function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, 
     );
 }
 
-// 10. DrawingCanvas (GELİŞMİŞ - TEK TANIM)
-function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
+// 10. DrawingCanvas (YENİ NESİL ÇİZİM & AKILLI TAHTA ARACI)
+function DrawingCanvas({ stepIndex }: { stepIndex?: number }) {
     const isTeacher = useTeacherMode();
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [isPenMode, setIsPenMode] = useState(false);
-    const [isPaletteVisible, setIsPaletteVisible] = useState(true); // YENİ: Palet görünürlük kontrolü
-    
-    // Araçlar: 'pen', 'highlighter', 'eraser'
-    const [tool, setTool] = useState<'pen' | 'highlighter' | 'eraser'>('pen');
-    const [color, setColor] = useState('#facc15'); // Varsayılan Kırmızı
-    const [lineWidth, setLineWidth] = useState(4); // Varsayılan orta kalınlık
-    const [history, setHistory] = useState<ImageData[]>([]);
-    
-    // Sayfa bazlı hafıza
-    const savedDrawings = useRef<{ [key: number]: ImageData }>({});
-    const prevStepIndexRef = useRef(stepIndex);
-    
-    const [isDrawing, setIsDrawing] = useState(false);
-    const pointsRef = useRef<{ x: number, y: number }[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
 
-    // Palet görünürlüğünü resetle
+    // Klavye kısayolu 'D'
     useEffect(() => {
-        if (isPenMode) setIsPaletteVisible(true);
-    }, [isPenMode]);
-
-    // Canvas Boyutlandırma (High DPI desteği)
-    useEffect(() => {
-        const handleResize = () => {
-            if (canvasRef.current) {
-                const canvas = canvasRef.current;
-                const context = canvas.getContext('2d');
-                let savedData = null;
-                if(context) {
-                    try { savedData = context.getImageData(0,0, canvas.width, canvas.height); } catch(e){}
-                }
-
-                const dpr = window.devicePixelRatio || 1;
-                canvas.style.width = window.innerWidth + 'px';
-                canvas.style.height = window.innerHeight + 'px';
-                
-                canvas.width = window.innerWidth * dpr;
-                canvas.height = window.innerHeight * dpr;
-
-                if (context) {
-                    context.scale(dpr, dpr);
-                    if (savedData) {
-                        context.putImageData(savedData, 0, 0);
-                    }
-                }
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+            if (e.key === 'd' || e.key === 'D') {
+                e.preventDefault();
+                setIsOpen(prev => !prev);
             }
         };
-        window.addEventListener('resize', handleResize);
-        handleResize();
-        return () => window.removeEventListener('resize', handleResize);
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
-
-    // Sayfa Değişimi Yönetimi
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        const ctx = canvas?.getContext('2d');
-        if (canvas && ctx) {
-            const dpr = window.devicePixelRatio || 1;
-            savedDrawings.current[prevStepIndexRef.current] = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
-            setHistory([]);
-            
-            if (savedDrawings.current[stepIndex]) {
-                ctx.putImageData(savedDrawings.current[stepIndex], 0, 0);
-                setHistory([savedDrawings.current[stepIndex]]);
-            }
-
-            prevStepIndexRef.current = stepIndex;
-        }
-    }, [stepIndex]);
-
-
-    const saveHistory = () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        // Maksimum 10 adım geri alma
-        if (history.length > 10) {
-            setHistory(prev => [...prev.slice(1), ctx.getImageData(0, 0, canvas.width, canvas.height)]);
-        } else {
-            setHistory(prev => [...prev, ctx.getImageData(0, 0, canvas.width, canvas.height)]);
-        }
-    };
-
-    const handleUndo = () => {
-        const canvas = canvasRef.current;
-        if (!canvas || history.length === 0) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        const previousState = history[history.length - 1];
-        ctx.putImageData(previousState, 0, 0);
-        setHistory(prev => prev.slice(0, -1));
-    };
-
-    const clearCanvas = () => {
-        const canvas = canvasRef.current;
-        if (canvas) {
-            saveHistory(); // Temizlemeden önce kaydet
-            const ctx = canvas.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            ctx?.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
-        }
-    };
-
-    // --- GELİŞMİŞ ÇİZİM MANTIĞI ---
-
-    const getCoords = (e: React.PointerEvent) => {
-        return { x: e.clientX, y: e.clientY };
-    };
-
-    const applyToolSettings = (ctx: CanvasRenderingContext2D, pressure: number) => {
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        
-        let dynamicWidth = lineWidth;
-        // Basınç duyarlılığı (tablet/kalem için), mouse pressure genelde 0.5'tir
-        if (pressure && pressure !== 0.5) {
-             dynamicWidth = lineWidth * (pressure * 2.5);
-        }
-
-        if (tool === 'eraser') {
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.lineWidth = dynamicWidth * 3;
-            ctx.globalAlpha = 1.0;
-        } else if (tool === 'highlighter') {
-            ctx.globalCompositeOperation = 'multiply';
-            ctx.strokeStyle = color;
-            ctx.fillStyle = color;
-            ctx.globalAlpha = 0.4;
-            ctx.lineWidth = dynamicWidth * 4;
-        } else {
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.strokeStyle = color;
-            ctx.fillStyle = color;
-            ctx.globalAlpha = 1.0;
-            ctx.lineWidth = dynamicWidth;
-        }
-    };
-
-    const startDrawing = (e: React.PointerEvent) => {
-        if (!isPenMode) return;
-        (e.target as HTMLElement).setPointerCapture(e.pointerId);
-        saveHistory();
-        
-        const { x, y } = getCoords(e);
-        setIsDrawing(true);
-        pointsRef.current = [{ x, y }];
-
-        const canvas = canvasRef.current;
-        const ctx = canvas?.getContext('2d');
-        if (canvas && ctx) {
-            applyToolSettings(ctx, e.pressure);
-            
-            // Nokta koyma efekti
-            ctx.beginPath();
-            ctx.arc(x, y, ctx.lineWidth / 2, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-        }
-    };
-
-    const draw = (e: React.PointerEvent) => {
-        if (!isDrawing || !isPenMode || !canvasRef.current) return;
-        
-        const ctx = canvasRef.current.getContext('2d');
-        if (!ctx) return;
-
-        const { x, y } = getCoords(e);
-        pointsRef.current.push({ x, y });
-        const pts = pointsRef.current;
-
-        applyToolSettings(ctx, e.pressure);
-
-        if (pts.length >= 3) {
-            const last2 = pts[pts.length - 2];
-            const last1 = pts[pts.length - 1];
-            // Kavisli pürüzsüz çizim (Quadratic Curve)
-            const xc = (last2.x + last1.x) / 2;
-            const yc = (last2.y + last1.y) / 2;
-
-            ctx.quadraticCurveTo(last2.x, last2.y, xc, yc);
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.moveTo(xc, yc);
-        } else {
-             // Sadece iki nokta varken düz çizgi
-             ctx.lineTo(x, y);
-             ctx.stroke();
-             ctx.beginPath();
-             ctx.moveTo(x, y);
-        }
-    };
-
-    const stopDrawing = (e: React.PointerEvent) => {
-        if (!isDrawing) return;
-        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
-        setIsDrawing(false);
-        pointsRef.current = [];
-        const ctx = canvasRef.current?.getContext('2d');
-        if(ctx) {
-             ctx.closePath();
-             ctx.globalCompositeOperation = 'source-over';
-             ctx.globalAlpha = 1.0;
-        }
-    };
 
     if (!isTeacher) return null;
 
     return (
         <>
-            {/* Canvas Katmanı */}
-            <canvas
-                ref={canvasRef}
-                className={cn(
-                    "fixed inset-0 z-[100]",
-                    isPenMode ? "pointer-events-auto cursor-crosshair" : "pointer-events-none"
-                )}
-                style={{ touchAction: 'none' }}
-                onPointerDown={startDrawing}
-                onPointerMove={draw}
-                onPointerUp={stopDrawing}
-                onPointerCancel={stopDrawing}
+            <PresentationDrawingBoard
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
             />
 
-            {/* Araç Çubuğu - YUKARI TAŞINDI VE KÜÇÜLTÜLDÜ */}
-            <div className="fixed bottom-32 right-4 z-[101] flex flex-col items-end gap-3">
-                
-                {isPenMode && (
-                    <>
-                        {isPaletteVisible ? (
-                            <div className="flex flex-col items-center gap-2 bg-white/95 p-2 rounded-xl border border-slate-200 shadow-xl animate-in slide-in-from-bottom-5 fade-in zoom-in backdrop-blur-sm w-44">
-                                
-                                {/* Header - Küçültme Butonu */}
-                                <div className="w-full flex justify-between items-center border-b border-slate-200 pb-2 mb-1 px-1">
-                                    <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Araçlar</span>
-                                    <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full hover:bg-slate-100 text-slate-600 dark:text-slate-400" onClick={() => setIsPaletteVisible(false)}>
-                                        <Minimize2 className="w-3.5 h-3.5" />
-                                    </Button>
-                                </div>
-
-                                {/* Renk Seçimi */}
-                                <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-lg mb-1 w-full">
-                                    {['#000000', '#ef4444', '#22c55e', '#3b82f6', '#facc15', '#a855f7'].map((c) => (
-                                        <button
-                                            key={c}
-                                            onClick={() => { setColor(c); setTool('pen'); }}
-                                            className={cn(
-                                                "w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 mx-auto",
-                                                color === c && tool !== 'eraser' ? "ring-2 ring-offset-1 ring-slate-400 scale-110 border-white" : "border-transparent"
-                                            )}
-                                            style={{ backgroundColor: c }}
-                                        />
-                                    ))}
-                                </div>
-
-                                {/* Kalınlık Ayarı */}
-                                <div className="flex gap-2 items-center justify-center w-full pb-2 border-b border-slate-200">
-                                     <button onClick={() => setLineWidth(4)} className={cn("w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 4 && "bg-slate-700")}>
-                                        <div className="w-1 h-1 bg-white rounded-full" />
-                                     </button>
-                                     <button onClick={() => setLineWidth(8)} className={cn("w-7 h-7 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 8 && "bg-slate-700")}>
-                                        <div className="w-2.5 h-2.5 bg-white rounded-full" />
-                                     </button>
-                                     <button onClick={() => setLineWidth(16)} className={cn("w-9 h-9 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 16 && "bg-slate-700")}>
-                                        <div className="w-4 h-4 bg-white rounded-full" />
-                                     </button>
-                                </div>
-
-                                {/* Araçlar */}
-                                <div className="flex flex-col gap-1.5 w-full">
-                                     <Button 
-                                        variant={tool === 'pen' ? 'default' : 'ghost'} 
-                                        size="sm" 
-                                        onClick={() => setTool('pen')}
-                                        className="w-full justify-start h-8 text-xs"
-                                    >
-                                        <PenTool className="w-3 h-3 mr-2" /> Kalem
-                                     </Button>
-                                     <Button 
-                                        variant={tool === 'highlighter' ? 'default' : 'ghost'} 
-                                        size="sm" 
-                                        onClick={() => setTool('highlighter')}
-                                        className={cn("w-full justify-start h-8 text-xs", tool === 'highlighter' && "bg-yellow-100 text-yellow-800 hover:bg-yellow-200")}
-                                    >
-                                        <Highlighter className="w-3 h-3 mr-2" /> Fosforlu
-                                     </Button>
-                                     <Button 
-                                        variant={tool === 'eraser' ? 'default' : 'ghost'} 
-                                        size="sm" 
-                                        onClick={() => setTool('eraser')}
-                                        className="w-full justify-start h-8 text-xs"
-                                    >
-                                        <Eraser className="w-3 h-3 mr-2" /> Silgi
-                                     </Button>
-                                </div>
-
-                                <div className="h-[1px] w-full bg-slate-200"></div>
-
-                                {/* Aksiyonlar */}
-                                <div className="flex gap-2 w-full justify-between px-1">
-                                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleUndo} title="Geri Al" disabled={history.length === 0}>
-                                        <Undo className="w-3 h-3" />
-                                    </Button>
-                                    <Button variant="destructive" size="icon" className="h-8 w-8" onClick={clearCanvas} title="Temizle">
-                                        <Trash2 className="w-3 h-3" />
-                                    </Button>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="animate-in zoom-in slide-in-from-bottom-5 pb-2">
-                                <Button 
-                                    onClick={() => setIsPaletteVisible(true)}
-                                    className="w-10 h-10 rounded-full bg-white text-slate-600 border border-slate-200 shadow-lg hover:bg-slate-50 flex items-center justify-center"
-                                    size="icon"
-                                    title="Araçları Göster"
-                                >
-                                    <Palette className="w-5 h-5" />
-                                </Button>
-                            </div>
-                        )}
-                    </>
-                )}
-
-                {/* Ana Toggle Butonu - KÜÇÜLTÜLDÜ */}
-                <Button
-                    onClick={() => setIsPenMode(!isPenMode)}
-                    className={cn(
-                        "w-12 h-12 rounded-full shadow-lg border-2 transition-all hover:scale-105 flex items-center justify-center",
-                        isPenMode 
-                            ? "bg-rose-500 text-slate-900 dark:text-white border-rose-200 hover:bg-rose-600" 
-                            : "bg-slate-800 text-slate-900 dark:text-white border-slate-600 hover:bg-slate-700"
-                    )}
-                >
-                    {isPenMode ? <X className="w-6 h-6" /> : <PenTool className="w-6 h-6" />}
-                </Button>
-            </div>
+            {/* Sağ Altta Şık Hızlı Çizim Butonu */}
+            {!isOpen && (
+                <div className="fixed bottom-20 right-4 z-40">
+                    <button
+                        onClick={() => setIsOpen(true)}
+                        className="w-12 h-12 rounded-full bg-slate-900/90 hover:bg-slate-800 text-cyan-400 border-2 border-cyan-500/40 shadow-[0_0_25px_rgba(6,182,212,0.4)] flex items-center justify-center transition-all hover:scale-110 active:scale-95 group backdrop-blur-xl"
+                        title="Canlı Çizim & Tahta (D)"
+                    >
+                        <Pencil className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                    </button>
+                </div>
+            )}
         </>
     );
 }
