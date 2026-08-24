@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
     X, Users, Sparkles, RotateCcw, UserMinus, Trophy, 
-    Settings, PartyPopper, Check, ChevronDown, User
+    Settings, PartyPopper, Check, ChevronDown, Maximize2, Minimize2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -12,7 +12,6 @@ import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import type { SchoolClass, UserProfile } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { UserAvatar } from '@/components/user-avatar';
 import { playSound } from '@/lib/audio-service';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
@@ -34,6 +33,9 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
     const [classFilter, setClassFilter] = useState('all');
     const [branchFilter, setBranchFilter] = useState('all');
     const [isLoadingData, setIsLoadingData] = useState(true);
+
+    // Fullscreen State
+    const [isWheelFullscreen, setIsWheelFullscreen] = useState(false);
 
     // Mode: 'registered' (Kayıtlı Öğrenciler) | 'custom' (Özel İsim Listesi)
     const [pickerSource, setPickerSource] = useState<'registered' | 'custom'>('registered');
@@ -176,9 +178,9 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
             } catch (e) {}
             try {
                 confetti({
-                    particleCount: 120,
-                    spread: 80,
-                    origin: { y: 0.6 }
+                    particleCount: 160,
+                    spread: 90,
+                    origin: { y: 0.55 }
                 });
             } catch (e) {}
         }
@@ -207,45 +209,102 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
     return (
         <AnimatePresence>
             <div 
-                className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-md p-3 sm:p-6 select-none"
-                onClick={onClose}
+                className={cn(
+                    "fixed inset-0 z-50 flex items-center justify-center select-none",
+                    isWheelFullscreen ? "bg-slate-950 p-0" : "bg-slate-950/70 backdrop-blur-md p-3 sm:p-6"
+                )}
+                onClick={isWheelFullscreen ? undefined : onClose}
             >
                 <motion.div
-                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                    animate={{ scale: 1, opacity: 1, y: 0 }}
-                    exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                    initial={{ scale: 0.92, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.92, opacity: 0 }}
                     transition={{ type: "spring", duration: 0.3 }}
                     onClick={e => e.stopPropagation()}
-                    className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-[2.5rem] bg-slate-900 border-2 border-indigo-500/40 shadow-2xl text-white overflow-hidden shadow-indigo-950/50"
+                    className={cn(
+                        "relative flex flex-col bg-slate-900 text-white overflow-hidden shadow-2xl transition-all duration-300",
+                        isWheelFullscreen 
+                            ? "w-screen h-screen max-w-none max-h-none rounded-none border-0" 
+                            : "w-full max-w-5xl max-h-[92vh] rounded-[2.5rem] border-2 border-indigo-500/40 shadow-indigo-950/60"
+                    )}
                 >
-                    {/* Üst Başlık & Kapat Butonu */}
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-slate-950/40 flex-shrink-0">
+                    {/* Üst Başlık, Sınıf Bilgisi & Kontroller */}
+                    <div className={cn(
+                        "flex items-center justify-between px-6 py-3.5 border-b border-white/10 bg-slate-950/60 flex-shrink-0 z-20",
+                        isWheelFullscreen ? "py-4 px-8" : "py-3.5 px-6"
+                    )}>
                         <div className="flex items-center gap-3">
                             <div className="p-2 rounded-2xl bg-indigo-600/30 border border-indigo-400/40 text-indigo-300">
                                 <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
+                                <h3 className={cn("font-black text-white tracking-tight flex items-center gap-2", isWheelFullscreen ? "text-2xl" : "text-lg")}>
                                     Şanslı Kura Çarkı
                                 </h3>
-                                <p className="text-xs text-slate-400 font-medium">
-                                    Kayıtlı öğrenciler veya özel liste arasından rastgele kura çekin.
-                                </p>
+                                <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
+                                    <span>{pickerSource === 'registered' ? (selectedClassData ? `${selectedClassData.name} ${branchFilter !== 'all' ? `(${branchFilter})` : ''}` : 'Tüm Sınıflar') : 'Özel Liste'}</span>
+                                    <span>•</span>
+                                    <span className="text-sky-400 font-bold">{totalSlices} Öğrenci</span>
+                                </div>
                             </div>
                         </div>
 
-                        <button 
-                            onClick={onClose}
-                            className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
-                        >
-                            <X className="w-6 h-6" />
-                        </button>
+                        {/* Sağ Aksiyon Butonları */}
+                        <div className="flex items-center gap-2">
+                            {/* Tam Ekran Modunda Hızlı Çevir */}
+                            {isWheelFullscreen && (
+                                <Button
+                                    onClick={spinWheel}
+                                    disabled={isRolling || totalSlices < 2}
+                                    className="h-10 px-5 text-sm font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 rounded-xl shadow-lg shadow-amber-500/20 active:scale-95 transition-all cursor-pointer mr-2"
+                                >
+                                    <Sparkles className={cn("w-4 h-4 mr-1", isRolling && "animate-spin")} />
+                                    {isRolling ? "Dönüyor..." : "ÇEVİR"}
+                                </Button>
+                            )}
+
+                            {/* Tam Ekran / Küçült Toggle Butonu */}
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setIsWheelFullscreen(prev => !prev)}
+                                className="h-9 px-3 rounded-xl border border-white/10 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold gap-1.5 cursor-pointer"
+                                title={isWheelFullscreen ? "Normal Görünüme Dön" : "Tam Ekranda Büyüt"}
+                            >
+                                {isWheelFullscreen ? (
+                                    <>
+                                        <Minimize2 className="w-4 h-4 text-rose-400" />
+                                        <span className="hidden sm:inline">Küçült</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Maximize2 className="w-4 h-4 text-sky-400" />
+                                        <span className="hidden sm:inline">Tam Ekran</span>
+                                    </>
+                                )}
+                            </Button>
+
+                            {/* Kapat Butonu */}
+                            <button 
+                                onClick={onClose}
+                                className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                                title="Kapat"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Ana Gövde (Sol: Ayarlar/Liste, Sağ: Dönen Çark) */}
-                    <div className="flex-1 flex flex-col md:flex-row overflow-hidden p-4 md:p-6 gap-6 min-h-0">
-                        {/* SOL: Kontrol & Sınıf / Şube Filtresi */}
-                        <div className="w-full md:w-80 flex flex-col gap-4 overflow-y-auto pr-1 flex-shrink-0">
+                    <div className={cn(
+                        "flex-1 flex overflow-hidden min-h-0",
+                        isWheelFullscreen ? "flex-col md:flex-row p-4 md:p-8 gap-6" : "flex-col md:flex-row p-4 md:p-6 gap-6"
+                    )}>
+                        {/* SOL: Kontrol & Sınıf / Şube Filtresi (Tam ekranda kompakt veya gizlenebilir) */}
+                        <div className={cn(
+                            "flex flex-col gap-4 overflow-y-auto pr-1 flex-shrink-0 transition-all",
+                            isWheelFullscreen ? "w-full md:w-80" : "w-full md:w-80"
+                        )}>
                             {/* Kaynak Seçimi (Kayıtlı vs Özel Liste) */}
                             <div className="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-slate-950/60 border border-white/10">
                                 <button
@@ -317,7 +376,7 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                 <div className="space-y-1.5 p-3 rounded-2xl bg-white/5 border border-white/10 flex-1 flex flex-col">
                                     <Label className="text-xs font-bold text-slate-300">İsimler (Her Satıra Bir İsim)</Label>
                                     <textarea
-                                        rows={6}
+                                        rows={isWheelFullscreen ? 8 : 5}
                                         value={customNamesText}
                                         onChange={e => { setCustomNamesText(e.target.value); resetStudentList(); }}
                                         disabled={isRolling}
@@ -351,36 +410,63 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                 size="lg"
                                 onClick={spinWheel}
                                 disabled={isRolling || totalSlices < 2}
-                                className="w-full h-14 text-lg font-black bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-400 hover:to-pink-400 text-white shadow-xl shadow-indigo-950/40 rounded-2xl transition-all active:scale-95 disabled:opacity-40 cursor-pointer mt-auto"
+                                className={cn(
+                                    "w-full text-white shadow-xl shadow-indigo-950/40 rounded-2xl transition-all active:scale-95 disabled:opacity-40 cursor-pointer mt-auto font-black",
+                                    isWheelFullscreen 
+                                        ? "h-16 text-xl bg-gradient-to-r from-amber-500 via-orange-500 to-pink-500 hover:from-amber-400 hover:to-pink-400" 
+                                        : "h-14 text-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-400 hover:to-pink-400"
+                                )}
                             >
                                 <Sparkles className={cn("w-5 h-5 mr-1.5", isRolling && "animate-spin")} />
                                 {isRolling ? "Çark Dönüyor..." : "ÇARKIK ÇEVİR"}
                             </Button>
                         </div>
 
-                        {/* SAĞ: Dönen Çark SVG & Gösterge İbresi */}
-                        <div className="flex-1 flex items-center justify-center relative p-2 min-h-[300px] md:min-h-[420px] bg-slate-950/40 rounded-3xl border border-white/10 overflow-hidden">
+                        {/* SAĞ: Dönen Çark SVG & Gösterge İbresi (Tam Ekranda Devasa Boyut) */}
+                        <div className={cn(
+                            "flex-1 flex items-center justify-center relative bg-slate-950/40 rounded-3xl border border-white/10 overflow-hidden transition-all",
+                            isWheelFullscreen ? "p-4 min-h-[400px]" : "p-2 min-h-[300px] md:min-h-[420px]"
+                        )}>
                             {/* Gösterge İbresi (Ticker Needle) */}
                             <div className={cn(
-                                "absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 filter drop-shadow-2xl transition-transform origin-right pointer-events-none",
-                                tickerShake ? "rotate-[-16deg]" : "rotate-0"
+                                "absolute z-30 filter drop-shadow-2xl transition-transform origin-right pointer-events-none",
+                                isWheelFullscreen 
+                                    ? "right-4 sm:right-12 top-1/2 -translate-y-1/2" 
+                                    : "right-2 sm:right-6 top-1/2 -translate-y-1/2",
+                                tickerShake ? "rotate-[-18deg]" : "rotate-0"
                             )}>
                                 <div className="relative">
-                                    <div className="w-0 h-0 border-t-[18px] border-t-transparent border-r-[45px] border-r-amber-400 border-b-[18px] border-b-transparent drop-shadow-[0_0_10px_rgba(245,158,11,0.8)]" />
-                                    <div className="absolute top-1/2 right-1.5 -translate-y-1/2 w-3.5 h-3.5 bg-white rounded-full shadow-inner" />
+                                    <div className={cn(
+                                        "w-0 h-0 border-t-transparent border-r-amber-400 border-b-transparent drop-shadow-[0_0_15px_rgba(245,158,11,0.9)]",
+                                        isWheelFullscreen 
+                                            ? "border-t-[26px] border-r-[65px] border-b-[26px]" 
+                                            : "border-t-[18px] border-r-[45px] border-b-[18px]"
+                                    )} />
+                                    <div className={cn(
+                                        "absolute top-1/2 right-1.5 -translate-y-1/2 bg-white rounded-full shadow-inner",
+                                        isWheelFullscreen ? "w-5 h-5" : "w-3.5 h-3.5"
+                                    )} />
                                 </div>
                             </div>
 
                             {/* Çark Dairesi */}
-                            <div className="relative aspect-square w-full max-w-[360px] md:max-w-[420px] flex items-center justify-center">
+                            <div className={cn(
+                                "relative aspect-square w-full flex items-center justify-center transition-all duration-300",
+                                isWheelFullscreen 
+                                    ? "max-w-[78vh] h-[78vh]" 
+                                    : "max-w-[360px] md:max-w-[440px]"
+                            )}>
                                 <div 
-                                    className="w-full h-full rounded-full border-[10px] border-slate-800 shadow-[0_0_60px_rgba(0,0,0,0.8)] relative overflow-hidden bg-slate-900"
+                                    className={cn(
+                                        "w-full h-full rounded-full shadow-[0_0_80px_rgba(0,0,0,0.8)] relative overflow-hidden bg-slate-900 transition-none",
+                                        isWheelFullscreen ? "border-[14px] border-slate-800" : "border-[10px] border-slate-800"
+                                    )}
                                     style={{
                                         transform: `rotate(${rotation}deg)`,
                                         transition: 'none'
                                     }}
                                 >
-                                    <div className="absolute inset-0 rounded-full shadow-[inset_0_0_30px_rgba(0,0,0,0.6)] z-10 pointer-events-none border-[2px] border-white/10" />
+                                    <div className="absolute inset-0 rounded-full shadow-[inset_0_0_35px_rgba(0,0,0,0.6)] z-10 pointer-events-none border-[3px] border-white/10" />
 
                                     <svg viewBox="-1 -1 2 2" className="w-full h-full" style={{ transform: 'rotate(0deg)' }}>
                                         {wheelItems.map((item, index) => {
@@ -399,7 +485,9 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                             const textX = Math.cos(midAngle) * textRadius;
                                             const textY = Math.sin(midAngle) * textRadius;
                                             const rotationDeg = (midAngle * 180) / Math.PI;
-                                            const fontSize = Math.max(0.04, Math.min(0.075, 0.45 / (totalSlices > 0 ? totalSlices : 1)));
+                                            
+                                            // Sınıftaki herkesin adı okunsun diye dinamik yazı boyutu
+                                            const fontSize = Math.max(0.045, Math.min(0.085, 0.5 / (totalSlices > 0 ? totalSlices : 1)));
 
                                             const displayName = item.name.split(' ')[0].toUpperCase();
 
@@ -412,11 +500,14 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                                         fill="white"
                                                         fontSize={fontSize}
                                                         fontWeight="900"
-                                                        fontFamily="Arial Black, system-ui, sans-serif"
+                                                        fontFamily="Arial Black, Impact, system-ui, sans-serif"
                                                         textAnchor="middle"
                                                         alignmentBaseline="middle"
                                                         transform={`rotate(${rotationDeg}, ${textX}, ${textY})`}
-                                                        style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.6)' }}
+                                                        style={{ 
+                                                            textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.9)',
+                                                            letterSpacing: '0.02em'
+                                                        }}
                                                     >
                                                         {displayName}
                                                     </text>
@@ -429,10 +520,18 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                 {/* Merkez Çevir Düğmesi */}
                                 <div 
                                     onClick={spinWheel}
-                                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white rounded-full border-[6px] border-slate-800 shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center justify-center z-20 cursor-pointer hover:scale-105 active:scale-95 transition-transform group"
+                                    className={cn(
+                                        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full shadow-[0_0_40px_rgba(255,255,255,0.4)] flex items-center justify-center z-20 cursor-pointer hover:scale-105 active:scale-95 transition-transform group",
+                                        isWheelFullscreen 
+                                            ? "w-28 h-28 border-[8px] border-slate-800" 
+                                            : "w-20 h-20 border-[6px] border-slate-800"
+                                    )}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-100 to-slate-300 rounded-full" />
-                                    <span className="relative text-slate-900 font-black text-sm tracking-tight group-hover:text-indigo-600 transition-colors">
+                                    <span className={cn(
+                                        "relative text-slate-900 font-black tracking-tight group-hover:text-indigo-600 transition-colors",
+                                        isWheelFullscreen ? "text-lg" : "text-xs sm:text-sm"
+                                    )}>
                                         ÇEVİR
                                     </span>
                                 </div>
@@ -446,35 +545,41 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                     exit={{ opacity: 0, scale: 0.8 }}
                                     className="absolute inset-0 z-40 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4"
                                 >
-                                    <div className="relative text-center p-6 md:p-8 bg-slate-900 border-2 border-amber-400 rounded-3xl shadow-[0_0_80px_rgba(245,158,11,0.5)] max-w-sm w-full">
-                                        <div className="w-14 h-14 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 flex items-center justify-center mx-auto mb-3">
-                                            <Trophy className="w-8 h-8" />
+                                    <div className={cn(
+                                        "relative text-center bg-slate-900 border-4 border-amber-400 rounded-[2.5rem] shadow-[0_0_100px_rgba(245,158,11,0.6)] w-full",
+                                        isWheelFullscreen ? "p-10 max-w-md" : "p-6 md:p-8 max-w-sm"
+                                    )}>
+                                        <div className="w-16 h-16 rounded-full bg-amber-400/20 text-amber-300 border-2 border-amber-400/50 flex items-center justify-center mx-auto mb-4 animate-bounce">
+                                            <Trophy className="w-9 h-9" />
                                         </div>
 
-                                        <span className="text-[11px] font-black text-amber-400 uppercase tracking-widest">
+                                        <span className="text-xs font-black text-amber-400 uppercase tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
                                             Seçilen Öğrenci
                                         </span>
 
-                                        <h3 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 my-2">
+                                        <h3 className={cn(
+                                            "font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 my-3",
+                                            isWheelFullscreen ? "text-4xl md:text-5xl" : "text-3xl md:text-4xl"
+                                        )}>
                                             {winner.name}
                                         </h3>
-                                        <p className="text-sm text-slate-400 font-semibold mb-6">
+                                        <p className="text-base text-slate-300 font-bold mb-8">
                                             {winner.className || "Öğrenci"}
                                         </p>
 
-                                        <div className="grid grid-cols-2 gap-3">
+                                        <div className="grid grid-cols-2 gap-3.5">
                                             <Button
                                                 onClick={removeCurrentStudent}
                                                 variant="destructive"
-                                                className="h-11 text-xs font-bold rounded-xl border border-red-500/40 cursor-pointer"
+                                                className="h-12 text-xs font-bold rounded-xl border border-red-500/40 cursor-pointer"
                                             >
-                                                <UserMinus className="w-3.5 h-3.5 mr-1" /> Listeden Çıkar
+                                                <UserMinus className="w-4 h-4 mr-1.5" /> Listeden Çıkar
                                             </Button>
                                             <Button
                                                 onClick={() => setWinner(null)}
-                                                className="h-11 text-xs font-black bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl shadow-md shadow-emerald-950/40 cursor-pointer"
+                                                className="h-12 text-xs font-black bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl shadow-lg shadow-emerald-950/40 cursor-pointer"
                                             >
-                                                <Check className="w-4 h-4 mr-1" /> Devam Et
+                                                <Check className="w-4 h-4 mr-1.5" /> Devam Et
                                             </Button>
                                         </div>
                                     </div>
