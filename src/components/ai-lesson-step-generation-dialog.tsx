@@ -15,6 +15,7 @@ import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import type { LessonStep } from '@/lib/types';
 import { Checkbox } from './ui/checkbox';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 const allActivityOptions = {
