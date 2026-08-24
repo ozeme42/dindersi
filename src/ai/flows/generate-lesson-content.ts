@@ -6,11 +6,13 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
+import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 
 const GenerateLessonContentInputSchema = z.object({
   topicSummary: z.string().describe('A summary of the topic for which to generate lesson content.'),
   apiKey: z.string().optional(),
   modelName: z.string().optional(),
+  itemCount: z.number().optional(), // e.g. 5 questions / concepts
   modules: z.object({
     summary: z.boolean().optional(),
     learningObjectives: z.boolean().optional(),
@@ -24,9 +26,8 @@ const GenerateLessonContentInputSchema = z.object({
     anagramQuestions: z.boolean().optional(),
     sentenceScrambleQuestions: z.boolean().optional(),
     visuals: z.boolean().optional(),
-    infographicIdeas: z.boolean().optional(),
-    videos: z.boolean().optional(),
-    documents: z.boolean().optional(),
+    conceptMap: z.boolean().optional(),
+    htmlSlide: z.boolean().optional(),
   }),
 });
 export type GenerateLessonContentInput = z.infer<typeof GenerateLessonContentInputSchema>;
@@ -44,25 +45,62 @@ export type GenerateLessonContentOutput = {
   anagramQuestions?: { definition: string; scrambledWord: string; correctAnswer: string }[];
   sentenceScrambleQuestions?: { scrambledSentence: string; correctSentence: string }[];
   visuals?: string[];
-  generatedImageDataUri?: string;
   progress?: string;
 };
 
 const moduleInstructions: Record<string, string> = {
-  summary: `- summary: Konunun 3-5 maddelik özeti. Her biri "title" ve "content" içermelidir. (Örn: [{ "title": "...", "content": "..." }])`,
-  learningObjectives: `- learningObjectives: Öğrencinin kazanacağı hedefler ("... kavrayabileceksiniz."). Dizi olmalıdır. (Örn: ["Hedef 1", "Hedef 2"])`,
-  keyTakeaways: `- keyTakeaways: Öğrenilen temel çıkarımlar ("... öğrendim."). Dizi olmalıdır. (Örn: ["Çıkarım 1", "Çıkarım 2"])`,
-  conceptExplanations: `- conceptExplanations: 3-5 temel kavram ve detaylı açıklamaları. (Örn: [{ "concept": "Adalet", "definition": "Hak ve hukuka uygunluk..." }])`,
-  keyConcepts: `- keyConcepts: Anahtar kavramların isim listesi. (Örn: ["Kavram 1", "Kavram 2"])`,
-  flashcards: `- flashcards: Bilgi kartları terim ve tanım çiftleri. (Örn: [{ "term": "Terim", "definition": "Tanım..." }])`,
-  multipleChoiceQuestions: `- multipleChoiceQuestions: 4 seçenekli çoktan seçmeli sorular. (Örn: [{ "question": "Soru...", "options": ["A", "B", "C", "D"], "correctAnswer": "A" }])`,
-  trueFalseQuestions: `- trueFalseQuestions: Doğru/Yanlış ifadeleri. (Örn: [{ "statement": "İfade...", "isTrue": true }])`,
-  fillInTheBlankQuestions: `- fillInTheBlankQuestions: Boşluk doldurma soruları (boşluk '___' ile belirtilir). (Örn: [{ "sentenceWithBlank": "İslam'ın şartı ___ tanedir.", "options": ["3", "4", "5", "6"], "correctAnswer": "5" }])`,
-  anagramQuestions: `- anagramQuestions: Karışık harfli kelime bulma soruları. (Örn: [{ "definition": "İpucu tanım", "scrambledWord": "karnaa", "correctAnswer": "Ankara" }])`,
-  sentenceScrambleQuestions: `- sentenceScrambleQuestions: Karışık kelimeli cümle düzeltme. (Örn: [{ "scrambledSentence": "geldi bugün okula ali", "correctSentence": "ali bugün okula geldi" }])`,
+  summary: `"summary": [
+    { "title": "1. Giriş ve Temel İlke", "content": "<li>Konunun ana hatlarını açıklayan detaylı birinci madde.</li><li>İkinci önemli açıklama noktası.</li>" },
+    { "title": "2. Önemli Özellikler ve Hükümler", "content": "<li>Uygulama şartları ve dikkat edilecek noktalar.</li>" },
+    { "title": "3. Günlük Hayata Yansımaları", "content": "<li>Bireysel ve toplumsal faydaları.</li>" }
+  ]`,
+  learningObjectives: `"learningObjectives": [
+    "Konunun temel kavramlarını ve anlamını doğru şekilde açıklayabileceksiniz.",
+    "Konuyla ilgili temel ilkeleri günlük yaşam örnekleriyle ilişkilendirebileceksiniz.",
+    "Kazanımları kavrayarak değerlendirme sorularını başarıyla çözebileceksiniz."
+  ]`,
+  keyTakeaways: `"keyTakeaways": [
+    "Konu hakkındaki en kritik 1. temel kazanım cümlesi.",
+    "Unutulmaması gereken 2. önemli ilke.",
+    "Sınavlarda sıkça çıkan 3. kilit kural."
+  ]`,
+  conceptExplanations: `"conceptExplanations": [
+    { "concept": "Kavram 1", "definition": "Bu kavramın açık, net ve pedagojik tanımı." },
+    { "concept": "Kavram 2", "definition": "İkinci kilit kavramın detaylı tanımı." },
+    { "concept": "Kavram 3", "definition": "Üçüncü kilit kavramın detaylı tanımı." },
+    { "concept": "Kavram 4", "definition": "Dördüncü kilit kavramın detaylı tanımı." }
+  ]`,
+  flashcards: `"flashcards": [
+    { "term": "Terim 1", "definition": "Bu terimin akılda kalıcı, kısa ve vurucu açıklaması." },
+    { "term": "Terim 2", "definition": "İkinci terimin açıklaması." },
+    { "term": "Terim 3", "definition": "Üçüncü terimin açıklaması." },
+    { "term": "Terim 4", "definition": "Dördüncü terimin açıklaması." }
+  ]`,
+  anagramQuestions: `"anagramQuestions": [
+    { "definition": "İpucu tanım veya açıklama", "scrambledWord": "karışıkharfler", "correctAnswer": "DOĞRUKELİME" },
+    { "definition": "İkinci ipucu tanım", "scrambledWord": "harflerkarışık", "correctAnswer": "İKİNCİKELİME" },
+    { "definition": "Üçüncü ipucu tanım", "scrambledWord": "karışıküç", "correctAnswer": "ÜÇÜNCÜKELİME" }
+  ]`,
+  sentenceScrambleQuestions: `"sentenceScrambleQuestions": [
+    { "scrambledSentence": "şartıdır İslam'ın beş temel namaz kılmak", "correctSentence": "namaz kılmak İslam'ın beş temel şartıdır" },
+    { "scrambledSentence": "bireyi korur kötülüklerden güzel ahlak", "correctSentence": "güzel ahlak bireyi kötülüklerden korur" }
+  ]`,
+  multipleChoiceQuestions: `"multipleChoiceQuestions": [
+    { "question": "Konuyla ilgili 1. soru kökü?", "options": ["A Seçeneği", "B Seçeneği", "C Seçeneği", "D Seçeneği"], "correctAnswer": "A Seçeneği" },
+    { "question": "Konuyla ilgili 2. soru kökü?", "options": ["A Seçeneği", "B Seçeneği", "C Seçeneği", "D Seçeneği"], "correctAnswer": "B Seçeneği" },
+    { "question": "Konuyla ilgili 3. soru kökü?", "options": ["A Seçeneği", "B Seçeneği", "C Seçeneği", "D Seçeneği"], "correctAnswer": "C Seçeneği" }
+  ]`,
+  trueFalseQuestions: `"trueFalseQuestions": [
+    { "statement": "Konuyla ilgili doğru bir yargı ifadesi.", "isTrue": true },
+    { "statement": "Konuyla ilgili çeldirici yanlış bir ifade.", "isTrue": false },
+    { "statement": "Konuyla ilgili ikinci doğru bir ifade.", "isTrue": true },
+    { "statement": "Konuyla ilgili ikinci yanlış bir ifade.", "isTrue": false }
+  ]`,
+  fillInTheBlankQuestions: `"fillInTheBlankQuestions": [
+    { "sentenceWithBlank": "Cümledeki boşluk ___ işaretiyle gösterilir.", "options": ["Doğru Cevap", "Çeldirici 1", "Çeldirici 2", "Çeldirici 3"], "correctAnswer": "Doğru Cevap" },
+    { "sentenceWithBlank": "İkinci boşluklu ___ cümle buradadır.", "options": ["Doğru Seçenek", "Yanlış 1", "Yanlış 2", "Yanlış 3"], "correctAnswer": "Doğru Seçenek" }
+  ]`
 };
-
-import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 
 export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
   const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
@@ -71,56 +109,63 @@ export async function generateLessonContent(input: GenerateLessonContentInput): 
   });
 
   if (!activeKey) {
-    throw new Error('Gemini API anahtarı bulunamadı. Lütfen "Model & API Ayarları" bölümünden kendi Google AI Studio API anahtarınızı girip "Sisteme Kaydet"e tıklayın.');
+    throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı girip Sisteme Kaydet butonuna tıklayın.');
   }
 
-  const requestedInstructions = Object.entries(input.modules)
+  const requestedKeys = Object.entries(input.modules)
     .filter(([, value]) => value)
-    .filter(([key]) => key in moduleInstructions && key !== 'visuals')
-    .map(([key]) => moduleInstructions[key])
-    .join('\n');
+    .map(([key]) => key)
+    .filter(key => key in moduleInstructions);
 
-  let output: GenerateLessonContentOutput = {};
+  if (requestedKeys.length === 0) {
+    return {};
+  }
 
-  if (requestedInstructions) {
-    const prompt = `Sen uzman bir Türk eğitim içerik üreticisi ve pedagojik ders tasarımcısısın.
-Aşağıdaki konu metnini ve istenen modülleri kullanarak SADECE geçerli bir JSON nesnesi üret.
-Tüm içerik Türkçe olmalıdır.
+  const requestedExamples = requestedKeys.map(k => moduleInstructions[k]).join(',\n\n');
+
+  const prompt = `Sen uzman bir Türk eğitim içerik üreticisi, soru yazarı ve pedagojik ders tasarımcısısın.
+Görevin, aşağıdaki konuyu derinlemesine analiz ederek talep edilen eğitim modüllerini EKSİKSİZ, DOĞRU ve ZENGİN bir şekilde üretmektir.
 
 KONU / KAYNAK METİN:
-${input.topicSummary}
+"${input.topicSummary}"
 
 ---
 
-İSTENEN MODÜLLER VE FORMATLARI:
-${requestedInstructions}
+İSTENEN JSON FORMATI VE ŞABLONU:
+SADECE geçerli bir JSON nesnesi üret. Yanıtın başında ve sonunda hiçbir ek metin, markdown (\`\`\`json) olmasın.
+Format tam olarak şu yapıda olmalıdır:
 
-ÖNEMLİ KURALLAR:
-1. Yanıtın SADECE geçerli bir JSON nesnesi olsun. Başına veya sonuna \`\`\`json veya açıklama ekleme.
-2. Yalnızca istenen modüllerin anahtarlarını JSON içine ekle.
-3. Sorularda ve içeriklerde Türkçe yazım kurallarına tam uy.
+{
+${requestedExamples}
+}
+
+---
+
+### KRİTİK KURALLAR:
+1. SADECE yukarıda istenen alanları (${requestedKeys.join(', ')}) JSON nesnesinde doldur.
+2. Tüm içerikler pedagojik olarak zengin, anlaşılır, MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
+3. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
+4. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
+5. SADECE saf JSON nesnesi döndür.
 `;
 
-    const genAI = new GoogleGenerativeAI(activeKey);
-    const model = genAI.getGenerativeModel({
-      model: selectedModel,
-      generationConfig: {
-        responseMimeType: 'application/json',
-      },
-    });
+  const genAI = new GoogleGenerativeAI(activeKey);
+  const model = genAI.getGenerativeModel({
+    model: selectedModel,
+    generationConfig: {
+      responseMimeType: 'application/json',
+    },
+  });
 
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
+  const result = await model.generateContent(prompt);
+  const text = result.response.text();
 
-    try {
-      // JSON temizleme ve parse
-      const cleaned = text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
-      output = JSON.parse(cleaned);
-    } catch (parseError) {
-      console.error('JSON parse error in generateLessonContent:', text);
-      throw new Error('Yapay zeka yanıtı JSON formatına dönüştürülemedi.');
-    }
+  try {
+    const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+    const parsed = JSON.parse(cleaned);
+    return parsed as GenerateLessonContentOutput;
+  } catch (parseError) {
+    console.error('JSON parse error in generateLessonContent:', text);
+    throw new Error('Yapay zeka yanıtı JSON olarak okunamadı: ' + (parseError as any).message);
   }
-
-  return output;
 }

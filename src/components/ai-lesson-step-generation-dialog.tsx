@@ -1,96 +1,109 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import * as z from 'zod';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-    Loader2, Sparkles, Wand2, KeyRound, Settings2, ExternalLink, 
-    Check, Eye, EyeOff, ShieldCheck, Zap, Flame, Save, Server
-} from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { 
+    Loader2, Sparkles, Key, Eye, EyeOff, Save, CheckCircle2, 
+    Settings2, Brain, ChevronDown, ChevronUp, Layers, Check, 
+    Flame, Wand2, BookOpen, Puzzle, HelpCircle, FileText, Shuffle, Target
+} from 'lucide-react';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
-import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
+import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
 import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
-import type { LessonStep } from '@/lib/types';
-import { Checkbox } from './ui/checkbox';
+import type { LessonStep, AnagramGameStep, TrueFalseListStep } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-// ══ GÜNCEL ÜCRETSİZ GEMİNİ MODELLERİ LİSTESİ (2026 GÜNCEL) ══
+// Güncel Gemini Modelleri
 export const FREE_GEMINI_MODELS = [
-    { 
-        id: 'gemini-3.7-flash', 
-        name: 'Gemini 3.7 Flash', 
-        tag: '🔥 En Yeni Amiral Gemisi (Ağustos 2026)', 
-        desc: 'Google\'ın en gelişmiş, hibrit akıl yürütme (thinking) yeteneğine sahip en yeni Flash modeli.',
-        badge: 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+    {
+        id: 'gemini-3.7-flash',
+        name: 'Gemini 3.7 Flash',
+        tag: 'Önerilen • En Yeni & Hızlı',
+        desc: 'Google’ın en güncel hibrit zeka ve ders tasarımı modeli.',
+        badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
     },
-    { 
-        id: 'gemini-2.0-flash', 
-        name: 'Gemini 2.0 Flash', 
-        tag: '⚡ Yüksek Hız & Kararlı', 
-        desc: 'Oldukça hızlı yanıt süresi ve dengeli pedagojik Türkçe üretimi.',
+    {
+        id: 'gemini-2.0-flash',
+        name: 'Gemini 2.0 Flash',
+        tag: 'Yüksek Hız & Çoklu İçerik',
+        desc: 'Geniş bağlam ve anında JSON üretimi için optimize.',
         badge: 'bg-blue-500/20 text-blue-300 border-blue-500/40'
     },
-    { 
-        id: 'gemini-2.0-flash-lite', 
-        name: 'Gemini 2.0 Flash-Lite', 
-        tag: '🚀 Ultra Hızlı & Hafif', 
-        desc: 'Saniyeler içinde hızlı soru ve kart üretmek için optimize edilmiştir.',
-        badge: 'bg-teal-500/20 text-teal-300 border-teal-500/40'
+    {
+        id: 'gemini-2.0-flash-lite',
+        name: 'Gemini 2.0 Flash Lite',
+        tag: 'Ultra Hızlı & Hafif',
+        desc: 'Hızlı soru ve kavram üretimi için düşük gecikmeli model.',
+        badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
     },
-    { 
-        id: 'gemini-2.0-flash-thinking-exp-01-21', 
-        name: 'Gemini 2.0 Flash Thinking', 
-        tag: '🧠 Düşünerek Akıl Yürütme', 
-        desc: 'Yanıt vermeden önce adım adım akıl yürüten (Chain-of-Thought) gelişmiş model.',
-        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-    },
-    { 
-        id: 'gemini-1.5-flash', 
-        name: 'Gemini 1.5 Flash', 
-        tag: '✨ Geniş Bağlam', 
-        desc: 'Çok uzun metinleri tek seferde analiz edebilen kararlı model.',
-        badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
-    },
-    { 
-        id: 'gemini-1.5-pro', 
-        name: 'Gemini 1.5 Pro', 
-        tag: '💎 Derin Analiz & Detay', 
-        desc: 'Kapsamlı ve zengin içerikler için yüksek kapasiteli model.',
+    {
+        id: 'gemini-2.0-flash-thinking-exp-01-21',
+        name: 'Gemini 2.0 Thinking (Akıl Yürütme)',
+        tag: 'Düşünce Zinciri (CoT)',
+        desc: 'Karmaşık LGS mantık ve muhakeme soruları yazımı için derin düşünme modeli.',
         badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
     },
+    {
+        id: 'gemini-1.5-flash',
+        name: 'Gemini 1.5 Flash',
+        tag: 'Kararlı Klasik',
+        desc: 'Geniş doküman okuma ve metinden soru çıkarma modeli.',
+        badge: 'bg-slate-500/20 text-slate-300 border-slate-500/40'
+    },
+    {
+        id: 'gemini-1.5-pro',
+        name: 'Gemini 1.5 Pro',
+        tag: 'Derin Analiz & Kalite',
+        desc: 'Akademik düzeyde detaylı ve zengin konu anlatımları için.',
+        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+    }
 ];
 
-const allActivityOptions = {
-    anlatim: [
-        { id: 'summary', label: 'Özet (Akordiyon)' },
-        { id: 'learningObjectives', label: 'Öğrenme Hedefleri' },
-        { id: 'conceptExplanations', label: 'Kavram Açıklamaları' },
-        { id: 'flashcards', label: 'Bilgi Kartları' },
-        { id: 'keyTakeaways', label: 'Anahtar Çıkarımlar' },
-        { id: 'htmlSlide', label: 'İnteraktif HTML Slayt' },
-        { id: 'conceptMap', label: 'Kavram Haritası (Görsel Şema)' },
-    ],
-    degerlendirme: [
-        { id: 'multipleChoiceQuestions', label: 'Çoktan Seçmeli Sorular' },
-        { id: 'trueFalseQuestions', label: 'Doğru/Yanlış Listesi' },
-        { id: 'fillInTheBlankQuestions', label: 'Boşluk Doldurma Soruları' },
-        { id: 'sentenceScrambleQuestions', label: 'Cümle Düzeltme Soruları' },
-        { id: 'anagramQuestions', label: 'Anagram / Kelime Soruları' },
-    ]
-} as const;
+export type ActivityOption = {
+    id: string;
+    label: string;
+    description: string;
+    icon: React.ReactNode;
+    category: 'anlatim' | 'degerlendirme';
+};
+
+export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
+    // Anlatım Modülleri
+    { id: 'htmlSlide', label: 'İnteraktif Zengin HTML Slayt', description: 'Gamma / NotebookLM kalitesinde görsel kartlı modern slayt', icon: <FileText className="w-4 h-4 text-sky-400" />, category: 'anlatim' },
+    { id: 'conceptExplanations', label: 'Kavram Açıklamaları (Kartlar)', description: 'Konunun 3-5 temel kavramı ve detaylı pedagojik tanımları', icon: <Brain className="w-4 h-4 text-indigo-400" />, category: 'anlatim' },
+    { id: 'flashcards', label: '3D Bilgi Kartları (Flashcards)', description: 'Dokunup 3D çevrilen etkileşimli terim-tanım hafıza kartları', icon: <BookOpen className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
+    { id: 'summary', label: 'Konu Özeti (Akordiyon)', description: '3 ana başlık altında toplanmış detaylı konu özeti maddeleri', icon: <Layers className="w-4 h-4 text-yellow-400" />, category: 'anlatim' },
+    { id: 'learningObjectives', label: 'Öğrenme Hedefleri', description: 'Öğrencinin dersten kazanacağı temel kazanım cümleleri', icon: <Target className="w-4 h-4 text-amber-400" />, category: 'anlatim' },
+    { id: 'keyTakeaways', label: 'Anahtar Çıkarımlar & İpuçları', description: 'Dersin en kritik hap bilgileri ve sınav tüyoları', icon: <Sparkles className="w-4 h-4 text-rose-400" />, category: 'anlatim' },
+    { id: 'conceptMap', label: 'Kavram Haritası Şeması', description: 'Kavramlar arası ilişkileri gösteren etkileşimli görsel şema', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
+
+    // Değerlendirme & Oyun Modülleri
+    { id: 'multipleChoiceQuestions', label: 'Çoktan Seçmeli Sorular (MCQ)', description: '4 seçenekli, açıklamalı test ve kontrol soruları', icon: <HelpCircle className="w-4 h-4 text-violet-400" />, category: 'degerlendirme' },
+    { id: 'trueFalseQuestions', label: 'Doğru / Yanlış Listesi', description: 'Tek ekranda çözülen etkileşimli D/Y ifadeleri', icon: <CheckCircle2 className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
+    { id: 'fillInTheBlankQuestions', label: 'Boşluk Doldurma Soruları', description: 'Kilit kavramları pekiştiren seçenekli boşluk doldurma', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
+    { id: 'anagramQuestions', label: 'Anagram / Kelime Oyunu', description: 'Harfleri karışık verilen kelimeleri bulma bulmacası', icon: <Puzzle className="w-4 h-4 text-fuchsia-400" />, category: 'degerlendirme' },
+    { id: 'sentenceScrambleQuestions', label: 'Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
+];
 
 const formSchema = z.object({
-  sourceText: z.string().min(5, 'Kaynak metin veya konu başlığı en az 5 karakter olmalıdır.'),
+  sourceText: z.string().min(3, 'Kaynak metin veya konu başlığı en az 3 karakter olmalıdır.'),
   modules: z.record(z.boolean().optional()).refine(val => Object.values(val).some(v => v), {
     message: "En az bir içerik türü seçmelisiniz."
   })
@@ -135,19 +148,15 @@ export function AiLessonStepGenerationDialog({
       modules: {},
     },
   });
-  
-  const activityOptions = generationType ? allActivityOptions[generationType] : [];
 
-  // Sistemden ve tarayıcıdan kayıtlı API Anahtarı ve Modeli yükle
+  // Sistemden kayıtlı API Anahtarı ve Modeli yükle
   useEffect(() => {
     async function loadConfig() {
         if (typeof window !== 'undefined') {
             const localKey = localStorage.getItem('custom_gemini_api_key') || '';
             const localModel = localStorage.getItem('custom_gemini_model') || '';
 
-            if (localKey) {
-                setApiKey(localKey);
-            }
+            if (localKey) setApiKey(localKey);
             if (localModel) {
                 const isKnown = FREE_GEMINI_MODELS.some(m => m.id === localModel);
                 if (isKnown) {
@@ -165,9 +174,7 @@ export function AiLessonStepGenerationDialog({
             const sysConfig = await getSystemAiConfigAction();
             if (sysConfig.apiKey) {
                 setIsSystemPersisted(true);
-                if (!apiKey) {
-                    setApiKey(sysConfig.apiKey);
-                }
+                if (!apiKey) setApiKey(sysConfig.apiKey);
             }
             if (sysConfig.modelName && !selectedModel) {
                 const isKnown = FREE_GEMINI_MODELS.some(m => m.id === sysConfig.modelName);
@@ -194,15 +201,25 @@ export function AiLessonStepGenerationDialog({
     if (context && isOpen) {
       form.setValue('sourceText', context.sourceText || context.topicTitle || '');
       
+      // Varsayılan zengin seçimler
       const defaultModules: { [key: string]: boolean } = {};
       if (generationType === 'anlatim') {
-        defaultModules['summary'] = true;
+        defaultModules['htmlSlide'] = true;
         defaultModules['conceptExplanations'] = true;
         defaultModules['flashcards'] = true;
+        defaultModules['summary'] = true;
       } else if (generationType === 'degerlendirme') {
+        defaultModules['trueFalseQuestions'] = true;
+        defaultModules['multipleChoiceQuestions'] = true;
+        defaultModules['fillInTheBlankQuestions'] = true;
+        defaultModules['anagramQuestions'] = true;
+      } else {
+        // Hepsi
+        defaultModules['htmlSlide'] = true;
+        defaultModules['conceptExplanations'] = true;
+        defaultModules['flashcards'] = true;
         defaultModules['multipleChoiceQuestions'] = true;
         defaultModules['trueFalseQuestions'] = true;
-        defaultModules['fillInTheBlankQuestions'] = true;
       }
       form.setValue('modules', defaultModules);
     }
@@ -210,20 +227,42 @@ export function AiLessonStepGenerationDialog({
 
   const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
 
-  // Anahtarı hem tarayıcıya hem de doğrudan Firebase/Sisteme kalıcı olarak kaydet
+  // Hazır Şablon Presetleri
+  const applyPreset = (preset: 'full' | 'presentation' | 'cards' | 'games' | 'assessment') => {
+    const modules: { [key: string]: boolean } = {};
+    if (preset === 'full') {
+        ALL_ACTIVITY_OPTIONS.forEach(opt => modules[opt.id] = true);
+    } else if (preset === 'presentation') {
+        modules['htmlSlide'] = true;
+        modules['summary'] = true;
+        modules['learningObjectives'] = true;
+        modules['conceptMap'] = true;
+    } else if (preset === 'cards') {
+        modules['conceptExplanations'] = true;
+        modules['flashcards'] = true;
+        modules['keyTakeaways'] = true;
+    } else if (preset === 'games') {
+        modules['anagramQuestions'] = true;
+        modules['sentenceScrambleQuestions'] = true;
+    } else if (preset === 'assessment') {
+        modules['multipleChoiceQuestions'] = true;
+        modules['trueFalseQuestions'] = true;
+        modules['fillInTheBlankQuestions'] = true;
+    }
+    form.setValue('modules', modules);
+  };
+
   const handleSaveApiKeyToSystem = async () => {
     setIsSavingSystemKey(true);
     try {
         const trimmedKey = apiKey.trim();
         const trimmedModel = activeModelId;
 
-        // Tarayıcıya kaydet
         if (typeof window !== 'undefined') {
             localStorage.setItem('custom_gemini_api_key', trimmedKey);
             localStorage.setItem('custom_gemini_model', trimmedModel);
         }
 
-        // Sisteme / Firestore'a kalıcı kaydet
         const result = await saveSystemAiConfigAction({
             apiKey: trimmedKey,
             modelName: trimmedModel,
@@ -248,26 +287,6 @@ export function AiLessonStepGenerationDialog({
     }
   };
 
-  const handleSelectModel = (modelId: string) => {
-    if (modelId === 'custom') {
-        setIsCustomModel(true);
-        setSelectedModel('custom');
-    } else {
-        setIsCustomModel(false);
-        setSelectedModel(modelId);
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('custom_gemini_model', modelId);
-        }
-    }
-  };
-
-  const handleSaveCustomModel = (customId: string) => {
-    setCustomModelInput(customId);
-    if (typeof window !== 'undefined' && customId.trim()) {
-        localStorage.setItem('custom_gemini_model', customId.trim());
-    }
-  };
-
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!context) {
       toast({ title: "Hata", description: "Geçersiz bağlam.", variant: "destructive" });
@@ -279,26 +298,11 @@ export function AiLessonStepGenerationDialog({
     let hasError = false;
 
     try {
-        const inputModules = data.modules as GenerateLessonContentInput['modules'];
+        const inputModules = data.modules as any;
         const activeKey = apiKey.trim() || undefined;
         const activeModel = activeModelId || 'gemini-3.7-flash';
         
-        // Özel akışlar (Kavram Haritası & HTML Slayt)
-        if (inputModules.conceptMap) {
-            try {
-                const mapData = await generateConceptMap({ 
-                    topicSummary: data.sourceText,
-                    apiKey: activeKey,
-                    modelName: activeModel
-                });
-                if (mapData && mapData.nodes && mapData.nodes.length > 0) {
-                    generatedSteps.push({ type: 'conceptMap', title: 'Kavram Haritası', mapData: mapData });
-                }
-            } catch (e) {
-                console.error("Concept map error:", e);
-            }
-        }
-
+        // 1. Zengin HTML Slayt Üretimi (Ayrı uzman prompt)
         if (inputModules.htmlSlide) {
             try {
                 const result = await generateHtmlSlide({ 
@@ -307,18 +311,44 @@ export function AiLessonStepGenerationDialog({
                     modelName: activeModel
                 });
                 if (result && result.htmlContent) {
-                    generatedSteps.push({ type: 'htmlSlide', title: 'İnteraktif Sunum Slaytı', htmlContent: result.htmlContent });
+                    generatedSteps.push({ 
+                        type: 'htmlSlide', 
+                        title: `💻 ${context.topicTitle} İnteraktif Slaytı`, 
+                        htmlContent: result.htmlContent,
+                        isPublished: true
+                    });
                 }
-            } catch (e) {
-                console.error("HTML slide error:", e);
+            } catch (e: any) {
+                console.warn("HTML slide generation warning:", e);
+            }
+        }
+
+        // 2. Kavram Haritası (Ayrı şema promptu)
+        if (inputModules.conceptMap) {
+            try {
+                const mapData = await generateConceptMap({ 
+                    topicSummary: data.sourceText,
+                    apiKey: activeKey,
+                    modelName: activeModel
+                });
+                if (mapData && mapData.nodes && mapData.nodes.length > 0) {
+                    generatedSteps.push({ 
+                        type: 'conceptMap', 
+                        title: `🧠 ${context.topicTitle} Kavram Haritası`, 
+                        mapData: mapData,
+                        isPublished: true 
+                    });
+                }
+            } catch (e: any) {
+                console.warn("Concept map warning:", e);
             }
         }
         
-        // Standart Modüller
+        // 3. Standart Yapılandırılmış Modüller (Kavramlar, Flashcard, Anagram, Cümle, Test, D/Y, Boşluk)
         const standardModules: GenerateLessonContentInput['modules'] = {};
         let needsStandardCall = false;
         for (const key in inputModules) {
-            if (key !== 'conceptMap' && key !== 'htmlSlide' && inputModules[key as keyof typeof inputModules]) {
+            if (key !== 'conceptMap' && key !== 'htmlSlide' && inputModules[key]) {
                 standardModules[key as keyof typeof standardModules] = true;
                 needsStandardCall = true;
             }
@@ -340,12 +370,20 @@ export function AiLessonStepGenerationDialog({
         if (generatedSteps.length > 0) {
             onStepsGenerated(generatedSteps);
             handleClose();
+            toast({
+                title: "İçerikler Başarıyla Üretildi! 🎉",
+                description: `${generatedSteps.length} adet zengin slayt sunum akışınıza eklendi.`,
+            });
         } else {
-             toast({ title: "Sonuç Yok", description: "Yapay zeka bu modüller için içerik üretemedi.", variant: "default" });
+             toast({ 
+                 title: "Sonuç Yok", 
+                 description: "Yapay zeka bu modüller için içerik üretemedi. Lütfen konu metnini biraz detaylandırın.", 
+                 variant: "default" 
+             });
         }
 
     } catch (error: any) {
-      console.error("Error generating lesson step:", error);
+      console.error("Error generating lesson steps:", error);
       toast({ 
           title: "Hata", 
           description: error.message || "İçerik üretilirken bir sorun oluştu.", 
@@ -360,70 +398,139 @@ export function AiLessonStepGenerationDialog({
   
   const handleClose = () => {
     onOpenChange(false);
-    setTimeout(() => {
-        form.reset({
-            sourceText: '',
-            modules: {},
-        });
-    }, 300);
   };
 
   const mapAIOutputToSteps = (output: GenerateLessonContentOutput): LessonStep[] => {
         const newSteps: LessonStep[] = [];
-        if (output.summary && output.summary.length > 0) {
-            newSteps.push({ type: 'accordion', title: 'Konu Özeti', items: output.summary.map(s => ({ title: s.title, content: `<ul>${s.content}</ul>` })) });
-        }
+        
+        // 1. Öğrenme Hedefleri
         if (output.learningObjectives && output.learningObjectives.length > 0) {
-            newSteps.push({ type: 'objectiveList', title: 'Öğrenme Hedefleri', items: output.learningObjectives });
+            newSteps.push({ 
+                type: 'objectiveList', 
+                title: '🎯 Öğrenme Hedefleri', 
+                items: output.learningObjectives,
+                isPublished: true 
+            });
         }
+
+        // 2. Konu Özeti (Akordiyon)
+        if (output.summary && output.summary.length > 0) {
+            newSteps.push({ 
+                type: 'accordion', 
+                title: '📖 Konu Özeti & Başlıklar', 
+                items: output.summary.map((s, idx) => ({ 
+                    id: `acc_${idx}_${Date.now()}`,
+                    title: s.title, 
+                    content: s.content.startsWith('<li>') ? `<ul>${s.content}</ul>` : s.content 
+                })),
+                isPublished: true
+            });
+        }
+
+        // 3. Anahtar Çıkarımlar
         if (output.keyTakeaways && output.keyTakeaways.length > 0) {
-            newSteps.push({ type: 'content', title: 'Anahtar Çıkarımlar', content: `<ul>${output.keyTakeaways.map(item => `<li>${item}</li>`).join('')}</ul>` });
+            newSteps.push({ 
+                type: 'content', 
+                title: '💡 Anahtar Çıkarımlar & İpuçları', 
+                content: `<ul>${output.keyTakeaways.map(item => `<li>${item}</li>`).join('')}</ul>`,
+                isPublished: true 
+            });
         }
+
+        // 4. Kavram Açıklamaları (Kavram Kartları)
         if (output.conceptExplanations && output.conceptExplanations.length > 0) {
-            newSteps.push({ type: 'conceptExplanation', title: 'Kavram Açıklamaları', items: output.conceptExplanations });
+            newSteps.push({ 
+                type: 'conceptExplanation', 
+                title: '📌 Temel Kavramlar & Açıklamaları', 
+                items: output.conceptExplanations,
+                isPublished: true 
+            });
         }
+
+        // 5. Bilgi Kartları (Flashcards)
         if (output.flashcards && output.flashcards.length > 0) {
-            newSteps.push({ type: 'flashcard', title: 'Bilgi Kartları', cards: output.flashcards });
+            newSteps.push({ 
+                type: 'flashcard', 
+                title: '💡 Bilgi & Hafıza Kartları', 
+                cards: output.flashcards,
+                isPublished: true 
+            });
         }
-        if (output.multipleChoiceQuestions && output.multipleChoiceQuestions.length > 0) {
-            output.multipleChoiceQuestions.forEach((q, idx) => newSteps.push({ type: 'mcq', title: `Kontrol Sorusu ${idx + 1}`, ...q }));
+
+        // 6. Anagram / Kelime Oyunu Kartları
+        if (output.anagramQuestions && output.anagramQuestions.length > 0) {
+            newSteps.push({ 
+                type: 'anagramGame', 
+                title: '🔤 Kelime Dehası (Anagram)', 
+                cards: output.anagramQuestions.map(q => ({
+                    definition: q.definition,
+                    scrambledWord: q.scrambledWord,
+                    correctAnswer: q.correctAnswer
+                })),
+                isPublished: true 
+            } as AnagramGameStep);
         }
+
+        // 7. Cümle Kurma / Düzeltme
+        if (output.sentenceScrambleQuestions && output.sentenceScrambleQuestions.length > 0) {
+            output.sentenceScrambleQuestions.forEach((q, idx) => {
+                newSteps.push({ 
+                    type: 'sentenceScramble', 
+                    title: `🧩 Cümle Kurma ${idx + 1}`, 
+                    scrambledSentence: q.scrambledSentence,
+                    correctSentence: q.correctSentence,
+                    isPublished: true 
+                });
+            });
+        }
+
+        // 8. Doğru / Yanlış Listesi
         if (output.trueFalseQuestions && output.trueFalseQuestions.length > 0) {
             newSteps.push({
                 type: 'trueFalseList',
-                title: 'Doğru / Yanlış Alıştırması',
+                title: '✓/✗ Doğru - Yanlış Alıştırması',
                 questions: output.trueFalseQuestions.map((q: any) => ({
                     statement: q.statement || q.question || q.text || '',
                     isTrue: q.isTrue !== undefined ? q.isTrue : true
-                }))
+                })),
+                isPublished: true
+            } as TrueFalseListStep);
+        }
+
+        // 9. Çoktan Seçmeli Test Soruları
+        if (output.multipleChoiceQuestions && output.multipleChoiceQuestions.length > 0) {
+            output.multipleChoiceQuestions.forEach((q, idx) => {
+                newSteps.push({ 
+                    type: 'mcq', 
+                    title: `❓ Kontrol Sorusu ${idx + 1}`, 
+                    question: q.question,
+                    options: q.options,
+                    correctAnswer: q.correctAnswer,
+                    isPublished: true 
+                });
             });
         }
+
+        // 10. Boşluk Doldurma Soruları
         if (output.fillInTheBlankQuestions && output.fillInTheBlankQuestions.length > 0) {
-            output.fillInTheBlankQuestions.forEach(q => newSteps.push({ type: 'fitb', title: 'Boşluk Doldurma', ...q }));
+            output.fillInTheBlankQuestions.forEach((q, idx) => {
+                newSteps.push({ 
+                    type: 'fitb', 
+                    title: `✍️ Boşluk Doldurma ${idx + 1}`, 
+                    sentenceWithBlank: q.sentenceWithBlank,
+                    options: q.options,
+                    correctAnswer: q.correctAnswer,
+                    isPublished: true 
+                });
+            });
         }
-        if (output.anagramQuestions && output.anagramQuestions.length > 0) {
-            output.anagramQuestions.forEach(q => newSteps.push({ type: 'anagram', title: 'Anagram', ...q }));
-        }
-        if (output.sentenceScrambleQuestions && output.sentenceScrambleQuestions.length > 0) {
-            output.sentenceScrambleQuestions.forEach(q => newSteps.push({ type: 'sentenceScramble', title: 'Cümle Düzeltme', ...q }));
-        }
-        if (output.generatedImageDataUri) {
-            newSteps.push({ type: 'visual', title: 'Konu Görseli', imageUrl: output.generatedImageDataUri, prompt: `educational illustration for ${context?.topicTitle}` });
-        }
+
         return newSteps;
     };
 
-  const currentModelMeta = FREE_GEMINI_MODELS.find(m => m.id === activeModelId) || {
-      id: activeModelId,
-      name: activeModelId,
-      tag: 'Özel Model',
-      desc: 'Kullanıcı tarafından belirlenen model.',
-      badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-2xl flex flex-col h-auto max-h-[92vh] bg-slate-950 border border-white/10 text-slate-100 shadow-2xl p-0 overflow-hidden rounded-3xl">
+      <DialogContent className="sm:max-w-3xl flex flex-col h-auto max-h-[92vh] bg-slate-950 border border-white/10 text-slate-100 shadow-2xl p-0 overflow-hidden rounded-3xl">
         {/* Header */}
         <DialogHeader className="p-5 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md flex flex-row items-center justify-between">
           <div className="flex items-center gap-3">
@@ -432,10 +539,10 @@ export function AiLessonStepGenerationDialog({
             </div>
             <div>
                 <DialogTitle className="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
-                    Yapay Zeka Stüdyosu
+                    Yapay Zeka Stüdyosu & İçerik Fabrikası
                 </DialogTitle>
                 <DialogDescription className="text-xs text-slate-400">
-                    {generationType === 'anlatim' ? 'Konu Anlatımı, Kavramlar & Bilgi Kartları' : 'Değerlendirme Soruları & Alıştırmalar'}
+                    {context?.topicTitle ? `"${context.topicTitle}" konusu için zengin interaktif içerikler üretin.` : 'Konu için zengin sunum ve değerlendirme slaytları üretin.'}
                 </DialogDescription>
             </div>
           </div>
@@ -449,239 +556,219 @@ export function AiLessonStepGenerationDialog({
                 showSettings ? "bg-indigo-600 text-white border-indigo-500 shadow-md" : "bg-slate-900 text-slate-300 hover:bg-slate-800"
             )}
           >
-            <Settings2 className="w-3.5 h-3.5 mr-1.5" /> Model & API Ayarları
+            <Settings2 className="w-3.5 h-3.5 mr-1.5 text-indigo-400" />
+            Model & API
           </Button>
         </DialogHeader>
 
-        {isGenerating ? (
-            <div className="flex flex-col items-center justify-center min-h-[360px] gap-5 text-center p-8">
-                <div className="relative">
-                    <div className="absolute inset-0 bg-purple-500 blur-2xl opacity-30 animate-pulse rounded-full"></div>
-                    <Loader2 className="h-14 w-14 animate-spin text-purple-400 relative z-10" />
+        {/* Ayarlar Akordiyonu */}
+        {showSettings && (
+            <div className="bg-slate-900/90 border-b border-white/10 p-5 space-y-4 animate-in slide-in-from-top-2 duration-200">
+                <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-black uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
+                        <Key className="w-3.5 h-3.5" /> Google AI Studio API Anahtarı & Model Seçimi
+                    </h4>
+                    {isSystemPersisted && (
+                        <Badge variant="outline" className="text-[10px] bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
+                            ✓ Sistem Anahtarı Aktif
+                        </Badge>
+                    )}
                 </div>
-                <div>
-                    <h3 className="text-lg font-black text-white mb-1.5">
-                        {currentModelMeta.name} ile Üretiliyor...
-                    </h3>
-                    <p className="text-xs text-slate-400 max-w-sm">
-                        Kaynak metin analiz ediliyor, pedagojik ders adımları ve slaytlar hazırlanıyor...
-                    </p>
+
+                <div className="space-y-1.5">
+                    <Label className="text-xs text-slate-400">Google AI Studio API Anahtarı</Label>
+                    <div className="flex gap-2">
+                        <div className="relative flex-1">
+                            <input 
+                                type={showApiKeyText ? "text" : "password"}
+                                value={apiKey}
+                                onChange={(e) => setApiKey(e.target.value)}
+                                placeholder="AIzaSy... (API anahtarınızı yapıştırın)"
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowApiKeyText(!showApiKeyText)}
+                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                            >
+                                {showApiKeyText ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+                        </div>
+                        <Button 
+                            type="button"
+                            size="sm"
+                            onClick={handleSaveApiKeyToSystem}
+                            disabled={isSavingSystemKey || !apiKey.trim()}
+                            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl px-4"
+                        >
+                            {isSavingSystemKey ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : isKeySaved ? <Check className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5 mr-1" />}
+                            {isKeySaved ? 'Kaydedildi' : 'Sisteme Kaydet'}
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="space-y-1.5">
+                    <Label className="text-xs text-slate-400">Aktif Gemini Modeli</Label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {FREE_GEMINI_MODELS.map(m => (
+                            <button
+                                key={m.id}
+                                type="button"
+                                onClick={() => {
+                                    setSelectedModel(m.id);
+                                    setIsCustomModel(false);
+                                }}
+                                className={cn(
+                                    "p-2 rounded-xl border text-left transition-all",
+                                    selectedModel === m.id && !isCustomModel
+                                        ? "bg-indigo-600/30 border-indigo-500 text-white shadow-md"
+                                        : "bg-slate-950 border-white/5 text-slate-400 hover:text-slate-200"
+                                )}
+                            >
+                                <div className="font-bold text-[11px] truncate text-white">{m.name}</div>
+                                <div className="text-[9px] text-slate-500 truncate">{m.tag}</div>
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
-        ) : (
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1 overflow-hidden">
-                 <div className="px-6 py-4 flex-grow overflow-y-auto space-y-4">
-                    
-                    {/* ⚙️ MODEL & API AYARLARI PANELİ */}
-                    {showSettings && (
-                        <div className="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <KeyRound className="w-4 h-4 text-indigo-400" />
-                                    <span className="text-xs font-black uppercase text-indigo-200 tracking-wider">
-                                        Google AI Studio API & Model Ayarları
-                                    </span>
-                                </div>
-                                <a 
-                                    href="https://aistudio.google.com/app/apikey" 
-                                    target="_blank" 
-                                    rel="noreferrer"
-                                    className="text-[11px] font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 hover:underline"
-                                >
-                                    Ücretsiz API Anahtarı Al <ExternalLink className="w-3 h-3" />
-                                </a>
-                            </div>
+        )}
 
-                            {/* API Key Input + Sisteme Kaydet Butonu */}
-                            <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <Label className="text-xs text-slate-300 font-bold">Google Gemini API Anahtarınız</Label>
-                                    {isSystemPersisted && (
-                                        <Badge variant="outline" className="text-[9px] bg-emerald-500/10 text-emerald-400 border-emerald-500/30 flex items-center gap-1">
-                                            <Server className="w-2.5 h-2.5" /> Sistem Anahtarı Aktif
-                                        </Badge>
-                                    )}
-                                </div>
-                                
-                                <div className="flex flex-col sm:flex-row gap-2">
-                                    <div className="relative flex-1">
-                                        <Input 
-                                            type={showApiKeyText ? "text" : "password"}
-                                            value={apiKey}
-                                            onChange={(e) => setApiKey(e.target.value)}
-                                            placeholder="AIzaSy... (Boş bırakılırsa sistem varsayılanı kullanılır)"
-                                            className="bg-slate-950 border-white/10 text-xs font-mono pr-10 rounded-xl"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowApiKeyText(!showApiKeyText)}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
-                                        >
-                                            {showApiKeyText ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                        </button>
-                                    </div>
-                                    
-                                    <Button
-                                        type="button"
-                                        onClick={handleSaveApiKeyToSystem}
-                                        disabled={isSavingSystemKey}
-                                        className="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs rounded-xl flex items-center gap-1.5 px-4 cursor-pointer"
-                                    >
-                                        {isSavingSystemKey ? (
-                                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                        ) : isKeySaved ? (
-                                            <Check className="w-3.5 h-3.5 text-emerald-300" />
-                                        ) : (
-                                            <Save className="w-3.5 h-3.5" />
-                                        )}
-                                        {isKeySaved ? "Kaydedildi!" : "Sisteme Kaydet"}
-                                    </Button>
-                                </div>
-                                <p className="text-[10px] text-slate-400">
-                                    * "Sisteme Kaydet" butonuna tıkladığınızda bu anahtar sunucu ve veritabanına kalıcı olarak işlenir ve tüm sistemin aktif anahtarı haline gelir.
-                                </p>
-                            </div>
+        {/* Ana Form Alanı */}
+        <form onSubmit={form.handleSubmit(onSubmit)} className="p-5 overflow-y-auto max-h-[60vh] space-y-5">
+            {/* Kaynak Metin */}
+            <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-slate-300">Konu Başlığı / Kaynak Metin</Label>
+                    <span className="text-[10px] text-slate-500">Bu metin AI içeriğinin temelini oluşturur.</span>
+                </div>
+                <Textarea 
+                    {...form.register('sourceText')}
+                    placeholder="Konu başlığını veya ders kitabı metnini buraya yapıştırın..."
+                    className="min-h-[85px] bg-slate-900 border-white/10 rounded-2xl text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 leading-relaxed"
+                />
+            </div>
 
-                            {/* Model Seçimi */}
-                            <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <Label className="text-xs text-slate-300 font-bold">Kullanılacak Gemini Modeli</Label>
-                                    <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
-                                        <ShieldCheck className="w-3 h-3" /> Ücretsiz Kota Destekli
-                                    </span>
-                                </div>
-                                <Select value={isCustomModel ? 'custom' : selectedModel} onValueChange={handleSelectModel}>
-                                    <SelectTrigger className="bg-slate-950 border-white/10 text-xs rounded-xl h-10">
-                                        <SelectValue placeholder="Model Seçin" />
-                                    </SelectTrigger>
-                                    <SelectContent className="bg-slate-950 border-white/15 text-white">
-                                        {FREE_GEMINI_MODELS.map(m => (
-                                            <SelectItem key={m.id} value={m.id} className="py-2 focus:bg-indigo-600">
-                                                <div className="flex flex-col gap-0.5">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="font-black text-xs text-white">{m.name}</span>
-                                                        <Badge variant="outline" className={cn("text-[9px] px-1.5 py-0 border", m.badge)}>
-                                                            {m.tag}
-                                                        </Badge>
-                                                    </div>
-                                                    <span className="text-[10px] text-slate-400">{m.desc}</span>
-                                                </div>
-                                            </SelectItem>
-                                        ))}
-                                        <SelectItem value="custom" className="py-2 focus:bg-indigo-600 border-t border-white/10">
-                                            <div className="flex items-center gap-2">
-                                                <span className="font-black text-xs text-amber-300">✍️ Özel Model Adı Girin...</span>
-                                            </div>
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+            {/* ⚡ Hızlı Şablon Butonları */}
+            <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                    <Wand2 className="w-3.5 h-3.5 text-yellow-400" /> Hızlı Zengin İçerik Paketleri
+                </Label>
+                <div className="flex flex-wrap gap-1.5">
+                    <Button 
+                        type="button" 
+                        size="sm" 
+                        onClick={() => applyPreset('full')}
+                        className="bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-xs rounded-xl h-8 px-3"
+                    >
+                        🚀 Tüm Zengin Modülleri Seç
+                    </Button>
+                    <Button 
+                        type="button" 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => applyPreset('presentation')}
+                        className="border-sky-500/40 text-sky-300 hover:bg-sky-500/20 bg-sky-950/30 text-xs rounded-xl h-8 px-3"
+                    >
+                        💻 İnteraktif Slayt & Özet
+                    </Button>
+                    <Button 
+                        type="button" 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => applyPreset('cards')}
+                        className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20 bg-emerald-950/30 text-xs rounded-xl h-8 px-3"
+                    >
+                        💡 Kavram & Bilgi Kartları
+                    </Button>
+                    <Button 
+                        type="button" 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => applyPreset('games')}
+                        className="border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/20 bg-fuchsia-950/30 text-xs rounded-xl h-8 px-3"
+                    >
+                        🔤 Anagram & Cümle Oyunları
+                    </Button>
+                    <Button 
+                        type="button" 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => applyPreset('assessment')}
+                        className="border-purple-500/40 text-purple-300 hover:bg-purple-500/20 bg-purple-950/30 text-xs rounded-xl h-8 px-3"
+                    >
+                        🎯 Sınav & Değerlendirme
+                    </Button>
+                </div>
+            </div>
 
-                                {isCustomModel && (
-                                    <div className="pt-2 animate-in fade-in">
-                                        <Label className="text-[11px] text-amber-300 font-bold">Özel Model Tanımlayıcısı (ID):</Label>
-                                        <Input 
-                                            value={customModelInput}
-                                            onChange={(e) => handleSaveCustomModel(e.target.value)}
-                                            placeholder="Örn: gemini-3.7-flash, gemini-2.0-pro-exp-02-05..."
-                                            className="mt-1 bg-slate-950 border-amber-500/40 text-xs text-amber-200 rounded-xl"
-                                        />
-                                    </div>
+            {/* Modül Seçim Kartları */}
+            <div className="space-y-3 pt-2">
+                <Label className="text-xs font-bold text-slate-300">Üretilecek Slayt ve Etkinlik Türleri</Label>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {ALL_ACTIVITY_OPTIONS.map(opt => {
+                        const isChecked = !!form.watch(`modules.${opt.id}`);
+                        return (
+                            <div 
+                                key={opt.id}
+                                onClick={() => form.setValue(`modules.${opt.id}`, !isChecked)}
+                                className={cn(
+                                    "p-3 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 select-none",
+                                    isChecked 
+                                        ? "bg-indigo-950/40 border-indigo-500/50 shadow-md shadow-indigo-950/40" 
+                                        : "bg-slate-900/40 border-white/5 hover:border-white/20 opacity-70 hover:opacity-100"
                                 )}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Hedef Bilgisi & Aktif Model Rozeti */}
-                    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-3 flex items-center justify-between">
-                        <div>
-                            <span className="text-[10px] font-bold uppercase text-purple-400 tracking-wider">Hedef Konu</span>
-                            <p className="text-sm font-black text-white">{context?.topicTitle || 'Konu Başlığı'}</p>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                            <Badge variant="outline" className="text-[10px] bg-slate-950 border-rose-500/30 text-rose-300 font-black">
-                                <Flame className="w-3 h-3 mr-1 text-rose-400" /> {currentModelMeta.name}
-                            </Badge>
-                            <Badge variant="outline" className="text-[10px] text-indigo-300 border-indigo-500/30 bg-indigo-500/10">
-                                {generationType === 'anlatim' ? 'Anlatım' : 'Değerlendirme'}
-                            </Badge>
-                        </div>
-                    </div>
-
-                    {/* Kaynak Metin */}
-                    <Controller
-                        name="sourceText"
-                        control={form.control}
-                        render={({ field, fieldState }) => (
-                            <div className="space-y-1.5">
-                                <Label htmlFor='contextText' className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                                    Kaynak Metin / Konu Özeti
-                                </Label>
-                                <Textarea 
-                                    id="contextText" 
-                                    {...field} 
-                                    className="min-h-[100px] bg-slate-950 border-white/10 text-white focus-visible:ring-purple-500 placeholder:text-slate-600 text-xs leading-relaxed rounded-2xl" 
-                                    placeholder="Yapay zekanın veri üretmesi için konuyla ilgili metin, özet veya anahtar kavramlar..."
+                            >
+                                <Checkbox 
+                                    checked={isChecked}
+                                    onCheckedChange={(checked) => form.setValue(`modules.${opt.id}`, !!checked)}
+                                    className="mt-0.5 border-white/20 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-500"
                                 />
-                                {fieldState.error && <p className="text-xs text-rose-400 mt-1">{fieldState.error.message}</p>}
-                            </div>
-                        )}
-                    />
-                    
-                    {/* Modül Seçimleri */}
-                    <Controller
-                        name="modules"
-                        control={form.control}
-                        render={({ field, fieldState }) => (
-                            <div className="space-y-2">
-                                <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                                    Üretilecek Modüller
-                                </Label>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                {activityOptions.map(item => (
-                                    <div 
-                                        key={item.id} 
-                                        onClick={() => field.onChange({ ...field.value, [item.id]: !field.value?.[item.id] })}
-                                        className={cn(
-                                            "flex items-center space-x-3 p-3 rounded-2xl border transition-all cursor-pointer",
-                                            field.value?.[item.id] 
-                                                ? "bg-purple-950/40 border-purple-500/50 shadow-md text-white" 
-                                                : "bg-slate-900/40 border-white/5 text-slate-400 hover:bg-slate-900/70"
-                                        )}
-                                    >
-                                        <Checkbox
-                                            id={item.id}
-                                            checked={field.value?.[item.id] || false}
-                                            onCheckedChange={(checked) => {
-                                                field.onChange({ ...field.value, [item.id]: checked });
-                                            }}
-                                            className="border-white/20 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-500"
-                                        />
-                                        <Label htmlFor={item.id} className="text-xs font-bold leading-none cursor-pointer flex-1">
-                                            {item.label}
-                                        </Label>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-1.5 mb-0.5">
+                                        {opt.icon}
+                                        <h5 className="font-bold text-xs text-white truncate">{opt.label}</h5>
                                     </div>
-                                ))}
+                                    <p className="text-[10px] text-slate-400 leading-snug line-clamp-2">
+                                        {opt.description}
+                                    </p>
                                 </div>
-                                {fieldState.error && <p className="text-xs text-rose-400 mt-1">{fieldState.error.message}</p>}
                             </div>
-                        )}
-                    />
-                 </div>
+                        );
+                    })}
+                </div>
+            </div>
 
-                 {/* Footer */}
-                 <DialogFooter className="p-4 px-6 border-t border-white/10 bg-slate-900/80 backdrop-blur-md flex items-center justify-between sm:justify-between">
-                    <Button type="button" variant="ghost" onClick={handleClose} className="text-slate-400 hover:text-white rounded-xl">
-                        İptal
+            <DialogFooter className="p-0 pt-4 flex items-center justify-between sm:justify-between border-t border-white/10">
+                <span className="text-[11px] text-slate-400">
+                    Aktif Model: <span className="font-bold text-indigo-400">{activeModelId}</span>
+                </span>
+
+                <div className="flex gap-2">
+                    <Button 
+                        type="button" 
+                        variant="ghost" 
+                        onClick={handleClose} 
+                        disabled={isGenerating}
+                        className="text-slate-400 hover:text-white text-xs rounded-xl"
+                    >
+                        Vazgeç
                     </Button>
                     <Button 
                         type="submit" 
-                        className="bg-gradient-to-r from-purple-600 via-indigo-600 to-rose-600 hover:from-purple-500 hover:to-rose-500 text-white font-black rounded-xl shadow-lg shadow-purple-950/50 px-6 cursor-pointer text-xs"
+                        disabled={isGenerating}
+                        className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs px-6 rounded-xl shadow-xl shadow-purple-950/50"
                     >
-                        <Wand2 className="mr-2 h-4 w-4 text-yellow-300" /> Üretimi Başlat ({currentModelMeta.name})
+                        {isGenerating ? (
+                            <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> İçerikler Üretiliyor...</>
+                        ) : (
+                            <><Sparkles className="w-4 h-4 mr-2 text-yellow-300" /> Seçilenleri Üret & Akışa Ekle</>
+                        )}
                     </Button>
-                </DialogFooter>
-            </form>
-        )}
+                </div>
+            </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
