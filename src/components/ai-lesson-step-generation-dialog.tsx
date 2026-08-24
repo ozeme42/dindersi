@@ -89,16 +89,7 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'sentenceScrambleQuestions', label: 'Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
 ];
 
-const DEFAULT_MODULES = {
-    htmlSlide: true,
-    conceptExplanations: true,
-    flashcards: true,
-    summary: true,
-    trueFalseQuestions: true,
-    multipleChoiceQuestions: true,
-    fillInTheBlankQuestions: true,
-    anagramQuestions: true,
-};
+const DEFAULT_MODULES: { [key: string]: boolean } = {};
 
 type AiLessonStepGenerationDialogProps = {
   isOpen: boolean;
@@ -118,7 +109,7 @@ export function AiLessonStepGenerationDialog({
   onStepsGenerated,
 }: AiLessonStepGenerationDialogProps) {
   const [localSourceText, setLocalSourceText] = useState(sourceText || topicTitle || '');
-  const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>(DEFAULT_MODULES);
+  const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>({});
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   
@@ -139,10 +130,17 @@ export function AiLessonStepGenerationDialog({
   const [customModelInput, setCustomModelInput] = useState('');
   const [isCustomModel, setIsCustomModel] = useState(false);
   const [showApiKeyText, setShowApiKeyText] = useState(false);
-  const [isKeySaved, setIsKeySaved] = useState(false);
   const [isSavingSystemKey, setIsSavingSystemKey] = useState(false);
+  const [isKeySaved, setIsKeySaved] = useState(false);
 
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (isOpen) {
+      setLocalSourceText(sourceText || topicTitle || '');
+      setSelectedModules({}); // Hiçbir modül seçili gelmesin, kullanıcı kendisi seçsin
+    }
+  }, [isOpen, sourceText, topicTitle]);
 
   if (!isOpen) return null;
 
@@ -160,10 +158,12 @@ export function AiLessonStepGenerationDialog({
   };
 
   // Hazır Şablon Presetleri
-  const applyPreset = (preset: 'full' | 'presentation' | 'cards' | 'games' | 'assessment') => {
+  const applyPreset = (preset: 'full' | 'clear' | 'presentation' | 'cards' | 'games' | 'assessment') => {
     const modules: { [key: string]: boolean } = {};
     if (preset === 'full') {
         ALL_ACTIVITY_OPTIONS.forEach(opt => modules[opt.id] = true);
+    } else if (preset === 'clear') {
+        // Boş bırak
     } else if (preset === 'presentation') {
         modules['htmlSlide'] = true;
         modules['summary'] = true;
@@ -345,17 +345,34 @@ export function AiLessonStepGenerationDialog({
             });
         }
 
-        // 2. Konu Özeti (Akordiyon)
+        // 2. Konu Özeti (Her Başlık Ayrı Bir Sayfa / Adım Olarak - Cümleler Sunumda Sırayla Ekrana Gelir)
         if (output.summary && output.summary.length > 0) {
-            newSteps.push({ 
-                type: 'accordion', 
-                title: '📖 Konu Özeti & Başlıklar', 
-                items: output.summary.map((s, idx) => ({ 
-                    id: `acc_${idx}_${Date.now()}`,
-                    title: s.title, 
-                    content: s.content.startsWith('<li>') ? `<ul>${s.content}</ul>` : s.content 
-                })),
-                isPublished: true
+            output.summary.forEach((section, idx) => {
+                let sentenceList: string[] = [];
+                if (Array.isArray(section.sentences) && section.sentences.length > 0) {
+                    sentenceList = section.sentences;
+                } else if (typeof section.content === 'string') {
+                    const doc = new DOMParser().parseFromString(`<div>${section.content}</div>`, 'text/html');
+                    const lis = doc.querySelectorAll('li');
+                    if (lis.length > 0) {
+                        sentenceList = Array.from(lis).map(l => l.textContent?.trim() || l.innerHTML.trim());
+                    } else {
+                        sentenceList = section.content.split('\n').map(s => s.trim()).filter(Boolean);
+                    }
+                }
+
+                if (sentenceList.length === 0 && section.title) {
+                    sentenceList = [section.title];
+                }
+
+                const htmlList = `<ul>${sentenceList.map(s => `<li>${s.replace(/^<li>|<\/li>$/g, '')}</li>`).join('')}</ul>`;
+
+                newSteps.push({ 
+                    type: 'content', 
+                    title: section.title || `📖 Konu Başlığı ${idx + 1}`, 
+                    content: htmlList,
+                    isPublished: true
+                });
             });
         }
 
@@ -598,57 +615,73 @@ export function AiLessonStepGenerationDialog({
                 <Label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
                     <Wand2 className="w-3.5 h-3.5 text-yellow-400" /> Hızlı Zengin İçerik Paketleri
                 </Label>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex items-center gap-1.5 flex-wrap">
                     <Button 
                         type="button" 
                         size="sm" 
                         onClick={() => applyPreset('full')}
                         className="bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-xs rounded-xl h-8 px-3"
                     >
-                        🚀 Tüm Zengin Modülleri Seç
+                        ✨ Tümünü Seç
+                    </Button>
+                    <Button 
+                        type="button" 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => applyPreset('clear')}
+                        className="border-rose-500/40 text-rose-300 hover:bg-rose-500/20 bg-rose-950/30 text-xs rounded-xl h-8 px-2.5"
+                    >
+                        🗑️ Temizle
                     </Button>
                     <Button 
                         type="button" 
                         size="sm" 
                         variant="outline"
                         onClick={() => applyPreset('presentation')}
-                        className="border-sky-500/40 text-sky-300 hover:bg-sky-500/20 bg-sky-950/30 text-xs rounded-xl h-8 px-3"
+                        className="border-sky-500/40 text-sky-300 hover:bg-sky-500/20 bg-sky-950/30 text-xs rounded-xl h-8 px-2.5"
                     >
-                        💻 İnteraktif Slayt & Özet
+                        💻 Slayt & Başlıklar
                     </Button>
                     <Button 
                         type="button" 
                         size="sm" 
                         variant="outline"
                         onClick={() => applyPreset('cards')}
-                        className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20 bg-emerald-950/30 text-xs rounded-xl h-8 px-3"
+                        className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20 bg-emerald-950/30 text-xs rounded-xl h-8 px-2.5"
                     >
-                        💡 Kavram & Bilgi Kartları
+                        💡 Bilgi Kartları
                     </Button>
                     <Button 
                         type="button" 
                         size="sm" 
                         variant="outline"
                         onClick={() => applyPreset('games')}
-                        className="border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/20 bg-fuchsia-950/30 text-xs rounded-xl h-8 px-3"
+                        className="border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/20 bg-fuchsia-950/30 text-xs rounded-xl h-8 px-2.5"
                     >
-                        🔤 Anagram & Cümle Oyunları
+                        🔤 Oyunlar
                     </Button>
                     <Button 
                         type="button" 
                         size="sm" 
                         variant="outline"
                         onClick={() => applyPreset('assessment')}
-                        className="border-purple-500/40 text-purple-300 hover:bg-purple-500/20 bg-purple-950/30 text-xs rounded-xl h-8 px-3"
+                        className="border-purple-500/40 text-purple-300 hover:bg-purple-500/20 bg-purple-950/30 text-xs rounded-xl h-8 px-2.5"
                     >
-                        🎯 Sınav & Değerlendirme
+                        🎯 Soru Çözümü
                     </Button>
                 </div>
             </div>
 
             {/* Modül Seçim Kartları */}
             <div className="space-y-3 pt-2">
-                <Label className="text-xs font-bold text-slate-300">Üretilecek Slayt ve Etkinlik Türleri</Label>
+                <div className="flex items-center justify-between">
+                    <Label className="text-xs font-bold text-slate-300">
+                        Üretilecek Slayt ve Etkinlik Türleri
+                    </Label>
+                    <span className="text-[11px] font-bold text-indigo-400 bg-indigo-950/40 border border-indigo-500/30 px-2 py-0.5 rounded-full">
+                        {Object.values(selectedModules).filter(Boolean).length} / {ALL_ACTIVITY_OPTIONS.length} Seçili
+                    </span>
+                </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {ALL_ACTIVITY_OPTIONS.map(opt => {

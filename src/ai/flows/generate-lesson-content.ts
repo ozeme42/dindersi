@@ -34,7 +34,7 @@ const GenerateLessonContentInputSchema = z.object({
 export type GenerateLessonContentInput = z.infer<typeof GenerateLessonContentInputSchema>;
 
 export type GenerateLessonContentOutput = {
-  summary?: { title: string; content: string }[];
+  summary?: { title: string; sentences?: string[]; content?: string }[];
   learningObjectives?: string[];
   keyTakeaways?: string[];
   conceptExplanations?: { concept: string; definition: string }[];
@@ -51,9 +51,30 @@ export type GenerateLessonContentOutput = {
 
 const moduleInstructions: Record<string, string> = {
   summary: `"summary": [
-    { "title": "Metindeki 1. Ana Konu Başlığı (Örn: Namazın Anlamı ve İslam'daki Yeri)", "content": "<li>Konunun metindeki 1. detaylı açıklama maddesi.</li><li>Önemli hadis, ayet veya ilke açıklaması.</li>" },
-    { "title": "Metindeki 2. Ana Konu Başlığı (Örn: Namaz Çeşitleri: Farz, Vacip ve Nafile)", "content": "<li>Farz namazlar ve günlük beş vakit ile Cuma namazı.</li><li>Vacip namazlar (Vitir, Bayram) ve Nafile/Sünnet namazlar.</li>" },
-    { "title": "Metindeki 3. Ana Konu Başlığı (Örn: Namaz İbadetinin Bireysel ve Toplumsal Faydaları)", "content": "<li>Allah'a şükretme ve yaratılış gayesini yerine getirme.</li><li>Müslümanların kaynaşması ve birlik şuuru.</li>" }
+    { 
+      "title": "Metindeki 1. Ana Konu Başlığı (Örn: Namaz İbadetinin Anlamı ve Önemi)", 
+      "sentences": [
+        "Namaz, tekbirle başlayıp selamla biten, belirli hareket ve sözlerden oluşan bedenî bir ibadettir.",
+        "İslam'ın beş temel şartından biri olup ergenlik çağına gelmiş her Müslümana farzdır.",
+        "Günde beş vakit kılınan namaz, kul ile Allah arasındaki bağı güçlendirir."
+      ] 
+    },
+    { 
+      "title": "Metindeki 2. Ana Konu Başlığı (Örn: Namaz Çeşitleri: Farz, Vacip ve Nafile)", 
+      "sentences": [
+        "Farz Namazlar: Günlük beş vakit namaz, cuma namazı ve cenaze namazıdır.",
+        "Vacip Namazlar: Vitir namazı ile Ramazan ve Kurban bayramı namazlarıdır.",
+        "Nafile Namazlar: Farz ve vaciplerin dışında Allah rızası için kılınan sünnet namazlardır."
+      ] 
+    },
+    { 
+      "title": "Metindeki 3. Ana Konu Başlığı (Örn: Namazın Bireysel ve Toplumsal Faydaları)", 
+      "sentences": [
+        "İnsana zaman bilinci, düzen ve beden-ruh temizliği kazandırır.",
+        "Kötülüklere karşı kalkan olur ve kalbe huzur verir.",
+        "Cemaatle namaz Müslümanlar arasında birlik, beraberlik ve kardeşliği pekiştirir."
+      ] 
+    }
   ]`,
   learningObjectives: `"learningObjectives": [
     "Konunun temel kavramlarını ve anlamını doğru şekilde açıklayabileceksiniz.",
@@ -144,11 +165,12 @@ ${requestedExamples}
 
 ### KRİTİK KURALLAR:
 1. SADECE yukarıda istenen alanları (${requestedKeys.join(', ')}) JSON nesnesinde doldur.
-2. "summary" (Konu Özeti): Verilen kaynak metindeki tüm ana başlıkları ve alt başlıkları tespit et. Her başlık için ("title") o başlığa ait metin içeriğini zengin, detaylı ve açıklayıcı HTML maddeleri (<li>...</li>) olarak "content" içine yaz.
-3. Tüm içerikler pedagojik olarak zengin, anlaşılır, MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
-4. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
-5. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
-6. SADECE saf JSON nesnesi döndür.
+2. "summary" (Konu Özeti): Verilen kaynak metindeki ana konu başlıklarını (3 ila 6 başlık) çıkar. Her başlık için ("title") o başlığa ait metin içeriğini, sunumda sırayla ekrana gelecek 3-5 adet tam, anlaşılır ve eğitici cümle ("sentences") dizisi olarak yaz.
+3. "learningObjectives" (Öğrenme Hedefleri): Konuyla ilgili öğrencinin kazanacağı 3-5 adet açık hedef cümlesi dizisi yaz.
+4. Tüm içerikler pedagojik olarak zengin, anlaşılır, MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
+5. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
+6. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
+7. SADECE saf JSON nesnesi döndür.
 `;
 
   const text = await runGeminiWithFallback({
