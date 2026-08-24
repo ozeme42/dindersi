@@ -2204,6 +2204,29 @@ export function LessonContentViewer({
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
     const [hideUI, setHideUI] = useState(false); // UI Gizleme State'i
 
+    // Tam ekran durumu takibi
+    const [isDocFullscreen, setIsDocFullscreen] = useState(false);
+    useEffect(() => {
+        const handleFs = () => {
+            setIsDocFullscreen(!!document.fullscreenElement);
+        };
+        handleFs();
+        document.addEventListener('fullscreenchange', handleFs);
+        return () => document.removeEventListener('fullscreenchange', handleFs);
+    }, []);
+
+    const toggleDocFullscreen = () => {
+        if (!document.fullscreenElement) {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
+    };
+
     // Steps ve CurrentStep tanımları
     const steps = useMemo(() => {
         if (!topic) return [];
@@ -2708,15 +2731,41 @@ export function LessonContentViewer({
 
             <div className="relative flex items-center justify-between gap-3 px-4 py-3">
 
-                {/* SOL: Geri + Yenile */}
+                {/* SOL: Geri + Tam Ekran / Küçült + Yenile + Çizim */}
                 <div className="flex items-center gap-2">
                     <button
                         onClick={handlePrev}
                         disabled={currentStepIndex === 0}
                         className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95 shadow-sm"
+                        title="Önceki Sayfa"
                     >
                         <ArrowLeft className="w-4 h-4" />
                     </button>
+
+                    {/* Tam Ekran / Küçült Butonu */}
+                    <button
+                        onClick={toggleDocFullscreen}
+                        className={cn(
+                            "h-9 px-3 rounded-xl border flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-sm",
+                            isDocFullscreen
+                                ? "bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 hover:border-rose-300"
+                                : "bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-100 hover:border-indigo-300"
+                        )}
+                        title={isDocFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap"}
+                    >
+                        {isDocFullscreen ? (
+                            <>
+                                <Minimize className="w-3.5 h-3.5 text-rose-600" />
+                                <span className="hidden sm:inline">Küçült</span>
+                            </>
+                        ) : (
+                            <>
+                                <Maximize className="w-3.5 h-3.5 text-indigo-600" />
+                                <span className="hidden sm:inline">Tam Ekran</span>
+                            </>
+                        )}
+                    </button>
+
                     {isTeacher && (
                         <>
                             <button

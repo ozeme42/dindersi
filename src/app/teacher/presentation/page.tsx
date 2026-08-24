@@ -229,8 +229,31 @@ function PresentationPageContent() {
             setIsFullscreen(!!document.fullscreenElement);
         };
         document.addEventListener('fullscreenchange', handleFullscreenChange);
+        
+        // Açılınca otomatik tam ekran yapma
+        const enterFullscreen = () => {
+            if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            }
+        };
+        enterFullscreen();
+
+        const handleFirstGesture = () => {
+            enterFullscreen();
+            window.removeEventListener('click', handleFirstGesture);
+            window.removeEventListener('keydown', handleFirstGesture);
+            window.removeEventListener('touchstart', handleFirstGesture);
+        };
+
+        window.addEventListener('click', handleFirstGesture, { once: true });
+        window.addEventListener('keydown', handleFirstGesture, { once: true });
+        window.addEventListener('touchstart', handleFirstGesture, { once: true });
+
         return () => {
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            window.removeEventListener('click', handleFirstGesture);
+            window.removeEventListener('keydown', handleFirstGesture);
+            window.removeEventListener('touchstart', handleFirstGesture);
         };
     }, []);
 
@@ -340,278 +363,280 @@ function PresentationPageContent() {
             
             <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03] pointer-events-none" />
 
-            {/* ══ ÜST HEADER: Breadcrumb, Saat ve Hızlı Araçlar ══ */}
-            <header className="relative z-30 flex-shrink-0 flex items-center justify-between px-6 py-2.5 bg-white/85 backdrop-blur-2xl border-b border-indigo-100/80 shadow-sm text-slate-800">
-                {/* SOL: Breadcrumb */}
-                <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-indigo-100 border border-indigo-200 text-indigo-700 shadow-sm">
-                        <Presentation className="h-4 w-4" />
+            {/* ══ ÜST HEADER: Breadcrumb, Saat ve Hızlı Araçlar (Tam ekranda gizlenir) ══ */}
+            {!isFullscreen && (
+                <header className="relative z-30 flex-shrink-0 flex items-center justify-between px-6 py-2.5 bg-white/85 backdrop-blur-2xl border-b border-indigo-100/80 shadow-sm text-slate-800">
+                    {/* SOL: Breadcrumb */}
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-xl bg-indigo-100 border border-indigo-200 text-indigo-700 shadow-sm">
+                            <Presentation className="h-4 w-4" />
+                        </div>
+                        <div className="flex items-center gap-2 text-xs md:text-sm font-bold">
+                            <span className="text-slate-500 font-semibold">{courseName || 'Ders'}</span>
+                            <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                            <span className="text-slate-600 truncate max-w-[160px] md:max-w-[240px]">{unitName || 'Ünite'}</span>
+                            <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 font-black truncate max-w-[200px] md:max-w-[320px]">{content.title}</span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2 text-xs md:text-sm font-bold">
-                        <span className="text-slate-500 font-semibold">{courseName || 'Ders'}</span>
-                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                        <span className="text-slate-600 truncate max-w-[160px] md:max-w-[240px]">{unitName || 'Ünite'}</span>
-                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 font-black truncate max-w-[200px] md:max-w-[320px]">{content.title}</span>
-                    </div>
-                </div>
 
-                {/* ORTA: Canlı Saat & Slayt İlerleme Rozeti */}
-                <div className="hidden sm:flex items-center gap-3">
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-mono font-bold text-slate-700 shadow-sm">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
-                        <span>{currentTime}</span>
-                    </div>
-                    {totalStepsCount > 0 && (
-                        <button 
-                            onClick={() => setIsSlideDrawerOpen(true)}
-                            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 border border-purple-200 text-purple-700 text-xs font-bold hover:bg-purple-200/80 transition-all active:scale-95 shadow-sm"
-                        >
-                            <LayoutGrid className="w-3.5 h-3.5" />
-                            <span>Slaytlar ({currentStepIndex + 1}/{totalStepsCount})</span>
-                        </button>
-                    )}
-                </div>
-
-                {/* SAĞ: TEK TUŞ SUNUM ARAÇLARI */}
-                <div className="flex items-center gap-2">
-                    {/* Canlı sayaç çalışıyorsa göster */}
-                    {isTimerRunning && (
-                        <button
-                            onClick={() => setIsTimerOpen(true)}
-                            className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/20 text-amber-500 border border-amber-500/40 text-xs font-mono font-bold animate-pulse hover:bg-amber-500/30 transition-all"
-                            title="Sayacı Görüntüle"
-                        >
-                            <Timer className="w-3.5 h-3.5" />
-                            <span>{formatTimer(timerSeconds)}</span>
-                        </button>
-                    )}
-
-                    {/* Hızlı Çizim & Tahta Butonu (D) */}
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setIsDrawingOpen(prev => !prev)}
-                        className={cn(
-                            "h-9 px-3 rounded-xl font-bold text-xs gap-1.5 transition-all border",
-                            isDrawingOpen 
-                                ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/50 shadow-md shadow-cyan-500/20" 
-                                : "bg-white/5 hover:bg-white/10 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10"
-                        )}
-                        title="Canlı Çizim & Not Alma (D)"
-                    >
-                        <Pencil className="w-3.5 h-3.5 text-cyan-400" />
-                        <span className="hidden sm:inline">Çizim (D)</span>
-                    </Button>
-
-                    {/* TEK TUŞ SUNUM ARAÇLARI & AYARLAR MENÜSÜ */}
-                    <Popover open={isToolsOpen} onOpenChange={setIsToolsOpen}>
-                        <PopoverTrigger asChild>
-                            <Button 
-                                variant="default"
-                                size="sm" 
-                                className="h-9 px-3.5 rounded-xl font-black gap-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-500 text-white shadow-md shadow-indigo-500/20 border border-indigo-400/30 transition-all active:scale-95"
+                    {/* ORTA: Canlı Saat & Slayt İlerleme Rozeti */}
+                    <div className="hidden sm:flex items-center gap-3">
+                        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-mono font-bold text-slate-700 shadow-sm">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
+                            <span>{currentTime}</span>
+                        </div>
+                        {totalStepsCount > 0 && (
+                            <button 
+                                onClick={() => setIsSlideDrawerOpen(true)}
+                                className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 border border-purple-200 text-purple-700 text-xs font-bold hover:bg-purple-200/80 transition-all active:scale-95 shadow-sm"
                             >
-                                <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
-                                <span className="text-xs tracking-wide">Sunum Araçları</span>
-                                <ChevronDown className={cn("w-3.5 h-3.5 text-indigo-200 transition-transform duration-200", isToolsOpen && "rotate-180")} />
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent side="bottom" align="end" container={mainContentRef.current || undefined} className="w-80 sm:w-96 p-0 rounded-2xl border-slate-200 dark:border-white/15 shadow-2xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl overflow-hidden z-50">
-                            {/* Menü Başlığı */}
-                            <div className="p-3.5 px-4 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Sparkles className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
-                                    <h4 className="font-extrabold text-xs uppercase tracking-wider text-slate-900 dark:text-white">
-                                        Sunum Araçları & Ayarlar
-                                    </h4>
-                                </div>
+                                <LayoutGrid className="w-3.5 h-3.5" />
+                                <span>Slaytlar ({currentStepIndex + 1}/{totalStepsCount})</span>
+                            </button>
+                        )}
+                    </div>
+
+                    {/* SAĞ: TEK TUŞ SUNUM ARAÇLARI */}
+                    <div className="flex items-center gap-2">
+                        {/* Canlı sayaç çalışıyorsa göster */}
+                        {isTimerRunning && (
+                            <button
+                                onClick={() => setIsTimerOpen(true)}
+                                className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/20 text-amber-500 border border-amber-500/40 text-xs font-mono font-bold animate-pulse hover:bg-amber-500/30 transition-all"
+                                title="Sayacı Görüntüle"
+                            >
+                                <Timer className="w-3.5 h-3.5" />
+                                <span>{formatTimer(timerSeconds)}</span>
+                            </button>
+                        )}
+
+                        {/* Hızlı Çizim & Tahta Butonu (D) */}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setIsDrawingOpen(prev => !prev)}
+                            className={cn(
+                                "h-9 px-3 rounded-xl font-bold text-xs gap-1.5 transition-all border",
+                                isDrawingOpen 
+                                    ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/50 shadow-md shadow-cyan-500/20" 
+                                    : "bg-white/5 hover:bg-white/10 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10"
+                            )}
+                            title="Canlı Çizim & Not Alma (D)"
+                        >
+                            <Pencil className="w-3.5 h-3.5 text-cyan-400" />
+                            <span className="hidden sm:inline">Çizim (D)</span>
+                        </Button>
+
+                        {/* TEK TUŞ SUNUM ARAÇLARI & AYARLAR MENÜSÜ */}
+                        <Popover open={isToolsOpen} onOpenChange={setIsToolsOpen}>
+                            <PopoverTrigger asChild>
                                 <Button 
-                                    variant="ghost" 
-                                    size="icon" 
-                                    onClick={() => setIsSoundEnabled(prev => !prev)}
-                                    className="h-7 w-7 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-white"
-                                    title={isSoundEnabled ? "Ses Efektleri Açık" : "Ses Efektleri Kapalı"}
+                                    variant="default"
+                                    size="sm" 
+                                    className="h-9 px-3.5 rounded-xl font-black gap-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-500 text-white shadow-md shadow-indigo-500/20 border border-indigo-400/30 transition-all active:scale-95"
                                 >
-                                    {isSoundEnabled ? <Volume2 className="w-3.5 h-3.5 text-emerald-500" /> : <VolumeX className="w-3.5 h-3.5 text-slate-400" />}
+                                    <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+                                    <span className="text-xs tracking-wide">Sunum Araçları</span>
+                                    <ChevronDown className={cn("w-3.5 h-3.5 text-indigo-200 transition-transform duration-200", isToolsOpen && "rotate-180")} />
                                 </Button>
-                            </div>
-
-                            <div className="p-4 space-y-4 max-h-[80vh] overflow-y-auto">
-                                {/* 1. Sınıf Araçları Izgara */}
-                                <div className="space-y-1.5">
-                                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tahta Araçları</span>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <button
-                                            onClick={() => { setIsDrawingOpen(true); setIsToolsOpen(false); }}
-                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-cyan-500/20 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 transition-all text-left group"
-                                        >
-                                            <div className="p-2 rounded-lg bg-cyan-500/20 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-colors">
-                                                <Pencil className="w-4 h-4" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Çizim & Not (D)</span>
-                                                <span className="text-[10px] opacity-75">Kalem & Şekiller</span>
-                                            </div>
-                                        </button>
-
-                                        <button
-                                            onClick={() => { setIsTimerOpen(true); setIsToolsOpen(false); }}
-                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 transition-all text-left group"
-                                        >
-                                            <div className="p-2 rounded-lg bg-amber-500/20 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
-                                                <Timer className="w-4 h-4" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Sayaç (T)</span>
-                                                <span className="text-[10px] opacity-75">{isTimerRunning ? formatTimer(timerSeconds) : 'Geri sayım'}</span>
-                                            </div>
-                                        </button>
-
-                                        <button
-                                            onClick={() => { setIsPickerOpen(true); setIsToolsOpen(false); }}
-                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-sky-500/20 bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-400 transition-all text-left group"
-                                        >
-                                            <div className="p-2 rounded-lg bg-sky-500/20 group-hover:bg-sky-500 group-hover:text-white transition-colors">
-                                                <Users className="w-4 h-4" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Öğrenci (R)</span>
-                                                <span className="text-[10px] opacity-75">Kura & Çark</span>
-                                            </div>
-                                        </button>
-
-                                        <button
-                                            onClick={() => { setIsSlideDrawerOpen(true); setIsToolsOpen(false); }}
-                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-purple-500/20 bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 transition-all text-left group"
-                                        >
-                                            <div className="p-2 rounded-lg bg-purple-500/20 group-hover:bg-purple-500 group-hover:text-white transition-colors">
-                                                <LayoutGrid className="w-4 h-4" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Slaytlar (G)</span>
-                                                <span className="text-[10px] opacity-75">Tüm adımlar</span>
-                                            </div>
-                                        </button>
-
-                                        <button
-                                            onClick={() => { setIsBlackout(true); setIsToolsOpen(false); }}
-                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-all text-left group col-span-2"
-                                        >
-                                            <div className="p-2 rounded-lg bg-rose-500/20 group-hover:bg-rose-500 group-hover:text-white transition-colors">
-                                                <EyeOff className="w-4 h-4" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-xs">Tahtayı Karart (B)</span>
-                                                <span className="text-[10px] opacity-75">Dikkati öğretmene topla</span>
-                                            </div>
-                                        </button>
+                            </PopoverTrigger>
+                            <PopoverContent side="bottom" align="end" container={mainContentRef.current || undefined} className="w-80 sm:w-96 p-0 rounded-2xl border-slate-200 dark:border-white/15 shadow-2xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl overflow-hidden z-50">
+                                {/* Menü Başlığı */}
+                                <div className="p-3.5 px-4 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Sparkles className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
+                                        <h4 className="font-extrabold text-xs uppercase tracking-wider text-slate-900 dark:text-white">
+                                            Sunum Araçları & Ayarlar
+                                        </h4>
                                     </div>
-                                </div>
-
-                                {/* 2. Anlık Yazı Boyutu */}
-                                <div className="space-y-1.5 pt-1 border-t border-slate-200 dark:border-white/10">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Yazı Boyutu</span>
-                                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-500 dark:text-indigo-400">
-                                            {fontSizeScale === 'normal' ? 'Normal' : (fontSizeScale === 'large' ? 'Büyük' : 'Dev (Maks)')}
-                                        </span>
-                                    </div>
-                                    <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                                        <button
-                                            onClick={() => setFontSizeScale('normal')}
-                                            className={cn(
-                                                "py-1.5 rounded-lg text-xs font-bold transition-all",
-                                                fontSizeScale === 'normal' 
-                                                    ? "bg-indigo-600 text-white shadow-sm" 
-                                                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
-                                            )}
-                                        >
-                                            Normal
-                                        </button>
-                                        <button
-                                            onClick={() => setFontSizeScale('large')}
-                                            className={cn(
-                                                "py-1.5 rounded-lg text-xs font-bold transition-all",
-                                                fontSizeScale === 'large' 
-                                                    ? "bg-indigo-600 text-white shadow-sm" 
-                                                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
-                                            )}
-                                        >
-                                            Büyük
-                                        </button>
-                                        <button
-                                            onClick={() => setFontSizeScale('huge')}
-                                            className={cn(
-                                                "py-1.5 rounded-lg text-xs font-bold transition-all",
-                                                fontSizeScale === 'huge' 
-                                                    ? "bg-indigo-600 text-white shadow-sm" 
-                                                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
-                                            )}
-                                        >
-                                            Dev
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* 3. Sunum Ayarları */}
-                                <div className="space-y-3 pt-1 border-t border-slate-200 dark:border-white/10">
-                                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Görünüm & Efektler</span>
-
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-0.5">
-                                            <Label className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
-                                                {isSingleCardMode ? <Maximize2 className="w-3.5 h-3.5 text-emerald-500" /> : <LayoutList className="w-3.5 h-3.5 text-sky-500" />} 
-                                                Tek Kart Modu
-                                            </Label>
-                                            <span className="text-[10px] text-slate-400">Konu anlatımında tek tek göster.</span>
-                                        </div>
-                                        <Switch checked={isSingleCardMode} onCheckedChange={setIsSingleCardMode} />
-                                    </div>
-
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col gap-0.5">
-                                            <Label className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
-                                                <Zap className="w-3.5 h-3.5 text-amber-500" />
-                                                Animasyon Hızı
-                                            </Label>
-                                            <span className="text-[10px] text-slate-400">Daktilo efektinin hızı.</span>
-                                        </div>
-                                        <Select value={animationSpeed} onValueChange={(v: any) => setAnimationSpeed(v)}>
-                                            <SelectTrigger className="w-[95px] h-7 bg-slate-100 dark:bg-white/10 border-slate-200 dark:border-white/20 text-xs">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent className="bg-white dark:bg-slate-900 border-slate-200 dark:border-white/20">
-                                                <SelectItem value="off">Kapalı</SelectItem>
-                                                <SelectItem value="slow">Yavaş</SelectItem>
-                                                <SelectItem value="normal">Normal</SelectItem>
-                                                <SelectItem value="fast">Hızlı</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-
-                                {/* 4. Hızlı Aksiyonlar (Tam Ekran & Çıkış) */}
-                                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
-                                    <FullscreenToggle 
-                                        elementRef={mainContentRef} 
-                                        className="w-full h-9 rounded-xl text-xs font-bold bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-white/10" 
-                                    />
                                     <Button 
-                                        asChild 
                                         variant="ghost" 
-                                        className="w-full h-9 rounded-xl text-xs font-bold bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white"
+                                        size="icon" 
+                                        onClick={() => setIsSoundEnabled(prev => !prev)}
+                                        className="h-7 w-7 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-white"
+                                        title={isSoundEnabled ? "Ses Efektleri Açık" : "Ses Efektleri Kapalı"}
                                     >
-                                        <Link href="/teacher/ders-akisi">
-                                            <ArrowLeft className="w-3.5 h-3.5 mr-1" /> Çıkış
-                                        </Link>
+                                        {isSoundEnabled ? <Volume2 className="w-3.5 h-3.5 text-emerald-500" /> : <VolumeX className="w-3.5 h-3.5 text-slate-400" />}
                                     </Button>
                                 </div>
-                            </div>
-                        </PopoverContent>
-                    </Popover>
-                </div>
-            </header>
+
+                                <div className="p-4 space-y-4 max-h-[80vh] overflow-y-auto">
+                                    {/* 1. Sınıf Araçları Izgara */}
+                                    <div className="space-y-1.5">
+                                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tahta Araçları</span>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <button
+                                                onClick={() => { setIsDrawingOpen(true); setIsToolsOpen(false); }}
+                                                className="flex items-center gap-2.5 p-2.5 rounded-xl border border-cyan-500/20 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 transition-all text-left group"
+                                            >
+                                                <div className="p-2 rounded-lg bg-cyan-500/20 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-colors">
+                                                    <Pencil className="w-4 h-4" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-bold text-xs">Çizim & Not (D)</span>
+                                                    <span className="text-[10px] opacity-75">Kalem & Şekiller</span>
+                                                </div>
+                                            </button>
+
+                                            <button
+                                                onClick={() => { setIsTimerOpen(true); setIsToolsOpen(false); }}
+                                                className="flex items-center gap-2.5 p-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 transition-all text-left group"
+                                            >
+                                                <div className="p-2 rounded-lg bg-amber-500/20 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+                                                    <Timer className="w-4 h-4" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-bold text-xs">Sayaç (T)</span>
+                                                    <span className="text-[10px] opacity-75">{isTimerRunning ? formatTimer(timerSeconds) : 'Geri sayım'}</span>
+                                                </div>
+                                            </button>
+
+                                            <button
+                                                onClick={() => { setIsPickerOpen(true); setIsToolsOpen(false); }}
+                                                className="flex items-center gap-2.5 p-2.5 rounded-xl border border-sky-500/20 bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-400 transition-all text-left group"
+                                            >
+                                                <div className="p-2 rounded-lg bg-sky-500/20 group-hover:bg-sky-500 group-hover:text-white transition-colors">
+                                                    <Users className="w-4 h-4" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-bold text-xs">Öğrenci (R)</span>
+                                                    <span className="text-[10px] opacity-75">Kura & Çark</span>
+                                                </div>
+                                            </button>
+
+                                            <button
+                                                onClick={() => { setIsSlideDrawerOpen(true); setIsToolsOpen(false); }}
+                                                className="flex items-center gap-2.5 p-2.5 rounded-xl border border-purple-500/20 bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 transition-all text-left group"
+                                            >
+                                                <div className="p-2 rounded-lg bg-purple-500/20 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                                                    <LayoutGrid className="w-4 h-4" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-bold text-xs">Slaytlar (G)</span>
+                                                    <span className="text-[10px] opacity-75">Tüm adımlar</span>
+                                                </div>
+                                            </button>
+
+                                            <button
+                                                onClick={() => { setIsBlackout(true); setIsToolsOpen(false); }}
+                                                className="flex items-center gap-2.5 p-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-all text-left group col-span-2"
+                                            >
+                                                <div className="p-2 rounded-lg bg-rose-500/20 group-hover:bg-rose-500 group-hover:text-white transition-colors">
+                                                    <EyeOff className="w-4 h-4" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-bold text-xs">Tahtayı Karart (B)</span>
+                                                    <span className="text-[10px] opacity-75">Dikkati öğretmene topla</span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* 2. Anlık Yazı Boyutu */}
+                                    <div className="space-y-1.5 pt-1 border-t border-slate-200 dark:border-white/10">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Yazı Boyutu</span>
+                                            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-500 dark:text-indigo-400">
+                                                {fontSizeScale === 'normal' ? 'Normal' : (fontSizeScale === 'large' ? 'Büyük' : 'Dev (Maks)')}
+                                            </span>
+                                        </div>
+                                        <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                                            <button
+                                                onClick={() => setFontSizeScale('normal')}
+                                                className={cn(
+                                                    "py-1.5 rounded-lg text-xs font-bold transition-all",
+                                                    fontSizeScale === 'normal' 
+                                                        ? "bg-indigo-600 text-white shadow-sm" 
+                                                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
+                                                )}
+                                            >
+                                                Normal
+                                            </button>
+                                            <button
+                                                onClick={() => setFontSizeScale('large')}
+                                                className={cn(
+                                                    "py-1.5 rounded-lg text-xs font-bold transition-all",
+                                                    fontSizeScale === 'large' 
+                                                        ? "bg-indigo-600 text-white shadow-sm" 
+                                                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
+                                                )}
+                                            >
+                                                Büyük
+                                            </button>
+                                            <button
+                                                onClick={() => setFontSizeScale('huge')}
+                                                className={cn(
+                                                    "py-1.5 rounded-lg text-xs font-bold transition-all",
+                                                    fontSizeScale === 'huge' 
+                                                        ? "bg-indigo-600 text-white shadow-sm" 
+                                                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
+                                                )}
+                                            >
+                                                Dev
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* 3. Sunum Ayarları */}
+                                    <div className="space-y-3 pt-1 border-t border-slate-200 dark:border-white/10">
+                                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Görünüm & Efektler</span>
+
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex flex-col gap-0.5">
+                                                <Label className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
+                                                    {isSingleCardMode ? <Maximize2 className="w-3.5 h-3.5 text-emerald-500" /> : <LayoutList className="w-3.5 h-3.5 text-sky-500" />} 
+                                                    Tek Kart Modu
+                                                </Label>
+                                                <span className="text-[10px] text-slate-400">Konu anlatımında tek tek göster.</span>
+                                            </div>
+                                            <Switch checked={isSingleCardMode} onCheckedChange={setIsSingleCardMode} />
+                                        </div>
+
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex flex-col gap-0.5">
+                                                <Label className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
+                                                    <Zap className="w-3.5 h-3.5 text-amber-500" />
+                                                    Animasyon Hızı
+                                                </Label>
+                                                <span className="text-[10px] text-slate-400">Daktilo efektinin hızı.</span>
+                                            </div>
+                                            <Select value={animationSpeed} onValueChange={(v: any) => setAnimationSpeed(v)}>
+                                                <SelectTrigger className="w-[95px] h-7 bg-slate-100 dark:bg-white/10 border-slate-200 dark:border-white/20 text-xs">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-white dark:bg-slate-900 border-slate-200 dark:border-white/20">
+                                                    <SelectItem value="off">Kapalı</SelectItem>
+                                                    <SelectItem value="slow">Yavaş</SelectItem>
+                                                    <SelectItem value="normal">Normal</SelectItem>
+                                                    <SelectItem value="fast">Hızlı</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </div>
+
+                                    {/* 4. Hızlı Aksiyonlar (Tam Ekran & Çıkış) */}
+                                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
+                                        <FullscreenToggle 
+                                            elementRef={mainContentRef} 
+                                            className="w-full h-9 rounded-xl text-xs font-bold bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-white/10" 
+                                        />
+                                        <Button 
+                                            asChild 
+                                            variant="ghost" 
+                                            className="w-full h-9 rounded-xl text-xs font-bold bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white"
+                                        >
+                                            <Link href="/teacher/ders-akisi">
+                                                <ArrowLeft className="w-3.5 h-3.5 mr-1" /> Çıkış
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+                    </div>
+                </header>
+            )}
 
             {/* ══ İÇERİK ALANI: LessonContentViewer ══ */}
             <div className="flex-grow flex flex-col min-h-0 relative z-10 w-full h-full">
