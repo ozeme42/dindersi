@@ -897,16 +897,29 @@ export function PresentationDrawingBoard({
 
                         <Button
                             variant="ghost"
-                            size="icon"
+                            size="sm"
                             onClick={onClose}
-                            className="h-10 w-10 rounded-xl bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/30"
+                            className="h-10 px-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs gap-1.5 shadow-md shadow-rose-600/30 transition-all active:scale-95"
                             title="Çizim Modunu Kapat (Esc / D)"
                         >
                             <X className="w-4 h-4" />
+                            <span>Kapat</span>
                         </Button>
                     </div>
                 </div>
             </motion.div>
+
+            {/* Sağ Üst Sabit Hızlı Kapatma Butonu */}
+            <div className="fixed top-3 right-4 z-50">
+                <Button
+                    onClick={onClose}
+                    size="sm"
+                    className="h-9 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow-lg shadow-rose-600/40 gap-1.5 border border-rose-400/40 active:scale-95 transition-all"
+                >
+                    <X className="w-4 h-4" />
+                    <span>Çizimi Kapat (D)</span>
+                </Button>
+            </div>
         </div>
     );
 }
