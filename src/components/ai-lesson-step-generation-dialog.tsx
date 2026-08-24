@@ -127,7 +127,7 @@ export function AiLessonStepGenerationDialog({
   targetIndex,
   onStepsGenerated,
 }: AiLessonStepGenerationDialogProps) {
-  const [localSourceText, setLocalSourceText] = useState('');
+  const [localSourceText, setLocalSourceText] = useState(sourceText || topicTitle || '');
   const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>(DEFAULT_MODULES);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -141,8 +141,9 @@ export function AiLessonStepGenerationDialog({
   const [isSystemPersisted, setIsSystemPersisted] = useState(false);
 
   const { toast } = useToast();
+  const prevIsOpenRef = React.useRef(false);
 
-  // Model & API Ayarlarını yükle
+  // Model & API Ayarlarını ilk açılışta yükle
   useEffect(() => {
     async function loadConfig() {
         if (typeof window !== 'undefined') {
@@ -188,12 +189,19 @@ export function AiLessonStepGenerationDialog({
     loadConfig();
   }, []);
 
-  // Dialog açıldığında kaynak metni ayarla
+  // Dialog açıldığı anda (kapalıdan açığa geçişte) kaynak metni senkronize et
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !prevIsOpenRef.current) {
         setLocalSourceText(sourceText || topicTitle || '');
     }
+    prevIsOpenRef.current = isOpen;
   }, [isOpen, sourceText, topicTitle]);
+
+  const handleDialogChange = (open: boolean) => {
+    if (!open) {
+        onOpenChange(false);
+    }
+  };
 
   const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
 
@@ -507,7 +515,7 @@ export function AiLessonStepGenerationDialog({
     };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleDialogChange}>
       <DialogContent className="sm:max-w-3xl flex flex-col h-auto max-h-[92vh] bg-slate-950 border border-white/10 text-slate-100 shadow-2xl p-0 overflow-hidden rounded-3xl">
         {/* Header */}
         <DialogHeader className="p-5 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md flex flex-row items-center justify-between">
@@ -699,11 +707,12 @@ export function AiLessonStepGenerationDialog({
                                         : "bg-slate-900/40 border-white/5 hover:border-white/20 opacity-70 hover:opacity-100"
                                 )}
                             >
-                                <Checkbox 
-                                    checked={isChecked}
-                                    onCheckedChange={() => toggleModule(opt.id)}
-                                    className="mt-0.5 border-white/20 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-500"
-                                />
+                                <div className="mt-0.5 pointer-events-none">
+                                    <Checkbox 
+                                        checked={isChecked}
+                                        className="border-white/20 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-500"
+                                    />
+                                </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-1.5 mb-0.5">
                                         {opt.icon}
