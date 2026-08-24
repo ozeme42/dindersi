@@ -15,7 +15,9 @@ import { useAuth } from '@/context/auth-context';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTheme } from '@/context/theme-provider';
+import { motion } from 'framer-motion';
 
 function PresentationPageContent() {
     const { user } = useAuth();
@@ -33,7 +35,7 @@ function PresentationPageContent() {
     
     // Settings state
     const [isSingleCardMode, setIsSingleCardMode] = useState(false);
-    const [isFastMode, setIsFastMode] = useState(false);
+    const [animationSpeed, setAnimationSpeed] = useState<'off' | 'slow' | 'normal' | 'fast'>('normal');
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
     const { themeMode, setThemeMode } = useTheme();
     const isDarkMode = themeMode === 'dark';
@@ -134,16 +136,42 @@ function PresentationPageContent() {
     const noOp = () => {};
 
     return (
-        <main 
-            ref={mainContentRef} 
-            className={cn(
-                "h-screen w-screen overflow-hidden flex flex-col font-sans relative transition-colors duration-500",
-                isDarkMode ? "dark bg-[#020617] text-white" : "bg-slate-50 text-slate-900"
+        <div className={cn(
+            "h-screen w-screen overflow-hidden flex flex-col font-sans relative transition-colors duration-500",
+            isDarkMode ? "dark bg-[#020617] text-white" : "bg-slate-50 text-slate-900"
+        )}>
+            {/* Ambient Animated Background (Dark Mode Only) */}
+            {isDarkMode && (
+                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                    <motion.div 
+                        animate={{ 
+                            scale: [1, 1.2, 1],
+                            opacity: [0.3, 0.5, 0.3],
+                            rotate: [0, 90, 0]
+                        }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-900/20 blur-[120px]" 
+                    />
+                    <motion.div 
+                        animate={{ 
+                            scale: [1, 1.5, 1],
+                            opacity: [0.2, 0.4, 0.2],
+                            x: [0, 100, 0]
+                        }}
+                        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-900/20 blur-[100px]" 
+                    />
+                    <motion.div 
+                        animate={{ 
+                            scale: [1, 1.3, 1],
+                            opacity: [0.1, 0.3, 0.1],
+                            y: [0, -50, 0]
+                        }}
+                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-sky-900/20 blur-[150px]" 
+                    />
+                </div>
             )}
-        >
-             {/* Animated Ambient Background */}
-             <div className={cn("fixed inset-0 pointer-events-none z-0 overflow-hidden", isDarkMode ? "bg-[#020617]" : "bg-slate-50")}>
-                {isDarkMode ? (
                     <>
                         <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] bg-indigo-900/20 rounded-full blur-[150px] mix-blend-screen animate-pulse" style={{ animationDuration: '10s' }} />
                         <div className="absolute bottom-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-purple-900/20 rounded-full blur-[150px] mix-blend-screen animate-pulse" style={{ animationDuration: '14s', animationDelay: '2s' }} />
@@ -172,7 +200,7 @@ function PresentationPageContent() {
                     onAllTfAnswered={noOp}
                     isFullscreen={true} // Her zaman tam ekran gibi davran
                     isSingleCardMode={isSingleCardMode}
-                    isFastMode={isFastMode}
+                    animationSpeed={animationSpeed}
                 />
             </div>
 
@@ -229,11 +257,21 @@ function PresentationPageContent() {
                                         <div className="flex flex-col gap-1">
                                             <Label className="text-white font-semibold flex items-center gap-2">
                                                 <Zap className="w-4 h-4 text-amber-400" />
-                                                Hızlı Animasyon
+                                                Animasyon Hızı
                                             </Label>
-                                            <span className="text-xs text-slate-400">Yazı efektlerini hızlandırır.</span>
+                                            <span className="text-xs text-slate-400">Yazı efektlerinin hızını ayarlar.</span>
                                         </div>
-                                        <Switch checked={isFastMode} onCheckedChange={setIsFastMode} />
+                                        <Select value={animationSpeed} onValueChange={(v: any) => setAnimationSpeed(v)}>
+                                            <SelectTrigger className="w-[100px] h-8 bg-white/10 border-white/20 text-white text-xs">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/20 text-white">
+                                                <SelectItem value="off">Kapalı</SelectItem>
+                                                <SelectItem value="slow">Yavaş</SelectItem>
+                                                <SelectItem value="normal">Normal</SelectItem>
+                                                <SelectItem value="fast">Hızlı</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                 </div>
                             </PopoverContent>

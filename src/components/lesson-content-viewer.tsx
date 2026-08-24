@@ -47,7 +47,7 @@ export type LessonContentViewerProps = {
     onMultiAnswer?: (stepIndex: number, questionIndex: number, selectedAnswer: boolean) => void;
     onAllTfAnswered?: (stepIndex?: number) => void;
     isSingleCardMode?: boolean;
-    isFastMode?: boolean;
+    animationSpeed?: 'off' | 'slow' | 'normal' | 'fast';
 };
 
 const useTeacherMode = () => {
@@ -304,14 +304,15 @@ export function ContentListPlayer({
     onAnimationStart, 
     onAnimationEnd,
     isSingleCardMode,
-    isFastMode
+    animationSpeed = 'normal'
 }: { 
     step: ContentStep | ObjectiveListStep | AccordionStep, 
     revealedSentencesCount: number, 
     isFullscreen?: boolean, 
     onAnimationStart?: () => void, 
     onAnimationEnd?: () => void,
-    isSingleCardMode?: boolean
+    isSingleCardMode?: boolean,
+    animationSpeed?: 'off' | 'slow' | 'normal' | 'fast'
 }) {
     const isTeacher = useTeacherMode();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -393,24 +394,52 @@ export function ContentListPlayer({
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-7xl mx-auto")}>
             {isModalOpen && latestSentence && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-100 dark:bg-slate-950/90 backdrop-blur-xl p-4 animate-in fade-in zoom-in duration-500" onClick={() => setIsModalOpen(false)}>
-                    <div className="relative bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 w-full max-w-5xl p-8 md:p-16 rounded-[3rem] shadow-[0_0_80px_rgba(168,85,247,0.4)] flex flex-col items-center text-center transform transition-all border-4 border-white/20" onClick={(e) => e.stopPropagation()}>
-                        <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 p-3 bg-white/20 hover:bg-white/30 rounded-full text-slate-900 dark:text-white transition-colors">
+                <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-100/50 dark:bg-slate-950/80 backdrop-blur-2xl p-4" onClick={() => setIsModalOpen(false)}>
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.8, y: 50 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        className="relative w-full max-w-6xl p-8 md:p-16 rounded-[3rem] shadow-[0_0_100px_rgba(168,85,247,0.5)] flex flex-col items-center text-center border-4 border-white/30 overflow-hidden" 
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Animated Gradient Background */}
+                        <motion.div 
+                            className="absolute inset-0 z-0 opacity-90"
+                            animate={{
+                                background: [
+                                    "linear-gradient(45deg, #4f46e5, #ec4899, #eab308)",
+                                    "linear-gradient(45deg, #ec4899, #eab308, #4f46e5)",
+                                    "linear-gradient(45deg, #eab308, #4f46e5, #ec4899)",
+                                    "linear-gradient(45deg, #4f46e5, #ec4899, #eab308)"
+                                ]
+                            }}
+                            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                        />
+                        
+                        {/* Overlay to ensure text readability */}
+                        <div className="absolute inset-0 bg-black/20 z-10" />
+
+                        <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-colors z-30">
                             <X className="h-8 w-8" />
                         </button>
                         
-                        <div className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight py-12 max-h-[70vh] overflow-y-auto drop-shadow-xl">
-                             <TypewriterText 
-                                content={latestSentence} 
-                                onComplete={() => onAnimationEnd?.()} 
-                                speed={150} 
-                             />
+                        <div className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight py-12 max-h-[70vh] overflow-y-auto drop-shadow-2xl z-20 tracking-tight">
+                            {animationSpeed !== 'off' ? (
+                                <TypewriterText 
+                                    content={latestSentence} 
+                                    onComplete={() => onAnimationEnd?.()} 
+                                    speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)} 
+                                />
+                            ) : (
+                                <div dangerouslySetInnerHTML={{ __html: latestSentence }} />
+                            )}
                         </div>
                         
-                        <Button size="lg" onClick={() => setIsModalOpen(false)} className="mt-8 h-16 px-12 text-2xl font-black rounded-2xl bg-white text-purple-700 hover:bg-slate-100 shadow-2xl transform transition-transform hover:scale-110 active:scale-95">
+                        <Button size="lg" onClick={() => setIsModalOpen(false)} className="mt-8 h-16 px-12 text-2xl font-black rounded-2xl bg-white text-purple-700 hover:bg-slate-100 shadow-2xl transform transition-transform hover:scale-110 active:scale-95 z-20">
                             Devam Et
                         </Button>
-                    </div>
+                    </motion.div>
                 </div>
             )}
             
@@ -475,8 +504,8 @@ export function ContentListPlayer({
                                             : "text-base md:text-xl tracking-wide"
                                     )}>
                                         <span className="flex-1">
-                                            {shouldAnimate ? (
-                                                <TypewriterText content={sentence} onComplete={() => onAnimationEnd?.()} speed={isFastMode ? 5 : 40} />
+                                            {shouldAnimate && animationSpeed !== 'off' ? (
+                                                <TypewriterText content={sentence} onComplete={() => onAnimationEnd?.()} speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)} />
                                             ) : (
                                                 <div dangerouslySetInnerHTML={{ __html: sentence }} />
                                             )}
@@ -487,7 +516,6 @@ export function ContentListPlayer({
                         )
                     })}
                 </div>
-            </div>
         </div>
     );
 }
@@ -498,21 +526,44 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleC
     const isTeacher = useTeacherMode();
     
     const cardStyles = [
-        { bg: 'bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100/50 dark:hover:bg-sky-900/60', border: 'border-sky-200 dark:border-sky-500/30', title: 'text-sky-700 dark:text-sky-300', hoverBorder: 'hover:border-sky-300 dark:hover:border-sky-400/60' },
-        { bg: 'bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100/50 dark:hover:bg-rose-900/60', border: 'border-rose-200 dark:border-rose-500/30', title: 'text-rose-700 dark:text-rose-300', hoverBorder: 'hover:border-rose-300 dark:hover:border-rose-400/60' },
-        { bg: 'bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100/50 dark:hover:bg-amber-900/60', border: 'border-amber-200 dark:border-amber-500/30', title: 'text-amber-700 dark:text-amber-300', hoverBorder: 'hover:border-amber-300 dark:hover:border-amber-400/60' },
-        { bg: 'bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100/50 dark:hover:bg-emerald-900/60', border: 'border-emerald-200 dark:border-emerald-500/30', title: 'text-emerald-700 dark:text-emerald-300', hoverBorder: 'hover:border-emerald-300 dark:hover:border-emerald-400/60' },
-        { bg: 'bg-violet-50 dark:bg-violet-950/50 hover:bg-violet-100/50 dark:hover:bg-violet-900/60', border: 'border-violet-200 dark:border-violet-500/30', title: 'text-violet-700 dark:text-violet-300', hoverBorder: 'hover:border-violet-300 dark:hover:border-violet-400/60' },
-        { bg: 'bg-cyan-50 dark:bg-cyan-950/50 hover:bg-cyan-100/50 dark:hover:bg-cyan-900/60', border: 'border-cyan-200 dark:border-cyan-500/30', title: 'text-cyan-700 dark:text-cyan-300', hoverBorder: 'hover:border-cyan-300 dark:hover:border-cyan-400/60' },
+        { bg: 'bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100/50 dark:hover:bg-sky-900/60', border: 'border-sky-200 dark:border-sky-500/30', title: 'text-sky-700 dark:text-sky-300', hoverBorder: 'hover:border-sky-300 dark:hover:border-sky-400/60', glow: 'hover:shadow-[0_0_30px_rgba(14,165,233,0.3)]' },
+        { bg: 'bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100/50 dark:hover:bg-rose-900/60', border: 'border-rose-200 dark:border-rose-500/30', title: 'text-rose-700 dark:text-rose-300', hoverBorder: 'hover:border-rose-300 dark:hover:border-rose-400/60', glow: 'hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]' },
+        { bg: 'bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100/50 dark:hover:bg-amber-900/60', border: 'border-amber-200 dark:border-amber-500/30', title: 'text-amber-700 dark:text-amber-300', hoverBorder: 'hover:border-amber-300 dark:hover:border-amber-400/60', glow: 'hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]' },
+        { bg: 'bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100/50 dark:hover:bg-emerald-900/60', border: 'border-emerald-200 dark:border-emerald-500/30', title: 'text-emerald-700 dark:text-emerald-300', hoverBorder: 'hover:border-emerald-300 dark:hover:border-emerald-400/60', glow: 'hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]' },
+        { bg: 'bg-violet-50 dark:bg-violet-950/50 hover:bg-violet-100/50 dark:hover:bg-violet-900/60', border: 'border-violet-200 dark:border-violet-500/30', title: 'text-violet-700 dark:text-violet-300', hoverBorder: 'hover:border-violet-300 dark:hover:border-violet-400/60', glow: 'hover:shadow-[0_0_30px_rgba(139,92,246,0.3)]' },
+        { bg: 'bg-cyan-50 dark:bg-cyan-950/50 hover:bg-cyan-100/50 dark:hover:bg-cyan-900/60', border: 'border-cyan-200 dark:border-cyan-500/30', title: 'text-cyan-700 dark:text-cyan-300', hoverBorder: 'hover:border-cyan-300 dark:hover:border-cyan-400/60', glow: 'hover:shadow-[0_0_30px_rgba(6,182,212,0.3)]' },
     ];
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.15
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30, scale: 0.95 },
+        show: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 200, damping: 20 } }
+    };
 
     return (
         <div className={cn('flex flex-col h-full w-full items-center justify-start p-2', isTeacher ? "max-w-[98%] mx-auto pt-4" : "max-w-6xl mx-auto justify-center")}>
-            <div className={cn("relative p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 mb-6 w-full text-center overflow-hidden shadow-lg")}>
+            <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={cn("relative p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-xl flex-shrink-0 mb-6 w-full text-center overflow-hidden shadow-lg")}
+            >
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn("font-black text-slate-800 dark:text-white", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
-            </div>
-             <div className={cn(
+                <h2 className={cn("font-black tracking-tight text-slate-800 dark:text-white drop-shadow-md", isTeacher ? "text-4xl md:text-5xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-3xl"))}>{title}</h2>
+            </motion.div>
+             <motion.div 
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                className={cn(
                 "w-full flex-grow grid gap-4 md:gap-6", 
                 isTeacher 
                     ? "grid-cols-1 md:grid-cols-2 content-start" 
@@ -523,11 +574,11 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleC
                     return items.map((item, index) => {
                         if (item.concept === '[BAŞLIK]') {
                             return (
-                                <div key={index} className="col-span-1 md:col-span-2 mt-6 mb-1 flex items-center gap-4 w-full">
-                                    <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent flex-1" />
-                                    <h3 className="text-lg md:text-2xl font-black text-cyan-400 tracking-wider uppercase drop-shadow-md text-center px-2">{item.definition}</h3>
-                                    <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent flex-1" />
-                                </div>
+                                <motion.div variants={itemVariants} key={index} className="col-span-1 md:col-span-2 mt-8 mb-2 flex items-center gap-4 w-full">
+                                    <div className="h-[2px] bg-gradient-to-r from-transparent via-cyan-500/70 to-transparent flex-1" />
+                                    <h3 className="text-2xl md:text-3xl font-black text-cyan-500 dark:text-cyan-400 tracking-widest uppercase drop-shadow-[0_0_15px_rgba(6,182,212,0.5)] text-center px-4">{item.definition}</h3>
+                                    <div className="h-[2px] bg-gradient-to-r from-transparent via-cyan-500/70 to-transparent flex-1" />
+                                </motion.div>
                             );
                         }
                         
@@ -535,31 +586,34 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleC
                         const currentNum = conceptIndex++;
                         
                         return (
-                            <Card key={index} className={cn(
-                                "border-2 transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-[1.02] backdrop-blur-xl",
-                                style.bg,
-                                style.border,
-                                style.hoverBorder,
-                                isTeacher ? 'min-h-[180px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
-                            )}>
-                                <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
-                                    <CardTitle className={cn(
-                                        "font-black uppercase tracking-wider transition-colors", 
-                                        style.title, 
-                                        isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg")
-                                    )}>{currentNum}. {item.concept}</CardTitle>
-                                </CardHeader>
-                                <CardContent className={cn(
-                                    "text-slate-700 dark:text-slate-300 font-semibold leading-relaxed", 
-                                    isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base"
+                            <motion.div variants={itemVariants} key={index} className="h-full">
+                                <Card className={cn(
+                                    "h-full border-2 transition-all duration-300 group shadow-lg hover:shadow-xl hover:-translate-y-1 backdrop-blur-xl",
+                                    style.bg,
+                                    style.border,
+                                    style.hoverBorder,
+                                    style.glow,
+                                    isTeacher ? 'min-h-[200px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
                                 )}>
-                                    <div dangerouslySetInnerHTML={{ __html: item.definition }} />
-                                </CardContent>
-                            </Card>
-                        )
-                    })
+                                    <CardHeader className={cn("border-b", style.border, isTeacher ? "p-5" : "p-3 md:p-4 pb-2 md:pb-3")}>
+                                        <CardTitle className={cn(
+                                            "font-black uppercase tracking-wider transition-colors drop-shadow-sm", 
+                                            style.title, 
+                                            isTeacher ? "text-3xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg")
+                                        )}>{currentNum}. {item.concept}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className={cn(
+                                        "text-slate-700 dark:text-slate-200 font-semibold leading-relaxed tracking-wide", 
+                                        isTeacher ? "text-2xl p-6 pt-6" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base"
+                                    )}>
+                                        <div dangerouslySetInnerHTML={{ __html: item.definition }} />
+                                    </CardContent>
+                                </Card>
+                            </motion.div>
+                        );
+                    });
                 })()}
-            </div>
+            </motion.div>
         </div>
     );
 }
