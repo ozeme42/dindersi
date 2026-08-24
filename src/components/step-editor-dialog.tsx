@@ -18,7 +18,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { 
     Loader2, PlusCircle, Trash2, Save, FileEdit, Database, 
     List, Library, ArrowLeft, ArrowRight, CheckCircle2, XCircle,
-    Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles
+    Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles,
+    ChevronUp, ChevronDown
 } from 'lucide-react';
 import type { 
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
@@ -277,20 +278,37 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 const currentContent = (editedStep as any).content || '';
                 const sentences = parseContentSentences(currentContent);
 
+                const moveSentence = (index: number, direction: 'up' | 'down') => {
+                    const newIndex = direction === 'up' ? index - 1 : index + 1;
+                    if (newIndex < 0 || newIndex >= sentences.length) return;
+                    const updated = [...sentences];
+                    const temp = updated[index];
+                    updated[index] = updated[newIndex];
+                    updated[newIndex] = temp;
+                    updateContentSentences(updated);
+                };
+
                 return (
-                    <div className="space-y-3">
-                        <div className="flex items-center justify-between">
+                    <div className="space-y-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-slate-900/90 border border-white/10 shadow-sm">
                             <div>
-                                <Label className="text-sm font-bold text-slate-300">
-                                    {contentViewMode === 'list' ? 'Cümle & Madde Listesi (Sunumda Sırayla Ekrana Gelir)' : 'Serbest HTML / Kod Modu'}
-                                </Label>
-                                <p className="text-[11px] text-slate-400">
+                                <div className="flex items-center gap-2.5 mb-1">
+                                    <Label className="text-sm font-black text-white">
+                                        {contentViewMode === 'list' ? '✨ Cümle & Madde Listesi (Sunum Akışı)' : '📝 Serbest HTML / Kod Modu'}
+                                    </Label>
+                                    {contentViewMode === 'list' && (
+                                        <span className="text-[11px] font-black text-indigo-300 bg-indigo-950/60 border border-indigo-500/30 px-2.5 py-0.5 rounded-full">
+                                            {sentences.length} Cümle
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-xs text-slate-400">
                                     {contentViewMode === 'list' 
-                                        ? 'Cümleleri buradan HTML etiketleri olmadan kolayca düzenleyebilir, ekleyebilir veya silebilirsiniz.' 
+                                        ? 'Cümleler sunumda "Devam Et" butonuna basıldıkça sırayla ekrana gelecektir. Buradan kolayca düzenleyebilirsiniz.' 
                                         : 'Özel HTML veya zengin metin düzenleme.'}
                                 </p>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
                                 {contentViewMode === 'list' && (
                                     <Button 
                                         type="button"
@@ -299,9 +317,9 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                             const updated = [...sentences, 'Yeni açıklama cümlesi...'];
                                             updateContentSentences(updated);
                                         }} 
-                                        className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl h-8"
+                                        className="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs rounded-xl h-9 px-4 shadow-md shadow-indigo-950/50"
                                     >
-                                        <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Cümle Ekle
+                                        <PlusCircle className="mr-1.5 h-4 w-4" /> Cümle Ekle
                                     </Button>
                                 )}
                                 <Button
@@ -309,7 +327,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                     variant="outline"
                                     size="sm"
                                     onClick={() => setContentViewMode(contentViewMode === 'list' ? 'raw' : 'list')}
-                                    className="border-white/10 text-xs text-slate-300 hover:text-white rounded-xl h-8"
+                                    className="border-white/10 text-xs text-slate-300 hover:text-white rounded-xl h-9 px-3 bg-slate-950"
                                 >
                                     {contentViewMode === 'list' ? '📝 Kod / HTML Modu' : '✨ Görsel Cümle Modu'}
                                 </Button>
@@ -317,48 +335,91 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         </div>
 
                         {contentViewMode === 'list' ? (
-                            <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+                            <div className="space-y-3 pb-6">
                                 {sentences.length > 0 ? (
-                                    sentences.map((sentence, idx) => (
-                                        <div key={`sentence-${idx}`} className="flex items-start gap-2 p-2.5 rounded-xl bg-slate-900 border border-white/10 hover:border-indigo-500/40 transition-colors">
-                                            <span className="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-1 border border-indigo-500/30">
-                                                {idx + 1}
-                                            </span>
-                                            <Textarea
-                                                value={sentence}
-                                                onChange={(e) => {
-                                                    const updated = [...sentences];
-                                                    updated[idx] = e.target.value;
-                                                    updateContentSentences(updated);
-                                                }}
-                                                rows={2}
-                                                className="bg-slate-950 border-white/10 text-white text-xs leading-relaxed rounded-xl flex-1 resize-none min-h-[52px]"
-                                                placeholder={`${idx + 1}. cümle açıklamasını buraya yazın...`}
-                                            />
+                                    <>
+                                        {sentences.map((sentence, idx) => (
+                                            <div key={`sentence-${idx}`} className="flex items-start gap-3 p-4 rounded-2xl bg-slate-900/80 border border-white/10 hover:border-indigo-500/50 transition-all shadow-sm">
+                                                <div className="flex flex-col items-center gap-1 mt-0.5">
+                                                    <span className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-300 font-black text-xs flex items-center justify-center border border-indigo-500/30">
+                                                        {idx + 1}
+                                                    </span>
+                                                    <div className="flex flex-col gap-0.5">
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            disabled={idx === 0}
+                                                            onClick={() => moveSentence(idx, 'up')}
+                                                            className="h-6 w-6 text-slate-400 hover:text-white disabled:opacity-20 p-0"
+                                                            title="Yukarı Taşı"
+                                                        >
+                                                            <ChevronUp className="h-3.5 w-3.5" />
+                                                        </Button>
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            disabled={idx === sentences.length - 1}
+                                                            onClick={() => moveSentence(idx, 'down')}
+                                                            className="h-6 w-6 text-slate-400 hover:text-white disabled:opacity-20 p-0"
+                                                            title="Aşağı Taşı"
+                                                        >
+                                                            <ChevronDown className="h-3.5 w-3.5" />
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                                <Textarea
+                                                    value={sentence}
+                                                    onChange={(e) => {
+                                                        const updated = [...sentences];
+                                                        updated[idx] = e.target.value;
+                                                        updateContentSentences(updated);
+                                                    }}
+                                                    rows={3}
+                                                    className="bg-slate-950/90 border-white/10 text-white text-sm leading-relaxed rounded-xl flex-1 focus:border-indigo-500 min-h-[72px]"
+                                                    placeholder={`${idx + 1}. cümle açıklamasını buraya yazın...`}
+                                                />
+                                                <Button 
+                                                    type="button"
+                                                    variant="ghost" 
+                                                    size="icon" 
+                                                    onClick={() => {
+                                                        const updated = sentences.filter((_, sIdx) => sIdx !== idx);
+                                                        updateContentSentences(updated);
+                                                    }} 
+                                                    className="text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 h-9 w-9 rounded-xl mt-1 flex-shrink-0"
+                                                    title="Cümleyi Sil"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        ))}
+
+                                        {/* Alt Cümle Ekle Butonu */}
+                                        <div className="pt-2 flex justify-center">
                                             <Button 
                                                 type="button"
-                                                variant="ghost" 
-                                                size="icon" 
+                                                size="sm" 
                                                 onClick={() => {
-                                                    const updated = sentences.filter((_, sIdx) => sIdx !== idx);
+                                                    const updated = [...sentences, 'Yeni açıklama cümlesi...'];
                                                     updateContentSentences(updated);
                                                 }} 
-                                                className="text-slate-500 hover:text-rose-400 h-8 w-8 rounded-lg mt-0.5"
+                                                className="w-full bg-slate-900/90 hover:bg-indigo-600/30 border border-dashed border-indigo-500/40 text-indigo-300 hover:text-white font-bold text-xs rounded-2xl h-12 transition-all"
                                             >
-                                                <Trash2 className="h-4 w-4" />
+                                                <PlusCircle className="mr-2 h-4 w-4" /> + Listenin Sonuna Yeni Cümle Ekle
                                             </Button>
                                         </div>
-                                    ))
+                                    </>
                                 ) : (
-                                    <div className="text-center py-8 border-2 border-dashed border-white/10 rounded-2xl bg-slate-900/40 p-4">
-                                        <p className="text-xs text-slate-400 mb-3">Bu adım altında henüz cümle bulunmuyor.</p>
+                                    <div className="text-center py-12 border-2 border-dashed border-white/10 rounded-3xl bg-slate-900/40 p-6">
+                                        <p className="text-sm text-slate-400 mb-4">Bu adım altında henüz cümle bulunmuyor.</p>
                                         <Button 
                                             type="button"
-                                            size="sm"
                                             onClick={() => updateContentSentences(['İlk açıklama cümlesi...'])}
-                                            className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs rounded-xl"
+                                            className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl h-10 px-5"
                                         >
-                                            <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> İlk Cümleyi Ekle
+                                            <PlusCircle className="mr-2 h-4 w-4" /> İlk Cümleyi Ekle
                                         </Button>
                                     </div>
                                 )}
@@ -367,7 +428,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                             <Textarea 
                                 value={currentContent} 
                                 onChange={(e) => handleValueChange('content', e.target.value)} 
-                                className="min-h-[260px] bg-slate-950 border-white/10 text-white font-mono text-xs leading-relaxed rounded-2xl" 
+                                className="min-h-[340px] bg-slate-950 border-white/10 text-white font-mono text-xs leading-relaxed rounded-2xl p-4" 
                                 placeholder="Metin içeriğinizi buraya girin. HTML etiketlerini (<p>, <strong>, <ul>, <li> vb.) destekler."
                             />
                         )}
@@ -939,7 +1000,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     return (
         <>
             <Dialog open={isOpen} onOpenChange={onOpenChange}>
-                <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col p-0 bg-slate-950 border border-white/10 text-slate-100 shadow-2xl rounded-3xl overflow-hidden">
+                <DialogContent className="max-w-5xl w-[95vw] md:w-[90vw] lg:max-w-5xl h-[92vh] max-h-[92vh] flex flex-col p-0 bg-slate-950 border border-white/10 text-slate-100 shadow-2xl rounded-3xl overflow-hidden">
                     {/* Header */}
                     <DialogHeader className="p-6 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md flex flex-row items-center justify-between">
                         <div className="flex items-center gap-3">
