@@ -252,20 +252,13 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
         const startRot = totalRotationRef.current;
         const targetRot = startRot + delta;
 
-        const totalDuration = 7000 + Math.random() * 1000; // ~7.5 saniye
+        const totalDuration = 6500 + Math.random() * 800; // ~7 saniye pürüzsüz ve keyifli dönüş
         const startTime = performance.now();
 
-        // 4 Kademeli Gerilim Eğrisi
+        // ══ SAF MONOTONİK YAVAŞLAMA EĞRİSİ (Ease-Out Quartic) ══
+        // Hız baştan sona sürekli ve kesintisiz şekilde azalarak yavaşça ve yumuşakça durur (asla hızlanma yapmaz).
         const getProgress = (t: number): number => {
-            if (t <= 0.15) {
-                return Math.pow(t / 0.15, 2) * 0.18;
-            } else if (t <= 0.70) {
-                const subT = (t - 0.15) / (0.70 - 0.15);
-                return 0.18 + (1 - Math.pow(1 - subT, 2.2)) * 0.62;
-            } else {
-                const subT = (t - 0.70) / (1 - 0.70);
-                return 0.80 + (1 - Math.pow(1 - subT, 4.0)) * 0.20;
-            }
+            return 1 - Math.pow(1 - t, 4);
         };
 
         const animate = (now: number) => {
