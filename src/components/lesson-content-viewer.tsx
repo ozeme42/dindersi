@@ -590,13 +590,52 @@ export function ContentListPlayer({
 }
 
 // 4. ConceptExplanationPlayer (3D Bilgi Kartı Görünümlü Anahtar Kavramlar)
-export function ConceptExplanationPlayer({ items, isFullscreen, title, isSingleCardMode, fontSizeScale = 'normal' }: { items: { concept: string, definition?: string }[], isFullscreen: boolean, title: string, isSingleCardMode?: boolean, fontSizeScale?: 'normal' | 'large' | 'huge' }) {
-    if (!items || items.length === 0) return null;
+export function ConceptExplanationPlayer({ 
+    items, 
+    step,
+    isFullscreen, 
+    title, 
+    isSingleCardMode, 
+    fontSizeScale = 'normal' 
+}: { 
+    items?: any[], 
+    step?: any,
+    isFullscreen: boolean, 
+    title?: string, 
+    isSingleCardMode?: boolean, 
+    fontSizeScale?: 'normal' | 'large' | 'huge' 
+}) {
     const isTeacher = useTeacherMode();
     const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
     const [customCols, setCustomCols] = useState<number | null>(null);
 
-    const validConcepts = useMemo(() => items.filter(it => it.concept !== '[BAŞLIK]'), [items]);
+    const validConcepts = useMemo(() => {
+        const raw = items || step?.items || step?.cards || [];
+        let list: { concept: string; definition?: string }[] = [];
+        if (Array.isArray(raw) && raw.length > 0) {
+            list = raw.map((it: any) => {
+                if (typeof it === 'string') {
+                    const clean = it.replace(/<[^>]*>/g, '').trim();
+                    return { concept: clean, definition: '' };
+                }
+                const term = (it.concept || it.term || it.title || it.word || it.name || '').replace(/<[^>]*>/g, '').trim();
+                return { concept: term, definition: it.definition || it.content || '' };
+            }).filter(it => it.concept.length > 0);
+        } else if (typeof step?.content === 'string') {
+            const doc = new DOMParser().parseFromString(`<div>${step.content}</div>`, 'text/html');
+            const listItems = doc.querySelectorAll('li');
+            if (listItems.length > 0) {
+                list = Array.from(listItems).map(li => ({ concept: (li.textContent || '').trim(), definition: '' })).filter(it => it.concept.length > 0);
+            } else {
+                list = (step.content.match(/[^.!?,\n]+[.!?,\n]*/g) || [step.content])
+                    .map((s: string) => ({ concept: s.replace(/<[^>]*>/g, '').trim(), definition: '' }))
+                    .filter((it: any) => it.concept.length > 0);
+            }
+        }
+        return list.filter(it => it.concept !== '[BAŞLIK]');
+    }, [items, step]);
+
+    if (!validConcepts || validConcepts.length === 0) return null;
     const totalCards = validConcepts.length;
 
     const getScaleStyles = () => {
@@ -1986,14 +2025,28 @@ export function StepContent({
             );
         }
         
+        // Anahtar Kavramlar / Kavram adımları (objectiveList, conceptExplanation veya başlığında kavram/anahtar geçenler)
+        const isConceptStep = step.type === 'conceptExplanation' || 
+                              step.type === 'objectiveList' || 
+                              (typeof step.title === 'string' && /kavram|anahtar/i.test(step.title) && step.type !== 'anagramFlashcard' && step.type !== 'conceptMap');
+
+        if (isConceptStep) {
+            return (
+                <ConceptExplanationPlayer 
+                    items={step.items || step.cards} 
+                    step={step} 
+                    isFullscreen={isFullscreen} 
+                    title={step.title} 
+                    isSingleCardMode={isSingleCardMode} 
+                    fontSizeScale={fontSizeScale} 
+                />
+            );
+        }
+
         switch (step.type) {
             case 'content':
-            case 'objectiveList':
             case 'accordion':
                  return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} />
-            case 'conceptExplanation': {
-                return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} isSingleCardMode={isSingleCardMode} fontSizeScale={fontSizeScale} />
-            }
             case 'visual':
                 return (
                       <div className="w-full h-full p-0 md:p-2">
