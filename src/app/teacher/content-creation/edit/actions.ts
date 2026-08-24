@@ -4,6 +4,7 @@
 import { db } from "@/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import type { LessonStep, YazilacaklarContent } from "@/lib/types";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function updateTopicContent({ 
     courseId, 
@@ -30,7 +31,18 @@ export async function updateTopicContent({
             steps: plainSteps,
             sourceText: sourceText || '',
             htmlContent: htmlContent || '',
+            itemCount: plainSteps.length,
         });
+
+        // Anında tüm sayfalarda önbelleği yenile
+        try {
+            revalidateTag('curriculum');
+            revalidatePath('/teacher/ders-akisi');
+            revalidatePath('/curriculum');
+            revalidatePath('/teacher/content-creation');
+        } catch (e) {
+            // Edge runtime fallback
+        }
 
         return { success: true };
     } catch (error: any) {

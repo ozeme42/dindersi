@@ -41,8 +41,8 @@ const getCachedFlowData = unstable_cache(
         const [classesSnap, coursesSnap, unitsSnap, topicsSnap] = await Promise.all([
             db.collection('classes').get(),
             db.collection('courses').select('title', 'classId', 'isTeacherOnly', 'order').get(),
-            db.collectionGroup('units').select('title', 'steps', 'isPublished').get(),
-            db.collectionGroup('topics').select('title', 'steps', 'isPublished').get(),
+            db.collectionGroup('units').select('title', 'steps', 'isPublished', 'htmlContent').get(),
+            db.collectionGroup('topics').select('title', 'steps', 'isPublished', 'htmlContent', 'itemCount').get(),
         ]);
         
         const topicsByUnit = new Map<string, EnrichedTopic[]>();
@@ -54,7 +54,7 @@ const getCachedFlowData = unstable_cache(
                 if (!topicsByUnit.has(unitId)) {
                     topicsByUnit.set(unitId, []);
                 }
-                const hasFlow = (topic.steps || []).length > 0;
+                const hasFlow = (topic.steps || []).length > 0 || !!topic.htmlContent || ((topic as any).itemCount || 0) > 0;
                 topicsByUnit.get(unitId)!.push({ ...topic, hasFlowContent: hasFlow });
             }
         });
@@ -69,7 +69,7 @@ const getCachedFlowData = unstable_cache(
                     unitsByCourse.set(courseId, []);
                 }
                 const topicsForUnit = (topicsByUnit.get(unit.id) || []).sort((a, b) => a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' }));
-                const hasUnitFlow = (unit.steps || []).length > 0;
+                const hasUnitFlow = (unit.steps || []).length > 0 || !!unit.htmlContent;
                 unitsByCourse.get(courseId)!.push({
                     ...unit,
                     hasFlowContent: hasUnitFlow,
@@ -111,7 +111,7 @@ const getCachedFlowData = unstable_cache(
         return enrichedClasses;
     },
     ['ders-akisi-flow-data'],
-    { revalidate: 60, tags: ['curriculum'] } // Her 60 saniyede bir önbelleği yenile
+    { revalidate: 15, tags: ['curriculum'] }
 );
 
 export async function getFlowData(): Promise<EnrichedClass[]> {
