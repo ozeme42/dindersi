@@ -78,6 +78,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     const [editedStep, setEditedStep] = useState<LessonStep | null>(null);
     const [initialData, setInitialData] = useState<Partial<LessonStep>>({});
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
+    const [contentViewMode, setContentViewMode] = useState<'list' | 'raw'>('list');
     
     const { toast } = useToast();
     const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[]})[]})[]>([]);
@@ -247,8 +248,6 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
 
     const selectedCourseData = allCourses.find(c => c.id === (editedStep as any).courseId);
     const selectedUnitData = selectedCourseData?.units.find(u => u.id === (editedStep as any).unitId);
-
-    const [contentViewMode, setContentViewMode] = useState<'list' | 'raw'>('list');
 
     const parseContentSentences = (html: string): string[] => {
         if (!html || typeof html !== 'string') return [];
