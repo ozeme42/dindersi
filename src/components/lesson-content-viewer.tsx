@@ -589,10 +589,11 @@ export function ContentListPlayer({
     );
 }
 
-// 4. ConceptExplanationPlayer (3D Bilgi Kartı Görünümlü Anahtar Kavramlar)
+// 4. ConceptExplanationPlayer (3D Bilgi Kartı Görünümlü Anahtar Kavramlar - Sırayla Ekrana Gelme)
 export function ConceptExplanationPlayer({ 
     items, 
     step,
+    revealedSentencesCount = 1,
     isFullscreen, 
     title, 
     isSingleCardMode, 
@@ -600,6 +601,7 @@ export function ConceptExplanationPlayer({
 }: { 
     items?: any[], 
     step?: any,
+    revealedSentencesCount?: number,
     isFullscreen: boolean, 
     title?: string, 
     isSingleCardMode?: boolean, 
@@ -637,6 +639,8 @@ export function ConceptExplanationPlayer({
 
     if (!validConcepts || validConcepts.length === 0) return null;
     const totalCards = validConcepts.length;
+    // Sırayla ekrana getirme: revealedSentencesCount kadar kart gösterilir
+    const visibleConcepts = validConcepts.slice(0, revealedSentencesCount || 1);
 
     const getScaleStyles = () => {
         switch (cardScale) {
@@ -693,7 +697,9 @@ export function ConceptExplanationPlayer({
                     <div>
                         <h2 className="font-black text-slate-800 text-lg md:text-2xl drop-shadow-sm tracking-tight">{title || 'Anahtar Kavramlar'}</h2>
                         <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
-                            <span>{totalCards} Anahtar Kavram</span>
+                            <span className={cn(visibleConcepts.length === totalCards ? "text-emerald-600 font-extrabold" : "text-indigo-600 font-extrabold")}>
+                                {visibleConcepts.length} / {totalCards} Anahtar Kavram
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -773,11 +779,11 @@ export function ConceptExplanationPlayer({
                 </div>
             </div>
 
-            {/* 3D Kavram Kartları Izgarası */}
+            {/* 3D Kavram Kartları Izgarası (Sırayla Açılma Animasyonu) */}
             <div className={cn("grid gap-4 md:gap-6 pb-20 transition-all duration-300", getGridClass())}>
                 {(() => {
                     let conceptCount = 0;
-                    return validConcepts.map((item, index) => {
+                    return visibleConcepts.map((item, index) => {
                         if (item.concept === '[BAŞLIK]') {
                             return (
                                 <div key={index} className="col-span-full mt-4 mb-2 flex items-center gap-4 w-full">
@@ -2035,6 +2041,7 @@ export function StepContent({
                 <ConceptExplanationPlayer 
                     items={step.items || step.cards} 
                     step={step} 
+                    revealedSentencesCount={revealedSentencesCount}
                     isFullscreen={isFullscreen} 
                     title={step.title} 
                     isSingleCardMode={isSingleCardMode} 
@@ -2678,7 +2685,30 @@ export function LessonContentViewer({
     const handleContinueOrNext = (e: React.MouseEvent) => {
         e.stopPropagation();
 
-          if (!currentStep) return;
+        if (!currentStep) return;
+
+        // Anahtar Kavramlar için sırayla ekrana gelme kontrolü
+        const isConceptStep = currentStep.type === 'conceptExplanation' || 
+                              currentStep.type === 'objectiveList' || 
+                              (typeof currentStep.title === 'string' && /kavram|anahtar/i.test(currentStep.title) && currentStep.type !== 'anagramFlashcard' && currentStep.type !== 'conceptMap');
+
+        if (isConceptStep) {
+            const raw = (currentStep as any).items || (currentStep as any).cards || [];
+            let totalItems = Array.isArray(raw) ? raw.length : 1;
+            if (typeof (currentStep as any).content === 'string') {
+                const doc = new DOMParser().parseFromString(`<div>${(currentStep as any).content}</div>`, 'text/html');
+                const listItems = doc.querySelectorAll('li');
+                totalItems = listItems.length > 0 ? listItems.length : ((currentStep as any).content.match(/[^.!?,\n]+[.!?,\n]*/g) || [(currentStep as any).content]).length;
+            }
+            if (revealedSentencesCount >= totalItems) {
+                handleNext();
+            } else {
+                setRevealedSentencesCount(prev => prev + 1);
+                playSound('pop');
+            }
+            return;
+        }
+
         const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
         if (isContentList) {
              let totalItems = 0;
