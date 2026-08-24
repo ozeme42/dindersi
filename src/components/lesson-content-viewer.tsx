@@ -2784,16 +2784,15 @@ export function LessonContentViewer({
         }
     };
 
-    const handleContinueOrNext = (e: React.MouseEvent) => {
-        e.stopPropagation();
+    // Mevcut sayfa içinde henüz açılmamış parça/cümle/kavram var mı kontrolü
+    const getStepRevealStatus = useCallback(() => {
+        if (!currentStep) return { hasUnrevealedItems: false, totalItems: 1, currentCount: 1 };
 
-        if (!currentStep) return;
+        // 1. Anahtar Kavramlar
+        const isConcept = currentStep.type === 'conceptExplanation' || 
+                          (typeof currentStep.title === 'string' && /kavram|anahtar/i.test(currentStep.title) && currentStep.type !== 'anagramFlashcard' && currentStep.type !== 'conceptMap' && !/hedef|kazan/i.test(currentStep.title) && currentStep.type !== 'objectiveList');
 
-        // Anahtar Kavramlar için sırayla ekrana gelme kontrolü (Öğrenme hedefleri isContentList bloğunda cümle cümle açılır)
-        const isConceptStep = currentStep.type === 'conceptExplanation' || 
-                              (typeof currentStep.title === 'string' && /kavram|anahtar/i.test(currentStep.title) && currentStep.type !== 'anagramFlashcard' && currentStep.type !== 'conceptMap' && !/hedef|kazan/i.test(currentStep.title) && currentStep.type !== 'objectiveList');
-
-        if (isConceptStep) {
+        if (isConcept) {
             const raw = (currentStep as any).items || (currentStep as any).cards || [];
             let totalItems = Array.isArray(raw) ? raw.length : 1;
             if (typeof (currentStep as any).content === 'string') {
@@ -2801,27 +2800,49 @@ export function LessonContentViewer({
                 const listItems = doc.querySelectorAll('li');
                 totalItems = listItems.length > 0 ? listItems.length : ((currentStep as any).content.match(/[^.!?,\n]+[.!?,\n]*/g) || [(currentStep as any).content]).length;
             }
-            if (revealedSentencesCount >= totalItems) {
-                handleNext();
-            } else {
-                setRevealedSentencesCount(prev => prev + 1);
-                playSound('pop');
-            }
-            return;
+            return {
+                hasUnrevealedItems: revealedSentencesCount < totalItems,
+                totalItems,
+                currentCount: revealedSentencesCount
+            };
         }
 
+        // 2. Metin / Öğrenme Hedefleri / Akordeon Listesi
         const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
         if (isContentList) {
-             let totalItems = 0;
-             if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length;
-             else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length;
-             else if (currentStep.type === 'content') {
-                 const stepContent = (currentStep as ContentStep).content || '';
-                 const listItems = stepContent.match(/<li>/g) || [];
-                 totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
-             }
-            const isListFullyRevealed = revealedSentencesCount >= totalItems;
-            if (isListFullyRevealed) handleNext(); else setRevealedSentencesCount(prev => prev + 1);
+            let totalItems = 0;
+            if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items?.length || 0;
+            else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items?.length || 0;
+            else if (currentStep.type === 'content') {
+                const stepContent = (currentStep as ContentStep).content || '';
+                const listItems = stepContent.match(/<li>/g) || [];
+                totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
+            }
+            return {
+                hasUnrevealedItems: revealedSentencesCount < totalItems,
+                totalItems,
+                currentCount: revealedSentencesCount
+            };
+        }
+
+        // 3. Diğer tekil sayfalar
+        return {
+            hasUnrevealedItems: false,
+            totalItems: 1,
+            currentCount: 1
+        };
+    }, [currentStep, revealedSentencesCount]);
+
+    const handleContinueOrNext = (e: React.MouseEvent) => {
+        e.stopPropagation();
+
+        if (!currentStep) return;
+
+        const { hasUnrevealedItems } = getStepRevealStatus();
+
+        if (hasUnrevealedItems) {
+            setRevealedSentencesCount(prev => prev + 1);
+            playSound('pop');
         } else {
             handleNext();
         }
@@ -3141,23 +3162,50 @@ export function LessonContentViewer({
                         </button>
                     )}
 
-                    <button
-                        onClick={handleContinueOrNext}
-                        disabled={!isNextButtonEnabled || (currentStepIndex === steps.length - 1 && isFinished)}
-                        className={cn(
-                            "h-8 px-3.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden border",
-                            isNextButtonEnabled
-                                ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white border-transparent shadow-sm shadow-indigo-500/20 hover:shadow-md hover:shadow-indigo-500/30"
-                                : "bg-black/5 text-slate-400 border-black/10 cursor-not-allowed"
-                        )}
-                    >
-                        {isNextButtonEnabled && (
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.25),transparent_60%)]" />
-                        )}
-                        <span className="relative">
-                            {currentStepIndex === steps.length - 1 ? (completeButtonText || 'Bitir') : 'Devam Et'}
-                        </span>
-                    </button>
+                    {(() => {
+                        const { hasUnrevealedItems } = getStepRevealStatus();
+                        const isLastStep = currentStepIndex === steps.length - 1;
+
+                        return (
+                            <button
+                                onClick={handleContinueOrNext}
+                                disabled={!isNextButtonEnabled || (isLastStep && isFinished)}
+                                className={cn(
+                                    "h-8 px-3.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden flex items-center gap-1.5",
+                                    !isNextButtonEnabled
+                                        ? "bg-black/5 text-slate-400 border border-black/10 cursor-not-allowed"
+                                        : hasUnrevealedItems
+                                            ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-sm shadow-purple-500/25 hover:shadow-md hover:shadow-purple-500/40"
+                                            : isLastStep
+                                                ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white border border-emerald-400/40 shadow-sm shadow-emerald-500/25 hover:shadow-md hover:shadow-emerald-500/40"
+                                                : "bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white border border-indigo-400/40 shadow-sm shadow-indigo-500/25 hover:shadow-md hover:shadow-indigo-500/40"
+                                )}
+                                title={hasUnrevealedItems ? "Sayfadaki sonraki içeriği göster" : (isLastStep ? "Dersi Bitir" : "Sonraki Sayfaya Geç")}
+                            >
+                                {isNextButtonEnabled && (
+                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.25),transparent_60%)]" />
+                                )}
+                                <span className="relative flex items-center gap-1.5">
+                                    {hasUnrevealedItems ? (
+                                        <>
+                                            <span>Devam Et</span>
+                                            <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                                        </>
+                                    ) : isLastStep ? (
+                                        <>
+                                            <span>{completeButtonText || 'Bitir'}</span>
+                                            <PartyPopper className="w-3.5 h-3.5" />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>İleri</span>
+                                            <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                                        </>
+                                    )}
+                                </span>
+                            </button>
+                        );
+                    })()}
                 </div>
             </div>
         </div>
