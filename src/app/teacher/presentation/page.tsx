@@ -124,75 +124,52 @@ function PresentationPageContent() {
     return (
         <main 
             ref={mainContentRef} 
-            className={cn(
-                "h-screen w-screen bg-slate-100/50 text-slate-900 overflow-hidden flex flex-col font-sans relative transition-colors duration-500",
-                !isFullscreen && "p-4 md:p-6 lg:p-8"
-            )}
+            className="h-screen w-screen bg-[#020617] text-white overflow-hidden flex flex-col font-sans relative"
         >
-             {/* Modern Animated Ambient Background */}
-             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-fuchsia-400/20 rounded-full blur-[120px] mix-blend-multiply animate-pulse" style={{ animationDuration: '8s' }} />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-cyan-400/20 rounded-full blur-[120px] mix-blend-multiply animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
-                <div className="absolute top-[20%] left-[30%] w-[40vw] h-[40vw] bg-amber-300/10 rounded-full blur-[100px] mix-blend-multiply animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }} />
+             {/* Premium Dark Animated Ambient Background */}
+             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#020617]">
+                <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] bg-indigo-900/20 rounded-full blur-[150px] mix-blend-screen animate-pulse" style={{ animationDuration: '10s' }} />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-purple-900/20 rounded-full blur-[150px] mix-blend-screen animate-pulse" style={{ animationDuration: '14s', animationDelay: '2s' }} />
+                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.05]" />
             </div>
 
-            {/* Header / Üst Bar - Glassmorphism */}
-            <header className={cn(
-                "flex-shrink-0 z-20 flex items-center justify-between transition-all duration-500 ease-out",
-                isFullscreen 
-                    ? "absolute top-0 left-0 right-0 p-4 bg-white/40 backdrop-blur-2xl border-b border-white/50 opacity-0 hover:opacity-100 focus-within:opacity-100 shadow-sm transform -translate-y-2 hover:translate-y-0" 
-                    : "mb-6 bg-white/60 backdrop-blur-2xl border border-white/80 rounded-[2rem] p-4 px-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
-            )}>
-                <div className="flex items-center gap-5 overflow-hidden">
-                    <div className={cn(
-                        "flex items-center justify-center shadow-inner transition-all duration-300", 
-                        isFullscreen ? "bg-transparent p-0" : "bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-2xl"
-                    )}>
-                        <Presentation className={cn("text-white", isFullscreen ? "h-6 w-6 text-purple-600" : "h-7 w-7")}/>
+            {/* İçerik Alanı - Tam Ekran (Full-Bleed) */}
+            <div className="flex-grow flex flex-col min-h-0 relative z-10 w-full h-full">
+                <LessonContentViewer
+                    topic={content as Topic}
+                    courseId={courseId!}
+                    unitId={unitId!}
+                    courseTitle={courseName!}
+                    unitTitle={unitName!}
+                    onTopicComplete={noOp}
+                    progress={undefined}
+                    onProgressUpdate={noOp}
+                    onMultiAnswer={noOp}
+                    onAllTfAnswered={noOp}
+                    isFullscreen={true} // Her zaman tam ekran gibi davran
+                />
+            </div>
+
+            {/* Floating Dock / Araç Çubuğu (Apple macOS Style) */}
+            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 opacity-20 hover:opacity-100 focus-within:opacity-100 group">
+                <div className="bg-slate-900/60 backdrop-blur-3xl border border-white/10 p-3 rounded-[2rem] shadow-2xl flex items-center gap-4 hover:scale-105 transition-transform duration-300">
+                    
+                    <div className="flex items-center gap-3 px-3 pr-6 border-r border-white/10">
+                        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl shadow-inner">
+                            <Presentation className="h-5 w-5 text-white" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-sm font-black text-white tracking-wide uppercase">{content.title}</span>
+                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{courseName}</span>
+                        </div>
                     </div>
-                    <div className="overflow-hidden flex flex-col justify-center">
-                        <h1 className={cn(
-                            "font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-800 to-slate-600 uppercase truncate leading-tight drop-shadow-sm", 
-                            isFullscreen ? "text-xl" : "text-3xl"
-                        )}>
-                            {content.title}
-                        </h1>
-                        {!isFullscreen && <p className="text-sm text-slate-500 font-bold mt-0.5 truncate tracking-wider uppercase opacity-80">{courseName} <span className="mx-1 text-purple-400">•</span> {unitName}</p>}
-                    </div>
-                </div>
-                 
-                 <div className="flex items-center gap-4 flex-shrink-0">
-                    <FullscreenToggle elementRef={mainContentRef} className="bg-white/80 backdrop-blur-md border border-white text-slate-600 hover:text-purple-600 hover:bg-white h-12 w-12 rounded-2xl shadow-sm transition-all hover:scale-105 hover:shadow-md" />
-                    {!isFullscreen && (
-                        <Button asChild variant="ghost" size="icon" className="bg-white/80 backdrop-blur-md border border-white text-slate-600 hover:text-rose-600 hover:bg-white rounded-2xl h-12 w-12 transition-all hover:scale-105 hover:shadow-md">
-                            <Link href="/teacher/ders-akisi"><ArrowLeft className="h-6 w-6" /></Link>
+
+                    <div className="flex items-center gap-2 pl-2">
+                        <FullscreenToggle elementRef={mainContentRef} className="bg-white/5 border border-white/10 text-white hover:bg-white hover:text-slate-900 h-12 w-12 rounded-xl transition-all" />
+                        <Button asChild variant="ghost" size="icon" className="bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white rounded-xl h-12 w-12 transition-all">
+                            <Link href="/teacher/ders-akisi"><ArrowLeft className="h-5 w-5" /></Link>
                         </Button>
-                    )}
-                 </div>
-            </header>
-            
-            {/* İçerik Alanı */}
-            <div className="flex-grow flex flex-col min-h-0 relative z-10">
-                 <div className={cn(
-                    "w-full h-full overflow-hidden transition-all duration-500 ease-in-out",
-                    // Fullscreen değilse şık kart efekti ver
-                    isFullscreen 
-                        ? "rounded-none bg-transparent" 
-                        : "rounded-[3rem] border-4 border-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] bg-white/90 backdrop-blur-md ring-1 ring-slate-900/5"
-                )}>
-                    <LessonContentViewer
-                        topic={content as Topic}
-                        courseId={courseId!}
-                        unitId={unitId!}
-                        courseTitle={courseName!}
-                        unitTitle={unitName!}
-                        onTopicComplete={noOp}
-                        progress={undefined}
-                        onProgressUpdate={noOp}
-                        onMultiAnswer={noOp}
-                        onAllTfAnswered={noOp}
-                        isFullscreen={isFullscreen}
-                    />
+                    </div>
                 </div>
             </div>
         </main>

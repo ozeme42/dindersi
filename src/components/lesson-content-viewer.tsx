@@ -132,14 +132,14 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
 
 // --- ORTAK RENK TEMALARI ---
 export const FLASHCARD_THEMES = [
-    { front: 'bg-gradient-to-br from-rose-950 to-rose-900 border-rose-500/50 text-slate-900 dark:text-white drop-shadow-md', back: 'bg-gradient-to-br from-rose-600 to-rose-700 border-rose-400/60 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(225,29,72,0.3)]' },
-    { front: 'bg-gradient-to-br from-sky-950 to-blue-900 border-sky-500/50 text-slate-900 dark:text-white drop-shadow-md', back: 'bg-gradient-to-br from-sky-600 to-blue-700 border-sky-400/60 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(14,165,233,0.3)]' },
-    { front: 'bg-gradient-to-br from-emerald-950 to-green-900 border-emerald-500/50 text-slate-900 dark:text-white drop-shadow-md', back: 'bg-gradient-to-br from-emerald-600 to-green-700 border-emerald-400/60 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(16,185,129,0.3)]' },
-    { front: 'bg-gradient-to-br from-amber-950 to-orange-900 border-amber-500/50 text-slate-900 dark:text-white drop-shadow-md', back: 'bg-gradient-to-br from-amber-600 to-orange-700 border-amber-400/60 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(245,158,11,0.3)]' },
-    { front: 'bg-gradient-to-br from-violet-950 to-purple-900 border-violet-500/50 text-slate-900 dark:text-white drop-shadow-md', back: 'bg-gradient-to-br from-violet-600 to-purple-700 border-violet-400/60 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]' },
-    { front: 'bg-gradient-to-br from-cyan-950 to-teal-900 border-cyan-500/50 text-slate-900 dark:text-white drop-shadow-md', back: 'bg-gradient-to-br from-cyan-600 to-teal-700 border-cyan-400/60 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]' },
-    { front: 'bg-gradient-to-br from-indigo-950 to-blue-900 border-indigo-500/50 text-slate-900 dark:text-white drop-shadow-md', back: 'bg-gradient-to-br from-indigo-600 to-blue-700 border-indigo-400/60 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]' },
-    { front: 'bg-gradient-to-br from-orange-950 to-red-900 border-orange-500/50 text-slate-900 dark:text-white drop-shadow-md', back: 'bg-gradient-to-br from-orange-600 to-red-700 border-orange-400/60 text-slate-900 dark:text-white shadow-[0_0_20px_rgba(249,115,22,0.3)]' },
+    { front: 'bg-gradient-to-br from-rose-900/60 to-rose-800/40 border-rose-500/40 text-rose-100', back: 'bg-gradient-to-br from-rose-500 to-rose-600 border-rose-400/50 text-white shadow-[0_0_30px_rgba(225,29,72,0.5)]' },
+    { front: 'bg-gradient-to-br from-sky-900/60 to-blue-800/40 border-sky-500/40 text-sky-100', back: 'bg-gradient-to-br from-sky-500 to-blue-600 border-sky-400/50 text-white shadow-[0_0_30px_rgba(14,165,233,0.5)]' },
+    { front: 'bg-gradient-to-br from-emerald-900/60 to-green-800/40 border-emerald-500/40 text-emerald-100', back: 'bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400/50 text-white shadow-[0_0_30px_rgba(16,185,129,0.5)]' },
+    { front: 'bg-gradient-to-br from-amber-900/60 to-orange-800/40 border-amber-500/40 text-amber-100', back: 'bg-gradient-to-br from-amber-500 to-orange-600 border-amber-400/50 text-white shadow-[0_0_30px_rgba(245,158,11,0.5)]' },
+    { front: 'bg-gradient-to-br from-violet-900/60 to-purple-800/40 border-violet-500/40 text-violet-100', back: 'bg-gradient-to-br from-violet-500 to-purple-600 border-violet-400/50 text-white shadow-[0_0_30px_rgba(139,92,246,0.5)]' },
+    { front: 'bg-gradient-to-br from-cyan-900/60 to-teal-800/40 border-cyan-500/40 text-cyan-100', back: 'bg-gradient-to-br from-cyan-500 to-teal-600 border-cyan-400/50 text-white shadow-[0_0_30px_rgba(6,182,212,0.5)]' },
+    { front: 'bg-gradient-to-br from-indigo-900/60 to-blue-800/40 border-indigo-500/40 text-indigo-100', back: 'bg-gradient-to-br from-indigo-500 to-blue-600 border-indigo-400/50 text-white shadow-[0_0_30px_rgba(99,102,241,0.5)]' },
+    { front: 'bg-gradient-to-br from-orange-900/60 to-red-800/40 border-orange-500/40 text-orange-100', back: 'bg-gradient-to-br from-orange-500 to-red-600 border-orange-400/50 text-white shadow-[0_0_30px_rgba(249,115,22,0.5)]' },
 ];
 
 // --- 1. VisualPlayer ---
@@ -209,22 +209,22 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     }, [allAnswered, isCompleted, onAllAnswered]);
 
     const colorThemes = [
-        { card: 'border-cyan-500/30 bg-cyan-50 dark:bg-cyan-950/40 hover:bg-cyan-50 dark:bg-cyan-950/60', number: 'text-cyan-400' },
-        { card: 'border-violet-500/30 bg-violet-50 dark:bg-violet-950/40 hover:bg-violet-50 dark:bg-violet-950/60', number: 'text-violet-400' },
-        { card: 'border-amber-500/30 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-50 dark:bg-amber-950/60', number: 'text-amber-400' },
-        { card: 'border-rose-500/30 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-50 dark:bg-rose-950/60', number: 'text-rose-400' },
-        { card: 'border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-50 dark:bg-emerald-950/60', number: 'text-emerald-400' },
-        { card: 'border-indigo-500/30 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-50 dark:bg-indigo-950/60', number: 'text-indigo-400' },
+        { card: 'border-cyan-500/30 bg-cyan-950/40 hover:bg-cyan-950/60', number: 'text-cyan-400' },
+        { card: 'border-violet-500/30 bg-violet-950/40 hover:bg-violet-950/60', number: 'text-violet-400' },
+        { card: 'border-amber-500/30 bg-amber-950/40 hover:bg-amber-950/60', number: 'text-amber-400' },
+        { card: 'border-rose-500/30 bg-rose-950/40 hover:bg-rose-950/60', number: 'text-rose-400' },
+        { card: 'border-emerald-500/30 bg-emerald-950/40 hover:bg-emerald-950/60', number: 'text-emerald-400' },
+        { card: 'border-indigo-500/30 bg-indigo-950/40 hover:bg-indigo-950/60', number: 'text-indigo-400' },
     ];
 
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-4xl mx-auto")}>
              <div className={cn(
-                "relative p-3 md:p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-[#161233] flex-shrink-0 w-full text-center overflow-hidden shadow-lg",
+                "relative p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-lg",
                 isTeacher ? "py-4 mb-6 mt-2" : "mb-3 md:mb-4"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn("font-black text-slate-900 dark:text-white",
+                <h2 className={cn("font-black text-white",
                     isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl")
                 )}>{step.title}</h2>
             </div>
@@ -240,47 +240,47 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                     return (
                         <div key={index} className={cn(
                             "rounded-2xl border-2 shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
-                            isTeacher ? "p-6 min-h-[14rem]" : "p-3 md:p-4 min-h-[8rem] md:min-h-[10rem]",
+                            isTeacher ? "p-6 min-h-[14rem]" : "p-4 min-h-[10rem]",
                             isAnswered
-                                ? (isCorrect ? "border-emerald-500/60 bg-emerald-50 dark:bg-emerald-950/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "border-rose-500/60 bg-rose-50 dark:bg-rose-950/50 shadow-[0_0_20px_rgba(244,63,94,0.2)]")
+                                ? (isCorrect ? "border-emerald-500/60 bg-emerald-950/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "border-rose-500/60 bg-rose-950/50 shadow-[0_0_20px_rgba(244,63,94,0.2)]")
                                 : `${theme.card} border`
                         )}>
-                            <div className="flex gap-3 md:gap-4 mb-4 md:mb-6">
-                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-lg md:text-xl", isAnswered ? "text-slate-900 dark:text-white" : theme.number)}>
+                            <div className="flex gap-4 mb-6">
+                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-xl", isAnswered ? "text-white" : theme.number)}>
                                     {index + 1}.
                                 </span>
-                                <p className={cn("font-bold text-slate-200 leading-relaxed", isTeacher ? "text-2xl" : "text-sm md:text-base")}>
+                                <p className={cn("font-bold text-slate-200 leading-relaxed", isTeacher ? "text-2xl" : "text-base")}>
                                     {q.statement}
                                 </p>
                             </div>
 
-                            <div className="flex gap-2 md:gap-3 mt-auto">
+                            <div className="flex gap-3 mt-auto">
                                 <button
                                     onClick={() => !isAnswered && onAnswer(index, true)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-1.5 md:gap-2",
-                                        isTeacher ? "h-14 text-lg" : "h-9 md:h-11 text-[11px] md:text-sm",
+                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-2",
+                                        isTeacher ? "h-14 text-lg" : "h-11 text-sm",
                                         isAnswered && userAnswer.answer === true
-                                            ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-slate-900 dark:text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-slate-900 dark:text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
+                                            ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== true
                                                 ? "bg-white/3 border-white/5 text-slate-600 opacity-30"
-                                                : "bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60 hover:border-emerald-400/60"
+                                                : "bg-emerald-950/60 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60 hover:border-emerald-400/60"
                                     )}
                                 >
-                                    <CheckCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 md:h-4 md:w-4")} /> Doğru
+                                    <CheckCircle className={cn(isTeacher ? "h-5 w-5" : "h-4 w-4")} /> Doğru
                                 </button>
                                 <button
                                     onClick={() => !isAnswered && onAnswer(index, false)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-1.5 md:gap-2",
-                                        isTeacher ? "h-14 text-lg" : "h-9 md:h-11 text-[11px] md:text-sm",
+                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-2",
+                                        isTeacher ? "h-14 text-lg" : "h-11 text-sm",
                                         isAnswered && userAnswer.answer === false
-                                            ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-slate-900 dark:text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-slate-900 dark:text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
+                                            ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== false
                                                 ? "bg-white/3 border-white/5 text-slate-600 opacity-30"
-                                                : "bg-rose-50 dark:bg-rose-950/60 border-rose-500/40 text-rose-300 hover:bg-rose-900/60 hover:border-rose-400/60"
+                                                : "bg-rose-950/60 border-rose-500/40 text-rose-300 hover:bg-rose-900/60 hover:border-rose-400/60"
                                     )}
                                 >
                                     <XCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 md:h-4 md:w-4")} /> Yanlış
@@ -408,7 +408,7 @@ export function ContentListPlayer({
             
             {/* BAŞLIK */}
             <div className={cn(
-                "relative z-20 rounded-2xl border border-slate-200 dark:border-white/10 bg-[#161233] flex-shrink-0 w-full max-w-full text-center mb-6 overflow-hidden shadow-lg",
+                "relative z-20 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl flex-shrink-0 w-full max-w-full text-center mb-6 overflow-hidden",
                 isTeacher ? "py-6 mt-2 px-6" : "p-4 md:p-6"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
@@ -445,23 +445,22 @@ export function ContentListPlayer({
                                 )}>
                                 
                                 <div className={cn(
-                                    "relative w-full h-full p-3 md:py-5 md:px-6 rounded-2xl border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 flex flex-row justify-start items-center text-left gap-3 md:gap-4 backdrop-blur-xl",
+                                    "relative w-full h-full py-4 px-5 md:py-5 md:px-6 rounded-2xl border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 flex flex-col md:flex-row justify-start items-center text-left gap-4 backdrop-blur-xl",
                                     style.bg, style.border
                                 )}>
                                     {/* Parlak üst çizgi */}
                                     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                                     {/* Numara rozeti */}
                                     <div className={cn(
-                                        "flex-shrink-0 w-8 h-8 md:w-13 md:h-13 rounded-lg md:rounded-xl flex items-center justify-center bg-black/30 border-2",
+                                        "flex-shrink-0 w-11 h-11 md:w-13 md:h-13 rounded-xl flex items-center justify-center bg-black/30 border-2",
                                         style.circleBorder
                                     )}>
-                                        <span className={cn("font-black text-sm md:text-lg", style.numberColor)}>{index + 1}</span>
+                                        <span className={cn("font-black text-lg", style.numberColor)}>{index + 1}</span>
                                     </div>
-
                                     <div className={cn(
                                         "leading-relaxed font-bold break-words flex-1 z-10 relative",
                                         style.textColor,
-                                        isTeacher ? "text-2xl md:text-3xl tracking-wide" : "text-[13px] md:text-xl tracking-wide"
+                                        isTeacher ? "text-2xl md:text-3xl tracking-wide" : "text-base md:text-xl tracking-wide"
                                     )}>
                                         <span className="flex-1">
                                             {shouldAnimate ? (
@@ -487,19 +486,19 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title }: { items
     const isTeacher = useTeacherMode();
     
     const cardStyles = [
-        { bg: 'bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-900/60', border: 'border-sky-500/30', title: 'text-sky-300', hoverBorder: 'hover:border-sky-400/60' },
-        { bg: 'bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-900/60', border: 'border-rose-500/30', title: 'text-rose-300', hoverBorder: 'hover:border-rose-400/60' },
-        { bg: 'bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-900/60', border: 'border-amber-500/30', title: 'text-amber-300', hoverBorder: 'hover:border-amber-400/60' },
-        { bg: 'bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-900/60', border: 'border-emerald-500/30', title: 'text-emerald-300', hoverBorder: 'hover:border-emerald-400/60' },
-        { bg: 'bg-violet-50 dark:bg-violet-950/50 hover:bg-violet-900/60', border: 'border-violet-500/30', title: 'text-violet-300', hoverBorder: 'hover:border-violet-400/60' },
-        { bg: 'bg-cyan-50 dark:bg-cyan-950/50 hover:bg-cyan-900/60', border: 'border-cyan-500/30', title: 'text-cyan-300', hoverBorder: 'hover:border-cyan-400/60' },
+        { bg: 'bg-sky-950/50 hover:bg-sky-900/60', border: 'border-sky-500/30', title: 'text-sky-300', hoverBorder: 'hover:border-sky-400/60' },
+        { bg: 'bg-rose-950/50 hover:bg-rose-900/60', border: 'border-rose-500/30', title: 'text-rose-300', hoverBorder: 'hover:border-rose-400/60' },
+        { bg: 'bg-amber-950/50 hover:bg-amber-900/60', border: 'border-amber-500/30', title: 'text-amber-300', hoverBorder: 'hover:border-amber-400/60' },
+        { bg: 'bg-emerald-950/50 hover:bg-emerald-900/60', border: 'border-emerald-500/30', title: 'text-emerald-300', hoverBorder: 'hover:border-emerald-400/60' },
+        { bg: 'bg-violet-950/50 hover:bg-violet-900/60', border: 'border-violet-500/30', title: 'text-violet-300', hoverBorder: 'hover:border-violet-400/60' },
+        { bg: 'bg-cyan-950/50 hover:bg-cyan-900/60', border: 'border-cyan-500/30', title: 'text-cyan-300', hoverBorder: 'hover:border-cyan-400/60' },
     ];
 
     return (
         <div className={cn('flex flex-col h-full w-full items-center justify-start p-2', isTeacher ? "max-w-[98%] mx-auto pt-4" : "max-w-6xl mx-auto justify-center")}>
-            <div className={cn("relative p-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-[#161233] flex-shrink-0 mb-6 w-full text-center overflow-hidden shadow-lg")}>
+            <div className={cn("relative p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl flex-shrink-0 mb-6 w-full text-center overflow-hidden")}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn("font-black text-slate-900 dark:text-white", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
+                <h2 className={cn("font-black text-white", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
             </div>
              
             <div className={cn(
@@ -532,11 +531,11 @@ export function ConceptExplanationPlayer({ items, isFullscreen, title }: { items
                                 style.hoverBorder,
                                 isTeacher ? 'min-h-[180px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
                             )}>
-                                <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
+                                <CardHeader className={cn("border-b border-white/10", isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
                                     <CardTitle className={cn("font-black uppercase tracking-wider transition-colors", style.title, isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg"))}>{currentNum}. {item.concept}</CardTitle>
                                 </CardHeader>
-                                <CardContent className={cn("text-slate-700 dark:text-slate-300 font-semibold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
-                                    {item.definition}
+                                <CardContent className={cn("text-slate-200 font-semibold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
+                                    <div dangerouslySetInnerHTML={{ __html: item.definition }} />
                                 </CardContent>
                             </Card>
                         )
