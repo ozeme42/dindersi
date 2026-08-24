@@ -589,19 +589,19 @@ export function ContentListPlayer({
     );
 }
 
-// 4. ConceptExplanationPlayer (3D Bilgi Kartı Görünümlü Anahtar Kavramlar - Sırayla Ekrana Gelme)
+// 4. ConceptExplanationPlayer (3D & Dinamik Boyut Destekli)
 export function ConceptExplanationPlayer({ 
     items, 
-    step,
-    revealedSentencesCount = 1,
+    step, 
+    revealedSentencesCount = 1, 
     isFullscreen, 
     title, 
     isSingleCardMode, 
     fontSizeScale = 'normal' 
 }: { 
     items?: any[], 
-    step?: any,
-    revealedSentencesCount?: number,
+    step?: any, 
+    revealedSentencesCount?: number, 
     isFullscreen: boolean, 
     title?: string, 
     isSingleCardMode?: boolean, 
@@ -609,15 +609,9 @@ export function ConceptExplanationPlayer({
 }) {
     const isTeacher = useTeacherMode();
     const scrollRef = useRef<HTMLDivElement>(null);
-    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('sm');
-    const [customCols, setCustomCols] = useState<number | null>(null);
 
-    // Sunum Araçlarındaki büyütme/küçültme ile otomatik senkronizasyon
-    useEffect(() => {
-        if (fontSizeScale === 'huge') setCardScale('xl');
-        else if (fontSizeScale === 'large') setCardScale('lg');
-        else if (fontSizeScale === 'normal') setCardScale('sm');
-    }, [fontSizeScale]);
+    // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (Varsayılan: Küçük)
+    const cardScale: 'sm' | 'lg' | 'xl' = fontSizeScale === 'huge' ? 'xl' : (fontSizeScale === 'large' ? 'lg' : 'sm');
 
     // Yeni kavram kartı açıldığında otomatik olarak aşağı kaydırıp ekrana getirme
     useEffect(() => {
@@ -656,7 +650,6 @@ export function ConceptExplanationPlayer({
 
     if (!validConcepts || validConcepts.length === 0) return null;
     const totalCards = validConcepts.length;
-    // Sırayla ekrana getirme: revealedSentencesCount kadar kart gösterilir
     const visibleConcepts = validConcepts.slice(0, revealedSentencesCount || 1);
 
     const getConceptFontSize = (conceptText: string) => {
@@ -676,12 +669,6 @@ export function ConceptExplanationPlayer({
             if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
             return isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-4xl md:text-5xl lg:text-6xl";
         }
-        if (cardScale === 'md') {
-            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xl md:text-2xl lg:text-3xl" : "text-lg md:text-xl lg:text-2xl";
-            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-2xl md:text-3xl lg:text-4xl" : "text-xl md:text-2xl lg:text-3xl";
-            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
-            return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
-        }
         // sm (varsayılan küçük)
         if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-lg md:text-xl lg:text-2xl" : "text-base md:text-lg lg:text-xl";
         if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-xl md:text-2xl lg:text-3xl" : "text-lg md:text-xl lg:text-2xl";
@@ -689,50 +676,32 @@ export function ConceptExplanationPlayer({
         return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
     };
 
-    const getScaleStyles = () => {
-        switch (cardScale) {
-            case 'sm':
-                return {
-                    minHeight: isTeacher ? "min-h-[140px] md:min-h-[160px]" : "min-h-[120px] md:min-h-[140px]",
-                    padding: "p-5 md:p-6",
-                };
-            case 'lg':
-                return {
-                    minHeight: isTeacher ? "min-h-[260px] md:min-h-[300px]" : "min-h-[220px] md:min-h-[260px]",
-                    padding: "p-8 md:p-10",
-                };
-            case 'xl':
-                return {
-                    minHeight: isTeacher ? "min-h-[340px] md:min-h-[380px]" : "min-h-[280px] md:min-h-[320px]",
-                    padding: "p-10 md:p-12",
-                };
-            case 'md':
-            default:
-                return {
-                    minHeight: isTeacher ? "min-h-[200px] md:min-h-[220px]" : "min-h-[160px] md:min-h-[180px]",
-                    padding: "p-6 md:p-8",
-                };
-        }
-    };
-
-    const scaleStyles = getScaleStyles();
+    const scaleStyles = {
+        sm: {
+            minHeight: isTeacher ? "min-h-[110px] md:min-h-[130px]" : "min-h-[95px] md:min-h-[115px]",
+            padding: "p-4 md:p-5",
+        },
+        lg: {
+            minHeight: isTeacher ? "min-h-[200px] md:min-h-[240px]" : "min-h-[170px] md:min-h-[200px]",
+            padding: "p-6 md:p-8",
+        },
+        xl: {
+            minHeight: isTeacher ? "min-h-[280px] md:min-h-[320px]" : "min-h-[240px] md:min-h-[280px]",
+            padding: "p-8 md:p-10",
+        },
+    }[cardScale];
 
     const getGridClass = () => {
-        if (customCols === 1) return "grid-cols-1 max-w-3xl mx-auto";
-        if (customCols === 2) return "grid-cols-1 md:grid-cols-2";
-        if (customCols === 3) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
-        if (customCols === 4) return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-        
         if (cardScale === 'xl') return "grid-cols-1 md:grid-cols-2";
         if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2";
-        if (cardScale === 'sm') return isTeacher ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 md:grid-cols-3";
-        return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : (isFullscreen ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2");
+        // sm (varsayılan)
+        return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4";
     };
 
     return (
         <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
-            {/* Üst Başlık ve Kontrol Araç Çubuğu */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
+            {/* Üst Başlık */}
+            <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200">
                         <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
@@ -744,80 +713,6 @@ export function ConceptExplanationPlayer({
                                 {visibleConcepts.length} / {totalCards} Anahtar Kavram
                             </span>
                         </div>
-                    </div>
-                </div>
-
-                {/* Boyut & Izgara Ayarları */}
-                <div className="flex flex-wrap items-center gap-2">
-                    {/* Boyut Ayarı (Zoom) */}
-                    <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={cardScale === 'sm'}
-                            onClick={() => {
-                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
-                                const currIdx = sizes.indexOf(cardScale);
-                                if (currIdx > 0) setCardScale(sizes[currIdx - 1]);
-                            }}
-                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
-                            title="Kartları Küçült"
-                        >
-                            <ZoomOut className="w-4 h-4" />
-                        </Button>
-                        <span className="px-2 text-xs font-black text-slate-700 uppercase tracking-wider min-w-[56px] text-center">
-                            {cardScale === 'sm' ? 'Küçük' : cardScale === 'md' ? 'Normal' : cardScale === 'lg' ? 'Büyük' : 'Dev'}
-                        </span>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={cardScale === 'xl'}
-                            onClick={() => {
-                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
-                                const currIdx = sizes.indexOf(cardScale);
-                                if (currIdx < sizes.length - 1) setCardScale(sizes[currIdx + 1]);
-                            }}
-                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
-                            title="Kartları Büyüt"
-                        >
-                            <ZoomIn className="w-4 h-4" />
-                        </Button>
-                    </div>
-
-                    {/* Sütun Düzeni */}
-                    <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setCustomCols(null)}
-                            className={cn("h-7 px-2.5 rounded-lg text-xs font-bold", customCols === null ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
-                        >
-                            Oto
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setCustomCols(2)}
-                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 2 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
-                        >
-                            2'li
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setCustomCols(3)}
-                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 3 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
-                        >
-                            3'lü
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setCustomCols(4)}
-                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 4 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
-                        >
-                            4'lü
-                        </Button>
                     </div>
                 </div>
             </div>
@@ -901,15 +796,9 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
     fontSizeScale?: 'normal' | 'large' | 'huge'
 }) {
     const isTeacher = useTeacherMode();
-    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('sm');
-    const [customCols, setCustomCols] = useState<number | null>(null);
 
-    // Sunum Araçlarındaki büyütme/küçültme ile otomatik senkronizasyon
-    useEffect(() => {
-        if (fontSizeScale === 'huge') setCardScale('xl');
-        else if (fontSizeScale === 'large') setCardScale('lg');
-        else if (fontSizeScale === 'normal') setCardScale('sm');
-    }, [fontSizeScale]);
+    // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (Varsayılan: Küçük)
+    const cardScale: 'sm' | 'lg' | 'xl' = fontSizeScale === 'huge' ? 'xl' : (fontSizeScale === 'large' ? 'lg' : 'sm');
 
     const totalCards = step.cards?.length || 0;
     const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
@@ -939,40 +828,29 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
             if (len > 8) return "text-3xl sm:text-4xl md:text-5xl";
             return "text-4xl sm:text-5xl md:text-6xl";
         }
-        if (cardScale === 'md') {
-            if (len > 12) return "text-xl sm:text-2xl md:text-3xl";
-            if (len > 8) return "text-2xl sm:text-3xl md:text-4xl";
-            return "text-3xl sm:text-4xl md:text-5xl";
-        }
-        // sm (varsayılan)
+        // sm (varsayılan küçük)
         if (len > 12) return "text-lg sm:text-xl md:text-2xl";
         if (len > 8) return "text-xl sm:text-2xl md:text-3xl";
         return "text-2xl sm:text-3xl md:text-4xl";
     };
 
     const scaleStyles = {
-        sm: { minHeight: isTeacher ? "min-h-[15rem]" : "min-h-[12rem]" },
-        md: { minHeight: isTeacher ? "min-h-[19rem]" : "min-h-[15rem]" },
-        lg: { minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[18rem]" },
-        xl: { minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[22rem]" },
+        sm: { minHeight: isTeacher ? "min-h-[11rem] sm:min-h-[12rem]" : "min-h-[10rem] sm:min-h-[11rem]" },
+        lg: { minHeight: isTeacher ? "min-h-[19rem] sm:min-h-[21rem]" : "min-h-[16rem] sm:min-h-[18rem]" },
+        xl: { minHeight: isTeacher ? "min-h-[25rem] sm:min-h-[27rem]" : "min-h-[21rem] sm:min-h-[23rem]" },
     }[cardScale];
 
     const getGridClass = () => {
-        if (customCols === 2) return "grid-cols-1 sm:grid-cols-2";
-        if (customCols === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
-        if (customCols === 4) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
-        
-        // Varsayılan duyarlı grid
         if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2";
         if (cardScale === 'lg') return isTeacher ? "grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
-        if (cardScale === 'sm') return isTeacher ? "grid-cols-3 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
-        return isTeacher ? "grid-cols-2 lg:grid-cols-4" : (isFullscreen ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4");
+        // sm (varsayılan)
+        return isTeacher ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
     };
 
     return (
         <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
-            {/* Üst Başlık ve 3D Kontrol Araç Çubuğu */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
+            {/* Üst Başlık ve Hepsini Çevir Butonu */}
+            <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200">
                         <Puzzle className="w-5 h-5" />
@@ -987,102 +865,29 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                     </div>
                 </div>
 
-                {/* Büyütme / Küçültme & Hepsini Çevir Kontrolleri */}
-                <div className="flex flex-wrap items-center gap-2">
-                    {/* Hepsini Çevir Butonu */}
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleToggleFlipAll}
-                        className="h-9 px-3 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
-                    >
-                        <RotateCw className={cn("w-3.5 h-3.5", allFlipped && "rotate-180")} />
-                        {allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}
-                    </Button>
-
-                    {/* Boyut Ayarı (Zoom) */}
-                    <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={cardScale === 'sm'}
-                            onClick={() => {
-                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
-                                const currIdx = sizes.indexOf(cardScale);
-                                if (currIdx > 0) setCardScale(sizes[currIdx - 1]);
-                            }}
-                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
-                            title="Kartları Küçült"
-                        >
-                            <ZoomOut className="w-4 h-4" />
-                        </Button>
-                        <span className="px-2 text-xs font-black text-slate-700 uppercase tracking-wider min-w-[56px] text-center">
-                            {cardScale === 'sm' ? 'Küçük' : cardScale === 'md' ? 'Normal' : cardScale === 'lg' ? 'Büyük' : 'Dev'}
-                        </span>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={cardScale === 'xl'}
-                            onClick={() => {
-                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
-                                const currIdx = sizes.indexOf(cardScale);
-                                if (currIdx < sizes.length - 1) setCardScale(sizes[currIdx + 1]);
-                            }}
-                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
-                            title="Kartları Büyüt"
-                        >
-                            <ZoomIn className="w-4 h-4" />
-                        </Button>
-                    </div>
-
-                    {/* Sütun Düzeni */}
-                    <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setCustomCols(null)}
-                            className={cn("h-7 px-2.5 rounded-lg text-xs font-bold", customCols === null ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
-                        >
-                            Oto
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setCustomCols(2)}
-                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 2 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
-                        >
-                            2'li
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setCustomCols(3)}
-                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 3 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
-                        >
-                            3'lü
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setCustomCols(4)}
-                            className={cn("h-7 px-2 rounded-lg text-xs font-bold", customCols === 4 ? "bg-white text-indigo-700 shadow-sm" : "text-slate-600")}
-                        >
-                            4'lü
-                        </Button>
-                    </div>
-                </div>
+                {/* Hepsini Çevir Butonu */}
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleToggleFlipAll}
+                    className="h-9 px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+                >
+                    <RotateCw className={cn("w-3.5 h-3.5", allFlipped && "rotate-180")} />
+                    {allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}
+                </Button>
             </div>
 
-            {/* 3D Anagram Kartları Izgarası */}
-            <div className={cn("grid gap-4 md:gap-6 pb-20 transition-all duration-300", getGridClass())}>
+            {/* 3D Anagram Kartları Grid'i */}
+            <div className={cn("grid gap-4 md:gap-6 pb-32 transition-all duration-300", getGridClass())}>
                 {step.cards.map((card, index) => {
-                    const theme = FLASHCARD_THEMES[index % FLASHCARD_THEMES.length];
                     const isFlipped = flippedCards.has(index);
+                    const theme = FLASHCARD_THEMES[index % FLASHCARD_THEMES.length];
+
                     return (
                         <div
                             key={index}
                             className={cn(
-                                "rounded-3xl [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
+                                "rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
                                 scaleStyles.minHeight
                             )}
                             onClick={() => onCardFlip(index, 'anagramFlashcard')}
@@ -1097,76 +902,77 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                             >
                                 {/* ══ ÖN YÜZ (KARIŞIK HARFLER) ══ */}
                                 <div className={cn(
-                                    "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] p-5 md:p-6 flex flex-col justify-between overflow-hidden",
+                                    "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] p-4 sm:p-5 flex flex-col justify-between overflow-hidden",
                                     theme.front
                                 )}>
-                                    {/* Üst Işık Yansıması */}
                                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                                     
-                                    {/* Kart Üst Bilgisi */}
+                                    {/* Üst Rozetler */}
                                     <div className="flex items-center justify-between w-full">
                                         <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                                             #{index + 1}
                                         </span>
-                                        <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2.5 py-0.5 rounded-full border border-white/30 backdrop-blur-md">
-                                            <Puzzle className="w-3 h-3 text-amber-300" /> Karışık Harfler
+                                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
+                                            <Puzzle className="w-3.5 h-3.5" />
+                                            <span>Anagram</span>
                                         </div>
                                     </div>
 
-                                    {/* Karışık Harfler - Kartı Dolduran Büyük Yazı (Harf bölünmesi engellendi) */}
+                                    {/* Karışık Harfler - Kartın Merkezini Dolduran Dinamik Punto (Harf bölünmesi engellendi) */}
                                     <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center">
-                                        <div className={cn(
-                                            "font-black tracking-widest text-white drop-shadow-lg uppercase leading-tight whitespace-nowrap [word-break:keep-all] hyphens-none max-w-full text-center px-1",
+                                        <h3 className={cn(
+                                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full px-1 text-center",
                                             getAnagramFontSize(card.scrambledWord)
                                         )}>
                                             {card.scrambledWord}
-                                        </div>
+                                        </h3>
                                     </div>
 
-                                    {/* Alt İpucu Butonu: SADECE ÇEVİR */}
+                                    {/* Alt İpucu Butonu */}
                                     <div className="flex items-center justify-center">
                                         <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
                                             <RotateCw className="w-3.5 h-3.5" />
-                                            <span>Çevir</span>
+                                            <span>Çözümü Gör</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* ══ ARKA YÜZ (DOĞRU KELİME) ══ */}
+                                {/* ══ ARKA YÜZ (DOĞRU CEVAP) ══ */}
                                 <div 
                                     className={cn(
-                                        "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] p-5 md:p-6 flex flex-col justify-between overflow-hidden",
+                                        "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] p-4 sm:p-5 flex flex-col justify-between overflow-hidden",
                                         theme.back
                                     )} 
                                     style={{ transform: "rotateY(180deg)" }}
                                 >
                                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                                     
-                                    {/* Kart Üst Bilgisi */}
+                                    {/* Üst Rozetler */}
                                     <div className="flex items-center justify-between w-full">
                                         <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                                             #{index + 1}
                                         </span>
-                                        <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2.5 py-0.5 rounded-full border border-white/30 backdrop-blur-md">
-                                            <Sparkles className="w-3 h-3 text-amber-300" /> Doğru Yanıt
+                                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
+                                            <CheckCircle className="w-3.5 h-3.5 text-emerald-300" />
+                                            <span>Çözüm</span>
                                         </div>
                                     </div>
 
-                                    {/* Doğru Yanıt - Doğrudan Kart Üzerinde (Harf bölünmesi engellendi) */}
+                                    {/* Doğru Cevap (Harf bölünmesi engellendi) */}
                                     <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center">
-                                        <div className={cn(
-                                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full text-center px-1",
+                                        <h3 className={cn(
+                                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full px-1 text-center",
                                             getAnagramFontSize(card.correctAnswer)
                                         )}>
                                             {card.correctAnswer}
-                                        </div>
+                                        </h3>
                                     </div>
 
-                                    {/* Alt İpucu Butonu: SADECE ÇEVİR */}
+                                    {/* Alt İpucu Butonu */}
                                     <div className="flex items-center justify-center">
                                         <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
                                             <RotateCw className="w-3.5 h-3.5" />
-                                            <span>Çevir</span>
+                                            <span>Kapat</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1188,15 +994,9 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     fontSizeScale?: 'normal' | 'large' | 'huge'
 }) {
     const isTeacher = useTeacherMode();
-    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('sm');
-    const [customCols, setCustomCols] = useState<number | null>(null);
 
-    // Sunum Araçlarındaki büyütme/küçültme ile otomatik senkronizasyon
-    useEffect(() => {
-        if (fontSizeScale === 'huge') setCardScale('xl');
-        else if (fontSizeScale === 'large') setCardScale('lg');
-        else if (fontSizeScale === 'normal') setCardScale('sm');
-    }, [fontSizeScale]);
+    // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (Varsayılan: Küçük)
+    const cardScale: 'sm' | 'lg' | 'xl' = fontSizeScale === 'huge' ? 'xl' : (fontSizeScale === 'large' ? 'lg' : 'sm');
 
     const totalCards = step.cards?.length || 0;
     const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
@@ -1215,22 +1015,16 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     };
 
     const getGridClass = () => {
-        if (customCols === 1) return "grid-cols-1 max-w-2xl mx-auto";
-        if (customCols === 2) return "grid-cols-1 md:grid-cols-2";
-        if (customCols === 3) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
-        if (customCols === 4) return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-        
-        // Varsayılan duyarlı grid
-        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 md:grid-cols-2";
-        if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
-        if (cardScale === 'sm') return isTeacher ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-        return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : (isFullscreen ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3");
+        if (cardScale === 'xl') return "grid-cols-1 md:grid-cols-2";
+        if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2";
+        // sm (varsayılan)
+        return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
     };
 
     return (
         <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
-            {/* Üst Başlık ve 3D Kontrol Araç Çubuğu */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
+            {/* Üst Başlık ve Hepsini Çevir Butonu */}
+            <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200">
                         <Layers className="w-5 h-5" />
@@ -1245,90 +1039,20 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
                     </div>
                 </div>
 
-                {/* Büyütme / Küçültme & Hepsini Çevir Kontrolleri */}
-                <div className="flex flex-wrap items-center gap-2">
-                    {/* Hepsini Çevir Butonu */}
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleToggleFlipAll}
-                        className="h-9 px-3 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
-                    >
-                        <RotateCw className={cn("w-3.5 h-3.5", allFlipped && "rotate-180")} />
-                        {allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}
-                    </Button>
-
-                    {/* Boyut Ayarı (Zoom) */}
-                    <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={cardScale === 'sm'}
-                            onClick={() => {
-                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
-                                const currIdx = sizes.indexOf(cardScale);
-                                if (currIdx > 0) setCardScale(sizes[currIdx - 1]);
-                            }}
-                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
-                            title="Kartları Küçült"
-                        >
-                            <ZoomOut className="w-4 h-4" />
-                        </Button>
-                        <span className="px-2 text-xs font-black text-slate-700 uppercase tracking-wider min-w-[56px] text-center">
-                            {cardScale === 'sm' ? 'Küçük' : cardScale === 'md' ? 'Normal' : cardScale === 'lg' ? 'Büyük' : 'Dev'}
-                        </span>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={cardScale === 'xl'}
-                            onClick={() => {
-                                const sizes: ('sm' | 'md' | 'lg' | 'xl')[] = ['sm', 'md', 'lg', 'xl'];
-                                const currIdx = sizes.indexOf(cardScale);
-                                if (currIdx < sizes.length - 1) setCardScale(sizes[currIdx + 1]);
-                            }}
-                            className="h-7 w-7 rounded-lg text-slate-600 hover:text-slate-900 disabled:opacity-30"
-                            title="Kartları Büyüt"
-                        >
-                            <ZoomIn className="w-4 h-4" />
-                        </Button>
-                    </div>
-
-                    {/* Sütun Düzeni */}
-                    <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
-                        <button
-                            onClick={() => setCustomCols(2)}
-                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 2 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
-                            title="2 Sütun"
-                        >
-                            2'li
-                        </button>
-                        <button
-                            onClick={() => setCustomCols(3)}
-                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 3 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
-                            title="3 Sütun"
-                        >
-                            3'lü
-                        </button>
-                        <button
-                            onClick={() => setCustomCols(4)}
-                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === 4 ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
-                            title="4 Sütun"
-                        >
-                            4'lü
-                        </button>
-                        <button
-                            onClick={() => setCustomCols(null)}
-                            className={cn("px-2 py-1 rounded-lg text-xs font-bold transition-all", customCols === null ? "bg-white text-indigo-600 shadow-sm font-black" : "text-slate-500 hover:text-slate-900")}
-                            title="Otomatik Düzen"
-                        >
-                            Oto
-                        </button>
-                    </div>
-                </div>
+                {/* Hepsini Çevir Butonu */}
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleToggleFlipAll}
+                    className="h-9 px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+                >
+                    <RotateCw className={cn("w-3.5 h-3.5", allFlipped && "rotate-180")} />
+                    {allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}
+                </Button>
             </div>
 
             {/* 3D Bilgi Kartları Grid'i */}
-            <div className={cn("grid gap-6 md:gap-8 pb-32 transition-all duration-300", getGridClass())}>
+            <div className={cn("grid gap-4 md:gap-6 pb-32 transition-all duration-300", getGridClass())}>
                 {step.cards.map((card, index) => (
                     <FlashcardItem
                         key={index}
@@ -1433,19 +1157,15 @@ export const FlashcardItem = ({
 
     const scaleStyles = {
         sm: { 
-            minHeight: isTeacher ? "min-h-[17rem]" : "min-h-[14rem]",
+            minHeight: isTeacher ? "min-h-[13rem] sm:min-h-[14rem]" : "min-h-[11rem] sm:min-h-[12rem]",
             padding: "p-4 sm:p-5"
         },
-        md: { 
-            minHeight: isTeacher ? "min-h-[21rem]" : "min-h-[17rem]",
-            padding: "p-5 sm:p-6"
-        },
         lg: { 
-            minHeight: isTeacher ? "min-h-[25rem]" : "min-h-[21rem]",
+            minHeight: isTeacher ? "min-h-[22rem] sm:min-h-[24rem]" : "min-h-[18rem] sm:min-h-[20rem]",
             padding: "p-6 sm:p-8"
         },
         xl: { 
-            minHeight: isTeacher ? "min-h-[29rem]" : "min-h-[25rem]",
+            minHeight: isTeacher ? "min-h-[27rem] sm:min-h-[29rem]" : "min-h-[23rem] sm:min-h-[25rem]",
             padding: "p-8 sm:p-10"
         },
     }[cardScale];
