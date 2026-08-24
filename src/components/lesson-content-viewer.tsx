@@ -516,6 +516,7 @@ export function ContentListPlayer({
                         )
                     })}
                 </div>
+            </div>
         </div>
     );
 }
