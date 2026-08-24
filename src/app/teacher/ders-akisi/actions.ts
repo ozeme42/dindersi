@@ -33,14 +33,16 @@ const serialize = (data: any): any => {
     return data;
 };
 
-export async function getFlowData(): Promise<EnrichedClass[]> {
-    try {
+import { unstable_cache } from 'next/cache';
+
+const getCachedFlowData = unstable_cache(
+    async (): Promise<EnrichedClass[]> => {
         const db = getAdminDb();
         const [classesSnap, coursesSnap, unitsSnap, topicsSnap] = await Promise.all([
             db.collection('classes').get(),
-            db.collection('courses').get(),
-            db.collectionGroup('units').get(),
-            db.collectionGroup('topics').get(),
+            db.collection('courses').select('title', 'classId', 'isTeacherOnly', 'order').get(),
+            db.collectionGroup('units').select('title', 'steps', 'isPublished').get(),
+            db.collectionGroup('topics').select('title', 'steps', 'isPublished').get(),
         ]);
         
         const topicsByUnit = new Map<string, EnrichedTopic[]>();
@@ -106,8 +108,15 @@ export async function getFlowData(): Promise<EnrichedClass[]> {
             }
         }
         
-        return serialize(enrichedClasses);
+        return enrichedClasses;
+    },
+    ['ders-akisi-flow-data'],
+    { revalidate: 60, tags: ['curriculum'] } // Her 60 saniyede bir önbelleği yenile
+);
 
+export async function getFlowData(): Promise<EnrichedClass[]> {
+    try {
+        return serialize(await getCachedFlowData());
     } catch (error) {
         console.error("Error fetching curriculum data:", error);
         return [];
