@@ -50,7 +50,7 @@ export type LessonContentViewerProps = {
     onAllTfAnswered?: (stepIndex?: number) => void;
     isSingleCardMode?: boolean;
     animationSpeed?: 'off' | 'slow' | 'normal' | 'fast';
-    fontSizeScale?: 'normal' | 'large' | 'huge';
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge';
     jumpToStep?: number | null;
     onJumpDone?: () => void;
     onStepIndexChange?: (index: number, total: number) => void;
@@ -260,7 +260,7 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
 }
 
 // --- 2. InteractiveTrueFalseList ---
-function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered, fontSizeScale = 'normal' }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void, fontSizeScale?: 'normal' | 'large' | 'huge' }) {
+function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered, fontSizeScale = 'normal' }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void, fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge' }) {
     const isTeacher = useTeacherMode();
     const allAnswered = step.questions.every((_, index) => answers && answers[index] !== undefined);
     
@@ -280,6 +280,15 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
         { card: 'border-2 border-emerald-300 bg-white/95 hover:bg-emerald-50/60 shadow-md shadow-emerald-100/50', number: 'text-emerald-600' },
         { card: 'border-2 border-indigo-300 bg-white/95 hover:bg-indigo-50/60 shadow-md shadow-indigo-100/50', number: 'text-indigo-600' },
     ];
+
+    const getTfFontSize = () => {
+        if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+        if (fontSizeScale === 'lg') return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
+        if (fontSizeScale === 'md') return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
+        if (fontSizeScale === 'xs') return isTeacher ? "text-sm md:text-base" : "text-xs md:text-sm";
+        // sm / normal (varsayılan)
+        return isTeacher ? "text-base md:text-lg" : "text-sm md:text-base";
+    };
 
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-4xl mx-auto")}>
@@ -315,9 +324,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                 </span>
                                 <p className={cn(
                                     "font-bold text-slate-800 leading-relaxed", 
-                                    isTeacher 
-                                        ? (fontSizeScale === 'huge' ? "text-2xl md:text-3xl" : (fontSizeScale === 'large' ? "text-xl md:text-2xl" : "text-lg md:text-xl"))
-                                        : "text-base"
+                                    getTfFontSize()
                                 )}>
                                     {q.statement}
                                 </p>
@@ -381,7 +388,7 @@ export function ContentListPlayer({
     onAnimationEnd?: () => void,
     isSingleCardMode?: boolean,
     animationSpeed?: 'off' | 'slow' | 'normal' | 'fast',
-    fontSizeScale?: 'normal' | 'large' | 'huge'
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'
 }) {
     const isTeacher = useTeacherMode();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -568,8 +575,24 @@ export function ContentListPlayer({
                                         "leading-relaxed font-bold break-words flex-1 z-10 relative",
                                         style.textColor,
                                         isTeacher 
-                                            ? (fontSizeScale === 'huge' ? "text-2xl md:text-3xl lg:text-4xl tracking-wide" : (fontSizeScale === 'large' ? "text-xl md:text-2xl lg:text-3xl tracking-normal" : "text-lg md:text-xl lg:text-2xl tracking-normal"))
-                                            : (fontSizeScale === 'huge' ? "text-lg md:text-xl" : (fontSizeScale === 'large' ? "text-base md:text-lg" : "text-sm md:text-base"))
+                                            ? ((fontSizeScale === 'huge' || fontSizeScale === 'xl')
+                                                ? "text-3xl md:text-4xl tracking-wide" 
+                                                : (fontSizeScale === 'lg'
+                                                    ? "text-2xl md:text-3xl tracking-wide"
+                                                    : (fontSizeScale === 'md'
+                                                        ? "text-xl md:text-2xl tracking-normal"
+                                                        : (fontSizeScale === 'xs'
+                                                            ? "text-base md:text-lg tracking-normal"
+                                                            : "text-lg md:text-xl lg:text-2xl tracking-normal"))))
+                                            : ((fontSizeScale === 'huge' || fontSizeScale === 'xl')
+                                                ? "text-lg md:text-xl" 
+                                                : (fontSizeScale === 'lg'
+                                                    ? "text-base md:text-lg"
+                                                    : (fontSizeScale === 'md'
+                                                        ? "text-sm md:text-base"
+                                                        : (fontSizeScale === 'xs'
+                                                            ? "text-xs md:text-sm"
+                                                            : "text-sm md:text-base"))))
                                     )}>
                                         <span className="flex-1">
                                             {shouldAnimate && animationSpeed !== 'off' ? (
@@ -605,13 +628,17 @@ export function ConceptExplanationPlayer({
     isFullscreen: boolean, 
     title?: string, 
     isSingleCardMode?: boolean, 
-    fontSizeScale?: 'normal' | 'large' | 'huge' 
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge' 
 }) {
     const isTeacher = useTeacherMode();
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (Varsayılan: Küçük)
-    const cardScale: 'sm' | 'lg' | 'xl' = fontSizeScale === 'huge' ? 'xl' : (fontSizeScale === 'large' ? 'lg' : 'sm');
+    // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (5 Kademe)
+    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
+        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
+        fontSizeScale === 'lg' ? 'lg' :
+        fontSizeScale === 'md' ? 'md' :
+        fontSizeScale === 'xs' ? 'xs' : 'sm';
 
     // Yeni kavram kartı açıldığında otomatik olarak aşağı kaydırıp ekrana getirme
     useEffect(() => {
@@ -669,6 +696,18 @@ export function ConceptExplanationPlayer({
             if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
             return isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-4xl md:text-5xl lg:text-6xl";
         }
+        if (cardScale === 'md') {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xl md:text-2xl lg:text-3xl" : "text-lg md:text-xl lg:text-2xl";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-2xl md:text-3xl lg:text-4xl" : "text-xl md:text-2xl lg:text-3xl";
+            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
+            return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
+        }
+        if (cardScale === 'xs') {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-base md:text-lg" : "text-sm md:text-base";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-lg md:text-xl" : "text-base md:text-lg";
+            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-xl md:text-2xl" : "text-lg md:text-xl";
+            return isTeacher ? "text-2xl md:text-3xl" : "text-xl md:text-2xl";
+        }
         // sm (varsayılan küçük)
         if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-lg md:text-xl lg:text-2xl" : "text-base md:text-lg lg:text-xl";
         if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-xl md:text-2xl lg:text-3xl" : "text-lg md:text-xl lg:text-2xl";
@@ -677,12 +716,20 @@ export function ConceptExplanationPlayer({
     };
 
     const scaleStyles = {
+        xs: {
+            minHeight: isTeacher ? "min-h-[85px] md:min-h-[105px]" : "min-h-[75px] md:min-h-[90px]",
+            padding: "p-3 md:p-4",
+        },
         sm: {
             minHeight: isTeacher ? "min-h-[110px] md:min-h-[130px]" : "min-h-[95px] md:min-h-[115px]",
             padding: "p-4 md:p-5",
         },
+        md: {
+            minHeight: isTeacher ? "min-h-[155px] md:min-h-[180px]" : "min-h-[135px] md:min-h-[155px]",
+            padding: "p-5 md:p-6",
+        },
         lg: {
-            minHeight: isTeacher ? "min-h-[200px] md:min-h-[240px]" : "min-h-[170px] md:min-h-[200px]",
+            minHeight: isTeacher ? "min-h-[210px] md:min-h-[250px]" : "min-h-[180px] md:min-h-[210px]",
             padding: "p-6 md:p-8",
         },
         xl: {
@@ -694,6 +741,8 @@ export function ConceptExplanationPlayer({
     const getGridClass = () => {
         if (cardScale === 'xl') return "grid-cols-1 md:grid-cols-2";
         if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2";
+        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4" : "grid-cols-2 sm:grid-cols-3";
+        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
         // sm (varsayılan)
         return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4";
     };
@@ -793,12 +842,16 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
     flippedCards: Set<number>, 
     onCardFlip: (cardIndex: number, type: 'anagramFlashcard') => void,
     isFullscreen: boolean,
-    fontSizeScale?: 'normal' | 'large' | 'huge'
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'
 }) {
     const isTeacher = useTeacherMode();
 
-    // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (Varsayılan: Küçük)
-    const cardScale: 'sm' | 'lg' | 'xl' = fontSizeScale === 'huge' ? 'xl' : (fontSizeScale === 'large' ? 'lg' : 'sm');
+    // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (5 Kademe)
+    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
+        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
+        fontSizeScale === 'lg' ? 'lg' :
+        fontSizeScale === 'md' ? 'md' :
+        fontSizeScale === 'xs' ? 'xs' : 'sm';
 
     const totalCards = step.cards?.length || 0;
     const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
@@ -828,6 +881,16 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
             if (len > 8) return "text-3xl sm:text-4xl md:text-5xl";
             return "text-4xl sm:text-5xl md:text-6xl";
         }
+        if (cardScale === 'md') {
+            if (len > 12) return "text-xl sm:text-2xl md:text-3xl";
+            if (len > 8) return "text-2xl sm:text-3xl md:text-4xl";
+            return "text-3xl sm:text-4xl md:text-5xl";
+        }
+        if (cardScale === 'xs') {
+            if (len > 12) return "text-base sm:text-lg md:text-xl";
+            if (len > 8) return "text-lg sm:text-xl md:text-2xl";
+            return "text-xl sm:text-2xl md:text-3xl";
+        }
         // sm (varsayılan küçük)
         if (len > 12) return "text-lg sm:text-xl md:text-2xl";
         if (len > 8) return "text-xl sm:text-2xl md:text-3xl";
@@ -835,14 +898,33 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
     };
 
     const scaleStyles = {
-        sm: { minHeight: isTeacher ? "min-h-[11rem] sm:min-h-[12rem]" : "min-h-[10rem] sm:min-h-[11rem]" },
-        lg: { minHeight: isTeacher ? "min-h-[19rem] sm:min-h-[21rem]" : "min-h-[16rem] sm:min-h-[18rem]" },
-        xl: { minHeight: isTeacher ? "min-h-[25rem] sm:min-h-[27rem]" : "min-h-[21rem] sm:min-h-[23rem]" },
+        xs: { 
+            minHeight: isTeacher ? "min-h-[8.5rem] sm:min-h-[9.5rem]" : "min-h-[8rem] sm:min-h-[9rem]",
+            padding: "p-2.5 sm:p-3" 
+        },
+        sm: { 
+            minHeight: isTeacher ? "min-h-[11rem] sm:min-h-[12rem]" : "min-h-[10rem] sm:min-h-[11rem]",
+            padding: "p-3.5 sm:p-4" 
+        },
+        md: { 
+            minHeight: isTeacher ? "min-h-[15rem] sm:min-h-[16.5rem]" : "min-h-[13rem] sm:min-h-[14.5rem]",
+            padding: "p-4 sm:p-5" 
+        },
+        lg: { 
+            minHeight: isTeacher ? "min-h-[19.5rem] sm:min-h-[21.5rem]" : "min-h-[16rem] sm:min-h-[18rem]",
+            padding: "p-5 sm:p-6" 
+        },
+        xl: { 
+            minHeight: isTeacher ? "min-h-[25rem] sm:min-h-[27rem]" : "min-h-[21rem] sm:min-h-[23rem]",
+            padding: "p-6 sm:p-7" 
+        },
     }[cardScale];
 
     const getGridClass = () => {
         if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2";
         if (cardScale === 'lg') return isTeacher ? "grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
+        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4";
+        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6";
         // sm (varsayılan)
         return isTeacher ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
     };
@@ -991,12 +1073,16 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     flippedCards: Set<number>, 
     onCardFlip: (cardIndex: number, type: 'flashcard') => void,
     isFullscreen: boolean,
-    fontSizeScale?: 'normal' | 'large' | 'huge'
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'
 }) {
     const isTeacher = useTeacherMode();
 
-    // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (Varsayılan: Küçük)
-    const cardScale: 'sm' | 'lg' | 'xl' = fontSizeScale === 'huge' ? 'xl' : (fontSizeScale === 'large' ? 'lg' : 'sm');
+    // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (5 Kademe)
+    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
+        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
+        fontSizeScale === 'lg' ? 'lg' :
+        fontSizeScale === 'md' ? 'md' :
+        fontSizeScale === 'xs' ? 'xs' : 'sm';
 
     const totalCards = step.cards?.length || 0;
     const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
@@ -1017,6 +1103,8 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     const getGridClass = () => {
         if (cardScale === 'xl') return "grid-cols-1 md:grid-cols-2";
         if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2";
+        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
+        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
         // sm (varsayılan)
         return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
     };
@@ -1091,7 +1179,7 @@ export const FlashcardItem = ({
     theme: any, 
     isFullscreen?: boolean, 
     isTeacher?: boolean,
-    cardScale?: 'sm' | 'md' | 'lg' | 'xl'
+    cardScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }) => {
     const getTermFontSize = (termText: string) => {
         const words = (termText || '').trim().split(/\s+/);
@@ -1115,6 +1203,12 @@ export const FlashcardItem = ({
             if (maxWordLen > 9 || totalLen > 16) return "text-2xl sm:text-3xl md:text-4xl";
             if (maxWordLen > 5 || totalLen > 10) return "text-3xl sm:text-4xl md:text-5xl";
             return "text-4xl sm:text-5xl md:text-6xl";
+        }
+        if (cardScale === 'xs') {
+            if (maxWordLen > 13 || totalLen > 24) return "text-base sm:text-lg md:text-xl";
+            if (maxWordLen > 9 || totalLen > 16) return "text-lg sm:text-xl md:text-2xl";
+            if (maxWordLen > 5 || totalLen > 10) return "text-xl sm:text-2xl md:text-3xl";
+            return "text-2xl sm:text-3xl md:text-4xl";
         }
         // sm (varsayılan küçük)
         if (maxWordLen > 13 || totalLen > 24) return "text-lg sm:text-xl md:text-2xl";
@@ -1147,6 +1241,13 @@ export const FlashcardItem = ({
             if (len > 50) return "text-lg sm:text-xl md:text-2xl";
             return "text-xl sm:text-2xl md:text-3xl";
         }
+        if (cardScale === 'xs') {
+            if (len > 300) return "text-[11px] sm:text-xs";
+            if (len > 180) return "text-xs sm:text-xs";
+            if (len > 100) return "text-xs sm:text-sm";
+            if (len > 50) return "text-sm sm:text-base";
+            return "text-base sm:text-lg";
+        }
         // sm (varsayılan küçük)
         if (len > 300) return "text-xs sm:text-sm";
         if (len > 180) return "text-xs sm:text-sm";
@@ -1156,9 +1257,17 @@ export const FlashcardItem = ({
     };
 
     const scaleStyles = {
+        xs: { 
+            minHeight: isTeacher ? "min-h-[10.5rem] sm:min-h-[11.5rem]" : "min-h-[9rem] sm:min-h-[10rem]",
+            padding: "p-3 sm:p-4"
+        },
         sm: { 
             minHeight: isTeacher ? "min-h-[13rem] sm:min-h-[14rem]" : "min-h-[11rem] sm:min-h-[12rem]",
             padding: "p-4 sm:p-5"
+        },
+        md: { 
+            minHeight: isTeacher ? "min-h-[17.5rem] sm:min-h-[19.5rem]" : "min-h-[14.5rem] sm:min-h-[16.5rem]",
+            padding: "p-5 sm:p-6"
         },
         lg: { 
             minHeight: isTeacher ? "min-h-[22rem] sm:min-h-[24rem]" : "min-h-[18rem] sm:min-h-[20rem]",

@@ -6,7 +6,7 @@ import {
     Loader2, ArrowLeft, Presentation, Settings, Sun, Moon, LayoutList, 
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
-    ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil
+    ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil, Minus, Plus
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -44,19 +44,41 @@ function PresentationPageContent() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     
     // Settings state
+    const FONT_SIZE_LEVELS: { key: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; label: string; short: string; badge: string; percent: string }[] = [
+        { key: 'xs', label: 'Çok Küçük', short: 'Ç.Küçük', badge: '1. Çok Küçük', percent: '%75' },
+        { key: 'sm', label: 'Küçük', short: 'Küçük', badge: '2. Küçük (Varsayılan)', percent: '%100' },
+        { key: 'md', label: 'Orta', short: 'Orta', badge: '3. Orta', percent: '%125' },
+        { key: 'lg', label: 'Büyük', short: 'Büyük', badge: '4. Büyük', percent: '%150' },
+        { key: 'xl', label: 'Dev', short: 'Dev', badge: '5. Dev', percent: '%180' },
+    ];
+
     const [isSingleCardMode, setIsSingleCardMode] = useState(false);
     const [animationSpeed, setAnimationSpeed] = useState<'off' | 'slow' | 'normal' | 'fast'>('normal');
-    const [fontSizeScale, setFontSizeScale] = useState<'normal' | 'large' | 'huge'>('normal');
+    const [fontSizeScale, setFontSizeScale] = useState<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'>('sm');
     const [isToolsOpen, setIsToolsOpen] = useState(false);
     const { themeMode, setThemeMode } = useTheme();
     const isDarkMode = themeMode === 'dark';
     const setIsDarkMode = (checked: boolean) => setThemeMode(checked ? 'dark' : 'light');
 
-    const increaseFontSize = () => {
-        setFontSizeScale(prev => prev === 'normal' ? 'large' : 'huge');
+    const getCurrentScaleIndex = () => {
+        if (fontSizeScale === 'normal') return 1; // 'sm'
+        if (fontSizeScale === 'huge') return 4; // 'xl'
+        const idx = FONT_SIZE_LEVELS.findIndex(lvl => lvl.key === fontSizeScale);
+        return idx !== -1 ? idx : 1;
     };
+
+    const increaseFontSize = () => {
+        const curr = getCurrentScaleIndex();
+        if (curr < FONT_SIZE_LEVELS.length - 1) {
+            setFontSizeScale(FONT_SIZE_LEVELS[curr + 1].key);
+        }
+    };
+
     const decreaseFontSize = () => {
-        setFontSizeScale(prev => prev === 'huge' ? 'large' : 'normal');
+        const curr = getCurrentScaleIndex();
+        if (curr > 0) {
+            setFontSizeScale(FONT_SIZE_LEVELS[curr - 1].key);
+        }
     };
 
     // Step Tracking & Jump
@@ -533,48 +555,83 @@ function PresentationPageContent() {
                                         </div>
                                     </div>
 
-                                    {/* 2. Anlık Yazı & Kart Boyutu */}
-                                    <div className="space-y-1.5 pt-1 border-t border-slate-200 dark:border-white/10">
+                                    {/* 2. Anlık Yazı & Kart Boyutu (Adım Adım Büyütme/Küçültme) */}
+                                    <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-white/10">
                                         <div className="flex items-center justify-between">
                                             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Yazı & Kart Boyutu</span>
-                                            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-500 dark:text-indigo-400">
-                                                {fontSizeScale === 'normal' ? 'Küçük (Varsayılan)' : (fontSizeScale === 'large' ? 'Büyük' : 'Dev (Maks)')}
+                                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+                                                {FONT_SIZE_LEVELS[getCurrentScaleIndex()]?.badge} ({FONT_SIZE_LEVELS[getCurrentScaleIndex()]?.percent})
                                             </span>
                                         </div>
-                                        <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                                            <button
-                                                onClick={() => setFontSizeScale('normal')}
-                                                className={cn(
-                                                    "py-1.5 rounded-lg text-xs font-bold transition-all",
-                                                    fontSizeScale === 'normal' 
-                                                        ? "bg-indigo-600 text-white shadow-sm font-black" 
-                                                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
-                                                )}
+
+                                        {/* Adım Adım Stepper (+ / -) */}
+                                        <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                disabled={getCurrentScaleIndex() === 0}
+                                                onClick={decreaseFontSize}
+                                                className="h-8 w-8 p-0 rounded-xl bg-white dark:bg-white/10 shadow-xs hover:bg-slate-200 dark:hover:bg-white/20 text-slate-700 dark:text-white disabled:opacity-30 flex items-center justify-center cursor-pointer"
+                                                title="Bir Adım Küçült (-)"
                                             >
-                                                Küçük
-                                            </button>
-                                            <button
-                                                onClick={() => setFontSizeScale('large')}
-                                                className={cn(
-                                                    "py-1.5 rounded-lg text-xs font-bold transition-all",
-                                                    fontSizeScale === 'large' 
-                                                        ? "bg-indigo-600 text-white shadow-sm font-black" 
-                                                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
-                                                )}
+                                                <Minus className="w-4 h-4 stroke-[3]" />
+                                            </Button>
+
+                                            <div className="flex-1 flex flex-col items-center">
+                                                <div className="flex items-center gap-1.5 py-1">
+                                                    {FONT_SIZE_LEVELS.map((lvl, idx) => (
+                                                        <div
+                                                            key={lvl.key}
+                                                            onClick={() => setFontSizeScale(lvl.key)}
+                                                            className={cn(
+                                                                "h-2.5 rounded-full cursor-pointer transition-all duration-300",
+                                                                idx === getCurrentScaleIndex()
+                                                                    ? "w-6 bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.6)]"
+                                                                    : idx < getCurrentScaleIndex()
+                                                                        ? "w-2.5 bg-indigo-400/60 hover:bg-indigo-500"
+                                                                        : "w-2.5 bg-slate-300 dark:bg-white/20 hover:bg-slate-400"
+                                                            )}
+                                                            title={lvl.label}
+                                                        />
+                                                    ))}
+                                                </div>
+                                                <span className="text-[11px] font-black text-slate-800 dark:text-slate-200">
+                                                    {FONT_SIZE_LEVELS[getCurrentScaleIndex()]?.label}
+                                                </span>
+                                            </div>
+
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                disabled={getCurrentScaleIndex() === FONT_SIZE_LEVELS.length - 1}
+                                                onClick={increaseFontSize}
+                                                className="h-8 w-8 p-0 rounded-xl bg-white dark:bg-white/10 shadow-xs hover:bg-slate-200 dark:hover:bg-white/20 text-slate-700 dark:text-white disabled:opacity-30 flex items-center justify-center cursor-pointer"
+                                                title="Bir Adım Büyüt (+)"
                                             >
-                                                Büyük
-                                            </button>
-                                            <button
-                                                onClick={() => setFontSizeScale('huge')}
-                                                className={cn(
-                                                    "py-1.5 rounded-lg text-xs font-bold transition-all",
-                                                    fontSizeScale === 'huge' 
-                                                        ? "bg-indigo-600 text-white shadow-sm font-black" 
-                                                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
-                                                )}
-                                            >
-                                                Dev
-                                            </button>
+                                                <Plus className="w-4 h-4 stroke-[3]" />
+                                            </Button>
+                                        </div>
+
+                                        {/* Hızlı Boyut Butonları (5 Kademe) */}
+                                        <div className="grid grid-cols-5 gap-1 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                                            {FONT_SIZE_LEVELS.map((lvl) => {
+                                                const isActive = (fontSizeScale === lvl.key) || (fontSizeScale === 'normal' && lvl.key === 'sm') || (fontSizeScale === 'huge' && lvl.key === 'xl');
+                                                return (
+                                                    <button
+                                                        key={lvl.key}
+                                                        onClick={() => setFontSizeScale(lvl.key)}
+                                                        className={cn(
+                                                            "py-1 rounded-lg text-[10px] font-bold transition-all truncate px-0.5 text-center cursor-pointer",
+                                                            isActive
+                                                                ? "bg-indigo-600 text-white shadow-xs font-black"
+                                                                : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
+                                                        )}
+                                                        title={lvl.label}
+                                                    >
+                                                        {lvl.short}
+                                                    </button>
+                                                );
+                                            })}
                                         </div>
                                     </div>
 
