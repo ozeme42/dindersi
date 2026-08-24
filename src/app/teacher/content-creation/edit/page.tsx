@@ -976,6 +976,7 @@ export function TopicEditor({
                     isOpen={isPreviewOpen}
                     onOpenChange={setIsPreviewOpen}
                     steps={steps}
+                    topicTitle={title}
                 />
             </div>
         </div>
