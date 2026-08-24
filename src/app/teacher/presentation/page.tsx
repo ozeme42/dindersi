@@ -312,63 +312,61 @@ function PresentationPageContent() {
         );
     }
 
-    const noOp = () => {};
-
     return (
         <main 
             ref={mainContentRef} 
-            className="h-screen w-screen overflow-hidden flex flex-col font-sans relative select-none dark bg-[#080719] text-white"
+            className="h-screen w-screen overflow-hidden flex flex-col font-sans relative select-none bg-gradient-to-br from-indigo-50/70 via-sky-50/60 to-pink-50/50 text-slate-900"
         >
-            {/* Canlı ve Modern Renkli Arka Plan Işıkları */}
+            {/* Canlı ve Neşeli Renkli Arka Plan Işıkları */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <motion.div 
                     animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.55, 0.35], rotate: [0, 90, 0] }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-600/20 blur-[140px]" 
+                    className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-300/40 blur-[140px]" 
                 />
                 <motion.div 
                     animate={{ scale: [1, 1.35, 1], opacity: [0.3, 0.5, 0.3], x: [0, 80, 0] }}
                     transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-600/20 blur-[130px]" 
+                    className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-300/40 blur-[130px]" 
                 />
                 <motion.div 
                     animate={{ scale: [1, 1.3, 1], opacity: [0.25, 0.45, 0.25], y: [0, -50, 0] }}
                     transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-cyan-600/18 blur-[160px]" 
+                    className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-sky-300/35 blur-[160px]" 
                 />
             </div>
             
-            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.05] pointer-events-none" />
+            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03] pointer-events-none" />
 
             {/* ══ ÜST HEADER: Breadcrumb, Saat ve Hızlı Araçlar ══ */}
-            <header className="relative z-30 flex-shrink-0 flex items-center justify-between px-6 py-2.5 bg-[#09071a]/85 backdrop-blur-2xl border-b border-white/10 shadow-sm text-white">
+            <header className="relative z-30 flex-shrink-0 flex items-center justify-between px-6 py-2.5 bg-white/85 backdrop-blur-2xl border-b border-indigo-100/80 shadow-sm text-slate-800">
                 {/* SOL: Breadcrumb */}
                 <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-300">
+                    <div className="p-2 rounded-xl bg-indigo-100 border border-indigo-200 text-indigo-700 shadow-sm">
                         <Presentation className="h-4 w-4" />
                     </div>
                     <div className="flex items-center gap-2 text-xs md:text-sm font-bold">
-                        <span className="text-slate-400 font-semibold">{courseName || 'Ders'}</span>
-                        <ChevronRight className="h-3.5 w-3.5 text-slate-500" />
-                        <span className="text-slate-300 truncate max-w-[160px] md:max-w-[240px]">{unitName || 'Ünite'}</span>
-                        <ChevronRight className="h-3.5 w-3.5 text-slate-500" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 font-extrabold truncate max-w-[200px] md:max-w-[320px]">{content.title}</span>
+                        <span className="text-slate-500 font-semibold">{courseName || 'Ders'}</span>
+                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                        <span className="text-slate-600 truncate max-w-[160px] md:max-w-[240px]">{unitName || 'Ünite'}</span>
+                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 font-black truncate max-w-[200px] md:max-w-[320px]">{content.title}</span>
                     </div>
                 </div>
 
                 {/* ORTA: Canlı Saat & Slayt İlerleme Rozeti */}
                 <div className="hidden sm:flex items-center gap-3">
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono font-bold text-slate-300">
-                        <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse" />
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-mono font-bold text-slate-700 shadow-sm">
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
                         <span>{currentTime}</span>
                     </div>
                     {totalStepsCount > 0 && (
                         <button 
                             onClick={() => setIsSlideDrawerOpen(true)}
-                            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-700 dark:text-purple-300 text-xs font-bold hover:bg-purple-500/20 transition-all active:scale-95"
+                            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 border border-purple-200 text-purple-700 text-xs font-bold hover:bg-purple-200/80 transition-all active:scale-95 shadow-sm"
                         >
                             <LayoutGrid className="w-3.5 h-3.5" />
-                            <span>Slayt {currentStepIndex + 1} / {totalStepsCount}</span>
+                            <span>Slaytlar ({currentStepIndex + 1}/{totalStepsCount})</span>
                         </button>
                     )}
                 </div>
@@ -654,29 +652,29 @@ function PresentationPageContent() {
             {/* ══ 1. SINIF GERİ SAYIM SAYACI MODALI ══ */}
             <AnimatePresence>
                 {isTimerOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-xl p-4" onClick={() => setIsTimerOpen(false)}>
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xl p-4" onClick={() => setIsTimerOpen(false)}>
                         <motion.div 
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative w-full max-w-md p-8 rounded-[2.5rem] bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-white/20 shadow-[0_0_60px_rgba(245,158,11,0.3)] flex flex-col items-center text-center text-white overflow-hidden"
+                            className="relative w-full max-w-md p-8 rounded-[2.5rem] bg-white/95 border-2 border-amber-300 shadow-2xl flex flex-col items-center text-center text-slate-900 overflow-hidden"
                             onClick={e => e.stopPropagation()}
                         >
-                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500" />
+                            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
                             
-                            <button onClick={() => setIsTimerOpen(false)} className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition-colors">
+                            <button onClick={() => setIsTimerOpen(false)} className="absolute top-5 right-5 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">
                                 <X className="w-5 h-5" />
                             </button>
 
-                            <div className="flex items-center gap-2 text-amber-400 font-bold uppercase tracking-widest text-xs mb-4">
+                            <div className="flex items-center gap-2 text-amber-600 font-black uppercase tracking-widest text-xs mb-4">
                                 <Timer className="w-4 h-4" /> Sınıf Geri Sayım Sayacı
                             </div>
 
                             {/* Dev Dijital Ekran */}
-                            <div className="w-full py-8 my-2 rounded-3xl bg-black/50 border border-white/10 flex items-center justify-center shadow-inner">
+                            <div className="w-full py-8 my-2 rounded-3xl bg-amber-50/90 border-2 border-amber-300 flex items-center justify-center shadow-inner">
                                 <span className={cn(
-                                    "font-mono font-black text-6xl md:text-7xl tracking-tighter drop-shadow-lg",
-                                    timerSeconds <= 10 && isTimerRunning ? "text-rose-500 animate-pulse" : "text-amber-400"
+                                    "font-mono font-black text-6xl md:text-7xl tracking-tighter drop-shadow-sm",
+                                    timerSeconds <= 10 && isTimerRunning ? "text-rose-600 animate-pulse" : "text-amber-600"
                                 )}>
                                     {formatTimer(timerSeconds)}
                                 </span>
@@ -690,7 +688,7 @@ function PresentationPageContent() {
                                         variant="outline"
                                         size="sm"
                                         onClick={() => startTimerPreset(sec)}
-                                        className="h-10 rounded-xl bg-white/5 border-white/10 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs transition-all text-white"
+                                        className="h-10 rounded-xl bg-amber-100/70 border-amber-300 hover:bg-amber-500 hover:text-white font-black text-xs transition-all text-amber-950 shadow-sm"
                                     >
                                         {sec < 60 ? `${sec}sn` : `${sec / 60}dk`}
                                     </Button>
@@ -705,7 +703,7 @@ function PresentationPageContent() {
                                         "flex-1 h-14 rounded-2xl font-black text-lg shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2",
                                         isTimerRunning 
                                             ? "bg-rose-500 hover:bg-rose-600 text-white shadow-rose-500/30" 
-                                            : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 shadow-amber-500/30"
+                                            : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-amber-500/30"
                                     )}
                                 >
                                     {isTimerRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
@@ -718,7 +716,7 @@ function PresentationPageContent() {
                                         setIsTimerRunning(false);
                                         setTimerSeconds(initialTimerSeconds);
                                     }}
-                                    className="h-14 w-14 rounded-2xl bg-white/10 border-white/15 hover:bg-white/20 text-white flex items-center justify-center"
+                                    className="h-14 w-14 rounded-2xl bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-700 flex items-center justify-center shadow-sm"
                                     title="Sıfırla"
                                 >
                                     <RotateCcw className="w-5 h-5" />
@@ -732,44 +730,42 @@ function PresentationPageContent() {
             {/* ══ 2. RASTGELE ÖĞRENCİ SEÇİCİ MODALI ══ */}
             <AnimatePresence>
                 {isPickerOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-xl p-4" onClick={() => setIsPickerOpen(false)}>
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xl p-4" onClick={() => setIsPickerOpen(false)}>
                         <motion.div 
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative w-full max-w-lg p-8 rounded-[2.5rem] bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-white/20 shadow-[0_0_70px_rgba(14,165,233,0.3)] flex flex-col items-center text-center text-white overflow-hidden"
+                            className="relative w-full max-w-lg p-8 rounded-[2.5rem] bg-white/95 border-2 border-sky-300 shadow-2xl flex flex-col items-center text-center text-slate-900 overflow-hidden"
                             onClick={e => e.stopPropagation()}
                         >
-                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-500" />
+                            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500" />
                             
-                            <button onClick={() => setIsPickerOpen(false)} className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition-colors">
+                            <button onClick={() => setIsPickerOpen(false)} className="absolute top-5 right-5 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">
                                 <X className="w-5 h-5" />
                             </button>
 
-                            <div className="flex items-center gap-2 text-sky-400 font-bold uppercase tracking-widest text-xs mb-3">
+                            <div className="flex items-center gap-2 text-sky-600 font-black uppercase tracking-widest text-xs mb-3">
                                 <Shuffle className="w-4 h-4" /> Rastgele Söz Hakkı & Öğrenci Seçici
                             </div>
 
                             {/* Mod Seçimi */}
-                            <div className="flex items-center gap-2 p-1 rounded-xl bg-black/40 border border-white/10 mb-5">
+                            <div className="flex items-center gap-2 p-1 rounded-xl bg-slate-100 border border-slate-200 mb-5">
                                 <button 
                                     onClick={() => setPickerMode('number')} 
-                                    className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", pickerMode === 'number' ? "bg-sky-500 text-slate-950 font-black shadow-md" : "text-slate-400 hover:text-white")}
+                                    className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", pickerMode === 'number' ? "bg-sky-500 text-white font-black shadow-md" : "text-slate-600 hover:text-slate-900")}
                                 >
                                     Okul Numarası (1-N)
                                 </button>
                                 <button 
                                     onClick={() => setPickerMode('list')} 
-                                    className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", pickerMode === 'list' ? "bg-sky-500 text-slate-950 font-black shadow-md" : "text-slate-400 hover:text-white")}
+                                    className={cn("px-4 py-1.5 rounded-lg text-xs font-bold transition-all", pickerMode === 'list' ? "bg-sky-500 text-white font-black shadow-md" : "text-slate-600 hover:text-slate-900")}
                                 >
                                     İsim Listesi
                                 </button>
                             </div>
 
                             {/* Seçim Ekranı / Çark Alanı */}
-                            <div className="relative w-full h-44 rounded-3xl bg-black/60 border-2 border-sky-500/30 flex flex-col items-center justify-center overflow-hidden shadow-inner my-2">
-                                <div className="absolute inset-0 bg-gradient-to-t from-sky-500/10 via-transparent to-sky-500/10 pointer-events-none" />
-                                
+                            <div className="relative w-full h-44 rounded-3xl bg-gradient-to-br from-sky-50 to-blue-50/70 border-2 border-sky-300 flex flex-col items-center justify-center overflow-hidden shadow-inner my-2">
                                 {pickedResult !== null ? (
                                     <motion.div 
                                         key={String(pickedResult)}
@@ -777,37 +773,37 @@ function PresentationPageContent() {
                                         animate={{ scale: 1, opacity: 1 }}
                                         className="flex flex-col items-center gap-2"
                                     >
-                                        <div className="flex items-center gap-2 text-amber-400 font-black text-xs uppercase tracking-widest">
+                                        <div className="flex items-center gap-2 text-amber-600 font-black text-xs uppercase tracking-widest">
                                             <Trophy className="w-4 h-4" /> Seçilen Kişi:
                                         </div>
-                                        <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-white to-sky-300 drop-shadow-[0_0_20px_rgba(56,189,248,0.6)]">
+                                        <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 drop-shadow-sm">
                                             {pickerMode === 'number' ? `No: ${pickedResult}` : pickedResult}
                                         </div>
                                     </motion.div>
                                 ) : (
-                                    <div className="flex flex-col items-center gap-2 text-slate-500">
-                                        <Users className="w-10 h-10 stroke-[1.5]" />
-                                        <span className="text-sm font-medium">Çevirmek için butona basın</span>
+                                    <div className="flex flex-col items-center gap-2 text-slate-400">
+                                        <Users className="w-10 h-10 stroke-[1.5] text-sky-400" />
+                                        <span className="text-sm font-semibold text-slate-500">Çevirmek için butona basın</span>
                                     </div>
                                 )}
                             </div>
 
                             {/* Ayarlar Alanı */}
                             {pickerMode === 'number' ? (
-                                <div className="flex items-center justify-center gap-3 my-4 text-xs font-bold">
+                                <div className="flex items-center justify-center gap-3 my-4 text-xs font-bold text-slate-700">
                                     <span>Numara Aralığı:</span>
                                     <input 
                                         type="number" 
                                         value={minNum} 
                                         onChange={e => setMinNum(Number(e.target.value))}
-                                        className="w-16 h-8 text-center rounded-lg bg-white/10 border border-white/20 text-white font-bold"
+                                        className="w-16 h-8 text-center rounded-lg bg-slate-100 border border-slate-300 text-slate-900 font-bold"
                                     />
                                     <span>ile</span>
                                     <input 
                                         type="number" 
                                         value={maxNum} 
                                         onChange={e => setMaxNum(Number(e.target.value))}
-                                        className="w-16 h-8 text-center rounded-lg bg-white/10 border border-white/20 text-white font-bold"
+                                        className="w-16 h-8 text-center rounded-lg bg-slate-100 border border-slate-300 text-slate-900 font-bold"
                                     />
                                     <span>arası</span>
                                 </div>
@@ -818,7 +814,7 @@ function PresentationPageContent() {
                                         value={customNamesText} 
                                         onChange={e => setCustomNamesText(e.target.value)}
                                         placeholder="Her satıra bir isim yazın..."
-                                        className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-xs font-medium text-white focus:outline-none focus:border-sky-400"
+                                        className="w-full p-3 rounded-xl bg-slate-100 border border-slate-300 text-xs font-medium text-slate-900 focus:outline-none focus:border-sky-500"
                                     />
                                 </div>
                             )}
@@ -827,7 +823,7 @@ function PresentationPageContent() {
                             <Button
                                 onClick={handleRoll}
                                 disabled={isRolling}
-                                className="w-full h-14 mt-2 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-lg shadow-[0_0_30px_rgba(14,165,233,0.4)] active:scale-95 transition-all flex items-center justify-center gap-2"
+                                className="w-full h-14 mt-2 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-lg shadow-xl shadow-sky-500/25 active:scale-95 transition-all flex items-center justify-center gap-2"
                             >
                                 <Sparkles className={cn("w-5 h-5", isRolling && "animate-spin")} />
                                 {isRolling ? 'Seçiliyor...' : 'Rastgele Seç'}
@@ -840,21 +836,21 @@ function PresentationPageContent() {
             {/* ══ 3. SLAYT ÇEKMECESİ (SLIDE GRID OVERVIEW) ══ */}
             <AnimatePresence>
                 {isSlideDrawerOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-950/70 backdrop-blur-xl" onClick={() => setIsSlideDrawerOpen(false)}>
+                    <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-900/40 backdrop-blur-xl" onClick={() => setIsSlideDrawerOpen(false)}>
                         <motion.div 
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="relative w-full max-w-md h-full bg-slate-900 border-l border-white/10 p-6 flex flex-col text-white shadow-2xl overflow-hidden"
+                            className="relative w-full max-w-md h-full bg-white/95 border-l border-indigo-100 p-6 flex flex-col text-slate-800 shadow-2xl overflow-hidden"
                             onClick={e => e.stopPropagation()}
                         >
-                            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                            <div className="flex items-center justify-between pb-4 border-b border-indigo-100">
                                 <div className="flex items-center gap-2.5">
-                                    <LayoutGrid className="w-5 h-5 text-purple-400" />
-                                    <h3 className="font-black text-lg">Slayt Çekmecesi ({content.steps?.length || 0})</h3>
+                                    <LayoutGrid className="w-5 h-5 text-purple-600" />
+                                    <h3 className="font-black text-lg text-slate-900">Slayt Çekmecesi ({content.steps?.length || 0})</h3>
                                 </div>
-                                <button onClick={() => setIsSlideDrawerOpen(false)} className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white">
+                                <button onClick={() => setIsSlideDrawerOpen(false)} className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700">
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
@@ -872,23 +868,23 @@ function PresentationPageContent() {
                                             className={cn(
                                                 "w-full text-left p-4 rounded-2xl border-2 transition-all flex items-start gap-3.5 group",
                                                 isActive 
-                                                    ? "bg-purple-500/20 border-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.3)]" 
-                                                    : "bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20"
+                                                    ? "bg-purple-50 border-purple-400 shadow-md shadow-purple-100" 
+                                                    : "bg-slate-50/80 border-slate-200 hover:bg-indigo-50/80 hover:border-indigo-300"
                                             )}
                                         >
                                             <div className={cn(
                                                 "w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs shrink-0 mt-0.5",
-                                                isActive ? "bg-purple-500 text-white" : "bg-black/30 text-slate-400 group-hover:text-white"
+                                                isActive ? "bg-purple-600 text-white" : "bg-slate-200 text-slate-600 group-hover:bg-indigo-600 group-hover:text-white"
                                             )}>
                                                 {idx + 1}
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2 mb-1">
-                                                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-md">
+                                                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 bg-purple-100 px-2 py-0.5 rounded-md">
                                                         {step.type}
                                                     </span>
                                                 </div>
-                                                <h4 className="font-bold text-sm text-slate-200 truncate group-hover:text-white">
+                                                <h4 className="font-bold text-sm text-slate-800 truncate group-hover:text-indigo-900">
                                                     {step.title || `Adım ${idx + 1}`}
                                                 </h4>
                                             </div>
