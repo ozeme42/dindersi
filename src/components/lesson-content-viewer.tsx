@@ -2259,12 +2259,26 @@ export function LessonContentViewer({
                         <ArrowLeft className="w-4 h-4" />
                     </button>
                     {isTeacher && (
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="h-9 px-3 rounded-xl bg-white shadow-sm dark:shadow-none dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/10 flex items-center gap-1.5 text-xs font-bold transition-all active:scale-95"
-                        >
-                            <Repeat className="w-3 h-3" /> Yenile
-                        </button>
+                        <>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="h-9 px-3 rounded-xl bg-white shadow-sm dark:shadow-none dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white/10 flex items-center gap-1.5 text-xs font-bold transition-all active:scale-95"
+                                title="Sayfayı Yenile"
+                            >
+                                <Repeat className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Yenile</span>
+                            </button>
+                            <button
+                                onClick={() => {
+                                    const event = new KeyboardEvent('keydown', { key: 'd', bubbles: true });
+                                    window.dispatchEvent(event);
+                                }}
+                                className="h-9 px-3 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 flex items-center gap-1.5 text-xs font-bold transition-all active:scale-95 shadow-sm"
+                                title="Canlı Çizim & Not Alma (D)"
+                            >
+                                <Pencil className="w-3.5 h-3.5" />
+                                <span>Çizim (D)</span>
+                            </button>
+                        </>
                     )}
                 </div>
 

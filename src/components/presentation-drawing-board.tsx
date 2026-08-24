@@ -96,8 +96,8 @@ export function PresentationDrawingBoard({
     const [isDrawing, setIsDrawing] = useState(false);
     const [isLayerVisible, setIsLayerVisible] = useState(true);
 
-    // Toolbar Durumları
-    const [toolbarPosition, setToolbarPosition] = useState<'top' | 'bottom'>('top');
+    // Toolbar Durumları (Varsayılan: Alt Çubuk)
+    const [toolbarPosition, setToolbarPosition] = useState<'top' | 'bottom'>('bottom');
 
     // Metin Ekleme
     const [textItems, setTextItems] = useState<TextItem[]>([]);
