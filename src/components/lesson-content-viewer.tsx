@@ -608,8 +608,15 @@ export function ConceptExplanationPlayer({
     fontSizeScale?: 'normal' | 'large' | 'huge' 
 }) {
     const isTeacher = useTeacherMode();
-    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
+    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('sm');
     const [customCols, setCustomCols] = useState<number | null>(null);
+
+    // Sunum Araçlarındaki büyütme/küçültme ile otomatik senkronizasyon
+    useEffect(() => {
+        if (fontSizeScale === 'huge') setCardScale('xl');
+        else if (fontSizeScale === 'large') setCardScale('lg');
+        else if (fontSizeScale === 'normal') setCardScale('sm');
+    }, [fontSizeScale]);
 
     const validConcepts = useMemo(() => {
         const raw = items || step?.items || step?.cards || [];
@@ -646,28 +653,28 @@ export function ConceptExplanationPlayer({
         switch (cardScale) {
             case 'sm':
                 return {
-                    minHeight: isTeacher ? "min-h-[140px]" : "min-h-[120px]",
-                    fontSize: isTeacher ? "text-xl md:text-2xl" : "text-lg md:text-xl",
-                    padding: "p-4",
+                    minHeight: isTeacher ? "min-h-[140px] md:min-h-[160px]" : "min-h-[120px] md:min-h-[140px]",
+                    fontSize: isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl",
+                    padding: "p-5 md:p-6",
                 };
             case 'lg':
                 return {
-                    minHeight: isTeacher ? "min-h-[260px]" : "min-h-[220px]",
-                    fontSize: isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-2xl md:text-4xl",
-                    padding: "p-6 md:p-8",
+                    minHeight: isTeacher ? "min-h-[260px] md:min-h-[300px]" : "min-h-[220px] md:min-h-[260px]",
+                    fontSize: isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-4xl md:text-5xl lg:text-6xl",
+                    padding: "p-8 md:p-10",
                 };
             case 'xl':
                 return {
-                    minHeight: isTeacher ? "min-h-[340px]" : "min-h-[280px]",
-                    fontSize: isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-3xl md:text-5xl",
-                    padding: "p-8 md:p-10",
+                    minHeight: isTeacher ? "min-h-[340px] md:min-h-[380px]" : "min-h-[280px] md:min-h-[320px]",
+                    fontSize: isTeacher ? "text-6xl md:text-7xl lg:text-8xl" : "text-5xl md:text-6xl lg:text-7xl",
+                    padding: "p-10 md:p-12",
                 };
             case 'md':
             default:
                 return {
-                    minHeight: isTeacher ? "min-h-[190px]" : "min-h-[160px]",
-                    fontSize: isTeacher ? "text-3xl md:text-4xl" : "text-xl md:text-3xl",
-                    padding: "p-5 md:p-6",
+                    minHeight: isTeacher ? "min-h-[200px] md:min-h-[220px]" : "min-h-[160px] md:min-h-[180px]",
+                    fontSize: isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl",
+                    padding: "p-6 md:p-8",
                 };
         }
     };
@@ -848,15 +855,23 @@ export function ConceptExplanationPlayer({
 }
 
 // 5. AnagramFlashcardPlayer (3D & Büyütme-Küçültme Destekli)
-function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: { 
+function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSizeScale = 'normal' }: { 
     step: AnagramFlashcardStep, 
     flippedCards: Set<number>, 
     onCardFlip: (cardIndex: number, type: 'anagramFlashcard') => void,
-    isFullscreen: boolean 
+    isFullscreen: boolean,
+    fontSizeScale?: 'normal' | 'large' | 'huge'
 }) {
     const isTeacher = useTeacherMode();
-    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
+    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('sm');
     const [customCols, setCustomCols] = useState<number | null>(null);
+
+    // Sunum Araçlarındaki büyütme/küçültme ile otomatik senkronizasyon
+    useEffect(() => {
+        if (fontSizeScale === 'huge') setCardScale('xl');
+        else if (fontSizeScale === 'large') setCardScale('lg');
+        else if (fontSizeScale === 'normal') setCardScale('sm');
+    }, [fontSizeScale]);
 
     const totalCards = step.cards?.length || 0;
     const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
@@ -875,10 +890,10 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     };
 
     const scaleStyles = {
-        sm: { minHeight: isTeacher ? "min-h-[14rem]" : "min-h-[10rem]", fontSize: "text-xl sm:text-2xl md:text-3xl" },
-        md: { minHeight: isTeacher ? "min-h-[18rem]" : "min-h-[13rem]", fontSize: "text-2xl sm:text-3xl md:text-4xl" },
-        lg: { minHeight: isTeacher ? "min-h-[22rem]" : "min-h-[16rem]", fontSize: "text-3xl sm:text-4xl md:text-5xl" },
-        xl: { minHeight: isTeacher ? "min-h-[26rem]" : "min-h-[19rem]", fontSize: "text-4xl sm:text-5xl md:text-6xl" },
+        sm: { minHeight: isTeacher ? "min-h-[15rem]" : "min-h-[12rem]", fontSize: "text-3xl sm:text-4xl md:text-5xl" },
+        md: { minHeight: isTeacher ? "min-h-[19rem]" : "min-h-[15rem]", fontSize: "text-4xl sm:text-5xl md:text-6xl" },
+        lg: { minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[18rem]", fontSize: "text-5xl sm:text-6xl md:text-7xl" },
+        xl: { minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[22rem]", fontSize: "text-6xl sm:text-7xl md:text-8xl" },
     }[cardScale];
 
     const getGridClass = () => {
@@ -1100,15 +1115,23 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
 }
 
 // 6. FlashcardPlayer (3D & Büyütme-Küçültme Destekli)
-function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: { 
+function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSizeScale = 'normal' }: { 
     step: FlashcardStep, 
     flippedCards: Set<number>, 
     onCardFlip: (cardIndex: number, type: 'flashcard') => void,
-    isFullscreen: boolean 
+    isFullscreen: boolean,
+    fontSizeScale?: 'normal' | 'large' | 'huge'
 }) {
     const isTeacher = useTeacherMode();
-    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
+    const [cardScale, setCardScale] = useState<'sm' | 'md' | 'lg' | 'xl'>('sm');
     const [customCols, setCustomCols] = useState<number | null>(null);
+
+    // Sunum Araçlarındaki büyütme/küçültme ile otomatik senkronizasyon
+    useEffect(() => {
+        if (fontSizeScale === 'huge') setCardScale('xl');
+        else if (fontSizeScale === 'large') setCardScale('lg');
+        else if (fontSizeScale === 'normal') setCardScale('sm');
+    }, [fontSizeScale]);
 
     const totalCards = step.cards?.length || 0;
     const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
@@ -1269,7 +1292,7 @@ export const FlashcardItem = ({
     theme, 
     isFullscreen, 
     isTeacher,
-    cardScale = 'md'
+    cardScale = 'sm'
 }: { 
     index?: number,
     term: string, 
@@ -1283,28 +1306,28 @@ export const FlashcardItem = ({
 }) => {
     const scaleStyles = {
         sm: { 
-            minHeight: isTeacher ? "min-h-[16rem]" : "min-h-[12rem]",
-            termText: term.length > 25 ? "text-xl sm:text-2xl" : (term.length > 12 ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl"),
-            defText: definition.length > 200 ? "text-xs sm:text-sm" : (definition.length > 100 ? "text-sm sm:text-base" : "text-base sm:text-lg"),
-            padding: "p-4 sm:p-5"
-        },
-        md: { 
-            minHeight: isTeacher ? "min-h-[20rem]" : "min-h-[15rem]",
-            termText: term.length > 25 ? "text-2xl sm:text-3xl" : (term.length > 12 ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl"),
-            defText: definition.length > 200 ? "text-sm sm:text-base" : (definition.length > 100 ? "text-base sm:text-lg" : "text-lg sm:text-xl"),
+            minHeight: isTeacher ? "min-h-[16rem]" : "min-h-[13rem]",
+            termText: term.length > 25 ? "text-2xl sm:text-3xl md:text-4xl" : (term.length > 12 ? "text-3xl sm:text-4xl md:text-5xl" : "text-4xl sm:text-5xl md:text-6xl"),
+            defText: definition.length > 200 ? "text-base sm:text-lg" : (definition.length > 100 ? "text-lg sm:text-xl md:text-2xl" : "text-xl sm:text-2xl md:text-3xl"),
             padding: "p-5 sm:p-6"
         },
-        lg: { 
-            minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[18rem]",
-            termText: term.length > 25 ? "text-3xl sm:text-4xl" : (term.length > 12 ? "text-4xl sm:text-5xl" : "text-5xl sm:text-6xl"),
-            defText: definition.length > 200 ? "text-base sm:text-lg" : (definition.length > 100 ? "text-lg sm:text-xl" : "text-xl sm:text-2xl"),
+        md: { 
+            minHeight: isTeacher ? "min-h-[20rem]" : "min-h-[16rem]",
+            termText: term.length > 25 ? "text-3xl sm:text-4xl md:text-5xl" : (term.length > 12 ? "text-4xl sm:text-5xl md:text-6xl" : "text-5xl sm:text-6xl md:text-7xl"),
+            defText: definition.length > 200 ? "text-lg sm:text-xl" : (definition.length > 100 ? "text-xl sm:text-2xl md:text-3xl" : "text-2xl sm:text-3xl md:text-4xl"),
             padding: "p-6 sm:p-8"
         },
-        xl: { 
-            minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[22rem]",
-            termText: term.length > 25 ? "text-4xl sm:text-5xl" : (term.length > 12 ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"),
-            defText: definition.length > 200 ? "text-lg sm:text-xl" : (definition.length > 100 ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl"),
+        lg: { 
+            minHeight: isTeacher ? "min-h-[24rem]" : "min-h-[20rem]",
+            termText: term.length > 25 ? "text-4xl sm:text-5xl md:text-6xl" : (term.length > 12 ? "text-5xl sm:text-6xl md:text-7xl" : "text-6xl sm:text-7xl md:text-8xl"),
+            defText: definition.length > 200 ? "text-xl sm:text-2xl" : (definition.length > 100 ? "text-2xl sm:text-3xl md:text-4xl" : "text-3xl sm:text-4xl md:text-5xl"),
             padding: "p-8 sm:p-10"
+        },
+        xl: { 
+            minHeight: isTeacher ? "min-h-[28rem]" : "min-h-[24rem]",
+            termText: term.length > 25 ? "text-5xl sm:text-6xl md:text-7xl" : (term.length > 12 ? "text-6xl sm:text-7xl md:text-8xl" : "text-7xl sm:text-8xl md:text-9xl"),
+            defText: definition.length > 200 ? "text-2xl sm:text-3xl" : (definition.length > 100 ? "text-3xl sm:text-4xl md:text-5xl" : "text-4xl sm:text-5xl md:text-6xl"),
+            padding: "p-10 sm:p-12"
         },
     }[cardScale];
 
@@ -2097,9 +2120,9 @@ export function StepContent({
                 );
 
             case 'flashcard':
-                return <FlashcardPlayer step={step as FlashcardStep} flippedCards={flippedCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
+                return <FlashcardPlayer step={step as FlashcardStep} flippedCards={flippedCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
             case 'anagramFlashcard':
-                return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
+                return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
             case 'trueFalseList':
                  return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} fontSizeScale={fontSizeScale} />;
             case 'conceptMap':

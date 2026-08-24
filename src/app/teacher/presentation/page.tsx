@@ -533,12 +533,12 @@ function PresentationPageContent() {
                                         </div>
                                     </div>
 
-                                    {/* 2. Anlık Yazı Boyutu */}
+                                    {/* 2. Anlık Yazı & Kart Boyutu */}
                                     <div className="space-y-1.5 pt-1 border-t border-slate-200 dark:border-white/10">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Yazı Boyutu</span>
+                                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Yazı & Kart Boyutu</span>
                                             <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-500 dark:text-indigo-400">
-                                                {fontSizeScale === 'normal' ? 'Normal' : (fontSizeScale === 'large' ? 'Büyük' : 'Dev (Maks)')}
+                                                {fontSizeScale === 'normal' ? 'Küçük (Varsayılan)' : (fontSizeScale === 'large' ? 'Büyük' : 'Dev (Maks)')}
                                             </span>
                                         </div>
                                         <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
@@ -547,18 +547,18 @@ function PresentationPageContent() {
                                                 className={cn(
                                                     "py-1.5 rounded-lg text-xs font-bold transition-all",
                                                     fontSizeScale === 'normal' 
-                                                        ? "bg-indigo-600 text-white shadow-sm" 
+                                                        ? "bg-indigo-600 text-white shadow-sm font-black" 
                                                         : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
                                                 )}
                                             >
-                                                Normal
+                                                Küçük
                                             </button>
                                             <button
                                                 onClick={() => setFontSizeScale('large')}
                                                 className={cn(
                                                     "py-1.5 rounded-lg text-xs font-bold transition-all",
                                                     fontSizeScale === 'large' 
-                                                        ? "bg-indigo-600 text-white shadow-sm" 
+                                                        ? "bg-indigo-600 text-white shadow-sm font-black" 
                                                         : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
                                                 )}
                                             >
@@ -569,7 +569,7 @@ function PresentationPageContent() {
                                                 className={cn(
                                                     "py-1.5 rounded-lg text-xs font-bold transition-all",
                                                     fontSizeScale === 'huge' 
-                                                        ? "bg-indigo-600 text-white shadow-sm" 
+                                                        ? "bg-indigo-600 text-white shadow-sm font-black" 
                                                         : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
                                                 )}
                                             >
