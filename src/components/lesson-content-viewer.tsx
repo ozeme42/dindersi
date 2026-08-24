@@ -46,6 +46,8 @@ export type LessonContentViewerProps = {
     completeButtonText?: string; 
     onMultiAnswer?: (stepIndex: number, questionIndex: number, selectedAnswer: boolean) => void;
     onAllTfAnswered?: (stepIndex?: number) => void;
+    isSingleCardMode?: boolean;
+    isFastMode?: boolean;
 };
 
 const useTeacherMode = () => {
@@ -306,7 +308,8 @@ export function ContentListPlayer({
     revealedSentencesCount: number, 
     isFullscreen?: boolean, 
     onAnimationStart?: () => void, 
-    onAnimationEnd?: () => void
+    onAnimationEnd?: () => void,
+    isSingleCardMode?: boolean
 }) {
     const isTeacher = useTeacherMode();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -315,11 +318,11 @@ export function ContentListPlayer({
     const [prevCount, setPrevCount] = useState(0);
 
     useEffect(() => {
-        if (isTeacher && revealedSentencesCount > prevCount && revealedSentencesCount > 0) {
+        if (isTeacher && revealedSentencesCount > prevCount && revealedSentencesCount > 0 && !isSingleCardMode) {
             setIsModalOpen(true);
         }
         setPrevCount(revealedSentencesCount);
-    }, [revealedSentencesCount, prevCount, isTeacher]);
+    }, [revealedSentencesCount, prevCount, isTeacher, isSingleCardMode]);
       
     const sentences = useMemo(() => {
         let items: string[] = [];
@@ -426,9 +429,12 @@ export function ContentListPlayer({
                  isTeacher ? "mt-4" : "mt-2"
              )}>
                 <div className={cn(
-                    "grid grid-cols-1 lg:grid-cols-2 w-full max-w-full px-2 md:px-4 gap-4 md:gap-6 pt-2 items-stretch"
+                    "grid w-full max-w-full px-2 md:px-4 gap-4 md:gap-6 pt-2 items-stretch",
+                    isSingleCardMode ? "grid-cols-1 place-items-center" : "grid-cols-1 lg:grid-cols-2"
                 )}>
                     {visibleSentences.map((sentence, index) => {
+                        if (isSingleCardMode && index !== visibleSentences.length - 1) return null;
+                        
                         const style = styles[index % styles.length]; 
                         const icons = decoIcons[index % decoIcons.length];
 
@@ -446,21 +452,27 @@ export function ContentListPlayer({
                                 
                                 <div className={cn(
                                     "relative w-full h-full py-4 px-5 md:py-5 md:px-6 rounded-2xl border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 flex flex-col md:flex-row justify-start items-center text-left gap-4 backdrop-blur-xl",
+                                    isSingleCardMode ? "md:p-12 min-h-[300px] justify-center items-center text-center max-w-4xl mx-auto" : "",
                                     style.bg, style.border
                                 )}>
                                     {/* Parlak üst çizgi */}
                                     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                                     {/* Numara rozeti */}
-                                    <div className={cn(
-                                        "flex-shrink-0 w-11 h-11 md:w-13 md:h-13 rounded-xl flex items-center justify-center bg-black/30 border-2",
-                                        style.circleBorder
-                                    )}>
-                                        <span className={cn("font-black text-lg", style.numberColor)}>{index + 1}</span>
-                                    </div>
+                                    {!isSingleCardMode && (
+                                        <div className={cn(
+                                            "flex-shrink-0 w-11 h-11 md:w-13 md:h-13 rounded-xl flex items-center justify-center bg-black/30 border-2",
+                                            style.circleBorder
+                                        )}>
+                                            <span className={cn("font-black text-lg", style.numberColor)}>{index + 1}</span>
+                                        </div>
+                                    )}
                                     <div className={cn(
                                         "leading-relaxed font-bold break-words flex-1 z-10 relative",
+                                        isSingleCardMode ? "text-center" : "",
                                         style.textColor,
-                                        isTeacher ? "text-2xl md:text-3xl tracking-wide" : "text-base md:text-xl tracking-wide"
+                                        isTeacher 
+                                            ? (isSingleCardMode ? "text-4xl md:text-5xl leading-tight tracking-wide" : "text-2xl md:text-3xl tracking-wide") 
+                                            : (isSingleCardMode ? "text-2xl md:text-3xl" : "text-base md:text-xl tracking-wide")
                                     )}>
                                         <span className="flex-1">
                                             {shouldAnimate ? (
@@ -1608,7 +1620,8 @@ export function StepContent({
     revealedSentencesCount, flippedCards, flippedAnagramCards, onCardFlip, onSlideScrolledToEnd, onMultiAnswer, onAllTfAnswered,
     onAnimationStart, onAnimationEnd,
     isVisualMaximized,
-    onToggleVisualMaximize
+    onToggleVisualMaximize,
+    isSingleCardMode
 }: any) {
     const isTeacher = useTeacherMode();
 
@@ -1627,7 +1640,7 @@ export function StepContent({
             case 'content':
             case 'objectiveList':
             case 'accordion':
-                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} />
+                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} />
             case 'conceptExplanation': {
                 return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} />
             }
@@ -1928,7 +1941,9 @@ export function LessonContentViewer({
     isFullscreen,
     completeButtonText, 
     onMultiAnswer,
-    onAllTfAnswered
+    onAllTfAnswered,
+    isSingleCardMode,
+    isFastMode
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     const isTeacher = useTeacherMode();
@@ -2357,27 +2372,29 @@ export function LessonContentViewer({
                 >
                   <StepContent 
                     step={currentStep}
-                answer={internalProgress.answers[currentStepIndex]}
-                onAnswer={handleAnswer}
-                onCorrectAndNext={() => setTimeout(handleNext, 1000)}
-                stepAnswers={internalProgress.answers[currentStepIndex]}
-                topic={topic}
-                courseId={courseId}
-                unitId={unitId}
-                courseTitle={courseTitle}
-                unitTitle={unitTitle}
-                isFullscreen={isFullscreen}
-                revealedSentencesCount={revealedSentencesCount}
-                flippedCards={flippedCards}
-                flippedAnagramCards={flippedAnagramCards}
-                onCardFlip={handleCardFlip}
-                onSlideScrolledToEnd={handleSlideScrolledToEnd}
-                onMultiAnswer={handleLocalMultiAnswer}
-                onAllTfAnswered={handleLocalAllTfAnswered}
-                onAnimationStart={() => setIsAnimating(true)}
-                onAnimationEnd={() => setIsAnimating(false)}
-                isVisualMaximized={isVisualMaximized}
-                onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
+                    answer={internalProgress.answers[currentStepIndex]}
+                    onAnswer={handleAnswer}
+                    onCorrectAndNext={() => setTimeout(handleNext, 1000)}
+                    stepAnswers={internalProgress.answers[currentStepIndex]}
+                    topic={topic}
+                    courseId={courseId}
+                    unitId={unitId}
+                    courseTitle={courseTitle}
+                    unitTitle={unitTitle}
+                    isFullscreen={isFullscreen}
+                    revealedSentencesCount={revealedSentencesCount}
+                    flippedCards={flippedCards}
+                    flippedAnagramCards={flippedAnagramCards}
+                    onCardFlip={handleCardFlip}
+                    onSlideScrolledToEnd={handleSlideScrolledToEnd}
+                    onMultiAnswer={handleLocalMultiAnswer}
+                    onAllTfAnswered={handleLocalAllTfAnswered}
+                    onAnimationStart={() => setIsAnimating(true)}
+                    onAnimationEnd={() => setIsAnimating(false)}
+                    isVisualMaximized={isVisualMaximized}
+                    onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
+                    isSingleCardMode={isSingleCardMode}
+                    isFastMode={isFastMode}
               />
                 </motion.div>
               </AnimatePresence>
