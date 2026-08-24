@@ -1,21 +1,21 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2, Library, PlusCircle, AlertTriangle } from 'lucide-react';
+import { Loader2, Library, PlusCircle, AlertTriangle, Search, Check, Filter } from 'lucide-react';
 import { getLibraryItems, type LibraryFilter } from '@/app/teacher/content-creation/edit/library-actions';
 import type { Question, ActivityItem, LessonStep, Course, Unit, Topic, SchoolClass, ImageAsset } from '@/lib/types';
 import { Badge } from './ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { Card, CardContent, CardFooter } from './ui/card';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import Image from 'next/image';
@@ -23,82 +23,132 @@ import Image from 'next/image';
 type LibraryItem = Question | ActivityItem | ImageAsset;
 
 function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, onSelect: (item: LibraryItem) => void, isSelected: boolean }) {
-    const isQuestion = 'text' in item;
+    const isQuestion = 'text' in item && 'type' in item && ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'].includes((item as any).type);
     const isImage = 'url' in item && 'storagePath' in item;
 
     const renderContent = () => {
         if (isImage) {
             return (
-                <div className="relative w-full aspect-video rounded-md overflow-hidden bg-slate-800">
-                    <Image src={(item as ImageAsset).url} alt={(item as ImageAsset).title} layout="fill" objectFit="cover" />
+                <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-900 border border-white/10">
+                    <Image src={(item as ImageAsset).url} alt={(item as ImageAsset).title || 'Görsel'} fill className="object-cover" />
                 </div>
-            )
-        }
-        if (isQuestion) {
-            return <p className="text-sm font-medium line-clamp-3">{(item as Question).text}</p>;
-        } else {
-            const actItem = item as ActivityItem;
-            switch (actItem.type) {
-                case 'concept': return actItem.content.text;
-                case 'definition': return `${actItem.content.term}: ${actItem.content.definition}`;
-                case 'sentence': return actItem.content.text;
-                case 'categorization': return `Oyun: ${actItem.content.title}`;
-                default: return 'Bilinmeyen öğe';
-            }
-        }
-    }
-    
-    const renderTypeBadge = () => {
-        if (isImage) {
-            return <Badge variant="secondary">Görsel</Badge>
+            );
         }
         if (isQuestion) {
             const q = item as Question;
-            const difficultyColors: Record<string, string> = {
-                'Kolay': 'bg-green-100 text-green-800', 'Orta': 'bg-yellow-100 text-yellow-800', 'Zor': 'bg-red-100 text-red-800',
-            };
             return (
-                <div className='flex items-center gap-1'>
-                    <Badge variant="secondary">Soru</Badge>
-                    <Badge variant="outline" className={difficultyColors[q.difficulty] || ''}>{q.difficulty}</Badge>
+                <div className="space-y-1.5">
+                    <p className="text-sm font-bold text-slate-100 line-clamp-2">{q.text}</p>
+                    {q.options && q.options.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                            {q.options.slice(0, 4).map((opt, i) => (
+                                <span key={i} className={cn("text-[10px] px-2 py-0.5 rounded-md border", opt === q.correctAnswer ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 font-bold" : "bg-slate-900 text-slate-400 border-white/5")}>
+                                    {opt}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
-            )
+            );
         } else {
             const actItem = item as ActivityItem;
-            const typeLabels: Record<string, string> = { concept: 'Kavram', definition: 'Tanım', sentence: 'Cümle', categorization: 'Kategorizasyon' };
-            return <Badge variant="outline">Etkinlik: {typeLabels[actItem.type]}</Badge>
+            switch (actItem.type) {
+                case 'concept': 
+                    return (
+                        <div>
+                            <span className="text-xs font-black uppercase text-blue-400 tracking-wider block mb-1">Kavram</span>
+                            <p className="text-sm font-bold text-white">{actItem.content?.text || (actItem as any).title}</p>
+                        </div>
+                    );
+                case 'definition': 
+                    return (
+                        <div className="space-y-1">
+                            <span className="text-xs font-black uppercase text-emerald-400 tracking-wider block mb-1">Bilgi Kartı</span>
+                            <p className="text-sm font-bold text-white">{actItem.content?.term}</p>
+                            <p className="text-xs text-slate-400 line-clamp-2">{actItem.content?.definition}</p>
+                        </div>
+                    );
+                case 'sentence': 
+                    return (
+                        <div>
+                            <span className="text-xs font-black uppercase text-cyan-400 tracking-wider block mb-1">Cümle</span>
+                            <p className="text-sm font-medium text-slate-200">{actItem.content?.text}</p>
+                        </div>
+                    );
+                default: 
+                    return <p className="text-xs text-slate-400">{(actItem.content as any)?.title || 'İçerik Öğesi'}</p>;
+            }
         }
-    }
+    };
+    
+    const renderTypeBadge = () => {
+        if (isImage) {
+            return <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-[10px]">Görsel</Badge>;
+        }
+        if (isQuestion) {
+            const q = item as Question;
+            return (
+                <div className="flex items-center gap-1.5">
+                    <Badge variant="secondary" className="bg-purple-500/10 text-purple-300 border-purple-500/20 text-[10px]">{q.type || 'Soru'}</Badge>
+                    {q.difficulty && (
+                        <Badge variant="outline" className={cn("text-[10px]", q.difficulty === 'Kolay' ? 'text-green-400 border-green-500/30' : q.difficulty === 'Orta' ? 'text-yellow-400 border-yellow-500/30' : 'text-rose-400 border-rose-500/30')}>
+                            {q.difficulty}
+                        </Badge>
+                    )}
+                </div>
+            );
+        } else {
+            const actItem = item as ActivityItem;
+            const typeLabels: Record<string, { label: string, color: string }> = { 
+                concept: { label: 'Kavram', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10' }, 
+                definition: { label: 'Tanım / Kart', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' }, 
+                sentence: { label: 'Cümle', color: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10' }, 
+                categorization: { label: 'Kategori', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10' } 
+            };
+            const config = typeLabels[actItem.type] || { label: 'Etkinlik', color: 'text-slate-400 border-white/10 bg-white/5' };
+            return <Badge variant="outline" className={cn("text-[10px]", config.color)}>{config.label}</Badge>;
+        }
+    };
 
     return (
         <Card 
-            className={cn("flex flex-col hover:shadow-md transition-shadow cursor-pointer", isSelected && "ring-2 ring-primary")}
+            className={cn(
+                "flex flex-col justify-between transition-all duration-200 cursor-pointer rounded-2xl border overflow-hidden",
+                isSelected 
+                    ? "bg-indigo-950/40 border-indigo-500 shadow-lg shadow-indigo-950/50 ring-1 ring-indigo-500" 
+                    : "bg-slate-900/60 hover:bg-slate-800/80 border-white/5 hover:border-white/15"
+            )}
             onClick={() => onSelect(item)}
         >
             <CardContent className="p-4 flex-grow space-y-2">
                 {renderContent()}
-                {isImage && <p className="text-sm font-semibold pt-2">{(item as ImageAsset).title}</p>}
+                {isImage && <p className="text-xs font-bold text-slate-200 pt-1 truncate">{(item as ImageAsset).title}</p>}
             </CardContent>
-            <CardFooter className="p-3 bg-muted/50 flex justify-between items-center">
+            <CardFooter className="p-3 bg-slate-950/50 border-t border-white/5 flex justify-between items-center">
                 {renderTypeBadge()}
-                <Checkbox checked={isSelected} />
+                <div className={cn(
+                    "w-5 h-5 rounded-md flex items-center justify-center border transition-all",
+                    isSelected ? "bg-indigo-600 border-indigo-500 text-white" : "border-white/20 bg-slate-900"
+                )}>
+                    {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                </div>
             </CardFooter>
         </Card>
-    )
+    );
 }
-
 
 export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, context, config }: {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
-    onItemsSelected: (items: LibraryItem[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => void;
+    onItemsSelected: (items: LibraryItem[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'anagramGame') => void;
     context: { courseId?: string | null, unitId?: string | null, topicId?: string | null };
-    config: { filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; };
+    config: { filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'anagramGame'; };
 }) {
     const [items, setItems] = useState<LibraryItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
+    const [searchTerm, setSearchTerm] = useState('');
 
     const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
     const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[]})[]})[]>([]);
@@ -108,13 +158,11 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
     });
     
     const { toast } = useToast();
-    
     const isImageType = useMemo(() => config.filter.includes('images'), [config]);
 
-     useEffect(() => {
+    useEffect(() => {
         if (!isOpen) return;
 
-        // Reset filters when dialog opens
         const initialFilterType = config.filter.includes('questions') ? 'questions' : (config.filter.includes('images') ? 'images' : 'activities');
         setFilters({
             type: initialFilterType,
@@ -122,48 +170,53 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
             courseId: isImageType ? null : context?.courseId || null,
             unitId: isImageType ? null : context?.unitId || null,
             topicId: isImageType ? null : context?.topicId || null,
+            searchTerm: '',
         });
+        setSearchTerm('');
+        setSelectedItemIds(new Set());
 
-        // Only fetch curriculum data if it's not for images
-        if (!isImageType) {
+        if (!isImageType && allClasses.length === 0) {
             const fetchFilterData = async () => {
-                const [classesSnapshot, coursesSnapshot] = await Promise.all([
-                    getDocs(query(collection(db, 'classes'), orderBy('name'))),
-                    getDocs(query(collection(db, 'courses')))
-                ]);
-                
-                const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as SchoolClass);
-                setAllClasses(classesData);
+                try {
+                    const [classesSnapshot, coursesSnapshot] = await Promise.all([
+                        getDocs(query(collection(db, 'classes'), orderBy('name'))),
+                        getDocs(query(collection(db, 'courses')))
+                    ]);
+                    
+                    const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as SchoolClass);
+                    setAllClasses(classesData);
 
-                const coursesData = await Promise.all(coursesSnapshot.docs.map(async (courseDoc) => {
-                    const course = { id: courseDoc.id, ...courseDoc.data() } as Course & { units: (Unit & { topics: Topic[]})[] };
-                    const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`)));
-                    course.units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
-                        const unit = { id: unitDoc.id, ...unitDoc.data() } as Unit & { topics: Topic[] };
-                        const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unit.id}/topics`)));
-                        unit.topics = topicsSnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}) as Topic);
-                        return unit;
+                    const coursesData = await Promise.all(coursesSnapshot.docs.map(async (courseDoc) => {
+                        const course = { id: courseDoc.id, ...courseDoc.data() } as Course & { units: (Unit & { topics: Topic[]})[] };
+                        const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`)));
+                        course.units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
+                            const unit = { id: unitDoc.id, ...unitDoc.data() } as Unit & { topics: Topic[] };
+                            const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unit.id}/topics`)));
+                            unit.topics = topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Topic);
+                            return unit;
+                        }));
+                        return course;
                     }));
-                    return course;
-                }));
-                setAllCourses(coursesData);
+                    setAllCourses(coursesData);
+                } catch (e) {
+                    console.error("Error fetching filter options:", e);
+                }
             };
             fetchFilterData();
         }
-
-    }, [isOpen, context, config.filter, isImageType]);
+    }, [isOpen, context, config.filter, isImageType, allClasses.length]);
     
     useEffect(() => {
         if (!isOpen) return;
         const fetchItems = async () => {
             setIsLoading(true);
             setError(null);
-            setSelectedItemIds(new Set());
             
             const filterPayload: LibraryFilter = { 
                 ...filters, 
                 activityTypes: config.filter.filter(f => !['questions', 'images'].includes(f)) as ActivityItem['type'][],
                 questionTypes: config.filter.includes('questions') ? ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'] : [],
+                searchTerm,
             };
 
             const { items: fetchedItems, error: fetchError } = await getLibraryItems(filterPayload);
@@ -174,7 +227,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
             setIsLoading(false);
         };
         fetchItems();
-    }, [isOpen, filters, config.filter]);
+    }, [isOpen, filters, config.filter, searchTerm]);
 
     const handleSelect = (item: LibraryItem) => {
         setSelectedItemIds(prev => {
@@ -226,86 +279,136 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
 
     const renderTabContent = (itemsToRender: LibraryItem[]) => {
         if (isLoading) {
-            return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin"/></div>
+            return (
+                <div className="flex flex-col justify-center items-center h-64 gap-3">
+                    <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
+                    <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">İçerikler Yükleniyor...</span>
+                </div>
+            );
         }
         if (error) {
-             return (
-                <Alert variant="destructive" className="whitespace-pre-wrap">
+            return (
+                <Alert variant="destructive" className="bg-rose-950/40 border-rose-500/30 text-rose-200">
                     <AlertTriangle className="h-4 w-4" />
-                    <AlertTitle>Veri Yüklenemedi!</AlertTitle>
+                    <AlertTitle>Veri Yüklenemedi</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
                 </Alert>
-            )
+            );
         }
         if (itemsToRender.length === 0) {
-            return <p className="text-center text-muted-foreground pt-10">Bu filtreler için kütüphanede öğe bulunamadı.</p>
+            return (
+                <div className="flex flex-col items-center justify-center py-16 text-slate-500">
+                    <Library className="h-12 w-12 mb-3 opacity-20" />
+                    <p className="text-base font-bold">Kayıtlı veri bulunamadı.</p>
+                    <p className="text-xs text-slate-600 mt-1">Filtreleri veya arama kelimesini değiştirerek tekrar deneyin.</p>
+                </div>
+            );
         }
         
         const allOnPageSelected = items.length > 0 && items.every(item => selectedItemIds.has(item.id));
 
         return (
-            <>
+            <div className="space-y-4">
                 {config.multiSelect && (
-                    <div className="flex items-center space-x-2 mb-4 p-2 bg-muted/50 rounded-md">
-                        <Checkbox
-                            id="select-all-library"
-                            checked={allOnPageSelected}
-                            onCheckedChange={handleSelectAll}
-                        />
-                        <Label htmlFor="select-all-library" className="font-semibold">
-                            Tümünü Seç ({items.length})
-                        </Label>
+                    <div className="flex items-center justify-between p-3 bg-slate-900/60 rounded-xl border border-white/5">
+                        <div className="flex items-center gap-3">
+                            <Checkbox
+                                id="select-all-library"
+                                checked={allOnPageSelected}
+                                onCheckedChange={handleSelectAll}
+                            />
+                            <Label htmlFor="select-all-library" className="text-xs font-bold text-slate-300 cursor-pointer">
+                                Tümünü Seç ({items.length} Öğe)
+                            </Label>
+                        </div>
+                        <span className="text-xs font-mono font-bold text-indigo-400">
+                            {selectedItemIds.size} seçildi
+                        </span>
                     </div>
                 )}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {itemsToRender.map(item => <LibraryItemCard key={item.id} item={item} onSelect={handleSelect} isSelected={selectedItemIds.has(item.id)} />)}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {itemsToRender.map(item => (
+                        <LibraryItemCard 
+                            key={item.id} 
+                            item={item} 
+                            onSelect={handleSelect} 
+                            isSelected={selectedItemIds.has(item.id)} 
+                        />
+                    ))}
                 </div>
-            </>
-        )
-    }
+            </div>
+        );
+    };
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2"><Library /> Veri Bankasından İçerik Ekle</DialogTitle>
-                </DialogHeader>
-                 {!isImageType && (
-                     <div className="grid grid-cols-1 md:grid-cols-4 gap-2 pt-2">
-                        <Select value={filters.classId || 'all'} onValueChange={v => setFilters({ type: config.filter.includes('questions') ? 'questions' : 'activities', classId: v === 'all' ? null : v, courseId: null, unitId: null, topicId: null })}>
-                            <SelectTrigger><SelectValue placeholder="Sınıf Seçin..." /></SelectTrigger>
-                            <SelectContent><SelectItem value="all">Tüm Sınıflar</SelectItem>{allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                        </Select>
-                         <Select value={filters.courseId || 'all'} onValueChange={v => setFilters(f => ({ ...f, courseId: v === 'all' ? null : v, unitId: null, topicId: null }))} disabled={!filters.classId}>
-                            <SelectTrigger><SelectValue placeholder="Ders Seçin..." /></SelectTrigger>
-                            <SelectContent><SelectItem value="all">Tüm Dersler</SelectItem>{filteredCourses.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}</SelectContent>
-                        </Select>
-                         <Select value={filters.unitId || 'all'} onValueChange={v => setFilters(f => ({ ...f, unitId: v === 'all' ? null : v, topicId: null }))} disabled={!filters.courseId}>
-                            <SelectTrigger><SelectValue placeholder="Ünite Seçin..." /></SelectTrigger>
-                            <SelectContent><SelectItem value="all">Tüm Üniteler</SelectItem>{filteredUnits.map(u => <SelectItem key={u.id} value={u.id}>{u.title}</SelectItem>)}</SelectContent>
-                        </Select>
-                         <Select value={filters.topicId || 'all'} onValueChange={v => setFilters(f => ({ ...f, topicId: v === 'all' ? null : v }))} disabled={!filters.unitId}>
-                            <SelectTrigger><SelectValue placeholder="Konu Seçin..." /></SelectTrigger>
-                            <SelectContent><SelectItem value="all">Tüm Konular</SelectItem>{filteredTopics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}</SelectContent>
-                        </Select>
+            <DialogContent className="max-w-5xl h-[88vh] flex flex-col p-0 bg-slate-950 border border-white/10 text-slate-100 shadow-2xl rounded-3xl overflow-hidden">
+                <DialogHeader className="p-5 border-b border-white/10 bg-slate-900/60 backdrop-blur-md">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <DialogTitle className="flex items-center gap-3 text-xl font-black uppercase tracking-tight text-white">
+                            <div className="p-2 bg-indigo-500/20 rounded-xl border border-indigo-500/30 text-indigo-400">
+                                <Library className="h-5 w-5" />
+                            </div>
+                            Veri Bankasından İçerik Aktar
+                        </DialogTitle>
+                        
+                        <div className="relative w-full sm:w-64">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                            <Input 
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                placeholder="Kelime veya konu ara..."
+                                className="pl-9 bg-slate-900 border-white/10 text-xs h-9 rounded-xl focus:border-indigo-500"
+                            />
+                        </div>
                     </div>
-                 )}
+
+                    {!isImageType && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 pt-3">
+                            <Select value={filters.classId || 'all'} onValueChange={v => setFilters(f => ({ ...f, classId: v === 'all' ? null : v, courseId: null, unitId: null, topicId: null }))}>
+                                <SelectTrigger className="bg-slate-900 border-white/10 text-xs h-9 rounded-xl"><SelectValue placeholder="Tüm Sınıflar" /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/15 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                            </Select>
+                            <Select value={filters.courseId || 'all'} onValueChange={v => setFilters(f => ({ ...f, courseId: v === 'all' ? null : v, unitId: null, topicId: null }))} disabled={!filters.classId}>
+                                <SelectTrigger className="bg-slate-900 border-white/10 text-xs h-9 rounded-xl"><SelectValue placeholder="Tüm Dersler" /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/15 text-white"><SelectItem value="all">Tüm Dersler</SelectItem>{filteredCourses.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}</SelectContent>
+                            </Select>
+                            <Select value={filters.unitId || 'all'} onValueChange={v => setFilters(f => ({ ...f, unitId: v === 'all' ? null : v, topicId: null }))} disabled={!filters.courseId}>
+                                <SelectTrigger className="bg-slate-900 border-white/10 text-xs h-9 rounded-xl"><SelectValue placeholder="Tüm Üniteler" /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/15 text-white"><SelectItem value="all">Tüm Üniteler</SelectItem>{filteredUnits.map(u => <SelectItem key={u.id} value={u.id}>{u.title}</SelectItem>)}</SelectContent>
+                            </Select>
+                            <Select value={filters.topicId || 'all'} onValueChange={v => setFilters(f => ({ ...f, topicId: v === 'all' ? null : v }))} disabled={!filters.unitId}>
+                                <SelectTrigger className="bg-slate-900 border-white/10 text-xs h-9 rounded-xl"><SelectValue placeholder="Tüm Konular" /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/15 text-white"><SelectItem value="all">Tüm Konular</SelectItem>{filteredTopics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}</SelectContent>
+                            </Select>
+                        </div>
+                    )}
+                </DialogHeader>
                 
-                <div className="flex-grow mt-4 overflow-hidden">
-                    <ScrollArea className="h-full pr-4">
+                <div className="flex-grow overflow-hidden p-5">
+                    <ScrollArea className="h-full pr-3">
                         {renderTabContent(items)}
                     </ScrollArea>
                 </div>
 
-                <DialogFooter className="pt-4 border-t flex-shrink-0">
-                    <span className="text-sm text-muted-foreground mr-auto">{selectedItemIds.size} öğe seçildi.</span>
-                    <Button onClick={() => onOpenChange(false)} variant="ghost">İptal</Button>
-                    <Button onClick={handleAddSelected} disabled={selectedItemIds.size === 0}>
-                        <PlusCircle className="mr-2 h-4 w-4"/> Seçilenleri Ekle
-                    </Button>
+                <DialogFooter className="p-4 px-6 border-t border-white/10 bg-slate-900/80 backdrop-blur-md flex items-center justify-between sm:justify-between flex-shrink-0">
+                    <span className="text-xs font-bold text-slate-400">
+                        Seçilen: <strong className="text-indigo-300">{selectedItemIds.size}</strong> öğe
+                    </span>
+                    <div className="flex gap-2">
+                        <Button onClick={() => onOpenChange(false)} variant="ghost" className="text-slate-400 hover:text-white rounded-xl">
+                            İptal
+                        </Button>
+                        <Button 
+                            onClick={handleAddSelected} 
+                            disabled={selectedItemIds.size === 0}
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-950 cursor-pointer disabled:opacity-40"
+                        >
+                            <PlusCircle className="mr-2 h-4 w-4"/> Seçilenleri Akışa Ekle
+                        </Button>
+                    </div>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
     );
 }
-

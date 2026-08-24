@@ -1,10 +1,8 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, where, orderBy, Query, and } from "firebase/firestore";
-import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, ImageAsset } from "@/lib/types";
+import { collection, getDocs, query, where, orderBy, Query, limit } from "firebase/firestore";
+import type { Question, ActivityItem, ImageAsset } from "@/lib/types";
 
 export type LibraryFilter = {
     classId?: string | null;
@@ -14,56 +12,13 @@ export type LibraryFilter = {
     type: 'questions' | 'activities' | 'images';
     questionTypes?: Question['type'][];
     activityTypes?: ActivityItem['type'][];
+    searchTerm?: string;
 };
-
-async function getSubCollectionIds(path: string, subCollectionName: 'units' | 'topics'): Promise<string[]> {
-    try {
-        const snapshot = await getDocs(collection(db, `${path}/${subCollectionName}`));
-        return snapshot.docs.map(doc => doc.id);
-    } catch (e) {
-        // This might happen if the path is invalid, which is okay in our recursive search.
-        return [];
-    }
-}
-
-async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]> {
-    if (filter.topicId && filter.topicId !== 'all') {
-        return [filter.topicId];
-    }
-    
-    if (filter.unitId && filter.unitId !== 'all' && filter.courseId && filter.courseId !== 'all') {
-        return await getSubCollectionIds(`courses/${filter.courseId}/units/${filter.unitId}`, 'topics');
-    }
-    
-    if (filter.courseId && filter.courseId !== 'all') {
-        const unitIds = await getSubCollectionIds(`courses/${filter.courseId}`, 'units');
-        const topicIdPromises = unitIds.map(unitId => getSubCollectionIds(`courses/${filter.courseId}/units/${unitId}`, 'topics'));
-        return (await Promise.all(topicIdPromises)).flat();
-    }
-    
-    if (filter.classId && filter.classId !== 'all') {
-        const coursesQuery = query(collection(db, 'courses'), where('classId', '==', filter.classId));
-        const coursesSnapshot = await getDocs(coursesQuery);
-        const courseIds = coursesSnapshot.docs.map(doc => doc.id);
-        
-        const unitIdPromises = courseIds.map(courseId => getSubCollectionIds(`courses/${courseId}`, 'units'));
-        const unitIds = (await Promise.all(unitIdPromises)).flat();
-
-        const topicIdPromises = courseIds.flatMap(courseId => 
-            unitIds.map(unitId => getSubCollectionIds(`courses/${courseId}/units/${unitId}`, 'topics'))
-        );
-        return (await Promise.all(topicIdPromises)).flat();
-    }
-    
-    // If no specific filter is applied, return empty, which will result in fetching all items.
-    return [];
-}
-
 
 export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | ImageAsset)[], error?: string }> {
     try {
         if (filters.type === 'images') {
-            const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
+            const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'), limit(100));
             const snapshot = await getDocs(imagesQuery);
             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ImageAsset));
             return { items: JSON.parse(JSON.stringify(items)) };
@@ -71,51 +26,66 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
 
         const isQuestions = filters.type === 'questions';
         const collectionName = isQuestions ? "questions" : "activityItems";
-        let baseQuery: Query = collection(db, collectionName);
-
-        const topicIds = await getAllTopicIdsUnderPath(filters);
-
-        let finalConditions: any[] = [];
         
-        if (topicIds.length > 0) {
-             // Firestore 'in' queries are limited to 30 items per query. 
-             // This logic doesn't handle chunking for >30 topics, but is more robust than before.
-            finalConditions.push(where("topicId", "in", topicIds.slice(0, 30)));
-        } else if (filters.topicId === 'all' && filters.unitId === 'all' && filters.courseId === 'all' && filters.classId === 'all') {
-            // No topic filter, fetch all
-        } else {
-             // If we got here with filters applied, it means no topics were found under the hierarchy.
-            // So, return no items.
-             return { items: [] };
+        let q: Query = collection(db, collectionName);
+        
+        // Eğer belirli bir topicId varsa doğrudan filtrele
+        if (filters.topicId && filters.topicId !== 'all') {
+            q = query(q, where("topicId", "==", filters.topicId));
+        } else if (filters.unitId && filters.unitId !== 'all') {
+            q = query(q, where("unitId", "==", filters.unitId));
+        } else if (filters.courseId && filters.courseId !== 'all') {
+            q = query(q, where("courseId", "==", filters.courseId));
         }
 
-        // Apply type filters
+        // Soru / Etkinlik tipi filtresi
         if (isQuestions && filters.questionTypes && filters.questionTypes.length > 0) {
-            finalConditions.push(where("type", "in", filters.questionTypes));
+            q = query(q, where("type", "in", filters.questionTypes));
+        } else if (!isQuestions && filters.activityTypes && filters.activityTypes.length > 0) {
+            q = query(q, where("type", "in", filters.activityTypes));
         }
 
-        if (!isQuestions && filters.activityTypes && filters.activityTypes.length > 0) {
-            finalConditions.push(where("type", "in", filters.activityTypes));
+        const snapshot = await getDocs(q);
+        let items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question | ActivityItem));
+
+        // Eğer arama kelimesi varsa sunucu tarafında filtrele
+        if (filters.searchTerm && filters.searchTerm.trim()) {
+            const term = filters.searchTerm.toLowerCase().trim();
+            items = items.filter(item => {
+                if ('text' in item && item.text) {
+                    return item.text.toLowerCase().includes(term);
+                }
+                if ('content' in item && item.content) {
+                    const c = item.content as any;
+                    return (c.text && c.text.toLowerCase().includes(term)) ||
+                           (c.term && c.term.toLowerCase().includes(term)) ||
+                           (c.definition && c.definition.toLowerCase().includes(term));
+                }
+                return false;
+            });
         }
-        
-        // Construct the final query
-        if (finalConditions.length > 0) {
-            baseQuery = query(baseQuery, and(...finalConditions));
-        }
-        
-        const snapshot = await getDocs(baseQuery);
-        const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question | ActivityItem));
-        
+
         return { items: JSON.parse(JSON.stringify(items)) };
-        
     } catch (e: any) {
         console.error("Error fetching library items:", e);
-        if (e.code === 'failed-precondition') {
-             return { 
-                error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kopyalayıp tarayıcınızda açın. Ayrıca, geliştirme sunucunuzun konsolunda (terminalde) tıklanabilir bir link bulabilirsiniz.\n\n---\n${e.message}\n---`, 
-                items: [] 
-            };
+        // Fallback if compound index error occurs: fetch without where query and filter in memory
+        try {
+            const isQuestions = filters.type === 'questions';
+            const collectionName = isQuestions ? "questions" : "activityItems";
+            const snapshot = await getDocs(query(collection(db, collectionName), limit(200)));
+            let items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question | ActivityItem));
+            
+            if (filters.topicId && filters.topicId !== 'all') {
+                items = items.filter((item: any) => item.topicId === filters.topicId);
+            }
+            if (isQuestions && filters.questionTypes && filters.questionTypes.length > 0) {
+                items = items.filter((item: any) => filters.questionTypes?.includes(item.type));
+            } else if (!isQuestions && filters.activityTypes && filters.activityTypes.length > 0) {
+                items = items.filter((item: any) => filters.activityTypes?.includes(item.type));
+            }
+            return { items: JSON.parse(JSON.stringify(items)) };
+        } catch (fallbackErr: any) {
+            return { error: "Kütüphane verileri alınırken bir hata oluştu: " + fallbackErr.message, items: [] };
         }
-        return { error: "Kütüphane verileri alınırken bir hata oluştu.", items: [] };
     }
 }
