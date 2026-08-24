@@ -51,9 +51,9 @@ export type GenerateLessonContentOutput = {
 
 const moduleInstructions: Record<string, string> = {
   summary: `"summary": [
-    { "title": "1. Giriş ve Temel İlke", "content": "<li>Konunun ana hatlarını açıklayan detaylı birinci madde.</li><li>İkinci önemli açıklama noktası.</li>" },
-    { "title": "2. Önemli Özellikler ve Hükümler", "content": "<li>Uygulama şartları ve dikkat edilecek noktalar.</li>" },
-    { "title": "3. Günlük Hayata Yansımaları", "content": "<li>Bireysel ve toplumsal faydaları.</li>" }
+    { "title": "Metindeki 1. Ana Konu Başlığı (Örn: Namazın Anlamı ve İslam'daki Yeri)", "content": "<li>Konunun metindeki 1. detaylı açıklama maddesi.</li><li>Önemli hadis, ayet veya ilke açıklaması.</li>" },
+    { "title": "Metindeki 2. Ana Konu Başlığı (Örn: Namaz Çeşitleri: Farz, Vacip ve Nafile)", "content": "<li>Farz namazlar ve günlük beş vakit ile Cuma namazı.</li><li>Vacip namazlar (Vitir, Bayram) ve Nafile/Sünnet namazlar.</li>" },
+    { "title": "Metindeki 3. Ana Konu Başlığı (Örn: Namaz İbadetinin Bireysel ve Toplumsal Faydaları)", "content": "<li>Allah'a şükretme ve yaratılış gayesini yerine getirme.</li><li>Müslümanların kaynaşması ve birlik şuuru.</li>" }
   ]`,
   learningObjectives: `"learningObjectives": [
     "Konunun temel kavramlarını ve anlamını doğru şekilde açıklayabileceksiniz.",
@@ -144,10 +144,11 @@ ${requestedExamples}
 
 ### KRİTİK KURALLAR:
 1. SADECE yukarıda istenen alanları (${requestedKeys.join(', ')}) JSON nesnesinde doldur.
-2. Tüm içerikler pedagojik olarak zengin, anlaşılır, MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
-3. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
-4. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
-5. SADECE saf JSON nesnesi döndür.
+2. "summary" (Konu Özeti): Verilen kaynak metindeki tüm ana başlıkları ve alt başlıkları tespit et. Her başlık için ("title") o başlığa ait metin içeriğini zengin, detaylı ve açıklayıcı HTML maddeleri (<li>...</li>) olarak "content" içine yaz.
+3. Tüm içerikler pedagojik olarak zengin, anlaşılır, MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
+4. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
+5. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
+6. SADECE saf JSON nesnesi döndür.
 `;
 
   const text = await runGeminiWithFallback({
