@@ -48,6 +48,17 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
         ...item,
     };
 
+    // content normalizasyonu
+    if (normalized.type === 'content') {
+        if (Array.isArray(normalized.content)) {
+            normalized.content = `<ul>${normalized.content.map((s: any) => `<li>${typeof s === 'string' ? s : JSON.stringify(s)}</li>`).join('')}</ul>`;
+        } else if (Array.isArray(normalized.sentences)) {
+            normalized.content = `<ul>${normalized.sentences.map((s: any) => `<li>${typeof s === 'string' ? s : JSON.stringify(s)}</li>`).join('')}</ul>`;
+        } else if (typeof normalized.content === 'string' && !normalized.content.includes('<li') && !normalized.content.includes('<p')) {
+            normalized.content = `<ul>${normalized.content.split('\n').filter(Boolean).map((s: string) => `<li>${s.trim()}</li>`).join('')}</ul>`;
+        }
+    }
+
     // conceptExplanation normalizasyonu
     if (normalized.type === 'conceptExplanation') {
         normalized.items = normalized.items || normalized.content?.items || [{ concept: 'Kavram', definition: 'Tanım' }];
@@ -138,16 +149,21 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
 
         setIsAiRefining(true);
         try {
+            const activeKey = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_api_key') : '') || undefined;
+            const activeModel = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_model') : '') || 'gemini-3.6-flash';
+
             const result = await refineLessonStep({
                 currentStep: editedStep,
                 instruction: finalInstruction,
                 topicTitle: context?.topicTitle,
                 sourceText: context?.sourceText,
+                apiKey: activeKey,
+                modelName: activeModel,
             });
 
             if (result.updatedStep) {
                 const normalized = getInitialFormData(result.updatedStep);
-                setEditedStep(normalized);
+                setEditedStep(JSON.parse(JSON.stringify(normalized)));
                 setAiRefinePrompt('');
                 toast({
                     title: "✨ Adım Yapay Zekâ ile Güncellendi",

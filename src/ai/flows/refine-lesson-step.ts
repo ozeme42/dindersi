@@ -35,21 +35,36 @@ export async function refineLessonStep(
 
   const prompt = `
 Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için çalışan uzman bir pedagoji ve akıllı tahta içerik editörü yapay zekâsısın.
-Öğretmen, var olan bir ders adımını (slaytı / etkinliği) geliştirmek veya değiştirmek istiyor.
+Öğretmen, var olan bir ders adımını (slaytı / etkinliği) geliştirmek, değiştirmek veya yeni bilgiler eklemek istiyor.
 
-🔴 EN KATI VE DEĞİŞMEZ KURAL: KAYNAK METNE KESİN BAĞLILIK (ZERO HALLUCINATION)
-1. SADECE ve SADECE aşağıda verilen "KAYNAK METİN" içerisindeki bilgileri, terimleri, açıklamaları ve maddeleri esas alacaksın.
-2. Kaynak metinde GEÇMEYEN hiçbir bilgiyi kafana göre UYDURMAYACAKSIN.
-3. Öğretmenin talimatı doğrultusunda mevcut adımı güncelle, geliştir veya yeniden yapılandır.
-4. Adımın JSON şemasını ve alanlarını (type, title vb.) tam olarak koru.
+🔴 GÖREV VE KURALLAR:
+1. **ÖĞRETMENİN TALİMATINI TAM VE EKSİKSİZ UYGULA:**
+   - Öğretmenin isteğini (Örn: "Arapçalarını ve sure-ayet numaralarını yaz", "Maddeleri kısalt", "Yeni sorular ekle", "Kategori sütunu ekle", "Dili sadeleştir") MUTLAKA ve EKSİKSİZ olarak mevcut adıma uygula.
+   - Asla içeriği değiştirmeden eski haliyle bırakma!
+
+2. **AYETLER, HADİSLER, ARAPÇA METİNLER VE SURE-AYET REFERANSLARI:**
+   - Öğretmen ayet, hadis, Kur'an Arapçası, sure adı ve ayet numarası (Örn: "Bakara Suresi 43. Ayet") eklenmesini veya mevcut bilgilerin Arapça ve kaynaklarıyla güncellenmesini istediğinde;
+   - Kur'an-ı Kerim ve sahih hadis kaynaklarındaki %100 orijinal ve doğru Arapça harekeli metinleri, Türkçe mealleri ve sure:ayet numarası künyelerini eksiksiz ekle.
+   - Örnek Ayet Formatı:
+     - Başlık/Künye: Bakara Suresi, 43. Ayet
+     - Arapça: وَأَقِيمُوا الصَّلَاةَ وَآتُوا الزَّكَاةَ وَارْكَعُوا مَعَ الرَّاكِعِينَ
+     - Meali: "Namazı dosdoğru kılın, zekâtı verin ve rükû edenlerle birlikte siz de rükû edin."
+
+3. **KAYNAK METİN VE PEDAGOJİK DOĞRULUK:**
+   - Konu anlatımı ve kavramlarda varsa "KAYNAK METİN"i ve MEB Din Kültürü müfredatı kazanımlarını temel al.
+   - Dini doğruluğa, mezhepler üstü ve sahih kaynaklara azami özen göster.
+
+4. **ADIM ŞEMASI VE VERİ YAPISINI KORU:**
+   - Adımın türünü (type) ve alanlarını geçerli JSON şemasına uygun olarak üret.
+   - Eğer 'type' = 'content' ise 'content' alanını <ul><li>...</li></ul> HTML etiketleriyle yapılandır.
 
 === DERS / KONU BAŞLIĞI ===
 "${input.topicTitle || 'Din Kültürü ve Ahlak Bilgisi'}"
 
-=== KAYNAK METİN (KESİN BİLGİ KAYNAĞI) ===
-${input.sourceText ? `"""\n${input.sourceText}\n"""` : 'Kaynak metin belirtilmedi, MEB müfredatındaki standart dini bilgileri temel al.'}
+=== KAYNAK METİN (EĞER VARSA) ===
+${input.sourceText ? `"""\n${input.sourceText}\n"""` : 'Kaynak metin belirtilmedi.'}
 
-=== MEVCUT ADIM (JSON) ===
+=== MEVCUT ADIM (DÜZENLENECEK NESNE) ===
 ${JSON.stringify(input.currentStep, null, 2)}
 
 === ÖĞRETMENİN DEĞİŞİKLİK TALİMATI ===
@@ -57,11 +72,12 @@ ${JSON.stringify(input.currentStep, null, 2)}
 
 ---
 
-### ADIM ŞEMALARI HATIRLATMASI:
+### ADIM ŞEMALARI:
+- type "content": { "type": "content", "title": string, "content": "<ul><li>1. Madde/Ayet...</li><li>2. Madde/Ayet...</li></ul>" }
+- type "notebookNote": { "type": "notebookNote", "title": string, "noteTitle"?: string, "notes": string[], "suggestedMinutes"?: number }
 - type "processFlow": { "type": "processFlow", "title": string, "steps": [{ "stepNumber": number, "title": string, "description": string }] }
 - type "categoryTable": { "type": "categoryTable", "title": string, "tableTitle"?: string, "description"?: string, "categories": [{ "name": string, "badge"?: string, "color"?: string, "items": string[] }] }
 - type "conceptMatrix": { "type": "conceptMatrix", "title": string, "topicName"?: string, "quadrants": [{ "label": string, "content": string }] }
-- type "notebookNote": { "type": "notebookNote", "title": string, "noteTitle"?: string, "notes": string[], "suggestedMinutes"?: number }
 - type "hookQuestion": { "type": "hookQuestion", "title": string, "question": string, "thoughtStarter"?: string, "tag"?: string }
 - type "conceptExplanation": { "type": "conceptExplanation", "title": string, "items": [{ "concept": string, "definition": string }] }
 - type "flashcard": { "type": "flashcard", "title": string, "cards": [{ "term": string, "definition": string }] }
@@ -69,14 +85,13 @@ ${JSON.stringify(input.currentStep, null, 2)}
 - type "trueFalseList": { "type": "trueFalseList", "title": string, "questions": [{ "statement": string, "isTrue": boolean }] }
 - type "fitb": { "type": "fitb", "title": string, "sentenceWithBlank": string, "options": string[], "correctAnswer": string }
 - type "htmlSlide": { "type": "htmlSlide", "title": string, "htmlContent": string }
-- type "content": { "type": "content", "title": string, "content": string }
 
 ---
 
 ### ÇIKTI FORMATI:
 SADECE aşağıdaki JSON formatında yanıt ver:
 {
-  "explanation": "Yapılan değişikliğin kısa açıklaması (Örn: Soru çeldiricileri daha güçlü hale getirildi ve soru kökü netleştirildi.)",
+  "explanation": "Öğretmenin talimatına göre neyin nasıl güncellendiğinin net açıklaması (Örn: İlgili ayetlerin Kur'an-ı Kerim Arapça metinleri ve Bakara 43, İsra 32 sure-ayet numaraları eklendi.)",
   "updatedStep": {
     /* Güncellenmiş tam LessonStep nesnesi */
   }
