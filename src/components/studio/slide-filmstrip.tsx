@@ -251,7 +251,12 @@ export function SlideFilmstrip({
                             <Plus className="h-3.5 w-3.5 mr-1" /> Ekle
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 rounded-2xl shadow-2xl p-2 z-50">
+                    <DropdownMenuContent 
+                        side="right" 
+                        align="start" 
+                        sideOffset={8}
+                        className="bg-slate-950/95 backdrop-blur-2xl border border-white/15 text-white w-72 max-h-[85vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20"
+                    >
                         <DropdownMenuItem 
                             onClick={() => onOpenAi?.(selectedIndex + 1)}
                             className="text-xs font-black text-yellow-300 focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2 mb-1 bg-indigo-950/50 border border-indigo-500/30"

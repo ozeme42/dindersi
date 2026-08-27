@@ -409,7 +409,7 @@ function InsertStepDivider({
                         <Plus className="h-3.5 w-3.5" /> Buraya Adım Ekle
                     </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-60 rounded-2xl shadow-2xl p-2 z-50">
+                <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20">
                     <DropdownMenuItem 
                         onClick={() => onOpenAi?.(insertIndex)}
                         className="text-xs font-black text-yellow-300 focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2 mb-1 bg-indigo-950/50 border border-indigo-500/30"
@@ -1282,7 +1282,7 @@ export function TopicEditor({
                                                 <ChevronDown className="h-3 w-3 ml-1 opacity-70" />
                                             </Button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 rounded-2xl shadow-2xl p-2 z-50">
+                                        <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20">
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-indigo-400 tracking-wider px-2 py-1">Anlatım Slaytı Türleri</DropdownMenuLabel>
                                             {[
                                                 { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
@@ -1338,7 +1338,7 @@ export function TopicEditor({
                                                 <ChevronDown className="h-3 w-3 ml-1 opacity-70" />
                                             </Button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 rounded-2xl shadow-2xl p-2 z-50">
+                                        <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20">
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">Soru & Değerlendirme Türleri</DropdownMenuLabel>
                                             {[
                                                 { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
