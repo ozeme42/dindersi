@@ -464,25 +464,25 @@ function InsertStepDivider({
                         📚 Veri Bankasından
                     </DropdownMenuLabel>
                     <DropdownMenuItem 
-                        onClick={() => onOpenLibrary(['concept', 'definition'], true, 'matching', insertIndex)}
+                        onClick={() => onOpenLibrary(['definition'], true, 'matching', insertIndex)}
                         className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                     >
                         <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                        onClick={() => onOpenLibrary(['concept', 'definition'], true, 'anagramGame', insertIndex)}
+                        onClick={() => onOpenLibrary(['concept'], true, 'anagramGame', insertIndex)}
                         className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                     >
                         <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> Veri Bankasından Anagram Kartları
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                        onClick={() => onOpenLibrary(['concept', 'definition'], true, 'flashcard', insertIndex)}
+                        onClick={() => onOpenLibrary(['definition'], true, 'flashcard', insertIndex)}
                         className="text-xs font-semibold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                     >
                         <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                        onClick={() => onOpenLibrary(['concept', 'definition'], true, 'conceptExplanation', insertIndex)}
+                        onClick={() => onOpenLibrary(['concept'], true, 'conceptExplanation', insertIndex)}
                         className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                     >
                         <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
@@ -1304,13 +1304,13 @@ export function TopicEditor({
                                             <DropdownMenuSeparator className="bg-white/10 my-1" />
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından</DropdownMenuLabel>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['concept', 'definition'], true, 'conceptExplanation')}
+                                                onClick={() => handleOpenLibrary(['concept'], true, 'conceptExplanation')}
                                                 className="text-xs font-bold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['concept', 'definition'], true, 'flashcard')}
+                                                onClick={() => handleOpenLibrary(['definition'], true, 'flashcard')}
                                                 className="text-xs font-bold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
@@ -1356,13 +1356,13 @@ export function TopicEditor({
                                             <DropdownMenuSeparator className="bg-white/10 my-1" />
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından</DropdownMenuLabel>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['concept', 'definition'], true, 'matching')}
+                                                onClick={() => handleOpenLibrary(['definition'], true, 'matching')}
                                                 className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> 📚 Veri Bankasından Tanım Eşleştirme
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['concept', 'definition'], true, 'anagramGame')}
+                                                onClick={() => handleOpenLibrary(['concept'], true, 'anagramGame')}
                                                 className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> 🔤 Veri Bankasından Anagram Kartları

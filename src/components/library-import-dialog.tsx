@@ -231,7 +231,11 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
 
     const filteredItems = useMemo(() => {
         if (!items || items.length === 0) return [];
-        // Eğer SADECE tanım kartı filtresi varsa ve kavram istenmemişse sadece dolu type === 'definition' olanları getir
+        // Eğer SADECE kavram istenmişse sadece type === 'concept' olanları getir
+        if (config.filter.length === 1 && config.filter.includes('concept')) {
+            return items.filter(it => 'type' in it && it.type === 'concept');
+        }
+        // Eğer SADECE tanım kartı filtresi varsa sadece dolu type === 'definition' olanları getir
         if (config.filter.length === 1 && config.filter.includes('definition')) {
             return items.filter(it => {
                 if ('type' in it && it.type === 'concept') return false;
@@ -239,7 +243,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
                     const def = (it as any).content?.definition || (it as any).definition;
                     return !!(def && String(def).trim().length > 0);
                 }
-                return true;
+                return false;
             });
         }
         return items;

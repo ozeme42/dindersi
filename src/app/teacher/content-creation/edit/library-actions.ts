@@ -112,6 +112,8 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
                 }
                 return true;
             });
+        } else if (mappedActivityTypes.length === 1 && mappedActivityTypes.includes('concept')) {
+            items = items.filter(item => item.type === 'concept');
         }
 
         // Eğer arama kelimesi varsa sunucu tarafında filtrele

@@ -311,25 +311,25 @@ export function SlideFilmstrip({
                                 <DropdownMenuSeparator className="bg-white/10 my-1" />
                                 <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından Aktar</DropdownMenuLabel>
                                 <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['concept', 'definition'], true, 'matching', selectedIndex + 1)}
+                                    onClick={() => onOpenLibrary(['definition'], true, 'matching', selectedIndex + 1)}
                                     className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                 >
                                     <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['concept', 'definition'], true, 'anagramGame', selectedIndex + 1)}
+                                    onClick={() => onOpenLibrary(['concept'], true, 'anagramGame', selectedIndex + 1)}
                                     className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                 >
                                     <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> Veri Bankasından Anagram Kartları
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['concept', 'definition'], true, 'flashcard', selectedIndex + 1)}
+                                    onClick={() => onOpenLibrary(['definition'], true, 'flashcard', selectedIndex + 1)}
                                     className="text-xs font-semibold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                 >
                                     <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['concept', 'definition'], true, 'conceptExplanation', selectedIndex + 1)}
+                                    onClick={() => onOpenLibrary(['concept'], true, 'conceptExplanation', selectedIndex + 1)}
                                     className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                 >
                                     <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
