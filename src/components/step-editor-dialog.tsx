@@ -19,7 +19,7 @@ import {
     Loader2, PlusCircle, Trash2, Save, FileEdit, Database, 
     List, Library, ArrowLeft, ArrowRight, CheckCircle2, XCircle,
     Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles,
-    ChevronUp, ChevronDown, Send, Lightbulb, Wand2
+    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye
 } from 'lucide-react';
 import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
 import type { 
@@ -139,6 +139,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     const [aiRefinePrompt, setAiRefinePrompt] = useState('');
     const [isAiRefining, setIsAiRefining] = useState(false);
     const [isAiRefineOpen, setIsAiRefineOpen] = useState(true);
+    const [isHtmlPreviewActive, setIsHtmlPreviewActive] = useState(true);
     
     const { toast } = useToast();
     const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[]})[]})[]>([]);
@@ -569,12 +570,51 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                 )}
                             </div>
                         ) : (
-                            <Textarea 
-                                value={currentContent} 
-                                onChange={(e) => handleValueChange('content', e.target.value)} 
-                                className="min-h-[340px] bg-slate-950 border-white/10 text-white font-mono text-xs leading-relaxed rounded-2xl p-4" 
-                                placeholder="Metin içeriğinizi buraya girin. HTML etiketlerini (<p>, <strong>, <ul>, <li> vb.) destekler."
-                            />
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-xs font-bold text-slate-400">Ham HTML Düzenleme & Önizleme</Label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsHtmlPreviewActive(v => !v)}
+                                        className={cn(
+                                            "flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border transition-all cursor-pointer",
+                                            isHtmlPreviewActive
+                                                ? "bg-indigo-600/30 border-indigo-500/50 text-indigo-300"
+                                                : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        <Eye className="h-3.5 w-3.5" />
+                                        {isHtmlPreviewActive ? "Canlı Önizleme Açık" : "Önizlemeyi Aç"}
+                                    </button>
+                                </div>
+                                <div className={cn("rounded-2xl border border-white/10 overflow-hidden bg-slate-950/80 flex", isHtmlPreviewActive ? "divide-x divide-white/10" : "")}>
+                                    <div className={cn("flex flex-col", isHtmlPreviewActive ? "w-1/2" : "w-full")}>
+                                        <div className="px-3 py-1.5 bg-slate-900/60 border-b border-white/5">
+                                            <span className="text-[10px] font-mono text-slate-400">HTML Kodu</span>
+                                        </div>
+                                        <Textarea 
+                                            value={currentContent} 
+                                            onChange={(e) => handleValueChange('content', e.target.value)} 
+                                            className="min-h-[340px] h-[340px] bg-slate-950 border-0 text-white font-mono text-xs leading-relaxed p-4 resize-none focus-visible:ring-0 rounded-none" 
+                                            placeholder="Metin içeriğinizi buraya girin. HTML etiketlerini (<p>, <strong>, <ul>, <li> vb.) destekler."
+                                        />
+                                    </div>
+                                    {isHtmlPreviewActive && (
+                                        <div className="w-1/2 flex flex-col bg-slate-900/30">
+                                            <div className="px-3 py-1.5 bg-slate-900/60 border-b border-white/5 flex items-center gap-2">
+                                                <span className="text-[10px] font-mono text-slate-400">Canlı Görünüm</span>
+                                                <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                            </div>
+                                            <div className="p-4 bg-slate-950/60 text-slate-200 overflow-y-auto max-h-[340px] h-[340px] text-sm leading-relaxed">
+                                                <div 
+                                                    className="prose prose-invert max-w-none text-slate-200"
+                                                    dangerouslySetInnerHTML={{ __html: currentContent || '<p class="text-slate-500 italic">HTML yazdıkça önizleme burada görünür...</p>' }} 
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         )}
                     </div>
                 );
@@ -1506,19 +1546,77 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     </div>
                 );
 
-            case 'htmlSlide':
+            case 'htmlSlide': {
                 const htmlStep = editedStep as HtmlSlideStep;
                 return (
-                    <div className="space-y-2">
-                        <Label className="text-sm font-bold text-slate-300">İnteraktif HTML Slayt Kodu</Label>
-                        <Textarea 
-                            value={htmlStep.htmlContent || ''} 
-                            onChange={e => handleValueChange('htmlContent', e.target.value)} 
-                            className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 leading-relaxed"
-                            placeholder="Tam HTML kodunu buraya yapıştırın..."
-                        />
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <Label className="text-sm font-bold text-slate-300">İnteraktif HTML Slayt Kodu</Label>
+                                {htmlStep.htmlContent && (
+                                    <span className="text-[10px] text-sky-300 bg-sky-950/60 border border-sky-500/30 px-2 py-0.5 rounded-full font-mono">
+                                        {htmlStep.htmlContent.length} karakter
+                                    </span>
+                                )}
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setIsHtmlPreviewActive(v => !v)}
+                                className={cn(
+                                    "flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold border transition-all cursor-pointer",
+                                    isHtmlPreviewActive
+                                        ? "bg-indigo-600/30 border-indigo-500/50 text-indigo-300"
+                                        : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                                )}
+                            >
+                                <Eye className="h-3.5 w-3.5" />
+                                {isHtmlPreviewActive ? "Canlı Önizleme Açık" : "Önizlemeyi Aç"}
+                            </button>
+                        </div>
+
+                        <div className={cn("rounded-2xl border border-white/10 overflow-hidden bg-slate-950/80 flex", isHtmlPreviewActive ? "divide-x divide-white/10" : "")}>
+                            {/* Kod Editörü */}
+                            <div className={cn("flex flex-col", isHtmlPreviewActive ? "w-1/2" : "w-full")}>
+                                <div className="px-3 py-2 bg-slate-900/60 border-b border-white/5 flex items-center justify-between">
+                                    <span className="text-[11px] font-mono text-slate-400">HTML & CSS & JS Kodu</span>
+                                </div>
+                                <Textarea 
+                                    value={htmlStep.htmlContent || ''} 
+                                    onChange={e => handleValueChange('htmlContent', e.target.value)} 
+                                    className="min-h-[420px] h-[420px] font-mono text-xs bg-slate-950 border-0 text-slate-200 leading-relaxed resize-none p-4 focus-visible:ring-0 rounded-none"
+                                    placeholder="<!DOCTYPE html> veya <div> tam HTML slayt içeriğinizi buraya yazın..."
+                                />
+                            </div>
+
+                            {/* Canlı Önizleme */}
+                            {isHtmlPreviewActive && (
+                                <div className="w-1/2 flex flex-col bg-slate-900/30">
+                                    <div className="px-3 py-2 bg-slate-900/60 border-b border-white/5 flex items-center gap-2">
+                                        <span className="text-[11px] font-mono text-slate-400">Canlı Önizleme</span>
+                                        <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                                    </div>
+                                    {htmlStep.htmlContent ? (
+                                        <iframe
+                                            srcDoc={`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:16px;background:#0f172a;font-family:system-ui,-apple-system,sans-serif;color:#e2e8f0;display:flex;flex-direction:column;justify-content:center;min-height:100vh;box-sizing:border-box}*{box-sizing:border-box}</style></head><body>${htmlStep.htmlContent}</body></html>`}
+                                            className="w-full min-h-[420px] h-[420px] bg-slate-950 border-0"
+                                            sandbox="allow-scripts allow-same-origin"
+                                            title="Slayt Önizleme"
+                                        />
+                                    ) : (
+                                        <div className="flex-1 flex items-center justify-center min-h-[420px] text-slate-500 text-xs text-center p-6">
+                                            <div>
+                                                <Eye className="h-10 w-10 mx-auto mb-3 opacity-30 text-indigo-400" />
+                                                <p className="font-semibold text-slate-300">HTML kodu yazdıkça</p>
+                                                <p className="text-slate-500 text-[11px]">burada canlı olarak slayt önizlemesi görüntülenecektir.</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 );
+            }
 
             case 'iframe':
                 const iframeStep = editedStep as IframeStep;
