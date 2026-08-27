@@ -470,10 +470,16 @@ function InsertStepDivider({
                         <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                        onClick={() => onOpenLibrary(['concept'], true, 'anagramGame', insertIndex)}
+                        onClick={() => onOpenLibrary(['concept'], true, 'anagramFlashcard', insertIndex)}
                         className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                     >
-                        <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> Veri Bankasından Anagram Kartları
+                        <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> 🔤 Veri Bankasından Anagram Kartları (Dokun & Çevir)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                        onClick={() => onOpenLibrary(['concept'], true, 'anagramGame', insertIndex)}
+                        className="text-xs font-semibold text-purple-300 focus:bg-purple-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                    >
+                        <Gamepad2 className="w-3.5 h-3.5 mr-2 text-purple-400" /> 🎮 Veri Bankasından Kelime Dehası (Oyun)
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                         onClick={() => onOpenLibrary(['definition'], true, 'flashcard', insertIndex)}
@@ -882,8 +888,8 @@ export function TopicEditor({
             }).filter(c => c.correctAnswer && c.correctAnswer.length > 0);
             if (cards.length > 0) {
                 generatedSteps = [{
-                    type: 'anagramGame',
-                    title: 'Kelime Dehası',
+                    type: stepType === 'anagramFlashcard' ? 'anagramFlashcard' : 'anagramGame',
+                    title: stepType === 'anagramFlashcard' ? 'Anagram Kartları' : 'Kelime Dehası',
                     cards
                 }];
             }
@@ -1362,10 +1368,16 @@ export function TopicEditor({
                                                 <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> 📚 Veri Bankasından Tanım Eşleştirme
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['concept'], true, 'anagramGame')}
+                                                onClick={() => handleOpenLibrary(['concept'], true, 'anagramFlashcard')}
                                                 className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
-                                                <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> 🔤 Veri Bankasından Anagram Kartları
+                                                <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> 🔤 Veri Bankasından Anagram Kartları (Dokun & Çevir)
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => handleOpenLibrary(['concept'], true, 'anagramGame')}
+                                                className="text-xs font-semibold text-purple-300 focus:bg-purple-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                            >
+                                                <Gamepad2 className="w-3.5 h-3.5 mr-2 text-purple-400" /> 🎮 Veri Bankasından Kelime Dehası (Oyun)
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 onClick={() => handleOpenLibrary(['sentence'], true, 'sentenceScramble')}
