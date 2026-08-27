@@ -1344,6 +1344,7 @@ function TopicEditorWrapper() {
     
     const [isAIOpen, setIsAIOpen] = useState(false);
     const [aiTargetIndex, setAiTargetIndex] = useState<number | undefined>(undefined);
+    const [showHtmlEditor, setShowHtmlEditor] = useState(false);
     const [showHtmlPreview, setShowHtmlPreview] = useState(true);
     
     const addIdToSteps = (stepsList: LessonStep[]): DraggableLessonStep[] => {
@@ -1458,35 +1459,47 @@ function TopicEditorWrapper() {
             >
                 {/* ══ İNTERAKTİF HTML — Editör + Canlı Önizleme ══ */}
                 <div className="border border-white/8 rounded-xl bg-slate-900/40 overflow-hidden">
-                    {/* Başlık Çubuğu */}
-                    <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/8 bg-slate-900/60">
+                    {/* Başlık Çubuğu — tıklayınca açılır/kapanır */}
+                    <button
+                        type="button"
+                        onClick={() => setShowHtmlEditor(v => !v)}
+                        className="w-full flex items-center gap-2 px-4 py-2.5 hover:bg-white/5 transition-colors cursor-pointer bg-slate-900/60"
+                    >
                         <div className="p-1 rounded-lg bg-rose-500/20 text-rose-400">
                             <FileText className="h-3.5 w-3.5" />
                         </div>
-                        <span className="text-xs font-bold text-slate-300 flex-1">İnteraktif HTML İçeriği</span>
+                        <span className="text-xs font-bold text-slate-300 flex-1 text-left">İnteraktif HTML İçeriği</span>
                         {htmlContent && (
                             <span className="text-[10px] text-rose-300 bg-rose-950/60 border border-rose-500/30 px-2 py-0.5 rounded-full">
                                 {htmlContent.length} karakter
                             </span>
                         )}
-                        {/* Önizleme Toggle */}
-                        <button
-                            type="button"
-                            onClick={() => setShowHtmlPreview(v => !v)}
-                            className={cn(
-                                "flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer",
-                                showHtmlPreview
-                                    ? "bg-indigo-600/30 border-indigo-500/50 text-indigo-300"
-                                    : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
-                            )}
-                        >
-                            <Eye className="h-3 w-3" />
-                            {showHtmlPreview ? "Önizleme Açık" : "Önizlemeyi Aç"}
-                        </button>
-                    </div>
+                        <ChevronDown className={cn("h-3.5 w-3.5 text-slate-500 transition-transform", showHtmlEditor && "rotate-180")} />
+                    </button>
 
-                    {/* Split Pane: Editör | Önizleme */}
-                    <div className={cn("flex", showHtmlPreview ? "gap-0 divide-x divide-white/8" : "")}>
+                    {/* İçerik — sadece açıkken göster */}
+                    {showHtmlEditor && (
+                    <>
+                        {/* Önizleme toggle alt çubuk */}
+                        <div className="flex items-center gap-2 px-4 py-1.5 border-t border-white/8 bg-slate-950/40">
+                            <span className="text-[10px] text-slate-500 flex-1">Editör + önizleme</span>
+                            <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); setShowHtmlPreview(v => !v); }}
+                                className={cn(
+                                    "flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer",
+                                    showHtmlPreview
+                                        ? "bg-indigo-600/30 border-indigo-500/50 text-indigo-300"
+                                        : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                                )}
+                            >
+                                <Eye className="h-3 w-3" />
+                                {showHtmlPreview ? "Önizleme Açık" : "Önizlemeyi Aç"}
+                            </button>
+                        </div>
+
+                        {/* Split Pane: Editör | Önizleme */}
+                        <div className={cn("flex", showHtmlPreview ? "gap-0 divide-x divide-white/8" : "")}>
                         {/* Editör */}
                         <div className={cn("flex flex-col", showHtmlPreview ? "w-1/2" : "w-full")}>
                             <div className="px-2 py-1 bg-slate-950/60 border-b border-white/5">
@@ -1525,7 +1538,9 @@ function TopicEditorWrapper() {
                                 )}
                             </div>
                         )}
-                    </div>
+                        </div>
+                    </>
+                )}
                 </div>
             </TopicEditor>
 
