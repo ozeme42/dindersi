@@ -1344,6 +1344,7 @@ function TopicEditorWrapper() {
     
     const [isAIOpen, setIsAIOpen] = useState(false);
     const [aiTargetIndex, setAiTargetIndex] = useState<number | undefined>(undefined);
+    const [showHtmlPreview, setShowHtmlPreview] = useState(true);
     
     const addIdToSteps = (stepsList: LessonStep[]): DraggableLessonStep[] => {
         return stepsList.map((step, index) => ({ 
@@ -1455,32 +1456,77 @@ function TopicEditorWrapper() {
                     setTimeout(() => setIsAIOpen(true), 10);
                 }}
             >
-                {/* İnteraktif HTML İçeriği — Kompakt */}
-                <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="html-content" className="border border-white/8 rounded-xl bg-slate-900/40 overflow-hidden">
-                        <AccordionTrigger className="px-4 py-2.5 hover:no-underline hover:bg-white/5 transition-colors">
-                            <div className="flex items-center gap-2">
-                                <div className="p-1 rounded-lg bg-rose-500/20 text-rose-400">
-                                    <FileText className="h-3.5 w-3.5" />
-                                </div>
-                                <span className="text-xs font-bold text-slate-300">İnteraktif HTML İçeriği</span>
-                                {htmlContent && (
-                                    <span className="text-[10px] text-rose-300 bg-rose-950/60 border border-rose-500/30 px-2 py-0.5 rounded-full ml-1">
-                                        {htmlContent.length} karakter
-                                    </span>
-                                )}
+                {/* ══ İNTERAKTİF HTML — Editör + Canlı Önizleme ══ */}
+                <div className="border border-white/8 rounded-xl bg-slate-900/40 overflow-hidden">
+                    {/* Başlık Çubuğu */}
+                    <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/8 bg-slate-900/60">
+                        <div className="p-1 rounded-lg bg-rose-500/20 text-rose-400">
+                            <FileText className="h-3.5 w-3.5" />
+                        </div>
+                        <span className="text-xs font-bold text-slate-300 flex-1">İnteraktif HTML İçeriği</span>
+                        {htmlContent && (
+                            <span className="text-[10px] text-rose-300 bg-rose-950/60 border border-rose-500/30 px-2 py-0.5 rounded-full">
+                                {htmlContent.length} karakter
+                            </span>
+                        )}
+                        {/* Önizleme Toggle */}
+                        <button
+                            type="button"
+                            onClick={() => setShowHtmlPreview(v => !v)}
+                            className={cn(
+                                "flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer",
+                                showHtmlPreview
+                                    ? "bg-indigo-600/30 border-indigo-500/50 text-indigo-300"
+                                    : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                            )}
+                        >
+                            <Eye className="h-3 w-3" />
+                            {showHtmlPreview ? "Önizleme Açık" : "Önizlemeyi Aç"}
+                        </button>
+                    </div>
+
+                    {/* Split Pane: Editör | Önizleme */}
+                    <div className={cn("flex", showHtmlPreview ? "gap-0 divide-x divide-white/8" : "")}>
+                        {/* Editör */}
+                        <div className={cn("flex flex-col", showHtmlPreview ? "w-1/2" : "w-full")}>
+                            <div className="px-2 py-1 bg-slate-950/60 border-b border-white/5">
+                                <span className="text-[10px] font-mono text-slate-500">HTML Kodu</span>
                             </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-3 pb-3 pt-1 bg-slate-950/40">
                             <Textarea
                                 value={htmlContent || ''}
                                 onChange={(e) => setHtmlContent(e.target.value)}
                                 placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
-                                className="min-h-[120px] max-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500 rounded-xl leading-relaxed"
+                                className="min-h-[320px] h-[320px] font-mono text-xs bg-slate-950 border-0 border-none text-slate-300 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none leading-relaxed resize-none"
+                                style={{ resize: 'none' }}
                             />
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
+                        </div>
+
+                        {/* Canlı Önizleme */}
+                        {showHtmlPreview && (
+                            <div className="w-1/2 flex flex-col">
+                                <div className="px-2 py-1 bg-slate-950/60 border-b border-white/5 flex items-center gap-2">
+                                    <span className="text-[10px] font-mono text-slate-500">Canlı Önizleme</span>
+                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                </div>
+                                {htmlContent ? (
+                                    <iframe
+                                        srcDoc={`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:0;background:#0f172a;font-family:system-ui,sans-serif;color:#e2e8f0}*{box-sizing:border-box}</style></head><body>${htmlContent}</body></html>`}
+                                        className="w-full h-[320px] bg-slate-950 border-0"
+                                        sandbox="allow-scripts allow-same-origin"
+                                        title="HTML Önizleme"
+                                    />
+                                ) : (
+                                    <div className="flex-1 flex items-center justify-center h-[320px] text-slate-600 text-xs text-center p-4">
+                                        <div>
+                                            <Eye className="h-8 w-8 mx-auto mb-2 opacity-30" />
+                                            <p>HTML kodu yazıldıkça<br/>önizleme burada görünür</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
             </TopicEditor>
 
             {isAIOpen && (
