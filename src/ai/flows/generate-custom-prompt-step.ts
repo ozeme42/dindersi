@@ -36,14 +36,20 @@ export async function generateCustomPromptStep(
 Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için çalışan uzman bir pedagoji ve interaktif ders tasarım yapay zekâsısın.
 Öğretmen senden özel bir istekte bulundu. Bu isteği analiz et ve Dindersi akıllı tahta sistemine tam uyumlu 1 veya birden fazla 'LessonStep' (Ders Adımı) üret.
 
-=== ÖĞRETMENİN İSTEĞİ ===
-"${input.userPrompt}"
+🔴 EN KATI VE DEĞİŞMEZ KURAL: KAYNAK METNE KESİN VE MUTLAK BAĞLILIK (ZERO HALLUCINATION)
+1. SADECE ve SADECE aşağıda verilen "KAYNAK METİN" içerisindeki bilgileri, terimleri, hükümleri, açıklamaları ve maddeleri esas alacaksın.
+2. Kaynak metinde GEÇMEYEN hiçbir bilgiyi kafana göre UYDURMAYACAKSIN, eklemeyeceksin ve konunun dışına çıkmayacaksın.
+3. Öğretmenin isteği ne olursa olsun (süreç şeması, kategori tablosu, defter notu, kavramlar, test/soru, infografik), metindeki gerçek cümle ve verileri ayıklayıp pedagojik olarak o slayt formatına dökeceksin.
+4. Kaynak metin girilmemişse, yalnızca MEB Din Kültürü müfredatındaki kesin, net ve tartışmasız doğruları temel alacaksın.
 
 === DERS / KONU BAŞLIĞI ===
 "${input.topicTitle || 'Din Kültürü ve Ahlak Bilgisi'}"
 
-=== KAYNAK METİN (EĞER VARSA) ===
+=== KAYNAK METİN (KESİN VE TEK BİLGİ KAYNAĞI) ===
 ${input.sourceText ? `"""\n${input.sourceText}\n"""` : 'Kaynak metin belirtilmedi, konunun MEB müfredatındaki standart bilgilerini temel al.'}
+
+=== ÖĞRETMENİN ÖZEL İSTEĞİ ===
+"${input.userPrompt}"
 
 ---
 
@@ -183,7 +189,7 @@ SADECE aşağıdaki JSON formatında yanıt ver (Markdown kod bloğu içinde vey
       primaryModel: resolvedModel,
       prompt,
       generationConfig: {
-        temperature: 0.3,
+        temperature: 0.15,
         responseMimeType: 'application/json',
       },
     });

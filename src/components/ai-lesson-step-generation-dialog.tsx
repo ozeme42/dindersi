@@ -1101,7 +1101,7 @@ export function AiLessonStepGenerationDialog({
                                         Yapay Zekâya Ne Hazırlamasını İstediğinizi Söyleyin
                                     </h4>
                                     <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                                        İstediğinizi serbestçe yazın; yapay zekâ konunuzu analiz edip en uygun akıllı tahta adım formatını (süreç şeması, kategori tablosu, infografik, test, defter notu vb.) otomatik üretsin.
+                                        İstediğinizi serbestçe yazın; yapay zekâ <span className="text-amber-300 font-bold">kaynak metninizi birebir temel alarak</span> ve kafasına göre uydurmadan en uygun adım formatını (süreç şeması, kategori tablosu, infografik, test, defter notu vb.) otomatik oluştursun.
                                     </p>
                                 </div>
                             </div>
