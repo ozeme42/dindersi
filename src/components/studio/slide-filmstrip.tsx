@@ -267,8 +267,13 @@ export function SlideFilmstrip({
                             { label: '✏️ Defterimize Yazalım', type: 'notebookNote' as LessonStep['type'], title: 'Defterimize Yazalım' },
                             { label: '💡 Kavram Açıklamaları', type: 'conceptExplanation' as LessonStep['type'], title: 'Kavram Açıklamaları' },
                             { label: '🔲 4 Boyut Konu Matrisi', type: 'conceptMatrix' as LessonStep['type'], title: '4 Boyutta Konu Analizi' },
+                            { label: '🎯 Öğrenme Hedefleri', type: 'objectiveList' as LessonStep['type'], title: 'Öğrenme Hedefleri' },
+                            { label: '📑 Akordiyon Özet', type: 'accordion' as LessonStep['type'], title: 'Akordiyon Özet' },
                             { label: '📄 Metin & Cümleler', type: 'content' as LessonStep['type'], title: 'Metin İçeriği' },
-                            { label: '🌐 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
+                            { label: '🎬 Video Slaytı (YouTube)', type: 'video' as LessonStep['type'], title: 'Video Anlatım' },
+                            { label: '🖼️ Görsel / Resim', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
+                            { label: '🌐 Web Simülasyonu (iFrame)', type: 'iframe' as LessonStep['type'], title: 'İnteraktif Simülasyon' },
+                            { label: '💻 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
                         ].map(opt => (
                             <DropdownMenuItem 
                                 key={opt.label} 
@@ -279,13 +284,17 @@ export function SlideFilmstrip({
                             </DropdownMenuItem>
                         ))}
                         <DropdownMenuSeparator className="bg-white/10 my-1" />
-                        <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">Değerlendirme Soruları</DropdownMenuLabel>
+                        <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">Değerlendirme & Etkinlik</DropdownMenuLabel>
                         {[
-                            { label: 'Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
-                            { label: 'Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
-                            { label: 'Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
-                            { label: 'Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
-                            { label: 'Kavram Eşleştirme (Boş)', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
+                            { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
+                            { label: '✅/❌ Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
+                            { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
+                            { label: '✏️ Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
+                            { label: '🔗 Kavram Eşleştirme (Boş)', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
+                            { label: '🎴 Bilgi Kartı (Flashcard)', type: 'flashcard' as LessonStep['type'], title: 'Bilgi Kartı' },
+                            { label: '🔤 Kelime Dehası (Anagram)', type: 'anagramGame' as LessonStep['type'], title: 'Kelime Dehası' },
+                            { label: '🔤 Anagram Bilgi Kartı', type: 'anagramFlashcard' as LessonStep['type'], title: 'Anagram Bilgi Kartı' },
+                            { label: '🧩 Karışık Cümle Tamamlama', type: 'sentenceScramble' as LessonStep['type'], title: 'Cümle Sıralama' },
                         ].map(opt => (
                             <DropdownMenuItem 
                                 key={opt.label} 
@@ -305,13 +314,25 @@ export function SlideFilmstrip({
                                     onClick={() => onOpenLibrary(['terms'], true, 'matching', selectedIndex + 1)}
                                     className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                 >
-                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme Ekle
+                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                     onClick={() => onOpenLibrary(['terms'], true, 'conceptExplanation', selectedIndex + 1)}
                                     className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                 >
                                     <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                    onClick={() => onOpenLibrary(['terms'], true, 'flashcard', selectedIndex + 1)}
+                                    className="text-xs font-semibold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                >
+                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                    onClick={() => onOpenLibrary(['images'], true, 'visual', selectedIndex + 1)}
+                                    className="text-xs font-semibold text-teal-300 focus:bg-teal-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                >
+                                    <ImageIcon className="w-3.5 h-3.5 mr-2 text-teal-400" /> Arşivden Görsel Ekle...
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                     onClick={() => onOpenLibrary(['questions'], true, 'questions', selectedIndex + 1)}

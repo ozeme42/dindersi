@@ -630,6 +630,433 @@ export function SlideInspector({
                             ))}
                         </div>
                     )}
+
+                    {/* 10. conceptExplanation */}
+                    {step.type === 'conceptExplanation' && (
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs text-indigo-400 font-bold">Kavram Açıklamaları</Label>
+                                <Button
+                                    size="sm"
+                                    type="button"
+                                    onClick={() => handleAddItemToArray('items', { concept: 'Yeni Kavram', definition: 'Kavramın açıklaması...' })}
+                                    className="h-6 text-[10px] bg-indigo-600 text-white rounded-lg px-2"
+                                >
+                                    + Kavram Ekle
+                                </Button>
+                            </div>
+                            {((step as any).items || []).map((item: any, iIdx: number) => (
+                                <div key={iIdx} className="p-2.5 rounded-xl bg-slate-900 border border-white/10 space-y-1.5">
+                                    <div className="flex items-center gap-1.5">
+                                        <Input
+                                            value={item.concept}
+                                            onChange={e => handleArrayChange('items', iIdx, 'concept', e.target.value)}
+                                            placeholder="Kavram Adı"
+                                            className="bg-slate-950 border-white/10 text-xs font-bold h-7 flex-1"
+                                        />
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => handleRemoveItemFromArray('items', iIdx)}
+                                            className="h-7 w-7 text-slate-500 hover:text-rose-400 p-0"
+                                        >
+                                            <Trash2 className="h-3 w-3" />
+                                        </Button>
+                                    </div>
+                                    <Textarea
+                                        value={item.definition}
+                                        onChange={e => handleArrayChange('items', iIdx, 'definition', e.target.value)}
+                                        placeholder="Tanım / Açıklama"
+                                        className="bg-slate-950 border-white/10 text-xs min-h-[45px]"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* 11. conceptMatrix (4 Boyut) */}
+                    {step.type === 'conceptMatrix' && (
+                        <div className="space-y-3">
+                            <div className="space-y-1">
+                                <Label className="text-xs text-purple-400 font-bold">Konu Başlığı</Label>
+                                <Input
+                                    value={(step as any).topicName || ''}
+                                    onChange={e => handleFieldChange('topicName', e.target.value)}
+                                    placeholder="Analiz edilen konu adı..."
+                                    className="bg-slate-950 border-white/10 text-xs h-8"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-xs text-slate-300 font-bold">4 Kadran</Label>
+                                {((step as any).quadrants || []).map((q: any, qIdx: number) => (
+                                    <div key={qIdx} className="p-2 rounded-xl bg-slate-900 border border-white/10 space-y-1.5">
+                                        <Input
+                                            value={q.label}
+                                            onChange={e => handleArrayChange('quadrants', qIdx, 'label', e.target.value)}
+                                            placeholder="Kadran Başlığı (Örn: 1. Nedir?)"
+                                            className="bg-slate-950 border-white/10 text-xs font-bold h-7"
+                                        />
+                                        <Textarea
+                                            value={q.content}
+                                            onChange={e => handleArrayChange('quadrants', qIdx, 'content', e.target.value)}
+                                            placeholder="Kadran içeriği..."
+                                            className="bg-slate-950 border-white/10 text-xs min-h-[45px]"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 12. matching (Kavram - Tanım Eşleştirme) */}
+                    {(step.type === 'matching' || (step as any).type === 'conceptMatching') && (
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs text-amber-400 font-bold">Eşleştirme Çiftleri</Label>
+                                <Button
+                                    size="sm"
+                                    type="button"
+                                    onClick={() => handleAddItemToArray('pairs', { concept: 'Kavram', definition: 'Tanım' })}
+                                    className="h-6 text-[10px] bg-amber-600 text-white rounded-lg px-2"
+                                >
+                                    + Çift Ekle
+                                </Button>
+                            </div>
+                            {((step as any).pairs || []).map((p: any, pIdx: number) => (
+                                <div key={pIdx} className="p-2 rounded-xl bg-slate-900 border border-white/10 space-y-1.5">
+                                    <div className="flex items-center gap-1.5">
+                                        <Input
+                                            value={p.concept}
+                                            onChange={e => handleArrayChange('pairs', pIdx, 'concept', e.target.value)}
+                                            placeholder="Kavram / Sol Taraf"
+                                            className="bg-slate-950 border-white/10 text-xs font-bold h-7 flex-1"
+                                        />
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => handleRemoveItemFromArray('pairs', pIdx)}
+                                            className="h-7 w-7 text-slate-500 hover:text-rose-400 p-0"
+                                        >
+                                            <Trash2 className="h-3 w-3" />
+                                        </Button>
+                                    </div>
+                                    <Textarea
+                                        value={p.definition}
+                                        onChange={e => handleArrayChange('pairs', pIdx, 'definition', e.target.value)}
+                                        placeholder="Tanım / Sağ Taraf"
+                                        className="bg-slate-950 border-white/10 text-xs min-h-[40px]"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* 13. trueFalseList */}
+                    {step.type === 'trueFalseList' && (
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs text-purple-400 font-bold">Doğru / Yanlış İfadeleri</Label>
+                                <Button
+                                    size="sm"
+                                    type="button"
+                                    onClick={() => handleAddItemToArray('questions', { statement: 'Yeni ifade metni...', isTrue: true })}
+                                    className="h-6 text-[10px] bg-purple-600 text-white rounded-lg px-2"
+                                >
+                                    + İfade Ekle
+                                </Button>
+                            </div>
+                            {((step as any).questions || []).map((q: any, qIdx: number) => (
+                                <div key={qIdx} className="p-2.5 rounded-xl bg-slate-900 border border-white/10 space-y-2">
+                                    <div className="flex items-start gap-1.5">
+                                        <span className="text-[10px] font-mono text-purple-400 pt-1">{qIdx + 1}.</span>
+                                        <Textarea
+                                            value={q.statement}
+                                            onChange={e => handleArrayChange('questions', qIdx, 'statement', e.target.value)}
+                                            placeholder="İfade metni..."
+                                            className="bg-slate-950 border-white/10 text-xs min-h-[45px] flex-1"
+                                        />
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => handleRemoveItemFromArray('questions', qIdx)}
+                                            className="h-7 w-7 text-slate-500 hover:text-rose-400 p-0"
+                                        >
+                                            <Trash2 className="h-3 w-3" />
+                                        </Button>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleArrayChange('questions', qIdx, 'isTrue', true)}
+                                            className={cn(
+                                                "flex-1 py-1 rounded-lg text-xs font-bold border transition-all flex items-center justify-center gap-1",
+                                                q.isTrue ? "bg-emerald-600 text-white border-emerald-400" : "bg-slate-950 text-slate-500 border-white/10"
+                                            )}
+                                        >
+                                            <CheckCircle2 className="w-3 h-3" /> Doğru
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleArrayChange('questions', qIdx, 'isTrue', false)}
+                                            className={cn(
+                                                "flex-1 py-1 rounded-lg text-xs font-bold border transition-all flex items-center justify-center gap-1",
+                                                !q.isTrue ? "bg-rose-600 text-white border-rose-400" : "bg-slate-950 text-slate-500 border-white/10"
+                                            )}
+                                        >
+                                            <XCircle className="w-3 h-3" /> Yanlış
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* 14. fitb (Boşluk Doldurma) */}
+                    {step.type === 'fitb' && (
+                        <div className="space-y-3">
+                            <div className="space-y-1">
+                                <Label className="text-xs text-amber-400 font-bold">Cümle (Boşluğu _____ ile belirtin)</Label>
+                                <Textarea
+                                    value={(step as any).sentenceWithBlank || ''}
+                                    onChange={e => handleFieldChange('sentenceWithBlank', e.target.value)}
+                                    placeholder="Namazın şartlarından biri _____ abdest almaktır."
+                                    className="bg-slate-950 border-white/10 text-xs min-h-[60px]"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="text-xs text-slate-300 font-bold">Seçenekler & Doğru Cevap</Label>
+                                {((step as any).options || []).map((opt: string, oIdx: number) => {
+                                    const isCorrect = (step as any).correctAnswer === opt;
+                                    return (
+                                        <div key={oIdx} className="flex items-center gap-1.5">
+                                            <button
+                                                type="button"
+                                                onClick={() => handleFieldChange('correctAnswer', opt)}
+                                                className={cn(
+                                                    "w-7 h-7 rounded-lg text-xs font-black flex items-center justify-center border transition-all",
+                                                    isCorrect ? "bg-emerald-500 text-white border-emerald-400" : "bg-slate-900 text-slate-400 border-white/10"
+                                                )}
+                                            >
+                                                {String.fromCharCode(65 + oIdx)}
+                                            </button>
+                                            <Input
+                                                value={opt}
+                                                onChange={e => {
+                                                    const newOpts = [...(step as any).options];
+                                                    const oldVal = newOpts[oIdx];
+                                                    newOpts[oIdx] = e.target.value;
+                                                    handleFieldChange('options', newOpts);
+                                                    if ((step as any).correctAnswer === oldVal) {
+                                                        handleFieldChange('correctAnswer', e.target.value);
+                                                    }
+                                                }}
+                                                className="bg-slate-950 border-white/10 text-xs h-8 flex-1"
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 15. visual (Görsel) */}
+                    {step.type === 'visual' && (
+                        <div className="space-y-3">
+                            <div className="space-y-1">
+                                <Label className="text-xs text-teal-400 font-bold">Görsel URL Adresi</Label>
+                                <Input
+                                    value={(step as any).imageUrl || ''}
+                                    onChange={e => handleFieldChange('imageUrl', e.target.value)}
+                                    placeholder="https://..."
+                                    className="bg-slate-950 border-white/10 text-xs h-8"
+                                />
+                            </div>
+                            {(step as any).imageUrl && (
+                                <div className="rounded-xl overflow-hidden border border-white/10 max-h-48 bg-slate-950 flex items-center justify-center">
+                                    <img src={(step as any).imageUrl} alt="Önizleme" className="max-h-48 object-contain" />
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* 16. video (Video) */}
+                    {step.type === 'video' && (
+                        <div className="space-y-3">
+                            <div className="space-y-1">
+                                <Label className="text-xs text-red-400 font-bold">Video URL (YouTube Embed / MP4)</Label>
+                                <Input
+                                    value={(step as any).url || ''}
+                                    onChange={e => handleFieldChange('url', e.target.value)}
+                                    placeholder="https://www.youtube.com/embed/..."
+                                    className="bg-slate-950 border-white/10 text-xs h-8"
+                                />
+                            </div>
+                            <p className="text-[10px] text-slate-500">💡 YouTube için embed URL kullanınız (Örn: https://www.youtube.com/embed/VIDEO_ID)</p>
+                        </div>
+                    )}
+
+                    {/* 17. iframe (Simülasyon) */}
+                    {step.type === 'iframe' && (
+                        <div className="space-y-3">
+                            <div className="space-y-1">
+                                <Label className="text-xs text-indigo-400 font-bold">Simülasyon / Web Sayfası URL</Label>
+                                <Input
+                                    value={(step as any).url || ''}
+                                    onChange={e => handleFieldChange('url', e.target.value)}
+                                    placeholder="https://phet.colorado.edu/..."
+                                    className="bg-slate-950 border-white/10 text-xs h-8"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 18. objectiveList (Öğrenme Hedefleri) */}
+                    {step.type === 'objectiveList' && (
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs text-yellow-400 font-bold">Öğrenme Hedefleri (Kazanımlar)</Label>
+                                <Button
+                                    size="sm"
+                                    type="button"
+                                    onClick={() => handleAddItemToArray('items', 'Yeni öğrenme hedefi...')}
+                                    className="h-6 text-[10px] bg-yellow-600 text-white rounded-lg px-2"
+                                >
+                                    + Hedef Ekle
+                                </Button>
+                            </div>
+                            {((step as any).items || []).map((item: string, iIdx: number) => (
+                                <div key={iIdx} className="flex items-center gap-1.5">
+                                    <Input
+                                        value={item}
+                                        onChange={e => handleArrayChange('items', iIdx, null, e.target.value)}
+                                        className="bg-slate-950 border-white/10 text-xs h-8 flex-1"
+                                    />
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleRemoveItemFromArray('items', iIdx)}
+                                        className="h-7 w-7 text-slate-500 hover:text-rose-400 p-0"
+                                    >
+                                        <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* 19. accordion (Akordiyon) */}
+                    {step.type === 'accordion' && (
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs text-emerald-400 font-bold">Akordiyon Bölümleri</Label>
+                                <Button
+                                    size="sm"
+                                    type="button"
+                                    onClick={() => handleAddItemToArray('items', { id: `item-${Date.now()}`, title: 'Yeni Başlık', content: 'Bölüm içeriği...' })}
+                                    className="h-6 text-[10px] bg-emerald-600 text-white rounded-lg px-2"
+                                >
+                                    + Bölüm Ekle
+                                </Button>
+                            </div>
+                            {((step as any).items || []).map((item: any, iIdx: number) => (
+                                <div key={iIdx} className="p-2 rounded-xl bg-slate-900 border border-white/10 space-y-1.5">
+                                    <div className="flex items-center gap-1.5">
+                                        <Input
+                                            value={item.title}
+                                            onChange={e => handleArrayChange('items', iIdx, 'title', e.target.value)}
+                                            placeholder="Bölüm Başlığı"
+                                            className="bg-slate-950 border-white/10 text-xs font-bold h-7 flex-1"
+                                        />
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => handleRemoveItemFromArray('items', iIdx)}
+                                            className="h-7 w-7 text-slate-500 hover:text-rose-400 p-0"
+                                        >
+                                            <Trash2 className="h-3 w-3" />
+                                        </Button>
+                                    </div>
+                                    <Textarea
+                                        value={item.content}
+                                        onChange={e => handleArrayChange('items', iIdx, 'content', e.target.value)}
+                                        placeholder="Bölüm içeriği..."
+                                        className="bg-slate-950 border-white/10 text-xs min-h-[45px]"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* 20. sentenceScramble */}
+                    {step.type === 'sentenceScramble' && (
+                        <div className="space-y-3">
+                            <div className="space-y-1">
+                                <Label className="text-xs text-cyan-400 font-bold">Karışık Cümle (Kelimeler arası boşluk bırakın)</Label>
+                                <Input
+                                    value={(step as any).scrambledSentence || ''}
+                                    onChange={e => handleFieldChange('scrambledSentence', e.target.value)}
+                                    placeholder="namazdır dinin direği"
+                                    className="bg-slate-950 border-white/10 text-xs h-8"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <Label className="text-xs text-emerald-400 font-bold">Doğru Sıralı Cümle</Label>
+                                <Input
+                                    value={(step as any).correctSentence || ''}
+                                    onChange={e => handleFieldChange('correctSentence', e.target.value)}
+                                    placeholder="namaz dinin direğidir"
+                                    className="bg-slate-950 border-white/10 text-xs h-8"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 21. anagramGame & anagramFlashcard */}
+                    {(step.type === 'anagramGame' || step.type === 'anagramFlashcard') && (
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs text-fuchsia-400 font-bold">Anagram Kelimeleri</Label>
+                                <Button
+                                    size="sm"
+                                    type="button"
+                                    onClick={() => handleAddItemToArray('cards', { definition: 'İpucu', scrambledWord: 'AKARNA', correctAnswer: 'ANKARA' })}
+                                    className="h-6 text-[10px] bg-fuchsia-600 text-white rounded-lg px-2"
+                                >
+                                    + Kelime Ekle
+                                </Button>
+                            </div>
+                            {((step as any).cards || []).map((card: any, cIdx: number) => (
+                                <div key={cIdx} className="p-2 rounded-xl bg-slate-900 border border-white/10 space-y-1.5">
+                                    <div className="flex items-center gap-1.5">
+                                        <Input
+                                            value={card.correctAnswer}
+                                            onChange={e => {
+                                                const val = e.target.value;
+                                                handleArrayChange('cards', cIdx, 'correctAnswer', val);
+                                                handleArrayChange('cards', cIdx, 'scrambledWord', cleanForAnagram(val));
+                                            }}
+                                            placeholder="Doğru Kelime"
+                                            className="bg-slate-950 border-white/10 text-xs font-bold h-7 flex-1"
+                                        />
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => handleRemoveItemFromArray('cards', cIdx)}
+                                            className="h-7 w-7 text-slate-500 hover:text-rose-400 p-0"
+                                        >
+                                            <Trash2 className="h-3 w-3" />
+                                        </Button>
+                                    </div>
+                                    <Input
+                                        value={card.definition}
+                                        onChange={e => handleArrayChange('cards', cIdx, 'definition', e.target.value)}
+                                        placeholder="Tanım / İpucu"
+                                        className="bg-slate-950 border-white/10 text-xs h-7"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* ══ ALT ÇEKMECELER: Kaynak Metin & İnteraktif HTML ══ */}

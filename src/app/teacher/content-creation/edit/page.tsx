@@ -1247,8 +1247,13 @@ export function TopicEditor({
                                                 { label: '✏️ Defterimize Yazalım', type: 'notebookNote' as LessonStep['type'], title: 'Defterimize Yazalım' },
                                                 { label: '💡 Kavram Açıklamaları', type: 'conceptExplanation' as LessonStep['type'], title: 'Kavram Açıklamaları' },
                                                 { label: '🔲 4 Boyut Konu Matrisi', type: 'conceptMatrix' as LessonStep['type'], title: '4 Boyutta Konu Analizi' },
+                                                { label: '🎯 Öğrenme Hedefleri', type: 'objectiveList' as LessonStep['type'], title: 'Öğrenme Hedefleri' },
+                                                { label: '📑 Akordiyon Özet', type: 'accordion' as LessonStep['type'], title: 'Akordiyon Özet' },
                                                 { label: '📄 Metin & Cümleler', type: 'content' as LessonStep['type'], title: 'Metin İçeriği' },
-                                                { label: '🌐 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
+                                                { label: '🎬 Video Slaytı (YouTube)', type: 'video' as LessonStep['type'], title: 'Video Anlatım' },
+                                                { label: '🖼️ Görsel / Resim', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
+                                                { label: '🌐 Web Simülasyonu (iFrame)', type: 'iframe' as LessonStep['type'], title: 'İnteraktif Simülasyon' },
+                                                { label: '💻 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
                                             ].map(opt => (
                                                 <DropdownMenuItem
                                                     key={opt.label}
@@ -1259,11 +1264,24 @@ export function TopicEditor({
                                                 </DropdownMenuItem>
                                             ))}
                                             <DropdownMenuSeparator className="bg-white/10 my-1" />
+                                            <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından</DropdownMenuLabel>
                                             <DropdownMenuItem
                                                 onClick={() => handleOpenLibrary(['terms'], true, 'conceptExplanation')}
-                                                className="text-xs font-bold text-cyan-300 focus:bg-cyan-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                                className="text-xs font-bold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
-                                                <BookOpen className="w-3.5 h-3.5 mr-2" /> Veri Bankasından Kavram Kartları
+                                                <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => handleOpenLibrary(['terms'], true, 'flashcard')}
+                                                className="text-xs font-bold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                            >
+                                                <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => handleOpenLibrary(['images'], true, 'visual')}
+                                                className="text-xs font-bold text-teal-300 focus:bg-teal-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                            >
+                                                <ImageIcon className="w-3.5 h-3.5 mr-2 text-teal-400" /> Arşivden Görsel Ekle...
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -1279,12 +1297,15 @@ export function TopicEditor({
                                         <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 rounded-2xl shadow-2xl p-2 z-50">
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">Soru & Değerlendirme Türleri</DropdownMenuLabel>
                                             {[
-                                                { label: 'Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
-                                                { label: 'Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
-                                                { label: 'Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
-                                                { label: 'Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
-                                                { label: 'Kavram - Tanım Eşleştirme (Boş)', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
-                                                { label: 'Bilgi Kartı (Flashcard)', type: 'flashcard' as LessonStep['type'], title: 'Bilgi Kartı' },
+                                                { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
+                                                { label: '✅/❌ Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
+                                                { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
+                                                { label: '✏️ Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
+                                                { label: '🔗 Kavram - Tanım Eşleştirme', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
+                                                { label: '🎴 Bilgi Kartı (Flashcard)', type: 'flashcard' as LessonStep['type'], title: 'Bilgi Kartı' },
+                                                { label: '🔤 Kelime Dehası (Anagram)', type: 'anagramGame' as LessonStep['type'], title: 'Kelime Dehası' },
+                                                { label: '🔤 Anagram Bilgi Kartı', type: 'anagramFlashcard' as LessonStep['type'], title: 'Anagram Bilgi Kartı' },
+                                                { label: '🧩 Karışık Cümle Tamamlama', type: 'sentenceScramble' as LessonStep['type'], title: 'Cümle Sıralama' },
                                             ].map(opt => (
                                                 <DropdownMenuItem
                                                     key={opt.label}
@@ -1295,17 +1316,18 @@ export function TopicEditor({
                                                 </DropdownMenuItem>
                                             ))}
                                             <DropdownMenuSeparator className="bg-white/10 my-1" />
+                                            <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından</DropdownMenuLabel>
                                             <DropdownMenuItem
                                                 onClick={() => handleOpenLibrary(['terms'], true, 'matching')}
-                                                className="text-xs font-bold text-amber-300 focus:bg-amber-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                                className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
-                                                <BookOpen className="w-3.5 h-3.5 mr-2" /> 📚 Veri Bankasından Tanım Eşleştirme Ekle
+                                                <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> 📚 Veri Bankasından Tanım Eşleştirme
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 onClick={() => handleOpenLibrary(['questions'], true, 'questions')}
-                                                className="text-xs font-bold text-indigo-300 focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                                className="text-xs font-bold text-indigo-300 focus:bg-indigo-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
-                                                <BookOpen className="w-3.5 h-3.5 mr-2" /> ❓ Soru Bankasından Seç...
+                                                <BookOpen className="w-3.5 h-3.5 mr-2 text-indigo-400" /> ❓ Soru Bankasından Soru Seç...
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
