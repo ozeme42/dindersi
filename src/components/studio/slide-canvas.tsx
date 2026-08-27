@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
     ChevronLeft, ChevronRight, Play, Maximize2, Sparkles, 
     Layers, Wand2, Eye, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen,
-    Tv, Monitor
+    Tv, Monitor, Sun, Moon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
@@ -45,6 +45,7 @@ export function SlideCanvas({
     const currentStep = steps[selectedIndex];
     const meta = getStepTypeMeta(currentStep?.type);
     const [aspectRatioMode, setAspectRatioMode] = useState<'16-9' | 'fill'>('16-9');
+    const [previewTheme, setPreviewTheme] = useState<'dark' | 'light'>('dark');
 
     // Tek slaytlık geçici Topic nesnesi oluşturuyoruz ki LessonContentViewer sadece bu slaytı birebir tam çalışır olarak render etsin
     const singleSlideTopic: Topic = useMemo(() => {
@@ -101,8 +102,20 @@ export function SlideCanvas({
                     </h3>
                 </div>
 
-                {/* Sağ: Görünüm butonları & Sağ panel aç/kapa */}
+                {/* Sağ: Tema seçici + Görünüm butonları + Sağ panel aç/kapa */}
                 <div className="flex items-center gap-1.5 flex-shrink-0">
+                    {/* Tema Değiştirici: Koyu / Açık */}
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPreviewTheme(t => t === 'dark' ? 'light' : 'dark')}
+                        className="bg-slate-950 border-white/10 text-slate-300 hover:text-white rounded-xl text-xs h-8 px-2.5"
+                        title={previewTheme === 'dark' ? "Açık Temaya Geç" : "Koyu (Akıllı Tahta) Temaya Geç"}
+                    >
+                        {previewTheme === 'dark' ? <Moon className="h-3.5 w-3.5 mr-1 text-indigo-400" /> : <Sun className="h-3.5 w-3.5 mr-1 text-amber-400" />}
+                        <span className="text-[11px] font-bold hidden sm:inline">{previewTheme === 'dark' ? 'Koyu Tahta' : 'Açık'}</span>
+                    </Button>
+
                     {/* 16:9 / Fill Toggle */}
                     <Button
                         variant="outline"
@@ -146,21 +159,36 @@ export function SlideCanvas({
                             ? "max-w-5xl aspect-[16/9] min-h-[440px] max-h-[75vh]" 
                             : "w-full h-full min-h-[480px]"
                     )}>
-                        {/* Akıllı Tahta Çerçevesi / Glow Frame */}
-                        <div className="w-full h-full rounded-2xl sm:rounded-3xl border-2 border-white/15 bg-gradient-to-b from-slate-900/90 to-slate-950/95 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col relative p-1 sm:p-2 backdrop-blur-2xl">
-                            <LessonContentViewer
-                                key={`slide-viewer-${currentStep.id || selectedIndex}`}
-                                topic={singleSlideTopic}
-                                courseId="preview-course"
-                                unitId="preview-unit"
-                                courseTitle={courseTitle}
-                                unitTitle={unitTitle}
-                                onTopicComplete={() => {}}
-                                progress={{ answers: {}, score: 0 }}
-                                onProgressUpdate={() => {}}
-                                isFullscreen={false}
-                                animationSpeed="fast"
-                            />
+                        {/* Akıllı Tahta Çerçevesi / Birebir Sahne */}
+                        <div className={cn(
+                            "w-full h-full rounded-2xl sm:rounded-3xl border-2 overflow-hidden flex flex-col relative p-1 sm:p-2 backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] transition-all duration-300",
+                            previewTheme === 'dark' 
+                                ? "dark bg-[#09071a] border-indigo-500/25 text-white" 
+                                : "bg-slate-100 border-slate-300 text-slate-900 shadow-xl"
+                        )}>
+                            {/* Kozmik arka plan ışıkları (Koyu temada) */}
+                            {previewTheme === 'dark' && (
+                                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                                    <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px]" />
+                                    <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px]" />
+                                </div>
+                            )}
+
+                            <div className={cn("w-full h-full flex-1 flex flex-col relative z-10", previewTheme === 'dark' ? "dark text-white" : "text-slate-900")}>
+                                <LessonContentViewer
+                                    key={`slide-viewer-${currentStep.id || selectedIndex}-${previewTheme}`}
+                                    topic={singleSlideTopic}
+                                    courseId="preview-course"
+                                    unitId="preview-unit"
+                                    courseTitle={courseTitle}
+                                    unitTitle={unitTitle}
+                                    onTopicComplete={() => {}}
+                                    progress={{ answers: {}, score: 0 }}
+                                    onProgressUpdate={() => {}}
+                                    isFullscreen={false}
+                                    animationSpeed="fast"
+                                />
+                            </div>
                         </div>
                     </div>
                 ) : (
