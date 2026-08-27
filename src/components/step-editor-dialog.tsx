@@ -19,8 +19,9 @@ import {
     Loader2, PlusCircle, Trash2, Save, FileEdit, Database, 
     List, Library, ArrowLeft, ArrowRight, CheckCircle2, XCircle,
     Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles,
-    ChevronUp, ChevronDown
+    ChevronUp, ChevronDown, Send, Lightbulb, Wand2
 } from 'lucide-react';
+import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
 import type { 
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
@@ -116,7 +117,7 @@ type StepEditorDialogProps = {
     step: LessonStep | null;
     onSave: (updatedStep: LessonStep) => void;
     isSaving: boolean;
-    context?: { courseId?: string | null, unitId?: string | null, topicId?: string | null };
+    context?: { courseId?: string | null, unitId?: string | null, topicId?: string | null, topicTitle?: string, sourceText?: string };
 };
 
 export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving, context }: StepEditorDialogProps) {
@@ -124,9 +125,45 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     const [initialData, setInitialData] = useState<Partial<LessonStep>>({});
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
     const [contentViewMode, setContentViewMode] = useState<'list' | 'raw'>('list');
+    const [aiRefinePrompt, setAiRefinePrompt] = useState('');
+    const [isAiRefining, setIsAiRefining] = useState(false);
+    const [isAiRefineOpen, setIsAiRefineOpen] = useState(true);
     
     const { toast } = useToast();
     const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[]})[]})[]>([]);
+
+    const handleAiRefine = async (instructionToUse?: string) => {
+        const finalInstruction = (instructionToUse || aiRefinePrompt).trim();
+        if (!finalInstruction || !editedStep) return;
+
+        setIsAiRefining(true);
+        try {
+            const result = await refineLessonStep({
+                currentStep: editedStep,
+                instruction: finalInstruction,
+                topicTitle: context?.topicTitle,
+                sourceText: context?.sourceText,
+            });
+
+            if (result.updatedStep) {
+                const normalized = getInitialFormData(result.updatedStep);
+                setEditedStep(normalized);
+                setAiRefinePrompt('');
+                toast({
+                    title: "✨ Adım Yapay Zekâ ile Güncellendi",
+                    description: result.explanation,
+                });
+            }
+        } catch (err: any) {
+            toast({
+                title: "Düzenleme Hatası",
+                description: err.message || "Adım düzenlenirken bir hata oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsAiRefining(false);
+        }
+    };
     
     // activityLink için ders ağacı yükleme
     useEffect(() => {
@@ -1612,6 +1649,87 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                             </Button>
                         )}
                     </DialogHeader>
+
+                    {/* ══ AI İLE ADIMI DÜZENLE & GELİŞTİR ÇUBUĞU ══ */}
+                    <div className="bg-gradient-to-r from-indigo-950/80 via-slate-900/90 to-purple-950/80 border-b border-white/10 p-3 sm:px-6 space-y-2 flex-shrink-0">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <span className="p-1 bg-yellow-500/20 rounded-lg text-yellow-300 border border-yellow-500/30">
+                                    <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+                                </span>
+                                <span className="text-xs font-black text-white">
+                                    Yapay Zekâ ile Bu Adımı Düzenle / Geliştir
+                                </span>
+                                <span className="text-[10px] font-bold text-amber-300 bg-amber-950/60 border border-amber-500/30 px-2 py-0.5 rounded-full">
+                                    Kaynak Metne Sadık AI
+                                </span>
+                            </div>
+
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setIsAiRefineOpen(!isAiRefineOpen)}
+                                className="h-6 px-2 text-[11px] text-indigo-300 hover:text-white"
+                            >
+                                {isAiRefineOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                            </Button>
+                        </div>
+
+                        {isAiRefineOpen && (
+                            <div className="space-y-2 animate-in fade-in-50 duration-200">
+                                <div className="flex gap-2">
+                                    <Input
+                                        value={aiRefinePrompt}
+                                        onChange={(e) => setAiRefinePrompt(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                e.preventDefault();
+                                                handleAiRefine();
+                                            }
+                                        }}
+                                        placeholder="Bu adımda neyi değiştirmek istersiniz? (Örn: Maddeleri sadeleştir, 2 yeni soru ekle, çeldiricileri zorlaştır, aşamaları detaylandır)..."
+                                        className="bg-slate-950/90 border-white/15 text-xs text-white placeholder:text-slate-500 h-9 rounded-xl flex-1"
+                                    />
+                                    <Button
+                                        type="button"
+                                        onClick={() => handleAiRefine()}
+                                        disabled={isAiRefining || !aiRefinePrompt.trim()}
+                                        className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs h-9 px-4 rounded-xl shadow-md shadow-purple-950/50 flex-shrink-0 cursor-pointer disabled:opacity-40"
+                                    >
+                                        {isAiRefining ? (
+                                            <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Düzenleniyor...</>
+                                        ) : (
+                                            <><Send className="w-3.5 h-3.5 mr-1.5" /> AI ile Güncelle</>
+                                        )}
+                                    </Button>
+                                </div>
+
+                                {/* Hızlı Öneri Butonları */}
+                                <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+                                    {[
+                                        "Maddeleri kısalt ve daha akılda kalıcı yap",
+                                        "Daha detaylı ve açıklayıcı hale getir",
+                                        "1 adet daha madde / soru ekle",
+                                        "Dili 6-8. sınıf seviyesine sadeleştir",
+                                        "Soruları ve çeldiricileri biraz daha zorlaştır",
+                                    ].map((sug, i) => (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            onClick={() => {
+                                                setAiRefinePrompt(sug);
+                                                handleAiRefine(sug);
+                                            }}
+                                            className="px-2 py-0.5 rounded-full bg-slate-950/70 hover:bg-indigo-950 border border-white/10 hover:border-indigo-400 text-slate-300 hover:text-white text-[10px] font-medium whitespace-nowrap transition-colors flex-shrink-0 cursor-pointer"
+                                        >
+                                            ✨ {sug}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
                     {/* Body */}
                     <ScrollArea className="flex-1 px-6 py-5">

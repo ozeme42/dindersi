@@ -316,6 +316,16 @@ function StepCard({
                         <Button 
                             variant="ghost" 
                             size="icon" 
+                            className="h-8 w-8 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 rounded-lg" 
+                            onClick={onEdit}
+                            title="Yapay Zekâ ile Düzenle / İyileştir"
+                        >
+                            <Sparkles className="h-4 w-4 text-yellow-300 animate-pulse" />
+                        </Button>
+
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
                             className="h-8 w-8 text-slate-400 hover:bg-white/10 hover:text-white rounded-lg" 
                             onClick={onEdit}
                             title="Düzenle"
