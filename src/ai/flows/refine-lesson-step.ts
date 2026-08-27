@@ -81,9 +81,17 @@ ${JSON.stringify(input.currentStep, null, 2)}
 - type "hookQuestion": { "type": "hookQuestion", "title": string, "question": string, "thoughtStarter"?: string, "tag"?: string }
 - type "conceptExplanation": { "type": "conceptExplanation", "title": string, "items": [{ "concept": string, "definition": string }] }
 - type "flashcard": { "type": "flashcard", "title": string, "cards": [{ "term": string, "definition": string }] }
+- type "matching": { "type": "matching", "title": string, "pairs": [{ "concept": string, "definition": string }] }
+- type "anagramGame": { "type": "anagramGame", "title": string, "cards": [{ "correctAnswer": string, "scrambledWord": string, "definition": string }] }
+- type "anagramFlashcard": { "type": "anagramFlashcard", "title": string, "cards": [{ "correctAnswer": string, "scrambledWord": string, "definition"?: string }] }
+- type "sentenceScramble": { "type": "sentenceScramble", "title": string, "correctSentence": string, "scrambledSentence": string }
 - type "mcq": { "type": "mcq", "title": string, "question": string, "options": string[], "correctAnswer": string }
 - type "trueFalseList": { "type": "trueFalseList", "title": string, "questions": [{ "statement": string, "isTrue": boolean }] }
+- type "tf": { "type": "tf", "title": string, "statement": string, "isTrue": boolean }
 - type "fitb": { "type": "fitb", "title": string, "sentenceWithBlank": string, "options": string[], "correctAnswer": string }
+- type "accordion": { "type": "accordion", "title": string, "items": [{ "title": string, "content": string }] }
+- type "video": { "type": "video", "title": string, "videoUrl": string, "caption"?: string }
+- type "visual": { "type": "visual", "title": string, "imageUrl": string, "caption"?: string }
 - type "htmlSlide": { "type": "htmlSlide", "title": string, "htmlContent": string }
 
 ---
