@@ -26,7 +26,7 @@ import type {
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
     FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, 
     VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, HookQuestionStep,
-    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep
+    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram } from "@/lib/utils";
@@ -94,6 +94,16 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
             { label: '2. Niçin Önemlidir? (Amaç)', content: 'Önemi ve hikmeti...' },
             { label: '3. Nasıl Uygulanır? (Pratik)', content: 'Uygulama şekli...' },
             { label: '4. Bize Ne Kazandırır? (Fayda)', content: 'Bireysel ve toplumsal faydaları...' }
+        ];
+    }
+    // categoryTable normalizasyonu
+    if (normalized.type === 'categoryTable') {
+        normalized.tableTitle = normalized.tableTitle || normalized.title || 'Konu Sınıflandırma Tablosu';
+        normalized.description = normalized.description || '';
+        normalized.categories = normalized.categories || [
+            { name: 'Farz Namazlar', badge: 'Kesin Emir', color: 'emerald', items: ['5 Vakit Namaz', 'Cuma Namazı', 'Cenaze Namazı'] },
+            { name: 'Vacip Namazlar', badge: 'Kuvvetli Emir', color: 'amber', items: ['Vitir Namazı', 'Bayram Namazları'] },
+            { name: 'Sünnet / Nafile', badge: 'Peygamber Sünneti', color: 'indigo', items: ['Revatib Sünnetler', 'Teravih Namazı', 'Kuşluk ve Teheccüd'] }
         ];
     }
 
@@ -753,6 +763,194 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                     />
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                );
+            }
+
+            case 'categoryTable': {
+                const catStep = editedStep as CategoryTableStep;
+                const colorOptions = [
+                    { value: 'emerald', label: '🟢 Zümrüt Yeşili (Farz vb.)' },
+                    { value: 'amber', label: '🟡 Kehribar Sarısı (Vacip vb.)' },
+                    { value: 'indigo', label: '🔵 İndigo Mavisi (Sünnet vb.)' },
+                    { value: 'rose', label: '🔴 Gül Pembesi / Kırmızı' },
+                    { value: 'cyan', label: '🩵 Turkuaz / Camgöbeği' },
+                    { value: 'fuchsia', label: '🟣 Fuşya / Mor' },
+                ];
+
+                return (
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                                    📊 Tablo / Sınıflandırma Başlığı
+                                </Label>
+                                <Input
+                                    value={catStep.tableTitle || ''}
+                                    onChange={(e) => handleValueChange('tableTitle', e.target.value)}
+                                    className="bg-slate-950 border-white/10 text-white font-semibold"
+                                    placeholder="Örn: Hükümlerine Göre Namazlar"
+                                />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                    📝 Kısa Açıklama (Opsiyonel)
+                                </Label>
+                                <Input
+                                    value={catStep.description || ''}
+                                    onChange={(e) => handleValueChange('description', e.target.value)}
+                                    className="bg-slate-950 border-white/10 text-white font-semibold"
+                                    placeholder="Örn: Namazlar farz, vacip ve sünnet olarak 3 gruba ayrılır."
+                                />
+                            </div>
+                        </div>
+
+                        {/* Kategoriler (Sütunlar) */}
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                    🏷️ Kategori Sütunları ({catStep.categories?.length || 0})
+                                </Label>
+                                <Button
+                                    size="sm"
+                                    onClick={() => {
+                                        const newCol: CategoryTableColumn = {
+                                            name: `Yeni Kategori ${(catStep.categories || []).length + 1}`,
+                                            badge: 'Hüküm',
+                                            color: ['emerald', 'amber', 'indigo', 'rose', 'cyan', 'fuchsia'][(catStep.categories || []).length % 6],
+                                            items: ['Örnek madde 1', 'Örnek madde 2']
+                                        };
+                                        setEditedStep(prev => ({
+                                            ...(prev as any),
+                                            categories: [...((prev as any)?.categories || []), newCol]
+                                        }));
+                                    }}
+                                    className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs"
+                                >
+                                    <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Kategori Sütunu Ekle
+                                </Button>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                {(catStep.categories || []).map((cat, catIdx) => (
+                                    <div key={`cat-col-${catIdx}`} className="p-3.5 rounded-2xl bg-slate-900 border-2 border-white/10 flex flex-col justify-between space-y-3">
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between gap-1.5">
+                                                <Input
+                                                    value={cat.name}
+                                                    onChange={e => {
+                                                        const updated = [...(catStep.categories || [])];
+                                                        updated[catIdx] = { ...updated[catIdx], name: e.target.value };
+                                                        handleValueChange('categories', updated);
+                                                    }}
+                                                    className="bg-slate-950 border-white/20 font-black text-sm text-white flex-1"
+                                                    placeholder="Kategori Adı (Örn: Farz Namazlar)"
+                                                />
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => {
+                                                        const updated = (catStep.categories || []).filter((_, i) => i !== catIdx);
+                                                        handleValueChange('categories', updated);
+                                                    }}
+                                                    className="h-8 w-8 text-slate-400 hover:text-rose-400 flex-shrink-0"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <Input
+                                                    value={cat.badge || ''}
+                                                    onChange={e => {
+                                                        const updated = [...(catStep.categories || [])];
+                                                        updated[catIdx] = { ...updated[catIdx], badge: e.target.value };
+                                                        handleValueChange('categories', updated);
+                                                    }}
+                                                    className="bg-slate-950 border-white/10 text-xs font-bold text-amber-300"
+                                                    placeholder="Rozet (Örn: Kesin Emir)"
+                                                />
+
+                                                <Select
+                                                    value={cat.color || 'emerald'}
+                                                    onValueChange={val => {
+                                                        const updated = [...(catStep.categories || [])];
+                                                        updated[catIdx] = { ...updated[catIdx], color: val };
+                                                        handleValueChange('categories', updated);
+                                                    }}
+                                                >
+                                                    <SelectTrigger className="bg-slate-950 border-white/10 text-xs h-9">
+                                                        <SelectValue placeholder="Renk" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-slate-900 border-white/10 text-white text-xs">
+                                                        {colorOptions.map(opt => (
+                                                            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+
+                                            {/* Bu Kategorinin Maddeleri */}
+                                            <div className="space-y-1.5 pt-2 border-t border-white/10">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-[11px] font-bold text-slate-400">Maddeler ({cat.items?.length || 0})</span>
+                                                    <Button
+                                                        type="button"
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        onClick={() => {
+                                                            const updated = [...(catStep.categories || [])];
+                                                            updated[catIdx] = {
+                                                                ...updated[catIdx],
+                                                                items: [...(updated[catIdx].items || []), 'Yeni Madde...']
+                                                            };
+                                                            handleValueChange('categories', updated);
+                                                        }}
+                                                        className="h-6 px-2 text-[10px] text-emerald-400 hover:text-emerald-300 font-bold"
+                                                    >
+                                                        + Madde Ekle
+                                                    </Button>
+                                                </div>
+
+                                                {(cat.items || []).map((item, itemIdx) => (
+                                                    <div key={`cat-${catIdx}-item-${itemIdx}`} className="flex items-center gap-1.5">
+                                                        <span className="text-[10px] font-mono text-slate-500 w-4">{itemIdx + 1}.</span>
+                                                        <Input
+                                                            value={item}
+                                                            onChange={e => {
+                                                                const updated = [...(catStep.categories || [])];
+                                                                const newItems = [...(updated[catIdx].items || [])];
+                                                                newItems[itemIdx] = e.target.value;
+                                                                updated[catIdx] = { ...updated[catIdx], items: newItems };
+                                                                handleValueChange('categories', updated);
+                                                            }}
+                                                            className="bg-slate-950 border-white/10 text-xs py-1 h-8 flex-1 text-slate-200"
+                                                            placeholder="Madde metni..."
+                                                        />
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => {
+                                                                const updated = [...(catStep.categories || [])];
+                                                                updated[catIdx] = {
+                                                                    ...updated[catIdx],
+                                                                    items: (updated[catIdx].items || []).filter((_, i) => i !== itemIdx)
+                                                                };
+                                                                handleValueChange('categories', updated);
+                                                            }}
+                                                            className="h-6 w-6 text-slate-500 hover:text-rose-400 flex-shrink-0"
+                                                        >
+                                                            <Trash2 className="h-3 w-3" />
+                                                        </Button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 );

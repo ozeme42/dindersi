@@ -19,6 +19,7 @@ const GenerateLessonContentInputSchema = z.object({
     notebookNote: z.boolean().optional(),
     processFlow: z.boolean().optional(),
     conceptMatrix: z.boolean().optional(),
+    categoryTable: z.boolean().optional(),
     summary: z.boolean().optional(),
     learningObjectives: z.boolean().optional(),
     keyTakeaways: z.boolean().optional(),
@@ -60,6 +61,17 @@ export type GenerateLessonContentOutput = {
     title: string;
     topicName?: string;
     quadrants: { label: string; content: string; color?: string; icon?: string }[];
+  };
+  categoryTable?: {
+    title: string;
+    tableTitle?: string;
+    description?: string;
+    categories: {
+      name: string;
+      badge?: string;
+      color?: string;
+      items: string[];
+    }[];
   };
   summary?: { title: string; sentences?: string[]; content?: string }[];
   learningObjectives?: string[];
@@ -122,6 +134,43 @@ const moduleInstructions: Record<string, string> = {
       { "label": "2. Niçin Önemlidir? (Amaç)", "content": "Bu ilkenin veya ibadetin var oluş sebebi, hikmeti ve gayesi.", "color": "emerald" },
       { "label": "3. Nasıl Uygulanır? (Pratik)", "content": "Günlük hayatta veya ibadet hayatında nasıl hayata geçirilir?", "color": "amber" },
       { "label": "4. Bize Ne Kazandırır? (Fayda)", "content": "Bireye huzur, topluma adalet ve güven kazandıran nihai sonucu.", "color": "purple" }
+    ]
+  }`,
+  categoryTable: `"categoryTable": {
+    "title": "📊 Hükümlerine Göre Namazlar Sınıflandırma Tablosu",
+    "tableTitle": "Namaz Çeşitleri, Hükümleri ve Örnekleri",
+    "description": "Namazlar dinimizdeki hüküm ve bağlayıcılık durumlarına göre 3 temel ana gruba ayrılır.",
+    "categories": [
+      {
+        "name": "Farz Namazlar",
+        "badge": "Kesin Dini Emir",
+        "color": "emerald",
+        "items": [
+          "5 Vakit Namazın Farzları (Sabah 2, Öğle 4, İkindi 4, Akşam 3, Yatsı 4 rekat)",
+          "Cuma Namazı (Akıllı, ergen ve hür erkeklere farz-ı ayn)",
+          "Cenaze Namazı (Müslüman topluluk üzerine farz-ı kifaye)"
+        ]
+      },
+      {
+        "name": "Vacip Namazlar",
+        "badge": "Kuvvetli Delille Sabit",
+        "color": "amber",
+        "items": [
+          "Vitir Namazı (Her gece yatsı namazından sonra kılınan 3 rekat)",
+          "Ramazan ve Kurban Bayramı Namazları (Yılda 2 defa kılınan 2 rekat)",
+          "Adak (Nezir) Namazı ve Tilavet/Sehiv Secdesi gerektiren durumlar"
+        ]
+      },
+      {
+        "name": "Sünnet / Nafile Namazlar",
+        "badge": "Peygamberimizin Uygulaması",
+        "color": "indigo",
+        "items": [
+          "Beş Vaktin Düzenli Sünnetleri (Sabah, Öğle, İkindi, Akşam, Yatsı revatib sünnetleri)",
+          "Teravih Namazı (Ramazan ayı gecelerinde cemaatle veya tek kılınır)",
+          "Kuşluk (Duha), Teheccüd (Gece), Evvabin ve Tahiyyetü'l-Mescid Namazları"
+        ]
+      }
     ]
   }`,
   infographicTable: `"infographicTable": {

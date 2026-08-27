@@ -19,7 +19,7 @@ import type {
     Topic, ActivityLinkStep, VisualStep, McqStep, TfStep, FlashcardStep, TrueFalseListStep, 
     HtmlSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, 
     ConceptExplanationStep, ObjectiveListStep, VideoStep, Question, AnagramGameStep, HookQuestionStep,
-    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep
+    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn
 } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -2961,6 +2961,248 @@ export function ConceptMatrixPlayer({
     );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// 📊 4. KATEGORİ & SINIFLANDIRMA TABLOSU BİLEŞENİ (CategoryTablePlayer)
+// ═══════════════════════════════════════════════════════════════════════════
+
+export function CategoryTablePlayer({
+    step,
+    isFullscreen,
+    fontSizeScale = 'normal'
+}: {
+    step: CategoryTableStep;
+    isFullscreen?: boolean;
+    fontSizeScale?: string;
+}) {
+    const isTeacher = useTeacherMode();
+    const categories = step.categories || [];
+    const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
+    
+    // Punto Ayarı
+    const [baseFontSize, setBaseFontSize] = useState<number>(
+        fontSizeScale === 'huge' || fontSizeScale === 'xl' ? 1.4 :
+        fontSizeScale === 'lg' ? 1.25 :
+        fontSizeScale === 'xs' ? 0.95 : 1.15
+    );
+
+    const increaseFontSize = () => setBaseFontSize(fs => Math.min(Number((fs + 0.15).toFixed(2)), 2.5));
+    const decreaseFontSize = () => setBaseFontSize(fs => Math.max(Number((fs - 0.15).toFixed(2)), 0.85));
+
+    const toggleItem = (catIdx: number, itemIdx: number) => {
+        playSound('pop');
+        const key = `${catIdx}-${itemIdx}`;
+        setCheckedItems(prev => ({ ...prev, [key]: !prev[key] }));
+    };
+
+    // Canlı, Doygun ve Yüksek Kontrastlı Kategori Kart Stilleri
+    const CATEGORY_COLOR_MAP: Record<string, {
+        card: string;
+        header: string;
+        badge: string;
+        item: string;
+        itemChecked: string;
+        num: string;
+        numChecked: string;
+    }> = {
+        emerald: {
+            card: 'bg-emerald-950/70 border-2 border-emerald-400 text-white shadow-[0_8px_30px_rgba(16,185,129,0.3)]',
+            header: 'from-emerald-500 to-teal-600 text-white',
+            badge: 'bg-emerald-500/30 text-emerald-200 border-emerald-400/50',
+            item: 'bg-slate-900/90 border-emerald-500/40 hover:bg-slate-800 text-white',
+            itemChecked: 'bg-emerald-900/60 border-emerald-300 text-emerald-100 shadow-md',
+            num: 'bg-emerald-500 text-slate-950 font-black',
+            numChecked: 'bg-emerald-400 text-slate-950'
+        },
+        amber: {
+            card: 'bg-amber-950/70 border-2 border-amber-400 text-white shadow-[0_8px_30px_rgba(245,158,11,0.3)]',
+            header: 'from-amber-500 to-orange-600 text-white',
+            badge: 'bg-amber-500/30 text-amber-200 border-amber-400/50',
+            item: 'bg-slate-900/90 border-amber-500/40 hover:bg-slate-800 text-white',
+            itemChecked: 'bg-amber-900/60 border-amber-300 text-amber-100 shadow-md',
+            num: 'bg-amber-500 text-slate-950 font-black',
+            numChecked: 'bg-amber-400 text-slate-950'
+        },
+        indigo: {
+            card: 'bg-indigo-950/70 border-2 border-indigo-400 text-white shadow-[0_8px_30px_rgba(99,102,241,0.3)]',
+            header: 'from-indigo-500 to-blue-600 text-white',
+            badge: 'bg-indigo-500/30 text-indigo-200 border-indigo-400/50',
+            item: 'bg-slate-900/90 border-indigo-500/40 hover:bg-slate-800 text-white',
+            itemChecked: 'bg-indigo-900/60 border-indigo-300 text-indigo-100 shadow-md',
+            num: 'bg-indigo-500 text-white font-black',
+            numChecked: 'bg-indigo-400 text-slate-950'
+        },
+        rose: {
+            card: 'bg-rose-950/70 border-2 border-rose-400 text-white shadow-[0_8px_30px_rgba(244,63,94,0.3)]',
+            header: 'from-rose-500 to-red-600 text-white',
+            badge: 'bg-rose-500/30 text-rose-200 border-rose-400/50',
+            item: 'bg-slate-900/90 border-rose-500/40 hover:bg-slate-800 text-white',
+            itemChecked: 'bg-rose-900/60 border-rose-300 text-rose-100 shadow-md',
+            num: 'bg-rose-500 text-white font-black',
+            numChecked: 'bg-rose-400 text-slate-950'
+        },
+        cyan: {
+            card: 'bg-cyan-950/70 border-2 border-cyan-400 text-white shadow-[0_8px_30px_rgba(6,182,212,0.3)]',
+            header: 'from-cyan-500 to-teal-600 text-white',
+            badge: 'bg-cyan-500/30 text-cyan-200 border-cyan-400/50',
+            item: 'bg-slate-900/90 border-cyan-500/40 hover:bg-slate-800 text-white',
+            itemChecked: 'bg-cyan-900/60 border-cyan-300 text-cyan-100 shadow-md',
+            num: 'bg-cyan-500 text-slate-950 font-black',
+            numChecked: 'bg-cyan-400 text-slate-950'
+        },
+        fuchsia: {
+            card: 'bg-fuchsia-950/70 border-2 border-fuchsia-400 text-white shadow-[0_8px_30px_rgba(217,70,239,0.3)]',
+            header: 'from-fuchsia-500 to-purple-600 text-white',
+            badge: 'bg-fuchsia-500/30 text-fuchsia-200 border-fuchsia-400/50',
+            item: 'bg-slate-900/90 border-fuchsia-500/40 hover:bg-slate-800 text-white',
+            itemChecked: 'bg-fuchsia-900/60 border-fuchsia-300 text-fuchsia-100 shadow-md',
+            num: 'bg-fuchsia-500 text-white font-black',
+            numChecked: 'bg-fuchsia-400 text-slate-950'
+        },
+    };
+
+    const defaultColors = ['emerald', 'amber', 'indigo', 'rose', 'cyan', 'fuchsia'];
+
+    const getColumnGridClass = () => {
+        const count = categories.length;
+        if (count === 1) return 'grid-cols-1 max-w-2xl mx-auto';
+        if (count === 2) return 'grid-cols-1 md:grid-cols-2';
+        if (count === 3) return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+        return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+    };
+
+    return (
+        <div className="w-full h-full flex flex-col justify-start p-2 md:p-3.5 select-none overflow-y-auto bg-slate-950 text-white">
+            
+            {/* ══ ÜST KONTROL & BAŞLIK ÇUBUĞU ══ */}
+            <div className="flex-shrink-0 w-full flex flex-wrap items-center justify-between gap-2 mb-2.5 p-2 md:p-2.5 rounded-2xl bg-slate-900/95 border border-white/20 backdrop-blur-xl shadow-xl">
+                
+                {/* SOL: BAŞLIK */}
+                <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-600 text-white flex items-center justify-center font-black shadow-md flex-shrink-0">
+                        <Layers className="w-4 h-4 md:w-5 md:h-5" />
+                    </div>
+                    <div>
+                        <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center gap-2">
+                            <span>{step.title || step.tableTitle || '📊 Konu Sınıflandırma Tablosu'}</span>
+                        </h2>
+                        {step.description && (
+                            <p className="text-[11px] text-amber-300 font-semibold hidden sm:block leading-none mt-0.5">
+                                {step.description}
+                            </p>
+                        )}
+                    </div>
+                </div>
+
+                {/* SAĞ: PUNTO BOYUT KONTROLLERİ */}
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center bg-slate-950/90 rounded-xl p-0.5 border border-white/15">
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={decreaseFontSize} 
+                            className="h-7 w-7 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg"
+                            title="Yazı Boyutunu Küçült"
+                        >
+                            <Minus className="h-3.5 w-3.5"/>
+                        </Button>
+                        <span className="text-[10px] font-black text-slate-300 w-8 text-center uppercase">Boyut</span>
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={increaseFontSize} 
+                            className="h-7 w-7 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg"
+                            title="Yazı Boyutunu Büyüt"
+                        >
+                            <Plus className="h-3.5 w-3.5"/>
+                        </Button>
+                    </div>
+
+                    <span className="text-xs font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-white/10 hidden md:inline-block">
+                        {categories.length} Kategori
+                    </span>
+                </div>
+            </div>
+
+            {/* ══ SÜTUNLU KATEGORİ IZGARASI ══ */}
+            <div className={cn("grid gap-3 w-full flex-grow items-stretch", getColumnGridClass())}>
+                {categories.map((cat, catIdx) => {
+                    const colorKey = cat.color || defaultColors[catIdx % defaultColors.length];
+                    const theme = CATEGORY_COLOR_MAP[colorKey] || CATEGORY_COLOR_MAP.emerald;
+                    const items = cat.items || [];
+
+                    return (
+                        <div
+                            key={`cat-${catIdx}`}
+                            className={cn(
+                                "relative overflow-hidden rounded-3xl p-3.5 sm:p-4 md:p-5 flex flex-col justify-between backdrop-blur-xl transition-all duration-300",
+                                theme.card
+                            )}
+                        >
+                            {/* Numara Filigranı */}
+                            <div className="absolute top-0 right-0 bg-black/40 text-white/30 font-black text-6xl p-1.5 leading-none pointer-events-none select-none rounded-bl-2xl opacity-25">
+                                {catIdx + 1}
+                            </div>
+
+                            <div className="z-10 relative flex flex-col h-full space-y-3">
+                                {/* Kategori Başlığı ve Rozeti */}
+                                <div className="space-y-1.5 border-b border-white/20 pb-3">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <span className={cn("px-2.5 py-0.5 rounded-full font-bold text-[11px] border tracking-wide", theme.badge)}>
+                                            {cat.badge || `Grup ${catIdx + 1}`}
+                                        </span>
+                                        <span className="text-[11px] font-bold text-white/70">
+                                            {items.length} Örnek
+                                        </span>
+                                    </div>
+                                    <h3 
+                                        className="font-black text-white uppercase tracking-tight leading-tight drop-shadow-md"
+                                        style={{ fontSize: `${baseFontSize * 1.2}rem` }}
+                                    >
+                                        {cat.name}
+                                    </h3>
+                                </div>
+
+                                {/* Kategori Altındaki Maddeler / Örnekler */}
+                                <div className="flex flex-col gap-2 flex-grow">
+                                    {items.map((item, itemIdx) => {
+                                        const isChecked = checkedItems[`${catIdx}-${itemIdx}`] || false;
+                                        return (
+                                            <div
+                                                key={`item-${catIdx}-${itemIdx}`}
+                                                onClick={() => toggleItem(catIdx, itemIdx)}
+                                                className={cn(
+                                                    "p-3 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-2.5",
+                                                    isChecked ? theme.itemChecked : theme.item
+                                                )}
+                                            >
+                                                <div className={cn(
+                                                    "w-6 h-6 md:w-7 md:h-7 rounded-lg flex items-center justify-center font-black text-xs flex-shrink-0 mt-0.5 shadow-sm",
+                                                    isChecked ? theme.numChecked : theme.num
+                                                )}>
+                                                    {isChecked ? <Check className="w-3.5 h-3.5" /> : itemIdx + 1}
+                                                </div>
+                                                <p
+                                                    className={cn(
+                                                        "font-bold leading-snug flex-1 select-text drop-shadow",
+                                                        isChecked ? "line-through opacity-85 text-white" : "text-white"
+                                                    )}
+                                                    style={{ fontSize: `${baseFontSize * 0.95}rem` }}
+                                                >
+                                                    {item}
+                                                </p>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
 // ══ 11. MatchingPlayer (KAVRAM - TANIM EŞLEŞTİRME MODÜLÜ - DİNAMİK BÜYÜTME & KOZMİK TASARIM) ══
 function MatchingPlayer({ 
     step, 
@@ -3464,6 +3706,8 @@ export function StepContent({
                 return <ProcessFlowPlayer step={step as ProcessFlowStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
             case 'conceptMatrix':
                 return <ConceptMatrixPlayer step={step as ConceptMatrixStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+            case 'categoryTable':
+                return <CategoryTablePlayer step={step as CategoryTableStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
             case 'conceptExplanation':
                 return (
                     <ConceptExplanationPlayer 
@@ -3994,7 +4238,7 @@ export function LessonContentViewer({
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     
-    const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote';
+    const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable';
       
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
@@ -4006,7 +4250,7 @@ export function LessonContentViewer({
         if (isHtmlSlideStep) return true;
         if (isActivityStep) return !!isStepCompleted;
 
-        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type);
+        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'hookQuestion', 'notebookNote', 'processFlow', 'conceptMatrix', 'categoryTable'].includes(currentStep.type);
         if (isPassiveStep) return true;
 
         if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true; 

@@ -77,6 +77,7 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'notebookNote', label: '✏️ Defterimize Yazalım (Özet Defter Notu)', description: 'Öğrencilerin defterlerine yazacağı en sade ve önemli 3-5 madde ile zamanlayıcı', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
     { id: 'processFlow', label: '🪜 Adım Adım Yol Haritası & Süreç', description: 'Konunun basamaklarını, aşamalarını ve sırasını gösteren etkileşimli akış adımı', icon: <Layers className="w-4 h-4 text-blue-400" />, category: 'anlatim' },
     { id: 'conceptMatrix', label: '🔲 4 Boyutta Konu Matrisi', description: 'Konuyu Nedir, Niçin Önemlidir, Nasıl Uygulanır ve Faydaları boyutlarıyla inceleyen 4’lü matris', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
+    { id: 'categoryTable', label: '📊 Kategori & Sınıflandırma Tablosu (Örn: Farz/Vacip/Sünnet)', description: 'Konuyu temel gruplara, türlere veya kategorilere ayıran (örn. Farz-Vacip-Sünnet vb.) çok sütunlu şık tablo', icon: <Layers className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
     { id: 'infographicTable', label: '📊 İnfografik Karşılaştırma Tablosu', description: 'Konunun temel türlerini ve hükümlerini özetleyen renkli infografik tablo', icon: <Layers className="w-4 h-4 text-cyan-400" />, category: 'anlatim' },
     { id: 'visualInfographics', label: '🔄 Süreç & Akış İnfografiği', description: 'Konunun aşamalarını veya boyutlarını adım adım gösteren görsel infografik diyagram', icon: <Sparkles className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
     { id: 'htmlSlide', label: 'İnteraktif Zengin HTML Slayt', description: 'Gamma / NotebookLM kalitesinde görsel kartlı modern slayt', icon: <FileText className="w-4 h-4 text-sky-400" />, category: 'anlatim' },
@@ -383,6 +384,18 @@ export function AiLessonStepGenerationDialog({
                 type: 'processFlow',
                 title: output.processFlow.title || '🪜 Adım Adım Yol Haritası & Süreç',
                 steps: output.processFlow.steps,
+                isPublished: true
+            });
+        }
+
+        // 1d. Kategori & Sınıflandırma Tablosu (Örn: Farz, Vacip, Sünnet)
+        if (activeModules.categoryTable && output.categoryTable && output.categoryTable.categories && output.categoryTable.categories.length > 0) {
+            newSteps.push({
+                type: 'categoryTable',
+                title: output.categoryTable.title || '📊 Konu Sınıflandırma Tablosu',
+                tableTitle: output.categoryTable.tableTitle || output.categoryTable.title,
+                description: output.categoryTable.description,
+                categories: output.categoryTable.categories,
                 isPublished: true
             });
         }

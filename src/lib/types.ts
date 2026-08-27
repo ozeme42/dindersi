@@ -186,6 +186,22 @@ export type ConceptMatrixStep = {
   isPublished?: boolean;
 };
 
+export type CategoryTableColumn = {
+  name: string;
+  badge?: string;
+  color?: string; // emerald, amber, indigo, rose, cyan, fuchsia
+  items: string[];
+};
+
+export type CategoryTableStep = {
+  type: 'categoryTable';
+  title: string;
+  tableTitle?: string;
+  description?: string;
+  categories: CategoryTableColumn[];
+  isPublished?: boolean;
+};
+
 export type LessonStep = 
   | ContentStep 
   | ObjectiveListStep
@@ -193,6 +209,7 @@ export type LessonStep =
   | NotebookNoteStep
   | ProcessFlowStep
   | ConceptMatrixStep
+  | CategoryTableStep
   | McqStep 
   | TfStep 
   | TrueFalseListStep

@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import type { LessonStep, Topic, AccordionStep, ActivityLinkStep, ActivityItem, Question, ImageAsset, NotebookNoteStep } from '@/lib/types';
+import type { LessonStep, Topic, AccordionStep, ActivityLinkStep, ActivityItem, Question, ImageAsset, NotebookNoteStep, CategoryTableStep } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { 
@@ -80,6 +80,7 @@ function StepCard({
             case 'notebookNote': return { label: 'Defter Notu', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <FileText className="w-4 h-4 text-emerald-400" /> };
             case 'processFlow': return { label: 'Süreç / Yol', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-4 h-4 text-blue-400" /> };
             case 'conceptMatrix': return { label: '4 Boyut Matris', color: 'text-purple-400 border-purple-500/30 bg-purple-500/10', icon: <Brain className="w-4 h-4 text-purple-400" /> };
+            case 'categoryTable': return { label: 'Kategori Tablosu', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <Layers className="w-4 h-4 text-emerald-400" /> };
             case 'content': return { label: 'Metin', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <FileText className="w-4 h-4 text-blue-400" /> };
             case 'objectiveList': return { label: 'Hedefler', color: 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10', icon: <GraduationCap className="w-4 h-4 text-yellow-400" /> };
             case 'conceptExplanation': return { label: 'Kavramlar', color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10', icon: <Brain className="w-4 h-4 text-indigo-400" /> };
@@ -115,6 +116,18 @@ function StepCard({
             case 'conceptMatrix':
                 const matrixQuads = (step as any).quadrants || [];
                 return <span className="text-xs font-semibold text-purple-300">🔲 {matrixQuads.length} Boyutlu Analiz</span>;
+            case 'categoryTable':
+                const categoriesList = (step as any).categories || [];
+                return (
+                    <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-300">
+                        <span className="font-bold text-emerald-400">📊 {categoriesList.length} Kategori:</span>
+                        {categoriesList.slice(0, 3).map((cat: any, i: number) => (
+                            <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-slate-950 border border-white/10 text-white font-semibold">
+                                {cat.name} ({cat.items?.length || 0})
+                            </span>
+                        ))}
+                    </div>
+                );
             case 'content': 
                 return <div className="line-clamp-2 text-xs text-slate-400" dangerouslySetInnerHTML={{ __html: (step as any).content || 'Metin içeriği girilmemiş.' }} />;
             case 'objectiveList': 
@@ -553,6 +566,19 @@ export function TopicEditor({
                     ]
                 };
                 break;
+            case 'categoryTable':
+                newStep = {
+                    type: 'categoryTable',
+                    title: defaultTitle || '📊 Konu Sınıflandırma Tablosu',
+                    tableTitle: 'Konu Sınıflandırma Tablosu',
+                    description: 'Konunun temel türleri ve kategorileri',
+                    categories: [
+                        { name: '1. Kategori (Örn: Farz)', badge: 'Zorunlu', color: 'emerald', items: ['Örnek madde 1', 'Örnek madde 2', 'Örnek madde 3'] },
+                        { name: '2. Kategori (Örn: Vacip)', badge: 'Kuvvetli Emir', color: 'amber', items: ['Örnek madde 1', 'Örnek madde 2'] },
+                        { name: '3. Kategori (Örn: Sünnet)', badge: 'Müstehap', color: 'indigo', items: ['Örnek madde 1', 'Örnek madde 2'] }
+                    ]
+                };
+                break;
             case 'content': newStep = { type, title: defaultTitle, content: '<h1>Başlık</h1><p>İçeriği buraya girin...</p>' }; break;
             case 'objectiveList': newStep = { type, title: defaultTitle, items: ['Yeni hedef...'] }; break;
             case 'conceptExplanation': newStep = { type, title: defaultTitle, items: [{ concept: "Kavram 1", definition: "Tanım 1"}] }; break;
@@ -895,6 +921,7 @@ export function TopicEditor({
         { label: '✏️ Defterimize Yazalım (Manuel Not Ekle)', type: 'notebookNote', defaultTitle: 'Defterimize Yazalım' },
         { label: '🪜 Adım Adım Yol Haritası & Süreç', type: 'processFlow', defaultTitle: 'Adım Adım Yol Haritası & Süreç' },
         { label: '🔲 4 Boyutta Konu Matrisi', type: 'conceptMatrix', defaultTitle: '4 Boyutta Konu Analizi' },
+        { label: '📊 Kategori & Sınıflandırma Tablosu (Farz/Vacip/Sünnet vb.)', type: 'categoryTable', defaultTitle: '📊 Konu Sınıflandırma Tablosu' },
         { label: 'Metin İçeriği', type: 'content', defaultTitle: 'Metin İçeriği' },
         { label: 'Öğrenme Hedefleri', type: 'objectiveList', defaultTitle: 'Öğrenme Hedefleri' },
         { label: 'Kavram Açıklamaları', type: 'conceptExplanation', defaultTitle: 'Kavram Açıklamaları' },
