@@ -464,25 +464,25 @@ function InsertStepDivider({
                         📚 Veri Bankasından
                     </DropdownMenuLabel>
                     <DropdownMenuItem 
-                        onClick={() => onOpenLibrary(['terms'], true, 'matching', insertIndex)}
+                        onClick={() => onOpenLibrary(['concept', 'definition'], true, 'matching', insertIndex)}
                         className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                     >
                         <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                        onClick={() => onOpenLibrary(['terms'], true, 'anagramGame', insertIndex)}
+                        onClick={() => onOpenLibrary(['concept', 'definition'], true, 'anagramGame', insertIndex)}
                         className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                     >
                         <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> Veri Bankasından Anagram Kartları
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                        onClick={() => onOpenLibrary(['terms'], true, 'flashcard', insertIndex)}
+                        onClick={() => onOpenLibrary(['concept', 'definition'], true, 'flashcard', insertIndex)}
                         className="text-xs font-semibold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                     >
                         <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                        onClick={() => onOpenLibrary(['terms'], true, 'conceptExplanation', insertIndex)}
+                        onClick={() => onOpenLibrary(['concept', 'definition'], true, 'conceptExplanation', insertIndex)}
                         className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                     >
                         <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
@@ -871,19 +871,22 @@ export function TopicEditor({
         } else if (stepType === 'anagramGame' || stepType === 'anagramFlashcard') {
             const cards = items.map(item => {
                 const act = item as ActivityItem;
-                const term = act.content?.term || act.content?.text || (act as any).title || '';
+                const term = act.content?.term || act.content?.text || (act as any).text || (act as any).term || (act as any).concept || (act as any).title || '';
                 const cleanWord = cleanForAnagram(term);
+                const def = act.content?.definition || (act as any).definition;
                 return {
-                    definition: act.content?.definition || `Bu kelime: "${term}"`,
+                    definition: def ? def : `Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: "${term}"`,
                     correctAnswer: cleanWord,
                     scrambledWord: cleanWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5).join('').toLocaleUpperCase('tr-TR')
                 };
-            });
-            generatedSteps = [{
-                type: 'anagramGame',
-                title: 'Kelime Dehası',
-                cards
-            }];
+            }).filter(c => c.correctAnswer && c.correctAnswer.length > 0);
+            if (cards.length > 0) {
+                generatedSteps = [{
+                    type: 'anagramGame',
+                    title: 'Kelime Dehası',
+                    cards
+                }];
+            }
         } else if (stepType === 'sentenceScramble') {
             generatedSteps = items.map(item => {
                 const act = item as ActivityItem;
@@ -1301,13 +1304,13 @@ export function TopicEditor({
                                             <DropdownMenuSeparator className="bg-white/10 my-1" />
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından</DropdownMenuLabel>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['terms'], true, 'conceptExplanation')}
+                                                onClick={() => handleOpenLibrary(['concept', 'definition'], true, 'conceptExplanation')}
                                                 className="text-xs font-bold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['terms'], true, 'flashcard')}
+                                                onClick={() => handleOpenLibrary(['concept', 'definition'], true, 'flashcard')}
                                                 className="text-xs font-bold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
@@ -1353,19 +1356,19 @@ export function TopicEditor({
                                             <DropdownMenuSeparator className="bg-white/10 my-1" />
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından</DropdownMenuLabel>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['terms'], true, 'matching')}
+                                                onClick={() => handleOpenLibrary(['concept', 'definition'], true, 'matching')}
                                                 className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> 📚 Veri Bankasından Tanım Eşleştirme
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['terms'], true, 'anagramGame')}
+                                                onClick={() => handleOpenLibrary(['concept', 'definition'], true, 'anagramGame')}
                                                 className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> 🔤 Veri Bankasından Anagram Kartları
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
-                                                onClick={() => handleOpenLibrary(['sentences'], true, 'sentenceScramble')}
+                                                onClick={() => handleOpenLibrary(['sentence'], true, 'sentenceScramble')}
                                                 className="text-xs font-bold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <Shuffle className="w-3.5 h-3.5 mr-2 text-cyan-400" /> 🧩 Veri Bankasından Cümle Sıralama

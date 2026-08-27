@@ -231,8 +231,8 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
 
     const filteredItems = useMemo(() => {
         if (!items || items.length === 0) return [];
-        // Eğer tanım kartı filtresi varsa (flashcard, keyConcepts, matching) sadece type === 'definition' olanları getir
-        if (config.filter.includes('definition')) {
+        // Eğer SADECE tanım kartı filtresi varsa ve kavram istenmemişse sadece dolu type === 'definition' olanları getir
+        if (config.filter.length === 1 && config.filter.includes('definition')) {
             return items.filter(it => {
                 if ('type' in it && it.type === 'concept') return false;
                 if ('type' in it && it.type === 'definition') {

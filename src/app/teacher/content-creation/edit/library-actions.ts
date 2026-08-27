@@ -38,18 +38,72 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
             q = query(q, where("courseId", "==", filters.courseId));
         }
 
+        // Normalize activityTypes
+        let mappedActivityTypes: string[] = [];
+        if (filters.activityTypes && filters.activityTypes.length > 0) {
+            for (const t of filters.activityTypes) {
+                if (t === 'terms' as any || t === 'term' as any) {
+                    mappedActivityTypes.push('concept', 'definition');
+                } else if (t === 'sentences' as any || t === 'sentence' as any) {
+                    mappedActivityTypes.push('sentence');
+                } else {
+                    mappedActivityTypes.push(t);
+                }
+            }
+            mappedActivityTypes = Array.from(new Set(mappedActivityTypes));
+        }
+
         // Soru / Etkinlik tipi filtresi
         if (isQuestions && filters.questionTypes && filters.questionTypes.length > 0) {
             q = query(q, where("type", "in", filters.questionTypes));
-        } else if (!isQuestions && filters.activityTypes && filters.activityTypes.length > 0) {
-            q = query(q, where("type", "in", filters.activityTypes));
+        } else if (!isQuestions && mappedActivityTypes.length > 0) {
+            q = query(q, where("type", "in", mappedActivityTypes));
         }
 
-        const snapshot = await getDocs(q);
-        let items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question | ActivityItem));
+        let items: (Question | ActivityItem)[] = [];
+        try {
+            const snapshot = await getDocs(q);
+            items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question | ActivityItem));
+        } catch (queryErr) {
+            console.warn("Firestore query failed, will fallback to local json:", queryErr);
+        }
 
-        // Eğer Tanım Kartı (definition) istenmişse, kavram ('concept') tipindeki ve tanımsız öğeleri tamamen filtrele
-        if (filters.activityTypes && filters.activityTypes.includes('definition')) {
+        // Local static JSON fallback if Firestore has 0 items
+        if (items.length === 0 && filters.topicId && filters.topicId !== 'all') {
+            try {
+                const fs = await import('fs');
+                const path = await import('path');
+                const candidatePaths = [
+                    path.join(process.cwd(), 'public', 'curriculum', 'activities', `${filters.topicId}.json`),
+                    path.join(process.cwd(), 'public', 'curriculum', 'activityItems', `${filters.topicId}.json`),
+                    path.join(process.cwd(), 'public', 'curriculum', 'activity-items', `${filters.topicId}.json`),
+                ];
+                if (isQuestions) {
+                    candidatePaths.unshift(path.join(process.cwd(), 'public', 'curriculum', 'questions', `${filters.topicId}.json`));
+                }
+
+                for (const filePath of candidatePaths) {
+                    if (fs.existsSync(filePath)) {
+                        const fileData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                        if (Array.isArray(fileData) && fileData.length > 0) {
+                            let localItems = fileData;
+                            if (!isQuestions && mappedActivityTypes.length > 0) {
+                                localItems = localItems.filter((it: any) => mappedActivityTypes.includes(it.type));
+                            } else if (isQuestions && filters.questionTypes && filters.questionTypes.length > 0) {
+                                localItems = localItems.filter((it: any) => filters.questionTypes?.includes(it.type));
+                            }
+                            items = localItems;
+                            break;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("Local activity/questions fallback read error:", err);
+            }
+        }
+
+        // Eğer sadece tanım istenmişse ve kavramlar hariç tutulacaksa
+        if (mappedActivityTypes.length === 1 && mappedActivityTypes.includes('definition')) {
             items = items.filter(item => {
                 if (item.type === 'concept') return false;
                 if (item.type === 'definition') {
@@ -58,30 +112,6 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
                 }
                 return true;
             });
-        }
-
-        // Local static JSON fallback if Firestore has 0 items
-        if (items.length === 0 && filters.topicId && filters.topicId !== 'all') {
-            try {
-                const fs = await import('fs');
-                const path = await import('path');
-                const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', `${filters.topicId}.json`);
-                if (fs.existsSync(filePath)) {
-                    const fileData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-                    if (Array.isArray(fileData)) {
-                        let localItems = fileData;
-                        if (!isQuestions && filters.activityTypes && filters.activityTypes.length > 0) {
-                            localItems = localItems.filter((it: any) => filters.activityTypes?.includes(it.type));
-                        }
-                        if (filters.activityTypes && filters.activityTypes.includes('definition')) {
-                            localItems = localItems.filter((it: any) => it.type === 'definition' && (it.content?.definition || it.definition));
-                        }
-                        items = localItems;
-                    }
-                }
-            } catch (err) {
-                console.warn("Local activity fallback read error:", err);
-            }
         }
 
         // Eğer arama kelimesi varsa sunucu tarafında filtrele
@@ -104,27 +134,6 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
         return { items: JSON.parse(JSON.stringify(items)) };
     } catch (e: any) {
         console.error("Error fetching library items:", e);
-        // Fallback if compound index error occurs: fetch without where query and filter in memory
-        try {
-            const isQuestions = filters.type === 'questions';
-            const collectionName = isQuestions ? "questions" : "activityItems";
-            const snapshot = await getDocs(query(collection(db, collectionName), limit(200)));
-            let items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question | ActivityItem));
-            
-            if (filters.topicId && filters.topicId !== 'all') {
-                items = items.filter((item: any) => item.topicId === filters.topicId);
-            }
-            if (isQuestions && filters.questionTypes && filters.questionTypes.length > 0) {
-                items = items.filter((item: any) => filters.questionTypes?.includes(item.type));
-            } else if (!isQuestions && filters.activityTypes && filters.activityTypes.length > 0) {
-                items = items.filter((item: any) => filters.activityTypes?.includes(item.type));
-            }
-            if (filters.activityTypes && filters.activityTypes.includes('definition')) {
-                items = items.filter(item => item.type === 'definition' && ((item as any).content?.definition || (item as any).definition));
-            }
-            return { items: JSON.parse(JSON.stringify(items)) };
-        } catch (fallbackErr: any) {
-            return { error: "Kütüphane verileri alınırken bir hata oluştu: " + fallbackErr.message, items: [] };
-        }
+        return { error: "Kütüphane verileri alınırken bir hata oluştu: " + e.message, items: [] };
     }
 }
