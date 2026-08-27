@@ -36,8 +36,12 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, v
 import { CSS } from '@dnd-kit/utilities';
 import { Input } from '@/components/ui/input';
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
+import { SlideFilmstrip } from '@/components/studio/slide-filmstrip';
+import { SlideCanvas } from '@/components/studio/slide-canvas';
+import { SlideInspector } from '@/components/studio/slide-inspector';
 import { cn, cleanForAnagram } from "@/lib/utils";
 import { Badge } from '@/components/ui/badge';
+import { LayoutGrid, Monitor, ListFilter } from 'lucide-react';
 
 type DraggableLessonStep = LessonStep & { id: string };
 
@@ -483,6 +487,8 @@ export function TopicEditor({
     onOpenAi?: (targetIndex?: number) => void;
     children?: React.ReactNode;
 }) {
+    const [viewMode, setViewMode] = useState<'studio' | 'list'>('studio');
+    const [selectedStepIndex, setSelectedStepIndex] = useState<number>(0);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
@@ -508,6 +514,12 @@ export function TopicEditor({
         topicTitle: title || undefined,
         sourceText: sourceText || undefined,
     }), [courseId, unitId, topicId, title, sourceText]);
+
+    useEffect(() => {
+        if (steps.length > 0 && selectedStepIndex >= steps.length) {
+            setSelectedStepIndex(steps.length - 1);
+        }
+    }, [steps.length, selectedStepIndex]);
     
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -686,6 +698,11 @@ export function TopicEditor({
             }
             return [...currentSteps, newStepWithId];
         });
+        if (atIndex !== undefined) {
+            setSelectedStepIndex(atIndex);
+        } else {
+            setSelectedStepIndex(steps.length);
+        }
     };
 
     const handleDuplicateStep = (index: number) => {
@@ -700,6 +717,7 @@ export function TopicEditor({
             updated.splice(index + 1, 0, clonedStep);
             return updated;
         });
+        setSelectedStepIndex(index + 1);
         toast({ title: "Adım Çoğaltıldı", description: `"${clonedStep.title}" akışa eklendi.` });
     };
 
@@ -1034,10 +1052,38 @@ export function TopicEditor({
 
                     <div className="flex gap-2 flex-wrap items-center w-full md:w-auto justify-end">
                         
+                        {/* Görünüm Modu Switcher: 🖥️ Stüdyo vs 📋 Liste */}
+                        <div className="flex items-center bg-slate-950/80 p-1 rounded-2xl border border-white/10 shadow-inner">
+                            <button
+                                type="button"
+                                onClick={() => setViewMode('studio')}
+                                className={cn(
+                                    "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                    viewMode === 'studio'
+                                        ? "bg-indigo-600 text-white shadow-md shadow-indigo-950/60"
+                                        : "text-slate-400 hover:text-white"
+                                )}
+                            >
+                                <Monitor className="w-3.5 h-3.5" /> Stüdyo
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setViewMode('list')}
+                                className={cn(
+                                    "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                    viewMode === 'list'
+                                        ? "bg-indigo-600 text-white shadow-md shadow-indigo-950/60"
+                                        : "text-slate-400 hover:text-white"
+                                )}
+                            >
+                                <ListFilter className="w-3.5 h-3.5" /> Liste
+                            </button>
+                        </div>
+
                         {/* ⋯ Diğer Araçlar — overflow menü */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" size="sm" className="border-white/15 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl font-bold text-xs">
+                                <Button variant="outline" size="sm" className="border-white/15 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl font-bold text-xs h-9">
                                     ⋯ Araçlar
                                 </Button>
                             </DropdownMenuTrigger>
@@ -1075,14 +1121,14 @@ export function TopicEditor({
                         <Button 
                             variant="secondary" 
                             onClick={() => setIsPreviewOpen(true)} 
-                            className="bg-slate-800 text-white hover:bg-slate-700 border border-white/10 shadow-md rounded-xl text-xs font-bold"
+                            className="bg-slate-800 text-white hover:bg-slate-700 border border-white/10 shadow-md rounded-xl text-xs font-bold h-9"
                         >
                             <Eye className="mr-1.5 h-3.5 w-3.5 text-cyan-400" /> Önizle
                         </Button>
 
                         <Button 
                             onClick={() => onOpenAi?.()}
-                            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-950/40 rounded-xl text-xs font-black cursor-pointer"
+                            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-950/40 rounded-xl text-xs font-black cursor-pointer h-9"
                         >
                             <Sparkles className="mr-1.5 h-3.5 w-3.5 text-yellow-300 animate-pulse" /> AI Stüdyosu
                         </Button>
@@ -1090,7 +1136,7 @@ export function TopicEditor({
                         <Button 
                             onClick={onSave} 
                             disabled={isSaving} 
-                            className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black rounded-xl shadow-lg shadow-emerald-950/50 cursor-pointer disabled:opacity-40 text-xs px-5"
+                            className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black rounded-xl shadow-lg shadow-emerald-950/50 cursor-pointer disabled:opacity-40 text-xs px-5 h-9"
                         >
                             {isSaving ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Save className="mr-1.5 h-3.5 w-3.5" />}
                             Kaydet
@@ -1098,185 +1144,214 @@ export function TopicEditor({
                     </div>
                 </div>
 
-                {/* ══ İKİ SÜTUNLU ANA LAYOUT ══ */}
-                <div className="flex gap-5 items-start">
+                {children}
 
-                    {/* ══ SOL: ADIM LİSTESİ (Geniş) ══ */}
-                    <div className="flex-1 min-w-0 space-y-4">
-
-                        {children}
-
-                        {/* Adım Listesi Başlığı */}
-                        <div className="flex items-center gap-3 px-1">
-                            <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30 text-purple-400">
-                                <Layers className="h-4 w-4" />
-                            </div>
-                            <div>
-                                <h2 className="text-base font-black text-white">Ders Akışı Adımları</h2>
-                                <p className="text-[11px] text-slate-500">Sürükle-bırak ile sırala • Aralarına tıklayarak yeni adım ekle</p>
-                            </div>
-                            <Badge variant="outline" className="ml-auto text-[9px] bg-slate-950 border-purple-500/20 text-purple-300">
-                                {steps.length} adım
-                            </Badge>
+                {/* ══ 1. STÜDYO MODU (PowerPoint / Canva Tarzı 3 Panelli Workspace) ══ */}
+                {viewMode === 'studio' ? (
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-[calc(100vh-130px)] min-h-[640px]">
+                        {/* SOL: Slayt Şeridi (Filmstrip) - 3 Sütun */}
+                        <div className="lg:col-span-3 h-full overflow-hidden">
+                            <SlideFilmstrip
+                                steps={steps}
+                                selectedIndex={selectedStepIndex}
+                                onSelectIndex={setSelectedStepIndex}
+                                onReorderSteps={(oldIdx, newIdx) => {
+                                    setSteps(items => arrayMove(items, oldIdx, newIdx));
+                                    setSelectedStepIndex(newIdx);
+                                }}
+                                onAddStep={handleAddStep}
+                                onDuplicateStep={handleDuplicateStep}
+                                onDeleteStep={handleDeleteStep}
+                                onTogglePublishStep={handleTogglePublishStep}
+                                onOpenAi={onOpenAi}
+                                onOpenGameSelector={(idx) => {
+                                    setInsertAtIndex(idx);
+                                    setTimeout(() => setIsGameSelectorOpen(true), 10);
+                                }}
+                                onOpenRegisteredAssets={() => setTimeout(() => setIsRegisteredAssetsOpen(true), 10)}
+                            />
                         </div>
 
-                    {/* Dnd-Kit Sortable Adım Listesi */}
-                    <DndContext
-                        sensors={sensors}
-                        collisionDetection={closestCenter}
-                        onDragEnd={handleDragEnd}
-                    >
-                        <SortableContext
-                            items={steps.map(s => s.id)}
-                            strategy={verticalListSortingStrategy}
-                        >
-                            <div className="space-y-0">
-                                {/* En başa adım ekleme çizgisi */}
-                                <InsertStepDivider 
-                                    insertIndex={0}
-                                    onAddStep={handleAddStep}
-                                    onOpenLibrary={handleOpenLibrary}
-                                    onOpenAi={onOpenAi}
-                                    onOpenGameSelector={(idx) => {
-                                        setInsertAtIndex(idx);
-                                        setTimeout(() => setIsGameSelectorOpen(true), 10);
-                                    }}
-                                    onOpenRegisteredAssets={() => setTimeout(() => setIsRegisteredAssetsOpen(true), 10)}
-                                />
+                        {/* ORTA: Canlı Slayt Sahnesi / Canvas - 5 Sütun */}
+                        <div className="lg:col-span-5 h-full overflow-hidden">
+                            <SlideCanvas
+                                steps={steps}
+                                selectedIndex={selectedStepIndex}
+                                onSelectIndex={setSelectedStepIndex}
+                                topicTitle={title}
+                                courseTitle={context?.topicTitle || 'Ders'}
+                                unitTitle=""
+                                onOpenFullscreenPreview={() => setIsPreviewOpen(true)}
+                                onOpenAi={() => onOpenAi?.(selectedStepIndex)}
+                            />
+                        </div>
 
-                                {steps.length > 0 ? (
-                                    <>
-                                        {steps.map((step, index) => (
-                                            <div key={step.id}>
-                                                <StepCard
-                                                    id={step.id}
-                                                    step={step}
-                                                    order={index + 1}
-                                                    isFirst={index === 0}
-                                                    isLast={index === steps.length - 1}
-                                                    onEdit={() => handleOpenEditor(index)}
-                                                    onDelete={() => handleDeleteStep(index)}
-                                                    onDuplicate={() => handleDuplicateStep(index)}
-                                                    onMoveUp={() => handleMoveStep(index, 'up')}
-                                                    onMoveDown={() => handleMoveStep(index, 'down')}
-                                                    onTogglePublish={() => handleTogglePublishStep(index)}
-                                                />
-                                                
-                                                {/* Her adımın ardına araya ekleme çizgisi */}
-                                                <InsertStepDivider 
-                                                    insertIndex={index + 1}
-                                                    onAddStep={handleAddStep}
-                                                    onOpenLibrary={handleOpenLibrary}
-                                                    onOpenAi={onOpenAi}
-                                                    onOpenGameSelector={(idx) => {
-                                                        setInsertAtIndex(idx);
-                                                        setTimeout(() => setIsGameSelectorOpen(true), 10);
-                                                    }}
-                                                    onOpenRegisteredAssets={() => setTimeout(() => setIsRegisteredAssetsOpen(true), 10)}
-                                                />
+                        {/* SAĞ: Anlık Slayt Düzenleyici & AI Inspector - 4 Sütun */}
+                        <div className="lg:col-span-4 h-full overflow-hidden">
+                            <SlideInspector
+                                step={steps[selectedStepIndex] || null}
+                                onUpdateStep={(updatedStep) => {
+                                    setSteps(currentSteps => {
+                                        const newSteps = [...currentSteps];
+                                        newSteps[selectedStepIndex] = updatedStep;
+                                        return newSteps;
+                                    });
+                                }}
+                                sourceText={sourceText}
+                                setSourceText={setSourceText}
+                                htmlContent={htmlContent}
+                                setHtmlContent={setHtmlContent}
+                                topicTitle={title}
+                                courseId={context?.courseId}
+                                unitId={context?.unitId}
+                                topicId={context?.topicId}
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    /* ══ 2. LİSTE MODU (Klasik Kart Görünümü) ══ */
+                    <div className="flex gap-5 items-start">
+                        {/* SOL: ADIM LİSTESİ */}
+                        <div className="flex-1 min-w-0 space-y-4">
+                            <div className="flex items-center gap-3 px-1">
+                                <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30 text-purple-400">
+                                    <Layers className="h-4 w-4" />
+                                </div>
+                                <div>
+                                    <h2 className="text-base font-black text-white">Ders Akışı Adımları</h2>
+                                    <p className="text-[11px] text-slate-500">Sürükle-bırak ile sırala • Aralarına tıklayarak yeni adım ekle</p>
+                                </div>
+                                <Badge variant="outline" className="ml-auto text-[9px] bg-slate-950 border-purple-500/20 text-purple-300">
+                                    {steps.length} adım
+                                </Badge>
+                            </div>
+
+                            <DndContext
+                                sensors={sensors}
+                                collisionDetection={closestCenter}
+                                onDragEnd={handleDragEnd}
+                            >
+                                <SortableContext
+                                    items={steps.map(s => s.id)}
+                                    strategy={verticalListSortingStrategy}
+                                >
+                                    <div className="space-y-0">
+                                        <InsertStepDivider 
+                                            insertIndex={0}
+                                            onAddStep={handleAddStep}
+                                            onOpenLibrary={handleOpenLibrary}
+                                            onOpenAi={onOpenAi}
+                                            onOpenGameSelector={(idx) => {
+                                                setInsertAtIndex(idx);
+                                                setTimeout(() => setIsGameSelectorOpen(true), 10);
+                                            }}
+                                            onOpenRegisteredAssets={() => setTimeout(() => setIsRegisteredAssetsOpen(true), 10)}
+                                        />
+
+                                        {steps.length > 0 ? (
+                                            <>
+                                                {steps.map((step, index) => (
+                                                    <div key={step.id}>
+                                                        <StepCard
+                                                            id={step.id}
+                                                            step={step}
+                                                            order={index + 1}
+                                                            isFirst={index === 0}
+                                                            isLast={index === steps.length - 1}
+                                                            onEdit={() => handleOpenEditor(index)}
+                                                            onDelete={() => handleDeleteStep(index)}
+                                                            onDuplicate={() => handleDuplicateStep(index)}
+                                                            onMoveUp={() => handleMoveStep(index, 'up')}
+                                                            onMoveDown={() => handleMoveStep(index, 'down')}
+                                                            onTogglePublish={() => handleTogglePublishStep(index)}
+                                                        />
+                                                        
+                                                        <InsertStepDivider 
+                                                            insertIndex={index + 1}
+                                                            onAddStep={handleAddStep}
+                                                            onOpenLibrary={handleOpenLibrary}
+                                                            onOpenAi={onOpenAi}
+                                                            onOpenGameSelector={(idx) => {
+                                                                setInsertAtIndex(idx);
+                                                                setTimeout(() => setIsGameSelectorOpen(true), 10);
+                                                            }}
+                                                            onOpenRegisteredAssets={() => setTimeout(() => setIsRegisteredAssetsOpen(true), 10)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/40 text-slate-500 text-center p-6">
+                                                <Wand2 className="h-16 w-16 mb-4 text-orange-400 opacity-40 animate-pulse" />
+                                                <p className="text-xl font-bold text-white mb-1">Ders akışı henüz boş.</p>
+                                                <p className="text-xs text-slate-400 max-w-md mb-6">
+                                                    Yukarıdaki <strong>"⚡ 10 Adımlık Dersi Kur"</strong> butonuna basarak tam ders akışınızı oluşturabilirsiniz.
+                                                </p>
                                             </div>
-                                        ))}
-                                    </>
-                                ) : (
-                                    <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/40 text-slate-500 text-center p-6">
-                                        <Wand2 className="h-16 w-16 mb-4 text-orange-400 opacity-40 animate-pulse" />
-                                        <p className="text-xl font-bold text-white mb-1">Ders akışı henüz boş.</p>
-                                        <p className="text-xs text-slate-400 max-w-md mb-6">
-                                            Yukarıdaki <strong>"⚡ 10 Adımlık Dersi Kur"</strong> butonuna basarak sistemdeki kayıtlı kavramlar, cümleler, oyun ve AI ile tam ders akışınızı 5 saniyede oluşturabilirsiniz.
-                                        </p>
+                                        )}
+                                    </div>
+                                </SortableContext>
+                            </DndContext>
+                        </div>
+
+                        {/* SAĞ SIDEBAR (Kompakt) */}
+                        <div className="hidden lg:flex flex-col gap-4 w-80 xl:w-96 flex-shrink-0 sticky top-24 self-start">
+                            <Card className="bg-slate-900/70 backdrop-blur-xl border border-white/10 shadow-lg overflow-hidden rounded-2xl">
+                                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/8">
+                                    <div className="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                                        <FileText className="h-3.5 w-3.5" />
+                                    </div>
+                                    <span className="text-xs font-black text-white flex-1">Kaynak Metin</span>
+                                    {sourceText && (
+                                        <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/60 border border-indigo-500/30 px-2 py-0.5 rounded-full">
+                                            {sourceText.trim().split(/\s+/).filter(Boolean).length} kelime
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="p-3">
+                                    <Textarea 
+                                        value={sourceText} 
+                                        onChange={(e) => setSourceText(e.target.value)}
+                                        placeholder="Ders kitabı metnini buraya yapıştırın. Yapay zeka bu metni temel alır..."
+                                        className="min-h-[160px] max-h-[320px] text-xs bg-slate-950 border-white/10 text-white focus:border-indigo-500 rounded-xl leading-relaxed font-sans resize-y"
+                                    />
+                                    <p className="text-[10px] text-slate-500 mt-2">💡 AI tüm içerikleri bu metinden üretir.</p>
+                                </div>
+                            </Card>
+
+                            <Card className="bg-gradient-to-b from-indigo-950/70 to-purple-950/50 border border-indigo-500/25 shadow-lg rounded-2xl overflow-hidden">
+                                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/8">
+                                    <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
+                                    <span className="text-xs font-black text-white">AI Asistanı ile Slayt Üret</span>
+                                </div>
+                                <div className="p-3 space-y-2">
+                                    <div className="flex gap-2">
+                                        <Input
+                                            value={quickPromptText}
+                                            onChange={(e) => setQuickPromptText(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && !e.shiftKey) {
+                                                    e.preventDefault();
+                                                    handleQuickPromptGenerate();
+                                                }
+                                            }}
+                                            placeholder="Slayt isteğinizi yazın..."
+                                            className="bg-slate-950/90 border-white/15 text-[11px] text-white placeholder:text-slate-500 h-9 rounded-xl flex-1"
+                                        />
                                         <Button
-                                            onClick={() => setIsRegisteredAssetsOpen(true)}
-                                            className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-xs px-6 py-2.5 rounded-2xl shadow-xl shadow-orange-950/50"
+                                            type="button"
+                                            onClick={handleQuickPromptGenerate}
+                                            disabled={isQuickPromptGenerating || !quickPromptText.trim()}
+                                            className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black text-[10px] h-9 px-3 rounded-xl flex-shrink-0 cursor-pointer disabled:opacity-40"
                                         >
-                                            <Wand2 className="w-4 h-4 mr-2 text-yellow-200" /> ⚡ 10 Adımlık Dersi Otomatik Kur
+                                            {isQuickPromptGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
                                         </Button>
                                     </div>
-                                )}
-                            </div>
-                        </SortableContext>
-                    </DndContext>
-                    </div>{/* /SOL SÜTUN */}
-
-                    {/* ══ SAĞ SIDEBAR (Kompakt, Sticky) ══ */}
-                    <div className="hidden lg:flex flex-col gap-4 w-80 xl:w-96 flex-shrink-0 sticky top-24 self-start">
-
-                        {/* Kaynak Metin — kompakt */}
-                        <Card className="bg-slate-900/70 backdrop-blur-xl border border-white/10 shadow-lg overflow-hidden rounded-2xl">
-                            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/8">
-                                <div className="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                                    <FileText className="h-3.5 w-3.5" />
                                 </div>
-                                <span className="text-xs font-black text-white flex-1">Kaynak Metin</span>
-                                {sourceText && (
-                                    <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/60 border border-indigo-500/30 px-2 py-0.5 rounded-full">
-                                        {sourceText.trim().split(/\s+/).filter(Boolean).length} kelime
-                                    </span>
-                                )}
-                            </div>
-                            <div className="p-3">
-                                <Textarea 
-                                    value={sourceText} 
-                                    onChange={(e) => setSourceText(e.target.value)}
-                                    placeholder="Ders kitabı metnini buraya yapıştırın. Yapay zeka bu metni temel alır..."
-                                    className="min-h-[160px] max-h-[320px] text-xs bg-slate-950 border-white/10 text-white focus:border-indigo-500 rounded-xl leading-relaxed font-sans resize-y"
-                                />
-                                <p className="text-[10px] text-slate-500 mt-2">💡 AI tüm içerikleri bu metinden üretir.</p>
-                            </div>
-                        </Card>
-
-                        {/* AI Hızlı Slayt Çubuğu — kompakt */}
-                        <Card className="bg-gradient-to-b from-indigo-950/70 to-purple-950/50 border border-indigo-500/25 shadow-lg rounded-2xl overflow-hidden">
-                            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/8">
-                                <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
-                                <span className="text-xs font-black text-white">AI Asistanı ile Slayt Üret</span>
-                            </div>
-                            <div className="p-3 space-y-2">
-                                <div className="flex gap-2">
-                                    <Input
-                                        value={quickPromptText}
-                                        onChange={(e) => setQuickPromptText(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter' && !e.shiftKey) {
-                                                e.preventDefault();
-                                                handleQuickPromptGenerate();
-                                            }
-                                        }}
-                                        placeholder="Slayt isteğinizi yazın..."
-                                        className="bg-slate-950/90 border-white/15 text-[11px] text-white placeholder:text-slate-500 h-9 rounded-xl flex-1"
-                                    />
-                                    <Button
-                                        type="button"
-                                        onClick={handleQuickPromptGenerate}
-                                        disabled={isQuickPromptGenerating || !quickPromptText.trim()}
-                                        className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black text-[10px] h-9 px-3 rounded-xl flex-shrink-0 cursor-pointer disabled:opacity-40"
-                                    >
-                                        {isQuickPromptGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                                    </Button>
-                                </div>
-                                {/* Hızlı öneri etiketleri */}
-                                <div className="flex flex-col gap-1">
-                                    {[
-                                        "Haccın yapılışını adım adım gösteren süreç akışı hazırla",
-                                        "Namazın farzları ve vacipleri tablosu yap",
-                                        "Konuyla ilgili 4 çoktan seçmeli soru üret",
-                                        "Deftere yazılacak 3 özet kural hazırla",
-                                    ].map((sample, idx) => (
-                                        <button
-                                            key={idx}
-                                            type="button"
-                                            onClick={() => { setQuickPromptText(sample); }}
-                                            className="text-left px-2.5 py-1.5 rounded-lg bg-slate-950/60 hover:bg-indigo-950/60 border border-white/8 hover:border-indigo-400/50 text-slate-400 hover:text-white text-[10px] font-medium transition-colors cursor-pointer"
-                                        >
-                                            ✨ {sample}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </Card>
-
-                    </div>{/* /SAĞ SIDEBAR */}
-
-                </div>{/* /İKİ SÜTUNLU LAYOUT */}
+                            </Card>
+                        </div>
+                    </div>
+                )}
 
                 {/* ══ DİYALOGLAR VE MODALLAR ══ */}
                 <BulkStepImportDialog 
