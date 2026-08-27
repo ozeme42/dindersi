@@ -17,7 +17,7 @@ import {
     ChevronDown, CheckCircle2, XCircle, FileText, Wand2, Lightbulb,
     Eye, Layers, HelpCircle, BookOpen, Brain, Shuffle, Puzzle
 } from 'lucide-react';
-import { cn, cleanForAnagram } from '@/lib/utils';
+import { cn, cleanForAnagram, scrambleAnagramWord } from '@/lib/utils';
 import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
 import { useToast } from '@/hooks/use-toast';
 import { getStepTypeMeta } from './slide-filmstrip';
@@ -1033,10 +1033,17 @@ export function SlideInspector({
                                             onChange={e => {
                                                 const val = e.target.value;
                                                 handleArrayChange('cards', cIdx, 'correctAnswer', val);
-                                                handleArrayChange('cards', cIdx, 'scrambledWord', cleanForAnagram(val));
+                                                handleArrayChange('cards', cIdx, 'scrambledWord', scrambleAnagramWord(val));
                                             }}
                                             placeholder="Doğru Kelime"
                                             className="bg-slate-950 border-white/10 text-xs font-bold h-7 flex-1"
+                                        />
+                                        <Input
+                                            value={card.scrambledWord || ''}
+                                            onChange={e => handleArrayChange('cards', cIdx, 'scrambledWord', e.target.value.toLocaleUpperCase('tr-TR'))}
+                                            placeholder="Ön Yüz (Karışık)"
+                                            title="Ön Yüzde Gözükecek Karışık Harfler"
+                                            className="bg-slate-950 border-white/10 text-xs font-mono text-fuchsia-300 h-7 flex-1"
                                         />
                                         <Button
                                             variant="ghost"
@@ -1050,7 +1057,7 @@ export function SlideInspector({
                                     <Input
                                         value={card.definition}
                                         onChange={e => handleArrayChange('cards', cIdx, 'definition', e.target.value)}
-                                        placeholder="Tanım / İpucu"
+                                        placeholder="Tanım / İpucu (İsteğe Bağlı)"
                                         className="bg-slate-950 border-white/10 text-xs h-7"
                                     />
                                 </div>

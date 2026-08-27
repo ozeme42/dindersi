@@ -30,6 +30,29 @@ export const cleanForAnagram = (text: string): string => {
   return cleanedText;
 };
 
+// Tek bir kelimenin harflerini kendi içinde karıştırır (aynı kalmaması için dener)
+export function scrambleSingleWord(word: string): string {
+  const letters = word.split('');
+  if (letters.length <= 1) return word;
+  if (letters.length === 2) return letters.reverse().join('');
+  
+  let scrambled = word;
+  let attempts = 0;
+  while (scrambled === word && attempts < 15) {
+    scrambled = letters.slice().sort(() => Math.random() - 0.5).join('');
+    attempts++;
+  }
+  return scrambled;
+}
+
+// İki veya daha fazla kelimelik ifadelerde her kelimeyi kendi içinde ayrı ayrı karıştırır
+export function scrambleAnagramWord(text: string): string {
+  if (!text) return '';
+  const cleaned = cleanForAnagram(text);
+  const words = cleaned.trim().split(/\s+/).filter(Boolean);
+  return words.map(w => scrambleSingleWord(w)).join(' ');
+}
+
 // Türkiye saatine göre tarih stringi (YYYY-MM-DD)
 export function getTurkeyDateString(date: Date = new Date()): string {
     return new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })).toISOString().split('T')[0];

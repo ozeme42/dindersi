@@ -40,7 +40,7 @@ import { SlideFilmstrip } from '@/components/studio/slide-filmstrip';
 import { SlideCanvas } from '@/components/studio/slide-canvas';
 import { SlideInspector } from '@/components/studio/slide-inspector';
 import { ResizableStudioLayout } from '@/components/studio/resizable-studio-layout';
-import { cn, cleanForAnagram } from "@/lib/utils";
+import { cn, cleanForAnagram, scrambleAnagramWord } from "@/lib/utils";
 import { Badge } from '@/components/ui/badge';
 import { LayoutGrid, Monitor, ListFilter } from 'lucide-react';
 
@@ -883,7 +883,7 @@ export function TopicEditor({
                 return {
                     definition: def ? def : `Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: "${term}"`,
                     correctAnswer: cleanWord,
-                    scrambledWord: cleanWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5).join('').toLocaleUpperCase('tr-TR')
+                    scrambledWord: scrambleAnagramWord(cleanWord)
                 };
             }).filter(c => c.correctAnswer && c.correctAnswer.length > 0);
             if (cards.length > 0) {

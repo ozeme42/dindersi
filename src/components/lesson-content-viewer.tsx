@@ -886,30 +886,38 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
     };
 
     const getAnagramFontSize = (wordText: string) => {
-        const len = (wordText || '').replace(/\s+/g, '').length;
+        const words = (wordText || '').trim().split(/\s+/).filter(Boolean);
+        const maxWordLen = words.length > 0 ? Math.max(...words.map(w => w.length)) : 0;
+        const totalLen = (wordText || '').replace(/\s+/g, '').length;
+
         if (cardScale === 'xl') {
-            if (len > 12) return "text-3xl sm:text-4xl md:text-5xl";
-            if (len > 8) return "text-4xl sm:text-5xl md:text-6xl";
+            if (maxWordLen > 11 || totalLen > 18) return "text-2xl sm:text-3xl md:text-4xl";
+            if (maxWordLen > 8 || totalLen > 13) return "text-3xl sm:text-4xl md:text-5xl";
+            if (maxWordLen > 5 || totalLen > 8) return "text-4xl sm:text-5xl md:text-6xl";
             return "text-5xl sm:text-6xl md:text-7xl";
         }
         if (cardScale === 'lg') {
-            if (len > 12) return "text-2xl sm:text-3xl md:text-4xl";
-            if (len > 8) return "text-3xl sm:text-4xl md:text-5xl";
+            if (maxWordLen > 11 || totalLen > 18) return "text-xl sm:text-2xl md:text-3xl";
+            if (maxWordLen > 8 || totalLen > 13) return "text-2xl sm:text-3xl md:text-4xl";
+            if (maxWordLen > 5 || totalLen > 8) return "text-3xl sm:text-4xl md:text-5xl";
             return "text-4xl sm:text-5xl md:text-6xl";
         }
         if (cardScale === 'md') {
-            if (len > 12) return "text-xl sm:text-2xl md:text-3xl";
-            if (len > 8) return "text-2xl sm:text-3xl md:text-4xl";
+            if (maxWordLen > 11 || totalLen > 18) return "text-lg sm:text-xl md:text-2xl";
+            if (maxWordLen > 8 || totalLen > 13) return "text-xl sm:text-2xl md:text-3xl";
+            if (maxWordLen > 5 || totalLen > 8) return "text-2xl sm:text-3xl md:text-4xl";
             return "text-3xl sm:text-4xl md:text-5xl";
         }
         if (cardScale === 'xs') {
-            if (len > 12) return "text-base sm:text-lg md:text-xl";
-            if (len > 8) return "text-lg sm:text-xl md:text-2xl";
-            return "text-xl sm:text-2xl md:text-3xl";
+            if (maxWordLen > 11 || totalLen > 18) return "text-xs sm:text-sm md:text-base";
+            if (maxWordLen > 8 || totalLen > 13) return "text-sm sm:text-base md:text-lg";
+            if (maxWordLen > 5 || totalLen > 8) return "text-base sm:text-lg md:text-xl";
+            return "text-lg sm:text-xl md:text-2xl";
         }
         // sm (varsayılan küçük)
-        if (len > 12) return "text-lg sm:text-xl md:text-2xl";
-        if (len > 8) return "text-xl sm:text-2xl md:text-3xl";
+        if (maxWordLen > 11 || totalLen > 18) return "text-sm sm:text-base md:text-lg";
+        if (maxWordLen > 8 || totalLen > 13) return "text-base sm:text-lg md:text-xl";
+        if (maxWordLen > 5 || totalLen > 8) return "text-xl sm:text-2xl md:text-3xl";
         return "text-2xl sm:text-3xl md:text-4xl";
     };
 
@@ -1016,14 +1024,21 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                         </div>
                                     </div>
 
-                                    {/* Karışık Harfler - Kartın Merkezini Dolduran Dinamik Punto (Harf bölünmesi engellendi) */}
-                                    <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center">
-                                        <h3 className={cn(
-                                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full px-1 text-center",
-                                            getAnagramFontSize(card.scrambledWord)
-                                        )}>
-                                            {card.scrambledWord}
-                                        </h3>
+                                    {/* Karışık Harfler - Her kelime kendi içinde karışık ve sığmayan kelime alt satıra geçer */}
+                                    <div className="my-auto py-2 px-1 text-center w-full flex items-center justify-center">
+                                        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 max-w-full text-center">
+                                            {(card.scrambledWord || '').trim().split(/\s+/).filter(Boolean).map((word, wIdx) => (
+                                                <span
+                                                    key={wIdx}
+                                                    className={cn(
+                                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight inline-block whitespace-nowrap",
+                                                        getAnagramFontSize(card.scrambledWord)
+                                                    )}
+                                                >
+                                                    {word}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
 
                                     {/* Alt İpucu Butonu */}
@@ -1056,14 +1071,21 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                         </div>
                                     </div>
 
-                                    {/* Doğru Cevap (Harf bölünmesi engellendi) */}
-                                    <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center">
-                                        <h3 className={cn(
-                                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full px-1 text-center",
-                                            getAnagramFontSize(card.correctAnswer)
-                                        )}>
-                                            {card.correctAnswer}
-                                        </h3>
+                                    {/* Doğru Cevap - Sığmayan kelime alt satıra geçer */}
+                                    <div className="my-auto py-2 px-1 text-center w-full flex items-center justify-center">
+                                        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 max-w-full text-center">
+                                            {(card.correctAnswer || '').trim().split(/\s+/).filter(Boolean).map((word, wIdx) => (
+                                                <span
+                                                    key={wIdx}
+                                                    className={cn(
+                                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight inline-block whitespace-nowrap",
+                                                        getAnagramFontSize(card.correctAnswer)
+                                                    )}
+                                                >
+                                                    {word}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
 
                                     {/* Alt İpucu Butonu */}
