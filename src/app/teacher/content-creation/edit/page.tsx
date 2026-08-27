@@ -818,62 +818,24 @@ export function TopicEditor({
         });
     };
 
-    const handleImportSavedTopicNotes = async () => {
-        let notesList: string[] = [];
-        let definitionsList: { concept: string; definition: string; }[] = [];
-
-        if (courseId && unitId && topicId) {
-            try {
-                // 1. Topic içindeki writingContent.notes ve definitions çek
-                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-                const topicSnap = await getDoc(topicRef);
-                if (topicSnap.exists()) {
-                    const tData = topicSnap.data() as Topic;
-                    if (tData.writingContent?.notes && tData.writingContent.notes.length > 0) {
-                        notesList = tData.writingContent.notes;
-                    }
-                    if (tData.writingContent?.conceptDefinitions && tData.writingContent.conceptDefinitions.length > 0) {
-                        definitionsList = tData.writingContent.conceptDefinitions;
-                    }
-                }
-
-                // 2. activityItems koleksiyonundaki tanımları çek
-                if (definitionsList.length === 0) {
-                    const q = query(
-                        collection(db, "activityItems"),
-                        where("topicId", "==", topicId),
-                        where("type", "==", "definition")
-                    );
-                    const querySnapshot = await getDocs(q);
-                    definitionsList = querySnapshot.docs.map(doc => {
-                        const item = doc.data() as ActivityItem;
-                        return {
-                            concept: item.content?.term || (item as any)?.title || '',
-                            definition: item.content?.definition || ''
-                        };
-                    }).filter(item => item.concept && item.definition);
-                }
-            } catch (e) {
-                console.error("Notlar ve kavramlar çekilirken hata:", e);
-            }
-        }
-
-        if (notesList.length === 0 && definitionsList.length === 0) {
+    const handleImportSavedTopicNotes = () => {
+        if (!courseId || !unitId || !topicId) {
             toast({
-                title: "Kayıtlı Veri Bulunamadı",
-                description: "Bu konu için henüz 'Yazılacaklar' (Kavram veya Defter Notu) kaydedilmemiş. Yapay Zekâ ile üretebilirsiniz.",
+                title: "Konu Bilgisi Eksik",
+                description: "Lütfen geçerli bir konu seçiniz.",
                 variant: "destructive"
             });
             return;
         }
 
-        const newStep: NotebookNoteStep = {
-            type: 'notebookNote',
-            title: '✏️ Defterimize Yazalım & Kavramlar',
-            noteTitle: `${title ? title + ' - ' : ''}Önemli Ders Notları & Kavramlar`,
-            notes: notesList,
-            conceptDefinitions: definitionsList.length > 0 ? definitionsList : undefined,
-            suggestedMinutes: Math.min(10, Math.max(3, Math.ceil(notesList.length * 0.8))),
+        const newStep: ActivityLinkStep = {
+            type: 'activityLink',
+            title: '📖 Yazılacaklar & Kavramlar',
+            activityType: '/teacher/smartboard/yazilacaklar/oyun',
+            activityLabel: 'Akıllı Tahta: Yazılacaklar & Kavramlar',
+            courseId: courseId,
+            unitId: unitId,
+            topicId: topicId,
             isPublished: true
         };
 
@@ -884,15 +846,15 @@ export function TopicEditor({
 
         setSteps(prev => [...prev, stepWithId]);
         toast({
-            title: "Yazılacaklar Sunuma Aktarıldı",
-            description: `Konunun kayıtlı ${definitionsList.length} kavramı ve ${notesList.length} defter notu birebir sunuma eklendi.`
+            title: "Yazılacaklar Eklendi",
+            description: "Akıllı Tahta 'Yazılacaklar & Kavramlar' ekranı birebir sunumun içine entegre edildi."
         });
     };
 
     const anlatimStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
         { label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion', defaultTitle: 'Derse Başlarken: Bir Düşünelim!' },
-        { label: '✏️ Defterimize Yazalım (Yeni Not)', type: 'notebookNote', defaultTitle: 'Defterimize Yazalım' },
-        { label: '📋 Veri Bankası: Kayıtlı Defter Notları (Yazılacaklar)', action: handleImportSavedTopicNotes },
+        { label: '📖 Akıllı Tahta: Yazılacaklar & Kavramlar (Oyun Ekranı)', action: handleImportSavedTopicNotes },
+        { label: '✏️ Defterimize Yazalım (Çizgili Defter & Sayaç)', type: 'notebookNote', defaultTitle: 'Defterimize Yazalım' },
         { label: '🪜 Adım Adım Yol Haritası & Süreç', type: 'processFlow', defaultTitle: 'Adım Adım Yol Haritası & Süreç' },
         { label: '🔲 4 Boyutta Konu Matrisi', type: 'conceptMatrix', defaultTitle: '4 Boyutta Konu Analizi' },
         { label: 'Metin İçeriği', type: 'content', defaultTitle: 'Metin İçeriği' },

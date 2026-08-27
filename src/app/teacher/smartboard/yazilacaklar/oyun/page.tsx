@@ -38,6 +38,7 @@ function YazilacaklarDisplayPage() {
     const topicId = searchParams.get('topicId');
     const courseId = searchParams.get('courseId');
     const unitId = searchParams.get('unitId');
+    const isEmbedded = searchParams.get('embedded') === 'true';
 
     const [topic, setTopic] = useState<Topic | null>(null);
     const [content, setContent] = useState<YazilacaklarContent | null>(null);
@@ -288,10 +289,10 @@ function YazilacaklarDisplayPage() {
                  <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-900/20 rounded-full blur-[150px]" />
              </div>
 
-             {/* Üst Menü (Fullscreen değilken görünür) */}
+             {/* Üst Menü (Fullscreen veya Embedded değilken görünür) */}
              <header className={cn(
                  "flex-shrink-0 p-4 border-b border-white/10 bg-slate-900/80 backdrop-blur-md z-20 transition-all duration-300",
-                 isFullscreen ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-auto opacity-100"
+                 (isFullscreen || isEmbedded) ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-auto opacity-100"
              )}>
                  <div className="flex flex-col md:flex-row items-center justify-between gap-4 max-w-7xl mx-auto w-full">
                      <h1 className="font-bold text-2xl text-slate-200 hidden md:block">Akıllı Tahta Modu</h1>
@@ -350,25 +351,24 @@ function YazilacaklarDisplayPage() {
             {/* FLOATING ACTION BAR (ŞEFFAF VE ŞIK) */}
             <div className={cn(
                 "fixed bottom-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500",
-                isFullscreen ? "translate-y-0 opacity-100" : "translate-y-32 opacity-0 pointer-events-none"
+                (isFullscreen || isEmbedded) ? "translate-y-0 opacity-100" : "translate-y-32 opacity-0 pointer-events-none"
             )}>
-                 {/* DÜZELTME: Arka plan bg-black/20 yapıldı (şeffaf).
-                     backdrop-blur-md ile buzlu cam etkisi verildi.
-                     Kenarlık inceltildi ve hover efekti eklendi.
-                 */}
-                 <div className="flex items-center gap-2 p-2 rounded-full bg-black/20 border border-white/10 shadow-2xl backdrop-blur-md transition-all hover:bg-black/40">
-                    <Button variant="ghost" size="icon" onClick={decreaseFontSize} className="h-12 w-12 rounded-full text-white hover:bg-white/10">
-                        <Minus className="h-6 w-6"/>
+                 <div className="flex items-center gap-2 p-2 rounded-full bg-black/40 border border-white/10 shadow-2xl backdrop-blur-md transition-all hover:bg-black/60">
+                    <Button variant="ghost" size="icon" onClick={decreaseFontSize} className="h-10 w-10 md:h-12 md:w-12 rounded-full text-white hover:bg-white/10">
+                        <Minus className="h-5 w-5 md:h-6 md:w-6"/>
                     </Button>
                     <div className="w-px h-6 bg-white/20 mx-1"></div>
                     <span className="text-xs font-bold text-slate-300 uppercase px-2 shadow-black drop-shadow-md">Boyut</span>
                     <div className="w-px h-6 bg-white/20 mx-1"></div>
-                    <Button variant="ghost" size="icon" onClick={increaseFontSize} className="h-12 w-12 rounded-full text-white hover:bg-white/10">
-                        <Plus className="h-6 w-6"/>
+                    <Button variant="ghost" size="icon" onClick={increaseFontSize} className="h-10 w-10 md:h-12 md:w-12 rounded-full text-white hover:bg-white/10">
+                        <Plus className="h-5 w-5 md:h-6 md:w-6"/>
                     </Button>
-                    <div className="w-px h-8 bg-white/30 mx-2"></div>
-                    {/* Çıkış butonu belirgin kalsın diye kırmızı/şeffaf karışımı */}
-                    <FullscreenToggle elementRef={mainContentRef} className="h-12 w-12 rounded-full bg-red-600/80 hover:bg-red-500 text-white border border-red-400/30 shadow-lg" />
+                    {!isEmbedded && (
+                        <>
+                            <div className="w-px h-8 bg-white/30 mx-2"></div>
+                            <FullscreenToggle elementRef={mainContentRef} className="h-12 w-12 rounded-full bg-red-600/80 hover:bg-red-500 text-white border border-red-400/30 shadow-lg" />
+                        </>
+                    )}
                  </div>
             </div>
 
