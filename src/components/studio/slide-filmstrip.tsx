@@ -191,6 +191,7 @@ export type SlideFilmstripProps = {
     onOpenAi?: (targetIndex?: number) => void;
     onOpenGameSelector?: (targetIndex?: number) => void;
     onOpenRegisteredAssets?: () => void;
+    onOpenLibrary?: (filter: any[], multiSelect: boolean, stepType: any, atIndex?: number) => void;
 };
 
 export function SlideFilmstrip({
@@ -204,7 +205,8 @@ export function SlideFilmstrip({
     onTogglePublishStep,
     onOpenAi,
     onOpenGameSelector,
-    onOpenRegisteredAssets
+    onOpenRegisteredAssets,
+    onOpenLibrary
 }: SlideFilmstripProps) {
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -249,7 +251,7 @@ export function SlideFilmstrip({
                             <Plus className="h-3.5 w-3.5 mr-1" /> Ekle
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-56 rounded-2xl shadow-2xl p-2 z-50">
+                    <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 rounded-2xl shadow-2xl p-2 z-50">
                         <DropdownMenuItem 
                             onClick={() => onOpenAi?.(selectedIndex + 1)}
                             className="text-xs font-black text-yellow-300 focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2 mb-1 bg-indigo-950/50 border border-indigo-500/30"
@@ -281,8 +283,9 @@ export function SlideFilmstrip({
                         {[
                             { label: 'Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
                             { label: 'Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
+                            { label: 'Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
                             { label: 'Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
-                            { label: 'Kavram Eşleştirme', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
+                            { label: 'Kavram Eşleştirme (Boş)', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
                         ].map(opt => (
                             <DropdownMenuItem 
                                 key={opt.label} 
@@ -292,6 +295,33 @@ export function SlideFilmstrip({
                                 {opt.label}
                             </DropdownMenuItem>
                         ))}
+                        
+                        {/* ══ VERİ BANKASINDAN İÇERİK SEÇME ══ */}
+                        {onOpenLibrary && (
+                            <>
+                                <DropdownMenuSeparator className="bg-white/10 my-1" />
+                                <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından Aktar</DropdownMenuLabel>
+                                <DropdownMenuItem 
+                                    onClick={() => onOpenLibrary(['terms'], true, 'matching', selectedIndex + 1)}
+                                    className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                >
+                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme Ekle
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                    onClick={() => onOpenLibrary(['terms'], true, 'conceptExplanation', selectedIndex + 1)}
+                                    className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                >
+                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                    onClick={() => onOpenLibrary(['questions'], true, 'questions', selectedIndex + 1)}
+                                    className="text-xs font-semibold text-indigo-300 focus:bg-indigo-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                >
+                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-indigo-400" /> Soru Bankasından Soru Seç...
+                                </DropdownMenuItem>
+                            </>
+                        )}
+
                         <DropdownMenuSeparator className="bg-white/10 my-1" />
                         <DropdownMenuItem 
                             onClick={() => onOpenGameSelector?.(selectedIndex + 1)}

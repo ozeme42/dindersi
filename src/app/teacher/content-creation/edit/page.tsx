@@ -1173,6 +1173,7 @@ export function TopicEditor({
                                     setTimeout(() => setIsGameSelectorOpen(true), 10);
                                 }}
                                 onOpenRegisteredAssets={() => setTimeout(() => setIsRegisteredAssetsOpen(true), 10)}
+                                onOpenLibrary={handleOpenLibrary}
                             />
                         }
                         centerPanel={
@@ -1257,6 +1258,13 @@ export function TopicEditor({
                                                     {opt.label}
                                                 </DropdownMenuItem>
                                             ))}
+                                            <DropdownMenuSeparator className="bg-white/10 my-1" />
+                                            <DropdownMenuItem
+                                                onClick={() => handleOpenLibrary(['terms'], true, 'conceptExplanation')}
+                                                className="text-xs font-bold text-cyan-300 focus:bg-cyan-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                            >
+                                                <BookOpen className="w-3.5 h-3.5 mr-2" /> Veri Bankasından Kavram Kartları
+                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
 
@@ -1275,7 +1283,7 @@ export function TopicEditor({
                                                 { label: 'Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
                                                 { label: 'Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
                                                 { label: 'Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
-                                                { label: 'Kavram - Tanım Eşleştirme', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
+                                                { label: 'Kavram - Tanım Eşleştirme (Boş)', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
                                                 { label: 'Bilgi Kartı (Flashcard)', type: 'flashcard' as LessonStep['type'], title: 'Bilgi Kartı' },
                                             ].map(opt => (
                                                 <DropdownMenuItem
@@ -1288,10 +1296,16 @@ export function TopicEditor({
                                             ))}
                                             <DropdownMenuSeparator className="bg-white/10 my-1" />
                                             <DropdownMenuItem
+                                                onClick={() => handleOpenLibrary(['terms'], true, 'matching')}
+                                                className="text-xs font-bold text-amber-300 focus:bg-amber-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                            >
+                                                <BookOpen className="w-3.5 h-3.5 mr-2" /> 📚 Veri Bankasından Tanım Eşleştirme Ekle
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
                                                 onClick={() => handleOpenLibrary(['questions'], true, 'questions')}
                                                 className="text-xs font-bold text-indigo-300 focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
-                                                <BookOpen className="w-3.5 h-3.5 mr-2" /> Soru Bankasından Seç...
+                                                <BookOpen className="w-3.5 h-3.5 mr-2" /> ❓ Soru Bankasından Seç...
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
