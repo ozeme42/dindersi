@@ -11,13 +11,15 @@ import {
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
     PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Palette, Pencil,
-    RotateCw, RotateCcw, ZoomIn, ZoomOut, Grid2X2, Grid3X3, HelpCircle, MessageSquare
+    RotateCw, RotateCcw, ZoomIn, ZoomOut, Grid2X2, Grid3X3, HelpCircle, MessageSquare,
+    Play, Pause, Timer, Clock, Compass
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
     Topic, ActivityLinkStep, VisualStep, McqStep, TfStep, FlashcardStep, TrueFalseListStep, 
     HtmlSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, 
-    ConceptExplanationStep, ObjectiveListStep, VideoStep, Question, AnagramGameStep, HookQuestionStep
+    ConceptExplanationStep, ObjectiveListStep, VideoStep, Question, AnagramGameStep, HookQuestionStep,
+    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep
 } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -2211,6 +2213,483 @@ export function HookQuestionPlayer({
     );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// 📝 1. DEFTERİMİZE YAZALIM (ÖZET DEFTER NOTU) BİLEŞENİ (NotebookNotePlayer)
+// ═══════════════════════════════════════════════════════════════════════════
+
+export function NotebookNotePlayer({
+    step,
+    isFullscreen,
+    fontSizeScale = 'normal'
+}: {
+    step: NotebookNoteStep;
+    isFullscreen?: boolean;
+    fontSizeScale?: string;
+}) {
+    const isTeacher = useTeacherMode();
+    const initialSeconds = (step.suggestedMinutes || 3) * 60;
+    const [timeLeft, setTimeLeft] = useState(initialSeconds);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
+    const [timerDone, setTimerDone] = useState(false);
+    const [checkedItems, setCheckedItems] = useState<{ [index: number]: boolean }>({});
+
+    useEffect(() => {
+        let interval: any = null;
+        if (isTimerRunning && timeLeft > 0) {
+            interval = setInterval(() => {
+                setTimeLeft(prev => {
+                    if (prev <= 1) {
+                        setIsTimerRunning(false);
+                        setTimerDone(true);
+                        playSound('win');
+                        import('canvas-confetti').then(m => {
+                            m.default({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
+                        }).catch(() => {});
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [isTimerRunning, timeLeft]);
+
+    const formatTime = (seconds: number) => {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${m}:${s < 10 ? '0' : ''}${s}`;
+    };
+
+    const toggleTimer = () => {
+        playSound('pop');
+        if (timeLeft === 0) {
+            setTimeLeft(initialSeconds);
+            setTimerDone(false);
+        }
+        setIsTimerRunning(prev => !prev);
+    };
+
+    const resetTimer = () => {
+        playSound('pop');
+        setIsTimerRunning(false);
+        setTimeLeft(initialSeconds);
+        setTimerDone(false);
+    };
+
+    const toggleCheckItem = (index: number) => {
+        playSound('pop');
+        setCheckedItems(prev => ({ ...prev, [index]: !prev[index] }));
+    };
+
+    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
+        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
+        fontSizeScale === 'lg' ? 'lg' :
+        fontSizeScale === 'md' ? 'md' :
+        fontSizeScale === 'xs' ? 'xs' : 'sm';
+
+    const getItemFontSize = () => {
+        switch (cardScale) {
+            case 'xs': return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
+            case 'sm': return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
+            case 'md': return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+            case 'lg': return isTeacher ? "text-3xl md:text-4xl" : "text-xl md:text-2xl";
+            case 'xl': return isTeacher ? "text-4xl md:text-5xl" : "text-2xl md:text-3xl";
+            default: return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+        }
+    };
+
+    return (
+        <div className={cn(
+            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 select-none max-w-5xl mx-auto overflow-y-auto",
+            isFullscreen ? "py-6" : "py-3"
+        )}>
+            {/* ══ ÜST KONTROL & SAYAÇ ÇUBUĞU ══ */}
+            <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4 md:mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-2 border-emerald-400/40 text-emerald-700 dark:text-emerald-300 text-xs md:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-xl">
+                    <Pencil className="w-4 h-4 text-emerald-500 animate-bounce" />
+                    <span>{step.title || '✏️ Defterimize Yazalım'}</span>
+                </div>
+
+                {/* SÜRE SAYACI KUTUSU */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-white/15 shadow-md">
+                    <Clock className={cn("w-4 h-4", isTimerRunning ? "text-emerald-500 animate-spin" : "text-slate-400")} />
+                    <span className="font-mono font-black text-sm md:text-base text-slate-800 dark:text-white">
+                        {formatTime(timeLeft)}
+                    </span>
+                    <Button
+                        size="sm"
+                        onClick={toggleTimer}
+                        className={cn(
+                            "h-7 px-3 text-xs font-black rounded-xl",
+                            isTimerRunning 
+                                ? "bg-amber-500 hover:bg-amber-600 text-slate-950" 
+                                : "bg-emerald-600 hover:bg-emerald-500 text-white"
+                        )}
+                    >
+                        {isTimerRunning ? <Pause className="w-3 h-3 mr-1" /> : <Play className="w-3 h-3 mr-1" />}
+                        {isTimerRunning ? "Durdur" : (timerDone ? "Tekrar Başlat" : "Süreyi Başlat")}
+                    </Button>
+                    {timeLeft !== initialSeconds && (
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={resetTimer}
+                            className="h-7 px-2 text-xs text-slate-400 hover:text-slate-200"
+                        >
+                            <RotateCcw className="w-3 h-3" />
+                        </Button>
+                    )}
+                </div>
+            </div>
+
+            {/* ══ ÇİZGİLİ DEFTER KARTI ══ */}
+            <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="relative w-full rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-slate-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-left border-l-[12px] border-l-rose-500/80 overflow-hidden"
+            >
+                {/* Defter Başlığı */}
+                <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-white/10 pb-4 mb-6">
+                    <h3 className="font-black text-xl md:text-2xl text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+                        <span className="p-2 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20">
+                            📝
+                        </span>
+                        <span>{step.noteTitle || 'Dersin En Önemli Özet Notları'}</span>
+                    </h3>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest hidden sm:inline">
+                        Öğrenci Defteri İçin
+                    </span>
+                </div>
+
+                {/* Maddeler */}
+                <div className="space-y-4 md:space-y-5">
+                    {(step.notes || []).map((note, idx) => {
+                        const isChecked = checkedItems[idx] || false;
+                        return (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.08 }}
+                                onClick={() => toggleCheckItem(idx)}
+                                className={cn(
+                                    "group p-4 md:p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-4",
+                                    isChecked
+                                        ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-950 dark:text-emerald-100 shadow-sm"
+                                        : "bg-slate-50/80 dark:bg-slate-800/50 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 hover:border-indigo-400/50 shadow-sm"
+                                )}
+                            >
+                                <div className={cn(
+                                    "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm border-2 transition-colors mt-0.5",
+                                    isChecked
+                                        ? "bg-emerald-500 border-emerald-400 text-white"
+                                        : "bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 group-hover:border-indigo-400"
+                                )}>
+                                    {isChecked ? <Check className="w-4 h-4" /> : `${idx + 1}`}
+                                </div>
+                                <p className={cn(
+                                    "flex-1 font-bold leading-relaxed tracking-wide select-text",
+                                    getItemFontSize(),
+                                    isChecked && "line-through opacity-80"
+                                )}>
+                                    {note}
+                                </p>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+            </motion.div>
+        </div>
+    );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🪜 2. ADIM ADIM YOL HARİTASI & SÜREÇ BİLEŞENİ (ProcessFlowPlayer)
+// ═══════════════════════════════════════════════════════════════════════════
+
+export function ProcessFlowPlayer({
+    step,
+    isFullscreen,
+    fontSizeScale = 'normal'
+}: {
+    step: ProcessFlowStep;
+    isFullscreen?: boolean;
+    fontSizeScale?: string;
+}) {
+    const isTeacher = useTeacherMode();
+    const [activeStepIndex, setActiveStepIndex] = useState(0);
+
+    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
+        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
+        fontSizeScale === 'lg' ? 'lg' :
+        fontSizeScale === 'md' ? 'md' :
+        fontSizeScale === 'xs' ? 'xs' : 'sm';
+
+    const getDescFontSize = () => {
+        switch (cardScale) {
+            case 'xs': return isTeacher ? "text-base md:text-lg" : "text-xs md:text-sm";
+            case 'sm': return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
+            case 'md': return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
+            case 'lg': return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+            case 'xl': return isTeacher ? "text-3xl md:text-4xl" : "text-xl md:text-2xl";
+            default: return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
+        }
+    };
+
+    const handleSelectStep = (idx: number) => {
+        playSound('pop');
+        setActiveStepIndex(idx);
+    };
+
+    const handleNextStep = () => {
+        playSound('pop');
+        setActiveStepIndex(prev => Math.min((step.steps || []).length - 1, prev + 1));
+    };
+
+    const handlePrevStep = () => {
+        playSound('pop');
+        setActiveStepIndex(prev => Math.max(0, prev - 1));
+    };
+
+    const stepsList = step.steps || [];
+
+    const STEP_GRADIENTS = [
+        { active: 'from-blue-600 to-indigo-600 border-blue-400 text-white shadow-blue-500/40', badge: 'bg-blue-500/20 text-blue-300 border-blue-400/40' },
+        { active: 'from-emerald-600 to-teal-600 border-emerald-400 text-white shadow-emerald-500/40', badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40' },
+        { active: 'from-amber-600 to-orange-600 border-amber-400 text-white shadow-amber-500/40', badge: 'bg-amber-500/20 text-amber-300 border-amber-400/40' },
+        { active: 'from-purple-600 to-pink-600 border-purple-400 text-white shadow-purple-500/40', badge: 'bg-purple-500/20 text-purple-300 border-purple-400/40' },
+        { active: 'from-rose-600 to-red-600 border-rose-400 text-white shadow-rose-500/40', badge: 'bg-rose-500/20 text-rose-300 border-rose-400/40' },
+    ];
+
+    return (
+        <div className={cn(
+            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 select-none max-w-5xl mx-auto overflow-y-auto",
+            isFullscreen ? "py-6" : "py-3"
+        )}>
+            {/* ══ BAŞLIK ROZETİ ══ */}
+            <motion.div 
+                initial={{ opacity: 0, y: -15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 border-2 border-blue-400/40 text-blue-700 dark:text-blue-300 text-xs md:text-sm font-black uppercase tracking-wider mb-4 md:mb-6 shadow-sm backdrop-blur-xl"
+            >
+                <Compass className="w-4 h-4 text-blue-500 animate-spin" />
+                <span>{step.title || '🪜 Adım Adım Yol Haritası & Süreç'}</span>
+                <Compass className="w-4 h-4 text-blue-500 animate-spin" />
+            </motion.div>
+
+            {/* ══ STEPPER ÜST SEÇİCİ (Yatay Adım Çizgisi) ══ */}
+            <div className="w-full flex items-center justify-between gap-2 overflow-x-auto pb-3 mb-4">
+                {stepsList.map((item, idx) => {
+                    const isCurrent = idx === activeStepIndex;
+                    const isPassed = idx < activeStepIndex;
+                    const style = STEP_GRADIENTS[idx % STEP_GRADIENTS.length];
+                    return (
+                        <div key={idx} className="flex-1 min-w-[120px] flex flex-col items-center">
+                            <button
+                                onClick={() => handleSelectStep(idx)}
+                                className={cn(
+                                    "w-full p-2.5 sm:p-3.5 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer",
+                                    isCurrent
+                                        ? `bg-gradient-to-r ${style.active} scale-105 shadow-lg`
+                                        : isPassed
+                                            ? "bg-slate-800/80 border-emerald-500/40 text-emerald-300 hover:bg-slate-800"
+                                            : "bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-400"
+                                )}
+                            >
+                                <span className="w-6 h-6 rounded-full bg-black/20 flex items-center justify-center font-black text-xs">
+                                    {isPassed ? <Check className="w-3.5 h-3.5" /> : idx + 1}
+                                </span>
+                                <span className="font-bold text-xs truncate">
+                                    {item.title}
+                                </span>
+                            </button>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* ══ AKTİF ADIM DETAY KARTI ══ */}
+            {stepsList[activeStepIndex] && (
+                <motion.div
+                    key={activeStepIndex}
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.25 }}
+                    className="relative w-full rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-blue-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-left overflow-hidden min-h-[220px] flex flex-col justify-between"
+                >
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500" />
+                    
+                    <div>
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-300 text-xs font-black uppercase tracking-wider mb-4">
+                            <span>ADIM {activeStepIndex + 1} / {stepsList.length}</span>
+                        </div>
+
+                        <h3 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mb-3">
+                            {stepsList[activeStepIndex].title}
+                        </h3>
+
+                        <p className={cn(
+                            "font-bold text-slate-700 dark:text-slate-200 leading-relaxed",
+                            getDescFontSize()
+                        )}>
+                            {stepsList[activeStepIndex].description}
+                        </p>
+                    </div>
+
+                    {/* Gezinme Butonları */}
+                    <div className="flex items-center justify-between border-t border-slate-100 dark:border-white/10 pt-4 mt-6">
+                        <Button
+                            variant="outline"
+                            onClick={handlePrevStep}
+                            disabled={activeStepIndex === 0}
+                            className="rounded-xl font-bold"
+                        >
+                            <ArrowLeft className="w-4 h-4 mr-2" /> Önceki Adım
+                        </Button>
+                        <Button
+                            onClick={handleNextStep}
+                            disabled={activeStepIndex === stepsList.length - 1}
+                            className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold"
+                        >
+                            Sıradaki Adım <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                    </div>
+                </motion.div>
+            )}
+        </div>
+    );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🔲 3. 4 BOYUTTA KONU MATRİSİ BİLEŞENİ (ConceptMatrixPlayer)
+// ═══════════════════════════════════════════════════════════════════════════
+
+export function ConceptMatrixPlayer({
+    step,
+    isFullscreen,
+    fontSizeScale = 'normal'
+}: {
+    step: ConceptMatrixStep;
+    isFullscreen?: boolean;
+    fontSizeScale?: string;
+}) {
+    const isTeacher = useTeacherMode();
+    const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+
+    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
+        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
+        fontSizeScale === 'lg' ? 'lg' :
+        fontSizeScale === 'md' ? 'md' :
+        fontSizeScale === 'xs' ? 'xs' : 'sm';
+
+    const getContentFontSize = () => {
+        switch (cardScale) {
+            case 'xs': return isTeacher ? "text-sm md:text-base" : "text-xs md:text-sm";
+            case 'sm': return isTeacher ? "text-base md:text-lg" : "text-sm md:text-base";
+            case 'md': return isTeacher ? "text-lg md:text-xl" : "text-base md:text-lg";
+            case 'lg': return isTeacher ? "text-xl md:text-2xl" : "text-lg md:text-xl";
+            case 'xl': return isTeacher ? "text-2xl md:text-3xl" : "text-xl md:text-2xl";
+            default: return isTeacher ? "text-lg md:text-xl" : "text-base md:text-lg";
+        }
+    };
+
+    const QUADRANT_STYLES = [
+        {
+            border: 'border-sky-400/50 hover:border-sky-400',
+            bg: 'bg-sky-500/10 hover:bg-sky-500/15',
+            badge: 'bg-sky-500 text-white',
+            text: 'text-sky-950 dark:text-sky-100',
+            titleText: 'text-sky-700 dark:text-sky-300'
+        },
+        {
+            border: 'border-emerald-400/50 hover:border-emerald-400',
+            bg: 'bg-emerald-500/10 hover:bg-emerald-500/15',
+            badge: 'bg-emerald-500 text-white',
+            text: 'text-emerald-950 dark:text-emerald-100',
+            titleText: 'text-emerald-700 dark:text-emerald-300'
+        },
+        {
+            border: 'border-amber-400/50 hover:border-amber-400',
+            bg: 'bg-amber-500/10 hover:bg-amber-500/15',
+            badge: 'bg-amber-500 text-slate-950',
+            text: 'text-amber-950 dark:text-amber-100',
+            titleText: 'text-amber-700 dark:text-amber-300'
+        },
+        {
+            border: 'border-purple-400/50 hover:border-purple-400',
+            bg: 'bg-purple-500/10 hover:bg-purple-500/15',
+            badge: 'bg-purple-500 text-white',
+            text: 'text-purple-950 dark:text-purple-100',
+            titleText: 'text-purple-700 dark:text-purple-300'
+        }
+    ];
+
+    const quadrants = step.quadrants || [];
+
+    return (
+        <div className={cn(
+            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 select-none max-w-5xl mx-auto overflow-y-auto",
+            isFullscreen ? "py-6" : "py-3"
+        )}>
+            {/* ══ BAŞLIK ══ */}
+            <motion.div 
+                initial={{ opacity: 0, y: -15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-500/20 via-sky-500/20 to-emerald-500/20 border-2 border-purple-400/40 text-purple-700 dark:text-purple-300 text-xs md:text-sm font-black uppercase tracking-wider mb-4 md:mb-6 shadow-sm backdrop-blur-xl"
+            >
+                <Layers className="w-4 h-4 text-purple-500 animate-pulse" />
+                <span>{step.title || '🔲 4 Boyutta Konu Analizi'}</span>
+                {step.topicName && <span className="opacity-70">({step.topicName})</span>}
+                <Layers className="w-4 h-4 text-purple-500 animate-pulse" />
+            </motion.div>
+
+            {/* ══ 2x2 MATRİS IZGARASI ══ */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 w-full">
+                {quadrants.map((quad, idx) => {
+                    const style = QUADRANT_STYLES[idx % QUADRANT_STYLES.length];
+                    const isFocused = focusedIndex === idx;
+                    return (
+                        <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: idx * 0.08 }}
+                            onClick={() => {
+                                playSound('pop');
+                                setFocusedIndex(focusedIndex === idx ? null : idx);
+                            }}
+                            className={cn(
+                                "rounded-3xl p-5 md:p-6 border-2 transition-all cursor-pointer relative shadow-md backdrop-blur-xl flex flex-col justify-between min-h-[160px] md:min-h-[180px]",
+                                style.border,
+                                style.bg,
+                                isFocused && "ring-4 ring-indigo-400/60 scale-[1.02]"
+                            )}
+                        >
+                            <div>
+                                <div className="flex items-center justify-between mb-3">
+                                    <span className={cn("px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider shadow-sm", style.badge)}>
+                                        {quad.label}
+                                    </span>
+                                    <span className="text-xs text-slate-400 font-bold">
+                                        {isFocused ? "Odaktan Çık ✕" : "Büyüt 🔍"}
+                                    </span>
+                                </div>
+                                <p className={cn(
+                                    "font-bold leading-relaxed tracking-wide",
+                                    style.text,
+                                    getContentFontSize()
+                                )}>
+                                    {quad.content}
+                                </p>
+                            </div>
+                        </motion.div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
 // ══ 11. MatchingPlayer (KAVRAM - TANIM EŞLEŞTİRME MODÜLÜ - DİNAMİK BÜYÜTME & KOZMİK TASARIM) ══
 function MatchingPlayer({ 
     step, 
@@ -2726,6 +3205,12 @@ export function StepContent({
         switch (step.type) {
             case 'hookQuestion':
                 return <HookQuestionPlayer step={step as HookQuestionStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+            case 'notebookNote':
+                return <NotebookNotePlayer step={step as NotebookNoteStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+            case 'processFlow':
+                return <ProcessFlowPlayer step={step as ProcessFlowStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+            case 'conceptMatrix':
+                return <ConceptMatrixPlayer step={step as ConceptMatrixStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
             case 'content':
             case 'objectiveList':
             case 'accordion':

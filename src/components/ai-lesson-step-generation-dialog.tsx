@@ -74,6 +74,9 @@ export type ActivityOption = {
 export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     // Anlatım Modülleri
     { id: 'hookQuestion', label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', description: 'Derse başlarken öğrencilerin dikkatini çeken, düşündürücü açık uçlu soru ve tartışma ipucu', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'anlatim' },
+    { id: 'notebookNote', label: '✏️ Defterimize Yazalım (Özet Defter Notu)', description: 'Öğrencilerin defterlerine yazacağı en sade ve önemli 3-5 madde ile zamanlayıcı', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
+    { id: 'processFlow', label: '🪜 Adım Adım Yol Haritası & Süreç', description: 'Konunun basamaklarını, aşamalarını ve sırasını gösteren etkileşimli akış adımı', icon: <Layers className="w-4 h-4 text-blue-400" />, category: 'anlatim' },
+    { id: 'conceptMatrix', label: '🔲 4 Boyutta Konu Matrisi', description: 'Konuyu Nedir, Niçin Önemlidir, Nasıl Uygulanır ve Faydaları boyutlarıyla inceleyen 4’lü matris', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
     { id: 'infographicTable', label: '📊 İnfografik Karşılaştırma Tablosu', description: 'Konunun temel türlerini ve hükümlerini özetleyen renkli infografik tablo', icon: <Layers className="w-4 h-4 text-cyan-400" />, category: 'anlatim' },
     { id: 'visualInfographics', label: '🔄 Süreç & Akış İnfografiği', description: 'Konunun aşamalarını veya boyutlarını adım adım gösteren görsel infografik diyagram', icon: <Sparkles className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
     { id: 'htmlSlide', label: 'İnteraktif Zengin HTML Slayt', description: 'Gamma / NotebookLM kalitesinde görsel kartlı modern slayt', icon: <FileText className="w-4 h-4 text-sky-400" />, category: 'anlatim' },
@@ -363,6 +366,27 @@ export function AiLessonStepGenerationDialog({
             });
         }
 
+        // 1b. 4 Boyutta Konu Matrisi
+        if (activeModules.conceptMatrix && output.conceptMatrix && output.conceptMatrix.quadrants && output.conceptMatrix.quadrants.length > 0) {
+            newSteps.push({
+                type: 'conceptMatrix',
+                title: output.conceptMatrix.title || '🔲 4 Boyutta Konu Analizi',
+                topicName: output.conceptMatrix.topicName || '',
+                quadrants: output.conceptMatrix.quadrants,
+                isPublished: true
+            });
+        }
+
+        // 1c. Adım Adım Yol Haritası & Süreç
+        if (activeModules.processFlow && output.processFlow && output.processFlow.steps && output.processFlow.steps.length > 0) {
+            newSteps.push({
+                type: 'processFlow',
+                title: output.processFlow.title || '🪜 Adım Adım Yol Haritası & Süreç',
+                steps: output.processFlow.steps,
+                isPublished: true
+            });
+        }
+
         // 2. Konu Özeti (Her Başlık Ayrı Bir Sayfa / Adım Olarak - Cümleler Sunumda Sırayla Ekrana Gelir)
         if (activeModules.summary && output.summary && output.summary.length > 0) {
             output.summary.forEach((section, idx) => {
@@ -540,6 +564,18 @@ export function AiLessonStepGenerationDialog({
                 title: '💡 Bilgi & Hafıza Kartları', 
                 cards: output.flashcards,
                 isPublished: true 
+            });
+        }
+
+        // 5b. Defterimize Yazalım (Özet Defter Notu)
+        if (activeModules.notebookNote && output.notebookNote && output.notebookNote.notes && output.notebookNote.notes.length > 0) {
+            newSteps.push({
+                type: 'notebookNote',
+                title: output.notebookNote.title || '✏️ Defterimize Yazalım',
+                noteTitle: output.notebookNote.noteTitle || 'Dersin En Önemli Özet Maddeleri',
+                notes: output.notebookNote.notes,
+                suggestedMinutes: output.notebookNote.suggestedMinutes || 3,
+                isPublished: true
             });
         }
 

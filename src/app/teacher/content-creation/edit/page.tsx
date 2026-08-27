@@ -76,6 +76,10 @@ function StepCard({
 
     const getTypeMeta = () => {
         switch (step.type) {
+            case 'hookQuestion': return { label: 'Giriş Sorusu', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10', icon: <HelpCircle className="w-4 h-4 text-amber-400" /> };
+            case 'notebookNote': return { label: 'Defter Notu', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <FileText className="w-4 h-4 text-emerald-400" /> };
+            case 'processFlow': return { label: 'Süreç / Yol', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-4 h-4 text-blue-400" /> };
+            case 'conceptMatrix': return { label: '4 Boyut Matris', color: 'text-purple-400 border-purple-500/30 bg-purple-500/10', icon: <Brain className="w-4 h-4 text-purple-400" /> };
             case 'content': return { label: 'Metin', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <FileText className="w-4 h-4 text-blue-400" /> };
             case 'objectiveList': return { label: 'Hedefler', color: 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10', icon: <GraduationCap className="w-4 h-4 text-yellow-400" /> };
             case 'conceptExplanation': return { label: 'Kavramlar', color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10', icon: <Brain className="w-4 h-4 text-indigo-400" /> };
@@ -100,6 +104,17 @@ function StepCard({
 
     const renderContentPreview = () => {
         switch (step.type) {
+            case 'hookQuestion':
+                return <span className="text-xs font-semibold text-amber-300">🤔 {(step as any).question || 'Merak & Giriş Sorusu'}</span>;
+            case 'notebookNote':
+                const notesList = (step as any).notes || [];
+                return <span className="text-xs font-semibold text-emerald-300">✏️ {notesList.length} Defter Maddesi (⏱️ {(step as any).suggestedMinutes || 3} dk)</span>;
+            case 'processFlow':
+                const flowSteps = (step as any).steps || [];
+                return <span className="text-xs font-semibold text-blue-300">🪜 {flowSteps.length} Aşamalı Süreç</span>;
+            case 'conceptMatrix':
+                const matrixQuads = (step as any).quadrants || [];
+                return <span className="text-xs font-semibold text-purple-300">🔲 {matrixQuads.length} Boyutlu Analiz</span>;
             case 'content': 
                 return <div className="line-clamp-2 text-xs text-slate-400" dangerouslySetInnerHTML={{ __html: (step as any).content || 'Metin içeriği girilmemiş.' }} />;
             case 'objectiveList': 
@@ -501,6 +516,43 @@ export function TopicEditor({
 
         switch(type) {
             case 'hookQuestion': newStep = { type, title: defaultTitle || '🤔 Derse Başlarken: Bir Düşünelim!', question: 'Bu konuyla ilgili merak uyandırıcı ve düşündürücü soru metni...', thoughtStarter: 'Arkadaşlarınızla tartışın: Sizce bu kavram günlük hayatımızı nasıl etkiler?', tag: '🤔 Derse Başlarken: Bir Düşünelim!' }; break;
+            case 'notebookNote':
+                newStep = {
+                    type: 'notebookNote',
+                    title: defaultTitle || '✏️ Defterimize Yazalım',
+                    noteTitle: 'Dersin En Önemli Özet Maddeleri',
+                    notes: [
+                        '1. Konuyla ilgili deftere yazılacak 1. kural...',
+                        '2. Konuyla ilgili deftere yazılacak 2. kural...',
+                        '3. Konuyla ilgili deftere yazılacak 3. kural...'
+                    ],
+                    suggestedMinutes: 3
+                };
+                break;
+            case 'processFlow':
+                newStep = {
+                    type: 'processFlow',
+                    title: defaultTitle || '🪜 Adım Adım Yol Haritası & Süreç',
+                    steps: [
+                        { stepNumber: 1, title: '1. Aşama', description: 'Birinci aşamanın açıklaması...' },
+                        { stepNumber: 2, title: '2. Aşama', description: 'İkinci aşamanın açıklaması...' },
+                        { stepNumber: 3, title: '3. Aşama', description: 'Üçüncü aşamanın açıklaması...' }
+                    ]
+                };
+                break;
+            case 'conceptMatrix':
+                newStep = {
+                    type: 'conceptMatrix',
+                    title: defaultTitle || '🔲 4 Boyutta Konu Analizi',
+                    topicName: 'Ders Konusu',
+                    quadrants: [
+                        { label: '1. Nedir? (Tanım)', content: 'Temel tanım ve kavram...' },
+                        { label: '2. Niçin Önemlidir? (Amaç)', content: 'Önemi ve hikmeti...' },
+                        { label: '3. Nasıl Uygulanır? (Pratik)', content: 'Hayata geçirilme biçimi...' },
+                        { label: '4. Bize Ne Kazandırır? (Fayda)', content: 'Bireysel ve toplumsal sonuçları...' }
+                    ]
+                };
+                break;
             case 'content': newStep = { type, title: defaultTitle, content: '<h1>Başlık</h1><p>İçeriği buraya girin...</p>' }; break;
             case 'objectiveList': newStep = { type, title: defaultTitle, items: ['Yeni hedef...'] }; break;
             case 'conceptExplanation': newStep = { type, title: defaultTitle, items: [{ concept: "Kavram 1", definition: "Tanım 1"}] }; break;
@@ -768,6 +820,9 @@ export function TopicEditor({
 
     const anlatimStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
         { label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion', defaultTitle: 'Derse Başlarken: Bir Düşünelim!' },
+        { label: '✏️ Defterimize Yazalım (Özet Not)', type: 'notebookNote', defaultTitle: 'Defterimize Yazalım' },
+        { label: '🪜 Adım Adım Yol Haritası & Süreç', type: 'processFlow', defaultTitle: 'Adım Adım Yol Haritası & Süreç' },
+        { label: '🔲 4 Boyutta Konu Matrisi', type: 'conceptMatrix', defaultTitle: '4 Boyutta Konu Analizi' },
         { label: 'Metin İçeriği', type: 'content', defaultTitle: 'Metin İçeriği' },
         { label: 'Öğrenme Hedefleri', type: 'objectiveList', defaultTitle: 'Öğrenme Hedefleri' },
         { label: 'Kavram Açıklamaları', type: 'conceptExplanation', defaultTitle: 'Kavram Açıklamaları' },

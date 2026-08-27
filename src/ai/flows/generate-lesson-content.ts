@@ -16,6 +16,9 @@ const GenerateLessonContentInputSchema = z.object({
   itemCount: z.number().optional(), // e.g. 5 questions / concepts
   modules: z.object({
     hookQuestion: z.boolean().optional(),
+    notebookNote: z.boolean().optional(),
+    processFlow: z.boolean().optional(),
+    conceptMatrix: z.boolean().optional(),
     summary: z.boolean().optional(),
     learningObjectives: z.boolean().optional(),
     keyTakeaways: z.boolean().optional(),
@@ -42,6 +45,21 @@ export type GenerateLessonContentOutput = {
     question: string;
     thoughtStarter?: string;
     tag?: string;
+  };
+  notebookNote?: {
+    title?: string;
+    noteTitle?: string;
+    notes: string[];
+    suggestedMinutes?: number;
+  };
+  processFlow?: {
+    title: string;
+    steps: { stepNumber: number; title: string; description: string; icon?: string }[];
+  };
+  conceptMatrix?: {
+    title: string;
+    topicName?: string;
+    quadrants: { label: string; content: string; color?: string; icon?: string }[];
   };
   summary?: { title: string; sentences?: string[]; content?: string }[];
   learningObjectives?: string[];
@@ -76,6 +94,35 @@ const moduleInstructions: Record<string, string> = {
     "question": "Eğer dünyada dürüstlük, adalet ve güven duygusu tamamen yok olsaydı, insanların bir gün bile huzurla yaşaması mümkün olur muydu?",
     "thoughtStarter": "Sizce bir toplumu ayakta tutan en temel manevi değer nedir? Arkadaşlarınızla fikirlerinizi paylaşın.",
     "tag": "Merak & Düşünce Sorusu"
+  }`,
+  notebookNote: `"notebookNote": {
+    "title": "✏️ Defterimize Yazalım",
+    "noteTitle": "Dersin En Önemli Özet Maddeleri",
+    "notes": [
+      "1. Konunun en temel ve unutulmaması gereken 1. ana kuralı.",
+      "2. Öğrencinin defterine yazacağı 2. kritik madde.",
+      "3. Sınavda soru olarak gelebilecek 3. önemli hap bilgi.",
+      "4. Günlük hayata aktarılacak 4. temel ahlaki ilke."
+    ],
+    "suggestedMinutes": 3
+  }`,
+  processFlow: `"processFlow": {
+    "title": "🪜 Konunun Adım Adım Aşamaları & Süreci",
+    "steps": [
+      { "stepNumber": 1, "title": "1. Hazırlık ve Niyet", "description": "Sürecin ilk başlangıç basamağı ve temel şartı.", "icon": "target" },
+      { "stepNumber": 2, "title": "2. Uygulama ve Eylem", "description": "Gerekli adımların sırasıyla ve dikkatle yerine getirilmesi.", "icon": "zap" },
+      { "stepNumber": 3, "title": "3. Tamamlama ve Sonuç", "description": "Sürecin hedefine ulaşması ve güzel bir sonla bağlanması.", "icon": "check" }
+    ]
+  }`,
+  conceptMatrix: `"conceptMatrix": {
+    "title": "🔲 4 Boyutta Konu Analizi",
+    "topicName": "Konu Başlığı",
+    "quadrants": [
+      { "label": "1. Nedir? (Tanım)", "content": "Konunun veya kavramın en sade ve anlaşılır temel tanımı.", "color": "blue" },
+      { "label": "2. Niçin Önemlidir? (Amaç)", "content": "Bu ilkenin veya ibadetin var oluş sebebi, hikmeti ve gayesi.", "color": "emerald" },
+      { "label": "3. Nasıl Uygulanır? (Pratik)", "content": "Günlük hayatta veya ibadet hayatında nasıl hayata geçirilir?", "color": "amber" },
+      { "label": "4. Bize Ne Kazandırır? (Fayda)", "content": "Bireye huzur, topluma adalet ve güven kazandıran nihai sonucu.", "color": "purple" }
+    ]
   }`,
   infographicTable: `"infographicTable": {
     "title": "Hükümlerine Göre Namaz Çeşitleri Karşılaştırma Tablosu",
@@ -216,13 +263,16 @@ ${requestedExamples}
 ### KRİTİK KURALLAR:
 1. SADECE yukarıda istenen alanları (${requestedKeys.join(', ')}) JSON nesnesinde doldur.
 2. "hookQuestion" (Merak & Giriş Sorusu): Derse başlarken öğrencilerin dikkatini anında çekecek, onları derin düşünmeye ve sınıfta tartışmaya sevk edecek ilgi çekici bir açık uçlu soru ("question") ve düşünme yönlendiricisi ("thoughtStarter") oluştur.
-3. "summary" (Konu Özeti / Ders Slaytları): Kaynak metni içeriğin kapsamına göre mantıklı ana başlıklara böl (Sabit bir başlık sınırı YOKTUR; metnin uzunluğuna göre 2, 3, 4, 5, 6 veya daha fazla başlığa serbestçe bölebilirsin). Her başlık ("title") için, ortaokul öğrencisinin rahatça okuyup kavrayabileceği KISA ve ÖZ cümlelerden oluşan bir "sentences" dizisi oluştur.
-4. "learningObjectives" (Öğrenme Hedefleri): Doğrudan öğrencinin dersteki kazanımlarını hedefleyen, öğrenciye hitap eden 3-5 adet net kazanım cümlesi yaz. Bütün hedef cümleleri KESİNLİKLE "... açıklayabileceksiniz", "... tanımlayabileceksiniz", "... ayırt edebileceksiniz", "... kavrayabileceksiniz", "... listeleyebileceksiniz", "... örneklendirebileceksiniz" gibi öğrenci merkezli yeterlilik ve gelecek zaman kipiyle bitmelidir. (Örn: "Namazın farz, vacip ve nafile çeşitlerini ayırt edebileceksiniz.").
-5. "conceptExplanations" ve "flashcards": Tanımları ortaokul düzeyine uygun, akılda kalıcı ve kısa tut.
-6. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
-7. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
-8. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
-9. SADECE saf JSON nesnesi döndür.
+3. "notebookNote" (Defterimize Yazalım): Öğrencilerin defterlerine geçireceği, konunun en can alıcı 3-5 özet maddesini ("notes" dizisi) oluştur. Sade, net ve madde imi ile deftere yazılmaya hazır olsun.
+4. "processFlow" (Adım Adım Yol Haritası / Süreç): Konunun aşamalarını, oluş sırasını veya basamaklarını 3 ila 5 sıralı adım ("steps" dizisi) olarak hazırla. Her adımda "stepNumber", "title" ve "description" olsun.
+5. "conceptMatrix" (4 Boyutta Konu Analizi): Konuyu 4 ana boyuta ("1. Nedir? (Tanım)", "2. Niçin Önemlidir? (Amaç)", "3. Nasıl Uygulanır? (Pratik)", "4. Bize Ne Kazandırır? (Fayda)") bölerek her biri için 1-2 cümlelik net açıklamalar yaz.
+6. "summary" (Konu Özeti / Ders Slaytları): Kaynak metni içeriğin kapsamına göre mantıklı ana başlıklara böl. Her başlık ("title") için, ortaokul öğrencisinin rahatça okuyup kavrayabileceği KISA ve ÖZ cümlelerden oluşan bir "sentences" dizisi oluştur.
+7. "learningObjectives" (Öğrenme Hedefleri): Doğrudan öğrencinin dersteki kazanımlarını hedefleyen, öğrenciye hitap eden 3-5 adet net kazanım cümlesi yaz ("... açıklayabileceksiniz", "... kavrayabileceksiniz" kipiyle).
+8. "conceptExplanations" ve "flashcards": Tanımları ortaokul düzeyine uygun, akılda kalıcı ve kısa tut.
+9. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
+10. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
+11. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
+12. SADECE saf JSON nesnesi döndür.
 `;
 
   const text = await runGeminiWithFallback({

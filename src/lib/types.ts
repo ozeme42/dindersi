@@ -147,10 +147,51 @@ export type HookQuestionStep = {
   isPublished?: boolean; 
 };
 
+export type NotebookNoteStep = {
+  type: 'notebookNote';
+  title: string;
+  noteTitle?: string;
+  notes: string[];
+  suggestedMinutes?: number;
+  isPublished?: boolean;
+};
+
+export type ProcessFlowItem = {
+  stepNumber: number;
+  title: string;
+  description: string;
+  icon?: string;
+};
+
+export type ProcessFlowStep = {
+  type: 'processFlow';
+  title: string;
+  steps: ProcessFlowItem[];
+  isPublished?: boolean;
+};
+
+export type MatrixQuadrant = {
+  label: string;
+  content: string;
+  color?: string;
+  icon?: string;
+};
+
+export type ConceptMatrixStep = {
+  type: 'conceptMatrix';
+  title: string;
+  topicName?: string;
+  quadrants: MatrixQuadrant[];
+  isPublished?: boolean;
+};
+
 export type LessonStep = 
   | ContentStep 
   | ObjectiveListStep
   | HookQuestionStep
+  | NotebookNoteStep
+  | ProcessFlowStep
+  | ConceptMatrixStep
   | McqStep 
   | TfStep 
   | TrueFalseListStep

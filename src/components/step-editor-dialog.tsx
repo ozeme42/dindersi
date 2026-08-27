@@ -25,7 +25,8 @@ import type {
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
     FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, 
-    VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, HookQuestionStep
+    VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, HookQuestionStep,
+    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram } from "@/lib/utils";
@@ -71,6 +72,29 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
         normalized.question = normalized.question || 'Konuyla ilgili merak uyandırıcı soru...';
         normalized.thoughtStarter = normalized.thoughtStarter || '';
         normalized.tag = normalized.tag || '🤔 Merak & Düşünce Sorusu';
+    }
+    // notebookNote normalizasyonu
+    if (normalized.type === 'notebookNote') {
+        normalized.noteTitle = normalized.noteTitle || 'Dersin En Önemli Özet Maddeleri';
+        normalized.notes = normalized.notes || ['1. Önemli ders notu...'];
+        normalized.suggestedMinutes = normalized.suggestedMinutes || 3;
+    }
+    // processFlow normalizasyonu
+    if (normalized.type === 'processFlow') {
+        normalized.steps = normalized.steps || [
+            { stepNumber: 1, title: '1. Aşama Başlığı', description: 'Aşamanın kısa açıklaması...' },
+            { stepNumber: 2, title: '2. Aşama Başlığı', description: 'İkinci aşamanın açıklaması...' }
+        ];
+    }
+    // conceptMatrix normalizasyonu
+    if (normalized.type === 'conceptMatrix') {
+        normalized.topicName = normalized.topicName || '';
+        normalized.quadrants = normalized.quadrants || [
+            { label: '1. Nedir? (Tanım)', content: 'Temel tanım...' },
+            { label: '2. Niçin Önemlidir? (Amaç)', content: 'Önemi ve hikmeti...' },
+            { label: '3. Nasıl Uygulanır? (Pratik)', content: 'Uygulama şekli...' },
+            { label: '4. Bize Ne Kazandırır? (Fayda)', content: 'Bireysel ve toplumsal faydaları...' }
+        ];
     }
 
     return normalized as LessonStep;
@@ -531,6 +555,159 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                 className="min-h-[80px] bg-slate-950 border-amber-500/20 text-amber-100 text-sm leading-relaxed rounded-2xl p-4" 
                                 placeholder="Örn: Arkadaşlarınızla tartışın: Günlük hayatınızda adaletin ne kadar vazgeçilmez olduğunu gösteren bir örnek verebilir misiniz?"
                             />
+                        </div>
+                    </div>
+                );
+            }
+
+            case 'notebookNote': {
+                const noteStep = editedStep as NotebookNoteStep;
+                return (
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="md:col-span-2 space-y-1.5">
+                                <Label className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                                    📝 Defter Başlığı
+                                </Label>
+                                <Input
+                                    value={noteStep.noteTitle || ''}
+                                    onChange={(e) => handleValueChange('noteTitle', e.target.value)}
+                                    className="bg-slate-950 border-white/10 text-white font-semibold"
+                                    placeholder="Örn: Dersin En Önemli Özet Notları"
+                                />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                    ⏳ Süre (Dakika)
+                                </Label>
+                                <Input
+                                    type="number"
+                                    min={1}
+                                    max={15}
+                                    value={noteStep.suggestedMinutes || 3}
+                                    onChange={(e) => handleValueChange('suggestedMinutes', Number(e.target.value))}
+                                    className="bg-slate-950 border-white/10 text-white font-semibold"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                    ✏️ Deftere Yazılacak Maddeler (Özetler)
+                                </Label>
+                                <Button size="sm" onClick={() => addToArray('notes')} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">
+                                    <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Madde Ekle
+                                </Button>
+                            </div>
+                            {(noteStep.notes || []).map((item, index) => (
+                                <div key={`note-${index}`} className="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-white/10">
+                                    <span className="w-6 text-center text-xs font-mono font-bold text-emerald-400">{index + 1}.</span>
+                                    <Input
+                                        value={item}
+                                        onChange={e => handleArrayChange('notes', index, null, e.target.value)}
+                                        className="bg-slate-950 border-white/10 flex-1"
+                                        placeholder="Örn: İslam dininde adalet her şeyin temelidir."
+                                    />
+                                    <Button variant="ghost" size="icon" onClick={() => removeFromArray('notes', index)} className="text-slate-400 hover:text-rose-400">
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            }
+
+            case 'processFlow': {
+                const flowStep = editedStep as ProcessFlowStep;
+                return (
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <Label className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                                🪜 Yol Haritası / Süreç Aşamaları
+                            </Label>
+                            <Button
+                                size="sm"
+                                onClick={() => {
+                                    const nextNum = (flowStep.steps || []).length + 1;
+                                    setEditedStep(prev => ({
+                                        ...(prev as any),
+                                        steps: [...((prev as any)?.steps || []), { stepNumber: nextNum, title: `${nextNum}. Aşama`, description: 'Açıklama...' }]
+                                    }));
+                                }}
+                                className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs"
+                            >
+                                <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Aşama Ekle
+                            </Button>
+                        </div>
+                        <div className="space-y-3">
+                            {(flowStep.steps || []).map((st, index) => (
+                                <div key={`step-${index}`} className="p-3.5 rounded-2xl bg-slate-900 border border-white/10 space-y-2">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <span className="px-2.5 py-0.5 rounded-lg bg-blue-500/20 text-blue-400 font-black text-xs">
+                                            Adım {index + 1}
+                                        </span>
+                                        <Input
+                                            value={st.title}
+                                            onChange={e => handleArrayChange('steps', index, 'title', e.target.value)}
+                                            className="bg-slate-950 border-white/10 flex-1 font-bold text-sm"
+                                            placeholder="Aşama Başlığı"
+                                        />
+                                        <Button variant="ghost" size="icon" onClick={() => removeFromArray('steps', index)} className="text-slate-400 hover:text-rose-400">
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                    <Textarea
+                                        value={st.description}
+                                        onChange={e => handleArrayChange('steps', index, 'description', e.target.value)}
+                                        className="bg-slate-950 border-white/10 text-xs min-h-[60px]"
+                                        placeholder="Bu aşamanın detaylı açıklaması..."
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            }
+
+            case 'conceptMatrix': {
+                const matStep = editedStep as ConceptMatrixStep;
+                return (
+                    <div className="space-y-4">
+                        <div className="space-y-1.5">
+                            <Label className="text-xs font-bold text-purple-400 uppercase tracking-wider">
+                                🔲 İncelenen Konu Başlığı (Opsiyonel)
+                            </Label>
+                            <Input
+                                value={matStep.topicName || ''}
+                                onChange={(e) => handleValueChange('topicName', e.target.value)}
+                                className="bg-slate-950 border-white/10 text-white font-semibold"
+                                placeholder="Örn: Namaz İbadeti"
+                            />
+                        </div>
+
+                        <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                            4 Boyutun Açıklamaları
+                        </Label>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {(matStep.quadrants || []).map((quad, index) => (
+                                <div key={`quad-${index}`} className="p-3.5 rounded-2xl bg-slate-900 border border-white/10 space-y-2">
+                                    <Input
+                                        value={quad.label}
+                                        onChange={e => handleArrayChange('quadrants', index, 'label', e.target.value)}
+                                        className="bg-slate-950 border-white/10 font-black text-xs text-purple-300"
+                                        placeholder="Boyut Etiketi (Örn: 1. Nedir?)"
+                                    />
+                                    <Textarea
+                                        value={quad.content}
+                                        onChange={e => handleArrayChange('quadrants', index, 'content', e.target.value)}
+                                        className="bg-slate-950 border-white/10 text-xs min-h-[80px]"
+                                        placeholder="Bu boyutun açıklaması..."
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                 );
