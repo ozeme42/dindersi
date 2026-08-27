@@ -404,7 +404,7 @@ function InsertStepDivider({
                         <Plus className="h-3.5 w-3.5" /> Buraya Adım Ekle
                     </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 rounded-2xl shadow-2xl p-2 z-50">
+                <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-60 rounded-2xl shadow-2xl p-2 z-50">
                     <DropdownMenuItem 
                         onClick={() => onOpenAi?.(insertIndex)}
                         className="text-xs font-black text-yellow-300 focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2 mb-1 bg-indigo-950/50 border border-indigo-500/30"
@@ -415,27 +415,39 @@ function InsertStepDivider({
                     <DropdownMenuSeparator className="bg-white/10 my-1" />
 
                     <DropdownMenuLabel className="text-[11px] font-black uppercase text-indigo-400 tracking-wider px-2 py-1">
-                        Anlatım Adımı Ekle
+                        Anlatım Adımları
                     </DropdownMenuLabel>
-                    {anlatimOptions.map(opt => (
+                    {[
+                        { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
+                        { label: '📊 Kategori & Sınıflandırma Tablosu', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
+                        { label: '🪜 Adım Adım Süreç & Yol Haritası', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },
+                        { label: '✏️ Defterimize Yazalım', type: 'notebookNote' as LessonStep['type'], title: 'Defterimize Yazalım' },
+                        { label: '💡 Kavram Açıklamaları', type: 'conceptExplanation' as LessonStep['type'], title: 'Kavram Açıklamaları' },
+                        { label: '🔲 4 Boyut Konu Matrisi', type: 'conceptMatrix' as LessonStep['type'], title: '4 Boyutta Konu Analizi' },
+                    ].map(opt => (
                         <DropdownMenuItem 
                             key={opt.label} 
-                            onClick={() => opt.action ? opt.action() : onAddStep(opt.type!, opt.defaultTitle!, insertIndex)}
+                            onClick={() => onAddStep(opt.type!, opt.title!, insertIndex)}
                             className="text-xs font-semibold focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                         >
                             {opt.label}
                         </DropdownMenuItem>
                     ))}
-                    
+
                     <DropdownMenuSeparator className="bg-white/10 my-1" />
                     
                     <DropdownMenuLabel className="text-[11px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">
-                        Değerlendirme Adımı Ekle
+                        Değerlendirme Soruları
                     </DropdownMenuLabel>
-                    {degerlendirmeOptions.map(opt => (
+                    {[
+                        { label: 'Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
+                        { label: 'Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
+                        { label: 'Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
+                        { label: 'Kavram - Tanım Eşleştirme', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
+                    ].map(opt => (
                         <DropdownMenuItem 
                             key={opt.label} 
-                            onClick={() => opt.action ? opt.action() : onAddStep(opt.type!, opt.defaultTitle!, insertIndex)}
+                            onClick={() => onAddStep(opt.type!, opt.title!, insertIndex)}
                             className="text-xs font-semibold focus:bg-purple-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                         >
                             {opt.label}
@@ -448,14 +460,7 @@ function InsertStepDivider({
                         onClick={() => onOpenGameSelector?.(insertIndex)}
                         className="text-xs font-bold text-orange-300 focus:bg-orange-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2"
                     >
-                        <Gamepad2 className="w-4 h-4 mr-2 text-orange-400" /> 🎮 İnteraktif Oyun Ekle...
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem 
-                        onClick={() => onOpenRegisteredAssets?.()}
-                        className="text-xs font-bold text-cyan-300 focus:bg-cyan-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2"
-                    >
-                        <BookOpen className="w-4 h-4 mr-2 text-cyan-400" /> 📚 Konu Varlıkları Çekmecesi...
+                        <Gamepad2 className="w-4 h-4 mr-2 text-orange-400" /> 🎮 Oyun / Etkinlik Ekle...
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -1029,34 +1034,43 @@ export function TopicEditor({
 
                     <div className="flex gap-2 flex-wrap items-center w-full md:w-auto justify-end">
                         
-                        {/* ⚡ 10 Adımlık Otomatik Ders Kur Butonu */}
-                        <Button 
-                            onClick={() => setIsRegisteredAssetsOpen(true)}
-                            className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black rounded-xl text-xs shadow-lg shadow-orange-950/40 border border-white/10 cursor-pointer"
-                        >
-                            <Wand2 className="mr-1.5 h-3.5 w-3.5 text-yellow-200" /> ⚡ 10 Adımlık Dersi Kur
-                        </Button>
-
-                        {/* 📚 Konu Varlıkları Butonu */}
-                        <Button 
-                            variant="outline" 
-                            onClick={() => setIsRegisteredAssetsOpen(true)}
-                            className="border-indigo-500/30 text-indigo-300 hover:text-white hover:bg-indigo-600/20 bg-indigo-950/30 rounded-xl text-xs font-bold"
-                        >
-                            <BookOpen className="mr-1.5 h-3.5 w-3.5 text-indigo-400" /> Konu Varlıkları
-                        </Button>
-
-                        {/* 🎮 Oyun Ekle Butonu */}
-                        <Button 
-                            variant="outline" 
-                            onClick={() => {
-                                setInsertAtIndex(undefined);
-                                setIsGameSelectorOpen(true);
-                            }}
-                            className="border-orange-500/30 text-orange-300 hover:text-white hover:bg-orange-600/20 bg-orange-950/30 rounded-xl text-xs font-bold"
-                        >
-                            <Gamepad2 className="mr-1.5 h-3.5 w-3.5 text-orange-400" /> Oyun Ekle
-                        </Button>
+                        {/* ⋯ Diğer Araçlar — overflow menü */}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="sm" className="border-white/15 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl font-bold text-xs">
+                                    ⋯ Araçlar
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-60 rounded-2xl shadow-2xl p-2 z-50">
+                                <DropdownMenuLabel className="text-[10px] font-black uppercase text-slate-500 tracking-wider px-2 pb-1">Ders Kurulum Araçları</DropdownMenuLabel>
+                                <DropdownMenuItem
+                                    onClick={() => setIsRegisteredAssetsOpen(true)}
+                                    className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-xl cursor-pointer px-2.5 py-2"
+                                >
+                                    <Wand2 className="w-4 h-4 mr-2 text-amber-400" /> ⚡ 10 Adımlık Dersi Otomatik Kur
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => setIsRegisteredAssetsOpen(true)}
+                                    className="text-xs font-semibold focus:bg-indigo-600 focus:text-white rounded-xl cursor-pointer px-2.5 py-2"
+                                >
+                                    <BookOpen className="w-4 h-4 mr-2 text-indigo-400" /> Konu Varlıkları Çekmecesi
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator className="bg-white/10 my-1" />
+                                <DropdownMenuItem
+                                    onClick={() => { setInsertAtIndex(undefined); setIsGameSelectorOpen(true); }}
+                                    className="text-xs font-semibold focus:bg-orange-600 focus:text-white rounded-xl cursor-pointer px-2.5 py-2"
+                                >
+                                    <Gamepad2 className="w-4 h-4 mr-2 text-orange-400" /> Oyun / Etkinlik Ekle
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator className="bg-white/10 my-1" />
+                                <DropdownMenuItem
+                                    onClick={() => setIsBulkImportOpen(true)}
+                                    className="text-xs font-semibold focus:bg-slate-700 focus:text-white rounded-xl cursor-pointer px-2.5 py-2"
+                                >
+                                    <Upload className="w-4 h-4 mr-2 text-slate-400" /> Toplu İçe Aktarma
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                         <Button 
                             variant="secondary" 
@@ -1070,7 +1084,7 @@ export function TopicEditor({
                             onClick={() => onOpenAi?.()}
                             className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-950/40 rounded-xl text-xs font-black cursor-pointer"
                         >
-                            <Sparkles className="mr-1.5 h-3.5 w-3.5 text-yellow-300 animate-pulse" /> ✨ AI Stüdyosu ile Üret
+                            <Sparkles className="mr-1.5 h-3.5 w-3.5 text-yellow-300 animate-pulse" /> AI Stüdyosu
                         </Button>
 
                         <Button 
@@ -1193,68 +1207,13 @@ export function TopicEditor({
 
                 {/* ══ DERS AKIŞI LİSTESİ & ADIM YÖNETİMİ ══ */}
                 <div className="space-y-4">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-2 gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30 text-purple-400">
-                                <Layers className="h-5 w-5" />
-                            </div>
-                            <div>
-                                <h2 className="text-xl font-black text-white">Sunum & Ders Akışı Adımları</h2>
-                                <p className="text-xs text-slate-400">Sıralamayı sürükleyerek veya oklarla değiştirebilir, aralara yeni adım ekleyebilirsiniz.</p>
-                            </div>
+                    <div className="flex items-center gap-3 px-2">
+                        <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30 text-purple-400">
+                            <Layers className="h-5 w-5" />
                         </div>
-
-                        {/* Hızlı Ekleme Menüleri */}
-                        <div className="flex gap-2 flex-wrap">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="sm" className="border-blue-500/30 text-blue-300 hover:text-white hover:bg-blue-600/20 bg-blue-950/30 rounded-xl font-bold text-xs">
-                                        <BookOpen className="mr-1.5 h-3.5 w-3.5" /> Anlatım Ekle
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-56 rounded-2xl shadow-2xl p-1.5 z-50">
-                                    {anlatimStepOptions.map(opt => (
-                                        <DropdownMenuItem 
-                                            key={opt.label} 
-                                            onClick={() => opt.action ? opt.action() : handleAddStep(opt.type!, opt.defaultTitle!)} 
-                                            className="text-xs font-semibold focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer py-1.5"
-                                        >
-                                            {opt.label}
-                                        </DropdownMenuItem>
-                                    ))}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="sm" className="border-purple-500/30 text-purple-300 hover:text-white hover:bg-purple-600/20 bg-purple-950/30 rounded-xl font-bold text-xs">
-                                        <Brain className="mr-1.5 h-3.5 w-3.5" /> Değerlendirme Ekle
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-56 rounded-2xl shadow-2xl p-1.5 z-50">
-                                    {degerlendirmeStepOptions.map(opt => (
-                                        <DropdownMenuItem 
-                                            key={opt.label} 
-                                            onClick={() => opt.action ? opt.action() : handleAddStep(opt.type!, opt.defaultTitle!)} 
-                                            className="text-xs font-semibold focus:bg-purple-600 focus:text-white rounded-lg cursor-pointer py-1.5"
-                                        >
-                                            {opt.label}
-                                        </DropdownMenuItem>
-                                    ))}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-
-                            <Button 
-                                variant="outline" 
-                                size="sm" 
-                                onClick={() => {
-                                    setInsertAtIndex(undefined);
-                                    setIsGameSelectorOpen(true);
-                                }}
-                                className="border-orange-500/30 text-orange-300 hover:text-white hover:bg-orange-600/20 bg-orange-950/30 rounded-xl font-bold text-xs"
-                            >
-                                <Gamepad2 className="mr-1.5 h-3.5 w-3.5" /> Oyun Kataloğu
-                            </Button>
+                        <div>
+                            <h2 className="text-xl font-black text-white">Sunum & Ders Akışı Adımları</h2>
+                            <p className="text-xs text-slate-400">Sıralamayı sürükleyerek veya oklarla değiştirebilir, adımlar arasına yeni adım ekleyebilirsiniz.</p>
                         </div>
                     </div>
 
