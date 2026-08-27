@@ -8,7 +8,8 @@ import { useToast } from '@/hooks/use-toast';
 import { 
     Loader2, Sparkles, Key, Eye, EyeOff, Save, CheckCircle2, 
     Settings2, Brain, Layers, Check, X,
-    Flame, Wand2, BookOpen, Puzzle, HelpCircle, FileText, Shuffle, Target
+    Flame, Wand2, BookOpen, Puzzle, HelpCircle, FileText, Shuffle, Target,
+    ChevronDown, ChevronUp, CheckCircle, Clock
 } from 'lucide-react';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
@@ -72,28 +73,28 @@ export type ActivityOption = {
 };
 
 export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
-    // Anlatım Modülleri
-    { id: 'hookQuestion', label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', description: 'Derse başlarken öğrencilerin dikkatini çeken, düşündürücü açık uçlu soru ve tartışma ipucu', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'anlatim' },
-    { id: 'notebookNote', label: '✏️ Defterimize Yazalım (Özet Defter Notu)', description: 'Öğrencilerin defterlerine yazacağı en sade ve önemli 3-5 madde ile zamanlayıcı', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
-    { id: 'processFlow', label: '🪜 Adım Adım Yol Haritası & Süreç', description: 'Konunun basamaklarını, aşamalarını ve sırasını gösteren etkileşimli akış adımı', icon: <Layers className="w-4 h-4 text-blue-400" />, category: 'anlatim' },
-    { id: 'conceptMatrix', label: '🔲 4 Boyutta Konu Matrisi', description: 'Konuyu Nedir, Niçin Önemlidir, Nasıl Uygulanır ve Faydaları boyutlarıyla inceleyen 4’lü matris', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
-    { id: 'categoryTable', label: '📊 Kategori & Sınıflandırma Tablosu (Örn: Farz/Vacip/Sünnet)', description: 'Konuyu temel gruplara, türlere veya kategorilere ayıran (örn. Farz-Vacip-Sünnet vb.) çok sütunlu şık tablo', icon: <Layers className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
-    { id: 'infographicTable', label: '📊 İnfografik Karşılaştırma Tablosu', description: 'Konunun temel türlerini ve hükümlerini özetleyen renkli infografik tablo', icon: <Layers className="w-4 h-4 text-cyan-400" />, category: 'anlatim' },
-    { id: 'visualInfographics', label: '🔄 Süreç & Akış İnfografiği', description: 'Konunun aşamalarını veya boyutlarını adım adım gösteren görsel infografik diyagram', icon: <Sparkles className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
-    { id: 'htmlSlide', label: 'İnteraktif Zengin HTML Slayt', description: 'Gamma / NotebookLM kalitesinde görsel kartlı modern slayt', icon: <FileText className="w-4 h-4 text-sky-400" />, category: 'anlatim' },
-    { id: 'conceptExplanations', label: 'Kavram Açıklamaları (Kartlar)', description: 'Konunun 3-5 temel kavramı ve detaylı pedagojik tanımları', icon: <Brain className="w-4 h-4 text-indigo-400" />, category: 'anlatim' },
-    { id: 'flashcards', label: '3D Bilgi Kartları (Flashcards)', description: 'Dokunup 3D çevrilen etkileşimli terim-tanım hafıza kartları', icon: <BookOpen className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
-    { id: 'summary', label: 'Konu Özeti (Slayt Başlıkları)', description: 'Konu ana başlıkları ve her başlık altında kısa açıklama cümleleri', icon: <Layers className="w-4 h-4 text-yellow-400" />, category: 'anlatim' },
-    { id: 'learningObjectives', label: 'Öğrenme Hedefleri', description: 'Öğrencinin dersten kazanacağı temel kazanım cümleleri', icon: <Target className="w-4 h-4 text-amber-400" />, category: 'anlatim' },
-    { id: 'keyTakeaways', label: 'Anahtar Çıkarımlar & İpuçları', description: 'Dersin en kritik hap bilgileri ve sınav tüyoları', icon: <Sparkles className="w-4 h-4 text-rose-400" />, category: 'anlatim' },
-    { id: 'conceptMap', label: 'Kavram Haritası Şeması', description: 'Kavramlar arası ilişkileri gösteren etkileşimli görsel şema', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
+    // 📖 Anlatım Modülleri (Presentation)
+    { id: 'hookQuestion', label: '🤔 Merak & Giriş Sorusu', description: 'Derse başlarken öğrencilerin dikkatini çeken açık uçlu soru', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'anlatim' },
+    { id: 'notebookNote', label: '✏️ Defterimize Yazalım', description: 'Deftere yazılacak en kritik 3-5 kural maddesi ve zamanlayıcı', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
+    { id: 'categoryTable', label: '📊 Kategori & Sınıflandırma Tablosu', description: 'Konuyu Farz, Vacip, Sünnet gibi sütunlu gruplara ayıran şık tablo', icon: <Layers className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
+    { id: 'processFlow', label: '🪜 Adım Adım Yol Haritası & Süreç', description: 'Konunun basamaklarını ve sırasını gösteren etkileşimli akış', icon: <Layers className="w-4 h-4 text-blue-400" />, category: 'anlatim' },
+    { id: 'conceptMatrix', label: '🔲 4 Boyutta Konu Analizi', description: 'Tanım, Amaç, Pratik ve Fayda boyutlarıyla 4’lü matris analiz', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
+    { id: 'conceptExplanations', label: '📌 Temel Kavram Kartları', description: 'Konunun anahtar kavramları ve sadeleştirilmiş tanımları', icon: <Brain className="w-4 h-4 text-indigo-400" />, category: 'anlatim' },
+    { id: 'flashcards', label: '🎴 3D Bilgi Kartları (Flashcards)', description: 'Dokunup 3D çevrilen etkileşimli terim-tanım hafıza kartları', icon: <BookOpen className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
+    { id: 'keyTakeaways', label: '💡 Anahtar Çıkarımlar & İpuçları', description: 'Dersin en önemli hap bilgileri ve sınav tüyoları', icon: <Sparkles className="w-4 h-4 text-rose-400" />, category: 'anlatim' },
+    { id: 'htmlSlide', label: '💻 İnteraktif Zengin HTML Slayt', description: 'Modern Gamma/NotebookLM kalitesinde görsel slayt', icon: <FileText className="w-4 h-4 text-sky-400" />, category: 'anlatim' },
+    { id: 'summary', label: '📑 Konu Özeti Başlıkları', description: 'Konu ana başlıkları ve maddeler halinde slayt özeti', icon: <Layers className="w-4 h-4 text-yellow-400" />, category: 'anlatim' },
+    { id: 'learningObjectives', label: '🎯 Öğrenme Hedefleri', description: 'Dersin başında hedeflenen kazanımlar listesi', icon: <Target className="w-4 h-4 text-amber-400" />, category: 'anlatim' },
+    { id: 'infographicTable', label: '📊 Karşılaştırma İnfografiği', description: 'Hükümleri ve türleri karşılaştıran renkli infografik tablo', icon: <Layers className="w-4 h-4 text-cyan-400" />, category: 'anlatim' },
+    { id: 'visualInfographics', label: '🔄 Akış & Süreç İnfografiği', description: 'Görsel diyagramlı aşamalı süreç infografiği', icon: <Sparkles className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
+    { id: 'conceptMap', label: '🧠 Kavram Haritası Şeması', description: 'Kavramlar arası ilişkileri gösteren etkileşimli görsel ağ', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
 
-    // Değerlendirme & Oyun Modülleri
-    { id: 'multipleChoiceQuestions', label: 'Çoktan Seçmeli Sorular (MCQ)', description: '4 seçenekli, açıklamalı test ve kontrol soruları', icon: <HelpCircle className="w-4 h-4 text-violet-400" />, category: 'degerlendirme' },
-    { id: 'trueFalseQuestions', label: 'Doğru / Yanlış Listesi', description: 'Tek ekranda çözülen etkileşimli D/Y ifadeleri', icon: <CheckCircle2 className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
-    { id: 'fillInTheBlankQuestions', label: 'Boşluk Doldurma Soruları', description: 'Kilit kavramları pekiştiren seçenekli boşluk doldurma', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
-    { id: 'anagramQuestions', label: 'Anagram / Kelime Oyunu', description: 'Harfleri karışık verilen kelimeleri bulma bulmacası', icon: <Puzzle className="w-4 h-4 text-fuchsia-400" />, category: 'degerlendirme' },
-    { id: 'sentenceScrambleQuestions', label: 'Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
+    // 🎯 Değerlendirme & Oyun Modülleri (Assessment)
+    { id: 'multipleChoiceQuestions', label: '❓ Çoktan Seçmeli Test (MCQ)', description: '4 seçenekli, açıklamalı test ve kontrol soruları', icon: <HelpCircle className="w-4 h-4 text-violet-400" />, category: 'degerlendirme' },
+    { id: 'trueFalseQuestions', label: '✓/✗ Doğru - Yanlış Listesi', description: 'Tek ekranda çözülen etkileşimli D/Y alıştırması', icon: <CheckCircle2 className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
+    { id: 'fillInTheBlankQuestions', label: '✍️ Boşluk Doldurma Soruları', description: 'Kilit kavramları pekiştiren seçenekli boşluk doldurma', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
+    { id: 'anagramQuestions', label: '🔤 Anagram / Kelime Oyunu', description: 'Harfleri karışık verilen kelimeleri bulma bulmacası', icon: <Puzzle className="w-4 h-4 text-fuchsia-400" />, category: 'degerlendirme' },
+    { id: 'sentenceScrambleQuestions', label: '🧩 Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
 ];
 
 const DEFAULT_MODULES: { [key: string]: boolean } = {};
@@ -119,6 +120,8 @@ export function AiLessonStepGenerationDialog({
   const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>({});
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [activeTab, setActiveTab] = useState<'anlatim' | 'degerlendirme'>('anlatim');
+  const [isSourceTextOpen, setIsSourceTextOpen] = useState(false);
   
   const [apiKey, setApiKey] = useState(() => {
       if (typeof window !== 'undefined') {
@@ -145,7 +148,8 @@ export function AiLessonStepGenerationDialog({
   useEffect(() => {
     if (isOpen) {
       setLocalSourceText(sourceText || topicTitle || '');
-      setSelectedModules({}); // Hiçbir modül seçili gelmesin, kullanıcı kendisi seçsin
+      setSelectedModules({}); // Başlangıçta temiz gelsin
+      setIsSourceTextOpen(!sourceText || sourceText.length < 50);
     }
   }, [isOpen, sourceText, topicTitle]);
 
@@ -164,29 +168,69 @@ export function AiLessonStepGenerationDialog({
     }));
   };
 
-  // Hazır Şablon Presetleri
-  const applyPreset = (preset: 'full' | 'clear' | 'presentation' | 'cards' | 'games' | 'assessment') => {
+  const anlatimOptions = ALL_ACTIVITY_OPTIONS.filter(opt => opt.category === 'anlatim');
+  const degerlendirmeOptions = ALL_ACTIVITY_OPTIONS.filter(opt => opt.category === 'degerlendirme');
+
+  const selectedAnlatimCount = anlatimOptions.filter(opt => selectedModules[opt.id]).length;
+  const selectedDegerlendirmeCount = degerlendirmeOptions.filter(opt => selectedModules[opt.id]).length;
+  const totalSelectedCount = Object.values(selectedModules).filter(Boolean).length;
+
+  const selectAllInCategory = (category: 'anlatim' | 'degerlendirme') => {
+    setSelectedModules(prev => {
+        const next = { ...prev };
+        ALL_ACTIVITY_OPTIONS.filter(o => o.category === category).forEach(o => {
+            next[o.id] = true;
+        });
+        return next;
+    });
+  };
+
+  const clearCategory = (category: 'anlatim' | 'degerlendirme') => {
+    setSelectedModules(prev => {
+        const next = { ...prev };
+        ALL_ACTIVITY_OPTIONS.filter(o => o.category === category).forEach(o => {
+            delete next[o.id];
+        });
+        return next;
+    });
+  };
+
+  // Hızlı Hazır Paketler
+  const applyPreset = (preset: 'tamDers' | 'anlatim' | 'sorular' | 'defter' | 'all' | 'clear') => {
     const modules: { [key: string]: boolean } = {};
-    if (preset === 'full') {
+    if (preset === 'all') {
         ALL_ACTIVITY_OPTIONS.forEach(opt => modules[opt.id] = true);
     } else if (preset === 'clear') {
         // Boş bırak
-    } else if (preset === 'presentation') {
-        modules['htmlSlide'] = true;
-        modules['summary'] = true;
-        modules['learningObjectives'] = true;
-        modules['conceptMap'] = true;
-    } else if (preset === 'cards') {
+    } else if (preset === 'tamDers') {
+        modules['hookQuestion'] = true;
+        modules['notebookNote'] = true;
+        modules['categoryTable'] = true;
         modules['conceptExplanations'] = true;
-        modules['flashcards'] = true;
+        modules['trueFalseQuestions'] = true;
+        modules['multipleChoiceQuestions'] = true;
+        setActiveTab('anlatim');
+    } else if (preset === 'anlatim') {
+        modules['hookQuestion'] = true;
+        modules['notebookNote'] = true;
+        modules['categoryTable'] = true;
+        modules['processFlow'] = true;
+        modules['conceptExplanations'] = true;
         modules['keyTakeaways'] = true;
-    } else if (preset === 'games') {
-        modules['anagramQuestions'] = true;
-        modules['sentenceScrambleQuestions'] = true;
-    } else if (preset === 'assessment') {
+        setActiveTab('anlatim');
+    } else if (preset === 'sorular') {
         modules['multipleChoiceQuestions'] = true;
         modules['trueFalseQuestions'] = true;
         modules['fillInTheBlankQuestions'] = true;
+        modules['anagramQuestions'] = true;
+        modules['sentenceScrambleQuestions'] = true;
+        setActiveTab('degerlendirme');
+    } else if (preset === 'defter') {
+        modules['notebookNote'] = true;
+        modules['categoryTable'] = true;
+        modules['conceptExplanations'] = true;
+        modules['flashcards'] = true;
+        setActiveTab('anlatim');
     }
     setSelectedModules(modules);
   };
@@ -225,8 +269,8 @@ export function AiLessonStepGenerationDialog({
     }
   };
 
-  const handleGenerate = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleGenerate = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
 
     const trimmedText = localSourceText.trim();
     if (trimmedText.length < 3) {
@@ -664,23 +708,23 @@ export function AiLessonStepGenerationDialog({
     };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in-0 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in-0 duration-200">
       <div 
-        className="relative w-full max-w-3xl max-h-[92vh] flex flex-col bg-slate-950 border border-white/15 text-slate-100 shadow-2xl rounded-3xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-4xl max-h-[94vh] flex flex-col bg-slate-950 border border-white/15 text-slate-100 shadow-2xl rounded-3xl overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="p-5 pb-4 border-b border-white/10 bg-slate-900/80 backdrop-blur-md flex flex-row items-center justify-between flex-shrink-0">
+        {/* ══ 1. ÜST BAŞLIK & AYARLAR ÇUBUĞU ══ */}
+        <div className="p-3.5 sm:p-4.5 px-4 sm:px-6 border-b border-white/10 bg-slate-900/90 backdrop-blur-md flex flex-row items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-br from-purple-500/20 to-rose-500/20 rounded-2xl border border-purple-500/30 text-purple-400">
-                <Flame className="h-5 w-5 text-rose-400 animate-pulse" />
+            <div className="p-2 sm:p-2.5 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl border border-purple-500/30 text-purple-400 shadow-md flex-shrink-0">
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-300 animate-pulse" />
             </div>
             <div>
-                <h3 className="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
-                    Yapay Zeka Stüdyosu & İçerik Fabrikası
+                <h3 className="text-sm sm:text-base md:text-lg font-black uppercase tracking-tight text-white flex items-center gap-2">
+                    ✨ Yapay Zekâ Stüdyosu
                 </h3>
-                <p className="text-xs text-slate-400">
-                    {topicTitle ? `"${topicTitle}" konusu için zengin interaktif içerikler üretin.` : 'Konu için zengin sunum ve değerlendirme slaytları üretin.'}
+                <p className="text-[11px] sm:text-xs text-slate-400 truncate max-w-[220px] sm:max-w-md">
+                    {topicTitle ? `"${topicTitle}" konusu için akıllı slayt ve alıştırmalar üretin.` : 'Ders için akıllı sunum ve alıştırma adımları üretin.'}
                 </p>
             </div>
           </div>
@@ -692,27 +736,27 @@ export function AiLessonStepGenerationDialog({
                 size="sm"
                 onClick={() => setShowSettings(!showSettings)}
                 className={cn(
-                    "border-white/10 text-xs font-bold rounded-xl transition-all",
+                    "border-white/10 text-xs font-bold rounded-xl transition-all h-8",
                     showSettings ? "bg-indigo-600 text-white border-indigo-500 shadow-md" : "bg-slate-900 text-slate-300 hover:bg-slate-800"
                 )}
               >
                 <Settings2 className="w-3.5 h-3.5 mr-1.5 text-indigo-400" />
-                Model & API
+                <span className="hidden sm:inline">Model & API</span>
               </Button>
 
               <button
                 type="button"
                 onClick={handleClose}
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
           </div>
         </div>
 
-        {/* Ayarlar Akordiyonu */}
+        {/* ══ 2. MODEL & API AYARLARI ÇEKMECESİ ══ */}
         {showSettings && (
-            <div className="bg-slate-900/95 border-b border-white/10 p-5 space-y-4 animate-in slide-in-from-top-2 duration-200 flex-shrink-0">
+            <div className="bg-slate-900/95 border-b border-white/10 p-4 sm:p-5 space-y-4 animate-in slide-in-from-top-2 duration-200 flex-shrink-0">
                 <div className="flex items-center justify-between">
                     <h4 className="text-xs font-black uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
                         <Key className="w-3.5 h-3.5" /> Google AI Studio API Anahtarı & Model Seçimi
@@ -778,162 +822,286 @@ export function AiLessonStepGenerationDialog({
             </div>
         )}
 
-        {/* Ana Form Alanı */}
-        <form onSubmit={handleGenerate} className="p-5 overflow-y-auto space-y-5 flex-1 min-h-0">
-            {/* Kaynak Metin */}
-            <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-slate-300">Konu Başlığı / Kaynak Metin</Label>
-                    <span className="text-[11px] font-bold text-indigo-300 bg-indigo-950/60 border border-indigo-500/30 px-2.5 py-0.5 rounded-full">
+        {/* ══ 3. KOMPAKT KAYNAK METİN ALANI ══ */}
+        <div className="bg-slate-900/60 border-b border-white/10 p-3 sm:px-6 flex flex-col gap-2 flex-shrink-0">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <span className="p-1 bg-indigo-500/20 rounded-lg text-indigo-300 border border-indigo-500/30">
+                        <FileText className="w-3.5 h-3.5" />
+                    </span>
+                    <span className="text-xs font-bold text-slate-300">Kaynak Metin & Konu</span>
+                    <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/70 border border-indigo-500/30 px-2 py-0.5 rounded-full">
                         {localSourceText.length.toLocaleString('tr-TR')} karakter • {localSourceText.trim().split(/\s+/).filter(Boolean).length} kelime
                     </span>
                 </div>
-                <Textarea 
-                    value={localSourceText}
-                    onChange={(e) => setLocalSourceText(e.target.value)}
-                    placeholder="Konu başlığını veya ders kitabı metnini buraya yapıştırın (Uzunluk kısıtlaması yoktur)..."
-                    className="min-h-[140px] max-h-[260px] bg-slate-900 border-white/10 rounded-2xl text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 leading-relaxed font-sans"
-                />
+
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsSourceTextOpen(!isSourceTextOpen)}
+                    className="h-7 px-2.5 text-xs text-indigo-300 hover:text-white hover:bg-white/10 font-bold rounded-lg"
+                >
+                    {isSourceTextOpen ? (
+                        <><ChevronUp className="w-3.5 h-3.5 mr-1" /> Metin Kutusunu Kapat</>
+                    ) : (
+                        <><ChevronDown className="w-3.5 h-3.5 mr-1" /> Metni Düzenle / Gör 📝</>
+                    )}
+                </Button>
             </div>
 
-            {/* ⚡ Hızlı Şablon Butonları */}
-            <div className="space-y-1.5">
-                <Label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                    <Wand2 className="w-3.5 h-3.5 text-yellow-400" /> Hızlı Zengin İçerik Paketleri
+            {/* Genişletilmiş Textarea */}
+            {isSourceTextOpen && (
+                <div className="mt-1 animate-in fade-in-50 duration-200">
+                    <Textarea 
+                        value={localSourceText}
+                        onChange={(e) => setLocalSourceText(e.target.value)}
+                        placeholder="Konu başlığını veya ders kitabı metnini buraya yapıştırın (Uzunluk kısıtlaması yoktur)..."
+                        className="min-h-[100px] max-h-[200px] bg-slate-950 border-white/15 rounded-xl text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 font-sans leading-relaxed"
+                    />
+                </div>
+            )}
+        </div>
+
+        {/* ══ 4. HIZLI HAZIR PAKETLER (TEK TIKLA SEÇİM) ══ */}
+        <div className="p-3 sm:px-6 pt-3 bg-slate-950 flex-shrink-0 space-y-1.5 border-b border-white/5">
+            <div className="flex items-center justify-between">
+                <Label className="text-[11px] sm:text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <Wand2 className="w-3.5 h-3.5 text-yellow-400" /> ⚡ Hızlı Hazır Paketler (Tek Tıkla Seç)
                 </Label>
-                <div className="flex items-center gap-1.5 flex-wrap">
-                    <Button 
-                        type="button" 
-                        size="sm" 
-                        onClick={() => applyPreset('full')}
-                        className="bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-xs rounded-xl h-8 px-3"
+                <div className="flex items-center gap-1.5">
+                    <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => applyPreset('all')}
+                        className="h-6 px-2 text-[11px] text-amber-400 hover:text-amber-300 font-bold"
                     >
-                        ✨ Tümünü Seç
+                        Tümünü Seç
                     </Button>
-                    <Button 
-                        type="button" 
-                        size="sm" 
-                        variant="outline"
+                    <span className="text-slate-600">•</span>
+                    <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
                         onClick={() => applyPreset('clear')}
-                        className="border-rose-500/40 text-rose-300 hover:bg-rose-500/20 bg-rose-950/30 text-xs rounded-xl h-8 px-2.5"
+                        className="h-6 px-2 text-[11px] text-rose-400 hover:text-rose-300 font-bold"
                     >
-                        🗑️ Temizle
-                    </Button>
-                    <Button 
-                        type="button" 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => applyPreset('presentation')}
-                        className="border-sky-500/40 text-sky-300 hover:bg-sky-500/20 bg-sky-950/30 text-xs rounded-xl h-8 px-2.5"
-                    >
-                        💻 Slayt & Başlıklar
-                    </Button>
-                    <Button 
-                        type="button" 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => applyPreset('cards')}
-                        className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20 bg-emerald-950/30 text-xs rounded-xl h-8 px-2.5"
-                    >
-                        💡 Bilgi Kartları
-                    </Button>
-                    <Button 
-                        type="button" 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => applyPreset('games')}
-                        className="border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/20 bg-fuchsia-950/30 text-xs rounded-xl h-8 px-2.5"
-                    >
-                        🔤 Oyunlar
-                    </Button>
-                    <Button 
-                        type="button" 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => applyPreset('assessment')}
-                        className="border-purple-500/40 text-purple-300 hover:bg-purple-500/20 bg-purple-950/30 text-xs rounded-xl h-8 px-2.5"
-                    >
-                        🎯 Soru Çözümü
+                        Temizle
                     </Button>
                 </div>
             </div>
 
-            {/* Modül Seçim Kartları */}
-            <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between">
-                    <Label className="text-xs font-bold text-slate-300">
-                        Üretilecek Slayt ve Etkinlik Türleri
-                    </Label>
-                    <span className="text-[11px] font-bold text-indigo-400 bg-indigo-950/40 border border-indigo-500/30 px-2 py-0.5 rounded-full">
-                        {Object.values(selectedModules).filter(Boolean).length} / {ALL_ACTIVITY_OPTIONS.length} Seçili
-                    </span>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                {/* 1. Tam Ders Paketi */}
+                <button
+                    type="button"
+                    onClick={() => applyPreset('tamDers')}
+                    className="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-950/60 to-purple-950/60 border border-indigo-500/40 hover:border-indigo-400 text-left transition-all hover:scale-[1.02] shadow-sm group cursor-pointer"
+                >
+                    <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-black text-white group-hover:text-indigo-300">🌟 Tam Ders</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">6 Adım</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 line-clamp-1 leading-tight">
+                        Giriş, Not, Kategori, Kavram, Test, D/Y
+                    </p>
+                </button>
+
+                {/* 2. Konu Anlatımı Paketi */}
+                <button
+                    type="button"
+                    onClick={() => applyPreset('anlatim')}
+                    className="p-2.5 rounded-2xl bg-gradient-to-br from-blue-950/60 to-cyan-950/60 border border-blue-500/40 hover:border-blue-400 text-left transition-all hover:scale-[1.02] shadow-sm group cursor-pointer"
+                >
+                    <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-black text-white group-hover:text-cyan-300">📖 Konu Anlatımı</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">5 Adım</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 line-clamp-1 leading-tight">
+                        Giriş, Not, Kategori, Süreç, Kavramlar
+                    </p>
+                </button>
+
+                {/* 3. Soru & Alıştırma Paketi */}
+                <button
+                    type="button"
+                    onClick={() => applyPreset('sorular')}
+                    className="p-2.5 rounded-2xl bg-gradient-to-br from-purple-950/60 to-pink-950/60 border border-purple-500/40 hover:border-purple-400 text-left transition-all hover:scale-[1.02] shadow-sm group cursor-pointer"
+                >
+                    <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-black text-white group-hover:text-purple-300">🎯 Soru & Oyunlar</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">5 Adım</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 line-clamp-1 leading-tight">
+                        Test (MCQ), D/Y, Boşluk, Anagram, Cümle
+                    </p>
+                </button>
+
+                {/* 4. Defter & Kavram Paketi */}
+                <button
+                    type="button"
+                    onClick={() => applyPreset('defter')}
+                    className="p-2.5 rounded-2xl bg-gradient-to-br from-emerald-950/60 to-teal-950/60 border border-emerald-500/40 hover:border-emerald-400 text-left transition-all hover:scale-[1.02] shadow-sm group cursor-pointer"
+                >
+                    <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-black text-white group-hover:text-emerald-300">✏️ Defter & Kavram</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">4 Adım</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 line-clamp-1 leading-tight">
+                        Defter Notu, Kategori, Kavram & 3D Kart
+                    </p>
+                </button>
+            </div>
+        </div>
+
+        {/* ══ 5. SEKME GEZİNTİSİ & MODÜL SEÇİM KARTLARI ══ */}
+        <div className="flex flex-col flex-1 min-h-0 overflow-hidden bg-slate-950">
+            {/* Sekme Başlıkları */}
+            <div className="px-3 sm:px-6 pt-3 pb-2 border-b border-white/10 flex items-center justify-between gap-2 flex-shrink-0 bg-slate-950">
+                <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-2xl border border-white/10">
+                    <button
+                        type="button"
+                        onClick={() => setActiveTab('anlatim')}
+                        className={cn(
+                            "px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer",
+                            activeTab === 'anlatim'
+                                ? "bg-blue-600 text-white shadow-md shadow-blue-950/50"
+                                : "text-slate-400 hover:text-white hover:bg-white/5"
+                        )}
+                    >
+                        <BookOpen className="w-3.5 h-3.5" />
+                        <span>1. Konu Anlatımı Slaytları</span>
+                        <span className={cn(
+                            "px-1.5 py-0.2 rounded-full text-[10px] font-mono",
+                            activeTab === 'anlatim' ? "bg-white/20 text-white" : "bg-slate-800 text-slate-400"
+                        )}>
+                            {selectedAnlatimCount}/{anlatimOptions.length}
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => setActiveTab('degerlendirme')}
+                        className={cn(
+                            "px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer",
+                            activeTab === 'degerlendirme'
+                                ? "bg-purple-600 text-white shadow-md shadow-purple-950/50"
+                                : "text-slate-400 hover:text-white hover:bg-white/5"
+                        )}
+                    >
+                        <Brain className="w-3.5 h-3.5" />
+                        <span>2. Soru, Test & Oyunlar</span>
+                        <span className={cn(
+                            "px-1.5 py-0.2 rounded-full text-[10px] font-mono",
+                            activeTab === 'degerlendirme' ? "bg-white/20 text-white" : "bg-slate-800 text-slate-400"
+                        )}>
+                            {selectedDegerlendirmeCount}/{degerlendirmeOptions.length}
+                        </span>
+                    </button>
                 </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {ALL_ACTIVITY_OPTIONS.map(opt => {
+
+                {/* Sekmeye Özel Hızlı Seçim Butonları */}
+                <div className="flex items-center gap-1">
+                    <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => selectAllInCategory(activeTab)}
+                        className="h-7 px-2 text-[11px] text-indigo-400 hover:text-indigo-300 font-bold"
+                    >
+                        Tümünü Seç
+                    </Button>
+                    <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => clearCategory(activeTab)}
+                        className="h-7 px-2 text-[11px] text-slate-400 hover:text-rose-400 font-bold"
+                    >
+                        Temizle
+                    </Button>
+                </div>
+            </div>
+
+            {/* Modül Kartları Izgarası (Kaydırılabilir) */}
+            <div className="p-3 sm:p-6 overflow-y-auto flex-1 min-h-0 space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                    {(activeTab === 'anlatim' ? anlatimOptions : degerlendirmeOptions).map(opt => {
                         const isChecked = !!selectedModules[opt.id];
                         return (
                             <div 
                                 key={opt.id}
                                 onClick={() => toggleModule(opt.id)}
                                 className={cn(
-                                    "p-3 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 select-none",
+                                    "p-3 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between select-none group",
                                     isChecked 
-                                        ? "bg-indigo-950/40 border-indigo-500/50 shadow-md shadow-indigo-950/40" 
-                                        : "bg-slate-900/40 border-white/5 hover:border-white/20 opacity-70 hover:opacity-100"
+                                        ? "bg-indigo-950/80 border-indigo-400 shadow-md shadow-indigo-950/50 scale-[1.01]" 
+                                        : "bg-slate-900/50 border-white/5 hover:border-white/20 hover:bg-slate-900/80 opacity-75 hover:opacity-100"
                                 )}
                             >
-                                <div className={cn(
-                                    "mt-0.5 w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                                    isChecked ? "bg-indigo-600 border-indigo-500 text-white" : "border-white/20 bg-slate-950"
-                                )}>
-                                    {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-1.5 mb-0.5">
-                                        {opt.icon}
-                                        <h5 className="font-bold text-xs text-white truncate">{opt.label}</h5>
+                                <div className="flex items-start justify-between gap-2 mb-1.5">
+                                    <div className="flex items-center gap-2">
+                                        <div className={cn(
+                                            "p-1.5 rounded-xl border flex items-center justify-center transition-colors flex-shrink-0",
+                                            isChecked ? "bg-indigo-600/30 border-indigo-400/50" : "bg-slate-950 border-white/10"
+                                        )}>
+                                            {opt.icon}
+                                        </div>
+                                        <h5 className="font-bold text-xs text-white leading-tight">{opt.label}</h5>
                                     </div>
-                                    <p className="text-[10px] text-slate-400 leading-snug line-clamp-2">
-                                        {opt.description}
-                                    </p>
+                                    <div className={cn(
+                                        "w-4 h-4 rounded-md border flex items-center justify-center flex-shrink-0 transition-colors mt-0.5",
+                                        isChecked ? "bg-indigo-500 border-indigo-400 text-white" : "border-white/20 bg-slate-950"
+                                    )}>
+                                        {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
+                                    </div>
                                 </div>
+                                <p className="text-[10px] text-slate-400 group-hover:text-slate-300 leading-snug line-clamp-2">
+                                    {opt.description}
+                                </p>
                             </div>
                         );
                     })}
                 </div>
             </div>
+        </div>
 
-            {/* Modal Footer */}
-            <div className="p-0 pt-4 flex items-center justify-between sm:justify-between border-t border-white/10 flex-shrink-0">
-                <span className="text-[11px] text-slate-400">
-                    Aktif Model: <span className="font-bold text-indigo-400">{activeModelId}</span>
+        {/* ══ 6. STICKY ALT AKSİYON ÇUBUĞU ══ */}
+        <div className="p-3 sm:px-6 border-t border-white/10 bg-slate-900/90 backdrop-blur-md flex items-center justify-between flex-shrink-0">
+            <div className="flex items-center gap-3">
+                <span className="text-xs font-bold text-white bg-indigo-950 border border-indigo-500/40 px-3 py-1 rounded-xl">
+                    ✨ <span className="text-indigo-300 font-black">{totalSelectedCount}</span> Modül Seçildi
                 </span>
-
-                <div className="flex gap-2">
-                    <Button 
-                        type="button" 
-                        variant="ghost" 
-                        onClick={handleClose} 
-                        disabled={isGenerating}
-                        className="text-slate-400 hover:text-white text-xs rounded-xl"
-                    >
-                        Vazgeç
-                    </Button>
-                    <Button 
-                        type="submit" 
-                        disabled={isGenerating}
-                        className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs px-6 rounded-xl shadow-xl shadow-purple-950/50"
-                    >
-                        {isGenerating ? (
-                            <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> İçerikler Üretiliyor...</>
-                        ) : (
-                            <><Sparkles className="w-4 h-4 mr-2 text-yellow-300" /> Seçilenleri Üret & Akışa Ekle</>
-                        )}
-                    </Button>
-                </div>
+                <span className="text-[11px] text-slate-400 hidden sm:inline">
+                    Model: <span className="font-bold text-indigo-400">{activeModelId}</span>
+                </span>
             </div>
-        </form>
+
+            <div className="flex items-center gap-2">
+                <Button 
+                    type="button" 
+                    variant="ghost" 
+                    onClick={handleClose} 
+                    disabled={isGenerating}
+                    className="text-slate-400 hover:text-white text-xs rounded-xl"
+                >
+                    Vazgeç
+                </Button>
+                <Button 
+                    type="button"
+                    onClick={handleGenerate}
+                    disabled={isGenerating || totalSelectedCount === 0}
+                    className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs px-5 sm:px-6 rounded-xl shadow-xl shadow-purple-950/50 disabled:opacity-40 cursor-pointer"
+                >
+                    {isGenerating ? (
+                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> İçerikler Üretiliyor...</>
+                    ) : (
+                        <><Sparkles className="w-4 h-4 mr-2 text-yellow-300" /> {totalSelectedCount > 0 ? `Seçilen ${totalSelectedCount} Adımı Üret` : 'Modül Seçin'}</>
+                    )}
+                </Button>
+            </div>
+        </div>
       </div>
     </div>
   );
