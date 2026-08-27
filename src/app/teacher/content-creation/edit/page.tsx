@@ -12,10 +12,12 @@ import {
     FilePenLine, Eye, Upload, Library, Gamepad2, Shuffle, 
     Puzzle, Layers, Grip, LayersIcon, 
     Video, FileText, Image as ImageIcon, GraduationCap, HelpCircle, Database, EyeOff, 
-    CheckCircle2, XCircle, Copy, ChevronUp, ChevronDown, Plus, Check, Wand2, Flag
+    CheckCircle2, XCircle, Copy, ChevronUp, ChevronDown, Plus, Check, Wand2, Flag,
+    Send, Lightbulb, MessageSquare
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
+import { generateCustomPromptStep } from '@/ai/flows/generate-custom-prompt-step';
 import Link from 'next/link';
 import Image from "next/image";
 import { 
@@ -475,6 +477,9 @@ export function TopicEditor({
     const [insertAtIndex, setInsertAtIndex] = useState<number | undefined>(undefined);
     const [libraryConfig, setLibraryConfig] = useState<{ filter: any[]; multiSelect: boolean; stepType: any; targetIndex?: number }>({ filter: [], multiSelect: false, stepType: 'content' });
     
+    const [quickPromptText, setQuickPromptText] = useState('');
+    const [isQuickPromptGenerating, setIsQuickPromptGenerating] = useState(false);
+
     const { toast } = useToast();
     const searchParams = useSearchParams();
     const courseId = searchParams.get('courseId');
@@ -522,6 +527,41 @@ export function TopicEditor({
         const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1;
         if (toIndex < 0 || toIndex >= steps.length) return;
         setSteps(items => arrayMove(items, fromIndex, toIndex));
+    };
+
+    const handleQuickPromptGenerate = async () => {
+        const prompt = quickPromptText.trim();
+        if (!prompt) return;
+
+        setIsQuickPromptGenerating(true);
+        try {
+            const result = await generateCustomPromptStep({
+                userPrompt: prompt,
+                topicTitle: title || 'Ders Konusu',
+                sourceText: sourceText.trim() || undefined,
+            });
+
+            if (result.steps && result.steps.length > 0) {
+                const newStepsWithIds: DraggableLessonStep[] = result.steps.map((step, idx) => ({
+                    ...step,
+                    id: (step as any).id || `step-${Date.now()}-${idx}-${Math.random()}`
+                }));
+                setSteps(prev => [...prev, ...newStepsWithIds]);
+                setQuickPromptText('');
+                toast({
+                    title: "✅ Slayt Başarıyla Eklendi",
+                    description: result.message,
+                });
+            }
+        } catch (err: any) {
+            toast({
+                title: "Üretim Hatası",
+                description: err.message || "Slayt üretilirken bir hata oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsQuickPromptGenerating(false);
+        }
     };
 
     const handleAddStep = (type: LessonStep['type'], defaultTitle: string, atIndex?: number) => {
@@ -1076,6 +1116,71 @@ export function TopicEditor({
 
                 {children}
                 
+                {/* ══ HIZLI YAPAY ZEKA PROMPT İLE SLAYT EKLEME ÇUBUĞU ══ */}
+                <Card className="p-3 sm:p-4 rounded-3xl bg-gradient-to-r from-indigo-950/80 via-slate-900/90 to-purple-950/80 border-2 border-indigo-500/30 shadow-xl space-y-2.5">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                            <div className="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 flex items-center justify-center">
+                                <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
+                            </div>
+                            <span className="text-xs font-black text-white whitespace-nowrap">
+                                AI Asistanı:
+                            </span>
+                        </div>
+
+                        <div className="flex-1 relative">
+                            <Input
+                                value={quickPromptText}
+                                onChange={(e) => setQuickPromptText(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleQuickPromptGenerate();
+                                    }
+                                }}
+                                placeholder="Yapay zekâya söyleyin, slaytı anında üretsin (Örn: Haccın yapılışını adım adım gösteren infografik ve süreç akışı ekle)..."
+                                className="bg-slate-950/90 border-white/15 text-xs sm:text-sm text-white placeholder:text-slate-500 h-10 rounded-xl pr-3"
+                            />
+                        </div>
+
+                        <Button
+                            type="button"
+                            onClick={handleQuickPromptGenerate}
+                            disabled={isQuickPromptGenerating || !quickPromptText.trim()}
+                            className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs h-10 px-5 rounded-xl shadow-lg shadow-emerald-950/50 flex-shrink-0 cursor-pointer disabled:opacity-40"
+                        >
+                            {isQuickPromptGenerating ? (
+                                <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Hazırlanıyor...</>
+                            ) : (
+                                <><Send className="w-3.5 h-3.5 mr-1.5" /> 🚀 Üret & Ekle</>
+                            )}
+                        </Button>
+                    </div>
+
+                    {/* Hızlı Örnek İstek Etiketleri */}
+                    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
+                        <span className="text-slate-400 font-bold flex items-center gap-1 flex-shrink-0">
+                            <Lightbulb className="w-3 h-3 text-amber-400" /> Hızlı İstekler:
+                        </span>
+                        {[
+                            "Haccın yapılışını adım adım gösteren süreç akışı ve infografik hazırla",
+                            "Namazın farzları ve vacipleri tablosu yap",
+                            "Ahiret hayatının aşamalarını gösteren yol haritası ekle",
+                            "Konuyla ilgili 4 adet çoktan seçmeli sınav sorusu üret",
+                            "Deftere yazılacak en önemli 3 özet kuralı hazırla",
+                        ].map((sample, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setQuickPromptText(sample)}
+                                className="px-2.5 py-1 rounded-full bg-slate-950/80 hover:bg-indigo-950 border border-white/10 hover:border-indigo-400 text-slate-300 hover:text-white font-medium whitespace-nowrap transition-colors cursor-pointer flex-shrink-0 text-[10px]"
+                            >
+                                ✨ {sample.slice(0, 32)}...
+                            </button>
+                        ))}
+                    </div>
+                </Card>
+
                 {/* ══ DERS AKIŞI LİSTESİ & ADIM YÖNETİMİ ══ */}
                 <div className="space-y-4">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-2 gap-4">
