@@ -2227,6 +2227,11 @@ export function NotebookNotePlayer({
     fontSizeScale?: string;
 }) {
     const isTeacher = useTeacherMode();
+    const hasConcepts = (step.conceptDefinitions && step.conceptDefinitions.length > 0);
+    const hasNotes = (step.notes && step.notes.length > 0);
+
+    const [activeTab, setActiveTab] = useState<'concepts' | 'notes'>(hasConcepts ? 'concepts' : 'notes');
+
     const initialSeconds = (step.suggestedMinutes || 3) * 60;
     const [timeLeft, setTimeLeft] = useState(initialSeconds);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -2298,107 +2303,214 @@ export function NotebookNotePlayer({
         }
     };
 
+    const getConceptTitleFontSize = () => {
+        switch (cardScale) {
+            case 'xs': return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
+            case 'sm': return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
+            case 'md': return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+            case 'lg': return isTeacher ? "text-3xl md:text-4xl" : "text-xl md:text-2xl";
+            case 'xl': return isTeacher ? "text-4xl md:text-5xl" : "text-2xl md:text-3xl";
+            default: return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+        }
+    };
+
+    const getConceptDefFontSize = () => {
+        switch (cardScale) {
+            case 'xs': return isTeacher ? "text-sm md:text-base" : "text-xs";
+            case 'sm': return isTeacher ? "text-base md:text-lg" : "text-xs md:text-sm";
+            case 'md': return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
+            case 'lg': return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
+            case 'xl': return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+            default: return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
+        }
+    };
+
+    const conceptColorClasses = [
+        'bg-indigo-900/40 border-indigo-500/50 text-indigo-100', 
+        'bg-emerald-900/40 border-emerald-500/50 text-emerald-100', 
+        'bg-rose-900/40 border-rose-500/50 text-rose-100', 
+        'bg-amber-900/40 border-amber-500/50 text-amber-100', 
+        'bg-cyan-900/40 border-cyan-500/50 text-cyan-100',
+        'bg-fuchsia-900/40 border-fuchsia-500/50 text-fuchsia-100'
+    ];
+
     return (
         <div className={cn(
-            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 select-none max-w-5xl mx-auto overflow-y-auto",
+            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 select-none max-w-6xl mx-auto overflow-y-auto",
             isFullscreen ? "py-6" : "py-3"
         )}>
-            {/* ══ ÜST KONTROL & SAYAÇ ÇUBUĞU ══ */}
+            {/* ══ ÜST KONTROL & SEKMELER ══ */}
             <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4 md:mb-6">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-2 border-emerald-400/40 text-emerald-700 dark:text-emerald-300 text-xs md:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-xl">
-                    <Pencil className="w-4 h-4 text-emerald-500 animate-bounce" />
-                    <span>{step.title || '✏️ Defterimize Yazalım'}</span>
-                </div>
+                <div className="flex items-center gap-2">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-2 border-emerald-400/40 text-emerald-700 dark:text-emerald-300 text-xs md:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-xl">
+                        <Pencil className="w-4 h-4 text-emerald-500 animate-bounce" />
+                        <span>{step.title || '✏️ Defterimize Yazalım'}</span>
+                    </div>
 
-                {/* SÜRE SAYACI KUTUSU */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-white/15 shadow-md">
-                    <Clock className={cn("w-4 h-4", isTimerRunning ? "text-emerald-500 animate-spin" : "text-slate-400")} />
-                    <span className="font-mono font-black text-sm md:text-base text-slate-800 dark:text-white">
-                        {formatTime(timeLeft)}
-                    </span>
-                    <Button
-                        size="sm"
-                        onClick={toggleTimer}
-                        className={cn(
-                            "h-7 px-3 text-xs font-black rounded-xl",
-                            isTimerRunning 
-                                ? "bg-amber-500 hover:bg-amber-600 text-slate-950" 
-                                : "bg-emerald-600 hover:bg-emerald-500 text-white"
-                        )}
-                    >
-                        {isTimerRunning ? <Pause className="w-3 h-3 mr-1" /> : <Play className="w-3 h-3 mr-1" />}
-                        {isTimerRunning ? "Durdur" : (timerDone ? "Tekrar Başlat" : "Süreyi Başlat")}
-                    </Button>
-                    {timeLeft !== initialSeconds && (
-                        <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={resetTimer}
-                            className="h-7 px-2 text-xs text-slate-400 hover:text-slate-200"
-                        >
-                            <RotateCcw className="w-3 h-3" />
-                        </Button>
-                    )}
-                </div>
-            </div>
-
-            {/* ══ ÇİZGİLİ DEFTER KARTI ══ */}
-            <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="relative w-full rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-slate-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-left border-l-[12px] border-l-rose-500/80 overflow-hidden"
-            >
-                {/* Defter Başlığı */}
-                <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-white/10 pb-4 mb-6">
-                    <h3 className="font-black text-xl md:text-2xl text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
-                        <span className="p-2 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20">
-                            📝
-                        </span>
-                        <span>{step.noteTitle || 'Dersin En Önemli Özet Notları'}</span>
-                    </h3>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest hidden sm:inline">
-                        Öğrenci Defteri İçin
-                    </span>
-                </div>
-
-                {/* Maddeler */}
-                <div className="space-y-4 md:space-y-5">
-                    {(step.notes || []).map((note, idx) => {
-                        const isChecked = checkedItems[idx] || false;
-                        return (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: idx * 0.08 }}
-                                onClick={() => toggleCheckItem(idx)}
+                    {/* SEKME GEÇİŞİ (KAVRAMLAR & NOTLAR) */}
+                    {hasConcepts && hasNotes && (
+                        <div className="flex items-center p-1 bg-slate-900/90 border border-white/10 rounded-2xl">
+                            <button
+                                onClick={() => { playSound('pop'); setActiveTab('concepts'); }}
                                 className={cn(
-                                    "group p-4 md:p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-4",
-                                    isChecked
-                                        ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-950 dark:text-emerald-100 shadow-sm"
-                                        : "bg-slate-50/80 dark:bg-slate-800/50 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 hover:border-indigo-400/50 shadow-sm"
+                                    "px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer",
+                                    activeTab === 'concepts'
+                                        ? "bg-cyan-500 text-slate-950 shadow-md"
+                                        : "text-slate-400 hover:text-white"
                                 )}
                             >
-                                <div className={cn(
-                                    "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm border-2 transition-colors mt-0.5",
-                                    isChecked
-                                        ? "bg-emerald-500 border-emerald-400 text-white"
-                                        : "bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 group-hover:border-indigo-400"
-                                )}>
-                                    {isChecked ? <Check className="w-4 h-4" /> : `${idx + 1}`}
-                                </div>
-                                <p className={cn(
-                                    "flex-1 font-bold leading-relaxed tracking-wide select-text",
-                                    getItemFontSize(),
-                                    isChecked && "line-through opacity-80"
-                                )}>
-                                    {note}
-                                </p>
-                            </motion.div>
-                        );
-                    })}
+                                📖 Kavramlar ({step.conceptDefinitions?.length})
+                            </button>
+                            <button
+                                onClick={() => { playSound('pop'); setActiveTab('notes'); }}
+                                className={cn(
+                                    "px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer",
+                                    activeTab === 'notes'
+                                        ? "bg-amber-500 text-slate-950 shadow-md"
+                                        : "text-slate-400 hover:text-white"
+                                )}
+                            >
+                                ✏️ Defter Notları ({step.notes?.length})
+                            </button>
+                        </div>
+                    )}
                 </div>
-            </motion.div>
+
+                {/* SÜRE SAYACI KUTUSU (NOTLAR MODUNDAYKEN) */}
+                {activeTab === 'notes' && (
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-white/15 shadow-md">
+                        <Clock className={cn("w-4 h-4", isTimerRunning ? "text-emerald-500 animate-spin" : "text-slate-400")} />
+                        <span className="font-mono font-black text-sm md:text-base text-slate-800 dark:text-white">
+                            {formatTime(timeLeft)}
+                        </span>
+                        <Button
+                            size="sm"
+                            onClick={toggleTimer}
+                            className={cn(
+                                "h-7 px-3 text-xs font-black rounded-xl",
+                                isTimerRunning 
+                                    ? "bg-amber-500 hover:bg-amber-600 text-slate-950" 
+                                    : "bg-emerald-600 hover:bg-emerald-500 text-white"
+                            )}
+                        >
+                            {isTimerRunning ? <Pause className="w-3 h-3 mr-1" /> : <Play className="w-3 h-3 mr-1" />}
+                            {isTimerRunning ? "Durdur" : (timerDone ? "Tekrar Başlat" : "Süreyi Başlat")}
+                        </Button>
+                        {timeLeft !== initialSeconds && (
+                            <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={resetTimer}
+                                className="h-7 px-2 text-xs text-slate-400 hover:text-slate-200"
+                            >
+                                <RotateCcw className="w-3 h-3" />
+                            </Button>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {/* ══ 1. KAVRAMLAR SEKMESİ (YAZILACAKLAR / OYUN TARZI RENKLİ KARTLAR) ══ */}
+            {activeTab === 'concepts' && hasConcepts && (
+                <div className="w-full flex flex-col">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 w-full">
+                        {step.conceptDefinitions!.map((item, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                                className={cn(
+                                    "relative overflow-hidden rounded-3xl border-2 transition-all duration-300 hover:scale-[1.02] shadow-2xl flex flex-col justify-between backdrop-blur-xl p-6 min-h-[160px]",
+                                    conceptColorClasses[index % conceptColorClasses.length]
+                                )}
+                            >
+                                {/* Arka plan Numara Rozeti (Watermark) */}
+                                <div className="absolute top-0 right-0 bg-black/30 text-white/40 font-black text-6xl p-2 leading-none pointer-events-none select-none -mr-2 -mt-2 opacity-30">
+                                    {index + 1}
+                                </div>
+                                
+                                <div className="z-10 relative flex flex-col h-full">
+                                    <h3 className={cn(
+                                        "font-black text-white mb-3 border-b border-white/20 pb-2.5 uppercase tracking-tight leading-tight",
+                                        getConceptTitleFontSize()
+                                    )}>
+                                        {item.concept}
+                                    </h3>
+                                    <div className="flex-grow">
+                                        <p className={cn(
+                                            "font-medium text-white/90 leading-relaxed",
+                                            getConceptDefFontSize()
+                                        )}>
+                                            {item.definition}
+                                        </p>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* ══ 2. DEFTERE YAZILACAK NOTLAR SEKMESİ (ÇİZGİLİ DEFTER KARTI) ══ */}
+            {(activeTab === 'notes' || !hasConcepts) && hasNotes && (
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="relative w-full rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-slate-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-left border-l-[12px] border-l-rose-500/80 overflow-hidden"
+                >
+                    {/* Defter Başlığı */}
+                    <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-white/10 pb-4 mb-6">
+                        <h3 className="font-black text-xl md:text-2xl text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+                            <span className="p-2 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20">
+                                📝
+                            </span>
+                            <span>{step.noteTitle || 'Dersin En Önemli Özet Notları'}</span>
+                        </h3>
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest hidden sm:inline">
+                            Öğrenci Defteri İçin
+                        </span>
+                    </div>
+
+                    {/* Maddeler */}
+                    <div className="space-y-4 md:space-y-5">
+                        {(step.notes || []).map((note, idx) => {
+                            const isChecked = checkedItems[idx] || false;
+                            return (
+                                <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: idx * 0.08 }}
+                                    onClick={() => toggleCheckItem(idx)}
+                                    className={cn(
+                                        "group p-4 md:p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-4",
+                                        isChecked
+                                            ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-950 dark:text-emerald-100 shadow-sm"
+                                            : "bg-slate-50/80 dark:bg-slate-800/50 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 hover:border-indigo-400/50 shadow-sm"
+                                    )}
+                                >
+                                    <div className={cn(
+                                        "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm border-2 transition-colors mt-0.5",
+                                        isChecked
+                                            ? "bg-emerald-500 border-emerald-400 text-white"
+                                            : "bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 group-hover:border-indigo-400"
+                                    )}>
+                                        {isChecked ? <Check className="w-4 h-4" /> : `${idx + 1}`}
+                                    </div>
+                                    <p className={cn(
+                                        "flex-1 font-bold leading-relaxed tracking-wide select-text",
+                                        getItemFontSize(),
+                                        isChecked && "line-through opacity-80"
+                                    )}>
+                                        {note}
+                                    </p>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </motion.div>
+            )}
         </div>
     );
 }

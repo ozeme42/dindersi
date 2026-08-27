@@ -615,6 +615,51 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                 </div>
                             ))}
                         </div>
+
+                        {/* Kavram & Tanımlar Bölümü (Varsa) */}
+                        <div className="space-y-3 pt-2 border-t border-white/10">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-bold text-cyan-300 uppercase tracking-wider">
+                                    📖 Kavramlar & Tanımlar ({noteStep.conceptDefinitions?.length || 0})
+                                </Label>
+                                <Button 
+                                    size="sm" 
+                                    onClick={() => {
+                                        setEditedStep(prev => ({
+                                            ...(prev as any),
+                                            conceptDefinitions: [...((prev as any)?.conceptDefinitions || []), { concept: 'Yeni Kavram', definition: 'Tanımı...' }]
+                                        }));
+                                    }} 
+                                    className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs"
+                                >
+                                    <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Kavram Ekle
+                                </Button>
+                            </div>
+                            {(noteStep.conceptDefinitions || []).map((item, index) => (
+                                <div key={`cd-${index}`} className="p-3 rounded-2xl bg-slate-900 border border-white/10 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <span className="px-2 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 font-bold text-xs">
+                                            #{index + 1}
+                                        </span>
+                                        <Input
+                                            value={item.concept}
+                                            onChange={e => handleArrayChange('conceptDefinitions', index, 'concept', e.target.value)}
+                                            className="bg-slate-950 border-white/10 font-bold text-sm text-cyan-200 flex-1"
+                                            placeholder="Kavram Adı"
+                                        />
+                                        <Button variant="ghost" size="icon" onClick={() => removeFromArray('conceptDefinitions', index)} className="text-slate-400 hover:text-rose-400">
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                    <Textarea
+                                        value={item.definition}
+                                        onChange={e => handleArrayChange('conceptDefinitions', index, 'definition', e.target.value)}
+                                        className="bg-slate-950 border-white/10 text-xs min-h-[50px]"
+                                        placeholder="Kavramın açıklaması..."
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 );
             }

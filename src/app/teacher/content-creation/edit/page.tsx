@@ -3,8 +3,8 @@
 import { Suspense, useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, Topic, AccordionStep, ActivityLinkStep, ActivityItem, Question, ImageAsset } from '@/lib/types';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import type { LessonStep, Topic, AccordionStep, ActivityLinkStep, ActivityItem, Question, ImageAsset, NotebookNoteStep } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { 
@@ -820,9 +820,11 @@ export function TopicEditor({
 
     const handleImportSavedTopicNotes = async () => {
         let notesList: string[] = [];
+        let definitionsList: { concept: string; definition: string; }[] = [];
 
         if (courseId && unitId && topicId) {
             try {
+                // 1. Topic içindeki writingContent.notes ve definitions çek
                 const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
                 const topicSnap = await getDoc(topicRef);
                 if (topicSnap.exists()) {
@@ -830,16 +832,36 @@ export function TopicEditor({
                     if (tData.writingContent?.notes && tData.writingContent.notes.length > 0) {
                         notesList = tData.writingContent.notes;
                     }
+                    if (tData.writingContent?.conceptDefinitions && tData.writingContent.conceptDefinitions.length > 0) {
+                        definitionsList = tData.writingContent.conceptDefinitions;
+                    }
+                }
+
+                // 2. activityItems koleksiyonundaki tanımları çek
+                if (definitionsList.length === 0) {
+                    const q = query(
+                        collection(db, "activityItems"),
+                        where("topicId", "==", topicId),
+                        where("type", "==", "definition")
+                    );
+                    const querySnapshot = await getDocs(q);
+                    definitionsList = querySnapshot.docs.map(doc => {
+                        const item = doc.data() as ActivityItem;
+                        return {
+                            concept: item.content?.term || (item as any)?.title || '',
+                            definition: item.content?.definition || ''
+                        };
+                    }).filter(item => item.concept && item.definition);
                 }
             } catch (e) {
-                console.error("Notlar çekilirken hata:", e);
+                console.error("Notlar ve kavramlar çekilirken hata:", e);
             }
         }
 
-        if (notesList.length === 0) {
+        if (notesList.length === 0 && definitionsList.length === 0) {
             toast({
-                title: "Kayıtlı Not Bulunamadı",
-                description: "Bu konu için henüz 'Yazılacaklar / Defter Notu' üretilmemiş veya kaydedilmemiş. Yapay Zekâ ile üretebilirsiniz.",
+                title: "Kayıtlı Veri Bulunamadı",
+                description: "Bu konu için henüz 'Yazılacaklar' (Kavram veya Defter Notu) kaydedilmemiş. Yapay Zekâ ile üretebilirsiniz.",
                 variant: "destructive"
             });
             return;
@@ -847,9 +869,10 @@ export function TopicEditor({
 
         const newStep: NotebookNoteStep = {
             type: 'notebookNote',
-            title: '✏️ Defterimize Yazalım',
-            noteTitle: `${title ? title + ' - ' : ''}Önemli Ders Notları`,
+            title: '✏️ Defterimize Yazalım & Kavramlar',
+            noteTitle: `${title ? title + ' - ' : ''}Önemli Ders Notları & Kavramlar`,
             notes: notesList,
+            conceptDefinitions: definitionsList.length > 0 ? definitionsList : undefined,
             suggestedMinutes: Math.min(10, Math.max(3, Math.ceil(notesList.length * 0.8))),
             isPublished: true
         };
@@ -861,8 +884,8 @@ export function TopicEditor({
 
         setSteps(prev => [...prev, stepWithId]);
         toast({
-            title: "Defter Notları Eklendi",
-            description: `Konunun kayıtlı ${notesList.length} adet defter notu birebir sunuma aktarıldı.`
+            title: "Yazılacaklar Sunuma Aktarıldı",
+            description: `Konunun kayıtlı ${definitionsList.length} kavramı ve ${notesList.length} defter notu birebir sunuma eklendi.`
         });
     };
 

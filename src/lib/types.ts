@@ -152,6 +152,7 @@ export type NotebookNoteStep = {
   title: string;
   noteTitle?: string;
   notes: string[];
+  conceptDefinitions?: { concept: string; definition: string; }[];
   suggestedMinutes?: number;
   isPublished?: boolean;
 };
