@@ -317,16 +317,28 @@ export function SlideFilmstrip({
                                     <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['terms'], true, 'conceptExplanation', selectedIndex + 1)}
-                                    className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    onClick={() => onOpenLibrary(['terms'], true, 'anagramGame', selectedIndex + 1)}
+                                    className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                 >
-                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
+                                    <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> Veri Bankasından Anagram Kartları
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                     onClick={() => onOpenLibrary(['terms'], true, 'flashcard', selectedIndex + 1)}
                                     className="text-xs font-semibold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                 >
                                     <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                    onClick={() => onOpenLibrary(['terms'], true, 'conceptExplanation', selectedIndex + 1)}
+                                    className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                >
+                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                    onClick={() => onOpenLibrary(['sentences'], true, 'sentenceScramble', selectedIndex + 1)}
+                                    className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                >
+                                    <Shuffle className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Cümle Sıralama
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                     onClick={() => onOpenLibrary(['images'], true, 'visual', selectedIndex + 1)}

@@ -460,6 +460,41 @@ function InsertStepDivider({
                     ))}
 
                     <DropdownMenuSeparator className="bg-white/10 my-1" />
+                    <DropdownMenuLabel className="text-[11px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">
+                        📚 Veri Bankasından
+                    </DropdownMenuLabel>
+                    <DropdownMenuItem 
+                        onClick={() => onOpenLibrary(['terms'], true, 'matching', insertIndex)}
+                        className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                    >
+                        <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                        onClick={() => onOpenLibrary(['terms'], true, 'anagramGame', insertIndex)}
+                        className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                    >
+                        <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> Veri Bankasından Anagram Kartları
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                        onClick={() => onOpenLibrary(['terms'], true, 'flashcard', insertIndex)}
+                        className="text-xs font-semibold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                    >
+                        <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                        onClick={() => onOpenLibrary(['terms'], true, 'conceptExplanation', insertIndex)}
+                        className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                    >
+                        <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                        onClick={() => onOpenLibrary(['questions'], true, 'questions', insertIndex)}
+                        className="text-xs font-semibold text-indigo-300 focus:bg-indigo-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                    >
+                        <BookOpen className="w-3.5 h-3.5 mr-2 text-indigo-400" /> Soru Bankasından Soru Seç...
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator className="bg-white/10 my-1" />
 
                     <DropdownMenuItem 
                         onClick={() => onOpenGameSelector?.(insertIndex)}
@@ -1322,6 +1357,18 @@ export function TopicEditor({
                                                 className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> 📚 Veri Bankasından Tanım Eşleştirme
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => handleOpenLibrary(['terms'], true, 'anagramGame')}
+                                                className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                            >
+                                                <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> 🔤 Veri Bankasından Anagram Kartları
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => handleOpenLibrary(['sentences'], true, 'sentenceScramble')}
+                                                className="text-xs font-bold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                            >
+                                                <Shuffle className="w-3.5 h-3.5 mr-2 text-cyan-400" /> 🧩 Veri Bankasından Cümle Sıralama
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 onClick={() => handleOpenLibrary(['questions'], true, 'questions')}
