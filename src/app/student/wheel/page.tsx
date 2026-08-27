@@ -12,6 +12,7 @@ import { WheelOfFortune } from '@/components/wheel-of-fortune';
 import { claimWheelPrize } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import confetti from 'canvas-confetti';
+import { playSound } from '@/lib/audio-service';
 
 // --- GÜNCEL PUAN LİSTESİ (ARTIRILDI) ---
 const prizes = [
@@ -60,6 +61,7 @@ export default function WheelPage() {
         
         // 10.000 ve üzeri büyük ödül sayılır
         const isBigWin = selectedPrize.value >= 10000;
+        playSound(isBigWin ? 'win' : 'level-up');
         triggerConfetti(isBigWin);
         
         setIsClaiming(true);

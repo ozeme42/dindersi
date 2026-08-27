@@ -42,20 +42,16 @@ export async function getTeacherScales(teacherId: string): Promise<{ success: bo
     try {
         const q = query(
             collection(db, 'evaluationScales'),
-            where('teacherId', '==', teacherId),
-            orderBy('createdAt', 'desc')
+            where('teacherId', '==', teacherId)
         );
         const querySnapshot = await getDocs(q);
         const scales = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as EvaluationScale));
         
-        scales.sort((a, b) => a.name.localeCompare(b.name, 'tr', { numeric: true }));
+        scales.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'tr', { numeric: true }));
 
         return { success: true, data: serialize(scales) };
     } catch (error: any) {
         console.error("Error fetching scales:", error);
-        if (error.code === 'failed-precondition') {
-            return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın veya aşağıdaki linke tıklayın. Hata: ${error.message}`};
-        }
         return { success: false, error: 'Ölçekler alınırken bir hata oluştu.' };
     }
 }

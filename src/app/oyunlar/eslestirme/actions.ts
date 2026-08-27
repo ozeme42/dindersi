@@ -60,9 +60,14 @@ export async function getEslestirmeAction(
         // 2. Firestore Topic Belgesinden Ders Adımlarını Tara (Öğretmen ve Dinamik Konular)
         if (topicId && topicId !== 'all') {
             try {
-                const topicRef = doc(db, 'topics', topicId);
-                const topicSnap = await getDoc(topicRef);
-                if (topicSnap.exists()) {
+                let topicSnap = null;
+                if (courseId && unitId) {
+                    topicSnap = await getDoc(doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId));
+                }
+                if (!topicSnap || !topicSnap.exists()) {
+                    topicSnap = await getDoc(doc(db, 'topics', topicId));
+                }
+                if (topicSnap && topicSnap.exists()) {
                     const topicData = topicSnap.data();
                     if (Array.isArray(topicData.steps)) {
                         for (const step of topicData.steps) {
@@ -84,10 +89,10 @@ export async function getEslestirmeAction(
                                         rawPairs.push({ term: String(cd.correctAnswer).trim(), definition: String(cd.definition).trim() });
                                     }
                                 }
-                            } else if (step.type === 'mcq' && step.correctAnswer && step.question) {
-                                rawPairs.push({ term: String(step.correctAnswer).trim(), definition: String(step.question).trim() });
-                            } else if (step.type === 'fitb' && step.correctAnswer && step.sentenceWithBlank) {
-                                rawPairs.push({ term: String(step.correctAnswer).trim(), definition: String(step.sentenceWithBlank).trim() });
+                            } else if (step.type === 'mcq' && step.correctAnswer && (step.question || step.text)) {
+                                rawPairs.push({ term: String(step.correctAnswer).trim(), definition: String(step.question || step.text).trim() });
+                            } else if (step.type === 'fitb' && step.correctAnswer && (step.sentenceWithBlank || step.text)) {
+                                rawPairs.push({ term: String(step.correctAnswer).trim(), definition: String(step.sentenceWithBlank || step.text).trim() });
                             }
                         }
                     }
@@ -97,7 +102,39 @@ export async function getEslestirmeAction(
             }
         }
 
-        // 3. Firestore activityItems Koleksiyonunu Tara
+        // 3. Statik flow dosyasını doğrudan tara (Eğer hala azsa)
+        if (rawPairs.length < 4 && topicId && topicId !== 'all') {
+            try {
+                const flowPath = path.join(process.cwd(), 'public', 'curriculum', 'flows', `${topicId}.json`);
+                const flowContent = await fs.readFile(flowPath, 'utf-8');
+                const flowSteps = JSON.parse(flowContent);
+                if (Array.isArray(flowSteps)) {
+                    for (const step of flowSteps) {
+                        if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                            for (const it of step.items) {
+                                if (it.concept && it.definition) {
+                                    rawPairs.push({ term: String(it.concept).trim(), definition: String(it.definition).trim() });
+                                }
+                            }
+                        } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
+                            for (const cd of step.cards) {
+                                if (cd.term && cd.definition) {
+                                    rawPairs.push({ term: String(cd.term).trim(), definition: String(cd.definition).trim() });
+                                }
+                            }
+                        } else if ((step.type === 'anagramGame' || step.type === 'anagramFlashcard') && Array.isArray(step.cards)) {
+                            for (const cd of step.cards) {
+                                if (cd.correctAnswer && cd.definition) {
+                                    rawPairs.push({ term: String(cd.correctAnswer).trim(), definition: String(cd.definition).trim() });
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (flowErr) {}
+        }
+
+        // 4. Firestore activityItems Koleksiyonunu Tara
         if (topicId && topicId !== 'all') {
             try {
                 const actQuery = query(collection(db, 'activityItems'), where('topicId', '==', topicId), firestoreLimit(50));
@@ -113,7 +150,7 @@ export async function getEslestirmeAction(
             }
         }
 
-        // 4. Firestore questions Koleksiyonunu Tara (Eğer hala azsa)
+        // 5. Firestore questions Koleksiyonunu Tara (Eğer hala azsa)
         if (rawPairs.length < 4 && topicId && topicId !== 'all') {
             try {
                 const qQuery = query(collection(db, 'questions'), where('topicId', '==', topicId), firestoreLimit(30));

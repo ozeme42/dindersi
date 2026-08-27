@@ -1,8 +1,7 @@
 'use server';
 
-import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import type { ActivityItem } from "@/lib/types";
+import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
 import { unstable_noStore as noStore } from 'next/cache';
 
 export type AnagramWallWord = string;
@@ -12,36 +11,35 @@ export async function getAnagramWallWords(
 ): Promise<{ words: AnagramWallWord[]; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', 'in', ['concept', 'definition']));
-        
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
-        }
-        
-        const snapshot = await getDocs(baseQuery);
-        
-        const allWords = snapshot.docs
-            .map(doc => doc.data() as ActivityItem)
-            .map(item => item.content?.term || item.content?.text)
-            .filter((word): word is string => 
-                typeof word === 'string' &&
-                word.trim().length > 2 &&
-                word.trim().length < 15 && 
-                !word.includes(' ') 
-            )
-            .map(word => word.toLocaleUpperCase('tr-TR'));
+        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
+        const validWords: string[] = [];
 
-        if (allWords.length < 5) {
-            return { error: "Anagram Duvarı oynamak için en az 5 kelime gereklidir.", words: [] };
-        }
-        
-        const uniqueWords = [...new Set(allWords)];
+        for (const item of allItems || []) {
+            if ('type' in item) {
+                let term = '';
+                if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.term) {
+                    term = String((item as any).content.term).trim();
+                } else if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.text) {
+                    term = String((item as any).content.text).trim();
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
+                    term = String((item as any).correctAnswer).trim();
+                }
 
-        return { words: JSON.parse(JSON.stringify(uniqueWords)) };
+                if (term && term.length >= 3 && term.length <= 15 && !term.includes(' ') && turkishAlphabetRegex.test(term)) {
+                    validWords.push(term.toLocaleUpperCase('tr-TR'));
+                }
+            }
+        }
+
+        const uniqueWords = [...new Set(validWords)];
+
+        if (uniqueWords.length < 2) {
+            return { error: "Anagram Duvarı oynamak için bu konuda en az 2 uygun kelime bulunmalıdır.", words: [] };
+        }
+
+        const shuffled = [...uniqueWords].sort(() => 0.5 - Math.random());
+        return { words: JSON.parse(JSON.stringify(shuffled.slice(0, 30))) };
 
     } catch (error: any) {
         console.error("Error getting Anagram words:", error);

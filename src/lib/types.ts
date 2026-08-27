@@ -125,6 +125,19 @@ export type ConceptMapStep = {
   isPublished?: boolean;
 };
 
+export type MatchingPair = {
+  id?: string;
+  concept: string;
+  definition: string;
+};
+
+export type MatchingStep = {
+  type: 'matching' | 'conceptMatching';
+  title: string;
+  pairs: MatchingPair[];
+  isPublished?: boolean;
+};
+
 export type LessonStep = 
   | ContentStep 
   | ObjectiveListStep
@@ -144,7 +157,8 @@ export type LessonStep =
   | HtmlSlideStep
   | ConceptExplanationStep
   | AnagramGameStep
-  | VideoStep;
+  | VideoStep
+  | MatchingStep;
 
 export type CategorizationGameData = {
     title: string;

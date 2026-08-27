@@ -15,20 +15,28 @@ export type CarkifelekQuestions = {
 export async function getCarkifelekQuestions(params: GetQuizInput): Promise<{ questions: CarkifelekQuestions | null; error?: string }> {
     noStore();
     try {
-        const easyParams: GetQuizInput = { ...params, difficulty: ['Kolay'], questionTypes: ['mcq'], questionCount: 20 };
-        const hardParams: GetQuizInput = { ...params, difficulty: ['Zor'], questionTypes: ['mcq'], questionCount: 20 };
+        const allResult = (await getQuestionsFromBank({ ...params, questionTypes: ['mcq', 'tf'], questionCount: 50 })).questions as Question[];
 
-        // getQuestionsFromBank handles isStatic filtering internally
-        const easyResult = (await getQuestionsFromBank(easyParams)).questions as Question[];
-        const hardResult = (await getQuestionsFromBank(hardParams)).questions as Question[];
+        if (!allResult || allResult.length < 2) {
+            return { questions: null, error: "Bu konu için yeterli sayıda soru bulunamadı (En az 2 soru gereklidir)." };
+        }
 
-        if (easyResult.length < 1 || hardResult.length < 1) {
-            return { questions: null, error: "Bu konu için yeterli sayıda kolay ve zor soru bulunamadı." };
+        let easy = allResult.filter(q => q.difficulty === 'Kolay');
+        let hard = allResult.filter(q => q.difficulty === 'Zor');
+        const medium = allResult.filter(q => q.difficulty === 'Orta' || !q.difficulty);
+
+        if (easy.length === 0) {
+            easy = medium.slice(0, Math.ceil(medium.length / 2));
+            if (easy.length === 0) easy = allResult.slice(0, 1);
+        }
+        if (hard.length === 0) {
+            hard = medium.slice(Math.ceil(medium.length / 2));
+            if (hard.length === 0) hard = allResult.slice(-1);
         }
 
         const data: CarkifelekQuestions = {
-            easy: easyResult,
-            hard: hardResult,
+            easy: easy.length > 0 ? easy : allResult,
+            hard: hard.length > 0 ? hard : allResult,
         };
 
         return { questions: JSON.parse(JSON.stringify(data)) };
@@ -39,9 +47,6 @@ export async function getCarkifelekQuestions(params: GetQuizInput): Promise<{ qu
     }
 }
 
-
 export async function submitCarkifelekScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
-    // This is a smartboard game, so we don't need to submit scores for now.
-    // The logic can be added here if needed in the future.
     return { success: true };
 }

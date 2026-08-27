@@ -2,123 +2,99 @@
 
 'use server';
 
-import { getAdminDb } from "@/lib/firebase-admin";
-import { Timestamp } from "firebase-admin/firestore";
-import type { Topic, Unit, Course, SchoolClass, Question, LessonStep } from "@/lib/types";
+import type { Topic, Unit, Course, SchoolClass } from "@/lib/types";
+import fs from 'fs/promises';
+import path from 'path';
 
-// Tip tanımlarını Enriched versiyonları için genişletelim
-type EnrichedTopic = Topic & { questionCount?: number, hasFlowContent?: boolean };
-type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string, steps?: any[], hasFlowContent?: boolean };
-type EnrichedCourse = Course & { units: EnrichedUnit[], className?: string };
-type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
+export type EnrichedTopic = Topic & { questionCount?: number, hasFlowContent?: boolean };
+export type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string, steps?: any[], hasFlowContent?: boolean };
+export type EnrichedCourse = Course & { units: EnrichedUnit[], className?: string };
+export type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 
-// Helper to serialize any data, converting Timestamps
-const serialize = (data: any): any => {
-    if (!data) return data;
-    if (Array.isArray(data)) {
-        return data.map(serialize);
+function extractLeadingNumbers(title: string): number[] {
+    if (!title) return [];
+    const clean = title.trim();
+    
+    // "Ünite 1", "Ünite 2" kalıbı
+    const uniteMatch = clean.match(/^Ünite\s+(\d+)/i);
+    if (uniteMatch) {
+        return [parseInt(uniteMatch[1], 10)];
     }
-    if (data instanceof Timestamp) {
-        return data.toDate().toISOString();
+
+    // "1.", "1.1", "1.1.2", "1-", "5. Sınıf" vb. kalıplar
+    const match = clean.match(/^(\d+(?:[\.\-]\d+)*)/);
+    if (match) {
+        return match[1].split(/[\.\-]/).filter(Boolean).map(n => parseInt(n, 10));
     }
-    if (typeof data === 'object' && Object.prototype.toString.call(data) === '[object Object]') {
-        const newObj: { [key: string]: any } = {};
-        for (const key in data) {
-            if (Object.prototype.hasOwnProperty.call(data, key)) {
-                newObj[key] = serialize(data[key]);
-            }
+    
+    return [];
+}
+
+function compareTitlesByLeadingNumber(titleA: string = '', titleB: string = ''): number {
+    const numsA = extractLeadingNumbers(titleA);
+    const numsB = extractLeadingNumbers(titleB);
+
+    if (numsA.length > 0 && numsB.length > 0) {
+        for (let i = 0; i < Math.max(numsA.length, numsB.length); i++) {
+            const a = numsA[i] ?? 0;
+            const b = numsB[i] ?? 0;
+            if (a !== b) return a - b;
         }
-        return newObj;
+    } else if (numsA.length > 0) {
+        return -1;
+    } else if (numsB.length > 0) {
+        return 1;
     }
-    return data;
-};
 
-import { unstable_cache } from 'next/cache';
+    return titleA.localeCompare(titleB, 'tr', { numeric: true, sensitivity: 'base' });
+}
 
-const getCachedFlowData = unstable_cache(
-    async (): Promise<EnrichedClass[]> => {
-        const db = getAdminDb();
-        const [classesSnap, coursesSnap, unitsSnap, topicsSnap] = await Promise.all([
-            db.collection('classes').get(),
-            db.collection('courses').select('title', 'classId', 'isTeacherOnly', 'order').get(),
-            db.collectionGroup('units').select('title', 'steps', 'isPublished', 'htmlContent').get(),
-            db.collectionGroup('topics').select('title', 'steps', 'isPublished', 'htmlContent', 'itemCount').get(),
-        ]);
-        
-        const topicsByUnit = new Map<string, EnrichedTopic[]>();
-        topicsSnap.forEach(doc => {
-            const topic = { id: doc.id, ...doc.data() } as Topic;
-            const parentUnitPath = doc.ref.parent.parent?.path;
-            if (parentUnitPath) {
-                const unitId = doc.ref.parent.parent!.id;
-                if (!topicsByUnit.has(unitId)) {
-                    topicsByUnit.set(unitId, []);
-                }
-                const hasFlow = (topic.steps || []).length > 0 || !!topic.htmlContent || ((topic as any).itemCount || 0) > 0;
-                topicsByUnit.get(unitId)!.push({ ...topic, hasFlowContent: hasFlow });
-            }
-        });
-        
-        const unitsByCourse = new Map<string, EnrichedUnit[]>();
-        unitsSnap.forEach(doc => {
-            const unit = { id: doc.id, ...doc.data() } as Unit;
-            const parentCoursePath = doc.ref.parent.parent?.path;
-            if(parentCoursePath) {
-                const courseId = doc.ref.parent.parent!.id;
-                if (!unitsByCourse.has(courseId)) {
-                    unitsByCourse.set(courseId, []);
-                }
-                const topicsForUnit = (topicsByUnit.get(unit.id) || []).sort((a, b) => a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' }));
-                const hasUnitFlow = (unit.steps || []).length > 0 || !!unit.htmlContent;
-                unitsByCourse.get(courseId)!.push({
-                    ...unit,
-                    hasFlowContent: hasUnitFlow,
-                    topics: topicsForUnit
-                });
-            }
-        });
-        
-        const courses = coursesSnap.docs.map(doc => {
-            const courseData = { id: doc.id, ...doc.data() } as Course;
-            const unitsForCourse = (unitsByCourse.get(courseData.id) || []).sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' }));
-            return { ...courseData, units: unitsForCourse };
-        });
-        courses.sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' }));
-
-        const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        classes.sort((a,b) => a.name.localeCompare(b.name, 'tr', { numeric: true, sensitivity: 'base' }));
-
-        const enrichedClasses: EnrichedClass[] = classes.map(cls => ({
-            ...cls,
-            courses: courses.filter(c => c.classId === cls.id),
-        }));
-
-        const generalCourses = courses.filter(c => !c.classId);
-        if (generalCourses.length > 0) {
-            const generalClassIndex = enrichedClasses.findIndex(c => c.name === "Genel");
-            if (generalClassIndex > -1) {
-                enrichedClasses[generalClassIndex].courses.push(...generalCourses);
-            } else {
-                enrichedClasses.unshift({
-                    id: 'general',
-                    name: 'Genel',
-                    courses: generalCourses,
-                    createdAt: new Date(),
-                } as EnrichedClass);
-            }
-        }
-        
-        return enrichedClasses;
-    },
-    ['ders-akisi-flow-data'],
-    { revalidate: 15, tags: ['curriculum'] }
-);
+// 30 saniyelik bellek içi önbellek (Next.js 2MB unstable_cache sınır hatasını önler)
+let memoryCache: { data: EnrichedClass[]; timestamp: number } | null = null;
+const CACHE_TTL_MS = 30 * 1000;
 
 export async function getFlowData(): Promise<EnrichedClass[]> {
+    const now = Date.now();
+    if (memoryCache && (now - memoryCache.timestamp < CACHE_TTL_MS)) {
+        return memoryCache.data;
+    }
+
     try {
-        return serialize(await getCachedFlowData());
+        const mPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+        const manifestContent = await fs.readFile(mPath, 'utf-8');
+        const manifest = JSON.parse(manifestContent);
+        
+        const cleanClassGroups: EnrichedClass[] = (manifest.classGroups || [])
+            .map((cg: any) => ({
+                id: cg.name || cg.id,
+                name: cg.name,
+                courses: (cg.courses || []).map((c: any) => ({
+                    id: c.id,
+                    title: c.title,
+                    classId: c.classId || cg.name,
+                    className: `${cg.name}. Sınıf`,
+                    units: (c.units || [])
+                        .map((u: any) => ({
+                            id: u.id,
+                            title: u.title,
+                            hasFlowContent: !!(u.hasFlowContent || (u.topics && u.topics.some((t: any) => t.hasFlowContent))),
+                            topics: (u.topics || [])
+                                .map((t: any) => ({
+                                    id: t.id,
+                                    title: t.title,
+                                    hasFlowContent: !!t.hasFlowContent
+                                }))
+                                .sort((tA: any, tB: any) => compareTitlesByLeadingNumber(tA.title, tB.title))
+                        }))
+                        .sort((uA: any, uB: any) => compareTitlesByLeadingNumber(uA.title, uB.title))
+                }))
+            }))
+            .sort((cgA: any, cgB: any) => compareTitlesByLeadingNumber(cgA.name, cgB.name));
+
+        memoryCache = { data: cleanClassGroups, timestamp: now };
+        return cleanClassGroups;
     } catch (error) {
-        console.error("Error fetching curriculum data:", error);
+        console.error("Error loading flow data from manifest:", error);
         return [];
     }
 }

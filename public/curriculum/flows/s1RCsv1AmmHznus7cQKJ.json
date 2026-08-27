@@ -1,0 +1,360 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Toplumsal İlişkileri konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Toplumsal İlişkileri ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Ünite: Toplumsal Hayatta Peygamberimiz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Akraba, Tebessüm, Komşuluk kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Akraba</li><li>Tebessüm</li><li>Komşuluk</li><li>Vefa</li><li>Sılayırahim</li><li>Sadaka</li><li>Selam</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Toplumsal İlişkileri - Önemli Bilgiler (1)",
+    "content": "<ul><li>Hz. Peygamber, insanlarla sevgi, saygı ve güler yüzle iletişim kurarak her kesimden kişiye değer vermiştir.</li><li>Küçüklere merhamet etmeyi ve büyüklere saygı göstermeyi Müslümanlara bir görev olarak emretmiştir.</li><li>Toplumda güven ve huzur ortamı için insanların birbirlerini sevmesini, selamlaşmayı ve tebessüm etmeyi teşvik etmiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Toplumsal İlişkileri - Önemli Bilgiler (2)",
+    "content": "<ul><li>Akrabalık ilişkilerine büyük önem vermiş, akrabaları ziyaret etmeyi, maddi ve manevi destek olmayı (sılayırahim) emretmiştir.</li><li>Akrabalara yapılan yardımın hem sadaka hem de akrabayı gözetme sevabıyla iki kat sevap kazandırdığını belirtmiştir.</li><li>Komşuluk ilişkilerine çok önem vermiş, komşuların haklarını gözetmeyi ve onlara iyilik yapmayı vurgulamıştır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Toplumsal İlişkileri - Önemli Bilgiler (3)",
+    "content": "<ul><li>Sözünde durmak ve yapılan iyilikleri unutmamak olan vefa kavramını hayatıyla en güzel şekilde örneklendirmiştir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Akraba",
+        "definition": "Aralarında soyca ilgi ve kan bağı olan kişilerdir."
+      },
+      {
+        "concept": "Tebessüm",
+        "definition": "İnsanların gönlünü huzurla dolduran yüz ifadesidir."
+      },
+      {
+        "concept": "Komşuluk",
+        "definition": "Aynı çevrede yaşayan insanlar arasındaki ilişkidir."
+      },
+      {
+        "concept": "Vefa",
+        "definition": "Dostlukta ve sevgide içtenlik, süreklilik ve kararlılıktır."
+      },
+      {
+        "concept": "Sılayırahim",
+        "definition": "Akrabalarla iyi ilişki kurma, onları ziyaret etme ve gönüllerini alma eylemidir."
+      },
+      {
+        "concept": "Sadaka",
+        "definition": "Yoksullara ve ihtiyaç sahiplerine yapılan maddi destektir."
+      },
+      {
+        "concept": "Selam",
+        "definition": "İnsanlar arasında bağı güçlendiren bir iletişim şeklidir."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Akraba",
+        "definition": "Aralarında soyca ilgi ve kan bağı olan kişilerdir."
+      },
+      {
+        "term": "Tebessüm",
+        "definition": "İnsanların gönlünü huzurla dolduran yüz ifadesidir."
+      },
+      {
+        "term": "Komşuluk",
+        "definition": "Aynı çevrede yaşayan insanlar arasındaki ilişkidir."
+      },
+      {
+        "term": "Vefa",
+        "definition": "Dostlukta ve sevgide içtenlik, süreklilik ve kararlılıktır."
+      },
+      {
+        "term": "Sılayırahim",
+        "definition": "Akrabalarla iyi ilişki kurma, onları ziyaret etme ve gönüllerini alma eylemidir."
+      },
+      {
+        "term": "Sadaka",
+        "definition": "Yoksullara ve ihtiyaç sahiplerine yapılan maddi destektir."
+      },
+      {
+        "term": "Selam",
+        "definition": "İnsanlar arasında bağı güçlendiren bir iletişim şeklidir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Akraba",
+        "scrambledWord": "AAARKB",
+        "definition": "İpucu: Bu kelime \"Akraba\""
+      },
+      {
+        "correctAnswer": "Tebessüm",
+        "scrambledWord": "SEESBTMÜ",
+        "definition": "İpucu: Bu kelime \"Tebessüm\""
+      },
+      {
+        "correctAnswer": "Komşuluk",
+        "scrambledWord": "KLŞMUKOU",
+        "definition": "İpucu: Bu kelime \"Komşuluk\""
+      },
+      {
+        "correctAnswer": "Vefa",
+        "scrambledWord": "VFAE",
+        "definition": "İpucu: Bu kelime \"Vefa\""
+      },
+      {
+        "correctAnswer": "Sılayırahim",
+        "scrambledWord": "LIHIMYSAAİR",
+        "definition": "İpucu: Bu kelime \"Sılayırahim\""
+      },
+      {
+        "correctAnswer": "Sadaka",
+        "scrambledWord": "SAAADK",
+        "definition": "İpucu: Bu kelime \"Sadaka\""
+      },
+      {
+        "correctAnswer": "Selam",
+        "scrambledWord": "ELAMS",
+        "definition": "İpucu: Bu kelime \"Selam\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Selamlaşmak, insanlar arasındaki bağı zayıflatır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Peygamber, Medine’ye hicret ettikten sonra Mekke’ye asla geri dönmemiş ve Medineli Müslümanlara vefa borcunu ödemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamber Efendimiz, emanete riayet etmeyen veya ahde vefa göstermeyenin imanının eksik olduğunu belirtmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamber Efendimiz, rızkının çoğalmasını ve ömrünün uzamasını isteyen kişiye akrabalarını kollayıp gözetmesini tavsiye etmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Hatice, Peygamberimizi teselli ederken onun akraba hakkına riayet etmediğini söylemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Peygamber, küçüklerine merhamet etmeyenlerin ve büyüklerine saygı göstermeyenlerin Müslümanlardan olmadığını belirtmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Peygamber, bir Yahudi cenazesi geçerken ayağa kalkarak insanlara değer verdiğini göstermiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamber Efendimiz, sadece Müslümanlarla değil, toplumun her kesimiyle iyi ilişkiler kurmuştur.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Komşularla iyi geçinmek imanın şartıdır.",
+    "scrambledSentence": "geçinmek imanın şartıdır. Komşularla iyi"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz örnek bir ahlakla yaşadı.",
+    "scrambledSentence": "örnek Peygamberimiz ahlakla bir yaşadı."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Akraba ilişkilerine çok önem verirdi.",
+    "scrambledSentence": "önem verirdi. Akraba ilişkilerine çok"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Toplumda güven ortamı oluşmasını isterdi.",
+    "scrambledSentence": "Toplumda oluşmasını güven ortamı isterdi."
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Hatice, Peygamberimize destek olurken onun ___ hakkına riayet etmesini, doğru konuşmasını ve fakiri doyurmasını örnek göstermiştir.",
+    "options": [
+      "komşu",
+      "yetim",
+      "akraba",
+      "misafir"
+    ],
+    "correctAnswer": "akraba"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber Efendimiz, insanlarla iletişim kurarken her zaman sevgi ve ___ çerçevesinde hareket etmiştir.",
+    "options": [
+      "hoşgörü",
+      "saygı",
+      "şefkat",
+      "merhamet"
+    ],
+    "correctAnswer": "saygı"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Peygamber, malının üçte ikisini sadaka olarak vermek isteyen Sad bin Ebu Vakkas'a, mirasçılarını ___ bırakmanın daha hayırlı olduğunu belirtmiştir.",
+    "options": [
+      "mutlu",
+      "güvende",
+      "zengin",
+      "varlıklı"
+    ],
+    "correctAnswer": "zengin"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kur'an-ı Kerim, Allah'ın adaleti, iyilik yapmayı ve ___ yardım etmeyi emrettiğini, hayâsızlığı, kötülüğü ve zorbalığı ise yasakladığını bildirir.",
+    "options": [
+      "komşuya",
+      "yetime",
+      "akrabaya",
+      "fakire"
+    ],
+    "correctAnswer": "akrabaya"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Sılayırahim, anne baba başta olmak üzere tüm akrabalar arasında güzel ilişki kurma, onları ziyaret etme ve onlara maddi manevi ___ bulunmadır.",
+    "options": [
+      "destekte",
+      "ikramda",
+      "yardımda",
+      "bağışta"
+    ],
+    "correctAnswer": "yardımda"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Yüzündeki gülümseme ve tebessüm ile insanların gönlüne huzur veren peygamber kimdir?",
+    "options": [
+      "Hz. Musa",
+      "Hz. İsa",
+      "Hz. Muhammed",
+      "Hz. Davut"
+    ],
+    "correctAnswer": "Hz. Muhammed"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin hadislerinde, küçüklerimize merhamet etmeyen, büyüklerimize ne göstermeyenlerin bizden olmadığı belirtilmiştir?",
+    "options": [
+      "Şefkat",
+      "Saygı",
+      "İlgi",
+      "Destek"
+    ],
+    "correctAnswer": "Saygı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Peygamber, akrabalık bağlarını koruyan kişilerin rızkının çoğalacağını ve ömrünün uzayacağını belirtmiştir. Bu durum İslam'da hangi kavramla ifade edilir?",
+    "options": [
+      "Vefa",
+      "Sılayırahim",
+      "Sadakat",
+      "İhsan"
+    ],
+    "correctAnswer": "Sılayırahim"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Sadaka verirken yoksula verilen sadakanın bir, akrabaya verilen sadakanın ise iki sevabı olduğu belirtilmiştir. İkinci sevap, hangi davranışı kapsar?",
+    "options": [
+      "İkramda bulunma",
+      "Misafir ağırlama",
+      "Akrabayı koruyup gözetme",
+      "Teşekkür etme"
+    ],
+    "correctAnswer": "Akrabayı koruyup gözetme"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Ebu Talha'nın en sevdiği hurma bahçesi \"Beyrahâ\"yı Allah yolunda sadaka olarak bağışlaması üzerine, Peygamberimiz onu ne şekilde değerlendirmesini tavsiye etmiştir?",
+    "options": [
+      "Fakirlere dağıtmasını",
+      "Akrabaları arasında taksim etmesini",
+      "Mescide vakfetmesini",
+      "Yetimlere vermesini"
+    ],
+    "correctAnswer": "Akrabaları arasında taksim etmesini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz’in toplumsal ilişkilerde gösterdiği hangi özellik, onun davetleri geri çevirmemesini ve kalpleri kırmamasını sağlamıştır?",
+    "options": [
+      "Hoşgörü",
+      "Adalet",
+      "Kibirli olmama",
+      "Değer verme"
+    ],
+    "correctAnswer": "Değer verme"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Hatice'nin, ilk vahiyden sonra Peygamberimizi teselli ederken saydığı özelliklerinden biri aşağıdakilerden hangisidir?",
+    "options": [
+      "Çok namaz kılması",
+      "Akraba hakkına riayet etmesi",
+      "Sadece zenginlere yardım etmesi",
+      "Misafiri ağırlamaması"
+    ],
+    "correctAnswer": "Akraba hakkına riayet etmesi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz, insanlarla ilişkilerinde hangi temel değeri ön planda tutmuştur?",
+    "options": [
+      "Güç",
+      "Zenginlik",
+      "Sevgi ve Saygı",
+      "Makam"
+    ],
+    "correctAnswer": "Sevgi ve Saygı"
+  }
+]

@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import type { LessonStep } from '@/lib/types';
 
 export async function updateUnitContent(courseId: string, unitId: string, data: { title: string, htmlContent?: string, steps?: LessonStep[], sourceText?: string }): Promise<{ success: boolean, error?: string }> {
@@ -30,7 +30,7 @@ export async function updateUnitContent(courseId: string, unitId: string, data: 
             dataToUpdate.sourceText = data.sourceText;
         }
 
-        await updateDoc(unitRef, dataToUpdate);
+        await setDoc(unitRef, dataToUpdate, { merge: true });
         return { success: true };
     } catch (e: any) {
         console.error("Error updating unit content:", e);

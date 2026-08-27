@@ -56,6 +56,9 @@ const activityTypes = [
   { href: '/oyunlar/labirent', label: 'Labirent', icon: Milestone, color: 'zinc' },
   { href: '/oyunlar/tornado', label: 'Tornado', icon: Wind, color: 'cyan' },
   { href: '/oyunlar/dogru-yol-kosucusu', label: 'Doğru Yol Koşucusu', icon: Footprints, color: 'blue' },
+  { href: '/oyunlar/fetih-oyunu', label: 'Fetih Oyunu', icon: Trophy, color: 'orange', badge: 'YENİ' },
+  { href: '/oyunlar/tirmanma-yarisi', label: 'Tırmanma Yarışı', icon: Milestone, color: 'lime', badge: 'YENİ' },
+  { href: '/oyunlar/anagram-duvari', label: 'Anagram Duvarı', icon: Shuffle, color: 'violet', badge: 'YENİ' },
   { href: '/oyunlar/balon-avcisi', label: 'Balon Avcısı', icon: Target, color: 'sky' },
 ];
 

@@ -23,38 +23,45 @@ export async function getKelimeAviAction(
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
-        // Sadece 'concept' türündeki verileri almak için dataType'ı 'activities' olarak belirleyip sonrasında filtreliyoruz.
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ 
+        let allItems = await getStaticQuestionsForGame({ 
             courseId, 
             unitId, 
             topicId, 
-            dataType: 'activities' 
+            dataType: 'all' 
         });
         
-        // Sadece 'concept' tipindeki öğeleri filtrele
-        const validItems = allItems.filter(item => item.type === 'concept');
-
-        if (validItems.length === 0) {
-            return { error: "Bu konu için oynanabilir 'kavram' verisi bulunamadı.", concepts: null };
-        }
-        
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
-        
-        const allConcepts = validItems
-            .map(item => item.content.text) // Sadece concept tipinden text'i al
-            .filter((text): text is string => 
-                typeof text === 'string' && 
-                text.trim().length > 2 &&
-                text.trim().length <= 12 &&
-                !text.trim().includes(' ') && // Sadece tek kelime olanları al
-                turkishAlphabetRegex.test(text.trim())
-            )
-            .map(text => text.trim().toLocaleUpperCase('tr-TR'));
+        const validTerms: string[] = [];
+        const fallbackTerms = ['İMAN', 'İSLAM', 'AHLAK', 'İBADET', 'TEVHİT', 'KURAN', 'SÜNNET', 'ADALET', 'MERHAMET', 'SABIR', 'ŞÜKÜR', 'İHLAS', 'TAKVA', 'FURKAN'];
 
-        const uniqueConcepts = [...new Set(allConcepts)];
+        for (const item of allItems || []) {
+            if ('type' in item) {
+                let term = '';
+                if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.term) {
+                    term = String((item as any).content.term).trim();
+                } else if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.text) {
+                    term = String((item as any).content.text).trim();
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
+                    term = String((item as any).correctAnswer).trim();
+                }
+
+                if (term && term.length > 2 && term.length <= 14 && !term.includes(' ') && turkishAlphabetRegex.test(term)) {
+                    validTerms.push(term.toLocaleUpperCase('tr-TR'));
+                }
+            }
+        }
+
+        let uniqueConcepts = [...new Set(validTerms)];
 
         if (uniqueConcepts.length < 5) {
-            return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime (3-12 harf arası, tek kelime, sadece harf içeren) bulunmalıdır.", concepts: null };
+            for (const fb of fallbackTerms) {
+                if (!uniqueConcepts.includes(fb)) uniqueConcepts.push(fb);
+                if (uniqueConcepts.length >= 8) break;
+            }
+        }
+
+        if (uniqueConcepts.length < 3) {
+            return { error: "Kelime Avı oynamak için bu konuda en az 3 adet uygun kelime bulunmalıdır.", concepts: null };
         }
         
         // Karıştır

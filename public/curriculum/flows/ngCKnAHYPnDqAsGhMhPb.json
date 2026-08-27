@@ -1,0 +1,433 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Çocukluğu konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Çocukluğu ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Çocukluk Yıllarında Peygamberimiz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Hz. Amine, Hilfülfudul, Ümmü Eymen kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Hz. Amine</li><li>Hilfülfudul</li><li>Ümmü Eymen</li><li>Abdülmuttalib</li><li>Rahip Bahira</li><li>Sadoğulları</li><li>Ebu Talib</li><li>Mekke</li><li>Bahira</li><li>Medine</li><li>Ebu Talip</li><li>Ebva</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Çocukluğu - Önemli Bilgiler (1)",
+    "content": "<ul><li>Peygamberimiz, 4 yaşına kadar sütannesi Halime Hatun ve ailesiyle Sadoğulları yurdunda büyüdü.</li><li>6 yaşındayken annesi Amine ile Medine'ye gitti ancak dönüş yolunda annesi Ebva köyünde vefat etti.</li><li>Annesinin vefatından sonra dedesi Abdülmuttalib'in himayesinde kaldı; dedesi vefat edince amcası Ebu Talib'e emanet edildi.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Çocukluğu - Önemli Bilgiler (2)",
+    "content": "<ul><li>Amcası Ebu Talib ve yengesi Fatıma onu kendi çocuklarından ayırmadan büyüttü; yengesine \"Annemden sonraki annem\" derdi.</li><li>Çocukluğunda çobanlık yaparak ailesine destek oldu ve 12 yaşındayken amcasıyla Şam ticaret yolculuğuna çıktı.</li><li>Şam yolculuğunda Rahip Bahira, onda peygamberlik alametleri gördü ve amcasını onu koruması için uyardı.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Çocukluğu - Önemli Bilgiler (3)",
+    "content": "<ul><li>Peygamberimiz, çocukluk yıllarından itibaren sakin, dürüst, güvenilir, adaletli, merhametli ve vefalı bir kişiliğe sahipti.</li><li>Cahiliye adetlerinden uzak durmuş, ailesine ve çevresine karşı her zaman saygılı ve uyumlu olmuştur.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Abdülmuttalib",
+        "definition": "Peygamberimizin dedesi"
+      },
+      {
+        "concept": "Sadoğulları",
+        "definition": "Peygamberimizin çocukluğunun bir kısmını geçirdiği yer"
+      },
+      {
+        "concept": "Bahira",
+        "definition": "Peygamberimizin peygamberliğini önceden haber veren rahip"
+      },
+      {
+        "concept": "Ümmü Eymen",
+        "definition": "Annesinin vefatından sonra Peygamberimizi dedesine getiren dadısı."
+      },
+      {
+        "concept": "Ebu Talip",
+        "definition": "Peygamberimizin amcası"
+      },
+      {
+        "concept": "Hilfülfudul",
+        "definition": "Peygamberimizin gençliğinde katıldığı, haksızlıklara karşı kurulan Erdemliler Birliği."
+      },
+      {
+        "concept": "Fatıma Hatun",
+        "definition": "Ebu Talib’in eşi, Peygamberimizin \"Annemden sonraki annem\" dediği yengesi."
+      },
+      {
+        "concept": "Senetülhüzün",
+        "definition": "Ebu Talib ve Hz. Hatice’nin vefat ettiği \"Hüzün Yılı\"."
+      },
+      {
+        "concept": "Halime",
+        "definition": "Peygamberimizin sütannesi"
+      },
+      {
+        "concept": "Süt Kardeşler",
+        "definition": "Peygamberimizin sütannesinin çocukları; Abdullah, Üneyse ve Şeyma."
+      },
+      {
+        "concept": "Mekke",
+        "definition": "Peygamberimizin doğduğu şehir"
+      },
+      {
+        "concept": "Ebva",
+        "definition": "Peygamberimizin annesi Hz. Amine’nin Mekke’ye dönüş yolunda vefat ettiği köy."
+      },
+      {
+        "concept": "Amine",
+        "definition": "Peygamberimizin annesi"
+      },
+      {
+        "concept": "Medine",
+        "definition": "Peygamberimizin hicret ettiği şehir"
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Abdülmuttalib",
+        "definition": "Peygamberimizin dedesi"
+      },
+      {
+        "term": "Sadoğulları",
+        "definition": "Peygamberimizin çocukluğunun bir kısmını geçirdiği yer"
+      },
+      {
+        "term": "Bahira",
+        "definition": "Peygamberimizin peygamberliğini önceden haber veren rahip"
+      },
+      {
+        "term": "Ümmü Eymen",
+        "definition": "Annesinin vefatından sonra Peygamberimizi dedesine getiren dadısı."
+      },
+      {
+        "term": "Ebu Talip",
+        "definition": "Peygamberimizin amcası"
+      },
+      {
+        "term": "Hilfülfudul",
+        "definition": "Peygamberimizin gençliğinde katıldığı, haksızlıklara karşı kurulan Erdemliler Birliği."
+      },
+      {
+        "term": "Fatıma Hatun",
+        "definition": "Ebu Talib’in eşi, Peygamberimizin \"Annemden sonraki annem\" dediği yengesi."
+      },
+      {
+        "term": "Senetülhüzün",
+        "definition": "Ebu Talib ve Hz. Hatice’nin vefat ettiği \"Hüzün Yılı\"."
+      },
+      {
+        "term": "Halime",
+        "definition": "Peygamberimizin sütannesi"
+      },
+      {
+        "term": "Süt Kardeşler",
+        "definition": "Peygamberimizin sütannesinin çocukları; Abdullah, Üneyse ve Şeyma."
+      },
+      {
+        "term": "Mekke",
+        "definition": "Peygamberimizin doğduğu şehir"
+      },
+      {
+        "term": "Ebva",
+        "definition": "Peygamberimizin annesi Hz. Amine’nin Mekke’ye dönüş yolunda vefat ettiği köy."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Hz. Amine",
+        "scrambledWord": ".İNZ AHME",
+        "definition": "İpucu: Bu kelime \"Hz. Amine\""
+      },
+      {
+        "correctAnswer": "Hilfülfudul",
+        "scrambledWord": "ÜFFİUHLUDLL",
+        "definition": "İpucu: Bu kelime \"Hilfülfudul\""
+      },
+      {
+        "correctAnswer": "Ümmü Eymen",
+        "scrambledWord": "ÜEMYM ÜENM",
+        "definition": "İpucu: Bu kelime \"Ümmü Eymen\""
+      },
+      {
+        "correctAnswer": "Abdülmuttalib",
+        "scrambledWord": "TULLTADAİMBBÜ",
+        "definition": "İpucu: Bu kelime \"Abdülmuttalib\""
+      },
+      {
+        "correctAnswer": "Rahip Bahira",
+        "scrambledWord": "AAİİBHPR ARH",
+        "definition": "İpucu: Bu kelime \"Rahip Bahira\""
+      },
+      {
+        "correctAnswer": "Sadoğulları",
+        "scrambledWord": "AORSIDLĞAUL",
+        "definition": "İpucu: Bu kelime \"Sadoğulları\""
+      },
+      {
+        "correctAnswer": "Ebu Talib",
+        "scrambledWord": " TBBİEAUL",
+        "definition": "İpucu: Bu kelime \"Ebu Talib\""
+      },
+      {
+        "correctAnswer": "Mekke",
+        "scrambledWord": "KEEKM",
+        "definition": "İpucu: Bu kelime \"Mekke\""
+      },
+      {
+        "correctAnswer": "Bahira",
+        "scrambledWord": "ARAHBİ",
+        "definition": "İpucu: Bu kelime \"Bahira\""
+      },
+      {
+        "correctAnswer": "Medine",
+        "scrambledWord": "DENMEİ",
+        "definition": "İpucu: Bu kelime \"Medine\""
+      },
+      {
+        "correctAnswer": "Ebu Talip",
+        "scrambledWord": "AİEPUTB L",
+        "definition": "İpucu: Bu kelime \"Ebu Talip\""
+      },
+      {
+        "correctAnswer": "Ebva",
+        "scrambledWord": "BVAE",
+        "definition": "İpucu: Bu kelime \"Ebva\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Peygamberimiz dört yaşına kadar annesinin yanında yaşadı.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz çocukluğunda cahiliye âdetlerine uymuş, yanlış davranışları benimsemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, ailesine ekonomik anlamda katkıda bulunmak için çobanlık yapmıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Dedesinin vefatından önce Peygamberimizi amcası Ebu Talib’e emanet etti.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz on iki yaşındayken amcası Ebu Talib ile ilk ticaret yolculuğunu Yemen’e yapmıştır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, annesinin vefatından sonra amcası Ebu Talib ile yaşamaya başladı.",
+        "isTrue": false
+      },
+      {
+        "statement": "Haris bin Abdüluzza, Peygamberimizin getirdiği bereketten memnun değildi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimizin ailesine maddi ve manevi anlamda her zaman destek olması, onun sadece kendi ailesine karşı sorumlu olduğunu gösterir.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Amcasıyla Şam'a yaptığı ticaret yolculuğunda Rahip Bahira ile karşılaşmıştır.",
+    "scrambledSentence": "Şam'a ticaret yaptığı Amcasıyla ile karşılaşmıştır. Bahira Rahip yolculuğunda"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Bu dönemde ailesine karşı sorumluluk sahibi ve yardımsever bir çocuktu.",
+    "scrambledSentence": "Bu ailesine yardımsever karşı dönemde ve çocuktu. sahibi bir sorumluluk"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimizin çocukluğu, peygamberliğine hazırlık niteliğinde önemli olaylar ve tecrübelerle doludur.",
+    "scrambledSentence": "peygamberliğine önemli tecrübelerle çocukluğu, niteliğinde doludur. olaylar hazırlık Peygamberimizin ve"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimizin çocukluk dönemi, onun ilerideki hayatını ve peygamberliğini anlamak için önemlidir.",
+    "scrambledSentence": "için onun hayatını ilerideki Peygamberimizin dönemi, ve peygamberliğini çocukluk önemlidir. anlamak"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimizin 'Sizin en hayırlınız, ailesine karşı en hayırlı olandır. Ben de aileme karşı en hayırlı olanınızım.' hadisi, ___ önemini vurgular.",
+    "options": [
+      "bireysel başarıların",
+      "aile içi ilişkilerin",
+      "maddi zenginliğin",
+      "sosyal statünün"
+    ],
+    "correctAnswer": "aile içi ilişkilerin"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimizin on iki yaşındayken amcası Ebu Talib ile yaptığı ilk ticaret yolculuğu ___’a idi.",
+    "options": [
+      "Medine",
+      "Kudüs",
+      "Şam",
+      "Taif"
+    ],
+    "correctAnswer": "Şam"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Rahip Bahira, Ebu Talib’e yeğeninin beklenen ___ olabileceğini ve çok iyi korunması gerektiğini söyledi.",
+    "options": [
+      "kral",
+      "lider",
+      "peygamber",
+      "tüccar"
+    ],
+    "correctAnswer": "peygamber"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber Efendimiz’in annesi, Mekke’ye dönüş yolunda ___ köyünde hastalanarak vefat etti.",
+    "options": [
+      "Kubâ",
+      "Ebva",
+      "Taif",
+      "Busra"
+    ],
+    "correctAnswer": "Ebva"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimizin annesi Amine’nin, oğlunun sütannesi Halime Hatun ile bir süre daha kalmasını uygun görmesinin nedenlerinden biri Mekke’deki salgın ___ idi.",
+    "options": [
+      "savaşlar",
+      "hastalıklar",
+      "kuraklıklar",
+      "kıtlıklar"
+    ],
+    "correctAnswer": "hastalıklar"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Rahip Bahira, Ebu Talib’e yeğeninin beklenen peygamber olabileceğini söyleyince Ebu Talib ne yapmıştır?",
+    "options": [
+      "Yolculuğa devam etmiştir",
+      "Şam’a yapacağı yolculuktan vazgeçerek Mekke’ye geri dönmüştür",
+      "Peygamberimizi yalnız bırakmıştır",
+      "Rahibin sözlerine inanmamıştır"
+    ],
+    "correctAnswer": "Şam’a yapacağı yolculuktan vazgeçerek Mekke’ye geri dönmüştür"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz kaç yaşına kadar Sadoğulları yurdunda, sütannesinin yanında yaşadı?",
+    "options": [
+      "İki",
+      "Dört",
+      "Altı",
+      "Sekiz"
+    ],
+    "correctAnswer": "Dört"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz kaç yaşındayken dedesi Abdülmuttalib vefat etti?",
+    "options": [
+      "Altı",
+      "Yedi",
+      "Sekiz",
+      "Dokuz"
+    ],
+    "correctAnswer": "Sekiz"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin 'Allah’ın gönderdiği her peygamber koyun gütmüştür.' sözü, çobanlık yapmasının hangi yönünü vurgular?",
+    "options": [
+      "Sadece maddi bir ihtiyaç olduğunu",
+      "Peygamberlik geleneğinin bir parçası olduğunu",
+      "Sadece çocukluk eğlencesi olduğunu",
+      "Zorunlu bir görev olduğunu"
+    ],
+    "correctAnswer": "Peygamberlik geleneğinin bir parçası olduğunu"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin çocukluğunda çevresi tarafından takdir edilen bir kişiliğe sahip olması, küçük yaşta olmasına rağmen sözüne değer verilmesi ve hiçbir zaman cahiliye âdetlerine uymaması, onun hangi üstün özelliğini gösterir?",
+    "options": [
+      "Sadece zekasını",
+      "Sadece fiziksel gücünü",
+      "Üstün ahlakını ve karakterini",
+      "Sadece sosyal becerilerini"
+    ],
+    "correctAnswer": "Üstün ahlakını ve karakterini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin yengesi Fatıma, ona nasıl davranmıştır?",
+    "options": [
+      "Soğuk",
+      "Uzak",
+      "Sevecen",
+      "İlgisiz"
+    ],
+    "correctAnswer": "Sevecen"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, ailesine ekonomik anlamda da katkıda bulunmak için hangi işi yapmıştır?",
+    "options": [
+      "Çiftçilik",
+      "Marangozluk",
+      "Çobanlık",
+      "Demircilik"
+    ],
+    "correctAnswer": "Çobanlık"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin zamanını iyi değerlendirmesi, boş geçirmemesi, dürüst olması, söz verdiği zaman sözünde durması, insanlar arasında hakkı gözetmesi ve adil kararlar alması, onun hangi genel ahlaki özelliğini özetler?",
+    "options": [
+      "Sadece cömertliğini",
+      "Sadece cesaretini",
+      "Sorumluluk bilincini ve güzel ahlakını",
+      "Sadece bilgeliğini"
+    ],
+    "correctAnswer": "Sorumluluk bilincini ve güzel ahlakını"
+  }
+]

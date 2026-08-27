@@ -5,6 +5,9 @@ import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
 
+import { db } from '@/lib/firebase';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+
 export default function CourseRedirectPage() {
     const router = useRouter();
     const params = useParams();
@@ -15,28 +18,38 @@ export default function CourseRedirectPage() {
         if (courseId) {
             const findFirstUnitAndRedirect = async () => {
                 try {
+                    let firstUnitId: string | null = null;
                     const res = await fetch('/curriculum/manifest.json');
-                    if (!res.ok) throw new Error("Manifest bulunamadı.");
-                    const manifest = await res.json();
-                    
-                    let targetCourse = null;
-                    for (const group of manifest.classGroups) {
-                        const found = group.courses.find((c: any) => c.id === courseId);
-                        if (found) {
-                            targetCourse = found;
-                            break;
+                    if (res.ok) {
+                        const manifest = await res.json();
+                        let targetCourse = null;
+                        for (const group of manifest.classGroups || []) {
+                            const found = group.courses?.find((c: any) => c.id === courseId);
+                            if (found) {
+                                targetCourse = found;
+                                break;
+                            }
+                        }
+
+                        if (targetCourse && targetCourse.units && targetCourse.units.length > 0) {
+                            const sortedUnits = targetCourse.units.sort((a: any, b: any) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+                            firstUnitId = sortedUnits[0].id;
                         }
                     }
 
-                    if (targetCourse && targetCourse.units && targetCourse.units.length > 0) {
-                        // Üniteleri ismine göre sırala
-                        const sortedUnits = targetCourse.units.sort((a: any, b: any) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
-                        const firstUnitId = sortedUnits[0].id;
+                    // Fallback to Firestore if not found in manifest
+                    if (!firstUnitId) {
+                        const unitsSnap = await getDocs(query(collection(db, `courses/${courseId}/units`), orderBy("title", "asc")));
+                        if (!unitsSnap.empty) {
+                            firstUnitId = unitsSnap.docs[0].id;
+                        }
+                    }
+
+                    if (firstUnitId) {
                         router.replace(`/student/ders/${courseId}/${firstUnitId}`);
                     } else {
-                        // Eğer ünite yoksa hata ver ve yönlendir
-                         setError("Bu derste henüz ünite bulunmuyor.");
-                         router.replace(`/student/soru-bankasi`);
+                        setError("Bu derste henüz ünite bulunmuyor.");
+                        router.replace(`/student/soru-bankasi`);
                     }
                 } catch (err) {
                     console.error("Redirect failed:", err);

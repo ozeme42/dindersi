@@ -1,0 +1,373 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Dede Olarak Peygamberimiz konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Dede Olarak Peygamberimiz ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Aile Hayatında Peygamberimiz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Hz. Hüseyin, Reyhan, Hz. Hasan kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Hz. Hüseyin</li><li>Reyhan</li><li>Hz. Hasan</li><li>Ümame</li><li>Seyit</li><li>Şerif</li><li>Akika Kurbanı</li><li>Muhassin</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Dede Olarak Peygamberimiz - Önemli Bilgiler (1)",
+    "content": "<ul><li>Aile büyükleri, genç nesillere tecrübelerini aktararak yol gösterir ve sevgi saygıyı pekiştirirler.</li><li>Peygamberimiz (sav), küçüklere merhamet etmeyi, büyüklere saygı göstermeyi öğütlemiştir.</li><li>Peygamberimizin toplam sekiz torunu olmuş, özellikle Hz. Hasan ve Hz. Hüseyin ile yakın ilişkisi olmuştur.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Dede Olarak Peygamberimiz - Önemli Bilgiler (2)",
+    "content": "<ul><li>Torunlarına yoğun sevgi gösterir, onlarla oyun oynar, şakalaşır ve vakit geçirirdi.</li><li>Namaz esnasında bile torunlarının sırtından inmesini sabırla bekler, onlara hoşgörüyle yaklaşırdı.</li><li>Torunlarına güzel isimler vermiş, akika kurbanı kesmiş ve onlar için \"cennet gençlerinin iki efendisi\" demiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Dede Olarak Peygamberimiz - Önemli Bilgiler (3)",
+    "content": "<ul><li>Merhamet etmeyene merhamet edilmeyeceğini vurgulayarak çocuklara karşı şefkatli olmanın önemini belirtmiştir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Hz. Hüseyin",
+        "definition": "Peygamberimizin Hz. Fatıma ve Hz. Ali’den olan küçük torunu."
+      },
+      {
+        "concept": "Reyhan",
+        "definition": "Güzel kokulu çiçek; Peygamberimizin torunları Hz. Hasan ve Hz. Hüseyin için kullandığı sevgi ifadesi (\"Dünyadaki iki reyhanım\")."
+      },
+      {
+        "concept": "Hz. Hasan",
+        "definition": "Peygamberimizin Hz. Fatıma ve Hz. Ali’den olan büyük torunu."
+      },
+      {
+        "concept": "Ümame",
+        "definition": "Peygamberimizin kızı Zeyneb'in kızı olan, dedesinin namazda omuzuna aldığı torunu."
+      },
+      {
+        "concept": "Seyit",
+        "definition": "Hz. Hüseyin'in soyundan gelenlere verilen, \"efendi, önder\" anlamına gelen unvan."
+      },
+      {
+        "concept": "Akika Kurbanı",
+        "definition": "Yeni doğan çocuklar için şükür amacıyla kesilen kurban."
+      },
+      {
+        "concept": "Şerif",
+        "definition": "Hz. Hasan'ın soyundan gelenlere verilen, \"şerefli, asaletli\" anlamına gelen unvan."
+      },
+      {
+        "concept": "Muhassin",
+        "definition": "Hz. Fatıma ve Hz. Ali'nin küçük yaşta vefat eden üçüncü oğlu."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Hz. Hüseyin",
+        "definition": "Peygamberimizin Hz. Fatıma ve Hz. Ali’den olan küçük torunu."
+      },
+      {
+        "term": "Reyhan",
+        "definition": "Güzel kokulu çiçek; Peygamberimizin torunları Hz. Hasan ve Hz. Hüseyin için kullandığı sevgi ifadesi (\"Dünyadaki iki reyhanım\")."
+      },
+      {
+        "term": "Hz. Hasan",
+        "definition": "Peygamberimizin Hz. Fatıma ve Hz. Ali’den olan büyük torunu."
+      },
+      {
+        "term": "Ümame",
+        "definition": "Peygamberimizin kızı Zeyneb'in kızı olan, dedesinin namazda omuzuna aldığı torunu."
+      },
+      {
+        "term": "Seyit",
+        "definition": "Hz. Hüseyin'in soyundan gelenlere verilen, \"efendi, önder\" anlamına gelen unvan."
+      },
+      {
+        "term": "Akika Kurbanı",
+        "definition": "Yeni doğan çocuklar için şükür amacıyla kesilen kurban."
+      },
+      {
+        "term": "Şerif",
+        "definition": "Hz. Hasan'ın soyundan gelenlere verilen, \"şerefli, asaletli\" anlamına gelen unvan."
+      },
+      {
+        "term": "Muhassin",
+        "definition": "Hz. Fatıma ve Hz. Ali'nin küçük yaşta vefat eden üçüncü oğlu."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Hz. Hüseyin",
+        "scrambledWord": " NİHEÜZ.SHY",
+        "definition": "İpucu: Bu kelime \"Hz. Hüseyin\""
+      },
+      {
+        "correctAnswer": "Reyhan",
+        "scrambledWord": "NYAERH",
+        "definition": "İpucu: Bu kelime \"Reyhan\""
+      },
+      {
+        "correctAnswer": "Hz. Hasan",
+        "scrambledWord": " SHAZHA.N",
+        "definition": "İpucu: Bu kelime \"Hz. Hasan\""
+      },
+      {
+        "correctAnswer": "Ümame",
+        "scrambledWord": "MAEÜM",
+        "definition": "İpucu: Bu kelime \"Ümame\""
+      },
+      {
+        "correctAnswer": "Seyit",
+        "scrambledWord": "ETİYS",
+        "definition": "İpucu: Bu kelime \"Seyit\""
+      },
+      {
+        "correctAnswer": "Şerif",
+        "scrambledWord": "ŞİFER",
+        "definition": "İpucu: Bu kelime \"Şerif\""
+      },
+      {
+        "correctAnswer": "Akika Kurbanı",
+        "scrambledWord": "IARKAKNK ABİU",
+        "definition": "İpucu: Bu kelime \"Akika Kurbanı\""
+      },
+      {
+        "correctAnswer": "Muhassin",
+        "scrambledWord": "NSMSUİHA",
+        "definition": "İpucu: Bu kelime \"Muhassin\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Peygamberimizin Hz. Fatıma’dan altı torunu olmuştur.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz namaz esnasında torunlarının çocukça hareketlerine engel olurdu.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, torunlarını sırtında taşımaktan çekinirdi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, torunları için 'Onları seven beni sevmiş demektir.' buyurmuştur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimizin torunları Hz. Hasan ve Hz. Hüseyin’e duyduğu muhabbeti 'Onlar benim dünyada (öpüp kokladığım) iki reyhanımdır.' sözüyle ifade etmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz, Hz. Hasan’ı kucağına alıp severken kucağını ıslattığında sütannesinin tepkisine kayıtsız kalmıştır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimizin torunlarına ad vermedeki hassasiyetinin nedenleri arasında, onlara güzel anlamlar yüklemek ve gelecekteki kişiliklerini olumlu yönde etkilemek amacı bulunur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Seyit kelimesi Hz. Hüseyin’in soyundan gelenler için kullanılır.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Torunlarına karşı sevgi dolu ve şefkatli bir dedeydi.",
+    "scrambledSentence": "dedeydi. karşı ve sevgi şefkatli Torunlarına dolu bir"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Namazda secdedeyken bile onlara sabır gösterirdi.",
+    "scrambledSentence": "Namazda bile secdedeyken onlara gösterirdi. sabır"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz torunlarına karşı çok şefkatli ve merhametliydi.",
+    "scrambledSentence": "çok Peygamberimiz ve torunlarına merhametliydi. şefkatli karşı"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Torunlarını sırtında taşır, onlarla oyunlar oynardı.",
+    "scrambledSentence": "oynardı. oyunlar sırtında taşır, onlarla Torunlarını"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, kızı Hz. Fatıma’yı evinde sık sık ziyaret eder, torunlarını kucaklayıp, ___ severdi.",
+    "options": [
+      "azarlayarak",
+      "öperek",
+      "kızarak",
+      "uzak durarak"
+    ],
+    "correctAnswer": "öperek"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz Hz. Hasan ve Hz. Hüseyin için '... cennet gençlerinin iki ___...' demiştir.",
+    "options": [
+      "arkadaşı",
+      "efendisi",
+      "lideri",
+      "önderi"
+    ],
+    "correctAnswer": "efendisi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Hasan’ın soyundan gelenlere duyulan saygıyı göstermek için '___' ünvanı söylenir.",
+    "options": [
+      "Seyit",
+      "Şerif",
+      "Molla",
+      "Dede"
+    ],
+    "correctAnswer": "Şerif"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz aile bireylerine karşı ilgi ve yaklaşımında ___ idi.",
+    "options": [
+      "ilgisiz",
+      "sert",
+      "samimi",
+      "uzak"
+    ],
+    "correctAnswer": "samimi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber Efendimiz küçüklere merhamet edip büyüklere ___ gösterilmesini öğütlemiştir.",
+    "options": [
+      "korku",
+      "saygı",
+      "öfke",
+      "ilgisizlik"
+    ],
+    "correctAnswer": "saygı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Seyit kelimesi sözlükte ne anlama gelir?",
+    "options": [
+      "Köle",
+      "Efendi, reis, ileri gelen, başkan, önder",
+      "Asker",
+      "Tüccar"
+    ],
+    "correctAnswer": "Efendi, reis, ileri gelen, başkan, önder"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz Hz. Hasan ve Hz. Hüseyin için '... cennet gençlerinin iki efendisi...' demiştir. Bu söz neyi ifade eder?",
+    "options": [
+      "Sadece liderliklerini",
+      "Sadece güçlerini",
+      "Cennetteki yüksek mertebelerini",
+      "Sadece dünyevi statülerini"
+    ],
+    "correctAnswer": "Cennetteki yüksek mertebelerini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Şefkat, koruyarak sevmektir. Peygamber Efendimiz her ne sebeple olursa olsun torunlarının neyine göz yummazdı?",
+    "options": [
+      "Başarısızlıklarına",
+      "Mutluluklarına",
+      "İncitilmelerine",
+      "Sevinçlerine"
+    ],
+    "correctAnswer": "İncitilmelerine"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, torunları için 'Allah’ım! Ben onları seviyorum, sen de onları sev.' şeklinde ne yapmıştır?",
+    "options": [
+      "Emretmiştir",
+      "Dua etmiştir",
+      "Yasaklamıştır",
+      "Uyarmıştır"
+    ],
+    "correctAnswer": "Dua etmiştir"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, torunlarını sırtında taşımaktan çekinmez, namaz esnasında onların çocukça hareketlerine ne yapmazdı?",
+    "options": [
+      "Engel olurdu",
+      "Görmezden gelirdi",
+      "Kızardı",
+      "Kısıtlardı"
+    ],
+    "correctAnswer": "Görmezden gelirdi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Aile büyükleri, hayat boyu elde ettikleri bilgi ve deneyimlerini küçüklerle paylaşarak onların neyine katkıda bulunurlar?",
+    "options": [
+      "Maddi durumuna",
+      "Fiziksel gücüne",
+      "Gelişimine",
+      "Sosyal statüsüne"
+    ],
+    "correctAnswer": "Gelişimine"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin torunları Hz. Hasan ve Hz. Hüseyin’e duyduğu muhabbeti 'Onlar benim dünyada (öpüp kokladığım) iki reyhanımdır.' sözüyle ifade etmesi, neyi vurgular?",
+    "options": [
+      "Sadece kokularını",
+      "Sadece güzelliklerini",
+      "Torunlarına duyduğu derin sevgiyi ve değerini",
+      "Sadece bitkilere olan sevgisini"
+    ],
+    "correctAnswer": "Torunlarına duyduğu derin sevgiyi ve değerini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin Hz. Rukıyye’den kaç torunu olmuştur?",
+    "options": [
+      "Bir",
+      "İki",
+      "Üç",
+      "Dört"
+    ],
+    "correctAnswer": "Bir"
+  }
+]

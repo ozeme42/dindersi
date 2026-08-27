@@ -27,26 +27,43 @@ export async function getCumleOlusturmaAction(
 ): Promise<{ data: ScrambledSentenceData[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
         
-        if (allItems.length === 0) {
+        if (!allItems || allItems.length === 0) {
             return { error: "Bu konu için oynanabilir veri bulunamadı.", data: null };
         }
         
-        const allSentences = allItems
-            .filter(item => item.type === 'sentence' && item.content.text && item.content.text.trim().length > 0 && item.content.text.trim().split(' ').length > 2)
-            .map(item => item.content.text!);
+        const extractedSentences: string[] = [];
 
-        if (allSentences.length < 1) {
+        for (const item of allItems) {
+            if ('type' in item) {
+                if (item.type === 'sentence' && (item as any).content?.text) {
+                    const txt = String((item as any).content.text).trim();
+                    if (txt.split(' ').length >= 3) extractedSentences.push(txt);
+                } else if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
+                    const t = String((item as any).content.term).trim();
+                    const d = String((item as any).content.definition).trim();
+                    const s = `${t}, ${d}`;
+                    if (s.split(' ').length >= 3 && s.length <= 150) extractedSentences.push(s);
+                } else if ((item.type === 'Doğru/Yanlış' || item.type === 'tf') && ((item as any).text || (item as any).statement)) {
+                    const txt = String((item as any).text || (item as any).statement).trim();
+                    if (txt.split(' ').length >= 3 && txt.length <= 150) extractedSentences.push(txt);
+                }
+            }
+        }
+
+        const uniqueSentences = [...new Set(extractedSentences)];
+
+        if (uniqueSentences.length < 1) {
             return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
         }
         
-        for (let i = allSentences.length - 1; i > 0; i--) {
+        for (let i = uniqueSentences.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
+            [uniqueSentences[i], uniqueSentences[j]] = [uniqueSentences[j], uniqueSentences[i]];
         }
 
-        const gameData: ScrambledSentenceData[] = allSentences.map(sentence => ({
+        const gameData: ScrambledSentenceData[] = uniqueSentences.slice(0, 15).map(sentence => ({
             correctSentence: sentence.trim(),
         }));
 

@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { doc, getDoc, collection, onSnapshot, writeBatch, serverTimestamp, increment } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, onSnapshot, writeBatch, serverTimestamp, increment, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { CourseSidebar } from "@/components/course-sidebar";
 
@@ -82,7 +82,22 @@ function PageContent() {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
-    const fetchStepsForContent = async (contentId: string): Promise<LessonStep[]> => {
+    const fetchStepsForContent = async (contentId: string, unitId?: string): Promise<LessonStep[]> => {
+        // 1. Check if Firestore has the topic steps
+        try {
+            const targetUnitId = unitId || unitIdFromUrl;
+            if (courseId && targetUnitId) {
+                const topicRef = doc(db, 'courses', courseId, 'units', targetUnitId, 'topics', contentId);
+                const topicSnap = await getDoc(topicRef);
+                if (topicSnap.exists() && Array.isArray(topicSnap.data()?.steps) && topicSnap.data().steps.length > 0) {
+                    return topicSnap.data().steps;
+                }
+            }
+        } catch (e) {
+            console.warn(`Firestore check for steps ${contentId} failed:`, e);
+        }
+
+        // 2. Fallback to static flow JSON
         try {
             const res = await fetch(`/curriculum/flows/${contentId}.json?v=${Date.now()}`);
             if (res.ok) return await res.json();
@@ -102,13 +117,33 @@ function PageContent() {
                 fetch('/curriculum/manifest.json')
             ]);
             if (progressSnap?.exists()) setCompletedTopics(progressSnap.data() as UserProgress);
-            if (!manifestRes.ok) throw new Error("Müfredat manifestosu bulunamadı.");
-            const manifest = await manifestRes.json();
+            
             let courseData: Course | undefined;
-            for (const group of manifest.classGroups) {
-                const foundCourse = group.courses.find((c: Course) => c.id === courseId);
-                if (foundCourse) { courseData = foundCourse; break; }
+            if (manifestRes.ok) {
+                const manifest = await manifestRes.json();
+                for (const group of manifest.classGroups || []) {
+                    const foundCourse = group.courses?.find((c: Course) => c.id === courseId);
+                    if (foundCourse) { courseData = foundCourse; break; }
+                }
             }
+
+            // Fallback: If not in manifest, try fetching from Firestore
+            if (!courseData) {
+                const courseDoc = await getDoc(doc(db, 'courses', courseId));
+                if (courseDoc.exists()) {
+                    const cData = { id: courseDoc.id, ...courseDoc.data() } as Course;
+                    const unitsSnap = await getDocs(query(collection(db, `courses/${courseId}/units`), orderBy("title", "asc")));
+                    const units = [];
+                    for (const uDoc of unitsSnap.docs) {
+                        const uData = { id: uDoc.id, ...uDoc.data() } as Unit;
+                        const topicsSnap = await getDocs(query(collection(db, `courses/${courseId}/units/${uDoc.id}/topics`), orderBy("title", "asc")));
+                        const topics = topicsSnap.docs.map(t => ({ id: t.id, ...t.data() } as Topic));
+                        units.push({ ...uData, topics });
+                    }
+                    courseData = { ...cData, units };
+                }
+            }
+
             if (!courseData) { setIsLoading(false); return; }
             courseData.units?.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
             courseData.units?.forEach(unit => {
@@ -142,7 +177,8 @@ function PageContent() {
     useEffect(() => {
         if (isLoading || allTopicsInOrder.length === 0 || activeContent) return;
         const preloadContent = async (content: Topic | Unit) => {
-            const steps = await fetchStepsForContent(content.id);
+            const uId = (content as any).unitId || ('topics' in content ? content.id : unitIdFromUrl);
+            const steps = await fetchStepsForContent(content.id, uId);
             setActiveContent({ ...content, steps });
             if (startTopicIdFromUrl) setView('content');
         };
@@ -153,9 +189,10 @@ function PageContent() {
         const firstUncompletedUnlockedTopic = allTopicsInOrder.find(t => isTopicUnlocked(t.id) && !isTopicCompleted(t.id));
         const targetTopic = firstUncompletedUnlockedTopic || allTopicsInOrder[allTopicsInOrder.length - 1];
         if (targetTopic) {
-            fetchStepsForContent(targetTopic.id).then(steps => setActiveContent({ ...targetTopic, steps }));
+            const uId = (targetTopic as any).unitId || unitIdFromUrl;
+            fetchStepsForContent(targetTopic.id, uId).then(steps => setActiveContent({ ...targetTopic, steps }));
         }
-    }, [isLoading, allTopicsInOrder, activeContent, isTopicUnlocked, isTopicCompleted, startTopicIdFromUrl]);
+    }, [isLoading, allTopicsInOrder, activeContent, isTopicUnlocked, isTopicCompleted, startTopicIdFromUrl, unitIdFromUrl]);
 
     const activeContentData = useMemo(() => {
         if (!course || !activeContent) return null;
@@ -167,12 +204,13 @@ function PageContent() {
 
     const handleSelectContent = useCallback(async (content: Topic | Unit) => {
         setIsLoading(true);
-        const steps = await fetchStepsForContent(content.id);
+        const uId = (content as any).unitId || ('topics' in content ? content.id : unitIdFromUrl);
+        const steps = await fetchStepsForContent(content.id, uId);
         setActiveContent({ ...content, steps });
         setView('content');
         if (window.innerWidth < 768) window.scrollTo(0, 0);
         setIsLoading(false);
-    }, []);
+    }, [unitIdFromUrl]);
 
     const onProgressUpdate = useCallback((topicId: string, newProgress: LocalProgress) => {
         setLocalProgressMap(prev => ({ ...prev, [topicId]: newProgress }));

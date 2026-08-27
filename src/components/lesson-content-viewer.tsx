@@ -11,7 +11,7 @@ import {
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
     PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Palette, Pencil,
-    RotateCw, ZoomIn, ZoomOut, Grid2X2, Grid3X3
+    RotateCw, RotateCcw, ZoomIn, ZoomOut, Grid2X2, Grid3X3
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -751,15 +751,15 @@ export function ConceptExplanationPlayer({
     return (
         <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
             {/* Üst Başlık */}
-            <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
+            <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950">
                         <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
                     </div>
                     <div>
-                        <h2 className="font-black text-slate-800 text-lg md:text-2xl drop-shadow-sm tracking-tight">{title || 'Anahtar Kavramlar'}</h2>
-                        <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
-                            <span className={cn(visibleConcepts.length === totalCards ? "text-emerald-600 font-extrabold" : "text-indigo-600 font-extrabold")}>
+                        <h2 className="font-black text-white text-lg md:text-2xl drop-shadow-sm tracking-tight">{title || 'Anahtar Kavramlar'}</h2>
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+                            <span className={cn(visibleConcepts.length === totalCards ? "text-emerald-400 font-extrabold" : "text-indigo-400 font-extrabold")}>
                                 {visibleConcepts.length} / {totalCards} Anahtar Kavram
                             </span>
                         </div>
@@ -776,7 +776,7 @@ export function ConceptExplanationPlayer({
                             return (
                                 <div key={index} className="col-span-full mt-4 mb-2 flex items-center gap-4 w-full">
                                     <div className="h-[2px] bg-gradient-to-r from-transparent via-indigo-500/70 to-transparent flex-1" />
-                                    <h3 className="text-xl md:text-2xl font-black text-indigo-700 tracking-widest uppercase drop-shadow-sm text-center px-4">{item.definition}</h3>
+                                    <h3 className="text-xl md:text-2xl font-black text-indigo-400 tracking-widest uppercase drop-shadow-sm text-center px-4">{item.definition}</h3>
                                     <div className="h-[2px] bg-gradient-to-r from-transparent via-indigo-500/70 to-transparent flex-1" />
                                 </div>
                             );
@@ -785,6 +785,7 @@ export function ConceptExplanationPlayer({
                         const currentNum = ++conceptCount;
                         const theme = FLASHCARD_THEMES[(currentNum - 1) % FLASHCARD_THEMES.length];
                         const isLatest = index === visibleConcepts.length - 1;
+                        const hasDefinition = !!(item.definition && item.definition.trim().length > 0);
 
                         return (
                             <motion.div
@@ -810,18 +811,30 @@ export function ConceptExplanationPlayer({
                                         #{currentNum}
                                     </span>
                                     <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2.5 py-0.5 rounded-full border border-white/30 backdrop-blur-md">
-                                        <Sparkles className="w-3 h-3 text-amber-300" /> Kavram
+                                        <Sparkles className="w-3 h-3 text-amber-300" /> {hasDefinition ? 'Tanım Kartı' : 'Kavram'}
                                     </div>
                                 </div>
 
-                                {/* Kavram Başlığı - Kartın Merkezini Dolduran Büyük Yazı (Harf bölünmesi engellendi) */}
-                                <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center relative z-10">
+                                {/* Kavram Başlığı & Tanım Açıklaması */}
+                                <div className="my-auto py-3 px-2 text-center w-full flex flex-col items-center justify-center relative z-10 gap-2">
                                     <h3 className={cn(
                                         "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full text-center px-1",
                                         getConceptFontSize(item.concept)
                                     )}>
                                         {item.concept}
                                     </h3>
+                                    {hasDefinition && (
+                                        <p className={cn(
+                                            "text-slate-200 font-medium leading-relaxed max-w-xl mx-auto px-2 mt-1",
+                                            cardScale === 'xl' ? (isTeacher ? "text-2xl md:text-3xl font-semibold" : "text-lg md:text-xl") :
+                                            cardScale === 'lg' ? (isTeacher ? "text-xl md:text-2xl font-medium" : "text-base md:text-lg") :
+                                            cardScale === 'md' ? (isTeacher ? "text-lg md:text-xl font-medium" : "text-sm md:text-base") :
+                                            cardScale === 'xs' ? (isTeacher ? "text-sm md:text-base" : "text-xs") :
+                                            (isTeacher ? "text-base md:text-lg font-medium" : "text-xs md:text-sm")
+                                        )}>
+                                            {item.definition}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Kart Taban Işıltısı */}
@@ -2054,6 +2067,475 @@ function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep, isFull
     );
 }
 
+// ══ 11. MatchingPlayer (KAVRAM - TANIM EŞLEŞTİRME MODÜLÜ - DİNAMİK BÜYÜTME & KOZMİK TASARIM) ══
+function MatchingPlayer({ 
+    step, 
+    onCompleted, 
+    topicId, 
+    isTeacher, 
+    isFullscreen,
+    fontSizeScale = 'normal'
+}: { 
+    step: any; 
+    onCompleted?: () => void; 
+    topicId?: string; 
+    isTeacher: boolean; 
+    isFullscreen: boolean; 
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge';
+}) {
+    const [pairs, setPairs] = useState<{ id: string; concept: string; definition: string }[]>([]);
+    const [shuffledDefinitions, setShuffledDefinitions] = useState<{ id: string; text: string }[]>([]);
+    const [selectedConceptId, setSelectedConceptId] = useState<string | null>(null);
+    const [selectedDefId, setSelectedDefId] = useState<string | null>(null);
+    const [matchedIds, setMatchedIds] = useState<Set<string>>(new Set());
+    const [wrongPair, setWrongPair] = useState<{ conceptId: string; defId: string } | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isFinished, setIsFinished] = useState(false);
+
+    // 8 Farklı Canlı ve Şık Eşleşme Renk Paleti (Eşleşen Çiftin Her İkisi de Aynı Canlı Rengi Alır)
+    const MATCH_COLORS = [
+        { 
+            card: 'bg-emerald-600 border-2 border-emerald-400 text-white shadow-[0_6px_25px_rgba(16,185,129,0.4)]', 
+            badge: 'bg-emerald-800 text-white border-transparent',
+            pill: 'text-emerald-100 border-emerald-300/50 bg-emerald-800/80',
+            accent: 'text-emerald-300'
+        },
+        { 
+            card: 'bg-sky-600 border-2 border-sky-400 text-white shadow-[0_6px_25px_rgba(14,165,233,0.4)]', 
+            badge: 'bg-sky-800 text-white border-transparent',
+            pill: 'text-sky-100 border-sky-300/50 bg-sky-800/80',
+            accent: 'text-sky-300'
+        },
+        { 
+            card: 'bg-purple-600 border-2 border-purple-400 text-white shadow-[0_6px_25px_rgba(168,85,247,0.4)]', 
+            badge: 'bg-purple-800 text-white border-transparent',
+            pill: 'text-purple-100 border-purple-300/50 bg-purple-800/80',
+            accent: 'text-purple-300'
+        },
+        { 
+            card: 'bg-amber-500 border-2 border-amber-300 text-slate-950 shadow-[0_6px_25px_rgba(245,158,11,0.4)]', 
+            badge: 'bg-amber-700 text-white border-transparent',
+            pill: 'text-amber-950 border-amber-600/50 bg-amber-200/90 font-black',
+            accent: 'text-amber-300'
+        },
+        { 
+            card: 'bg-rose-600 border-2 border-rose-400 text-white shadow-[0_6px_25px_rgba(244,63,94,0.4)]', 
+            badge: 'bg-rose-800 text-white border-transparent',
+            pill: 'text-rose-100 border-rose-300/50 bg-rose-800/80',
+            accent: 'text-rose-300'
+        },
+        { 
+            card: 'bg-indigo-600 border-2 border-indigo-400 text-white shadow-[0_6px_25px_rgba(99,102,241,0.4)]', 
+            badge: 'bg-indigo-800 text-white border-transparent',
+            pill: 'text-indigo-100 border-indigo-300/50 bg-indigo-800/80',
+            accent: 'text-indigo-300'
+        },
+        { 
+            card: 'bg-lime-600 border-2 border-lime-400 text-white shadow-[0_6px_25px_rgba(101,163,13,0.4)]', 
+            badge: 'bg-lime-800 text-white border-transparent',
+            pill: 'text-lime-100 border-lime-300/50 bg-lime-800/80',
+            accent: 'text-lime-300'
+        },
+        { 
+            card: 'bg-fuchsia-600 border-2 border-fuchsia-400 text-white shadow-[0_6px_25px_rgba(217,70,239,0.4)]', 
+            badge: 'bg-fuchsia-800 text-white border-transparent',
+            pill: 'text-fuchsia-100 border-fuchsia-300/50 bg-fuchsia-800/80',
+            accent: 'text-fuchsia-300'
+        },
+    ];
+
+    const [pairColorMap, setPairColorMap] = useState<Map<string, number>>(new Map());
+
+    // Sunum Araçlarındaki Büyütme/Küçültme (A- / A+) İle Senkronizasyon (5 Kademe)
+    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
+        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
+        fontSizeScale === 'lg' ? 'lg' :
+        fontSizeScale === 'md' ? 'md' :
+        fontSizeScale === 'xs' ? 'xs' : 'sm';
+
+    const getConceptFontSize = () => {
+        switch (cardScale) {
+            case 'xs': return isTeacher ? "text-sm md:text-base font-bold" : "text-xs md:text-sm font-bold";
+            case 'sm': return isTeacher ? "text-lg md:text-xl font-black" : "text-sm md:text-base font-black";
+            case 'md': return isTeacher ? "text-xl md:text-2xl font-black" : "text-base md:text-lg font-black";
+            case 'lg': return isTeacher ? "text-2xl md:text-3xl font-black" : "text-lg md:text-xl font-black";
+            case 'xl': return isTeacher ? "text-3xl md:text-4xl font-black" : "text-xl md:text-2xl font-black";
+            default: return isTeacher ? "text-xl md:text-2xl font-black" : "text-base md:text-lg font-black";
+        }
+    };
+
+    const getDefinitionFontSize = () => {
+        switch (cardScale) {
+            case 'xs': return isTeacher ? "text-xs md:text-sm font-medium" : "text-[11px] md:text-xs font-medium";
+            case 'sm': return isTeacher ? "text-sm md:text-base font-medium" : "text-xs md:text-sm font-medium";
+            case 'md': return isTeacher ? "text-base md:text-lg font-semibold" : "text-sm md:text-base font-semibold";
+            case 'lg': return isTeacher ? "text-lg md:text-xl font-semibold" : "text-base md:text-lg font-semibold";
+            case 'xl': return isTeacher ? "text-xl md:text-2xl font-bold" : "text-lg md:text-xl font-bold";
+            default: return isTeacher ? "text-base md:text-lg font-semibold" : "text-sm md:text-base font-semibold";
+        }
+    };
+
+    const getCardPadding = () => {
+        switch (cardScale) {
+            case 'xs': return "p-2.5 md:p-3 min-h-[46px]";
+            case 'sm': return "p-3 md:p-4 min-h-[58px]";
+            case 'md': return "p-4 md:p-5 min-h-[72px]";
+            case 'lg': return "p-5 md:p-6 min-h-[86px]";
+            case 'xl': return "p-6 md:p-8 min-h-[104px]";
+            default: return "p-4 md:p-5 min-h-[72px]";
+        }
+    };
+
+    const getBadgeSize = () => {
+        switch (cardScale) {
+            case 'xs': return "h-6 w-6 text-xs";
+            case 'sm': return "h-7 w-7 text-xs";
+            case 'md': return "h-9 w-9 text-sm";
+            case 'lg': return "h-11 w-11 text-base";
+            case 'xl': return "h-13 w-13 text-lg";
+            default: return "h-9 w-9 text-sm";
+        }
+    };
+
+    useEffect(() => {
+        const initPairs = async () => {
+            let rawPairs: { concept: string; definition: string }[] = [];
+            if (Array.isArray(step.pairs) && step.pairs.length > 0) {
+                rawPairs = step.pairs.filter((p: any) => p.concept && p.definition);
+            }
+
+            if (rawPairs.length === 0 && topicId) {
+                setIsLoading(true);
+                try {
+                    const res = await fetch(`/curriculum/activity-items/${topicId}.json?v=${Date.now()}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data)) {
+                            data.forEach((item: any) => {
+                                const c = item.content?.term || item.content?.text || item.concept || item.term;
+                                const d = item.content?.definition || item.definition;
+                                if (c && d) rawPairs.push({ concept: String(c).trim(), definition: String(d).trim() });
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Could not fetch topic matching items:", e);
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+
+            if (rawPairs.length === 0) {
+                rawPairs = [
+                    { concept: "Adalet", definition: "Her hak sahibine hakkını vermek, eşit ve dürüst davranmak." },
+                    { concept: "İhlas", definition: "İbadet ve amelleri sadece Allah rızası için samimiyetle yapmak." },
+                    { concept: "Tevhid", definition: "Allah'ın bir ve tek olduğuna, eşi ve benzeri olmadığına inanmak." },
+                    { concept: "Ahlak", definition: "İnsanın iyi veya kötü olarak vasıflandırılmasına yol açan manevi nitelikleri ve davranışları." },
+                ];
+            }
+
+            const formatted = rawPairs.slice(0, 8).map((p, idx) => ({
+                id: `pair-${idx}-${p.concept.toLowerCase().replace(/\s+/g, '-')}`,
+                concept: p.concept,
+                definition: p.definition
+            }));
+
+            setPairs(formatted);
+
+            const defs = formatted.map(p => ({ id: p.id, text: p.definition }));
+            setShuffledDefinitions(defs.sort(() => Math.random() - 0.5));
+            setMatchedIds(new Set());
+            setSelectedConceptId(null);
+            setSelectedDefId(null);
+            setIsFinished(false);
+        };
+
+        initPairs();
+    }, [step, topicId]);
+
+    const handleConceptClick = (id: string) => {
+        if (matchedIds.has(id)) return;
+        playSound('pop');
+        setSelectedConceptId(id);
+
+        if (selectedDefId) {
+            checkMatch(id, selectedDefId);
+        }
+    };
+
+    const handleDefinitionClick = (id: string) => {
+        if (matchedIds.has(id)) return;
+        playSound('pop');
+        setSelectedDefId(id);
+
+        if (selectedConceptId) {
+            checkMatch(selectedConceptId, id);
+        }
+    };
+
+    const checkMatch = (conceptId: string, defId: string) => {
+        if (conceptId === defId) {
+            playSound('correct');
+            const nextMatched = new Set(matchedIds);
+            nextMatched.add(conceptId);
+            setMatchedIds(nextMatched);
+
+            setPairColorMap(prev => {
+                const nextMap = new Map(prev);
+                const colorIdx = (nextMatched.size - 1) % MATCH_COLORS.length;
+                nextMap.set(conceptId, colorIdx);
+                return nextMap;
+            });
+
+            setSelectedConceptId(null);
+            setSelectedDefId(null);
+            setWrongPair(null);
+
+            import('canvas-confetti').then(m => {
+                m.default({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.6 }
+                });
+            }).catch(() => {});
+
+            if (nextMatched.size === pairs.length) {
+                setIsFinished(true);
+                playSound('win');
+                import('canvas-confetti').then(m => {
+                    m.default({
+                        particleCount: 200,
+                        spread: 100,
+                        origin: { y: 0.5 }
+                    });
+                }).catch(() => {});
+                if (onCompleted) onCompleted();
+            }
+        } else {
+            playSound('incorrect');
+            setWrongPair({ conceptId, defId });
+            setTimeout(() => {
+                setSelectedConceptId(null);
+                setSelectedDefId(null);
+                setWrongPair(null);
+            }, 700);
+        }
+    };
+
+    const handleSolveAll = () => {
+        const allIds = new Set(pairs.map(p => p.id));
+        setMatchedIds(allIds);
+        const map = new Map<string, number>();
+        pairs.forEach((p, i) => map.set(p.id, i % MATCH_COLORS.length));
+        setPairColorMap(map);
+        setIsFinished(true);
+        playSound('win');
+        if (onCompleted) onCompleted();
+    };
+
+    const handleReset = () => {
+        setMatchedIds(new Set());
+        setSelectedConceptId(null);
+        setSelectedDefId(null);
+        setWrongPair(null);
+        setIsFinished(false);
+        setPairColorMap(new Map());
+        const defs = pairs.map(p => ({ id: p.id, text: p.definition }));
+        setShuffledDefinitions(defs.sort(() => Math.random() - 0.5));
+    };
+
+    return (
+        <div className={cn(
+            "w-full h-full flex flex-col items-center justify-start p-2 md:p-4 select-none",
+            isTeacher ? "max-w-full" : "max-w-6xl mx-auto"
+        )}>
+            {/* ══ BAŞLIK KARTI (KOMPAKT & ODAKLI) ══ */}
+            <div className={cn(
+                "relative z-20 rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-xl flex-shrink-0 w-full mb-3 md:mb-4 overflow-hidden shadow-lg px-3.5 py-2 md:px-5 md:py-2.5"
+            )}>
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+                <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="p-1.5 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 flex-shrink-0">
+                            <Shuffle className="w-4 h-4 animate-pulse" />
+                        </div>
+                        <div className="flex items-baseline gap-2 truncate">
+                            <h2 className="font-black text-white tracking-tight text-sm md:text-base truncate">
+                                {step.title || 'Kavram - Tanım Eşleştirme'}
+                            </h2>
+                            <span className="text-xs text-slate-400 font-medium hidden md:inline-block">
+                                • Sol ve sağ kartlara dokunarak eşleştirin
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-950/80 border border-white/10 shadow-inner">
+                            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                            <span className="text-xs font-black text-slate-300">
+                                <span className="text-emerald-400 font-black">{matchedIds.size}</span> / {pairs.length}
+                            </span>
+                        </div>
+
+                        {isTeacher && (
+                            <div className="flex items-center gap-1.5">
+                                <Button
+                                    size="sm"
+                                    onClick={handleSolveAll}
+                                    className="bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-200 text-xs font-bold rounded-lg h-7 px-2.5"
+                                >
+                                    <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-400" /> Çöz
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    onClick={handleReset}
+                                    variant="outline"
+                                    className="border-white/10 text-slate-300 hover:text-white text-xs font-bold rounded-lg h-7 px-2.5"
+                                >
+                                    <RotateCcw className="w-3 h-3 mr-1" /> Sıfırla
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* ══ EŞLEŞTİRME ÇİFTLERİ TABLOSU ══ */}
+            {isLoading ? (
+                <div className="flex flex-col items-center justify-center p-16 text-slate-400">
+                    <Loader2 className="w-10 h-10 animate-spin text-indigo-400 mb-3" />
+                    <p className="font-bold text-sm">Kavramlar yükleniyor...</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full flex-1">
+                    {/* SOL SÜTUN: KAVRAMLAR */}
+                    <div className="flex flex-col gap-3">
+                        <div className="text-xs font-black text-indigo-300 uppercase tracking-widest px-2 flex items-center gap-2">
+                            <span className="h-2 w-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]" /> Kavramlar / Terimler
+                        </div>
+                        {pairs.map((pair, index) => {
+                            const isMatched = matchedIds.has(pair.id);
+                            const isSelected = selectedConceptId === pair.id;
+                            const isWrong = wrongPair?.conceptId === pair.id;
+                            const colorIndex = pairColorMap.get(pair.id) ?? 0;
+                            const matchedTheme = MATCH_COLORS[colorIndex % MATCH_COLORS.length];
+
+                            return (
+                                <motion.button
+                                    key={pair.id}
+                                    type="button"
+                                    onClick={() => handleConceptClick(pair.id)}
+                                    disabled={isMatched}
+                                    whileHover={!isMatched ? { scale: 1.015, x: 4 } : {}}
+                                    whileTap={!isMatched ? { scale: 0.985 } : {}}
+                                    className={cn(
+                                        "w-full text-left rounded-2xl border-2 transition-all duration-300 relative flex items-center justify-between gap-3 md:gap-4 overflow-hidden backdrop-blur-xl shadow-md",
+                                        getCardPadding(),
+                                        isMatched
+                                            ? `${matchedTheme.card} opacity-95 cursor-default`
+                                            : isWrong
+                                                ? "animate-shake bg-rose-100 border-rose-500 text-rose-900 shadow-md"
+                                                : isSelected
+                                                    ? "bg-indigo-50 border-indigo-500 text-indigo-950 ring-4 ring-indigo-400/40 shadow-lg scale-[1.02]"
+                                                    : "bg-white hover:bg-indigo-50/60 border-slate-200/90 hover:border-indigo-400 text-slate-900 shadow-sm hover:shadow-md"
+                                    )}
+                                >
+                                    <div className="flex items-center gap-3 md:gap-3.5 flex-1 min-w-0">
+                                        <span className={cn(
+                                            "rounded-xl flex items-center justify-center font-black border-2 flex-shrink-0 transition-colors",
+                                            getBadgeSize(),
+                                            isMatched
+                                                ? `${matchedTheme.badge} border-transparent`
+                                                : isSelected
+                                                    ? "bg-indigo-600 text-white border-transparent shadow-md"
+                                                    : "bg-indigo-100 text-indigo-700 border-indigo-200"
+                                        )}>
+                                            {isMatched ? <CheckCircle2 className="w-4 h-4 text-white" /> : index + 1}
+                                        </span>
+                                        <span className={cn(
+                                            "tracking-wide drop-shadow-sm truncate font-black",
+                                            getConceptFontSize()
+                                        )}>
+                                            {pair.concept}
+                                        </span>
+                                    </div>
+                                    {isMatched && (
+                                        <span className={cn(
+                                            "text-[10px] md:text-xs font-black uppercase tracking-widest px-2.5 py-1 rounded-full border backdrop-blur-md flex-shrink-0",
+                                            matchedTheme.pill
+                                        )}>
+                                            ✓ Eşleşti
+                                        </span>
+                                    )}
+                                </motion.button>
+                            );
+                        })}
+                    </div>
+
+                    {/* SAĞ SÜTUN: TANIMLAR */}
+                    <div className="flex flex-col gap-3">
+                        <div className="text-xs font-black text-purple-300 uppercase tracking-widest px-2 flex items-center gap-2">
+                            <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]" /> Tanımlar / Açıklamalar
+                        </div>
+                        {shuffledDefinitions.map((def, index) => {
+                            const isMatched = matchedIds.has(def.id);
+                            const isSelected = selectedDefId === def.id;
+                            const isWrong = wrongPair?.defId === def.id;
+                            const colorIndex = pairColorMap.get(def.id) ?? 0;
+                            const matchedTheme = MATCH_COLORS[colorIndex % MATCH_COLORS.length];
+
+                            return (
+                                <motion.button
+                                    key={`def-${def.id}`}
+                                    type="button"
+                                    onClick={() => handleDefinitionClick(def.id)}
+                                    disabled={isMatched}
+                                    whileHover={!isMatched ? { scale: 1.015, x: -4 } : {}}
+                                    whileTap={!isMatched ? { scale: 0.985 } : {}}
+                                    className={cn(
+                                        "w-full text-left rounded-2xl border-2 transition-all duration-300 relative flex items-center justify-between gap-3 md:gap-4 overflow-hidden backdrop-blur-xl shadow-md",
+                                        getCardPadding(),
+                                        isMatched
+                                            ? `${matchedTheme.card} opacity-95 cursor-default`
+                                            : isWrong
+                                                ? "animate-shake bg-rose-100 border-rose-500 text-rose-900 shadow-md"
+                                                : isSelected
+                                                    ? "bg-purple-50 border-purple-500 text-purple-950 ring-4 ring-purple-400/40 shadow-lg scale-[1.02]"
+                                                    : "bg-white hover:bg-purple-50/60 border-slate-200/90 hover:border-purple-400 text-slate-800 shadow-sm hover:shadow-md"
+                                    )}
+                                >
+                                    <div className="flex items-start gap-3 md:gap-3.5 flex-1 min-w-0">
+                                        <span className={cn(
+                                            "rounded-lg flex items-center justify-center font-black border-2 flex-shrink-0 mt-0.5 transition-colors",
+                                            getBadgeSize(),
+                                            isMatched
+                                                ? `${matchedTheme.badge} border-transparent`
+                                                : isSelected
+                                                    ? "bg-purple-600 text-white border-transparent shadow-md"
+                                                    : "bg-purple-100 text-purple-700 border-purple-200"
+                                        )}>
+                                            {String.fromCharCode(65 + index)}
+                                        </span>
+                                        <p className={cn(
+                                            "leading-relaxed",
+                                            getDefinitionFontSize()
+                                        )}>
+                                            {def.text}
+                                        </p>
+                                    </div>
+                                    {isMatched && (
+                                        <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                                    )}
+                                </motion.button>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
 // --- ANA BİLEŞEN: StepContent ---
 
 export function StepContent({ 
@@ -2079,9 +2561,9 @@ export function StepContent({
             );
         }
         
-        // SADECE Anahtar Kavramlar / Kavram adımları (Öğrenme hedefleri standart liste olarak cümle cümle kalır)
-        const isConceptStep = step.type === 'conceptExplanation' || 
-                              (typeof step.title === 'string' && /kavram|anahtar/i.test(step.title) && step.type !== 'anagramFlashcard' && step.type !== 'conceptMap' && !/hedef|kazan/i.test(step.title) && step.type !== 'objectiveList');
+        // SADECE Anahtar Kavramlar / Kavram adımları (Eşleştirme adımları hariç tutulur)
+        const isConceptStep = (step.type === 'conceptExplanation' || 
+                              (typeof step.title === 'string' && /kavram|anahtar/i.test(step.title) && step.type !== 'anagramFlashcard' && step.type !== 'conceptMap' && !/hedef|kazan/i.test(step.title) && step.type !== 'objectiveList')) && step.type !== 'matching' && step.type !== 'conceptMatching';
 
         if (isConceptStep) {
             return (
@@ -2373,6 +2855,22 @@ export function StepContent({
             case 'sentenceScramble': 
                 return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} />;
             
+            case 'matching':
+            case 'conceptMatching':
+                return (
+                    <MatchingPlayer 
+                        step={step} 
+                        onCompleted={() => {
+                            if (onAnswer) onAnswer("completed");
+                            if (onCorrectAndNext) setTimeout(onCorrectAndNext, 1200);
+                        }} 
+                        topicId={topic?.id}
+                        isTeacher={isTeacher} 
+                        isFullscreen={isFullscreen} 
+                        fontSizeScale={fontSizeScale}
+                    />
+                );
+            
             default: 
                 // Bilinmeyen tip gelirse beyaz ekran yerine uyarı basar
                 return (
@@ -2611,7 +3109,9 @@ export function LessonContentViewer({
         }
 
         const answer = internalProgress.answers[currentStepIndex];
-        if (currentStep.type === 'trueFalseList') return !!answer?.completed;
+        if (currentStep.type === 'trueFalseList' || currentStep.type === 'matching' || (currentStep as any).type === 'conceptMatching') {
+            return !!answer?.completed || answer !== undefined;
+        }
 
         return answer !== undefined && answer !== null;
 
@@ -2668,6 +3168,9 @@ export function LessonContentViewer({
         } else if (currentStep.type === 'sentenceScramble') {
              isCorrect = (answer as string) === (currentStep as SentenceScrambleStep).correctSentence;
              points = isCorrect ? 100 : 0;
+        } else if (currentStep.type === 'matching' || (currentStep as any).type === 'conceptMatching') {
+             isCorrect = true;
+             points = 100;
         }
         if (isCorrect) {
             playSound('correct');
@@ -2793,8 +3296,8 @@ export function LessonContentViewer({
         };
     }, [currentStep, revealedSentencesCount]);
 
-    const handleContinueOrNext = (e: React.MouseEvent) => {
-        e.stopPropagation();
+    const handleContinueOrNext = (e?: React.MouseEvent) => {
+        if (e) e.stopPropagation();
 
         if (!currentStep) return;
 
@@ -2807,6 +3310,33 @@ export function LessonContentViewer({
             handleNext();
         }
     };
+
+    // Klavye Kısayolları ile Sunum & Ders İlerleme (Sağ/Sol Ok, Boşluk, PageUp/Down)
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            const activeEl = document.activeElement;
+            if (activeEl && ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl.tagName)) return;
+            if ((activeEl as HTMLElement)?.isContentEditable) return;
+
+            if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+                if (isNextButtonEnabled) {
+                    e.preventDefault();
+                    handleContinueOrNext();
+                }
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                handlePrev();
+            } else if (e.key === ' ' && !['BUTTON', 'A'].includes(activeEl?.tagName || '')) {
+                if (isNextButtonEnabled) {
+                    e.preventDefault();
+                    handleContinueOrNext();
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isNextButtonEnabled, currentStep, getStepRevealStatus, handleNext]);
 
     if (isFinished) {
         return (
@@ -2853,6 +3383,18 @@ export function LessonContentViewer({
                         <ArrowLeft className="w-4 h-4" />
                         Soru Bankasına Dön
                     </a>
+                </div>
+            </div>
+        );
+    }
+      
+    if (steps.length === 0) {
+        return (
+            <div className="flex h-full items-center justify-center p-8 text-center">
+                <div className="max-w-md p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl space-y-4">
+                    <BookOpen className="h-16 w-16 mx-auto text-indigo-400 opacity-60" />
+                    <h3 className="text-xl font-bold text-white">İçerik Hazırlanıyor</h3>
+                    <p className="text-sm text-slate-400">Bu ders konusunun akış adımları yakında eklenecektir.</p>
                 </div>
             </div>
         );
@@ -3015,8 +3557,8 @@ export function LessonContentViewer({
                         <ArrowLeft className="w-3.5 h-3.5" />
                     </button>
 
-                    {/* Sunum Araçları Butonu (Araçlar) veya Tam Ekran */}
-                    {onOpenTools ? (
+                    {/* Sunum Araçları Butonu (Araçlar) */}
+                    {onOpenTools && (
                         <button
                             onClick={onOpenTools}
                             className="h-8 px-3 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 hover:from-indigo-500/30 hover:to-purple-500/30 text-indigo-950 dark:text-indigo-200 flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
@@ -3025,40 +3567,42 @@ export function LessonContentViewer({
                             <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
                             <span>Araçlar</span>
                         </button>
-                    ) : (
-                        <button
-                            onClick={toggleDocFullscreen}
-                            className={cn(
-                                "h-8 px-2.5 rounded-xl border flex items-center gap-1.5 text-[11px] font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm",
-                                isDocFullscreen
-                                    ? "bg-rose-500/20 border-rose-500/40 text-rose-800 hover:bg-rose-500/30"
-                                    : "bg-indigo-500/20 border-indigo-500/40 text-indigo-900 hover:bg-indigo-500/30"
-                            )}
-                            title={isDocFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap"}
-                        >
-                            {isDocFullscreen ? (
-                                <>
-                                    <Minimize className="w-3 h-3 text-rose-700" />
-                                    <span className="hidden sm:inline">Küçült</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Maximize className="w-3 h-3 text-indigo-700" />
-                                    <span className="hidden sm:inline">Tam Ekran</span>
-                                </>
-                            )}
-                        </button>
                     )}
 
+                    {/* Sayfayı Yenile Butonu */}
                     {isTeacher && (
                         <button
                             onClick={() => window.location.reload()}
-                            className="h-8 px-2.5 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm"
+                            className="h-8 px-2.5 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
                             title="Sayfayı Yenile"
                         >
                             <Repeat className="w-3 h-3" /> <span className="hidden sm:inline">Yenile</span>
                         </button>
                     )}
+
+                    {/* Tam Ekran / Küçült Butonu (Yenile Tuşunun Hemen Yanında) */}
+                    <button
+                        onClick={toggleDocFullscreen}
+                        className={cn(
+                            "h-8 px-2.5 rounded-xl border flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                            isDocFullscreen
+                                ? "bg-rose-500/20 border-rose-500/40 text-rose-800 dark:text-rose-300 hover:bg-rose-500/30"
+                                : "bg-white/40 hover:bg-white/70 border-white/50 text-slate-800 dark:text-slate-200"
+                        )}
+                        title={isDocFullscreen ? "Tam Ekrandan Çık (F)" : "Tam Ekran Yap (F)"}
+                    >
+                        {isDocFullscreen ? (
+                            <>
+                                <Minimize className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                                <span className="hidden sm:inline">Küçült</span>
+                            </>
+                        ) : (
+                            <>
+                                <Maximize className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                                <span className="hidden sm:inline">Tam Ekran</span>
+                            </>
+                        )}
+                    </button>
                 </div>
 
                 {/* ORTA: İlerleme noktaları + sayfa seçici */}

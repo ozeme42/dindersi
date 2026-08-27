@@ -172,6 +172,7 @@ export default function WheelOfFortunePage() {
             
             if (sliceIndex !== prevSliceIndex) {
                 setTickerShake(true);
+                playSound('click');
                 setTimeout(() => setTickerShake(false), 50); 
             }
 

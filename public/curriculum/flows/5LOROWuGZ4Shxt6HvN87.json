@@ -1,0 +1,394 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Allah’ın Huzurunda Olmak: Namaz İbadeti konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Allah’ın Huzurunda Olmak: Namaz İbadeti ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Namaz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "İbadet, Teravih Namazı, Cuma Namazı kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>İbadet</li><li>Teravih Namazı</li><li>Cuma Namazı</li><li>Namaz</li><li>Cenaze Namazı</li><li>Vacip</li><li>Bayram Namazı</li><li>Vitir Namazı</li><li>Nafile</li><li>Farz</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Allah’ın Huzurunda Olmak: Namaz İbadeti - Önemli Bilgiler (1)",
+    "content": "<ul><li>Namaz, Allah'a yönelik bir ibadettir.</li><li>Namaz ibadeti, Allah'ın huzurunda olmayı temsil eder.</li><li>Müslümanlar namaz kılarak Allah ile manevi bir bağ kurar.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Allah’ın Huzurunda Olmak: Namaz İbadeti - Önemli Bilgiler (2)",
+    "content": "<ul><li>Allah'ın huzurunda olmak, namazın özünü oluşturur.</li><li>Namaz, kişiyi Allah'a yaklaştıran önemli bir dini eylemdir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "İbadet",
+        "definition": "Allah'ın hoşnutluğunu kazandıran her türlü davranıştır."
+      },
+      {
+        "concept": "Teravih Namazı",
+        "definition": "Ramazanda yatsı ile vitir arası kılınır."
+      },
+      {
+        "concept": "Cuma Namazı",
+        "definition": "Haftada bir cemaatle kılınan farz ibadettir."
+      },
+      {
+        "concept": "Vitir Namazı",
+        "definition": "Yatsı sonrası kılınan vacip ibadettir."
+      },
+      {
+        "concept": "Cenaze Namazı",
+        "definition": "Vefat eden Müslüman için kılınan farz ibadettir."
+      },
+      {
+        "concept": "Bayram Namazı",
+        "definition": "Ramazan ve Kurban bayramlarında kılınan vacip ibadettir."
+      },
+      {
+        "concept": "Farz",
+        "definition": "Yüce Allah'ın kesin olarak emrettiği eylemdir."
+      },
+      {
+        "concept": "Nafile",
+        "definition": "Peygamberimizin farz veya vacip dışı kıldığı ibadetlerdir."
+      },
+      {
+        "concept": "Vacip",
+        "definition": "Kesin emir olmasa da yapılması istenen ibadettir."
+      },
+      {
+        "concept": "Namaz",
+        "definition": "Tekbirle başlayıp selamla biten bedenî bir ibadettir."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "İbadet",
+        "definition": "Allah'ın hoşnutluğunu kazandıran her türlü davranıştır."
+      },
+      {
+        "term": "Teravih Namazı",
+        "definition": "Ramazanda yatsı ile vitir arası kılınır."
+      },
+      {
+        "term": "Cuma Namazı",
+        "definition": "Haftada bir cemaatle kılınan farz ibadettir."
+      },
+      {
+        "term": "Vitir Namazı",
+        "definition": "Yatsı sonrası kılınan vacip ibadettir."
+      },
+      {
+        "term": "Cenaze Namazı",
+        "definition": "Vefat eden Müslüman için kılınan farz ibadettir."
+      },
+      {
+        "term": "Bayram Namazı",
+        "definition": "Ramazan ve Kurban bayramlarında kılınan vacip ibadettir."
+      },
+      {
+        "term": "Farz",
+        "definition": "Yüce Allah'ın kesin olarak emrettiği eylemdir."
+      },
+      {
+        "term": "Nafile",
+        "definition": "Peygamberimizin farz veya vacip dışı kıldığı ibadetlerdir."
+      },
+      {
+        "term": "Vacip",
+        "definition": "Kesin emir olmasa da yapılması istenen ibadettir."
+      },
+      {
+        "term": "Namaz",
+        "definition": "Tekbirle başlayıp selamla biten bedenî bir ibadettir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "İbadet",
+        "scrambledWord": "EİTBDA",
+        "definition": "İpucu: Bu kelime \"İbadet\""
+      },
+      {
+        "correctAnswer": "Teravih Namazı",
+        "scrambledWord": "MIHAAR TANEVİZ",
+        "definition": "İpucu: Bu kelime \"Teravih Namazı\""
+      },
+      {
+        "correctAnswer": "Cuma Namazı",
+        "scrambledWord": "ACMU ANAIMZ",
+        "definition": "İpucu: Bu kelime \"Cuma Namazı\""
+      },
+      {
+        "correctAnswer": "Namaz",
+        "scrambledWord": "MZANA",
+        "definition": "İpucu: Bu kelime \"Namaz\""
+      },
+      {
+        "correctAnswer": "Cenaze Namazı",
+        "scrambledWord": "CZZENAMENAI A",
+        "definition": "İpucu: Bu kelime \"Cenaze Namazı\""
+      },
+      {
+        "correctAnswer": "Vacip",
+        "scrambledWord": "VPACİ",
+        "definition": "İpucu: Bu kelime \"Vacip\""
+      },
+      {
+        "correctAnswer": "Bayram Namazı",
+        "scrambledWord": "ARMMYAA IBANZ",
+        "definition": "İpucu: Bu kelime \"Bayram Namazı\""
+      },
+      {
+        "correctAnswer": "Vitir Namazı",
+        "scrambledWord": "IİZT İRANVMA",
+        "definition": "İpucu: Bu kelime \"Vitir Namazı\""
+      },
+      {
+        "correctAnswer": "Nafile",
+        "scrambledWord": "İELFAN",
+        "definition": "İpucu: Bu kelime \"Nafile\""
+      },
+      {
+        "correctAnswer": "Farz",
+        "scrambledWord": "RZAF",
+        "definition": "İpucu: Bu kelime \"Farz\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "İnsan ibadet sayesinde hem yaratılış gayesine uygun davranmış hem de verdiği nimetler için Allah'a teşekkür etmiş olur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Namaz kılmak, insanın Yüce Allah'a teşekkür etmesinin bir yoludur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kur'an-ı Kerim'de müminlerin namazlarında derin saygı içinde oldukları belirtilmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "İbadet, sadece belirli kuralları olan davranışları ifade eder.",
+        "isTrue": false
+      },
+      {
+        "statement": "Farz, Allah'ın (cc) yapılmasını kesin olarak emrettiği ibadetlerdir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Vitir namazı nafile namazlardandır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Nafile namazlara sünnet namaz da denir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Vacip namazlar, farz kadar kesin olmamakla birlikte kılınması emredilen namazlardır.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İbadet, Allah'a teşekkür etmektir.",
+    "scrambledSentence": "teşekkür Allah'a etmektir. İbadet,"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Namaz, dinin direğidir.",
+    "scrambledSentence": "direğidir. dinin Namaz,"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Cuma namazı cemaatle kılınır.",
+    "scrambledSentence": "kılınır. Cuma cemaatle namazı"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Abdest, namazın anahtarıdır.",
+    "scrambledSentence": "namazın anahtarıdır. Abdest,"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Haftada bir, camilerde cemaatle kılınması gereken ___ namazı da farz namazlardandır.",
+    "options": [
+      "bayram",
+      "cuma",
+      "teravih",
+      "cenaze"
+    ],
+    "correctAnswer": "cuma"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kasıtlı olarak terk edilmesi ___ günahtır.",
+    "options": [
+      "küçük",
+      "orta",
+      "büyük",
+      "önemsiz"
+    ],
+    "correctAnswer": "büyük"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Cennetin anahtarı namaz, namazın anahtarı ise ___dır.",
+    "options": [
+      "dua",
+      "zekât",
+      "oruç",
+      "abdest"
+    ],
+    "correctAnswer": "abdest"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Namaz ibadeti kelimeişehadetten sonra İslam’ın en önemli esasıdır. Bu durum, namazın İslam dinindeki ___ önemini gösterir.",
+    "options": [
+      "ikincil",
+      "geçici",
+      "merkezi",
+      "dönemsel"
+    ],
+    "correctAnswer": "merkezi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kur’an-ı Kerim’de “Ben cinleri ve insanları, ancak bana ___ etsinler diye yarattım.” buyrulur.",
+    "options": [
+      "şükür",
+      "dua",
+      "ibadet",
+      "hizmet"
+    ],
+    "correctAnswer": "ibadet"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Allah'ın (cc) yapılmasını kesin olarak emrettiği ibadetlere ne denir?",
+    "options": [
+      "Sünnet",
+      "Vacip",
+      "Nafile",
+      "Farz"
+    ],
+    "correctAnswer": "Farz"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur'an-ı Kerim'de namazın müminler üzerine vakitleri belli bir farz olduğu hangi ifadeyle belirtilmiştir?",
+    "options": [
+      "Namaz kılmayın",
+      "Namazı dosdoğru kılın",
+      "Namazı sonra kılın",
+      "Namazı erteleyin"
+    ],
+    "correctAnswer": "Namazı dosdoğru kılın"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Namaz kılarken Müslüman, Yüce Allah'ı anar; O'na olan sevgi, saygı ve bağlılığını ne yapar?",
+    "options": [
+      "Gizler",
+      "Dile getirir",
+      "Unutur",
+      "Saklar"
+    ],
+    "correctAnswer": "Dile getirir"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Peygamber bir hadisinde namazı ne olarak nitelemiştir?",
+    "options": [
+      "Cennetin anahtarı",
+      "Dinin direği",
+      "Müminin miracı",
+      "İbadetlerin tacı"
+    ],
+    "correctAnswer": "Dinin direği"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kadınlar cuma namazından sorumlu mudur?",
+    "options": [
+      "Evet, kesinlikle sorumludur.",
+      "Hayır, sorumlu değildirler ama isterlerse kılabilirler.",
+      "Sadece belirli durumlarda sorumludurlar.",
+      "Sorumludurlar ama evde kılmaları gerekir."
+    ],
+    "correctAnswer": "Hayır, sorumlu değildirler ama isterlerse kılabilirler."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"Namaz bütün peygamberlere ve ümmetlerine emredilmiş bir ibadettir.\" ifadesi, namazın hangi özelliğini vurgulamaktadır?",
+    "options": [
+      "Sadece Hz. Muhammed'in ümmetine özgü olduğunu",
+      "Peygamberlerin namazı farklı şekillerde kıldığını",
+      "Namazın ilahi mesajlarda evrensel bir ibadet olduğunu",
+      "Namazın sadece belirli dönemlerde emredildiğini"
+    ],
+    "correctAnswer": "Namazın ilahi mesajlarda evrensel bir ibadet olduğunu"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Farz kadar açık ve kesin olmamakla birlikte kılınması emredilen namazlara ne denir?",
+    "options": [
+      "Sünnet namaz",
+      "Nafile namaz",
+      "Vacip namaz",
+      "Müstehap namaz"
+    ],
+    "correctAnswer": "Vacip namaz"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur'an-ı Kerim'de müminlerin kurtuluşa erdiği ve namazlarında derin saygı içinde oldukları belirtilen özelliklerinden biri de nedir?",
+    "options": [
+      "Namazlarını bırakmaları",
+      "Namazlarına devam etmeleri",
+      "Namazlarını hızlıca kılmaları",
+      "Namazlarını sadece evde kılmaları"
+    ],
+    "correctAnswer": "Namazlarına devam etmeleri"
+  }
+]

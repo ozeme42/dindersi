@@ -1,0 +1,368 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Hz. Muhammed’in (sav) Gençlik Yılları konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Hz. Muhammed’in (sav) Gençlik Yılları ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "4️⃣ Peygamberliğinden Önce Hz. Muhammed çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Hz. Hatice, Hilfülfudul, el-emin kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Hz. Hatice</li><li>Hilfülfudul</li><li>el-emin</li><li>Hacerülesved</li><li>Ebülkasım</li><li>Tahire</li><li>Künye</li><li>Cahiliye</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Hz. Muhammed’in (sav) Gençlik Yılları - Önemli Bilgiler (1)",
+    "content": "<ul><li>Hz. Muhammed (sav), peygamberlikten önce de dürüstlüğü, merhameti ve güvenilirliği ile tanınan örnek bir insandı.</li><li>Mekke halkı, onun güvenilirliğinden dolayı kendisine \"el-emin\" (güvenilir insan) lakabını vermiştir.</li><li>Yirmili yaşlarında, haksızlıkları önlemek ve mağdurlara yardım etmek amacıyla kurulan Hilfülfudul (Erdemliler Anlaşması) topluluğuna katıldı.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Hz. Muhammed’in (sav) Gençlik Yılları - Önemli Bilgiler (2)",
+    "content": "<ul><li>Kâbe onarımı sırasında Hacerülesved'in yerleştirilmesi anlaşmazlığını adil ve zekice bir yöntemle çözerek Mekkelilerin güvenini kazandı.</li><li>Hz. Hatice ile evlendi; bu evlilikte Hz. Hatice, onun en büyük destekçisi oldu ve örnek bir aile kurdular.</li><li>Aile hayatında eşine ve çocuklarına karşı sevgi, saygı ve nezaketle davranan Hz. Muhammed (sav), çocukları arasında ayrım yapmazdı.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Hz. Hatice",
+        "definition": "Hz. Muhammed'in ilk eşi ve en büyük destekçisi."
+      },
+      {
+        "concept": "Hilfülfudul",
+        "definition": "Haksızlığa uğrayanlara yardım amacıyla kurulan sözleşme."
+      },
+      {
+        "concept": "el-emin",
+        "definition": "Mekke halkının Hz. Muhammed'e verdiği güvenilir unvan."
+      },
+      {
+        "concept": "Hacerülesved",
+        "definition": "Kâbe'deki tavafın başlangıç noktasını belirleyen taş."
+      },
+      {
+        "concept": "Ebülkasım",
+        "definition": "Hz. Muhammed'in ilk oğlunun adından gelen künyesi."
+      },
+      {
+        "concept": "Tahire",
+        "definition": "Hz. Hatice'ye iffetinden dolayı verilen lakap."
+      },
+      {
+        "concept": "Künye",
+        "definition": "Arap toplumunda 'ebû' kelimesiyle yapılan tanıtıcı ibare."
+      },
+      {
+        "concept": "Cahiliye",
+        "definition": "Mekke'de can ve mal güvenliğinin olmadığı dönem."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Hz. Hatice",
+        "definition": "Hz. Muhammed'in ilk eşi ve en büyük destekçisi."
+      },
+      {
+        "term": "Hilfülfudul",
+        "definition": "Haksızlığa uğrayanlara yardım amacıyla kurulan sözleşme."
+      },
+      {
+        "term": "el-emin",
+        "definition": "Mekke halkının Hz. Muhammed'e verdiği güvenilir unvan."
+      },
+      {
+        "term": "Hacerülesved",
+        "definition": "Kâbe'deki tavafın başlangıç noktasını belirleyen taş."
+      },
+      {
+        "term": "Ebülkasım",
+        "definition": "Hz. Muhammed'in ilk oğlunun adından gelen künyesi."
+      },
+      {
+        "term": "Tahire",
+        "definition": "Hz. Hatice'ye iffetinden dolayı verilen lakap."
+      },
+      {
+        "term": "Künye",
+        "definition": "Arap toplumunda 'ebû' kelimesiyle yapılan tanıtıcı ibare."
+      },
+      {
+        "term": "Cahiliye",
+        "definition": "Mekke'de can ve mal güvenliğinin olmadığı dönem."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Hz. Hatice",
+        "scrambledWord": "CZH.HTİ EA",
+        "definition": "İpucu: Bu kelime \"Hz. Hatice\""
+      },
+      {
+        "correctAnswer": "Hilfülfudul",
+        "scrambledWord": "FFULUHLDÜİL",
+        "definition": "İpucu: Bu kelime \"Hilfülfudul\""
+      },
+      {
+        "correctAnswer": "el-emin",
+        "scrambledWord": "İMNELE-",
+        "definition": "İpucu: Bu kelime \"el-emin\""
+      },
+      {
+        "correctAnswer": "Hacerülesved",
+        "scrambledWord": "ÜHESLDCEVEAR",
+        "definition": "İpucu: Bu kelime \"Hacerülesved\""
+      },
+      {
+        "correctAnswer": "Ebülkasım",
+        "scrambledWord": "BMKSLEAÜI",
+        "definition": "İpucu: Bu kelime \"Ebülkasım\""
+      },
+      {
+        "correctAnswer": "Tahire",
+        "scrambledWord": "İAETRH",
+        "definition": "İpucu: Bu kelime \"Tahire\""
+      },
+      {
+        "correctAnswer": "Künye",
+        "scrambledWord": "ENKYÜ",
+        "definition": "İpucu: Bu kelime \"Künye\""
+      },
+      {
+        "correctAnswer": "Cahiliye",
+        "scrambledWord": "CYİHELİA",
+        "definition": "İpucu: Bu kelime \"Cahiliye\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Peygamberimiz Hz. Muhammed (sav), Hacerü'l-Esved'i yerine yerleştirme sırasında, bu görevi sadece kendi kabilesi olan Kureyş'e vermiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav), peygamber olmadan önce de Mekke halkı tarafından \"el-Emin\" lakabıyla anılırdı.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hacerü'l-Esved, Kâbe'nin kuzeybatı köşesinde bulunur.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav), gençlik yıllarında içinde bulunduğu toplumun kötülüklerinden uzak bir yaşam sürmüştür.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Hatice'nin ticaret kervanını yönetmesi için Hz. Muhammed'e (sav) teklifte bulunmasının nedeni, onun ticari tecrübesinin çok fazla olmasıydı.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav), peygamberliğinden sonra da Hilfü'l-Fudûl gibi bir topluluğa her zaman memnuniyetle katılacağını ifade etmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Muhammed (sav)'in Hz. Hatice'den olan tüm çocukları kendisinden sonra vefat etmiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav), Hz. Hatice ile evlenmeden önce onun ticaret kervanını Yemen'e götürmüştür.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Hz. Hatice ile evlenip aile kurdu.",
+    "scrambledSentence": "aile Hatice Hz. ile evlenip kurdu."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Hz. Muhammed gençlikte örnek insandı.",
+    "scrambledSentence": "gençlikte insandı. Muhammed örnek Hz."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Ona 'el-emin' lakabı verildi.",
+    "scrambledSentence": "Ona lakabı 'el-emin' verildi."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Adaleti ve zekası takdir edildi.",
+    "scrambledSentence": "Adaleti takdir zekası edildi. ve"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed'e (sav) Mekke halkı tarafından güvenilir insan anlamına gelen \"___\" lakabı verilmiştir.",
+    "options": [
+      "el-Emin",
+      "es-Sıddık",
+      "el-Faruk",
+      "el-Gazi"
+    ],
+    "correctAnswer": "el-Emin"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hilfü'l-Fudûl, Arapçada \"___\" anlamına gelmektedir.",
+    "options": [
+      "Erdemli ve faziletli insanların sözleşmesi",
+      "Yiğitler Sözleşmesi",
+      "Ticaret Erbabı Anlaşması",
+      "Kabileler Antlaşması"
+    ],
+    "correctAnswer": "Erdemli ve faziletli insanların sözleşmesi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Mekke'de can ve mal güvenliğinin olmadığı, güçlülerin zayıfları ezdiği dönem hangi isimle anılırdı?",
+    "options": [
+      "Fetret Dönemi",
+      "Hilfü'l-Fudûl Dönemi",
+      "Cahiliye Dönemi",
+      "Asr-ı Saadet"
+    ],
+    "correctAnswer": "Cahiliye Dönemi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz Hz. Muhammed (sav), Mekke'de ticaret yapan Hz. Hatice'nin kervanını nereye götürmüştür?",
+    "options": [
+      "Yemen",
+      "Mısır",
+      "Suriye",
+      "Irak"
+    ],
+    "correctAnswer": "Suriye"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed (sav)'in çocuklarından Hz. Fatıma hariç diğerlerinin hepsi ___ vefat etmiştir.",
+    "options": [
+      "çocukluklarında",
+      "genç yaşta",
+      "kendisi hayattayken",
+      "hicretten sonra"
+    ],
+    "correctAnswer": "kendisi hayattayken"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hilfü'l-Fudûl'ün kurulmasına yol açan olay aşağıdakilerden hangisidir?",
+    "options": [
+      "Mekke'de yaşanan kabile savaşları",
+      "Kâbe'nin onarımı sırasında çıkan anlaşmazlık",
+      "Bir Yemenli tüccarın mallarına el konulması",
+      "Su kaynakları üzerindeki anlaşmazlıklar"
+    ],
+    "correctAnswer": "Bir Yemenli tüccarın mallarına el konulması"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Mekke halkı, güvenilirliği nedeniyle Hz. Muhammed'e (sav) hangi lakabı vermiştir?",
+    "options": [
+      "es-Sıddık",
+      "el-Faruk",
+      "el-Emin",
+      "el-Gazi"
+    ],
+    "correctAnswer": "el-Emin"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav) gençlik yıllarında hangi topluluğa katılarak haksızlığa uğrayanlara yardım etmiştir?",
+    "options": [
+      "Darü'n-Nedve",
+      "Hilfü'l-Fudûl",
+      "Medine Sözleşmesi",
+      "Akabe Biatları"
+    ],
+    "correctAnswer": "Hilfü'l-Fudûl"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hilfü'l-Fudûl'ün ilk icraatı aşağıdakilerden hangisidir?",
+    "options": [
+      "Mekke'de su kuyuları açmak",
+      "Bir Yemenli tüccarın malını geri almak",
+      "Kâbe'nin onarımına yardım etmek",
+      "Kabileler arası barışı sağlamak için antlaşma imzalamak"
+    ],
+    "correctAnswer": "Bir Yemenli tüccarın malını geri almak"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav)'in Hz. Hatice ile yaptığı ticaret seferinde kervanın Suriye'ye götürülmesinde Hz. Hatice'nin yardımcısı olarak kim görev almıştır?",
+    "options": [
+      "Ebû Talib",
+      "Varaka b. Nevfel",
+      "Meysere",
+      "Zübeyr"
+    ],
+    "correctAnswer": "Meysere"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav)'in gençlik yıllarında Kâbe'nin tahrip olmasına neden olan doğal afet aşağıdakilerden hangisidir?",
+    "options": [
+      "Deprem",
+      "Fırtına",
+      "Yağmur ve sel suları",
+      "Kum fırtınası"
+    ],
+    "correctAnswer": "Yağmur ve sel suları"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed'in (sav) künyesi olan \"Ebülkasım\" ne anlama gelir?",
+    "options": [
+      "Kasım'ın dedesi",
+      "Kasım'ın babası",
+      "Kasım'ın kardeşi",
+      "Kasım'ın amcası"
+    ],
+    "correctAnswer": "Kasım'ın babası"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav)'in Hz. Hatice ile evliliğinden doğan çocukları hakkında aşağıdaki bilgilerden hangisi doğrudur?",
+    "options": [
+      "Sadece kız çocukları olmuştur.",
+      "Sadece erkek çocukları olmuştur.",
+      "Hz. Fatıma hariç diğer bütün çocukları Hz. Peygamber hayattayken vefat etmiştir.",
+      "Bütün çocukları Hz. Peygamber'den sonra vefat etmiştir."
+    ],
+    "correctAnswer": "Hz. Fatıma hariç diğer bütün çocukları Hz. Peygamber hayattayken vefat etmiştir."
+  }
+]

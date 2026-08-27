@@ -234,6 +234,61 @@ function OzetDisplayPage() {
                 ]);
 
                 if (!docSnap.exists()) {
+                    const targetId = (topicId && topicId !== 'undefined') ? topicId : unitId;
+                    let foundTitle = (topicId && topicId !== 'undefined') ? 'Konu Özeti' : 'Ünite Özeti';
+                    let courseTitle = 'Ders';
+
+                    try {
+                        const mRes = await fetch('/curriculum/manifest.json');
+                        if (mRes.ok) {
+                            const manifest = await mRes.json();
+                            for (const g of manifest.classGroups || []) {
+                                for (const c of g.courses || []) {
+                                    if (c.id === courseId) courseTitle = c.title;
+                                    for (const u of c.units || []) {
+                                        if (u.id === targetId) foundTitle = u.title;
+                                        for (const t of u.topics || []) {
+                                            if (t.id === targetId) { foundTitle = t.title; break; }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (mErr) {}
+
+                    let htmlContent = '';
+                    try {
+                        const ozRes = await fetch(`/curriculum/ozetler/${targetId}.html`);
+                        if (ozRes.ok) htmlContent = await ozRes.text();
+                    } catch (ozErr) {}
+
+                    let conceptDefinitions: { concept: string; definition: string }[] = [];
+                    let notes: string[] = [];
+                    try {
+                        const yRes = await fetch(`/curriculum/yazilacaklar/${targetId}.json`);
+                        if (yRes.ok) {
+                            const yData = await yRes.json();
+                            notes = yData.notes || [];
+                            if (Array.isArray(yData.conceptDefinitions)) {
+                                conceptDefinitions = yData.conceptDefinitions;
+                            }
+                        }
+                    } catch (yErr) {}
+
+                    if (htmlContent || conceptDefinitions.length > 0 || notes.length > 0) {
+                        setContent({
+                            title: foundTitle,
+                            courseName: courseTitle,
+                            htmlContent,
+                            conceptDefinitions,
+                            notes,
+                            unitId,
+                            courseId
+                        });
+                        setIsLoading(false);
+                        return;
+                    }
+
                     setError("İçerik bulunamadı.");
                     setIsLoading(false);
                     return;

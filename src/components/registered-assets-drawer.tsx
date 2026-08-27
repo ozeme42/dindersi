@@ -78,10 +78,10 @@ export function RegisteredAssetsDrawer({
 
                 actSnap.docs.forEach(doc => {
                     const data = doc.data() as ActivityItem;
-                    if (data.type === 'concept') {
-                        const term = data.content?.text || (data.content as any)?.term || '';
-                        const def = data.content?.definition || '';
-                        if (term) {
+                    if (data.type === 'definition' || data.type === 'concept') {
+                        const term = data.content?.term || (data.content as any)?.concept || data.content?.text || (data as any).title || '';
+                        const def = data.content?.definition || (data as any).definition || '';
+                        if (term && def) {
                             loadedConcepts.push({ id: doc.id, concept: term, definition: def });
                         }
                     } else if (data.type === 'sentence') {
@@ -98,6 +98,29 @@ export function RegisteredAssetsDrawer({
                         }
                     }
                 });
+
+                // Fallback to local JSON if no concepts loaded
+                if (loadedConcepts.length === 0 && context.topicId) {
+                    try {
+                        const res = await fetch(`/curriculum/activity-items/${context.topicId}.json?v=${Date.now()}`);
+                        if (res.ok) {
+                            const localData = await res.json();
+                            if (Array.isArray(localData)) {
+                                localData.forEach((item: any, idx: number) => {
+                                    if (item.type === 'definition' || item.type === 'concept') {
+                                        const term = item.content?.term || item.content?.text || item.concept || item.term || item.title || '';
+                                        const def = item.content?.definition || item.definition || '';
+                                        if (term && def) {
+                                            loadedConcepts.push({ id: `local-def-${idx}`, concept: term, definition: def });
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Local fallback in registered-assets-drawer:", e);
+                    }
+                }
 
                 setConcepts(loadedConcepts);
                 setSentences(loadedSentences);

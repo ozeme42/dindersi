@@ -1,0 +1,425 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Yanında Yetişen Çocuklar konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Yanında Yetişen Çocuklar ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Peygamberimizin Çevresindeki Çocuklar çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "İslam, Tevazu, Hz. Ali kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>İslam</li><li>Tevazu</li><li>Hz. Ali</li><li>Sahabi</li><li>Kabile</li><li>Küçük Sırdaş</li><li>Hicret</li><li>Hz. Zeyd bin Harise</li><li>Saygı</li><li>Kureyş</li><li>Merhamet</li><li>Şefkat</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Yanında Yetişen Çocuklar - Önemli Bilgiler (1)",
+    "content": "<ul><li>Peygamberimizin yanında Hz. Ali, Hz. Zeyd bin Harise ve Hz. Enes bin Malik gibi çocuklar yetişmiştir.</li><li>Hz. Ali, beş yaşından itibaren Peygamberimizin himayesinde büyüdü ve İslam'ı ilk kabul eden çocuklardan biri oldu.</li><li>Hz. Zeyd bin Harise, ailesiyle gitmek yerine Peygamberimizin yanında kalmayı tercih etmiş, Peygamberimiz onu azat edip evlat edinmiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Yanında Yetişen Çocuklar - Önemli Bilgiler (2)",
+    "content": "<ul><li>Hz. Enes bin Malik, on yıl boyunca Peygamberimize hizmet etti ve onun nezaketini, sabrını yakından tecrübe etti.</li><li>Peygamberimiz, çocuklarla iletişiminde sevgi, şefkat ve anlayışı esas alarak onları en güzel şekilde yetiştirmeye önem vermiştir.</li><li>Hz. Ali, Hicret esnasında Peygamberimizin yatağına yatarak hayatını tehlikeye atmış, büyük bir fedakarlık örneği göstermiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Yanında Yetişen Çocuklar - Önemli Bilgiler (3)",
+    "content": "<ul><li>Hz. Zeyd, Taif'te Peygamberimizi taşlardan korumak için kendini siper etmiş, sadakatin en güzel örneklerinden birini sergilemiştir.</li><li>Hz. Enes, Peygamberimizin sırdaşı olmuş ve verilen görevleri unuttuğunda bile ona hoşgörüyle davranıldığını belirtmiştir.</li><li>Bu çocuklar, Peygamberimize duydukları sevgi ve sadakati davranışlarıyla göstererek tüm Müslümanlar için örnek teşkil etmişlerdir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Tevazu",
+        "definition": "Kişinin kendi değerini olduğundan aşağı göstermesi, alçakgönüllülük."
+      },
+      {
+        "concept": "Hz. Ali",
+        "definition": "Beş yaşından itibaren Peygamberimizin evinde yaşamaya başlayan çocuk sahabe."
+      },
+      {
+        "concept": "Saygı",
+        "definition": "Bir kişiye veya şeye karşı duyulan değer ve önem verme."
+      },
+      {
+        "concept": "Hz. Zeyd bin Harise",
+        "definition": "Peygamberimizin hürriyetine kavuşturduğu ve evlat edindiği sahabi."
+      },
+      {
+        "concept": "Merhamet",
+        "definition": "Acıma, şefkat ve yardım duygularıyla dolu olmak."
+      },
+      {
+        "concept": "Şefkat",
+        "definition": "Başkasının acılarına karşı duyulan üzüntü ve yardım etme isteği."
+      },
+      {
+        "concept": "Asrısaadet",
+        "definition": "Hz. Muhammed'in yaşadığı dönem, mutluluk çağı."
+      },
+      {
+        "concept": "Sevgi",
+        "definition": "Bir kişiye veya şeye karşı duyulan derin ilgi ve bağlılık."
+      },
+      {
+        "concept": "Küçük Sırdaş",
+        "definition": "Hz. Enes'in Peygamberimizin sırrını saklaması sebebiyle aldığı isim."
+      },
+      {
+        "concept": "Hicret",
+        "definition": "Müslümanların 622 yılında Mekke’den Medine’ye yaptıkları göç."
+      },
+      {
+        "concept": "Hz. Enes bin Malik",
+        "definition": "Peygamberimize on yıl hizmet eden, onun terbiyesinde yetişen çocuk."
+      },
+      {
+        "concept": "Hâdimü’n-nebi",
+        "definition": "Peygamberin küçük hizmetkârı anlamına gelen, Hz. Enes'e verilen unvan."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Tevazu",
+        "definition": "Kişinin kendi değerini olduğundan aşağı göstermesi, alçakgönüllülük."
+      },
+      {
+        "term": "Hz. Ali",
+        "definition": "Beş yaşından itibaren Peygamberimizin evinde yaşamaya başlayan çocuk sahabe."
+      },
+      {
+        "term": "Saygı",
+        "definition": "Bir kişiye veya şeye karşı duyulan değer ve önem verme."
+      },
+      {
+        "term": "Hz. Zeyd bin Harise",
+        "definition": "Peygamberimizin hürriyetine kavuşturduğu ve evlat edindiği sahabi."
+      },
+      {
+        "term": "Merhamet",
+        "definition": "Acıma, şefkat ve yardım duygularıyla dolu olmak."
+      },
+      {
+        "term": "Şefkat",
+        "definition": "Başkasının acılarına karşı duyulan üzüntü ve yardım etme isteği."
+      },
+      {
+        "term": "Asrısaadet",
+        "definition": "Hz. Muhammed'in yaşadığı dönem, mutluluk çağı."
+      },
+      {
+        "term": "Sevgi",
+        "definition": "Bir kişiye veya şeye karşı duyulan derin ilgi ve bağlılık."
+      },
+      {
+        "term": "Küçük Sırdaş",
+        "definition": "Hz. Enes'in Peygamberimizin sırrını saklaması sebebiyle aldığı isim."
+      },
+      {
+        "term": "Hicret",
+        "definition": "Müslümanların 622 yılında Mekke’den Medine’ye yaptıkları göç."
+      },
+      {
+        "term": "Hz. Enes bin Malik",
+        "definition": "Peygamberimize on yıl hizmet eden, onun terbiyesinde yetişen çocuk."
+      },
+      {
+        "term": "Hâdimü’n-nebi",
+        "definition": "Peygamberin küçük hizmetkârı anlamına gelen, Hz. Enes'e verilen unvan."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "İslam",
+        "scrambledWord": "İASLM",
+        "definition": "İpucu: Bu kelime \"İslam\""
+      },
+      {
+        "correctAnswer": "Tevazu",
+        "scrambledWord": "TAEVUZ",
+        "definition": "İpucu: Bu kelime \"Tevazu\""
+      },
+      {
+        "correctAnswer": "Hz. Ali",
+        "scrambledWord": ".ZLHİ A",
+        "definition": "İpucu: Bu kelime \"Hz. Ali\""
+      },
+      {
+        "correctAnswer": "Sahabi",
+        "scrambledWord": "ABHİAS",
+        "definition": "İpucu: Bu kelime \"Sahabi\""
+      },
+      {
+        "correctAnswer": "Kabile",
+        "scrambledWord": "LBAKEİ",
+        "definition": "İpucu: Bu kelime \"Kabile\""
+      },
+      {
+        "correctAnswer": "Küçük Sırdaş",
+        "scrambledWord": "SKRIŞAÜ DÜÇK",
+        "definition": "İpucu: Bu kelime \"Küçük Sırdaş\""
+      },
+      {
+        "correctAnswer": "Hicret",
+        "scrambledWord": "RECİHT",
+        "definition": "İpucu: Bu kelime \"Hicret\""
+      },
+      {
+        "correctAnswer": "Saygı",
+        "scrambledWord": "IGAYS",
+        "definition": "İpucu: Bu kelime \"Saygı\""
+      },
+      {
+        "correctAnswer": "Kureyş",
+        "scrambledWord": "ŞYRUKE",
+        "definition": "İpucu: Bu kelime \"Kureyş\""
+      },
+      {
+        "correctAnswer": "Merhamet",
+        "scrambledWord": "HETRAEMM",
+        "definition": "İpucu: Bu kelime \"Merhamet\""
+      },
+      {
+        "correctAnswer": "Şefkat",
+        "scrambledWord": "TAFEKŞ",
+        "definition": "İpucu: Bu kelime \"Şefkat\""
+      },
+      {
+        "correctAnswer": "Asrısaadet",
+        "scrambledWord": "SSRDAAATIE",
+        "definition": "İpucu: Bu kelime \"Asrısaadet\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Hz. Ali, savaşlarda büyük kahramanlıklar göstermiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Zeyd bin Harise, aslen Mekkeliydi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Ali, Hicret’ten sonra Medine’ye hicret etmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimizin yanında yetişen çocukların onunla kurdukları iletişim, sadece o döneme özgü olup günümüz Müslümanları için bir örnek teşkil etmez.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Zeyd, İslam davasında her zaman Peygamberimizin yanındaydı.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Ali'nin on yaşında Müslüman olması ve genç yaşına rağmen Peygamberimize tam destek vermesi, onun İslam'a olan derin inancını ve cesaretini gösterir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Enes'in on yıl boyunca Peygamberimize hizmet etmesi ve Peygamberimizin ona karşı sergilediği hoşgörülü ve anlayışlı tutum, İslam'ın eğitim ve insan ilişkilerindeki temel prensiplerini yansıtır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Ali, Hicret’in ikinci yılında Peygamberimizin kızı Hz. Fatıma ile evlenmiştir.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Hz. Ali, Hz. Zeyd bin Harise ve Hz. Enes bin Malik, Peygamberimizin yanında yetişen önemli çocuk sahabelerdendir.",
+    "scrambledSentence": "Zeyd sahabelerdendir. Malik, Hz. bin önemli çocuk Peygamberimizin ve bin Harise yanında yetişen Enes Ali, Hz. Hz."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz, çocuklara sevgi, şefkat ve merhametle yaklaşmıştır.",
+    "scrambledSentence": "çocuklara merhametle sevgi, Peygamberimiz, yaklaşmıştır. şefkat ve"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimizin yanında yetişen çocuklar, Müslümanlar için örnek teşkil etmektedir.",
+    "scrambledSentence": "Müslümanlar etmektedir. yetişen Peygamberimizin çocuklar, teşkil örnek yanında için"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Asrısaadet dönemi, Hz. Muhammed'in yaşadığı ve İslam'ın yayılmaya başladığı dönemdir.",
+    "scrambledSentence": "dönemdir. dönemi, İslam'ın ve Hz. Muhammed'in yaşadığı yayılmaya başladığı Asrısaadet"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Zeyd, İslam davasında her zaman Peygamberimizin yanındaydı. Peygamberimiz Taiflileri İslam’a davet etmek için Taif’e gittiğinde yanında Hz. ___ vardı.",
+    "options": [
+      "Ali",
+      "Ebu Bekir",
+      "Zeyd",
+      "Ömer"
+    ],
+    "correctAnswer": "Zeyd"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Enes, Peygamberimizden dua alan Hz. Enes uzun bir ömür yaşadı. Onun evlatları ve malları çoğaldı. O, en çok hadis rivayet eden ve en uzun yaşayan sahabilerden ___.",
+    "options": [
+      "biriydi",
+      "değildi",
+      "en kısasıydı",
+      "en fakiriydi"
+    ],
+    "correctAnswer": "biriydi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Zeyd'in ailesine karşı Peygamberimizi tercih etmesi, onun Peygamberimize olan derin ___ ve bağlılığını ortaya koyar.",
+    "options": [
+      "nefretini",
+      "sevgisini",
+      "korkusunu",
+      "endişesini"
+    ],
+    "correctAnswer": "sevgisini"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Zeyd; başta Bedir, Uhud ve Hendek Savaşları olmak üzere pek çok savaşa katıldı. Bedir’deki zaferin müjdesini Medine’ye o ___.",
+    "options": [
+      "getirmedi",
+      "ulaştırdı",
+      "sakladı",
+      "unuttu"
+    ],
+    "correctAnswer": "ulaştırdı"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Zeyd, köle iken Hz. Peygamber tarafından hürriyetine kavuşturulmuş Müslümanların ___ oldu.",
+    "options": [
+      "sonuncusu",
+      "ikincisi",
+      "ilki",
+      "üçüncüsü"
+    ],
+    "correctAnswer": "ilki"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Enes'in Peygamberimize on yıl hizmet etmesi ve 'Yaptığım bir işten dolayı 'Niye böyle yaptın?', yapmadığım bir işten dolayı da 'Niçin böyle yapmadın?' dediğini hatırlamıyorum.' demesi, Peygamberimizin hangi özelliğini gösterir?",
+    "options": [
+      "Sadece hoşgörüsünü",
+      "Sadece sabrını",
+      "Yüksek ahlakını, anlayışını ve insanlara karşı nazik tutumunu",
+      "Sadece liderlik vasfını"
+    ],
+    "correctAnswer": "Yüksek ahlakını, anlayışını ve insanlara karşı nazik tutumunu"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Ali, Peygamberimizin kızı Hz. Fatıma ile ne zaman evlenmiştir?",
+    "options": [
+      "Hicret'ten önce",
+      "Hicret'in birinci yılında",
+      "Hicret'in ikinci yılında",
+      "Hicret'in üçüncü yılında"
+    ],
+    "correctAnswer": "Hicret'in ikinci yılında"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Enes, Peygamberimizin küçük sırdaşı olarak anılmasının sebebi nedir?",
+    "options": [
+      "Çok konuşkan olması",
+      "Peygamberimizin verdiği sırrı saklaması",
+      "Çok meraklı olması",
+      "Peygamberimizin ona her şeyi anlatması"
+    ],
+    "correctAnswer": "Peygamberimizin verdiği sırrı saklaması"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Ali'nin, İslam'ı anlatmak için akrabalarına davet veren Peygamberimize 'Buradakilerin en küçüğü benim ama ben sana yardımcı olurum.' demesi, onun hangi özelliğini vurgular?",
+    "options": [
+      "Sadece cesaretini",
+      "Sadece yaşının küçüklüğünü",
+      "İslam'a olan bağlılığını ve Peygamberimize desteğini",
+      "Sadece akrabalık bağını"
+    ],
+    "correctAnswer": "İslam'a olan bağlılığını ve Peygamberimize desteğini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Köle iken hürriyetine kavuşturulmuş ilk Müslüman kimdir?",
+    "options": [
+      "Hz. Ali",
+      "Hz. Enes bin Malik",
+      "Hz. Zeyd bin Harise",
+      "Hz. Bilal"
+    ],
+    "correctAnswer": "Hz. Zeyd bin Harise"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Enes bin Malik, 'Hâdimü'n-Nebi' olarak anılırdı. Bu ne anlama gelir?",
+    "options": [
+      "Peygamberin dostu",
+      "Peygamberin küçük hizmetkârı",
+      "Peygamberin komutanı",
+      "Peygamberin sırdaşı"
+    ],
+    "correctAnswer": "Peygamberin küçük hizmetkârı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Ali, kaç yaşında Peygamberimizin himayesine alınmıştır?",
+    "options": [
+      "Üç",
+      "Beş",
+      "Yedi",
+      "On"
+    ],
+    "correctAnswer": "Beş"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İlk Müslüman çocuk kimdir?",
+    "options": [
+      "Hz. Zeyd",
+      "Hz. Enes",
+      "Hz. Ali",
+      "Hz. Cafer"
+    ],
+    "correctAnswer": "Hz. Ali"
+  }
+]

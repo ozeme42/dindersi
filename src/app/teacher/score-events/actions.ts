@@ -48,18 +48,17 @@ export async function getScoreEvents(params: {
 
         // DURUM 1: ARAMA VARSA (Limit Yok, Tüm Veriyi Çekip Filtrele)
         if (searchTerm && searchTerm.trim() !== "") {
-            // Arama varken cursor ve pagination backend'de yapılmaz, frontend'e filtrelenmiş tüm liste gönderilir
-            // Veya burada tümünü çekip, filtreleyip, sadece istenen sayfayı döndürürüz.
-            // Performans için 500 kayıtla sınırlayalım (Firestore maliyeti ve hız için)
             finalQuery = query(collectionRef, orderBy('timestamp', 'desc'), ...queryConstraints, limit(500));
             
             const snapshot = await getDocs(finalQuery);
             let allData = snapshot.docs.map(doc => {
                 const data = doc.data();
+                const ts = data.timestamp;
+                const isoTimestamp = (ts && typeof ts.toDate === 'function') ? ts.toDate().toISOString() : (typeof ts === 'string' ? ts : new Date().toISOString());
                 return {
                     ...data,
                     id: doc.id,
-                    timestamp: (data.timestamp as Timestamp).toDate().toISOString(),
+                    timestamp: isoTimestamp,
                     userName: usersMap.get(data.userId) || 'Bilinmeyen Kullanıcı',
                 } as EnrichedScoreEvent;
             });
@@ -72,12 +71,10 @@ export async function getScoreEvents(params: {
                 (typeof event.context === 'string' && event.context.toLowerCase().includes(lowerTerm))
             );
 
-            // Arama sonuçlarında sayfalama karmaşıklaşacağı için
-            // şimdilik sadece ilk 20 sonucu veya tümünü döndürüyoruz.
             return {
                 success: true,
                 data: JSON.parse(JSON.stringify(filteredData)),
-                lastVisible: null // Arama modunda sonsuz kaydırmayı kapatıyoruz
+                lastVisible: null
             };
         } 
         
@@ -85,15 +82,12 @@ export async function getScoreEvents(params: {
         else {
             if (direction === 'next') {
                 let q = query(collectionRef, orderBy('timestamp', 'desc'), ...queryConstraints);
-                if (cursor) {
-                    const startAtTimestamp = Timestamp.fromMillis(cursor._seconds * 1000 + cursor._nanoseconds / 1000000);
+                if (cursor && cursor._seconds) {
+                    const startAtTimestamp = new Timestamp(cursor._seconds, cursor._nanoseconds);
                     q = query(q, startAfter(startAtTimestamp));
                 }
                 finalQuery = query(q, limit(itemsPerPage));
             } else { 
-                // Prev direction için logic (Genelde UI'da 'önceki sayfa' verisi cache'den okunur ama server side yapacaksak:)
-                // Firestore'da geriye doğru sayfalama zordur. Genellikle 'endBefore' kullanılır.
-                // Basit çözüm: Cursor yoksa başa dön.
                 finalQuery = query(collectionRef, orderBy('timestamp', 'desc'), ...queryConstraints, limit(itemsPerPage));
             }
 
@@ -101,21 +95,24 @@ export async function getScoreEvents(params: {
             
             const data = snapshot.docs.map(doc => {
                 const d = doc.data();
+                const ts = d.timestamp;
+                const isoTimestamp = (ts && typeof ts.toDate === 'function') ? ts.toDate().toISOString() : (typeof ts === 'string' ? ts : new Date().toISOString());
                 return {
                     ...d,
                     id: doc.id,
-                    timestamp: (d.timestamp as Timestamp).toDate().toISOString(),
+                    timestamp: isoTimestamp,
                     userName: usersMap.get(d.userId) || 'Bilinmeyen Kullanıcı',
                 } as EnrichedScoreEvent;
             });
 
             const lastDoc = snapshot.docs[snapshot.docs.length - 1];
-            const lastVisible = lastDoc ? (lastDoc.data().timestamp as Timestamp) : null;
+            const rawLast = lastDoc ? lastDoc.data().timestamp : null;
+            const lastVisible = (rawLast && typeof rawLast === 'object' && 'seconds' in rawLast) ? { _seconds: rawLast.seconds, _nanoseconds: rawLast.nanoseconds } : null;
 
             return {
                 success: true,
                 data: JSON.parse(JSON.stringify(data)),
-                lastVisible: lastVisible ? { _seconds: lastVisible.seconds, _nanoseconds: lastVisible.nanoseconds } : null
+                lastVisible
             };
         }
 

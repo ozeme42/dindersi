@@ -84,7 +84,53 @@ export function YazilacaklarDisplayPage() {
                 setContent({ conceptDefinitions: definitions, notes: notes });
 
             } else {
-                 throw new Error('Konu veritabanında bulunamadı.');
+                // Fallback to static yazilacaklar JSON and manifest
+                let foundTitle = 'Kavram Panosu';
+                try {
+                    const mRes = await fetch('/curriculum/manifest.json');
+                    if (mRes.ok) {
+                        const manifest = await mRes.json();
+                        for (const g of manifest.classGroups || []) {
+                            for (const c of g.courses || []) {
+                                for (const u of c.units || []) {
+                                    for (const t of u.topics || []) {
+                                        if (t.id === topicId) { foundTitle = t.title; break; }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (mErr) {}
+                setTopicTitle(foundTitle);
+
+                try {
+                    const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
+                    if (yRes.ok) {
+                        const yData = await yRes.json();
+                        if ((yData.notes?.length || 0) > 0 || (yData.conceptDefinitions?.length || 0) > 0) {
+                            setContent(yData);
+                            return;
+                        }
+                    }
+                } catch (yErr) {}
+
+                // Try activities fallback
+                try {
+                    const aRes = await fetch(`/curriculum/activities/${topicId}.json`);
+                    if (aRes.ok) {
+                        const aData = await aRes.json();
+                        const defs = aData.filter((a: any) => a.type === 'definition' && a.content?.term && a.content?.definition)
+                                          .map((a: any) => ({ concept: a.content.term, definition: a.content.definition }));
+                        const notes = aData.filter((a: any) => a.type === 'sentence' && a.content?.text)
+                                           .map((a: any) => a.content.text);
+                        if (defs.length > 0 || notes.length > 0) {
+                            setContent({ conceptDefinitions: defs, notes });
+                            return;
+                        }
+                    }
+                } catch (aErr) {}
+
+                throw new Error('Bu konu için yazılacak içerik bulunamadı.');
             }
 
         } catch (e: any) {

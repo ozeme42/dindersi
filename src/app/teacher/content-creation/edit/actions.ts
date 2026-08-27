@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import type { LessonStep, YazilacaklarContent } from "@/lib/types";
 import { revalidatePath, revalidateTag } from "next/cache";
 
@@ -27,12 +27,12 @@ export async function updateTopicContent({
         // Firestore works best with plain objects, so we serialize the steps array.
         const plainSteps = JSON.parse(JSON.stringify(steps));
         
-        await updateDoc(topicRef, { 
+        await setDoc(topicRef, { 
             steps: plainSteps,
             sourceText: sourceText || '',
             htmlContent: htmlContent || '',
             itemCount: plainSteps.length,
-        });
+        }, { merge: true });
 
         // Anında tüm sayfalarda önbelleği yenile
         try {

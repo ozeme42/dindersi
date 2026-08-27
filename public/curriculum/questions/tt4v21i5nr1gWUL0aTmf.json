@@ -1,0 +1,227 @@
+[
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-0",
+    "type": "Doğru/Yanlış",
+    "text": "Her canın yaşama hakkı vardır.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Kolay",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-1",
+    "type": "Doğru/Yanlış",
+    "text": "Peygamber mesajı tüm insanlığa yöneliktir.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Kolay",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-2",
+    "type": "Doğru/Yanlış",
+    "text": "Malın helal yoldan kazanılması gerekir.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Kolay",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-3",
+    "type": "Doğru/Yanlış",
+    "text": "Namus ve iffet korunmalıdır.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Orta",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-4",
+    "type": "Doğru/Yanlış",
+    "text": "İnsan onuru İslam'da çok değerlidir.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Orta",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-5",
+    "type": "Doğru/Yanlış",
+    "text": "Akıl en büyük nimettir.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Orta",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-6",
+    "type": "Doğru/Yanlış",
+    "text": "İnanç özgürlüğü esastır, zorlama yoktur.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Orta",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-7",
+    "type": "Doğru/Yanlış",
+    "text": "Hz. Peygamber, her insanın özel ve biricik olduğunu vurgulayarak insan onurunun korunmasının önemine dikkat çekmiştir.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Zor",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-8",
+    "type": "Doğru/Yanlış",
+    "text": "İslam, din, dil, ırk, cinsiyet farkı gözetmeksizin her insana yaşama hakkı tanır ve canın dokunulmazlığını esas alır.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Zor",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-tf-tt4v21i5nr1gWUL0aTmf-9",
+    "type": "Doğru/Yanlış",
+    "text": "Dinde zorlama yoktur ilkesiyle inanç özgürlüğünü temel kabul eden İslam, farklı dinlere mensup insanlarla bir arada yaşama ve onların ibadetlerine saygı gösterme esasını benimser.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Zor",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-mcq-tt4v21i5nr1gWUL0aTmf-0",
+    "type": "Çoktan Seçmeli",
+    "question": "\"Can, mal ve namus gibi değerlerin koruma altında olması\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"Can, mal ve namus gibi değerlerin koruma altında olması\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Dokunulmazlık",
+      "Namus",
+      "Can",
+      "Akıl"
+    ],
+    "correctAnswer": "Dokunulmazlık",
+    "difficulty": "Kolay",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-mcq-tt4v21i5nr1gWUL0aTmf-1",
+    "type": "Çoktan Seçmeli",
+    "question": "\"Her insanın sahip olduğu yaşama hakkı\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"Her insanın sahip olduğu yaşama hakkı\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Can",
+      "Mal",
+      "Akıl",
+      "Namus"
+    ],
+    "correctAnswer": "Can",
+    "difficulty": "Kolay",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-mcq-tt4v21i5nr1gWUL0aTmf-2",
+    "type": "Çoktan Seçmeli",
+    "question": "\"İffetli olmak ve kendine ait olmayana göz dikmemek\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"İffetli olmak ve kendine ait olmayana göz dikmemek\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Namus",
+      "Mal",
+      "Akıl",
+      "Can"
+    ],
+    "correctAnswer": "Namus",
+    "difficulty": "Orta",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-mcq-tt4v21i5nr1gWUL0aTmf-3",
+    "type": "Çoktan Seçmeli",
+    "question": "\"Helal yoldan kazanılan kişisel varlıklar\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"Helal yoldan kazanılan kişisel varlıklar\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Akıl",
+      "Can",
+      "Mal",
+      "Namus"
+    ],
+    "correctAnswer": "Mal",
+    "difficulty": "Orta",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  },
+  {
+    "id": "gen-mcq-tt4v21i5nr1gWUL0aTmf-4",
+    "type": "Çoktan Seçmeli",
+    "question": "\"İnsana verilen en büyük nimetlerden biri\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"İnsana verilen en büyük nimetlerden biri\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Mal",
+      "Dokunulmazlık",
+      "Can",
+      "Akıl"
+    ],
+    "correctAnswer": "Akıl",
+    "difficulty": "Orta",
+    "courseId": "",
+    "unitId": "",
+    "topicId": "tt4v21i5nr1gWUL0aTmf"
+  }
+]

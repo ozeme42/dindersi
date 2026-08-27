@@ -20,27 +20,48 @@ export async function getDogruYolKosucusuAction(
 ): Promise<{ questions: DogruYolQuestion[]; error?: string }> {
     noStore();
     try {
-        const allItems: ActivityItem[] = await getStaticQuestionsForGame({ topicId, courseId, unitId, dataType: 'activities' });
+        const allItems = await getStaticQuestionsForGame({ topicId, courseId, unitId, dataType: 'all' });
         
-        const allDefinitions = allItems
-            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
+        const pairs: { q: string, correct: string, wrong?: string }[] = [];
+        
+        for (const item of allItems || []) {
+            if ('type' in item) {
+                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && (item as any).content?.definition) {
+                    pairs.push({
+                        q: (item as any).content.definition.trim(),
+                        correct: (item as any).content.term.trim()
+                    });
+                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
+                    const wrongs = ((item as any).options || []).filter((o: any) => o !== (item as any).correctAnswer);
+                    pairs.push({
+                        q: ((item as any).text || (item as any).question).trim(),
+                        correct: String((item as any).correctAnswer).trim(),
+                        wrong: wrongs[0] ? String(wrongs[0]).trim() : undefined
+                    });
+                }
+            }
+        }
 
-        if (allDefinitions.length < 2) {
-            return { error: "Bu oyun için en az 2 farklı tanım/kavram gereklidir.", questions: [] };
+        if (pairs.length < 2) {
+            return { error: "Bu oyun için en az 2 farklı tanım veya soru gereklidir.", questions: [] };
         }
             
-        const gameQuestions: DogruYolQuestion[] = allDefinitions.map((item, index, arr) => {
-            const wrongOptions = arr.filter((_, i) => i !== index);
-            const wrongAnswerItem = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+        const gameQuestions: DogruYolQuestion[] = pairs.map((item, index, arr) => {
+            let wrongAnswer = item.wrong;
+            if (!wrongAnswer) {
+                const otherOptions = arr.filter((_, i) => i !== index);
+                wrongAnswer = otherOptions[Math.floor(Math.random() * otherOptions.length)]?.correct || 'İslam';
+            }
 
             return {
-                q: item.content.definition!,
-                correct: item.content.term!,
-                wrong: wrongAnswerItem.content.term!
+                q: item.q,
+                correct: item.correct,
+                wrong: wrongAnswer
             };
         });
 
-        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
+        const shuffled = [...gameQuestions].sort(() => 0.5 - Math.random());
+        return { questions: JSON.parse(JSON.stringify(shuffled.slice(0, 20))) };
 
     } catch (error: any) {
         console.error("Error getting Dogru Yol Kosucusu questions:", error);

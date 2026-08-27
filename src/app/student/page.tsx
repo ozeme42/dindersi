@@ -210,8 +210,11 @@ function PageContent() {
         const sorted = [...allStudents].sort((a,b) => (b.score||0)-(a.score||0));
         let classRank = 0, branchRank = 0;
         if(user.class) {
-            const grade = user.class.split(' - ')[0];
-            classRank = allStudents.filter(s => s.class?.startsWith(grade)).sort((a,b) => (b.score||0)-(a.score||0)).findIndex(s => s.uid === user.uid) + 1;
+            const userGrade = user.class.match(/\d+/)?.[0] || user.class.split(' - ')[0];
+            classRank = allStudents.filter(s => {
+                const sGrade = s.class?.match(/\d+/)?.[0];
+                return (sGrade && sGrade === userGrade) || s.class?.startsWith(userGrade);
+            }).sort((a,b) => (b.score||0)-(a.score||0)).findIndex(s => s.uid === user.uid) + 1;
             branchRank = allStudents.filter(s => s.class === user.class).sort((a,b) => (b.score||0)-(a.score||0)).findIndex(s => s.uid === user.uid) + 1;
         }
         setStats({ totalCourses: allCoursesSnapshot.size, generalRank: sorted.findIndex(s => s.uid === user.uid)+1, classRank, branchRank, todayScore: todayTotal });

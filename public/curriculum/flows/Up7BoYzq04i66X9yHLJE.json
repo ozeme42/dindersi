@@ -1,0 +1,388 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Temizlik Adabı konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Temizlik Adabı ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Rehberim Peygamberim çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Taharet, Maddi Temizlik, Manevi Temizlik kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Taharet</li><li>Maddi Temizlik</li><li>Manevi Temizlik</li><li>Gusül</li><li>Misvak</li><li>Temizlik</li><li>Kişisel Bakım</li><li>Tövbe</li><li>Abdest</li><li>Çevre Temizliği</li><li>Hijyen</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Temizlik Adabı - Önemli Bilgiler (1)",
+    "content": "<ul><li>Peygamberimiz Hz. Muhammed (sav), temizliği \"imanın yarısı\" olarak görmüş ve hayatı boyunca önem vermiştir.</li><li>İslam'da temizlik, maddi (beden, giysi, çevre) ve manevi (kalbi kötülüklerden arındırma) olmak üzere ikiye ayrılır.</li><li>Peygamberimiz, \"Allah temizdir, temiz olan şeyleri sever.\" buyurarak temizliğin önemini vurgulamıştır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Temizlik Adabı - Önemli Bilgiler (2)",
+    "content": "<ul><li>Ağız ve diş temizliği (misvak kullanımıyla) Peygamberimizin üzerinde en çok durduğu maddi temizlik unsurlarındandır.</li><li>Peygamberimiz, beden temizliği için düzenli banyo yapmayı (gusül) ve tırnak temizliğini tavsiye etmiştir.</li><li>Elbiselerin ve çevrenin temiz tutulması, hem ibadet hem de toplum sağlığı açısından önemlidir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Temizlik Adabı - Önemli Bilgiler (3)",
+    "content": "<ul><li>Manevi temizlik, kalbi günahlardan ve kötü düşüncelerden arındırmak, tövbe etmekle gerçekleşir.</li><li>Abdest, namaz öncesi hem maddi hem manevi arınmayı sağlayan önemli bir temizlik uygulamasıdır.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Taharet",
+        "definition": "Dinen pis kabul edilen şeyleri su veya temizleyici başka şeylerle temizleme."
+      },
+      {
+        "concept": "Manevi Temizlik",
+        "definition": "Kalbi kötü düşünce ve duygulardan arındırma, günahlardan tövbe etme."
+      },
+      {
+        "concept": "Temizlik",
+        "definition": "İnsan sağlığı ve sosyal ilişkiler için önemli olan, kirlerden arınma durumu."
+      },
+      {
+        "concept": "Misvak",
+        "definition": "Peygamberimizin de kullandığı, ağız ve diş temizliği için kullanılan araç."
+      },
+      {
+        "concept": "Tövbe",
+        "definition": "İşlenen günahlardan pişmanlık duyup Allah'a yönelme."
+      },
+      {
+        "concept": "Maddi Temizlik",
+        "definition": "Beden, elbise ve çevre temizliği gibi görünen kirlerden arınma."
+      },
+      {
+        "concept": "Gusül",
+        "definition": "Bütün bedenin yıkanması, boy abdesti."
+      },
+      {
+        "concept": "Abdest",
+        "definition": "Namaz gibi ibadetlerden önce alınan, bedenin bazı bölgelerinin yıkanması."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Taharet",
+        "definition": "Dinen pis kabul edilen şeyleri su veya temizleyici başka şeylerle temizleme."
+      },
+      {
+        "term": "Manevi Temizlik",
+        "definition": "Kalbi kötü düşünce ve duygulardan arındırma, günahlardan tövbe etme."
+      },
+      {
+        "term": "Temizlik",
+        "definition": "İnsan sağlığı ve sosyal ilişkiler için önemli olan, kirlerden arınma durumu."
+      },
+      {
+        "term": "Misvak",
+        "definition": "Peygamberimizin de kullandığı, ağız ve diş temizliği için kullanılan araç."
+      },
+      {
+        "term": "Tövbe",
+        "definition": "İşlenen günahlardan pişmanlık duyup Allah'a yönelme."
+      },
+      {
+        "term": "Maddi Temizlik",
+        "definition": "Beden, elbise ve çevre temizliği gibi görünen kirlerden arınma."
+      },
+      {
+        "term": "Gusül",
+        "definition": "Bütün bedenin yıkanması, boy abdesti."
+      },
+      {
+        "term": "Abdest",
+        "definition": "Namaz gibi ibadetlerden önce alınan, bedenin bazı bölgelerinin yıkanması."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Taharet",
+        "scrambledWord": "THATEAR",
+        "definition": "İpucu: Bu kelime \"Taharet\""
+      },
+      {
+        "correctAnswer": "Maddi Temizlik",
+        "scrambledWord": "TİKİEİMZLDMAD ",
+        "definition": "İpucu: Bu kelime \"Maddi Temizlik\""
+      },
+      {
+        "correctAnswer": "Manevi Temizlik",
+        "scrambledWord": "VZMİATNLİKE İEM",
+        "definition": "İpucu: Bu kelime \"Manevi Temizlik\""
+      },
+      {
+        "correctAnswer": "Gusül",
+        "scrambledWord": "ÜGLSU",
+        "definition": "İpucu: Bu kelime \"Gusül\""
+      },
+      {
+        "correctAnswer": "Misvak",
+        "scrambledWord": "MSVKAİ",
+        "definition": "İpucu: Bu kelime \"Misvak\""
+      },
+      {
+        "correctAnswer": "Temizlik",
+        "scrambledWord": "ZEKLİTMİ",
+        "definition": "İpucu: Bu kelime \"Temizlik\""
+      },
+      {
+        "correctAnswer": "Kişisel Bakım",
+        "scrambledWord": "İLEKASBMIŞİ K",
+        "definition": "İpucu: Bu kelime \"Kişisel Bakım\""
+      },
+      {
+        "correctAnswer": "Tövbe",
+        "scrambledWord": "ÖVTEB",
+        "definition": "İpucu: Bu kelime \"Tövbe\""
+      },
+      {
+        "correctAnswer": "Abdest",
+        "scrambledWord": "BATDES",
+        "definition": "İpucu: Bu kelime \"Abdest\""
+      },
+      {
+        "correctAnswer": "Çevre Temizliği",
+        "scrambledWord": "ĞİLİMÇZEİE VETR",
+        "definition": "İpucu: Bu kelime \"Çevre Temizliği\""
+      },
+      {
+        "correctAnswer": "Hijyen",
+        "scrambledWord": "JNİYEH",
+        "definition": "İpucu: Bu kelime \"Hijyen\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Temizlik, kirlerden arınmak, mikrop ve hastalıklardan korunmak için önemlidir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Temizlik, maddi ve manevi temizlik olmak üzere ikiye ayrılmaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz beden temizliğinde özellikle ağız ve diş temizliğini önemsememiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Misvak kullanmak, sadece Peygamberimize özel bir uygulamadır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Manevi temizlik, insanın yaptığı hatalara tövbe ederek iyi ve güzel şeylere yönelmesiyle gerçekleşmez.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, hayatı boyunca temizliğe dikkat etmemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Manevi temizlik, insanın kalbini kötülüklerden temizlemesi, olumsuz duygu ve düşüncelere kapılmaktan koruması, günah ve hatalardan kaçınmasıdır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kulun tövbe edip Allah’a (cc) dönmesi, bir silginin kalem ile yazılanı silmesi gibi önceki günah ve hatalarını silmez.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Elbise temizliği, namaz gibi ibadetler için bir ön şarttır.",
+    "scrambledSentence": "ön bir Elbise gibi şarttır. temizliği, için namaz ibadetler"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Ağız ve diş temizliği, beden temizliği, elbise temizliği ve çevre temizliği önemlidir.",
+    "scrambledSentence": "elbise ve ve temizliği, temizliği diş önemlidir. Ağız beden çevre temizliği temizliği,"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Temizlik, hem fiziksel hem de ruhsal sağlığımız için önemlidir ve İslam'da imanın yarısı olarak kabul edilir.",
+    "scrambledSentence": "sağlığımız ruhsal imanın İslam'da için Temizlik, edilir. fiziksel hem de olarak yarısı önemlidir ve kabul hem"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz, temizliğe büyük önem vermiş ve bunu hem sözleriyle hem de uygulamalarıyla göstermiştir.",
+    "scrambledSentence": "önem temizliğe Peygamberimiz, hem hem göstermiştir. sözleriyle ve büyük uygulamalarıyla de bunu vermiş"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz bir hadisinde 'Allah temizdir, temiz olan şeyleri ___.' diyerek temizliğin önemini vurgulamıştır.",
+    "options": [
+      "sevmez",
+      "sever",
+      "umursamaz",
+      "nefret eder"
+    ],
+    "correctAnswer": "sever"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Beden temizliği kişisel bakım ve hijyen için gereklidir. Kişisel bakım, bireylerin hayatını sağlıklı bir şekilde sürdürebilmesini sağlayan vücut, kıyafet gibi temizlik kurallarının ___.",
+    "options": [
+      "bir kısmıdır",
+      "parçasıdır",
+      "bütünüdür",
+      "dışındadır"
+    ],
+    "correctAnswer": "bütünüdür"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Temizlik, kirlerden arınmak, mikrop ve hastalıklardan korunmak için önemlidir. Bazı ibadetlerin şartı olmasının yanı sıra günlük hayatın da vazgeçilmez ___ biridir.",
+    "options": [
+      "yüklerinden",
+      "sorunlarından",
+      "unsurlarından",
+      "engellerinden"
+    ],
+    "correctAnswer": "unsurlarından"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Manevi temizlik, insanın kalbini günahlardan ve kötü düşüncelerden korur. Kişinin düşünce dünyasının kötü niyetten ___ manevi temizliktir.",
+    "options": [
+      "kirlenmesi",
+      "arınması",
+      "çoğalması",
+      "oluşması"
+    ],
+    "correctAnswer": "arınması"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, Müslümanlardan temizliğe önem vermelerini istemiştir. Temizlik insan sağlığı için önemlidir. Temiz olmak, bireyin sağlığını koruyacağı gibi sosyal ilişkilerini de olumlu ___.",
+    "options": [
+      "engeller",
+      "etkiler",
+      "bozar",
+      "yavaşlatır"
+    ],
+    "correctAnswer": "etkiler"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Elbise temizliği, namaz ibadetinin hangi şartlarından biridir?",
+    "options": [
+      "Vakit",
+      "Kıble",
+      "Hazırlık",
+      "Niyet"
+    ],
+    "correctAnswer": "Hazırlık"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz beden temizliğinde özellikle neyi önemsemiştir?",
+    "options": [
+      "Saç bakımı",
+      "El temizliği",
+      "Ağız ve diş temizliği",
+      "Ayak temizliği"
+    ],
+    "correctAnswer": "Ağız ve diş temizliği"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz başka bir hadisinde ise kulun samimi bir şekilde tövbe ettiğinde hiç günah işlemeyen kişi gibi olacağını belirtmiştir. Bu durum, tövbenin hangi gücünü gösterir?",
+    "options": [
+      "Sadece affedilme",
+      "Sadece unutulma",
+      "Günahları tamamen silme ve kişiyi temizleme",
+      "Sadece pişmanlık duyma"
+    ],
+    "correctAnswer": "Günahları tamamen silme ve kişiyi temizleme"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Peygamber temizliği ne olarak ifade etmiştir?",
+    "options": [
+      "Bir yük",
+      "İmanın yarısı",
+      "Bir zorunluluk",
+      "Bir alışkanlık"
+    ],
+    "correctAnswer": "İmanın yarısı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Manevi temizliğin yolu günahlardan kaçınmak ve işlenen günahlardan tövbe etmektir. Peygamberimiz bir hadisinde, tövbe eden kulun kalbinin ne olacağını vurgulamıştır?",
+    "options": [
+      "Kirleneceğini",
+      "Kararacağını",
+      "Arınacağını",
+      "Değişmeyeceğini"
+    ],
+    "correctAnswer": "Arınacağını"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz Müslümanlara, yaşadıkları çevreyi temiz tutmalarını tavsiye etmiştir. O, bir hadisinde şöyle demiştir: 'Evlerinizin önünü ve civarını ___ tutunuz.'",
+    "options": [
+      "kirli",
+      "dağınık",
+      "temiz",
+      "bakımsız"
+    ],
+    "correctAnswer": "temiz"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Dinen pis kabul edilen şeyleri su ile yıkama veya temizleyici olan başka şeylerle temizlemeye ne denir?",
+    "options": [
+      "Necaset",
+      "Hadesten taharet",
+      "Taharet",
+      "Setr-i avret"
+    ],
+    "correctAnswer": "Taharet"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Manevi temizlik, insanın kalbini günahlardan ve kötü düşüncelerden korur. Kişinin düşünce dünyasının kötü niyetten arınması manevi temizliktir. Müslümanın niyeti, zihniyeti nasıl olmalıdır?",
+    "options": [
+      "Kötü ve kirli",
+      "İyi ve güzel",
+      "Karmaşık ve belirsiz",
+      "Sadece kendi çıkarına"
+    ],
+    "correctAnswer": "İyi ve güzel"
+  }
+]

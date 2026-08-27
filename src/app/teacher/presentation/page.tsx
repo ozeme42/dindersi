@@ -270,13 +270,48 @@ function PresentationPageContent() {
                      } catch (e) {}
                  }
                 
-                let finalSteps = steps;
+                 let finalSteps = steps;
                 if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
                     finalSteps = steps.filter((s: any) => s.isPublished ?? true);
                 }
 
                  setContent({ id: contentId, title: data.title, steps: finalSteps });
                  setTotalStepsCount(finalSteps.length);
+            } else {
+                // Fallback: Static Manifest & Flow JSON
+                try {
+                    const targetId = topicId || unitId;
+                    let foundTitle = topicId ? 'Konu Sunumu' : 'Ünite Sunumu';
+                    try {
+                        const mRes = await fetch('/curriculum/manifest.json');
+                        if (mRes.ok) {
+                            const manifest = await mRes.json();
+                            for (const g of manifest.classGroups || []) {
+                                for (const c of g.courses || []) {
+                                    for (const u of c.units || []) {
+                                        if (u.id === targetId) foundTitle = u.title;
+                                        for (const t of u.topics || []) {
+                                            if (t.id === targetId) { foundTitle = t.title; break; }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (mErr) {}
+
+                    const flowRes = await fetch(`/curriculum/flows/${targetId}.json`);
+                    if (flowRes.ok) {
+                        const staticSteps = await flowRes.json();
+                        if (staticSteps.length > 0) {
+                            let finalSteps = staticSteps;
+                            if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
+                                finalSteps = staticSteps.filter((s: any) => s.isPublished ?? true);
+                            }
+                            setContent({ id: targetId, title: foundTitle, steps: finalSteps });
+                            setTotalStepsCount(finalSteps.length);
+                        }
+                    }
+                } catch (fallbackErr) {}
             }
         } catch (error) {
             console.error("Error fetching content for presentation:", error);
@@ -665,19 +700,15 @@ function PresentationPageContent() {
                                     </div>
                                 </div>
 
-                                {/* 4. Hızlı Aksiyonlar (Tam Ekran & Çıkış) */}
-                                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-white/10">
-                                    <FullscreenToggle 
-                                        elementRef={mainContentRef} 
-                                        className="w-full h-9 rounded-xl text-xs font-bold bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-white/10" 
-                                    />
+                                {/* 4. Hızlı Aksiyon (Çıkış) */}
+                                <div className="pt-2 border-t border-slate-200 dark:border-white/10">
                                     <Button 
                                         asChild 
                                         variant="ghost" 
-                                        className="w-full h-9 rounded-xl text-xs font-bold bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white"
+                                        className="w-full h-9 rounded-xl text-xs font-bold bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white cursor-pointer"
                                     >
                                         <Link href="/teacher/ders-akisi">
-                                            <ArrowLeft className="w-3.5 h-3.5 mr-1" /> Çıkış
+                                            <ArrowLeft className="w-3.5 h-3.5 mr-1" /> Ders Akışına Dön / Çıkış
                                         </Link>
                                     </Button>
                                 </div>

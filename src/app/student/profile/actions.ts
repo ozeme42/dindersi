@@ -43,13 +43,17 @@ export async function getStudentAchievements(studentId: string, registrationDate
     }
 
     try {
-        const startDate = new Date(registrationDate);
+        const rawStartDate = new Date(registrationDate);
+        const startDate = isNaN(rawStartDate.getTime()) ? sub(new Date(), { months: 3 }) : rawStartDate;
         const now = new Date();
-        const achievements: Achievement[] = [];
+        const achievementsWithTime: (Achievement & { sortTimestamp: number })[] = [];
         
-        // Weekly Achievements
+        // Weekly Achievements (Capped to max 12 recent weeks)
+        const maxWeekStart = sub(now, { weeks: 12 });
+        const effectiveWeekStart = startDate > maxWeekStart ? startDate : maxWeekStart;
+
         const weeks = eachWeekOfInterval(
-            { start: startDate, end: now },
+            { start: effectiveWeekStart, end: now },
             { weekStartsOn: 1 }
         );
 
@@ -62,17 +66,21 @@ export async function getStudentAchievements(studentId: string, registrationDate
             const userRank = leaderboard.findIndex(entry => entry.uid === studentId);
             
             if (userRank !== -1 && userRank < 3) {
-                achievements.push({
+                achievementsWithTime.push({
                     periodType: 'weekly',
                     periodName: `${format(weekStart, 'd MMM')} - ${format(weekEnd, 'd MMM yyyy')}`,
                     rank: userRank + 1,
                     score: leaderboard[userRank].score,
+                    sortTimestamp: weekEnd.getTime(),
                 });
             }
         }
 
-        // Monthly Achievements
-        const months = eachMonthOfInterval({ start: startDate, end: now });
+        // Monthly Achievements (Capped to max 6 recent months)
+        const maxMonthStart = sub(now, { months: 6 });
+        const effectiveMonthStart = startDate > maxMonthStart ? startDate : maxMonthStart;
+
+        const months = eachMonthOfInterval({ start: effectiveMonthStart, end: now });
 
         for (const month of months) {
             const monthStart = startOfMonth(month);
@@ -83,22 +91,20 @@ export async function getStudentAchievements(studentId: string, registrationDate
             const userRank = leaderboard.findIndex(entry => entry.uid === studentId);
 
             if (userRank !== -1 && userRank < 3) {
-                achievements.push({
+                achievementsWithTime.push({
                     periodType: 'monthly',
                     periodName: format(monthStart, 'MMMM yyyy', { locale: tr }),
                     rank: userRank + 1,
                     score: leaderboard[userRank].score,
+                    sortTimestamp: monthEnd.getTime(),
                 });
             }
         }
         
-        // Sort achievements by period name descending (most recent first)
-        achievements.sort((a,b) => {
-            const dateA = new Date(a.periodName.split(' - ')[1] || a.periodName);
-            const dateB = new Date(b.periodName.split(' - ')[1] || b.periodName);
-            return dateB.getTime() - dateA.getTime();
-        });
+        // Sort achievements by timestamp descending (most recent first)
+        achievementsWithTime.sort((a, b) => b.sortTimestamp - a.sortTimestamp);
 
+        const achievements: Achievement[] = achievementsWithTime.map(({ sortTimestamp, ...rest }) => rest);
 
         return { success: true, achievements: JSON.parse(JSON.stringify(achievements)) };
 

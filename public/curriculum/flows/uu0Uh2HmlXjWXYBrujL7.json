@@ -1,0 +1,394 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Geleneğimizde Dinin İzleri konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Geleneğimizde Dinin İzleri ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "5️⃣ Kültürümüzdeki Dinî Motifler çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Mevlit, Mahya, Ehlibeyt kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Mevlit</li><li>Mahya</li><li>Ehlibeyt</li><li>Sadaka taşı</li><li>Diş kirası</li><li>Gelenek</li><li>Taziye</li><li>Vakıf</li><li>Zimem defteri</li><li>Aşure</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Geleneğimizde Dinin İzleri - Önemli Bilgiler (1)",
+    "content": "<ul><li>Türk kültüründeki örf ve adetler, toplumun benimsediği yazılı olmayan kurallardır ve içinde birçok dinî unsur barındırır.</li><li>Yeni doğan bebeğe isim verme (ezan okuma), asker uğurlama, kız isteme, düğün ve taziye ziyaretleri gibi yaygın geleneklerde dinin izleri belirgindir.</li><li>Dinî bayramlar (Ramazan, Kurban) ve kandil geceleri (Mevlit, Regaip, Miraç, Berat, Kadir), toplumsal birlik ve beraberliği pekiştiren, dinî değerlerle dolu özel zamanlardır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Geleneğimizde Dinin İzleri - Önemli Bilgiler (2)",
+    "content": "<ul><li>İslam'ın yardımlaşma ve paylaşma teşvikiyle ortaya çıkan sadaka taşı, zimem defteri ve vakıf geleneği gibi uygulamalar, kimseyi incitmeden yapılan yardımlaşmanın güzel örnekleridir.</li><li>Ramazan ayına özgü iftar davetleri, mahyalar, tekne orucu ve Muharrem ayında aşure dağıtımı gibi gelenekler, dinin toplumsal yaşantımızdaki derin etkisini gösterir.</li><li>Hz. Muhammed (sav) ve Ehlibeyt sevgisi, çocuklara verilen isimler ve Peygamber anıldığında salavat getirme gibi uygulamalarla kültürümüzde yaşatılır.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Mevlit",
+        "definition": "Doğum, ölüm gibi özel günlerde okutulan dua programı nedir?"
+      },
+      {
+        "concept": "Mahya",
+        "definition": "Ramazan ayında minareler arasına asılan ışıklı yazılar nedir?"
+      },
+      {
+        "concept": "Ehlibeyt",
+        "definition": "Hz. Peygamber’in aile fertlerine verilen isim nedir?"
+      },
+      {
+        "concept": "Gelenek",
+        "definition": "Toplumun benimsediği, yazılı olmayan kurallara ne denir?"
+      },
+      {
+        "concept": "Taziye",
+        "definition": "Vefat eden yakınlarına başsağlığı dilemeye ne ad verilir?"
+      },
+      {
+        "concept": "Sadaka taşı",
+        "definition": "Alan ve verenin bilinmediği yardımlaşma alanı nedir?"
+      },
+      {
+        "concept": "Vakıf",
+        "definition": "Allah rızası için toplum yararına ayrılan mal varlığına ne denir?"
+      },
+      {
+        "concept": "Zimem defteri",
+        "definition": "Borçluların hesaplarının kapatıldığı deftere ne denir?"
+      },
+      {
+        "concept": "Aşure",
+        "definition": "Muharrem ayında yapılan özel tatlıya ne denir?"
+      },
+      {
+        "concept": "Diş kirası",
+        "definition": "İftar davetlerinde misafirlere verilen hediye nedir?"
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Mevlit",
+        "definition": "Doğum, ölüm gibi özel günlerde okutulan dua programı nedir?"
+      },
+      {
+        "term": "Mahya",
+        "definition": "Ramazan ayında minareler arasına asılan ışıklı yazılar nedir?"
+      },
+      {
+        "term": "Ehlibeyt",
+        "definition": "Hz. Peygamber’in aile fertlerine verilen isim nedir?"
+      },
+      {
+        "term": "Gelenek",
+        "definition": "Toplumun benimsediği, yazılı olmayan kurallara ne denir?"
+      },
+      {
+        "term": "Taziye",
+        "definition": "Vefat eden yakınlarına başsağlığı dilemeye ne ad verilir?"
+      },
+      {
+        "term": "Sadaka taşı",
+        "definition": "Alan ve verenin bilinmediği yardımlaşma alanı nedir?"
+      },
+      {
+        "term": "Vakıf",
+        "definition": "Allah rızası için toplum yararına ayrılan mal varlığına ne denir?"
+      },
+      {
+        "term": "Zimem defteri",
+        "definition": "Borçluların hesaplarının kapatıldığı deftere ne denir?"
+      },
+      {
+        "term": "Aşure",
+        "definition": "Muharrem ayında yapılan özel tatlıya ne denir?"
+      },
+      {
+        "term": "Diş kirası",
+        "definition": "İftar davetlerinde misafirlere verilen hediye nedir?"
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Mevlit",
+        "scrambledWord": "EMTLİV",
+        "definition": "İpucu: Bu kelime \"Mevlit\""
+      },
+      {
+        "correctAnswer": "Mahya",
+        "scrambledWord": "MHAYA",
+        "definition": "İpucu: Bu kelime \"Mahya\""
+      },
+      {
+        "correctAnswer": "Ehlibeyt",
+        "scrambledWord": "BHELTEYİ",
+        "definition": "İpucu: Bu kelime \"Ehlibeyt\""
+      },
+      {
+        "correctAnswer": "Sadaka taşı",
+        "scrambledWord": "AAAAS TKŞDI",
+        "definition": "İpucu: Bu kelime \"Sadaka taşı\""
+      },
+      {
+        "correctAnswer": "Diş kirası",
+        "scrambledWord": "Rİ İKŞDIAS",
+        "definition": "İpucu: Bu kelime \"Diş kirası\""
+      },
+      {
+        "correctAnswer": "Gelenek",
+        "scrambledWord": "KENLEEG",
+        "definition": "İpucu: Bu kelime \"Gelenek\""
+      },
+      {
+        "correctAnswer": "Taziye",
+        "scrambledWord": "İETYZA",
+        "definition": "İpucu: Bu kelime \"Taziye\""
+      },
+      {
+        "correctAnswer": "Vakıf",
+        "scrambledWord": "AFVKI",
+        "definition": "İpucu: Bu kelime \"Vakıf\""
+      },
+      {
+        "correctAnswer": "Zimem defteri",
+        "scrambledWord": "TDİEREMİFZE M",
+        "definition": "İpucu: Bu kelime \"Zimem defteri\""
+      },
+      {
+        "correctAnswer": "Aşure",
+        "scrambledWord": "EARŞU",
+        "definition": "İpucu: Bu kelime \"Aşure\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Din, insan hayatına yön veren temel unsurlardan biri değildir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kandil geceleri, Osmanlı Dönemi'nden itibaren minarelerde kandiller yakılarak kutlandığı için bu ismi almıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "“Üç aylar” olarak bilinen Recep, Şaban ve Ramazan ayları, manevi duyguların yoğun yaşandığı dönemlerdir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Vakfiye, bir vakfın kurucusu tarafından düzenlenen, vakfın işleyişi ve gayeleriyle ilgili resmî bir belgedir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Örf ve âdetler, toplumların hayatında kabul görmüş ortak değerler olup bir toplumu diğerlerinden ayıran özelliklere sahiptir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Mevlit Kandili, Hz. Peygamber’in vefat yıldönümünü anmak ve onun mirasını hatırlamak için kutlanan bir gecedir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Ramazan ve Kurban Bayramları, sadece bir tatil fırsatı olarak görülmeli, manevi değerleri göz ardı edilmelidir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav), Kur’an-ı Kerim’de “en güzel örnek” olarak nitelendirilmiştir.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kandil geceleri ibadetle anlam bulur.",
+    "scrambledSentence": "geceleri anlam bulur. ibadetle Kandil"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Din, geleneklerimizi şekillendiren temel unsurdur.",
+    "scrambledSentence": "şekillendiren Din, unsurdur. geleneklerimizi temel"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Taziye acıları paylaşma zamanıdır.",
+    "scrambledSentence": "paylaşma zamanıdır. Taziye acıları"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Düğünlerde dinin izleri görülür.",
+    "scrambledSentence": "dinin Düğünlerde görülür. izleri"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Muharrem ayının onuncu gününe verilen isim olan \"____\" kelimesi, Arapçadaki \"aşere\" (on) sayısından türemiştir.",
+    "options": [
+      "bayram",
+      "oruç",
+      "aşure",
+      "takvim"
+    ],
+    "correctAnswer": "aşure"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Taziyenin temel anlamı, yakını vefat eden birine başsağlığı dilemenin yanı sıra, acılara karşı ____ ve dirençli olmayı tavsiye etmektir.",
+    "options": [
+      "sabırlı",
+      "üzgün",
+      "metin",
+      "dirayetli"
+    ],
+    "correctAnswer": "sabırlı"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kadir Gecesi, Kur’an-ı Kerim’de bin aydan daha hayırlı olduğu bildirilen ve genellikle ____ ayının sonlarında yer alan mübarek bir gecedir.",
+    "options": [
+      "Şaban",
+      "Recep",
+      "Ramazan",
+      "Muharrem"
+    ],
+    "correctAnswer": "Ramazan"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Dinin onay verdiği, taşınan veya taşınmayan bir maldan Allah rızası için toplumun yararlanması ve mülkiyetinin devredilmemesi durumuna \"____\" denir.",
+    "options": [
+      "hibe",
+      "bağış",
+      "vakıf",
+      "mülk"
+    ],
+    "correctAnswer": "vakıf"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yeni doğmuş bebeklere isim verilirken sağ kulağa ezan, sol kulağa ____ okunması bir gelenektir.",
+    "options": [
+      "tekbir",
+      "salavat",
+      "kamet",
+      "dua"
+    ],
+    "correctAnswer": "kamet"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Aşağıdakilerden hangisi genellikle mevlit okutma gelenekleri arasında yer almaz?",
+    "options": [
+      "Asker uğurlama",
+      "Sünnet törenleri",
+      "Kandil geceleri",
+      "Arkadaş doğum günü partisi"
+    ],
+    "correctAnswer": "Arkadaş doğum günü partisi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İslam’da paylaşma ve yardımlaşmayı teşvik eden zekât ve kurban dışında kalan, gizliliği esas alan bir ibadet türü aşağıdakilerden hangisidir?",
+    "options": [
+      "Hac",
+      "Namaz",
+      "Sadaka",
+      "Oruç"
+    ],
+    "correctAnswer": "Sadaka"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Bir bebek görüldüğünde iyi dilekleri ifade etmek amacıyla sıkça kullanılan dinî motifli söz hangisidir?",
+    "options": [
+      "Elhamdülillah",
+      "Estağfurullah",
+      "Maşallah",
+      "Bismillah"
+    ],
+    "correctAnswer": "Maşallah"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"Kandil Geceleri\" isminin ortaya çıkmasında Osmanlı padişahlarından II. Selim döneminde minarelerde yapılan hangi uygulama etkili olmuştur?",
+    "options": [
+      "Vaaz verilmesi",
+      "Kandiller yakılması",
+      "Ezan okunması",
+      "Mevlit okutulması"
+    ],
+    "correctAnswer": "Kandiller yakılması"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Ahzab Suresi'nde geçen ve Hz. Muhammed’in (sav) aile fertleri için kullanılan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Ashab",
+      "Ensar",
+      "Ehlibeyt",
+      "Muhacir"
+    ],
+    "correctAnswer": "Ehlibeyt"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Bir vakfın kurucusu tarafından düzenlenerek vakfın işleyişiyle ilgili bilgileri içeren resmî belgeye ne ad verilir?",
+    "options": [
+      "Berat",
+      "Ferman",
+      "Vakfiye",
+      "Sened"
+    ],
+    "correctAnswer": "Vakfiye"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Sadaka taşı geleneği, İslam'ın hangi prensibini en güzel şekilde yansıtan uygulamalardan biridir?",
+    "options": [
+      "Varlık gösterişi",
+      "Toplumsal ayrımcılık",
+      "Yardımlaşmada gizliliği ve alanın onurunu korumayı",
+      "Veren ile alanı yüzleştirmeyi"
+    ],
+    "correctAnswer": "Yardımlaşmada gizliliği ve alanın onurunu korumayı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Toplumun uzun sürede oluşturup benimsediği yazılı olmayan kurallara ne ad verilir?",
+    "options": [
+      "Kanun",
+      "Yönetmelik",
+      "Örf ve âdetler",
+      "Tüzük"
+    ],
+    "correctAnswer": "Örf ve âdetler"
+  }
+]

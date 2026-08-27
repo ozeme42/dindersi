@@ -1,0 +1,253 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Edebiyatımızda Dinin İzleri konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Edebiyatımızda Dinin İzleri ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "5️⃣ Kültürümüzdeki Dinî Motifler çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Din, Tevhit, Münacat kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Din</li><li>Tevhit</li><li>Münacat</li><li>Edebiyat</li><li>İstiklal Marşı</li><li>Süleyman Çelebi</li><li>Mevlit</li><li>Naat</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Edebiyatımızda Dinin İzleri - Önemli Bilgiler (1)",
+    "content": "<ul><li>Din, bir toplumun kültür ve değerlerini ifade etme aracı olan dili ve edebiyatı derinden etkilemiştir.</li><li>Edebî metinlerde ve halk deyişlerinde 'Allah, peygamber, cennet, cehennem' gibi birçok dinî kavram yer alır ve bu durum Türkçeyi zenginleştirir.</li><li>Din, edebiyatımıza tevhit, münacat, naat ve mevlit gibi yeni türler kazandırmıştır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Edebiyatımızda Dinin İzleri - Önemli Bilgiler (2)",
+    "content": "<ul><li>Tevhit, Allah'ın varlığını ve birliğini anlatan; münacat, Allah'a dua etmek amacıyla yazılan; mevlit, Hz. Muhammed'in doğumunu ve hayatından kesitleri; naat ise Hz. Peygamber'i öven şiirlerdir.</li><li>Süleyman Çelebi'nin 'Vesiletü'n-Necat'ı (Mevlit) ve Hoca Ahmet Yesevi, Yunus Emre, Mevlana gibi şahsiyetlerin eserleri dinî edebiyatımızın önemli örneklerindendir.</li><li>İstiklal Marşı gibi önemli eserlerde bile 'Hakk'a tapan millet', 'şüheda', 'mabed' gibi dinî ögeler bulunmaktadır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Edebiyatımızda Dinin İzleri - Önemli Bilgiler (3)",
+    "content": "<ul><li>Dinî motifler, öykü, roman, deneme, şiir gibi yazılı edebiyat türlerinin yanı sıra atasözü, deyim, masal ve destan gibi sözlü edebiyat ürünlerinde de sıkça görülür.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Münacat",
+        "definition": "Allah'a dua şiirleri"
+      },
+      {
+        "concept": "Mevlit",
+        "definition": "Peygamberin doğumunu anlatan eser"
+      },
+      {
+        "concept": "Tevhit",
+        "definition": "Allah'ın birliğini anlatan eser"
+      },
+      {
+        "concept": "Naat",
+        "definition": "Peygamberi öven şiirler"
+      },
+      {
+        "concept": "Edebiyat",
+        "definition": "Duygu ve düşüncelerin ifadesi sanatıdır."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Münacat",
+        "definition": "Allah'a dua şiirleri"
+      },
+      {
+        "term": "Mevlit",
+        "definition": "Peygamberin doğumunu anlatan eser"
+      },
+      {
+        "term": "Tevhit",
+        "definition": "Allah'ın birliğini anlatan eser"
+      },
+      {
+        "term": "Naat",
+        "definition": "Peygamberi öven şiirler"
+      },
+      {
+        "term": "Edebiyat",
+        "definition": "Duygu ve düşüncelerin ifadesi sanatıdır."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Din",
+        "scrambledWord": "İDN",
+        "definition": "İpucu: Bu kelime \"Din\""
+      },
+      {
+        "correctAnswer": "Tevhit",
+        "scrambledWord": "ETHTİV",
+        "definition": "İpucu: Bu kelime \"Tevhit\""
+      },
+      {
+        "correctAnswer": "Münacat",
+        "scrambledWord": "ÜATCANM",
+        "definition": "İpucu: Bu kelime \"Münacat\""
+      },
+      {
+        "correctAnswer": "Edebiyat",
+        "scrambledWord": "YİADETBE",
+        "definition": "İpucu: Bu kelime \"Edebiyat\""
+      },
+      {
+        "correctAnswer": "İstiklal Marşı",
+        "scrambledWord": "ALSIŞMRLİKİAT ",
+        "definition": "İpucu: Bu kelime \"İstiklal Marşı\""
+      },
+      {
+        "correctAnswer": "Süleyman Çelebi",
+        "scrambledWord": "SYİEEBLNÇÜLEAM ",
+        "definition": "İpucu: Bu kelime \"Süleyman Çelebi\""
+      },
+      {
+        "correctAnswer": "Mevlit",
+        "scrambledWord": "TELVMİ",
+        "definition": "İpucu: Bu kelime \"Mevlit\""
+      },
+      {
+        "correctAnswer": "Naat",
+        "scrambledWord": "ANAT",
+        "definition": "İpucu: Bu kelime \"Naat\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Halk edebiyatında din izleri çoktur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Yunus Emre, Hoca Yesevi önemlidir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Tevhit, naat önemli türlerdir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Atasözleri, deyimler dini içerir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Mehmet Akif, Arif Nihat örneklerdir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Edebiyat dini kavramları taşır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Mevlit, Süleyman Çelebi ile ünlüdür.",
+        "isTrue": true
+      },
+      {
+        "statement": "Din, edebiyatımızı derinden etkilemiştir.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Halk edebiyatında din izleri çoktur.",
+    "scrambledSentence": "izleri edebiyatında din Halk çoktur."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Yunus Emre, Hoca Yesevi önemlidir.",
+    "scrambledSentence": "Yesevi Yunus Hoca önemlidir. Emre,"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Tevhit, naat önemli türlerdir.",
+    "scrambledSentence": "naat önemli Tevhit, türlerdir."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Atasözleri, deyimler dini içerir.",
+    "scrambledSentence": "dini içerir. deyimler Atasözleri,"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"Allah'a dua şiirleri\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Mevlit",
+      "Tevhit",
+      "Edebiyat",
+      "Münacat"
+    ],
+    "correctAnswer": "Münacat"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"Peygamberin doğumunu anlatan eser\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Mevlit",
+      "Naat",
+      "Edebiyat",
+      "Münacat"
+    ],
+    "correctAnswer": "Mevlit"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"Allah'ın birliğini anlatan eser\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Naat",
+      "Mevlit",
+      "Münacat",
+      "Tevhit"
+    ],
+    "correctAnswer": "Tevhit"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"Peygamberi öven şiirler\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Naat",
+      "Tevhit",
+      "Mevlit",
+      "Edebiyat"
+    ],
+    "correctAnswer": "Naat"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"Duygu ve düşüncelerin ifadesi sanatıdır.\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Edebiyat",
+      "Münacat",
+      "Naat",
+      "Tevhit"
+    ],
+    "correctAnswer": "Edebiyat"
+  }
+]

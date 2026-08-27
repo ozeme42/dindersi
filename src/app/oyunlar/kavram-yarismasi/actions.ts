@@ -31,45 +31,52 @@ export async function getConceptQuizAction(
 ): Promise<{ questions: ConceptQuizQuestion[] | null; error?: string }> {
     noStore();
     try {
-        let itemsForTopic: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
+        let itemsForTopic = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
 
-        // Sadece 'definition' tipindeki verileri al
-        const allDefinitions = itemsForTopic.filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
-            item.type === 'definition' && !!item.content?.term && !!item.content?.definition
-        );
-        
-        const allTermsFromDefinitions = [...new Set(allDefinitions.map(item => item.content.term))];
+        const pairs: { term: string; definition: string }[] = [];
+        const fallbackTerms = ['İman', 'İslam', 'Ahlak', 'İbadet', 'Tevhit', 'Nübüvvet', 'Kuran', 'Sünnet', 'Adalet', 'Merhamet', 'Sabır', 'Şükür', 'İhlas', 'Takva', 'Furkan'];
 
-        if (allDefinitions.length < 1) {
-            return { error: "Bu konu için oynanabilir tanım ('definition') verisi bulunamadı.", questions: null };
+        for (const item of itemsForTopic || []) {
+            if ('type' in item) {
+                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && (item as any).content?.definition) {
+                    const t = String((item as any).content.term).trim();
+                    const d = String((item as any).content.definition).trim();
+                    if (t.length >= 2 && t.length <= 35) pairs.push({ term: t, definition: d });
+                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
+                    const t = String((item as any).correctAnswer).trim();
+                    const d = String((item as any).text || (item as any).question).trim();
+                    if (t.length >= 2 && t.length <= 35) pairs.push({ term: t, definition: d });
+                }
+            }
         }
-        if (allTermsFromDefinitions.length < 4) {
-            return { error: "Bu oyun için en az 4 farklı kavram/tanım çifti gereklidir.", questions: null };
+
+        if (pairs.length < 1) {
+            return { error: "Bu konu için oynanabilir tanım veya soru verisi bulunamadı.", questions: null };
         }
+
+        const allTermsFromDefinitions = [...new Set([...pairs.map(p => p.term), ...fallbackTerms])];
         
         const gameQuestions: ConceptQuizQuestion[] = [];
 
-        for (const item of allDefinitions) {
-            const correctAnswer = item.content.term;
-            const definition = item.content.definition;
+        for (const item of pairs) {
+            const correctAnswer = item.term;
+            const definition = item.definition;
 
-            // Çeldiricileri, doğru cevap dışındaki diğer tanımların terimlerinden seç
-            const distractors = allTermsFromDefinitions
-                .filter(term => term !== correctAnswer)
+            let distractors = allTermsFromDefinitions
+                .filter(term => term.toLocaleLowerCase('tr-TR') !== correctAnswer.toLocaleLowerCase('tr-TR'))
                 .sort(() => 0.5 - Math.random())
-                .slice(0, 3); // 3 çeldirici al
+                .slice(0, 3);
 
-            // Eğer yeterli çeldirici yoksa bu soruyu atla
-            if (distractors.length < 3) { 
-                continue; 
+            while (distractors.length < 3) {
+                distractors.push(['İhlas', 'Takva', 'Furkan'][distractors.length]);
             }
-            
+
             const options = [correctAnswer, ...distractors].sort(() => 0.5 - Math.random());
-            
+
             gameQuestions.push({
-                definition,
-                options,
-                correctAnswer,
+                definition: definition,
+                options: options,
+                correctAnswer: correctAnswer
             });
         }
         

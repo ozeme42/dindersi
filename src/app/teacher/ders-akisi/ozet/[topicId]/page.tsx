@@ -95,7 +95,63 @@ function OzetPageContent() {
                 setNotes(topicData.writingContent?.notes || []);
 
             } else {
-                 setError('Konu bulunamadı.');
+                // Fallback: Load from static curriculum JSON files
+                let title = 'Ders Özeti';
+                try {
+                    const mRes = await fetch('/curriculum/manifest.json');
+                    if (mRes.ok) {
+                        const manifest = await mRes.json();
+                        for (const g of manifest.classGroups || []) {
+                            for (const c of g.courses || []) {
+                                for (const u of c.units || []) {
+                                    for (const t of u.topics || []) {
+                                        if (t.id === topicId) { title = t.title; break; }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (mErr) {}
+
+                let staticNotes: string[] = [];
+                let staticDefs: ActivityItem[] = [];
+
+                try {
+                    const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
+                    if (yRes.ok) {
+                        const yData = await yRes.json();
+                        staticNotes = yData.notes || [];
+                        if (Array.isArray(yData.conceptDefinitions)) {
+                            staticDefs = yData.conceptDefinitions.map((cd: any, idx: number) => ({
+                                id: `static-def-${idx}`,
+                                type: 'definition' as const,
+                                content: { term: cd.concept, definition: cd.definition },
+                                topicId,
+                                courseId,
+                                unitId,
+                            }));
+                        }
+                    }
+                } catch (yErr) {}
+
+                if (staticDefs.length === 0) {
+                    try {
+                        const aRes = await fetch(`/curriculum/activities/${topicId}.json`);
+                        if (aRes.ok) {
+                            const aData = await aRes.json();
+                            staticDefs = aData.filter((it: any) => it.type === 'definition');
+                        }
+                    } catch (aErr) {}
+                }
+
+                if (staticNotes.length > 0 || staticDefs.length > 0 || title !== 'Ders Özeti') {
+                    setTopic({ id: topicId, title, courseId, unitId, writingContent: { notes: staticNotes } } as Topic);
+                    setDefinitions(staticDefs);
+                    setOriginalDefinitionIds(new Set(staticDefs.map(d => d.id)));
+                    setNotes(staticNotes);
+                } else {
+                    setError('Konu bulunamadı.');
+                }
             }
         } catch (e: any) {
             setError('İçerik alınırken bir hata oluştu.');

@@ -53,9 +53,10 @@ function EditProfileForm({ user, classes, schools, onSave, onCancel, isSaving }:
     useEffect(() => {
         if (user.class) {
             const parts = user.class.split(' - ');
-            const className = parts[0];
-            const branchName = parts[1] || '';
-            const userClass = classes.find(c => c.name === className);
+            const className = parts[0]?.trim() || '';
+            const branchName = parts[1]?.trim() || '';
+            const gradeMatch = user.class.match(/\d+/)?.[0];
+            const userClass = classes.find(c => c.name === className || (gradeMatch && c.name === gradeMatch) || (gradeMatch && c.name.includes(gradeMatch)));
             if (userClass) {
                 setSelectedClassId(userClass.id);
                 setSelectedBranch(branchName);

@@ -34,37 +34,54 @@ export async function getHitTheTargetAction(
 ): Promise<{ data: HitTheTargetRound[] | null; error?: string }> {
     noStore();
     try {
-        const allItems: ActivityItem[] = await getStaticQuestionsForGame({
+        const allItems = await getStaticQuestionsForGame({
             courseId,
             unitId,
             topicId,
-            dataType: 'activities'
+            dataType: 'all'
         });
 
-        const allDefinitions = allItems
-             .filter(item => 
-                item.type === 'definition' &&
-                item.content &&
-                item.content.term && 
-                item.content.definition &&
-                item.content.term.trim().length > 2 &&
-                !item.content.term.includes(' ')
-            );
+        const pairs: { term: string; definition: string }[] = [];
+        const fallbackTerms = ['İman', 'İslam', 'Ahlak', 'İbadet', 'Tevhit', 'Nübüvvet', 'Kuran', 'Sünnet', 'Adalet', 'Merhamet', 'Sabır', 'Şükür', 'İhlas', 'Takva', 'Furkan'];
 
-        if (allDefinitions.length < 5) {
-            return { error: "Hedefi Vur oynamak için bu konuda en az 5 adet uygun tanım (tek kelimelik kavramlar) bulunmalıdır.", data: null };
+        for (const item of allItems || []) {
+            if ('type' in item) {
+                if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
+                    const t = String((item as any).content.term).trim();
+                    const d = String((item as any).content.definition).trim();
+                    if (t.length >= 2 && t.length <= 30) {
+                        pairs.push({ term: t, definition: d });
+                    }
+                } else if (item.type === 'concept' && (item as any).content?.term && (item as any).content?.definition) {
+                    const t = String((item as any).content.term).trim();
+                    const d = String((item as any).content.definition).trim();
+                    if (t.length >= 2 && t.length <= 30) {
+                        pairs.push({ term: t, definition: d });
+                    }
+                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
+                    const t = String((item as any).correctAnswer).trim();
+                    const d = String((item as any).text || (item as any).question).trim();
+                    if (t.length >= 2 && t.length <= 30) {
+                        pairs.push({ term: t, definition: d });
+                    }
+                }
+            }
+        }
+
+        if (pairs.length < 2) {
+            return { error: "Hedefi Vur oynamak için bu konuda en az 2 adet uygun kavram/tanım bulunmalıdır.", data: null };
         }
         
-        const shuffled = [...allDefinitions].sort(() => 0.5 - Math.random());
+        const allTargetWords = [...new Set([...pairs.map(p => p.term), ...fallbackTerms])];
+        const shuffled = [...pairs].sort(() => 0.5 - Math.random());
         const rounds: HitTheTargetRound[] = [];
 
         for (const targetDef of shuffled) {
-            const targetWord = targetDef.content.term!;
-            const definition = targetDef.content.definition!;
+            const targetWord = targetDef.term;
+            const definition = targetDef.definition;
             
-            const otherWords = allDefinitions
-                .filter(d => d.content.term !== targetWord)
-                .map(d => d.content.term!);
+            const otherWords = allTargetWords
+                .filter(w => w.toLocaleLowerCase('tr-TR') !== targetWord.toLocaleLowerCase('tr-TR'));
             
             const shuffledOthers = otherWords.sort(() => 0.5 - Math.random());
             const decoys = shuffledOthers.slice(0, 4);
@@ -78,7 +95,7 @@ export async function getHitTheTargetAction(
             });
         }
         
-        const finalRounds = rounds.slice(0, 10); // Limit to 10 rounds per game
+        const finalRounds = rounds.slice(0, 10);
 
         return { data: JSON.parse(JSON.stringify(finalRounds)) };
 

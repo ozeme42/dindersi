@@ -42,6 +42,16 @@ export async function saveStaticData(dataType: string, id: string, data: any): P
         await ensureDirExists(filePath);
         const fileContent = JSON.stringify(data, null, 2); // Pretty-print
         await fs.writeFile(filePath, fileContent, 'utf-8');
+
+        // Keep all activity folders in sync
+        if (dataType === 'activity-items' || dataType === 'activities' || dataType === 'activityItems') {
+            for (const folder of ['activities', 'activityItems', 'activity-items']) {
+                const altPath = path.join(process.cwd(), 'public', 'curriculum', folder, `${id}.json`);
+                await ensureDirExists(altPath);
+                await fs.writeFile(altPath, fileContent, 'utf-8');
+            }
+        }
+
         return { success: true };
     } catch (error: any) {
         return { success: false, error: 'Dosya yazılırken hata oluştu.' };

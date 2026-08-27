@@ -31,25 +31,36 @@ export async function getBilBakalimAction(
              return { questions: [], error: "Bu konu için etkinlik verisi bulunamadı." };
         }
         
-        // Correctly filter for definition items from the potentially mixed pool
-        const validDefinitions = allItems.filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
-                item.type === 'definition' && !!item.content?.term && !!item.content?.definition
-            );
-        
-        if (validDefinitions.length < 3) {
-            return { questions: [], error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır." };
+        const validDefinitions: Partial<Question>[] = [];
+
+        for (const item of allItems || []) {
+            if ('type' in item) {
+                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && (item as any).content?.definition) {
+                    validDefinitions.push({
+                        id: item.id || `def-${Math.random()}`,
+                        text: (item as any).content.definition.trim(),
+                        type: 'Bil Bakalım',
+                        correctAnswer: (item as any).content.term.trim(),
+                        difficulty: 'Orta',
+                    });
+                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
+                    validDefinitions.push({
+                        id: item.id || `mcq-${Math.random()}`,
+                        text: ((item as any).text || (item as any).question).trim(),
+                        type: 'Bil Bakalım',
+                        correctAnswer: String((item as any).correctAnswer).trim(),
+                        difficulty: 'Orta',
+                    });
+                }
+            }
         }
         
-        // Map the valid items to the game question format
-        const gameQuestions: Partial<Question>[] = validDefinitions.map((item) => ({
-            id: item.id,
-            text: item.content.definition,
-            type: 'Bil Bakalım',
-            correctAnswer: item.content.term,
-            difficulty: 'Orta', // or derive from item if available
-        }));
+        if (validDefinitions.length < 2) {
+            return { questions: [], error: "Bil Bakalım oynamak için bu konuda en az 2 farklı tanım veya soru bulunmalıdır." };
+        }
 
-        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
+        const shuffled = [...validDefinitions].sort(() => 0.5 - Math.random());
+        return { questions: JSON.parse(JSON.stringify(shuffled.slice(0, 20))) };
 
     } catch (error: any) {
         console.error("Error getting Bil Bakalım questions:", error);

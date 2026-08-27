@@ -145,15 +145,50 @@ export async function getExamCreationData(): Promise<any> {
     noStore();
     try {
         const [classesSnap, coursesSnap, studentsSnap, examQuestionsSnap] = await Promise.all([
-            getDocs(query(collection(db, 'classes'), orderBy("createdAt", "asc"))),
-            getDocs(query(collection(db, 'courses'))),
+            getDocs(collection(db, 'classes')),
+            getDocs(collection(db, 'courses')),
             getDocs(query(collection(db, 'users'), where("role", "==", "student"))),
-            getDocs(query(collection(db, 'questions')))
+            getDocs(collection(db, 'questions'))
         ]);
         
-        const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
-        const courses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        let classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+        let students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as any));
+        let courses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+
+        classes.sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'tr', { numeric: true }));
+
+        // Fallback to manifest if classes or courses are empty in Firestore
+        if (classes.length === 0 || courses.length === 0) {
+            try {
+                const fs = await import('fs/promises');
+                const path = await import('path');
+                const mPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+                const manifestContent = await fs.readFile(mPath, 'utf-8');
+                const manifest = JSON.parse(manifestContent);
+                
+                if (classes.length === 0) {
+                    classes = (manifest.classGroups || []).map((cg: any) => ({
+                        id: cg.name,
+                        name: `${cg.name}. Sınıf`,
+                        branches: ['A', 'B', 'C', 'D']
+                    }));
+                }
+
+                if (courses.length === 0) {
+                    courses = [];
+                    for (const cg of manifest.classGroups || []) {
+                        for (const c of cg.courses || []) {
+                            courses.push({
+                                id: c.id,
+                                title: `${c.title} (${cg.name}. Sınıf)`,
+                                classId: cg.name,
+                                units: c.units || []
+                            });
+                        }
+                    }
+                }
+            } catch (mErr) {}
+        }
         
         return JSON.parse(JSON.stringify({ 
             classes, 

@@ -1,0 +1,373 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Musikimizde Dinin İzleri konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Musikimizde Dinin İzleri ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "5️⃣ Kültürümüzdeki Dinî Motifler çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Musiki, İlahi, Ezan kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Musiki</li><li>İlahi</li><li>Ezan</li><li>Kamet</li><li>Bilal Habeşi</li><li>Salavat</li><li>Tekbir</li><li>Sela</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Musikimizde Dinin İzleri - Önemli Bilgiler (1)",
+    "content": "<ul><li>Müzik (musiki), duyguları ifade eden, dinlendiren ve eğlendiren bir sanattır.</li><li>İslam dinine göre ölçülü eğlenceye izin verilir ve bazı durumlarda huzur için müzikten faydalanılır.</li><li>Ezan, sela, kamet, salavat ve ilahi, dinî musikimizin önemli türleridir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Musikimizde Dinin İzleri - Önemli Bilgiler (2)",
+    "content": "<ul><li>Ezan, namaz vakitlerini Müslümanlara duyurmak için günde beş vakit camilerden okunur.</li><li>Sela, önemli dinî günleri ve cenaze namazlarını haber vermek için okunan özel bir duadır.</li><li>İlahiler ve salavatlar, Allah'ı övmek ve Hz. Peygamber'e dua etmek amacıyla bestelenmiş dinî şiirlerdir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Musikimizde Dinin İzleri - Önemli Bilgiler (3)",
+    "content": "<ul><li>Kur'an-ı Kerim, farklı makamlarda okunabilen, musiki yönü olan kutsal bir kitaptır.</li><li>İslam dini, Türk müziğini ve edebiyatını etkileyerek eserlerde dinî kavramların kullanılmasına yol açmıştır.</li><li>Buhurizade Mustafa Itri gibi büyük besteciler, dinî musikimize önemli katkılar sağlamıştır.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Musiki",
+        "definition": "Kulağa hoş gelen sesler bütünüdür."
+      },
+      {
+        "concept": "Bilal Habeşi",
+        "definition": "İlk defa ezan okuyan kişidir."
+      },
+      {
+        "concept": "Salavat",
+        "definition": "Peygambere saygı ve dua içeren sözlerdir."
+      },
+      {
+        "concept": "İlahi",
+        "definition": "Allah'ı öven, bestelenmiş dini şiirlerdir."
+      },
+      {
+        "concept": "Ezan",
+        "definition": "Namaz vaktini duyuran kutsal çağrıdır."
+      },
+      {
+        "concept": "Kamet",
+        "definition": "Farz namazdan hemen önce yapılan özel çağrıdır."
+      },
+      {
+        "concept": "Tekbir",
+        "definition": "Allah'ın yüceliğini ifade eden sözlerdir."
+      },
+      {
+        "concept": "Sela",
+        "definition": "Cenaze namazı öncesi okunan duadır."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Musiki",
+        "definition": "Kulağa hoş gelen sesler bütünüdür."
+      },
+      {
+        "term": "Bilal Habeşi",
+        "definition": "İlk defa ezan okuyan kişidir."
+      },
+      {
+        "term": "Salavat",
+        "definition": "Peygambere saygı ve dua içeren sözlerdir."
+      },
+      {
+        "term": "İlahi",
+        "definition": "Allah'ı öven, bestelenmiş dini şiirlerdir."
+      },
+      {
+        "term": "Ezan",
+        "definition": "Namaz vaktini duyuran kutsal çağrıdır."
+      },
+      {
+        "term": "Kamet",
+        "definition": "Farz namazdan hemen önce yapılan özel çağrıdır."
+      },
+      {
+        "term": "Tekbir",
+        "definition": "Allah'ın yüceliğini ifade eden sözlerdir."
+      },
+      {
+        "term": "Sela",
+        "definition": "Cenaze namazı öncesi okunan duadır."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Musiki",
+        "scrambledWord": "İKUSİM",
+        "definition": "İpucu: Bu kelime \"Musiki\""
+      },
+      {
+        "correctAnswer": "İlahi",
+        "scrambledWord": "HAİLİ",
+        "definition": "İpucu: Bu kelime \"İlahi\""
+      },
+      {
+        "correctAnswer": "Ezan",
+        "scrambledWord": "EAZN",
+        "definition": "İpucu: Bu kelime \"Ezan\""
+      },
+      {
+        "correctAnswer": "Kamet",
+        "scrambledWord": "TKMAE",
+        "definition": "İpucu: Bu kelime \"Kamet\""
+      },
+      {
+        "correctAnswer": "Bilal Habeşi",
+        "scrambledWord": " LAEİBHŞLİAB",
+        "definition": "İpucu: Bu kelime \"Bilal Habeşi\""
+      },
+      {
+        "correctAnswer": "Salavat",
+        "scrambledWord": "ALASATV",
+        "definition": "İpucu: Bu kelime \"Salavat\""
+      },
+      {
+        "correctAnswer": "Tekbir",
+        "scrambledWord": "ETKİBR",
+        "definition": "İpucu: Bu kelime \"Tekbir\""
+      },
+      {
+        "correctAnswer": "Sela",
+        "scrambledWord": "AELS",
+        "definition": "İpucu: Bu kelime \"Sela\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Buhurizade Mustafa Itri Efendi, sadece ressam olarak tanınmış bir sanatçıdır.",
+        "isTrue": false
+      },
+      {
+        "statement": "\"Kad kâmeti's salâh\" ifadesi, \"Namaz vakti bitmiştir\" anlamına gelir.",
+        "isTrue": false
+      },
+      {
+        "statement": "İslam, insanların ölçülü bir şekilde eğlenmelerini tamamen yasaklar.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kültürümüzde her vaktin ezanı farklı makamlarda okunmaktadır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Musiki, insanları eğlendirme ve rahatlatma özelliğine sahiptir.",
+        "isTrue": true
+      },
+      {
+        "statement": "İlahiler dinî düşünce ve duyguları içerir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Sela, sadece bayram namazlarından önce okunur.",
+        "isTrue": false
+      },
+      {
+        "statement": "İslam, Türk sanat ve Türk halk müziğini dini ifadelerle etkilememiştir.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kur'an-ı Kerim makamlarla okunur.",
+    "scrambledSentence": "Kur'an-ı Kerim okunur. makamlarla"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Ezan, namaz vaktini haber verir.",
+    "scrambledSentence": "haber Ezan, vaktini namaz verir."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İlahiler, Allah'a dua içerir.",
+    "scrambledSentence": "içerir. İlahiler, Allah'a dua"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kültürümüzde dini eserler çoktur.",
+    "scrambledSentence": "Kültürümüzde çoktur. eserler dini"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Musikimizdeki \"Allah, Hak, Yaradan, cennet, kader\" gibi dinî ifadeler, İslam'ın Türk sanat ve ___ müziğini etkilediğini gösterir.",
+    "options": [
+      "Rock",
+      "Pop",
+      "Caz",
+      "Halk"
+    ],
+    "correctAnswer": "Halk"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Müslümanlara dinî açıdan önemli gün ve geceleri hatırlatmak, kılınacak cenaze namazını haber vermek amacıyla minarelerde okunan duaya ___ denir.",
+    "options": [
+      "Ezan",
+      "Kamet",
+      "Sela",
+      "İlahi"
+    ],
+    "correctAnswer": "Sela"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Namaz Müslümanlar için en önemli ibadetlerden biridir. Namaza çağrı ___ ile yapılır.",
+    "options": [
+      "Kamet",
+      "İlahi",
+      "Sela",
+      "Ezan"
+    ],
+    "correctAnswer": "Ezan"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kültürümüzde her vaktin ezanı farklı ___ okunur.",
+    "options": [
+      "Yöntemlerle",
+      "Hızlarda",
+      "Makamlarda",
+      "Dillerde"
+    ],
+    "correctAnswer": "Makamlarda"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Mevlitlerde, önemli gün ve gecelerde Itri’nin bestesiyle hep bir ağızdan ___ okunur.",
+    "options": [
+      "Ezan",
+      "Sela",
+      "Tekbir",
+      "Kamet"
+    ],
+    "correctAnswer": "Tekbir"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Minarelerden okunan sela neyi haber verir?",
+    "options": [
+      "Bayramı",
+      "Cenaze namazını",
+      "Düğünü",
+      "Toplantıyı"
+    ],
+    "correctAnswer": "Cenaze namazını"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Türk musikisinin önemli bestekârlarından biri olan ve Tekbir’i bestelediği bilinen sanatçı kimdir?",
+    "options": [
+      "Dede Efendi",
+      "Itri",
+      "Hacı Arif Bey",
+      "Zekai Dede Efendi"
+    ],
+    "correctAnswer": "Itri"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İslam inancına göre insanları huzur ve mutluluğa götürmeyi amaçlayan din, bazı durumlarda hangi sanattan yararlanır?",
+    "options": [
+      "Resim",
+      "Heykel",
+      "Musiki",
+      "Mimari"
+    ],
+    "correctAnswer": "Musiki"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Ezanı ilk kez okuyan sahâbe kimdir?",
+    "options": [
+      "Hz. Ebubekir",
+      "Hz. Ömer",
+      "Bilal Habeşi",
+      "Hz. Osman"
+    ],
+    "correctAnswer": "Bilal Habeşi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Farz namazların hemen öncesinde okunan ve \"Namaz başlamak üzeredir.\" anlamına gelen ifadeyi içeren dini çağrıya ne denir?",
+    "options": [
+      "Ezan",
+      "Sela",
+      "Kamet",
+      "Tekbir"
+    ],
+    "correctAnswer": "Kamet"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Mevlitlerde ve önemli gün ve gecelerde Itri’nin bestesiyle hep bir ağızdan okunan dinî ifade nedir?",
+    "options": [
+      "Ezan",
+      "Kamet",
+      "Tekbir",
+      "Salavat"
+    ],
+    "correctAnswer": "Tekbir"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Geleneksel Türk musikisinde ezanın her vaktinin farklı makamlarda okunması neyi gösterir?",
+    "options": [
+      "Dinî ritüellerin basitliğini",
+      "Müslümanların makam bilgisi eksikliğini",
+      "Türk musikisinin zenginliğini ve dine olan etkileşimini",
+      "Ezanın sadece tek bir makamda okunması gerektiğini"
+    ],
+    "correctAnswer": "Türk musikisinin zenginliğini ve dine olan etkileşimini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Musiki eserlerde sıkça kullanılan \"Allah, Hak, Yaradan, cennet, kader\" gibi ifadeler, musikimizin hangi kültürle etkileşimini kanıtlar?",
+    "options": [
+      "Batı kültürü",
+      "Uzak Doğu kültürü",
+      "İslam kültürü",
+      "Antik Yunan kültürü"
+    ],
+    "correctAnswer": "İslam kültürü"
+  }
+]

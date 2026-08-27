@@ -1,0 +1,433 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Dinin Mimarimize Etkisi konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Dinin Mimarimize Etkisi ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Mimarimizde Dinî Motifler çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Aşevi (İmarethane), Sebil, Külliye kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Aşevi (İmarethane)</li><li>Sebil</li><li>Külliye</li><li>Şadırvan</li><li>Mabet</li><li>Cami</li><li>Hüsnühat</li><li>Minyatür</li><li>Mimari</li><li>Medrese</li><li>Kültür</li><li>Tezhip</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Dinin Mimarimize Etkisi - Önemli Bilgiler (1)",
+    "content": "<ul><li>Mimari, bir toplumun kültürel, sosyal, estetik ve dinî bakış açısını yansıtan bir sanattır.</li><li>İslam mimarisinde camiler, kubbeleri, minareleri, hat, tezhip ve çini sanatlarıyla dinî inancı en belirgin şekilde yansıtır.</li><li>Din ve inanç, kültürün oluşmasında ve şekillenmesinde önemli bir rol oynar; kültür ise dinin somut bir yansımasıdır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Dinin Mimarimize Etkisi - Önemli Bilgiler (2)",
+    "content": "<ul><li>Müslümanlar, ibadet, eğitim, yardımlaşma gibi ihtiyaçlara yönelik cami, medrese, aşevi, şifahane, kervansaray gibi birçok mimari eser inşa etmişlerdir.</li><li>İslam şehirleri genellikle cami merkezli bir yapıya sahiptir; diğer yapılar caminin etrafında konumlanmıştır.</li><li>Namaz, zekât ve ilim öğrenme gibi dinî ibadetler, şadırvan, çeşme, hamam, aşevi ve kütüphane gibi farklı mimari yapıların ortaya çıkmasına neden olmuştur.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Dinin Mimarimize Etkisi - Önemli Bilgiler (3)",
+    "content": "<ul><li>İslam mimarisinde hüsnühat (kaligrafi), tezhip (süsleme), minyatür ve çini gibi sanatlar yapıların süslemesinde yaygın olarak kullanılır.</li><li>Mimari eserlerin yapı malzemeleri (taş veya ahşap), inşa edildiği bölgenin iklim ve coğrafi koşullarına göre değişiklik gösterebilir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Aşevi (İmarethane)",
+        "definition": "Yoksullara ve ihtiyaç sahiplerine yemek dağıtılan yer."
+      },
+      {
+        "concept": "Şadırvan",
+        "definition": "Camilerde abdest almak için yapılan su tesisi."
+      },
+      {
+        "concept": "Mabet",
+        "definition": "İbadet etmek amacıyla inşa edilen yapı, ibadethane."
+      },
+      {
+        "concept": "Cami",
+        "definition": "İslam şehir mimarisinin merkezinde yer alan ibadet yeri."
+      },
+      {
+        "concept": "Sebil",
+        "definition": "İnsanların su ihtiyacını karşılamak için yapılan hayır yapısı."
+      },
+      {
+        "concept": "Minyatür",
+        "definition": "Derinliği olmayan, ince işlenmiş küçük resim sanatı."
+      },
+      {
+        "concept": "Mimari",
+        "definition": "Toplumun ihtiyaçlarını, kültürünü ve inancını yansıtan yapı sanatı."
+      },
+      {
+        "concept": "Medrese",
+        "definition": "Dinî ve pozitif ilimlerin öğretildiği eğitim kurumu."
+      },
+      {
+        "concept": "Kültür",
+        "definition": "Nesilden nesile aktarılan maddi ve manevi değerlerin tamamı."
+      },
+      {
+        "concept": "Tezhip",
+        "definition": "Kitap ve tabloları altın ve boyayla süsleme sanatı."
+      },
+      {
+        "concept": "Çini",
+        "definition": "Toprağın pişirilip desenlerle süslenmesiyle oluşan seramik sanatı."
+      },
+      {
+        "concept": "Kervansaray",
+        "definition": "Yolcuların konaklaması ve ihtiyaçlarını gidermesi için yapılan yapı."
+      },
+      {
+        "concept": "Hüsnühat",
+        "definition": "Arap harfleriyle icra edilen güzel yazı yazma sanatı."
+      },
+      {
+        "concept": "Külliye",
+        "definition": "Merkezinde cami olan, çevresinde sosyal yapıların bulunduğu topluluk."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Aşevi (İmarethane)",
+        "definition": "Yoksullara ve ihtiyaç sahiplerine yemek dağıtılan yer."
+      },
+      {
+        "term": "Şadırvan",
+        "definition": "Camilerde abdest almak için yapılan su tesisi."
+      },
+      {
+        "term": "Mabet",
+        "definition": "İbadet etmek amacıyla inşa edilen yapı, ibadethane."
+      },
+      {
+        "term": "Cami",
+        "definition": "İslam şehir mimarisinin merkezinde yer alan ibadet yeri."
+      },
+      {
+        "term": "Sebil",
+        "definition": "İnsanların su ihtiyacını karşılamak için yapılan hayır yapısı."
+      },
+      {
+        "term": "Minyatür",
+        "definition": "Derinliği olmayan, ince işlenmiş küçük resim sanatı."
+      },
+      {
+        "term": "Mimari",
+        "definition": "Toplumun ihtiyaçlarını, kültürünü ve inancını yansıtan yapı sanatı."
+      },
+      {
+        "term": "Medrese",
+        "definition": "Dinî ve pozitif ilimlerin öğretildiği eğitim kurumu."
+      },
+      {
+        "term": "Kültür",
+        "definition": "Nesilden nesile aktarılan maddi ve manevi değerlerin tamamı."
+      },
+      {
+        "term": "Tezhip",
+        "definition": "Kitap ve tabloları altın ve boyayla süsleme sanatı."
+      },
+      {
+        "term": "Çini",
+        "definition": "Toprağın pişirilip desenlerle süslenmesiyle oluşan seramik sanatı."
+      },
+      {
+        "term": "Kervansaray",
+        "definition": "Yolcuların konaklaması ve ihtiyaçlarını gidermesi için yapılan yapı."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Sebil",
+        "scrambledWord": "EBLİS",
+        "definition": "İpucu: Bu kelime \"Sebil\""
+      },
+      {
+        "correctAnswer": "Külliye",
+        "scrambledWord": "İÜYLELK",
+        "definition": "İpucu: Bu kelime \"Külliye\""
+      },
+      {
+        "correctAnswer": "Şadırvan",
+        "scrambledWord": "DVANRAIŞ",
+        "definition": "İpucu: Bu kelime \"Şadırvan\""
+      },
+      {
+        "correctAnswer": "Mabet",
+        "scrambledWord": "MTBAE",
+        "definition": "İpucu: Bu kelime \"Mabet\""
+      },
+      {
+        "correctAnswer": "Cami",
+        "scrambledWord": "AİMC",
+        "definition": "İpucu: Bu kelime \"Cami\""
+      },
+      {
+        "correctAnswer": "Hüsnühat",
+        "scrambledWord": "ÜNSTHHAÜ",
+        "definition": "İpucu: Bu kelime \"Hüsnühat\""
+      },
+      {
+        "correctAnswer": "Minyatür",
+        "scrambledWord": "ARTÜİMYN",
+        "definition": "İpucu: Bu kelime \"Minyatür\""
+      },
+      {
+        "correctAnswer": "Mimari",
+        "scrambledWord": "İİMMRA",
+        "definition": "İpucu: Bu kelime \"Mimari\""
+      },
+      {
+        "correctAnswer": "Medrese",
+        "scrambledWord": "EEMDRSE",
+        "definition": "İpucu: Bu kelime \"Medrese\""
+      },
+      {
+        "correctAnswer": "Kültür",
+        "scrambledWord": "ÜÜLTRK",
+        "definition": "İpucu: Bu kelime \"Kültür\""
+      },
+      {
+        "correctAnswer": "Tezhip",
+        "scrambledWord": "ETZPHİ",
+        "definition": "İpucu: Bu kelime \"Tezhip\""
+      },
+      {
+        "correctAnswer": "Kervansaray",
+        "scrambledWord": "VYAAEKRNRSA",
+        "definition": "İpucu: Bu kelime \"Kervansaray\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Camilerin iç bölümleri genellikle hat sanatıyla yazılmış ayetlerle donatılmıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Din kültürün özü, kültür ise dinin somut yansımasıdır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Çini sanatı, kil toprağının pişirilmesiyle yapılan seramik ve porselenleri geometrik ve çiçek motifleriyle süsleme sanatıdır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Müslümanların yaşadığı şehirlerde ortaya çıkan mimari eserlere bakıldığında, inanç ve ibadetlerin mekân tasarımını ve mimari yapı çeşitliliğini etkilemediği görülür.",
+        "isTrue": false
+      },
+      {
+        "statement": "Mimari, sadece insanın zorunlu ihtiyaçlarını karşılamakla kalmaz, aynı zamanda kültürel, sosyal, estetik ve dinî bakış açısını da yansıtır.",
+        "isTrue": true
+      },
+      {
+        "statement": "İslam coğrafyasındaki mimari eserler, sadece bir yapının inşa edilmesinden ibarettir, duygusal bir anlam taşımaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "İslam mimarisinde cami, sebil, türbe, aşevi, imarethane, şifahane, kervansaray, medrese gibi eserler inşa edilmemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Tezhip sanatı, kitap, levha ve tabloları motiflerle, yaldız ve boya ile bezenmesi sanatıdır.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kültür dinin somut bir yansımasıdır.",
+    "scrambledSentence": "somut dinin yansımasıdır. bir Kültür"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Camiler şehirlerin merkezinde yer alır.",
+    "scrambledSentence": "alır. yer şehirlerin Camiler merkezinde"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Medreseler ilim öğrenilen eğitim yuvalarıdır.",
+    "scrambledSentence": "Medreseler ilim eğitim yuvalarıdır. öğrenilen"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Din ve inanç mimariyi şekillendirir.",
+    "scrambledSentence": "Din şekillendirir. inanç mimariyi ve"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "El emeğiyle küçük resimlerin çizildiği ___ sanatı; iç ve dış mekânları kaplayan porselen malzemelerin en güzel motiflerle işlendiği çini sanatı dinî mimariyle birlikte gelişen sanatlardan bazılarıdır.",
+    "options": [
+      "tezhip",
+      "minyatür",
+      "hüsnühat",
+      "heykel"
+    ],
+    "correctAnswer": "minyatür"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "İslam coğrafyasındaki mimari eserlerin, bir yapının inşa edilmesinden öte bir anlamı vardır. Müslümanların en ince, en yüce ve en güzel duyguları, mimari eserlere sanatkârların ___ somutlaşmıştır.",
+    "options": [
+      "emirleriyle",
+      "dokunuşlarıyla",
+      "sözleriyle",
+      "fikirleriyle"
+    ],
+    "correctAnswer": "dokunuşlarıyla"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kültür; toplumların ortak duygu, düşünce, gelenek ve örfleriyle hayata dair birikimlerinin edebiyat, mimari, resim, oyun ve müzik gibi birçok alanda kalıcı değerlere ___.",
+    "options": [
+      "yok olmasıdır",
+      "dönüşmesidir",
+      "unutulmasıdır",
+      "değişmesidir"
+    ],
+    "correctAnswer": "dönüşmesidir"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Namaz ibadeti sayesinde şehir mimarisinde camiler, mescitler ve ___ ortaya çıkmıştır.",
+    "options": [
+      "hanlar",
+      "hamamlar",
+      "namazgâhlar",
+      "kervansaraylar"
+    ],
+    "correctAnswer": "namazgâhlar"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yapı malzemesi ister taş ister ahşap olsun, mahir mimar ve ustaların elinde taşa ve ahşaba işlenen desenler, motifler ve süslemeler İslam sanatının en ___ örneklerini ortaya koymuştur.",
+    "options": [
+      "sıradan",
+      "çirkin",
+      "güzide",
+      "basit"
+    ],
+    "correctAnswer": "güzide"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İlim öğrenmek ve öğretmek Müslümanlar için ne kadar önemlidir?",
+    "options": [
+      "Önemsiz",
+      "İbadet kadar",
+      "Az önemli",
+      "Hiç önemli değil"
+    ],
+    "correctAnswer": "İbadet kadar"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İnsanın biriktirdiği maddi ve manevi değerlerin tamamına kültür denir. Bu tanım, kültürün hangi yönünü vurgular?",
+    "options": [
+      "Sadece maddi varlıkları içerdiğini",
+      "Sadece manevi değerleri içerdiğini",
+      "Hem maddi hem de manevi birikimleri kapsadığını",
+      "Sadece sanat eserlerini içerdiğini"
+    ],
+    "correctAnswer": "Hem maddi hem de manevi birikimleri kapsadığını"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Zekât, sadaka ve infak ibadetleri sayesinde hangi yapılar inşa edilmiştir?",
+    "options": [
+      "Okullar ve kütüphaneler",
+      "Aşevleri, sebiller, yolda kalmışlar için kervansaraylar",
+      "Camiler ve mescitler",
+      "Hamamlar ve şadırvanlar"
+    ],
+    "correctAnswer": "Aşevleri, sebiller, yolda kalmışlar için kervansaraylar"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İslam’ın mimariye etkisi, Müslümanların kültür ve inançlarını, inşa ettikleri eserlere yansıtmasıyla ortaya çıkar. Bunun en belirgin örneği hangi mimaride görülür?",
+    "options": [
+      "Ev mimarisi",
+      "Cami mimarisi",
+      "Köprü mimarisi",
+      "Kale mimarisi"
+    ],
+    "correctAnswer": "Cami mimarisi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Müslümanların yaşadığı şehirlerde ortaya çıkan mimari eserlere bakıldığında, inanç ve ibadetlerin neyi etkilediği görülür?",
+    "options": [
+      "Sadece ekonomik durumu",
+      "Sadece siyasi yapıyı",
+      "Mekân tasarımını ve mimari yapı çeşitliliğini",
+      "Sadece sosyal hiyerarşiyi"
+    ],
+    "correctAnswer": "Mekân tasarımını ve mimari yapı çeşitliliğini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Müslümanlar yaşadıkları coğrafyayı güzelleştirmişlerdir. Bu anlayışa göre şehrin merkezinde ne vardır?",
+    "options": [
+      "Pazar",
+      "Okul",
+      "Cami",
+      "Hükümet binası"
+    ],
+    "correctAnswer": "Cami"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kültür; toplumların ortak duygu, düşünce, gelenek ve örfleriyle hayata dair birikimlerinin edebiyat, mimari, resim, oyun ve müzik gibi birçok alanda kalıcı değerlere dönüşmesidir. Bu tanıma göre kültürün oluşumunda aşağıdakilerden hangisi doğrudan etkili değildir?",
+    "options": [
+      "Ortak duygu",
+      "Gelenek ve örfler",
+      "Bireysel çıkarlar",
+      "Hayata dair birikimler"
+    ],
+    "correctAnswer": "Bireysel çıkarlar"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İslam’da dinin direği hangi ibadettir?",
+    "options": [
+      "Oruç",
+      "Zekât",
+      "Namaz",
+      "Hac"
+    ],
+    "correctAnswer": "Namaz"
+  }
+]

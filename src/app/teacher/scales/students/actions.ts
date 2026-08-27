@@ -95,8 +95,8 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
                     const pluses = statuses.filter(s => s === '+').length;
                     const totalGraded = pluses + statuses.filter(s => s === '-').length;
                     if (totalGraded > 0) {
-                        studentScores[studentId].totalSuccess += (pluses / totalGraded) * 100;
-                        studentScores[studentId].scaleCount += 1;
+                        totalSuccess += (pluses / totalGraded) * 100;
+                        totalScalesCount += 1;
                     }
                 }
             });

@@ -32,23 +32,29 @@ export async function getStudentDetails(studentId: string): Promise<{ data?: Stu
             createdAt: (profileData.createdAt as Timestamp)?.toDate()?.toISOString() || null,
         } as UserProfile;
         
-        // Fetch recent activity
-        const recentActivityQuery = query(
-            collection(db, 'scoreEvents'),
-            where('userId', '==', studentId),
-            orderBy('timestamp', 'desc'),
-            limit(10)
-        );
-        const recentActivitySnapshot = await getDocs(recentActivityQuery);
-        
-        const recentActivity = recentActivitySnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                ...data,
-                id: doc.id,
-                timestamp: (data.timestamp as Timestamp)?.toDate().toISOString(),
-            } as ScoreEvent;
-        });
+        // Fetch recent activity safely
+        let recentActivity: ScoreEvent[] = [];
+        try {
+            const recentActivityQuery = query(
+                collection(db, 'scoreEvents'),
+                where('userId', '==', studentId)
+            );
+            const recentActivitySnapshot = await getDocs(recentActivityQuery);
+            recentActivity = recentActivitySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    ...data,
+                    id: doc.id,
+                    timestamp: (data.timestamp as Timestamp)?.toDate?.() ? (data.timestamp as Timestamp).toDate().toISOString() : (typeof data.timestamp === 'string' ? data.timestamp : null),
+                } as ScoreEvent;
+            }).sort((a, b) => {
+                const tA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+                const tB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+                return tB - tA;
+            }).slice(0, 10);
+        } catch (actErr) {
+            console.warn("Could not fetch recent activity for student:", actErr);
+        }
         
         // Fetch ALL courses to map names and calculate progress against
         const coursesSnapshot = await getDocs(collection(db, "courses"));

@@ -11,32 +11,28 @@ type ScoreUpdate = {
 };
 
 export async function updateMultipleStudentScores(scoreUpdates: ScoreUpdate[]): Promise<{ success: boolean; error?: string }> {
-    if (!scoreUpdates) {
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !scoreUpdates || scoreUpdates.length === 0) {
         return { success: true }; 
     }
 
-    const db = getAdminDb();
-    const batch = db.batch();
-    const scoreEventsRef = collection(db, 'scoreEvents');
+    try {
+        const db = getAdminDb();
+        if (!db) return { success: true };
+        const batch = db.batch();
+        const scoreEventsRef = collection(db, 'scoreEvents');
 
-    scoreUpdates.forEach(update => {
-        // Log the event for every participant, even if their score is 0.
-        // This ensures participation is recorded.
-        const newEventRef = doc(scoreEventsRef);
-        batch.set(newEventRef, {
-            userId: update.userId,
-            points: update.points,
-            timestamp: serverTimestamp(),
-            gameType: update.gameType, 
-            context: update.context || 'Akıllı Tahta Yarışması',
+        scoreUpdates.forEach(update => {
+            if (!update.userId) return;
+            const newEventRef = doc(scoreEventsRef);
+            batch.set(newEventRef, {
+                userId: update.userId,
+                points: update.points || 0,
+                timestamp: serverTimestamp(),
+                gameType: update.gameType, 
+                context: update.context || 'Akıllı Tahta Yarışması',
+            });
         });
 
-        // DO NOT increment the user's main score.
-        // The tournament leaderboard is separate from the all-time leaderboard.
-        // The main score is updated through individual activities and daily quests.
-    });
-
-    try {
         await batch.commit();
         return { success: true };
     } catch (error: any) {

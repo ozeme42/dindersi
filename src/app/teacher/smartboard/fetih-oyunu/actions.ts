@@ -1,63 +1,65 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, limit as firestoreLimit } from "firebase/firestore";
 import type { Question } from "@/lib/types";
+import { getQuestionsFromBank, getStaticGameData } from "@/lib/quiz-actions";
+import { unstable_noStore as noStore } from 'next/cache';
 
-// This is a simplified version for now. 
-// A more robust solution might use getQuestionsFromBank from quiz-actions.
 export async function getFetihGameQuestions(
-    { courseId, unitId, topicId, questionCount }: { courseId?: string; unitId?: string; topicId?: string; questionCount: number }
+    { courseId, unitId, topicId, questionCount = 20 }: { courseId?: string; unitId?: string; topicId?: string; questionCount: number }
 ): Promise<{ questions: Question[], error?: string }> {
+    noStore();
     try {
-        let q: Query = collection(db, "questions");
-        
-        // Apply filters directly
-        if (topicId && topicId !== 'all') {
-            q = query(q, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            q = query(q, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            q = query(q, where("courseId", "==", courseId));
-        } else {
-             // If no specific filters are applied, limit the query to avoid fetching the entire collection
-            q = query(q, firestoreLimit(100)); 
-        }
-        
-        const querySnapshot = await getDocs(q);
-        
-        let allQuestions = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            const question: Question = {
-                id: doc.id,
-                text: data.text || data.statement || '',
-                type: data.type,
-                options: data.options || [],
-                correctAnswer: data.correctAnswer || (data.isTrue ? 'Doğru' : 'Yanlış'),
-                difficulty: data.difficulty || 'Orta',
-                courseId: data.courseId,
-                unitId: data.unitId,
-                topicId: data.topicId,
-                topic: data.topic,
-            };
-            return question;
+        const result = await getQuestionsFromBank({
+            courseId,
+            unitId,
+            topicId,
+            questionTypes: ['mcq', 'tf', 'Çoktan Seçmeli', 'Doğru/Yanlış'],
+            questionCount: Math.max(questionCount, 30)
         });
 
-        if (allQuestions.length < questionCount) {
-            return { error: `Bu kriterlere uygun yeterli soru bulunamadı. Gerekli: ${questionCount}, Bulunan: ${allQuestions.length}.`, questions: [] };
+        let questions = (result.questions || []) as Question[];
+
+        if (questions.length < questionCount) {
+            try {
+                const allItems = await getStaticGameData({ courseId, unitId, topicId });
+                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition);
+                
+                definitions.forEach((dItem, idx) => {
+                    const term = (dItem as any).content.term.trim();
+                    const def = (dItem as any).content.definition.trim();
+                    const isTrue = idx % 2 === 0;
+                    let statement = `${term}, ${def}`;
+                    if (!isTrue && definitions.length > 1) {
+                        const wrongTerm = (definitions[(idx + 1) % definitions.length] as any).content.term.trim();
+                        statement = `${wrongTerm}, ${def}`;
+                    }
+                    if (!questions.some(q => q.text === statement)) {
+                        questions.push({
+                            id: `fetih-gen-${idx}-${Date.now()}`,
+                            type: 'Doğru/Yanlış',
+                            text: statement,
+                            correctAnswer: isTrue ? 'Doğru' : 'Yanlış',
+                            options: ['Doğru', 'Yanlış'],
+                            difficulty: 'Orta',
+                            topicId: topicId || ''
+                        } as any);
+                    }
+                });
+            } catch (fallbackErr) {}
         }
 
-        const shuffled = allQuestions.sort(() => 0.5 - Math.random());
+        if (questions.length < 2) {
+            return { error: `Bu konu için yeterli soru bulunamadı (En az 2 soru gereklidir).`, questions: [] };
+        }
+
+        const shuffled = [...questions].sort(() => 0.5 - Math.random());
         const selectedQuestions = shuffled.slice(0, questionCount);
 
         return { questions: JSON.parse(JSON.stringify(selectedQuestions)) };
 
     } catch (error: any) {
         console.error("Error fetching questions for Fetih Game:", error);
-        if (error.code === 'failed-precondition') {
-            return { error: `Veritabanı indeksi eksik veya oluşturuluyor. Lütfen birkaç dakika sonra tekrar deneyin. Hata: ${error.message}`, questions: [] };
-        }
         return { error: 'Sorular alınırken bir hata oluştu.', questions: [] };
     }
 }

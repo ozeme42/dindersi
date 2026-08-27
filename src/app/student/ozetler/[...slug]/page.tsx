@@ -51,20 +51,50 @@ function OzetDisplayPage() {
                     getDoc(doc(db, 'courses', courseId))
                 ]);
 
-                if (!docSnap.exists()) {
-                    setError("İçerik bulunamadı.");
+                const targetId = topicId || unitId;
+                if (!docSnap.exists() || !docSnap.data()?.htmlContent) {
+                    try {
+                        const ozRes = await fetch(`/curriculum/ozetler/${targetId}.html`);
+                        if (ozRes.ok) {
+                            const htmlContent = await ozRes.text();
+                            let foundTitle = topicId ? 'Konu Özeti' : 'Ünite Özeti';
+                            let courseTitle = courseSnap.exists() ? courseSnap.data()?.title : 'Ders';
+
+                            try {
+                                const mRes = await fetch('/curriculum/manifest.json');
+                                if (mRes.ok) {
+                                    const manifest = await mRes.json();
+                                    for (const g of manifest.classGroups || []) {
+                                        for (const c of g.courses || []) {
+                                            if (c.id === courseId) courseTitle = c.title;
+                                            for (const u of c.units || []) {
+                                                if (u.id === targetId) foundTitle = u.title;
+                                                for (const t of u.topics || []) {
+                                                    if (t.id === targetId) { foundTitle = t.title; break; }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (mErr) {}
+
+                            setContent({
+                                title: foundTitle,
+                                htmlContent,
+                                courseName: courseTitle
+                            });
+                            setIsLoading(false);
+                            return;
+                        }
+                    } catch (ozErr) {}
+
+                    setError("Bu konu için interaktif özet içeriği henüz eklenmemiş.");
                     setIsLoading(false);
                     return;
                 }
 
                 const data = docSnap.data();
                 const courseData = courseSnap.data();
-
-                if (!data.htmlContent) {
-                    setError("Bu konu için interaktif özet içeriği henüz eklenmemiş.");
-                    setIsLoading(false);
-                    return;
-                }
 
                 setContent({ 
                     title: data.title, 

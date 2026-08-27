@@ -1,0 +1,383 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Eş Olarak Peygamberimiz konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Eş Olarak Peygamberimiz ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Aile Hayatında Peygamberimiz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Vefa, Nezaket, Saygı kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Vefa</li><li>Nezaket</li><li>Saygı</li><li>Sevgi</li><li>Hz. Hatice</li><li>Hz. Aişe</li><li>Aile</li><li>Nikah</li><li>Sorumluluk</li><li>Peygamber</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Eş Olarak Peygamberimiz - Önemli Bilgiler (1)",
+    "content": "<ul><li>Peygamberimiz, aile bireyleriyle yakından ilgilenir, onlara zaman ayırırdı.</li><li>Eşleriyle (Hz. Hatice ve Hz. Aişe) sevgi, saygı ve vefa dolu ilişkiler kurdu.</li><li>Ev işlerinde eşine yardımcı olur, kendi ihtiyaçlarını da karşılardı.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Eş Olarak Peygamberimiz - Önemli Bilgiler (2)",
+    "content": "<ul><li>Eşlerinin isteklerini nezaketle karşılar, onlara özel ve güzel sözlerle hitap ederdi.</li><li>Hz. Hatice'ye ilk vahiy anında güvenerek heyecanını paylaştı ve ondan büyük destek gördü.</li><li>\"Sizin en hayırlınız ailesine karşı en hayırlı olanınızdır\" diyerek aileye verilen önemi vurguladı.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Eş Olarak Peygamberimiz - Önemli Bilgiler (3)",
+    "content": "<ul><li>Eşlerin birbirleri üzerindeki haklarına riayet eder, kimseyi ihmal etmezdi.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Hz. Hatice",
+        "definition": "Peygamberimizin ilk eşi"
+      },
+      {
+        "concept": "Nezaket",
+        "definition": "Başkalarına karşı saygılı ve kibar davranma"
+      },
+      {
+        "concept": "Sevgi",
+        "definition": "Birine veya bir şeye karşı duyulan derin ilgi ve bağlılık"
+      },
+      {
+        "concept": "Nikah",
+        "definition": "Evlilik bağı kurma"
+      },
+      {
+        "concept": "Sorumluluk",
+        "definition": "Üstlenilen görevi yerine getirme yükümlülüğü"
+      },
+      {
+        "concept": "Aile",
+        "definition": "Bireylerin sevgi, saygı ve güven temelinde bir araya geldiği topluluk"
+      },
+      {
+        "concept": "Vefa",
+        "definition": "Sevgi ve dostluk bağını sürdürme"
+      },
+      {
+        "concept": "Hz. Aişe",
+        "definition": "Peygamberimizin Hz. Hatice'den sonraki eşi"
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Hz. Hatice",
+        "definition": "Peygamberimizin ilk eşi"
+      },
+      {
+        "term": "Nezaket",
+        "definition": "Başkalarına karşı saygılı ve kibar davranma"
+      },
+      {
+        "term": "Sevgi",
+        "definition": "Birine veya bir şeye karşı duyulan derin ilgi ve bağlılık"
+      },
+      {
+        "term": "Nikah",
+        "definition": "Evlilik bağı kurma"
+      },
+      {
+        "term": "Sorumluluk",
+        "definition": "Üstlenilen görevi yerine getirme yükümlülüğü"
+      },
+      {
+        "term": "Aile",
+        "definition": "Bireylerin sevgi, saygı ve güven temelinde bir araya geldiği topluluk"
+      },
+      {
+        "term": "Vefa",
+        "definition": "Sevgi ve dostluk bağını sürdürme"
+      },
+      {
+        "term": "Hz. Aişe",
+        "definition": "Peygamberimizin Hz. Hatice'den sonraki eşi"
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Vefa",
+        "scrambledWord": "EFAV",
+        "definition": "İpucu: Bu kelime \"Vefa\""
+      },
+      {
+        "correctAnswer": "Nezaket",
+        "scrambledWord": "AZNKTEE",
+        "definition": "İpucu: Bu kelime \"Nezaket\""
+      },
+      {
+        "correctAnswer": "Saygı",
+        "scrambledWord": "GISAY",
+        "definition": "İpucu: Bu kelime \"Saygı\""
+      },
+      {
+        "correctAnswer": "Sevgi",
+        "scrambledWord": "EVSGİ",
+        "definition": "İpucu: Bu kelime \"Sevgi\""
+      },
+      {
+        "correctAnswer": "Hz. Hatice",
+        "scrambledWord": "TH AEHİ.ZC",
+        "definition": "İpucu: Bu kelime \"Hz. Hatice\""
+      },
+      {
+        "correctAnswer": "Hz. Aişe",
+        "scrambledWord": "EİŞA.HZ ",
+        "definition": "İpucu: Bu kelime \"Hz. Aişe\""
+      },
+      {
+        "correctAnswer": "Aile",
+        "scrambledWord": "İAEL",
+        "definition": "İpucu: Bu kelime \"Aile\""
+      },
+      {
+        "correctAnswer": "Nikah",
+        "scrambledWord": "HAİNK",
+        "definition": "İpucu: Bu kelime \"Nikah\""
+      },
+      {
+        "correctAnswer": "Sorumluluk",
+        "scrambledWord": "RUULOLSUKM",
+        "definition": "İpucu: Bu kelime \"Sorumluluk\""
+      },
+      {
+        "correctAnswer": "Peygamber",
+        "scrambledWord": "EMRBEAGPY",
+        "definition": "İpucu: Bu kelime \"Peygamber\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Hz. Aişe, Peygamberimizin ev işleriyle ilgilenmediğini söylemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Sağlıklı bir aileye sahip olmak, birey ve toplumun huzuru açısından büyük önem taşımaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, 'Sizin en hayırlınız ailesine karşı en hayırlı olanınızdır.' hadisiyle aileye verilen önemi vurgulamıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz, Hz. Hatice'nin vefatından sonra Hz. Aişe ile evlenmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz, eşinden gece ibadeti için izin istemezdi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Aişe, Hz. Ebu Bekir'in kızıdır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz, eşinin haklarını gözetmezdi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Ehlibeyt, Peygamberimizin sünnetinin yaşatılması ve sonraki nesillere aktarılmasında önemli bir görev üstlenmiştir.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Hz. Peygamber, aile bireylerine zaman ayırır ve onlarla ilgilenirdi.",
+    "scrambledSentence": "ayırır ve Hz. Peygamber, ilgilenirdi. onlarla bireylerine aile zaman"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz, Hz. Hatice'ye olan sevgisini ve vefasını her zaman dile getirmiştir.",
+    "scrambledSentence": "ve Hz. Hatice'ye dile olan getirmiştir. Peygamberimiz, sevgisini her zaman vefasını"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz, Hz. Hatice'nin vefatından sonra bile onun sevdikleriyle ilişkisini sürdürmüştür.",
+    "scrambledSentence": "bile onun ilişkisini sevdikleriyle Hz. Hatice'nin sonra Peygamberimiz, vefatından sürdürmüştür."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz, ev işlerinde ailesine yardım ederdi.",
+    "scrambledSentence": "yardım ailesine işlerinde Peygamberimiz, ev ederdi."
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Gerdanlığın fidye olarak gönderilmesi, Hz. Zeyneb’in Ebulas bin Rebi’ye duyduğu ___ bir işaretiydi.",
+    "options": [
+      "nefretin",
+      "korkunun",
+      "sevginin",
+      "endişenin"
+    ],
+    "correctAnswer": "sevginin"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimizin aile hayatı da Kur’an-ı Kerim’de belirtilen ___ göre şekillenmiştir.",
+    "options": [
+      "geleneklere",
+      "kurallara",
+      "adetlere",
+      "isteklere"
+    ],
+    "correctAnswer": "kurallara"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Sağlıklı bir aileye sahip olmak, birey ve toplumun ___ açısından büyük önem taşır.",
+    "options": [
+      "ekonomik durumu",
+      "sosyal statüsü",
+      "huzuru",
+      "eğitim düzeyi"
+    ],
+    "correctAnswer": "huzuru"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimizin Ehlibeyt’inden ___ suresinin 33. ayetinde bahsedilmektedir.",
+    "options": [
+      "Bakara",
+      "Ahzab",
+      "Yasin",
+      "Fatiha"
+    ],
+    "correctAnswer": "Ahzab"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Aile, aynı zamanda toplumsal hayatın ___.",
+    "options": [
+      "yüküdür",
+      "temelidir",
+      "sorunudur",
+      "engeli"
+    ],
+    "correctAnswer": "temelidir"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin Hz. Hatice'nin arkadaşlarına hediye göndermesi ve ikramda bulunması, onun hangi ahlaki özelliğini gösterir?",
+    "options": [
+      "Cömertliğini",
+      "Vefasını",
+      "Misafirperverliğini",
+      "Sabrını"
+    ],
+    "correctAnswer": "Vefasını"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz kaç yaşında Hz. Hatice ile evlenmiştir?",
+    "options": [
+      "20",
+      "25",
+      "30",
+      "35"
+    ],
+    "correctAnswer": "25"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Hatice, Peygamberimize ilk vahiyden sonra nasıl teselli etmiştir?",
+    "options": [
+      "Korkmamasını söyleyerek",
+      "Allah'ın onu utandırmayacağını söyleyerek",
+      "Hemen Mekke'den ayrılmasını söyleyerek",
+      "Peygamberliğini inkar ederek"
+    ],
+    "correctAnswer": "Allah'ın onu utandırmayacağını söyleyerek"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz ilk vahyin heyecanını ilk olarak kiminle paylaşmıştır?",
+    "options": [
+      "Hz. Ebu Bekir",
+      "Hz. Ali",
+      "Hz. Hatice",
+      "Hz. Zeyd"
+    ],
+    "correctAnswer": "Hz. Hatice"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Amr bin As (ra) bir gün Peygamberimize 'Sana insanların en sevimlisi kimdir?' diye sorduğunda Peygamberimiz ne cevap vermiştir?",
+    "options": [
+      "Fatıma",
+      "Ali",
+      "Aişe",
+      "Hatice"
+    ],
+    "correctAnswer": "Aişe"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Hatice'nin Peygamberimize ilk vahiyden sonra tereddüt etmeden iman etmesi ve onu teselli etmesi, onun hangi yönünü gösterir?",
+    "options": [
+      "Sadece duygusallığını",
+      "Sadece eşine olan bağlılığını",
+      "Derin imanını ve eşine olan güvenini",
+      "Sadece cesaretini"
+    ],
+    "correctAnswer": "Derin imanını ve eşine olan güvenini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin eşi Hz. Aişe'ye 'Uveyş (Ayşecik)' ve 'Hümeyra' gibi hitaplarla seslenmesi, onun eşine karşı hangi tutumunu yansıtır?",
+    "options": [
+      "Otoriter",
+      "Sevecen ve samimi",
+      "Kayıtsız",
+      "Eleştirel"
+    ],
+    "correctAnswer": "Sevecen ve samimi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin eşinin haklarını gözetmesi ve ona zaman ayırması (örneğin kılıç kalkan gösterisini birlikte izlemesi), hangi ilkeyi destekler?",
+    "options": [
+      "Eşlerin birbirinden bağımsız olması",
+      "Eşler arasında ortak ilgi alanları oluşturma",
+      "Eşlerin birbirine saygı duyması ve haklarını gözetmesi",
+      "Sadece erkeklerin haklarının önemli olması"
+    ],
+    "correctAnswer": "Eşlerin birbirine saygı duyması ve haklarını gözetmesi"
+  }
+]

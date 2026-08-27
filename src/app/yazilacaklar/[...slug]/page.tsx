@@ -70,14 +70,32 @@ export function YazilacaklarDisplayPage() {
             }
 
             // İçerik verisini statik dosyadan çek
-            const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
-            if (!res.ok) {
-                throw new Error('Bu konu için yazılacak notlar bulunamadı.');
-            }
-            const data: YazilacaklarContent = await res.json();
+            let data: YazilacaklarContent = { notes: [], conceptDefinitions: [] };
+            try {
+                const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
+                if (res.ok) {
+                    data = await res.json();
+                }
+            } catch (e) {}
 
             if ((data.notes?.length || 0) === 0 && (data.conceptDefinitions?.length || 0) === 0) {
-                 throw new Error('Yazılacak içerik boş.');
+                try {
+                    const aRes = await fetch(`/curriculum/activities/${topicId}.json`);
+                    if (aRes.ok) {
+                        const aData = await aRes.json();
+                        const defs = aData.filter((a: any) => a.type === 'definition' && a.content?.term && a.content?.definition)
+                                          .map((a: any) => ({ concept: a.content.term, definition: a.content.definition }));
+                        const notes = aData.filter((a: any) => a.type === 'sentence' && a.content?.text)
+                                           .map((a: any) => a.content.text);
+                        if (defs.length > 0 || notes.length > 0) {
+                            data = { conceptDefinitions: defs, notes };
+                        }
+                    }
+                } catch (aErr) {}
+            }
+
+            if ((data.notes?.length || 0) === 0 && (data.conceptDefinitions?.length || 0) === 0) {
+                 throw new Error('Bu konu için yazılacak notlar bulunamadı.');
             }
             
             setContent(data);

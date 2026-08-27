@@ -29,38 +29,44 @@ export async function getAdamAsmacaAction(
 ): Promise<{ data: HangmanData[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
         
-        if (allItems.length === 0) {
+        if (!allItems || allItems.length === 0) {
             return { error: "Bu konu için oynanabilir veri bulunamadı.", data: null };
         }
 
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
+        const validWords: HangmanData[] = [];
+        const seenWords = new Set<string>();
 
-        const suitableItems = allItems
-            .filter(item => 
-                item.type === 'definition' &&
-                item.content &&
-                item.content.term && 
-                item.content.definition &&
-                item.content.term.trim().length >= 4 && 
-                item.content.term.trim().length <= 14 && 
-                !item.content.term.includes(' ') && 
-                turkishAlphabetRegex.test(item.content.term.trim())
-            );
-        
-        if (suitableItems.length < 3) {
-            return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı (4-14 harf, boşluksuz, en az 3 adet).", data: null };
+        for (const item of allItems || []) {
+            if ('type' in item) {
+                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term) {
+                    const w = String((item as any).content.term).trim();
+                    const hint = String((item as any).content.definition || (item as any).content.text || `${w} kavramı`).trim();
+                    const upper = w.toLocaleUpperCase('tr-TR');
+                    if (w.length >= 3 && w.length <= 16 && !w.includes(' ') && turkishAlphabetRegex.test(w) && !seenWords.has(upper)) {
+                        seenWords.add(upper);
+                        validWords.push({ word: upper, hint });
+                    }
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
+                    const w = String((item as any).correctAnswer).trim();
+                    const hint = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${w} kavramı`).trim();
+                    const upper = w.toLocaleUpperCase('tr-TR');
+                    if (w.length >= 3 && w.length <= 16 && !w.includes(' ') && turkishAlphabetRegex.test(w) && !seenWords.has(upper)) {
+                        seenWords.add(upper);
+                        validWords.push({ word: upper, hint });
+                    }
+                }
+            }
         }
         
-        const shuffled = [...suitableItems].sort(() => 0.5 - Math.random());
+        if (validWords.length < 2) {
+            return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı (3-16 harf, boşluksuz, en az 2 adet).", data: null };
+        }
         
-        const gameData: HangmanData[] = shuffled.map(item => ({
-            word: item.content.term!.trim().toLocaleUpperCase('tr-TR'),
-            hint: item.content.definition!,
-        }));
-
-        return { data: JSON.parse(JSON.stringify(gameData)) };
+        const shuffled = [...validWords].sort(() => 0.5 - Math.random());
+        return { data: JSON.parse(JSON.stringify(shuffled.slice(0, 15))) };
         
     } catch (error: any) {
         console.error("Server Action Error (getAdamAsmacaAction):", error);

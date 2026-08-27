@@ -1,0 +1,360 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Hayatında Şükür konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Hayatında Şükür ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Ünite: Rehberim Peygamberim çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Zikir, İbadet, Hamd kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Zikir</li><li>İbadet</li><li>Hamd</li><li>Minnettarlık</li><li>Şükür</li><li>Şükür secdesi</li><li>Namaz</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Hayatında Şükür - Önemli Bilgiler (1)",
+    "content": "<ul><li>Kendini başkalarıyla kıyaslamak mutsuzluk getirir; sahip olduklarını takdir etmek mutluluğun anahtarıdır.</li><li>Allah her insanı özel yaratmıştır; bu yüzden başkalarıyla kıyaslanmamalı, kendi yeteneklerimize odaklanmalıyız.</li><li>Hamt, bütün övgülerin Allah'a ait olması; şükür ise Allah'tan veya insanlardan gelen nimet ve iyiliğin kıymetini bilmektir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Hayatında Şükür - Önemli Bilgiler (2)",
+    "content": "<ul><li>Peygamber Efendimiz (sav), hayatındaki tüm zorluklara rağmen şikâyet etmemiş, sabrederek Allah'a hamdetmeyi ve şükretmeyi tercih etmiştir.</li><li>Şükretmek, insanı daha mutlu, huzurlu ve olumlu bir bakış açısına sahip yapar; Allah şükredenlerin nimetlerini artırır.</li><li>Hz. Peygamber, \"Elhamdülillah\" diyerek, namaz kılarak ve şükür secdesi yaparak şükrünü dile getirmiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Hayatında Şükür - Önemli Bilgiler (3)",
+    "content": "<ul><li>\"İnsanlara teşekkür etmeyen, Allah'a şükredemez.\" hadisi, hem Allah'a hem de insanlara teşekkür etmenin önemini gösterir.</li><li>Teşekkür sadece sözle değil, davranışlarla da (hediye vermek, hayırla anmak) gösterilmelidir.</li><li>Allah'ı zikretmek şükür bilincini geliştirir; namaz ise şükrün en güzel ifadesidir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Zikir",
+        "definition": "Bir şeyi anmak ve hatırlamak demektir."
+      },
+      {
+        "concept": "Hamd",
+        "definition": "Sevgi ve tazimle Allah'a yönelen tüm övgü türleridir."
+      },
+      {
+        "concept": "İbadet",
+        "definition": "Allah'a kulluk amacıyla yapılan davranışlardır."
+      },
+      {
+        "concept": "Minnettarlık",
+        "definition": "Başkasından görülen iyiliğe karşı kendini borçlu hissetme duygusudur."
+      },
+      {
+        "concept": "Şükür",
+        "definition": "Bir iyiliğe karşı söz ve davranışla hoşnutluk göstermektir."
+      },
+      {
+        "concept": "Namaz",
+        "definition": "Müslümanların belirli vakitlerde Allah'a yönelerek yaptığı ibadettir."
+      },
+      {
+        "concept": "Şükür secdesi",
+        "definition": "Bir nimete teşekkür etmek için yapılan özel bir secdedir."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Zikir",
+        "definition": "Bir şeyi anmak ve hatırlamak demektir."
+      },
+      {
+        "term": "Hamd",
+        "definition": "Sevgi ve tazimle Allah'a yönelen tüm övgü türleridir."
+      },
+      {
+        "term": "İbadet",
+        "definition": "Allah'a kulluk amacıyla yapılan davranışlardır."
+      },
+      {
+        "term": "Minnettarlık",
+        "definition": "Başkasından görülen iyiliğe karşı kendini borçlu hissetme duygusudur."
+      },
+      {
+        "term": "Şükür",
+        "definition": "Bir iyiliğe karşı söz ve davranışla hoşnutluk göstermektir."
+      },
+      {
+        "term": "Namaz",
+        "definition": "Müslümanların belirli vakitlerde Allah'a yönelerek yaptığı ibadettir."
+      },
+      {
+        "term": "Şükür secdesi",
+        "definition": "Bir nimete teşekkür etmek için yapılan özel bir secdedir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Zikir",
+        "scrambledWord": "ZRİİK",
+        "definition": "İpucu: Bu kelime \"Zikir\""
+      },
+      {
+        "correctAnswer": "İbadet",
+        "scrambledWord": "BEİDAT",
+        "definition": "İpucu: Bu kelime \"İbadet\""
+      },
+      {
+        "correctAnswer": "Hamd",
+        "scrambledWord": "MDHA",
+        "definition": "İpucu: Bu kelime \"Hamd\""
+      },
+      {
+        "correctAnswer": "Minnettarlık",
+        "scrambledWord": "TITAMLEİNRNK",
+        "definition": "İpucu: Bu kelime \"Minnettarlık\""
+      },
+      {
+        "correctAnswer": "Şükür",
+        "scrambledWord": "KÜÜŞR",
+        "definition": "İpucu: Bu kelime \"Şükür\""
+      },
+      {
+        "correctAnswer": "Şükür secdesi",
+        "scrambledWord": "EŞKİSÜCÜRDS E",
+        "definition": "İpucu: Bu kelime \"Şükür secdesi\""
+      },
+      {
+        "correctAnswer": "Namaz",
+        "scrambledWord": "MNAZA",
+        "definition": "İpucu: Bu kelime \"Namaz\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Bir nimete ulaşan kişinin ilk olarak Allah'a şükretmesi, ardından insanlara teşekkür etmesi Peygamberimizin tavsiye ettiği bir davranıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Rızık nimetine karşı şükretmek sadece dua etmekle sınırlı olup, israftan kaçınmak gibi davranışsal göstergeleri içermez.",
+        "isTrue": false
+      },
+      {
+        "statement": "Namaz kılmak, Hz. Peygamber'in şükrünü ifade etme yollarından biri olup, onun dualarında da şükreden bir kul olmayı dilediği belirtilmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Şükür secdesi, mutlu olunan her durumda yapılabilen ve Allah'a minnettarlığı ifade eden bir ibadet şeklidir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Mümin, sevinecek olsa şükreder, başına bir bela gelecek olsa sabreder ve bu her iki durum da kendisi için hayırlıdır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Peygamber, Allah'ın kendisine verdiği nimetlerin farkında olarak yaşamış ve kendisini başkalarıyla kıyaslamamıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Bakara Suresi 152. ayette geçen \"Artık siz beni anın ki ben de sizi anayım. Bana şükredin bana nankörlük etmeyin!\" ifadesi, Allah'ı anmanın şükre, şükrün ise nankörlükten kaçınmaya vesile olduğunu belirtir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Allah (cc), her insanı özel olarak yaratmıştır ve kendimizi başkalarıyla kıyaslamamızı ister.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Şükür, nimetin kıymetini bilmektir.",
+    "scrambledSentence": "bilmektir. nimetin kıymetini Şükür,"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Namaz, şükrün en güzel ifadesidir.",
+    "scrambledSentence": "en Namaz, güzel ifadesidir. şükrün"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Şükretmek, özgüveni ve mutluluğu artırır.",
+    "scrambledSentence": "artırır. mutluluğu Şükretmek, özgüveni ve"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz zorluklarda bile hamdetti.",
+    "scrambledSentence": "bile Peygamberimiz zorluklarda hamdetti."
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Peygamber ve Muhacirler, Medineli Ensar'ın kendilerine gösterdiği iyiliği her fırsatta övgü ile anarak onlara _________ etmişlerdir.",
+    "options": [
+      "hizmet",
+      "minnet",
+      "teşekkür",
+      "vefa"
+    ],
+    "correctAnswer": "teşekkür"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Bir hadiste Muaz'a yapılan tavsiyede, her namazın ardından \"Allah’ım seni __________, sana şükretmek ve sana güzelce ibadet etmek için bana yardım et.\" duası yer almaktadır. Bu, ibadetin zikir ve şükürle iç içe olduğunu gösterir.",
+    "options": [
+      "tefekkür etmek",
+      "zikretmek",
+      "düşünmek",
+      "anımsamak"
+    ],
+    "correctAnswer": "zikretmek"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "\"İnsanlara __________ etmeyen, Allah'a şükredemez.\" hadisi, toplumsal ilişkilerde minnettarlığın önemini vurgular.",
+    "options": [
+      "yardım",
+      "teşekkür",
+      "itaat",
+      "ikram"
+    ],
+    "correctAnswer": "teşekkür"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kur'an-ı Kerim'de \"Şüphesiz biz insanı en güzel biçimde yaratmışızdır.\" buyrularak her insanın Allah katında özel ve __________ olduğu vurgulanır.",
+    "options": [
+      "zayıf",
+      "sınırlı",
+      "değerli",
+      "kusurlu"
+    ],
+    "correctAnswer": "değerli"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Şükür, görülen iyiliğe karşı söz ve __________ ile hoşnutluk gösterme ve yapılan iyiliğin kıymetini bilmedir.",
+    "options": [
+      "niyet",
+      "düşünce",
+      "davranış",
+      "temenni"
+    ],
+    "correctAnswer": "davranış"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"İnsanlara teşekkür etmeyen, Allah'a şükredemez.\" hadisi, aşağıdakilerden hangisinin önemini vurgulamaktadır?",
+    "options": [
+      "İnsanlara sürekli hediye vermenin",
+      "Toplumsal ilişkilerde minnettarlığın",
+      "Sadece Allah'a şükretmenin yeterli olduğunun",
+      "Başkalarına iyilik yapma zorunluluğunun"
+    ],
+    "correctAnswer": "Toplumsal ilişkilerde minnettarlığın"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Peygamber'in uzun süre namaz kılıp ayakları şiştiğinde Hz. Aişe'nin \"Yüce Allah senin bütün günahlarını bağışladığı hâlde niçin bu kadar çok namaz kılıyorsun?\" sorusuna verdiği cevap, aşağıdakilerden hangisinin bir göstergesidir?",
+    "options": [
+      "Peygamberimizin günahlarından korktuğunun",
+      "Şükreden bir kul olma arzusunun",
+      "İnsanlara örnek olma çabasının",
+      "İbadetlerde aşırıya kaçtığının"
+    ],
+    "correctAnswer": "Şükreden bir kul olma arzusunun"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Aşağıdaki davranışlardan hangisi, Allah'ın verdiği rızık nimetine karşı şükrü ifade etme yollarından biridir?",
+    "options": [
+      "Sürekli sadaka vermek",
+      "Sadece ihtiyaç kadar tüketmek ve israftan kaçınmak",
+      "Başkalarıyla rızkı kıyaslamak",
+      "Sadece sofrada dua etmek"
+    ],
+    "correctAnswer": "Sadece ihtiyaç kadar tüketmek ve israftan kaçınmak"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Şükretmek, insan fıtratında nasıl bir etki oluşturur?",
+    "options": [
+      "İnsanı bencil yapar",
+      "İnsanı daha mutsuz eder",
+      "İnsanı daha mutlu ve huzurlu yapar",
+      "İnsanı sürekli beklenti içine sokar"
+    ],
+    "correctAnswer": "İnsanı daha mutlu ve huzurlu yapar"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur'an-ı Kerim'de insanla ilgili olarak \"Şüphesiz biz insanı en güzel biçimde yaratmışızdır.\" ayeti hangi konuya vurgu yapar?",
+    "options": [
+      "İnsanın doğa üzerindeki üstünlüğü",
+      "İnsanın fiziksel güzelliği",
+      "Her insanın Allah katında özel ve değerli olduğu",
+      "İnsanın sorumluluklarının çokluğu"
+    ],
+    "correctAnswer": "Her insanın Allah katında özel ve değerli olduğu"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Nisa Suresi 147. ayette \"Eğer siz iman eder ve şükrederseniz Allah size niçin azap etsin? Allah şükre karşılık veren ve her şeyi bilendir.\" buyrulmaktadır. Bu ayetten çıkarılabilecek en kapsamlı sonuç aşağıdakilerden hangisidir?",
+    "options": [
+      "Allah, yalnızca şükreden kullarına azap etmez.",
+      "İman ve şükür, Allah'ın azabından korunmanın temel yollarındandır.",
+      "Şükür, imandan daha önemlidir.",
+      "İman eden herkes mutlaka şükretmelidir."
+    ],
+    "correctAnswer": "İman ve şükür, Allah'ın azabından korunmanın temel yollarındandır."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Peygamber'in \"Sana her namazın ardından şu duayı söylemeyi terk etmemeni tavsiye ediyorum: Allah'ım seni zikretmek, sana şükretmek ve sana güzelce ibadet etmek için bana yardım et.\" duası, zikir, şükür ve ibadet arasındaki ilişkiyi nasıl özetler?",
+    "options": [
+      "Zikir ibadete yol açar, ibadet şükrü getirir.",
+      "Zikir şükre, şükür ibadete götürür ve bu üçü birbirini tamamlar.",
+      "İbadet zikir ve şükürden daha önemlidir.",
+      "Şükür sadece dualarla ifade edilir."
+    ],
+    "correctAnswer": "Zikir şükre, şükür ibadete götürür ve bu üçü birbirini tamamlar."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Fatiha suresinde geçen \"Hamd, âlemlerin Rabbi olan Allah’a mahsustur.\" ayetinden hareketle \"hamt\" kavramının \"şükür\"den farkı nedir?",
+    "options": [
+      "Hamt, sadece sözlü olarak ifade edilirken, şükür davranışlarla da gösterilir.",
+      "Hamt, sadece Allah'a mahsus bir övgüyü içerirken, şükür hem Allah'a hem insanlara karşı olabilir.",
+      "Şükür, hamt kavramından daha kapsamlıdır.",
+      "İkisi arasında hiçbir fark yoktur, eş anlamlıdırlar."
+    ],
+    "correctAnswer": "Hamt, sadece Allah'a mahsus bir övgüyü içerirken, şükür hem Allah'a hem insanlara karşı olabilir."
+  }
+]

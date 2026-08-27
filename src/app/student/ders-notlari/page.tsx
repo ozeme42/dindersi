@@ -65,15 +65,17 @@ function DersNotlariPage() {
             if (loading) return;
             setIsLoadingData(true);
             try {
-                let studentClassStr = '7'; // Fallback
+                let gradeStr = '5'; // Fallback
                 if (user?.class) {
-                    studentClassStr = user.class.split(' - ')[0].trim();
+                    const gradeMatch = user.class.match(/\d+/);
+                    if (gradeMatch) gradeStr = gradeMatch[0];
+                    else gradeStr = user.class.split(' - ')[0].trim();
                 }
 
                 // Statik veriyi çek
                 const { classGroups, error } = await getCurriculumForSelection('yazilacaklar', true);
                 if (!error && classGroups) {
-                    const myClassGroup = classGroups.find(g => String(g.name).includes(studentClassStr)) || classGroups[0];
+                    const myClassGroup = classGroups.find(g => String(g.name) === gradeStr || String(g.name).includes(gradeStr)) || classGroups[0];
                     if (myClassGroup && myClassGroup.courses.length > 0) {
                         setCourses(myClassGroup.courses);
                         setActiveCourseId(myClassGroup.courses[0].id);

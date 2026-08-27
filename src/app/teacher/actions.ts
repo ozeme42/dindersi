@@ -72,13 +72,15 @@ type LeaderboardEntry = UserProfile & { score: number };
 export async function getTopStudents(count: number = 5): Promise<LeaderboardEntry[]> {
     noStore();
     try {
-        const usersQuery = query(collection(db, 'users'), where('role', '==', 'student'), orderBy('score', 'desc'), limit(count));
+        const usersQuery = query(collection(db, 'users'), where('role', '==', 'student'));
         const usersSnapshot = await getDocs(usersQuery);
-        return usersSnapshot.docs.map(doc => ({
+        const students = usersSnapshot.docs.map(doc => ({
             ...doc.data() as UserProfile,
             uid: doc.id,
             score: doc.data().score || 0
         }));
+        students.sort((a, b) => (b.score || 0) - (a.score || 0));
+        return JSON.parse(JSON.stringify(students.slice(0, count)));
     } catch (error) {
         console.error("Error fetching top students:", error);
         return [];
@@ -91,15 +93,20 @@ export async function getRecentActivity(count: number = 10): Promise<(ScoreEvent
         const eventsQuery = query(collection(db, 'scoreEvents'), orderBy('timestamp', 'desc'), limit(count));
         const eventsSnapshot = await getDocs(eventsQuery);
 
-        const activities = await Promise.all(eventsSnapshot.docs.map(async (doc) => {
-            const eventData = doc.data() as ScoreEvent;
-            eventData.id = doc.id;
-            eventData.timestamp = (eventData.timestamp as Timestamp).toDate().toISOString();
+        const activities = await Promise.all(eventsSnapshot.docs.map(async (d) => {
+            const eventData = d.data() as ScoreEvent;
+            eventData.id = d.id;
+            const ts = eventData.timestamp;
+            eventData.timestamp = (ts && typeof (ts as any).toDate === 'function') ? (ts as any).toDate().toISOString() : (typeof ts === 'string' ? ts : new Date().toISOString());
 
-            const studentDoc = await getDoc(db.collection('users').doc(eventData.userId));
-            if (studentDoc.exists()) {
-                return { ...eventData, student: studentDoc.data() as UserProfile };
-            }
+            try {
+                if (eventData.userId) {
+                    const studentDoc = await getDoc(doc(db, 'users', eventData.userId));
+                    if (studentDoc.exists()) {
+                        return { ...eventData, student: { uid: studentDoc.id, ...studentDoc.data() } as UserProfile };
+                    }
+                }
+            } catch (uErr) {}
             return eventData;
         }));
 

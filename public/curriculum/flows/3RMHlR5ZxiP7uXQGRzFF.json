@@ -1,0 +1,453 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Namazın Kılınışı konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Namazın Kılınışı ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Namaz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Necasetten Taharet, Niyet, Rükû kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Necasetten Taharet</li><li>Niyet</li><li>Rükû</li><li>İstikbalikıble</li><li>Selam</li><li>Secde</li><li>Ka'de-i Ahîre</li><li>Gusül</li><li>Teyemmüm</li><li>Cuma Namazı</li><li>Kıraat</li><li>Bayram Namazı</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Namazın Kılınışı - Önemli Bilgiler (1)",
+    "content": "<ul><li>Namazın geçerli olması için on iki farzı vardır: Altısı namaz öncesi hazırlık, altısı namaz kılarken yerine getirilir.</li><li>Namazın hazırlık şartları (dış farzlar): Abdest veya gusül almak, elbise ve mekan temizliği, avret yerlerini örtmek, kıbleye yönelmek, namaz vaktinin girmesi ve namaza niyet etmektir.</li><li>Abdest, namazdan önce yapılan dini temizliktir; yüzü, kolları, başı ve ayakları yıkamak farzıdır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Namazın Kılınışı - Önemli Bilgiler (2)",
+    "content": "<ul><li>Su bulunmadığında veya kullanılamadığında abdest veya gusül yerine temiz toprakla teyemmüm alınır.</li><li>Namazın kılınış şartları (iç farzlar): İftitah tekbiri, kıyam (ayakta durmak), kıraat (Kur'an okumak), rükû, secde ve son oturuş (ka'de-i ahîre) yapmaktır.</li><li>Günde beş vakit namaz (sabah, öğle, ikindi, akşam, yatsı) Müslümanlara farz kılınmıştır ve rekâtlardan oluşur.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Namazın Kılınışı - Önemli Bilgiler (3)",
+    "content": "<ul><li>Farz namazların cemaatle kılınması tek başına kılınmaktan yirmi yedi kat daha faziletlidir; Cuma, Bayram ve Cenaze namazları cemaatle kılınır.</li><li>Hz. Peygamber, \"Namazı benden gördüğünüz gibi kılınız\" buyurarak namazın nasıl kılınacağını bizzat öğretmiştir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Necasetten Taharet",
+        "definition": "Bedenin, elbisenin ve namaz kılınacak yerin temiz olması. Setriavret : Vücudun örtülmesi gereken yerlerini örtmek."
+      },
+      {
+        "concept": "Rükû",
+        "definition": "Elleri dizlere koyarak eğilmek, sırtı düz tutmak."
+      },
+      {
+        "concept": "Selam",
+        "definition": "Başı önce sağa, sonra sola çevirerek namazı bitirmek."
+      },
+      {
+        "concept": "Secde",
+        "definition": "Alnı, burnu, elleri, dizleri ve ayakları yere koyarak kapanmak."
+      },
+      {
+        "concept": "Teyemmüm",
+        "definition": "Su bulunmadığı durumlarda yapılan temizlik."
+      },
+      {
+        "concept": "Kıraat",
+        "definition": "Namazda Kur'an'dan sure veya ayet okumak."
+      },
+      {
+        "concept": "Bayram Namazı",
+        "definition": "Yılda iki kez (Ramazan ve Kurban) kılınan, cemaatle yapılan vacip namaz."
+      },
+      {
+        "concept": "Gusül",
+        "definition": "Tüm vücudun yıkandığı boy abdesti."
+      },
+      {
+        "concept": "Hadesten Taharet",
+        "definition": "Abdest, gusül veya teyemmüm alarak manevi kirlerden temizlenmek."
+      },
+      {
+        "concept": "İstikbalikıble",
+        "definition": "Namaz kılarken Kıbleye (Kâbe'ye) yönelmek."
+      },
+      {
+        "concept": "Niyet",
+        "definition": "Hangi namazın kılınacağına kalben karar verip niyet etmek."
+      },
+      {
+        "concept": "Cuma Namazı",
+        "definition": "Erkeklere farz olan, cemaatle kılınan ve hutbe okunan haftalık namaz. "
+      },
+      {
+        "concept": "Ka'de-i Ahîre",
+        "definition": "Namazın sonunda (son oturuşta) duaları okuyacak kadar oturmak."
+      },
+      {
+        "concept": "Vakit",
+        "definition": "Namazı belirlenen zaman dilimi içinde (vaktinde) kılmak."
+      },
+      {
+        "concept": "Teravih Namazı",
+        "definition": "Ramazan ayında yatsıdan sonra kılınan sünnet namaz."
+      },
+      {
+        "concept": "İftitah Tekbiri",
+        "definition": "\"Allahüekber\" diyerek namaza başlamak."
+      },
+      {
+        "concept": "Cenaze Namazı",
+        "definition": "Ölen Müslüman için kılınan, rükûsu ve secdesi olmayan, ayakta yapılan dua niteliğindeki namaz."
+      },
+      {
+        "concept": "Mesh",
+        "definition": "Abdest alırken başın dörtte birini ıslak elle silmek."
+      },
+      {
+        "concept": "Kıyam",
+        "definition": "Namazda ayakta durmak."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Necasetten Taharet",
+        "definition": "Bedenin, elbisenin ve namaz kılınacak yerin temiz olması. Setriavret : Vücudun örtülmesi gereken yerlerini örtmek."
+      },
+      {
+        "term": "Rükû",
+        "definition": "Elleri dizlere koyarak eğilmek, sırtı düz tutmak."
+      },
+      {
+        "term": "Selam",
+        "definition": "Başı önce sağa, sonra sola çevirerek namazı bitirmek."
+      },
+      {
+        "term": "Secde",
+        "definition": "Alnı, burnu, elleri, dizleri ve ayakları yere koyarak kapanmak."
+      },
+      {
+        "term": "Teyemmüm",
+        "definition": "Su bulunmadığı durumlarda yapılan temizlik."
+      },
+      {
+        "term": "Kıraat",
+        "definition": "Namazda Kur'an'dan sure veya ayet okumak."
+      },
+      {
+        "term": "Bayram Namazı",
+        "definition": "Yılda iki kez (Ramazan ve Kurban) kılınan, cemaatle yapılan vacip namaz."
+      },
+      {
+        "term": "Gusül",
+        "definition": "Tüm vücudun yıkandığı boy abdesti."
+      },
+      {
+        "term": "Hadesten Taharet",
+        "definition": "Abdest, gusül veya teyemmüm alarak manevi kirlerden temizlenmek."
+      },
+      {
+        "term": "İstikbalikıble",
+        "definition": "Namaz kılarken Kıbleye (Kâbe'ye) yönelmek."
+      },
+      {
+        "term": "Niyet",
+        "definition": "Hangi namazın kılınacağına kalben karar verip niyet etmek."
+      },
+      {
+        "term": "Cuma Namazı",
+        "definition": "Erkeklere farz olan, cemaatle kılınan ve hutbe okunan haftalık namaz. "
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Niyet",
+        "scrambledWord": "İTYEN",
+        "definition": "İpucu: Bu kelime \"Niyet\""
+      },
+      {
+        "correctAnswer": "Rükû",
+        "scrambledWord": "ÛKRÜ",
+        "definition": "İpucu: Bu kelime \"Rükû\""
+      },
+      {
+        "correctAnswer": "İstikbalikıble",
+        "scrambledWord": "LAESBIBTKLİİİK",
+        "definition": "İpucu: Bu kelime \"İstikbalikıble\""
+      },
+      {
+        "correctAnswer": "Selam",
+        "scrambledWord": "SLEAM",
+        "definition": "İpucu: Bu kelime \"Selam\""
+      },
+      {
+        "correctAnswer": "Secde",
+        "scrambledWord": "DEESC",
+        "definition": "İpucu: Bu kelime \"Secde\""
+      },
+      {
+        "correctAnswer": "Ka'de-i Ahîre",
+        "scrambledWord": "K'RÎEH-İADE A",
+        "definition": "İpucu: Bu kelime \"Ka'de-i Ahîre\""
+      },
+      {
+        "correctAnswer": "Gusül",
+        "scrambledWord": "LÜGSU",
+        "definition": "İpucu: Bu kelime \"Gusül\""
+      },
+      {
+        "correctAnswer": "Teyemmüm",
+        "scrambledWord": "ÜMYETEMM",
+        "definition": "İpucu: Bu kelime \"Teyemmüm\""
+      },
+      {
+        "correctAnswer": "Cuma Namazı",
+        "scrambledWord": "AAMNIMAZC U",
+        "definition": "İpucu: Bu kelime \"Cuma Namazı\""
+      },
+      {
+        "correctAnswer": "Kıraat",
+        "scrambledWord": "TIKAAR",
+        "definition": "İpucu: Bu kelime \"Kıraat\""
+      },
+      {
+        "correctAnswer": "Bayram Namazı",
+        "scrambledWord": "IAANBMAMRYZ A",
+        "definition": "İpucu: Bu kelime \"Bayram Namazı\""
+      },
+      {
+        "correctAnswer": "Teravih Namazı",
+        "scrambledWord": "EITANAMH RAZVİ",
+        "definition": "İpucu: Bu kelime \"Teravih Namazı\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Hutbe, cuma namazının farzlarından biri değildir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Cuma namazı sadece kadınlara farzdır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Akşam namazının farzında, üçüncü rekâttan sonra son oturuş ve selam ile namaz bitirilir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Dört rekâtlı farz namazlarda, üçüncü rekâta kalkınca önce Sübhaneke duası okunur.",
+        "isTrue": false
+      },
+      {
+        "statement": "İki rekâtlı bir namazın kılınışını öğrenen bir kimse, genel olarak namaz kılmayı öğrenmiş sayılır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Cenaze namazı, Müslüman topluluğun üzerine düşen bir sorumluluktur ve bir kısmının kılmasıyla diğerlerinin üzerinden sorumluluk kalkar.",
+        "isTrue": true
+      },
+      {
+        "statement": "Nafile namazlar genellikle cemaatle kılınır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Rükû, namazda alnı yere koymaktır.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Cuma namazı Müslümanların haftalık bayramıdır.",
+    "scrambledSentence": "Müslümanların Cuma haftalık namazı bayramıdır."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Namazın farzlarından biri eksikse namaz bozulur.",
+    "scrambledSentence": "farzlarından bozulur. biri namaz Namazın eksikse"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Cemaatle kılınan namaz daha faziletlidir.",
+    "scrambledSentence": "faziletlidir. daha namaz Cemaatle kılınan"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Abdest namazın en temel hazırlık şartıdır.",
+    "scrambledSentence": "en hazırlık şartıdır. temel Abdest namazın"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Namaz kılınan yeri ve elbiseyi temiz tutmaya ___ denir.",
+    "options": [
+      "Hadesten Taharet",
+      "Necasetten Taharet",
+      "Setr-i Avret",
+      "İstikbal-i Kıble"
+    ],
+    "correctAnswer": "Necasetten Taharet"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Namaz kılmadan önce ___ almak gerekir.",
+    "options": [
+      "gusül",
+      "teyemmüm",
+      "abdest",
+      "duş"
+    ],
+    "correctAnswer": "abdest"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Namazın sonunda baş önce sağa, sonra sola çevrilerek 'Esselamü aleyküm ve rahmetullah' denilerek ___ verilir.",
+    "options": [
+      "dua",
+      "selam",
+      "tekbir",
+      "tahmid"
+    ],
+    "correctAnswer": "selam"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Namazda elleri dizlere koyarak eğilmeye ___ denir.",
+    "options": [
+      "Kıyam",
+      "Secde",
+      "Rükû",
+      "Kıraat"
+    ],
+    "correctAnswer": "Rükû"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Cuma günü öğle vakti geldiğinde akıllı, ergenlik çağına gelmiş, sağlıklı, hür ve yolculuk hâlinde bulunmayan Müslüman ___ camilerde cuma namazını kılmaları farzdır.",
+    "options": [
+      "kadınların",
+      "erkeklerin",
+      "çocukların",
+      "yaşlıların"
+    ],
+    "correctAnswer": "erkeklerin"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Rükûda üç kez söylenen tesbih hangisidir?",
+    "options": [
+      "Sübhâne Rabbiye’l-a’lâ",
+      "Sübhâne Rabbiye’l-azîm",
+      "Elhamdülillah",
+      "Allahüekber"
+    ],
+    "correctAnswer": "Sübhâne Rabbiye’l-azîm"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Teyemmüm hangi durumlarda alınır?",
+    "options": [
+      "Sadece yolculukta",
+      "Sadece hasta olunca",
+      "Suyun bulunmadığı veya kullanılamadığı durumlarda",
+      "Her zaman"
+    ],
+    "correctAnswer": "Suyun bulunmadığı veya kullanılamadığı durumlarda"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Abdest alırken ağız kaç kez suyla çalkalanır?",
+    "options": [
+      "Bir",
+      "İki",
+      "Üç",
+      "Dört"
+    ],
+    "correctAnswer": "Üç"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Vitir namazının üçüncü rekâtının kılınması diğer namazlardan nasıl farklılık gösterir?",
+    "options": [
+      "Sadece Fatiha okunur.",
+      "Tekbir getirilir, eller kaldırılır ve Kunut duaları okunur.",
+      "Rükû ve secde yapılmaz.",
+      "Sadece iki rekât kılınır."
+    ],
+    "correctAnswer": "Tekbir getirilir, eller kaldırılır ve Kunut duaları okunur."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Guslün farzlarından biri olmayan hangisidir?",
+    "options": [
+      "Ağzı suyla çalkalamak",
+      "Burna su çekmek",
+      "Boynu mesh etmek",
+      "Bütün vücudu kuru yer kalmayacak şekilde yıkamak"
+    ],
+    "correctAnswer": "Boynu mesh etmek"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Abdest alırken yüz kaç kez yıkanır?",
+    "options": [
+      "Bir",
+      "İki",
+      "Üç",
+      "Dört"
+    ],
+    "correctAnswer": "Üç"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Namazda Kur'an okumaya ne denir?",
+    "options": [
+      "Tekbir",
+      "Rükû",
+      "Kıraat",
+      "Selam"
+    ],
+    "correctAnswer": "Kıraat"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hutbe, cuma namazının hangi farzlarından biridir?",
+    "options": [
+      "Kıraat",
+      "Rükû",
+      "Secde",
+      "Farzlarından biri"
+    ],
+    "correctAnswer": "Farzlarından biri"
+  }
+]

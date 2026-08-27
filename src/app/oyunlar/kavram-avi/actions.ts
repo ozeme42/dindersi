@@ -29,15 +29,32 @@ export async function getConceptHuntAction({
 }): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
 
-        const validItems = allItems.filter(item => 
-            item.type === 'definition' && 
-            item.content?.term && 
-            item.content?.definition &&
-            item.content.term.trim().length > 2 &&
-            !item.content.term.includes(' ')
-        );
+        const validItems: { term: string; definition: string }[] = [];
+        const seenTerms = new Set<string>();
+
+        for (const item of allItems || []) {
+            if ('type' in item) {
+                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term) {
+                    const t = String((item as any).content.term).trim();
+                    const d = String((item as any).content.definition || (item as any).content.text || `${t} kavramı`).trim();
+                    const upper = t.toLocaleUpperCase('tr-TR');
+                    if (t.length > 2 && t.length < 16 && !t.includes(' ') && !seenTerms.has(upper)) {
+                        seenTerms.add(upper);
+                        validItems.push({ term: t, definition: d });
+                    }
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
+                    const t = String((item as any).correctAnswer).trim();
+                    const d = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${t} kavramı`).trim();
+                    const upper = t.toLocaleUpperCase('tr-TR');
+                    if (t.length > 2 && t.length < 16 && !t.includes(' ') && !seenTerms.has(upper)) {
+                        seenTerms.add(upper);
+                        validItems.push({ term: t, definition: d });
+                    }
+                }
+            }
+        }
 
         if (validItems.length < 1) {
             return { error: "Kavram Avı oynamak için bu konuda en az 1 adet uygun kelime bulunmalıdır.", questions: null };
@@ -49,15 +66,15 @@ export async function getConceptHuntAction({
         }
         
         const anagramQuestions: Anagram[] = validItems.map(item => {
-            const correctAnswer = item.content.term!.trim().toLocaleUpperCase('tr-TR');
+            const correctAnswer = item.term.trim().toLocaleUpperCase('tr-TR');
             return {
-                definition: item.content.definition!,
+                definition: item.definition,
                 scrambledWord: correctAnswer.split('').sort(() => 0.5 - Math.random()).join(''),
                 correctAnswer: correctAnswer,
             }
         });
 
-        return { questions: JSON.parse(JSON.stringify(anagramQuestions)) };
+        return { questions: JSON.parse(JSON.stringify(anagramQuestions.slice(0, 20))) };
 
     } catch (error: any) {
         console.error("Server Action Error (getConceptHuntAction):", error);

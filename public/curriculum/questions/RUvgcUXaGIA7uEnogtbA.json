@@ -1,0 +1,227 @@
+[
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-0",
+    "type": "Doğru/Yanlış",
+    "text": "Halk edebiyatında din izleri çoktur.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Kolay",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-1",
+    "type": "Doğru/Yanlış",
+    "text": "Yunus Emre, Hoca Yesevi önemlidir.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Kolay",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-2",
+    "type": "Doğru/Yanlış",
+    "text": "Tevhit, naat önemli türlerdir.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Kolay",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-3",
+    "type": "Doğru/Yanlış",
+    "text": "Atasözleri, deyimler dini içerir.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-4",
+    "type": "Doğru/Yanlış",
+    "text": "Mehmet Akif, Arif Nihat örneklerdir.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-5",
+    "type": "Doğru/Yanlış",
+    "text": "Edebiyat dini kavramları taşır.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-6",
+    "type": "Doğru/Yanlış",
+    "text": "Mevlit, Süleyman Çelebi ile ünlüdür.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-7",
+    "type": "Doğru/Yanlış",
+    "text": "Din, edebiyatımızı derinden etkilemiştir.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-8",
+    "type": "Doğru/Yanlış",
+    "text": "İstiklal Marşı'nda dini ögeler var.",
+    "correctAnswer": "Doğru",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-tf-RUvgcUXaGIA7uEnogtbA-9",
+    "type": "Doğru/Yanlış",
+    "text": "Yeni edebi türler doğmuştur.",
+    "correctAnswer": "Yanlış",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-mcq-RUvgcUXaGIA7uEnogtbA-0",
+    "type": "Çoktan Seçmeli",
+    "question": "\"Allah'a dua şiirleri\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"Allah'a dua şiirleri\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Mevlit",
+      "Tevhit",
+      "Edebiyat",
+      "Münacat"
+    ],
+    "correctAnswer": "Münacat",
+    "difficulty": "Kolay",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-mcq-RUvgcUXaGIA7uEnogtbA-1",
+    "type": "Çoktan Seçmeli",
+    "question": "\"Peygamberin doğumunu anlatan eser\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"Peygamberin doğumunu anlatan eser\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Mevlit",
+      "Naat",
+      "Edebiyat",
+      "Münacat"
+    ],
+    "correctAnswer": "Mevlit",
+    "difficulty": "Kolay",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-mcq-RUvgcUXaGIA7uEnogtbA-2",
+    "type": "Çoktan Seçmeli",
+    "question": "\"Allah'ın birliğini anlatan eser\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"Allah'ın birliğini anlatan eser\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Naat",
+      "Mevlit",
+      "Münacat",
+      "Tevhit"
+    ],
+    "correctAnswer": "Tevhit",
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-mcq-RUvgcUXaGIA7uEnogtbA-3",
+    "type": "Çoktan Seçmeli",
+    "question": "\"Peygamberi öven şiirler\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"Peygamberi öven şiirler\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Naat",
+      "Tevhit",
+      "Mevlit",
+      "Edebiyat"
+    ],
+    "correctAnswer": "Naat",
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  },
+  {
+    "id": "gen-mcq-RUvgcUXaGIA7uEnogtbA-4",
+    "type": "Çoktan Seçmeli",
+    "question": "\"Duygu ve düşüncelerin ifadesi sanatıdır.\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "text": "\"Duygu ve düşüncelerin ifadesi sanatıdır.\" şeklinde tanımlanan kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Edebiyat",
+      "Münacat",
+      "Naat",
+      "Tevhit"
+    ],
+    "correctAnswer": "Edebiyat",
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
+  }
+]

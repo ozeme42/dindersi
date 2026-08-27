@@ -7,7 +7,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import type { Question } from '@/lib/types';
 import fs from 'fs/promises';
 import path from 'path';
-import { getQuestionsFromBank } from '@/lib/quiz-actions';
+import { getQuestionsFromBank, getStaticGameData } from '@/lib/quiz-actions';
 
 export async function getDogruYanlisZinciriAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
@@ -18,22 +18,51 @@ export async function getDogruYanlisZinciriAction(
             courseId,
             unitId,
             topicId,
-            questionTypes: ['Doğru/Yanlış'],
-            questionCount: 50 // Fetch a good amount to shuffle
+            questionTypes: ['Doğru/Yanlış', 'tf'],
+            questionCount: 50
         });
         
-        if (result.error || result.questions.length < 5) {
-            return { questions: [], error: result.error || "Bu zincir oyunu için en az 5 Doğru/Yanlış sorusu gereklidir." };
-        }
+        let questions = (result.questions || []) as Question[];
         
-        const questions = result.questions as Question[];
+        if (questions.length < 5) {
+            try {
+                const allItems = await getStaticGameData({ courseId, unitId, topicId });
+                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition);
+                
+                definitions.forEach((dItem, idx) => {
+                    const term = (dItem as any).content.term.trim();
+                    const def = (dItem as any).content.definition.trim();
+                    const isTrue = idx % 2 === 0;
+                    let statement = `${term}, ${def}`;
+                    if (!isTrue && definitions.length > 1) {
+                        const wrongTerm = (definitions[(idx + 1) % definitions.length] as any).content.term.trim();
+                        statement = `${wrongTerm}, ${def}`;
+                    }
+                    if (!questions.some(q => q.text === statement)) {
+                        questions.push({
+                            id: `gen-tf-${idx}-${Date.now()}`,
+                            type: 'Doğru/Yanlış',
+                            text: statement,
+                            correctAnswer: isTrue ? 'Doğru' : 'Yanlış',
+                            options: ['Doğru', 'Yanlış'],
+                            difficulty: 'Orta',
+                            topicId: topicId || ''
+                        } as any);
+                    }
+                });
+            } catch (fallbackErr) {}
+        }
+
+        if (questions.length < 3) {
+            return { questions: [], error: "Bu oyun için en az 3 Doğru/Yanlış sorusu veya kavram gereklidir." };
+        }
         
         for (let i = questions.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [questions[i], questions[j]] = [questions[j], questions[i]];
         }
         
-        return { questions: JSON.parse(JSON.stringify(questions)) };
+        return { questions: JSON.parse(JSON.stringify(questions.slice(0, 20))) };
 
     } catch (e: any) {
         console.error("Error getting D/Y Zinciri questions:", e);

@@ -1,0 +1,355 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Bir Sure Öğreniyorum: Kevser Suresi konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Bir Sure Öğreniyorum: Kevser Suresi ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Kur’an-ı Kerim çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Kevser (Kelime), Ebter, Kevser (Nehir) kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Kevser (Kelime)</li><li>Ebter</li><li>Kevser (Nehir)</li><li>Müşrik</li><li>Kevser Suresi</li><li>Nahr Suresi</li><li>Nesil</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Bir Sure Öğreniyorum: Kevser Suresi - Önemli Bilgiler (1)",
+    "content": "<ul><li>Kevser Suresi, Kur'an-ı Kerim'in en kısa suresidir ve üç ayetten oluşur.</li><li>Sure adını, bolluk, bereket ve cennetteki bir nehir anlamına gelen \"kevser\" kelimesinden alır.</li><li>Kevser Suresi, Hz. Peygamber'e soyunun kesildiği (ebter) şeklindeki haksız eleştirilere cevap olarak indirilmiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Bir Sure Öğreniyorum: Kevser Suresi - Önemli Bilgiler (2)",
+    "content": "<ul><li>Allah, bu sureyle Hz. Peygamber'e bitip tükenmez nimetler verdiğini müjdelemiş ve onu teselli etmiştir.</li><li>Hz. Peygamber'in soyu, kızı Hz. Fatıma ve torunları Hz. Hasan ile Hz. Hüseyin aracılığıyla devam etmiştir.</li><li>Kevser Suresi, Allah'a şükretmek ve O'nu anmak amacıyla namazlarda okunur.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Ebter",
+        "definition": "Soyu kesik, nesli devam etmeyen anlamına gelen hakaret ifadesi."
+      },
+      {
+        "concept": "Kevser (Nehir)",
+        "definition": "Cennette Hz. Peygamber’in müminlerle başında buluşacağı havuz."
+      },
+      {
+        "concept": "Kevser (Kelime)",
+        "definition": "Bolluk, bereket, neslin çoğalması, maddi ve manevi çokluk."
+      },
+      {
+        "concept": "Nesil",
+        "definition": "Hz. Peygamber’in kızı Hz. Fatıma ile devam eden soyu."
+      },
+      {
+        "concept": "Müşrik",
+        "definition": "Allah’a ortak koşan, birden fazla tanrı olduğuna inanan kimse."
+      },
+      {
+        "concept": "Nahr Suresi",
+        "definition": "İkinci ayetinde kurbandan söz edildiği için sureye verilen diğer isim."
+      },
+      {
+        "concept": "Kevser Suresi",
+        "definition": "Kur’an-ı Kerim’in üç ayetten oluşan en kısa suresi."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Ebter",
+        "definition": "Soyu kesik, nesli devam etmeyen anlamına gelen hakaret ifadesi."
+      },
+      {
+        "term": "Kevser (Nehir)",
+        "definition": "Cennette Hz. Peygamber’in müminlerle başında buluşacağı havuz."
+      },
+      {
+        "term": "Kevser (Kelime)",
+        "definition": "Bolluk, bereket, neslin çoğalması, maddi ve manevi çokluk."
+      },
+      {
+        "term": "Nesil",
+        "definition": "Hz. Peygamber’in kızı Hz. Fatıma ile devam eden soyu."
+      },
+      {
+        "term": "Müşrik",
+        "definition": "Allah’a ortak koşan, birden fazla tanrı olduğuna inanan kimse."
+      },
+      {
+        "term": "Nahr Suresi",
+        "definition": "İkinci ayetinde kurbandan söz edildiği için sureye verilen diğer isim."
+      },
+      {
+        "term": "Kevser Suresi",
+        "definition": "Kur’an-ı Kerim’in üç ayetten oluşan en kısa suresi."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Kevser (Kelime)",
+        "scrambledWord": "VKS()KMERİ LEEE",
+        "definition": "İpucu: Bu kelime \"Kevser (Kelime)\""
+      },
+      {
+        "correctAnswer": "Ebter",
+        "scrambledWord": "EBRTE",
+        "definition": "İpucu: Bu kelime \"Ebter\""
+      },
+      {
+        "correctAnswer": "Kevser (Nehir)",
+        "scrambledWord": "SVEER(HİENK) R",
+        "definition": "İpucu: Bu kelime \"Kevser (Nehir)\""
+      },
+      {
+        "correctAnswer": "Müşrik",
+        "scrambledWord": "MÜŞKİR",
+        "definition": "İpucu: Bu kelime \"Müşrik\""
+      },
+      {
+        "correctAnswer": "Kevser Suresi",
+        "scrambledWord": "EVSSEİE KSRRU",
+        "definition": "İpucu: Bu kelime \"Kevser Suresi\""
+      },
+      {
+        "correctAnswer": "Nahr Suresi",
+        "scrambledWord": "REA RSSNUHİ",
+        "definition": "İpucu: Bu kelime \"Nahr Suresi\""
+      },
+      {
+        "correctAnswer": "Nesil",
+        "scrambledWord": "SİNLE",
+        "definition": "İpucu: Bu kelime \"Nesil\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Kevser kelimesi sadece maddi çokluk anlamına gelir, manevi çokluk anlamına gelmez.",
+        "isTrue": false
+      },
+      {
+        "statement": "Cahiliye Dönemi’nde bir kişinin soyunun sadece kız çocukları tarafından devam edeceği kabul edilirdi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Peygamber’in soyu, kızı Hz. Fatıma’nın çocukları Hz. Hasan ve Hz. Hüseyin ile devam etmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kevser suresinin ikinci ayetinde kurbandan söz edilmesi, surenin sadece bir isimle anılmasına sebep olmuştur.",
+        "isTrue": false
+      },
+      {
+        "statement": "Müşrikler, Hz. Peygamber’den bahsederken 'nesli kesik' anlamına gelen 'ebter' ifadesini kullandılar.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kevser kelimesi sadece 'bolluk' anlamına gelir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kevser suresi, Hz. Peygamber için sadece bir umut olmuştur, teselli olmamıştır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kevser suresi, namaz sırasında Fatiha’dan önce okunur.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamber'e teselli ve umut oldu.",
+    "scrambledSentence": "teselli Peygamber'e umut ve oldu."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kevser Suresi Kur'an'ın en suresidir.",
+    "scrambledSentence": "Kevser Suresi en suresidir. Kur'an'ın"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Namazda Fatiha sonrası okunur.",
+    "scrambledSentence": "Namazda okunur. Fatiha sonrası"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Bolluk, bereket, nehir demektir.",
+    "scrambledSentence": "bereket, demektir. Bolluk, nehir"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kevser suresinin indirilmesi, Hz. Peygamber’in yaşadığı ___ karşısında ilahi bir destek sağlamıştır.",
+    "options": [
+      "sevinç",
+      "mutluluk",
+      "zorluklar",
+      "başarılar"
+    ],
+    "correctAnswer": "zorluklar"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kevser suresinin indirilmesiyle, Cahiliye Dönemi’ndeki 'bir kişinin soyunun sadece erkek çocukları tarafından devam edeceği' anlayışı ___.",
+    "options": [
+      "doğrulanmıştır",
+      "geçerliliğini sürdürmüştür",
+      "reddedilmiştir",
+      "güçlendirilmiştir"
+    ],
+    "correctAnswer": "reddedilmiştir"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Müşrikler, Hz. Peygamber’den bahsederken 'nesli kesik' anlamına gelen '___' ifadesini kullandılar.",
+    "options": [
+      "rahmet",
+      "bereket",
+      "ebter",
+      "selam"
+    ],
+    "correctAnswer": "ebter"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Peygamber, müşriklerin bu aşağılayıcı sözlerine çok ___.",
+    "options": [
+      "sevindi",
+      "güldü",
+      "üzüldü",
+      "aldırmadı"
+    ],
+    "correctAnswer": "üzüldü"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kevser suresi, ikinci ayette kurbandan söz edildiği için ___ suresi adıyla da anılır.",
+    "options": [
+      "Fatiha",
+      "Nahr",
+      "İhlas",
+      "Nas"
+    ],
+    "correctAnswer": "Nahr"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed’in (sav) cennette müminlerle başında buluşacağı nehir veya havuza ne denir?",
+    "options": [
+      "Nil",
+      "Fırat",
+      "Kevser",
+      "Cennet suyu"
+    ],
+    "correctAnswer": "Kevser"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav) 'O, Rabbimin bana vadettiği, cennette bir nehirdir.' buyurarak neyi açıklamıştır?",
+    "options": [
+      "Zemzem suyunu",
+      "Kevseri",
+      "Nil Nehri'ni",
+      "Fırat Nehri'ni"
+    ],
+    "correctAnswer": "Kevseri"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kevser suresi, Hz. Peygamber için hem bir teselli hem de ne olmuştur?",
+    "options": [
+      "Sınav",
+      "Yük",
+      "Umut",
+      "Endişe"
+    ],
+    "correctAnswer": "Umut"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kevser suresinin okunuşunda 'İnne şânieke hüvel ebter' ifadesinin anlamı nedir?",
+    "options": [
+      "Şüphesiz biz sana bitip tükenmez nimetler verdik.",
+      "Şimdi sen rabbin için namaz kıl ve kurban kes!",
+      "Asıl soyu gelmeyecek olan, sana karşı nefret duyandır.",
+      "Rahman ve Rahîm olan Allah’ın adıyla."
+    ],
+    "correctAnswer": "Asıl soyu gelmeyecek olan, sana karşı nefret duyandır."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kevser suresinin okunuşunda 'İnnâ e’taynâ kelkevser' ifadesinin anlamı nedir?",
+    "options": [
+      "Şüphesiz biz sana bitip tükenmez nimetler verdik.",
+      "Şimdi sen rabbin için namaz kıl ve kurban kes!",
+      "Asıl soyu gelmeyecek olan, sana karşı nefret duyandır.",
+      "Rahman ve Rahîm olan Allah’ın adıyla."
+    ],
+    "correctAnswer": "Şüphesiz biz sana bitip tükenmez nimetler verdik."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kevser suresi ne amaçla okunur?",
+    "options": [
+      "Sadece ezberlemek için",
+      "Allah’ı (cc) anmak ve O’nun verdiği nimetlere şükretmek amacıyla",
+      "Sadece namazı uzatmak için",
+      "Sadece bir gelenek olduğu için"
+    ],
+    "correctAnswer": "Allah’ı (cc) anmak ve O’nun verdiği nimetlere şükretmek amacıyla"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Cahiliye Dönemi’ndeki 'bir kişinin soyunun sadece erkek çocukları tarafından devam edeceği' anlayışı, Kevser suresinin indirilmesiyle nasıl bir duruma gelmiştir?",
+    "options": [
+      "Pekiştirilmiştir",
+      "Kabul görmüştür",
+      "Reddedilmiştir",
+      "Değişmeden kalmıştır"
+    ],
+    "correctAnswer": "Reddedilmiştir"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kevser suresi kaç ayetten oluşur?",
+    "options": [
+      "İki",
+      "Üç",
+      "Dört",
+      "Beş"
+    ],
+    "correctAnswer": "Üç"
+  }
+]

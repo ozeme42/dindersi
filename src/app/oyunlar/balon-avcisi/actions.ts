@@ -20,34 +20,60 @@ export async function getBalloonHunterDataAction(
 ): Promise<{ questions: BalloonHunterQuestion[]; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
 
-        if (allItems.length === 0) {
+        if (!allItems || allItems.length === 0) {
              return { error: "Oyun oynamak için veri bulunamadı.", questions: [] };
         }
 
-        const allDefinitions = allItems
-            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
+        const pairs: { term: string; definition: string }[] = [];
+        const termsPool: string[] = ['İman', 'İslam', 'Ahlak', 'İbadet', 'Tevhit', 'Nübüvvet', 'Kuran', 'Sünnet', 'Adalet', 'Merhamet', 'Sabır', 'Şükür'];
 
-        if (allDefinitions.length < 5) {
-            return { error: "Bu oyun için en az 5 farklı tanım/kavram gereklidir.", questions: [] };
+        for (const item of allItems) {
+            if ('type' in item) {
+                if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
+                    const t = (item as any).content.term.trim();
+                    const d = (item as any).content.definition.trim();
+                    pairs.push({ term: t, definition: d });
+                    termsPool.push(t);
+                } else if (item.type === 'concept' && (item as any).content?.term && (item as any).content?.definition) {
+                    const t = (item as any).content.term.trim();
+                    const d = (item as any).content.definition.trim();
+                    pairs.push({ term: t, definition: d });
+                    termsPool.push(t);
+                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
+                    const t = String((item as any).correctAnswer).trim();
+                    const d = String((item as any).text || (item as any).question).trim();
+                    if (t.length <= 25) {
+                        pairs.push({ term: t, definition: d });
+                        termsPool.push(t);
+                    }
+                    if (Array.isArray((item as any).options)) {
+                        termsPool.push(...(item as any).options.map((o: any) => String(o).trim()));
+                    }
+                }
+            }
         }
-        
-        const allTerms = allItems
-            .filter(item => item.type === 'definition' || item.type === 'concept')
-            .map(item => item.content.term || item.content.text!)
-            .filter(Boolean);
-        const uniqueTerms = [...new Set(allTerms)];
-        
-        const gameQuestions: BalloonHunterQuestion[] = allDefinitions.map(item => {
-            const correctAnswer = item.content.term!;
-            const distractors = uniqueTerms
+
+        if (pairs.length < 2) {
+            return { error: "Bu oyun için en az 2 adet kavram veya soru gereklidir.", questions: [] };
+        }
+
+        const uniqueTerms = [...new Set(termsPool.filter(t => t.length > 1 && t.length <= 25))];
+
+        const gameQuestions: BalloonHunterQuestion[] = pairs.map(item => {
+            const correctAnswer = item.term;
+            let distractors = uniqueTerms
                 .filter(term => term !== correctAnswer)
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 4);
 
+            while (distractors.length < 3) {
+                distractors.push(['İhlas', 'Takva', 'Furkan', 'Mizan', 'Kıyamet'][distractors.length]);
+            }
+
             return {
-                q: item.content.definition!,
+                q: item.definition,
                 a: correctAnswer,
                 wrongs: distractors,
             };

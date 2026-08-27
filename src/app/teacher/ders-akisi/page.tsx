@@ -29,6 +29,30 @@ const colorClasses = [
     'bg-cyan-600 border-cyan-500 shadow-cyan-500/20'
 ];
 
+function extractLeadingNumbers(title: string): number[] {
+    if (!title) return [];
+    const clean = title.trim();
+    const uniteMatch = clean.match(/^Ünite\s+(\d+)/i);
+    if (uniteMatch) return [parseInt(uniteMatch[1], 10)];
+    const match = clean.match(/^(\d+(?:[\.\-]\d+)*)/);
+    if (match) return match[1].split(/[\.\-]/).filter(Boolean).map(n => parseInt(n, 10));
+    return [];
+}
+
+function compareTitlesByLeadingNumber(titleA: string = '', titleB: string = ''): number {
+    const numsA = extractLeadingNumbers(titleA);
+    const numsB = extractLeadingNumbers(titleB);
+    if (numsA.length > 0 && numsB.length > 0) {
+        for (let i = 0; i < Math.max(numsA.length, numsB.length); i++) {
+            const a = numsA[i] ?? 0;
+            const b = numsB[i] ?? 0;
+            if (a !== b) return a - b;
+        }
+    } else if (numsA.length > 0) return -1;
+    else if (numsB.length > 0) return 1;
+    return titleA.localeCompare(titleB, 'tr', { numeric: true, sensitivity: 'base' });
+}
+
 export default function DersAkisiPage() {
     const [curriculum, setCurriculum] = useState<EnrichedClass[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -75,7 +99,7 @@ export default function DersAkisiPage() {
         return Object.keys(grouped)
             .map(title => ({
                 title,
-                courses: grouped[title].sort((a,b) => (a.className || '').localeCompare(b.className || '')),
+                courses: grouped[title].sort((a,b) => compareTitlesByLeadingNumber(a.className || '', b.className || '')),
             }))
             .sort((a,b) => {
                  if (a.title.includes('Din Kültürü')) return -1;
@@ -148,7 +172,7 @@ export default function DersAkisiPage() {
                                                         </AccordionTrigger>
                                                         <AccordionContent className="p-6 md:p-8 bg-black/20">
                                                             <div className="space-y-6">
-                                                                {course.units?.map((unit, unitIndex) => {
+                                                                {course.units?.slice().sort((a, b) => compareTitlesByLeadingNumber(a.title, b.title)).map((unit, unitIndex) => {
                                                                     const hasAnyContent = unit.hasFlowContent || unit.topics.some(t => t.hasFlowContent);
                                                                     if (!hasAnyContent) return null;
 
@@ -190,7 +214,7 @@ export default function DersAkisiPage() {
                                                                                                 </div>
                                                                                             )}
                                                                                             {/* Konu akış linkleri */}
-                                                                                            {unit.topics?.map((topic, topicIndex) => {
+                                                                                            {unit.topics?.slice().sort((a, b) => compareTitlesByLeadingNumber(a.title, b.title)).map((topic, topicIndex) => {
                                                                                                 if (!topic.hasFlowContent) return null;
 
                                                                                                 const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;

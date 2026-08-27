@@ -1,0 +1,360 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Yeme İçme Adabı konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Yeme İçme Adabı ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Rehberim Peygamberim çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Sofra Adabı, Helal, İsraf kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Sofra Adabı</li><li>Helal</li><li>İsraf</li><li>Tevazu</li><li>Rızık</li><li>Besmele</li><li>Bereket</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Yeme İçme Adabı - Önemli Bilgiler (1)",
+    "content": "<ul><li>Yeme içme adabı, insan ilişkilerinde saygının bir göstergesi olup, Peygamberimiz bu konuda Müslümanlara örnek olmuştur.</li><li>Peygamberimiz, rızkın Allah'tan geldiğini ve helal yollardan kazanılması gerektiğini belirtmiş; İslam temiz ve helal olanı yemeye önem verir.</li><li>Yemeğe besmele ile başlamak, sonunda Allah'a şükretmek (\"Elhamdülillah\" demek) ve yemek öncesi-sonrası elleri yıkamak sünnettir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Yeme İçme Adabı - Önemli Bilgiler (2)",
+    "content": "<ul><li>Yemeği sağ elle yemek, kendi önünden almak, ikram edilen yemeği eleştirmemek ve israf etmemek önemli adab kurallarıdır.</li><li>Su, üç defada ve yavaşça içilmeli, ortak kaplara üflenmemeli ve su kaplarının ağzı kapalı tutulmalıdır.</li><li>Peygamberimiz, aşırı yemekten sakınılmasını (midenin üçte bir kuralı) ve ayakta yiyip içilmemesini tavsiye etmiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Yeme İçme Adabı - Önemli Bilgiler (3)",
+    "content": "<ul><li>Yemeğini bitirenlerin, diğerleri bitirmeden sofradan kalkmaması ve yemeğe büyüklerin başlamasını beklemek sofra adabına dahildir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "İsraf",
+        "definition": "Sahip olunan nimetlerin gereksiz yere harcanmasına ne denir?"
+      },
+      {
+        "concept": "Rızık",
+        "definition": "Allah'ın verdiği yiyecek, içecek ve diğer tüm nimetler için kullanılan kelime nedir?"
+      },
+      {
+        "concept": "Helal",
+        "definition": "Dinen yenilmesine izin verilen yiyecek ve içeceklere ne denir?"
+      },
+      {
+        "concept": "Bereket",
+        "definition": "Allah'ın verdiği nimetlerin çoğalması ve verimli olması anlamına gelen kelime nedir?"
+      },
+      {
+        "concept": "Sofra Adabı",
+        "definition": "Yemek yerken uyulması gereken kurallar nelerdir?"
+      },
+      {
+        "concept": "Tevazu",
+        "definition": "Alçakgönüllülük ve gösterişsizlik olarak tanımlanan davranış şekli nedir?"
+      },
+      {
+        "concept": "Besmele",
+        "definition": "Yemeğe başlamadan önce \"Bismillahirrahmanirrahim\" demenin adı nedir?"
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "İsraf",
+        "definition": "Sahip olunan nimetlerin gereksiz yere harcanmasına ne denir?"
+      },
+      {
+        "term": "Rızık",
+        "definition": "Allah'ın verdiği yiyecek, içecek ve diğer tüm nimetler için kullanılan kelime nedir?"
+      },
+      {
+        "term": "Helal",
+        "definition": "Dinen yenilmesine izin verilen yiyecek ve içeceklere ne denir?"
+      },
+      {
+        "term": "Bereket",
+        "definition": "Allah'ın verdiği nimetlerin çoğalması ve verimli olması anlamına gelen kelime nedir?"
+      },
+      {
+        "term": "Sofra Adabı",
+        "definition": "Yemek yerken uyulması gereken kurallar nelerdir?"
+      },
+      {
+        "term": "Tevazu",
+        "definition": "Alçakgönüllülük ve gösterişsizlik olarak tanımlanan davranış şekli nedir?"
+      },
+      {
+        "term": "Besmele",
+        "definition": "Yemeğe başlamadan önce \"Bismillahirrahmanirrahim\" demenin adı nedir?"
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Sofra Adabı",
+        "scrambledWord": "DA BARAOFSI",
+        "definition": "İpucu: Bu kelime \"Sofra Adabı\""
+      },
+      {
+        "correctAnswer": "Helal",
+        "scrambledWord": "ELLHA",
+        "definition": "İpucu: Bu kelime \"Helal\""
+      },
+      {
+        "correctAnswer": "İsraf",
+        "scrambledWord": "SFİAR",
+        "definition": "İpucu: Bu kelime \"İsraf\""
+      },
+      {
+        "correctAnswer": "Tevazu",
+        "scrambledWord": "ZVETUA",
+        "definition": "İpucu: Bu kelime \"Tevazu\""
+      },
+      {
+        "correctAnswer": "Rızık",
+        "scrambledWord": "IIZRK",
+        "definition": "İpucu: Bu kelime \"Rızık\""
+      },
+      {
+        "correctAnswer": "Besmele",
+        "scrambledWord": "EBLSEME",
+        "definition": "İpucu: Bu kelime \"Besmele\""
+      },
+      {
+        "correctAnswer": "Bereket",
+        "scrambledWord": "TEREEBK",
+        "definition": "İpucu: Bu kelime \"Bereket\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Peygamberimizin öneri ve davranışlarına uymak, insan ilişkilerini olumsuz etkiler.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, su içilmediği zamanlarda kapların ağzının kapatılmasını önermiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimizin tavsiyeleri insanların duyarlılıklarını geliştirmekte, sağlıklı bireyler olmalarına katkıda bulunmaktadır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Yemeğe besmele ile başlamak, yemeğin bereketini azaltır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz yiyip içerken her zaman sol elini kullanmıştır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimizin yemek sırasında midenin üçte birini yemeğe, üçte birini içeceğe ayırması ve diğer üçte birini de nefes alıp vermek için boş bırakması tavsiyesi, günümüz beslenme uzmanları tarafından desteklenmez.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, sofraya yayılarak oturmayı tercih etmiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, ayakta bir şeyler yiyip içmeyi uygun görmemiştir.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Su kabına üflememek, kabın ağzını kapalı tutmak ve ikram edilen yiyeceği kontrol etmek temizliğe verilen önemi gösterir.",
+    "scrambledSentence": "Su üflememek, kabına gösterir. yiyeceği temizliğe etmek önemi edilen kontrol tutmak kapalı kabın ikram ağzını verilen ve"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamber Efendimiz ayakta yemek yemeyi uygun görmemiştir.",
+    "scrambledSentence": "görmemiştir. Peygamber ayakta Efendimiz yemeyi uygun yemek"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İslam'da helal ve temiz olan yiyeceklerin tüketilmesi önemlidir.",
+    "scrambledSentence": "olan ve helal yiyeceklerin İslam'da önemlidir. temiz tüketilmesi"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Yemeklerden önce ve sonra ellerin yıkanması, besmele çekmek ve şükretmek önemlidir.",
+    "scrambledSentence": "yıkanması, sonra ve çekmek Yemeklerden ellerin önemlidir. besmele şükretmek ve önce"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, suyun üç defada içilmesini tavsiye etmiştir. İnsanların suyu bu şekilde içmesi besinlerin ___ kolaylaştırmaktadır.",
+    "options": [
+      "emilimini",
+      "sindirimini",
+      "tadını",
+      "miktarını"
+    ],
+    "correctAnswer": "sindirimini"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz beslenme konusunda dengeli olunmasını söylemiş ve aşırı yemekten ___ istemiştir.",
+    "options": [
+      "teşvik etmiş",
+      "sakınılmasını",
+      "önemsemiş",
+      "göz ardı etmiş"
+    ],
+    "correctAnswer": "sakınılmasını"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "İsraf; 'saçıp savurmak, harcamalarda orta yoldan sapmak, ölçüyü aşmak ve aşırılık yapmak suretiyle sahip olduğu nimetleri gereksiz yere ___' anlamına gelir.",
+    "options": [
+      "üretme",
+      "biriktirme",
+      "tüketme",
+      "saklama"
+    ],
+    "correctAnswer": "tüketme"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz hayatın her alanında olduğu gibi yeme içme ___ da Müslümanlara örnek olmuştur.",
+    "options": [
+      "kurallarıyla",
+      "adetleriyle",
+      "adabıyla",
+      "gelenekleriyle"
+    ],
+    "correctAnswer": "adabıyla"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimizin sade bir yer sofrasında, tevazu ile diz üstü oturarak yemek yemesi ve sofraya yayılarak oturmaması, onun ___ ve gösterişten uzak yaşam tarzını yansıtır.",
+    "options": [
+      "lüks",
+      "israf",
+      "sadeliği",
+      "aşırılığı"
+    ],
+    "correctAnswer": "sadeliği"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Yeme içme adabı, insanların yiyip içerken dikkat etmesi gereken tutum ve davranışları ifade eder. Buna ne ad verilir?",
+    "options": [
+      "Masa düzeni",
+      "Sofra adabı",
+      "Yemek tarifi",
+      "Beslenme programı"
+    ],
+    "correctAnswer": "Sofra adabı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, Allah’ın (cc) verdiği nimetler karşısında ne diyerek şükretmek gerektiğini belirtmiştir?",
+    "options": [
+      "Bismillah",
+      "Subhanallah",
+      "Elhamdülillah",
+      "Allahu Ekber"
+    ],
+    "correctAnswer": "Elhamdülillah"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, yemeğin israf edilmemesini istemiş, tabakta küçük bir lokmanın bile ne yapılmaması gerektiğini söylemiştir?",
+    "options": [
+      "Bırakılmaması",
+      "Yenmemesi",
+      "Paylaşılmaması",
+      "Saklanmaması"
+    ],
+    "correctAnswer": "Bırakılmaması"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin ayakta bir şeyler yiyip içmeyi uygun görmemesi, yeme içme adabının hangi yönünü vurgular?",
+    "options": [
+      "Sadece pratikliği",
+      "Sadece hızı",
+      "Saygı, sükunet ve sağlık açısından uygun pozisyonu",
+      "Sadece geleneksel olmayı"
+    ],
+    "correctAnswer": "Saygı, sükunet ve sağlık açısından uygun pozisyonu"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Yemeğe başlarken besmele çekmek, yemeğin neyini artırır?",
+    "options": [
+      "Tadını",
+      "Miktarını",
+      "Bereketini",
+      "Sıcaklığını"
+    ],
+    "correctAnswer": "Bereketini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, her insanın rızkının kim tarafından verildiğini söylemiştir?",
+    "options": [
+      "İnsanlar",
+      "Devlet",
+      "Allah (cc)",
+      "Doğa"
+    ],
+    "correctAnswer": "Allah (cc)"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İsraf; 'saçıp savurmak, harcamalarda orta yoldan sapmak, ölçüyü aşmak ve aşırılık yapmak suretiyle sahip olduğu nimetleri gereksiz yere tüketme' anlamına gelir. Yüce Allah, Kur’an-ı Kerim’de israf edenleri neden sevmez?",
+    "options": [
+      "Çünkü cimridirler",
+      "Çünkü bencilidirler",
+      "Çünkü nimetlere şükretmezler ve onları hor kullanırlar",
+      "Çünkü fakirdirler"
+    ],
+    "correctAnswer": "Çünkü nimetlere şükretmezler ve onları hor kullanırlar"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, kişinin yemek yerken tabağın neresinden yemesini istemiştir?",
+    "options": [
+      "Ortasından",
+      "Uzağından",
+      "Kendi önüne gelen kısmından",
+      "Başkalarının önünden"
+    ],
+    "correctAnswer": "Kendi önüne gelen kısmından"
+  }
+]

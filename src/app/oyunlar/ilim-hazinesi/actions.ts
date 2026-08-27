@@ -20,6 +20,8 @@ import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
 import { cleanForAnagram } from '@/lib/utils';
 
+import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
+
 export type IlimHazinesiLevel = {
     letters: string[];
     mainWord: string;
@@ -34,54 +36,56 @@ export async function getIlimHazinesiAction(
 ): Promise<{ levels: IlimHazinesiLevel[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        
+        const validItems: { term: string; definition: string }[] = [];
+        const seenWords = new Set<string>();
 
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
+        for (const item of allItems || []) {
+            if ('type' in item) {
+                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term) {
+                    const t = String((item as any).content.term).trim();
+                    const d = String((item as any).content.definition || (item as any).content.text || `${t} kavramı`).trim();
+                    const cleaned = cleanForAnagram(t).replace(/\s/g, '');
+                    if (cleaned.length >= 3 && cleaned.length <= 14 && !seenWords.has(cleaned)) {
+                        seenWords.add(cleaned);
+                        validItems.push({ term: t, definition: d });
+                    }
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
+                    const t = String((item as any).correctAnswer).trim();
+                    const d = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${t} kavramı`).trim();
+                    const cleaned = cleanForAnagram(t).replace(/\s/g, '');
+                    if (cleaned.length >= 3 && cleaned.length <= 14 && !seenWords.has(cleaned)) {
+                        seenWords.add(cleaned);
+                        validItems.push({ term: t, definition: d });
+                    }
+                }
+            }
         }
 
-        const querySnapshot = await getDocs(baseQuery);
-        
-        const allDefinitions = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
-             .filter(item => 
-                item.content &&
-                item.content.term &&
-                item.content.definition &&
-                cleanForAnagram(item.content.term).replace(/\s/g, '').length >= 3 &&
-                cleanForAnagram(item.content.term).replace(/\s/g, '').length <= 12
-            );
-
-        if (allDefinitions.length === 0) {
+        if (validItems.length === 0) {
             return { error: "İlim Hazinesi oynamak için bu konuda en az 1 adet tanımı olan kavram bulunmalıdır.", levels: null };
         }
         
-        const shuffled = [...allDefinitions].sort(() => 0.5 - Math.random());
+        const shuffled = [...validItems].sort(() => 0.5 - Math.random());
         
         const gameLevels: IlimHazinesiLevel[] = [];
 
         for (const item of shuffled) {
-            const mainWord = cleanForAnagram(item.content.term!);
-            const definition = item.content.definition!;
+            const mainWord = cleanForAnagram(item.term);
+            const definition = item.definition;
             
             // The letters will only be from the main word itself.
             const letters = mainWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5);
             
             gameLevels.push({
                 mainWord,
-                info: definition, // The definition is now the info
+                info: definition,
                 letters,
             });
         }
         
-        if (gameLevels.length === 0) {
-             return { error: "Oyun seviyeleri oluşturulamadı.", levels: null };
-        }
-
-        return { levels: JSON.parse(JSON.stringify(gameLevels)) };
+        return { levels: JSON.parse(JSON.stringify(gameLevels.slice(0, 20))) };
 
     } catch (error: any) {
         console.error("Server Action Error (getIlimHazinesiAction):", error);

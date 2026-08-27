@@ -11,22 +11,21 @@ export async function getGeneralStats() {
     noStore();
     const studentQuery = query(collection(db, "users"), where("role", "==", "student"));
     const questionsQuery = query(collection(db, "questions"));
-    const topStudentsQuery = query(collection(db, "users"), where("role", "==", "student"), orderBy("score", "desc"), limit(5));
 
-    const [studentSnap, questionSnap, topStudentsSnap] = await Promise.all([
+    const [studentSnap, questionSnap] = await Promise.all([
         getDocs(studentQuery),
-        getDocs(questionsQuery),
-        getDocs(topStudentsQuery)
+        getDocs(questionsQuery)
     ]);
 
     const allStudents = studentSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
     const allQuestions = questionSnap.docs.map(doc => doc.data() as Question);
     
-    // Serialize Timestamps for client component
-    const topStudents = topStudentsSnap.docs.map(doc => {
-        const data = doc.data();
-        return { ...JSON.parse(JSON.stringify(data)), uid: doc.id } as UserProfile;
-    });
+    // Sort and take top 5 students in-memory
+    const topStudents = allStudents
+        .slice()
+        .sort((a, b) => (b.score || 0) - (a.score || 0))
+        .slice(0, 5)
+        .map(s => JSON.parse(JSON.stringify(s)));
 
     const studentsPerClassData = allStudents.reduce((acc, student) => {
         const className = student.class?.split(' - ')[0] || "Belirtilmemiş";

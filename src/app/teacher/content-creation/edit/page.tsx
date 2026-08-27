@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, Topic, AccordionStep, ActivityLinkStep } from '@/lib/types';
+import type { LessonStep, Topic, AccordionStep, ActivityLinkStep, ActivityItem, Question, ImageAsset } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { 
@@ -34,7 +34,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, v
 import { CSS } from '@dnd-kit/utilities';
 import { Input } from '@/components/ui/input';
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
-import { cn } from "@/lib/utils";
+import { cn, cleanForAnagram } from "@/lib/utils";
 import { Badge } from '@/components/ui/badge';
 
 type DraggableLessonStep = LessonStep & { id: string };
@@ -91,6 +91,8 @@ function StepCard({
             case 'video': return { label: 'Video', color: 'text-red-400 border-red-500/30 bg-red-500/10', icon: <Video className="w-4 h-4 text-red-400" /> };
             case 'activityLink': return { label: 'Oyun', color: 'text-orange-400 border-orange-500/30 bg-orange-500/10', icon: <Gamepad2 className="w-4 h-4 text-orange-400" /> };
             case 'htmlSlide': return { label: 'HTML Slayt', color: 'text-sky-400 border-sky-500/30 bg-sky-500/10', icon: <FileText className="w-4 h-4 text-sky-400" /> };
+            case 'matching':
+            case 'conceptMatching': return { label: 'Eşleştirme', color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10', icon: <Shuffle className="w-4 h-4 text-indigo-400" /> };
             case 'accordion': return { label: 'Özet', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <Layers className="w-4 h-4 text-emerald-400" /> };
             default: return { label: step.type, color: 'text-slate-400 border-white/10 bg-white/5', icon: <BookOpen className="w-4 h-4 text-slate-400" /> };
         }
@@ -106,6 +108,10 @@ function StepCard({
             case 'conceptExplanation': 
                 const concItems = (step as any).items || (step as any).content?.items || [];
                 return <span className="text-xs font-semibold text-indigo-300">{concItems.length} Kavram ve Tanım</span>;
+            case 'matching':
+            case 'conceptMatching':
+                const matchPairs = (step as any).pairs || [];
+                return <span className="text-xs font-semibold text-indigo-300">{matchPairs.length} Kavram - Tanım Eşleşmesi</span>;
             case 'flashcard': 
                 const cards = (step as any).cards || [];
                 return <span className="text-xs font-semibold text-emerald-300">{cards.length} Bilgi Kartı</span>;
@@ -520,6 +526,18 @@ export function TopicEditor({
                     topicId: context?.topicId,
                 };
                 break;
+            case 'matching':
+            case 'conceptMatching':
+                newStep = {
+                    type: 'matching',
+                    title: defaultTitle || 'Kavram - Tanım Eşleştirme',
+                    pairs: [
+                        { concept: 'Kavram 1', definition: 'Birinci kavramın açıklaması ve tanımı...' },
+                        { concept: 'Kavram 2', definition: 'İkinci kavramın açıklaması ve tanımı...' },
+                        { concept: 'Kavram 3', definition: 'Üçüncü kavramın açıklaması ve tanımı...' }
+                    ]
+                };
+                break;
             case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Özet', items: [{ id: `item-${Date.now()}`, title: 'Başlık 1', content: 'İçerik 1'}] }; break;
             default: return;
         }
@@ -618,8 +636,115 @@ export function TopicEditor({
         setTimeout(() => setIsLibraryPanelOpen(true), 10);
     };
 
-    const handleItemsImportedFromLibrary = (importedSteps: LessonStep[]) => {
-        const newStepsWithIds = importedSteps.map((step, index) => ({
+    const handleItemsImportedFromLibrary = (items: any[], stepType: any) => {
+        if (!items || items.length === 0) return;
+
+        let generatedSteps: LessonStep[] = [];
+
+        if (stepType === 'matching' || stepType === 'conceptMatching') {
+            const pairs = items.map(item => {
+                const act = item as ActivityItem;
+                const concept = act.content?.term || (act as any).term || act.content?.text || (act as any).concept || (act as any).title || '';
+                const definition = act.content?.definition || (act as any).definition || '';
+                return { concept: String(concept).trim(), definition: String(definition).trim() };
+            }).filter(p => p.concept && p.definition);
+
+            if (pairs.length > 0) {
+                generatedSteps = [{
+                    type: 'matching',
+                    title: 'Kavram - Tanım Eşleştirme',
+                    pairs
+                }];
+            }
+        } else if (stepType === 'keyConcepts' || stepType === 'conceptExplanation') {
+            const concItems = items.map(item => {
+                const act = item as ActivityItem;
+                const concept = act.content?.term || (act as any).term || act.content?.text || (act as any).concept || 'Kavram';
+                const definition = act.content?.definition || (act as any).definition || '';
+                return { concept: String(concept).trim(), definition: String(definition).trim() };
+            });
+            generatedSteps = [{
+                type: 'conceptExplanation',
+                title: 'Anahtar Kavramlar',
+                items: concItems
+            }];
+        } else if (stepType === 'flashcard') {
+            const cards = items.map(item => {
+                const act = item as ActivityItem;
+                const term = act.content?.term || (act as any).term || act.content?.text || (act as any).title || 'Terim';
+                const definition = act.content?.definition || (act as any).definition || '';
+                return { term: String(term).trim(), definition: String(definition).trim() };
+            });
+            generatedSteps = [{
+                type: 'flashcard',
+                title: 'Bilgi Kartları',
+                cards
+            }];
+        } else if (stepType === 'anagramGame' || stepType === 'anagramFlashcard') {
+            const cards = items.map(item => {
+                const act = item as ActivityItem;
+                const term = act.content?.term || act.content?.text || (act as any).title || '';
+                const cleanWord = cleanForAnagram(term);
+                return {
+                    definition: act.content?.definition || `Bu kelime: "${term}"`,
+                    correctAnswer: cleanWord,
+                    scrambledWord: cleanWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5).join('').toLocaleUpperCase('tr-TR')
+                };
+            });
+            generatedSteps = [{
+                type: 'anagramGame',
+                title: 'Kelime Dehası',
+                cards
+            }];
+        } else if (stepType === 'sentenceScramble') {
+            generatedSteps = items.map(item => {
+                const act = item as ActivityItem;
+                const sentence = act.content?.text || (act as any).title || '';
+                const scrambled = sentence.split(' ').sort(() => Math.random() - 0.5).join(' ');
+                return {
+                    type: 'sentenceScramble',
+                    title: 'Cümle Düzeltme',
+                    correctSentence: sentence,
+                    scrambledSentence: scrambled
+                };
+            });
+        } else if (stepType === 'questions') {
+            generatedSteps = items.map(item => {
+                const q = item as Question;
+                if (q.type === 'Doğru/Yanlış') {
+                    return {
+                        type: 'tf',
+                        title: 'Doğru / Yanlış',
+                        statement: q.text,
+                        isTrue: q.correctAnswer === 'Doğru'
+                    };
+                } else if (q.type === 'Boşluk Doldurma') {
+                    return {
+                        type: 'fitb',
+                        title: 'Boşluk Doldurma',
+                        sentenceWithBlank: q.text,
+                        options: q.options || [],
+                        correctAnswer: q.correctAnswer || ''
+                    };
+                } else {
+                    return {
+                        type: 'mcq',
+                        title: 'Kontrol Sorusu',
+                        question: q.text,
+                        options: q.options || ['A', 'B', 'C', 'D'],
+                        correctAnswer: q.correctAnswer || (q.options ? q.options[0] : 'A')
+                    };
+                }
+            });
+        } else if (stepType === 'visual') {
+            generatedSteps = items.map(item => ({
+                type: 'visual',
+                title: (item as ImageAsset).title || 'Görsel',
+                imageUrl: (item as ImageAsset).url
+            }));
+        }
+
+        const newStepsWithIds = generatedSteps.map((step, index) => ({
             ...step,
             id: `step-${Date.now()}-${index}-${Math.random()}`
         }));
@@ -634,6 +759,10 @@ export function TopicEditor({
             return [...currentSteps, ...newStepsWithIds];
         });
         setIsLibraryPanelOpen(false);
+        toast({ 
+            title: "Adım Eklendi", 
+            description: `${newStepsWithIds.length} adet adım başarıyla eklendi.` 
+        });
     };
 
     const anlatimStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
@@ -645,12 +774,14 @@ export function TopicEditor({
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'İnteraktif HTML Slayt', type: 'htmlSlide', defaultTitle: 'İnteraktif Sunum' },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
-        { label: 'Veri Bankası: Kavramlar', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
+        { label: 'Veri Bankası: Tanım Kartları', action: () => handleOpenLibrary(['definition'], true, 'keyConcepts') },
         { label: 'Veri Bankası: Bilgi Kartları', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
         { label: 'Arşivden Görsel Ekle', action: () => handleOpenLibrary(['images'], true, 'visual') },
     ];
 
     const degerlendirmeStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
+        { label: 'Kavram - Tanım Eşleştirme', type: 'matching', defaultTitle: 'Kavram Eşleştirme' },
+        { label: 'Veri Bankasından Eşleştirme Ekle', action: () => handleOpenLibrary(['definition'], true, 'matching') },
         { label: 'Çoktan Seçmeli Soru', type: 'mcq', defaultTitle: 'Kontrol Sorusu' },
         { label: 'Doğru / Yanlış', type: 'tf', defaultTitle: 'Doğru/Yanlış' },
         { label: 'Doğru / Yanlış Listesi', type: 'trueFalseList', defaultTitle: 'Doğru/Yanlış Alıştırması' },

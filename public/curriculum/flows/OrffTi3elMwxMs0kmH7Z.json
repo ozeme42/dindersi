@@ -1,0 +1,373 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimiz ve Çevre Bilinci konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimiz ve Çevre Bilinci ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Ünite: Toplumsal Hayatta Peygamberimiz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Sadaka, İsraf, Fidan kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Sadaka</li><li>İsraf</li><li>Fidan</li><li>Ahlak</li><li>Vakıf</li><li>Vicdan</li><li>Temizlik</li><li>Emanet</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimiz ve Çevre Bilinci - Önemli Bilgiler (1)",
+    "content": "<ul><li>Yeryüzü, Allah'ın insana emanetidir ve bu, çevreye karşı sorumluluk yükler.</li><li>Hz. Peygamber, ağaç dikmeyi çok teşvik etmiş, hatta \"kıyamet kopsa bile fidan dikin\" demiştir.</li><li>Hayvanlara merhametli davranmayı, onlara iyi bakmayı ve yardım etmeyi öğütlemiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimiz ve Çevre Bilinci - Önemli Bilgiler (2)",
+    "content": "<ul><li>Su israfını kesinlikle yasaklamış, suyu temiz tutmayı ve ölçülü kullanmayı vurgulamıştır.</li><li>Toprağın verimli kullanılmasını, işlenebilir arazilerin boş bırakılmamasını teşvik etmiştir.</li><li>Çevre temizliğine önem vermiş, \"Temizlik imanın yarısıdır\" buyurarak temizliği vurgulamıştır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimiz ve Çevre Bilinci - Önemli Bilgiler (3)",
+    "content": "<ul><li>Doğal dengeyi bozmaktan kaçınılmasını ve tabiatla uyumlu yaşamayı öğretmiştir.</li><li>Gelecek nesillere yaşanabilir bir çevre bırakmanın Müslüman ahlakının gereği olduğunu belirtmiştir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "İsraf",
+        "definition": "Kaynakların gereksiz yere harcanması eylemi."
+      },
+      {
+        "concept": "Sadaka",
+        "definition": "Her canlıya iyilikte elde edilen sevap."
+      },
+      {
+        "concept": "Vakıf",
+        "definition": "Topluma fayda sağlayan hayır kurumlarının adı."
+      },
+      {
+        "concept": "Ahlak",
+        "definition": "Davranışlarda ölçülü ve dengeli olmayı ifade eden ilke."
+      },
+      {
+        "concept": "Fidan",
+        "definition": "Kıyamet koparken bile dikilmesi öğütlenen bitki."
+      },
+      {
+        "concept": "Temizlik",
+        "definition": "İmanın yarısı olarak kabul edilen durum."
+      },
+      {
+        "concept": "Vicdan",
+        "definition": "Çevremizdeki canlılara davranışımızı düzenleyen iç ses."
+      },
+      {
+        "concept": "Emanet",
+        "definition": "Yeryüzü ve üzerindeki her şeyin insana yüklediği sorumluluk."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "İsraf",
+        "definition": "Kaynakların gereksiz yere harcanması eylemi."
+      },
+      {
+        "term": "Sadaka",
+        "definition": "Her canlıya iyilikte elde edilen sevap."
+      },
+      {
+        "term": "Vakıf",
+        "definition": "Topluma fayda sağlayan hayır kurumlarının adı."
+      },
+      {
+        "term": "Ahlak",
+        "definition": "Davranışlarda ölçülü ve dengeli olmayı ifade eden ilke."
+      },
+      {
+        "term": "Fidan",
+        "definition": "Kıyamet koparken bile dikilmesi öğütlenen bitki."
+      },
+      {
+        "term": "Temizlik",
+        "definition": "İmanın yarısı olarak kabul edilen durum."
+      },
+      {
+        "term": "Vicdan",
+        "definition": "Çevremizdeki canlılara davranışımızı düzenleyen iç ses."
+      },
+      {
+        "term": "Emanet",
+        "definition": "Yeryüzü ve üzerindeki her şeyin insana yüklediği sorumluluk."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Sadaka",
+        "scrambledWord": "AAADSK",
+        "definition": "İpucu: Bu kelime \"Sadaka\""
+      },
+      {
+        "correctAnswer": "İsraf",
+        "scrambledWord": "RSİAF",
+        "definition": "İpucu: Bu kelime \"İsraf\""
+      },
+      {
+        "correctAnswer": "Fidan",
+        "scrambledWord": "ADNFİ",
+        "definition": "İpucu: Bu kelime \"Fidan\""
+      },
+      {
+        "correctAnswer": "Ahlak",
+        "scrambledWord": "AKHAL",
+        "definition": "İpucu: Bu kelime \"Ahlak\""
+      },
+      {
+        "correctAnswer": "Vakıf",
+        "scrambledWord": "FAVIK",
+        "definition": "İpucu: Bu kelime \"Vakıf\""
+      },
+      {
+        "correctAnswer": "Vicdan",
+        "scrambledWord": "AİVNDC",
+        "definition": "İpucu: Bu kelime \"Vicdan\""
+      },
+      {
+        "correctAnswer": "Temizlik",
+        "scrambledWord": "MZTİLKİE",
+        "definition": "İpucu: Bu kelime \"Temizlik\""
+      },
+      {
+        "correctAnswer": "Emanet",
+        "scrambledWord": "TEENAM",
+        "definition": "İpucu: Bu kelime \"Emanet\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "\"Temizlik, imanın yarısıdır\" hadisi çevre temizliğini değil, sadece bedensel temizliği vurgular.",
+        "isTrue": false
+      },
+      {
+        "statement": "Küresel çevre sorunları günümüzde dünyanın en büyük tehlikelerinden biri olarak görülmez, çünkü bunlar sadece lokal sorunlardır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Peygamber, ağaç dikmenin önemini sürekli vurgulamıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamber Efendimiz, zorunlu bir sebep olmadıkça ağaç kesilmesini yasaklamıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Müslümanlar, doğal kaynakların sürdürülebilirliği için sadece su tasarrufuna odaklanmalıdır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Peygamber'in hayvanlara karşı merhametli tutumu, sadece güçsüz hayvanlara yönelikti.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamber Efendimiz'in öğretileri, sadece insanlara yönelik sosyal sorumlulukları kapsar, diğer canlılara karşı sorumlulukları içermez.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamber Efendimiz'i örnek alan bir mümin, çevresel sorunlara karşı duyarsız kalabilir çünkü sorumluluk sadece devletlere aittir.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Ağaç dikmek büyük sevaptır.",
+    "scrambledSentence": "Ağaç dikmek sevaptır. büyük"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Doğal dengeyi bozmamalıyız.",
+    "scrambledSentence": "Doğal dengeyi bozmamalıyız."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Su ve toprak israf edilmemeli.",
+    "scrambledSentence": "israf toprak Su ve edilmemeli."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Vakıflar çevreye fayda sağladı.",
+    "scrambledSentence": "Vakıflar çevreye sağladı. fayda"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "__________, çevremizdeki varlıklara karşı davranışlarımızı düzenleyen önemli bir ahlaki ilkedir.",
+    "options": [
+      "Akıl",
+      "Vicdan",
+      "Hırs",
+      "Kudret"
+    ],
+    "correctAnswer": "Vicdan"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Müslüman'ın sadece kendini değil, etrafındaki diğer canlıların hayatından da sorumlu olması, onların __________ tükenmesinin kötü sonuçlar doğuracağının bilincinde olmasını sağlar.",
+    "options": [
+      "Refahının",
+      "Neslinin",
+      "Gücünün",
+      "Kaynaklarının"
+    ],
+    "correctAnswer": "Neslinin"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Gelecek nesillere bırakılacak en güzel mirasın, yaşayabilecekleri doğal bir yaşam alanı olduğunu vurgulayan Peygamberimiz, bu konuda __________ bir sorumluluğa işaret etmiştir.",
+    "options": [
+      "Bireysel",
+      "Toplumsal",
+      "Nesiller arası",
+      "Anlık"
+    ],
+    "correctAnswer": "Nesiller arası"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yeryüzündeki dengeyi bozmaması için Yüce Allah, insanı __________ olmaya ayetiyle uyarmaktadır.",
+    "options": [
+      "İbadet etmeye",
+      "Ölçülü",
+      "Zengin",
+      "Bilim yapmaya"
+    ],
+    "correctAnswer": "Ölçülü"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber Efendimiz, tarım alanlarının dikkatli kullanılmasını ve işlenebilecek durumdaki toprakların __________ bırakılmamasını teşvik etmiştir.",
+    "options": [
+      "Kuru",
+      "Verimli",
+      "Atıl",
+      "İşlenmiş"
+    ],
+    "correctAnswer": "Atıl"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz'in Afira köyünün adını Hadira olarak değiştirmesindeki temel amaç nedir?",
+    "options": [
+      "A) Tarihi bir olayı anmak",
+      "B) Bölgenin coğrafi yapısını değiştirmek",
+      "C) İnsanların zihninde yeşilin ve doğanın önemini pekiştirmek",
+      "D) Köylüler arasında birliği sağlamak"
+    ],
+    "correctAnswer": "C) İnsanların zihninde yeşilin ve doğanın önemini pekiştirmek"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz'in \"Her canlıya yapılan iyilikte bir sevap vardır.\" hadisi, İslam'ın hangi ahlaki ilkesini vurgular?",
+    "options": [
+      "A) Adalet",
+      "B) Merhamet",
+      "C) Cömertlik",
+      "D) Sabır"
+    ],
+    "correctAnswer": "B) Merhamet"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İslam dinindeki vakıf kültürü, Peygamber Efendimiz'in çevre bilincine dair öğretileriyle nasıl bir ilişki içindedir?",
+    "options": [
+      "A) Vakıflar sadece cami yapımında kullanılmıştır.",
+      "B) Vakıflar, çevresel sorunlara karşı pasif kalmayı teşvik etmiştir.",
+      "C) Vakıflar, doğal kaynakların korunması ve hayvanların bakımı gibi alanlarda somut uygulamalar sunmuştur.",
+      "D) Vakıflar, sadece insanlara yönelik sosyal yardımlaşma kurumlarıdır."
+    ],
+    "correctAnswer": "C) Vakıflar, doğal kaynakların korunması ve hayvanların bakımı gibi alanlarda somut uygulamalar sunmuştur."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz'in \"Yeryüzündekilere (canlılara) merhamet edin ki Allah da size merhamet etsin.\" hadisi, çevre bilincinin hangi boyutuyla doğrudan ilişkilidir?",
+    "options": [
+      "A) Bilimsel araştırma",
+      "B) Ekonomik sürdürülebilirlik",
+      "C) Etik ve ahlaki sorumluluk",
+      "D) Teknolojik gelişme"
+    ],
+    "correctAnswer": "C) Etik ve ahlaki sorumluluk"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz'in \"Temizlik imanın yarısıdır.\" sözü neyin önemini vurgular?",
+    "options": [
+      "A) Zenginliğin",
+      "B) Sağlığın",
+      "C) Temizliğin",
+      "D) Eğitimin"
+    ],
+    "correctAnswer": "C) Temizliğin"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kasva adlı devenin hikayesi, Peygamber Efendimiz'in canlılara karşı tutumunu hangi yönüyle en iyi şekilde örnekler?",
+    "options": [
+      "A) Güçlü hayvanları takdir etme",
+      "B) Hayvan sevgisinin sadece hızlı ve işe yarayanlarla sınırlı olduğu",
+      "C) Hayvanlara vefalı olma ve merhamet gösterme",
+      "D) Hayvanları yarışlarda kullanma"
+    ],
+    "correctAnswer": "C) Hayvanlara vefalı olma ve merhamet gösterme"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"O, göğü yükseltti. (Yeryüzüne) Denge ve ölçü koydu. O dengeden sapmayın, ölçüyü düzgün tutun.\" ayeti neyin korunması gerektiğine işaret eder?",
+    "options": [
+      "A) İnsanlık",
+      "B) Gökler",
+      "C) Yeryüzündeki denge",
+      "D) Zenginlik"
+    ],
+    "correctAnswer": "C) Yeryüzündeki denge"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Peygamber, hayvanlara nasıl davranılması gerektiğini öğütlemiştir?",
+    "options": [
+      "A) Aşırı yük yükleyerek",
+      "B) İhmal ederek",
+      "C) Merhametle",
+      "D) Eğlence aracı olarak"
+    ],
+    "correctAnswer": "C) Merhametle"
+  }
+]

@@ -63,9 +63,9 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
                 case 'definition': 
                     return (
                         <div className="space-y-1">
-                            <span className="text-xs font-black uppercase text-emerald-400 tracking-wider block mb-1">Bilgi Kartı</span>
-                            <p className="text-sm font-bold text-white">{actItem.content?.term}</p>
-                            <p className="text-xs text-slate-400 line-clamp-2">{actItem.content?.definition}</p>
+                            <span className="text-xs font-black uppercase text-emerald-400 tracking-wider block mb-1">Tanım Kartı</span>
+                            <p className="text-sm font-bold text-white">{(actItem.content as any)?.term || (actItem as any).term || (actItem as any).concept}</p>
+                            <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">{(actItem.content as any)?.definition || (actItem as any).definition}</p>
                         </div>
                     );
                 case 'sentence': 
@@ -101,7 +101,7 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
             const actItem = item as ActivityItem;
             const typeLabels: Record<string, { label: string, color: string }> = { 
                 concept: { label: 'Kavram', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10' }, 
-                definition: { label: 'Tanım / Kart', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' }, 
+                definition: { label: 'Tanım Kartı', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' }, 
                 sentence: { label: 'Cümle', color: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10' }, 
                 categorization: { label: 'Kategori', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10' } 
             };
@@ -229,6 +229,22 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
         fetchItems();
     }, [isOpen, filters, config.filter, searchTerm]);
 
+    const filteredItems = useMemo(() => {
+        if (!items || items.length === 0) return [];
+        // Eğer tanım kartı filtresi varsa (flashcard, keyConcepts, matching) sadece type === 'definition' olanları getir
+        if (config.filter.includes('definition')) {
+            return items.filter(it => {
+                if ('type' in it && it.type === 'concept') return false;
+                if ('type' in it && it.type === 'definition') {
+                    const def = (it as any).content?.definition || (it as any).definition;
+                    return !!(def && String(def).trim().length > 0);
+                }
+                return true;
+            });
+        }
+        return items;
+    }, [items, config.filter]);
+
     const handleSelect = (item: LibraryItem) => {
         setSelectedItemIds(prev => {
             const newSet = new Set(prev);
@@ -246,14 +262,14 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
     
     const handleSelectAll = (isChecked: boolean) => {
         if (isChecked) {
-            setSelectedItemIds(new Set(items.map(item => item.id)));
+            setSelectedItemIds(new Set(filteredItems.map(item => item.id)));
         } else {
             setSelectedItemIds(new Set());
         }
     };
     
     const handleAddSelected = () => {
-        const selected = items.filter(item => selectedItemIds.has(item.id));
+        const selected = filteredItems.filter(item => selectedItemIds.has(item.id));
         onItemsSelected(selected, config.stepType);
         onOpenChange(false);
     };
@@ -305,7 +321,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
             );
         }
         
-        const allOnPageSelected = items.length > 0 && items.every(item => selectedItemIds.has(item.id));
+        const allOnPageSelected = itemsToRender.length > 0 && itemsToRender.every(item => selectedItemIds.has(item.id));
 
         return (
             <div className="space-y-4">
@@ -318,7 +334,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
                                 onCheckedChange={handleSelectAll}
                             />
                             <Label htmlFor="select-all-library" className="text-xs font-bold text-slate-300 cursor-pointer">
-                                Tümünü Seç ({items.length} Öğe)
+                                Tümünü Seç ({itemsToRender.length} Öğe)
                             </Label>
                         </div>
                         <span className="text-xs font-mono font-bold text-indigo-400">
@@ -387,7 +403,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
                 
                 <div className="flex-grow overflow-hidden p-5">
                     <ScrollArea className="h-full pr-3">
-                        {renderTabContent(items)}
+                        {renderTabContent(filteredItems)}
                     </ScrollArea>
                 </div>
 

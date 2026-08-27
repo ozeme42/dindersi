@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { playSound } from '@/lib/audio-service';
 
 // --- ÜRÜN KARTI BİLEŞENİ ---
 function ItemCard({ item, user, onPurchase, onEquip }: { 
@@ -185,9 +186,11 @@ export default function ShopPage() {
         }
         const result = await purchaseItem(user.uid, itemId, price);
         if (result.success) {
+            playSound('win');
             toast({ title: "Başarılı!", description: "Ürün başarıyla satın alındı." });
             // The onSnapshot listener in useAuth will handle the UI update.
         } else {
+            playSound('incorrect');
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
     };
@@ -199,8 +202,10 @@ export default function ShopPage() {
         const assetValue = item.type === 'avatarFrame' ? item.assetUrl : item.id;
         const result = await equipItem(user.uid, item.type, assetValue || null);
         if (result.success) {
+            playSound('pop');
             toast({ title: "Başarılı!", description: "Seçiminiz güncellendi." });
         } else {
+            playSound('incorrect');
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
     }
@@ -210,8 +215,10 @@ export default function ShopPage() {
         if (!user) return;
         const result = await equipItem(user.uid, type, null);
          if (result.success) {
+            playSound('pop');
             toast({ title: "Başarılı!", description: "Eşya çıkarıldı." });
         } else {
+            playSound('incorrect');
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
     }

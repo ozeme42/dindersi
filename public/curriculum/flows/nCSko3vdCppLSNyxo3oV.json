@@ -1,0 +1,399 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Kur’an-ı Kerim’in İç Düzeni konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Kur’an-ı Kerim’in İç Düzeni ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Kur’an-ı Kerim çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Medeni ayet, Furkan, Mekki ayet kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Medeni ayet</li><li>Furkan</li><li>Mekki ayet</li><li>Hafız</li><li>Ayet</li><li>Kur'an</li><li>Hatim</li><li>Sure</li><li>Kelam</li><li>Cüz</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Kur’an-ı Kerim’in İç Düzeni - Önemli Bilgiler (1)",
+    "content": "<ul><li>Kur'an-ı Kerim, son peygamber Hz. Muhammed'e (sav) indirilen ve Allah (cc) tarafından kıyamete kadar korunacak olan son ilahi kitaptır.</li><li>Kur'an, vahiy meleği Cebrail aracılığıyla 23 yılda tamamlanmıştır ve okunması ile yaşanması ibadettir.</li><li>Kur'an'ın dili Arapçadır ve Hz. Peygamber, Kur'an'ın mesajlarını en iyi anlayan ve açıklayan örnektir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Kur’an-ı Kerim’in İç Düzeni - Önemli Bilgiler (2)",
+    "content": "<ul><li>Kur'an'ın Furkan, Nur, Şifa, Zikir ve Kelam gibi pek çok güzel ismi bulunmaktadır.</li><li>Kur'an'ın iç düzeni Ayet, Sure ve Cüz gibi temel kavramlarla açıklanır.</li><li>Ayet, sureleri oluşturan harf, kelime veya cümlelerdir; Mekki (iman esasları) ve Medeni (toplumsal konular) olarak ayrılırlar.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Kur’an-ı Kerim’in İç Düzeni - Önemli Bilgiler (3)",
+    "content": "<ul><li>Sure, ayetlerden oluşan bölümlerdir; Kur'an'da 114 sure vardır, en uzunu Bakara, en kısası Kevser'dir.</li><li>Cüz, Kur'an'ın yirmi sayfadan oluşan bölümüdür; toplam 30 cüz, Kur'an'ı okumayı ve ezberlemeyi kolaylaştırır.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Medeni ayet",
+        "definition": "Hz. Peygamber Medine'de iken inen ayetlere denir."
+      },
+      {
+        "concept": "Furkan",
+        "definition": "Doğru ile yanlışı ayırt eden ismi."
+      },
+      {
+        "concept": "Ayet",
+        "definition": "Kur'an surelerini oluşturan harf, kelime veya cümlelerden oluşurum. Küçük yuvarlak işaretlerle ayrılır."
+      },
+      {
+        "concept": "Kur'an",
+        "definition": "Toplamak, okumak ve bir araya getirmek anlamlarına gelirim. Vahiy yoluyla gönderildim ve okunmam ibadettir."
+      },
+      {
+        "concept": "Mekki ayet",
+        "definition": "Hz. Peygamber Mekke'de iken inen ayetlere denir."
+      },
+      {
+        "concept": "Cüz",
+        "definition": "Kur'an'ın yirmi sayfadan oluşan bölümleri. Başlangıcında \"cüz gülleri\" bulunur."
+      },
+      {
+        "concept": "Kelam",
+        "definition": "Yüce Allah'ın sözü olan ismi."
+      },
+      {
+        "concept": "Sure",
+        "definition": "Ayetlerden oluşan Kur'an bölümlerinden biri. Besmele ile ayrılır. Fatiha ilk, Nas ise sonuncusudur."
+      },
+      {
+        "concept": "Hafız",
+        "definition": "Kur'an'ı baştan sona ezberlemiş kişiye denir."
+      },
+      {
+        "concept": "Hatim",
+        "definition": "Kur'an'ı baştan sona okumak."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Medeni ayet",
+        "definition": "Hz. Peygamber Medine'de iken inen ayetlere denir."
+      },
+      {
+        "term": "Furkan",
+        "definition": "Doğru ile yanlışı ayırt eden ismi."
+      },
+      {
+        "term": "Ayet",
+        "definition": "Kur'an surelerini oluşturan harf, kelime veya cümlelerden oluşurum. Küçük yuvarlak işaretlerle ayrılır."
+      },
+      {
+        "term": "Kur'an",
+        "definition": "Toplamak, okumak ve bir araya getirmek anlamlarına gelirim. Vahiy yoluyla gönderildim ve okunmam ibadettir."
+      },
+      {
+        "term": "Mekki ayet",
+        "definition": "Hz. Peygamber Mekke'de iken inen ayetlere denir."
+      },
+      {
+        "term": "Cüz",
+        "definition": "Kur'an'ın yirmi sayfadan oluşan bölümleri. Başlangıcında \"cüz gülleri\" bulunur."
+      },
+      {
+        "term": "Kelam",
+        "definition": "Yüce Allah'ın sözü olan ismi."
+      },
+      {
+        "term": "Sure",
+        "definition": "Ayetlerden oluşan Kur'an bölümlerinden biri. Besmele ile ayrılır. Fatiha ilk, Nas ise sonuncusudur."
+      },
+      {
+        "term": "Hafız",
+        "definition": "Kur'an'ı baştan sona ezberlemiş kişiye denir."
+      },
+      {
+        "term": "Hatim",
+        "definition": "Kur'an'ı baştan sona okumak."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Medeni ayet",
+        "scrambledWord": "EEAY MTNDEİ",
+        "definition": "İpucu: Bu kelime \"Medeni ayet\""
+      },
+      {
+        "correctAnswer": "Furkan",
+        "scrambledWord": "AFNURK",
+        "definition": "İpucu: Bu kelime \"Furkan\""
+      },
+      {
+        "correctAnswer": "Mekki ayet",
+        "scrambledWord": "İYTAM KEKE",
+        "definition": "İpucu: Bu kelime \"Mekki ayet\""
+      },
+      {
+        "correctAnswer": "Hafız",
+        "scrambledWord": "HFZAI",
+        "definition": "İpucu: Bu kelime \"Hafız\""
+      },
+      {
+        "correctAnswer": "Ayet",
+        "scrambledWord": "EATY",
+        "definition": "İpucu: Bu kelime \"Ayet\""
+      },
+      {
+        "correctAnswer": "Kur'an",
+        "scrambledWord": "UNK'RA",
+        "definition": "İpucu: Bu kelime \"Kur'an\""
+      },
+      {
+        "correctAnswer": "Hatim",
+        "scrambledWord": "ATHİM",
+        "definition": "İpucu: Bu kelime \"Hatim\""
+      },
+      {
+        "correctAnswer": "Sure",
+        "scrambledWord": "SUER",
+        "definition": "İpucu: Bu kelime \"Sure\""
+      },
+      {
+        "correctAnswer": "Kelam",
+        "scrambledWord": "ALKEM",
+        "definition": "İpucu: Bu kelime \"Kelam\""
+      },
+      {
+        "correctAnswer": "Cüz",
+        "scrambledWord": "CZÜ",
+        "definition": "İpucu: Bu kelime \"Cüz\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Hz. Muhammed (sav), peygamberliğinin yaklaşık 13 yılını Medine’de, 10 yılını da Mekke’de geçirmiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Ayetler, içlerinde ayet numaralarının yazılı olduğu küçük yuvarlak işaretlerle birbirinden ayrılmaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kur’an-ı Kerim’in okunması ve ezberlenmesi ibadet değildir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav), Kur’an-ı Kerim’in mesajlarını en iyi anlayan ve insanlara açıklayan kişi değildir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kur’an’ın içindeki hükümler sadece belirli bir topluluk için geçerlidir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Peygamber Mekke’deyken gelen ayetlere Medeni ayet denir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kur’an-ı Kerim’in Medine’de inen ayetlerinde daha çok iman esasları anlatılır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kur’an-ı Kerim’de 30 cüz bulunur.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kur'an 23 yılda tamamlanmıştır.",
+    "scrambledSentence": "yılda 23 Kur'an tamamlanmıştır."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Cüz 20 sayfadan oluşan bölümdür.",
+    "scrambledSentence": "oluşan bölümdür. Cüz sayfadan 20"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Sureler ayetlerden oluşan bölümlerdir.",
+    "scrambledSentence": "ayetlerden Sureler bölümlerdir. oluşan"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Mekki ayetler Mekke'de inmiştir.",
+    "scrambledSentence": "Mekke'de inmiştir. ayetler Mekki"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Ayetler, içlerinde ayet numaralarının yazılı olduğu küçük yuvarlak işaretlerle birbirinden ayrılır. Bu işaretlere ___ adı verilir.",
+    "options": [
+      "nokta",
+      "virgül",
+      "durak",
+      "işaret"
+    ],
+    "correctAnswer": "durak"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kur’an-ı Kerim’in Medine’de inen ayetlerinde ise genellikle ___ ve toplumu ilgilendiren konular yer alır.",
+    "options": [
+      "ticaret",
+      "aile",
+      "eğlence",
+      "sanat"
+    ],
+    "correctAnswer": "aile"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kur’an-ı Kerim’in içindeki hükümlerin daha iyi kavranıp özümsenmesi için ___ indirilmiştir.",
+    "options": [
+      "tek seferde",
+      "hızlıca",
+      "parça parça",
+      "sadece geceleri"
+    ],
+    "correctAnswer": "parça parça"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Sureler isimlerini ya içerisindeki bir kelimeden ya anlatılan olaydan ya da peygamber veya bir ___ isminden alır.",
+    "options": [
+      "bitkinin",
+      "canlının",
+      "eşyanın",
+      "yerin"
+    ],
+    "correctAnswer": "canlının"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Her cüzün başlangıcında sayfanın kenarında bulunan sembollere ___ denir.",
+    "options": [
+      "ayet gülleri",
+      "sure gülleri",
+      "cüz gülleri",
+      "hatim gülleri"
+    ],
+    "correctAnswer": "cüz gülleri"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an-ı Kerim hangi ayda indirilmeye başlanmıştır?",
+    "options": [
+      "Şevval",
+      "Ramazan",
+      "Muharrem",
+      "Recep"
+    ],
+    "correctAnswer": "Ramazan"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an-ı Kerim’de toplam kaç sure bulunur?",
+    "options": [
+      "100",
+      "110",
+      "114",
+      "120"
+    ],
+    "correctAnswer": "114"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed’in (sav) Kur’an’ın nasıl anlaşılacağını ve yaşanacağını gösteren en güzel örnek olması, onun hangi rolünü vurgular?",
+    "options": [
+      "Sadece bir tebliğci olduğunu",
+      "Sadece bir lider olduğunu",
+      "Kur'an'ın canlı bir tefsiri ve uygulayıcısı olduğunu",
+      "Sadece bir şair olduğunu"
+    ],
+    "correctAnswer": "Kur'an'ın canlı bir tefsiri ve uygulayıcısı olduğunu"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an kelimesi hangi anlamlara gelir?",
+    "options": [
+      "Yazmak, çizmek",
+      "Toplamak, okumak, bir araya getirmek",
+      "Dinlemek, anlamak",
+      "Ezberlemek, yaymak"
+    ],
+    "correctAnswer": "Toplamak, okumak, bir araya getirmek"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Vahiy meleği Cebrail tarafından bölümler hâlinde Hz. Muhammed’e (sav) bildirilen Kur’an-ı Kerim’in tamamlanması kaç yıl sürmüştür?",
+    "options": [
+      "10 yıl",
+      "13 yıl",
+      "20 yıl",
+      "23 yıl"
+    ],
+    "correctAnswer": "23 yıl"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an-ı Kerim’in son suresi hangisidir?",
+    "options": [
+      "Fatiha",
+      "Bakara",
+      "Nas",
+      "Kevser"
+    ],
+    "correctAnswer": "Nas"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an surelerini oluşturan harf, kelime veya cümlelere ne denir?",
+    "options": [
+      "Sure",
+      "Cüz",
+      "Ayet",
+      "Hatim"
+    ],
+    "correctAnswer": "Ayet"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Ayetlerin uzunlukları birbirinden farklıdır. Bir harften oluşan ayetler olduğu gibi bir sayfa uzunluğunda ayet de vardır. Bu durum, Kur'an'ın hangi özelliğini gösterir?",
+    "options": [
+      "Sadece kısa metinlerden oluştuğunu",
+      "Sadece uzun metinlerden oluştuğunu",
+      "Yapısal çeşitliliğini ve esnekliğini",
+      "Anlaşılmasının zor olduğunu"
+    ],
+    "correctAnswer": "Yapısal çeşitliliğini ve esnekliğini"
+  }
+]

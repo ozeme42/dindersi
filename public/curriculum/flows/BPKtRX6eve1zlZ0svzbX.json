@@ -1,0 +1,373 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Hz. Muhammed’in (sav) Doğduğu Çevre konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Hz. Muhammed’in (sav) Doğduğu Çevre ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "4️⃣ Peygamberliğinden Önce Hz. Muhammed çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Şirk, Putperest, Bedevi kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Şirk</li><li>Putperest</li><li>Bedevi</li><li>Cahiliye Dönemi</li><li>Kâbe</li><li>Kabile</li><li>Put</li><li>Hanif</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Hz. Muhammed’in (sav) Doğduğu Çevre - Önemli Bilgiler (1)",
+    "content": "<ul><li>Hz. Muhammed (sav) Arap Yarımadası'nın Hicaz bölgesinde, Kâbe'nin bulunduğu önemli bir ticaret ve inanç merkezi olan Mekke'de doğmuştur.</li><li>Hz. Muhammed'in doğduğu döneme \"Cahiliye Dönemi\" denir; bu dönemde putperestlik, soyla övünme, adaletsizlik ve zayıfları ezme gibi olumsuz davranışlar yaygındı.</li><li>Mekke'de dinî hayatta putperestlik baskındı ancak Allah'ın birliğine inanan Hanifler de bulunuyordu; az da olsa Hristiyanlık da vardı.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Hz. Muhammed’in (sav) Doğduğu Çevre - Önemli Bilgiler (2)",
+    "content": "<ul><li>Mekke'nin sıcak ve kurak iklimi nedeniyle tarıma elverişli toprakları sınırlıydı; halkın geçim kaynakları genellikle ticaret, hayvancılık ve el sanatlarıydı.</li><li>Siyasi yapı, merkezi bir otoriteden yoksun kabileler üzerine kuruluydu; kabile reisleri mutlak güç sahibi olmayıp daha çok hakemlik yapardı.</li><li>Sosyal hayatta kölelik çok yaygındı, kölelerin hakları gözetilmezdi; kadınlara ve kız çocuklarına değer verilmez, içki, kumar, hırsızlık gibi kötülükler yaygındı.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Hz. Muhammed’in (sav) Doğduğu Çevre - Önemli Bilgiler (3)",
+    "content": "<ul><li>Hz. Peygamber, Veda Hutbesi'nde Cahiliye Dönemi'nin kötü âdetlerinden uzak durulması gerektiğini vurgulayarak, bu zihniyetin tekrar yaşanmaması için uyarılarda bulunmuştur.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Putperest",
+        "definition": "Taş veya ağaç nesnelere tapan kişiler."
+      },
+      {
+        "concept": "Bedevi",
+        "definition": "Çöllerde göçebe yaşayanlara verilen ad."
+      },
+      {
+        "concept": "Cahiliye Dönemi",
+        "definition": "Adaletsizliğin, putperestliğin yaygın olduğu zaman."
+      },
+      {
+        "concept": "Kabile",
+        "definition": "Kan bağıyla bağlı insan topluluğu."
+      },
+      {
+        "concept": "Put",
+        "definition": "İbadet için yapılan taş veya ağaç nesneler."
+      },
+      {
+        "concept": "Şirk",
+        "definition": "Allah'a başka ilahlar ortak koşmak."
+      },
+      {
+        "concept": "Kâbe",
+        "definition": "Yeryüzündeki ilk ibadet yeri."
+      },
+      {
+        "concept": "Hanif",
+        "definition": "Cahiliye döneminde Allah'ın tek olduğuna inananlar."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Putperest",
+        "definition": "Taş veya ağaç nesnelere tapan kişiler."
+      },
+      {
+        "term": "Bedevi",
+        "definition": "Çöllerde göçebe yaşayanlara verilen ad."
+      },
+      {
+        "term": "Cahiliye Dönemi",
+        "definition": "Adaletsizliğin, putperestliğin yaygın olduğu zaman."
+      },
+      {
+        "term": "Kabile",
+        "definition": "Kan bağıyla bağlı insan topluluğu."
+      },
+      {
+        "term": "Put",
+        "definition": "İbadet için yapılan taş veya ağaç nesneler."
+      },
+      {
+        "term": "Şirk",
+        "definition": "Allah'a başka ilahlar ortak koşmak."
+      },
+      {
+        "term": "Kâbe",
+        "definition": "Yeryüzündeki ilk ibadet yeri."
+      },
+      {
+        "term": "Hanif",
+        "definition": "Cahiliye döneminde Allah'ın tek olduğuna inananlar."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Şirk",
+        "scrambledWord": "İRKŞ",
+        "definition": "İpucu: Bu kelime \"Şirk\""
+      },
+      {
+        "correctAnswer": "Putperest",
+        "scrambledWord": "UTPPETRSE",
+        "definition": "İpucu: Bu kelime \"Putperest\""
+      },
+      {
+        "correctAnswer": "Bedevi",
+        "scrambledWord": "İDVBEE",
+        "definition": "İpucu: Bu kelime \"Bedevi\""
+      },
+      {
+        "correctAnswer": "Cahiliye Dönemi",
+        "scrambledWord": "MCHİEEİDY ÖİNAL",
+        "definition": "İpucu: Bu kelime \"Cahiliye Dönemi\""
+      },
+      {
+        "correctAnswer": "Kâbe",
+        "scrambledWord": "ÂBKE",
+        "definition": "İpucu: Bu kelime \"Kâbe\""
+      },
+      {
+        "correctAnswer": "Kabile",
+        "scrambledWord": "İEAKBL",
+        "definition": "İpucu: Bu kelime \"Kabile\""
+      },
+      {
+        "correctAnswer": "Put",
+        "scrambledWord": "TUP",
+        "definition": "İpucu: Bu kelime \"Put\""
+      },
+      {
+        "correctAnswer": "Hanif",
+        "scrambledWord": "İHNAF",
+        "definition": "İpucu: Bu kelime \"Hanif\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Hz. Muhammed (sav) Medine şehrinde doğmuştur.",
+        "isTrue": false
+      },
+      {
+        "statement": "Cahiliye Dönemi’nde şiir ve hitabet sanatına büyük önem verilirdi ve sözlü kültür oldukça yaygındı.",
+        "isTrue": true
+      },
+      {
+        "statement": "Mekke'de hayvancılık, sıcak ve kurak iklim nedeniyle mümkün olmayan bir geçim kaynağıydı.",
+        "isTrue": false
+      },
+      {
+        "statement": "Cahiliye Dönemi’nde kabile reislerinin mutlak bir otoritesi vardı ve kabile içi tüm kararları tek başlarına alırlardı.",
+        "isTrue": false
+      },
+      {
+        "statement": "Bedeviler, Mekke’de yerleşik hayat süren insanlara verilen isimdi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Cahiliye Dönemi’nde Allah'ın (cc) varlığına ve birliğine inanan hanifler bulunmaktaydı.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kâbe, Hz. Âdem tarafından yapılmış, Nuh Tufanı’nda yıkılmış ve daha sonra Hz. İbrahim ile oğlu Hz. İsmail tarafından yeniden inşa edilmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Cahiliye kavramı, sadece tarihin belli bir dönemine işaret eder ve günümüz toplumları için herhangi bir anlam taşımaz.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kölelik sistemi çok yaygındı.",
+    "scrambledSentence": "sistemi çok yaygındı. Kölelik"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kâbe ilk ibadet yeriydi.",
+    "scrambledSentence": "yeriydi. ilk ibadet Kâbe"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Hz. Muhammed Mekke'de doğdu.",
+    "scrambledSentence": "doğdu. Hz. Mekke'de Muhammed"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Mekke ticari ve kutsal şehirdi.",
+    "scrambledSentence": "ve şehirdi. ticari Mekke kutsal"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed (sav), Veda Hutbesi’nde Müslümanlara _______ Dönemi’nin olumsuz âdetlerinden uzak durmalarını buyurmuştur.",
+    "options": [
+      "Medine",
+      "Asr-ı Saadet",
+      "Cahiliye",
+      "Abbasiler"
+    ],
+    "correctAnswer": "Cahiliye"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Cahiliye Dönemi’nde kölelik yaygın bir uygulamaydı; genellikle kölelerin hak ve hukukuna dikkat edilmez, _______ ve kız çocuklarına değer verilmezdi.",
+    "options": [
+      "erkeklere",
+      "yaşlılara",
+      "kadınlara",
+      "çocuklara"
+    ],
+    "correctAnswer": "kadınlara"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Mekke’de göçebe yaşayan insanlara _______, yerleşik yaşayanlara hadari denirdi.",
+    "options": [
+      "müşrik",
+      "hanif",
+      "bedevi",
+      "kabile reisi"
+    ],
+    "correctAnswer": "bedevi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Cahiliye Dönemi’nde Hz. İbrahim’in tevhit anlayışını benimseyen, Allah’ın (cc) varlığına ve birliğine inanan insanlara _______ ismiyle anılırdı.",
+    "options": [
+      "müşrik",
+      "hanif",
+      "sabi",
+      "Yahudi"
+    ],
+    "correctAnswer": "hanif"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed’in (sav) doğduğu dönemde putlara tapma, soyla övünme gibi olumsuz davranışlar yaygın olduğu için bu zamana _______ Dönemi denmiştir.",
+    "options": [
+      "Asr-ı Saadet",
+      "Fetret",
+      "Cahiliye",
+      "Hilafet"
+    ],
+    "correctAnswer": "Cahiliye"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Cahiliye Dönemi’nde Mekke’deki sosyal etkinlikler arasında önemli bir yere sahip olan ve sözlü kültürün yaygınlığını gösteren sanat dalı aşağıdakilerden hangisidir?",
+    "options": [
+      "Heykeltıraşlık",
+      "Resim",
+      "Şiir ve hitabet",
+      "Mimari"
+    ],
+    "correctAnswer": "Şiir ve hitabet"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an-ı Kerim’de \"Allah’tan başka ilah olduğuna inanmak ve ona tapmak\" olarak tanımlanan kavram hangisidir?",
+    "options": [
+      "Tevhit",
+      "Hanif",
+      "Şirk",
+      "İbadet"
+    ],
+    "correctAnswer": "Şirk"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Mekke’nin tarıma elverişli olmamasının temel nedeni nedir?",
+    "options": [
+      "Nüfusun çok kalabalık olması",
+      "Teknolojinin yetersiz olması",
+      "Sıcak ve kurak iklime sahip, verimsiz toprak yapısı",
+      "Sık sık sel felaketleri yaşanması"
+    ],
+    "correctAnswer": "Sıcak ve kurak iklime sahip, verimsiz toprak yapısı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Mekke'nin verimsiz toprak yapısı nedeniyle halkın ana geçim kaynakları arasında aşağıdakilerden hangisi yer almazdı?",
+    "options": [
+      "Ticaret",
+      "Hayvancılık",
+      "Tarım",
+      "El sanatları"
+    ],
+    "correctAnswer": "Tarım"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav) hangi şehirde doğmuştur?",
+    "options": [
+      "Medine",
+      "Taif",
+      "Mekke",
+      "Şam"
+    ],
+    "correctAnswer": "Mekke"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Mekke’de yaşam tarzlarına göre iki gruba ayrılan insanlardan göçebe yaşayanlara ne ad verilirdi ve bu grubun başlıca geçim kaynakları nelerdi?",
+    "options": [
+      "Hadariler; ticaret ve el sanatları",
+      "Bedeviler; ticaret ve hayvancılık",
+      "Müşrikler; tarım ve balıkçılık",
+      "Hanifler; ilim ve ibadet"
+    ],
+    "correctAnswer": "Bedeviler; ticaret ve hayvancılık"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kâbe, Hz. Âdem tarafından yapıldığı ve Nuh Tufanı’nda yıkıldığı rivayet edildikten sonra, hangi iki peygamber tarafından yeniden inşa edilmiştir?",
+    "options": [
+      "Hz. Musa ve Hz. Harun",
+      "Hz. İbrahim ve Hz. İsmail",
+      "Hz. Davut ve Hz. Süleyman",
+      "Hz. Yakup ve Hz. Yusuf"
+    ],
+    "correctAnswer": "Hz. İbrahim ve Hz. İsmail"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed'in doğduğu dönemdeki putlara tapma, adaletsizlik gibi olumsuzluklar nedeniyle bu döneme ne ad verilmiştir?",
+    "options": [
+      "Altın Çağ",
+      "Cahiliye Dönemi",
+      "Aydınlanma Dönemi",
+      "Yeni Dönem"
+    ],
+    "correctAnswer": "Cahiliye Dönemi"
+  }
+]

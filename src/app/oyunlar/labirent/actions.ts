@@ -28,18 +28,49 @@ export async function getMazeQuestionsAction(
             courseId,
             unitId,
             topicId,
-            questionCount: 30, // Fetch a decent pool of questions for the maze
-            difficulty: ['Kolay', 'Orta', 'Zor'],
-            questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış'],
+            questionCount: 30,
+            questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış', 'mcq', 'tf'],
         };
         
         const result = await getQuestionsFromBank(params);
-        
-        if (result.error || result.questions.length < 5) {
-             return { questions: [], error: result.error || "Bu labirent için en az 5 soru gereklidir." };
+        let questions = (result.questions || []) as Question[];
+
+        if (questions.length < 5) {
+            try {
+                const { getStaticGameData } = await import('@/lib/quiz-actions');
+                const allItems = await getStaticGameData({ courseId, unitId, topicId });
+                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition);
+                
+                definitions.forEach((dItem, idx) => {
+                    const term = (dItem as any).content.term.trim();
+                    const def = (dItem as any).content.definition.trim();
+                    const isTrue = idx % 2 === 0;
+                    let statement = `${term}, ${def}`;
+                    if (!isTrue && definitions.length > 1) {
+                        const wrongTerm = (definitions[(idx + 1) % definitions.length] as any).content.term.trim();
+                        statement = `${wrongTerm}, ${def}`;
+                    }
+                    if (!questions.some(q => q.text === statement)) {
+                        questions.push({
+                            id: `maze-tf-${idx}-${Date.now()}`,
+                            type: 'Doğru/Yanlış',
+                            text: statement,
+                            correctAnswer: isTrue ? 'Doğru' : 'Yanlış',
+                            options: ['Doğru', 'Yanlış'],
+                            difficulty: 'Orta',
+                            topicId: topicId || ''
+                        } as any);
+                    }
+                });
+            } catch (fallbackErr) {}
         }
         
-        return { questions: result.questions as Question[] };
+        if (questions.length < 2) {
+             return { questions: [], error: "Bu labirent için en az 2 soru gereklidir." };
+        }
+        
+        const shuffled = [...questions].sort(() => 0.5 - Math.random());
+        return { questions: shuffled as Question[] };
         
     } catch (e: any) {
         console.error("Error getting Maze questions:", e);

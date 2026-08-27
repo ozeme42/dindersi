@@ -1,0 +1,417 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Çocuklarla İletişimi konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Çocuklarla İletişimi ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Peygamberimizin Çevresindeki Çocuklar çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Yetim, Merhamet, Ümame kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Yetim</li><li>Merhamet</li><li>Ümame</li><li>Ebu Mahzure</li><li>Ebu Umeyr (Kuş Babası)</li><li>Hürmet</li><li>İletişim</li><li>Sevgi</li><li>Şefkat</li><li>Güven</li><li>Tevazu</li><li>Adalet</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Çocuklarla İletişimi - Önemli Bilgiler (1)",
+    "content": "<ul><li>Peygamberimiz çocuklara sevgi, şefkat ve merhamet temelinde yaklaşmış, onlarla samimi ilişkiler kurmuştur.</li><li>Çocuklarla oyunlar oynamış, sohbet meclislerinde onlara yer vermiş ve yolculuklardan döndüğünde özel ilgi göstermiştir.</li><li>Çocukların duygusal ihtiyaçlarına önem vermiş, onların sevinçlerine ortak olmuş ve üzüntülerini paylaşarak teselli etmiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Çocuklarla İletişimi - Önemli Bilgiler (2)",
+    "content": "<ul><li>Hata yapan çocuklara karşı anlayışlı ve hoşgörülü davranmış, cezalandırmak yerine tatlı dille nasihat etmiştir.</li><li>Çocukların yeteneklerini ve öz güvenlerini desteklemiş, onlara yaşlarına uygun görevler vererek gelişimlerine katkıda bulunmuştur.</li><li>Çocukların ahlaki ve dini eğitimlerine önem vermiş, onlara temel ibadetleri ve toplum kurallarını öğretmiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Çocuklarla İletişimi - Önemli Bilgiler (3)",
+    "content": "<ul><li>Kız ve erkek çocuklar arasında ayrım yapmamış, ailelere çocuklarına karşı adaletli davranmaları konusunda öğütler vermiştir.</li><li>Tüm çocuklara, inançlarına bakmaksızın sevgi göstermiş ve özellikle yetimlerin korunmasına büyük hassasiyet göstermiştir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Yetim",
+        "definition": "Babası ölmüş olan çocuk"
+      },
+      {
+        "concept": "Merhamet",
+        "definition": "Bir insanı başka insanlar ve diğer canlıların sıkıntıları karşısında duyarlı olmaya ve yardım etmeye sevk eden acıma duygusu"
+      },
+      {
+        "concept": "Ebu Umeyr (Kuş Babası)",
+        "definition": "Peygamberimizin kuşu öldüğü için teselli etmeye gittiği çocuk sahabe."
+      },
+      {
+        "concept": "Hürmet",
+        "definition": "Bir kimseye, bir şeye karşı dikkatli, özenli, ölçülü davranmaya sebep olan sevgi duygusu"
+      },
+      {
+        "concept": "Şefkat",
+        "definition": "Koruma ve esirgeme duygusu ile karışık olan sevgi, sevecenlik"
+      },
+      {
+        "concept": "Güven",
+        "definition": "Korku, çekinme ve kuşku duymadan inanma ve bağlanma duygusu; emniyet, itimat"
+      },
+      {
+        "concept": "Ümame",
+        "definition": "Peygamberimizin torunu, kendisine hediye edilen kolyeyi taktığı kız çocuğu."
+      },
+      {
+        "concept": "Adalet",
+        "definition": "Hak ve hukuka uygun davranma, hakkı gözetme, herkese kendi hakkı olanı verme"
+      },
+      {
+        "concept": "Muhabbet",
+        "definition": "Bir insanı bir şeye veya bir kimseye karşı yakın ilgi ve bağlılık göstermeye yönelten duygu"
+      },
+      {
+        "concept": "Tevazu",
+        "definition": "İnsanın, kendisinin de yaratılmış olduğunu bilerek insanlara karşı büyüklük taslamaması, alçak gönüllü ve yumuşak huylu olması"
+      },
+      {
+        "concept": "Ebu Mahzure",
+        "definition": "Peygamberimizin sesini beğenip kendisine ezanı öğrettiği ve Mekke müezzini yaptığı çocuk."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Yetim",
+        "definition": "Babası ölmüş olan çocuk"
+      },
+      {
+        "term": "Merhamet",
+        "definition": "Bir insanı başka insanlar ve diğer canlıların sıkıntıları karşısında duyarlı olmaya ve yardım etmeye sevk eden acıma duygusu"
+      },
+      {
+        "term": "Ebu Umeyr (Kuş Babası)",
+        "definition": "Peygamberimizin kuşu öldüğü için teselli etmeye gittiği çocuk sahabe."
+      },
+      {
+        "term": "Hürmet",
+        "definition": "Bir kimseye, bir şeye karşı dikkatli, özenli, ölçülü davranmaya sebep olan sevgi duygusu"
+      },
+      {
+        "term": "Şefkat",
+        "definition": "Koruma ve esirgeme duygusu ile karışık olan sevgi, sevecenlik"
+      },
+      {
+        "term": "Güven",
+        "definition": "Korku, çekinme ve kuşku duymadan inanma ve bağlanma duygusu; emniyet, itimat"
+      },
+      {
+        "term": "Ümame",
+        "definition": "Peygamberimizin torunu, kendisine hediye edilen kolyeyi taktığı kız çocuğu."
+      },
+      {
+        "term": "Adalet",
+        "definition": "Hak ve hukuka uygun davranma, hakkı gözetme, herkese kendi hakkı olanı verme"
+      },
+      {
+        "term": "Muhabbet",
+        "definition": "Bir insanı bir şeye veya bir kimseye karşı yakın ilgi ve bağlılık göstermeye yönelten duygu"
+      },
+      {
+        "term": "Tevazu",
+        "definition": "İnsanın, kendisinin de yaratılmış olduğunu bilerek insanlara karşı büyüklük taslamaması, alçak gönüllü ve yumuşak huylu olması"
+      },
+      {
+        "term": "Ebu Mahzure",
+        "definition": "Peygamberimizin sesini beğenip kendisine ezanı öğrettiği ve Mekke müezzini yaptığı çocuk."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Yetim",
+        "scrambledWord": "TİMEY",
+        "definition": "İpucu: Bu kelime \"Yetim\""
+      },
+      {
+        "correctAnswer": "Merhamet",
+        "scrambledWord": "AHMRMEET",
+        "definition": "İpucu: Bu kelime \"Merhamet\""
+      },
+      {
+        "correctAnswer": "Ümame",
+        "scrambledWord": "MMÜEA",
+        "definition": "İpucu: Bu kelime \"Ümame\""
+      },
+      {
+        "correctAnswer": "Ebu Mahzure",
+        "scrambledWord": "EAHEUBZU MR",
+        "definition": "İpucu: Bu kelime \"Ebu Mahzure\""
+      },
+      {
+        "correctAnswer": "Hürmet",
+        "scrambledWord": "EHTÜRM",
+        "definition": "İpucu: Bu kelime \"Hürmet\""
+      },
+      {
+        "correctAnswer": "İletişim",
+        "scrambledWord": "LTMİİİEŞ",
+        "definition": "İpucu: Bu kelime \"İletişim\""
+      },
+      {
+        "correctAnswer": "Sevgi",
+        "scrambledWord": "GSEİV",
+        "definition": "İpucu: Bu kelime \"Sevgi\""
+      },
+      {
+        "correctAnswer": "Şefkat",
+        "scrambledWord": "ŞATKFE",
+        "definition": "İpucu: Bu kelime \"Şefkat\""
+      },
+      {
+        "correctAnswer": "Güven",
+        "scrambledWord": "GNEÜV",
+        "definition": "İpucu: Bu kelime \"Güven\""
+      },
+      {
+        "correctAnswer": "Tevazu",
+        "scrambledWord": "VETUZA",
+        "definition": "İpucu: Bu kelime \"Tevazu\""
+      },
+      {
+        "correctAnswer": "Adalet",
+        "scrambledWord": "LDTEAA",
+        "definition": "İpucu: Bu kelime \"Adalet\""
+      },
+      {
+        "correctAnswer": "Muhabbet",
+        "scrambledWord": "MEBTABUH",
+        "definition": "İpucu: Bu kelime \"Muhabbet\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Peygamberimiz, 'Allah’ım, ben iki zayıfın -yetimin ve kadının- hakkına el uzatılmasını yasaklıyorum.' buyurarak yetimlerin ve kadınların korunmasını istemiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz (sav) çocuklara karşı merhametli davranırdı.",
+        "isTrue": true
+      },
+      {
+        "statement": "Şefkat, koruma ve esirgeme duygusu ile karışık olan sevgidir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz (sav) çocukların sevinçli hallerinden rahatsız olurdu.",
+        "isTrue": false
+      },
+      {
+        "statement": "Çocuklar, Peygamberimize yakın olabilmek için onun mescidini ve mescidin çevresini toplanma yeri olarak belirlemişlerdi.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimizin yaşamı çocuklarla kurduğu güzel iletişim örnekleriyle doluydu.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz (sav), kız ve erkek çocuklar arasında ayrım yapılmasını uygun bulmuştur.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz (sav), Allah'ın maddi kaygılardan dolayı çocuklara zarar vermeyi yasakladığını anne ve babalara her zaman hatırlatırdı.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Çocuklara güzel terbiye verilmesini ve onlara şefkatle davranılmasını isterdi.",
+    "scrambledSentence": "Çocuklara onlara isterdi. terbiye verilmesini ve güzel şefkatle davranılmasını"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz, kız ve erkek çocukları arasında ayrım yapmazdı.",
+    "scrambledSentence": "arasında yapmazdı. erkek çocukları kız ve ayrım Peygamberimiz,"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İnancına bakmaksızın tüm çocuklara sevgisini gösterirdi.",
+    "scrambledSentence": "çocuklara bakmaksızın İnancına tüm sevgisini gösterirdi."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Çocuklar Peygamberimizi çok sever ve onun mescidinde toplanırlardı.",
+    "scrambledSentence": "çok toplanırlardı. onun sever mescidinde Çocuklar Peygamberimizi ve"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, Yüce Allah’ın, maddi kaygılardan dolayı çocuklara zarar vermeyi ___ anne ve babalara her zaman hatırlatırdı.",
+    "options": [
+      "emrettiğini",
+      "yasakladığını",
+      "teşvik ettiğini",
+      "önemsediğini"
+    ],
+    "correctAnswer": "yasakladığını"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hurma ağacını taşlayan çocuğu cezalandırmak yerine, Peygamberimiz ona \"Hurmaları taşlama da altına düşenlerden ___!\" diye nasihat etmiştir.",
+    "options": [
+      "sat",
+      "ye",
+      "topla",
+      "paylaş"
+    ],
+    "correctAnswer": "ye"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, hurma ağacını taşlarken yakalanan çocuğu cezalandırma yoluna gitmemiş, ona tatlı bir ___ bu davranışının sebebini sormuştu.",
+    "options": [
+      "sesle",
+      "dille",
+      "bakışla",
+      "işaretle"
+    ],
+    "correctAnswer": "dille"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber Efendimiz çocukların ihtiyaçlarını gözetir, ahlaki gelişimlerini her fırsatta ___.",
+    "options": [
+      "engellerdi",
+      "desteklerdi",
+      "görmezden gelirdi",
+      "kısıtlardı"
+    ],
+    "correctAnswer": "desteklerdi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, yolculuktan döndüğünde kendisini karşılayan çocuklar arasından bazılarını bineğine alır, şehre onlarla birlikte ___ idi.",
+    "options": [
+      "gitmez",
+      "geç girer",
+      "yalnız girer",
+      "girerdi"
+    ],
+    "correctAnswer": "girerdi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz Müslümanlardan çocuklarına nasıl davranmalarını istemiştir?",
+    "options": [
+      "Sertçe",
+      "İlgisizce",
+      "Hoşgörülü, sevgi, şefkat ve merhametle",
+      "Korkuyla"
+    ],
+    "correctAnswer": "Hoşgörülü, sevgi, şefkat ve merhametle"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, kendisine hediye edilen bir kolyeyi eşlerine gösterdikten sonra 'Bunu içinizden en sevimli olana vereceğim.' demiş ve kolyeyi Hz. Zeyneb’in kızı Ümame’nin (ra) boynuna takmıştır. Bu durum, onun hangi konuda ayrım yapmadığını gösterir?",
+    "options": [
+      "Sadece yaşlılar ve gençler arasında",
+      "Sadece zenginler ve fakirler arasında",
+      "Kız ve erkek çocukları arasında",
+      "Sadece akrabalar arasında"
+    ],
+    "correctAnswer": "Kız ve erkek çocukları arasında"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Aşağıdakilerden hangisi Peygamberimizin çocuklarla kurduğu iletişimin temel özelliklerinden biridir?",
+    "options": [
+      "Otoriter olmak",
+      "Mesafeli durmak",
+      "Sevgi ve şefkat göstermek",
+      "Korkutmak"
+    ],
+    "correctAnswer": "Sevgi ve şefkat göstermek"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz bir hadisinde 'Kalbinde zerre kadar kibir bulunan kimse cennete giremez.' buyurarak neyden sakınmayı öğütlemiştir?",
+    "options": [
+      "Cömertlikten",
+      "Tevazudan",
+      "Kibirden",
+      "Merhametten"
+    ],
+    "correctAnswer": "Kibirden"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, çocuklarla iletişim kurarken hangi duyguların insanlar arası iletişimi olumlu yönde etkilediğini göstermiştir?",
+    "options": [
+      "Korku ve öfke",
+      "Şefkat, merhamet, güven",
+      "Kibir ve bencillik",
+      "Kıskançlık ve nefret"
+    ],
+    "correctAnswer": "Şefkat, merhamet, güven"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin Ebu Umeyr’in (ra) ölen kuşunu teselli etmek için evine gitmesi, onun çocuklara karşı hangi hassasiyetini gösterir?",
+    "options": [
+      "Sadece dini hassasiyetini",
+      "Sadece sosyal hassasiyetini",
+      "Duygusal hassasiyetini ve empati yeteneğini",
+      "Sadece eğlenceye düşkünlüğünü"
+    ],
+    "correctAnswer": "Duygusal hassasiyetini ve empati yeteneğini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, hurma ağacını taşlarken yakalanan bir çocuğa nasıl nasihatte bulunmuştur?",
+    "options": [
+      "Onu cezalandırmıştır",
+      "Ona bağırmıştır",
+      "Tatlı bir dille 'Hurmaları taşlama da altına düşenlerden ye!' demiştir",
+      "Onu görmezden gelmiştir"
+    ],
+    "correctAnswer": "Tatlı bir dille 'Hurmaları taşlama da altına düşenlerden ye!' demiştir"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz sofrada yemek yerken Ömer bin Seleme’ye (ra) neyi tavsiye etmiştir?",
+    "options": [
+      "Hızlı yemesini",
+      "Çok yemesini",
+      "Besmele çekmesini, sağ eli ile önünden yemesini",
+      "Konuşarak yemesini"
+    ],
+    "correctAnswer": "Besmele çekmesini, sağ eli ile önünden yemesini"
+  }
+]

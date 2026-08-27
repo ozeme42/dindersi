@@ -1,0 +1,363 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamber Kıssalarında Verilen Mesajlar konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamber Kıssalarında Verilen Mesajlar ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Peygamber Kıssaları çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Firavun, Beytülmakdis, Mucize kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Firavun</li><li>Beytülmakdis</li><li>Mucize</li><li>Cudi</li><li>Tevhit Daveti</li><li>Hanif</li><li>Kızıldeniz</li><li>Peygamber Kıssaları</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamber Kıssalarında Verilen Mesajlar - Önemli Bilgiler (1)",
+    "content": "<ul><li>Peygamber kıssaları, Allah'ın birliğine (tevhid) inanmanın önemini vurgular.</li><li>Bu kıssalar, zorluklar karşısında sabırlı ve metanetli olmamız gerektiğini öğretir.</li><li>İnsanlara karşı her zaman adaletli ve merhametli davranmanın gerekliliğini gösterir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamber Kıssalarında Verilen Mesajlar - Önemli Bilgiler (2)",
+    "content": "<ul><li>Allah'a tam bir güven (tevekkül) duymanın ve ona teslim olmanın huzurunu anlatır.</li><li>Doğruluk, dürüstlük ve güzel ahlak sahibi olmanın kıymetini ortaya koyar.</li><li>Tövbe etmenin ve hatalardan ders çıkararak doğru yola dönmenin önemini vurgular.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Firavun",
+        "definition": "Hz. Musa döneminde Mısır’ı yöneten ve ilahlık taslayan zalim kral."
+      },
+      {
+        "concept": "Beytülmakdis",
+        "definition": "Hz. İsa ve Hz. Zekeriyya döneminde ibadet edilen kutsal mabet."
+      },
+      {
+        "concept": "Cudi",
+        "definition": "Büyük tufandan sonra Hz. Nuh’un gemisinin oturduğu dağ."
+      },
+      {
+        "concept": "Tevhit Daveti",
+        "definition": "Peygamberlerin insanları Allah'ın birliğine ve doğru yola çağırması."
+      },
+      {
+        "concept": "Hanif",
+        "definition": "Hz. İbrahim’in temsil ettiği, Allah’ı birleyen hak inanç."
+      },
+      {
+        "concept": "Kızıldeniz",
+        "definition": "Hz. Musa ve inananların kurtulması için Allah’ın izniyle yarılan deniz."
+      },
+      {
+        "concept": "Mucize",
+        "definition": "Allah’ın peygamberleri desteklemek için yarattığı olağanüstü olaylar."
+      },
+      {
+        "concept": "Peygamber Kıssaları",
+        "definition": "İnsanlara öğüt vermek amacıyla anlatılan peygamberlerin ibretlik hayat hikâyeleri."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Firavun",
+        "definition": "Hz. Musa döneminde Mısır’ı yöneten ve ilahlık taslayan zalim kral."
+      },
+      {
+        "term": "Beytülmakdis",
+        "definition": "Hz. İsa ve Hz. Zekeriyya döneminde ibadet edilen kutsal mabet."
+      },
+      {
+        "term": "Cudi",
+        "definition": "Büyük tufandan sonra Hz. Nuh’un gemisinin oturduğu dağ."
+      },
+      {
+        "term": "Tevhit Daveti",
+        "definition": "Peygamberlerin insanları Allah'ın birliğine ve doğru yola çağırması."
+      },
+      {
+        "term": "Hanif",
+        "definition": "Hz. İbrahim’in temsil ettiği, Allah’ı birleyen hak inanç."
+      },
+      {
+        "term": "Kızıldeniz",
+        "definition": "Hz. Musa ve inananların kurtulması için Allah’ın izniyle yarılan deniz."
+      },
+      {
+        "term": "Mucize",
+        "definition": "Allah’ın peygamberleri desteklemek için yarattığı olağanüstü olaylar."
+      },
+      {
+        "term": "Peygamber Kıssaları",
+        "definition": "İnsanlara öğüt vermek amacıyla anlatılan peygamberlerin ibretlik hayat hikâyeleri."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Firavun",
+        "scrambledWord": "FİAUVRN",
+        "definition": "İpucu: Bu kelime \"Firavun\""
+      },
+      {
+        "correctAnswer": "Beytülmakdis",
+        "scrambledWord": "TMÜLKBSİEYAD",
+        "definition": "İpucu: Bu kelime \"Beytülmakdis\""
+      },
+      {
+        "correctAnswer": "Mucize",
+        "scrambledWord": "EMİZCU",
+        "definition": "İpucu: Bu kelime \"Mucize\""
+      },
+      {
+        "correctAnswer": "Cudi",
+        "scrambledWord": "DİUC",
+        "definition": "İpucu: Bu kelime \"Cudi\""
+      },
+      {
+        "correctAnswer": "Tevhit Daveti",
+        "scrambledWord": "VETDTH VİİATE",
+        "definition": "İpucu: Bu kelime \"Tevhit Daveti\""
+      },
+      {
+        "correctAnswer": "Hanif",
+        "scrambledWord": "İNFAH",
+        "definition": "İpucu: Bu kelime \"Hanif\""
+      },
+      {
+        "correctAnswer": "Kızıldeniz",
+        "scrambledWord": "ZIİZNEIDKL",
+        "definition": "İpucu: Bu kelime \"Kızıldeniz\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Peygamber kıssaları, Müslümanların peygamberlerin güzel ahlakını kendi hayatında örnek almalarını engeller.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamber kıssaları sayesinde Müslümanlar, peygamberlerin güzel ahlakını kendi hayatında örnek alabilir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Musa kıssasından çıkarılabilecek hisselerden biri, Allah (cc) zulüm ve haksızlık edenleri cezalandırmaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamber kıssalarında Yüce Allah’ın, peygamberleri desteklemek için gönderdiği mucizelere yer verilmez.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Nuh kıssasından çıkarılabilecek hisselerden biri, Allah’a (cc) hiçbir şey şirk koşulmaması gerektiğidir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamber kıssalarında iyilik ve kötülüğün ne olduğu anlatılır. Böylece insanlar doğru yola teşvik edilir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamber kıssalarında sadece peygamberlerin başarıları anlatılır, zorlukları anlatılmaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. İsa kıssasından çıkarılabilecek hisselerden biri, insanın görevini yerine getirirken sabırlı ve kararlı olması gerektiğidir.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberler insanları tevhit inancına davet eder.",
+    "scrambledSentence": "Peygamberler tevhit eder. davet inancına insanları"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Mucizeler peygamberleri desteklemek için verilmiştir.",
+    "scrambledSentence": "için verilmiştir. desteklemek Mucizeler peygamberleri"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "eygamberler zorluklara karşı sabırla mücadele etmiştir.",
+    "scrambledSentence": "karşı zorluklara etmiştir. mücadele sabırla eygamberler"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kıssalar geçmiş toplumların hatalarını hatırlatır. P",
+    "scrambledSentence": "geçmiş hatalarını Kıssalar hatırlatır. toplumların P"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber kıssaları sayesinde Müslümanlar, peygamberlerin iyilik ve doğruluğu anlatmak için gösterdikleri çabayı ___ alabilir.",
+    "options": [
+      "eleştirebilir",
+      "görmezden gelebilir",
+      "örnek",
+      "reddedebilir"
+    ],
+    "correctAnswer": "örnek"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber kıssaları, peygamberlerin yaşadığı zorlukları anlatarak, Müslümanlara kendi sıkıntıları karşısında ___ gücü ve sabır verir.",
+    "options": [
+      "korku",
+      "dayanma",
+      "endişe",
+      "pes etme"
+    ],
+    "correctAnswer": "dayanma"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Nuh kıssasından çıkarılabilecek hisselerden biri, yalnızca Allah’a (cc) ___ edenlerin kurtulması gerektiğidir.",
+    "options": [
+      "isyan",
+      "inkar",
+      "iman",
+      "şirk"
+    ],
+    "correctAnswer": "iman"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber kıssaları, Müslümanların peygamberlerin iyilik ve doğruluğu anlatmak için gösterdikleri çabayı örnek almalarını sağlayarak, onların ___ gelişimine katkıda bulunur.",
+    "options": [
+      "maddi",
+      "siyasi",
+      "ahlaki",
+      "ekonomik"
+    ],
+    "correctAnswer": "ahlaki"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber kıssalarında verilen mesajlar arasında peygamberlerin ___ daveti önemli bir yer tutar.",
+    "options": [
+      "savaş",
+      "tevhid",
+      "ticaret",
+      "eğlence"
+    ],
+    "correctAnswer": "tevhid"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. İbrahim kıssasından çıkarılabilecek hisselerden biri aşağıdakilerden hangisidir?",
+    "options": [
+      "İnsan atalarını körü körüne taklit etmelidir.",
+      "Yüce Allah dilerse imkânsız olduğu düşünülen şeyler gerçekleşemez.",
+      "İnsan, inandığı değerleri savunurken cesur ve kararlı olmalıdır.",
+      "En yakınları şirke bulaşmış olsa bile insan, bu en büyük günahı işlemelidir."
+    ],
+    "correctAnswer": "İnsan, inandığı değerleri savunurken cesur ve kararlı olmalıdır."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber kıssalarında verilen mesajlar arasında aşağıdakilerden hangisi yer almaz?",
+    "options": [
+      "Peygamberlerin tevhide daveti",
+      "Peygamberlerin maddi zenginlikleri",
+      "İyilik ve kötülüğün ne olduğu",
+      "Geçmiş toplumların hataları"
+    ],
+    "correctAnswer": "Peygamberlerin maddi zenginlikleri"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber kıssalarında iyilik ve kötülüğün ne olduğu anlatılarak insanlar neye teşvik edilir?",
+    "options": [
+      "Yanlış yola",
+      "Kötülüğe",
+      "Doğru yola",
+      "Sapkınlığa"
+    ],
+    "correctAnswer": "Doğru yola"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber kıssaları sayesinde Müslümanlar, peygamberler gibi cesaret ve sabırla ne uğruna mücadele edebilir?",
+    "options": [
+      "Maddi kazanç",
+      "Siyasi güç",
+      "İnancı",
+      "Kişisel çıkar"
+    ],
+    "correctAnswer": "İnancı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber kıssalarında verilen öğütlerdeki ortak noktalardan yola çıkarak kıssaların verdiği ortak mesajı en iyi özetleyen ifade aşağıdakilerden hangisidir?",
+    "options": [
+      "Sadece geçmişi anlatır.",
+      "Sadece eğlence amaçlıdır.",
+      "İnsanları doğru yola teşvik eder ve ibret alınmasını sağlar.",
+      "Sadece belirli kişilere hitap eder."
+    ],
+    "correctAnswer": "İnsanları doğru yola teşvik eder ve ibret alınmasını sağlar."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber kıssalarında anlatılan bütün peygamberler, gönderildikleri toplumlara Allah’ın (cc) emir ve yasaklarına uygun bir hayat yaşamalarını ve başkalarının haklarına ne yapmalarını öğütler?",
+    "options": [
+      "İhlal etmelerini",
+      "Saygı göstermelerini",
+      "Görmezden gelmelerini",
+      "Çiğnemelerini"
+    ],
+    "correctAnswer": "Saygı göstermelerini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Yüce Allah’ın, peygamberleri desteklemek için gönderdiği bazı ___ yer verilir.",
+    "options": [
+      "hediyelere",
+      "mucizelere",
+      "kitaplara",
+      "ordulara"
+    ],
+    "correctAnswer": "mucizelere"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber kıssaları sayesinde Müslümanlar, her insan gibi peygamberlerin de ne çektiklerini ve acılar yaşadıklarını anlayabilir?",
+    "options": [
+      "Mutluluk",
+      "Zenginlik",
+      "Sıkıntı",
+      "Şöhret"
+    ],
+    "correctAnswer": "Sıkıntı"
+  }
+]

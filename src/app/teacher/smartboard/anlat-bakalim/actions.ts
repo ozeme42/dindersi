@@ -1,11 +1,9 @@
 'use server';
 
-import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import type { ActivityItem } from "@/lib/types";
+import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
 import { unstable_noStore as noStore } from 'next/cache';
 
-// Bu tip, oyun component'inin beklediği basit kelime dizisini döndürmek için.
 export type AnlatBakalimWord = string;
 
 export async function getAnlatBakalimWords(
@@ -13,39 +11,35 @@ export async function getAnlatBakalimWords(
 ): Promise<{ words: AnlatBakalimWord[]; error?: string }> {
     noStore();
     try {
-        // Hem 'concept' hem de 'definition' tipli verileri çekelim, 
-        // çünkü her ikisinin de 'term' alanı bizim için kelime olabilir.
-        let baseQuery = query(collection(db, 'activityItems'), where('type', 'in', ['concept', 'definition']));
-        
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
-        }
-        
-        const snapshot = await getDocs(baseQuery);
-        
-        const allWords = snapshot.docs
-            .map(doc => doc.data() as ActivityItem)
-            .map(item => item.content?.term || item.content?.text) // Hem 'term' hem de 'text' alanlarını kontrol et
-            .filter((word): word is string => 
-                typeof word === 'string' &&
-                word.trim().length > 2 && // En az 3 harfli
-                word.trim().length < 15 && // En fazla 14 harfli
-                !word.includes(' ') // Boşluk içermeyen
-            )
-            .map(word => word.toLocaleUpperCase('tr-TR')); // Büyük harfe çevir
+        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
+        const validWords: string[] = [];
 
-        if (allWords.length < 5) {
-            return { error: "Anlat Bakalım oynamak için bu konuda en az 5 adet uygun kelime bulunmalıdır.", words: [] };
-        }
-        
-        // Tekrarları temizle
-        const uniqueWords = [...new Set(allWords)];
+        for (const item of allItems || []) {
+            if ('type' in item) {
+                let term = '';
+                if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.term) {
+                    term = String((item as any).content.term).trim();
+                } else if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.text) {
+                    term = String((item as any).content.text).trim();
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
+                    term = String((item as any).correctAnswer).trim();
+                }
 
-        return { words: JSON.parse(JSON.stringify(uniqueWords)) };
+                if (term && term.length >= 3 && term.length <= 15 && !term.includes(' ') && turkishAlphabetRegex.test(term)) {
+                    validWords.push(term.toLocaleUpperCase('tr-TR'));
+                }
+            }
+        }
+
+        const uniqueWords = [...new Set(validWords)];
+
+        if (uniqueWords.length < 2) {
+            return { error: "Anlat Bakalım oynamak için bu konuda en az 2 adet uygun kelime bulunmalıdır.", words: [] };
+        }
+
+        const shuffled = [...uniqueWords].sort(() => 0.5 - Math.random());
+        return { words: JSON.parse(JSON.stringify(shuffled.slice(0, 30))) };
 
     } catch (error: any) {
         console.error("Error getting Anlat Bakalım words:", error);

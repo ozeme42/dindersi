@@ -1,0 +1,399 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Baba Olarak Peygamberimiz konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Baba Olarak Peygamberimiz ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Aile Hayatında Peygamberimiz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Abdullah, Ebülkasım, Zeyneb kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Abdullah</li><li>Ebülkasım</li><li>Zeyneb</li><li>Hz. Fatıma</li><li>Ümmü Gülsüm</li><li>Mariye</li><li>Hz. Ali</li><li>Rukıyye</li><li>İbrahim</li><li>Kasım</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Baba Olarak Peygamberimiz - Önemli Bilgiler (1)",
+    "content": "<ul><li>Peygamberimiz, çocuklara sevgi ve şefkatle yaklaşan, söz ve davranışlarıyla Müslümanlara örnek olan bir babaydı.</li><li>O, çocuklarına iyi davranmayı öğütlerdi ve kendi ailesinde de bu prensipleri uygulayarak örnek olurdu.</li><li>Peygamberimizin Hz. Hatice'den altı, Mariye'den ise bir olmak üzere toplam yedi çocuğu vardı; soyu kızı Hz. Fatıma aracılığıyla devam etti.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Baba Olarak Peygamberimiz - Önemli Bilgiler (2)",
+    "content": "<ul><li>Kendi evlatları dışında Hz. Ali ve Zeyd bin Harise gibi başka çocukları da ailesine dahil etti, onlara adaletli ve eşit davrandı.</li><li>Peygamberimiz, çocukları arasında kız-erkek ayrımı yapmaz, hepsine değer verir ve özellikle Hz. Fatıma'ya derin bir sevgi ve saygı gösterirdi.</li><li>Çocuklarının vefatı gibi acı anlarda dahi sabır ve tevekkül gösterirken, insani duygularını da yaşamaktan çekinmezdi.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Baba Olarak Peygamberimiz - Önemli Bilgiler (3)",
+    "content": "<ul><li>Evlilik gibi konularda çocuklarının görüşlerine önem verir, aile içi anlaşmazlıklarda arabuluculuk yaparak aile birliğini ve huzurunu korurdu.</li><li>Kızları (Hz. Zeyneb ve Hz. Fatıma gibi) da zor zamanlarda babalarına destek olmuş, ona karşı derin bir bağlılık ve güven duymuşlardır.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Abdullah",
+        "definition": "Peygamberimizin Hz. Hatice’den olan, küçük yaşta vefat eden oğlu."
+      },
+      {
+        "concept": "Ebülkasım",
+        "definition": "İlk çocuğu Kasım olduğu için Peygamberimize verilen künye."
+      },
+      {
+        "concept": "Hz. Fatıma",
+        "definition": "Peygamberimizin soyunun devam ettiği, Hz. Ali’nin eşi olan en küçük kızı."
+      },
+      {
+        "concept": "Mariye",
+        "definition": "Peygamberimizin oğlu İbrahim’in annesi olan eşi."
+      },
+      {
+        "concept": "Hz. Ali",
+        "definition": "Peygamberimizin amcasının oğlu, damadı ve \"Ebüttürab\" lakaplı sahabi."
+      },
+      {
+        "concept": "Ümmü Gülsüm",
+        "definition": "Peygamberimizin kızı."
+      },
+      {
+        "concept": "Kasım",
+        "definition": "Peygamberimizin ilk çocuğu, kendisine \"Ebülkasım\" künyesi verilen oğlu."
+      },
+      {
+        "concept": "İbrahim",
+        "definition": "Peygamberimizin Hz. Mariye’den olan ve bebekken vefat eden son çocuğu."
+      },
+      {
+        "concept": "Rukıyye",
+        "definition": "Peygamberimizin kızı, Bedir Savaşı sırasında vefat etti."
+      },
+      {
+        "concept": "Zeyneb",
+        "definition": "Peygamberimizin en büyük kızı."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Abdullah",
+        "definition": "Peygamberimizin Hz. Hatice’den olan, küçük yaşta vefat eden oğlu."
+      },
+      {
+        "term": "Ebülkasım",
+        "definition": "İlk çocuğu Kasım olduğu için Peygamberimize verilen künye."
+      },
+      {
+        "term": "Hz. Fatıma",
+        "definition": "Peygamberimizin soyunun devam ettiği, Hz. Ali’nin eşi olan en küçük kızı."
+      },
+      {
+        "term": "Mariye",
+        "definition": "Peygamberimizin oğlu İbrahim’in annesi olan eşi."
+      },
+      {
+        "term": "Hz. Ali",
+        "definition": "Peygamberimizin amcasının oğlu, damadı ve \"Ebüttürab\" lakaplı sahabi."
+      },
+      {
+        "term": "Ümmü Gülsüm",
+        "definition": "Peygamberimizin kızı."
+      },
+      {
+        "term": "Kasım",
+        "definition": "Peygamberimizin ilk çocuğu, kendisine \"Ebülkasım\" künyesi verilen oğlu."
+      },
+      {
+        "term": "İbrahim",
+        "definition": "Peygamberimizin Hz. Mariye’den olan ve bebekken vefat eden son çocuğu."
+      },
+      {
+        "term": "Rukıyye",
+        "definition": "Peygamberimizin kızı, Bedir Savaşı sırasında vefat etti."
+      },
+      {
+        "term": "Zeyneb",
+        "definition": "Peygamberimizin en büyük kızı."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Abdullah",
+        "scrambledWord": "UBAHALDL",
+        "definition": "İpucu: Bu kelime \"Abdullah\""
+      },
+      {
+        "correctAnswer": "Ebülkasım",
+        "scrambledWord": "IEKÜLABMS",
+        "definition": "İpucu: Bu kelime \"Ebülkasım\""
+      },
+      {
+        "correctAnswer": "Zeyneb",
+        "scrambledWord": "NEBEYZ",
+        "definition": "İpucu: Bu kelime \"Zeyneb\""
+      },
+      {
+        "correctAnswer": "Hz. Fatıma",
+        "scrambledWord": ".MZ FATHIA",
+        "definition": "İpucu: Bu kelime \"Hz. Fatıma\""
+      },
+      {
+        "correctAnswer": "Ümmü Gülsüm",
+        "scrambledWord": " LÜSMMGMÜÜÜ",
+        "definition": "İpucu: Bu kelime \"Ümmü Gülsüm\""
+      },
+      {
+        "correctAnswer": "Mariye",
+        "scrambledWord": "EMYİRA",
+        "definition": "İpucu: Bu kelime \"Mariye\""
+      },
+      {
+        "correctAnswer": "Hz. Ali",
+        "scrambledWord": " İLHA.Z",
+        "definition": "İpucu: Bu kelime \"Hz. Ali\""
+      },
+      {
+        "correctAnswer": "Rukıyye",
+        "scrambledWord": "UYRYKEI",
+        "definition": "İpucu: Bu kelime \"Rukıyye\""
+      },
+      {
+        "correctAnswer": "İbrahim",
+        "scrambledWord": "MİRABİH",
+        "definition": "İpucu: Bu kelime \"İbrahim\""
+      },
+      {
+        "correctAnswer": "Kasım",
+        "scrambledWord": "SAMIK",
+        "definition": "İpucu: Bu kelime \"Kasım\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Hz. Ali, beş yaşından itibaren Peygamberimiz ile yaşamaya başlamış ve ömrü boyunca onun yanından ayrılmamıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz, çocuklarına beslediği sevgiyi her fırsatta göstermezdi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz çocuklarının görüşlerine önem vermezdi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimizin oğlu İbrahim (ra) vefat ettiğinde hiç hüzünlenmemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimizin ilk çocuğu Kasım'dır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Fatıma, Peygamberimizin terbiyesi altında yetişmemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimizin soyu, Hz. Fatıma dışındaki bütün çocukları kendisinden önce vefat ettiği için Hz. Fatıma'dan devam etmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimizin çocuklarına karşı sevgi ve şefkat dolu olması, sadece onların fiziksel ihtiyaçlarını karşıladığını gösterir.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Çocukların eğitimi ve hayata hazırlanması ailelerin önemli sorumlulukları arasındadır.",
+    "scrambledSentence": "ailelerin hayata hazırlanması arasındadır. Çocukların önemli ve eğitimi sorumlulukları"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kasım, Zeynep, Rukıyye, Ümmü Gülsüm, Fatıma, Abdullah ve İbrahim Peygamberimizin çocuklarının isimleridir.",
+    "scrambledSentence": "Ümmü Rukıyye, Zeynep, Abdullah Fatıma, çocuklarının Gülsüm, Peygamberimizin ve isimleridir. Kasım, İbrahim"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Hz. Fatıma, Peygamberimizin en küçük kızıdır ve Peygamberimizin soyu ondan devam etmiştir.",
+    "scrambledSentence": "Hz. Peygamberimizin ondan en kızıdır etmiştir. küçük soyu devam ve Fatıma, Peygamberimizin"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamber Efendimiz, çocuklarına değer verir, onların görüşlerini önemser ve aralarında adaletli davranırdı.",
+    "scrambledSentence": "görüşlerini onların Peygamber çocuklarına davranırdı. Efendimiz, değer verir, adaletli ve aralarında önemser"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, 'Fatıma benim bir parçamdır, onu sevindiren beni sevindirmiş, onu üzen beni ___ olur.' diyerek ona olan sevgisini her fırsatta dile getirirdi.",
+    "options": [
+      "mutlu",
+      "üzmüş",
+      "neşe",
+      "güçlü"
+    ],
+    "correctAnswer": "üzmüş"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, 'Hiçbir anne baba, çocuğuna güzel ___ daha kıymetli bir bağışta bulunmamıştır.' hadisiyle neyin önemini vurgulamıştır?",
+    "options": [
+      "mal",
+      "terbiyeden",
+      "para",
+      "oyuncak"
+    ],
+    "correctAnswer": "terbiyeden"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yüce Allah, Kur’an-ı Kerim’de çocukların '... dünya hayatının ___...' olduklarını bildirir.",
+    "options": [
+      "yükü",
+      "süsü",
+      "engeli",
+      "sorunu"
+    ],
+    "correctAnswer": "süsü"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber Efendimiz’in en küçük kızı olan ___ Hz. Ali ile evlenmiştir.",
+    "options": [
+      "Zeyneb",
+      "Rukıyye",
+      "Ümmü Gülsüm",
+      "Fatıma"
+    ],
+    "correctAnswer": "Fatıma"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimizin ilk çocuğunun adı Kasım olduğu için '___' künyesiyle anıldı.",
+    "options": [
+      "Ebu Abdullah",
+      "Ebülkasım",
+      "Ebu İbrahim",
+      "Ebu Zeyneb"
+    ],
+    "correctAnswer": "Ebülkasım"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, Hz. Ali ile Hz. Fatıma arasında çıkan anlaşmazlıklarda ara buluculuk yaparak onların mutlu olması için çaba göstermiştir. Bu durum, onun hangi rolünü vurgular?",
+    "options": [
+      "Sadece bir lider",
+      "Sadece bir baba",
+      "Aile içinde huzur ve barışı sağlayan bir arabulucu",
+      "Sadece bir eş"
+    ],
+    "correctAnswer": "Aile içinde huzur ve barışı sağlayan bir arabulucu"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, 'Hiçbir anne baba, çocuğuna güzel terbiyeden daha kıymetli bir bağışta bulunmamıştır.' hadisiyle neyin önemini vurgulamıştır?",
+    "options": [
+      "Maddi mirasın",
+      "Güzel terbiyenin",
+      "Fiziksel gücün",
+      "Sosyal statünün"
+    ],
+    "correctAnswer": "Güzel terbiyenin"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Çocuklar, aile hayatının vazgeçilmez bir parçasıdır. Onlar, evi neşe ile doldurur ve aile hayatının neyini sağlar?",
+    "options": [
+      "Karmaşasını",
+      "Sıkıntısını",
+      "Sürekliliğini",
+      "Yükünü"
+    ],
+    "correctAnswer": "Sürekliliğini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin ailesinde kendi evlatları dışında başka çocuklar da vardı. Amcası Ebu Talib’in geçim yükünü hafifletmek için yanına aldığı çocuk kimdi?",
+    "options": [
+      "Hz. Zeyd bin Harise",
+      "Hz. Enes bin Malik",
+      "Hz. Ali",
+      "Hz. Hasan"
+    ],
+    "correctAnswer": "Hz. Ali"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Aişe, Hz. Fatıma için 'Resulullah’a tavır, hâl ve davranış bakımından Fatıma’dan daha fazla benzeyen birini görmedim…' demiştir. Bu söz neyi ifade eder?",
+    "options": [
+      "Hz. Fatıma'nın babasına benzemediğini",
+      "Hz. Fatıma'nın babasına çok benzediğini",
+      "Hz. Fatıma'nın farklı olduğunu",
+      "Hz. Fatıma'nın babasından üstün olduğunu"
+    ],
+    "correctAnswer": "Hz. Fatıma'nın babasına çok benzediğini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, Mekke’de İslam’ı tebliğ ederken müşriklerin saldırısına ve hakaretlerine maruz kaldığında en büyük kızı Hz. Zeyneb’in hemen onun yanına gidip yüzünü yıkaması ve Hz. Peygamber’in 'Babamı zor duruma düşürecekler diye korkma, düşüremezler!' demesi, neyi gösterir?",
+    "options": [
+      "Sadece babalık sevgisini",
+      "Sadece kızının cesaretini",
+      "Kızıyla arasındaki güçlü bağı ve onun tebliğdeki kararlılığını",
+      "Sadece müşriklerin zayıflığını"
+    ],
+    "correctAnswer": "Kızıyla arasındaki güçlü bağı ve onun tebliğdeki kararlılığını"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin ilk çocuğunun adı Kasım olduğu için hangi künyeyle anılmıştır?",
+    "options": [
+      "Ebulkasım",
+      "Ebu Abdullah",
+      "Ebu İbrahim",
+      "Ebu Zeyneb"
+    ],
+    "correctAnswer": "Ebulkasım"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, Hz. Fatıma geldiği zamanlarda çok sevinir, onu ayakta karşılar, elinden tutar, yanaklarından öper, onu yanına veya kendi yerine oturturdu. Bu durum, onun hangi özelliğini vurgular?",
+    "options": [
+      "Sadece nezaketini",
+      "Sadece otoritesini",
+      "Çocuklarına duyduğu derin sevgiyi ve adaleti",
+      "Sadece geleneklere bağlılığını"
+    ],
+    "correctAnswer": "Çocuklarına duyduğu derin sevgiyi ve adaleti"
+  }
+]

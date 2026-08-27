@@ -1,0 +1,368 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Bir Sure Öğreniyorum: Kureyş Suresi konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Bir Sure Öğreniyorum: Kureyş Suresi ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Peygamber Kıssaları çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Nimet, Kureyş, Ticaret (Seyahat) kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Nimet</li><li>Kureyş</li><li>Ticaret (Seyahat)</li><li>Tevhit</li><li>Şükür</li><li>Kureyş Suresi</li><li>Beyt</li><li>Kabile</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Bir Sure Öğreniyorum: Kureyş Suresi - Önemli Bilgiler (1)",
+    "content": "<ul><li>Kureyş Suresi, Hz. Muhammed'in (sav) ailesinin mensup olduğu Kureyş kabilesinden adını alır.</li><li>Kureyş kabilesi, Mekke'de Kâbe'nin bakımını üstlenmiş ve hacılara hizmet vermiştir.</li><li>Sure, Allah'ın Kureyş'e kış ve yaz ticari yolculuklarını kolaylaştırma gibi verdiği nimetleri hatırlatır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Bir Sure Öğreniyorum: Kureyş Suresi - Önemli Bilgiler (2)",
+    "content": "<ul><li>Kureyş Suresi, Kureyş'i açlıktan doyuran ve korkudan emin kılan Kâbe'nin Rabbine (Allah'a) kulluk etmeye davet eder.</li><li>Surede Allah'ın (cc) Kureyş'e sağladığı geçim ve güvenlik nimetleri vurgulanır.</li><li>Kureyş Suresi, tevhit inancına dikkat çekerek, nimetlerin tek sahibinin Allah olduğunu ve yalnızca O'na ibadet edilmesi gerektiğini öğretir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Bir Sure Öğreniyorum: Kureyş Suresi - Önemli Bilgiler (3)",
+    "content": "<ul><li>Bu sure, Müslümanlar tarafından namazlarda sıklıkla okunan surelerdendir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Nimet",
+        "definition": "Allah’ın verdiği güvenlik, rızık ve kolaylıklar."
+      },
+      {
+        "concept": "Ticaret (Seyahat)",
+        "definition": "Kureyş kabilesinin yaz ve kış yaptığı geçim yolculukları."
+      },
+      {
+        "concept": "Tevhit",
+        "definition": "Sadece Kâbe’nin Rabbine kulluk edilmesini emreden ilke."
+      },
+      {
+        "concept": "Kureyş Suresi",
+        "definition": "İsmini Peygamberimizin kabilesinden alan, nimetleri hatırlatan sure."
+      },
+      {
+        "concept": "Beyt",
+        "definition": "Surenin içinde geçen, Kâbe anlamına gelen ifade."
+      },
+      {
+        "concept": "Kureyş",
+        "definition": "Hz. Peygamber’in mensup olduğu, Kâbe’nin bakımını yapan kabile."
+      },
+      {
+        "concept": "Şükür",
+        "definition": "Allah’ın verdiği nimetlere karşı yapılması gereken kulluk."
+      },
+      {
+        "concept": "Kabile",
+        "definition": "Kan bağı olan insanların oluşturduğu geniş aile."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Nimet",
+        "definition": "Allah’ın verdiği güvenlik, rızık ve kolaylıklar."
+      },
+      {
+        "term": "Ticaret (Seyahat)",
+        "definition": "Kureyş kabilesinin yaz ve kış yaptığı geçim yolculukları."
+      },
+      {
+        "term": "Tevhit",
+        "definition": "Sadece Kâbe’nin Rabbine kulluk edilmesini emreden ilke."
+      },
+      {
+        "term": "Kureyş Suresi",
+        "definition": "İsmini Peygamberimizin kabilesinden alan, nimetleri hatırlatan sure."
+      },
+      {
+        "term": "Beyt",
+        "definition": "Surenin içinde geçen, Kâbe anlamına gelen ifade."
+      },
+      {
+        "term": "Kureyş",
+        "definition": "Hz. Peygamber’in mensup olduğu, Kâbe’nin bakımını yapan kabile."
+      },
+      {
+        "term": "Şükür",
+        "definition": "Allah’ın verdiği nimetlere karşı yapılması gereken kulluk."
+      },
+      {
+        "term": "Kabile",
+        "definition": "Kan bağı olan insanların oluşturduğu geniş aile."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Nimet",
+        "scrambledWord": "MİENT",
+        "definition": "İpucu: Bu kelime \"Nimet\""
+      },
+      {
+        "correctAnswer": "Kureyş",
+        "scrambledWord": "UŞKEYR",
+        "definition": "İpucu: Bu kelime \"Kureyş\""
+      },
+      {
+        "correctAnswer": "Tevhit",
+        "scrambledWord": "THVETİ",
+        "definition": "İpucu: Bu kelime \"Tevhit\""
+      },
+      {
+        "correctAnswer": "Şükür",
+        "scrambledWord": "ŞRÜKÜ",
+        "definition": "İpucu: Bu kelime \"Şükür\""
+      },
+      {
+        "correctAnswer": "Kureyş Suresi",
+        "scrambledWord": "SEŞREKYİUUR S",
+        "definition": "İpucu: Bu kelime \"Kureyş Suresi\""
+      },
+      {
+        "correctAnswer": "Beyt",
+        "scrambledWord": "TYBE",
+        "definition": "İpucu: Bu kelime \"Beyt\""
+      },
+      {
+        "correctAnswer": "Kabile",
+        "scrambledWord": "EKİBAL",
+        "definition": "İpucu: Bu kelime \"Kabile\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Kureyş kabilesi, Kâbe’ye hizmetleri nedeniyle diğer kabileler tarafından büyük saygı görmemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kureyş suresinin 'kış ve yaz seyahatleri onlara kolaylaştırıldığı için' ifadesi, Kureyş kabilesinin sadece dini lider olmalarına dikkat çeker.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kureyş suresinde Allah’ın (cc) verdiği nimetler hatırlatılmaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kureyş suresinde Allah’ın (cc) verdiği nimetler karşılığında insanın şükretmesi gerektiği belirtilir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kureyş suresinin 'Felya’büdû rabbe hâẕelbeyt' ayeti, Kâbe’nin asıl sahibinin Yüce Allah olduğunu hatırlatarak tevhit inancına vurgu yapar.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kureyş suresinin anlamında 'kış ve yaz seyahatleri onlara kolaylaştırıldığı için' ifadesi yer almaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kureyş suresi, namaz surelerinden biri olarak bilinir ve namazlarda sıklıkla okunur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kureyş kabilesi Mekke’de Kâbe’nin bakımını üstlenmemiştir.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İnsanlar Kâbe’nin Rabbine kulluk etmelidir.",
+    "scrambledSentence": "Kâbe’nin etmelidir. Rabbine kulluk İnsanlar"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Allah onları açlıktan ve korkudan korumuştur.",
+    "scrambledSentence": "ve korkudan korumuştur. onları Allah açlıktan"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kureyş kabilesi Kâbe’nin bakımını üstlenmiştir.",
+    "scrambledSentence": "Kureyş Kâbe’nin kabilesi üstlenmiştir. bakımını"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Nimetler karşılığında Allah’a şükredilmelidir.",
+    "scrambledSentence": "Allah’a şükredilmelidir. karşılığında Nimetler"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kureyş suresinin temel mesajlarından biri olan 'nimet verenin yalnızca Allah (cc) olduğu' bilgisi, Müslümanlara sadece Allah'a ___ etmenin gerekliliğini hatırlatır.",
+    "options": [
+      "isyan",
+      "ibadet",
+      "şirk",
+      "nankörlük"
+    ],
+    "correctAnswer": "ibadet"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kur’an’daki surelerden biri, ismini ___ kabilesinden almaktadır.",
+    "options": [
+      "Beni İsrail",
+      "Kureyş",
+      "Semud",
+      "Ad"
+    ],
+    "correctAnswer": "Kureyş"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed (sav)'in ailesi, Mekke’nin yerli halkı olan ___ kabilesine mensuptur.",
+    "options": [
+      "Haşimoğulları",
+      "Kureyş",
+      "Adnaniler",
+      "Kahtaniler"
+    ],
+    "correctAnswer": "Kureyş"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kureyş suresi, Kureyş halkını Kâbe’nin sahibi olan Allah’a (cc) ___ etmeye davet eder.",
+    "options": [
+      "isyan",
+      "kulluk",
+      "nankörlük",
+      "uzaklaşma"
+    ],
+    "correctAnswer": "kulluk"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kureyş suresi, Kâbe’nin asıl sahibinin Yüce Allah olduğunu hatırlatarak ___ inancına vurgu yapar.",
+    "options": [
+      "şirk",
+      "tevhit",
+      "putperestlik",
+      "çok tanrıcılık"
+    ],
+    "correctAnswer": "tevhit"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kureyş suresinin 'kış ve yaz seyahatleri onlara kolaylaştırıldığı için' ifadesi, Kureyş kabilesinin hangi özelliğine dikkat çeker?",
+    "options": [
+      "Sadece savaşçı olmalarına",
+      "Sadece tarım yapmalarına",
+      "Ticari faaliyetlerinin önemine ve Allah'ın bu konudaki lütfuna",
+      "Sadece dini lider olmalarına"
+    ],
+    "correctAnswer": "Ticari faaliyetlerinin önemine ve Allah'ın bu konudaki lütfuna"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kureyş suresi kaç ayetten oluşur?",
+    "options": [
+      "İki",
+      "Üç",
+      "Dört",
+      "Beş"
+    ],
+    "correctAnswer": "Dört"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kureyş suresinde Allah’ın (cc) verdiği nimetler karşılığında insanın ne yapması gerektiği belirtilir?",
+    "options": [
+      "İsyan etmesi",
+      "Şükretmesi",
+      "Unutması",
+      "Şikayet etmesi"
+    ],
+    "correctAnswer": "Şükretmesi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kureyş suresi, Kureyş halkını Kâbe’nin sahibi olan Allah’a (cc) ne etmeye davet eder?",
+    "options": [
+      "İsyankarlık",
+      "Kulluk",
+      "Nankörlük",
+      "Uzaklaşma"
+    ],
+    "correctAnswer": "Kulluk"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kureyş suresinin 'tevhit inancına vurgu yapması' ne anlama gelir?",
+    "options": [
+      "Birden fazla tanrıya inanmayı teşvik etmesi",
+      "Allah'ın bir ve tek olduğunu, eşi ve benzeri olmadığını vurgulaması",
+      "Sadece Kâbe'ye tapınmayı emretmesi",
+      "Peygamberlere tapınmayı emretmesi"
+    ],
+    "correctAnswer": "Allah'ın bir ve tek olduğunu, eşi ve benzeri olmadığını vurgulaması"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kureyş suresi, Kâbe’nin asıl sahibinin kim olduğunu hatırlatarak hangi inanca vurgu yapar?",
+    "options": [
+      "Şirk",
+      "Tevhit",
+      "Putperestlik",
+      "Çok tanrıcılık"
+    ],
+    "correctAnswer": "Tevhit"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kureyş kabilesi, Kâbe’ye hizmetleri nedeniyle diğer kabileler tarafından nasıl bir muamele görmüştür?",
+    "options": [
+      "Dışlanmıştır",
+      "Küçümsenmiştir",
+      "Büyük saygı görmüştür",
+      "Korkulmuştur"
+    ],
+    "correctAnswer": "Büyük saygı görmüştür"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kureyş suresinin anlamında 'Kureyş’e kolaylaştırıldığı, evet, kış ve yaz seyahatleri onlara kolaylaştırıldığı için onlar, kendilerini açlıktan doyuran ve her çeşit korkudan emin kılan şu evin (Kâbe’nin) Rabbine ne yapsınlar?' diye belirtilir.",
+    "options": [
+      "İsyankarlık etsinler",
+      "Kulluk etsinler",
+      "Nankörlük etsinler",
+      "Uzaklaşsınlar"
+    ],
+    "correctAnswer": "Kulluk etsinler"
+  }
+]

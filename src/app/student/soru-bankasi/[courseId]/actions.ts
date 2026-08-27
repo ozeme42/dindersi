@@ -10,6 +10,7 @@ import {
   serverTimestamp, 
   writeBatch,
   query,
+  where,
   orderBy,
   limit,
   getDocs
@@ -17,19 +18,40 @@ import {
 import { revalidatePath } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
-import type { QuestionBankProgress, TestResult, Question, Course } from '@/lib/types';
+import type { QuestionBankProgress, TestResult, Question, Course, Unit, Topic } from '@/lib/types';
 
 // 1. DERS MÜFREDATINI ÇEK
 export async function getCourseForSoruBankasi(courseId: string): Promise<{ course: Course | null, error?: string }> {
     try {
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        const manifest = JSON.parse(fileContent);
-        
         let courseData: any = null;
-        for (const group of manifest.classGroups) {
-            const found = group.courses.find((c: any) => c.id === courseId);
-            if (found) { courseData = found; break; }
+        try {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const manifest = JSON.parse(fileContent);
+            
+            for (const group of manifest.classGroups || []) {
+                const found = group.courses?.find((c: any) => c.id === courseId);
+                if (found) { courseData = found; break; }
+            }
+        } catch (mErr) {
+            console.warn("Manifest read error in [courseId]/actions:", mErr);
+        }
+
+        // Firestore fallback
+        if (!courseData) {
+            const courseDoc = await getDoc(doc(db, 'courses', courseId));
+            if (courseDoc.exists()) {
+                const c = { id: courseDoc.id, ...courseDoc.data() } as Course;
+                const unitsSnap = await getDocs(query(collection(db, `courses/${courseId}/units`), orderBy("title", "asc")));
+                const units = [];
+                for (const uDoc of unitsSnap.docs) {
+                    const uData = { id: uDoc.id, ...uDoc.data() } as Unit;
+                    const topicsSnap = await getDocs(query(collection(db, `courses/${courseId}/units/${uDoc.id}/topics`), orderBy("title", "asc")));
+                    const topics = topicsSnap.docs.map(t => ({ id: t.id, ...t.data() } as Topic));
+                    units.push({ ...uData, topics });
+                }
+                courseData = { ...c, units };
+            }
         }
         
         if (!courseData) return { course: null, error: "Ders bulunamadı" };
@@ -150,21 +172,35 @@ export async function submitSoruBankasiScore(userId: string, score: number, cont
 
 // 5. SORU SAYILARI
 export async function getQuestionCounts(topicId: string) {
+    let easy = 0, medium = 0, hard = 0;
     try {
         const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicId}.json`);
-        try { await fs.access(filePath); } catch { return { easy: 0, medium: 0, hard: 0 }; }
-
         const fileContent = await fs.readFile(filePath, 'utf-8');
         const questions = JSON.parse(fileContent) as Question[];
         
-        const easy = questions.filter(q => q.difficulty?.toLowerCase() === 'easy' || q.difficulty === 'Kolay').length;
-        const medium = questions.filter(q => q.difficulty?.toLowerCase() === 'medium' || q.difficulty === 'Orta').length;
-        const hard = questions.filter(q => q.difficulty?.toLowerCase() === 'hard' || q.difficulty === 'Zor').length;
-
-        return { easy, medium, hard };
-    } catch (e) {
-        return { easy: 0, medium: 0, hard: 0 };
+        easy += questions.filter(q => q.difficulty?.toLowerCase() === 'easy' || q.difficulty === 'Kolay').length;
+        medium += questions.filter(q => q.difficulty?.toLowerCase() === 'medium' || q.difficulty === 'Orta').length;
+        hard += questions.filter(q => q.difficulty?.toLowerCase() === 'hard' || q.difficulty === 'Zor').length;
+    } catch {
+        // Continue to Firestore check
     }
+
+    if (easy === 0 && medium === 0 && hard === 0) {
+        try {
+            const qSnap = await getDocs(query(collection(db, 'questions'), where('topicId', '==', topicId)));
+            qSnap.docs.forEach(d => {
+                const q = d.data() as Question;
+                const diff = (q.difficulty || '').toLowerCase();
+                if (diff === 'easy' || diff === 'kolay') easy++;
+                else if (diff === 'medium' || diff === 'orta') medium++;
+                else if (diff === 'hard' || diff === 'zor') hard++;
+            });
+        } catch (dbErr) {
+            console.warn(`Firestore question count fetch failed for topic ${topicId}:`, dbErr);
+        }
+    }
+
+    return { easy, medium, hard };
 }
 
 // 6. SIRALAMA

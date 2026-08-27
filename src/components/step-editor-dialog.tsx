@@ -54,6 +54,10 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
     if (normalized.type === 'flashcard') {
         normalized.cards = normalized.cards || [{ term: 'Terim', definition: 'Tanım' }];
     }
+    // matching normalizasyonu
+    if (normalized.type === 'matching' || normalized.type === 'conceptMatching') {
+        normalized.pairs = normalized.pairs || [{ concept: 'Kavram', definition: 'Tanım' }];
+    }
     // trueFalseList normalizasyonu
     if (normalized.type === 'trueFalseList') {
         normalized.questions = normalized.questions || [{ statement: 'Yeni ifade...', isTrue: true }];
@@ -199,13 +203,52 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
         if (!editedStep) return null;
         switch (editedStep.type) {
             case 'flashcard': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'flashcard' as const };
-            case 'anagramFlashcard': return { enabled: true, filter: ['concept'], multiSelect: true, stepType: 'anagramFlashcard' as const };
+            case 'anagramFlashcard': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'anagramFlashcard' as const };
             case 'anagramGame': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'anagramGame' as const };
             case 'sentenceScramble': return { enabled: true, filter: ['sentence'], multiSelect: true, stepType: 'sentenceScramble' as const };
             case 'conceptExplanation': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'keyConcepts' as const };
+            case 'matching':
+            case 'conceptMatching': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'keyConcepts' as const };
             default: return { enabled: false, filter: [], multiSelect: false, stepType: 'content' as const };
         }
     }, [editedStep]);
+
+    const handleAutoLoadMatchingFromTopic = async () => {
+        const topicId = context?.topicId;
+        if (!topicId) {
+            toast({ title: "Konu Seçilmedi", description: "Bu konunun ID bilgisi bulunamadı.", variant: "destructive" });
+            return;
+        }
+        try {
+            const res = await fetch(`/curriculum/activity-items/${topicId}.json?v=${Date.now()}`);
+            if (!res.ok) {
+                toast({ title: "Veri Bulunamadı", description: "Bu konuya ait etkinlik veritabanında kavram bulunamadı.", variant: "destructive" });
+                return;
+            }
+            const data = await res.json();
+            const loadedPairs: { concept: string; definition: string }[] = [];
+            
+            if (Array.isArray(data)) {
+                data.forEach((item: any) => {
+                    const concept = item.content?.term || item.content?.text || item.concept || item.term || item.title;
+                    const definition = item.content?.definition || item.definition || '';
+                    if (concept && definition) {
+                        loadedPairs.push({ concept: String(concept).trim(), definition: String(definition).trim() });
+                    }
+                });
+            }
+            
+            if (loadedPairs.length > 0) {
+                setEditedStep(prev => prev ? ({ ...prev, pairs: loadedPairs } as any) : prev);
+                toast({ title: "Kavramlar Yüklendi!", description: `Veri bankasından ${loadedPairs.length} kavram-tanım çifti başarıyla aktarıldı.` });
+            } else {
+                toast({ title: "Kavram Bulunamadı", description: "Bu konuda henüz kayıtlı kavram tanımı bulunmuyor.", variant: "destructive" });
+            }
+        } catch (err: any) {
+            console.error("Auto load matching pairs failed:", err);
+            toast({ title: "Hata", description: "Veriler yüklenirken hata oluştu.", variant: "destructive" });
+        }
+    };
 
     const handleSelectFromLibrary = (items: (ActivityItem | Question | ImageAsset)[], stepType: any) => {
         if (!editedStep || items.length === 0) return;
@@ -236,11 +279,19 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 scrambledSentence: shuffleSentence(newSentence),
             } as SentenceScrambleStep));
         } else if (stepType === 'keyConcepts') {
-            const newItems = items.map(item => ({
-                concept: (item as ActivityItem).content?.term || (item as ActivityItem).content?.text || 'Kavram',
-                definition: (item as ActivityItem).content?.definition || ''
-            }));
-            setEditedStep(prev => ({ ...(prev as any), items: newItems } as ConceptExplanationStep));
+            if (editedStep.type === 'matching' || (editedStep as any).type === 'conceptMatching') {
+                const newPairs = items.map(item => ({
+                    concept: (item as ActivityItem).content?.term || (item as ActivityItem).content?.text || (item as any).concept || (item as any).title || 'Kavram',
+                    definition: (item as ActivityItem).content?.definition || (item as any).definition || ''
+                }));
+                setEditedStep(prev => ({ ...(prev as any), pairs: newPairs } as any));
+            } else {
+                const newItems = items.map(item => ({
+                    concept: (item as ActivityItem).content?.term || (item as ActivityItem).content?.text || 'Kavram',
+                    definition: (item as ActivityItem).content?.definition || ''
+                }));
+                setEditedStep(prev => ({ ...(prev as any), items: newItems } as ConceptExplanationStep));
+            }
         }
         setIsLibraryOpen(false);
     };
@@ -525,6 +576,70 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                     placeholder="Arka Yüz (Tanım / Cevap)" 
                                     className="bg-slate-950 border-white/10 min-h-[70px] text-sm"
                                 />
+                            </div>
+                        ))}
+                    </div>
+                );
+
+            case 'matching':
+            case 'conceptMatching':
+                return (
+                    <div className="space-y-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30">
+                            <div>
+                                <Label className="text-sm font-black text-white flex items-center gap-2">
+                                    <Shuffle className="w-4 h-4 text-indigo-400" /> Kavram - Tanım Eşleştirme Çiftleri
+                                </Label>
+                                <p className="text-xs text-slate-400 mt-0.5">
+                                    Öğrenciler sunumda sol sütundaki kavramlarla sağ sütundaki tanımları eşleştirecektir.
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <Button 
+                                    type="button" 
+                                    size="sm" 
+                                    onClick={handleAutoLoadMatchingFromTopic}
+                                    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-black rounded-lg shadow-md shadow-indigo-950/40"
+                                >
+                                    <Sparkles className="mr-1.5 h-3.5 w-3.5" /> Veri Bankasından Çek
+                                </Button>
+                                <Button size="sm" onClick={() => addToArray('pairs')} className="bg-indigo-700 hover:bg-indigo-600 text-white text-xs font-bold rounded-lg">
+                                    <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Çift Ekle
+                                </Button>
+                            </div>
+                        </div>
+
+                        {((editedStep as any).pairs || []).map((pair: any, index: number) => (
+                            <div key={`matching-${index}`} className="p-4 rounded-xl bg-slate-900 border border-white/10 space-y-3 relative group">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-bold text-indigo-400 font-mono flex items-center gap-1.5">
+                                        <span className="h-5 w-5 rounded-md bg-indigo-500/20 text-indigo-300 flex items-center justify-center text-[11px] font-black">{index + 1}</span>
+                                        Eşleşme Çifti
+                                    </span>
+                                    <Button variant="ghost" size="sm" onClick={() => removeFromArray('pairs', index)} className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 h-7 text-xs">
+                                        <Trash2 className="h-3.5 w-3.5 mr-1" /> Sil
+                                    </Button>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div className="md:col-span-1">
+                                        <Label className="text-[11px] font-bold text-indigo-300 mb-1 block">Kavram / Terim</Label>
+                                        <Input 
+                                            value={pair.concept || pair.term || ''} 
+                                            onChange={e => handleArrayChange('pairs', index, 'concept', e.target.value)} 
+                                            placeholder="Örn: İhlas" 
+                                            className="bg-slate-950 border-indigo-500/30 text-white font-bold placeholder:text-slate-600"
+                                        />
+                                    </div>
+                                    <div className="md:col-span-2">
+                                        <Label className="text-[11px] font-bold text-slate-400 mb-1 block">Tanım / Açıklama</Label>
+                                        <Textarea 
+                                            value={pair.definition || ''} 
+                                            onChange={e => handleArrayChange('pairs', index, 'definition', e.target.value)} 
+                                            placeholder="Bu kavramın doğru tanımı..." 
+                                            className="bg-slate-950 border-white/10 text-slate-200 min-h-[42px] text-sm"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>

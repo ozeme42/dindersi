@@ -137,14 +137,14 @@ export async function getGradeLeaderboard(): Promise<ClassLeaderboardEntry[]> {
         const scoresByClass: Record<string, { totalScore: number, studentCount: number }> = {};
         studentsSnapshot.forEach(doc => {
             const student = doc.data() as UserProfile;
-            const className = student.class?.split(' - ')[0]; 
-            if (className) {
-                if (!scoresByClass[className]) scoresByClass[className] = { totalScore: 0, studentCount: 0 };
-                scoresByClass[className].totalScore += (student.score || 0);
-                scoresByClass[className].studentCount += 1;
+            const gradeMatch = student.class?.match(/\d+/)?.[0]; 
+            if (gradeMatch) {
+                if (!scoresByClass[gradeMatch]) scoresByClass[gradeMatch] = { totalScore: 0, studentCount: 0 };
+                scoresByClass[gradeMatch].totalScore += (student.score || 0);
+                scoresByClass[gradeMatch].studentCount += 1;
             }
         });
-        const list = Object.entries(scoresByClass).map(([name, data]) => ({ name: `${name}. Sınıflar`, ...data })).sort((a, b) => b.totalScore - a.totalScore);
+        const list = Object.entries(scoresByClass).map(([grade, data]) => ({ name: `${grade}. Sınıflar`, ...data })).sort((a, b) => b.totalScore - a.totalScore);
         return JSON.parse(JSON.stringify(list));
     } catch (e) { return []; }
 }

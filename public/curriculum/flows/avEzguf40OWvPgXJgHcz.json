@@ -1,0 +1,360 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Hayatında Namaz konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Hayatında Namaz ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Ünite: Rehberim Peygamberim çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Dua, Namaz, Salat kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Dua</li><li>Namaz</li><li>Salat</li><li>Şükür</li><li>Cennet</li><li>Bilal</li><li>İbadet</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Hayatında Namaz - Önemli Bilgiler (1)",
+    "content": "<ul><li>Namaz, cennetin anahtarı ve dinin direğidir.</li><li>Peygamberimiz (sav) namazı çok sever, zor zamanlarda bile onda huzur bulurdu.</li><li>Namaz, insanın temel manevi ihtiyaçlarını karşılar ve ruh sağlığını koruyan en önemli ibadettir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Hayatında Namaz - Önemli Bilgiler (2)",
+    "content": "<ul><li>Peygamber Efendimiz (sav) hayatı boyunca, savaş gibi en zor şartlarda dahi namaz kılmayı ihmal etmemiştir.</li><li>Namaz kılmak, Yüce Allah'ın verdiği nimetlere karşı yapılabilecek en büyük şükürdür.</li><li>Namaz, kulun Rabb'iyle kurduğu özel bir bağdır ve vaktinde kılınan namaz en güzel amellerdendir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Hayatında Namaz - Önemli Bilgiler (3)",
+    "content": "<ul><li>Beş vakit namaz, bir nehirde yıkanmak gibi günahları silip yok eder.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Dua",
+        "definition": "İnsanın Rabb'iyle konuştuğu, sığınma şeklidir."
+      },
+      {
+        "concept": "Salat",
+        "definition": "Kur'an-ı Kerim'de ibadet için kullanılan terimdir."
+      },
+      {
+        "concept": "Namaz",
+        "definition": "İnsanı Allah'a ulaştıran, cennetin anahtarı sayılan ibadettir."
+      },
+      {
+        "concept": "Cennet",
+        "definition": "Salih kulların gideceği ebedi bir yurttur."
+      },
+      {
+        "concept": "Şükür",
+        "definition": "Allah'ın nimetlerine karşı minnettarlığı ifade etmektir."
+      },
+      {
+        "concept": "Bilal",
+        "definition": "Peygamberimizin müezzinliğini yapan sahabedir."
+      },
+      {
+        "concept": "İbadet",
+        "definition": "Allah'a kulluk etme ve boyun eğme eylemidir."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Dua",
+        "definition": "İnsanın Rabb'iyle konuştuğu, sığınma şeklidir."
+      },
+      {
+        "term": "Salat",
+        "definition": "Kur'an-ı Kerim'de ibadet için kullanılan terimdir."
+      },
+      {
+        "term": "Namaz",
+        "definition": "İnsanı Allah'a ulaştıran, cennetin anahtarı sayılan ibadettir."
+      },
+      {
+        "term": "Cennet",
+        "definition": "Salih kulların gideceği ebedi bir yurttur."
+      },
+      {
+        "term": "Şükür",
+        "definition": "Allah'ın nimetlerine karşı minnettarlığı ifade etmektir."
+      },
+      {
+        "term": "Bilal",
+        "definition": "Peygamberimizin müezzinliğini yapan sahabedir."
+      },
+      {
+        "term": "İbadet",
+        "definition": "Allah'a kulluk etme ve boyun eğme eylemidir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Dua",
+        "scrambledWord": "DAU",
+        "definition": "İpucu: Bu kelime \"Dua\""
+      },
+      {
+        "correctAnswer": "Namaz",
+        "scrambledWord": "AMNZA",
+        "definition": "İpucu: Bu kelime \"Namaz\""
+      },
+      {
+        "correctAnswer": "Salat",
+        "scrambledWord": "AATLS",
+        "definition": "İpucu: Bu kelime \"Salat\""
+      },
+      {
+        "correctAnswer": "Şükür",
+        "scrambledWord": "RKÜÜŞ",
+        "definition": "İpucu: Bu kelime \"Şükür\""
+      },
+      {
+        "correctAnswer": "Cennet",
+        "scrambledWord": "CTNNEE",
+        "definition": "İpucu: Bu kelime \"Cennet\""
+      },
+      {
+        "correctAnswer": "Bilal",
+        "scrambledWord": "LAİLB",
+        "definition": "İpucu: Bu kelime \"Bilal\""
+      },
+      {
+        "correctAnswer": "İbadet",
+        "scrambledWord": "EADBİT",
+        "definition": "İpucu: Bu kelime \"İbadet\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Kur'an-ı Kerim'de namaz için kullanılan terimlerden biri de \"salat\"tır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamber Efendimiz, namazı cennetin anahtarı olarak nitelendirmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamber Efendimiz'in, \"Namazı gözünün nuru\" olarak görmesi, namazın kendisine bir yük olduğunu ifade eder.",
+        "isTrue": false
+      },
+      {
+        "statement": "Yüce Allah'ın \"Namazı dosdoğru kılın...\" ayeti, namazın sadece şeklen yerine getirilmesinin yeterli olduğunu belirtir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamber Efendimiz, beş vakit namazın günahları silip yok ettiğini, bir nehirde yıkanmanın kiri temizlemesine benzeterek açıklamıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Namaz, insanın sadece maddi ihtiyaçlarını karşılamasına yardımcı olur.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamber Efendimiz, savaş zamanlarında bile namaz kılmayı ihmal etmemiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamber Efendimiz, gücü yetmeyenlerin namazı oturarak veya yan üstü yatarak kılabileceğini belirterek, namazın her durumda kılınabilirliğini vurgulamıştır.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Namaz en büyük şükürdür.",
+    "scrambledSentence": "büyük Namaz en şükürdür."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Namaz dinin direğidir.",
+    "scrambledSentence": "Namaz direğidir. dinin"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamberimiz namazı çok severdi.",
+    "scrambledSentence": "severdi. namazı çok Peygamberimiz"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Allah namazı emretmiştir.",
+    "scrambledSentence": "Allah emretmiştir. namazı"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "“Namaz, dinin ___.” hadisi, namazın İslam dinindeki merkezi yerini belirtir.",
+    "options": [
+      "temelidir",
+      "kapısıdır",
+      "direğidir",
+      "çatısıdır"
+    ],
+    "correctAnswer": "direğidir"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamber Efendimiz namazı ___ olarak görmüştür.",
+    "options": [
+      "yük",
+      "oyun",
+      "gözünün nuru",
+      "sıkıntı"
+    ],
+    "correctAnswer": "gözünün nuru"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimizin hayatındaki örnekliğe göre, namaz, şartlar ne kadar zor olursa olsun asla ___ bir ibadet değildir.",
+    "options": [
+      "kolaylaştırılan",
+      "aksatılan",
+      "terkedilen",
+      "ertelenen"
+    ],
+    "correctAnswer": "aksatılan"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Abdullah bin Mesud'un aktardığına göre, Allah katında en güzel amel ___ kılınan namazdır.",
+    "options": [
+      "cemaatle",
+      "vaktinde",
+      "uzun",
+      "kısık sesle"
+    ],
+    "correctAnswer": "vaktinde"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "“Cennetin anahtarı ___.” hadisinde, ibadetin önemi vurgulanmıştır.",
+    "options": [
+      "oruçtur",
+      "zekattır",
+      "namazdır",
+      "hacdır"
+    ],
+    "correctAnswer": "namazdır"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz namazı neden cennetin anahtarına benzetmiştir?",
+    "options": [
+      "Çünkü sadece namaz kılanlar cennete girebilir.",
+      "Çünkü namaz cennete giden yolu açar.",
+      "Çünkü namaz çok zor bir ibadettir.",
+      "Çünkü cennete anahtarla girilir."
+    ],
+    "correctAnswer": "Çünkü namaz cennete giden yolu açar."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Namaz ibadeti, Kur'an-ı Kerim'de hangi terimle de ifade edilir?",
+    "options": [
+      "Sıyam",
+      "Zekat",
+      "Salat",
+      "Hac"
+    ],
+    "correctAnswer": "Salat"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz'in beş vakit namazı, kirleri temizleyen bir nehir benzetmesiyle açıklaması, namazın hangi etkisini belirtir?",
+    "options": [
+      "Fiziksel temizlik sağladığını.",
+      "Günahları silip yok ettiğini.",
+      "İnsanları dünyadan uzaklaştırdığını.",
+      "Sadece ruhsal bir ibadet olduğunu."
+    ],
+    "correctAnswer": "Günahları silip yok ettiğini."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz'in Hz. Bilal'e \"Kalk ey Bilal! Ezan okuyup da namaz kılmamızı sağlayarak bizi rahatlat!\" demesi, namazın hangi yönünü vurgular?",
+    "options": [
+      "Namazın sadece cemaatle kılınması gerektiğini.",
+      "Namazın insanlara manevi huzur verdiğini.",
+      "Namaz vaktinin gelmesini istemediğini.",
+      "Namazın zor bir ibadet olduğunu."
+    ],
+    "correctAnswer": "Namazın insanlara manevi huzur verdiğini."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Evrendeki bütün canlıların Allah'ı kendi dilleriyle zikretmesi (Güneşin ısıtması, Ayın aydınlatması gibi) insanların namaz ibadetiyle hangi ilişkiyi kurmasını teşvik eder?",
+    "options": [
+      "Doğayı taklit etmesini.",
+      "Doğanın bir parçası olduğunu anlamasını.",
+      "Allah'ın nimetlerine şükrederek O'na yönelmesini.",
+      "Bilimsel araştırmalar yapmasını."
+    ],
+    "correctAnswer": "Allah'ın nimetlerine şükrederek O'na yönelmesini."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz'e zor ve sıkıntılı zamanlarda huzur veren ibadet aşağıdakilerden hangisidir?",
+    "options": [
+      "Oruç",
+      "Zekat",
+      "Namaz",
+      "Hac"
+    ],
+    "correctAnswer": "Namaz"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Namazın, insanın ruh sağlığını koruması için yapabileceği en önemli ibadet olmasının nedeni aşağıdakilerden hangisidir?",
+    "options": [
+      "Maddi ihtiyaçları karşılaması.",
+      "Sadece bedensel faydaları olması.",
+      "İnanma, sığınma ve dua etme gibi manevi ihtiyaçları karşılaması.",
+      "Sadece toplumsal faydaları olması."
+    ],
+    "correctAnswer": "İnanma, sığınma ve dua etme gibi manevi ihtiyaçları karşılaması."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "\"Allah katında en güzel amel hangisidir?\" sorusuna Resulullah'ın (sav) \"Vaktinde kılınan namaz.\" buyurması, namazın hangi özelliğine dikkat çeker?",
+    "options": [
+      "Namazın cemaatle kılınmasının önemine.",
+      "Namazın sadece farz olmasına.",
+      "Namazın zamanında ifa edilmesinin faziletine.",
+      "Namazın uzun kılınmasının sevabına."
+    ],
+    "correctAnswer": "Namazın zamanında ifa edilmesinin faziletine."
+  }
+]

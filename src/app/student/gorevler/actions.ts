@@ -53,36 +53,59 @@ function serializeData(data: any): any {
   return data;
 }
 
-// 1. Öğrencinin sınıfına ait dersleri ve içeriklerini getir
-export async function getStudentCurriculum(classId: string) {
-  try {
-    const q = query(
-      collection(db, "courses"), 
-      where("classId", "==", classId),
-      orderBy("title", "asc")
-    );
-    const coursesSnap = await getDocs(q);
-    
-    const courses: (Course & { units: any[] })[] = [];
+import fs from 'fs/promises';
+import path from 'path';
 
-    for (const courseDoc of coursesSnap.docs) {
-      const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
-      
-      const unitsRef = collection(db, `courses/${courseDoc.id}/units`);
-      const unitsSnap = await getDocs(query(unitsRef, orderBy("title", "asc")));
-      
-      const units = [];
-      for (const unitDoc of unitsSnap.docs) {
-        const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
+// 1. Öğrencinin sınıfına ait dersleri ve içeriklerini getir
+export async function getStudentCurriculum(classId?: string | null, userClassString?: string | null) {
+  try {
+    let courses: (Course & { units: any[] })[] = [];
+
+    if (classId) {
+      const q = query(
+        collection(db, "courses"), 
+        where("classId", "==", classId),
+        orderBy("title", "asc")
+      );
+      const coursesSnap = await getDocs(q);
+
+      for (const courseDoc of coursesSnap.docs) {
+        const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
         
-        const topicsRef = collection(db, `courses/${courseDoc.id}/units/${unitDoc.id}/topics`);
-        const topicsSnap = await getDocs(query(topicsRef, orderBy("title", "asc")));
-        const topics = topicsSnap.docs.map(t => ({ id: t.id, ...t.data() } as Topic));
+        const unitsRef = collection(db, `courses/${courseDoc.id}/units`);
+        const unitsSnap = await getDocs(query(unitsRef, orderBy("title", "asc")));
         
-        units.push({ ...unitData, topics });
+        const units = [];
+        for (const unitDoc of unitsSnap.docs) {
+          const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
+          
+          const topicsRef = collection(db, `courses/${courseDoc.id}/units/${unitDoc.id}/topics`);
+          const topicsSnap = await getDocs(query(topicsRef, orderBy("title", "asc")));
+          const topics = topicsSnap.docs.map(t => ({ id: t.id, ...t.data() } as Topic));
+          
+          units.push({ ...unitData, topics });
+        }
+        
+        courses.push({ ...courseData, units });
       }
-      
-      courses.push({ ...courseData, units });
+    }
+
+    // If courses from Firestore is empty or all courses have 0 units, load from manifest.json
+    if (courses.length === 0 || courses.every(c => !c.units || c.units.length === 0)) {
+      try {
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const manifest = JSON.parse(fileContent);
+        
+        const gradeStr = (userClassString || '').match(/\d+/)?.[0] || '5';
+        const targetGroup = manifest.classGroups?.find((g: any) => g.name === gradeStr || String(g.name).includes(gradeStr)) || manifest.classGroups?.[0];
+        
+        if (targetGroup && targetGroup.courses && targetGroup.courses.length > 0) {
+          courses = targetGroup.courses;
+        }
+      } catch (manifestErr) {
+        console.error("Manifest fallback error in getStudentCurriculum:", manifestErr);
+      }
     }
 
     // KRİTİK NOKTA: Veriyi Client'a göndermeden önce serileştiriyoruz.

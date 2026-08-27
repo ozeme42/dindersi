@@ -113,44 +113,49 @@ export default function StudentMissionsPage() {
   const refreshData = useCallback(async () => {
     if (!user) return;
     try {
-        let classId = null;
+        let classId: string | null = null;
+        let gradeStr = '5';
         if (user.class) {
-            const q = query(collection(db, "classes"), where("name", "==", user.class.split(" - ")[0]));
-            const snap = await getDocs(q);
-            if (!snap.empty) classId = snap.docs[0].id;
-        }
-
-        if (classId) {
-            const [coursesDataRaw, progressData] = await Promise.all([
-                getStudentCurriculum(classId),
-                getUserTopicProgress(user.uid) 
-            ]);
-            
-            const rewardsQuery = query(
-                collection(db, 'scoreEvents'),
-                where('userId', '==', user.uid),
-                where('gameType', '==', 'topic-completion-reward')
-            );
-            const rewardsSnap = await getDocs(rewardsQuery);
-            
-            const mergedProgress = { ...(progressData || {}) };
-
-            rewardsSnap.forEach(doc => {
-                const data = serializeFirebaseData(doc.data());
-                const topicId = data.context; 
-                if (topicId) {
-                    if (!mergedProgress[topicId]) {
-                        mergedProgress[topicId] = { completionCount: 0, completed: false };
-                    }
-                    mergedProgress[topicId].completed = true;
-                    mergedProgress[topicId].completionCount = Math.max(mergedProgress[topicId].completionCount || 0, 1);
-                }
+            const gradeMatch = user.class.match(/\d+/);
+            if (gradeMatch) gradeStr = gradeMatch[0];
+            const prefix = user.class.split(" - ")[0].trim();
+            const snap = await getDocs(collection(db, "classes"));
+            const foundClass = snap.docs.find(d => {
+                const name = d.data().name || '';
+                return name === gradeStr || name === prefix || name === user.class || name.includes(gradeStr);
             });
-
-            // Gelen veriyi güvenle serileştir
-            setCourses(serializeFirebaseData(coursesDataRaw) || []);
-            setGlobalProgress(serializeFirebaseData(mergedProgress) || {});
+            if (foundClass) classId = foundClass.id;
         }
+
+        const [coursesDataRaw, progressData] = await Promise.all([
+            getStudentCurriculum(classId, user.class),
+            getUserTopicProgress(user.uid) 
+        ]);
+        
+        const rewardsQuery = query(
+            collection(db, 'scoreEvents'),
+            where('userId', '==', user.uid),
+            where('gameType', '==', 'topic-completion-reward')
+        );
+        const rewardsSnap = await getDocs(rewardsQuery);
+        
+        const mergedProgress = { ...(progressData || {}) };
+
+        rewardsSnap.forEach(doc => {
+            const data = serializeFirebaseData(doc.data());
+            const topicId = data.context; 
+            if (topicId) {
+                if (!mergedProgress[topicId]) {
+                    mergedProgress[topicId] = { completionCount: 0, completed: false };
+                }
+                mergedProgress[topicId].completed = true;
+                mergedProgress[topicId].completionCount = Math.max(mergedProgress[topicId].completionCount || 0, 1);
+            }
+        });
+
+        // Gelen veriyi güvenle serileştir
+        setCourses(serializeFirebaseData(coursesDataRaw) || []);
+        setGlobalProgress(serializeFirebaseData(mergedProgress) || {});
     } catch (e) { 
         console.error("Veri yenileme hatası:", e); 
     }

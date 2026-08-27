@@ -1,0 +1,360 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Bir Sure Öğreniyorum: Fil Suresi konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Bir Sure Öğreniyorum: Fil Suresi ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "4️⃣ Peygamberliğinden Önce Hz. Muhammed çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Fil Yılı, Fil Suresi, Ebâbîl kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Fil Yılı</li><li>Fil Suresi</li><li>Ebâbîl</li><li>Ebrehe</li><li>Kâbe</li><li>Abdülmuttalib</li><li>Fil Vakası</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Bir Sure Öğreniyorum: Fil Suresi - Önemli Bilgiler (1)",
+    "content": "<ul><li>Fil Suresi, Kâbe'yi yıkmaya çalışan Yemen Valisi Ebrehe ve fil ordusunun nasıl helak edildiğini anlatır.</li><li>Ebrehe, Mekke'nin ticaretini engellemek ve kendi şehrini dini merkez yapmak amacıyla Kâbe'yi yıkmaya kalkışmıştır.</li><li>Ebrehe'nin ordusundaki filler, Kâbe'ye doğru ilerlemek istendiğinde yerinden kımıldamamıştır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Bir Sure Öğreniyorum: Fil Suresi - Önemli Bilgiler (2)",
+    "content": "<ul><li>Allah, Kâbe'yi korumak için gökyüzünden balçıktan pişmiş taşlar atan sürü sürü kuşlar (Ebabil kuşları) göndermiştir.</li><li>Ebabil kuşları, Ebrehe'nin büyük ordusunu yenilmiş ekin yaprakları gibi darmadağın etmiştir.</li><li>Bu önemli olaya \"Fil Vakası\", yaşandığı yıla ise \"Fil Yılı\" denilmektedir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Bir Sure Öğreniyorum: Fil Suresi - Önemli Bilgiler (3)",
+    "content": "<ul><li>Fil Vakası, Hz. Muhammed'in (sav) doğumundan kısa bir süre önce gerçekleşen ibret verici bir olaydır.</li><li>Fil Suresi, Allah'ın evini koruduğunu ve kötü niyetli tuzakları boşa çıkardığını Müslümanlara ders olarak öğretir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Fil Yılı",
+        "definition": "Peygamberimizden önce meydana gelen olayın yılı."
+      },
+      {
+        "concept": "Fil Suresi",
+        "definition": "Kutsal evi yıkmaya kalkan orduyu anlatan kısa sure."
+      },
+      {
+        "concept": "Kâbe",
+        "definition": "Mekke'de bulunan ilk kutsal ibadet yeridir."
+      },
+      {
+        "concept": "Abdülmuttalib",
+        "definition": "Peygamberimizin dedesi, develerini istemişti."
+      },
+      {
+        "concept": "Ebrehe",
+        "definition": "Kabe'ye saldıran fillerle donatılmış Yemen valisi."
+      },
+      {
+        "concept": "Fil Vakası",
+        "definition": "Ebrehe ordusunun helak olduğu büyük olay."
+      },
+      {
+        "concept": "Ebâbîl",
+        "definition": "Ordunun üzerine taş atan sürü kuşları."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Fil Yılı",
+        "definition": "Peygamberimizden önce meydana gelen olayın yılı."
+      },
+      {
+        "term": "Fil Suresi",
+        "definition": "Kutsal evi yıkmaya kalkan orduyu anlatan kısa sure."
+      },
+      {
+        "term": "Kâbe",
+        "definition": "Mekke'de bulunan ilk kutsal ibadet yeridir."
+      },
+      {
+        "term": "Abdülmuttalib",
+        "definition": "Peygamberimizin dedesi, develerini istemişti."
+      },
+      {
+        "term": "Ebrehe",
+        "definition": "Kabe'ye saldıran fillerle donatılmış Yemen valisi."
+      },
+      {
+        "term": "Fil Vakası",
+        "definition": "Ebrehe ordusunun helak olduğu büyük olay."
+      },
+      {
+        "term": "Ebâbîl",
+        "definition": "Ordunun üzerine taş atan sürü kuşları."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Fil Yılı",
+        "scrambledWord": "İYFIL IL",
+        "definition": "İpucu: Bu kelime \"Fil Yılı\""
+      },
+      {
+        "correctAnswer": "Fil Suresi",
+        "scrambledWord": "ULSİERSİ F",
+        "definition": "İpucu: Bu kelime \"Fil Suresi\""
+      },
+      {
+        "correctAnswer": "Ebâbîl",
+        "scrambledWord": "EÂBÎBL",
+        "definition": "İpucu: Bu kelime \"Ebâbîl\""
+      },
+      {
+        "correctAnswer": "Ebrehe",
+        "scrambledWord": "ERBEEH",
+        "definition": "İpucu: Bu kelime \"Ebrehe\""
+      },
+      {
+        "correctAnswer": "Kâbe",
+        "scrambledWord": "ÂBEK",
+        "definition": "İpucu: Bu kelime \"Kâbe\""
+      },
+      {
+        "correctAnswer": "Abdülmuttalib",
+        "scrambledWord": "DBBTULAÜİMLTA",
+        "definition": "İpucu: Bu kelime \"Abdülmuttalib\""
+      },
+      {
+        "correctAnswer": "Fil Vakası",
+        "scrambledWord": "KFASAİI LV",
+        "definition": "İpucu: Bu kelime \"Fil Vakası\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Ebrehe'nin ordusundaki askerler, Fil Suresi'nde \"yenilmiş ekin yaprakları\"na benzetilmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Fil Suresi, Kur'an-ı Kerim'in en uzun surelerinden biridir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Abdülmuttalib, Ebrehe'ye Kâbe'yi kendi sahibinin koruyacağını söylemiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Fil Suresi'nde, Ebrehe'nin ordusuna saldıran kuşlar, üzerlerine kum taneleri atmıştır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Fil Suresi, fillerle donatılmış ordusuyla Kâbe'yi yıkmaya gelen Ebrehe'nin helak edilişini anlatır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Fil Vakası'nda, filler Mekke'ye doğru ilerlemek için büyük bir istek göstermişlerdir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Ebrehe, ordusunun yenilgisinden sonra Mekke'de kalarak pişmanlık duymuş ve tövbe etmiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Abdülmuttalib, Ebrehe ile konuşmasında sadece develerinin iadesini talep etmiş, Kâbe'nin akıbeti hakkında bir talepte bulunmamıştır.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Fil suresi adını Yemen Valisi Ebrehe’den almıştır.",
+    "scrambledSentence": "almıştır. Yemen suresi Fil Ebrehe’den Valisi adını"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kâbe’yi yıkmaya gelen Ebrehe’nin fil ordusunun Ebabil kuşları tarafından helak edilmesini (Fil Vakası) anlatır.",
+    "scrambledSentence": "anlatır. tarafından helak Ebabil Kâbe’yi kuşları fil Vakası) edilmesini ordusunun Ebrehe’nin yıkmaya gelen (Fil"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Fil suresinde “Fil Vakası” anlatılmaktadır.",
+    "scrambledSentence": "suresinde “Fil Vakası” Fil anlatılmaktadır."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Fil ashabının yaşadıklarından ders almak gerekir.",
+    "scrambledSentence": "gerekir. yaşadıklarından ders almak ashabının Fil"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Fil Vakası, Hz. Muhammed'in (sav) doğumundan bir süre _______ gerçekleşmiştir.",
+    "options": [
+      "sonra",
+      "hemen önce",
+      "çok sonra",
+      "önce"
+    ],
+    "correctAnswer": "önce"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Ebrehe, Yemen Valisi olarak görev yapmaktaydı ve bağlı olduğu krallık _______ Krallığı idi.",
+    "options": [
+      "Bizans",
+      "Sasani",
+      "Roma",
+      "Habeş"
+    ],
+    "correctAnswer": "Habeş"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kâbe'yi yıkmaya gelen Ebrehe'nin Yemen'de vali olduğu ve Kâbe'ye alternatif bir _______ inşa ettiği belirtilir.",
+    "options": [
+      "mescit",
+      "tapınak",
+      "kilise",
+      "sinagog"
+    ],
+    "correctAnswer": "kilise"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Abdülmuttalib, Ebrehe'ye \"Ben develerin sahibiyim, Kâbe'yi kendi sahibi _______.\" demiştir.",
+    "options": [
+      "inşa edecektir",
+      "tamir edecektir",
+      "koruyacaktır",
+      "süsleyecektir"
+    ],
+    "correctAnswer": "koruyacaktır"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Ebrehe'nin Kâbe'yi yıkmak istemesinin temel amacı, Sana şehrini hem dinî hem de _______ bir merkez hâline getirmekti.",
+    "options": [
+      "kültürel",
+      "siyasi",
+      "askeri",
+      "ticari"
+    ],
+    "correctAnswer": "ticari"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Fil Suresi hangi olayı anlatır?",
+    "options": [
+      "Bedir Savaşı",
+      "Uhud Savaşı",
+      "Fil Vakası",
+      "Hendek Savaşı"
+    ],
+    "correctAnswer": "Fil Vakası"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Fil Suresi'nde bahsi geçen \"balçıktan pişirilmiş taşlar\" ifadesiyle ne kastedilmektedir?",
+    "options": [
+      "Altın parçacıkları",
+      "Volkanik taşlar",
+      "Siccîl taşları",
+      "Meteor parçaları"
+    ],
+    "correctAnswer": "Siccîl taşları"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Fil Suresi'nin ikinci ayeti olan \"Elem yec’al keydehüm fîtadlîl\" ne anlama gelir?",
+    "options": [
+      "Onların tuzaklarını boşa çıkarmadı mı?",
+      "Üzerlerine sürü sürü kuşlar göndermedi mi?",
+      "Rabb'inin, fil sahiplerine ne yaptığını görmedin mi?",
+      "Nihayet onları yenilmiş ekin yaprakları hâline getirmedi mi?"
+    ],
+    "correctAnswer": "Onların tuzaklarını boşa çıkarmadı mı?"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Abdülmuttalib, develerini Ebrehe'den geri isterken Kâbe hakkında ne söylemiştir?",
+    "options": [
+      "Kâbe'yi Mekkeliler koruyacaktır.",
+      "Kâbe'nin yıkılmasına karşı çıkmamıştır.",
+      "Kâbe'yi kendi sahibi koruyacaktır.",
+      "Kâbe'yi o tamir edecektir."
+    ],
+    "correctAnswer": "Kâbe'yi kendi sahibi koruyacaktır."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Fil Suresi adını neyden almıştır?",
+    "options": [
+      "Kuşlardan",
+      "Fillerden",
+      "Taşlardan",
+      "Ekin yapraklarından"
+    ],
+    "correctAnswer": "Fillerden"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Ebrehe'nin ordusundaki fillerin Mekke'ye girerken göstermiş olduğu direniş ne şekilde olmuştur?",
+    "options": [
+      "Saldırganlaşarak",
+      "Yerinden kımıldamayarak",
+      "Geri dönerek",
+      "Askerlerini çiğneyerek"
+    ],
+    "correctAnswer": "Yerinden kımıldamayarak"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Fil Suresi'nde geçen \"asfim me’kûl\" ifadesi, Ebrehe'nin ordusunun sonunu neye benzetir?",
+    "options": [
+      "Yere düşmüş yapraklara",
+      "Yenilmiş ekin yapraklarına",
+      "Toz bulutuna",
+      "Taş yığınına"
+    ],
+    "correctAnswer": "Yenilmiş ekin yapraklarına"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Fil Suresi'nde, Kâbe'ye saldıranların üzerine Allah tarafından ne gönderilmiştir?",
+    "options": [
+      "Şiddetli rüzgarlar",
+      "Tufan",
+      "Sürü sürü kuşlar",
+      "Deprem"
+    ],
+    "correctAnswer": "Sürü sürü kuşlar"
+  }
+]

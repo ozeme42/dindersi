@@ -13,10 +13,12 @@ import {
   where, 
   getCountFromServer,
   getDoc,
+  getDocs,
+  orderBy,
   arrayUnion
 } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache'; 
-import type { Course, Question, QuestionBankProgress, TestResult, QuestionBankStats } from '@/lib/types';
+import type { Course, Unit, Topic, Question, QuestionBankProgress, TestResult, QuestionBankStats } from '@/lib/types';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import fs from 'fs/promises';
 import path from 'path';
@@ -24,16 +26,37 @@ import path from 'path';
 // 1. DERS BİLGİLERİNİ GETİR
 export async function getCourseForSoruBankasi(courseId: string): Promise<{ course: (Course & { units: { id: string; title: string; topics: { id: string; title: string; }[] }[] }) | null, error?: string }> {
     try {
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        const manifest = JSON.parse(fileContent);
-        
         let courseData: any = null;
-        for (const group of manifest.classGroups) {
-            const foundCourse = group.courses.find((c: any) => c.id === courseId);
-            if (foundCourse) {
-                courseData = foundCourse;
-                break;
+        try {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const manifest = JSON.parse(fileContent);
+            
+            for (const group of manifest.classGroups || []) {
+                const found = group.courses?.find((c: any) => c.id === courseId);
+                if (found) {
+                    courseData = found;
+                    break;
+                }
+            }
+        } catch (e) {
+            console.warn("Manifest read error in getCourseForSoruBankasi:", e);
+        }
+
+        // Firestore fallback
+        if (!courseData) {
+            const courseDoc = await getDoc(doc(db, 'courses', courseId));
+            if (courseDoc.exists()) {
+                const c = { id: courseDoc.id, ...courseDoc.data() } as Course;
+                const unitsSnap = await getDocs(query(collection(db, `courses/${courseId}/units`), orderBy("title", "asc")));
+                const units = [];
+                for (const uDoc of unitsSnap.docs) {
+                    const uData = { id: uDoc.id, ...uDoc.data() } as Unit;
+                    const topicsSnap = await getDocs(query(collection(db, `courses/${courseId}/units/${uDoc.id}/topics`), orderBy("title", "asc")));
+                    const topics = topicsSnap.docs.map(t => ({ id: t.id, ...t.data() } as Topic));
+                    units.push({ ...uData, topics });
+                }
+                courseData = { ...c, units };
             }
         }
         
@@ -108,28 +131,38 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
 // 4. SORU SAYILARINI GETİR
 export async function getQuestionCounts(topicId: string): Promise<{ easy: number, medium: number, hard: number } | null> {
     if (!topicId) return null;
+    const counts = { easy: 0, medium: 0, hard: 0 };
     try {
         const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicId}.json`);
         const fileContent = await fs.readFile(filePath, 'utf-8');
         const questions = JSON.parse(fileContent) as Question[];
 
-        const counts = { easy: 0, medium: 0, hard: 0 };
         questions.forEach(question => {
             const d = question.difficulty?.toLowerCase();
             if (d === 'kolay' || d === 'easy') counts.easy++;
             else if (d === 'orta' || d === 'medium') counts.medium++;
             else if (d === 'zor' || d === 'hard') counts.hard++;
         });
-
-        return counts;
-
-    } catch (error: any) {
-        if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-            return { easy: 0, medium: 0, hard: 0 };
-        }
-        console.error(`Error fetching question counts for topic ${topicId}:`, error);
-        return { easy: 0, medium: 0, hard: 0 };
+    } catch {
+        // Static file doesn't exist, proceed to Firestore check
     }
+
+    if (counts.easy === 0 && counts.medium === 0 && counts.hard === 0) {
+        try {
+            const qSnap = await getDocs(query(collection(db, 'questions'), where('topicId', '==', topicId)));
+            qSnap.docs.forEach(d => {
+                const q = d.data() as Question;
+                const diff = (q.difficulty || '').toLowerCase();
+                if (diff === 'easy' || diff === 'kolay') counts.easy++;
+                else if (diff === 'medium' || diff === 'orta') counts.medium++;
+                else if (diff === 'hard' || diff === 'zor') counts.hard++;
+            });
+        } catch (dbErr) {
+            console.warn(`Firestore question count fetch failed for topic ${topicId}:`, dbErr);
+        }
+    }
+
+    return counts;
 }
 
 // 5. İLERLEMEYİ VE PUANI KAYDET (GÜNCELLENDİ)

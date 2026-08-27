@@ -163,7 +163,7 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 
 
 /**
- * Fetches data from static JSON files for games. It can read from both `activities` and `questions` directories.
+ * Fetches data from static JSON files (activities, questions, flows) and Firestore for games.
  * If topicId is 'all', it aggregates data from all topics within the given unit.
  */
 export async function getStaticGameData(params: {
@@ -171,14 +171,13 @@ export async function getStaticGameData(params: {
   unitId?: string;
   topicId?: string;
 }): Promise<(ActivityItem | Question)[]> {
-    const { unitId, topicId } = params;
+    const { courseId, unitId, topicId } = params;
 
     const readJsonFile = async (filePath: string): Promise<any[] | null> => {
         try {
             const fileContent = await fs.readFile(filePath, 'utf-8');
             return JSON.parse(fileContent);
         } catch (e: any) {
-            if (e.code !== 'ENOENT') console.error(`Error reading ${filePath}:`, e);
             return null;
         }
     };
@@ -186,14 +185,212 @@ export async function getStaticGameData(params: {
     const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem | Question)[]> => {
         const activityPath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicIdToFetch}.json`);
         const questionPath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicIdToFetch}.json`);
+        const flowPath = path.join(process.cwd(), 'public', 'curriculum', 'flows', `${topicIdToFetch}.json`);
 
-        const [activityData, questionData] = await Promise.all([
+        const [activityData, questionData, flowData] = await Promise.all([
             readJsonFile(activityPath),
-            readJsonFile(questionPath)
+            readJsonFile(questionPath),
+            readJsonFile(flowPath)
         ]);
 
-        return [...(activityData || []), ...(questionData || [])];
-    }
+        const extractedFlowItems: (ActivityItem | Question)[] = [];
+        if (Array.isArray(flowData)) {
+            for (const step of flowData) {
+                if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                    for (const it of step.items) {
+                        if (it.concept) {
+                            extractedFlowItems.push({
+                                id: `flow-c-${Math.random().toString(36).slice(2, 8)}`,
+                                type: 'concept',
+                                topicId: topicIdToFetch,
+                                content: { text: it.concept, term: it.concept, definition: it.definition || '' }
+                            } as any);
+                        }
+                        if (it.concept && it.definition) {
+                            extractedFlowItems.push({
+                                id: `flow-d-${Math.random().toString(36).slice(2, 8)}`,
+                                type: 'definition',
+                                topicId: topicIdToFetch,
+                                content: { term: it.concept, definition: it.definition }
+                            } as any);
+                        }
+                    }
+                } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
+                    for (const cd of step.cards) {
+                        if (cd.term) {
+                            extractedFlowItems.push({
+                                id: `flow-c-${Math.random().toString(36).slice(2, 8)}`,
+                                type: 'concept',
+                                topicId: topicIdToFetch,
+                                content: { text: cd.term, term: cd.term, definition: cd.definition || '' }
+                            } as any);
+                        }
+                        if (cd.term && cd.definition) {
+                            extractedFlowItems.push({
+                                id: `flow-d-${Math.random().toString(36).slice(2, 8)}`,
+                                type: 'definition',
+                                topicId: topicIdToFetch,
+                                content: { term: cd.term, definition: cd.definition }
+                            } as any);
+                        }
+                    }
+                } else if ((step.type === 'anagramGame' || step.type === 'anagramFlashcard') && Array.isArray(step.cards)) {
+                    for (const cd of step.cards) {
+                        const ans = cd.correctAnswer || cd.term;
+                        if (ans) {
+                            extractedFlowItems.push({
+                                id: `flow-c-${Math.random().toString(36).slice(2, 8)}`,
+                                type: 'concept',
+                                topicId: topicIdToFetch,
+                                content: { text: ans, term: ans, definition: cd.definition || '' }
+                            } as any);
+                        }
+                        if (ans && cd.definition) {
+                            extractedFlowItems.push({
+                                id: `flow-d-${Math.random().toString(36).slice(2, 8)}`,
+                                type: 'definition',
+                                topicId: topicIdToFetch,
+                                content: { term: ans, definition: cd.definition }
+                            } as any);
+                        }
+                    }
+                } else if (step.type === 'contentList' && Array.isArray(step.sentences)) {
+                    for (const s of step.sentences) {
+                        if (s && typeof s === 'string') {
+                            extractedFlowItems.push({
+                                id: `flow-s-${Math.random().toString(36).slice(2, 8)}`,
+                                type: 'sentence',
+                                topicId: topicIdToFetch,
+                                content: { text: s }
+                            } as any);
+                        }
+                    }
+                } else if (step.type === 'content' && step.content) {
+                    extractedFlowItems.push({
+                        id: `flow-s-${Math.random().toString(36).slice(2, 8)}`,
+                        type: 'sentence',
+                        topicId: topicIdToFetch,
+                        content: { text: step.content }
+                    } as any);
+                } else if (step.type === 'trueFalseList' && Array.isArray(step.questions)) {
+                    for (const q of step.questions) {
+                        if (q.statement) {
+                            extractedFlowItems.push({
+                                id: `flow-tf-${Math.random().toString(36).slice(2, 8)}`,
+                                type: 'Doğru/Yanlış',
+                                topicId: topicIdToFetch,
+                                text: q.statement,
+                                correctAnswer: q.isTrue ? 'Doğru' : 'Yanlış',
+                                options: ['Doğru', 'Yanlış'],
+                                difficulty: 'Orta'
+                            } as any);
+                        }
+                    }
+                } else if (step.type === 'mcq' && (step.question || step.text) && step.correctAnswer) {
+                    extractedFlowItems.push({
+                        id: `flow-mcq-${Math.random().toString(36).slice(2, 8)}`,
+                        type: 'Çoktan Seçmeli',
+                        topicId: topicIdToFetch,
+                        text: step.question || step.text,
+                        correctAnswer: step.correctAnswer,
+                        options: step.options || [],
+                        difficulty: 'Orta'
+                    } as any);
+                }
+            }
+        }
+
+        const items: (ActivityItem | Question)[] = [
+            ...(activityData || []),
+            ...(questionData || []),
+            ...extractedFlowItems
+        ];
+
+        // If items are still empty, fetch from Firestore
+        if (items.length === 0) {
+            try {
+                let topicDocData: any = null;
+                if (courseId && unitId) {
+                    const topicDoc = await getDoc(doc(db, 'courses', courseId, 'units', unitId, 'topics', topicIdToFetch));
+                    if (topicDoc.exists()) topicDocData = topicDoc.data();
+                }
+                if (!topicDocData) {
+                    const topicDoc = await getDoc(doc(db, 'topics', topicIdToFetch));
+                    if (topicDoc.exists()) topicDocData = topicDoc.data();
+                }
+
+                if (topicDocData && Array.isArray(topicDocData.steps)) {
+                    for (const step of topicDocData.steps) {
+                        if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                            for (const it of step.items) {
+                                if (it.concept) {
+                                    items.push({
+                                        id: `db-c-${Math.random().toString(36).slice(2, 8)}`,
+                                        type: 'concept',
+                                        topicId: topicIdToFetch,
+                                        content: { text: it.concept, term: it.concept, definition: it.definition || '' }
+                                    } as any);
+                                }
+                                if (it.concept && it.definition) {
+                                    items.push({
+                                        id: `db-d-${Math.random().toString(36).slice(2, 8)}`,
+                                        type: 'definition',
+                                        topicId: topicIdToFetch,
+                                        content: { term: it.concept, definition: it.definition }
+                                    } as any);
+                                }
+                            }
+                        } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
+                            for (const cd of step.cards) {
+                                if (cd.term) {
+                                    items.push({
+                                        id: `db-c-${Math.random().toString(36).slice(2, 8)}`,
+                                        type: 'concept',
+                                        topicId: topicIdToFetch,
+                                        content: { text: cd.term, term: cd.term, definition: cd.definition || '' }
+                                    } as any);
+                                }
+                                if (cd.term && cd.definition) {
+                                    items.push({
+                                        id: `db-d-${Math.random().toString(36).slice(2, 8)}`,
+                                        type: 'definition',
+                                        topicId: topicIdToFetch,
+                                        content: { term: cd.term, definition: cd.definition }
+                                    } as any);
+                                }
+                            }
+                        } else if (step.type === 'trueFalseList' && Array.isArray(step.questions)) {
+                            for (const q of step.questions) {
+                                if (q.statement) {
+                                    items.push({
+                                        id: `db-tf-${Math.random().toString(36).slice(2, 8)}`,
+                                        type: 'Doğru/Yanlış',
+                                        topicId: topicIdToFetch,
+                                        text: q.statement,
+                                        correctAnswer: q.isTrue ? 'Doğru' : 'Yanlış',
+                                        options: ['Doğru', 'Yanlış'],
+                                        difficulty: 'Orta'
+                                    } as any);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Check questions & activityItems collections
+                const [qSnap, actSnap] = await Promise.all([
+                    getDocs(query(collection(db, 'questions'), where('topicId', '==', topicIdToFetch))),
+                    getDocs(query(collection(db, 'activityItems'), where('topicId', '==', topicIdToFetch)))
+                ]);
+                qSnap.docs.forEach(d => items.push({ id: d.id, ...d.data() } as Question));
+                actSnap.docs.forEach(d => items.push({ id: d.id, ...d.data() } as ActivityItem));
+            } catch (dbError) {
+                console.warn("Firestore fallback in getStaticGameData:", dbError);
+            }
+        }
+
+        return items;
+    };
 
     if (topicId && topicId !== 'all') {
         return readDataForTopic(topicId);
@@ -205,9 +402,9 @@ export async function getStaticGameData(params: {
             const manifest = JSON.parse(manifestContent);
             
             let targetUnit;
-            for (const group of manifest.classGroups) {
-                for (const course of group.courses) {
-                    const foundUnit = course.units.find((u: any) => u.id === unitId);
+            for (const group of manifest.classGroups || []) {
+                for (const course of group.courses || []) {
+                    const foundUnit = course.units?.find((u: any) => u.id === unitId);
                     if (foundUnit) {
                         targetUnit = foundUnit;
                         break;
@@ -225,7 +422,7 @@ export async function getStaticGameData(params: {
             console.error("Error reading manifest to get topics for unit:", e);
         }
         return allUnitItems;
-    } else if (params.courseId && params.courseId !== 'all') {
+    } else if (courseId && courseId !== 'all') {
         let allCourseItems: (ActivityItem | Question)[] = [];
         try {
             const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
@@ -233,8 +430,8 @@ export async function getStaticGameData(params: {
             const manifest = JSON.parse(manifestContent);
             
             let targetCourse;
-            for (const group of manifest.classGroups) {
-                const foundCourse = group.courses.find((c: any) => c.id === params.courseId);
+            for (const group of manifest.classGroups || []) {
+                const foundCourse = group.courses?.find((c: any) => c.id === courseId);
                 if (foundCourse) {
                     targetCourse = foundCourse;
                     break;
@@ -278,11 +475,11 @@ export async function getStaticQuestionsForGame(params: {
     }
     
     return allData.filter(item => {
-        if ('text' in item && typeof item.text === 'string') { // Likely a Question
-             if (dataType === 'questions') return true;
-        } else { // Likely an ActivityItem
-             if (dataType === 'activities') return true;
-        }
-        return false;
+        const isActivity = 'content' in item || item.type === 'concept' || item.type === 'definition' || item.type === 'sentence' || item.type === 'categorization' || item.type === 'sorting';
+        const isQuestion = 'correctAnswer' in item || 'options' in item || item.type === 'Çoktan Seçmeli' || item.type === 'Doğru/Yanlış' || item.type === 'Boşluk Doldurma' || item.type === 'mcq' || item.type === 'tf' || item.type === 'fitb';
+        
+        if (dataType === 'questions') return isQuestion;
+        if (dataType === 'activities') return isActivity;
+        return true;
     });
 }

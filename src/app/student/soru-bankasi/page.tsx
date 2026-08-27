@@ -197,7 +197,10 @@ export default function SoruBankasiPage() {
             if (!user) { setIsLoading(false); return; }
             setIsLoading(true);
             try {
-                const studentClassName = user.class?.split(' - ')[0];
+                const gradeMatch = user.class?.match(/\d+/);
+                const gradeStr = gradeMatch ? gradeMatch[0] : '5';
+                const studentClassName = user.class?.split(' - ')[0]?.trim();
+
                 const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
                 const [classesSnapshot, allCoursesSnapshot] = await Promise.all([
                     getDocs(classesQuery),
@@ -205,10 +208,32 @@ export default function SoruBankasiPage() {
                 ]);
                 const allClasses = classesSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as SchoolClass));
                 const allCourses = allCoursesSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Course));
-                const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-                const filteredCourses = allCourses.filter(course =>
+                const studentClass = allClasses.find(c => 
+                    c.name === gradeStr || 
+                    (studentClassName && c.name === studentClassName) ||
+                    (studentClassName && c.name.includes(gradeStr))
+                );
+
+                let filteredCourses = allCourses.filter(course =>
                     !course.isTeacherOnly && ((studentClass && course.classId === studentClass.id) || !course.classId)
                 );
+
+                // Fallback: If no courses found in Firestore, load from manifest.json
+                if (filteredCourses.length === 0) {
+                    try {
+                        const manifestRes = await fetch('/curriculum/manifest.json');
+                        if (manifestRes.ok) {
+                            const manifest = await manifestRes.json();
+                            const group = manifest.classGroups?.find((g: any) => g.name === gradeStr || String(g.name).includes(gradeStr)) || manifest.classGroups?.[0];
+                            if (group && group.courses) {
+                                filteredCourses = group.courses;
+                            }
+                        }
+                    } catch (mErr) {
+                        console.error("Manifest fallback error in soru-bankasi page:", mErr);
+                    }
+                }
+
                 const coursesData = await Promise.all(filteredCourses.map(async (course) => {
                     const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
                     const qbStatsPromise = getCourseQuestionBankStats(course.id, user.uid);
@@ -218,13 +243,21 @@ export default function SoruBankasiPage() {
                         const progressData = progressSnap.data() as UserProgress;
                         completedTopicsCount = Object.values(progressData).filter(topic => topic.completionCount > 0).length;
                     }
-                    const unitsRef = collection(db, 'courses', course.id, 'units');
-                    const unitsSnap = await getDocs(unitsRef);
+                    
                     let totalTopics = 0;
-                    for (const unitDoc of unitsSnap.docs) {
-                        const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
-                        totalTopics += topicsSnap.size;
+                    if (course.units && Array.isArray(course.units)) {
+                        for (const unit of course.units) {
+                            totalTopics += (unit.topics || []).length;
+                        }
+                    } else {
+                        const unitsRef = collection(db, 'courses', course.id, 'units');
+                        const unitsSnap = await getDocs(unitsRef);
+                        for (const unitDoc of unitsSnap.docs) {
+                            const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
+                            totalTopics += topicsSnap.size;
+                        }
                     }
+
                     const lessonProgress = totalTopics > 0 ? Math.round((completedTopicsCount / totalTopics) * 100) : 0;
                     const lower = (course.title || "").toLocaleLowerCase('tr');
                     let finalTitle = course.title || "";
@@ -233,7 +266,7 @@ export default function SoruBankasiPage() {
                     return {
                         ...course,
                         displayTitle: finalTitle,
-                        className: studentClass?.name || 'Genel',
+                        className: studentClass?.name ? `${studentClass.name}. Sınıf` : `${gradeStr}. Sınıf`,
                         lessonProgress,
                         completedTopicsCount,
                         topicsCount: totalTopics,

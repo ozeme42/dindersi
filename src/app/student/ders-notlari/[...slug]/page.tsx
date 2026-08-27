@@ -12,23 +12,43 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import { db } from '@/lib/firebase';
 import { ConceptExplanationPlayer, ContentListPlayer, FlashcardItem, FLASHCARD_THEMES } from '@/components/lesson-content-viewer';
 
-// Helper to fetch definitions directly from Firestore
+// Helper to fetch definitions from Firestore or static activities
 async function getDefinitionsForTopic(topicId: string) {
     if (!topicId) return [];
     try {
         const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => {
+        const results = querySnapshot.docs.map(doc => {
             const item = doc.data();
             return {
-                concept: item.content.term || '',
-                definition: item.content.definition || ''
+                concept: item.content?.term || item.concept || '',
+                definition: item.content?.definition || item.definition || ''
             };
         }).filter(item => item.concept && item.definition);
+
+        if (results.length > 0) return results;
     } catch (error) {
-        console.error("Error fetching definitions for topic:", error);
-        return [];
+        console.warn("Error fetching definitions from Firestore:", error);
     }
+
+    // Static fallback
+    try {
+        const res = await fetch(`/curriculum/activities/${topicId}.json?v=${Date.now()}`);
+        if (res.ok) {
+            const items = await res.json();
+            return (items || [])
+                .filter((item: any) => item.type === 'definition' || (item.content?.term && item.content?.definition))
+                .map((item: any) => ({
+                    concept: item.content?.term || item.concept || item.term || '',
+                    definition: item.content?.definition || item.definition || ''
+                }))
+                .filter((item: any) => item.concept && item.definition);
+        }
+    } catch (e) {
+        console.warn(`Could not fetch static activity definitions for ${topicId}:`, e);
+    }
+
+    return [];
 }
 
 interface TopicContent {
@@ -125,29 +145,104 @@ export function DersNotlariDisplayPage() {
                 const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
                 const topicSnap = await getDoc(topicRef);
                 
+                let topicTitle = '';
+                let definitions: { concept: string, definition: string }[] = [];
+                let notes: string[] = [];
+                let htmlContent = '';
+
                 if (topicSnap.exists()) {
                     const topicData = topicSnap.data() as any;
-                    
-                    const definitions = await getDefinitionsForTopic(topicId);
-                    const notes = topicData.writingContent?.notes || [];
-                    const htmlContent = topicData.htmlContent || '';
-
-                    if (definitions.length === 0 && notes.length === 0 && !htmlContent) {
-                         throw new Error('Bu konu için hiçbir içerik bulunamadı.');
-                    }
-                    
-                    setContent({ 
-                        title: topicData.title,
-                        courseName: courseData?.title || 'Ders',
-                        conceptDefinitions: definitions, 
-                        notes: notes,
-                        htmlContent: htmlContent
-                    });
-                    setFlippedCards(new Array(definitions.length).fill(false));
-
+                    topicTitle = topicData.title || '';
+                    definitions = await getDefinitionsForTopic(topicId);
+                    notes = topicData.writingContent?.notes || [];
+                    htmlContent = topicData.htmlContent || '';
                 } else {
-                     throw new Error('Konu veritabanında bulunamadı.');
+                    // Fallback to static data
+                    definitions = await getDefinitionsForTopic(topicId);
+
+                    try {
+                        const flowRes = await fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`);
+                        if (flowRes.ok) {
+                            const steps = await flowRes.json();
+                            for (const step of steps || []) {
+                                if (step.type === 'content' && step.content) {
+                                    notes.push(step.content);
+                                } else if (step.type === 'contentList' && Array.isArray(step.sentences)) {
+                                    notes.push(...step.sentences);
+                                } else if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                                    for (const itm of step.items) {
+                                        if (itm.concept && itm.definition && !definitions.some(d => d.concept === itm.concept)) {
+                                            definitions.push({ concept: itm.concept, definition: itm.definition });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Could not fetch flow for notes:", e);
+                    }
+
+                    // Get title from manifest if empty
+                    try {
+                        const manifestRes = await fetch('/curriculum/manifest.json');
+                        if (manifestRes.ok) {
+                            const manifest = await manifestRes.json();
+                            for (const g of manifest.classGroups || []) {
+                                for (const c of g.courses || []) {
+                                    if (c.id === courseId && !courseData) courseData = c;
+                                    for (const u of c.units || []) {
+                                        const t = u.topics?.find((top: any) => top.id === topicId);
+                                        if (t) {
+                                            topicTitle = t.title;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (e) {}
+                    // Also load yazilacaklar and ozetler if empty
+                    if (notes.length === 0 || definitions.length === 0) {
+                        try {
+                            const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
+                            if (yRes.ok) {
+                                const yData = await yRes.json();
+                                if (notes.length === 0 && Array.isArray(yData.notes)) notes.push(...yData.notes);
+                                if (Array.isArray(yData.conceptDefinitions)) {
+                                    for (const cd of yData.conceptDefinitions) {
+                                        if (cd.concept && cd.definition && !definitions.some(d => d.concept === cd.concept)) {
+                                            definitions.push({ concept: cd.concept, definition: cd.definition });
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (e) {}
+                    }
+
+                    if (!htmlContent) {
+                        try {
+                            const ozRes = await fetch(`/curriculum/ozetler/${topicId}.html`);
+                            if (ozRes.ok) {
+                                htmlContent = await ozRes.text();
+                            }
+                        } catch (e) {}
+                    }
                 }
+
+                if (!topicTitle) topicTitle = 'Ders Notu';
+
+                if (definitions.length === 0 && notes.length === 0 && !htmlContent) {
+                     throw new Error('Bu konu için henüz özet veya ders notu eklenmemiş.');
+                }
+                
+                setContent({ 
+                    title: topicTitle,
+                    courseName: courseData?.title || 'Ders',
+                    conceptDefinitions: definitions, 
+                    notes: notes,
+                    htmlContent: htmlContent
+                });
+                setFlippedCards(new Array(definitions.length).fill(false));
             }
 
         } catch (e: any) {

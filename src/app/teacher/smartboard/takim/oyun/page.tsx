@@ -220,8 +220,7 @@ function TeamCompetitionComponent() {
                     unitId: searchParams.get('unitId') || undefined,
                     topicId: searchParams.get('topicId') || undefined,
                     questionCount: 100, 
-                    difficulty: ['Kolay', 'Orta', 'Zor'],
-                    questionTypes: ['mcq', 'tf', 'fitb'],
+                    questionTypes: ['mcq', 'tf', 'fitb', 'Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'],
                 };
                 const qResult = await getQuestionsFromBank(params);
                 if (qResult.questions) setQuestions(qResult.questions as GameQuestion[]);

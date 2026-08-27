@@ -1,0 +1,429 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Doğduğu Çevre konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Doğduğu Çevre ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Çocukluk Yıllarında Peygamberimiz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Fil Vakası, Ebrehe, Peygamber kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Fil Vakası</li><li>Ebrehe</li><li>Peygamber</li><li>Bedevi</li><li>Cahiliye Dönemi</li><li>Hicaz Bölgesi</li><li>Kâbe</li><li>Mekke</li><li>Hicaz</li><li>Hadari</li><li>Haniflik</li><li>Zemzem</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Doğduğu Çevre - Önemli Bilgiler (1)",
+    "content": "<ul><li>Hz. Muhammed (sav) son peygamberdir ve Mekke'de doğmuştur. Mekke, Kur'an'da \"şehirlerin anası\" (Ümmülkura) olarak geçer.</li><li>Müslümanların kıblesi Kâbe, Mekke'dedir. Kâbe'yi Hz. İbrahim ve oğlu Hz. İsmail yeniden inşa etmiştir.</li><li>Peygamberimizin doğduğu dönemde Arap Yarımadası'nda \"Cahiliye Dönemi\" yaşanmaktaydı.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Doğduğu Çevre - Önemli Bilgiler (2)",
+    "content": "<ul><li>Cahiliye Dönemi'nde Arap toplumu kabileler halinde yaşar, güçlüler zayıfları ezerdi. Putperestlik en yaygın inançtı.</li><li>Fil Vakası, Yemen Valisi Ebrehe'nin Kâbe'yi yıkmak için fillerle desteklediği büyük bir orduyla Mekke'ye saldırması olayıdır.</li><li>Peygamberimizin dedesi Abdülmuttalib, Kâbe'nin sahibinin Allah olduğunu ve O'nun evini koruyacağını söylemiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Doğduğu Çevre - Önemli Bilgiler (3)",
+    "content": "<ul><li>Ebrehe'nin ordusu, Kâbe'ye yaklaşamadan ebabil kuşlarının attığı taşlar sayesinde yenildi. Bu olay Kur'an'daki Fil Suresi'nde anlatılır.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Ebrehe",
+        "definition": "Kâbe'yi yıkmak isteyen Yemen Valisi"
+      },
+      {
+        "concept": "Fil Vakası",
+        "definition": "Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırdığı olay"
+      },
+      {
+        "concept": "Bedevi",
+        "definition": "Çöllerde göçebe olarak yaşayan, hayvancılıkla geçinen Arap topluluğu."
+      },
+      {
+        "concept": "Cahiliye Dönemi",
+        "definition": "Hz. Muhammed'in peygamberliğinden önceki dönem"
+      },
+      {
+        "concept": "Kâbe",
+        "definition": "Müslümanların kıblesi olan, Mekke'de bulunan kutsal yapı"
+      },
+      {
+        "concept": "Hicaz",
+        "definition": "Peygamberimizin çocukluk yıllarının geçtiği bölge"
+      },
+      {
+        "concept": "Zemzem",
+        "definition": "Hz. Hacer ve oğlu Hz. İsmail'e Allah tarafından verilen su kaynağı"
+      },
+      {
+        "concept": "Putperestlik",
+        "definition": "İnsanların cansız varlıklara tapması"
+      },
+      {
+        "concept": "Mekke",
+        "definition": "Peygamberimizin doğduğu şehir ve Kâbe'nin bulunduğu yer"
+      },
+      {
+        "concept": "Haram aylar",
+        "definition": "Savaşmanın yasak olduğu aylar"
+      },
+      {
+        "concept": "Hadari",
+        "definition": "Şehirlerde yerleşik yaşayan, ticaret ve tarımla uğraşan Arap topluluğu."
+      },
+      {
+        "concept": "Ümmülkura",
+        "definition": "Şehirlerin anası anlamına gelen, Kur'an-ı Kerim'de Mekke için kullanılan ifade."
+      },
+      {
+        "concept": "Haniflik",
+        "definition": "Hz. İbrahim'in dinine inen ve putperestliği reddeden kişilerin inancı"
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Ebrehe",
+        "definition": "Kâbe'yi yıkmak isteyen Yemen Valisi"
+      },
+      {
+        "term": "Fil Vakası",
+        "definition": "Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırdığı olay"
+      },
+      {
+        "term": "Bedevi",
+        "definition": "Çöllerde göçebe olarak yaşayan, hayvancılıkla geçinen Arap topluluğu."
+      },
+      {
+        "term": "Cahiliye Dönemi",
+        "definition": "Hz. Muhammed'in peygamberliğinden önceki dönem"
+      },
+      {
+        "term": "Kâbe",
+        "definition": "Müslümanların kıblesi olan, Mekke'de bulunan kutsal yapı"
+      },
+      {
+        "term": "Hicaz",
+        "definition": "Peygamberimizin çocukluk yıllarının geçtiği bölge"
+      },
+      {
+        "term": "Zemzem",
+        "definition": "Hz. Hacer ve oğlu Hz. İsmail'e Allah tarafından verilen su kaynağı"
+      },
+      {
+        "term": "Putperestlik",
+        "definition": "İnsanların cansız varlıklara tapması"
+      },
+      {
+        "term": "Mekke",
+        "definition": "Peygamberimizin doğduğu şehir ve Kâbe'nin bulunduğu yer"
+      },
+      {
+        "term": "Haram aylar",
+        "definition": "Savaşmanın yasak olduğu aylar"
+      },
+      {
+        "term": "Hadari",
+        "definition": "Şehirlerde yerleşik yaşayan, ticaret ve tarımla uğraşan Arap topluluğu."
+      },
+      {
+        "term": "Ümmülkura",
+        "definition": "Şehirlerin anası anlamına gelen, Kur'an-ı Kerim'de Mekke için kullanılan ifade."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Fil Vakası",
+        "scrambledWord": "KVLFAIİ AS",
+        "definition": "İpucu: Bu kelime \"Fil Vakası\""
+      },
+      {
+        "correctAnswer": "Ebrehe",
+        "scrambledWord": "EEHREB",
+        "definition": "İpucu: Bu kelime \"Ebrehe\""
+      },
+      {
+        "correctAnswer": "Peygamber",
+        "scrambledWord": "EGBYPAMER",
+        "definition": "İpucu: Bu kelime \"Peygamber\""
+      },
+      {
+        "correctAnswer": "Bedevi",
+        "scrambledWord": "VBİEDE",
+        "definition": "İpucu: Bu kelime \"Bedevi\""
+      },
+      {
+        "correctAnswer": "Cahiliye Dönemi",
+        "scrambledWord": " İNAEDLİYCHİMEÖ",
+        "definition": "İpucu: Bu kelime \"Cahiliye Dönemi\""
+      },
+      {
+        "correctAnswer": "Hicaz Bölgesi",
+        "scrambledWord": "ÖCİSG ZEHLİBA",
+        "definition": "İpucu: Bu kelime \"Hicaz Bölgesi\""
+      },
+      {
+        "correctAnswer": "Kâbe",
+        "scrambledWord": "KBÂE",
+        "definition": "İpucu: Bu kelime \"Kâbe\""
+      },
+      {
+        "correctAnswer": "Mekke",
+        "scrambledWord": "EMEKK",
+        "definition": "İpucu: Bu kelime \"Mekke\""
+      },
+      {
+        "correctAnswer": "Hicaz",
+        "scrambledWord": "AİZCH",
+        "definition": "İpucu: Bu kelime \"Hicaz\""
+      },
+      {
+        "correctAnswer": "Hadari",
+        "scrambledWord": "HDAİRA",
+        "definition": "İpucu: Bu kelime \"Hadari\""
+      },
+      {
+        "correctAnswer": "Haniflik",
+        "scrambledWord": "KNHİİLFA",
+        "definition": "İpucu: Bu kelime \"Haniflik\""
+      },
+      {
+        "correctAnswer": "Zemzem",
+        "scrambledWord": "EZMZEM",
+        "definition": "İpucu: Bu kelime \"Zemzem\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Mekke, Arap Yarımadası’nın Hicaz bölgesindedir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Fil Vakası, ismini Ebrehe’nin ordusundaki fillerden almıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kâbe içerisinde her kabilenin ayrı bir putu vardı.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimizin çocukluk yıllarının geçtiği Hicaz bölgesinde sadece Mekke şehri bulunur.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kâbe’yi ilk inşa edenin kim olduğu kesin bilgiyle bilinmektedir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Cahiliye Dönemi, Hz. Muhammed’in (sav) peygamberliğinden önce insanların yaşadığı olumlu bir sosyal ve kültürel ortamı ifade eder.",
+        "isTrue": false
+      },
+      {
+        "statement": "Fil Vakası’nın gerçekleştiği yıl, İslam tarihinde Fil Yılı olarak anılmaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Arap Yarımadası’nda, göçebeler (bedeviler) ve yerleşik yaşam sürenler (hadariler) olmak üzere iki farklı toplumsal grup mevcut değildi.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Hz. Muhammed (sav), Allah'ın son peygamberidir ve Mekke'de doğmuştur.",
+    "scrambledSentence": "Allah'ın Muhammed ve peygamberidir Hz. Mekke'de doğmuştur. son (sav),"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Ebrehe, Yemen Valisi ve Fil Vakası'nın sorumlusudur.",
+    "scrambledSentence": "Vakası'nın Fil Ebrehe, Valisi ve sorumlusudur. Yemen"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Mekke, Kâbe'nin bulunduğu şehir ve Müslümanların kutsal saydığı bir yerdir.",
+    "scrambledSentence": "Kâbe'nin şehir Müslümanların Mekke, yerdir. bir ve bulunduğu saydığı kutsal"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Zemzem Kuyusu, Kâbe yakınlarında bulunan ve kutsal kabul edilen bir kuyudur.",
+    "scrambledSentence": "kabul Kâbe bir kuyudur. yakınlarında edilen bulunan ve kutsal Kuyusu, Zemzem"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Cahiliye Dönemi, Hz. Muhammed’in (sav) peygamberliğinden önce, insanların yaşadıkları ve özünde, putlara tapma, soyla övünme, hukuksuzluk, kibir ve zayıfları ezme gibi olumsuzlukları barındıran sosyal ve kültürel ___ denir.",
+    "options": [
+      "döneme",
+      "ortama",
+      "topluma",
+      "devlete"
+    ],
+    "correctAnswer": "ortama"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Arap Yarımadası’nda putperestliğin dışında Hristiyanlık ve ___ de yaygındı.",
+    "options": [
+      "Budizm",
+      "Hinduizm",
+      "Yahudilik",
+      "Zerdüştlük"
+    ],
+    "correctAnswer": "Yahudilik"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kâbe, Cahiliye Dönemi’nde Arapların sosyal, dinî ve ekonomik yaşantılarının ___ idi.",
+    "options": [
+      "kenarı",
+      "merkezi",
+      "dışında",
+      "önemsiz bir parçası"
+    ],
+    "correctAnswer": "merkezi"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Fil suresinde, Ebrehe tarafından oluşturulan fil ordusunun başına gelen felaketin büyüklüğünden ve Ebrehe’nin Kâbe’yi yıkma planlarının ___ çıkarıldığından bahsedilmektedir.",
+    "options": [
+      "desteklendiğinden",
+      "boşa",
+      "gerçekleştiğinden",
+      "başarılı olduğundan"
+    ],
+    "correctAnswer": "boşa"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kâbe’nin temellerini bulup yeniden inşa edenler Hz. İbrahim ve oğlu Hz. ___’dir.",
+    "options": [
+      "Musa",
+      "İsmail",
+      "İsa",
+      "Nuh"
+    ],
+    "correctAnswer": "İsmail"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Panayırların Mekke’nin ekonomik, sosyal ve kültürel hayatına önemli katkı sağlaması, haram aylarda kurulması ve farklı dinlere mensup birçok insanın ziyaret etmesi, o dönemdeki Mekke'nin hangi yönünü gösterir?",
+    "options": [
+      "Sadece dini bir merkez olduğunu",
+      "Sadece ticari bir merkez olduğunu",
+      "Çok yönlü bir merkez olup farklı kültürlerin etkileşimine açık olduğunu",
+      "Sadece kapalı bir toplum olduğunu"
+    ],
+    "correctAnswer": "Çok yönlü bir merkez olup farklı kültürlerin etkileşimine açık olduğunu"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Fil Suresi'nde, Ebrehe tarafından oluşturulan fil ordusunun başına gelen felaketin büyüklüğünden ve Ebrehe’nin Kâbe’yi yıkma planlarının boşa çıkarıldığından bahsedilmesi, hangi mesajı verir?",
+    "options": [
+      "Allah'ın gücünün sınırlı olduğunu",
+      "Zalimlerin her zaman galip geldiğini",
+      "Allah'ın Kâbe'yi koruduğunu ve zalimlerin planlarını boşa çıkardığını",
+      "Kâbe'nin korunmaya ihtiyacı olmadığını"
+    ],
+    "correctAnswer": "Allah'ın Kâbe'yi koruduğunu ve zalimlerin planlarını boşa çıkardığını"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Fil Vakası'nda Ebrehe'nin ordusunun üzerine taş atan kuşlar hangi kuşlardır?",
+    "options": [
+      "Serçeler",
+      "Güvercinler",
+      "Ebabil kuşları",
+      "Kartallar"
+    ],
+    "correctAnswer": "Ebabil kuşları"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav)'in son peygamber olduğu hangi surede bildirilmiştir?",
+    "options": [
+      "Bakara Suresi",
+      "Enam Suresi",
+      "Ahzab Suresi",
+      "Yasin Suresi"
+    ],
+    "correctAnswer": "Ahzab Suresi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Yemen Valisi Ebrehe, Arapları kendi topraklarına çekmek ve neyi yaymak için çalışmalar yapmaya başladı?",
+    "options": [
+      "Yahudiliği",
+      "Hristiyanlığı",
+      "Mecusiliği",
+      "Putperestliği"
+    ],
+    "correctAnswer": "Hristiyanlığı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Ebrehe, Kâbe'yi yıkmak için hazırladığı orduyu neyle desteklemiştir?",
+    "options": [
+      "Atlarla",
+      "Develerle",
+      "Fillerle",
+      "Köpeklerle"
+    ],
+    "correctAnswer": "Fillerle"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin doğduğu şehir olan Mekke, Kur’an-ı Kerim’de ne olarak nitelendirilir?",
+    "options": [
+      "Medinetü'l-Münevvere",
+      "Ümmülkura (şehirlerin anası)",
+      "Beytü'l-Makdis",
+      "Hicaz"
+    ],
+    "correctAnswer": "Ümmülkura (şehirlerin anası)"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. İbrahim, eşi Hz. Hacer ve oğlu Hz. İsmail’i yanlarında az bir yiyecek ve su ile nereye bırakır?",
+    "options": [
+      "Medine Vadisi’ne",
+      "Taif Vadisi’ne",
+      "Mekke Vadisi’ne",
+      "San'a Vadisi’ne"
+    ],
+    "correctAnswer": "Mekke Vadisi’ne"
+  }
+]

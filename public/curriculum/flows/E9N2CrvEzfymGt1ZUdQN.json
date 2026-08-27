@@ -1,0 +1,393 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Peygamberimizin Giyim Kuşam Adabı konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Peygamberimizin Giyim Kuşam Adabı ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Rehberim Peygamberim çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Mütevazı, Giyim Kuşam Adabı, Mütevazılık kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Mütevazı</li><li>Giyim Kuşam Adabı</li><li>Mütevazılık</li><li>Temizlik</li><li>İsraf</li><li>Tasarruf</li><li>İtidal</li><li>Kibir</li><li>Tesettür</li><li>Taharet</li><li>Ölçülülük</li><li>Sadaka</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Giyim Kuşam Adabı - Önemli Bilgiler (1)",
+    "content": "<ul><li>Peygamberimiz giyiminde temizliği, sadeliği ve ölçülü olmayı tavsiye etmiştir.</li><li>Sadelik imandandır; abartılı ve gösterişli giyinmek kibir olarak görülmüştür.</li><li>İmkân sahibi olanın, eski püskü ve dağınık giyinmek yerine temiz ve düzenli olması beklenir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Giyim Kuşam Adabı - Önemli Bilgiler (2)",
+    "content": "<ul><li>Hz. Peygamber, giyimi ve davranışlarıyla mütevazı bir liderdi, insanlarla arasına mesafe koymazdı.</li><li>Giyimde itidal (dengeli ve ölçülü olma) esastır; israftan ve marka ısrarcılığından kaçınılmalıdır.</li><li>Giysi, Kur'an'a göre hem süs hem de örtünme aracıdır; tesettür, dinen uygun örtünmeyi ifade eder.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Peygamberimizin Giyim Kuşam Adabı - Önemli Bilgiler (3)",
+    "content": "<ul><li>Alışveriş yaparken ihtiyaca, sadeliğe ve bütçeye dikkat ederek bilinçli tüketici olmak önemlidir.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Mütevazı",
+        "definition": "Gösterişsiz, alçakgönüllü"
+      },
+      {
+        "concept": "İsraf",
+        "definition": "İhtiyaçtan fazla tüketim"
+      },
+      {
+        "concept": "İtidal",
+        "definition": "Yeme içme ve giyim kuşamda dengeli ve ölçülü olmaktır."
+      },
+      {
+        "concept": "Tesettür",
+        "definition": "Dinen örtülmesi gereken yerleri kapatmaktır."
+      },
+      {
+        "concept": "Tasarruf",
+        "definition": "Kaynakları bilinçli ve dikkatli kullanmaktır."
+      },
+      {
+        "concept": "Taharet",
+        "definition": "İslami kaynaklarda temizlik anlamında kullanılan kavramdır."
+      },
+      {
+        "concept": "Sadaka",
+        "definition": "İhtiyaç sahiplerine yapılan maddi ve manevi yardıma denir."
+      },
+      {
+        "concept": "Kibir",
+        "definition": "Kendini başkalarından üstün görmektir."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Mütevazı",
+        "definition": "Gösterişsiz, alçakgönüllü"
+      },
+      {
+        "term": "İsraf",
+        "definition": "İhtiyaçtan fazla tüketim"
+      },
+      {
+        "term": "İtidal",
+        "definition": "Yeme içme ve giyim kuşamda dengeli ve ölçülü olmaktır."
+      },
+      {
+        "term": "Tesettür",
+        "definition": "Dinen örtülmesi gereken yerleri kapatmaktır."
+      },
+      {
+        "term": "Tasarruf",
+        "definition": "Kaynakları bilinçli ve dikkatli kullanmaktır."
+      },
+      {
+        "term": "Taharet",
+        "definition": "İslami kaynaklarda temizlik anlamında kullanılan kavramdır."
+      },
+      {
+        "term": "Sadaka",
+        "definition": "İhtiyaç sahiplerine yapılan maddi ve manevi yardıma denir."
+      },
+      {
+        "term": "Kibir",
+        "definition": "Kendini başkalarından üstün görmektir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Mütevazı",
+        "scrambledWord": "VTÜAEMZI",
+        "definition": "İpucu: Bu kelime \"Mütevazı\""
+      },
+      {
+        "correctAnswer": "Mütevazılık",
+        "scrambledWord": "LZAIVIETÜKM",
+        "definition": "İpucu: Bu kelime \"Mütevazılık\""
+      },
+      {
+        "correctAnswer": "Temizlik",
+        "scrambledWord": "İZMEİLTK",
+        "definition": "İpucu: Bu kelime \"Temizlik\""
+      },
+      {
+        "correctAnswer": "İsraf",
+        "scrambledWord": "SİARF",
+        "definition": "İpucu: Bu kelime \"İsraf\""
+      },
+      {
+        "correctAnswer": "Tasarruf",
+        "scrambledWord": "RAARFTUS",
+        "definition": "İpucu: Bu kelime \"Tasarruf\""
+      },
+      {
+        "correctAnswer": "İtidal",
+        "scrambledWord": "İLAİTD",
+        "definition": "İpucu: Bu kelime \"İtidal\""
+      },
+      {
+        "correctAnswer": "Kibir",
+        "scrambledWord": "BRİİK",
+        "definition": "İpucu: Bu kelime \"Kibir\""
+      },
+      {
+        "correctAnswer": "Tesettür",
+        "scrambledWord": "ÜTTEERST",
+        "definition": "İpucu: Bu kelime \"Tesettür\""
+      },
+      {
+        "correctAnswer": "Taharet",
+        "scrambledWord": "HEATRAT",
+        "definition": "İpucu: Bu kelime \"Taharet\""
+      },
+      {
+        "correctAnswer": "Ölçülülük",
+        "scrambledWord": "ÖÜÜÇKLLLÜ",
+        "definition": "İpucu: Bu kelime \"Ölçülülük\""
+      },
+      {
+        "correctAnswer": "Sadaka",
+        "scrambledWord": "AKSDAA",
+        "definition": "İpucu: Bu kelime \"Sadaka\""
+      },
+      {
+        "correctAnswer": "Sadelik",
+        "scrambledWord": "LDESİKA",
+        "definition": "İpucu: Bu kelime \"Sadelik\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Peygamberimizin 'Korkma! Ben bir kral değilim. Ben sadece (güneşte) kurutulmuş et yiyen bir kadının oğluyum.' sözü, onun mütevazı kişiliğini ve halka yakınlığını vurgular.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimizin giyim kuşam adabında temiz, sade ve ölçülü giyinmek yer almaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kur’an-ı Kerim’de elbise, insanlar için sadece süs aracı olarak görülmüştür.",
+        "isTrue": false
+      },
+      {
+        "statement": "İslam’a göre ihtiyaçtan fazla ürün almak israf değildir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, 'Sadelik imandandır.' diyerek müminlerin sadeliği tercih etmesini önermiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamberimiz abartılı ve gösterişli giyinmeyi uygun bulmuştur.",
+        "isTrue": false
+      },
+      {
+        "statement": "Peygamberimiz, 'Yüce Allah, kibrinden dolayı elbisesini yerde sürükleyen kimseye (rahmet nazarıyla) bakmaz.' hadisiyle abartılı giyinmeyi hoş görmediğini ifade etmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Peygamber Efendimiz 'Tutumlu davranmak yaşamın, güzel ahlak da dinin yarısıdır.' demiştir.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İsraf ve kibirden kaçınılması, İslam dininin önemli öğütlerindendir.",
+    "scrambledSentence": "İsraf kaçınılması, İslam kibirden önemli öğütlerindendir. dininin ve"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Giyim kuşamda israftan ve kibirden kaçınılması gerektiğini öğütlemiştir.",
+    "scrambledSentence": "gerektiğini kuşamda Giyim ve öğütlemiştir. israftan kibirden kaçınılması"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Hz. Muhammed (sav), giyim kuşamında temizlik, sadelik ve ölçülülük ilkelerini benimsemiştir.",
+    "scrambledSentence": "ölçülülük temizlik, Hz. kuşamında sadelik giyim (sav), ilkelerini benimsemiştir. Muhammed ve"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Giyimde marka ısrarcılığı ve aşırı harcama yapmak israftır.",
+    "scrambledSentence": "marka yapmak Giyimde harcama aşırı ve ısrarcılığı israftır."
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, varlıklı bir sahabiyi dağınık ve eski giysiler içinde görünce ona 'Allah sana mal vermişse bu malın varlığı, üzerine ___.' demiştir.",
+    "options": [
+      "gizlenmeli",
+      "yansımalı",
+      "saklanmalı",
+      "görünmemeli"
+    ],
+    "correctAnswer": "yansımalı"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimizin giyim kuşam adabında öne çıkan üç temel ilke olan temiz, sade ve ölçülü giyinmek, onun ___ yaşam tarzının bir göstergesidir.",
+    "options": [
+      "lüks",
+      "gösterişli",
+      "mütevazı",
+      "aşırı"
+    ],
+    "correctAnswer": "mütevazı"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Müslümanlar ___ konusunda da Peygamberimizi örnek almalıdır.",
+    "options": [
+      "lüks yaşam",
+      "israf",
+      "tasarruf",
+      "savurganlık"
+    ],
+    "correctAnswer": "tasarruf"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, 'Yüce Allah, kibrinden dolayı elbisesini yerde sürükleyen kimseye (rahmet nazarıyla) ___.' buyurmuştur.",
+    "options": [
+      "bakar",
+      "bakmaz",
+      "sever",
+      "hoşnut olur"
+    ],
+    "correctAnswer": "bakmaz"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberimiz, Sad bin Ebu Vakkas’ın (ra) abdest alırken suyu fazla kullandığını görünce onu uyarmış ve şöyle demiştir: '... Akan bir nehir kenarında olsan bile (haddinden fazla tüketirsen abdestte de ___ olur)!'",
+    "options": [
+      "bereket",
+      "israf",
+      "temizlik",
+      "hız"
+    ],
+    "correctAnswer": "israf"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimizin sade giyimi, onun hangi kişiliğinin bir yansımasıdır?",
+    "options": [
+      "Gösterişli",
+      "Kibirli",
+      "Mütevazı",
+      "Zengin"
+    ],
+    "correctAnswer": "Mütevazı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Müslüman, sahip olduklarını başkalarına üstünlük sağlamak ve gösteriş yapmak için kullanmaz. O, sahip olduklarını ne yoluyla ihtiyaç sahipleri ile paylaşır?",
+    "options": [
+      "Borçlanma",
+      "Sadaka ve infak",
+      "Tasarruf",
+      "Yatırım"
+    ],
+    "correctAnswer": "Sadaka ve infak"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz 'Tutumlu davranmak yaşamın, güzel ahlak da dinin yarısıdır.' diyerek neyin önemini ifade etmiştir?",
+    "options": [
+      "Cimriliğin",
+      "Savurganlığın",
+      "Tutumlu olmanın",
+      "İsrafın"
+    ],
+    "correctAnswer": "Tutumlu olmanın"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz doğal, temiz ve sade elbiseler giymiş; arkadaşlarına da nasıl giyinmelerini tavsiye etmiştir?",
+    "options": [
+      "Gösterişli",
+      "Pahalı",
+      "Sade",
+      "Modaya uygun"
+    ],
+    "correctAnswer": "Sade"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Giyinmek insanın temel ihtiyaçlarından biridir. İnsanlar, içinde bulundukları coğrafya ve kültüre göre farklı giyim tercihlerinde bulunurlar. Peygamber Efendimiz giyimiyle de insanlara ne olmuştur?",
+    "options": [
+      "Örnek",
+      "Engel",
+      "Yük",
+      "Sıkıntı"
+    ],
+    "correctAnswer": "Örnek"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamber Efendimiz’i örnek alan her Müslüman, temiz ve sade giyinmelidir. Başkalarının gözünü yormayacak renk, desen ve dokudaki elbiseleri tercih etmelidir. Bu durum, giyim kuşamın hangi yönünü vurgular?",
+    "options": [
+      "Sadece marka",
+      "Sadece pahalılık",
+      "Estetik ve toplumsal uyum",
+      "Sadece gelenek"
+    ],
+    "correctAnswer": "Estetik ve toplumsal uyum"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Giyim kuşam harcamalarında bilinçli davranmak, ihtiyacından fazla ürün satın almamak, alışverişte marka ısrarcılığından ve israftan kaçınmak hangi ilkeye uymaktır?",
+    "options": [
+      "Cimrilik",
+      "Savurganlık",
+      "Tasarruf",
+      "Gösteriş"
+    ],
+    "correctAnswer": "Tasarruf"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberimiz, 'Korkma! Ben bir kral değilim. Ben sadece (güneşte) kurutulmuş et yiyen bir kadının oğluyum.' diyerek neyi vurgulamıştır?",
+    "options": [
+      "Sadece gücünü",
+      "Sadece statüsünü",
+      "Alçakgönüllülüğünü ve insanlara yakınlığını",
+      "Sadece ailesinin kökenini"
+    ],
+    "correctAnswer": "Alçakgönüllülüğünü ve insanlara yakınlığını"
+  }
+]

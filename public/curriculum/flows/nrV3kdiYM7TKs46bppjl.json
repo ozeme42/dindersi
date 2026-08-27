@@ -1,0 +1,394 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Hz. Muhammed’in (sav) Ailesi ve Çocukluğu konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Hz. Muhammed’in (sav) Ailesi ve Çocukluğu ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "4️⃣ Peygamberliğinden Önce Hz. Muhammed çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Abdullah, Abdülmuttalib, Halime kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Abdullah</li><li>Abdülmuttalib</li><li>Halime</li><li>Kureyş</li><li>Amine</li><li>Mustafa</li><li>Mekke</li><li>Çobanlık</li><li>Ebu Talib</li><li>Ahmed</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Hz. Muhammed’in (sav) Ailesi ve Çocukluğu - Önemli Bilgiler (1)",
+    "content": "<ul><li>Hz. Muhammed'in soyu Hz. İbrahim'in oğlu Hz. İsmail'e dayanır ve ailesi Mekke'nin önde gelenlerindendir.</li><li>Babası Abdullah kendisi doğmadan, annesi Amine ise 6 yaşındayken vefat etti; bu sebeple yetim ve öksüz büyüdü.</li><li>Miladi 20 Nisan 571'de Mekke'de doğdu ve dedesi Abdülmuttalib ona 'Muhammed' adını verdi.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Hz. Muhammed’in (sav) Ailesi ve Çocukluğu - Önemli Bilgiler (2)",
+    "content": "<ul><li>Mekke geleneği gereği sütannesi Halime'nin yanında 4 yaşına kadar kaldı ve onun evine bereket getirdi.</li><li>Annesinin ve dedesinin vefatından sonra 8 yaşından 25 yaşına kadar amcası Ebu Talib'in himayesinde yaşadı.</li><li>Çocukluk yıllarından itibaren saygılı, çalışkan, yardımsever, dürüst ve güvenilir kişiliğiyle tanındı.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "Abdullah",
+        "definition": "Peygamberimizin doğumundan önce vefat eden babasıdır."
+      },
+      {
+        "concept": "Kureyş",
+        "definition": "Peygamberimizin ailesinin mensup olduğu büyük kabiledir."
+      },
+      {
+        "concept": "Amine",
+        "definition": "Peygamberimizin vefat eden annesidir."
+      },
+      {
+        "concept": "Mustafa",
+        "definition": "Seçilmiş anlamına gelen isimlerinden biridir."
+      },
+      {
+        "concept": "Halime",
+        "definition": "Peygamberimizin çocukluğunu geçirdiği sütannesidir."
+      },
+      {
+        "concept": "Çobanlık",
+        "definition": "Gençliğinde amcasına destek olmak için yaptığı iştir."
+      },
+      {
+        "concept": "Mekke",
+        "definition": "Peygamberimizin dünyaya geldiği şehirdir."
+      },
+      {
+        "concept": "Ebu Talib",
+        "definition": "Dedesinin vefatından sonra Peygamberimize bakan amcasıdır."
+      },
+      {
+        "concept": "Abdülmuttalib",
+        "definition": "Peygamberimizin sevgili dedesidir."
+      },
+      {
+        "concept": "Ahmed",
+        "definition": "Allah'ı herkesten çok öven anlamına gelen ismidir."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Abdullah",
+        "definition": "Peygamberimizin doğumundan önce vefat eden babasıdır."
+      },
+      {
+        "term": "Kureyş",
+        "definition": "Peygamberimizin ailesinin mensup olduğu büyük kabiledir."
+      },
+      {
+        "term": "Amine",
+        "definition": "Peygamberimizin vefat eden annesidir."
+      },
+      {
+        "term": "Mustafa",
+        "definition": "Seçilmiş anlamına gelen isimlerinden biridir."
+      },
+      {
+        "term": "Halime",
+        "definition": "Peygamberimizin çocukluğunu geçirdiği sütannesidir."
+      },
+      {
+        "term": "Çobanlık",
+        "definition": "Gençliğinde amcasına destek olmak için yaptığı iştir."
+      },
+      {
+        "term": "Mekke",
+        "definition": "Peygamberimizin dünyaya geldiği şehirdir."
+      },
+      {
+        "term": "Ebu Talib",
+        "definition": "Dedesinin vefatından sonra Peygamberimize bakan amcasıdır."
+      },
+      {
+        "term": "Abdülmuttalib",
+        "definition": "Peygamberimizin sevgili dedesidir."
+      },
+      {
+        "term": "Ahmed",
+        "definition": "Allah'ı herkesten çok öven anlamına gelen ismidir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Abdullah",
+        "scrambledWord": "BHLDUAAL",
+        "definition": "İpucu: Bu kelime \"Abdullah\""
+      },
+      {
+        "correctAnswer": "Abdülmuttalib",
+        "scrambledWord": "ALMTBTUÜBADLİ",
+        "definition": "İpucu: Bu kelime \"Abdülmuttalib\""
+      },
+      {
+        "correctAnswer": "Halime",
+        "scrambledWord": "İAMEHL",
+        "definition": "İpucu: Bu kelime \"Halime\""
+      },
+      {
+        "correctAnswer": "Kureyş",
+        "scrambledWord": "URKŞYE",
+        "definition": "İpucu: Bu kelime \"Kureyş\""
+      },
+      {
+        "correctAnswer": "Amine",
+        "scrambledWord": "AİENM",
+        "definition": "İpucu: Bu kelime \"Amine\""
+      },
+      {
+        "correctAnswer": "Mustafa",
+        "scrambledWord": "UTAFSMA",
+        "definition": "İpucu: Bu kelime \"Mustafa\""
+      },
+      {
+        "correctAnswer": "Mekke",
+        "scrambledWord": "KEMEK",
+        "definition": "İpucu: Bu kelime \"Mekke\""
+      },
+      {
+        "correctAnswer": "Çobanlık",
+        "scrambledWord": "ABINOÇKL",
+        "definition": "İpucu: Bu kelime \"Çobanlık\""
+      },
+      {
+        "correctAnswer": "Ebu Talib",
+        "scrambledWord": "UİE TLBAB",
+        "definition": "İpucu: Bu kelime \"Ebu Talib\""
+      },
+      {
+        "correctAnswer": "Ahmed",
+        "scrambledWord": "HDMEA",
+        "definition": "İpucu: Bu kelime \"Ahmed\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Hz. Muhammed (sav) altı yaşındayken annesiyle birlikte babasının kabrini ve Medine'deki akrabalarını ziyaret etmiştir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Muhammed'in (sav) dedesi Abdülmuttalib, Kureyş kabilesinin reisiydi.",
+        "isTrue": true
+      },
+      {
+        "statement": "Sütanne geleneğinde çocuklar genellikle dört yaşına kadar sütannelerinde kalırdı.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav) çocukluğunda dedesi Abdülmuttalib'in yanında kalmıştır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Muhammed'in (sav) annesi Amine, Kureyş kabilesinin Haşimoğulları kolundandı.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav)'in sütannesi Halime'dir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Peygamber'in 'seçilmiş' anlamına gelen ismi 'Ahmed'dir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav) 4 yaşından 6 yaşına kadar annesi Amine'nin yanında kalmıştır.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Annesi Amine, Ebva'da vefat etti.",
+    "scrambledSentence": "Amine, Ebva'da vefat Annesi etti."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Dürüst ve çalışkan olarak bilindi.",
+    "scrambledSentence": "bilindi. Dürüst çalışkan olarak ve"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Çocukluğu yetim ve öksüz geçti.",
+    "scrambledSentence": "öksüz geçti. Çocukluğu yetim ve"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Ailesi Kureyş kabilesindendi.",
+    "scrambledSentence": "Ailesi Kureyş kabilesindendi."
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed'in (sav) soyu, Hz. İbrahim'in oğlu _______'e dayanmaktadır.",
+    "options": [
+      "Hz. Musa",
+      "Hz. Yusuf",
+      "Hz. İsmail",
+      "Hz. İshak"
+    ],
+    "correctAnswer": "Hz. İsmail"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Mekkeli aileler yeni doğan bebeklerini, bölgenin sağlıklı havasında büyümeleri ve _______ akıcı bir şekilde konuşmaları için sütanneye verirlerdi.",
+    "options": [
+      "İbraniceyi",
+      "Süryaniceyi",
+      "Yunancayı",
+      "Arapçayı"
+    ],
+    "correctAnswer": "Arapçayı"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed'in (sav) dedesi _______, Kureyş kabilesinin reisiydi.",
+    "options": [
+      "Ebu Talib",
+      "Vehb",
+      "Abdülmuttalib",
+      "Abdullah"
+    ],
+    "correctAnswer": "Abdülmuttalib"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed'in (sav) babasının adı _______'dır.",
+    "options": [
+      "Ebu Talib",
+      "Hamza",
+      "Abdullah",
+      "Abbas"
+    ],
+    "correctAnswer": "Abdullah"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed (sav) altı yaşındayken annesi Amine _______ köyünde vefat etmiştir.",
+    "options": [
+      "Kuba",
+      "Ebva",
+      "Uhud",
+      "Hayber"
+    ],
+    "correctAnswer": "Ebva"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav) doğduktan sonra ilk sütanneliğini kısa bir süre kim yapmıştır?",
+    "options": [
+      "Halime",
+      "Amine",
+      "Süveybe",
+      "Şeyma"
+    ],
+    "correctAnswer": "Süveybe"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav) sekiz yaşındayken vefat eden dedesi Abdülmuttalib, onu kime emanet etmiştir?",
+    "options": [
+      "Annesi Amine'ye",
+      "Amcası Ebu Talib'e",
+      "Sütannesi Halime'ye",
+      "Amcası Hz. Hamza'ya"
+    ],
+    "correctAnswer": "Amcası Ebu Talib'e"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Mekkeli aileler yeni doğan bebeklerini neden sütanneye verirlerdi?",
+    "options": [
+      "Şehirde iş yoğunluğu olduğu için",
+      "Bölgenin sağlıklı havasında büyümeleri ve Arapçayı akıcı konuşmaları için",
+      "Sadece zengin ailelerin bir geleneği olduğu için",
+      "Çocukların daha erken yaşta bağımsız olmaları için"
+    ],
+    "correctAnswer": "Bölgenin sağlıklı havasında büyümeleri ve Arapçayı akıcı konuşmaları için"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed'in (sav) babası Kureyş kabilesinin Haşimoğulları kolundan iken, annesi Amine aynı kabilenin hangi kolundandı?",
+    "options": [
+      "Ümeyyeoğulları",
+      "Mahzumoğulları",
+      "Zühreoğulları",
+      "Adioğulları"
+    ],
+    "correctAnswer": "Zühreoğulları"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed'in (sav) dedesi kimdir?",
+    "options": [
+      "Ebu Talib",
+      "Abdullah",
+      "Abdülmuttalib",
+      "Vehb"
+    ],
+    "correctAnswer": "Abdülmuttalib"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed'in (sav) babası Abdullah, ticaret için çıktığı yolculuktan dönerken hangi şehirde vefat etmiştir?",
+    "options": [
+      "Mekke",
+      "Şam",
+      "Medine",
+      "Taif"
+    ],
+    "correctAnswer": "Medine"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed'in (sav) annesinin adı nedir?",
+    "options": [
+      "Fatıma",
+      "Hatice",
+      "Amine",
+      "Zeynep"
+    ],
+    "correctAnswer": "Amine"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Muhammed (sav) amcası Ebu Talib'in yanında kaldığı dönemde ona yardımcı olmak amacıyla hangi işleri yapmıştır?",
+    "options": [
+      "Marangozluk ve demircilik",
+      "Çobanlık ve ticaret seyahatlerine katılma",
+      "Çiftçilik ve kuyuculuk",
+      "Dokumacılık ve taşımacılık"
+    ],
+    "correctAnswer": "Çobanlık ve ticaret seyahatlerine katılma"
+  }
+]

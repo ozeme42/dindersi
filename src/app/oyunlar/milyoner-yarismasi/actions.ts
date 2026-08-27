@@ -119,7 +119,6 @@ export async function checkAndAwardMillionaireBadge(userId: string): Promise<{ s
 export async function getMillionaireQuestions({ courseId, unitId, topicId }: { courseId?: string, unitId?: string, topicId?: string }): Promise<{ questions: Question[], error?: string}> {
     noStore();
     
-    // Milyoner formatı için kolaydan zora sıralama
     const difficulties: ('Kolay' | 'Orta' | 'Zor')[] = ['Kolay', 'Kolay', 'Kolay', 'Orta', 'Orta', 'Orta', 'Orta', 'Zor', 'Zor', 'Zor'];
     
     try {
@@ -128,7 +127,7 @@ export async function getMillionaireQuestions({ courseId, unitId, topicId }: { c
                 courseId,
                 unitId,
                 topicId,
-                questionCount: 5, // Havuzdan rastgele çekmek için her zorluktan 5 tane istiyoruz
+                questionCount: 5,
                 difficulty: [difficulty],
                 questionTypes: ['mcq']
             })
@@ -143,7 +142,6 @@ export async function getMillionaireQuestions({ courseId, unitId, topicId }: { c
             if (result.error || result.questions.length === 0) {
                 continue;
             }
-            // Daha önce kullanılmamış bir soru bul
             const unusedQuestion = result.questions.find(q => q && q.id && !usedQuestionIds.has(q.id));
             
             if(unusedQuestion) {
@@ -152,14 +150,30 @@ export async function getMillionaireQuestions({ courseId, unitId, topicId }: { c
             }
         }
         
+        // Eğer belirli zorluklardan 10 soru tamamlanamadıysa, havuzdaki tüm MCQ sorularıyla doldur
         if (finalQuestions.length < 10) {
-            // Yeterli soru yoksa hata döndürme, eldekini ver (veya doldur)
-             if (finalQuestions.length < 5) {
-                return { questions: [], error: "Yarışma için yeterli soru bulunamadı." };
-             }
+            const fallbackResult = await getQuestionsFromBank({
+                courseId,
+                unitId,
+                topicId,
+                questionCount: 20,
+                questionTypes: ['mcq']
+            });
+            if (fallbackResult.questions && fallbackResult.questions.length > 0) {
+                for (const q of fallbackResult.questions) {
+                    if (q && 'id' in q && q.id && !usedQuestionIds.has(q.id)) {
+                        finalQuestions.push(q as Question);
+                        usedQuestionIds.add(q.id);
+                        if (finalQuestions.length >= 10) break;
+                    }
+                }
+            }
         }
 
-        // Deep copy ve dilimleme
+        if (finalQuestions.length < 3) {
+            return { questions: [], error: "Yarışma için bu konuda yeterli soru bulunamadı (En az 3 çoktan seçmeli soru gereklidir)." };
+        }
+
         return { questions: JSON.parse(JSON.stringify(finalQuestions.slice(0, 10))) };
 
     } catch (e: any) {

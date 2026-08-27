@@ -1,0 +1,429 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Kur’an-ı Kerim’in Ana Konuları konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
+      "Kur’an-ı Kerim’in Ana Konuları ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
+      "Kur’an-ı Kerim çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
+      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
+      "Sure, Sosyal Hayat, Salih Amel kavramlarının önemini değerlendirebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Sure</li><li>Sosyal Hayat</li><li>Salih Amel</li><li>Kur’an-ı Kerim</li><li>İbadet</li><li>Durak</li><li>Ahlak</li><li>Melek</li><li>Ahiret</li><li>İnanç (İtikat)</li><li>Peygamberlere İman</li><li>İlahi Kitaplar</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Kur’an-ı Kerim’in Ana Konuları - Önemli Bilgiler (1)",
+    "content": "<ul><li>Kur'an-ı Kerim, insanlara doğru yolu gösteren bir rehberdir ve Allah'a, topluma, çevreye karşı görevlerimizi bildirir.</li><li>Kur'an'ın ana konuları inanç, ibadet, ahlak, sosyal hayat ve kıssalardır.</li><li>İnanç esasları; Allah'a, peygamberlere, ilahi kitaplara, meleklere ve ahiret gününe imandır.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Kur’an-ı Kerim’in Ana Konuları - Önemli Bilgiler (2)",
+    "content": "<ul><li>İbadet, Allah'ın emirlerini yerine getirmek ve O'na karşı saygı duymaktır; namaz, oruç, zekât ve hac temel ibadetlerdendir.</li><li>Kur'an, adaleti, iyiliği, dürüstlüğü emrederken; yalan, iftira gibi kötü davranışları yasaklar ve güzel ahlakı öğretir.</li><li>Kur'an, aile ilişkileri, alışverişte dürüstlük gibi sosyal hayatı düzenleyen kuralları içerir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Kur’an-ı Kerim’in Ana Konuları - Önemli Bilgiler (3)",
+    "content": "<ul><li>Kıssalar, geçmiş peygamber ve kavimlerin ibret verici hikayeleridir; insanlara öğüt ve ders verirler.</li></ul>"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Kavram Açıklamaları",
+    "items": [
+      {
+        "concept": "İbadet",
+        "definition": "Allah’a boyun eğmek, itaat etmek ve saygı duymak."
+      },
+      {
+        "concept": "Durak",
+        "definition": "Ayetlerin bittiğini gösteren, içinde numaraların olduğu yuvarlak işaret."
+      },
+      {
+        "concept": "Ahiret",
+        "definition": "Dünya hayatındaki davranışların karşılığının görüleceği ölüm sonrası hayat."
+      },
+      {
+        "concept": "Sosyal Hayat",
+        "definition": "İnsanların birbirleriyle, aileleriyle ve toplumla olan ilişkilerini düzenleyen alan."
+      },
+      {
+        "concept": "İnanç (İtikat)",
+        "definition": "Allah’ın peygamberleri aracılığıyla bildirdiği esasları tereddütsüz kabul etmek."
+      },
+      {
+        "concept": "Kur’an-ı Kerim",
+        "definition": "İnsana rehberlik eden, inanç, ibadet ve ahlakı öğreten ilahi kitap."
+      },
+      {
+        "concept": "Ahlak",
+        "definition": "İnsanın huy, mizaç ve karakterini oluşturan davranışlar bütünü."
+      },
+      {
+        "concept": "Salih Amel",
+        "definition": "Allah’ın rızasını kazanmak amacıyla yapılan her türlü güzel iş."
+      },
+      {
+        "concept": "Sure",
+        "definition": "Kur’an-ı Kerim’in ayetlerden oluşan her bir bölümü."
+      },
+      {
+        "concept": "Melek",
+        "definition": "Allah’ın emirlerini sorgusuz yerine getiren, nurdan yaratılmış varlıklar."
+      },
+      {
+        "concept": "İlahi Kitaplar",
+        "definition": "Yüce Allah tarafından peygamberlere vahiy yoluyla indirilen kitaplar."
+      },
+      {
+        "concept": "Kıssa",
+        "definition": "Kur’an’da anlatılan geçmiş peygamberler ve toplulukların ibret verici hikâyeleri."
+      },
+      {
+        "concept": "Peygamberlere İman",
+        "definition": "Allah’ın seçtiği elçilere ve getirdikleri vahye inanmak."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "İbadet",
+        "definition": "Allah’a boyun eğmek, itaat etmek ve saygı duymak."
+      },
+      {
+        "term": "Durak",
+        "definition": "Ayetlerin bittiğini gösteren, içinde numaraların olduğu yuvarlak işaret."
+      },
+      {
+        "term": "Ahiret",
+        "definition": "Dünya hayatındaki davranışların karşılığının görüleceği ölüm sonrası hayat."
+      },
+      {
+        "term": "Sosyal Hayat",
+        "definition": "İnsanların birbirleriyle, aileleriyle ve toplumla olan ilişkilerini düzenleyen alan."
+      },
+      {
+        "term": "İnanç (İtikat)",
+        "definition": "Allah’ın peygamberleri aracılığıyla bildirdiği esasları tereddütsüz kabul etmek."
+      },
+      {
+        "term": "Kur’an-ı Kerim",
+        "definition": "İnsana rehberlik eden, inanç, ibadet ve ahlakı öğreten ilahi kitap."
+      },
+      {
+        "term": "Ahlak",
+        "definition": "İnsanın huy, mizaç ve karakterini oluşturan davranışlar bütünü."
+      },
+      {
+        "term": "Salih Amel",
+        "definition": "Allah’ın rızasını kazanmak amacıyla yapılan her türlü güzel iş."
+      },
+      {
+        "term": "Sure",
+        "definition": "Kur’an-ı Kerim’in ayetlerden oluşan her bir bölümü."
+      },
+      {
+        "term": "Melek",
+        "definition": "Allah’ın emirlerini sorgusuz yerine getiren, nurdan yaratılmış varlıklar."
+      },
+      {
+        "term": "İlahi Kitaplar",
+        "definition": "Yüce Allah tarafından peygamberlere vahiy yoluyla indirilen kitaplar."
+      },
+      {
+        "term": "Kıssa",
+        "definition": "Kur’an’da anlatılan geçmiş peygamberler ve toplulukların ibret verici hikâyeleri."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Sure",
+        "scrambledWord": "SRUE",
+        "definition": "İpucu: Bu kelime \"Sure\""
+      },
+      {
+        "correctAnswer": "Sosyal Hayat",
+        "scrambledWord": "ATALOS YASYH",
+        "definition": "İpucu: Bu kelime \"Sosyal Hayat\""
+      },
+      {
+        "correctAnswer": "Salih Amel",
+        "scrambledWord": "A ESLİLMAH",
+        "definition": "İpucu: Bu kelime \"Salih Amel\""
+      },
+      {
+        "correctAnswer": "Kur’an-ı Kerim",
+        "scrambledWord": "NİEKRIA’-M RUK",
+        "definition": "İpucu: Bu kelime \"Kur’an-ı Kerim\""
+      },
+      {
+        "correctAnswer": "İbadet",
+        "scrambledWord": "DABİET",
+        "definition": "İpucu: Bu kelime \"İbadet\""
+      },
+      {
+        "correctAnswer": "Durak",
+        "scrambledWord": "UDKRA",
+        "definition": "İpucu: Bu kelime \"Durak\""
+      },
+      {
+        "correctAnswer": "Ahlak",
+        "scrambledWord": "HALAK",
+        "definition": "İpucu: Bu kelime \"Ahlak\""
+      },
+      {
+        "correctAnswer": "Melek",
+        "scrambledWord": "LEMKE",
+        "definition": "İpucu: Bu kelime \"Melek\""
+      },
+      {
+        "correctAnswer": "Ahiret",
+        "scrambledWord": "EAHTRİ",
+        "definition": "İpucu: Bu kelime \"Ahiret\""
+      },
+      {
+        "correctAnswer": "İnanç (İtikat)",
+        "scrambledWord": "İ NA(İKN)TÇTAİ",
+        "definition": "İpucu: Bu kelime \"İnanç (İtikat)\""
+      },
+      {
+        "correctAnswer": "İlahi Kitaplar",
+        "scrambledWord": "İKLL ARHTAPİİA",
+        "definition": "İpucu: Bu kelime \"İlahi Kitaplar\""
+      },
+      {
+        "correctAnswer": "Kıssa",
+        "scrambledWord": "IKSAS",
+        "definition": "İpucu: Bu kelime \"Kıssa\""
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Kıssalar, Kur’an-ı Kerim’de geçmiş peygamberler ve kavimlerle ilgili ibret verici olayları ifade eder.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kur’an kıssalarının bir amacı da Hz. Peygamber’e inanmayanları uyarmak değildir.",
+        "isTrue": false
+      },
+      {
+        "statement": "İslam dininin temel amacı, insanların güzel ahlaka sahip olmasını sağlamaktır.",
+        "isTrue": true
+      },
+      {
+        "statement": "İbadetler, kişinin Allah (cc) ile bağ kurmasını ve inananlarla kaynaşmasını sağlar.",
+        "isTrue": true
+      },
+      {
+        "statement": "Melekler, Allah (cc) tarafından yaratılmış varlıklardır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Müslümanlar Kur’an’da yer alan inanç esaslarını şüphe taşıyarak kabul eder.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Peygamber, insanlara karşı şefkatli ve saygılı olmayı öğretmemiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kur’an ayetlerinin birçoğu, Allah’ın (cc) birliğini, eşi ve benzerinin olmadığını vurgular.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Sosyal hayatı da düzenler.",
+    "scrambledSentence": "da hayatı düzenler. Sosyal"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Doğruluk, dürüstlük önemli değerlerdir.",
+    "scrambledSentence": "değerlerdir. dürüstlük Doğruluk, önemli"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İnanç esasları şüphe duyulmadan kabul edilmelidir.",
+    "scrambledSentence": "edilmelidir. kabul şüphe İnanç esasları duyulmadan"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İnanç, ibadet, ahlak ana konulardır.",
+    "scrambledSentence": "ahlak ana ibadet, İnanç, konulardır."
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "İbadetler, kişinin Allah (cc) ile bağ kurmasını ve ___ kaynaşmasını sağlar.",
+    "options": [
+      "yabancılarla",
+      "düşmanlarla",
+      "inananlarla",
+      "inanmayanlarla"
+    ],
+    "correctAnswer": "inananlarla"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kur’an-ı Kerim, insana bireysel ve toplumsal hayatında ___ eder.",
+    "options": [
+      "engel",
+      "rehberlik",
+      "yük",
+      "sınır"
+    ],
+    "correctAnswer": "rehberlik"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Müslümanlar, bireysel ve toplumsal hayatlarında Kur’an’ı rehber edinirler. Bu sayede hayatlarının her alanına doğruluk, dürüstlük, ___ gibi ahlaki değerleri yansıtırlar.",
+    "options": [
+      "kibir",
+      "adalet",
+      "riya",
+      "israf"
+    ],
+    "correctAnswer": "adalet"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Melekler, Allah (cc) tarafından yaratılmış varlıklardır. Yüce Allah’ın verdiği çeşitli görevleri ___ sualsiz yerine getirirler.",
+    "options": [
+      "tartışmasız",
+      "sorgusuz",
+      "itirazsız",
+      "düşüncesiz"
+    ],
+    "correctAnswer": "sorgusuz"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Peygamber; sevgi, merhamet, şefkat, samimiyet, sadakat, ___ gibi pek çok ahlaki değeri hayatında uygulayarak Müslümanlara örnek olmuştur.",
+    "options": [
+      "kıskançlık",
+      "kardeşlik",
+      "bencillik",
+      "nefret"
+    ],
+    "correctAnswer": "kardeşlik"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an-ı Kerim’de pek çok konuya yer verilir. Aşağıdakilerden hangisi bu başlıca konulardan biri değildir?",
+    "options": [
+      "İnanç",
+      "İbadet",
+      "Ekonomi",
+      "Ahlak"
+    ],
+    "correctAnswer": "Ekonomi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberlere iman, Allah’ın (cc) insanlar arasından seçtiği kimselere ve onların Allah’tan (cc) getirdiği neyin doğru olduğuna inanmaktır?",
+    "options": [
+      "Sözlerin",
+      "Vahyin",
+      "Hayallerin",
+      "Düşüncelerin"
+    ],
+    "correctAnswer": "Vahyin"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an-ı Kerim’in sosyal hayatı konu edinen ayetleri, insanların birbirleriyle ilişkilerini ve toplum hayatını ne yapar?",
+    "options": [
+      "Karmaşıklaştırır",
+      "Düzensizleştirir",
+      "Düzenler",
+      "Engeller"
+    ],
+    "correctAnswer": "Düzenler"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an-ı Kerim’in ana konularından birisi de ahlaktır. Yüce Allah Kur’an-ı Kerim’de neyi emreder?",
+    "options": [
+      "Cimriliği ve israfı",
+      "Adaletle davranmayı ve iyilikte yarışmayı",
+      "Yalan söylemeyi ve iftira atmayı",
+      "Haddi aşmayı ve fenalığı"
+    ],
+    "correctAnswer": "Adaletle davranmayı ve iyilikte yarışmayı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kıssa, 'hikâye etmek, anlatmak, haber vermek' anlamlarına gelir. Kur’an-ı Kerim’de neyle ilgili ibret verici olayları ifade eder?",
+    "options": [
+      "Gelecek olaylar",
+      "Şimdiki zaman olayları",
+      "Geçmiş peygamberler ve kavimlerle ilgili",
+      "Hayali olaylar"
+    ],
+    "correctAnswer": "Geçmiş peygamberler ve kavimlerle ilgili"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İbadetlerde devamlılık, kişilerde ahlaki değerlerin yerleşmesine ve pekişmesine yardımcı olur. Bu durum, ibadet ile ahlak arasındaki hangi ilişkiyi gösterir?",
+    "options": [
+      "Ayrı ve bağımsız olduklarını",
+      "Birbirlerini zayıflattıklarını",
+      "İbadetin ahlakı beslediğini ve güçlendirdiğini",
+      "Sadece ahlakın ibadeti etkilediğini"
+    ],
+    "correctAnswer": "İbadetin ahlakı beslediğini ve güçlendirdiğini"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İbadet, 'boyun eğme, itaat, saygı duyma' anlamlarına gelir. Kur’an-ı Kerim’de insanın Allah’a ne yapmak için yaratıldığı ifade edilir?",
+    "options": [
+      "Eğlenmek",
+      "İbadet etmek",
+      "Çalışmak",
+      "Dinlenmek"
+    ],
+    "correctAnswer": "İbadet etmek"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Ahiret, dünya hayatındaki söz ve davranışların sonuçlarının alınacağı ve değerlendirileceği hangi hayattır?",
+    "options": [
+      "Geçmiş",
+      "Şimdiki",
+      "Ölümden sonraki",
+      "Rüya"
+    ],
+    "correctAnswer": "Ölümden sonraki"
+  }
+]

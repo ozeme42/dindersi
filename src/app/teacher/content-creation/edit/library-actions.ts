@@ -48,6 +48,42 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
         const snapshot = await getDocs(q);
         let items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question | ActivityItem));
 
+        // Eğer Tanım Kartı (definition) istenmişse, kavram ('concept') tipindeki ve tanımsız öğeleri tamamen filtrele
+        if (filters.activityTypes && filters.activityTypes.includes('definition')) {
+            items = items.filter(item => {
+                if (item.type === 'concept') return false;
+                if (item.type === 'definition') {
+                    const def = (item as any).content?.definition || (item as any).definition;
+                    return !!(def && String(def).trim().length > 0);
+                }
+                return true;
+            });
+        }
+
+        // Local static JSON fallback if Firestore has 0 items
+        if (items.length === 0 && filters.topicId && filters.topicId !== 'all') {
+            try {
+                const fs = await import('fs');
+                const path = await import('path');
+                const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', `${filters.topicId}.json`);
+                if (fs.existsSync(filePath)) {
+                    const fileData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                    if (Array.isArray(fileData)) {
+                        let localItems = fileData;
+                        if (!isQuestions && filters.activityTypes && filters.activityTypes.length > 0) {
+                            localItems = localItems.filter((it: any) => filters.activityTypes?.includes(it.type));
+                        }
+                        if (filters.activityTypes && filters.activityTypes.includes('definition')) {
+                            localItems = localItems.filter((it: any) => it.type === 'definition' && (it.content?.definition || it.definition));
+                        }
+                        items = localItems;
+                    }
+                }
+            } catch (err) {
+                console.warn("Local activity fallback read error:", err);
+            }
+        }
+
         // Eğer arama kelimesi varsa sunucu tarafında filtrele
         if (filters.searchTerm && filters.searchTerm.trim()) {
             const term = filters.searchTerm.toLowerCase().trim();
@@ -82,6 +118,9 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
                 items = items.filter((item: any) => filters.questionTypes?.includes(item.type));
             } else if (!isQuestions && filters.activityTypes && filters.activityTypes.length > 0) {
                 items = items.filter((item: any) => filters.activityTypes?.includes(item.type));
+            }
+            if (filters.activityTypes && filters.activityTypes.includes('definition')) {
+                items = items.filter(item => item.type === 'definition' && ((item as any).content?.definition || (item as any).definition));
             }
             return { items: JSON.parse(JSON.stringify(items)) };
         } catch (fallbackErr: any) {
