@@ -2232,28 +2232,31 @@ export function NotebookNotePlayer({
     const hasConcepts = conceptDefs.length > 0;
     const hasNotes = noteItems.length > 0;
 
-    const [activeTab, setActiveTab] = useState<'concepts' | 'notes'>(hasConcepts ? 'concepts' : 'notes');
+    // Varsayılan mod: Eğer hem kavram hem not varsa 'split' (Yan yana) veya 'concepts'
+    const [viewMode, setViewMode] = useState<'split' | 'concepts' | 'notes'>(
+        hasConcepts && hasNotes ? 'split' : (hasConcepts ? 'concepts' : 'notes')
+    );
 
-    // Step değiştiğinde aktif sekmeyi dinamik güncelle
+    // Step değiştiğinde modu akıllıca senkronize et
     useEffect(() => {
         const cExist = (step.conceptDefinitions && step.conceptDefinitions.length > 0);
         const nExist = (step.notes && step.notes.length > 0);
-        if (cExist && !nExist) {
-            setActiveTab('concepts');
-        } else if (nExist && !cExist) {
-            setActiveTab('notes');
+        if (cExist && nExist) {
+            setViewMode('split');
         } else if (cExist) {
-            setActiveTab('concepts');
+            setViewMode('concepts');
         } else {
-            setActiveTab('notes');
+            setViewMode('notes');
         }
     }, [step]);
 
+    // Canlı Sayaç Durumu
     const initialSeconds = (step.suggestedMinutes || 3) * 60;
     const [timeLeft, setTimeLeft] = useState(initialSeconds);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     const [timerDone, setTimerDone] = useState(false);
     const [checkedItems, setCheckedItems] = useState<{ [index: number]: boolean }>({});
+    const [localFontStep, setLocalFontStep] = useState<number>(0); // -2 to +2 local font adjustment
 
     // Step değiştiğinde süreyi resetle
     useEffect(() => {
@@ -2274,7 +2277,7 @@ export function NotebookNotePlayer({
                         setTimerDone(true);
                         playSound('win');
                         import('canvas-confetti').then(m => {
-                            m.default({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
+                            m.default({ particleCount: 100, spread: 90, origin: { y: 0.6 } });
                         }).catch(() => {});
                         return 0;
                     }
@@ -2307,6 +2310,11 @@ export function NotebookNotePlayer({
         setTimerDone(false);
     };
 
+    const addExtraMinute = () => {
+        playSound('pop');
+        setTimeLeft(prev => prev + 60);
+    };
+
     const toggleCheckItem = (index: number) => {
         playSound('pop');
         setCheckedItems(prev => ({ ...prev, [index]: !prev[index] }));
@@ -2318,56 +2326,87 @@ export function NotebookNotePlayer({
         fontSizeScale === 'md' ? 'md' :
         fontSizeScale === 'xs' ? 'xs' : 'sm';
 
+    // Dinamik font hesaplaması
     const getItemFontSize = () => {
-        switch (cardScale) {
-            case 'xs': return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
-            case 'sm': return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
-            case 'md': return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
-            case 'lg': return isTeacher ? "text-3xl md:text-4xl" : "text-xl md:text-2xl";
-            case 'xl': return isTeacher ? "text-4xl md:text-5xl" : "text-2xl md:text-3xl";
-            default: return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+        const base = cardScale === 'xl' ? 5 : cardScale === 'lg' ? 4 : cardScale === 'md' ? 3 : cardScale === 'xs' ? 1 : 2;
+        const total = Math.max(1, Math.min(6, base + localFontStep));
+        switch (total) {
+            case 1: return isTeacher ? "text-base md:text-lg" : "text-xs md:text-sm";
+            case 2: return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
+            case 3: return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
+            case 4: return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+            case 5: return isTeacher ? "text-3xl md:text-4xl" : "text-xl md:text-2xl";
+            default: return isTeacher ? "text-4xl md:text-5xl" : "text-2xl md:text-3xl";
         }
     };
 
     const getConceptTitleFontSize = () => {
-        switch (cardScale) {
-            case 'xs': return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
-            case 'sm': return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
-            case 'md': return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
-            case 'lg': return isTeacher ? "text-3xl md:text-4xl" : "text-xl md:text-2xl";
-            case 'xl': return isTeacher ? "text-4xl md:text-5xl" : "text-2xl md:text-3xl";
-            default: return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+        const base = cardScale === 'xl' ? 5 : cardScale === 'lg' ? 4 : cardScale === 'md' ? 3 : cardScale === 'xs' ? 1 : 2;
+        const total = Math.max(1, Math.min(6, base + localFontStep));
+        switch (total) {
+            case 1: return isTeacher ? "text-base md:text-lg" : "text-xs md:text-sm";
+            case 2: return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
+            case 3: return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
+            case 4: return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
+            default: return isTeacher ? "text-3xl md:text-4xl" : "text-xl md:text-2xl";
         }
     };
 
     const getConceptDefFontSize = () => {
-        switch (cardScale) {
-            case 'xs': return isTeacher ? "text-sm md:text-base" : "text-xs";
-            case 'sm': return isTeacher ? "text-base md:text-lg" : "text-xs md:text-sm";
-            case 'md': return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
-            case 'lg': return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
-            case 'xl': return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
-            default: return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
+        const base = cardScale === 'xl' ? 5 : cardScale === 'lg' ? 4 : cardScale === 'md' ? 3 : cardScale === 'xs' ? 1 : 2;
+        const total = Math.max(1, Math.min(6, base + localFontStep));
+        switch (total) {
+            case 1: return isTeacher ? "text-xs md:text-sm" : "text-[11px]";
+            case 2: return isTeacher ? "text-sm md:text-base" : "text-xs md:text-sm";
+            case 3: return isTeacher ? "text-base md:text-lg" : "text-sm md:text-base";
+            case 4: return isTeacher ? "text-lg md:text-xl" : "text-base md:text-lg";
+            default: return isTeacher ? "text-xl md:text-2xl" : "text-lg md:text-xl";
         }
     };
 
     const conceptColorClasses = [
-        'bg-indigo-900/40 border-indigo-500/50 text-indigo-100', 
-        'bg-emerald-900/40 border-emerald-500/50 text-emerald-100', 
-        'bg-rose-900/40 border-rose-500/50 text-rose-100', 
-        'bg-amber-900/40 border-amber-500/50 text-amber-100', 
-        'bg-cyan-900/40 border-cyan-500/50 text-cyan-100',
-        'bg-fuchsia-900/40 border-fuchsia-500/50 text-fuchsia-100'
+        {
+            card: 'bg-gradient-to-br from-indigo-950/80 via-indigo-900/40 to-slate-950/90 border-indigo-500/50 hover:border-indigo-400 text-indigo-100 shadow-[0_8px_32px_rgba(99,102,241,0.15)]',
+            badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+            title: 'text-indigo-200'
+        },
+        {
+            card: 'bg-gradient-to-br from-emerald-950/80 via-emerald-900/40 to-slate-950/90 border-emerald-500/50 hover:border-emerald-400 text-emerald-100 shadow-[0_8px_32px_rgba(16,185,129,0.15)]',
+            badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+            title: 'text-emerald-200'
+        },
+        {
+            card: 'bg-gradient-to-br from-rose-950/80 via-rose-900/40 to-slate-950/90 border-rose-500/50 hover:border-rose-400 text-rose-100 shadow-[0_8px_32px_rgba(244,63,94,0.15)]',
+            badge: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+            title: 'text-rose-200'
+        },
+        {
+            card: 'bg-gradient-to-br from-amber-950/80 via-amber-900/40 to-slate-950/90 border-amber-500/50 hover:border-amber-400 text-amber-100 shadow-[0_8px_32px_rgba(245,158,11,0.15)]',
+            badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+            title: 'text-amber-200'
+        },
+        {
+            card: 'bg-gradient-to-br from-cyan-950/80 via-cyan-900/40 to-slate-950/90 border-cyan-500/50 hover:border-cyan-400 text-cyan-100 shadow-[0_8px_32px_rgba(6,182,212,0.15)]',
+            badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+            title: 'text-cyan-200'
+        },
+        {
+            card: 'bg-gradient-to-br from-fuchsia-950/80 via-fuchsia-900/40 to-slate-950/90 border-fuchsia-500/50 hover:border-fuchsia-400 text-fuchsia-100 shadow-[0_8px_32px_rgba(217,70,239,0.15)]',
+            badge: 'bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30',
+            title: 'text-fuchsia-200'
+        }
     ];
 
-    // Hem kavram hem not boşsa boş ekran olmasını önle
+    // Hem kavram hem not boşsa boş durum yönlendirmesi
     if (!hasConcepts && !hasNotes) {
         return (
             <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
-                <div className="p-8 rounded-3xl bg-slate-900/80 border border-white/10 text-slate-300 max-w-lg shadow-2xl">
-                    <Pencil className="w-12 h-12 text-emerald-400 mx-auto mb-4 animate-bounce" />
-                    <h3 className="text-xl font-black text-white mb-2">{step.title || 'Defterimize Yazalım'}</h3>
-                    <p className="text-sm text-slate-400">Bu adım için henüz kayıtlı kavram veya defter notu bulunmuyor. Stüdyo ekranından düzenleyebilirsiniz.</p>
+                <div className="p-8 md:p-12 rounded-3xl bg-slate-900/90 border border-white/10 text-slate-300 max-w-xl shadow-2xl backdrop-blur-xl">
+                    <Pencil className="w-14 h-14 text-emerald-400 mx-auto mb-4 animate-bounce" />
+                    <h3 className="text-2xl font-black text-white mb-2">{step.title || 'Defterimize Yazalım'}</h3>
+                    <p className="text-slate-400 leading-relaxed">
+                        Bu adım için henüz kayıtlı kavram veya defter notu bulunmuyor. Stüdyo ekranından düzenleyebilir veya yapay zeka ile tek tıkla üretebilirsiniz.
+                    </p>
                 </div>
             </div>
         );
@@ -2375,180 +2414,335 @@ export function NotebookNotePlayer({
 
     return (
         <div className={cn(
-            "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 select-none max-w-6xl mx-auto overflow-y-auto",
-            isFullscreen ? "py-6" : "py-3"
+            "w-full h-full max-w-[1700px] flex flex-col justify-start p-2 sm:p-4 md:p-6 lg:p-7 select-none mx-auto overflow-y-auto",
+            isFullscreen ? "py-4 md:py-6" : "py-2 md:py-4"
         )}>
-            {/* ══ ÜST KONTROL & SEKMELER ══ */}
-            <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4 md:mb-6">
-                <div className="flex items-center gap-2">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-2 border-emerald-400/40 text-emerald-700 dark:text-emerald-300 text-xs md:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-xl">
-                        <Pencil className="w-4 h-4 text-emerald-500 animate-bounce" />
-                        <span>{step.title || '✏️ Defterimize Yazalım'}</span>
+            {/* ══ ÜST KONTROL, BAŞLIK & SAYAÇ ÇUBUĞU ══ */}
+            <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4 md:mb-6 p-3 md:p-4 rounded-3xl bg-slate-900/90 border border-white/10 backdrop-blur-xl shadow-2xl">
+                
+                {/* SOL: BAŞLIK ROZETİ */}
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-black shadow-lg shadow-emerald-950/50">
+                        <Pencil className="w-5 h-5 md:w-6 md:h-6" />
                     </div>
+                    <div>
+                        <h2 className="font-black text-white text-base sm:text-xl md:text-2xl drop-shadow-sm tracking-tight flex items-center gap-2">
+                            <span>{step.title || '✏️ Defterimize Yazalım'}</span>
+                        </h2>
+                        <p className="text-xs text-slate-400 font-semibold hidden sm:block">
+                            {step.noteTitle || 'Dersin En Önemli Özet Notları & Kavramları'}
+                        </p>
+                    </div>
+                </div>
 
-                    {/* SEKME GEÇİŞİ (KAVRAMLAR & NOTLAR) */}
+                {/* ORTA: GÖRÜNÜM SEÇENEKLERİ (SEKMELER) */}
+                <div className="flex items-center p-1 bg-slate-950/80 border border-white/10 rounded-2xl shadow-inner">
                     {hasConcepts && hasNotes && (
-                        <div className="flex items-center p-1 bg-slate-900/90 border border-white/10 rounded-2xl">
-                            <button
-                                onClick={() => { playSound('pop'); setActiveTab('concepts'); }}
-                                className={cn(
-                                    "px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer",
-                                    activeTab === 'concepts'
-                                        ? "bg-cyan-500 text-slate-950 shadow-md"
-                                        : "text-slate-400 hover:text-white"
-                                )}
-                            >
-                                📖 Kavramlar ({conceptDefs.length})
-                            </button>
-                            <button
-                                onClick={() => { playSound('pop'); setActiveTab('notes'); }}
-                                className={cn(
-                                    "px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer",
-                                    activeTab === 'notes'
-                                        ? "bg-amber-500 text-slate-950 shadow-md"
-                                        : "text-slate-400 hover:text-white"
-                                )}
-                            >
-                                ✏️ Defter Notları ({noteItems.length})
-                            </button>
-                        </div>
+                        <button
+                            onClick={() => { playSound('pop'); setViewMode('split'); }}
+                            className={cn(
+                                "px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all cursor-pointer flex items-center gap-1.5",
+                                viewMode === 'split'
+                                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/50"
+                                    : "text-slate-400 hover:text-white"
+                            )}
+                        >
+                            <span>🔲 Tümü (Yan Yana)</span>
+                        </button>
+                    )}
+                    {hasConcepts && (
+                        <button
+                            onClick={() => { playSound('pop'); setViewMode('concepts'); }}
+                            className={cn(
+                                "px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all cursor-pointer flex items-center gap-1.5",
+                                viewMode === 'concepts'
+                                    ? "bg-cyan-600 text-white shadow-lg shadow-cyan-900/50"
+                                    : "text-slate-400 hover:text-white"
+                            )}
+                        >
+                            <span>📖 Kavramlar</span>
+                            <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">{conceptDefs.length}</span>
+                        </button>
+                    )}
+                    {hasNotes && (
+                        <button
+                            onClick={() => { playSound('pop'); setViewMode('notes'); }}
+                            className={cn(
+                                "px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-black transition-all cursor-pointer flex items-center gap-1.5",
+                                viewMode === 'notes'
+                                    ? "bg-amber-600 text-white shadow-lg shadow-amber-900/50"
+                                    : "text-slate-400 hover:text-white"
+                            )}
+                        >
+                            <span>✏️ Defter Notları</span>
+                            <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">{noteItems.length}</span>
+                        </button>
                     )}
                 </div>
 
-                {/* SÜRE SAYACI KUTUSU (NOTLAR MODUNDAYKEN) */}
-                {activeTab === 'notes' && (
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-white/15 shadow-md">
-                        <Clock className={cn("w-4 h-4", isTimerRunning ? "text-emerald-500 animate-spin" : "text-slate-400")} />
-                        <span className="font-mono font-black text-sm md:text-base text-slate-800 dark:text-white">
+                {/* SAĞ: CANLI SAYAÇ & BOYUT KONTROLLERİ */}
+                <div className="flex items-center gap-2">
+                    {/* Font Boyut Tuşları */}
+                    <div className="hidden lg:flex items-center bg-slate-950/80 rounded-xl p-1 border border-white/10">
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => { playSound('pop'); setLocalFontStep(s => Math.max(-2, s - 1)); }} 
+                            className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg"
+                        >
+                            <Minus className="h-4 w-4"/>
+                        </Button>
+                        <span className="text-[10px] font-black text-slate-400 w-10 text-center uppercase tracking-widest">Yazı</span>
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => { playSound('pop'); setLocalFontStep(s => Math.min(2, s + 1)); }} 
+                            className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg"
+                        >
+                            <Plus className="h-4 w-4"/>
+                        </Button>
+                    </div>
+
+                    {/* Canlı Sayaç */}
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-950/90 border border-white/15 shadow-md">
+                        <Clock className={cn("w-4 h-4", isTimerRunning ? "text-emerald-400 animate-spin" : "text-slate-400")} />
+                        <span className="font-mono font-black text-sm md:text-base text-white">
                             {formatTime(timeLeft)}
                         </span>
                         <Button
                             size="sm"
                             onClick={toggleTimer}
                             className={cn(
-                                "h-7 px-3 text-xs font-black rounded-xl",
+                                "h-7 px-2.5 text-xs font-black rounded-xl transition-all",
                                 isTimerRunning 
-                                    ? "bg-amber-500 hover:bg-amber-600 text-slate-950" 
-                                    : "bg-emerald-600 hover:bg-emerald-500 text-white"
+                                    ? "bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-md" 
+                                    : "bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-950"
                             )}
                         >
-                            {isTimerRunning ? <Pause className="w-3 h-3 mr-1" /> : <Play className="w-3 h-3 mr-1" />}
-                            {isTimerRunning ? "Durdur" : (timerDone ? "Tekrar Başlat" : "Süreyi Başlat")}
+                            {isTimerRunning ? <Pause className="w-3.5 h-3.5 mr-1" /> : <Play className="w-3.5 h-3.5 mr-1" />}
+                            {isTimerRunning ? "Durdur" : (timerDone ? "Yeniden" : "Başlat")}
+                        </Button>
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={addExtraMinute}
+                            title="+1 Dakika Ekle"
+                            className="h-7 px-2 text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/10 rounded-xl"
+                        >
+                            +1dk
                         </Button>
                         {timeLeft !== initialSeconds && (
                             <Button
                                 size="sm"
                                 variant="ghost"
                                 onClick={resetTimer}
-                                className="h-7 px-2 text-xs text-slate-400 hover:text-slate-200"
+                                className="h-7 px-2 text-slate-400 hover:text-slate-200"
                             >
-                                <RotateCcw className="w-3 h-3" />
+                                <RotateCcw className="w-3.5 h-3.5" />
                             </Button>
                         )}
                     </div>
-                )}
+                </div>
             </div>
 
-            {/* ══ 1. KAVRAMLAR SEKMESİ (YAZILACAKLAR / OYUN TARZI RENKLİ KARTLAR) ══ */}
-            {activeTab === 'concepts' && hasConcepts && (
-                <div className="w-full flex flex-col">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 w-full">
-                        {conceptDefs.map((item, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 15 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.05 }}
-                                className={cn(
-                                    "relative overflow-hidden rounded-3xl border-2 transition-all duration-300 hover:scale-[1.02] shadow-2xl flex flex-col justify-between backdrop-blur-xl p-6 min-h-[160px]",
-                                    conceptColorClasses[index % conceptColorClasses.length]
-                                )}
-                            >
-                                {/* Arka plan Numara Rozeti (Watermark) */}
-                                <div className="absolute top-0 right-0 bg-black/30 text-white/40 font-black text-6xl p-2 leading-none pointer-events-none select-none -mr-2 -mt-2 opacity-30">
-                                    {index + 1}
-                                </div>
-                                
-                                <div className="z-10 relative flex flex-col h-full">
-                                    <h3 className={cn(
-                                        "font-black text-white mb-3 border-b border-white/20 pb-2.5 uppercase tracking-tight leading-tight",
-                                        getConceptTitleFontSize()
-                                    )}>
-                                        {item.concept}
-                                    </h3>
-                                    <div className="flex-grow">
-                                        <p className={cn(
-                                            "font-medium text-white/90 leading-relaxed",
-                                            getConceptDefFontSize()
-                                        )}>
-                                            {item.definition}
-                                        </p>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
+            {/* ══ 1. YAN YANA GÖRÜNÜM (SPLIT VIEW) ══ */}
+            {viewMode === 'split' && hasConcepts && hasNotes && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6 w-full flex-grow items-start">
+                    
+                    {/* SOL PANEL: KAVRAM KARTLARI (5 SÜTUN) */}
+                    <div className="lg:col-span-6 flex flex-col space-y-4">
+                        <div className="flex items-center justify-between px-2">
+                            <span className="text-xs font-black text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+                                <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+                                📖 Anahtar Kavramlar ({conceptDefs.length})
+                            </span>
+                            <span className="text-[11px] text-slate-400 font-semibold">Dokunup okuyalım</span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                            {conceptDefs.map((item, index) => {
+                                const theme = conceptColorClasses[index % conceptColorClasses.length];
+                                return (
+                                    <motion.div
+                                        key={`split-c-${index}`}
+                                        initial={{ opacity: 0, y: 15 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: index * 0.04 }}
+                                        className={cn(
+                                            "relative overflow-hidden rounded-3xl border-2 transition-all duration-300 hover:scale-[1.02] p-5 flex flex-col justify-between backdrop-blur-xl min-h-[140px]",
+                                            theme.card
+                                        )}
+                                    >
+                                        <div className="absolute top-0 right-0 bg-black/40 text-white/30 font-black text-6xl p-2 leading-none pointer-events-none select-none -mr-2 -mt-2 opacity-25">
+                                            {index + 1}
+                                        </div>
+                                        <div className="z-10 relative flex flex-col h-full">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <span className={cn("px-2 py-0.5 rounded-md font-mono font-black text-xs border", theme.badge)}>
+                                                    #{index + 1}
+                                                </span>
+                                            </div>
+                                            <h3 className={cn("font-black uppercase tracking-tight leading-tight mb-2", theme.title, getConceptTitleFontSize())}>
+                                                {item.concept}
+                                            </h3>
+                                            <p className={cn("font-medium text-slate-200 leading-relaxed flex-grow", getConceptDefFontSize())}>
+                                                {item.definition}
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
                     </div>
+
+                    {/* SAĞ PANEL: ÇİZGİLİ DEFTER NOTLARI (6 SÜTUN) */}
+                    <div className="lg:col-span-6 flex flex-col space-y-4">
+                        <div className="flex items-center justify-between px-2">
+                            <span className="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                                <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]" />
+                                ✏️ Deftere Yazılacaklar ({noteItems.length})
+                            </span>
+                            <span className="text-[11px] text-slate-400 font-semibold">Maddelere dokunarak tamamlayın</span>
+                        </div>
+                        <div className="w-full rounded-3xl p-5 sm:p-6 md:p-7 border-2 border-white/15 bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-left border-l-[12px] border-l-rose-500/80 overflow-hidden space-y-3.5">
+                            {noteItems.map((note, idx) => {
+                                const isChecked = checkedItems[idx] || false;
+                                return (
+                                    <motion.div
+                                        key={`split-n-${idx}`}
+                                        initial={{ opacity: 0, x: 10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: idx * 0.05 }}
+                                        onClick={() => toggleCheckItem(idx)}
+                                        className={cn(
+                                            "group p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3.5",
+                                            isChecked
+                                                ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-200 shadow-sm"
+                                                : "bg-slate-800/60 hover:bg-slate-800/90 border-white/10 text-slate-100 hover:border-amber-400/50 shadow-sm"
+                                        )}
+                                    >
+                                        <div className={cn(
+                                            "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs border-2 transition-colors mt-0.5",
+                                            isChecked
+                                                ? "bg-emerald-500 border-emerald-400 text-white"
+                                                : "bg-slate-950 border-slate-700 text-amber-400 group-hover:border-amber-400"
+                                        )}>
+                                            {isChecked ? <Check className="w-4 h-4" /> : `${idx + 1}`}
+                                        </div>
+                                        <p className={cn(
+                                            "flex-1 font-bold leading-relaxed tracking-wide select-text",
+                                            getItemFontSize(),
+                                            isChecked && "line-through opacity-70 text-slate-400"
+                                        )}>
+                                            {note}
+                                        </p>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
                 </div>
             )}
 
-            {/* ══ 2. DEFTERE YAZILACAK NOTLAR SEKMESİ (ÇİZGİLİ DEFTER KARTI) ══ */}
-            {(activeTab === 'notes' || !hasConcepts) && hasNotes && (
-                <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="relative w-full rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-slate-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-left border-l-[12px] border-l-rose-500/80 overflow-hidden"
-                >
-                    {/* Defter Başlığı */}
-                    <div className="flex items-center justify-between border-b-2 border-slate-100 dark:border-white/10 pb-4 mb-6">
-                        <h3 className="font-black text-xl md:text-2xl text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
-                            <span className="p-2 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20">
-                                📝
-                            </span>
-                            <span>{step.noteTitle || 'Dersin En Önemli Özet Notları'}</span>
+            {/* ══ 2. TAM EKRAN KAVRAMLAR IZGARASI (CONCEPTS GRID) ══ */}
+            {viewMode === 'concepts' && hasConcepts && (
+                <div className="w-full flex flex-col space-y-4">
+                    <div className="flex items-center justify-between px-2">
+                        <h3 className="text-xl md:text-2xl font-black text-cyan-400 uppercase tracking-wide flex items-center gap-2">
+                            <span>📖 {step.noteTitle || 'Anahtar Kavramlar ve Tanımlar'}</span>
                         </h3>
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest hidden sm:inline">
-                            Öğrenci Defteri İçin
-                        </span>
+                        <span className="text-xs text-slate-400 font-bold">Toplam {conceptDefs.length} Kavram</span>
                     </div>
-
-                    {/* Maddeler */}
-                    <div className="space-y-4 md:space-y-5">
-                        {noteItems.map((note, idx) => {
-                            const isChecked = checkedItems[idx] || false;
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 w-full">
+                        {conceptDefs.map((item, index) => {
+                            const theme = conceptColorClasses[index % conceptColorClasses.length];
                             return (
                                 <motion.div
-                                    key={idx}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: idx * 0.08 }}
-                                    onClick={() => toggleCheckItem(idx)}
+                                    key={`full-c-${index}`}
+                                    initial={{ opacity: 0, y: 15 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.04 }}
                                     className={cn(
-                                        "group p-4 md:p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-4",
-                                        isChecked
-                                            ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-950 dark:text-emerald-100 shadow-sm"
-                                            : "bg-slate-50/80 dark:bg-slate-800/50 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 hover:border-indigo-400/50 shadow-sm"
+                                        "relative overflow-hidden rounded-3xl border-2 transition-all duration-300 hover:scale-[1.02] p-6 flex flex-col justify-between backdrop-blur-xl min-h-[160px]",
+                                        theme.card
                                     )}
                                 >
-                                    <div className={cn(
-                                        "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm border-2 transition-colors mt-0.5",
-                                        isChecked
-                                            ? "bg-emerald-500 border-emerald-400 text-white"
-                                            : "bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 group-hover:border-indigo-400"
-                                    )}>
-                                        {isChecked ? <Check className="w-4 h-4" /> : `${idx + 1}`}
+                                    <div className="absolute top-0 right-0 bg-black/40 text-white/30 font-black text-7xl p-2 leading-none pointer-events-none select-none -mr-2 -mt-2 opacity-25">
+                                        {index + 1}
                                     </div>
-                                    <p className={cn(
-                                        "flex-1 font-bold leading-relaxed tracking-wide select-text",
-                                        getItemFontSize(),
-                                        isChecked && "line-through opacity-80"
-                                    )}>
-                                        {note}
-                                    </p>
+                                    <div className="z-10 relative flex flex-col h-full">
+                                        <div className="flex items-center justify-between mb-2.5">
+                                            <span className={cn("px-2.5 py-0.5 rounded-md font-mono font-black text-xs border", theme.badge)}>
+                                                #{index + 1} Kavram
+                                            </span>
+                                        </div>
+                                        <h3 className={cn("font-black uppercase tracking-tight leading-tight mb-2.5", theme.title, getConceptTitleFontSize())}>
+                                            {item.concept}
+                                        </h3>
+                                        <p className={cn("font-medium text-slate-200 leading-relaxed flex-grow", getConceptDefFontSize())}>
+                                            {item.definition}
+                                        </p>
+                                    </div>
                                 </motion.div>
                             );
                         })}
                     </div>
-                </motion.div>
+                </div>
+            )}
+
+            {/* ══ 3. TAM EKRAN ÇİZGİLİ DEFTER NOTLARI (MULTI-COLUMN RULED NOTEBOOK) ══ */}
+            {viewMode === 'notes' && hasNotes && (
+                <div className="w-full flex flex-col space-y-4">
+                    <div className="flex items-center justify-between px-2">
+                        <h3 className="text-xl md:text-2xl font-black text-amber-400 uppercase tracking-wide flex items-center gap-2">
+                            <span>✏️ {step.noteTitle || 'Öğrenci Defterine Yazılacak Özet Notlar'}</span>
+                        </h3>
+                        <span className="text-xs text-slate-400 font-bold">Toplam {noteItems.length} Madde</span>
+                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="relative w-full rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-white/15 bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-left border-l-[14px] border-l-rose-500/80 overflow-hidden"
+                    >
+                        {/* Not Maddeleri Izgarası (2 veya 3 Sütun) */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
+                            {noteItems.map((note, idx) => {
+                                const isChecked = checkedItems[idx] || false;
+                                return (
+                                    <motion.div
+                                        key={`full-n-${idx}`}
+                                        initial={{ opacity: 0, scale: 0.98 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: idx * 0.05 }}
+                                        onClick={() => toggleCheckItem(idx)}
+                                        className={cn(
+                                            "group p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-4 shadow-md",
+                                            isChecked
+                                                ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-200"
+                                                : "bg-slate-800/70 hover:bg-slate-800/95 border-white/10 text-slate-100 hover:border-amber-400/60"
+                                        )}
+                                    >
+                                        <div className={cn(
+                                            "flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center font-black text-base border-2 transition-colors mt-0.5",
+                                            isChecked
+                                                ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_12px_rgba(16,185,129,0.5)]"
+                                                : "bg-slate-950 border-amber-500/40 text-amber-400 group-hover:border-amber-400 shadow-sm"
+                                        )}>
+                                            {isChecked ? <Check className="w-5 h-5" /> : `${idx + 1}`}
+                                        </div>
+                                        <p className={cn(
+                                            "flex-1 font-bold leading-relaxed tracking-wide select-text",
+                                            getItemFontSize(),
+                                            isChecked && "line-through opacity-70 text-slate-400"
+                                        )}>
+                                            {note}
+                                        </p>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </motion.div>
+                </div>
             )}
         </div>
     );
