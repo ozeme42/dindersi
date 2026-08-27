@@ -73,6 +73,7 @@ export type ActivityOption = {
 
 export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     // Anlatım Modülleri
+    { id: 'hookQuestion', label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', description: 'Derse başlarken öğrencilerin dikkatini çeken, düşündürücü açık uçlu soru ve tartışma ipucu', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'anlatim' },
     { id: 'infographicTable', label: '📊 İnfografik Karşılaştırma Tablosu', description: 'Konunun temel türlerini ve hükümlerini özetleyen renkli infografik tablo', icon: <Layers className="w-4 h-4 text-cyan-400" />, category: 'anlatim' },
     { id: 'visualInfographics', label: '🔄 Süreç & Akış İnfografiği', description: 'Konunun aşamalarını veya boyutlarını adım adım gösteren görsel infografik diyagram', icon: <Sparkles className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
     { id: 'htmlSlide', label: 'İnteraktif Zengin HTML Slayt', description: 'Gamma / NotebookLM kalitesinde görsel kartlı modern slayt', icon: <FileText className="w-4 h-4 text-sky-400" />, category: 'anlatim' },
@@ -340,6 +341,18 @@ export function AiLessonStepGenerationDialog({
   ): LessonStep[] => {
         const newSteps: LessonStep[] = [];
         
+        // 0. Merak & Giriş Sorusu (Dikkat Çekme - En Başta Gösterilir)
+        if (activeModules.hookQuestion && output.hookQuestion && output.hookQuestion.question) {
+            newSteps.push({
+                type: 'hookQuestion',
+                title: output.hookQuestion.title || '🤔 Derse Başlarken: Bir Düşünelim!',
+                question: output.hookQuestion.question,
+                thoughtStarter: output.hookQuestion.thoughtStarter,
+                tag: output.hookQuestion.tag || 'Merak & Düşünce Sorusu',
+                isPublished: true
+            });
+        }
+
         // 1. Öğrenme Hedefleri
         if (activeModules.learningObjectives && output.learningObjectives && output.learningObjectives.length > 0) {
             newSteps.push({ 

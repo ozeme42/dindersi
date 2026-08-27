@@ -15,6 +15,7 @@ const GenerateLessonContentInputSchema = z.object({
   modelName: z.string().optional(),
   itemCount: z.number().optional(), // e.g. 5 questions / concepts
   modules: z.object({
+    hookQuestion: z.boolean().optional(),
     summary: z.boolean().optional(),
     learningObjectives: z.boolean().optional(),
     keyTakeaways: z.boolean().optional(),
@@ -36,6 +37,12 @@ const GenerateLessonContentInputSchema = z.object({
 export type GenerateLessonContentInput = z.infer<typeof GenerateLessonContentInputSchema>;
 
 export type GenerateLessonContentOutput = {
+  hookQuestion?: {
+    title?: string;
+    question: string;
+    thoughtStarter?: string;
+    tag?: string;
+  };
   summary?: { title: string; sentences?: string[]; content?: string }[];
   learningObjectives?: string[];
   keyTakeaways?: string[];
@@ -64,6 +71,12 @@ export type GenerateLessonContentOutput = {
 };
 
 const moduleInstructions: Record<string, string> = {
+  hookQuestion: `"hookQuestion": {
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "question": "Eğer dünyada dürüstlük, adalet ve güven duygusu tamamen yok olsaydı, insanların bir gün bile huzurla yaşaması mümkün olur muydu?",
+    "thoughtStarter": "Sizce bir toplumu ayakta tutan en temel manevi değer nedir? Arkadaşlarınızla fikirlerinizi paylaşın.",
+    "tag": "Merak & Düşünce Sorusu"
+  }`,
   infographicTable: `"infographicTable": {
     "title": "Hükümlerine Göre Namaz Çeşitleri Karşılaştırma Tablosu",
     "description": "Namazların dini hükümleri, vakitleri ve temel özellikleri",
@@ -202,13 +215,14 @@ ${requestedExamples}
 
 ### KRİTİK KURALLAR:
 1. SADECE yukarıda istenen alanları (${requestedKeys.join(', ')}) JSON nesnesinde doldur.
-2. "summary" (Konu Özeti / Ders Slaytları): Kaynak metni içeriğin kapsamına göre mantıklı ana başlıklara böl (Sabit bir başlık sınırı YOKTUR; metnin uzunluğuna göre 2, 3, 4, 5, 6 veya daha fazla başlığa serbestçe bölebilirsin). Her başlık ("title") için, ortaokul öğrencisinin rahatça okuyup kavrayabileceği KISA ve ÖZ cümlelerden oluşan bir "sentences" dizisi oluştur.
-3. "learningObjectives" (Öğrenme Hedefleri): Doğrudan öğrencinin dersteki kazanımlarını hedefleyen, öğrenciye hitap eden 3-5 adet net kazanım cümlesi yaz. Bütün hedef cümleleri KESİNLİKLE "... açıklayabileceksiniz", "... tanımlayabileceksiniz", "... ayırt edebileceksiniz", "... kavrayabileceksiniz", "... listeleyebileceksiniz", "... örneklendirebileceksiniz" gibi öğrenci merkezli yeterlilik ve gelecek zaman kipiyle bitmelidir. (Örn: "Namazın farz, vacip ve nafile çeşitlerini ayırt edebileceksiniz.").
-4. "conceptExplanations" ve "flashcards": Tanımları ortaokul düzeyine uygun, akılda kalıcı ve kısa tut.
-5. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
-6. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
-7. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
-8. SADECE saf JSON nesnesi döndür.
+2. "hookQuestion" (Merak & Giriş Sorusu): Derse başlarken öğrencilerin dikkatini anında çekecek, onları derin düşünmeye ve sınıfta tartışmaya sevk edecek ilgi çekici bir açık uçlu soru ("question") ve düşünme yönlendiricisi ("thoughtStarter") oluştur.
+3. "summary" (Konu Özeti / Ders Slaytları): Kaynak metni içeriğin kapsamına göre mantıklı ana başlıklara böl (Sabit bir başlık sınırı YOKTUR; metnin uzunluğuna göre 2, 3, 4, 5, 6 veya daha fazla başlığa serbestçe bölebilirsin). Her başlık ("title") için, ortaokul öğrencisinin rahatça okuyup kavrayabileceği KISA ve ÖZ cümlelerden oluşan bir "sentences" dizisi oluştur.
+4. "learningObjectives" (Öğrenme Hedefleri): Doğrudan öğrencinin dersteki kazanımlarını hedefleyen, öğrenciye hitap eden 3-5 adet net kazanım cümlesi yaz. Bütün hedef cümleleri KESİNLİKLE "... açıklayabileceksiniz", "... tanımlayabileceksiniz", "... ayırt edebileceksiniz", "... kavrayabileceksiniz", "... listeleyebileceksiniz", "... örneklendirebileceksiniz" gibi öğrenci merkezli yeterlilik ve gelecek zaman kipiyle bitmelidir. (Örn: "Namazın farz, vacip ve nafile çeşitlerini ayırt edebileceksiniz.").
+5. "conceptExplanations" ve "flashcards": Tanımları ortaokul düzeyine uygun, akılda kalıcı ve kısa tut.
+6. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
+7. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
+8. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
+9. SADECE saf JSON nesnesi döndür.
 `;
 
   const text = await runGeminiWithFallback({

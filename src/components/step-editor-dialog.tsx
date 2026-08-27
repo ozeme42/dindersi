@@ -25,7 +25,7 @@ import type {
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
     FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, 
-    VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep 
+    VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, HookQuestionStep
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram } from "@/lib/utils";
@@ -65,6 +65,12 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
     // objectiveList normalizasyonu
     if (normalized.type === 'objectiveList') {
         normalized.items = normalized.items || ['Yeni hedef...'];
+    }
+    // hookQuestion normalizasyonu
+    if (normalized.type === 'hookQuestion') {
+        normalized.question = normalized.question || 'Konuyla ilgili merak uyandırıcı soru...';
+        normalized.thoughtStarter = normalized.thoughtStarter || '';
+        normalized.tag = normalized.tag || '🤔 Merak & Düşünce Sorusu';
     }
 
     return normalized as LessonStep;
@@ -483,6 +489,49 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                 placeholder="Metin içeriğinizi buraya girin. HTML etiketlerini (<p>, <strong>, <ul>, <li> vb.) destekler."
                             />
                         )}
+                    </div>
+                );
+            }
+
+            case 'hookQuestion': {
+                const hookStep = editedStep as HookQuestionStep;
+                return (
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                                🏷️ Üst Rozet / Etiket Metni
+                            </Label>
+                            <Input 
+                                value={hookStep.tag || ''} 
+                                onChange={(e) => handleValueChange('tag', e.target.value)} 
+                                className="bg-slate-950 border-white/10 text-white font-semibold" 
+                                placeholder="Örn: 🤔 Derse Başlarken: Bir Düşünelim!"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                ❓ Dikkat Çekici Giriş Sorusu Metni *
+                            </Label>
+                            <Textarea 
+                                value={hookStep.question || ''} 
+                                onChange={(e) => handleValueChange('question', e.target.value)} 
+                                className="min-h-[100px] bg-slate-950 border-white/10 text-white font-bold text-base leading-relaxed rounded-2xl p-4" 
+                                placeholder="Örn: Eğer dünyada adalet ve dürüstlük tamamen yok olsaydı, insanlar güvenle bir gün bile yaşayabilir miydi?"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold text-amber-300 uppercase tracking-wider">
+                                💡 Düşünme & Tartışma İpucu (Thought Starter)
+                            </Label>
+                            <Textarea 
+                                value={hookStep.thoughtStarter || ''} 
+                                onChange={(e) => handleValueChange('thoughtStarter', e.target.value)} 
+                                className="min-h-[80px] bg-slate-950 border-amber-500/20 text-amber-100 text-sm leading-relaxed rounded-2xl p-4" 
+                                placeholder="Örn: Arkadaşlarınızla tartışın: Günlük hayatınızda adaletin ne kadar vazgeçilmez olduğunu gösteren bir örnek verebilir misiniz?"
+                            />
+                        </div>
                     </div>
                 );
             }

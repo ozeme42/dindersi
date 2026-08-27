@@ -138,9 +138,19 @@ export type MatchingStep = {
   isPublished?: boolean;
 };
 
+export type HookQuestionStep = { 
+  type: 'hookQuestion'; 
+  title: string; 
+  question: string; 
+  thoughtStarter?: string; 
+  tag?: string; 
+  isPublished?: boolean; 
+};
+
 export type LessonStep = 
   | ContentStep 
   | ObjectiveListStep
+  | HookQuestionStep
   | McqStep 
   | TfStep 
   | TrueFalseListStep

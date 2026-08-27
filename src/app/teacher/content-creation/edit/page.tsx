@@ -500,6 +500,7 @@ export function TopicEditor({
         let newStep: LessonStep;
 
         switch(type) {
+            case 'hookQuestion': newStep = { type, title: defaultTitle || '🤔 Derse Başlarken: Bir Düşünelim!', question: 'Bu konuyla ilgili merak uyandırıcı ve düşündürücü soru metni...', thoughtStarter: 'Arkadaşlarınızla tartışın: Sizce bu kavram günlük hayatımızı nasıl etkiler?', tag: '🤔 Derse Başlarken: Bir Düşünelim!' }; break;
             case 'content': newStep = { type, title: defaultTitle, content: '<h1>Başlık</h1><p>İçeriği buraya girin...</p>' }; break;
             case 'objectiveList': newStep = { type, title: defaultTitle, items: ['Yeni hedef...'] }; break;
             case 'conceptExplanation': newStep = { type, title: defaultTitle, items: [{ concept: "Kavram 1", definition: "Tanım 1"}] }; break;
@@ -766,6 +767,7 @@ export function TopicEditor({
     };
 
     const anlatimStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
+        { label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion', defaultTitle: 'Derse Başlarken: Bir Düşünelim!' },
         { label: 'Metin İçeriği', type: 'content', defaultTitle: 'Metin İçeriği' },
         { label: 'Öğrenme Hedefleri', type: 'objectiveList', defaultTitle: 'Öğrenme Hedefleri' },
         { label: 'Kavram Açıklamaları', type: 'conceptExplanation', defaultTitle: 'Kavram Açıklamaları' },
