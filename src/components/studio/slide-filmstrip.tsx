@@ -241,140 +241,170 @@ export function SlideFilmstrip({
                     </Badge>
                 </div>
 
-                {/* Slayt Ekle Butonu */}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button 
-                            size="sm" 
-                            className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs h-7 px-2.5 rounded-xl shadow-md shadow-indigo-950/50 cursor-pointer"
-                        >
-                            <Plus className="h-3.5 w-3.5 mr-1" /> Ekle
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent 
-                        side="right" 
-                        align="start" 
-                        sideOffset={8}
-                        className="bg-slate-950/95 backdrop-blur-2xl border border-white/15 text-white w-72 max-h-[85vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20"
-                    >
-                        <DropdownMenuItem 
-                            onClick={() => onOpenAi?.(selectedIndex + 1)}
-                            className="text-xs font-black text-yellow-300 focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2 mb-1 bg-indigo-950/50 border border-indigo-500/30"
-                        >
-                            <Sparkles className="w-4 h-4 mr-2 text-yellow-400 animate-pulse" /> ✨ AI ile Slayt Üret...
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator className="bg-white/10 my-1" />
-                        <DropdownMenuLabel className="text-[10px] font-black uppercase text-indigo-400 tracking-wider px-2 py-1">Anlatım Slaytları</DropdownMenuLabel>
-                        {[
-                            { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
-                            { label: '📊 Kategori & Tablo', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
-                            { label: '🪜 Adım Adım Süreç & Yol', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },
-                            { label: '✏️ Defterimize Yazalım', type: 'notebookNote' as LessonStep['type'], title: 'Defterimize Yazalım' },
-                            { label: '💡 Kavram Açıklamaları', type: 'conceptExplanation' as LessonStep['type'], title: 'Kavram Açıklamaları' },
-                            { label: '🔲 4 Boyut Konu Matrisi', type: 'conceptMatrix' as LessonStep['type'], title: '4 Boyutta Konu Analizi' },
-                            { label: '🎯 Öğrenme Hedefleri', type: 'objectiveList' as LessonStep['type'], title: 'Öğrenme Hedefleri' },
-                            { label: '📑 Akordiyon Özet', type: 'accordion' as LessonStep['type'], title: 'Akordiyon Özet' },
-                            { label: '📄 Metin & Cümleler', type: 'content' as LessonStep['type'], title: 'Metin İçeriği' },
-                            { label: '🎬 Video Slaytı (YouTube)', type: 'video' as LessonStep['type'], title: 'Video Anlatım' },
-                            { label: '🖼️ Görsel / Resim', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
-                            { label: '🌐 Web Simülasyonu (iFrame)', type: 'iframe' as LessonStep['type'], title: 'İnteraktif Simülasyon' },
-                            { label: '💻 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
-                        ].map(opt => (
-                            <DropdownMenuItem 
-                                key={opt.label} 
-                                onClick={() => onAddStep(opt.type!, opt.title!, selectedIndex + 1)}
-                                className="text-xs font-semibold focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                {/* Anlatım & Değerlendirme Ekle Yan Yana Butonları */}
+                <div className="flex items-center gap-1">
+                    {/* 1. Anlatım Ekle Dropdown */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button 
+                                size="sm" 
+                                className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[11px] h-7 px-2 rounded-xl shadow-md shadow-indigo-950/50 cursor-pointer"
                             >
-                                {opt.label}
-                            </DropdownMenuItem>
-                        ))}
-                        <DropdownMenuSeparator className="bg-white/10 my-1" />
-                        <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">Değerlendirme & Etkinlik</DropdownMenuLabel>
-                        {[
-                            { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
-                            { label: '✅/❌ Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
-                            { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
-                            { label: '✏️ Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
-                            { label: '🔗 Kavram Eşleştirme (Boş)', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
-                            { label: '🎴 Bilgi Kartı (Flashcard)', type: 'flashcard' as LessonStep['type'], title: 'Bilgi Kartı' },
-                            { label: '🔤 Kelime Dehası (Anagram)', type: 'anagramGame' as LessonStep['type'], title: 'Kelime Dehası' },
-                            { label: '🔤 Anagram Bilgi Kartı', type: 'anagramFlashcard' as LessonStep['type'], title: 'Anagram Bilgi Kartı' },
-                            { label: '🧩 Karışık Cümle Tamamlama', type: 'sentenceScramble' as LessonStep['type'], title: 'Cümle Sıralama' },
-                        ].map(opt => (
+                                <Plus className="h-3 w-3 mr-0.5" /> Anlatım
+                                <ChevronDown className="h-2.5 w-2.5 ml-0.5 opacity-70" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent 
+                            side="right" 
+                            align="start" 
+                            sideOffset={8}
+                            className="bg-slate-950/95 backdrop-blur-2xl border border-white/15 text-white w-64 max-h-[85vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20"
+                        >
                             <DropdownMenuItem 
-                                key={opt.label} 
-                                onClick={() => onAddStep(opt.type!, opt.title!, selectedIndex + 1)}
-                                className="text-xs font-semibold focus:bg-purple-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                onClick={() => onOpenAi?.(selectedIndex + 1)}
+                                className="text-xs font-black text-yellow-300 focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2 mb-1 bg-indigo-950/50 border border-indigo-500/30"
                             >
-                                {opt.label}
+                                <Sparkles className="w-4 h-4 mr-2 text-yellow-400 animate-pulse" /> ✨ AI ile Slayt Üret...
                             </DropdownMenuItem>
-                        ))}
-                        
-                        {/* ══ VERİ BANKASINDAN İÇERİK SEÇME ══ */}
-                        {onOpenLibrary && (
-                            <>
-                                <DropdownMenuSeparator className="bg-white/10 my-1" />
-                                <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından Aktar</DropdownMenuLabel>
+                            <DropdownMenuSeparator className="bg-white/10 my-1" />
+                            <DropdownMenuLabel className="text-[10px] font-black uppercase text-indigo-400 tracking-wider px-2 py-1">Anlatım Slaytları</DropdownMenuLabel>
+                            {[
+                                { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
+                                { label: '📊 Kategori & Tablo', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
+                                { label: '🪜 Adım Adım Süreç & Yol', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },
+                                { label: '✏️ Defterimize Yazalım', type: 'notebookNote' as LessonStep['type'], title: 'Defterimize Yazalım' },
+                                { label: '💡 Kavram Açıklamaları', type: 'conceptExplanation' as LessonStep['type'], title: 'Kavram Açıklamaları' },
+                                { label: '🔲 4 Boyut Konu Matrisi', type: 'conceptMatrix' as LessonStep['type'], title: '4 Boyutta Konu Analizi' },
+                                { label: '🎯 Öğrenme Hedefleri', type: 'objectiveList' as LessonStep['type'], title: 'Öğrenme Hedefleri' },
+                                { label: '📑 Akordiyon Özet', type: 'accordion' as LessonStep['type'], title: 'Akordiyon Özet' },
+                                { label: '📄 Metin & Cümleler', type: 'content' as LessonStep['type'], title: 'Metin İçeriği' },
+                                { label: '🎬 Video Slaytı (YouTube)', type: 'video' as LessonStep['type'], title: 'Video Anlatım' },
+                                { label: '🖼️ Görsel / Resim', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
+                                { label: '🌐 Web Simülasyonu (iFrame)', type: 'iframe' as LessonStep['type'], title: 'İnteraktif Simülasyon' },
+                                { label: '💻 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
+                            ].map(opt => (
                                 <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['definition'], true, 'matching', selectedIndex + 1)}
-                                    className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    key={opt.label} 
+                                    onClick={() => onAddStep(opt.type!, opt.title!, selectedIndex + 1)}
+                                    className="text-xs font-semibold focus:bg-indigo-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                 >
-                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme
+                                    {opt.label}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['concept'], true, 'anagramFlashcard', selectedIndex + 1)}
-                                    className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
-                                >
-                                    <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> 🔤 Veri Bankasından Anagram Kartları (Dokun & Çevir)
-                                </DropdownMenuItem>
-                                <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['concept'], true, 'anagramGame', selectedIndex + 1)}
-                                    className="text-xs font-semibold text-purple-300 focus:bg-purple-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
-                                >
-                                    <Gamepad2 className="w-3.5 h-3.5 mr-2 text-purple-400" /> 🎮 Veri Bankasından Kelime Dehası (Oyun)
-                                </DropdownMenuItem>
-                                <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['definition'], true, 'flashcard', selectedIndex + 1)}
-                                    className="text-xs font-semibold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
-                                >
-                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
-                                </DropdownMenuItem>
-                                <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['concept'], true, 'conceptExplanation', selectedIndex + 1)}
-                                    className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
-                                >
-                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
-                                </DropdownMenuItem>
-                                <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['sentence'], true, 'sentenceScramble', selectedIndex + 1)}
-                                    className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
-                                >
-                                    <Shuffle className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Cümle Sıralama
-                                </DropdownMenuItem>
-                                <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['images'], true, 'visual', selectedIndex + 1)}
-                                    className="text-xs font-semibold text-teal-300 focus:bg-teal-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
-                                >
-                                    <ImageIcon className="w-3.5 h-3.5 mr-2 text-teal-400" /> Arşivden Görsel Ekle...
-                                </DropdownMenuItem>
-                                <DropdownMenuItem 
-                                    onClick={() => onOpenLibrary(['questions'], true, 'questions', selectedIndex + 1)}
-                                    className="text-xs font-semibold text-indigo-300 focus:bg-indigo-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
-                                >
-                                    <BookOpen className="w-3.5 h-3.5 mr-2 text-indigo-400" /> Soru Bankasından Soru Seç...
-                                </DropdownMenuItem>
-                            </>
-                        )}
+                            ))}
+                            {onOpenLibrary && (
+                                <>
+                                    <DropdownMenuSeparator className="bg-white/10 my-1" />
+                                    <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından</DropdownMenuLabel>
+                                    <DropdownMenuItem 
+                                        onClick={() => onOpenLibrary(['concept'], true, 'conceptExplanation', selectedIndex + 1)}
+                                        className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    >
+                                        <BookOpen className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Kavram Kartları
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem 
+                                        onClick={() => onOpenLibrary(['definition'], true, 'flashcard', selectedIndex + 1)}
+                                        className="text-xs font-semibold text-emerald-300 focus:bg-emerald-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    >
+                                        <BookOpen className="w-3.5 h-3.5 mr-2 text-emerald-400" /> Veri Bankasından Bilgi Kartları
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem 
+                                        onClick={() => onOpenLibrary(['images'], true, 'visual', selectedIndex + 1)}
+                                        className="text-xs font-semibold text-teal-300 focus:bg-teal-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    >
+                                        <ImageIcon className="w-3.5 h-3.5 mr-2 text-teal-400" /> Arşivden Görsel Ekle...
+                                    </DropdownMenuItem>
+                                </>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
 
-                        <DropdownMenuSeparator className="bg-white/10 my-1" />
-                        <DropdownMenuItem 
-                            onClick={() => onOpenGameSelector?.(selectedIndex + 1)}
-                            className="text-xs font-bold text-orange-300 focus:bg-orange-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2"
+                    {/* 2. Değerlendirme & Soru Ekle Dropdown */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button 
+                                size="sm" 
+                                className="bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] h-7 px-2 rounded-xl shadow-md shadow-purple-950/50 cursor-pointer"
+                            >
+                                <Plus className="h-3 w-3 mr-0.5" /> Değerlendirme
+                                <ChevronDown className="h-2.5 w-2.5 ml-0.5 opacity-70" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent 
+                            side="right" 
+                            align="start" 
+                            sideOffset={8}
+                            className="bg-slate-950/95 backdrop-blur-2xl border border-white/15 text-white w-64 max-h-[85vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20"
                         >
-                            <Gamepad2 className="w-4 h-4 mr-2 text-orange-400" /> 🎮 Oyun Ekle...
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                            <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">Soru & Değerlendirme</DropdownMenuLabel>
+                            {[
+                                { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
+                                { label: '✅/❌ Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
+                                { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
+                                { label: '✏️ Boşluk Doldurma', type: 'fitb' as LessonStep['type'], title: 'Boşluk Doldurma' },
+                                { label: '🔗 Kavram Eşleştirme', type: 'matching' as LessonStep['type'], title: 'Kavram Eşleştirme' },
+                                { label: '🎴 Bilgi Kartı (Flashcard)', type: 'flashcard' as LessonStep['type'], title: 'Bilgi Kartı' },
+                                { label: '🔤 Anagram Kartları (Dokun & Çevir)', type: 'anagramFlashcard' as LessonStep['type'], title: 'Anagram Bilgi Kartı' },
+                                { label: '🎮 Kelime Dehası (Anagram Oyunu)', type: 'anagramGame' as LessonStep['type'], title: 'Kelime Dehası' },
+                                { label: '🧩 Karışık Cümle Tamamlama', type: 'sentenceScramble' as LessonStep['type'], title: 'Cümle Sıralama' },
+                            ].map(opt => (
+                                <DropdownMenuItem 
+                                    key={opt.label} 
+                                    onClick={() => onAddStep(opt.type!, opt.title!, selectedIndex + 1)}
+                                    className="text-xs font-semibold focus:bg-purple-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                >
+                                    {opt.label}
+                                </DropdownMenuItem>
+                            ))}
+                            {onOpenLibrary && (
+                                <>
+                                    <DropdownMenuSeparator className="bg-white/10 my-1" />
+                                    <DropdownMenuLabel className="text-[10px] font-black uppercase text-amber-400 tracking-wider px-2 py-1">📚 Veri Bankasından</DropdownMenuLabel>
+                                    <DropdownMenuItem 
+                                        onClick={() => onOpenLibrary(['definition'], true, 'matching', selectedIndex + 1)}
+                                        className="text-xs font-bold text-amber-300 focus:bg-amber-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    >
+                                        <BookOpen className="w-3.5 h-3.5 mr-2 text-amber-400" /> Veri Bankasından Tanım Eşleştirme
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem 
+                                        onClick={() => onOpenLibrary(['concept'], true, 'anagramFlashcard', selectedIndex + 1)}
+                                        className="text-xs font-bold text-fuchsia-300 focus:bg-fuchsia-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    >
+                                        <Puzzle className="w-3.5 h-3.5 mr-2 text-fuchsia-400" /> 🔤 Veri Bankasından Anagram Kartları
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem 
+                                        onClick={() => onOpenLibrary(['concept'], true, 'anagramGame', selectedIndex + 1)}
+                                        className="text-xs font-semibold text-purple-300 focus:bg-purple-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    >
+                                        <Gamepad2 className="w-3.5 h-3.5 mr-2 text-purple-400" /> 🎮 Veri Bankasından Kelime Dehası
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem 
+                                        onClick={() => onOpenLibrary(['sentence'], true, 'sentenceScramble', selectedIndex + 1)}
+                                        className="text-xs font-semibold text-cyan-300 focus:bg-cyan-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    >
+                                        <Shuffle className="w-3.5 h-3.5 mr-2 text-cyan-400" /> Veri Bankasından Cümle Sıralama
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem 
+                                        onClick={() => onOpenLibrary(['questions'], true, 'questions', selectedIndex + 1)}
+                                        className="text-xs font-semibold text-indigo-300 focus:bg-indigo-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    >
+                                        <BookOpen className="w-3.5 h-3.5 mr-2 text-indigo-400" /> Soru Bankasından Soru Seç...
+                                    </DropdownMenuItem>
+                                </>
+                            )}
+                            {onOpenGameSelector && (
+                                <>
+                                    <DropdownMenuSeparator className="bg-white/10 my-1" />
+                                    <DropdownMenuItem 
+                                        onClick={() => onOpenGameSelector?.(selectedIndex + 1)}
+                                        className="text-xs font-bold text-orange-300 focus:bg-orange-600 focus:text-white rounded-lg cursor-pointer px-2.5 py-2"
+                                    >
+                                        <Gamepad2 className="w-4 h-4 mr-2 text-orange-400" /> 🎮 İnteraktif Oyun Ekle...
+                                    </DropdownMenuItem>
+                                </>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
 
             {/* Slayt Listesi */}
