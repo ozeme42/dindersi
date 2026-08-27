@@ -818,9 +818,58 @@ export function TopicEditor({
         });
     };
 
+    const handleImportSavedTopicNotes = async () => {
+        let notesList: string[] = [];
+
+        if (courseId && unitId && topicId) {
+            try {
+                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+                const topicSnap = await getDoc(topicRef);
+                if (topicSnap.exists()) {
+                    const tData = topicSnap.data() as Topic;
+                    if (tData.writingContent?.notes && tData.writingContent.notes.length > 0) {
+                        notesList = tData.writingContent.notes;
+                    }
+                }
+            } catch (e) {
+                console.error("Notlar çekilirken hata:", e);
+            }
+        }
+
+        if (notesList.length === 0) {
+            toast({
+                title: "Kayıtlı Not Bulunamadı",
+                description: "Bu konu için henüz 'Yazılacaklar / Defter Notu' üretilmemiş veya kaydedilmemiş. Yapay Zekâ ile üretebilirsiniz.",
+                variant: "destructive"
+            });
+            return;
+        }
+
+        const newStep: NotebookNoteStep = {
+            type: 'notebookNote',
+            title: '✏️ Defterimize Yazalım',
+            noteTitle: `${title ? title + ' - ' : ''}Önemli Ders Notları`,
+            notes: notesList,
+            suggestedMinutes: Math.min(10, Math.max(3, Math.ceil(notesList.length * 0.8))),
+            isPublished: true
+        };
+
+        const stepWithId: DraggableLessonStep = {
+            ...newStep,
+            id: `step-${Date.now()}-${Math.random()}`
+        };
+
+        setSteps(prev => [...prev, stepWithId]);
+        toast({
+            title: "Defter Notları Eklendi",
+            description: `Konunun kayıtlı ${notesList.length} adet defter notu birebir sunuma aktarıldı.`
+        });
+    };
+
     const anlatimStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
         { label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion', defaultTitle: 'Derse Başlarken: Bir Düşünelim!' },
-        { label: '✏️ Defterimize Yazalım (Özet Not)', type: 'notebookNote', defaultTitle: 'Defterimize Yazalım' },
+        { label: '✏️ Defterimize Yazalım (Yeni Not)', type: 'notebookNote', defaultTitle: 'Defterimize Yazalım' },
+        { label: '📋 Veri Bankası: Kayıtlı Defter Notları (Yazılacaklar)', action: handleImportSavedTopicNotes },
         { label: '🪜 Adım Adım Yol Haritası & Süreç', type: 'processFlow', defaultTitle: 'Adım Adım Yol Haritası & Süreç' },
         { label: '🔲 4 Boyutta Konu Matrisi', type: 'conceptMatrix', defaultTitle: '4 Boyutta Konu Analizi' },
         { label: 'Metin İçeriği', type: 'content', defaultTitle: 'Metin İçeriği' },
