@@ -1004,7 +1004,7 @@ export function TopicEditor({
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 pb-24">
-            <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+            <div className="w-full px-3 sm:px-4 lg:px-6 space-y-4">
                 
                 {/* ══ STÜDYO ÜST ARAÇ ÇUBUĞU ══ */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/80 backdrop-blur-xl border border-white/10 p-4 sm:p-5 rounded-3xl shadow-2xl sticky top-4 z-40">
@@ -1455,31 +1455,32 @@ function TopicEditorWrapper() {
                     setTimeout(() => setIsAIOpen(true), 10);
                 }}
             >
-                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-3xl">
-                    <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="html-content" className="border-b-0">
-                            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/5 transition-colors">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                                        <FileText className="h-5 w-5" />
-                                    </div>
-                                    <div className="flex flex-col items-start text-left">
-                                        <span className="text-base font-black text-white">İnteraktif HTML İçeriği</span>
-                                        <span className="text-xs text-slate-400 font-normal">Bu konunun detay sayfasında gösterilecek tam sayfa HTML içeriği.</span>
-                                    </div>
+                {/* İnteraktif HTML İçeriği — Kompakt */}
+                <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="html-content" className="border border-white/8 rounded-xl bg-slate-900/40 overflow-hidden">
+                        <AccordionTrigger className="px-4 py-2.5 hover:no-underline hover:bg-white/5 transition-colors">
+                            <div className="flex items-center gap-2">
+                                <div className="p-1 rounded-lg bg-rose-500/20 text-rose-400">
+                                    <FileText className="h-3.5 w-3.5" />
                                 </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="px-6 pb-6 pt-2 bg-slate-950/40">
-                                <Textarea
-                                    value={htmlContent || ''}
-                                    onChange={(e) => setHtmlContent(e.target.value)}
-                                    placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
-                                    className="min-h-[260px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500 rounded-2xl leading-relaxed"
-                                />
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </Card>
+                                <span className="text-xs font-bold text-slate-300">İnteraktif HTML İçeriği</span>
+                                {htmlContent && (
+                                    <span className="text-[10px] text-rose-300 bg-rose-950/60 border border-rose-500/30 px-2 py-0.5 rounded-full ml-1">
+                                        {htmlContent.length} karakter
+                                    </span>
+                                )}
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-3 pb-3 pt-1 bg-slate-950/40">
+                            <Textarea
+                                value={htmlContent || ''}
+                                onChange={(e) => setHtmlContent(e.target.value)}
+                                placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
+                                className="min-h-[120px] max-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500 rounded-xl leading-relaxed"
+                            />
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </TopicEditor>
 
             {isAIOpen && (
