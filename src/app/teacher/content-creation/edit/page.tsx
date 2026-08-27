@@ -39,6 +39,7 @@ import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-genera
 import { SlideFilmstrip } from '@/components/studio/slide-filmstrip';
 import { SlideCanvas } from '@/components/studio/slide-canvas';
 import { SlideInspector } from '@/components/studio/slide-inspector';
+import { ResizableStudioLayout } from '@/components/studio/resizable-studio-layout';
 import { cn, cleanForAnagram } from "@/lib/utils";
 import { Badge } from '@/components/ui/badge';
 import { LayoutGrid, Monitor, ListFilter } from 'lucide-react';
@@ -1146,11 +1147,14 @@ export function TopicEditor({
 
                 {children}
 
-                {/* ══ 1. STÜDYO MODU (PowerPoint / Canva Tarzı 3 Panelli Workspace) ══ */}
+                {/* ══ 1. STÜDYO MODU (PowerPoint / Canva Tarzı Boyutlandırılabilir & Gizlenebilir 3 Panelli Workspace) ══ */}
                 {viewMode === 'studio' ? (
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-[calc(100vh-130px)] min-h-[640px]">
-                        {/* SOL: Slayt Şeridi (Filmstrip) - 3 Sütun */}
-                        <div className="lg:col-span-3 h-full overflow-hidden">
+                    <ResizableStudioLayout
+                        defaultLeftWidth={280}
+                        defaultRightWidth={380}
+                        leftTitle="Slaytlar"
+                        rightTitle="Düzenleyici"
+                        leftPanel={
                             <SlideFilmstrip
                                 steps={steps}
                                 selectedIndex={selectedStepIndex}
@@ -1170,10 +1174,8 @@ export function TopicEditor({
                                 }}
                                 onOpenRegisteredAssets={() => setTimeout(() => setIsRegisteredAssetsOpen(true), 10)}
                             />
-                        </div>
-
-                        {/* ORTA: Canlı Slayt Sahnesi / Canvas - 5 Sütun */}
-                        <div className="lg:col-span-5 h-full overflow-hidden">
+                        }
+                        centerPanel={
                             <SlideCanvas
                                 steps={steps}
                                 selectedIndex={selectedStepIndex}
@@ -1184,10 +1186,8 @@ export function TopicEditor({
                                 onOpenFullscreenPreview={() => setIsPreviewOpen(true)}
                                 onOpenAi={() => onOpenAi?.(selectedStepIndex)}
                             />
-                        </div>
-
-                        {/* SAĞ: Anlık Slayt Düzenleyici & AI Inspector - 4 Sütun */}
-                        <div className="lg:col-span-4 h-full overflow-hidden">
+                        }
+                        rightPanel={
                             <SlideInspector
                                 step={steps[selectedStepIndex] || null}
                                 onUpdateStep={(updatedStep) => {
@@ -1206,8 +1206,8 @@ export function TopicEditor({
                                 unitId={context?.unitId}
                                 topicId={context?.topicId}
                             />
-                        </div>
-                    </div>
+                        }
+                    />
                 ) : (
                     /* ══ 2. LİSTE MODU (Klasik Kart Görünümü) ══ */
                     <div className="flex gap-5 items-start">
