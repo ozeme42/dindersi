@@ -1,11 +1,12 @@
 
 'use server';
+
 /**
- * @fileOverview AI-assisted activity data generation tool.
+ * @fileOverview AI-assisted activity data generation tool with fallback runner and active model resolution.
  */
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
-import { googleAI } from '@genkit-ai/googleai';
+import { z } from 'zod';
+import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
+import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 
 const AiActivityDataInputSchema = z.object({
   topicTitle: z.string().describe('The title of the topic to generate data for.'),
@@ -13,100 +14,92 @@ const AiActivityDataInputSchema = z.object({
   generateConcepts: z.boolean().describe('Generate a list of key concepts?'),
   generateDefinitions: z.boolean().describe('Generate concept-definition pairs?'),
   generateSentences: z.boolean().describe('Generate summary sentences?'),
+  apiKey: z.string().optional(),
+  modelName: z.string().optional(),
 });
 export type AiActivityDataInput = z.infer<typeof AiActivityDataInputSchema>;
 
-const AiActivityDataOutputSchema = z.object({
-  concepts: z.array(z.string()).optional().describe('A list of key concepts related to the topic.'),
-  conceptDefinitions: z.array(z.object({concept: z.string(), definition: z.string()})).optional().describe('A list of concept and definition pairs.'),
-  summarySentences: z.array(z.string()).optional().describe('A list of sentences that summarize the topic.'),
-});
-export type AiActivityDataOutput = z.infer<typeof AiActivityDataOutputSchema>;
+export type AiActivityDataOutput = {
+  concepts?: string[];
+  conceptDefinitions?: { concept: string; definition: string }[];
+  summarySentences?: string[];
+};
 
 export async function generateActivityData(input: AiActivityDataInput): Promise<AiActivityDataOutput> {
-  return generateActivityDataFlow(input);
+  const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
+    apiKey: input.apiKey,
+    modelName: input.modelName,
+  });
+
+  if (!activeKey) {
+    throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı kaydedin.');
+  }
+
+  const instructions: string[] = [];
+
+  if (input.generateConcepts || input.generateDefinitions) {
+    instructions.push(
+      `- **Kavram - Tanım Çiftleri (conceptDefinitions)**: Konuyla ilgili 5-10 adet "Ben Kimim?" tarzı soru/ipucu tanımı ve kavram üret. 'definition' alanında ipucu tanımı, 'concept' alanında ise tek kelimelik veya kısa kavram adı yer almalıdır. Tanım metninde kavramın kendi adı KESİNLİKLE GEÇMEMELİDİR.`
+    );
+  }
+
+  if (input.generateSentences) {
+    instructions.push(
+      `- **Özet Cümleler (summarySentences)**: Konunun en önemli noktalarını özetleyen 5-10 adet cümle üret. ZORUNLU KURAL: Her bir cümle EN FAZLA 6 KELİMEDEN oluşmalıdır. Asla 6 kelimeden uzun cümle üretme.`
+    );
+  }
+
+  const prompt = `Sen Din Kültürü ve Ahlak Bilgisi dersi için etkinlik veri bankası uzmanısın.
+Tüm çıktılar %100 Türkçe olmalıdır.
+
+${input.contextText ? `Kaynak Metin:\n"""\n${input.contextText}\n"""` : `Konu Başlığı: ${input.topicTitle}`}
+
+İstenen İçerikler:
+${instructions.join('\n\n')}
+
+Lütfen SADECE geçerli bir JSON nesnesi döndür:
+{
+  ${(input.generateConcepts || input.generateDefinitions) ? `"conceptDefinitions": [
+    { "concept": "Tevhid", "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzeri olmadığına inanma ilkesi." }
+  ],` : ''}
+  ${input.generateSentences ? `"summarySentences": [
+    "Namaz dinin direğidir.",
+    "İslam barış ve esenlik dinidir."
+  ]` : ''}
 }
-
-const promptTemplate = `You are a helpful assistant for a Turkish teacher.
-Your task is to generate educational materials based on the provided information.
-All content must be in Turkish.
-
-{{#if contextText}}
-Use the following text as the primary source for generation:
-"""
-{{{contextText}}}
-"""
-{{else}}
-Generate content based on the following topic title: {{{topicTitle}}}
-{{/if}}
-
-Based on the provided information, generate the requested items.
-
-{{{instructions}}}
-
-Please provide the output as a single, valid JSON object, containing ONLY the keys for the requested fields.
 `;
 
-const generateActivityDataFlow = ai.defineFlow(
-  {
-    name: 'generateActivityDataFlow',
-    inputSchema: AiActivityDataInputSchema,
-    outputSchema: AiActivityDataOutputSchema,
-  },
-  async (input) => {
-    
-    const instructions: string[] = [];
+  const text = await runGeminiWithFallback({
+    apiKey: activeKey,
+    primaryModel: selectedModel,
+    prompt,
+    generationConfig: {
+      responseMimeType: 'application/json',
+    },
+  });
 
-    // If concepts or definitions (or both) are requested, we will always ask for definitions
-    // and then derive concepts from them to ensure synchronization.
-    if (input.generateConcepts || input.generateDefinitions) {
-      instructions.push(
-        `- **Definitions as Questions**: Generate 5-10 definitions that can be used as 'What am I?' style questions. For each, provide the 'definition' (the clue/question) and the 'concept' (the single-word answer). The definition must not contain the concept word itself. Provide this as a 'conceptDefinitions' array of {concept, definition} objects.`
-      );
-    }
+  try {
+    const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+    const output = JSON.parse(cleaned) as Record<string, any>;
 
-    if (input.generateSentences) {
-      instructions.push(`- **Summary Sentences**: Generate 5-10 sentences that summarize key aspects of the topic (konuyu özetleyen cümleler). It is MANDATORY that each sentence has a maximum of 6 words. Do not generate sentences longer than 6 words.`);
-    }
-
-    const prompt = promptTemplate
-      .replace('{{{topicTitle}}}', input.topicTitle)
-      .replace('{{{contextText}}}', input.contextText || '')
-      .replace('{{{instructions}}}', instructions.join('\n\n'));
-    
-    const {output} = await ai.generate({
-        prompt: prompt,
-        model: googleAI.model('gemini-2.5-flash'),
-        config: {
-            responseModalities: ['TEXT'],
-        },
-        output: {
-            schema: AiActivityDataOutputSchema
-        }
-    });
-
-    if (!output) {
-      return {};
-    }
-
-    // Post-processing to ensure sync
     const finalOutput: AiActivityDataOutput = {};
-    
-    if (output.conceptDefinitions && output.conceptDefinitions.length > 0) {
-      // If user requested definitions, add them.
+
+    if (output.conceptDefinitions && Array.isArray(output.conceptDefinitions) && output.conceptDefinitions.length > 0) {
       if (input.generateDefinitions) {
         finalOutput.conceptDefinitions = output.conceptDefinitions;
       }
-      // If user requested concepts, derive them from the definitions that were just generated.
       if (input.generateConcepts) {
-        finalOutput.concepts = output.conceptDefinitions.map(cd => cd.concept);
+        finalOutput.concepts = output.conceptDefinitions.map((cd: any) => cd.concept);
       }
     }
-    
-    if (output.summarySentences) {
+
+    if (output.summarySentences && Array.isArray(output.summarySentences)) {
       finalOutput.summarySentences = output.summarySentences;
     }
-    
+
     return finalOutput;
+  } catch (err: any) {
+    console.error("JSON parse error in generateActivityData:", text);
+    throw new Error("Yapay zeka yanıtı JSON formatında okunamadı: " + err.message);
   }
-);
+}

@@ -2,16 +2,12 @@
 "use server";
 
 /**
- * @fileOverview AI-assisted question generation flow for educators.
- *
- * - generateQuestions - A function that handles the question generation process.
- * - GenerateQuestionsInput - The input type for the generateQuestions function.
- * - AIGeneratedQuestions - The raw return type from the AI model.
+ * @fileOverview AI-assisted question generation flow with fallback runner and active model resolution.
  */
 
-import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { googleAI } from '@genkit-ai/googleai';
+import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
+import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 
 const DifficultyEnum = z.enum(['Kolay', 'Orta', 'Zor']);
 
@@ -21,6 +17,8 @@ const GenerateQuestionsInputSchema = z.object({
   questionTypes: z.array(z.string()).describe("An array of question type IDs to generate (e.g., 'mcq', 'tf', 'fitb')."),
   difficulty: z.array(DifficultyEnum).describe("An array of difficulty levels to generate."),
   questionCountPerType: z.number().int().min(1).max(50).describe("The number of questions to generate for each selected type."),
+  apiKey: z.string().optional(),
+  modelName: z.string().optional(),
 });
 export type GenerateQuestionsInput = z.infer<typeof GenerateQuestionsInputSchema>;
 
@@ -52,61 +50,72 @@ const AIGeneratedQuestionsSchema = z.object({
 export type AIGeneratedQuestions = z.infer<typeof AIGeneratedQuestionsSchema>;
 
 export async function generateQuestions(input: GenerateQuestionsInput): Promise<AIGeneratedQuestions> {
-  return generateQuestionsFlow(input);
-}
+  const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
+    apiKey: input.apiKey,
+    modelName: input.modelName,
+  });
 
-const generateQuestionsFlow = ai.defineFlow(
-  {
-    name: 'generateQuestionsFlow',
-    inputSchema: GenerateQuestionsInputSchema,
-    outputSchema: AIGeneratedQuestionsSchema,
-  },
-  async (input) => {
-    const typeMap: { [key: string]: string } = {
-        'mcq': 'Çoktan Seçmeli (Multiple Choice)',
-        'tf': 'Doğru/Yanlış (True/False)',
-        'fitb': 'Boşluk Doldurma (Fill in the Blank)',
-    };
-    
-    const questionTypesFormatted = input.questionTypes.map(typeId => `- ${typeMap[typeId] || typeId}`).join('\n');
-    const difficultiesFormatted = input.difficulty.join(', ');
+  if (!activeKey) {
+    throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı kaydedin.');
+  }
 
-    const prompt = `You are an expert Turkish educator creating a quiz.
-Your task is to generate a set of high-quality questions about the given topic.
-First, fully understand the provided topic summary. If the summary is brief, use your expert knowledge to expand on it.
-Then, based on this comprehensive understanding, create questions in the requested formats. The generated questions must be independent and should not refer to the provided context text with phrases like "Metne göre" or "Yukarıdaki metne göre". They should stand alone as general knowledge questions about the topic.
+  const typeMap: { [key: string]: string } = {
+      'mcq': 'Çoktan Seçmeli (multipleChoiceQuestions)',
+      'tf': 'Doğru/Yanlış (trueFalseQuestions)',
+      'fitb': 'Boşluk Doldurma (fillInTheBlankQuestions)',
+  };
+  
+  const questionTypesFormatted = input.questionTypes.map(typeId => `- ${typeMap[typeId] || typeId}`).join('\n');
+  const difficultiesFormatted = input.difficulty.join(', ');
 
-All generated content MUST be in Turkish.
+  const prompt = `Sen uzman bir Din Kültürü ve Ahlak Bilgisi öğretmenisin. Ortaokul düzeyinde kaliteli sınav ve test soruları üreteceksin.
+Tüm içerikler %100 Türkçe olmalıdır.
 
-Topic: ${input.topicName}
-Topic Summary / Key Information: ${input.contextText}
+Konu: ${input.topicName}
+Kaynak Metin / Bilgi: ${input.contextText}
 
-Please generate exactly ${input.questionCountPerType} questions for each of the following types:
+İstenen Soru Tipleri:
 ${questionTypesFormatted}
 
-It is CRITICAL that you create a balanced mix of difficulties for the generated questions. Distribute them evenly among the FOLLOWING requested difficulty levels:
-${difficultiesFormatted}
-Each generated question MUST have a 'difficulty' field set to one of the requested values.
+Her tip için üretilecek soru sayısı: ${input.questionCountPerType} adet
+Zorluk seviyeleri dağılımı: ${difficultiesFormatted}
 
-For fill-in-the-blank questions, you MUST provide 4 options, one of which is the correct answer.
+KRİTİK KURALLAR:
+1. Sorular bağımsız olmalı, "Metne göre" veya "Yukarıdaki metne göre" gibi kalıplar içermemelidir.
+2. Çoktan seçmeli sorular için 4 seçenek (options) ve seçeneklerden biriyle birebir aynı olan correctAnswer olmalıdır.
+3. Doğru/yanlış sorularında statement ve isTrue (boolean) olmalıdır.
+4. Boşluk doldurma sorularında sentenceWithBlank (cümledeki boşluk ___ ile gösterilmeli), 4 adet options ve correctAnswer olmalıdır.
+5. Her soruda difficulty alanı 'Kolay', 'Orta' veya 'Zor' olmalıdır.
+6. SADECE geçerli bir JSON nesnesi döndür:
 
-Return all generated questions in a single, valid JSON object that adheres to the output schema. The questions should be clear, accurate, and relevant.
+{
+  "multipleChoiceQuestions": [
+    { "question": "...", "options": ["...", "...", "...", "..."], "correctAnswer": "...", "difficulty": "Kolay" }
+  ],
+  "trueFalseQuestions": [
+    { "statement": "...", "isTrue": true, "difficulty": "Orta" }
+  ],
+  "fillInTheBlankQuestions": [
+    { "sentenceWithBlank": "... ___ ...", "options": ["...", "...", "...", "..."], "correctAnswer": "...", "difficulty": "Zor" }
+  ]
+}
 `;
 
-    const { output } = await ai.generate({
-        model: googleAI.model('gemini-2.5-flash'),
-        prompt: prompt,
-        config: {
-            responseModalities: ['TEXT'],
-        },
-        output: {
-            schema: AIGeneratedQuestionsSchema,
-        },
-    });
+  const text = await runGeminiWithFallback({
+    apiKey: activeKey,
+    primaryModel: selectedModel,
+    prompt,
+    generationConfig: {
+      responseMimeType: 'application/json',
+    },
+  });
 
-    if (!output) {
-        throw new Error("AI model failed to generate questions. The output was empty.");
-    }
-    return output;
+  try {
+    const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+    const parsed = JSON.parse(cleaned);
+    return parsed as AIGeneratedQuestions;
+  } catch (err: any) {
+    console.error("JSON parsing error in generateQuestions:", text);
+    throw new Error("Yapay zeka soru yanıtı JSON formatında okunamadı: " + err.message);
   }
-);
+}
