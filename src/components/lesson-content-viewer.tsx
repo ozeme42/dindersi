@@ -2227,16 +2227,42 @@ export function NotebookNotePlayer({
     fontSizeScale?: string;
 }) {
     const isTeacher = useTeacherMode();
-    const hasConcepts = (step.conceptDefinitions && step.conceptDefinitions.length > 0);
-    const hasNotes = (step.notes && step.notes.length > 0);
+    const conceptDefs = step.conceptDefinitions || [];
+    const noteItems = step.notes || [];
+    const hasConcepts = conceptDefs.length > 0;
+    const hasNotes = noteItems.length > 0;
 
     const [activeTab, setActiveTab] = useState<'concepts' | 'notes'>(hasConcepts ? 'concepts' : 'notes');
+
+    // Step değiştiğinde aktif sekmeyi dinamik güncelle
+    useEffect(() => {
+        const cExist = (step.conceptDefinitions && step.conceptDefinitions.length > 0);
+        const nExist = (step.notes && step.notes.length > 0);
+        if (cExist && !nExist) {
+            setActiveTab('concepts');
+        } else if (nExist && !cExist) {
+            setActiveTab('notes');
+        } else if (cExist) {
+            setActiveTab('concepts');
+        } else {
+            setActiveTab('notes');
+        }
+    }, [step]);
 
     const initialSeconds = (step.suggestedMinutes || 3) * 60;
     const [timeLeft, setTimeLeft] = useState(initialSeconds);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     const [timerDone, setTimerDone] = useState(false);
     const [checkedItems, setCheckedItems] = useState<{ [index: number]: boolean }>({});
+
+    // Step değiştiğinde süreyi resetle
+    useEffect(() => {
+        const s = (step.suggestedMinutes || 3) * 60;
+        setTimeLeft(s);
+        setIsTimerRunning(false);
+        setTimerDone(false);
+        setCheckedItems({});
+    }, [step]);
 
     useEffect(() => {
         let interval: any = null;
@@ -2334,6 +2360,19 @@ export function NotebookNotePlayer({
         'bg-fuchsia-900/40 border-fuchsia-500/50 text-fuchsia-100'
     ];
 
+    // Hem kavram hem not boşsa boş ekran olmasını önle
+    if (!hasConcepts && !hasNotes) {
+        return (
+            <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
+                <div className="p-8 rounded-3xl bg-slate-900/80 border border-white/10 text-slate-300 max-w-lg shadow-2xl">
+                    <Pencil className="w-12 h-12 text-emerald-400 mx-auto mb-4 animate-bounce" />
+                    <h3 className="text-xl font-black text-white mb-2">{step.title || 'Defterimize Yazalım'}</h3>
+                    <p className="text-sm text-slate-400">Bu adım için henüz kayıtlı kavram veya defter notu bulunmuyor. Stüdyo ekranından düzenleyebilirsiniz.</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className={cn(
             "w-full h-full flex flex-col items-center justify-start p-3 md:p-6 select-none max-w-6xl mx-auto overflow-y-auto",
@@ -2359,7 +2398,7 @@ export function NotebookNotePlayer({
                                         : "text-slate-400 hover:text-white"
                                 )}
                             >
-                                📖 Kavramlar ({step.conceptDefinitions?.length})
+                                📖 Kavramlar ({conceptDefs.length})
                             </button>
                             <button
                                 onClick={() => { playSound('pop'); setActiveTab('notes'); }}
@@ -2370,7 +2409,7 @@ export function NotebookNotePlayer({
                                         : "text-slate-400 hover:text-white"
                                 )}
                             >
-                                ✏️ Defter Notları ({step.notes?.length})
+                                ✏️ Defter Notları ({noteItems.length})
                             </button>
                         </div>
                     )}
@@ -2414,7 +2453,7 @@ export function NotebookNotePlayer({
             {activeTab === 'concepts' && hasConcepts && (
                 <div className="w-full flex flex-col">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 w-full">
-                        {step.conceptDefinitions!.map((item, index) => (
+                        {conceptDefs.map((item, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: 15 }}
@@ -2474,7 +2513,7 @@ export function NotebookNotePlayer({
 
                     {/* Maddeler */}
                     <div className="space-y-4 md:space-y-5">
-                        {(step.notes || []).map((note, idx) => {
+                        {noteItems.map((note, idx) => {
                             const isChecked = checkedItems[idx] || false;
                             return (
                                 <motion.div
@@ -3295,24 +3334,6 @@ export function StepContent({
                 </div>
             );
         }
-        
-        // SADECE Anahtar Kavramlar / Kavram adımları (Eşleştirme adımları hariç tutulur)
-        const isConceptStep = (step.type === 'conceptExplanation' || 
-                              (typeof step.title === 'string' && /kavram|anahtar/i.test(step.title) && step.type !== 'anagramFlashcard' && step.type !== 'conceptMap' && !/hedef|kazan/i.test(step.title) && step.type !== 'objectiveList')) && step.type !== 'matching' && step.type !== 'conceptMatching';
-
-        if (isConceptStep) {
-            return (
-                <ConceptExplanationPlayer 
-                    items={step.items || step.cards} 
-                    step={step} 
-                    revealedSentencesCount={revealedSentencesCount}
-                    isFullscreen={isFullscreen} 
-                    title={step.title} 
-                    isSingleCardMode={isSingleCardMode} 
-                    fontSizeScale={fontSizeScale} 
-                />
-            );
-        }
 
         switch (step.type) {
             case 'hookQuestion':
@@ -3323,10 +3344,36 @@ export function StepContent({
                 return <ProcessFlowPlayer step={step as ProcessFlowStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
             case 'conceptMatrix':
                 return <ConceptMatrixPlayer step={step as ConceptMatrixStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+            case 'conceptExplanation':
+                return (
+                    <ConceptExplanationPlayer 
+                        items={step.items || step.cards} 
+                        step={step} 
+                        revealedSentencesCount={revealedSentencesCount}
+                        isFullscreen={isFullscreen} 
+                        title={step.title} 
+                        isSingleCardMode={isSingleCardMode} 
+                        fontSizeScale={fontSizeScale} 
+                    />
+                );
             case 'content':
             case 'objectiveList':
             case 'accordion':
-                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} />
+                // Legacy: Sadece eski içeriklerde başlıkta kavram varsa ve items listesi doluysa ConceptExplanationPlayer
+                if (((step.items && step.items.length > 0) || (step.cards && step.cards.length > 0)) && typeof step.title === 'string' && /kavram|anahtar/i.test(step.title)) {
+                    return (
+                        <ConceptExplanationPlayer 
+                            items={step.items || step.cards} 
+                            step={step} 
+                            revealedSentencesCount={revealedSentencesCount}
+                            isFullscreen={isFullscreen} 
+                            title={step.title} 
+                            isSingleCardMode={isSingleCardMode} 
+                            fontSizeScale={fontSizeScale} 
+                        />
+                    );
+                }
+                return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} />;
             case 'visual':
                 return (
                       <div className="w-full h-full p-0 md:p-2">
