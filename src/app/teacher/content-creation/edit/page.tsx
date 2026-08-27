@@ -1098,124 +1098,27 @@ export function TopicEditor({
                     </div>
                 </div>
 
-                {/* ══ KAYNAK METİN AKORDİYONU ══ */}
-                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-3xl">
-                    <Accordion type="single" collapsible defaultValue="source-text" className="w-full">
-                        <AccordionItem value="source-text" className="border-b-0">
-                            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/5 transition-colors">
-                                <div className="flex items-center justify-between w-full pr-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                                            <FileText className="h-5 w-5" />
-                                        </div>
-                                        <div className="flex flex-col items-start text-left">
-                                            <span className="text-base font-black text-white">Kaynak Metin (Yapay Zeka & Özet Temeli)</span>
-                                            <span className="text-xs text-slate-400 font-normal">Bu metin, yapay zekanın konuya özel içerik üretmesi için temel alınır.</span>
-                                        </div>
-                                    </div>
-                                    {sourceText && (
-                                        <div className="text-[11px] font-bold text-indigo-300 bg-indigo-950/60 border border-indigo-500/30 px-3 py-1 rounded-full">
-                                            {sourceText.length.toLocaleString('tr-TR')} karakter • {sourceText.trim().split(/\s+/).filter(Boolean).length} kelime
-                                        </div>
-                                    )}
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="px-6 pb-6 pt-2 bg-slate-950/40">
-                                <Textarea 
-                                    value={sourceText} 
-                                    onChange={(e) => setSourceText(e.target.value)}
-                                    placeholder="Ders kitabı metnini, kazanım açıklamalarını veya konu özetini buraya yapıştırın (Herhangi bir uzunluk sınırı yoktur)..."
-                                    className="min-h-[220px] max-h-[500px] text-sm bg-slate-950 border-white/10 text-white focus:border-indigo-500 rounded-2xl leading-relaxed font-sans"
-                                />
-                                <div className="flex justify-between items-center mt-2 px-1 text-[11px] text-slate-400">
-                                    <span>💡 Metniniz tam olarak kaydedilir. Yapay zeka bu metnin tamamını analiz ederek soru ve slayt üretir.</span>
-                                    <span className="font-mono text-indigo-400">
-                                        {sourceText ? `${sourceText.length} karakter` : 'Metin boş'}
-                                    </span>
-                                </div>
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </Card>
+                {/* ══ İKİ SÜTUNLU ANA LAYOUT ══ */}
+                <div className="flex gap-5 items-start">
 
-                {children}
-                
-                {/* ══ HIZLI YAPAY ZEKA PROMPT İLE SLAYT EKLEME ÇUBUĞU ══ */}
-                <Card className="p-3 sm:p-4 rounded-3xl bg-gradient-to-r from-indigo-950/80 via-slate-900/90 to-purple-950/80 border-2 border-indigo-500/30 shadow-xl space-y-2.5">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                            <div className="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 flex items-center justify-center">
-                                <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
+                    {/* ══ SOL: ADIM LİSTESİ (Geniş) ══ */}
+                    <div className="flex-1 min-w-0 space-y-4">
+
+                        {children}
+
+                        {/* Adım Listesi Başlığı */}
+                        <div className="flex items-center gap-3 px-1">
+                            <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30 text-purple-400">
+                                <Layers className="h-4 w-4" />
                             </div>
-                            <span className="text-xs font-black text-white whitespace-nowrap">
-                                AI Asistanı:
-                            </span>
+                            <div>
+                                <h2 className="text-base font-black text-white">Ders Akışı Adımları</h2>
+                                <p className="text-[11px] text-slate-500">Sürükle-bırak ile sırala • Aralarına tıklayarak yeni adım ekle</p>
+                            </div>
+                            <Badge variant="outline" className="ml-auto text-[9px] bg-slate-950 border-purple-500/20 text-purple-300">
+                                {steps.length} adım
+                            </Badge>
                         </div>
-
-                        <div className="flex-1 relative">
-                            <Input
-                                value={quickPromptText}
-                                onChange={(e) => setQuickPromptText(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' && !e.shiftKey) {
-                                        e.preventDefault();
-                                        handleQuickPromptGenerate();
-                                    }
-                                }}
-                                placeholder="Yapay zekâya söyleyin, slaytı anında üretsin (Örn: Haccın yapılışını adım adım gösteren infografik ve süreç akışı ekle)..."
-                                className="bg-slate-950/90 border-white/15 text-xs sm:text-sm text-white placeholder:text-slate-500 h-10 rounded-xl pr-3"
-                            />
-                        </div>
-
-                        <Button
-                            type="button"
-                            onClick={handleQuickPromptGenerate}
-                            disabled={isQuickPromptGenerating || !quickPromptText.trim()}
-                            className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs h-10 px-5 rounded-xl shadow-lg shadow-emerald-950/50 flex-shrink-0 cursor-pointer disabled:opacity-40"
-                        >
-                            {isQuickPromptGenerating ? (
-                                <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Hazırlanıyor...</>
-                            ) : (
-                                <><Send className="w-3.5 h-3.5 mr-1.5" /> 🚀 Üret & Ekle</>
-                            )}
-                        </Button>
-                    </div>
-
-                    {/* Hızlı Örnek İstek Etiketleri */}
-                    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
-                        <span className="text-slate-400 font-bold flex items-center gap-1 flex-shrink-0">
-                            <Lightbulb className="w-3 h-3 text-amber-400" /> Hızlı İstekler:
-                        </span>
-                        {[
-                            "Haccın yapılışını adım adım gösteren süreç akışı ve infografik hazırla",
-                            "Namazın farzları ve vacipleri tablosu yap",
-                            "Ahiret hayatının aşamalarını gösteren yol haritası ekle",
-                            "Konuyla ilgili 4 adet çoktan seçmeli sınav sorusu üret",
-                            "Deftere yazılacak en önemli 3 özet kuralı hazırla",
-                        ].map((sample, idx) => (
-                            <button
-                                key={idx}
-                                type="button"
-                                onClick={() => setQuickPromptText(sample)}
-                                className="px-2.5 py-1 rounded-full bg-slate-950/80 hover:bg-indigo-950 border border-white/10 hover:border-indigo-400 text-slate-300 hover:text-white font-medium whitespace-nowrap transition-colors cursor-pointer flex-shrink-0 text-[10px]"
-                            >
-                                ✨ {sample.slice(0, 32)}...
-                            </button>
-                        ))}
-                    </div>
-                </Card>
-
-                {/* ══ DERS AKIŞI LİSTESİ & ADIM YÖNETİMİ ══ */}
-                <div className="space-y-4">
-                    <div className="flex items-center gap-3 px-2">
-                        <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30 text-purple-400">
-                            <Layers className="h-5 w-5" />
-                        </div>
-                        <div>
-                            <h2 className="text-xl font-black text-white">Sunum & Ders Akışı Adımları</h2>
-                            <p className="text-xs text-slate-400">Sıralamayı sürükleyerek veya oklarla değiştirebilir, adımlar arasına yeni adım ekleyebilirsiniz.</p>
-                        </div>
-                    </div>
 
                     {/* Dnd-Kit Sortable Adım Listesi */}
                     <DndContext
@@ -1292,7 +1195,88 @@ export function TopicEditor({
                             </div>
                         </SortableContext>
                     </DndContext>
-                </div>
+                    </div>{/* /SOL SÜTUN */}
+
+                    {/* ══ SAĞ SIDEBAR (Kompakt, Sticky) ══ */}
+                    <div className="hidden lg:flex flex-col gap-4 w-80 xl:w-96 flex-shrink-0 sticky top-24 self-start">
+
+                        {/* Kaynak Metin — kompakt */}
+                        <Card className="bg-slate-900/70 backdrop-blur-xl border border-white/10 shadow-lg overflow-hidden rounded-2xl">
+                            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/8">
+                                <div className="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                                    <FileText className="h-3.5 w-3.5" />
+                                </div>
+                                <span className="text-xs font-black text-white flex-1">Kaynak Metin</span>
+                                {sourceText && (
+                                    <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/60 border border-indigo-500/30 px-2 py-0.5 rounded-full">
+                                        {sourceText.trim().split(/\s+/).filter(Boolean).length} kelime
+                                    </span>
+                                )}
+                            </div>
+                            <div className="p-3">
+                                <Textarea 
+                                    value={sourceText} 
+                                    onChange={(e) => setSourceText(e.target.value)}
+                                    placeholder="Ders kitabı metnini buraya yapıştırın. Yapay zeka bu metni temel alır..."
+                                    className="min-h-[160px] max-h-[320px] text-xs bg-slate-950 border-white/10 text-white focus:border-indigo-500 rounded-xl leading-relaxed font-sans resize-y"
+                                />
+                                <p className="text-[10px] text-slate-500 mt-2">💡 AI tüm içerikleri bu metinden üretir.</p>
+                            </div>
+                        </Card>
+
+                        {/* AI Hızlı Slayt Çubuğu — kompakt */}
+                        <Card className="bg-gradient-to-b from-indigo-950/70 to-purple-950/50 border border-indigo-500/25 shadow-lg rounded-2xl overflow-hidden">
+                            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/8">
+                                <Sparkles className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
+                                <span className="text-xs font-black text-white">AI Asistanı ile Slayt Üret</span>
+                            </div>
+                            <div className="p-3 space-y-2">
+                                <div className="flex gap-2">
+                                    <Input
+                                        value={quickPromptText}
+                                        onChange={(e) => setQuickPromptText(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                e.preventDefault();
+                                                handleQuickPromptGenerate();
+                                            }
+                                        }}
+                                        placeholder="Slayt isteğinizi yazın..."
+                                        className="bg-slate-950/90 border-white/15 text-[11px] text-white placeholder:text-slate-500 h-9 rounded-xl flex-1"
+                                    />
+                                    <Button
+                                        type="button"
+                                        onClick={handleQuickPromptGenerate}
+                                        disabled={isQuickPromptGenerating || !quickPromptText.trim()}
+                                        className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black text-[10px] h-9 px-3 rounded-xl flex-shrink-0 cursor-pointer disabled:opacity-40"
+                                    >
+                                        {isQuickPromptGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                                    </Button>
+                                </div>
+                                {/* Hızlı öneri etiketleri */}
+                                <div className="flex flex-col gap-1">
+                                    {[
+                                        "Haccın yapılışını adım adım gösteren süreç akışı hazırla",
+                                        "Namazın farzları ve vacipleri tablosu yap",
+                                        "Konuyla ilgili 4 çoktan seçmeli soru üret",
+                                        "Deftere yazılacak 3 özet kural hazırla",
+                                    ].map((sample, idx) => (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            onClick={() => { setQuickPromptText(sample); }}
+                                            className="text-left px-2.5 py-1.5 rounded-lg bg-slate-950/60 hover:bg-indigo-950/60 border border-white/8 hover:border-indigo-400/50 text-slate-400 hover:text-white text-[10px] font-medium transition-colors cursor-pointer"
+                                        >
+                                            ✨ {sample}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </Card>
+
+                    </div>{/* /SAĞ SIDEBAR */}
+
+                </div>{/* /İKİ SÜTUNLU LAYOUT */}
 
                 {/* ══ DİYALOGLAR VE MODALLAR ══ */}
                 <BulkStepImportDialog 
