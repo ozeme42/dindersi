@@ -315,31 +315,31 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
 
                     return (
                         <div key={index} className={cn(
-                            "rounded-2xl border-2 shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
-                            isTeacher ? "p-5 min-h-[12rem]" : "p-4 min-h-[10rem]",
+                            "rounded-2xl border-2 shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
+                            isTeacher ? "p-5 min-h-[12rem]" : "p-3 sm:p-4 min-h-0",
                             isAnswered
                                 ? (isCorrect ? "border-2 border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.25)]" : "border-2 border-rose-500 bg-rose-50 shadow-[0_0_20px_rgba(244,63,94,0.25)]")
                                 : `${theme.card} border`
                         )}>
-                            <div className="flex gap-4 mb-4">
-                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-xl", isAnswered ? (isCorrect ? "text-emerald-700" : "text-rose-700") : theme.number)}>
+                            <div className="flex gap-2.5 sm:gap-4 mb-2.5 sm:mb-4">
+                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-base sm:text-lg", isAnswered ? (isCorrect ? "text-emerald-700" : "text-rose-700") : theme.number)}>
                                     {index + 1}.
                                 </span>
                                 <p className={cn(
-                                    "font-bold text-slate-800 leading-relaxed", 
+                                    "font-bold text-slate-800 leading-snug sm:leading-relaxed", 
                                     getTfFontSize()
                                 )}>
                                     {q.statement}
                                 </p>
                             </div>
 
-                            <div className="flex gap-3 mt-auto">
+                            <div className="flex gap-2 sm:gap-3 mt-auto">
                                 <button
                                     onClick={() => !isAnswered && onAnswer(index, true)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-2",
-                                        isTeacher ? "h-14 text-lg" : "h-11 text-sm",
+                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-1.5",
+                                        isTeacher ? "h-14 text-lg" : "h-9 sm:h-10 text-xs sm:text-sm",
                                         isAnswered && userAnswer.answer === true
                                             ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== true
@@ -347,14 +347,14 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                                 : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/25 border-emerald-400"
                                     )}
                                 >
-                                    <CheckCircle className={cn(isTeacher ? "h-5 w-5" : "h-4 w-4")} /> Doğru
+                                    <CheckCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 sm:h-4 sm:w-4")} /> Doğru
                                 </button>
                                 <button
                                     onClick={() => !isAnswered && onAnswer(index, false)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-2",
-                                        isTeacher ? "h-14 text-lg" : "h-11 text-sm",
+                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-1.5",
+                                        isTeacher ? "h-14 text-lg" : "h-9 sm:h-10 text-xs sm:text-sm",
                                         isAnswered && userAnswer.answer === false
                                             ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== false
@@ -362,7 +362,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                                 : "bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/25 border-rose-400"
                                     )}
                                 >
-                                    <XCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 md:h-4 md:w-4")} /> Yanlış
+                                    <XCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 sm:h-4 sm:w-4")} /> Yanlış
                                 </button>
                             </div>
                         </div>
@@ -890,83 +890,81 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
         const maxWordLen = words.length > 0 ? Math.max(...words.map(w => w.length)) : 0;
         const totalLen = (wordText || '').replace(/\s+/g, '').length;
 
-        if (cardScale === 'xl') {
-            if (maxWordLen > 11 || totalLen > 18) return "text-2xl sm:text-3xl md:text-4xl";
-            if (maxWordLen > 8 || totalLen > 13) return "text-3xl sm:text-4xl md:text-5xl";
-            if (maxWordLen > 5 || totalLen > 8) return "text-4xl sm:text-5xl md:text-6xl";
-            return "text-5xl sm:text-6xl md:text-7xl";
+        if (isTeacher) {
+            if (cardScale === 'xl') {
+                if (maxWordLen > 11 || totalLen > 18) return "text-2xl sm:text-3xl md:text-4xl";
+                if (maxWordLen > 8 || totalLen > 13) return "text-3xl sm:text-4xl md:text-5xl";
+                if (maxWordLen > 5 || totalLen > 8) return "text-4xl sm:text-5xl md:text-6xl";
+                return "text-5xl sm:text-6xl md:text-7xl";
+            }
+            if (cardScale === 'lg') {
+                if (maxWordLen > 11 || totalLen > 18) return "text-xl sm:text-2xl md:text-3xl";
+                if (maxWordLen > 8 || totalLen > 13) return "text-2xl sm:text-3xl md:text-4xl";
+                if (maxWordLen > 5 || totalLen > 8) return "text-3xl sm:text-4xl md:text-5xl";
+                return "text-4xl sm:text-5xl md:text-6xl";
+            }
+            if (cardScale === 'md') {
+                if (maxWordLen > 11 || totalLen > 18) return "text-lg sm:text-xl md:text-2xl";
+                if (maxWordLen > 8 || totalLen > 13) return "text-xl sm:text-2xl md:text-3xl";
+                if (maxWordLen > 5 || totalLen > 8) return "text-2xl sm:text-3xl md:text-4xl";
+                return "text-3xl sm:text-4xl md:text-5xl";
+            }
+            return "text-2xl sm:text-3xl md:text-4xl";
         }
-        if (cardScale === 'lg') {
-            if (maxWordLen > 11 || totalLen > 18) return "text-xl sm:text-2xl md:text-3xl";
-            if (maxWordLen > 8 || totalLen > 13) return "text-2xl sm:text-3xl md:text-4xl";
-            if (maxWordLen > 5 || totalLen > 8) return "text-3xl sm:text-4xl md:text-5xl";
-            return "text-4xl sm:text-5xl md:text-6xl";
-        }
-        if (cardScale === 'md') {
-            if (maxWordLen > 11 || totalLen > 18) return "text-lg sm:text-xl md:text-2xl";
-            if (maxWordLen > 8 || totalLen > 13) return "text-xl sm:text-2xl md:text-3xl";
-            if (maxWordLen > 5 || totalLen > 8) return "text-2xl sm:text-3xl md:text-4xl";
-            return "text-3xl sm:text-4xl md:text-5xl";
-        }
-        if (cardScale === 'xs') {
-            if (maxWordLen > 11 || totalLen > 18) return "text-xs sm:text-sm md:text-base";
-            if (maxWordLen > 8 || totalLen > 13) return "text-sm sm:text-base md:text-lg";
-            if (maxWordLen > 5 || totalLen > 8) return "text-base sm:text-lg md:text-xl";
-            return "text-lg sm:text-xl md:text-2xl";
-        }
-        // sm (varsayılan küçük)
-        if (maxWordLen > 11 || totalLen > 18) return "text-sm sm:text-base md:text-lg";
-        if (maxWordLen > 8 || totalLen > 13) return "text-base sm:text-lg md:text-xl";
-        if (maxWordLen > 5 || totalLen > 8) return "text-xl sm:text-2xl md:text-3xl";
-        return "text-2xl sm:text-3xl md:text-4xl";
+
+        // Student mode (Compact)
+        if (maxWordLen > 11 || totalLen > 18) return "text-xs xs:text-sm sm:text-base md:text-lg";
+        if (maxWordLen > 8 || totalLen > 13) return "text-sm xs:text-base sm:text-lg md:text-xl";
+        if (maxWordLen > 5 || totalLen > 8) return "text-base xs:text-lg sm:text-xl md:text-2xl";
+        return "text-lg xs:text-xl sm:text-2xl md:text-3xl";
     };
 
     const scaleStyles = {
         xs: { 
-            minHeight: isTeacher ? "min-h-[8.5rem] sm:min-h-[9.5rem]" : "min-h-[8rem] sm:min-h-[9rem]",
-            padding: "p-2.5 sm:p-3" 
+            minHeight: isTeacher ? "min-h-[8.5rem] sm:min-h-[9.5rem]" : "min-h-[7.5rem] sm:min-h-[8.5rem] md:min-h-[9.5rem]",
+            padding: isTeacher ? "p-2.5 sm:p-3" : "p-2 sm:p-3" 
         },
         sm: { 
-            minHeight: isTeacher ? "min-h-[11rem] sm:min-h-[12rem]" : "min-h-[10rem] sm:min-h-[11rem]",
-            padding: "p-3.5 sm:p-4" 
+            minHeight: isTeacher ? "min-h-[11rem] sm:min-h-[12rem]" : "min-h-[8.5rem] sm:min-h-[10rem] md:min-h-[11.5rem]",
+            padding: isTeacher ? "p-3.5 sm:p-4" : "p-2.5 sm:p-3.5" 
         },
         md: { 
-            minHeight: isTeacher ? "min-h-[15rem] sm:min-h-[16.5rem]" : "min-h-[13rem] sm:min-h-[14.5rem]",
-            padding: "p-4 sm:p-5" 
+            minHeight: isTeacher ? "min-h-[15rem] sm:min-h-[16.5rem]" : "min-h-[11rem] sm:min-h-[12.5rem] md:min-h-[14.5rem]",
+            padding: isTeacher ? "p-4 sm:p-5" : "p-3 sm:p-4" 
         },
         lg: { 
-            minHeight: isTeacher ? "min-h-[19.5rem] sm:min-h-[21.5rem]" : "min-h-[16rem] sm:min-h-[18rem]",
-            padding: "p-5 sm:p-6" 
+            minHeight: isTeacher ? "min-h-[19.5rem] sm:min-h-[21.5rem]" : "min-h-[13.5rem] sm:min-h-[15.5rem] md:min-h-[17.5rem]",
+            padding: isTeacher ? "p-5 sm:p-6" : "p-4 sm:p-5" 
         },
         xl: { 
-            minHeight: isTeacher ? "min-h-[25rem] sm:min-h-[27rem]" : "min-h-[21rem] sm:min-h-[23rem]",
-            padding: "p-6 sm:p-7" 
+            minHeight: isTeacher ? "min-h-[25rem] sm:min-h-[27rem]" : "min-h-[16.5rem] sm:min-h-[19rem] md:min-h-[21rem]",
+            padding: isTeacher ? "p-6 sm:p-7" : "p-5 sm:p-6" 
         },
     }[cardScale];
 
     const getGridClass = () => {
         if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2";
-        if (cardScale === 'lg') return isTeacher ? "grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
-        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4";
-        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6";
-        // sm (varsayılan)
-        return isTeacher ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
+        if (cardScale === 'lg') return isTeacher ? "grid-cols-2 lg:grid-cols-3" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3";
+        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
+        // sm (varsayılan: mobil için 2 sütun)
+        return isTeacher ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
     };
 
     return (
-        <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
+        <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
             {/* Üst Başlık ve Hepsini Çevir Butonu */}
-            <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200">
-                        <Puzzle className="w-5 h-5" />
+            <div className="flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-indigo-100 dark:border-white/10 shadow-sm">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200 shrink-0">
+                        <Puzzle className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <div>
-                        <h2 className="font-black text-slate-800 text-lg md:text-2xl drop-shadow-sm tracking-tight">{step.title}</h2>
-                        <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
-                            <span>{totalCards} Anagram Kartı</span>
+                    <div className="min-w-0">
+                        <h2 className="font-black text-slate-800 dark:text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight truncate">{step.title}</h2>
+                        <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
+                            <span>{totalCards} Kart</span>
                             <span>•</span>
-                            <span className={cn(flippedCount > 0 ? "text-emerald-600 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
+                            <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
                         </div>
                     </div>
                 </div>
@@ -976,15 +974,15 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                     variant="outline"
                     size="sm"
                     onClick={handleToggleFlipAll}
-                    className="h-9 px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+                    className="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
                 >
-                    <RotateCw className={cn("w-3.5 h-3.5", allFlipped && "rotate-180")} />
-                    {allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}
+                    <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
+                    <span>{allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}</span>
                 </Button>
             </div>
 
             {/* 3D Anagram Kartları Grid'i */}
-            <div className={cn("grid gap-4 md:gap-6 pb-32 transition-all duration-300", getGridClass())}>
+            <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6 pb-28 transition-all duration-300", getGridClass())}>
                 {step.cards.map((card, index) => {
                     const isFlipped = flippedCards.has(index);
                     const theme = FLASHCARD_THEMES[index % FLASHCARD_THEMES.length];
@@ -993,7 +991,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                         <div
                             key={index}
                             className={cn(
-                                "rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
+                                "rounded-2xl sm:rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
                                 scaleStyles.minHeight
                             )}
                             onClick={() => onCardFlip(index, 'anagramFlashcard')}
@@ -1003,30 +1001,31 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                 initial={false}
                                 animate={{ rotateY: isFlipped ? 180 : 0 }}
                                 transition={{ duration: 0.6, type: "spring", stiffness: 220, damping: 20 }}
-                                whileHover={{ y: -6, scale: 1.02 }}
+                                whileHover={{ y: -4, scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
                                 {/* ══ ÖN YÜZ (KARIŞIK HARFLER) ══ */}
                                 <div className={cn(
-                                    "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-[2rem] p-4 sm:p-5 flex flex-col justify-between overflow-hidden",
+                                    "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-2xl sm:rounded-[2rem] flex flex-col justify-between overflow-hidden",
+                                    scaleStyles.padding,
                                     theme.front
                                 )}>
-                                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                                     
                                     {/* Üst Rozetler */}
-                                    <div className="flex items-center justify-between w-full">
-                                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                                    <div className="flex items-center justify-between w-full flex-shrink-0 mb-0.5">
+                                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                                             #{index + 1}
                                         </span>
-                                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
-                                            <Puzzle className="w-3.5 h-3.5" />
-                                            <span>Anagram</span>
+                                        <div className="flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border border-white/30 backdrop-blur-md">
+                                            <Puzzle className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
+                                            <span className="hidden xs:inline">Anagram</span>
                                         </div>
                                     </div>
 
                                     {/* Karışık Harfler - Her kelime kendi içinde karışık ve sığmayan kelime alt satıra geçer */}
-                                    <div className="my-auto py-2 px-1 text-center w-full flex items-center justify-center">
-                                        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 max-w-full text-center">
+                                    <div className="my-auto py-1 px-1 sm:px-2 text-center w-full flex items-center justify-center">
+                                        <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 sm:gap-x-3 sm:gap-y-1 max-w-full text-center">
                                             {(card.scrambledWord || '').trim().split(/\s+/).filter(Boolean).map((word, wIdx) => (
                                                 <span
                                                     key={wIdx}
@@ -1042,9 +1041,9 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                     </div>
 
                                     {/* Alt İpucu Butonu */}
-                                    <div className="flex items-center justify-center">
-                                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
-                                            <RotateCw className="w-3.5 h-3.5" />
+                                    <div className="flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[9px] sm:text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                                            <RotateCw className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                                             <span>Çözümü Gör</span>
                                         </div>
                                     </div>
@@ -1053,27 +1052,28 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                 {/* ══ ARKA YÜZ (DOĞRU CEVAP) ══ */}
                                 <div 
                                     className={cn(
-                                        "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-[2rem] p-4 sm:p-5 flex flex-col justify-between overflow-hidden",
+                                        "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-2xl sm:rounded-[2rem] flex flex-col justify-between overflow-hidden",
+                                        scaleStyles.padding,
                                         theme.back
                                     )} 
                                     style={{ transform: "rotateY(180deg)" }}
                                 >
-                                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                                     
                                     {/* Üst Rozetler */}
-                                    <div className="flex items-center justify-between w-full">
-                                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                                    <div className="flex items-center justify-between w-full flex-shrink-0 mb-0.5">
+                                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                                             #{index + 1}
                                         </span>
-                                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
-                                            <CheckCircle className="w-3.5 h-3.5 text-emerald-300" />
-                                            <span>Çözüm</span>
+                                        <div className="flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border border-white/30 backdrop-blur-md">
+                                            <CheckCircle className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-emerald-300" />
+                                            <span className="hidden xs:inline">Çözüm</span>
                                         </div>
                                     </div>
 
                                     {/* Doğru Cevap - Sığmayan kelime alt satıra geçer */}
-                                    <div className="my-auto py-2 px-1 text-center w-full flex items-center justify-center">
-                                        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 max-w-full text-center">
+                                    <div className="my-auto py-1 px-1 sm:px-2 text-center w-full flex items-center justify-center">
+                                        <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 sm:gap-x-3 sm:gap-y-1 max-w-full text-center">
                                             {(card.correctAnswer || '').trim().split(/\s+/).filter(Boolean).map((word, wIdx) => (
                                                 <span
                                                     key={wIdx}
@@ -1089,10 +1089,10 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                     </div>
 
                                     {/* Alt İpucu Butonu */}
-                                    <div className="flex items-center justify-center">
-                                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
-                                            <RotateCw className="w-3.5 h-3.5" />
-                                            <span>Kapat</span>
+                                    <div className="flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[9px] sm:text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                                            <RotateCw className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
+                                            <span>Çevir</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1139,28 +1139,28 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     };
 
     const getGridClass = () => {
-        if (cardScale === 'xl') return "grid-cols-1 md:grid-cols-2";
-        if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2";
-        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
+        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2";
+        if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3";
+        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
         if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
-        // sm (varsayılan)
-        return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        // sm (varsayılan: mobil için kompakt 2 sütun)
+        return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
     };
 
     return (
-        <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
+        <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
             {/* Üst Başlık ve Hepsini Çevir Butonu */}
-            <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-white/80 backdrop-blur-xl border-2 border-indigo-100 shadow-sm">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200">
-                        <Layers className="w-5 h-5" />
+            <div className="flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-indigo-100 dark:border-white/10 shadow-sm">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200 shrink-0">
+                        <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <div>
-                        <h2 className="font-black text-slate-800 text-lg md:text-2xl drop-shadow-sm tracking-tight">{step.title}</h2>
-                        <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
-                            <span>{totalCards} Bilgi Kartı</span>
+                    <div className="min-w-0">
+                        <h2 className="font-black text-slate-800 dark:text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight truncate">{step.title}</h2>
+                        <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
+                            <span>{totalCards} Kart</span>
                             <span>•</span>
-                            <span className={cn(flippedCount > 0 ? "text-emerald-600 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
+                            <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
                         </div>
                     </div>
                 </div>
@@ -1170,15 +1170,15 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
                     variant="outline"
                     size="sm"
                     onClick={handleToggleFlipAll}
-                    className="h-9 px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+                    className="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
                 >
-                    <RotateCw className={cn("w-3.5 h-3.5", allFlipped && "rotate-180")} />
-                    {allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}
+                    <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
+                    <span>{allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}</span>
                 </Button>
             </div>
 
             {/* 3D Bilgi Kartları Grid'i */}
-            <div className={cn("grid gap-4 md:gap-6 pb-32 transition-all duration-300", getGridClass())}>
+            <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6 pb-28 transition-all duration-300", getGridClass())}>
                 {step.cards.map((card, index) => (
                     <FlashcardItem
                         key={index}
@@ -1224,103 +1224,102 @@ export const FlashcardItem = ({
         const maxWordLen = Math.max(...words.map(w => w.length));
         const totalLen = (termText || '').length;
 
-        if (cardScale === 'xl') {
-            if (maxWordLen > 13 || totalLen > 24) return "text-3xl sm:text-4xl md:text-5xl";
-            if (maxWordLen > 9 || totalLen > 16) return "text-4xl sm:text-5xl md:text-6xl";
-            if (maxWordLen > 5 || totalLen > 10) return "text-5xl sm:text-6xl md:text-7xl";
-            return "text-6xl sm:text-7xl md:text-8xl";
-        }
-        if (cardScale === 'lg') {
-            if (maxWordLen > 13 || totalLen > 24) return "text-2xl sm:text-3xl md:text-4xl";
-            if (maxWordLen > 9 || totalLen > 16) return "text-3xl sm:text-4xl md:text-5xl";
-            if (maxWordLen > 5 || totalLen > 10) return "text-4xl sm:text-5xl md:text-6xl";
-            return "text-5xl sm:text-6xl md:text-7xl";
-        }
-        if (cardScale === 'md') {
-            if (maxWordLen > 13 || totalLen > 24) return "text-xl sm:text-2xl md:text-3xl";
-            if (maxWordLen > 9 || totalLen > 16) return "text-2xl sm:text-3xl md:text-4xl";
-            if (maxWordLen > 5 || totalLen > 10) return "text-3xl sm:text-4xl md:text-5xl";
-            return "text-4xl sm:text-5xl md:text-6xl";
-        }
-        if (cardScale === 'xs') {
-            if (maxWordLen > 13 || totalLen > 24) return "text-base sm:text-lg md:text-xl";
-            if (maxWordLen > 9 || totalLen > 16) return "text-lg sm:text-xl md:text-2xl";
-            if (maxWordLen > 5 || totalLen > 10) return "text-xl sm:text-2xl md:text-3xl";
+        if (isTeacher) {
+            if (cardScale === 'xl') {
+                if (maxWordLen > 13 || totalLen > 24) return "text-3xl sm:text-4xl md:text-5xl";
+                if (maxWordLen > 9 || totalLen > 16) return "text-4xl sm:text-5xl md:text-6xl";
+                if (maxWordLen > 5 || totalLen > 10) return "text-5xl sm:text-6xl md:text-7xl";
+                return "text-6xl sm:text-7xl md:text-8xl";
+            }
+            if (cardScale === 'lg') {
+                if (maxWordLen > 13 || totalLen > 24) return "text-2xl sm:text-3xl md:text-4xl";
+                if (maxWordLen > 9 || totalLen > 16) return "text-3xl sm:text-4xl md:text-5xl";
+                if (maxWordLen > 5 || totalLen > 10) return "text-4xl sm:text-5xl md:text-6xl";
+                return "text-5xl sm:text-6xl md:text-7xl";
+            }
+            if (cardScale === 'md') {
+                if (maxWordLen > 13 || totalLen > 24) return "text-xl sm:text-2xl md:text-3xl";
+                if (maxWordLen > 9 || totalLen > 16) return "text-2xl sm:text-3xl md:text-4xl";
+                if (maxWordLen > 5 || totalLen > 10) return "text-3xl sm:text-4xl md:text-5xl";
+                return "text-4xl sm:text-5xl md:text-6xl";
+            }
             return "text-2xl sm:text-3xl md:text-4xl";
         }
-        // sm (varsayılan küçük)
-        if (maxWordLen > 13 || totalLen > 24) return "text-lg sm:text-xl md:text-2xl";
-        if (maxWordLen > 9 || totalLen > 16) return "text-xl sm:text-2xl md:text-3xl";
-        if (maxWordLen > 5 || totalLen > 10) return "text-2xl sm:text-3xl md:text-4xl";
-        return "text-3xl sm:text-4xl md:text-5xl";
+
+        // Student mode (Compact)
+        if (maxWordLen > 14 || totalLen > 24) return "text-xs xs:text-sm sm:text-base md:text-lg";
+        if (maxWordLen > 9 || totalLen > 16) return "text-sm xs:text-base sm:text-lg md:text-xl";
+        if (maxWordLen > 5 || totalLen > 10) return "text-base xs:text-lg sm:text-xl md:text-2xl";
+        return "text-lg xs:text-xl sm:text-2xl md:text-3xl";
     };
 
     const getDefFontSize = (defText: string) => {
         const len = (defText || '').length;
 
-        if (cardScale === 'xl') {
-            if (len > 300) return "text-base sm:text-lg md:text-xl";
-            if (len > 180) return "text-lg sm:text-xl md:text-2xl";
-            if (len > 100) return "text-xl sm:text-2xl md:text-3xl";
-            if (len > 50) return "text-2xl sm:text-3xl md:text-4xl";
-            return "text-3xl sm:text-4xl md:text-5xl";
+        if (isTeacher) {
+            if (cardScale === 'xl') {
+                if (len > 300) return "text-base sm:text-lg md:text-xl leading-snug";
+                if (len > 180) return "text-lg sm:text-xl md:text-2xl leading-snug";
+                if (len > 100) return "text-xl sm:text-2xl md:text-3xl leading-snug";
+                if (len > 50) return "text-2xl sm:text-3xl md:text-4xl leading-relaxed";
+                return "text-3xl sm:text-4xl md:text-5xl leading-relaxed";
+            }
+            if (cardScale === 'lg') {
+                if (len > 300) return "text-sm sm:text-base md:text-lg leading-snug";
+                if (len > 180) return "text-base sm:text-lg md:text-xl leading-snug";
+                if (len > 100) return "text-lg sm:text-xl md:text-2xl leading-snug";
+                if (len > 50) return "text-xl sm:text-2xl md:text-3xl leading-relaxed";
+                return "text-2xl sm:text-3xl md:text-4xl leading-relaxed";
+            }
+            if (cardScale === 'md') {
+                if (len > 300) return "text-xs sm:text-sm md:text-base leading-snug";
+                if (len > 180) return "text-sm sm:text-base md:text-lg leading-snug";
+                if (len > 100) return "text-base sm:text-lg md:text-xl leading-snug";
+                if (len > 50) return "text-lg sm:text-xl md:text-2xl leading-relaxed";
+                return "text-xl sm:text-2xl md:text-3xl leading-relaxed";
+            }
+            if (len > 300) return "text-xs sm:text-sm md:text-base leading-snug";
+            if (len > 180) return "text-sm sm:text-base md:text-lg leading-snug";
+            if (len > 100) return "text-base sm:text-lg md:text-xl leading-snug";
+            if (len > 50) return "text-lg sm:text-xl md:text-2xl leading-relaxed";
+            return "text-xl sm:text-2xl md:text-3xl leading-relaxed";
         }
-        if (cardScale === 'lg') {
-            if (len > 300) return "text-sm sm:text-base md:text-lg";
-            if (len > 180) return "text-base sm:text-lg md:text-xl";
-            if (len > 100) return "text-lg sm:text-xl md:text-2xl";
-            if (len > 50) return "text-xl sm:text-2xl md:text-3xl";
-            return "text-2xl sm:text-3xl md:text-4xl";
-        }
-        if (cardScale === 'md') {
-            if (len > 300) return "text-xs sm:text-sm md:text-base";
-            if (len > 180) return "text-sm sm:text-base md:text-lg";
-            if (len > 100) return "text-base sm:text-lg md:text-xl";
-            if (len > 50) return "text-lg sm:text-xl md:text-2xl";
-            return "text-xl sm:text-2xl md:text-3xl";
-        }
-        if (cardScale === 'xs') {
-            if (len > 300) return "text-[11px] sm:text-xs";
-            if (len > 180) return "text-xs sm:text-xs";
-            if (len > 100) return "text-xs sm:text-sm";
-            if (len > 50) return "text-sm sm:text-base";
-            return "text-base sm:text-lg";
-        }
-        // sm (varsayılan küçük)
-        if (len > 300) return "text-xs sm:text-sm";
-        if (len > 180) return "text-xs sm:text-sm";
-        if (len > 100) return "text-sm sm:text-base";
-        if (len > 50) return "text-base sm:text-lg";
-        return "text-lg sm:text-xl";
+
+        // Student mode (Compact, Auto-fitting, zero-scroll)
+        if (len > 350) return "text-[8.5px] xs:text-[9.5px] sm:text-[11px] md:text-xs leading-tight sm:leading-snug";
+        if (len > 220) return "text-[9.5px] xs:text-[10.5px] sm:text-xs md:text-sm leading-tight sm:leading-snug";
+        if (len > 130) return "text-[11px] xs:text-xs sm:text-sm md:text-base leading-tight sm:leading-snug";
+        if (len > 70) return "text-xs xs:text-sm sm:text-base md:text-lg leading-snug";
+        return "text-sm xs:text-base sm:text-lg md:text-xl leading-relaxed";
     };
 
     const scaleStyles = {
         xs: { 
-            minHeight: isTeacher ? "min-h-[10.5rem] sm:min-h-[11.5rem]" : "min-h-[9rem] sm:min-h-[10rem]",
-            padding: "p-3 sm:p-4"
+            minHeight: isTeacher ? "min-h-[10.5rem] sm:min-h-[11.5rem]" : "min-h-[7.5rem] sm:min-h-[8.5rem] md:min-h-[9.5rem]",
+            padding: isTeacher ? "p-3 sm:p-4" : "p-2 sm:p-3"
         },
         sm: { 
-            minHeight: isTeacher ? "min-h-[13rem] sm:min-h-[14rem]" : "min-h-[11rem] sm:min-h-[12rem]",
-            padding: "p-4 sm:p-5"
+            minHeight: isTeacher ? "min-h-[13rem] sm:min-h-[14rem]" : "min-h-[8.5rem] sm:min-h-[10rem] md:min-h-[11.5rem]",
+            padding: isTeacher ? "p-4 sm:p-5" : "p-2.5 sm:p-3.5"
         },
         md: { 
-            minHeight: isTeacher ? "min-h-[17.5rem] sm:min-h-[19.5rem]" : "min-h-[14.5rem] sm:min-h-[16.5rem]",
-            padding: "p-5 sm:p-6"
+            minHeight: isTeacher ? "min-h-[17.5rem] sm:min-h-[19.5rem]" : "min-h-[11rem] sm:min-h-[12.5rem] md:min-h-[14.5rem]",
+            padding: isTeacher ? "p-5 sm:p-6" : "p-3 sm:p-4"
         },
         lg: { 
-            minHeight: isTeacher ? "min-h-[22rem] sm:min-h-[24rem]" : "min-h-[18rem] sm:min-h-[20rem]",
-            padding: "p-6 sm:p-8"
+            minHeight: isTeacher ? "min-h-[22rem] sm:min-h-[24rem]" : "min-h-[13.5rem] sm:min-h-[15.5rem] md:min-h-[17.5rem]",
+            padding: isTeacher ? "p-6 sm:p-8" : "p-4 sm:p-5"
         },
         xl: { 
-            minHeight: isTeacher ? "min-h-[27rem] sm:min-h-[29rem]" : "min-h-[23rem] sm:min-h-[25rem]",
-            padding: "p-8 sm:p-10"
+            minHeight: isTeacher ? "min-h-[27rem] sm:min-h-[29rem]" : "min-h-[16.5rem] sm:min-h-[19rem] md:min-h-[21rem]",
+            padding: isTeacher ? "p-8 sm:p-10" : "p-5 sm:p-6"
         },
     }[cardScale];
 
     return (
         <div
             className={cn(
-                "rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
+                "rounded-2xl sm:rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
                 scaleStyles.minHeight
             )}
             onClick={onFlip}
@@ -1330,33 +1329,33 @@ export const FlashcardItem = ({
                 initial={false}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
                 transition={{ duration: 0.6, type: "spring", stiffness: 220, damping: 20 }}
-                whileHover={{ y: -6, scale: 1.02 }}
+                whileHover={{ y: -4, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
             >
                 {/* ══ ÖN YÜZ (KAVRAM & TERİM) ══ */}
                 <div className={cn(
-                    "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-[2rem] flex flex-col justify-between overflow-hidden",
+                    "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-2xl sm:rounded-[2rem] flex flex-col justify-between overflow-hidden",
                     scaleStyles.padding,
                     theme.front
                 )}>
                     {/* Üst Işık Yansıması */}
-                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                     
                     {/* Kart Üst Başlığı */}
-                    <div className="flex items-center justify-between w-full flex-shrink-0 mb-1">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                    <div className="flex items-center justify-between w-full flex-shrink-0 mb-0.5">
+                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                             #{index + 1}
                         </span>
-                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
-                            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                            <span>Kavram Kartı</span>
+                        <div className="flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border border-white/30 backdrop-blur-md">
+                            <Sparkles className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-amber-300" />
+                            <span className="hidden xs:inline">Kavram</span>
                         </div>
                     </div>
 
                     {/* Ana Terim / Başlık - Kartı Dolduran Görünüm (Harf bölünmesi engellendi) */}
-                    <div className="my-auto py-3 px-2 text-center w-full flex items-center justify-center">
+                    <div className="my-auto py-1 px-1 sm:px-2 text-center w-full flex items-center justify-center">
                         <h3 className={cn(
-                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full px-1 text-center",
+                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full px-0.5 text-center",
                             getTermFontSize(term)
                         )}>
                             {term}
@@ -1364,40 +1363,40 @@ export const FlashcardItem = ({
                     </div>
 
                     {/* Alt İpucu Butonu: SADECE ÇEVİR */}
-                    <div className="flex items-center justify-center flex-shrink-0 mt-1">
-                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
-                            <RotateCw className="w-3.5 h-3.5" />
+                    <div className="flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[9px] sm:text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                            <RotateCw className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                             <span>Çevir</span>
                         </div>
                     </div>
                 </div>
 
-                {/* ══ ARKA YÜZ (TANIM & AÇIKLAMA - DOĞRUDAN KARTIN ÜZERİNDE) ══ */}
+                {/* ══ ARKA YÜZ (TANIM & AÇIKLAMA - DOĞRUDAN KARTIN ÜZERİNDE, SIFIR KAYDIRMA) ══ */}
                 <div 
                     className={cn(
-                        "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-[2rem] flex flex-col justify-between overflow-hidden",
+                        "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-2xl sm:rounded-[2rem] flex flex-col justify-between overflow-hidden",
                         scaleStyles.padding,
                         theme.back
                     )} 
                     style={{ transform: "rotateY(180deg)" }}
                 >
-                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                     
                     {/* Kart Üst Başlığı */}
-                    <div className="flex items-center justify-between w-full flex-shrink-0 mb-1">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                    <div className="flex items-center justify-between w-full flex-shrink-0 mb-0.5">
+                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
                             #{index + 1}
                         </span>
-                        <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
-                            <CheckCircle className="w-3.5 h-3.5 text-emerald-300" />
-                            <span>Tanım & Açıklama</span>
+                        <div className="flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border border-white/30 backdrop-blur-md">
+                            <CheckCircle className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-emerald-300" />
+                            <span className="hidden xs:inline">Tanım</span>
                         </div>
                     </div>
 
-                    {/* Doğrudan Kart Üzerinde Yazılan Tanım (Tam metin, dinamik punto, kaydırma destekli) */}
-                    <div className="my-auto py-2 px-2 sm:px-3 text-center w-full flex-1 flex items-center justify-center overflow-y-auto max-h-[68%] scrollbar-thin scrollbar-thumb-white/40 scrollbar-track-transparent">
+                    {/* Doğrudan Kart Üzerinde Yazılan Tanım (Tam metin, dinamik punto, sıfır kaydırma) */}
+                    <div className="my-auto py-1 px-0.5 sm:px-2 text-center w-full flex-1 flex items-center justify-center overflow-hidden">
                         <p className={cn(
-                            "font-bold leading-relaxed tracking-wide text-white drop-shadow-md break-normal whitespace-normal [overflow-wrap:break-word] hyphens-none max-w-full px-1 text-center my-auto",
+                            "font-bold tracking-normal sm:tracking-wide text-white drop-shadow-md break-normal whitespace-normal [overflow-wrap:break-word] hyphens-none max-w-full text-center my-auto",
                             getDefFontSize(definition)
                         )}>
                             {definition}
@@ -1405,9 +1404,9 @@ export const FlashcardItem = ({
                     </div>
 
                     {/* Alt İpucu Butonu: SADECE ÇEVİR */}
-                    <div className="flex items-center justify-center flex-shrink-0 mt-1">
-                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
-                            <RotateCw className="w-3.5 h-3.5" />
+                    <div className="flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[9px] sm:text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                            <RotateCw className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                             <span>Çevir</span>
                         </div>
                     </div>
