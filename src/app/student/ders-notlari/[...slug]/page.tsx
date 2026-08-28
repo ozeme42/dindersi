@@ -7,14 +7,17 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { getCachedData, setCachedData } from '@/lib/lesson-cache';
 import { ConceptExplanationPlayer, ContentListPlayer, FlashcardItem, FLASHCARD_THEMES } from '@/components/lesson-content-viewer';
 
-// Helper to fetch definitions from Firestore or static activities
+// Helper to fetch definitions from Firestore or static activities with smart cache
 async function getDefinitionsForTopic(topicId: string) {
     if (!topicId) return [];
+    const cached = getCachedData<{ concept: string, definition: string }[]>(`defs_${topicId}`);
+    if (cached && cached.length > 0) return cached;
+
     try {
         const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
         const querySnapshot = await getDocs(q);
@@ -26,7 +29,10 @@ async function getDefinitionsForTopic(topicId: string) {
             };
         }).filter(item => item.concept && item.definition);
 
-        if (results.length > 0) return results;
+        if (results.length > 0) {
+            setCachedData(`defs_${topicId}`, results);
+            return results;
+        }
     } catch (error) {
         console.warn("Error fetching definitions from Firestore:", error);
     }
@@ -90,6 +96,16 @@ export function DersNotlariDisplayPage() {
             setIsLoading(false);
             return;
         }
+
+        const cacheKey = `ders_notlari_${courseId}_${unitId}_${topicId}`;
+        const cached = getCachedData<TopicContent>(cacheKey);
+        if (cached) {
+            setContent(cached);
+            setFlippedCards(new Array(cached.conceptDefinitions?.length || 0).fill(false));
+            setIsLoading(false);
+            return;
+        }
+
         setIsLoading(true);
         setError(null);
         try {
@@ -129,13 +145,15 @@ export function DersNotlariDisplayPage() {
                         }
                     }
 
-                    setContent({
+                    const unitContent: TopicContent = {
                         title: `${unitData.title || 'Ünite'} Özeti`,
                         courseName: courseData?.title || 'Ders',
                         conceptDefinitions: allDefinitions,
                         notes: allNotes,
                         htmlContent: unitData.htmlContent || ''
-                    });
+                    };
+                    setCachedData(cacheKey, unitContent);
+                    setContent(unitContent);
                     setFlippedCards(new Array(allDefinitions.length).fill(false));
 
                 } else {
@@ -235,13 +253,15 @@ export function DersNotlariDisplayPage() {
                      throw new Error('Bu konu için henüz özet veya ders notu eklenmemiş.');
                 }
                 
-                setContent({ 
+                const topicContent: TopicContent = { 
                     title: topicTitle,
                     courseName: courseData?.title || 'Ders',
                     conceptDefinitions: definitions, 
                     notes: notes,
                     htmlContent: htmlContent
-                });
+                };
+                setCachedData(cacheKey, topicContent);
+                setContent(topicContent);
                 setFlippedCards(new Array(definitions.length).fill(false));
             }
 

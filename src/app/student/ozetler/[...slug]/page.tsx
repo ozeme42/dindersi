@@ -9,6 +9,7 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { getCachedData, setCachedData } from '@/lib/lesson-cache';
 
 function OzetDisplayPage() {
     const params = useParams();
@@ -40,6 +41,15 @@ function OzetDisplayPage() {
         }
 
         const fetchData = async () => {
+            const targetId = topicId || unitId;
+            const cacheKey = `ozet_${courseId}_${unitId}_${targetId}`;
+            const cached = getCachedData<{title: string, htmlContent: string, courseName: string}>(cacheKey);
+            if (cached) {
+                setContent(cached);
+                setIsLoading(false);
+                return;
+            }
+
             setIsLoading(true);
             try {
                 const docRef = topicId 
@@ -51,7 +61,6 @@ function OzetDisplayPage() {
                     getDoc(doc(db, 'courses', courseId))
                 ]);
 
-                const targetId = topicId || unitId;
                 if (!docSnap.exists() || !docSnap.data()?.htmlContent) {
                     try {
                         const ozRes = await fetch(`/curriculum/ozetler/${targetId}.html`);
@@ -78,11 +87,13 @@ function OzetDisplayPage() {
                                 }
                             } catch (mErr) {}
 
-                            setContent({
+                            const resData = {
                                 title: foundTitle,
                                 htmlContent,
                                 courseName: courseTitle
-                            });
+                            };
+                            setCachedData(cacheKey, resData);
+                            setContent(resData);
                             setIsLoading(false);
                             return;
                         }
@@ -96,11 +107,13 @@ function OzetDisplayPage() {
                 const data = docSnap.data();
                 const courseData = courseSnap.data();
 
-                setContent({ 
+                const finalData = { 
                     title: data.title, 
                     htmlContent: data.htmlContent, 
                     courseName: courseData?.title || 'Ders' 
-                });
+                };
+                setCachedData(cacheKey, finalData);
+                setContent(finalData);
 
             } catch (e: any) {
                 console.error(e);

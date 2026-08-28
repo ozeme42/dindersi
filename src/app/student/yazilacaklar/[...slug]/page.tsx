@@ -12,24 +12,33 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { getCachedData, setCachedData } from '@/lib/lesson-cache';
 
-// Helper to fetch definitions directly from Firestore
+// Helper to fetch definitions directly from Firestore with smart cache
 async function getDefinitionsForTopic(topicId: string) {
     if (!topicId) return [];
+    const cached = getCachedData<{ concept: string, definition: string }[]>(`defs_${topicId}`);
+    if (cached && cached.length > 0) return cached;
+
     try {
         const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => {
+        const results = querySnapshot.docs.map(doc => {
             const item = doc.data();
             return {
                 concept: item.content.term || '',
                 definition: item.content.definition || ''
             };
         }).filter(item => item.concept && item.definition);
+
+        if (results.length > 0) {
+            setCachedData(`defs_${topicId}`, results);
+            return results;
+        }
     } catch (error) {
         console.error("Error fetching definitions for topic:", error);
-        return [];
     }
+    return [];
 }
 
 
@@ -64,6 +73,16 @@ export function YazilacaklarDisplayPage() {
             setIsLoading(false);
             return;
         }
+
+        const cacheKey = `yazilacaklar_${courseId}_${unitId}_${topicId}`;
+        const cached = getCachedData<{ topicTitle: string; content: YazilacaklarContent }>(cacheKey);
+        if (cached) {
+            setTopicTitle(cached.topicTitle);
+            setContent(cached.content);
+            setIsLoading(false);
+            return;
+        }
+
         setIsLoading(true);
         setError(null);
         try {
@@ -72,7 +91,8 @@ export function YazilacaklarDisplayPage() {
             
             if (topicSnap.exists()) {
                 const topicData = topicSnap.data() as Topic;
-                setTopicTitle(topicData.title);
+                const title = topicData.title || '';
+                setTopicTitle(title);
                 
                 const definitions = await getDefinitionsForTopic(topicId);
                 const notes = topicData.writingContent?.notes || [];
@@ -81,7 +101,9 @@ export function YazilacaklarDisplayPage() {
                      throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
                 }
                 
-                setContent({ conceptDefinitions: definitions, notes: notes });
+                const finalContent: YazilacaklarContent = { conceptDefinitions: definitions, notes: notes };
+                setCachedData(cacheKey, { topicTitle: title, content: finalContent });
+                setContent(finalContent);
 
             } else {
                 // Fallback to static yazilacaklar JSON and manifest
@@ -108,6 +130,7 @@ export function YazilacaklarDisplayPage() {
                     if (yRes.ok) {
                         const yData = await yRes.json();
                         if ((yData.notes?.length || 0) > 0 || (yData.conceptDefinitions?.length || 0) > 0) {
+                            setCachedData(cacheKey, { topicTitle: foundTitle, content: yData });
                             setContent(yData);
                             return;
                         }
@@ -124,7 +147,9 @@ export function YazilacaklarDisplayPage() {
                         const notes = aData.filter((a: any) => a.type === 'sentence' && a.content?.text)
                                            .map((a: any) => a.content.text);
                         if (defs.length > 0 || notes.length > 0) {
-                            setContent({ conceptDefinitions: defs, notes });
+                            const fallbackContent: YazilacaklarContent = { conceptDefinitions: defs, notes };
+                            setCachedData(cacheKey, { topicTitle: foundTitle, content: fallbackContent });
+                            setContent(fallbackContent);
                             return;
                         }
                     }
