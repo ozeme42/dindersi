@@ -1008,7 +1008,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                             >
                                 {/* ══ ÖN YÜZ (KARIŞIK HARFLER) ══ */}
                                 <div className={cn(
-                                    "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] p-4 sm:p-5 flex flex-col justify-between overflow-hidden",
+                                    "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-[2rem] p-4 sm:p-5 flex flex-col justify-between overflow-hidden",
                                     theme.front
                                 )}>
                                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
@@ -1053,7 +1053,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                 {/* ══ ARKA YÜZ (DOĞRU CEVAP) ══ */}
                                 <div 
                                     className={cn(
-                                        "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] p-4 sm:p-5 flex flex-col justify-between overflow-hidden",
+                                        "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-[2rem] p-4 sm:p-5 flex flex-col justify-between overflow-hidden",
                                         theme.back
                                     )} 
                                     style={{ transform: "rotateY(180deg)" }}
@@ -1335,7 +1335,7 @@ export const FlashcardItem = ({
             >
                 {/* ══ ÖN YÜZ (KAVRAM & TERİM) ══ */}
                 <div className={cn(
-                    "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] flex flex-col justify-between overflow-hidden",
+                    "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-[2rem] flex flex-col justify-between overflow-hidden",
                     scaleStyles.padding,
                     theme.front
                 )}>
@@ -1375,7 +1375,7 @@ export const FlashcardItem = ({
                 {/* ══ ARKA YÜZ (TANIM & AÇIKLAMA - DOĞRUDAN KARTIN ÜZERİNDE) ══ */}
                 <div 
                     className={cn(
-                        "absolute inset-0 [backface-visibility:hidden] rounded-[2rem] flex flex-col justify-between overflow-hidden",
+                        "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-[2rem] flex flex-col justify-between overflow-hidden",
                         scaleStyles.padding,
                         theme.back
                     )} 
@@ -4026,7 +4026,17 @@ export function StepContent({
             
             case 'anagramGame': 
             case 'kelimeDahasi': 
-                 return <AnagramGamePlayer step={step as AnagramGameStep} onAnswered={onCorrectAndNext} isTeacher={isTeacher} isFullscreen={isFullscreen} />;
+                 return (
+                     <AnagramGamePlayer 
+                         step={step as AnagramGameStep} 
+                         onAnswered={() => {
+                             if (onAnswer) onAnswer("completed");
+                             if (onCorrectAndNext) setTimeout(onCorrectAndNext, 600);
+                         }} 
+                         isTeacher={isTeacher} 
+                         isFullscreen={isFullscreen} 
+                     />
+                 );
 
             case 'sentenceScramble': 
                 return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} />;
@@ -4099,6 +4109,7 @@ export function LessonContentViewer({
     const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
     const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
     const [flippedAnagramCards, setFlippedAnagramCards] = useState<Set<number>>(new Set());
+    const [exploredCards, setExploredCards] = useState<Set<number>>(new Set());
     const [internalProgress, setInternalProgress] = useState<LocalProgress>(() => ({ answers: {}, score: 0 }));
     
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -4279,19 +4290,21 @@ export function LessonContentViewer({
 
         const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
         if (isCardStep) {
-            const cards = (currentStep as FlashcardStep | AnagramFlashcardStep).cards;
+            const cards = (currentStep as FlashcardStep | AnagramFlashcardStep).cards || [];
+            if (cards.length === 0) return true;
+            if (internalProgress.answers[currentStepIndex]?.completed) return true;
             const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards;
-            return cardSet.size === cards.length;
+            return cardSet.size >= cards.length || exploredCards.size >= cards.length;
         }
 
         const answer = internalProgress.answers[currentStepIndex];
-        if (currentStep.type === 'trueFalseList' || currentStep.type === 'matching' || (currentStep as any).type === 'conceptMatching') {
+        if (currentStep.type === 'trueFalseList' || currentStep.type === 'matching' || (currentStep as any).type === 'conceptMatching' || currentStep.type === 'anagramGame' || (currentStep as any).type === 'kelimeDahasi') {
             return !!answer?.completed || answer !== undefined;
         }
 
         return answer !== undefined && answer !== null;
 
-    }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
+    }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, exploredCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
 
     const handleNext = useCallback(() => {
         if (!currentStep) return;
@@ -4316,6 +4329,7 @@ export function LessonContentViewer({
             setRevealedSentencesCount(1);
             setFlippedCards(new Set());
             setFlippedAnagramCards(new Set());
+            setExploredCards(new Set());
             setIsAnimating(false);
             setIsVisualMaximized(false); 
         } else {
@@ -4331,7 +4345,7 @@ export function LessonContentViewer({
         if (internalProgress.answers[currentStepIndex] !== undefined) return;
         let isCorrect = false;
         let points = 0;
-        // BURADA DEĞİŞİKLİKLER YAPILDI: Tüm puanlar 100'e sabitlendi
+        
         if (currentStep.type === 'mcq' || currentStep.type === 'fitb') {
             isCorrect = answer === (currentStep as McqStep).correctAnswer;
             points = isCorrect ? 100 : 0;
@@ -4341,6 +4355,9 @@ export function LessonContentViewer({
         } else if (currentStep.type === 'anagram') {
             isCorrect = (answer as string).toLocaleUpperCase('tr-TR') === (currentStep as AnagramStep).correctAnswer.toLocaleUpperCase('tr-TR');
             points = isCorrect ? 100 : 0;
+        } else if (currentStep.type === 'anagramGame' || (currentStep as any).type === 'kelimeDahasi') {
+            isCorrect = true;
+            points = 100;
         } else if (currentStep.type === 'sentenceScramble') {
              isCorrect = (answer as string) === (currentStep as SentenceScrambleStep).correctSentence;
              points = isCorrect ? 100 : 0;
@@ -4348,6 +4365,7 @@ export function LessonContentViewer({
              isCorrect = true;
              points = 100;
         }
+
         if (isCorrect) {
             playSound('correct');
             import('canvas-confetti').then((confettiModule) => {
@@ -4363,7 +4381,7 @@ export function LessonContentViewer({
         } else {
             playSound('incorrect');
         }
-        const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { answer, isCorrect } };
+        const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { answer, isCorrect, completed: true } };
         const newScore = internalProgress.score + points;
         setInternalProgress({ answers: newAnswers, score: newScore });
     };
@@ -4373,16 +4391,22 @@ export function LessonContentViewer({
         const cardSet = type === 'flashcard' ? flippedCards : flippedAnagramCards;
         const setCardSet = type === 'flashcard' ? setFlippedCards : setFlippedAnagramCards;
         const currentStepTyped = currentStep as FlashcardStep | AnagramFlashcardStep;
-        const totalCards = currentStepTyped.cards.length;
+        const totalCards = currentStepTyped.cards?.length || 0;
+        
         const newSet = new Set(cardSet);
         if (newSet.has(cardIndex)) newSet.delete(cardIndex);
         else newSet.add(cardIndex);
         setCardSet(newSet);
-        const isAllFlipped = newSet.size === totalCards;
-        if(isAllFlipped && internalProgress.answers[currentStepIndex] === undefined) {
-             const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
-            setInternalProgress(prev => ({ ...prev, answers: newAnswers }));
-        }
+
+        setExploredCards(prev => {
+            const next = new Set(prev);
+            next.add(cardIndex);
+            if (next.size >= totalCards && internalProgress.answers[currentStepIndex] === undefined) {
+                const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
+                setInternalProgress(p => ({ ...p, answers: newAnswers }));
+            }
+            return next;
+        });
     }, [currentStep, flippedCards, flippedAnagramCards, internalProgress, currentStepIndex]);
 
     const handleSlideScrolledToEnd = useCallback(() => {
