@@ -4332,7 +4332,7 @@ export function LessonContentViewer({
             setIsAnimating(false);
             setIsVisualMaximized(false); 
         } else {
-            const finalScore = internalProgress.score + 10000;
+            const finalScore = internalProgress.score;
             setInternalProgress(prev => ({ ...prev, score: finalScore }));
             setIsFinished(true);
             playSound('win');
@@ -4347,22 +4347,22 @@ export function LessonContentViewer({
         
         if (currentStep.type === 'mcq' || currentStep.type === 'fitb') {
             isCorrect = answer === (currentStep as McqStep).correctAnswer;
-            points = isCorrect ? 100 : 0;
+            points = isCorrect ? 250 : 0;
         } else if (currentStep.type === 'tf') {
             isCorrect = (answer === "Doğru") === (currentStep as TfStep).isTrue;
-            points = isCorrect ? 100 : 0;
+            points = isCorrect ? 250 : 0;
         } else if (currentStep.type === 'anagram') {
             isCorrect = (answer as string).toLocaleUpperCase('tr-TR') === (currentStep as AnagramStep).correctAnswer.toLocaleUpperCase('tr-TR');
-            points = isCorrect ? 100 : 0;
+            points = isCorrect ? 250 : 0;
         } else if (currentStep.type === 'anagramGame' || (currentStep as any).type === 'kelimeDahasi') {
             isCorrect = true;
-            points = 100;
+            points = 250;
         } else if (currentStep.type === 'sentenceScramble') {
              isCorrect = (answer as string) === (currentStep as SentenceScrambleStep).correctSentence;
-             points = isCorrect ? 100 : 0;
+             points = isCorrect ? 250 : 0;
         } else if (currentStep.type === 'matching' || (currentStep as any).type === 'conceptMatching') {
              isCorrect = true;
-             points = 100;
+             points = 250;
         }
 
         if (isCorrect) {
@@ -4437,7 +4437,7 @@ export function LessonContentViewer({
         if (!currentStep || currentStep.type !== 'trueFalseList') return;
         const answersForStep = internalProgress.answers[currentStepIndex];
         const correctCount = Object.values(answersForStep || {}).filter((a: any) => a.isCorrect).length;
-        const points = correctCount * 100;
+        const points = correctCount * 250;
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { ...answersForStep, completed: true } };
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
         if (correctCount > 0) {

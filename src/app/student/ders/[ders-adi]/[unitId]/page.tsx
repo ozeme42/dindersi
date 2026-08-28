@@ -237,13 +237,12 @@ function PageContent() {
         const isUnitFlow = activeContentData.type === 'unit';
         const currentCompletionData = completedTopics[contentId];
         const currentCompletionCount = currentCompletionData ? (currentCompletionData.completionCount || 0) : 0;
-        let completionBonus = 0, totalScore = 0;
+        let totalScore = 0;
         let toastTitle = "İçerik Tamamlandı!", toastDescription = "Tebrikler, bu bölümü başarıyla bitirdin!";
         if (currentCompletionCount < 2) {
-            completionBonus = score;
-            totalScore = score + completionBonus;
+            totalScore = score;
             toastTitle = currentCompletionCount === 0 ? "Harika! Bölüm Bitti!" : "Bölüm Tekrarı!";
-            toastDescription = `Sorulardan ${score} ve Bonustan ${completionBonus} puan kazandın. Toplam: ${totalScore} Puan!`;
+            toastDescription = `Tebrikler! Bu dersten toplam ${score} Puan kazandın!`;
         } else {
             totalScore = 0;
             toastDescription = "Bu bölümü daha önce tamamladığın için tekrar puan kazanmadın.";
