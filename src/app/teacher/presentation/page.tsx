@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { getCachedSteps, setCachedSteps } from '@/lib/lesson-cache';
 import type { Topic, Unit, LessonStep } from '@/lib/types';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
@@ -239,6 +240,22 @@ function PresentationPageContent() {
         }
 
         try {
+            const targetId = topicId || unitId;
+            // 0. Check client cache first if topicId is specified
+            if (topicId) {
+                const cached = getCachedSteps(topicId);
+                if (cached && cached.length > 0) {
+                    let finalSteps = cached;
+                    if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
+                        finalSteps = cached.filter((s: any) => s.isPublished ?? true);
+                    }
+                    setContent({ id: topicId, title: topicName || 'Konu Sunumu', steps: finalSteps });
+                    setTotalStepsCount(finalSteps.length);
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
             let contentRef;
             if (topicId) {
                 contentRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
@@ -264,18 +281,22 @@ function PresentationPageContent() {
                          if (flowRes.ok) {
                              const staticSteps = await flowRes.json();
                              if (staticSteps.length > 0) {
-                                steps = staticSteps;
+                                 steps = staticSteps;
                              }
                          }
                      } catch (e) {}
                  }
                 
+                 if (topicId && steps.length > 0) {
+                     setCachedSteps(topicId, steps);
+                 }
+
                  let finalSteps = steps;
                 if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
                     finalSteps = steps.filter((s: any) => s.isPublished ?? true);
                 }
 
-                 setContent({ id: contentId, title: data.title, steps: finalSteps });
+                 setContent({ id: contentId, title: data.title || topicName || 'Sunum', steps: finalSteps });
                  setTotalStepsCount(finalSteps.length);
             } else {
                 // Fallback: Static Manifest & Flow JSON

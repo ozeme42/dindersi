@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
+import { setCachedSteps } from '@/lib/lesson-cache';
 import { generateCustomPromptStep } from '@/ai/flows/generate-custom-prompt-step';
 import Link from 'next/link';
 import Image from "next/image";
@@ -1673,6 +1674,7 @@ function TopicEditorWrapper() {
         const stepsToSave = steps.map(({ id, ...rest }) => rest);
         const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText, htmlContent });
         if (result.success) { 
+            setCachedSteps(topicId, stepsToSave as any);
             toast({ title: "Başarılı", description: "Ders akışı başarıyla kaydedildi." });
         } else { 
             toast({ title: "Hata", description: result.error, variant: "destructive" }); 

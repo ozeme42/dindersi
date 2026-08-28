@@ -15,6 +15,7 @@ import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { doc, getDoc, getDocs, collection, onSnapshot, writeBatch, serverTimestamp, increment, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { CourseSidebar } from "@/components/course-sidebar";
+import { getCachedSteps, setCachedSteps } from "@/lib/lesson-cache";
 
 type LocalProgress = {
     answers: { [stepIndex: number]: any };
@@ -83,6 +84,12 @@ function PageContent() {
     }, []);
 
     const fetchStepsForContent = async (contentId: string, unitId?: string): Promise<LessonStep[]> => {
+        // 0. Check client-side memory/localStorage cache (0ms latency, 0 database reads)
+        const cached = getCachedSteps(contentId);
+        if (cached && cached.length > 0) {
+            return cached;
+        }
+
         // 1. Check if Firestore has the topic steps
         try {
             const targetUnitId = unitId || unitIdFromUrl;
@@ -90,7 +97,9 @@ function PageContent() {
                 const topicRef = doc(db, 'courses', courseId, 'units', targetUnitId, 'topics', contentId);
                 const topicSnap = await getDoc(topicRef);
                 if (topicSnap.exists() && Array.isArray(topicSnap.data()?.steps) && topicSnap.data().steps.length > 0) {
-                    return topicSnap.data().steps;
+                    const steps = topicSnap.data().steps;
+                    setCachedSteps(contentId, steps);
+                    return steps;
                 }
             }
         } catch (e) {
@@ -100,7 +109,13 @@ function PageContent() {
         // 2. Fallback to static flow JSON
         try {
             const res = await fetch(`/curriculum/flows/${contentId}.json?v=${Date.now()}`);
-            if (res.ok) return await res.json();
+            if (res.ok) {
+                const steps = await res.json();
+                if (Array.isArray(steps) && steps.length > 0) {
+                    setCachedSteps(contentId, steps);
+                    return steps;
+                }
+            }
         } catch (e) {
             console.warn(`Could not fetch static flow for ${contentId}:`, e);
         }
