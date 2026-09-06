@@ -1,8 +1,8 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback } from "react";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Sparkles, Loader2, Gamepad2 } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Sparkles, Loader2, Gamepad2, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,7 @@ import { getCurriculumForSelection, type EnrichedCourse } from './actions/get-cu
 // Type Definitions
 type Topic = { id: string; title: string; };
 type Unit = { id: string; title: string; topics: Topic[]; };
-type Course = EnrichedCourse;
+type Course = EnrichedCourse & { icon?: any; color?: string; };
 
 // --- UI COMPONENTS ---
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -130,8 +130,9 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
     const fetchInitialData = async () => {
         if (!user) return;
         setIsLoading(true);
-        const courseData = await getCurriculumForSelection(user.uid, dataType);
-        const enrichedCourses = courseData.map((c, i) => ({
+        const { classGroups, error: fetchError } = await getCurriculumForSelection(dataType, true, user.uid);
+        const courses = (classGroups || []).flatMap(cg => cg.courses || []);
+        const enrichedCourses: Course[] = courses.map((c: any, i: number) => ({
             ...c,
             icon: ICONS[i % ICONS.length],
             color: getGradient(i)
@@ -156,7 +157,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
     
     setIsLoading(true);
     setTimeout(() => {
-        setUnits(course.units || []);
+        setUnits((course.units as any) || []);
         setIsLoading(false);
         setCurrentStep(2);
     }, 300);
@@ -183,8 +184,8 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
 
     setIsLoading(true);
     setTimeout(() => {
-        const selectedCourse = allCourses.find(c => c.id === selection.courseId);
-        const selectedUnit = selectedCourse?.units.find(u => u.id === unitId);
+        const selectedCourse = allCourses.find((c: any) => c.id === selection.courseId);
+        const selectedUnit = selectedCourse?.units.find((u: any) => u.id === unitId);
         setTopics(selectedUnit?.topics || []);
         setIsLoading(false);
         setCurrentStep(3);
@@ -232,7 +233,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
           case 1:
             return (
                 <div className="grid grid-cols-1 gap-3 md:gap-6">
-                    {allCourses.length > 0 ? allCourses.map((course, idx) => (
+                    {allCourses.length > 0 ? allCourses.map((course: any, idx: number) => (
                         <SelectionCard 
                             key={course.id}
                             title={course.title}
@@ -258,7 +259,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                             delay={0}
                         />
                     )}
-                    {units.map((unit, idx) => (
+                    {units.map((unit: any, idx: number) => (
                         <SelectionCard 
                             key={unit.id}
                             title={unit.title}
@@ -283,7 +284,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                             delay={0}
                         />
                     )}
-                    {topics.map((topic, idx) => (
+                    {topics.map((topic: any, idx: number) => (
                         <SelectionCard 
                             key={topic.id}
                             title={topic.title}

@@ -39,6 +39,7 @@ function PresentationPageContent() {
     const topicId = searchParams.get('topicId');
     const courseName = searchParams.get('courseName');
     const unitName = searchParams.get('unitName');
+    const topicName = searchParams.get('topicName');
 
     const [content, setContent] = useState<(Topic | Unit) & { steps?: LessonStep[] } | null>(null);
     const [isLoading, setIsLoading] = useState(true);

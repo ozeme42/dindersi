@@ -22,7 +22,7 @@ export type ClassGroup = {
  * Statik seçildiğinde 'public/curriculum/manifest.json' dosyasını okur.
  */
 export async function getCurriculumForSelection(
-    dataType: 'games' | 'yazilacaklar' | 'ozetler',
+    dataType: 'games' | 'yazilacaklar' | 'ozetler' | 'questions',
     isStatic: boolean,
     userId?: string
 ): Promise<{ classGroups: ClassGroup[], error?: string }> {
@@ -96,7 +96,7 @@ export async function getCurriculumForSelection(
                 const validTopics = topicsWithFlags.filter(t => (t.isPublished ?? true));
                 const unitHasOzet = !!unitDoc.htmlContent;
                 const unitHasTopicsWithContent = validTopics.some(t => {
-                    if (dataType === 'games') return true;
+                    if (dataType === 'games' || dataType === 'questions') return true;
                     if (dataType === 'ozetler') return t.hasOzetContent;
                     if (dataType === 'yazilacaklar') return t.hasYazilacaklarContent;
                     return false;
@@ -122,7 +122,7 @@ export async function getCurriculumForSelection(
         }
         
         enrichedCourses.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr'));
-        const groupedByClass: {[key: string]: Course[]} = {};
+        const groupedByClass: {[key: string]: EnrichedCourse[]} = {};
         enrichedCourses.forEach(course => {
             const className = course.className || 'Genel';
             if (!groupedByClass[className]) groupedByClass[className] = [];

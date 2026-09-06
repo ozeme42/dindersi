@@ -94,19 +94,19 @@ function HardestWorkersToday() {
                 {isLoading ? (
                     [1,2,3].map(i => <div key={i} className="p-4"><Skeleton className="h-14 w-full rounded-2xl bg-white/5" /></div>)
                 ) : dailyTop.length > 0 ? dailyTop.map((student, i) => (
-                    <div key={student.uid || i} className={cn("flex items-center justify-between px-5 py-4 hover:bg-white/3 transition-colors group", i === 0 && "bg-amber-500/5")}>
-                        <div className="flex items-center gap-4">
-                            <span className="text-2xl">{rankConfig[i].label}</span>
-                            <div className="relative">
-                                <UserAvatar user={student} className={cn("w-11 h-11 border-2 border-white/10", i === 0 && "border-amber-500/50 shadow-[0_0_12px_rgba(251,191,36,0.3)]")}/>
+                    <div key={student.uid || i} className={cn("flex items-center justify-between px-3.5 sm:px-5 py-4 hover:bg-white/3 transition-colors group gap-2", i === 0 && "bg-amber-500/5")}>
+                        <div className="flex items-center gap-3 min-w-0">
+                            <span className="text-xl sm:text-2xl shrink-0">{rankConfig[i].label}</span>
+                            <div className="relative shrink-0">
+                                <UserAvatar user={student} className={cn("w-10 h-10 sm:w-11 sm:h-11 border-2 border-white/10", i === 0 && "border-amber-500/50 shadow-[0_0_12px_rgba(251,191,36,0.3)]")}/>
                             </div>
-                            <div>
-                                <p className="font-black text-white text-sm">{student.displayName}</p>
-                                <p className="text-white/30 text-xs font-medium">Bugün</p>
+                            <div className="min-w-0">
+                                <p className="font-black text-white text-xs sm:text-sm truncate">{student.displayName}</p>
+                                <p className="text-white/30 text-[10px] sm:text-xs font-medium">Bugün</p>
                             </div>
                         </div>
-                        <div className={cn("px-4 py-1.5 rounded-full border", i === 0 ? "bg-amber-500/15 border-amber-500/30" : "bg-white/5 border-white/10")}>
-                            <p className={cn("font-black text-sm tabular-nums", rankConfig[i].text)}>+{student.score} XP</p>
+                        <div className={cn("px-2.5 sm:px-4 py-1.5 rounded-full border shrink-0", i === 0 ? "bg-amber-500/15 border-amber-500/30" : "bg-white/5 border-white/10")}>
+                            <p className={cn("font-black text-xs sm:text-sm tabular-nums", rankConfig[i].text)}>+{student.score} XP</p>
                         </div>
                     </div>
                 )) : (
@@ -117,59 +117,6 @@ function HardestWorkersToday() {
     );
 }
 
-
-function DesktopSidebar({ examBadge, handleLogout }: { examBadge: number, handleLogout: () => void }) {
-    const pathname = usePathname();
-    const tabs = [
-        { href: '/student', icon: Home, label: 'Ana Sayfa' },
-        { href: '/student/soru-bankasi', icon: Map, label: 'Macera Haritası' },
-        { href: '/student/gorevler', icon: Compass, label: 'Görev Yolculuğu' },
-        { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
-        { href: '/student/shop', icon: ShoppingCart, label: 'Mağaza' },
-        { href: '/student/profile', icon: User, label: 'Profil' },
-    ];
-    return (
-        <aside className="hidden md:flex flex-col fixed top-0 left-0 w-72 h-screen bg-[#0a081e]/90 backdrop-blur-2xl border-r border-white/8 z-50 p-6 overflow-y-auto">
-            <div className="flex items-center gap-3 mb-10 mt-2 px-2">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                    <Sparkles className="w-7 h-7 text-white" />
-                </div>
-                <h1 className="text-2xl font-black text-white tracking-wide leading-tight">Din Dersi<br/><span className="text-emerald-400">Atölyesi</span></h1>
-            </div>
-            
-            <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 px-2">Ana Menü</div>
-            <nav className="flex-1 flex flex-col gap-2">
-                {tabs.map(tab => {
-                    const isActive = pathname === tab.href;
-                    const Icon = tab.icon;
-                    return (
-                        <Link key={tab.href} href={tab.href} className={cn(
-                            "flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 font-bold",
-                            isActive 
-                                ? "bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
-                                : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
-                        )}>
-                            <div className="relative">
-                                <Icon className={cn("w-6 h-6 transition-transform", isActive && "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)] scale-110")} />
-                                {tab.href === '/student/deneme' && examBadge > 0 && (
-                                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border border-slate-950">{examBadge}</span>
-                                )}
-                            </div>
-                            <span className="text-base">{tab.label}</span>
-                        </Link>
-                    );
-                })}
-            </nav>
-
-            <div className="mt-auto pt-6 border-t border-white/5">
-                <Button onClick={handleLogout} variant="ghost" className="w-full justify-start gap-4 px-4 py-4 h-auto text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-2xl transition-colors font-bold border border-transparent">
-                    <LogOut className="w-6 h-6" />
-                    <span className="text-base">Çıkış Yap</span>
-                </Button>
-            </div>
-        </aside>
-    );
-}
 
 // ===================== ANA SAYFA =====================
 function PageContent() {
@@ -361,9 +308,9 @@ function PageContent() {
         </div>
 
         {/* ════════ YAPIŞIK ÜST BAR ════════ */}
-        <header className="sticky top-0 z-40 md:ml-72">
+        <header className="sticky top-0 z-40 w-full">
             <div className="absolute inset-0 bg-[#09071a]/70 backdrop-blur-2xl border-b border-white/5" />
-            <div className="relative w-full max-w-lg md:max-w-7xl mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between gap-3">
+            <div className="relative w-full max-w-7xl mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between gap-3">
                 {/* Avatar */}
                 <div className="flex items-center gap-3 min-w-0">
                     <div className="relative shrink-0">
@@ -399,7 +346,7 @@ function PageContent() {
         </header>
 
         {/* ════════ ANA İÇERİK ════════ */}
-        <main className="w-full max-w-lg md:max-w-7xl mx-auto px-4 md:px-8 pt-5 pb-36 md:ml-72 space-y-6 md:space-y-8 relative z-10">
+        <main className="w-full max-w-7xl mx-auto px-4 md:px-8 pt-5 pb-36 space-y-6 md:space-y-8 relative z-10">
 
             {/* ── BÜYÜK PROFİL HERO KARTI ── */}
             <section className="relative rounded-[2.5rem] overflow-hidden border border-white/10 p-[2px] group shadow-[0_20px_80px_rgba(99,102,241,0.2)] hover:shadow-[0_20px_80px_rgba(99,102,241,0.4)] transition-shadow duration-700">
@@ -542,15 +489,15 @@ function PageContent() {
                 </div>
             </section>
 
-            <div className="md:grid md:grid-cols-12 md:gap-8 space-y-6 md:space-y-0">
+            <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-6 lg:space-y-0">
                 {/* SOL KOLON: Ana Görevler ve Keşfet */}
-                <div className="md:col-span-8 space-y-6 md:space-y-8">
+                <div className="lg:col-span-8 space-y-6 md:space-y-8">
                     {/* ── BÜYÜK İŞLEM KARTLARI ── */}
             <section>
                 <h2 className="text-white font-black text-xs uppercase tracking-[0.2em] mb-3 px-1 flex items-center gap-2">
                     <span className="w-1 h-3.5 bg-indigo-400 rounded-full" />Başla
                 </h2>
-                <div className="space-y-3">
+                <div className="flex flex-col gap-4 md:gap-5">
                     {/* Macera Haritası */}
                     <Link href="/student/soru-bankasi">
                         <div className="group relative rounded-3xl overflow-hidden border border-sky-500/30 shadow-[0_12px_40px_rgba(14,165,233,0.3)] active:scale-[0.98] transition-all duration-200 cursor-pointer">
@@ -645,16 +592,13 @@ function PageContent() {
                 </div>
 
                 {/* SAĞ KOLON: Günün Efsaneleri */}
-                <div className="md:col-span-4 space-y-6 md:space-y-8">
+                <div className="lg:col-span-4 space-y-6 md:space-y-8">
                     {/* ── GÜNÜN EFSANELERİ ── */}
                     <HardestWorkersToday />
                 </div>
             </div>
 
         </main>
-
-        {/* MASAÜSTÜ YAN MENÜ */}
-        <DesktopSidebar examBadge={examStats.pending} handleLogout={handleLogout} />
 
 
         <style jsx global>{`

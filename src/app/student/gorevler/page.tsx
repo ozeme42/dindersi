@@ -6,13 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
-  Map, Lock, CheckCircle2, Play, ArrowRight, ChevronLeft, Loader2, Trophy, BookOpen, Gamepad2, Target, Lightbulb, Puzzle, Search, SortAsc, Link2, Skull, X, Crosshair, Gift
+  Map, Lock, CheckCircle2, Play, ArrowRight, ChevronLeft, Loader2, Trophy, BookOpen, Gamepad2, Target, Lightbulb, Puzzle, Search, SortAsc, Link2, Skull, X, Crosshair, Gift, Compass, Sparkles
 } from 'lucide-react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { getStudentCurriculum, getUserTopicProgress, claimTopicRewardAction } from './actions';
 import type { Course, Topic, UserProgress } from "@/lib/types";
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, limit, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
@@ -110,8 +111,9 @@ export default function StudentMissionsPage() {
         }
 
         if (coursesDataRaw && coursesDataRaw.length > 0) {
-            const [progressData, rewardsSnap] = await Promise.all([
+            const [progressData, userSnap, rewardsSnap] = await Promise.all([
                 getUserTopicProgress(user.uid),
+                getDoc(doc(db, 'users', user.uid)),
                 getDocs(query(
                     collection(db, 'scoreEvents'),
                     where('userId', '==', user.uid),
@@ -122,7 +124,19 @@ export default function StudentMissionsPage() {
             
             const mergedProgress = { ...(progressData || {}) };
 
-            rewardsSnap.forEach(doc => {
+            if (userSnap.exists()) {
+                const completedTopics = userSnap.data()?.completedTopics || [];
+                completedTopics.forEach((tId: string) => {
+                    if (!mergedProgress[tId]) {
+                        mergedProgress[tId] = { completionCount: 1, completed: true };
+                    } else {
+                        mergedProgress[tId].completed = true;
+                        mergedProgress[tId].completionCount = Math.max(mergedProgress[tId].completionCount || 0, 1);
+                    }
+                });
+            }
+
+            rewardsSnap.forEach((doc: any) => {
                 const data = doc.data();
                 const topicId = data.context; 
                 if (topicId) {
@@ -249,7 +263,7 @@ export default function StudentMissionsPage() {
 
   const handleStartGame = (gameType: string) => {
     if (!activeCourse || !selectedTopic) return;
-    const unit = activeCourse.units.find(u => u.topics.some((t: Topic) => t.id === selectedTopic.id));
+    const unit = activeCourse.units.find(u => (u.topics || []).some((t: any) => t?.id === selectedTopic.id));
 
     const params = new URLSearchParams({
         classId: user?.class || '',
@@ -331,7 +345,7 @@ export default function StudentMissionsPage() {
   if (isLoading && courses.length === 0) return <div className="h-screen flex items-center justify-center bg-slate-950 text-white"><Loader2 className="animate-spin h-12 w-12 text-cyan-500"/></div>;
 
   if (activeCourse) {
-    const allTopics = activeCourse.units.flatMap(u => u.topics);
+    const allTopics = activeCourse.units.flatMap(u => u.topics || []);
 
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8 relative font-sans">
@@ -358,8 +372,8 @@ export default function StudentMissionsPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {unit.topics.map((topic: Topic) => {
-                            const currentIndex = allTopics.findIndex(t => t.id === topic.id);
+                        {(unit.topics || []).map((topic: Topic) => {
+                            const currentIndex = allTopics.findIndex(t => t?.id === topic.id);
                             const prevTopic = currentIndex > 0 ? allTopics[currentIndex - 1] : null;
                             
                             const isPrevCompleted = prevTopic ? isTopicCompleted(prevTopic.id) : false;
@@ -606,34 +620,53 @@ export default function StudentMissionsPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8 relative overflow-hidden font-sans">
       <MissionBackground />
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="flex flex-col items-center text-center mb-16 space-y-6">
-          <div className="relative">
-              <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 rounded-full"></div>
-              <div className="relative p-5 bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl ring-1 ring-indigo-500/50 shadow-2xl">
-                <Map className="h-14 w-14 text-indigo-400" />
-              </div>
-          </div>
-          <div>
-              <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight drop-shadow-2xl mb-2">
-                GÖREV <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">YOLCULUĞU</span>
-              </h1>
-              <p className="text-lg text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed">
-                Bir ders seç, haritayı takip et ve her bölümü tamamlayarak efsanevi ödülleri topla.
-              </p>
-          </div>
-          <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white bg-white/5 backdrop-blur-sm px-6 h-12 rounded-xl">
-              <a href="/student"><ChevronLeft className="mr-2 h-4 w-4"/> Panele Dön</a>
-          </Button>
+      <div className="relative z-10 max-w-7xl mx-auto">
+        {/* Modern Hero Header */}
+        <div className="relative rounded-[2rem] p-6 md:p-8 mb-8 md:mb-12 bg-gradient-to-r from-purple-950/60 via-slate-900/80 to-indigo-950/60 border border-purple-500/20 backdrop-blur-2xl shadow-2xl overflow-hidden">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-fuchsia-500/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-fuchsia-400/40 to-transparent" />
+            
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30 text-white shrink-0">
+                            <Compass className="w-6 h-6" />
+                        </div>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-400/30 text-purple-300 text-[11px] font-black uppercase tracking-widest">
+                            <Trophy className="w-3 h-3 text-amber-400" /> Macera Sezonu
+                        </div>
+                    </div>
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                        Görev <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-purple-300 to-indigo-400">Yolculuğu</span>
+                    </h1>
+                    <p className="text-slate-300/80 text-sm md:text-base max-w-2xl font-medium leading-relaxed">
+                        Bir ders seç, haritadaki aşamaları sırayla tamamla ve her bölüm sonunda {TOPIC_REWARD.toLocaleString()} XP değerindeki efsanevi ödülleri topla!
+                    </p>
+                </div>
+
+                <div className="flex flex-wrap sm:flex-nowrap gap-3 shrink-0">
+                    <div className="bg-black/40 border border-white/10 rounded-2xl p-4 min-w-[110px] flex flex-col items-center justify-center text-center backdrop-blur-md">
+                        <BookOpen className="w-5 h-5 text-purple-400 mb-1" />
+                        <span className="text-xl md:text-2xl font-black text-white tabular-nums">{courses.length}</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Aktif Ders</span>
+                    </div>
+                    <div className="bg-black/40 border border-white/10 rounded-2xl p-4 min-w-[110px] flex flex-col items-center justify-center text-center backdrop-blur-md">
+                        <Trophy className="w-5 h-5 text-amber-400 mb-1" />
+                        <span className="text-xl md:text-2xl font-black text-amber-300 tabular-nums">+{TOPIC_REWARD.toLocaleString()}</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bölüm Başı XP</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         {courses.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
             {courses.map((course) => {
-                const totalTopics = course.units.reduce((acc, u) => acc + u.topics.length, 0);
+                const totalTopics = course.units.reduce((acc, u) => acc + (u.topics?.length || 0), 0);
                 let completedTopicsInCourse = 0;
                 course.units.forEach(u => {
-                    u.topics.forEach(t => {
+                    u.topics?.forEach(t => {
                         if (isTopicCompleted(t.id)) completedTopicsInCourse++;
                     });
                 });

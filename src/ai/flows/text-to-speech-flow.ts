@@ -28,7 +28,7 @@ async function toWav(pcmData: Buffer): Promise<string> {
         });
 
         const chunks: Buffer[] = [];
-        writer.on('data', (chunk) => {
+        writer.on('data', (chunk: Buffer) => {
             chunks.push(chunk);
         });
         writer.on('end', () => {

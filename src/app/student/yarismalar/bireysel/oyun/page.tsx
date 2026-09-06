@@ -138,7 +138,7 @@ function CompetitionComponent() {
             };
             const questionResult = await getQuestionsFromBank(params as any);
 
-            if ('error' in questionResult) setError(questionResult.error);
+            if ('error' in questionResult) setError(questionResult.error || null);
             else if (questionResult.questions) setQuestions(questionResult.questions as GameQuestion[]);
             else setError("Uygun soru bulunamadı.");
             setIsLoading(false);

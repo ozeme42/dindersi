@@ -31,7 +31,7 @@ export async function getActivitiesPageData(): Promise<EnrichedClass[]> {
                 const unitsSnapshot = await getDocs(query(collection(db, `courses/${courseData.id}/units`), orderBy("title")));
                 const unitsData: (Unit & { topics: Topic[] })[] = [];
                 for (const unitDoc of unitsSnapshot.docs) {
-                    const unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as (Unit & { topics: Topic[] });
+                    const unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as unknown as (Unit & { topics: Topic[] });
                     const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseData.id}/units/${unitDoc.id}/topics`), orderBy("title")));
                     unit.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
                     unitsData.push(unit);

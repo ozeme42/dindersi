@@ -1680,7 +1680,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                         <SelectValue placeholder="Konu Seç" />
                                     </SelectTrigger>
                                     <SelectContent className="bg-slate-900 border-white/15 text-white">
-                                        {selectedUnitData?.topics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}
+                                        {selectedUnitData?.topics?.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -1744,7 +1744,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                             </div>
                             <div>
                                 <DialogTitle className="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
-                                    {step?.id && !step.id.startsWith('new-') ? 'Adımı Düzenle' : 'Yeni Adım Ekle'}
+                                    {(step as any)?.id && !(step as any).id.startsWith('new-') ? 'Adımı Düzenle' : 'Yeni Adım Ekle'}
                                 </DialogTitle>
                                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
                                     Tür: <strong className="text-indigo-300">{editedStep.type}</strong>
@@ -1890,7 +1890,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     onOpenChange={setIsLibraryOpen}
                     onItemsSelected={(handleSelectFromLibrary as any)}
                     context={context || {}}
-                    config={libraryConfig}
+                    config={libraryConfig as any}
                 />
             )}
         </>

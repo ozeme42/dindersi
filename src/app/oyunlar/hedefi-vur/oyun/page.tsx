@@ -131,7 +131,7 @@ const PauseMenu = ({
                         
                         <div className="flex justify-between items-end mb-2">
                             <span className="text-2xl font-black text-white">{score}</span>
-                            <span className="text-sm font-medium text-slate-500 mb-1">/ {threshold} Puan Gerekli</span>
+                            <span className="text-sm font-medium text-slate-500 mb-1">/ {threshold} Hedef Gerekli</span>
                         </div>
 
                         <div className="h-3 w-full bg-slate-700 rounded-full overflow-hidden">
@@ -142,7 +142,7 @@ const PauseMenu = ({
                         </div>
                         {!isPassed && (
                             <p className="text-xs text-slate-400 mt-2 text-center">
-                                Görevi tamamlamak için <span className="text-white font-bold">{threshold - score}</span> puan daha toplamalısın.
+                                Görevi tamamlamak için <span className="text-white font-bold">{Math.max(0, threshold - score)}</span> hedef daha vurmalısın.
                             </p>
                         )}
                     </div>
@@ -180,6 +180,7 @@ function HitTheTargetGame() {
     const [currentRoundIndex, setCurrentRoundIndex] = useState(0);
     const [targets, setTargets] = useState<TargetInfo[]>([]);
     const [score, setScore] = useState(0);
+    const [correctHits, setCorrectHits] = useState(0);
     const [timeLeft, setTimeLeft] = useState(30);
     
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'paused' | 'round_end' | 'finished'>('loading');
@@ -285,13 +286,13 @@ function HitTheTargetGame() {
             } else {
                 setGameState('finished');
                 playSound('win');
-                const maxPossibleScore = rounds.length * 5;
-                if (score >= maxPossibleScore / 2) {
+                const minHits = Math.max(1, Math.ceil((rounds.length || 5) / 2));
+                if (correctHits >= minHits) {
                     setShowConfetti(true);
                 }
             }
         }, 1500);
-    }, [currentRoundIndex, rounds, generateTargets, score]);
+    }, [currentRoundIndex, rounds, generateTargets, correctHits]);
     
     const handleManualPause = () => {
         setIsPaused(true);
@@ -388,6 +389,7 @@ function HitTheTargetGame() {
 
         if (target.isCorrect) {
             playSound('correct'); 
+            setCorrectHits(prev => prev + 1);
             setScore(prev => prev + 5); 
             handleRoundEnd(true);
         } else {
@@ -396,9 +398,8 @@ function HitTheTargetGame() {
         }
     };
 
-    const maxScore = rounds.length * 5;
-    const successThreshold = Math.ceil(maxScore / 2);
-    const isSuccess = score >= successThreshold;
+    const minRequiredHits = Math.max(1, Math.ceil((rounds.length || 5) / 2));
+    const isThresholdPassed = correctHits >= minRequiredHits;
     const finalScoreToSave = Math.ceil(score / 2);
 
     const handleSaveAndExit = async () => {
@@ -423,7 +424,7 @@ function HitTheTargetGame() {
                     gameType: 'hedefi-vur',
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: isSuccess
+                    completed: isThresholdPassed
                 });
 
                 // 2. Kullanıcı Profilini Güncelleme (users -> score)
@@ -435,10 +436,10 @@ function HitTheTargetGame() {
                 // İşlemleri Kaydet
                 await batch.commit();
 
-                if (isSuccess) {
+                if (isThresholdPassed) {
                     toast({ title: "Görev Başarılı!", description: `Tebrikler! ${finalScoreToSave} XP kazandın ve kaydedildi.`, className: "bg-green-600 text-white" });
                 } else {
-                    toast({ title: "Görev Tamamlanamadı", description: "Başarı oranını %50'nin üzerine çıkarmalısın.", variant: "destructive" });
+                    toast({ title: "Puan Kaydedildi (Görev Tamamlanmadı)", description: "Başarı oranını %50'nin üzerine çıkarmalısın.", variant: "destructive" });
                 }
             } else {
                 // --- NORMAL MOD KAYDI ---
@@ -461,6 +462,7 @@ function HitTheTargetGame() {
 
     const handleRestart = () => {
         setScore(0);
+        setCorrectHits(0);
         setCurrentRoundIndex(0);
         setGameState('loading');
         setIsScoreSaved(false);
@@ -472,62 +474,6 @@ function HitTheTargetGame() {
     if (error) return <div className="flex h-[100dvh] w-full items-center justify-center p-4 bg-slate-950 text-white">{error}</div>;
 
     if (gameState === 'finished') {
-        if(isMission) {
-             return (
-                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
-                        <Confetti active={showConfetti} config={{ angle: 90, spread: 360, startVelocity: 40, elementCount: 100, decay: 0.9 }} />
-                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
-                            
-                            <div className="mb-6 flex justify-center">
-                                {isSuccess ? (
-                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
-                                        <Trophy className="h-16 w-16 text-green-600" />
-                                    </div>
-                                ) : (
-                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
-                                        <XOctagon className="h-16 w-16 text-red-500" />
-                                    </div>
-                                )}
-                            </div>
-
-                            <h2 className="text-3xl font-black text-slate-800 mb-2">
-                                {isSuccess ? "GÖREV BAŞARILI!" : "GÖREV TAMAMLANMADI"}
-                            </h2>
-                            
-                            <p className="text-slate-500 mb-2 font-medium">
-                                {isSuccess ? "Tebrikler! Barajı geçtin." : "Maalesef barajı geçemedin."}
-                            </p>
-                            <p className="text-2xl font-black text-emerald-600 mb-6">{finalScoreToSave} PUAN</p>
-
-                            <div className="space-y-3">
-                                {!isScoreSaved && (
-                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
-                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
-                                    </Button>
-                                )}
-                                
-                                {isScoreSaved && (
-                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
-                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
-                                    </Button>
-                                )}
-                                
-                                {(!isSuccess || isScoreSaved) && (
-                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 font-bold">
-                                        <RotateCcw className="mr-2 h-4 w-4"/> Tekrar Dene
-                                    </Button>
-                                )}
-
-                                <Button onClick={() => router.push(user ? '/student' : '/')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
-                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-            );
-        }
-
         return (
             <GameEndScreen 
                 score={finalScoreToSave}
@@ -535,7 +481,17 @@ function HitTheTargetGame() {
                 isSaving={isSaving}
                 scoreSaved={isScoreSaved}
                 onRestart={handleRestart}
-                backUrl={user ? backUrl : '/'}
+                backUrl={backUrl}
+                isSuccess={isThresholdPassed}
+                successThreshold={50}
+                isMission={isMission}
+                customMessage={
+                    isMission 
+                        ? (isThresholdPassed 
+                            ? `Tebrikler! ${correctHits}/${rounds.length} hedefi doğru vurarak %50 barajını geçtin.`
+                            : `Maalesef ${correctHits}/${rounds.length} hedef vurdun. Görevi geçmek için en az %50 başarı (${minRequiredHits} doğru hedef) sağlamalısın.`)
+                        : undefined
+                }
             />
         );
     }
@@ -561,8 +517,8 @@ function HitTheTargetGame() {
             {/* PAUSE MENU MODAL */}
             {showPauseMenu && (
                 <PauseMenu 
-                    score={score}
-                    threshold={successThreshold}
+                    score={correctHits}
+                    threshold={minRequiredHits}
                     isMission={isMission}
                     onResume={handleResume}
                     onQuit={handleManualQuit}

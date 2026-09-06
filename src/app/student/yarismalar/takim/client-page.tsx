@@ -435,11 +435,10 @@ export function TakimYarismaSetupClientPage({ gameConfig }: { gameConfig: any })
 
             {currentStep < steps.length ? (
                 <Button onClick={handleNext} disabled={
-                    (currentStep === 1 && !selection.classId) || 
-                    (currentStep === 2 && !selection.courseId) ||
-                    (currentStep === 3 && !selection.unitId) ||
-                    (currentStep === 4 && !selection.topicId) || 
-                    (currentStep === 5 && (teams.some(t => t.players.length === 0) || unassignedStudents.length > 0))
+                    (currentStep === 1 && !selection.courseId) || 
+                    (currentStep === 2 && !selection.unitId) ||
+                    (currentStep === 3 && !selection.topicId) || 
+                    (currentStep === 4 && (teams.some(t => t.players.length === 0) || unassignedPlayers.length > 0))
                 } className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20 px-8">
                     İleri <ArrowRight className="ml-2 h-4 w-4" />
                 </Button> 

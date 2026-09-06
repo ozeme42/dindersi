@@ -128,7 +128,7 @@ function MilyonerGame() {
         const isSuccess = gameState === 'won' && prize === 1000;
 
         if (!user || isSaving || isScoreSaved) {
-             router.push(backUrl);
+             router.push(isMission ? '/student/gorevler' : backUrl);
              return;
         }
 
@@ -178,7 +178,7 @@ function MilyonerGame() {
                 if (isSuccess) {
                     toast({ title: "Görev Başarılı!", description: `Tebrikler! Konuyu tamamladın ve ${finalPrize} puan eklendi.`, className: "bg-green-600 text-white" });
                 } else {
-                    toast({ title: "Görev Tamamlanamadı", description: "Büyük ödülü (1.000 puan) kazanmalısın.", variant: "destructive" });
+                    toast({ title: "Puan Kaydedildi (Görev Tamamlanmadı)", description: "Büyük ödülü (1.000 puan) kazanmalısın.", variant: "destructive" });
                 }
             } else {
                 // --- NORMAL MOD KAYDI ---
@@ -193,12 +193,6 @@ function MilyonerGame() {
                 }
             }
             setIsScoreSaved(true);
-            
-            // Kullanıcıyı bekletmeden yönlendir
-            setTimeout(() => {
-                router.push(backUrl);
-            }, 1000);
-
         } catch (e) {
             console.error(e);
             toast({ title: 'Hata', description: "Bir hata oluştu.", variant: 'destructive' });
@@ -334,76 +328,26 @@ function MilyonerGame() {
         else if (gameState === 'withdraw') prize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
         else prize = 0;
 
-        // GÖREV MODU İÇİN ÖZEL BİTİŞ
-        if (isMission) {
-            const isSuccess = prize === 1000;
-             return (
-                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
-                        <Confetti active={showConfetti} config={confettiConfig} />
-                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
-                            
-                            <div className="mb-6 flex justify-center">
-                                {isSuccess ? (
-                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
-                                        <Trophy className="h-16 w-16 text-green-600" />
-                                    </div>
-                                ) : (
-                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
-                                        <XOctagon className="h-16 w-16 text-red-500" />
-                                    </div>
-                                )}
-                            </div>
+        const isSuccess = gameState === 'won' && prize === 1000;
 
-                            <h2 className="text-3xl font-black text-slate-800 mb-2">
-                                {isSuccess ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ"}
-                            </h2>
-                            <p className="text-slate-500 mb-6 font-medium">
-                                {isSuccess 
-                                    ? "Tebrikler! 1.000 puanlık büyük ödülü kazandın." 
-                                    : `Maalesef ${prize} puan kazandın. Görevi tamamlamak için 1.000 puan gerekli.`}
-                            </p>
-                            
-                            <p className="text-2xl font-black text-emerald-600 mb-6">{prize} PUAN</p>
-
-                            <div className="space-y-3">
-                                {/* Eğer başarılıysa veya puan varsa ve henüz kaydedilmediyse */}
-                                {!isScoreSaved && (
-                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
-                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
-                                    </Button>
-                                )}
-                                
-                                {isScoreSaved && (
-                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
-                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
-                                    </Button>
-                                )}
-                                
-                                {(!isSuccess || isScoreSaved) && (
-                                    <Button onClick={resetGame} variant="outline" className="w-full h-12 font-bold">
-                                        <RotateCcw className="mr-2 h-4 w-4"/> Tekrar Dene
-                                    </Button>
-                                )}
-
-                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
-                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-            );
-        }
-
-        // NORMAL MOD İÇİN
         return (
             <GameEndScreen 
                 score={prize} 
-                onSave={handleSaveAndExit} 
+                onSave={user ? handleSaveAndExit : undefined} 
                 isSaving={isSaving} 
                 scoreSaved={isScoreSaved} 
                 onRestart={resetGame} 
                 backUrl={backUrl} 
+                isSuccess={isSuccess}
+                successThreshold={1000}
+                isMission={isMission}
+                customMessage={
+                    isMission 
+                        ? (isSuccess 
+                            ? "Tebrikler! 1.000 XP barajını aşarak Milyoner görevini başarıyla tamamladın." 
+                            : `Maalesef ${prize} XP aldın. Görevi tamamlamak için 1.000 XP barajına (büyük ödüle) ulaşmalısın.`)
+                        : undefined
+                }
             />
         );
     }

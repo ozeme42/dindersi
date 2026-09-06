@@ -13,10 +13,10 @@ import { useToast } from "@/hooks/use-toast";
 
 interface Question {
     id: string;
-    text: string;
-    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış';
+    text?: string;
+    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış' | 'Boşluk Doldurma' | string;
     options?: string[];
-    correctAnswer: string;
+    correctAnswer?: string;
     isTrue?: boolean;
 }
 
@@ -59,16 +59,7 @@ function SiberSifreKiriciContent() {
     const { user } = useAuth();
     const { toast } = useToast();
 
-    const backUrl = useMemo(() => {
-        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
-        if (courseId && unitId && topicId) {
-            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
-        }
-        if (user) {
-            return user.role === 'teacher' || user.role === 'superadmin' ? '/teacher' : '/student';
-        }
-        return '/oyunlar';
-    }, [searchParams, user]);
+    const backUrl = '/oyunlar/siber-sifre-kirici';
 
     const gameContext = `Siber Şifre Kırıcı - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
 
@@ -158,13 +149,16 @@ function SiberSifreKiriciContent() {
         const possibleWords = questions
             .filter(q => q.type === 'Çoktan Seçmeli')
             .map(q => q.correctAnswer)
-            .filter(ans => ans && !ans.includes(' ') && ans.length >= 4 && ans.length <= 10);
+            .filter((ans): ans is string => Boolean(ans && !ans.includes(' ') && ans.length >= 4 && ans.length <= 10));
             
         if (possibleWords.length > 0) {
             // Pick a random one and make uppercase, remove turkish chars for simplicity in terminal
-            const w = possibleWords[Math.floor(Math.random() * possibleWords.length)].toLocaleUpperCase('tr-TR');
-            // Remove spaces/special chars just in case
-            chosenWord = w.replace(/[^A-ZÇĞİÖŞÜ]/g, '');
+            const randWord = possibleWords[Math.floor(Math.random() * possibleWords.length)];
+            if (randWord) {
+                const w = randWord.toLocaleUpperCase('tr-TR');
+                // Remove spaces/special chars just in case
+                chosenWord = w.replace(/[^A-ZÇĞİÖŞÜ]/g, '');
+            }
         }
 
         setSecretWord(chosenWord);

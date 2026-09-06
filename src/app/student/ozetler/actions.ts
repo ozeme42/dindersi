@@ -118,8 +118,8 @@ export async function getCurriculumForOzetler(userId: string): Promise<{ courses
                         const topicData = topicDoc.data() as Topic;
                         const hasContent = !!topicData.htmlContent;
                         return {
-                            id: topicDoc.id,
                             ...topicData,
+                            id: topicDoc.id,
                             hasOzetContent: hasContent
                         } as Topic & { hasOzetContent: boolean };
                     })

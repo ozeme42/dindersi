@@ -95,9 +95,9 @@ export async function getStudentDetails(studentId: string): Promise<{ data?: Stu
             const stats = await getCourseQuestionBankStats(course.id, studentId);
             if (stats.totalTests > 0 || stats.passedTests > 0) { // Only include courses with activity
                  questionBankStats.push({
+                    ...stats,
                     courseId: course.id,
                     courseName: course.title,
-                    ...stats
                 });
             }
         }

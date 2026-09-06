@@ -65,7 +65,7 @@ async function getContent(courseId: string, unitId: string, topicId?: string): P
 
                 const topicsSnap = await getDocs(query(collection(db, 'courses', courseId, 'units', unitId, 'topics')));
                 const sortedTopics = topicsSnap.docs
-                    .map(d => ({ id: d.id, ...d.data() as Topic }))
+                    .map(d => ({ ...d.data() as Topic, id: d.id }))
                     .sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
 
                 for (const tData of sortedTopics) {

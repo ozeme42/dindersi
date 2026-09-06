@@ -176,8 +176,8 @@ export async function getCurriculumForYazilacaklar(userId: string): Promise<{ co
                         const topicData = topicDoc.data() as Topic;
                         const hasContent = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
                         return {
-                            id: topicDoc.id,
                             ...topicData,
+                            id: topicDoc.id,
                             hasYazilacaklarContent: hasContent
                         } as Topic & { hasYazilacaklarContent: boolean };
                     })

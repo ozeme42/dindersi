@@ -266,66 +266,25 @@ function SentenceClickGame() {
     );
 
     if (gameState === 'finished') {
-        if (isMission) {
-            return (
-                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
-                        <Confetti active={showConfetti} config={{ angle: 90, spread: 360, startVelocity: 40, elementCount: 100, decay: 0.9 }} />
-                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
-                            
-                            <div className="mb-6 flex justify-center">
-                                {isAllSentencesCompleted ? (
-                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
-                                        <Trophy className="h-16 w-16 text-green-600" />
-                                    </div>
-                                ) : (
-                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
-                                        <XOctagon className="h-16 w-16 text-red-500" />
-                                    </div>
-                                )}
-                            </div>
-
-                            <h2 className="text-3xl font-black text-slate-800 mb-2">
-                                {isAllSentencesCompleted ? "GÖREV BAŞARILI!" : "GÖREV TAMAMLANMADI"}
-                            </h2>
-                            <p className="text-slate-500 mb-6 font-medium">
-                                {isAllSentencesCompleted 
-                                    ? `Tebrikler! ${score} puan topladın ve görevi bitirdin.` 
-                                    : `Toplam ${score} puan topladın ama tüm cümleleri bitirmedin.`}
-                            </p>
-
-                            <div className="space-y-3">
-                                {/* PUAN VARSA KAYDET BUTONU HER ZAMAN GÖZÜKÜR */}
-                                {!isScoreSaved && score > 0 && (
-                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className={cn("w-full h-12 text-lg font-bold shadow-lg", isAllSentencesCompleted ? "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200" : "bg-amber-600 hover:bg-amber-700 shadow-amber-200")}>
-                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : (isAllSentencesCompleted ? "Kaydet ve Devam Et" : "Puanı Al ve Çık")}
-                                    </Button>
-                                )}
-                                
-                                {/* BAŞARILIYSA VE KAYDEDİLDİYSE GÖREVLERE DÖN */}
-                                {isScoreSaved && isAllSentencesCompleted && (
-                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
-                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
-                                    </Button>
-                                )}
-
-                                {/* BAŞARISIZSA TEKRAR DENE */}
-                                {(!isAllSentencesCompleted || isScoreSaved) && (
-                                    <Button onClick={handleGameRestart} variant="outline" className="w-full h-12 text-lg font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">
-                                        <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
-                                    </Button>
-                                )}
-                                
-                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
-                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-            );
-        }
-
-        return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} scoreSaved={isScoreSaved} onRestart={handleGameRestart} backUrl="/oyunlar/cumle-olusturma" />;
+        return (
+            <GameEndScreen 
+                score={score} 
+                onSave={user ? handleSaveAndExit : undefined} 
+                isSaving={isSaving} 
+                scoreSaved={isScoreSaved} 
+                onRestart={handleGameRestart} 
+                backUrl={isMission ? '/student/gorevler' : '/oyunlar/cumle-olusturma'} 
+                isSuccess={isAllSentencesCompleted}
+                isMission={isMission}
+                customMessage={
+                    isMission 
+                        ? (isAllSentencesCompleted 
+                            ? `Tebrikler! Tüm cümleleri doğru oluşturarak görevi başarıyla tamamladın.` 
+                            : `Maalesef tüm cümleleri bitiremedin. Görevi geçmek için tüm cümleleri tamamlamalısın.`)
+                        : undefined
+                }
+            />
+        );
     }
 
     const progressPercentage = ((currentSentenceIndex) / sentences.length) * 100;

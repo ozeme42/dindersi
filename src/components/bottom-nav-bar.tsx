@@ -71,14 +71,16 @@ export function BottomNavBar() {
     
     const isEmbedded = searchParams.get('embedded') === 'true';
 
-    // 2. Öğrencinin odaklanması gereken sayfalarda gizle
+    // 2. Tam odaklanılması gereken sunum ve oyun sayfalarında gizle
     const distractionFreePaths = [
         '/student/ders/', // Ders akışı ve tüm alt sayfaları
         '/oyunlar/',      // Tüm oyun sayfaları
-        '/student/deneme/' // Deneme çözme ve sonuç ekranı
+        '/student/deneme/', // Deneme çözme ve sonuç ekranı
+        '/teacher/presentation', // Akıllı tahta ders sunumu
+        '/teacher/smartboard/'   // Akıllı tahta sınıf oyunları
     ];
 
-    if (user.role === 'student' && (isEmbedded || distractionFreePaths.some(p => pathname.startsWith(p)))) {
+    if (isEmbedded || distractionFreePaths.some(p => pathname.startsWith(p))) {
         return null;
     }
 

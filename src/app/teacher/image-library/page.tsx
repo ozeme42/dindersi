@@ -22,7 +22,7 @@ import {
   Expand,
   Download,
   MoreHorizontal,
-  Folder,
+  Folder as FolderIcon,
   ArrowLeft,
   FolderPlus,
   Move,
@@ -372,7 +372,7 @@ export default function ImageLibraryPage() {
                                 <ArrowLeft className="h-5 w-5" />
                             </Button>
                         )}
-                        <Folder className="h-5 w-5 text-amber-500"/>
+                        <FolderIcon className="h-5 w-5 text-amber-500"/>
                         {currentFolder ? `Klasör: ${currentFolder.name}` : 'Klasörler'}
                     </h3>
                      {filteredFolders.length === 0 && !currentFolder ? (
@@ -386,7 +386,7 @@ export default function ImageLibraryPage() {
                                         className="w-full h-24 flex-col gap-2"
                                         onClick={() => setCurrentFolder({id: folder.id, name: folder.name})}
                                     >
-                                        <Folder className="h-8 w-8 text-amber-400"/>
+                                        <FolderIcon className="h-8 w-8 text-amber-400"/>
                                         <span className="truncate">{folder.name}</span>
                                     </Button>
                                     <AlertDialog>
@@ -544,11 +544,11 @@ export default function ImageLibraryPage() {
                 <DialogHeader><DialogTitle>Görseli Taşı</DialogTitle><DialogDescription>Görseli taşımak istediğiniz klasörü seçin.</DialogDescription></DialogHeader>
                 <div className="py-4 space-y-2">
                      <Button variant="outline" className="w-full justify-start" onClick={() => handleMoveImage(null)}>
-                        <Folder className="mr-2 h-4 w-4"/> Ana Dizin (Klasörsüz)
+                        <FolderIcon className="mr-2 h-4 w-4"/> Ana Dizin (Klasörsüz)
                     </Button>
                     {folders.map(folder => (
                         <Button key={folder.id} variant="ghost" className="w-full justify-start" onClick={() => handleMoveImage(folder.id)}>
-                            <Folder className="mr-2 h-4 w-4"/> {folder.name}
+                            <FolderIcon className="mr-2 h-4 w-4"/> {folder.name}
                         </Button>
                     ))}
                 </div>

@@ -5,7 +5,8 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { 
     Crown, Trophy, Users, List, Flame, Search, 
     ChevronLeft, ChevronRight, Loader2, BookOpenCheck, LogIn, School, GraduationCap, LayoutDashboard,
-    Megaphone, BellRing, X, Palmtree, Sun, Gift, PartyPopper, CalendarClock, Settings, Save, Plus, Trash2, FilePenLine, RotateCcw, AlertTriangle, Hammer, Calculator
+    Megaphone, BellRing, X, Palmtree, Sun, Gift, PartyPopper, CalendarClock, Settings, Save, Plus, Trash2, FilePenLine, RotateCcw, AlertTriangle, Hammer, Calculator,
+    Home, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -544,22 +545,31 @@ export default function LeaderboardPage() {
             <div className="fixed inset-0 pointer-events-none overflow-hidden"><div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[120px]" /><div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[120px]" /></div>
 
             <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#0f0720]/80 backdrop-blur-xl">
-                <div className="container flex h-16 items-center justify-between px-4">
-                    <Link href="/" className="flex items-center justify-center gap-2 group">
-                        <div className="bg-indigo-600/20 p-1.5 rounded-lg group-hover:bg-indigo-600/30 transition-colors"><BookOpenCheck className="h-5 w-5 text-indigo-400" /></div>
-                        <span className="text-lg font-bold tracking-tight text-white">Değerler Oyunu</span>
+                <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
+                    <Link href="/" className="flex items-center justify-center gap-2.5 group">
+                        <div className="bg-indigo-600/20 p-2 rounded-xl group-hover:bg-indigo-600/30 transition-colors border border-indigo-500/30">
+                            <Trophy className="h-5 w-5 text-indigo-400" />
+                        </div>
+                        <span className="text-lg font-black tracking-tight text-white">Liderlik <span className="text-indigo-400">Arenası</span></span>
                     </Link>
                     <div className="flex items-center gap-3">
+                        {user && (
+                            <Button asChild size="sm" variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 hover:text-white text-slate-200 rounded-xl font-bold">
+                                <Link href={user.role === 'teacher' || user.role === 'superadmin' ? '/teacher' : '/student'}>
+                                    <Home className="mr-2 h-4 w-4 text-emerald-400" /> Panele Dön
+                                </Link>
+                            </Button>
+                        )}
                         {user?.role === 'superadmin' && <AdminSettingsDialog onSettingsChange={fetchSettings} />}
-                        {!user && <Button asChild size="sm" className="bg-white/10 hover:bg-white/20 text-white border-0"><Link href="/login"><LogIn className="mr-2 h-4 w-4"/> Giriş Yap</Link></Button>}
+                        {!user && <Button asChild size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold border-0"><Link href="/login"><LogIn className="mr-2 h-4 w-4"/> Giriş Yap</Link></Button>}
                     </div>
                 </div>
             </header>
 
-            <main className="flex-1 container mx-auto px-4 py-8 relative z-10 pb-24 md:pb-8">
+            <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 relative z-10 pb-24 md:pb-8">
                 <SeasonInfoWidget settings={settings} />
                 <AnnouncementsWidget />
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-5xl mx-auto">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mx-auto">
                     <div className="flex justify-center mb-10">
                         <TabsList className="bg-slate-900/80 p-1.5 rounded-2xl border border-white/10 h-auto gap-2 shadow-2xl backdrop-blur-md">
                             <TabsTrigger value="current" className="px-6 py-3 rounded-xl text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white transition-all text-slate-400"><List className="h-4 w-4 mr-2" /> <span className="hidden sm:inline">Genel Sıralama</span><span className="sm:hidden">Sıralama</span></TabsTrigger>

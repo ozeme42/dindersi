@@ -170,16 +170,7 @@ function GameContent() {
     const [isScoreSaved, setIsScoreSaved] = useState(false);
 
     const gameContext = `Doğru Yol Koşucusu - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
-    const backUrl = useMemo(() => {
-        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
-        if (courseId && unitId && topicId) {
-            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
-        }
-        if (user) {
-            return user.role === 'teacher' || user.role === 'superadmin' ? '/teacher' : '/student';
-        }
-        return '/oyunlar';
-    }, [searchParams, user]);
+    const backUrl = '/oyunlar/dogru-yol-kosucusu';
 
     // --- DATA FETCHING ---
     const fetchGameData = useCallback(async () => {

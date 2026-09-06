@@ -453,68 +453,23 @@ function WordSearchGame() {
             
             {/* --- BİTİŞ EKRANI --- */}
             {gameState === 'finished' && (
-                isMission ? (
-                    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
-                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
-                            
-                            <div className="mb-6 flex justify-center">
-                                {isAllWordsFound ? (
-                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
-                                        <Trophy className="h-16 w-16 text-green-600" />
-                                    </div>
-                                ) : (
-                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
-                                        <XOctagon className="h-16 w-16 text-red-500" />
-                                    </div>
-                                )}
-                            </div>
-
-                            <h2 className="text-3xl font-black text-slate-800 mb-2">
-                                {isAllWordsFound ? "GÖREV BAŞARILI!" : "GÖREV BAŞARISIZ"}
-                            </h2>
-                            
-                            <p className="text-slate-500 mb-6 font-medium">
-                                {isAllWordsFound 
-                                    ? `Tebrikler! Tüm kelimeleri buldun.` 
-                                    : `Maalesef tüm kelimeleri bulamadın.`}
-                            </p>
-
-                            <div className="space-y-3">
-                                {!isScoreSaved && score > 0 && (
-                                    <Button onClick={saveScore} disabled={isSaving} className={cn("w-full h-12 text-lg font-bold shadow-lg", isAllWordsFound ? "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200" : "bg-amber-600 hover:bg-amber-700 shadow-amber-200")}>
-                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : (isAllWordsFound ? "Kaydet ve Devam Et" : "Puanı Al ve Çık")}
-                                    </Button>
-                                )}
-                                
-                                {isScoreSaved && isAllWordsFound && (
-                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
-                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
-                                    </Button>
-                                )}
-
-                                {(!isAllWordsFound || isScoreSaved) && (
-                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 text-lg font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50">
-                                        <RotateCcw className="mr-2 h-5 w-5"/> Tekrar Dene
-                                    </Button>
-                                )}
-                                
-                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
-                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <GameEndScreen 
-                        score={score} 
-                        onSave={saveScore} 
-                        isSaving={isSaving} 
-                        scoreSaved={isScoreSaved} 
-                        onRestart={handleRestart} 
-                        backUrl="/" 
-                    />
-                )
+                <GameEndScreen 
+                    score={score} 
+                    onSave={user ? saveScore : undefined} 
+                    isSaving={isSaving} 
+                    scoreSaved={isScoreSaved} 
+                    onRestart={handleRestart} 
+                    backUrl={isMission ? '/student/gorevler' : '/oyunlar/kelime-avi'} 
+                    isSuccess={isAllWordsFound}
+                    isMission={isMission}
+                    customMessage={
+                        isMission 
+                            ? (isAllWordsFound 
+                                ? "Tebrikler! Tüm kelimeleri bularak görevi başarıyla tamamladın." 
+                                : "Maalesef tüm kelimeleri bulamadın. Görevi geçmek için tüm kelimeleri bulmalısın.")
+                            : undefined
+                    }
+                />
             )}
         </div>
     );

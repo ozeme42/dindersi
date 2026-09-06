@@ -25,7 +25,7 @@ export async function getBilBakalimAction(
     noStore();
     try {
         // Use the centralized, corrected function to get data
-        const allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        const allItems: ActivityItem[] = (await getStaticQuestionsForGame({ courseId, unitId, topicId }) as any);
 
         if (allItems.length === 0) {
              return { questions: [], error: "Bu konu için etkinlik verisi bulunamadı." };

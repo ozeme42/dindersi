@@ -3,17 +3,18 @@
 import { useState, useEffect, Suspense, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Loader2, Volume2, VolumeX, Maximize2, Home, RefreshCw } from "lucide-react";
+import { Loader2, Volume2, VolumeX, Maximize2, Home, RefreshCw, Layers, LayoutDashboard, Gamepad2 } from "lucide-react";
 import { getClimbingDuelQuestions } from '../actions';
+import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
 
 // --- TİPLER ---
 export interface Question {
     id: string;
-    text: string;
-    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış';
+    text?: string;
+    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış' | 'Boşluk Doldurma' | string;
     options?: string[];
-    correctAnswer: string;
+    correctAnswer?: string;
     isTrue?: boolean;
 }
 
@@ -206,6 +207,7 @@ const MOCK_QUESTIONS: Question[] = [
 function ClimbingDuelGameContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const { user } = useAuth();
     
     // --- STATE ---
     const [gameState, setGameState] = useState<'loading' | 'home' | 'playing' | 'win'>('loading');
@@ -438,7 +440,7 @@ function ClimbingDuelGameContent() {
                 
                 {/* ÜST BUTONLAR */}
                 <div className="absolute top-3 right-3 z-[150] flex gap-2">
-                    <button className="bg-white/80 border border-gray-400 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white hover:bg-rose-100 hover:text-rose-600 hover:border-rose-300 transition" onClick={() => router.push('/')}>
+                    <button className="bg-white/80 border border-gray-400 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white hover:bg-rose-100 hover:text-rose-600 hover:border-rose-300 transition" onClick={() => router.push(user ? (user.role === 'student' ? '/student' : '/teacher') : '/oyunlar/tirmanma-yarisi')}>
                         <Home size={14}/> Çıkış
                     </button>
                     <button className="bg-white/80 border border-gray-400 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white transition" onClick={() => { setSoundOn(!soundOn); initAudio(); }}>
@@ -604,9 +606,19 @@ function ClimbingDuelGameContent() {
                             <h2 className="text-orange-500 text-3xl font-bold m-0">YARIŞ BİTTİ</h2>
                             <h3 className="text-gray-800 text-xl my-4">{winnerText}</h3>
                             <div className="text-6xl mb-6">🏆</div>
-                            <Button className="bg-teal-600 hover:bg-teal-700 text-white w-48 text-lg" onClick={() => {setGameState('home'); setSunRotation(-90); setContainerClass('sky_morning');}}>
-                                Tekrar Oyna
-                            </Button>
+                            <div className="flex flex-col gap-2.5 w-full max-w-xs mt-4">
+                                <Button className="bg-teal-600 hover:bg-teal-700 text-white font-bold h-12 rounded-xl text-base w-full shadow-md" onClick={() => {setGameState('home'); setSunRotation(-90); setContainerClass('sky_morning');}}>
+                                    <RefreshCw className="mr-2 h-4 w-4"/> Tekrar Oyna
+                                </Button>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Button variant="outline" className="h-10 text-xs font-semibold rounded-xl border border-slate-300" onClick={() => router.push('/oyunlar/tirmanma-yarisi')}>
+                                        <Layers className="mr-1.5 h-3.5 w-3.5"/> Konu Seç
+                                    </Button>
+                                    <Button variant="outline" className="h-10 text-xs font-semibold rounded-xl border border-slate-300" onClick={() => router.push(user ? (user.role === 'student' ? '/student' : '/teacher') : '/oyunlar')}>
+                                        <LayoutDashboard className="mr-1.5 h-3.5 w-3.5"/> {user ? 'Panel' : 'Oyunlar'}
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

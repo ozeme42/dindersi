@@ -321,7 +321,7 @@ function ProfilePage() {
             <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px]" />
         </div>
 
-        <div className="relative z-10 max-w-3xl mx-auto p-4 sm:p-6 md:p-8 space-y-8">
+        <div className="relative z-10 max-w-5xl mx-auto p-4 sm:p-6 md:p-8 space-y-8">
             
             {/* Header Area */}
             <div className="flex items-center justify-between">
@@ -330,8 +330,8 @@ function ProfilePage() {
                          <Link href="/student"><ArrowLeft className="h-6 w-6"/></Link>
                     </Button>
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight text-white">Profilim</h1>
-                        <p className="text-slate-400 text-sm font-medium">Hesap bilgilerin ve başarıların.</p>
+                        <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white">Profilim</h1>
+                        <p className="text-slate-400 text-sm font-medium">Hesap bilgilerin, okul tanımlamaların ve güvenlik ayarların.</p>
                     </div>
                  </div>
                  
@@ -363,9 +363,10 @@ function ProfilePage() {
                  </div>
             </div>
 
-            <div className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                   
-                  <Card className="overflow-visible bg-slate-900/60 backdrop-blur-md border border-white/10 shadow-2xl rounded-[2.5rem] relative mt-16 group hover:border-indigo-500/30 transition-all duration-500">
+                  {/* Sol Kolon: Ana Profil Kartı */}
+                  <Card className="lg:col-span-7 overflow-visible bg-slate-900/60 backdrop-blur-md border border-white/10 shadow-2xl rounded-[2.5rem] relative mt-16 group hover:border-indigo-500/30 transition-all duration-500">
                      <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full p-1 bg-gradient-to-br from-cyan-500 via-violet-500 to-fuchsia-500 shadow-[0_0_50px_rgba(139,92,246,0.4)] z-20 group-hover:scale-105 transition-transform duration-500">
                           <div className="w-full h-full rounded-full bg-slate-900 p-1">
                              <UserAvatar user={user} className="w-full h-full text-4xl rounded-full" />
@@ -418,17 +419,40 @@ function ProfilePage() {
                      </CardContent>
                   </Card>
 
-                  <Card className="bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-3xl shadow-lg overflow-hidden">
-                     <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-transparent opacity-50" />
-                     <CardHeader className="pb-3 border-b border-white/5">
-                         <CardTitle className="text-lg font-bold text-slate-200 flex items-center gap-2">
-                             <Lock className="h-4 w-4 text-indigo-400"/> Güvenlik
-                         </CardTitle>
-                     </CardHeader>
-                     <CardContent className="pt-4 space-y-3">
-                         <PasswordChangeDialog user={user as UserProfile} onPasswordChanged={handleLogout} />
-                     </CardContent>
-                  </Card>
+                  {/* Sağ Kolon: Hesap Durumu & Güvenlik */}
+                  <div className="lg:col-span-5 space-y-6 lg:mt-16">
+                      <Card className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-[2rem] shadow-xl overflow-hidden">
+                         <CardHeader className="pb-3 border-b border-white/5">
+                             <CardTitle className="text-base font-bold text-slate-200 flex items-center gap-2">
+                                 <Shield className="h-4 w-4 text-cyan-400"/> Hesap Durumu
+                             </CardTitle>
+                         </CardHeader>
+                         <CardContent className="pt-4 space-y-3">
+                             <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/50 border border-white/5">
+                                 <span className="text-xs font-semibold text-slate-400">Üyelik Tipi</span>
+                                 <Badge variant="secondary" className="bg-emerald-500/15 border-emerald-500/30 text-emerald-400 font-bold uppercase text-[10px]">
+                                     Öğrenci
+                                 </Badge>
+                             </div>
+                             <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/50 border border-white/5">
+                                 <span className="text-xs font-semibold text-slate-400">Toplam Puan</span>
+                                 <span className="text-sm font-black text-amber-400 tabular-nums">{(user.score || 0).toLocaleString()} XP</span>
+                             </div>
+                         </CardContent>
+                      </Card>
+
+                      <Card className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-[2rem] shadow-xl overflow-hidden">
+                         <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-transparent opacity-50" />
+                         <CardHeader className="pb-3 border-b border-white/5">
+                             <CardTitle className="text-base font-bold text-slate-200 flex items-center gap-2">
+                                 <Lock className="h-4 w-4 text-indigo-400"/> Güvenlik
+                             </CardTitle>
+                         </CardHeader>
+                         <CardContent className="pt-4 space-y-3">
+                             <PasswordChangeDialog user={user as UserProfile} onPasswordChanged={handleLogout} />
+                         </CardContent>
+                      </Card>
+                  </div>
             </div>
         </div>
     </div>

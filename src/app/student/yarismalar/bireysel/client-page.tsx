@@ -353,11 +353,9 @@ export function BireyselYarismaClientPage({ gameConfig }: { gameConfig: any }) {
 
             {currentStep < steps.length ? (
               <Button onClick={handleNext} disabled={
-                (currentStep === 1 && !selection.classId) || 
-                (currentStep === 2 && !selection.courseId) || 
-                (currentStep === 3 && !selection.unitId) || 
-                (currentStep === 4 && !selection.topicId) ||
-                (currentStep === 5 && !selection.player1Id && !selection.player2Id)
+                (currentStep === 1 && !selection.courseId) || 
+                (currentStep === 2 && !selection.unitId) || 
+                (currentStep === 3 && !selection.topicId)
                 } className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20 px-8">
                     İleri <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>

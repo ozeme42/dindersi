@@ -64,7 +64,7 @@ function KutuAcGame() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const mainContentRef = useRef<HTMLDivElement>(null);
 
-    const backUrl = "/"; 
+    const backUrl = "/oyunlar/kutu-ac"; 
 
     const gameContext = `Kutu Aç - ${searchParams.get('topicName') || 'Genel'}`;
 

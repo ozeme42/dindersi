@@ -101,10 +101,11 @@ function TornadoGame() {
     }, [siraIndeksi, GRUPLAR, cezaliGruplar, toast]);
 
     const ozelKutuEtkisiUygula = useCallback((icerik: KutuIcerik) => {
+        if (icerik.type === 'soru') return;
         const aktifGrup = GRUPLAR[siraIndeksi];
         setMesaj({ metin: icerik.mesaj, renk: icerik.renk });
         
-        if (icerik.puan) {
+        if ('puan' in icerik && icerik.puan) {
             setPuanlar(prev => ({ ...prev, [aktifGrup]: Math.max(0, (prev[aktifGrup] || 0) + icerik.puan!) }));
         }
 

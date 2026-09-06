@@ -9,7 +9,7 @@ import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, GraduationCap, PlayCircle, Target, ArrowLeft, BrainCircuit, Sparkles, ChevronRight } from "lucide-react";
+import { BookOpen, GraduationCap, PlayCircle, Target, ArrowLeft, BrainCircuit, Sparkles, ChevronRight, Map, Trophy, Zap } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -296,21 +296,58 @@ export default function SoruBankasiPage() {
         fetchCoursesAndProgress();
     }, [user]);
 
+    const totalTests = courses.reduce((acc, c) => acc + (c.totalQuestionBankTests || 0), 0);
+    const totalPassed = courses.reduce((acc, c) => acc + (c.passedTests || 0), 0);
+
     return (
         <div className="min-h-screen bg-[#020617] pb-24 md:pb-12 overflow-x-hidden relative selection:bg-cyan-500/30 font-sans">
             <CyberBackground />
 
             <div className="relative z-10 max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
                 
-                {/* Navbar / Geri Dön Butonu */}
-                <div className="flex items-center justify-between mb-8 md:mb-12">
-                    <div className="hidden md:block"></div> 
+                {/* Modern Hero Header */}
+                <div className="relative rounded-[2rem] p-6 md:p-8 mb-8 md:mb-10 bg-gradient-to-r from-cyan-950/60 via-slate-900/80 to-indigo-950/60 border border-cyan-500/20 backdrop-blur-2xl shadow-2xl overflow-hidden">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+                    <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none" />
+                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
                     
-                    <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/5 -ml-2 md:ml-0">
-                        <Link href="/student">
-                            <ArrowLeft className="mr-2 h-5 w-5"/> Panele Dön
-                        </Link>
-                    </Button>
+                    <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 text-white shrink-0">
+                                    <Map className="w-6 h-6" />
+                                </div>
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-[11px] font-black uppercase tracking-widest">
+                                    <Sparkles className="w-3 h-3" /> Soru Bankası
+                                </div>
+                            </div>
+                            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                                Macera <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-400">Haritası</span>
+                            </h1>
+                            <p className="text-slate-300/80 text-sm md:text-base max-w-2xl font-medium leading-relaxed">
+                                Dersini ve üniteni seç, konu anlatımlarını tamamla ve soru bankası testlerini çözerek seviye atla!
+                            </p>
+                        </div>
+
+                        {/* Hızlı İstatistik Kartları */}
+                        <div className="flex flex-wrap sm:flex-nowrap gap-3 shrink-0">
+                            <div className="bg-black/40 border border-white/10 rounded-2xl p-4 min-w-[100px] sm:min-w-[110px] flex flex-col items-center justify-center text-center backdrop-blur-md">
+                                <BookOpen className="w-5 h-5 text-cyan-400 mb-1" />
+                                <span className="text-xl md:text-2xl font-black text-white tabular-nums">{courses.length}</span>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Aktif Ders</span>
+                            </div>
+                            <div className="bg-black/40 border border-white/10 rounded-2xl p-4 min-w-[100px] sm:min-w-[110px] flex flex-col items-center justify-center text-center backdrop-blur-md">
+                                <Target className="w-5 h-5 text-indigo-400 mb-1" />
+                                <span className="text-xl md:text-2xl font-black text-white tabular-nums">{totalTests}</span>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Toplam Test</span>
+                            </div>
+                            <div className="bg-black/40 border border-white/10 rounded-2xl p-4 min-w-[100px] sm:min-w-[110px] flex flex-col items-center justify-center text-center backdrop-blur-md">
+                                <Trophy className="w-5 h-5 text-amber-400 mb-1" />
+                                <span className="text-xl md:text-2xl font-black text-amber-300 tabular-nums">{totalPassed}</span>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Çözülen</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 {/* İçerik */}

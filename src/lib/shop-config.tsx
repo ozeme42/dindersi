@@ -276,7 +276,7 @@ export const SHOP_ITEMS: ShopItem[] = [
     { id: 'badge_legendary_leader', name: 'Efsanevi Lider', price: 3000, type: 'avatarBadge', description: 'Savaş meydanlarının kralı.', component: LegendaryLeaderBadge },
     { id: 'badge_future_architect', name: 'Geleceğin Mimarı', price: 5000, type: 'avatarBadge', description: 'Teknoloji ve vizyon.', component: FutureArchitectBadge },
     { id: 'badge_elemental_master', name: 'Element Ustası', price: 8000, type: 'avatarBadge', description: 'Ateş ve buzun dengesi.', component: ElementalMasterBadge },
-    { id: 'badge_elemental_master', name: 'Elite Gamer', price: 12000, type: 'avatarBadge', description: 'Sadece en iyiler için.', component: EliteGamerBadge },
+    { id: 'badge_elite_gamer', name: 'Elite Gamer', price: 12000, type: 'avatarBadge', description: 'Sadece en iyiler için.', component: EliteGamerBadge },
     { id: 'badge_letter_a', name: 'Harf Rozeti - A', price: 300, type: 'avatarBadge', description: 'Profilini A harfiyle süsle.', component: LetterABadge },
     { id: 'badge_letter_b', name: 'Harf Rozeti - B', price: 300, type: 'avatarBadge', description: 'Profilini B harfiyle süsle.', component: LetterBBadge },
     { id: 'badge_letter_c', name: 'Harf Rozeti - C', price: 300, type: 'avatarBadge', description: 'Profilini C harfiyle süsle.', component: LetterCBadge },

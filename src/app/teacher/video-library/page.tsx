@@ -8,6 +8,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -242,7 +243,7 @@ export default function VideoLibraryPage() {
                     </Button>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive-outline" size="sm">
+                            <Button variant="outline" size="sm" className="text-red-400 hover:text-red-300 hover:bg-red-500/10 border-red-500/30">
                                 <Trash2 className="mr-2 h-4 w-4" /> Sil
                             </Button>
                         </AlertDialogTrigger>

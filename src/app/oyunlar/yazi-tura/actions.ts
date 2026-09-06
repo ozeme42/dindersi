@@ -6,28 +6,39 @@ import { collection, query, where, getDocs, doc, writeBatch, serverTimestamp, ge
 import type { Question, GetQuizInput } from "@/lib/types";
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
 
+import { unstable_noStore as noStore } from 'next/cache';
+
 export type YaziTuraQuestions = {
     easy: Question[];
     hard: Question[];
 };
 
 export async function getYaziTuraQuestionsAction(params: GetQuizInput): Promise<{ questions: YaziTuraQuestions | null; error?: string }> {
+    noStore();
     try {
-        const easyParams: GetQuizInput = { ...params, difficulty: ['Kolay'], questionTypes: ['mcq'], questionCount: 20 };
-        const hardParams: GetQuizInput = { ...params, difficulty: ['Zor'], questionTypes: ['mcq'], questionCount: 20 };
+        const allResult = (await getQuestionsFromBank({ ...params, questionTypes: ['mcq'], questionCount: 40 })).questions as Question[];
 
-        const [easyResult, hardResult] = await Promise.all([
-            getQuestionsFromBank(easyParams),
-            getQuestionsFromBank(hardParams)
-        ]);
+        if (!allResult || allResult.length < 2) {
+            return { questions: null, error: "Bu konu için yeterli sayıda soru bulunamadı (En az 2 çoktan seçmeli soru gereklidir)." };
+        }
 
-        if (easyResult.error || hardResult.error || easyResult.questions.length < 1 || hardResult.questions.length < 1) {
-            return { questions: null, error: "Bu konu için yeterli sayıda kolay ve zor soru bulunamadı." };
+        let easy = allResult.filter(q => q.difficulty === 'Kolay');
+        let hard = allResult.filter(q => q.difficulty === 'Zor');
+        const medium = allResult.filter(q => q.difficulty === 'Orta' || !q.difficulty);
+
+        if (easy.length === 0) {
+            easy = medium.slice(0, Math.ceil(medium.length / 2));
+            if (easy.length === 0) easy = allResult.slice(0, Math.ceil(allResult.length / 2));
+        }
+        if (hard.length === 0) {
+            hard = medium.slice(Math.ceil(medium.length / 2));
+            if (hard.length === 0) hard = allResult.slice(Math.ceil(allResult.length / 2));
+            if (hard.length === 0) hard = allResult;
         }
 
         const data: YaziTuraQuestions = {
-            easy: easyResult.questions as Question[],
-            hard: hardResult.questions as Question[],
+            easy: easy.length > 0 ? easy : allResult,
+            hard: hard.length > 0 ? hard : allResult,
         };
 
         return { questions: JSON.parse(JSON.stringify(data)) };

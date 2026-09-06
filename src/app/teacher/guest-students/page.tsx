@@ -746,7 +746,7 @@ export default function GuestStudentManagementPage() {
                                 <Select value={bulkEditBranch} onValueChange={setBulkEditBranch} disabled={!bulkEditClassId}>
                                     <SelectTrigger className="bg-slate-950 border-white/10"><SelectValue placeholder="Şube..." /></SelectTrigger>
                                     <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                        {classes.find(c => c.id === bulkEditClassId)?.branches.map(b => (
+                                        {classes.find(c => c.id === bulkEditClassId)?.branches?.map(b => (
                                             <SelectItem key={b} value={b}>{b}</SelectItem>
                                         ))}
                                     </SelectContent>

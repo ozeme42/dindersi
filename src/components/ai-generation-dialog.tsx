@@ -304,7 +304,7 @@ export function AIGenerationDialog({
                                 <div className="space-y-2">
                                     <Label>Seçenekler ve Doğru Cevap</Label>
                                     <RadioGroup value={q.correctAnswer} onValueChange={(val) => updateQuestion(q.tempId, { correctAnswer: val })} className="space-y-2">
-                                        {(q.options || []).map((opt, i) => (
+                                        {(q.options || []).map((opt: string, i: number) => (
                                             <div key={i} className="flex items-center gap-2">
                                                 <RadioGroupItem value={opt} id={`q-${q.tempId}-opt-${i}`} />
                                                 <Label htmlFor={`q-${q.tempId}-opt-${i}`} className="font-normal flex-1">

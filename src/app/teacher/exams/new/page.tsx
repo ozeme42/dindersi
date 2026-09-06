@@ -187,7 +187,7 @@ export default function CreateExamClientPage() {
         let questions = [...allQuestions];
 
         if (questionSearchTerm) {
-            questions = questions.filter(q => q.text.toLowerCase().includes(questionSearchTerm.toLowerCase()));
+            questions = questions.filter(q => (q.text || '').toLowerCase().includes(questionSearchTerm.toLowerCase()));
         }
 
         if (selectedTopicId !== 'all') {

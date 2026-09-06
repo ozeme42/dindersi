@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { submitConceptQuizScoreAction, getConceptQuizAction } from '../actions';
 import type { ConceptQuizQuestion } from '../actions';
-import { Loader2, ArrowLeft, Timer, User, Users, Trophy, CheckCircle2, Lock, ArrowRight, Home, Repeat, XOctagon } from "lucide-react";
+import { Loader2, ArrowLeft, Timer, User, Users, Trophy, CheckCircle2, Lock, ArrowRight, Home, Repeat, XOctagon, Layers, LayoutDashboard, Gamepad2, LogIn } from "lucide-react";
 import { useSearchParams, useRouter } from 'next/navigation';
 import { cn } from "@/lib/utils";
 import { playSound, stopSound } from '@/lib/audio-service';
@@ -288,12 +288,16 @@ function KavramYarismaGame() {
         if(timerRef.current) clearInterval(timerRef.current);
         const totalScore = scoreLeft;
         
-        if (!user || scoreSaved || isSaving) {
-            if (scoreSaved) return;
-            if(totalScore === 0) {
-                 router.push('/oyunlar/kavram-yarismasi');
-                 return;
-            }
+        if (!user) {
+            router.push('/oyunlar/kavram-yarismasi');
+            return;
+        }
+        if (scoreSaved || isSaving) {
+            return;
+        }
+        if (totalScore === 0) {
+             router.push('/oyunlar/kavram-yarismasi');
+             return;
         }
         
         setIsSaving(true);
@@ -436,12 +440,12 @@ function KavramYarismaGame() {
         let iconColor = "text-yellow-400";
         
         // Çıkış butonu için hedef URL
-        const exitHref = user ? '/oyunlar/kavram-yarismasi' : '/';
+        const exitHref = '/oyunlar/kavram-yarismasi';
 
         if (isTeam) {
             if (scoreLeft > scoreRight) {
                 winnerText = "MAVİ TAKIM KAZANDI!";
-                winnerDesc = "Mavi takımın ezici üstünlüğü!";
+                winnerDesc = "Mavi takımın zaferi!";
                 iconColor = "text-blue-400";
             } else if (scoreRight > scoreLeft) {
                 winnerText = "KIRMIZI TAKIM KAZANDI!";
@@ -476,8 +480,8 @@ function KavramYarismaGame() {
                             )}
                          </div>
                     </CardContent>
-                    <CardFooter className="flex-col gap-4 p-8 bg-slate-900/50">
-                        {!isTeam && (
+                    <CardFooter className="flex-col gap-3 p-6 md:p-8 bg-slate-900/50">
+                        {!isTeam && user && (
                              <Button 
                                 onClick={handleSaveAndExit} 
                                 disabled={isSaving || scoreSaved}
@@ -488,12 +492,30 @@ function KavramYarismaGame() {
                                 {scoreSaved ? "Kaydedildi" : "Puanı Kaydet & Çık"}
                             </Button>
                         )}
-                        <div className="flex w-full gap-4">
-                            <Button onClick={resetGame} variant="outline" size="lg" className="flex-1 border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12">
-                                <Repeat className="mr-2 h-5 w-5"/> Tekrar
+                        <div className="grid grid-cols-2 gap-3 w-full">
+                            <Button onClick={resetGame} variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 text-sm font-bold">
+                                <Repeat className="mr-2 h-4 w-4"/> Tekrar
                             </Button>
-                            <Button asChild variant="outline" size="lg" className="flex-1 border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12">
-                                <Link href={exitHref}><Home className="mr-2 h-5 w-5"/> Çıkış</Link>
+                            <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 text-sm font-bold">
+                                <Link href={exitHref}><Layers className="mr-2 h-4 w-4"/> Konu Değiştir</Link>
+                            </Button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 w-full">
+                            {user?.role === 'student' ? (
+                                <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-10 text-xs font-semibold">
+                                    <Link href="/student"><LayoutDashboard className="mr-1.5 h-3.5 w-3.5"/> Öğrenci Paneli</Link>
+                                </Button>
+                            ) : !user ? (
+                                <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-10 text-xs font-semibold">
+                                    <Link href="/login?redirect=/oyunlar/kavram-yarismasi"><LogIn className="mr-1.5 h-3.5 w-3.5"/> Giriş Yap</Link>
+                                </Button>
+                            ) : (
+                                <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-10 text-xs font-semibold">
+                                    <Link href="/teacher"><LayoutDashboard className="mr-1.5 h-3.5 w-3.5"/> Öğretmen Paneli</Link>
+                                </Button>
+                            )}
+                            <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-10 text-xs font-semibold">
+                                <Link href="/oyunlar"><Gamepad2 className="mr-1.5 h-3.5 w-3.5"/> Tüm Oyunlar</Link>
                             </Button>
                         </div>
                     </CardFooter>
@@ -529,7 +551,7 @@ function KavramYarismaGame() {
             <GlobalStyles />
             
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[100]">
-                <Confetti active={showConfetti} config={{ particleCount: 150, spread: 360 }} />
+                <Confetti active={showConfetti} config={{ elementCount: 150, spread: 360 }} />
             </div>
 
             <button onClick={() => setGameState('mode-select')} className="absolute top-3 left-3 z-50 p-2 bg-black/20 hover:bg-black/40 rounded-full backdrop-blur-sm transition-colors border border-white/10 group">

@@ -156,12 +156,12 @@ export default function ContentCreationPage() {
                             }
                             return { // Topic update
                                 ...u,
-                                topics: u.topics.map(t => t.id === (updatedData as Topic).id ? { ...t, ...updatedData } : t)
+                                topics: (u.topics || []).map(t => t.id === (updatedData as Topic).id ? { ...t, ...updatedData } : t)
                             };
                         })
                     };
                 })
-            }))
+            })) as any
         );
     };
 
@@ -170,15 +170,15 @@ export default function ContentCreationPage() {
         if (topicId) {
             const course = curriculum.flatMap(c => c.courses).find(c => c.id === courseId);
             const unit = course?.units.find(u => u.id === unitId);
-            const topic = unit?.topics.find(t => t.id === topicId);
-            if (topic) {
+            const topic = unit?.topics?.find(t => t.id === topicId);
+            if (topic && unitId) {
                 const updatedTopic = { ...topic, steps: [...(topic.steps || []), ...newSteps] };
                 setCourseData(courseId, unitId, updatedTopic);
             }
         } else {
             const course = curriculum.flatMap(c => c.courses).find(c => c.id === courseId);
             const unit = course?.units.find(u => u.id === unitId);
-            if(unit) {
+            if(unit && unitId) {
                  const updatedUnit = { ...unit, steps: [...(unit.steps || []), ...newSteps] };
                  setCourseData(courseId, unitId, updatedUnit);
             }
@@ -508,7 +508,7 @@ export default function ContentCreationPage() {
                             <button
                                 className={cn(
                                     "w-full h-32 p-6 flex flex-col items-start justify-between text-left transition-all duration-300 rounded-2xl border-2 hover:-translate-y-1 hover:shadow-2xl",
-                                    theme.bg, theme.border, theme.hoverBorder, theme.shadow
+                                    theme.bg, theme.border, theme.hoverBorder
                                 )}
                                 onClick={() => {
                                     const displayName = item[itemTitleKey] || item.name;
@@ -762,7 +762,7 @@ export default function ContentCreationPage() {
             </Dialog>
 
             {deleteDialogState && (
-                 <AlertDialog open={deleteDialogState.isOpen} onOpenChange={setDeleteDialogState}>
+                 <AlertDialog open={deleteDialogState.isOpen} onOpenChange={(open) => !open && setDeleteDialogState(null)}>
                     <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
                         <AlertDialogHeader>
                             <AlertDialogTitle className="text-red-400">Silmek İstediğinize Emin misiniz?</AlertDialogTitle>

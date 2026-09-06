@@ -97,7 +97,7 @@ export function YazilacaklarDisplayPage() {
             htmlContent += `<div style="margin-top: 40px; font-size: 10px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 10px;">Bu döküman Değerler Oyunu platformundan oluşturulmuştur.</div>`;
             element.innerHTML = htmlContent;
 
-            const opt = { margin: 10, filename: `${topicTitle.replace(/\s+/g, '_')}_Yazilacaklar.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas:  { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            const opt: any = { margin: 10, filename: `${topicTitle.replace(/\s+/g, '_')}_Yazilacaklar.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas:  { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             await html2pdf().set(opt).from(element).save();
 
         } catch (err) {

@@ -3,6 +3,7 @@
 'use server';
 
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
+export type { GetQuizOutput };
 import path from 'path';
 import fs from 'fs/promises';
 import { db } from "@/lib/firebase"; 
@@ -48,31 +49,46 @@ function filterAndShuffleQuestions(
 ): (Question | ActivityItem)[] {
     let filtered = items;
 
-    const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
+    if (questionTypes && questionTypes.length > 0) {
+        const typeSet = new Set<string>();
+        for (const qt of questionTypes) {
+            typeSet.add(qt);
+            if (qt === 'mcq') typeSet.add('Çoktan Seçmeli');
+            if (qt === 'Çoktan Seçmeli') typeSet.add('mcq');
+            if (qt === 'tf') typeSet.add('Doğru/Yanlış');
+            if (qt === 'Doğru/Yanlış') typeSet.add('tf');
+            if (qt === 'fitb') typeSet.add('Boşluk Doldurma');
+            if (qt === 'Boşluk Doldurma') typeSet.add('fitb');
+            if (qt === 'definition') typeSet.add('concept');
+            if (qt === 'concept') typeSet.add('definition');
+        }
 
-    if (mappedTypes && mappedTypes.length > 0) {
         filtered = filtered.filter(item => {
-            if ('type' in item) {
-                return mappedTypes.includes(item.type);
+            if ('type' in item && item.type) {
+                return typeSet.has(item.type);
             }
             return false;
         });
     }
 
     if (difficulty && difficulty.length > 0) {
-        filtered = filtered.filter(item => {
+        const withDifficulty = filtered.filter(item => {
             if ('difficulty' in item && item.difficulty) {
                 return difficulty.includes(item.difficulty);
             }
-            return true;
+            return false;
         });
+        // İstenen zorlukta soru varsa filtrele, yoksa mevcut soruları koru
+        if (withDifficulty.length > 0) {
+            filtered = withDifficulty;
+        }
     }
 
     const shuffled = [...filtered].sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, questionCount);
 
     return selected.map(question => {
-        if ('type' in question && (question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && 'options' in question && question.options) {
+        if ('type' in question && (question.type === 'Çoktan Seçmeli' || question.type === 'mcq' || question.type === 'Boşluk Doldurma' || question.type === 'fitb') && 'options' in question && question.options) {
             const newOptions = [...question.options];
             newOptions.sort(() => Math.random() - 0.5);
             return { ...question, options: newOptions };
@@ -84,15 +100,21 @@ function filterAndShuffleQuestions(
 // Centralized function to fetch questions - CACHED & STATIC-FIRST
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
     const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes, isStatic } = params;
+    const typedDifficulty = difficulty as ('Kolay' | 'Orta' | 'Zor')[] | undefined;
 
     // 1. STATİK ÖNCELİK (0 FIRESTORE READS):
     // Önce yerel JSON dosyalarını kontrol et. Eğer yerel veri varsa Firestore'a HİÇ gitme!
     try {
         const staticItems = await getStaticGameData({ topicId, unitId, courseId });
         if (staticItems && staticItems.length > 0) {
-            const selectedItems = filterAndShuffleQuestions(staticItems, questionCount, difficulty, questionTypes);
+            const selectedItems = filterAndShuffleQuestions(staticItems, questionCount, typedDifficulty, questionTypes);
             if (selectedItems.length > 0) {
                 return { questions: JSON.parse(JSON.stringify(selectedItems)) };
+            }
+            // Fallback: Belirtilen zorluk uymadıysa diğer zorluklardaki soruları dön
+            const fallbackAnyDiff = filterAndShuffleQuestions(staticItems, questionCount, undefined, questionTypes);
+            if (fallbackAnyDiff.length > 0) {
+                return { questions: JSON.parse(JSON.stringify(fallbackAnyDiff)) };
             }
         }
     } catch (err) {
@@ -104,7 +126,7 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
     const cacheKey = `${courseId || 'all'}_${unitId || 'all'}_${topicId || 'all'}_${(questionTypes || []).join('-')}`;
     const cachedItems = getFromCache(cacheKey);
     if (cachedItems && cachedItems.length > 0) {
-        const selectedItems = filterAndShuffleQuestions(cachedItems, questionCount, difficulty, questionTypes);
+        const selectedItems = filterAndShuffleQuestions(cachedItems, questionCount, typedDifficulty, questionTypes);
         if (selectedItems.length > 0) {
             return { questions: JSON.parse(JSON.stringify(selectedItems)) };
         }
@@ -154,7 +176,7 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             setInCache(cacheKey, allQuestions);
         }
 
-        const selectedQuestions = filterAndShuffleQuestions(allQuestions, questionCount, difficulty, questionTypes);
+        const selectedQuestions = filterAndShuffleQuestions(allQuestions, questionCount, typedDifficulty, questionTypes);
 
         if (selectedQuestions.length === 0) {
             return { questions: [], error: "Belirtilen kriterlere uygun soru/veri bulunamadı." };
@@ -171,9 +193,97 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
     }
 }
 
+// Global module-level in-memory caches for ultra-fast response times (0ms on warm reads)
+const STATIC_FILE_CACHE = new Map<string, any[]>();
+const STATIC_TOPIC_CACHE = new Map<string, (ActivityItem | Question)[]>();
+let CACHED_MANIFEST: any = null;
+
+const readJsonFile = async (filePath: string): Promise<any[] | null> => {
+    if (STATIC_FILE_CACHE.has(filePath)) {
+        return STATIC_FILE_CACHE.get(filePath) || null;
+    }
+    try {
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const parsed = JSON.parse(fileContent);
+        STATIC_FILE_CACHE.set(filePath, parsed);
+        return parsed;
+    } catch (e: any) {
+        if (e.code !== 'ENOENT') console.error(`Error reading ${filePath}:`, e);
+        return null;
+    }
+};
+
+const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem | Question)[]> => {
+    if (STATIC_TOPIC_CACHE.has(topicIdToFetch)) {
+        return STATIC_TOPIC_CACHE.get(topicIdToFetch)!;
+    }
+
+    const activityPath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicIdToFetch}.json`);
+    const questionPath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicIdToFetch}.json`);
+    const flowPath = path.join(process.cwd(), 'public', 'curriculum', 'flows', `${topicIdToFetch}.json`);
+
+    const [activityData, questionData, flowData] = await Promise.all([
+        readJsonFile(activityPath),
+        readJsonFile(questionPath),
+        readJsonFile(flowPath)
+    ]);
+
+    const flowItems: (ActivityItem | Question)[] = [];
+    if (Array.isArray(flowData)) {
+        flowData.forEach((step: any, sIdx: number) => {
+            if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                step.items.forEach((it: any, iIdx: number) => {
+                    const term = String(it.concept || it.term || '').trim();
+                    const definition = String(it.definition || '').trim();
+                    if (term && definition) {
+                        flowItems.push({
+                            id: `flow-ce-${topicIdToFetch}-${sIdx}-${iIdx}`,
+                            type: 'definition',
+                            content: { term, definition },
+                            topicId: topicIdToFetch
+                        } as any);
+                    }
+                });
+            }
+            if ((step.type === 'flashcard' || step.type === 'anagramFlashcard') && Array.isArray(step.cards)) {
+                step.cards.forEach((cd: any, cIdx: number) => {
+                    const term = String(cd.term || cd.correctAnswer || '').trim();
+                    const definition = String(cd.definition || '').trim();
+                    if (term && definition) {
+                        flowItems.push({
+                            id: `flow-fc-${topicIdToFetch}-${sIdx}-${cIdx}`,
+                            type: 'definition',
+                            content: { term, definition },
+                            topicId: topicIdToFetch
+                        } as any);
+                    }
+                });
+            }
+            if (step.type === 'trueFalseList' && Array.isArray(step.questions)) {
+                step.questions.forEach((q: any, qIdx: number) => {
+                    if (q.statement) {
+                        flowItems.push({
+                            id: `flow-tf-${topicIdToFetch}-${sIdx}-${qIdx}`,
+                            type: 'Doğru/Yanlış',
+                            text: String(q.statement).trim(),
+                            correctAnswer: q.isCorrect ? 'Doğru' : 'Yanlış',
+                            options: ['Doğru', 'Yanlış'],
+                            difficulty: 'Orta',
+                            topicId: topicIdToFetch
+                        } as any);
+                    }
+                });
+            }
+        });
+    }
+
+    const combined = [...(activityData || []), ...(questionData || []), ...flowItems];
+    STATIC_TOPIC_CACHE.set(topicIdToFetch, combined);
+    return combined;
+};
 
 /**
- * Fetches data from static JSON files for games. It can read from both `activities` and `questions` directories.
+ * Fetches data from static JSON files for games. Reads from `activities`, `questions`, and `flows` directories.
  * If topicId is 'all', it aggregates data from all topics within the given unit.
  */
 export async function getStaticGameData(params: {
@@ -183,39 +293,14 @@ export async function getStaticGameData(params: {
 }): Promise<(ActivityItem | Question)[]> {
     const { unitId, topicId } = params;
 
-    const FILE_CACHE = new Map<string, any[]>();
-    let CACHED_MANIFEST: any = null;
-
-    const readJsonFile = async (filePath: string): Promise<any[] | null> => {
-        if (FILE_CACHE.has(filePath)) {
-            return FILE_CACHE.get(filePath) || null;
-        }
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const parsed = JSON.parse(fileContent);
-            FILE_CACHE.set(filePath, parsed);
-            return parsed;
-        } catch (e: any) {
-            if (e.code !== 'ENOENT') console.error(`Error reading ${filePath}:`, e);
-            return null;
-        }
-    };
-    
-    const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem | Question)[]> => {
-        const activityPath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicIdToFetch}.json`);
-        const questionPath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicIdToFetch}.json`);
-
-        const [activityData, questionData] = await Promise.all([
-            readJsonFile(activityPath),
-            readJsonFile(questionPath)
-        ]);
-
-        return [...(activityData || []), ...(questionData || [])];
-    }
-
     if (topicId && topicId !== 'all') {
         return readDataForTopic(topicId);
     } else if (unitId && unitId !== 'all') {
+        const unitCacheKey = `unit_${unitId}`;
+        if (STATIC_TOPIC_CACHE.has(unitCacheKey)) {
+            return STATIC_TOPIC_CACHE.get(unitCacheKey)!;
+        }
+
         let allUnitItems: (ActivityItem | Question)[] = [];
         try {
             if (!CACHED_MANIFEST) {
@@ -245,6 +330,8 @@ export async function getStaticGameData(params: {
         } catch(e) {
             console.error("Error reading manifest to get topics for unit:", e);
         }
+
+        STATIC_TOPIC_CACHE.set(unitCacheKey, allUnitItems);
         return allUnitItems;
     }
 
@@ -252,7 +339,7 @@ export async function getStaticGameData(params: {
 }
 
 
-// --- This function is now a specific wrapper around getStaticGameData ---
+// --- Wrapper around getStaticGameData ---
 export async function getStaticQuestionsForGame(params: {
   courseId?: string;
   unitId?: string;
@@ -276,3 +363,4 @@ export async function getStaticQuestionsForGame(params: {
         return false;
     });
 }
+

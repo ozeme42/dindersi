@@ -24,26 +24,53 @@ export async function getAcikUcluCevaplaAction(
 ): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let allItems: ActivityItem[] = (await getStaticQuestionsForGame({ courseId, unitId, topicId }) as any);
 
         if (allItems.length === 0) {
              return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
         }
 
-        const allDefinitions = allItems
-            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
+        let allDefinitions: { term: string; definition: string; courseId?: string; unitId?: string; topicId?: string; }[] = allItems
+            .filter(item => (item.type === 'definition' || item.type === 'concept') && item.content?.term && (item.content?.definition || item.content?.text))
+            .map(item => ({
+                term: item.content!.term!.trim(),
+                definition: (item.content!.definition || item.content!.text)!.trim(),
+                courseId: item.courseId,
+                unitId: item.unitId,
+                topicId: item.topicId
+            }));
 
         if (allDefinitions.length < 1) {
-            return { error: "Açık Uçlu Cevaplama için bu konuda uygun tanım bulunamadı.", questions: [] };
+            for (const item of allItems) {
+                if ('type' in item) {
+                    if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer && ((item as any).sentenceWithBlank || (item as any).text)) {
+                        const term = String((item as any).correctAnswer).trim();
+                        const def = String((item as any).sentenceWithBlank || (item as any).text).trim();
+                        if (term && def && term.length <= 30) {
+                            allDefinitions.push({ term, definition: def, courseId: item.courseId, unitId: item.unitId, topicId: item.topicId });
+                        }
+                    } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).question || (item as any).text)) {
+                        const term = String((item as any).correctAnswer).trim();
+                        const def = String((item as any).question || (item as any).text).trim();
+                        if (term && def && term.length <= 25) {
+                            allDefinitions.push({ term, definition: def, courseId: item.courseId, unitId: item.unitId, topicId: item.topicId });
+                        }
+                    }
+                }
+            }
+        }
+
+        if (allDefinitions.length < 1) {
+            return { error: "Açık Uçlu Cevaplama için bu konuda uygun soru veya tanım bulunamadı.", questions: [] };
         }
         
         const selectedDefinitions = allDefinitions.sort(() => 0.5 - Math.random());
 
         const gameQuestions: Question[] = selectedDefinitions.map((item, index) => ({
             id: `${topicId}-${index}`,
-            text: item.content.definition!,
+            text: item.definition,
             type: 'Açık Uçlu',
-            correctAnswer: item.content.term!,
+            correctAnswer: item.term,
             difficulty: 'Orta',
             courseId: item.courseId,
             unitId: item.unitId,

@@ -8,7 +8,7 @@ import { addQuestionToReviewList } from "@/app/student/tekrar-et/actions";
 
 // UI Imports
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, AlertCircle, HelpCircle, Check, X, Zap, X as CloseIcon } from 'lucide-react';
+import { CheckCircle2, AlertCircle, HelpCircle, Check, X, Zap, X as CloseIcon, User } from 'lucide-react';
 import { useAuth } from "@/context/auth-context";
 
 // --- DAİRESEL ZAMANLAYICI ---
@@ -55,7 +55,7 @@ type GameQuestion = Partial<Question> & {
 export type QuestionDialogProps = {
     isOpen: boolean;
     onClose: () => void;
-    questionData: { number: number; question: GameQuestion };
+    questionData: { number: number; question: any };
     onAnswer: (questionNumber: number, isCorrect: boolean, scoreChange: number) => void;
     timerDuration?: number;
     pointsConfig?: any;
@@ -63,6 +63,7 @@ export type QuestionDialogProps = {
     pullStrengthConfig?: any;
     isFullscreen: boolean;
     showCorrectAnswerOnWrong?: boolean;
+    activeStudentName?: string;
 };
 
 // --- ANA BİLEŞEN ---
@@ -76,7 +77,8 @@ export function QuestionDialog({
     penaltyConfig,
     pullStrengthConfig,
     isFullscreen,
-    showCorrectAnswerOnWrong = true
+    showCorrectAnswerOnWrong = true,
+    activeStudentName
 }: QuestionDialogProps) {
     const { user } = useAuth();
     const { number, question } = questionData;
@@ -246,6 +248,12 @@ export function QuestionDialog({
                                     <span className="text-xs font-bold text-emerald-300">+{pointsValue}p</span>
                                 </div>
                              )}
+                             {activeStudentName && (
+                                <div className="flex items-center gap-1.5 bg-amber-500/20 px-2.5 py-1 rounded-full border border-amber-500/30 text-amber-200">
+                                    <User className="w-3 h-3 text-amber-300" />
+                                    <span className="text-xs font-bold">{activeStudentName}</span>
+                                </div>
+                             )}
                         </div>
                     </div>
 
@@ -288,7 +296,7 @@ export function QuestionDialog({
 
                     {/* Seçenekler */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10 pb-20 md:pb-0 shrink-0">
-                        {options.map((option, i) => {
+                        {(options as any[]).map((option: any, i: number) => {
                             const colors = optionColors[i % optionColors.length];
                             const isCorrectOption = option === correctAnswer;
                             const isSelectedOption = option === userAnswer;

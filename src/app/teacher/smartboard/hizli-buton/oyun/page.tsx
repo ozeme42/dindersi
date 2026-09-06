@@ -264,7 +264,7 @@ function SpeedBuzzerGameComponent() {
             `}</style>
             
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100]">
-                <Confetti active={showConfetti} config={{ particleCount: 200, spread: 90, origin: { x: state.winner === 'p1' ? 0.25 : 0.75, y: 0.6 } }} />
+                <Confetti active={showConfetti} config={{ elementCount: 200, spread: 90 }} />
             </div>
 
             {/* MAVİ */}

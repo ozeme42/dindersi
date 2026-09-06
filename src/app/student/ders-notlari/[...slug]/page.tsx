@@ -11,50 +11,156 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import { db } from '@/lib/firebase';
 import { getCachedData, setCachedData } from '@/lib/lesson-cache';
 import { ConceptExplanationPlayer, ContentListPlayer, FlashcardItem, FLASHCARD_THEMES } from '@/components/lesson-content-viewer';
+import { FullscreenToggle } from '@/components/fullscreen-toggle';
 
-// Helper to fetch definitions from Firestore or static activities with smart cache
-async function getDefinitionsForTopic(topicId: string) {
+// Helper to fetch all definitions aggregating from writingContent, activityItems, and static json files
+async function getAllDefinitionsForTopic(topicId: string, topicData?: any): Promise<{ concept: string; definition: string }[]> {
     if (!topicId) return [];
-    const cached = getCachedData<{ concept: string, definition: string }[]>(`defs_${topicId}`);
+    const cacheKey = `defs_all_v2_${topicId}`;
+    const cached = getCachedData<{ concept: string; definition: string }[]>(cacheKey);
     if (cached && cached.length > 0) return cached;
 
+    const defsMap = new Map<string, { concept: string; definition: string }>();
+
+    const addDef = (concept?: string, definition?: string) => {
+        const cleanConcept = (concept || '').replace(/<[^>]*>/g, '').trim();
+        const cleanDef = (definition || '').replace(/<[^>]*>/g, '').trim();
+        if (!cleanConcept || !cleanDef) return;
+        const key = cleanConcept.toLocaleLowerCase('tr');
+        if (!defsMap.has(key)) {
+            defsMap.set(key, { concept: cleanConcept, definition: cleanDef });
+        }
+    };
+
+    // 1. topicData içerisindeki kavramlar (Firestore topic belgesi)
+    if (topicData) {
+        if (Array.isArray(topicData.writingContent?.conceptDefinitions)) {
+            topicData.writingContent.conceptDefinitions.forEach((d: any) => addDef(d.concept || d.term, d.definition));
+        }
+        if (Array.isArray(topicData.conceptDefinitions)) {
+            topicData.conceptDefinitions.forEach((d: any) => addDef(d.concept || d.term, d.definition));
+        }
+    }
+
+    // 2. Statik yazılacaklar dosyası (/curriculum/yazilacaklar/${topicId}.json)
+    try {
+        const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json?v=${Date.now()}`);
+        if (yRes.ok) {
+            const yData = await yRes.json();
+            if (Array.isArray(yData.conceptDefinitions)) {
+                yData.conceptDefinitions.forEach((d: any) => addDef(d.concept || d.term, d.definition));
+            }
+        }
+    } catch (e) {}
+
+    // 3. Statik activities dosyası (/curriculum/activities/${topicId}.json)
+    try {
+        const actRes = await fetch(`/curriculum/activities/${topicId}.json?v=${Date.now()}`);
+        if (actRes.ok) {
+            const items = await actRes.json();
+            (items || []).forEach((item: any) => {
+                if (item.type === 'definition' || (item.content?.term && item.content?.definition)) {
+                    addDef(item.content?.term || item.concept || item.term, item.content?.definition || item.definition);
+                }
+            });
+        }
+    } catch (e) {}
+
+    // 4. Statik flows dosyası (/curriculum/flows/${topicId}.json - conceptExplanation adımları)
+    try {
+        const flowRes = await fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`);
+        if (flowRes.ok) {
+            const steps = await flowRes.json();
+            for (const step of steps || []) {
+                if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                    step.items.forEach((itm: any) => addDef(itm.concept || itm.term, itm.definition));
+                }
+            }
+        }
+    } catch (e) {}
+
+    // 5. Firestore activityItems sorgusu (çevrimiçi eklenmiş yeni kavramlar varsa)
     try {
         const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
         const querySnapshot = await getDocs(q);
-        const results = querySnapshot.docs.map(doc => {
+        querySnapshot.docs.forEach(doc => {
             const item = doc.data();
-            return {
-                concept: item.content?.term || item.concept || '',
-                definition: item.content?.definition || item.definition || ''
-            };
-        }).filter(item => item.concept && item.definition);
-
-        if (results.length > 0) {
-            setCachedData(`defs_${topicId}`, results);
-            return results;
-        }
+            addDef(item.content?.term || item.concept || item.term, item.content?.definition || item.definition);
+        });
     } catch (error) {
-        console.warn("Error fetching definitions from Firestore:", error);
+        console.warn("Firestore activityItems okuma uyarısı:", error);
     }
 
-    // Static fallback
+    const results = Array.from(defsMap.values());
+    if (results.length > 0) {
+        setCachedData(cacheKey, results);
+    }
+    return results;
+}
+
+// Helper to fetch all notes aggregating from writingContent, yazilacaklar and flows
+async function getAllNotesForTopic(topicId: string, topicData?: any): Promise<string[]> {
+    const notesSet = new Set<string>();
+
+    if (topicData?.writingContent?.notes && Array.isArray(topicData.writingContent.notes)) {
+        topicData.writingContent.notes.forEach((n: string) => {
+            const trimmed = (n || '').trim();
+            if (trimmed) notesSet.add(trimmed);
+        });
+    }
+
+    // Statik yazilacaklar
+    if (notesSet.size === 0) {
+        try {
+            const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json?v=${Date.now()}`);
+            if (yRes.ok) {
+                const yData = await yRes.json();
+                if (Array.isArray(yData.notes)) {
+                    yData.notes.forEach((n: string) => {
+                        const trimmed = (n || '').trim();
+                        if (trimmed) notesSet.add(trimmed);
+                    });
+                }
+            }
+        } catch (e) {}
+    }
+
+    // Statik flows
+    if (notesSet.size === 0) {
+        try {
+            const flowRes = await fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`);
+            if (flowRes.ok) {
+                const steps = await flowRes.json();
+                for (const step of steps || []) {
+                    if (step.type === 'content' && step.content) {
+                        const trimmed = step.content.trim();
+                        if (trimmed) notesSet.add(trimmed);
+                    } else if (step.type === 'contentList' && Array.isArray(step.sentences)) {
+                        step.sentences.forEach((s: string) => {
+                            const trimmed = (s || '').trim();
+                            if (trimmed) notesSet.add(trimmed);
+                        });
+                    }
+                }
+            }
+        } catch (e) {}
+    }
+
+    return Array.from(notesSet);
+}
+
+// Helper to fetch HTML summary
+async function getHtmlContentForTopic(topicId: string, topicData?: any): Promise<string> {
+    if (topicData?.htmlContent && typeof topicData.htmlContent === 'string' && topicData.htmlContent.trim()) {
+        return topicData.htmlContent;
+    }
     try {
-        const res = await fetch(`/curriculum/activities/${topicId}.json?v=${Date.now()}`);
-        if (res.ok) {
-            const items = await res.json();
-            return (items || [])
-                .filter((item: any) => item.type === 'definition' || (item.content?.term && item.content?.definition))
-                .map((item: any) => ({
-                    concept: item.content?.term || item.concept || item.term || '',
-                    definition: item.content?.definition || item.definition || ''
-                }))
-                .filter((item: any) => item.concept && item.definition);
+        const ozRes = await fetch(`/curriculum/ozetler/${topicId}.html?v=${Date.now()}`);
+        if (ozRes.ok) {
+            return await ozRes.text();
         }
-    } catch (e) {
-        console.warn(`Could not fetch static activity definitions for ${topicId}:`, e);
-    }
-
-    return [];
+    } catch (e) {}
+    return '';
 }
 
 interface TopicContent {
@@ -65,7 +171,7 @@ interface TopicContent {
     htmlContent: string;
 }
 
-export function DersNotlariDisplayPage() {
+function DersNotlariDisplayPage() {
     const params = useParams();
     const router = useRouter();
     const slug = params.slug as string[];
@@ -118,89 +224,84 @@ export function DersNotlariDisplayPage() {
             if (topicId === 'unit-summary') {
                 const unitRef = doc(db, 'courses', courseId, 'units', unitId);
                 const unitSnap = await getDoc(unitRef);
+                let unitData: any = null;
+                let sortedTopics: any[] = [];
+
                 if (unitSnap.exists()) {
-                    const unitData = unitSnap.data() as any;
-                    
+                    unitData = unitSnap.data() as any;
                     const topicsSnap = await getDocs(query(collection(db, 'courses', courseId, 'units', unitId, 'topics')));
-                    
-                    const sortedTopics = topicsSnap.docs
+                    sortedTopics = topicsSnap.docs
                         .map(d => ({ id: d.id, ...d.data() as any }))
                         .sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
-
-                    let allDefinitions: { concept: string; definition: string }[] = [];
-                    let allNotes: string[] = [];
-
-                    for (const tData of sortedTopics) {
-                        const tTitle = tData.title || 'Konu';
-                        
-                        const defs = await getDefinitionsForTopic(tData.id);
-                        if (defs.length > 0) {
-                            allDefinitions.push({ concept: '[BAŞLIK]', definition: tTitle });
-                            allDefinitions = [...allDefinitions, ...defs];
-                        }
-                        
-                        if (tData.writingContent?.notes && tData.writingContent.notes.length > 0) {
-                            allNotes.push(`[BAŞLIK] ${tTitle.toUpperCase()}`);
-                            allNotes = [...allNotes, ...tData.writingContent.notes];
-                        }
-                    }
-
-                    const unitContent: TopicContent = {
-                        title: `${unitData.title || 'Ünite'} Özeti`,
-                        courseName: courseData?.title || 'Ders',
-                        conceptDefinitions: allDefinitions,
-                        notes: allNotes,
-                        htmlContent: unitData.htmlContent || ''
-                    };
-                    setCachedData(cacheKey, unitContent);
-                    setContent(unitContent);
-                    setFlippedCards(new Array(allDefinitions.length).fill(false));
-
-                } else {
-                    throw new Error('Ünite veritabanında bulunamadı.');
                 }
-            } else {
-                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-                const topicSnap = await getDoc(topicRef);
-                
-                let topicTitle = '';
-                let definitions: { concept: string, definition: string }[] = [];
-                let notes: string[] = [];
-                let htmlContent = '';
 
-                if (topicSnap.exists()) {
-                    const topicData = topicSnap.data() as any;
-                    topicTitle = topicData.title || '';
-                    definitions = await getDefinitionsForTopic(topicId);
-                    notes = topicData.writingContent?.notes || [];
-                    htmlContent = topicData.htmlContent || '';
-                } else {
-                    // Fallback to static data
-                    definitions = await getDefinitionsForTopic(topicId);
-
+                // If topics not in Firestore, fallback to static manifest
+                if (sortedTopics.length === 0) {
                     try {
-                        const flowRes = await fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`);
-                        if (flowRes.ok) {
-                            const steps = await flowRes.json();
-                            for (const step of steps || []) {
-                                if (step.type === 'content' && step.content) {
-                                    notes.push(step.content);
-                                } else if (step.type === 'contentList' && Array.isArray(step.sentences)) {
-                                    notes.push(...step.sentences);
-                                } else if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
-                                    for (const itm of step.items) {
-                                        if (itm.concept && itm.definition && !definitions.some(d => d.concept === itm.concept)) {
-                                            definitions.push({ concept: itm.concept, definition: itm.definition });
+                        const manifestRes = await fetch('/curriculum/manifest.json');
+                        if (manifestRes.ok) {
+                            const manifest = await manifestRes.json();
+                            for (const g of manifest.classGroups || []) {
+                                for (const c of g.courses || []) {
+                                    if (c.id === courseId) {
+                                        const u = (c.units || []).find((un: any) => un.id === unitId);
+                                        if (u) {
+                                            if (!unitData) unitData = { title: u.title };
+                                            sortedTopics = (u.topics || []).sort((a: any, b: any) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
                                         }
                                     }
                                 }
                             }
                         }
-                    } catch (e) {
-                        console.warn("Could not fetch flow for notes:", e);
-                    }
+                    } catch (e) {}
+                }
 
-                    // Get title from manifest if empty
+                let allDefinitions: { concept: string; definition: string }[] = [];
+                let allNotes: string[] = [];
+
+                for (const tData of sortedTopics) {
+                    const tTitle = tData.title || 'Konu';
+                    
+                    const defs = await getAllDefinitionsForTopic(tData.id, tData);
+                    if (defs.length > 0) {
+                        allDefinitions.push({ concept: '[BAŞLIK]', definition: tTitle });
+                        allDefinitions = [...allDefinitions, ...defs];
+                    }
+                    
+                    const tNotes = await getAllNotesForTopic(tData.id, tData);
+                    if (tNotes.length > 0) {
+                        allNotes.push(`[BAŞLIK] ${tTitle.toUpperCase()}`);
+                        allNotes = [...allNotes, ...tNotes];
+                    }
+                }
+
+                let unitHtmlContent = unitData?.htmlContent || '';
+                if (!unitHtmlContent) {
+                    try {
+                        const ozRes = await fetch(`/curriculum/ozetler/${unitId}.html?v=${Date.now()}`);
+                        if (ozRes.ok) unitHtmlContent = await ozRes.text();
+                    } catch (e) {}
+                }
+
+                const unitContent: TopicContent = {
+                    title: `${unitData?.title || 'Ünite'} Özeti`,
+                    courseName: courseData?.title || 'Ders',
+                    conceptDefinitions: allDefinitions,
+                    notes: allNotes,
+                    htmlContent: unitHtmlContent
+                };
+                setCachedData(cacheKey, unitContent);
+                setContent(unitContent);
+                setFlippedCards(new Array(allDefinitions.length).fill(false));
+
+            } else {
+                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+                const topicSnap = await getDoc(topicRef);
+                const topicData = topicSnap.exists() ? (topicSnap.data() as any) : null;
+                
+                let topicTitle = topicData?.title || '';
+
+                if (!topicTitle) {
                     try {
                         const manifestRes = await fetch('/curriculum/manifest.json');
                         if (manifestRes.ok) {
@@ -219,33 +320,11 @@ export function DersNotlariDisplayPage() {
                             }
                         }
                     } catch (e) {}
-                    // Also load yazilacaklar and ozetler if empty
-                    if (notes.length === 0 || definitions.length === 0) {
-                        try {
-                            const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
-                            if (yRes.ok) {
-                                const yData = await yRes.json();
-                                if (notes.length === 0 && Array.isArray(yData.notes)) notes.push(...yData.notes);
-                                if (Array.isArray(yData.conceptDefinitions)) {
-                                    for (const cd of yData.conceptDefinitions) {
-                                        if (cd.concept && cd.definition && !definitions.some(d => d.concept === cd.concept)) {
-                                            definitions.push({ concept: cd.concept, definition: cd.definition });
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (e) {}
-                    }
-
-                    if (!htmlContent) {
-                        try {
-                            const ozRes = await fetch(`/curriculum/ozetler/${topicId}.html`);
-                            if (ozRes.ok) {
-                                htmlContent = await ozRes.text();
-                            }
-                        } catch (e) {}
-                    }
                 }
+
+                const definitions = await getAllDefinitionsForTopic(topicId, topicData);
+                const notes = await getAllNotesForTopic(topicId, topicData);
+                const htmlContent = await getHtmlContentForTopic(topicId, topicData);
 
                 if (!topicTitle) topicTitle = 'Ders Notu';
 
@@ -422,6 +501,7 @@ export function DersNotlariDisplayPage() {
                             <ConceptExplanationPlayer 
                                 title="Kavramlar ve Tanımları" 
                                 items={content.conceptDefinitions} 
+                                revealedSentencesCount={content.conceptDefinitions.length}
                                 isFullscreen={isFullscreen} 
                             />
                         </TabsContent>

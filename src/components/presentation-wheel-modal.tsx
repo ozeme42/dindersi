@@ -199,7 +199,7 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                 .map(s => ({
                     id: s.uid,
                     name: s.displayName || 'Öğrenci',
-                    avatarUrl: s.avatarUrl,
+                    avatarUrl: (s as any).avatarUrl || s.avatar || (s as any).photoURL,
                     className: s.class
                 }));
         } else {

@@ -10,7 +10,8 @@ import {
   getQuestionBankProgress, 
   getQuestionCounts, 
   updateTopicTestProgress, 
-  getCourseLeaderboard 
+  getCourseLeaderboard,
+  getQuestionsForTest
 } from '@/app/student/soru-bankasi/actions';
 import { addQuestionToReviewList } from '@/app/student/tekrar-et/actions';
 
@@ -62,29 +63,13 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
         async function fetchQuestions() {
             setIsLoading(true);
             try {
-                const result = await getQuestionsFromBank({ 
-                    topicId: topic.id, difficulty: [], questionCount: 500, isStatic: true 
-                });
+                const result = await getQuestionsForTest(topic.id, difficulty, testIndex);
                 if (!isMounted) return;
-                if (result.error || !result.questions) {
-                    setError(result.error || "Sorular yüklenemedi.");
+                if (result.error || !result.questions || result.questions.length === 0) {
+                    setError(result.error || `Bu seviyede (${difficulty}) yeterli soru bulunamadı.`);
                 } else {
-                    const allRawQuestions = result.questions as Question[];
-                    const targetDifficultyEng = difficultyMap[difficulty as keyof typeof difficultyMap];
-                    const filteredQuestions = allRawQuestions.filter(q => {
-                        const qDiff = q.difficulty ? q.difficulty.toLowerCase().trim() : '';
-                        return qDiff === difficulty.toLowerCase() || qDiff === targetDifficultyEng.toLowerCase();
-                    });
-                    const sortedQuestions = filteredQuestions.sort((a,b) => (a.text || '').localeCompare(b.text || '', 'tr'));
-                    const startIndex = testIndex * 10;
-                    const selectedQuestions = sortedQuestions.slice(startIndex, startIndex + 10);
-                    
-                    if (selectedQuestions.length === 0) {
-                        setError(`Bu seviyede (${difficulty}) yeterli soru bulunamadı.`);
-                    } else {
-                        setQuestions(selectedQuestions);
-                        setAnswers(new Array(selectedQuestions.length).fill(null));
-                    }
+                    setQuestions(result.questions);
+                    setAnswers(new Array(result.questions.length).fill(null));
                 }
             } catch (err: any) {
                 if (isMounted) setError("Bir hata oluştu: " + err.message);
@@ -457,23 +442,25 @@ function QuestionBankCoursePageComponent() {
 
     const allSortedTopics = useMemo(() => sortedUnits.flatMap(u => u.topics || []), [sortedUnits]);
 
-    const isTopicCompleted = useCallback((topicId: string) => {
+    const isLevelCompleted = useCallback((topicId: string, key: 'easy' | 'medium' | 'hard') => {
         const progress = topicProgress[topicId];
         const counts = testCounts[topicId];
         if (!counts) return false;
-        const checkLevel = (key: 'easy' | 'medium' | 'hard') => {
-            const total = Math.ceil((counts[key] || 0) / 10);
-            if (total === 0) return true;
-            return Object.values(progress?.[key] || {}).filter(res => res.status === 'passed').length >= total;
-        };
-        return checkLevel('easy') && checkLevel('medium') && checkLevel('hard');
+        const total = Math.ceil((counts[key] || 0) / 10);
+        if (total === 0) return true;
+        return Object.values(progress?.[key] || {}).filter(res => res.status === 'passed').length >= total;
     }, [topicProgress, testCounts]);
+
+    const isTopicCompleted = useCallback((topicId: string) => {
+        return isLevelCompleted(topicId, 'easy') && isLevelCompleted(topicId, 'medium') && isLevelCompleted(topicId, 'hard');
+    }, [isLevelCompleted]);
 
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         const idx = allSortedTopics.findIndex(t => t.id === topicId);
         if (idx <= 0) return true;
-        return isTopicCompleted(allSortedTopics[idx - 1].id);
-    }, [isTopicCompleted, allSortedTopics]);
+        const prevTopic = allSortedTopics[idx - 1];
+        return isTopicCompleted(prevTopic.id) || isLevelCompleted(prevTopic.id, 'easy');
+    }, [isTopicCompleted, isLevelCompleted, allSortedTopics]);
 
     const handleTestComplete = async (
         difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number, score: number,
@@ -481,8 +468,9 @@ function QuestionBankCoursePageComponent() {
     ) => {
         if (!user || !activeTest) return;
         let finalScore = score; // Test puanı her zaman eklenir
+        let isTopicCompletedNow = false;
 
-        // Ünite tamamlama bonusu: tüm konular bittiyse +10.000
+        // Konu tamamlama bonusu: tüm testler bittiyse +10.000
         if (passed) {
             // Bu test sonucu eklendikten sonra aktif konunun tamamlanıp tamamlanmadığını hesapla
             const counts = testCounts[activeTest.topic.id];
@@ -496,27 +484,11 @@ function QuestionBankCoursePageComponent() {
                 });
             }
             const wasAlreadyPassed = currentProgress?.[difficultyMap[difficulty]]?.[testIndex]?.status === 'passed';
-            const thisTopicNowCompleted = !wasAlreadyPassed && (passedCountSoFar + 1) >= totalTestsNeeded;
+            isTopicCompletedNow = !wasAlreadyPassed && (passedCountSoFar + 1) >= totalTestsNeeded;
 
-            if (thisTopicNowCompleted) {
-                // Bu konunun ait olduğu üniteyi bul
-                const parentUnit = sortedUnits.find(u => u.topics?.some((t: any) => t.id === activeTest.topic.id));
-                if (parentUnit) {
-                    // Ünitedeki diğer tüm konuların tamamlanıp tamamlanmadığını kontrol et
-                    const otherTopicsAllDone = (parentUnit.topics || []).every((t: any) => {
-                        if (t.id === activeTest.topic.id) return true; // Bu konuyu tamamlandı say
-                        return isTopicCompleted(t.id);
-                    });
-
-                    if (otherTopicsAllDone) {
-                        // Ünite daha önce tamamlanmamıştı — bonus ver!
-                        const wasUnitAlreadyDone = (parentUnit.topics || []).every((t: any) => isTopicCompleted(t.id));
-                        if (!wasUnitAlreadyDone) {
-                            finalScore += UNIT_REWARD;
-                            playSound('level-up');
-                        }
-                    }
-                }
+            if (isTopicCompletedNow) {
+                finalScore += UNIT_REWARD;
+                playSound('win');
             }
         }
 
@@ -531,9 +503,33 @@ function QuestionBankCoursePageComponent() {
                 } 
             } 
         }));
-        await updateTopicTestProgress(user.uid, courseId, activeTest.topic.id, difficultyMap[difficulty], testIndex, result);
+        await updateTopicTestProgress(
+            user.uid, 
+            courseId, 
+            activeTest.topic.id, 
+            difficultyMap[difficulty], 
+            testIndex, 
+            result,
+            undefined,
+            {
+                isTopicCompleted: isTopicCompletedNow,
+                topicTitle: activeTest.topic.title,
+                courseTitle: course?.title
+            }
+        );
         if (action === 'next' && passed) {
-            setActiveTest({ topic: activeTest.topic, difficulty, testIndex: testIndex + 1 });
+            const diffKey = difficultyMap[difficulty];
+            const counts = testCounts[activeTest.topic.id];
+            const totalInCurDiff = Math.max(1, Math.ceil((counts?.[diffKey] || 0) / 10));
+            if (testIndex + 1 < totalInCurDiff) {
+                setActiveTest({ topic: activeTest.topic, difficulty, testIndex: testIndex + 1 });
+            } else if (difficulty === 'Kolay') {
+                setActiveTest({ topic: activeTest.topic, difficulty: 'Orta', testIndex: 0 });
+            } else if (difficulty === 'Orta') {
+                setActiveTest({ topic: activeTest.topic, difficulty: 'Zor', testIndex: 0 });
+            } else {
+                setActiveTest(null);
+            }
         } else {
             setActiveTest(null);
         }
@@ -686,8 +682,8 @@ function QuestionBankCoursePageComponent() {
                                 </div>
                             </AccordionTrigger>
                             <AccordionContent className="pt-2 pb-6 px-1">
-                                {/* Topics */}
-                                <div className="flex flex-col gap-3">
+                                {/* Topics — Responsive Grid on Desktop */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                                     {unit.topics.map((topic, topicIdx) => {
                                         const unlocked = isTopicUnlocked(topic.id);
                                         const completed = isTopicCompleted(topic.id);
@@ -815,15 +811,15 @@ function QuestionBankCoursePageComponent() {
                         {selectedTopic && (['Kolay', 'Orta', 'Zor'] as const).map(level => {
                             const levelKey = difficultyMap[level];
                             const counts = testCounts[selectedTopic.id]?.[levelKey] || 0;
-                            const safeCounts = counts > 0 ? counts : 50;
-                            const numTests = Math.ceil(safeCounts / 10);
+                            const safeCounts = counts > 0 ? counts : 10;
+                            const numTests = Math.max(1, Math.ceil(safeCounts / 10));
                             
                             const isLevelUnlocked = () => {
                                 if (level === 'Kolay') return true;
                                 const prevDiff = level === 'Orta' ? 'easy' : 'medium';
                                 const prevCounts = testCounts[selectedTopic.id]?.[prevDiff] || 0;
-                                const safePrevCounts = prevCounts > 0 ? prevCounts : 50;
-                                const totalPrev = Math.ceil(safePrevCounts / 10);
+                                const safePrevCounts = prevCounts > 0 ? prevCounts : 10;
+                                const totalPrev = Math.max(1, Math.ceil(safePrevCounts / 10));
                                 const passedPrev = Object.values(topicProgress[selectedTopic.id]?.[prevDiff] || {}).filter(r => r.status === 'passed').length;
                                 return passedPrev >= totalPrev;
                             };

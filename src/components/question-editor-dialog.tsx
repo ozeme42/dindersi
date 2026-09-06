@@ -23,7 +23,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-const difficultyOptions: Question['difficulty'][] = ['Kolay', 'Orta', 'Zor'];
+const difficultyOptions: ('Kolay' | 'Orta' | 'Zor')[] = ['Kolay', 'Orta', 'Zor'];
 const questionTypeOptions: Question['type'][] = ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'];
 
 type QuestionEditorProps = {
@@ -84,7 +84,7 @@ export function QuestionEditorDialog({
         newQuestion.topic = '';
     } else if (type === 'topic') {
         newQuestion.topicId = id;
-        const topic = curriculum.flatMap(c => c.units?.flatMap(u => u.topics)).find(t => t.id === id);
+        const topic = curriculum.flatMap(c => c.units?.flatMap(u => u.topics || []) || []).find(t => t?.id === id);
         newQuestion.topic = topic?.title || '';
     }
     setEditedQuestion(newQuestion);
@@ -154,7 +154,7 @@ export function QuestionEditorDialog({
 
                     <div className="space-y-2">
                         <Label htmlFor="difficulty" className="text-slate-300 font-bold uppercase tracking-wider text-xs">Zorluk Seviyesi</Label>
-                        <Select value={editedQuestion.difficulty} onValueChange={(val) => setEditedQuestion({...editedQuestion, difficulty: val as Question['difficulty']})}>
+                        <Select value={editedQuestion.difficulty || 'Orta'} onValueChange={(val) => setEditedQuestion({...editedQuestion, difficulty: val as Question['difficulty']})}>
                              <SelectTrigger id="difficulty" className="bg-slate-900 border-white/10 text-white h-12"><SelectValue/></SelectTrigger>
                              <SelectContent className="bg-slate-900 border-white/10 text-white">
                                 {difficultyOptions.map(opt => (
@@ -260,7 +260,7 @@ export function QuestionEditorDialog({
                          <Select value={editedQuestion.topicId || ''} onValueChange={(val) => handleContextChange('topic', val)} disabled={!selectedUnit}>
                             <SelectTrigger className="bg-slate-950 border-white/10 text-white"><SelectValue placeholder="Konu Seç"/></SelectTrigger>
                             <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                {selectedUnit?.topics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}
+                                {selectedUnit?.topics?.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>

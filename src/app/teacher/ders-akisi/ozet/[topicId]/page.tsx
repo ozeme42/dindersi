@@ -145,7 +145,7 @@ function OzetPageContent() {
                 }
 
                 if (staticNotes.length > 0 || staticDefs.length > 0 || title !== 'Ders Özeti') {
-                    setTopic({ id: topicId, title, courseId, unitId, writingContent: { notes: staticNotes } } as Topic);
+                    setTopic({ id: topicId, title, courseId, unitId, writingContent: { notes: staticNotes, conceptDefinitions: [] } } as Topic);
                     setDefinitions(staticDefs);
                     setOriginalDefinitionIds(new Set(staticDefs.map(d => d.id)));
                     setNotes(staticNotes);
@@ -223,8 +223,10 @@ function OzetPageContent() {
 
     const handleDefinitionChange = (index: number, field: 'term' | 'definition', value: string) => {
         const newDefinitions = [...definitions];
-        newDefinitions[index].content[field] = value;
-        setDefinitions(newDefinitions);
+        if (newDefinitions[index] && newDefinitions[index].content) {
+            newDefinitions[index].content[field] = value;
+            setDefinitions(newDefinitions);
+        }
     };
     const addDefinition = () => {
         if (!courseId || !unitId || !topicId) return;
@@ -239,7 +241,7 @@ function OzetPageContent() {
     
     const handleDownload = () => {
         const dataToDownload = {
-            kavramlar: definitions.map(d => ({ kavram: d.content.term, tanim: d.content.definition })),
+            kavramlar: definitions.map(d => ({ kavram: d.content?.term || '', tanim: d.content?.definition || '' })),
             notlar: notes,
         };
         const dataStr = JSON.stringify(dataToDownload, null, 2);
@@ -247,7 +249,7 @@ function OzetPageContent() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `yazilacaklar_${topic?.title.replace(/\s+/g, '_').toLowerCase()}.json`;
+        link.download = `yazilacaklar_${(topic?.title || 'ozet').replace(/\s+/g, '_').toLowerCase()}.json`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

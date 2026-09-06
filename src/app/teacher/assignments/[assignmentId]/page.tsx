@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getAssignmentDetails } from "./actions";
-import type { AssignmentDetails, UserProfile, ScoreEvent } from "@/lib/types";
+import { getAssignmentDetails, type AssignmentDetails } from "./actions";
+import type { UserProfile, ScoreEvent } from "@/lib/types";
 import {
     Card,
     CardContent,

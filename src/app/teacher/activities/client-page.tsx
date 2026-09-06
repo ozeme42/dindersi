@@ -129,7 +129,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
 
                                                          return (
                                                             <Button key={activity.href} asChild {...buttonProps}>
-                                                                <Link href={`${activity.href}?classId=${selectedClassData.id}&courseId=${selectedCourseData.id}&unitId=${unit.id}&topicId=all&courseName=${encodeURIComponent(selectedCourseData.title)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent("Tüm Konular")}`}>
+                                                                <Link href={`${activity.href}?classId=${selectedClassData?.id || ''}&courseId=${selectedCourseData?.id || ''}&unitId=${unit.id}&topicId=all&courseName=${encodeURIComponent(selectedCourseData?.title || '')}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent("Tüm Konular")}`}>
                                                                     <activity.icon className="h-6 w-6 mb-1" />
                                                                     <span>{activity.label}</span>
                                                                 </Link>
@@ -140,7 +140,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                                             </AccordionContent>
                                         </AccordionItem>
                                      </Accordion>
-                                    {unit.topics.length > 0 ? (
+                                    {unit.topics && unit.topics.length > 0 ? (
                                         <Accordion type="multiple" className="w-full space-y-3">
                                             {unit.topics.map(topic => (
                                                 <AccordionItem value={topic.id} key={topic.id} className="border rounded-md bg-background">
@@ -159,7 +159,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                                                                         colorClasses[activityIndex % colorClasses.length]
                                                                     )}
                                                                 >
-                                                                    <Link href={`${activity.href}?classId=${selectedClassData.id}&courseId=${selectedCourseData.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(selectedCourseData.title)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`}>
+                                                                    <Link href={`${activity.href}?classId=${selectedClassData?.id || ''}&courseId=${selectedCourseData?.id || ''}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(selectedCourseData?.title || '')}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`}>
                                                                         <activity.icon className="h-6 w-6 mb-1" />
                                                                         <span>{activity.label}</span>
                                                                     </Link>

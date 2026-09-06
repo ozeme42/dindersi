@@ -60,8 +60,7 @@ function TornadoGame() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     
-    // DEĞİŞİKLİK BURADA: Kullanıcı giriş yapmışsa oyun merkezine, yapmamışsa ana sayfaya yönlendirir.
-    const exitLink = user ? '/oyunlar/tornado' : '/';
+    const exitLink = '/oyunlar/tornado';
 
     useEffect(() => {
         const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -178,10 +177,11 @@ function TornadoGame() {
     }, [siraIndeksi, teams, cezaliGruplar, toast, teamCount]);
 
     const ozelKutuEtkisiUygula = useCallback((icerik: KutuIcerik) => {
+        if (icerik.type === 'soru') return;
         const aktifGrup = teams[siraIndeksi];
         setMesaj({ metin: icerik.mesaj, renk: icerik.renk });
         
-        if (icerik.puan) {
+        if ('puan' in icerik && icerik.puan) {
             setPuanlar(prev => ({ ...prev, [aktifGrup]: Math.max(0, (prev[aktifGrup] || 0) + icerik.puan!) }));
         }
 

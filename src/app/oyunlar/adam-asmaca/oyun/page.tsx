@@ -193,7 +193,7 @@ function HangmanGame() {
                 if (isThresholdPassed) {
                     toast({ title: "Görev Başarılı!", description: "Tebrikler, görevi tamamladın ve puanın eklendi.", className: "bg-green-600 text-white" });
                 } else {
-                    toast({ title: "Görev Tamamlanamadı", description: "Puan kaydedildi ancak soruların en az yarısını bilmelisin.", variant: "destructive" });
+                    toast({ title: "Puan Kaydedildi (Görev Tamamlanmadı)", description: "Soruların en az yarısını bilmelisin.", variant: "destructive" });
                 }
             } else {
                 await submitAdamAsmacaScoreAction(user.uid, totalScore, gameContext);
@@ -274,41 +274,24 @@ function HangmanGame() {
 
     if (gameState === 'finished') {
         return (
-            <div className="relative flex items-center justify-center h-screen bg-slate-900">
-                <Confetti active={showConfetti} config={{ spread: 360 }} />
-                {isMission ? (
-                    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-                        <div className="bg-white rounded-[2.5rem] p-8 max-w-md w-full text-center shadow-2xl relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
-                            
-                            <div className="mb-6 flex justify-center">
-                                {isThresholdPassed ? <Trophy className="h-16 w-16 text-green-600 animate-bounce" /> : <XOctagon className="h-16 w-16 text-red-500" />}
-                            </div>
- 
-                            <h2 className="text-3xl font-black text-slate-800 mb-2">{isThresholdPassed ? "GÖREV BAŞARILI!" : "BAŞARISIZ"}</h2>
-                            <p className="text-slate-500 mb-6">
-                                {isThresholdPassed 
-                                    ? `Tebrikler! ${correctCount}/${gameData?.length} doğru ile geçtin.` 
-                                    : `Maalesef ${correctCount}/${gameData?.length} doğru yaptın. En az yarısını bilmelisin.`}
-                            </p>
-                            
-                            <div className="space-y-3">
-                                {!isScoreSaved && totalScore > 0 && (
-                                    <Button onClick={handleFinishAndSave} disabled={isSaving} className={cn("w-full h-12 text-lg font-bold shadow-lg", isThresholdPassed ? "bg-indigo-600 hover:bg-indigo-700" : "bg-amber-600 hover:bg-amber-700")}>
-                                        {isSaving ? "Kaydediliyor..." : (isThresholdPassed ? "Kaydet ve Devam Et" : "Puanı Al ve Çık")}
-                                    </Button>
-                                )}
-                                
-                                {isScoreSaved && isThresholdPassed && <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 bg-green-600 font-bold">Görevlere Dön</Button>}
-                                
-                                {(!isThresholdPassed || isScoreSaved) && <Button onClick={() => window.location.reload()} variant="outline" className="w-full h-12 font-bold">Tekrar Dene</Button>}
-                                
-                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400">Ana Menü</Button>
-                            </div>
-                        </div>
-                    </div>
-                ) : <GameEndScreen score={totalScore} onSave={handleFinishAndSave} isSaving={isSaving} scoreSaved={isScoreSaved} onRestart={() => window.location.reload()} backUrl={backUrl} />}
-            </div>
+            <GameEndScreen 
+                score={totalScore} 
+                onSave={user ? handleFinishAndSave : undefined} 
+                isSaving={isSaving} 
+                scoreSaved={isScoreSaved} 
+                onRestart={() => window.location.reload()} 
+                backUrl={backUrl} 
+                isSuccess={isThresholdPassed}
+                successThreshold={50}
+                isMission={isMission}
+                customMessage={
+                    isMission 
+                        ? (isThresholdPassed 
+                            ? `Tebrikler! ${correctCount}/${gameData?.length} kelimeyi doğru bilerek %50 barajını geçtin.` 
+                            : `Maalesef ${correctCount}/${gameData?.length} kelime bildin. Görevi geçmek için kelimelerin en az yarısını bilmelisin.`)
+                        : undefined
+                }
+            />
         );
     }
 

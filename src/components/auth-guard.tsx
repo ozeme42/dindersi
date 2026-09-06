@@ -41,7 +41,7 @@ export function AuthGuard({ children, role }: AuthGuardProps) {
       return;
     }
 
-    const requiredRoles = Array.isArray(role) ? role : [role];
+    const requiredRoles = (Array.isArray(role) ? role : [role]) as string[];
 
     // If the user's role does not match the required roles for this page,
     // redirect them to their correct dashboard.
@@ -57,7 +57,7 @@ export function AuthGuard({ children, role }: AuthGuardProps) {
       return <>{children}</>;
   }
 
-  const requiredRoles = Array.isArray(role) ? role : [role];
+  const requiredRoles = (Array.isArray(role) ? role : [role]) as string[];
 
   // While loading or redirecting, show a spinner.
   if (loading || !user || !user.role || !requiredRoles.includes(user.role)) {

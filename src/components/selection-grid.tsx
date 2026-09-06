@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Check, Loader2, Sparkles, Star, Trophy } from "lucide-react";
 
-interface SelectionGridProps<T> {
+export interface SelectionGridProps<T> {
   items: T[];
   selectedId?: string;
   onSelect: (id: string, name: string) => void;
@@ -13,6 +13,9 @@ interface SelectionGridProps<T> {
   specialOptions?: { id: string; name: string }[];
   // Konu ID'sine göre başarı yüzdesi: { "topic_1": 85, "topic_2": 40 }
   progressMap?: Record<string, number>;
+  subtitleKey?: keyof T | string;
+  countKey?: keyof T | string;
+  countLabel?: string;
 }
 
 const colorThemes = [
@@ -50,7 +53,10 @@ export function SelectionGrid<T extends { id: string; [key: string]: any }>({
   isLoading,
   disabled,
   specialOptions = [],
-  progressMap = {}
+  progressMap = {},
+  subtitleKey,
+  countKey,
+  countLabel = 'Öğe'
 }: SelectionGridProps<T>) {
 
   if (isLoading) {
@@ -115,6 +121,18 @@ export function SelectionGrid<T extends { id: string; [key: string]: any }>({
             <span className="relative z-10 text-center font-bold text-lg leading-tight break-words w-full drop-shadow-md">
               {displayName}
             </span>
+
+            {subtitleKey && (item as any)[subtitleKey] && (
+              <span className="relative z-10 text-xs text-white/60 text-center mt-1">
+                {String((item as any)[subtitleKey])}
+              </span>
+            )}
+
+            {countKey && (item as any)[countKey] !== undefined && (
+              <span className="relative z-10 inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-white/10 text-white/80 border border-white/10 mt-2">
+                {(item as any)[countKey]} {countLabel}
+              </span>
+            )}
 
             {/* Dinamik İlerleme Çubuğu (Taban) */}
             <div className="absolute bottom-0 left-0 w-full h-1.5 bg-white/5 overflow-hidden">

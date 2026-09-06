@@ -77,7 +77,7 @@ const steps = [
   { id: 5, name: "Sorular", icon: <Check className="h-5 w-5" /> },
 ];
 
-const difficultyOptions: Question['difficulty'][] = ['Kolay', 'Orta', 'Zor'];
+const difficultyOptions: ('Kolay' | 'Orta' | 'Zor')[] = ['Kolay', 'Orta', 'Zor'];
 const questionTypeOptions: Question['type'][] = ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'];
 
 
@@ -128,8 +128,8 @@ function QuestionCard({ question, index, onEdit, onDifficultyChange, onSelect, i
                     <Badge variant="secondary" className="bg-slate-800 text-slate-300 border-white/10">{question.type}</Badge>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Badge variant="outline" className={cn("cursor-pointer font-bold border", difficultyColors[question.difficulty])}>
-                                {question.difficulty}
+                            <Badge variant="outline" className={cn("cursor-pointer font-bold border", difficultyColors[question.difficulty || 'Orta'])}>
+                                {question.difficulty || 'Orta'}
                             </Badge>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="bg-slate-900 border-white/10 text-white">
@@ -215,7 +215,7 @@ export default function ExamQuestionBankPage() {
         const course = { ...courseDoc, units: [] } as EnrichedCourse;
         const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
         course.units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
-            const unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as (Unit & { topics: Topic[] });
+            const unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as unknown as (Unit & { topics: Topic[] });
             const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unit.id}/topics`), orderBy('title')));
             unit.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
             return unit;
@@ -269,7 +269,7 @@ export default function ExamQuestionBankPage() {
         const courseIdsInClass = new Set(allData.courses.filter(course => course.classId === c.id).map(course => course.id));
         return {
             ...c,
-            questionCount: allData.questions.filter(q => courseIdsInClass.has(q.courseId)).length
+            questionCount: allData.questions.filter(q => Boolean(q.courseId && courseIdsInClass.has(q.courseId))).length
         };
     });
   }, [allData]);
@@ -317,17 +317,17 @@ export default function ExamQuestionBankPage() {
         tempQuestions = tempQuestions.filter((q) => q.topicId === selection.topicId);
     } else if (selection.unitId && selection.unitId !== 'all') {
         tempQuestions = tempQuestions.filter((q) => q.unitId === selection.unitId);
-    } else if (selection.courseId && selection.courseId !== 'all') {
+    } else if (selection.courseId) {
         tempQuestions = tempQuestions.filter((q) => q.courseId === selection.courseId);
     } else if (selection.classId) {
-         const courseIdsInClass = new Set(filteredCourses.map(c => c.id));
-         tempQuestions = tempQuestions.filter(q => q.courseId && courseIdsInClass.has(q.courseId));
+        const courseIdsInClass = new Set(allData.courses.filter(c => c.classId === selection.classId).map(c => c.id));
+        tempQuestions = tempQuestions.filter(q => Boolean(q.courseId && courseIdsInClass.has(q.courseId)));
     }
 
     if (searchTerm) {
         const lowercasedTerm = searchTerm.toLowerCase();
         tempQuestions = tempQuestions.filter((q) =>
-            q.text.toLowerCase().includes(lowercasedTerm)
+            (q.text || '').toLowerCase().includes(lowercasedTerm)
         );
     }
     if (selectedQuestionTypes.length > 0) {
@@ -337,7 +337,7 @@ export default function ExamQuestionBankPage() {
     }
     if (selectedDifficulties.length > 0) {
         tempQuestions = tempQuestions.filter((q) =>
-            selectedDifficulties.includes(q.difficulty)
+            Boolean(q.difficulty && selectedDifficulties.includes(q.difficulty))
         );
     }
     
@@ -500,7 +500,7 @@ export default function ExamQuestionBankPage() {
     const unit = course.units?.find(u => u.id === selection.unitId);
     if (!unit) return null;
 
-    const topic = unit.topics.find(t => t.id === selection.topicId);
+    const topic = unit.topics?.find(t => t.id === selection.topicId);
     if (!topic) return null;
 
     return {
@@ -516,8 +516,8 @@ export default function ExamQuestionBankPage() {
       switch(currentStep) {
           case 1: return <SelectionGrid items={classesWithCounts} onSelect={(id, name) => handleSelect('class', id, name)} titleKey="name" isLoading={isLoading} countKey="questionCount" countLabel="Soru"/>
           case 2: return <SelectionGrid items={filteredCoursesWithCounts} onSelect={(id, name) => handleSelect('course', id, name)} titleKey="title" isLoading={isLoading} countKey="questionCount" countLabel="Soru"/>
-          case 3: return <SelectionGrid items={filteredUnitsWithCounts} onSelect={(id, name) => handleSelect('unit', id, name)} specialOptions={[{id: 'all', name: 'Tüm Üniteler', questionCount: filteredCoursesWithCounts.find(c => c.id === selection.courseId)?.questionCount || 0}]} titleKey="title" isLoading={isLoading} countKey="questionCount" countLabel="Soru"/>
-          case 4: return <SelectionGrid items={filteredTopicsWithCounts} onSelect={(id, name) => handleSelect('topic', id, name)} specialOptions={[{id: 'all', name: 'Tüm Konular', questionCount: filteredUnitsWithCounts.find(u => u.id === selection.unitId)?.questionCount || 0}]} titleKey="title" isLoading={isLoading} countKey="questionCount" countLabel="Soru"/>
+          case 3: return <SelectionGrid items={filteredUnitsWithCounts} onSelect={(id, name) => handleSelect('unit', id, name)} specialOptions={[{id: 'all', name: 'Tüm Üniteler', questionCount: filteredCoursesWithCounts.find(c => c.id === selection.courseId)?.questionCount || 0} as any]} titleKey="title" isLoading={isLoading} countKey="questionCount" countLabel="Soru"/>
+          case 4: return <SelectionGrid items={filteredTopicsWithCounts} onSelect={(id, name) => handleSelect('topic', id, name)} specialOptions={[{id: 'all', name: 'Tüm Konular', questionCount: filteredUnitsWithCounts.find(u => u.id === selection.unitId)?.questionCount || 0} as any]} titleKey="title" isLoading={isLoading} countKey="questionCount" countLabel="Soru"/>
           case 5: return (
               <div>
                    <div className="flex flex-col xl:flex-row items-center gap-4 mb-6 p-4 rounded-2xl bg-slate-900/60 backdrop-blur-md border border-white/5 shadow-lg">

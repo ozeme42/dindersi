@@ -1,6 +1,5 @@
 
 import { cn } from "@/lib/utils";
-import { Futbol } from "lucide-react";
 import React from "react";
 
 export const FootballBadge = ({ className }: { className?: string }) => (

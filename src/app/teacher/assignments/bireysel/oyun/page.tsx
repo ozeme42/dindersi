@@ -95,7 +95,7 @@ function CompetitionComponent() {
             };
             const questionResult = await getQuestionsFromBank(params as any);
 
-            if ('error' in questionResult) setError(questionResult.error);
+            if ('error' in questionResult) setError(questionResult.error || null);
             else if (questionResult.questions) setQuestions(questionResult.questions);
             else setError("Uygun soru bulunamadı.");
             setIsLoading(false);
@@ -242,7 +242,7 @@ function QuestionDialog({ isOpen, onClose, questionData, onAnswer, timerDuration
 
         if (timerDuration > 0) {
             const interval = setInterval(() => {
-                setTimeLeft(prev => {
+                setTimeLeft((prev: number) => {
                     if (prev <= 1) {
                         clearInterval(interval);
                         handleAnswerClick(""); // Timeout

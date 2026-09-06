@@ -151,7 +151,7 @@ function TeamCompetitionComponent() {
                 questionTypes: ['mcq', 'tf', 'fitb'],
             };
             const result = await getQuestionsFromBank(params as any);
-            if ('error' in result) setError(result.error);
+            if ('error' in result) setError(result.error || null);
             else if (result.questions) setQuestions(result.questions);
             setIsLoading(false);
         };
@@ -213,6 +213,7 @@ function TeamCompetitionComponent() {
 
     if (gameState === 'finished') {
         const winner = sortedTeams[0];
+        const isDraw = sortedTeams.length > 1 && sortedTeams[0].score === sortedTeams[1].score;
         return (
              <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
                 <div className="fixed inset-0 pointer-events-none z-0">
@@ -236,7 +237,7 @@ function TeamCompetitionComponent() {
                     </CardHeader>
                     <CardContent className="space-y-8">
                          <div className="flex flex-col items-center gap-2">
-                            {winner === 'draw' ? (
+                            {isDraw ? (
                                 <p className="text-3xl font-black text-slate-300">BERABERE!</p>
                             ) : (
                                 <>

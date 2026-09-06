@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, useRef, useCallback, useMemo } from "rea
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Loader2, Maximize2, Home, RefreshCw, Rocket, Heart, Crosshair, Users, User, Star } from "lucide-react";
+import { Loader2, Maximize2, Home, RefreshCw, Rocket, Heart, Crosshair, Users, User, Star, Layers, LayoutDashboard, Gamepad2, LogIn } from "lucide-react";
 import { getSpaceDefenseQuestions } from '../actions';
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
@@ -69,13 +69,17 @@ const GAME_STYLES = `
   /* LAZER */
   .laser {
     position: absolute; width: 4px; background: #00ffff;
-    box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; border-radius: 2px;
-    transform-origin: bottom center; z-index: 50;
-    animation: laserShoot 0.3s ease-out forwards;
+    position: absolute; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #ff9900, #ff0055);
+    border: 2px solid #ffcc00; border-radius: 50%;
+    color: white; font-weight: bold; font-size: 1.1rem; text-align: center;
+    padding: 10px; width: 120px; height: 120px; cursor: pointer;
+    box-shadow: 0 0 15px rgba(255, 100, 0, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%); transition: transform 0.1s;
+    z-index: 50;
   }
-  @keyframes laserShoot { 0% { opacity: 1; } 100% { opacity: 0; } }
-  
-  /* PATLAMA */
+  .meteor:hover { transform: translate(-50%, -50%) scale(1.05); }
+
   .explosion {
     position: absolute; width: 150px; height: 150px;
     background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,153,0,1) 30%, rgba(255,0,0,0) 70%);
@@ -100,16 +104,7 @@ function SpaceDefenseGameContent() {
     const router = useRouter();
     const { user } = useAuth();
 
-    const backUrl = useMemo(() => {
-        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
-        if (courseId && unitId && topicId) {
-            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
-        }
-        if (user) {
-            return user.role === 'teacher' || user.role === 'superadmin' ? '/teacher' : '/student';
-        }
-        return '/oyunlar';
-    }, [searchParams, user]);
+    const backUrl = '/oyunlar/uzay-savunmasi';
     
     // --- STATE ---
     const [gameState, setGameState] = useState<'loading' | 'home' | 'playing' | 'win' | 'lose'>('loading');
@@ -452,9 +447,35 @@ function SpaceDefenseGameContent() {
                                 </div>
                             </div>
                         )}
-                        <Button className="bg-white text-black hover:bg-slate-200 text-xl px-8 py-6 rounded-full" onClick={() => setGameState('home')}>
-                            <RefreshCw className="mr-2" /> Yeniden Oyna
-                        </Button>
+                        <div className="flex flex-col gap-3 w-full max-w-sm px-4">
+                            <Button className="w-full bg-white text-black hover:bg-slate-200 text-lg py-5 rounded-2xl font-bold flex items-center justify-center gap-2" onClick={() => setGameState('home')}>
+                                <RefreshCw size={18} /> Yeniden Oyna
+                            </Button>
+                            
+                            <div className="grid grid-cols-2 gap-2">
+                                <Button variant="outline" className="h-11 bg-white/10 hover:bg-white/20 text-white border-white/20 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5" onClick={() => router.push(backUrl)}>
+                                    <Layers size={14} /> Konu Değiştir
+                                </Button>
+                                
+                                {user?.role === 'student' ? (
+                                    <Button variant="outline" className="h-11 bg-indigo-600/80 hover:bg-indigo-600 text-white border-indigo-400/40 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5" onClick={() => router.push('/student')}>
+                                        <LayoutDashboard size={14} /> Öğrenci Paneli
+                                    </Button>
+                                ) : !user ? (
+                                    <Button variant="outline" className="h-11 bg-indigo-600/80 hover:bg-indigo-600 text-white border-indigo-400/40 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5" onClick={() => router.push('/login?redirect=/oyunlar/uzay-savunmasi')}>
+                                        <LogIn size={14} /> Giriş Yap
+                                    </Button>
+                                ) : (
+                                    <Button variant="outline" className="h-11 bg-purple-600/80 hover:bg-purple-600 text-white border-purple-400/40 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5" onClick={() => router.push('/teacher')}>
+                                        <LayoutDashboard size={14} /> Öğretmen Paneli
+                                    </Button>
+                                )}
+                            </div>
+
+                            <Button variant="ghost" className="text-slate-400 hover:text-white text-xs" onClick={() => router.push('/oyunlar')}>
+                                <Gamepad2 size={14} className="mr-1.5" /> Tüm Oyunlar
+                            </Button>
+                        </div>
                     </div>
                 )}
             </div>

@@ -12,7 +12,7 @@ import {
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
     PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Palette, Pencil,
     RotateCw, RotateCcw, ZoomIn, ZoomOut, Grid2X2, Grid3X3, HelpCircle, MessageSquare,
-    Play, Pause, Timer, Clock, Compass
+    Play, Pause, Timer, Clock, Compass, BookOpen
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -619,7 +619,7 @@ export function ContentListPlayer({
 export function ConceptExplanationPlayer({ 
     items, 
     step, 
-    revealedSentencesCount = 1, 
+    revealedSentencesCount, 
     isFullscreen, 
     title, 
     isSingleCardMode, 
@@ -645,7 +645,7 @@ export function ConceptExplanationPlayer({
 
     // Yeni kavram kartı açıldığında otomatik olarak aşağı kaydırıp ekrana getirme
     useEffect(() => {
-        if (revealedSentencesCount > 1 && scrollRef.current) {
+        if (revealedSentencesCount && revealedSentencesCount > 1 && scrollRef.current) {
             setTimeout(() => {
                 scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
             }, 100);
@@ -675,12 +675,15 @@ export function ConceptExplanationPlayer({
                     .filter((it: any) => it.concept.length > 0);
             }
         }
-        return list.filter(it => it.concept !== '[BAŞLIK]');
+        return list;
     }, [items, step]);
 
     if (!validConcepts || validConcepts.length === 0) return null;
-    const totalCards = validConcepts.length;
-    const visibleConcepts = validConcepts.slice(0, revealedSentencesCount || 1);
+    const totalCards = validConcepts.filter(it => it.concept !== '[BAŞLIK]').length;
+    const visibleConcepts = (typeof revealedSentencesCount === 'number' && revealedSentencesCount > 0)
+        ? validConcepts.slice(0, revealedSentencesCount)
+        : validConcepts;
+    const visibleCount = visibleConcepts.filter(it => it.concept !== '[BAŞLIK]').length;
 
     const getConceptFontSize = (conceptText: string) => {
         const words = (conceptText || '').trim().split(/\s+/);
@@ -742,16 +745,13 @@ export function ConceptExplanationPlayer({
     }[cardScale];
 
     const getGridClass = () => {
-        if (cardScale === 'xl') return "grid-cols-1 md:grid-cols-2";
-        if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2";
-        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4" : "grid-cols-2 sm:grid-cols-3";
-        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
-        // sm (varsayılan)
-        return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4";
+        if (isSingleCardMode || visibleConcepts.length === 1) return "grid-cols-1 max-w-4xl mx-auto w-full";
+        if (visibleConcepts.length === 2) return "grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto w-full";
+        return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full";
     };
 
     return (
-        <div className={cn("w-full p-2 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
+        <div className="w-full max-w-7xl mx-auto p-2 md:p-4 animate-in fade-in duration-500">
             {/* Üst Başlık */}
             <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl">
                 <div className="flex items-center gap-3">
@@ -761,8 +761,8 @@ export function ConceptExplanationPlayer({
                     <div>
                         <h2 className="font-black text-white text-lg md:text-2xl drop-shadow-sm tracking-tight">{title || 'Anahtar Kavramlar'}</h2>
                         <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
-                            <span className={cn(visibleConcepts.length === totalCards ? "text-emerald-400 font-extrabold" : "text-indigo-400 font-extrabold")}>
-                                {visibleConcepts.length} / {totalCards} Anahtar Kavram
+                            <span className={cn(visibleCount === totalCards ? "text-emerald-400 font-extrabold" : "text-indigo-400 font-extrabold")}>
+                                {visibleCount} / {totalCards} Anahtar Kavram
                             </span>
                         </div>
                     </div>
@@ -969,16 +969,36 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                     </div>
                 </div>
 
-                {/* Hepsini Çevir Butonu */}
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleToggleFlipAll}
-                    className="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
-                >
-                    <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
-                    <span>{allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}</span>
-                </Button>
+                {/* Hepsini Çevir Butonu (Öğretmen) / İlerleme Çubuğu (Öğrenci) */}
+                {isTeacher ? (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleToggleFlipAll}
+                        className="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
+                    >
+                        <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
+                        <span>{allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}</span>
+                    </Button>
+                ) : (
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                        <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-600 dark:text-slate-300">
+                            <span>Kart İlerlemesi:</span>
+                            <span className="font-extrabold text-indigo-600 dark:text-indigo-400">{flippedCount} / {totalCards}</span>
+                            {allFlipped && (
+                                <span className="flex items-center gap-1 text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full ml-1">
+                                    <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Tamamlandı
+                                </span>
+                            )}
+                        </div>
+                        <div className="w-28 sm:w-36 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div 
+                                className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 transition-all duration-300 rounded-full"
+                                style={{ width: `${totalCards > 0 ? (flippedCount / totalCards) * 100 : 0}%` }}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* 3D Anagram Kartları Grid'i */}
@@ -1165,16 +1185,36 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
                     </div>
                 </div>
 
-                {/* Hepsini Çevir Butonu */}
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleToggleFlipAll}
-                    className="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
-                >
-                    <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
-                    <span>{allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}</span>
-                </Button>
+                {/* Hepsini Çevir Butonu (Öğretmen) / İlerleme Çubuğu (Öğrenci) */}
+                {isTeacher ? (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleToggleFlipAll}
+                        className="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
+                    >
+                        <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
+                        <span>{allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}</span>
+                    </Button>
+                ) : (
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                        <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-600 dark:text-slate-300">
+                            <span>Kart İlerlemesi:</span>
+                            <span className="font-extrabold text-indigo-600 dark:text-indigo-400">{flippedCount} / {totalCards}</span>
+                            {allFlipped && (
+                                <span className="flex items-center gap-1 text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full ml-1">
+                                    <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Tamamlandı
+                                </span>
+                            )}
+                        </div>
+                        <div className="w-28 sm:w-36 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div 
+                                className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 transition-all duration-300 rounded-full"
+                                style={{ width: `${totalCards > 0 ? (flippedCount / totalCards) * 100 : 0}%` }}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* 3D Bilgi Kartları Grid'i */}
@@ -1624,7 +1664,7 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
              </div>
             
             <AnagramGame 
-                step={{...currentCard, title: step.title}} 
+                step={{...currentCard, title: step.title, type: 'anagram'}} 
                 onAnswer={handleAnswer}
                 answer={answerState[currentCardIndex]}
                 isAnswerRevealed={!!answerState[currentCardIndex]}
@@ -4291,19 +4331,35 @@ export function LessonContentViewer({
         if (isCardStep) {
             const cards = (currentStep as FlashcardStep | AnagramFlashcardStep).cards || [];
             if (cards.length === 0) return true;
+            if (isTeacher) return true;
             if (internalProgress.answers[currentStepIndex]?.completed) return true;
-            const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards;
-            return cardSet.size >= cards.length || exploredCards.size >= cards.length;
+            return exploredCards.size >= cards.length;
         }
 
         const answer = internalProgress.answers[currentStepIndex];
-        if (currentStep.type === 'trueFalseList' || currentStep.type === 'matching' || (currentStep as any).type === 'conceptMatching' || currentStep.type === 'anagramGame' || (currentStep as any).type === 'kelimeDahasi') {
+
+        if (currentStep.type === 'trueFalseList') {
+            if (isTeacher) return true;
+            const qCount = (currentStep as TrueFalseListStep).questions?.length || 0;
+            if (qCount === 0) return true;
+            const answersForStep = internalProgress.answers[currentStepIndex] || {};
+            const answeredCount = Object.keys(answersForStep).filter(k => !isNaN(Number(k))).length;
+            return !!answersForStep.completed || answeredCount >= qCount;
+        }
+
+        if (currentStep.type === 'matching' || (currentStep as any).type === 'conceptMatching') {
+            if (isTeacher) return true;
+            return !!answer?.completed || answer === 'completed';
+        }
+
+        if (currentStep.type === 'anagramGame' || (currentStep as any).type === 'kelimeDahasi' || currentStep.type === 'sentenceScramble') {
+            if (isTeacher) return true;
             return !!answer?.completed || answer !== undefined;
         }
 
         return answer !== undefined && answer !== null;
 
-    }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, exploredCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
+    }, [currentStep, internalProgress.answers, currentStepIndex, exploredCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
 
     const handleNext = useCallback(() => {
         if (!currentStep) return;
@@ -4887,20 +4943,25 @@ export function LessonContentViewer({
                                 className={cn(
                                     "h-8 px-3.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden flex items-center gap-1.5",
                                     !isNextButtonEnabled
-                                        ? "bg-black/5 text-slate-400 border border-black/10 cursor-not-allowed"
+                                        ? "bg-slate-200/60 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-300/60 dark:border-slate-700 cursor-not-allowed"
                                         : hasUnrevealedItems
                                             ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-sm shadow-purple-500/25 hover:shadow-md hover:shadow-purple-500/40"
                                             : isLastStep
                                                 ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white border border-emerald-400/40 shadow-sm shadow-emerald-500/25 hover:shadow-md hover:shadow-emerald-500/40"
                                                 : "bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white border border-indigo-400/40 shadow-sm shadow-indigo-500/25 hover:shadow-md hover:shadow-indigo-500/40"
                                 )}
-                                title={hasUnrevealedItems ? "Sayfadaki sonraki içeriği göster" : (isLastStep ? "Dersi Bitir" : "Sonraki Sayfaya Geç")}
+                                title={!isNextButtonEnabled ? "Bu sayfadaki içeriği tamamlamadan sonraki adıma geçemezsin." : (hasUnrevealedItems ? "Sayfadaki sonraki içeriği göster" : (isLastStep ? "Dersi Bitir" : "Sonraki Sayfaya Geç"))}
                             >
                                 {isNextButtonEnabled && (
                                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.25),transparent_60%)]" />
                                 )}
                                 <span className="relative flex items-center gap-1.5">
-                                    {hasUnrevealedItems ? (
+                                    {!isNextButtonEnabled ? (
+                                        <>
+                                            <span>Kilitli</span>
+                                            <Lock className="w-3.5 h-3.5" />
+                                        </>
+                                    ) : hasUnrevealedItems ? (
                                         <>
                                             <span>Devam Et</span>
                                             <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />

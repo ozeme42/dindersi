@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import fs from 'fs/promises';
 import path from 'path';
+import type { Course, Unit, Topic, UserProgress } from "@/lib/types";
 
 let MANIFEST_CACHE: any = null;
 

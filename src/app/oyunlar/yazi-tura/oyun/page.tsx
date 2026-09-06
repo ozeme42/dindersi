@@ -145,7 +145,7 @@ type Team = { id: string; name: string; goals: number; color: string; };
 const TEAM_COLORS = ['text-rose-400', 'text-blue-400', 'text-emerald-400', 'text-amber-400', 'text-fuchsia-400', 'text-cyan-400'];
 const TEAM_BG_COLORS = ['bg-rose-500', 'bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-fuchsia-500', 'bg-cyan-500'];
 
-export function PenaltyGameClient() {
+function PenaltyGameClient() {
     const { user } = useAuth();
     const { toast } = useToast();
     const searchParams = useSearchParams();
@@ -186,7 +186,7 @@ export function PenaltyGameClient() {
     const [flashes, setFlashes] = useState<{id: number, top: string, left: string}[]>([]);
 
     const gameContext = `Gol Kralı - ${searchParams.get('topicName') || 'Genel'}`;
-    const backUrl = '/oyunlar'; 
+    const backUrl = '/oyunlar/yazi-tura'; 
 
     useEffect(() => {
         const fetchQuestions = async () => {

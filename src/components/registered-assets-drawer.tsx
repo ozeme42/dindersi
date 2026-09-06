@@ -334,7 +334,10 @@ export function RegisteredAssetsDrawer({
                     aiObjectives = aiResult.learningObjectives;
                 }
                 if (aiResult.summary && aiResult.summary.length > 0) {
-                    aiSummaryItems = aiResult.summary;
+                    aiSummaryItems = aiResult.summary.map(s => ({
+                        title: s.title,
+                        content: s.content || (s.sentences ? s.sentences.join(' ') : '')
+                    }));
                 }
 
                 // AI'dan türetilen kavramlar

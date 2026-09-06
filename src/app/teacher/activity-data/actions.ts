@@ -97,7 +97,7 @@ export async function saveActivityItem(item: Partial<ActivityItem>): Promise<{ s
     try {
         // Ensure content.categories is an array of strings if it exists
         if (dataToSave.content?.categories && Array.isArray(dataToSave.content.categories)) {
-            dataToSave.content.categories = dataToSave.content.categories.map(cat => (typeof cat === 'object' ? cat.value : cat));
+            dataToSave.content.categories = dataToSave.content.categories.map((cat: any) => (typeof cat === 'object' ? cat?.value : cat));
         }
 
         if (id && !id.startsWith('new-')) {

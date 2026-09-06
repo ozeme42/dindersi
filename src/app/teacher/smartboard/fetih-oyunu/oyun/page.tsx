@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { ArrowLeft, Swords, Repeat, Award, Trophy, Castle, Map, ShieldAlert, Skull, Home, CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -24,14 +24,14 @@ const GRID_COLS = 6;
 const GRID_ROWS = 5; // Biraz daha geniş bir harita
 const TOTAL_TERRITORIES = GRID_COLS * GRID_ROWS;
 
-type GameQuestion = Question;
+type GameQuestion = any;
 type Team = { id: number; name: string; color: string; playerUids: string[]; score: number };
 type TeamForUrl = { id: number; name: string; color: string; playerUids: string[] };
 
 // Bölge Tipi
 type Territory = {
   id: number;
-  question: GameQuestion;
+  question: any;
   ownerId: number | null; // Takım ID'si veya Null (Tarafsız)
   isBase: boolean; // Ana üs mü?
 };

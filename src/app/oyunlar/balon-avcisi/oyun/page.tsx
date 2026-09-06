@@ -52,13 +52,7 @@ function Game() {
 
     const gameContext = `Balon Avcısı - ${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
     
-    const backUrl = useMemo(() => {
-        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
-        if (courseId && unitId && topicId) {
-            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
-        }
-        return '/oyunlar/balon-avcisi';
-    }, [searchParams]);
+    const backUrl = '/oyunlar/balon-avcisi';
 
     // Fetch data on load
     useEffect(() => {

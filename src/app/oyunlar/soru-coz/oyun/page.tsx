@@ -36,10 +36,11 @@ function QuizGame() {
     const [correctCount, setCorrectCount] = useState(0);
 
     const topicId = searchParams.get('topicId');
-    const difficulty = searchParams.get('difficulty')?.split(',');
+    const difficultyParam = searchParams.get('difficulty');
+    const difficulty = difficultyParam ? difficultyParam.split(',') : undefined;
     
     const fetchQuestions = useCallback(async () => {
-        if (!topicId || !difficulty) {
+        if (!topicId) {
             setError("Geçersiz test parametreleri.");
             setIsLoading(false);
             return;
@@ -52,8 +53,8 @@ function QuizGame() {
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
             questionCount: parseInt(searchParams.get('questionCount') || '10'),
-            difficulty: searchParams.get('difficulty')?.split(','),
-            questionTypes: searchParams.get('questionTypes')?.split(','),
+            difficulty: difficulty,
+            questionTypes: searchParams.get('questionTypes')?.split(',') || ['mcq', 'Çoktan Seçmeli'],
         };
         const result = await getQuestionsFromBank(params as any);
         if (result.error) {
@@ -62,7 +63,7 @@ function QuizGame() {
             setQuestions(result.questions as Question[]);
         }
         setIsLoading(false);
-    }, [searchParams, difficulty, topicId]);
+    }, [searchParams, difficultyParam, topicId]);
 
     useEffect(() => {
         fetchQuestions();
@@ -100,7 +101,11 @@ function QuizGame() {
     }
     
     const handleSaveAndExit = async () => {
-        if (!user || user.role !== 'student' || score <= 0 || isSubmitting) {
+        if (!user || user.role !== 'student') {
+            router.push('/oyunlar/soru-coz');
+            return;
+        }
+        if (score <= 0 || isSubmitting) {
             router.push('/student');
             return;
         }
@@ -128,7 +133,11 @@ function QuizGame() {
     };
 
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /> <span className="ml-2">Sorular Yükleniyor...</span></div>;
+        return (
+            <div className="w-full h-full min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8">
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            </div>
+        );
     }
     
     if (error) {
@@ -168,14 +177,25 @@ function QuizGame() {
                         <p className="text-4xl md:text-5xl font-bold text-primary">{correctCount} / {questions.length}</p>
                         <p className="text-base md:text-lg">Kazandığın Puan: <span className="font-bold">{score}</span></p>
                     </CardContent>
-                    <CardFooter className="flex-col sm:flex-row gap-2">
-                        <Button onClick={handleRestart} className="w-full">
-                           <Repeat className="mr-2 h-4 w-4" /> Tekrar Çöz
-                        </Button>
-                        <Button onClick={handleSaveAndExit} className="w-full" variant="outline" disabled={isSubmitting}>
-                             {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Home className="mr-2 h-4 w-4"/>}
-                             {isSubmitting ? "Kaydediliyor..." : "Kaydet ve Panele Dön"}
-                        </Button>
+                    <CardFooter className="flex-col gap-2.5">
+                        <div className="grid grid-cols-2 gap-2 w-full">
+                            <Button onClick={handleRestart} className="w-full">
+                               <Repeat className="mr-2 h-4 w-4" /> Tekrar Çöz
+                            </Button>
+                            <Button onClick={() => router.push('/oyunlar/soru-coz')} variant="outline" className="w-full">
+                               Konu Seç
+                            </Button>
+                        </div>
+                        {user?.role === 'student' ? (
+                            <Button onClick={handleSaveAndExit} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold" disabled={isSubmitting}>
+                                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Home className="mr-2 h-4 w-4"/>}
+                                {isSubmitting ? "Kaydediliyor..." : "Puanı Kaydet & Panele Dön"}
+                            </Button>
+                        ) : !user ? (
+                            <Button onClick={() => router.push('/login?redirect=/oyunlar/soru-coz')} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold">
+                                Giriş Yap / Kaydol
+                            </Button>
+                        ) : null}
                     </CardFooter>
                 </Card>
             </div>

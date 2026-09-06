@@ -12,7 +12,7 @@ import { playSound } from '@/lib/audio-service';
 import { GameEndScreen } from '@/components/game-end-screen';
 import Confetti from 'react-dom-confetti';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 
 function MatchingGame() {
     const { user } = useAuth();
@@ -123,15 +123,22 @@ function MatchingGame() {
         try {
             if (isMission && topicId) {
                 // --- GÖREV MODU ---
-                await addDoc(collection(db, 'scoreEvents'), {
+                const batch = writeBatch(db);
+                const eventRef = doc(collection(db, 'scoreEvents'));
+                batch.set(eventRef, {
                     userId: user.uid,
-                    points: score, // Kazanılan puan (başarısız olsa bile)
+                    points: score,
                     context: topicId,
                     gameType: 'eslestirme',
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: isAllMatched // Sadece hepsi bittiyse TRUE
+                    completed: isAllMatched
                 });
+                if (score > 0) {
+                    const userRef = doc(db, 'users', user.uid);
+                    batch.update(userRef, { score: increment(score) });
+                }
+                await batch.commit();
                 if (isAllMatched) {
                     toast({ title: "Görev Başarılı!", description: "Tebrikler, tüm eşleşmeleri tamamladın.", className: "bg-green-600 text-white" });
                 } else {
@@ -189,36 +196,23 @@ function MatchingGame() {
 
     if (gameState === 'finished') {
         return (
-            <div className="relative flex items-center justify-center h-screen bg-slate-900">
-                <Confetti active={showConfetti} config={{ spread: 360, elementCount: 100 }} />
-                {isMission ? (
-                    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl relative overflow-hidden">
-                            <div className="mb-6 flex justify-center">
-                                {isAllMatched ? <Trophy className="h-16 w-16 text-green-600 animate-bounce" /> : <XOctagon className="h-16 w-16 text-red-500" />}
-                            </div>
-                            <h2 className="text-3xl font-black text-slate-800 mb-2">{isAllMatched ? "GÖREV BAŞARILI!" : "GÖREV TAMAMLANMADI"}</h2>
-                            <p className="text-slate-500 mb-6">{isAllMatched ? "Harika! Tüm eşleştirmeleri yaptın." : `Toplam ${score} puan topladın ama tüm eşleşmeleri bitirmedin.`}</p>
-                            <div className="space-y-3">
-                                {/* PUAN VARSA KAYDET BUTONU HER ZAMAN GÖRÜNÜR */}
-                                {!isScoreSaved && score > 0 && (
-                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className={cn("w-full h-12 font-bold", isAllMatched ? "bg-indigo-600 hover:bg-indigo-700" : "bg-amber-600 hover:bg-amber-700")}>
-                                        {isSaving ? "Kaydediliyor..." : (isAllMatched ? "Kaydet ve Devam Et" : "Puanı Al ve Çık")}
-                                    </Button>
-                                )}
-                                
-                                {isScoreSaved && isAllMatched && <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 bg-green-600 font-bold">Görevlere Dön</Button>}
-                                
-                                {(!isAllMatched || isScoreSaved) && <Button onClick={handleRestart} variant="outline" className="w-full h-12 font-bold">Tekrar Dene</Button>}
-                                
-                                <Button onClick={() => router.push('/student')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
-                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                ) : <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} scoreSaved={isScoreSaved} onRestart={handleRestart} backUrl={backUrl} />}
-            </div>
+            <GameEndScreen 
+                score={score} 
+                onSave={user ? handleSaveAndExit : undefined} 
+                isSaving={isSaving} 
+                scoreSaved={isScoreSaved} 
+                onRestart={handleRestart} 
+                backUrl={backUrl} 
+                isSuccess={isAllMatched}
+                isMission={isMission}
+                customMessage={
+                    isMission 
+                        ? (isAllMatched 
+                            ? "Tebrikler! Tüm eşleştirmeleri doğru yaparak görevi başarıyla tamamladın." 
+                            : "Maalesef tüm kartları eşleştiremedin. Görevi geçmek için tüm eşleştirmeleri tamamlamalısın.")
+                        : undefined
+                }
+            />
         );
     }
 

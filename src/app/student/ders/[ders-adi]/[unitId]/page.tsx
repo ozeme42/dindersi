@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { doc, getDoc, getDocs, collection, onSnapshot, writeBatch, serverTimestamp, increment, query, orderBy } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, onSnapshot, writeBatch, serverTimestamp, increment, query, orderBy, arrayUnion } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { getCachedSteps, setCachedSteps } from "@/lib/lesson-cache";
@@ -127,11 +127,38 @@ function PageContent() {
         setIsLoading(true);
         setView('map');
         try {
-            const [progressSnap, manifestRes] = await Promise.all([
+            const [progressSnap, userSnap, manifestRes] = await Promise.all([
                 user ? getDoc(doc(db, 'users', user.uid, 'progress', courseId)) : Promise.resolve(null),
+                user ? getDoc(doc(db, 'users', user.uid)) : Promise.resolve(null),
                 fetch('/curriculum/manifest.json')
             ]);
-            if (progressSnap?.exists()) setCompletedTopics(progressSnap.data() as UserProgress);
+            
+            const mergedProgress: UserProgress = {};
+            if (progressSnap?.exists()) {
+                Object.assign(mergedProgress, progressSnap.data());
+            }
+            if (userSnap?.exists()) {
+                const userData = userSnap.data();
+                const completedTopicsList = userData?.completedTopics || [];
+                const topicCompletionCounts = userData?.topicCompletionCounts || {};
+                completedTopicsList.forEach((tId: string) => {
+                    if (!mergedProgress[tId]) {
+                        mergedProgress[tId] = {
+                            completionCount: topicCompletionCounts[tId] || 1,
+                            lastCompleted: new Date().toISOString()
+                        };
+                    }
+                });
+                Object.entries(topicCompletionCounts).forEach(([tId, count]) => {
+                    if (!mergedProgress[tId]) {
+                        mergedProgress[tId] = {
+                            completionCount: Number(count) || 1,
+                            lastCompleted: new Date().toISOString()
+                        };
+                    }
+                });
+            }
+            setCompletedTopics(mergedProgress);
             
             let courseData: Course | undefined;
             if (manifestRes.ok) {
@@ -256,11 +283,20 @@ function PageContent() {
         try {
             const batch = writeBatch(db);
             const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
+            const userRef = doc(db, 'users', user.uid);
             const newCompletionCount = currentCompletionCount + 1;
             batch.set(progressRef, { [contentId]: { completionCount: newCompletionCount, lastCompleted: serverTimestamp() } }, { merge: true });
+            
+            const userUpdates: Record<string, any> = {
+                completedTopics: arrayUnion(contentId),
+                [`topicCompletionCounts.${contentId}`]: newCompletionCount
+            };
             if (totalScore > 0) {
-                const userRef = doc(db, 'users', user.uid);
-                batch.update(userRef, { score: increment(totalScore) });
+                userUpdates.score = increment(totalScore);
+            }
+            batch.set(userRef, userUpdates, { merge: true });
+
+            if (totalScore > 0) {
                 const eventRef = doc(collection(db, 'scoreEvents'));
                 batch.set(eventRef, {
                     userId: user.uid, points: totalScore, timestamp: serverTimestamp(),
@@ -281,7 +317,9 @@ function PageContent() {
         const currentIndex = allTopicsInOrder.findIndex(t => t.id === (isUnitFlow ? null : contentId));
         if (currentIndex !== -1 && currentIndex < allTopicsInOrder.length - 1) {
             const nextTopic = allTopicsInOrder[currentIndex + 1];
-            if (isTopicUnlocked(nextTopic.id)) { handleSelectContent(nextTopic); return; }
+            const prevTopic = allTopicsInOrder[currentIndex];
+            const isNextUnlocked = isTeacher || prevTopic.id === contentId || isTopicUnlocked(nextTopic.id);
+            if (isNextUnlocked) { handleSelectContent(nextTopic); return; }
         }
         setView('map');
     };
@@ -295,7 +333,7 @@ function PageContent() {
             if (currentAnswers[questionIndex] !== undefined) return prevMap;
             const step = activeContentData.data.steps?.[stepIndex];
             if (!step) return prevMap;
-            const question = step.questions?.[questionIndex];
+            const question = (step as any).questions?.[questionIndex];
             const isCorrect = question ? (selectedAnswer === question.isTrue) : (selectedAnswer === true);
             const scoreToAdd = isCorrect ? POINTS_PER_QUESTION : 0;
             const newAnswersForStep = { ...currentAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect } };

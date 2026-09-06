@@ -103,20 +103,31 @@ const DEFAULT_MODULES: { [key: string]: boolean } = {};
 type AiLessonStepGenerationDialogProps = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  topicTitle: string;
-  sourceText: string;
+  topicTitle?: string;
+  sourceText?: string;
   targetIndex?: number;
-  onStepsGenerated: (steps: LessonStep[], targetIndex?: number) => void;
+  context?: {
+    topicId?: string;
+    topicTitle?: string;
+    sourceText?: string;
+    [key: string]: any;
+  } | any;
+  generationType?: string | null;
+  onStepsGenerated: (steps: LessonStep[], targetIndexOrContext?: any) => void;
 };
 
 export function AiLessonStepGenerationDialog({
   isOpen,
   onOpenChange,
-  topicTitle,
-  sourceText,
+  topicTitle: rawTopicTitle,
+  sourceText: rawSourceText,
   targetIndex,
+  context,
+  generationType,
   onStepsGenerated,
 }: AiLessonStepGenerationDialogProps) {
+  const topicTitle = rawTopicTitle || context?.topicTitle || context?.title || '';
+  const sourceText = rawSourceText || context?.sourceText || '';
   const [localSourceText, setLocalSourceText] = useState(sourceText || topicTitle || '');
   const [selectedModules, setSelectedModules] = useState<{ [key: string]: boolean }>({});
   const [isGenerating, setIsGenerating] = useState(false);
@@ -258,7 +269,7 @@ export function AiLessonStepGenerationDialog({
         });
 
         if (result.steps && result.steps.length > 0) {
-            onStepsGenerated(result.steps, targetIndex);
+            onStepsGenerated(result.steps, targetIndex ?? context);
             toast({
                 title: "✅ Adımlar Başarıyla Eklendi",
                 description: result.message,
@@ -404,7 +415,7 @@ export function AiLessonStepGenerationDialog({
         }
 
         if (generatedSteps.length > 0) {
-            onStepsGenerated(generatedSteps, targetIndex);
+            onStepsGenerated(generatedSteps, targetIndex ?? context);
             handleClose();
             toast({
                 title: "İçerikler Başarıyla Üretildi! 🎉",

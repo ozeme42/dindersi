@@ -63,18 +63,7 @@ function GameComponent() {
     const currentLevel = levels[levelIndex];
     const gameContext = `İlim Hazinesi - ${searchParams.get('topicName') || 'Genel'}`;
 
-    const backUrl = useMemo(() => {
-        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
-        if (courseId && unitId && topicId) {
-             const params = new URLSearchParams({
-                courseName: courseName || '',
-                unitName: unitName || '',
-                topicName: topicName || '',
-            });
-            return `/konu/${courseId}/${unitId}/${topicId}?${params.toString()}`;
-        }
-        return '/oyunlar/ilim-hazinesi';
-    }, [searchParams]);
+    const backUrl = isMission ? '/student/gorevler' : '/oyunlar/ilim-hazinesi';
 
     const initLevel = useCallback(() => {
         if (!levels || levels.length === 0 || levelIndex >= levels.length) return;
@@ -297,67 +286,6 @@ function GameComponent() {
     }
     
     if (isFinished) {
-        // GÖREV MODU BİTİŞ EKRANI (Özel Durum)
-        if(isMission) {
-             return (
-                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
-                        <Confetti active={showConfetti} config={{ angle: 90, spread: 360, startVelocity: 40, elementCount: 100, decay: 0.9 }} />
-                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
-                            
-                            <div className="mb-6 flex justify-center">
-                                {isSuccess ? (
-                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
-                                        <Trophy className="h-16 w-16 text-green-600" />
-                                    </div>
-                                ) : (
-                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
-                                        <XOctagon className="h-16 w-16 text-red-500" />
-                                    </div>
-                                )}
-                            </div>
-
-                            <h2 className="text-3xl font-black text-slate-800 mb-2">
-                                {isSuccess ? "GÖREV BAŞARILI!" : "GÖREV TAMAMLANMADI"}
-                            </h2>
-                            
-                            <p className="text-slate-500 mb-2 font-medium">
-                                {isSuccess ? "Tebrikler! Tüm hazineleri topladın." : "Tüm hazineleri toplamadan çıkış yaptın."}
-                            </p>
-                            <p className="text-2xl font-black text-emerald-600 mb-6">{score} PUAN</p>
-
-                            <div className="space-y-3">
-                                {/* Puan varsa ve kaydedilmemişse Kaydet Butonu */}
-                                {!isScoreSaved && score > 0 && (
-                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
-                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
-                                    </Button>
-                                )}
-                                
-                                {/* Kaydedildiyse Görevlere Dön */}
-                                {isScoreSaved && isSuccess && (
-                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
-                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
-                                    </Button>
-                                )}
-                                
-                                {/* Tekrar Dene */}
-                                {(!isSuccess || isScoreSaved) && (
-                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 font-bold">
-                                        <RotateCcw className="mr-2 h-4 w-4"/> Tekrar Dene
-                                    </Button>
-                                )}
-
-                                <Button onClick={() => router.push(user ? '/student' : '/')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
-                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-            );
-        }
-
-        // NORMAL MOD BİTİŞ EKRANI (Bileşeni Kullanıyoruz)
         return (
             <GameEndScreen 
                 score={score}
@@ -365,9 +293,18 @@ function GameComponent() {
                 isSaving={isSaving}
                 scoreSaved={isScoreSaved}
                 onRestart={handleRestart}
-                backUrl={user ? backUrl : '/'}
+                backUrl={backUrl}
+                isSuccess={isSuccess}
+                isMission={isMission}
+                customMessage={
+                    isMission 
+                        ? (isSuccess 
+                            ? "Tebrikler! Tüm hazineleri toplayarak görevi başarıyla tamamladın." 
+                            : "Maalesef tüm sandıkları açamadın. Görevi geçmek için tüm sandıkları açmalısın.")
+                        : undefined
+                }
             />
-        )
+        );
     }
     
     if (!currentLevel) return null;

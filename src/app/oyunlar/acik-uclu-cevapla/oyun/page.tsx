@@ -62,20 +62,7 @@ const OpenEndedGame = () => {
     
     const contextString = `Açık Uçlu Cevaplama - ${gameContext.courseName} > ${gameContext.topicName}`;
     
-    const backUrl = useMemo(() => {
-        const courseId = searchParams.get('courseId');
-        const unitId = searchParams.get('unitId');
-        const topicId = searchParams.get('topicId');
-        if (courseId && unitId && topicId) {
-             const params = new URLSearchParams({
-                courseName: gameContext.courseName,
-                unitName: gameContext.unitName,
-                topicName: gameContext.topicName,
-            });
-            return `/konu/${courseId}/${unitId}/${topicId}?${params.toString()}`;
-        }
-        return '/';
-    }, [searchParams, gameContext]);
+    const backUrl = '/oyunlar/acik-uclu-cevapla';
 
 
     const fetchQuestions = useCallback(async () => {

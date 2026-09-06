@@ -276,7 +276,7 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
             }
             html += `<div style="margin-top:40px; border-top:1px solid #eee; padding-top:10px; text-align:center; font-size:10px; color:#94a3b8;">Bu belge dindersiatolyesi.com üzerinden oluşturulmuştur. Tüm hakları saklıdır.</div>`;
             element.innerHTML = html;
-            const opt = { margin: 10, filename: `${topicTitle.replace(/\s+/g, '_')}_Ders_Notlari.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            const opt: any = { margin: 10, filename: `${topicTitle.replace(/\s+/g, '_')}_Ders_Notlari.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             await html2pdf().set(opt).from(element).save();
         } catch (err) { alert("PDF hatası oluştu."); } finally { setIsDownloading(false); }
     };

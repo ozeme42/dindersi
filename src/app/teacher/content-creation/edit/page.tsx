@@ -535,7 +535,7 @@ function InsertStepDivider({
 // ══ ANA KONU DÜZENLEYİCİ BİLEŞENİ ══
 export function TopicEditor({ 
     title, setTitle, steps, setSteps, sourceText, setSourceText, htmlContent, setHtmlContent,
-    onSave, isSaving, isUnitFlow = false, onOpenAi, children
+    onSave, isSaving, isUnitFlow = false, onOpenAi, onOpenAIGeneration, children
 }: { 
     title: string, setTitle: (t: string) => void,
     steps: DraggableLessonStep[], setSteps: (s: DraggableLessonStep[] | ((prev: DraggableLessonStep[]) => DraggableLessonStep[])) => void,
@@ -545,6 +545,7 @@ export function TopicEditor({
     isSaving: boolean,
     isUnitFlow?: boolean,
     onOpenAi?: (targetIndex?: number) => void;
+    onOpenAIGeneration?: (type?: any) => void;
     children?: React.ReactNode;
 }) {
     const [viewMode, setViewMode] = useState<'studio' | 'list'>('studio');
@@ -930,14 +931,14 @@ export function TopicEditor({
                     return {
                         type: 'tf',
                         title: 'Doğru / Yanlış',
-                        statement: q.text,
+                        statement: q.text || '',
                         isTrue: q.correctAnswer === 'Doğru'
                     };
                 } else if (q.type === 'Boşluk Doldurma') {
                     return {
                         type: 'fitb',
                         title: 'Boşluk Doldurma',
-                        sentenceWithBlank: q.text,
+                        sentenceWithBlank: q.text || '',
                         options: q.options || [],
                         correctAnswer: q.correctAnswer || ''
                     };
@@ -945,7 +946,7 @@ export function TopicEditor({
                     return {
                         type: 'mcq',
                         title: 'Kontrol Sorusu',
-                        question: q.text,
+                        question: q.text || '',
                         options: q.options || ['A', 'B', 'C', 'D'],
                         correctAnswer: q.correctAnswer || (q.options ? q.options[0] : 'A')
                     };

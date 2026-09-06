@@ -112,7 +112,7 @@ function IntroCard({ assignment }: { assignment: any }) {
   const sortedThresholds = [...(assignment.rewardThresholds || [])].sort((a, b) => a.rate - b.rate);
 
   return (
-      <div className="group relative w-full max-w-2xl mx-auto rounded-3xl bg-slate-900/80 border border-white/10 backdrop-blur-md overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 shadow-2xl">
+      <div className="group relative w-full h-full flex flex-col rounded-3xl bg-slate-900/80 border border-white/10 backdrop-blur-md overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 shadow-2xl">
           <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-cyan-500/10 transition-colors" />
 
           <div className="relative p-6 pb-4 border-b border-white/5 flex flex-col sm:flex-row gap-4 justify-between items-start">
@@ -148,7 +148,7 @@ function IntroCard({ assignment }: { assignment: any }) {
              </div>
           </div>
 
-          <div className="p-6 pt-4 space-y-6">
+          <div className="p-6 pt-4 space-y-6 flex-1 flex flex-col">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   <div className="bg-slate-950/50 p-3 rounded-xl border border-white/5 flex flex-col items-center justify-center text-center">
                       <div className="text-slate-500 text-[10px] font-bold uppercase mb-1 flex items-center gap-1"><FileText className="h-3 w-3"/> Soru</div>
@@ -191,7 +191,7 @@ function IntroCard({ assignment }: { assignment: any }) {
                 </div>
               )}
 
-              <div className="pt-2">
+              <div className="pt-2 mt-auto">
                 {isSolved ? (
                    <Dialog open={isLeaderboardOpen} onOpenChange={setIsLeaderboardOpen}>
                         <div className="flex flex-col gap-3">
@@ -278,25 +278,56 @@ function DenemeSinaviPage() {
             <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-cyan-600/10 rounded-full blur-[100px]" />
         </div>
 
-        <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-24 md:pb-12 relative z-10">
-          <div className="flex flex-col items-center text-center mb-10 md:mb-14">
-            <div className="bg-slate-900/50 p-4 rounded-3xl border border-white/5 mb-4 shadow-xl backdrop-blur-sm">
-                <GraduationCap className="h-12 w-12 text-cyan-400" />
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8 pb-24 md:pb-12 relative z-10">
+          {/* Modern Hero Header */}
+          <div className="relative rounded-[2rem] p-6 md:p-8 mb-8 md:mb-12 bg-gradient-to-r from-blue-950/60 via-slate-900/80 to-indigo-950/60 border border-blue-500/20 backdrop-blur-2xl shadow-2xl overflow-hidden">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
+            
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30 text-white shrink-0">
+                            <GraduationCap className="w-6 h-6" />
+                        </div>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-[11px] font-black uppercase tracking-widest">
+                            <FileText className="w-3 h-3" /> Sınav Merkezi
+                        </div>
+                    </div>
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                        Deneme <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-300 to-indigo-400">Sınavları</span>
+                    </h1>
+                    <p className="text-slate-300/80 text-sm md:text-base max-w-2xl font-medium leading-relaxed">
+                        Öğretmenlerin tarafından atanan sınavları çöz, süre dolmadan testini tamamlayarak ekstra bonus XP ve başarı dereceleri kazan!
+                    </p>
+                </div>
+
+                <div className="flex flex-wrap sm:flex-nowrap gap-3 shrink-0">
+                    <div className="bg-black/40 border border-white/10 rounded-2xl p-4 min-w-[110px] flex flex-col items-center justify-center text-center backdrop-blur-md">
+                        <FileText className="w-5 h-5 text-cyan-400 mb-1" />
+                        <span className="text-xl md:text-2xl font-black text-white tabular-nums">{assignments.length}</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Toplam Sınav</span>
+                    </div>
+                    <div className="bg-black/40 border border-white/10 rounded-2xl p-4 min-w-[110px] flex flex-col items-center justify-center text-center backdrop-blur-md">
+                        <CheckCircle2 className="w-5 h-5 text-emerald-400 mb-1" />
+                        <span className="text-xl md:text-2xl font-black text-emerald-400 tabular-nums">{assignments.filter(a => a.isSolved).length}</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tamamlanan</span>
+                    </div>
+                </div>
             </div>
-            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2">Deneme <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">Sınavları</span></h1>
-            <p className="text-slate-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed">Öğretmenlerin tarafından atanan sınavları buradan çözebilir ve ödüller kazanabilirsin.</p>
           </div>
 
-           <div className="space-y-6 flex flex-col items-center w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 w-full">
                {assignments.length > 0 ? (
                    assignments.map(assignment => <IntroCard key={assignment.id} assignment={assignment} />)
                ) : (
-                   <div className="text-center py-16 px-6 rounded-3xl bg-slate-900/50 border border-dashed border-white/10 max-w-lg w-full">
+                   <div className="col-span-full text-center py-16 px-6 rounded-3xl bg-slate-900/50 border border-dashed border-white/10 max-w-lg mx-auto w-full">
                        <FileText className="h-12 w-12 text-slate-600 mx-auto mb-4" />
                        <p className="text-slate-400 font-medium">Aktif bir deneme sınavı bulunmuyor.</p>
                    </div>
                )}
-           </div>
+          </div>
         </div>
     </div>
   );

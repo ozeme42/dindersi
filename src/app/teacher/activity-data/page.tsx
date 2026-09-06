@@ -220,7 +220,7 @@ export default function ActivityDataManagementPage() {
         const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
         const unitsData: (Unit & { topics: Topic[] })[] = [];
         for (const unitDoc of unitsSnapshot.docs) {
-          const unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as (Unit & { topics: Topic[] });
+          const unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as unknown as (Unit & { topics: Topic[] });
           const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
           unit.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
           unitsData.push(unit);
@@ -242,7 +242,7 @@ export default function ActivityDataManagementPage() {
   }, [fetchData]);
 
   const allTopics = useMemo(() => {
-    return allData.courses.flatMap(c => c.units?.flatMap(u => u.topics.map(t => ({ ...t, courseId: c.id, unitId: u.id, classId: c.classId }))) || []);
+    return allData.courses.flatMap(c => c.units?.flatMap(u => (u.topics || []).map(t => ({ ...t, courseId: c.id, unitId: u.id, classId: c.classId }))) || []);
   }, [allData.courses]);
 
   // Filtering Logic
@@ -254,13 +254,13 @@ export default function ActivityDataManagementPage() {
   }, [filters.classId, allData.courses, allData.classes]);
 
   const filteredUnits = useMemo(() => {
-    if (filters.courseId === 'all') return allData.courses.flatMap(c => c.units);
+    if (filters.courseId === 'all') return allData.courses.flatMap(c => c.units || []);
     const course = filteredCourses.find(c => c.id === filters.courseId);
     return course?.units || [];
   }, [filters.courseId, filteredCourses, allData.courses]);
 
   const filteredTopics = useMemo(() => {
-    if (filters.unitId === 'all') return filteredUnits.flatMap(u => u.topics);
+    if (filters.unitId === 'all') return filteredUnits.flatMap(u => u.topics || []);
     const unit = filteredUnits.find(u => u.id === filters.unitId);
     return unit?.topics || [];
   }, [filters.unitId, filteredUnits]);
@@ -273,7 +273,7 @@ export default function ActivityDataManagementPage() {
     else if (filters.courseId !== 'all') temp = temp.filter(d => d.courseId === filters.courseId);
     else if (filters.classId !== 'all') {
         const courseIdsInClass = new Set(filteredCourses.map(c => c.id));
-        temp = temp.filter(d => courseIdsInClass.has(d.courseId));
+        temp = temp.filter(d => Boolean(d.courseId && courseIdsInClass.has(d.courseId)));
     }
     
     if (dataTypeFilter !== 'all') {

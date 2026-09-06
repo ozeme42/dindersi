@@ -173,7 +173,7 @@ export default function DersAkisiPage() {
                                                         <AccordionContent className="p-6 md:p-8 bg-black/20">
                                                             <div className="space-y-6">
                                                                 {course.units?.slice().sort((a, b) => compareTitlesByLeadingNumber(a.title, b.title)).map((unit, unitIndex) => {
-                                                                    const hasAnyContent = unit.hasFlowContent || unit.topics.some(t => t.hasFlowContent);
+                                                                    const hasAnyContent = unit.hasFlowContent || (unit.topics || []).some(t => t.hasFlowContent);
                                                                     if (!hasAnyContent) return null;
 
                                                                     return (

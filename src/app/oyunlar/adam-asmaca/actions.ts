@@ -41,7 +41,8 @@ export async function getAdamAsmacaAction(
 
         for (const item of allItems || []) {
             if ('type' in item) {
-                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term) {
+                const itemType = (item as any).type;
+                if ((itemType === 'definition' || itemType === 'concept') && (item as any).content?.term) {
                     const w = String((item as any).content.term).trim();
                     const hint = String((item as any).content.definition || (item as any).content.text || `${w} kavramı`).trim();
                     const upper = w.toLocaleUpperCase('tr-TR');
@@ -49,7 +50,7 @@ export async function getAdamAsmacaAction(
                         seenWords.add(upper);
                         validWords.push({ word: upper, hint });
                     }
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
+                } else if ((itemType === 'Boşluk Doldurma' || itemType === 'fitb' || itemType === 'Çoktan Seçmeli' || itemType === 'mcq') && (item as any).correctAnswer) {
                     const w = String((item as any).correctAnswer).trim();
                     const hint = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${w} kavramı`).trim();
                     const upper = w.toLocaleUpperCase('tr-TR');

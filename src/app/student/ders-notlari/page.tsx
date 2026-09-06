@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
+import { Button } from '@/components/ui/button';
 import { getCurriculumForSelection, ClassGroup, EnrichedCourse } from '@/components/actions/get-curriculum-for-selection';
 
 // --- YARDIMCI FONKSİYONLAR ---
@@ -104,50 +105,114 @@ function DersNotlariPage() {
         return <div className="flex h-[80vh] w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>;
     }
 
+    // Hesaplanmış istatistikler (0 DB maliyeti)
+    const stats = useMemo(() => {
+        const totalUnits = activeCourseData?.units?.length || 0;
+        const totalTopics = activeCourseData?.units?.reduce((acc, u) => acc + (u.topics?.length || 0), 0) || 0;
+        return { totalUnits, totalTopics };
+    }, [activeCourseData]);
+
     return (
-        <div className="min-h-screen bg-[#09071a] w-full pb-20 md:pb-8 pt-4 md:pt-6">
-            <div className="max-w-lg md:max-w-5xl mx-auto px-3 md:px-8">
-                
-                <style jsx global>{`
-                    body { background-color: #09071a; }
-                `}</style>
-                
-                {/* SAYFA BAŞLIĞI */}
-            <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
-                <button onClick={() => router.push('/student')} className="p-2 md:p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all group shrink-0 mr-1 md:mr-2">
-                    <ArrowLeft className="h-5 w-5 md:h-6 md:w-6 text-slate-400 group-hover:text-white transition-colors" />
-                </button>
-                <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 shrink-0">
-                    <BookOpen className="w-5 h-5 md:w-7 md:h-7 text-white drop-shadow-md" />
-                </div>
-                <div>
-                    <h1 className="text-lg md:text-3xl font-black text-white tracking-tight leading-tight">Ders Notları</h1>
-                    <p className="text-indigo-200/80 font-medium text-[10px] md:text-sm leading-tight">Panolar ve Özetler</p>
-                </div>
+        <div className="min-h-screen bg-[#050314] w-full pb-24 md:pb-12 pt-4 md:pt-6 relative overflow-hidden font-sans">
+            {/* Ambient Background Glows */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[140px]" />
+                <div className="absolute top-[30%] right-[-10%] w-[600px] h-[600px] bg-purple-600/15 rounded-full blur-[140px]" />
+                <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[140px]" />
+                <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] opacity-40" />
             </div>
 
+            <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+                
+                {/* HERO BANNER */}
+                <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent backdrop-blur-2xl p-6 md:p-8 mb-8 shadow-2xl">
+                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-400/50 to-transparent" />
+                    
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                        <div>
+                            <div className="flex items-center gap-2 mb-3">
+                                <Button asChild variant="ghost" size="sm" className="h-8 px-3 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl group">
+                                    <Link href="/student" className="flex items-center gap-1.5 text-xs font-bold">
+                                        <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+                                        Öğrenci Paneli
+                                    </Link>
+                                </Button>
+                                <span className="text-slate-600">/</span>
+                                <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Çalışma Panosu</span>
+                            </div>
+                            
+                            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight flex items-center gap-3.5">
+                                <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/25 shrink-0">
+                                    <BookOpen className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                                </div>
+                                <span>Ders <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-cyan-300">Notları</span></span>
+                            </h1>
+                            <p className="text-slate-300/80 text-sm md:text-base mt-2 max-w-xl leading-relaxed font-medium">
+                                Konu özetleri, kavram haritaları ve interaktif ders içerikleriyle sınava ve derslere eksiksiz hazırlan!
+                            </p>
+                        </div>
+
+                        {/* Canlı İstatistik Çipleri */}
+                        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
+                            <div className="flex-1 sm:flex-none bg-[#0e0c26]/90 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-xl flex items-center gap-3.5 min-w-[140px]">
+                                <div className="w-11 h-11 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center shrink-0">
+                                    <BookOpen className="w-6 h-6 text-indigo-400" />
+                                </div>
+                                <div>
+                                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Ders Sayısı</span>
+                                    <span className="text-xl md:text-2xl font-black text-white font-mono leading-none">{courses.length}</span>
+                                    <span className="text-[10px] font-bold text-slate-400 ml-1">Ders</span>
+                                </div>
+                            </div>
+
+                            <div className="flex-1 sm:flex-none bg-[#0e0c26]/90 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-xl flex items-center gap-3.5 min-w-[140px]">
+                                <div className="w-11 h-11 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center shrink-0">
+                                    <Layers className="w-6 h-6 text-purple-400" />
+                                </div>
+                                <div>
+                                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Toplam Ünite</span>
+                                    <span className="text-xl md:text-2xl font-black text-white font-mono leading-none">{stats.totalUnits}</span>
+                                    <span className="text-[10px] font-bold text-slate-400 ml-1">Ünite</span>
+                                </div>
+                            </div>
+
+                            <div className="flex-1 sm:flex-none bg-[#0e0c26]/90 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-xl flex items-center gap-3.5 min-w-[140px]">
+                                <div className="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0">
+                                    <FileText className="w-6 h-6 text-cyan-400" />
+                                </div>
+                                <div>
+                                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Toplam Konu</span>
+                                    <span className="text-xl md:text-2xl font-black text-white font-mono leading-none">{stats.totalTopics}</span>
+                                    <span className="text-[10px] font-bold text-slate-400 ml-1">Konu</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             {isLoadingData ? (
-                <div className="flex py-20 w-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-slate-500" /></div>
+                <div className="flex py-20 w-full items-center justify-center"><Loader2 className="h-10 w-10 animate-spin text-indigo-400" /></div>
             ) : (
                 <>
                     {/* DERS SEÇİM TABS */}
                     {courses.length > 1 && (
-                        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar mb-4 md:mb-8 pb-1 md:pb-2">
+                        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar mb-8 pb-1">
                             {courses.map((course) => {
                                 const isCourseActive = activeCourseId === course.id;
-                                const { short } = getCourseDisplayInfo(course.title);
+                                const { short, full } = getCourseDisplayInfo(course.title);
                                 return (
                                     <button 
                                         key={course.id} 
                                         onClick={() => setActiveCourseId(course.id)} 
                                         className={cn(
-                                            "flex-shrink-0 px-4 py-2 md:px-5 md:py-3 rounded-xl md:rounded-2xl font-bold text-xs md:text-sm transition-all duration-300 focus-visible:outline-none", 
+                                            "flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-xs md:text-sm transition-all duration-300 focus-visible:outline-none shrink-0 shadow-lg", 
                                             isCourseActive 
-                                                ? "bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)] scale-105 border border-indigo-400/50" 
-                                                : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-white/5"
+                                                ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] scale-105 border border-indigo-400/50" 
+                                                : "bg-[#0e0c26]/80 text-slate-400 hover:bg-white/10 hover:text-white border border-white/10"
                                         )}
                                     >
-                                        {short}
+                                        <BookOpen className="w-4 h-4 shrink-0" />
+                                        <span>{full || short}</span>
                                     </button>
                                 );
                             })}
@@ -155,81 +220,84 @@ function DersNotlariPage() {
                     )}
 
                     {courses.length === 0 && (
-                        <div className="py-10 text-center rounded-3xl border border-dashed border-white/10 bg-white/5 mt-8">
-                            <Layers className="h-10 w-10 text-slate-500 mx-auto mb-3 opacity-50" />
-                            <p className="text-slate-400 font-medium">Bu sınıfa ait henüz içerik bulunamadı.</p>
+                        <div className="py-16 text-center rounded-3xl border border-dashed border-white/10 bg-white/5 mt-8">
+                            <Layers className="h-12 w-12 text-slate-500 mx-auto mb-3 opacity-50" />
+                            <p className="text-slate-400 font-bold text-base">Bu sınıfa ait henüz içerik bulunamadı.</p>
                         </div>
                     )}
 
-                    {/* ÜNİTELER VE KONULAR (GRID) */}
-                    <div className="grid md:grid-cols-2 gap-4 md:gap-8 animate-in zoom-in-95 duration-500 items-start">
+                    {/* ÜNİTELER VE KONULAR (RESPONSIVE GRID) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 animate-in zoom-in-95 duration-500 items-start">
                         {activeCourseData && (activeCourseData.units || []).sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((unit, index) => {
                             const theme = getUnitTheme(index);
                             
                             return (
-                                <div key={unit.id} className="bg-white/5 backdrop-blur-md rounded-2xl md:rounded-[2rem] border border-white/10 shadow-sm md:shadow-md overflow-hidden flex flex-col hover:shadow-lg md:hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 relative z-10">
+                                <div key={unit.id} className="bg-[#0e0c26]/70 backdrop-blur-xl rounded-3xl border border-white/10 shadow-xl overflow-hidden flex flex-col hover:border-white/20 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative z-10">
                                     {/* ÜNİTE BAŞLIĞI */}
-                                    <div className={cn("relative p-3 md:p-6 bg-gradient-to-br border-b border-white/10", theme.headerFrom, theme.headerTo)}>
-                                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                                        <div className="flex items-center justify-between mb-1.5 md:mb-3">
-                                            <div className="px-2 py-0.5 md:px-3 md:py-1 rounded-md md:rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-widest bg-white/20 text-white backdrop-blur-sm shadow-sm">
+                                    <div className={cn("relative p-5 md:p-6 bg-gradient-to-br border-b border-white/10", theme.headerFrom, theme.headerTo)}>
+                                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                                        <div className="flex items-center justify-between mb-2.5">
+                                            <div className="px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-widest bg-white/20 text-white backdrop-blur-md shadow-sm border border-white/15">
                                                 {index + 1}. ÜNİTE
                                             </div>
+                                            <span className="text-[11px] font-bold text-white/70">
+                                                {(unit.topics?.length || 0)} Konu
+                                            </span>
                                         </div>
-                                        <h3 className="text-base md:text-2xl font-bold text-white leading-snug drop-shadow-md">
+                                        <h3 className="text-lg md:text-xl font-black text-white leading-snug drop-shadow-md">
                                             {unit.title}
                                         </h3>
                                     </div>
 
                                     {/* KONULAR LİSTESİ */}
-                                    <div className="p-2 md:p-4 flex flex-col gap-2 md:gap-3 relative z-10 bg-black/20">
+                                    <div className="p-3 md:p-4 flex flex-col gap-2.5 relative z-10 bg-black/20">
                                         {(unit as any).hasUnitOzet && (
                                             <Link 
                                                 href={`/student/ders-notlari/${activeCourseData.id}/${unit.id}/unit-summary`} 
                                                 className={cn(
-                                                    "group/card flex items-center justify-between p-2.5 md:p-4 rounded-xl bg-cyan-900/40 transition-all duration-300 shadow-sm focus-visible:outline-none focus-visible:ring-2 border border-cyan-500/30 hover:bg-cyan-800/50 hover:shadow-md hover:-translate-y-0.5 md:hover:-translate-y-1 backdrop-blur-sm"
+                                                    "group/card flex items-center justify-between p-3.5 md:p-4 rounded-2xl bg-cyan-950/40 transition-all duration-300 shadow-md focus-visible:outline-none focus-visible:ring-2 border border-cyan-500/30 hover:bg-cyan-900/50 hover:border-cyan-400/60 hover:-translate-y-0.5 backdrop-blur-sm"
                                                 )}
                                             >
-                                                <div className="flex-1 pr-2 md:pr-3 flex items-center gap-2.5 md:gap-3">
-                                                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-cyan-950/50 border border-cyan-500/40 flex items-center justify-center shrink-0">
-                                                        <BookOpen className="w-4 h-4 md:w-5 md:h-5 text-cyan-400" />
+                                                <div className="flex-1 pr-3 flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/40 flex items-center justify-center shrink-0 shadow-inner">
+                                                        <BookOpen className="w-5 h-5 text-cyan-400" />
                                                     </div>
-                                                    <h4 className="text-xs md:text-[15px] font-black leading-tight transition-colors text-cyan-100 group-hover/card:text-white uppercase tracking-wider">
+                                                    <h4 className="text-xs md:text-sm font-black leading-tight transition-colors text-cyan-200 group-hover/card:text-white uppercase tracking-wider">
                                                         Ünite Özeti
                                                     </h4>
                                                 </div>
-                                                <div className="flex-shrink-0 p-1.5 md:p-2.5 rounded-lg md:rounded-xl bg-cyan-950/50 border border-cyan-500/40 text-cyan-400 transition-colors duration-300 group-hover/card:text-white group-hover/card:bg-cyan-500">
-                                                    <ArrowRight className="h-3.5 w-3.5 md:h-5 md:w-5" />
+                                                <div className="flex-shrink-0 p-2 rounded-xl bg-cyan-950/60 border border-cyan-500/40 text-cyan-400 transition-all duration-300 group-hover/card:text-white group-hover/card:bg-cyan-500 group-hover/card:scale-105">
+                                                    <ArrowRight className="h-4 w-4" />
                                                 </div>
                                             </Link>
                                         )}
-                                        {unit.topics.length > 0 ? (
-                                            unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((topic) => (
+                                        {unit.topics && unit.topics.length > 0 ? (
+                                            [...unit.topics].sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((topic) => (
                                                 <Link 
                                                     key={topic.id} 
                                                     href={`/student/ders-notlari/${activeCourseData.id}/${unit.id}/${topic.id}`} 
                                                     className={cn(
-                                                        "group/card flex items-center justify-between p-2.5 md:p-4 rounded-xl bg-white/5 transition-all duration-300 shadow-sm focus-visible:outline-none focus-visible:ring-2 border",
+                                                        "group/card flex items-center justify-between p-3.5 md:p-4 rounded-2xl bg-white/[0.04] transition-all duration-300 shadow-sm focus-visible:outline-none focus-visible:ring-2 border",
                                                         theme.topicBorder, 
-                                                        "hover:shadow-md hover:-translate-y-0.5 md:hover:-translate-y-1 backdrop-blur-sm", theme.topicHoverBg, theme.topicHoverBorder
+                                                        "hover:shadow-md hover:-translate-y-0.5 backdrop-blur-sm", theme.topicHoverBg, theme.topicHoverBorder
                                                     )}
                                                 >
-                                                    <div className="flex-1 pr-2 md:pr-3 flex items-center gap-2.5 md:gap-3">
-                                                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-black/30 border border-white/10 flex items-center justify-center shrink-0">
-                                                            <Layers className={cn("w-4 h-4 md:w-5 md:h-5", theme.topicText)} />
+                                                    <div className="flex-1 pr-3 flex items-center gap-3">
+                                                        <div className="w-10 h-10 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center shrink-0">
+                                                            <Layers className={cn("w-5 h-5", theme.topicText)} />
                                                         </div>
-                                                        <h4 className={cn("text-xs md:text-[15px] font-bold leading-tight transition-colors text-slate-200 group-hover/card:text-white")}>
+                                                        <h4 className={cn("text-xs md:text-sm font-bold leading-tight transition-colors text-slate-200 group-hover/card:text-white")}>
                                                             {topic.title}
                                                         </h4>
                                                     </div>
-                                                    <div className={cn("flex-shrink-0 p-1.5 md:p-2.5 rounded-lg md:rounded-xl bg-white/5 border border-white/10 text-slate-500 transition-colors duration-300 group-hover/card:text-white", theme.topicIconHoverAccent)}>
-                                                        <ArrowRight className="h-3.5 w-3.5 md:h-5 md:w-5" />
+                                                    <div className={cn("flex-shrink-0 p-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 transition-all duration-300 group-hover/card:text-white group-hover/card:scale-105", theme.topicIconHoverAccent)}>
+                                                        <ArrowRight className="h-4 w-4" />
                                                     </div>
                                                 </Link>
                                             ))
                                         ) : (
                                             !(unit as any).hasUnitOzet && (
-                                                <div className="py-4 md:py-6 rounded-xl border border-dashed border-white/20 bg-white/5 text-slate-400 text-xs md:text-sm font-medium text-center">
+                                                <div className="py-6 rounded-2xl border border-dashed border-white/15 bg-white/5 text-slate-400 text-xs md:text-sm font-medium text-center">
                                                     Bu üniteye henüz içerik eklenmemiş.
                                                 </div>
                                             )

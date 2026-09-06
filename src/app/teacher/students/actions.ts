@@ -114,7 +114,7 @@ type SaveUserData = {
     uid?: string;
     displayName: string;
     email?: string;
-    role: 'student' | 'teacher' | 'superadmin' | 'guest';
+    role: 'student' | 'teacher' | 'superadmin' | 'guest' | 'pending';
     class?: string;
     schoolName?: string;
     password?: string;
@@ -275,7 +275,7 @@ export async function bulkAddStudents(names: string[], className: string, school
     return { success: true, successCount: successfulCreations.length };
 }
 
-export async function addStudentToClass(displayName: string, className: string, teacherId: string | null): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
+export async function addStudentToClass(displayName: string, className: string, teacherId: string | null = null): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
     const finalDisplayName = displayName.trim();
     if (!finalDisplayName) {
         return { success: false, error: "Öğrenci adı boş olamaz." };

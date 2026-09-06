@@ -110,11 +110,32 @@ const SelectionCard = ({
 // --- MAIN PAGE COMPONENT ---
 type OyunKurulumProps = {
     pageTitle?: string; gameName?: string; gamePath?: string; pageIcon?: React.ElementType; gameIcon?: React.ElementType;
-    targetPath?: string; dataType: 'games' | 'yazilacaklar' | 'ozetler'; isStatic?: boolean;
+    targetPath?: string; dataType: 'games' | 'yazilacaklar' | 'ozetler' | 'questions'; isStatic?: boolean;
     studentClassId?: string | null; 
 }
 
-export function OyunKurulum({ 
+export function OyunKurulum(props: OyunKurulumProps) {
+    const { user } = useAuth();
+    
+    // Öğrenci ise yeni kurulumu göster
+    if (user?.role === 'student' && props.dataType === 'games') {
+        return (
+            <StudentOyunKurulum 
+                pageTitle={props.pageTitle} 
+                gameName={props.gameName} 
+                gamePath={props.gamePath} 
+                pageIcon={props.pageIcon} 
+                gameIcon={props.gameIcon} 
+                isStatic={props.isStatic} 
+                studentClassId={props.studentClassId} 
+            />
+        );
+    }
+
+    return <GeneralOyunKurulum {...props} />;
+}
+
+function GeneralOyunKurulum({ 
     pageTitle: initialPageTitle, gameName, gamePath, pageIcon: PageIconProp, gameIcon,
     targetPath, dataType, isStatic = false, studentClassId 
 }: OyunKurulumProps) {
@@ -124,19 +145,7 @@ export function OyunKurulum({
     const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [isRedirecting, setIsRedirecting] = useState(false); 
-    
-    // Öğrenci ise yeni kurumu göster
-    if (user?.role === 'student' && dataType === 'games') {
-        return <StudentOyunKurulum 
-            pageTitle={initialPageTitle} 
-            gameName={gameName} 
-            gamePath={gamePath} 
-            pageIcon={PageIconProp} 
-            gameIcon={gameIcon} 
-            isStatic={isStatic} 
-            studentClassId={studentClassId} 
-        />;
-    }
+
 
     // Firestore'dan gelecek sınıf bilgisi state'i
     const [dbUserClass, setDbUserClass] = useState<string | null>(null);
@@ -234,7 +243,7 @@ export function OyunKurulum({
               ...group,
               courses: group.courses.map((course: any, courseIndex: number) => ({
                   ...course, icon: ICONS[(groupIndex + courseIndex) % ICONS.length], color: getGradient(groupIndex + courseIndex),
-                  className: group.name, classId: course.classId || group.id 
+                  className: group.name, classId: course.classId || (group as any).id || ""
               }))
           }));
           
@@ -261,7 +270,7 @@ export function OyunKurulum({
   
     useEffect(() => { if (!isRedirecting && !isClassFetching) fetchCurriculumData(); }, [fetchCurriculumData, isRedirecting, isClassFetching]);
   
-    const handleSelectCourse = (course: EnrichedCourse) => {
+    const handleSelectCourse = (course: any) => {
       setSelection({ 
           ...selection, classId: course.classId || "", className: course.className || "", courseId: course.id, 
           courseName: course.title, courseColor: course.color || "from-slate-700 to-slate-800", unitId: '', unitName: '',
@@ -270,20 +279,20 @@ export function OyunKurulum({
       setTimeout(() => {
           let unitsWithContent = course.units;
           if (dataType !== 'games') {
-               unitsWithContent = course.units.filter((unit) => {
-                  if (dataType === 'ozetler') return (unit as any).hasUnitOzet || unit.topics.some((t: Topic) => (t as any).hasOzetContent);
-                  if (dataType === 'yazilacaklar') return unit.topics.some((t: Topic) => (t as any).hasYazilacaklarContent);
+               unitsWithContent = (course.units || []).filter((unit: any) => {
+                  if (dataType === 'ozetler') return (unit as any).hasUnitOzet || (unit.topics || []).some((t: any) => t?.hasOzetContent);
+                  if (dataType === 'yazilacaklar') return (unit.topics || []).some((t: any) => t?.hasYazilacaklarContent);
                   return false;
                });
           }
-          setUnits((unitsWithContent || []).sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })));
+          setUnits(((unitsWithContent || []) as any).sort((a: any, b: any) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })));
           setIsLoading(false); setCurrentStep(2);
       }, 300);
     };
   
     const handleSelectUnit = (unit: Unit) => {
       setSelection({ ...selection, unitId: unit.id, unitName: unit.title, topicName: '' });
-      if (dataType === 'games' && unit.id === 'all') {
+      if ((dataType === 'games' || dataType === 'questions') && unit.id === 'all') {
           const params = new URLSearchParams({ gameName: pageTitle, gamePath: finalGamePath, classId: selection.classId, className: selection.className, courseId: selection.courseId, courseName: selection.courseName, unitId: 'all', unitName: 'Tüm Üniteler', topicId: 'all', topicName: 'Tüm Konular', isStatic: String(isStatic) });
           router.push(`/oyunlar/${finalGamePath}/oyun?${params.toString()}`);
           return;
@@ -297,7 +306,7 @@ export function OyunKurulum({
           const selectedUnit = courses.find(c => c.id === selection.courseId)?.units?.find(u => u.id === unit.id);
           let topicsWithContent: Topic[] = [];
           if (selectedUnit?.topics) {
-              if (dataType === 'games') topicsWithContent = selectedUnit.topics;
+              if (dataType === 'games' || dataType === 'questions') topicsWithContent = selectedUnit.topics;
               else if (dataType === 'ozetler') topicsWithContent = selectedUnit.topics.filter(t => (t as any).hasOzetContent);
               else if (dataType === 'yazilacaklar') topicsWithContent = selectedUnit.topics.filter(t => (t as any).hasYazilacaklarContent);
           }

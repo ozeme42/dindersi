@@ -3,8 +3,8 @@
 
 import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { getExamResultDetails } from './actions';
-import type { ExamResultDetails, Question } from '@/lib/types';
+import { getExamResultDetails, type ExamResultDetails } from './actions';
+import type { Question } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

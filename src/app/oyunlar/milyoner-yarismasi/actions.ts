@@ -119,59 +119,56 @@ export async function checkAndAwardMillionaireBadge(userId: string): Promise<{ s
 export async function getMillionaireQuestions({ courseId, unitId, topicId }: { courseId?: string, unitId?: string, topicId?: string }): Promise<{ questions: Question[], error?: string}> {
     noStore();
     
-    const difficulties: ('Kolay' | 'Orta' | 'Zor')[] = ['Kolay', 'Kolay', 'Kolay', 'Orta', 'Orta', 'Orta', 'Orta', 'Zor', 'Zor', 'Zor'];
-    
     try {
-        const questionPromises = difficulties.map(difficulty => 
-            getQuestionsFromBank({
-                courseId,
-                unitId,
-                topicId,
-                questionCount: 5,
-                difficulty: [difficulty],
-                questionTypes: ['mcq']
-            })
-        );
+        const result = await getQuestionsFromBank({
+            courseId,
+            unitId,
+            topicId,
+            questionCount: 60,
+            questionTypes: ['mcq']
+        });
 
-        const results = await Promise.all(questionPromises);
+        const allQuestions = (result.questions || []) as Question[];
+
+        if (!allQuestions || allQuestions.length < 3) {
+            return { questions: [], error: "Yarışma için bu konuda yeterli soru bulunamadı (En az 3 çoktan seçmeli soru gereklidir)." };
+        }
+
+        const easyPool = allQuestions.filter(q => q.difficulty === 'Kolay');
+        const mediumPool = allQuestions.filter(q => q.difficulty === 'Orta' || !q.difficulty);
+        const hardPool = allQuestions.filter(q => q.difficulty === 'Zor');
 
         const finalQuestions: Question[] = [];
-        const usedQuestionIds = new Set<string>();
+        const usedIds = new Set<string>();
 
-        for (const result of results) {
-            if (result.error || result.questions.length === 0) {
-                continue;
-            }
-            const unusedQuestion = result.questions.find(q => q && q.id && !usedQuestionIds.has(q.id));
-            
-            if(unusedQuestion) {
-                finalQuestions.push(unusedQuestion as Question);
-                usedQuestionIds.add(unusedQuestion.id!);
-            }
-        }
-        
-        // Eğer belirli zorluklardan 10 soru tamamlanamadıysa, havuzdaki tüm MCQ sorularıyla doldur
-        if (finalQuestions.length < 10) {
-            const fallbackResult = await getQuestionsFromBank({
-                courseId,
-                unitId,
-                topicId,
-                questionCount: 20,
-                questionTypes: ['mcq']
-            });
-            if (fallbackResult.questions && fallbackResult.questions.length > 0) {
-                for (const q of fallbackResult.questions) {
-                    if (q && 'id' in q && q.id && !usedQuestionIds.has(q.id)) {
-                        finalQuestions.push(q as Question);
-                        usedQuestionIds.add(q.id);
-                        if (finalQuestions.length >= 10) break;
-                    }
+        const pickFromPool = (pool: Question[], needed: number) => {
+            const shuffled = [...pool].sort(() => 0.5 - Math.random());
+            for (const q of shuffled) {
+                if (q.id && !usedIds.has(q.id)) {
+                    usedIds.add(q.id);
+                    finalQuestions.push(q);
+                    if (finalQuestions.length >= 10 || --needed <= 0) break;
                 }
             }
-        }
+        };
 
-        if (finalQuestions.length < 3) {
-            return { questions: [], error: "Yarışma için bu konuda yeterli soru bulunamadı (En az 3 çoktan seçmeli soru gereklidir)." };
+        // 3 Kolay, 4 Orta, 3 Zor
+        pickFromPool(easyPool, 3);
+        pickFromPool(mediumPool, 4);
+        pickFromPool(hardPool, 3);
+
+        // Kalan slotlar varsa diğer sorularla tamamla
+        if (finalQuestions.length < 10) {
+            pickFromPool(mediumPool, 10 - finalQuestions.length);
+        }
+        if (finalQuestions.length < 10) {
+            pickFromPool(easyPool, 10 - finalQuestions.length);
+        }
+        if (finalQuestions.length < 10) {
+            pickFromPool(hardPool, 10 - finalQuestions.length);
+        }
+        if (finalQuestions.length < 10) {
+            pickFromPool(allQuestions, 10 - finalQuestions.length);
         }
 
         return { questions: JSON.parse(JSON.stringify(finalQuestions.slice(0, 10))) };

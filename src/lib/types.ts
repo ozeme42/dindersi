@@ -6,6 +6,8 @@ export type UserProfile = {
     role: 'student' | 'teacher' | 'superadmin' | 'guest' | 'pending';
     class?: string; // e.g. "5/A" or "Yaz Okulu Havuzu"
     schoolName?: string; // e.g. "Değerler Okulu"
+    schoolId?: string;
+    teacherId?: string;
     studentNumber?: string; // Add student number
     score?: number;
     avatar?: string;
@@ -42,7 +44,8 @@ export type Achievement = {
 export type UserProgress = {
     [topicId: string]: {
         completionCount: number;
-        lastCompleted: any; // Can be a server timestamp on write, string on read
+        lastCompleted?: any; // Can be a server timestamp on write, string on read
+        completed?: boolean;
     };
 };
 
@@ -104,10 +107,19 @@ export type AnagramStep = { type: 'anagram'; title: string; definition: string; 
 export type AnagramCard = { definition: string; scrambledWord: string; correctAnswer: string; };
 export type AnagramFlashcardStep = { type: 'anagramFlashcard'; title: string; cards: AnagramCard[]; isPublished?: boolean; };
 export type SentenceScrambleStep = { type: 'sentenceScramble'; title: string; scrambledSentence: string; correctSentence: string; isPublished?: boolean; };
-export type VisualStep = { type: 'visual'; title: string; imageUrl: string; prompt?: string; isPublished?: boolean; };
+export type VisualStep = { type: 'visual'; title: string; imageUrl: string; prompt?: string; caption?: string; isPublished?: boolean; };
 export type AccordionStep = { type: 'accordion'; title: string; items: { id: string, title: string; content: string; }[]; isPublished?: boolean; };
 export type IframeStep = { type: 'iframe'; title: string; url: string; isPublished?: boolean; };
-export type ActivityLinkStep = { type: 'activityLink'; title: string; activityType: string; activityLabel: string; isPublished?: boolean; };
+export type ActivityLinkStep = { 
+  type: 'activityLink'; 
+  title: string; 
+  activityType: string; 
+  activityLabel: string; 
+  courseId?: string;
+  unitId?: string;
+  topicId?: string;
+  isPublished?: boolean; 
+};
 export type HtmlSlideStep = { type: 'htmlSlide'; title: string; htmlContent: string; isPublished?: boolean; };
 export type VideoStep = { type: 'video'; title: string; url: string; description?: string; isPublished?: boolean; };
 export type AnagramGameStep = { type: 'anagramGame'; title: string; cards: AnagramCard[]; isPublished?: boolean; };
@@ -242,7 +254,7 @@ export type SortingGameData = {
 
 export type ActivityItem = {
   id: string;
-  type: 'concept' | 'definition' | 'sentence' | 'categorization' | 'sorting';
+  type: 'concept' | 'definition' | 'sentence' | 'categorization' | 'sorting' | 'Çoktan Seçmeli' | 'Doğru/Yanlış' | 'Boşluk Doldurma' | 'mcq' | 'tf' | 'fitb' | string;
   content: {
     text?: string;
     term?: string;
@@ -251,11 +263,13 @@ export type ActivityItem = {
     // Fields for categorization type
     categories?: string[];
     items?: { text: string; category: string }[] | string[];
+    [key: string]: any;
   };
-  courseId: string;
-  unitId: string;
-  topicId: string;
+  courseId?: string;
+  unitId?: string;
+  topicId?: string;
   createdAt?: any;
+  [key: string]: any;
 };
 
 export type YazilacaklarContent = {
@@ -273,6 +287,9 @@ export type Topic = {
     writingContent?: YazilacaklarContent; // For the new "Yazılacaklar" module
     createdAt?: any;
     isPublished?: boolean;
+    hasFlowContent?: boolean;
+    itemCount?: number;
+    [key: string]: any;
 };
 
 export type Unit = {
@@ -284,6 +301,10 @@ export type Unit = {
     isPublished?: boolean;
     steps?: LessonStep[];
     sourceText?: string;
+    hasUnitOzet?: boolean;
+    hasFlowContent?: boolean;
+    questionCount?: number;
+    [key: string]: any;
 };
 
 export type Course = {
@@ -305,19 +326,20 @@ export type Course = {
 
 export type Question = {
     id: string;
-    text: string;
-    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış' | 'Boşluk Doldurma';
-    courseId: string;
+    text?: string;
+    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış' | 'Boşluk Doldurma' | 'mcq' | 'tf' | 'fitb' | 'Açık Uçlu' | 'Bil Bakalım' | string;
+    courseId?: string;
     unitId?: string;
-    topicId: string;
-    topic: string; // The name of the topic for display
-    difficulty: 'Kolay' | 'Orta' | 'Zor';
+    topicId?: string;
+    topic?: string; // The name of the topic for display
+    difficulty?: 'Kolay' | 'Orta' | 'Zor';
     options?: string[];
     correctAnswer?: string;
     isTrue?: boolean;
     classId?: string;
     className?: string;
     createdAt?: any;
+    [key: string]: any;
 };
 
 // Represents a class in the school
@@ -375,6 +397,16 @@ export type Assignment = {
   successThreshold?: number; // Puan barajı
   successReward?: number;    // Ödül puanı
   rewardsDistributed?: boolean; // Ödüller dağıtıldı mı?
+  rewardThresholds?: { rate: number; points: number }[];
+};
+
+export type VideoAsset = {
+  id: string;
+  title: string;
+  description?: string;
+  url: string;
+  teacherId?: string;
+  createdAt?: any;
 };
 
 export type EvaluationScaleColumn = {

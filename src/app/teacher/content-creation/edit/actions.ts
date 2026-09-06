@@ -36,7 +36,7 @@ export async function updateTopicContent({
 
         // Anında tüm sayfalarda önbelleği yenile
         try {
-            revalidateTag('curriculum');
+            (revalidateTag as any)('curriculum');
             revalidatePath('/teacher/ders-akisi');
             revalidatePath('/curriculum');
             revalidatePath('/teacher/content-creation');

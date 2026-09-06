@@ -154,7 +154,7 @@ const wheelStyles = `
   }
 `;
 
-export function CarkifelekGameClient() {
+function CarkifelekGameClient() {
     const { user } = useAuth();
     const { toast } = useToast();
     const searchParams = useSearchParams();
@@ -191,16 +191,7 @@ export function CarkifelekGameClient() {
 
     const gameContext = `Çarkıfelek - ${searchParams.get('topicName') || 'Genel'}`;
     
-    const backUrl = useMemo(() => {
-        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
-        if (courseId && unitId && topicId) {
-            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
-        }
-        if (user) {
-            return user.role === 'teacher' || user.role === 'superadmin' ? '/teacher' : '/student';
-        }
-        return '/oyunlar/carkifelek';
-    }, [searchParams, user]);
+    const backUrl = '/oyunlar/carkifelek';
 
     const wheelGradientStops = SLICES.map((slice, i) => {
         const start = i * SLICE_DEGREE;
@@ -566,37 +557,27 @@ export function CarkifelekGameClient() {
     }
 
     if (gameState === 'finished') {
-         return (
-             <div className="h-screen w-full flex flex-col items-center justify-center p-4 bg-slate-950 text-white gap-8 relative overflow-hidden">
-                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-black to-black opacity-80" />
-                 <PartyPopper className="h-24 w-24 text-yellow-500 animate-bounce relative z-10" />
-                 
-                 <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 relative z-10 drop-shadow-lg text-center">
-                     {gameMode === 'single' ? "Oyun Bitti!" : "Büyük Savaş Sona Erdi!"}
-                 </h1>
-                 
-                 {gameMode === 'single' ? (
-                     <div className="relative z-10 flex flex-col items-center gap-6 w-full max-w-sm">
-                        <div className="bg-slate-900/80 border border-white/10 p-8 rounded-3xl backdrop-blur-md text-center shadow-2xl w-full">
-                            <p className="text-slate-400 text-lg mb-2">Toplam Skorun</p>
-                            <p className="text-6xl font-black text-emerald-400">{score}</p>
-                        </div>
-                        <div className="flex flex-col gap-3 w-full">
-                            <Button onClick={() => window.location.reload()} variant="outline" className="h-14 px-8 text-lg border-slate-700 text-slate-300 hover:bg-slate-800 w-full">
-                                Tekrar Oyna
-                            </Button>
-                            {user ? (
-                                <Button onClick={handleSaveAndExit} disabled={isSaving || isScoreSaved} className="h-14 px-8 text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-900/20 w-full">
-                                    {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Çık"}
-                                </Button>
-                            ) : (
-                                <Button onClick={() => router.push('/')} className="h-14 px-8 text-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg w-full">
-                                    <Home className="mr-2 h-5 w-5" /> Ana Sayfa
-                                </Button>
-                            )}
-                        </div>
-                     </div>
-                 ) : (
+        if (gameMode === 'single') {
+            return (
+                <GameEndScreen 
+                    score={score} 
+                    onSave={handleSaveAndExit} 
+                    isSaving={isSaving} 
+                    scoreSaved={isScoreSaved} 
+                    onRestart={() => window.location.reload()} 
+                    backUrl={backUrl} 
+                />
+            );
+        }
+
+        return (
+            <div className="h-screen w-full flex flex-col items-center justify-center p-4 bg-slate-950 text-white gap-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-black to-black opacity-80" />
+                <PartyPopper className="h-24 w-24 text-yellow-500 animate-bounce relative z-10" />
+                
+                <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 relative z-10 drop-shadow-lg text-center">
+                    Büyük Savaş Sona Erdi!
+                </h1>
                      <div className="w-full max-w-2xl relative z-10 flex flex-col max-h-[80vh]">
                          <Card className="bg-slate-900/90 border-slate-800 text-white shadow-2xl backdrop-blur-xl flex flex-col overflow-hidden">
                              <CardHeader className="bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-800 p-4 md:p-6 text-center flex-shrink-0">
@@ -654,7 +635,6 @@ export function CarkifelekGameClient() {
                             </Button>
                          </div>
                      </div>
-                 )}
              </div>
          )
     }

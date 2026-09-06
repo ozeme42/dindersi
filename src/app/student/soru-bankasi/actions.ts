@@ -74,43 +74,93 @@ export async function getCourseForSoruBankasi(courseId: string): Promise<{ cours
 // 2. İLERLEMEYİ GETİR
 export async function getQuestionBankProgress(courseId: string, userId: string): Promise<QuestionBankProgress> {
     try {
-        const progressRef = doc(db, 'users', userId, 'questionBankProgress', courseId);
-        const docSnap = await getDoc(progressRef);
+        const [qbSnap, legSnap] = await Promise.all([
+            getDoc(doc(db, 'users', userId, 'questionBankProgress', courseId)),
+            getDoc(doc(db, 'users', userId, 'progress', courseId))
+        ]);
         
-        if (docSnap.exists()) {
-            return JSON.parse(JSON.stringify(docSnap.data())) as QuestionBankProgress;
-        }
-        return {};
+        const qbData = qbSnap.exists() ? (qbSnap.data() as QuestionBankProgress) : {};
+        const legData = legSnap.exists() ? (legSnap.data() as QuestionBankProgress) : {};
+        
+        const merged: any = { ...legData, ...qbData };
+        const allKeys = new Set([...Object.keys(legData), ...Object.keys(qbData)]);
+        allKeys.forEach((k) => {
+            merged[k] = {
+                ...(legData[k] || {}),
+                ...(qbData[k] || {})
+            };
+        });
+        
+        return JSON.parse(JSON.stringify(merged)) as QuestionBankProgress;
     } catch (error) {
         console.error("Error fetching question bank progress:", error);
         return {};
     }
 }
 
+function deduplicateQuestions(raw: Question[]): Question[] {
+    const seen = new Set<string>();
+    return raw.filter(q => {
+        const textKey = (q.text || '').trim().toLowerCase();
+        const idKey = q.id ? q.id.trim().toLowerCase() : '';
+        const key = idKey ? `${idKey}_${textKey}` : textKey;
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+}
+
 // 3. TEST İÇİN SORULARI GETİR
-export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number): Promise<{ questions: Question[], error?: string }> {
+export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number): Promise<{ questions: Question[], totalTests?: number, error?: string }> {
     try {
-        const result = await getQuestionsFromBank({
-            topicId: topicId,
-            difficulty: [difficulty],
-            questionCount: 100, 
-            isStatic: true, 
+        let allQuestions: Question[] = [];
+        try {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicId}.json`);
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            allQuestions = JSON.parse(fileContent) as Question[];
+        } catch {
+            const result = await getQuestionsFromBank({
+                topicId: topicId,
+                difficulty: [difficulty],
+                questionCount: 500, 
+                isStatic: true, 
+            });
+            if (result.questions) {
+                allQuestions = result.questions as Question[];
+            }
+        }
+
+        allQuestions = deduplicateQuestions(allQuestions);
+
+        const diffMap: Record<string, string[]> = {
+            'Kolay': ['kolay', 'easy'],
+            'Orta': ['orta', 'medium'],
+            'Zor': ['zor', 'hard']
+        };
+        const targets = diffMap[difficulty] || [difficulty.toLowerCase()];
+        const filtered = allQuestions.filter(q => {
+            const d = (q.difficulty || '').toLowerCase();
+            return targets.includes(d);
         });
 
-        if (result.error || !result.questions) {
-            return { questions: [], error: result.error || 'Sorular yüklenemedi.' };
-        }
-        
-        const allQuestions = (result.questions as Question[]).sort((a,b) => (a.text || '').localeCompare(b.text || '', 'tr'));
-        
+        filtered.sort((a, b) => {
+            const keyA = a.id || a.text || '';
+            const keyB = b.id || b.text || '';
+            return keyA.localeCompare(keyB, 'tr');
+        });
+
+        const totalTests = Math.max(1, Math.ceil(filtered.length / 10));
         const startIndex = testIndex * 10;
         const endIndex = startIndex + 10;
 
-        if (allQuestions.length < startIndex) {
-            return { questions: [], error: 'Bu test için yeterli soru bulunamadı.' };
+        if (filtered.length === 0) {
+            return { questions: [], totalTests: 0, error: 'Bu seviyede yeterli soru bulunamadı.' };
         }
-        
-        const selectedQuestions = allQuestions.slice(startIndex, endIndex);
+
+        const selectedQuestions = filtered.slice(startIndex, endIndex);
+        if (selectedQuestions.length === 0) {
+            return { questions: [], totalTests, error: 'Bu test için yeterli soru bulunamadı.' };
+        }
 
         const questionsWithShuffledOptions = selectedQuestions.map(question => {
             if ((question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
@@ -120,7 +170,7 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
             return question;
         });
 
-        return { questions: JSON.parse(JSON.stringify(questionsWithShuffledOptions)) };
+        return { questions: JSON.parse(JSON.stringify(questionsWithShuffledOptions)), totalTests };
 
     } catch (e: any) {
         console.error("Error getting questions for test:", e);
@@ -135,7 +185,8 @@ export async function getQuestionCounts(topicId: string): Promise<{ easy: number
     try {
         const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicId}.json`);
         const fileContent = await fs.readFile(filePath, 'utf-8');
-        const questions = JSON.parse(fileContent) as Question[];
+        let questions = JSON.parse(fileContent) as Question[];
+        questions = deduplicateQuestions(questions);
 
         questions.forEach(question => {
             const d = question.difficulty?.toLowerCase();
@@ -150,8 +201,8 @@ export async function getQuestionCounts(topicId: string): Promise<{ easy: number
     if (counts.easy === 0 && counts.medium === 0 && counts.hard === 0) {
         try {
             const qSnap = await getDocs(query(collection(db, 'questions'), where('topicId', '==', topicId)));
-            qSnap.docs.forEach(d => {
-                const q = d.data() as Question;
+            const questions = deduplicateQuestions(qSnap.docs.map(d => d.data() as Question));
+            questions.forEach(q => {
                 const diff = (q.difficulty || '').toLowerCase();
                 if (diff === 'easy' || diff === 'kolay') counts.easy++;
                 else if (diff === 'medium' || diff === 'orta') counts.medium++;
@@ -173,17 +224,23 @@ export async function updateTopicTestProgress(
     difficultyKey: 'easy' | 'medium' | 'hard', 
     testIndex: number, 
     result: TestResult,
-    solvedQuestionIds?: string[]
+    solvedQuestionIds?: string[],
+    extraData?: {
+        isTopicCompleted?: boolean;
+        topicTitle?: string;
+        courseTitle?: string;
+    }
 ): Promise<{ success: boolean; error?: string }> {
     try {
         const batch = writeBatch(db);
         const progressRef = doc(db, 'users', userId, 'questionBankProgress', courseId);
+        const userProgressRef = doc(db, 'users', userId, 'progress', courseId);
         const userRef = doc(db, 'users', userId);
         
         // Firestore'a gönderirken objeyi saf hale getiriyoruz
         const safeResult = JSON.parse(JSON.stringify(result));
 
-        // 1. İlerleme Kaydı
+        // 1. İlerleme Kaydı (questionBankProgress)
         batch.set(progressRef, {
             [topicId]: {
                 [difficultyKey]: {
@@ -192,18 +249,44 @@ export async function updateTopicTestProgress(
             }
         }, { merge: true });
 
-        // 2. Puan Güncelleme (Eğer skor varsa)
-        if (result.score > 0) {
-            batch.set(userRef, { score: increment(result.score) }, { merge: true });
+        // 1b. Dual write to users/{uid}/progress/{courseId}
+        batch.set(userProgressRef, {
+            [topicId]: {
+                [difficultyKey]: {
+                    [testIndex]: safeResult
+                }
+            }
+        }, { merge: true });
 
-            // 3. Puan Hareketi Kaydı
+        // 2. Puan ve Kullanıcı Güncelleme
+        const userUpdates: Record<string, any> = {};
+        if (result.score > 0) {
+            userUpdates.score = increment(result.score);
+        }
+
+        if (result.status === 'passed') {
+            const testId = `${topicId}_${difficultyKey}_${testIndex}`;
+            userUpdates.completedTests = arrayUnion(testId);
+            userUpdates[`topicCompletionCounts.${topicId}`] = increment(1);
+        }
+
+        if (extraData?.isTopicCompleted) {
+            userUpdates.completedTopics = arrayUnion(topicId);
+        }
+
+        if (Object.keys(userUpdates).length > 0) {
+            batch.set(userRef, userUpdates, { merge: true });
+        }
+
+        // 3. Puan Hareketi Kaydı
+        if (result.score > 0) {
             const eventRef = doc(collection(db, 'scoreEvents'));
             batch.set(eventRef, {
                 userId: userId,
                 points: result.score,
                 timestamp: serverTimestamp(),
                 gameType: 'Soru Bankası',
-                context: `${topicId} - ${difficultyKey} - Test ${testIndex + 1}`,
+                context: `${extraData?.topicTitle || topicId} - ${difficultyKey} - Test ${testIndex + 1}`,
                 completed: result.status === 'passed'
             });
         }
@@ -220,6 +303,7 @@ export async function updateTopicTestProgress(
 
         revalidatePath(`/student/soru-bankasi/${courseId}`);
         revalidatePath('/student/soru-bankasi');
+        revalidatePath('/student/ders');
 
         return { success: true };
     } catch (e: any) {

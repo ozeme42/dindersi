@@ -123,11 +123,11 @@ export default function ScoreEventsPage() {
 
     // --- VERİ ÇEKME FONKSİYONU ---
     // useCallback ile sarmalandı ki useEffect bağımlılıklarında sorun çıkmasın
-    const fetchData = useCallback(async (cursorToUse: SerializableTimestamp | null, targetPageIndex: number) => {
+    const fetchData = useCallback(async (cursorToUse: SerializableTimestamp | null | undefined, targetPageIndex: number) => {
         setIsLoading(true);
         try {
             const result = await getScoreEvents({ 
-                cursor: cursorToUse, 
+                cursor: cursorToUse || null, 
                 direction: 'next',
                 searchTerm: debouncedSearchTerm, // Debounced değeri kullan
                 showOnlyExcessiveAttempts,

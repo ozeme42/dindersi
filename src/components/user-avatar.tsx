@@ -7,7 +7,15 @@ import type { UserProfile } from '@/lib/types';
 import type { User } from 'firebase/auth';
 import { SHOP_ITEMS } from '@/lib/shop-config';
 
-type UserForAvatar = Partial<UserProfile> & Partial<User>;
+export type UserForAvatar = {
+  displayName?: string | null;
+  email?: string | null;
+  photoURL?: string | null;
+  avatar?: string | null;
+  equippedBadgeId?: string | null;
+  equippedFrameUrl?: string | null;
+  [key: string]: any;
+};
 
 export function UserAvatar({ user, className }: { user: UserForAvatar | null; className?: string }) {
   if (!user) {
@@ -15,7 +23,7 @@ export function UserAvatar({ user, className }: { user: UserForAvatar | null; cl
   }
 
   const fallbackLetter = user.displayName?.charAt(0) || user.email?.charAt(0) || '?';
-  const equippedBadge = SHOP_ITEMS.find(item => item.type === 'avatarBadge' && item.id === user.equippedBadgeId);
+  const equippedBadge = SHOP_ITEMS.find((item: any) => item.type === 'avatarBadge' && item.id === user.equippedBadgeId);
   const BadgeIcon = equippedBadge?.component;
 
   return (

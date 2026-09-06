@@ -7,12 +7,16 @@ import { doc, getDoc, DocumentData, Timestamp, onSnapshot } from 'firebase/fires
 import { auth, db } from '@/lib/firebase';
 import { Loader2 } from 'lucide-react';
 
-interface AuthUser extends User {
-    role?: 'student' | 'teacher' | 'superadmin' | 'guest';
+export interface AuthUser extends User {
+    role?: 'student' | 'teacher' | 'superadmin' | 'guest' | 'pending';
     ownedItems?: string[];
     equippedFrameUrl?: string | null;
     equippedBadgeId?: string | null;
     class?: string;
+    schoolName?: string;
+    schoolId?: string;
+    teacherId?: string;
+    studentNumber?: string;
     score?: number;
     avatar?: string;
     createdAt?: string;
@@ -22,11 +26,13 @@ interface AuthUser extends User {
 type AuthContextType = {
     user: AuthUser | null;
     loading: boolean;
+    logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
     loading: true,
+    logout: async () => {},
 });
 
 // Helper function to recursively convert Firestore Timestamps to ISO strings
@@ -100,8 +106,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return () => unsubscribe();
     }, []);
 
+    const logout = useCallback(async () => {
+        try {
+            await auth.signOut();
+            setUser(null);
+        } catch (e) {
+            console.error("Sign out error:", e);
+        }
+    }, []);
+
     return (
-        <AuthContext.Provider value={{ user, loading }}>
+        <AuthContext.Provider value={{ user, loading, logout }}>
             {children}
         </AuthContext.Provider>
     );

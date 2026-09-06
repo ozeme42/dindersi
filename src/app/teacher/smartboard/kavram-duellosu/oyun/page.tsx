@@ -374,7 +374,7 @@ function DuelGameComponent() {
                     <ArrowLeft className="w-8 h-8" />
                  </Button>
             </Link>
-             {showConfetti && <Confetti active={showConfetti} config={{ particleCount: 200, spread: 90, origin: { x: state.winner === 'p1' ? 0.25 : 0.75, y: 0.6 } }} />}
+             {showConfetti && <Confetti active={showConfetti} config={{ elementCount: 200, spread: 90 }} />}
         </div>
     );
 }

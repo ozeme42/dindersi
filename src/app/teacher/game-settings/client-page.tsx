@@ -425,16 +425,19 @@ export function GameSettingsClientPage({ initialSettings }: { initialSettings: t
                         {DIFFICULTY_LEVELS.map(level => (
                             <Controller
                                 key={level}
-                                name={`${name}.${level}`}
+                                name={`${name}.${level}` as any}
                                 control={control}
-                                render={({ field }) => (
+                                render={({ field: controllerField }) => (
                                     <div className="space-y-1.5">
                                         <Label htmlFor={`${name}.${level}`} className="text-xs font-bold text-slate-400 uppercase">{level}</Label>
                                         <Input
                                             id={`${name}.${level}`}
                                             type="number"
-                                            {...field}
-                                            onChange={e => field.onChange(parseInt(e.target.value) || 0)}
+                                            name={controllerField.name}
+                                            onBlur={controllerField.onBlur}
+                                            ref={controllerField.ref}
+                                            value={typeof controllerField.value === 'number' || typeof controllerField.value === 'string' ? controllerField.value : ''}
+                                            onChange={e => controllerField.onChange(parseInt(e.target.value) || 0)}
                                             className="bg-slate-900 border-white/10 text-white h-9 text-center"
                                         />
                                     </div>

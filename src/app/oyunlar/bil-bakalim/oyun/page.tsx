@@ -77,13 +77,7 @@ function BilBakalimGame() {
 
     const gameContext = `Bil Bakalım - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
     
-    const backUrl = useMemo(() => {
-        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
-        if (courseId && unitId && topicId) {
-            return `/konu/${courseId}/${unitId}/${topicId}?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
-        }
-        return '/oyunlar/bil-bakalim';
-    }, [searchParams]);
+    const backUrl = isMission ? '/student/gorevler' : '/oyunlar/bil-bakalim';
     
     const fetchGameData = useCallback(async () => {
         setGameState('loading');
@@ -169,7 +163,7 @@ function BilBakalimGame() {
         }
         
         // Puan varsa kaydetmeye çalış (Görev başarısız olsa bile puanı alabilir)
-        if (score > 0 && !isScoreSaved) {
+        if (score > 0 && !isScoreSaved && user) {
             setIsSaving(true);
             try {
                 if (isMission && topicId) {
@@ -260,63 +254,6 @@ function BilBakalimGame() {
     
     // --- BİTİŞ EKRANI ---
     if (gameState === 'won' || gameState === 'finished') {
-        if (isMission) {
-            return (
-                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in zoom-in">
-                        <Confetti active={showConfetti} config={{ angle: 90, spread: 360, startVelocity: 40, elementCount: 100, decay: 0.9 }} />
-                        <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white -z-10"></div>
-                            
-                            <div className="mb-6 flex justify-center">
-                                {isAllSolved ? (
-                                    <div className="p-4 bg-green-100 rounded-full border-4 border-green-200 shadow-xl animate-bounce">
-                                        <Trophy className="h-16 w-16 text-green-600" />
-                                    </div>
-                                ) : (
-                                    <div className="p-4 bg-red-100 rounded-full border-4 border-red-200 shadow-xl">
-                                        <XOctagon className="h-16 w-16 text-red-500" />
-                                    </div>
-                                )}
-                            </div>
-
-                            <h2 className="text-3xl font-black text-slate-800 mb-2">
-                                {isAllSolved ? "GÖREV BAŞARILI!" : "GÖREV TAMAMLANMADI"}
-                            </h2>
-                            <p className="text-slate-500 mb-6 font-medium">
-                                {isAllSolved ? "Tebrikler! Tüm kavramları bildin." : "Tüm soruları bitirmeden çıktın."}
-                            </p>
-                            
-                            <p className="text-2xl font-black text-emerald-600 mb-6">{score} PUAN</p>
-
-                            <div className="space-y-3">
-                                {/* Puan varsa ve kaydedilmemişse Kaydet Butonu */}
-                                {!isScoreSaved && score > 0 && (
-                                    <Button onClick={handleSaveAndExit} disabled={isSaving} className="w-full h-12 text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
-                                        {isSaving ? <Loader2 className="animate-spin mr-2"/> : "Kaydet ve Devam Et"}
-                                    </Button>
-                                )}
-                                
-                                {isScoreSaved && (
-                                    <Button onClick={() => router.push('/student/gorevler')} className="w-full h-12 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200">
-                                        <CheckCircle className="mr-2 h-5 w-5"/> Görevlere Dön
-                                    </Button>
-                                )}
-                                
-                                {(!isAllSolved || isScoreSaved) && (
-                                    <Button onClick={handleRestart} variant="outline" className="w-full h-12 font-bold">
-                                        <RotateCcw className="mr-2 h-4 w-4"/> Tekrar Dene
-                                    </Button>
-                                )}
-
-                                <Button onClick={() => router.push(user ? '/student' : '/')} variant="ghost" className="w-full text-slate-400 hover:text-slate-600">
-                                    <Home className="mr-2 h-4 w-4"/> Ana Menü
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-            )
-        }
-
         return (
             <GameEndScreen 
                 score={score}
@@ -324,7 +261,16 @@ function BilBakalimGame() {
                 isSaving={isSaving}
                 scoreSaved={isScoreSaved}
                 onRestart={handleRestart}
-                backUrl={user ? backUrl : '/'}
+                backUrl={backUrl}
+                isSuccess={isAllSolved}
+                isMission={isMission}
+                customMessage={
+                    isMission 
+                        ? (isAllSolved 
+                            ? "Tebrikler! Tüm kavramları bilerek görevi başarıyla tamamladın." 
+                            : "Maalesef tüm kavramları bilemedin. Görevi geçmek için tüm soruları doğru tamamlamalısın.")
+                        : undefined
+                }
             />
         );
     }

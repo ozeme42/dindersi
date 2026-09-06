@@ -187,7 +187,7 @@ function OzetDisplayPage() {
     const unitId = slugArray[1] ? decodeURIComponent(slugArray[1]) : null;
     const topicId = slugArray[2] ? decodeURIComponent(slugArray[2]) : null;
 
-    const [content, setContent] = useState<{title: string, htmlContent: string, courseName: string, conceptDefinitions: {concept: string, definition: string}[], notes: string[]} | null>(null);
+    const [content, setContent] = useState<{title: string, htmlContent: string, courseName: string, conceptDefinitions: {concept: string, definition: string}[], notes: string[], unitId?: string | null, courseId?: string | null} | null>(null);
     const [activeTab, setActiveTab] = useState("ozet");
     const [isLoading, setIsLoading] = useState(true);
     const [zoomLevel, setZoomLevel] = useState(1.0);

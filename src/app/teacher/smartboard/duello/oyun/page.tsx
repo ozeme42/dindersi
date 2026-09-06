@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 // --- TİPLER ---
 export interface Question {
     id: string;
-    text: string;
-    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış';
+    text?: string;
+    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış' | 'Boşluk Doldurma' | string;
     options?: string[];
-    correctAnswer: string;
+    correctAnswer?: string;
     isTrue?: boolean;
 }
 
