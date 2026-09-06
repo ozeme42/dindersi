@@ -152,13 +152,15 @@ function QuestionCard({ question, index, onEdit, onDifficultyChange, onSelect, i
 export default function ExamQuestionBankPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isQuestionsLoading, setIsQuestionsLoading] = useState(false);
   const { toast } = useToast();
   
-  const [allData, setAllData] = useState<{ classes: SchoolClass[]; courses: EnrichedCourse[]; questions: Question[] }>({
+  const [allData, setAllData] = useState<{ classes: SchoolClass[]; courses: EnrichedCourse[] }>({
     classes: [],
     courses: [],
-    questions: [],
   });
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [topicCounts, setTopicCounts] = useState<Record<string, number>>({});
 
   const [selection, setSelection] = useState({ classId: '', courseId: '', unitId: '', topicId: '' });
   const [selectionNames, setSelectionNames] = useState({ className: '', courseName: '', unitName: '', topicName: '' });
@@ -180,60 +182,156 @@ export default function ExamQuestionBankPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [sortBy, setSortBy] = useState<'text' | 'createdAt'>('text');
 
-  const fetchData = useCallback(async () => {
+  const fetchInitialTree = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [questionsQuerySnapshot, classesSnapshot, coursesSnapshot] = await Promise.all([
-        getDocs(query(collection(db, "examQuestions"))),
-        getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-        getDocs(collection(db, "courses"))
+      const [manifestRes, countsRes, classesSnapshot] = await Promise.all([
+        fetch('/curriculum/manifest.json'),
+        fetch('/curriculum/exam-question-counts.json').catch(() => null),
+        getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))).catch(() => null)
       ]);
 
-      const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-      const coursesDataRaw = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-      
-      const courseIdToClassId = new Map(coursesDataRaw.map(c => [c.id, c.classId]));
-      const courseIdToClassName = new Map(coursesDataRaw.map(c => {
-          const classInfo = classesData.find(cls => cls.id === c.classId);
-          return [c.id, classInfo?.name || 'Genel'];
-      }));
-      
-      const questionsData = questionsQuerySnapshot.docs.map(doc => {
-          const data = doc.data();
-          const createdAt = (data.createdAt as Timestamp)?.toDate()?.toISOString() || new Date(0).toISOString();
-          return {
-              ...data,
-              id: doc.id,
-              classId: courseIdToClassId.get(data.courseId) || '',
-              className: courseIdToClassName.get(data.courseId) || 'Genel',
-              createdAt,
-          } as Question;
-      });
-      
-      const coursesWithUnits = await Promise.all(coursesDataRaw.map(async (courseDoc) => {
-        const course = { ...courseDoc, units: [] } as EnrichedCourse;
-        const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
-        course.units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
-            const unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as unknown as (Unit & { topics: Topic[] });
-            const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unit.id}/topics`), orderBy('title')));
-            unit.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
-            return unit;
-        }));
-        return course;
-      }));
+      let mData: any = null;
+      if (manifestRes.ok) {
+        mData = await manifestRes.json();
+      }
 
-      setAllData({ classes: classesData, courses: coursesWithUnits, questions: questionsData });
+      let countsMap: Record<string, number> = {};
+      if (countsRes && countsRes.ok) {
+        try {
+          countsMap = await countsRes.json();
+        } catch (e) {}
+      }
+      setTopicCounts(countsMap);
+
+      const firestoreClasses = classesSnapshot 
+        ? classesSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as SchoolClass))
+        : [];
+
+      let classesList: SchoolClass[] = [];
+      const classIdToNameMap = new Map<string, string>();
+      const gradeNameToClassIdMap = new Map<string, string>();
+
+      if (firestoreClasses.length > 0) {
+        classesList = firestoreClasses.map(c => ({
+          ...c,
+          name: c.name.includes('Sınıf') ? c.name : `${c.name}. Sınıf`
+        }));
+        firestoreClasses.forEach(c => {
+          const formattedName = c.name.includes('Sınıf') ? c.name : `${c.name}. Sınıf`;
+          classIdToNameMap.set(c.id, formattedName);
+          const grade = c.name.replace(/[^0-9]/g, '');
+          if (grade) {
+            gradeNameToClassIdMap.set(grade, c.id);
+            gradeNameToClassIdMap.set(c.name, c.id);
+          }
+        });
+      } else if (mData?.classGroups) {
+        classesList = mData.classGroups.map((cg: any) => ({
+          id: cg.name,
+          name: `${cg.name}. Sınıf`,
+          grade: cg.name,
+          branches: ['A', 'B', 'C', 'D'],
+          createdAt: new Date().toISOString()
+        }));
+        classesList.forEach(c => {
+          classIdToNameMap.set(c.id, c.name);
+          gradeNameToClassIdMap.set(c.id, c.id);
+        });
+      }
+
+      const coursesList: EnrichedCourse[] = [];
+      if (mData?.classGroups) {
+        for (const cg of mData.classGroups) {
+          const classId = gradeNameToClassIdMap.get(cg.name) || cg.name;
+          const className = classIdToNameMap.get(classId) || `${cg.name}. Sınıf`;
+
+          for (const c of cg.courses || []) {
+            coursesList.push({
+              id: c.id,
+              title: c.title,
+              classId: classId,
+              className: className,
+              isTeacherOnly: false,
+              units: (c.units || []).map((u: any) => ({
+                id: u.id,
+                title: u.title,
+                courseId: c.id,
+                topics: (u.topics || []).map((t: any) => ({
+                  id: t.id,
+                  title: t.title,
+                  unitId: u.id,
+                  sourceText: t.sourceText || '',
+                }))
+              }))
+            } as EnrichedCourse);
+          }
+        }
+      }
+
+      setAllData({
+        classes: classesList,
+        courses: coursesList,
+      });
     } catch (error) {
-      console.error("Error fetching data:", error);
-      toast({ title: "Hata", description: "Veriler yüklenirken bir hata oluştu.", variant: "destructive" });
+      console.error("Error fetching curriculum tree:", error);
+      toast({ title: "Hata", description: "Müfredat yüklenirken bir hata oluştu.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
   }, [toast]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchInitialTree();
+  }, [fetchInitialTree]);
+
+  const fetchQuestionsForSelection = useCallback(async () => {
+    if (!selection.topicId && !selection.unitId && !selection.courseId) return;
+    setIsQuestionsLoading(true);
+    try {
+      let qRef;
+      if (selection.topicId && selection.topicId !== 'all') {
+        qRef = query(collection(db, "examQuestions"), where("topicId", "==", selection.topicId));
+      } else if (selection.unitId && selection.unitId !== 'all') {
+        qRef = query(collection(db, "examQuestions"), where("unitId", "==", selection.unitId));
+      } else if (selection.courseId) {
+        qRef = query(collection(db, "examQuestions"), where("courseId", "==", selection.courseId));
+      }
+
+      let fetchedQuestions: Question[] = [];
+      if (qRef) {
+        const snap = await getDocs(qRef);
+        fetchedQuestions = snap.docs.map(doc => {
+          const data = doc.data();
+          const createdAt = (data.createdAt as Timestamp)?.toDate?.()?.toISOString?.() || 
+            (typeof data.createdAt === 'string' ? data.createdAt : new Date(0).toISOString());
+          return {
+            ...data,
+            id: doc.id,
+            classId: selection.classId || data.classId,
+            className: selectionNames.className || data.className,
+            createdAt,
+          } as Question;
+        });
+      }
+
+      setQuestions(fetchedQuestions);
+      if (selection.topicId && selection.topicId !== 'all') {
+        setTopicCounts(prev => ({ ...prev, [selection.topicId]: fetchedQuestions.length }));
+      }
+    } catch (error) {
+      console.error("Error fetching exam questions for topic:", error);
+      toast({ title: "Hata", description: "Sorular yüklenirken bir hata oluştu.", variant: "destructive" });
+    } finally {
+      setIsQuestionsLoading(false);
+    }
+  }, [selection.topicId, selection.unitId, selection.courseId, selection.classId, selectionNames.className, toast]);
+
+  useEffect(() => {
+    if (currentStep === 5) {
+      fetchQuestionsForSelection();
+    }
+  }, [currentStep, fetchQuestionsForSelection]);
   
   const handleNext = () => currentStep < steps.length && setCurrentStep(currentStep + 1);
   const handleBack = () => {
@@ -241,7 +339,10 @@ export default function ExamQuestionBankPage() {
           if (currentStep === 2) setSelection(s => ({...s, classId: ''}));
           if (currentStep === 3) setSelection(s => ({...s, courseId: ''}));
           if (currentStep === 4) setSelection(s => ({...s, unitId: ''}));
-          if (currentStep === 5) setSelection(s => ({...s, topicId: ''}));
+          if (currentStep === 5) {
+              setSelection(s => ({...s, topicId: ''}));
+              setQuestions([]);
+          }
           setCurrentStep(currentStep - 1);
       }
   };
@@ -252,7 +353,7 @@ export default function ExamQuestionBankPage() {
       setSelectionNames({ className: name, courseName: '', unitName: '', topicName: '' });
     } else if (type === 'course') {
       setSelection(s => ({ ...s, courseId: id, unitId: '', topicId: '' }));
-      setSelectionNames(s => ({ ...s, courseName: name, unitName: '' }));
+      setSelectionNames(s => ({ ...s, courseName: name, unitName: '', topicName: '' }));
     } else if (type === 'unit') {
       setSelection(s => ({ ...s, unitId: id, topicId: '' }));
       setSelectionNames(s => ({ ...s, unitName: name, topicName: '' }));
@@ -261,17 +362,25 @@ export default function ExamQuestionBankPage() {
       setSelectionNames(s => ({ ...s, topicName: name }));
     }
     handleNext();
-  }
+  };
   
   const classesWithCounts = useMemo(() => {
     return allData.classes.map(c => {
-        const courseIdsInClass = new Set(allData.courses.filter(course => course.classId === c.id).map(course => course.id));
+        const coursesInClass = allData.courses.filter(course => course.classId === c.id || course.classId === c.name);
+        let count = 0;
+        for (const crs of coursesInClass) {
+            for (const u of crs.units || []) {
+                for (const t of u.topics || []) {
+                    count += (topicCounts[t.id] || 0);
+                }
+            }
+        }
         return {
             ...c,
-            questionCount: allData.questions.filter(q => Boolean(q.courseId && courseIdsInClass.has(q.courseId))).length
+            questionCount: count
         };
     });
-  }, [allData]);
+  }, [allData.classes, allData.courses, topicCounts]);
 
   const filteredCourses = useMemo(() => {
     if (!selection.classId) return [];
@@ -279,11 +388,19 @@ export default function ExamQuestionBankPage() {
   }, [selection.classId, allData.courses]);
 
   const filteredCoursesWithCounts = useMemo(() => {
-    return filteredCourses.map(course => ({
-        ...course,
-        questionCount: allData.questions.filter(q => q.courseId === course.id).length
-    }));
-  }, [filteredCourses, allData.questions]);
+    return filteredCourses.map(course => {
+        let count = 0;
+        for (const u of course.units || []) {
+            for (const t of u.topics || []) {
+                count += (topicCounts[t.id] || 0);
+            }
+        }
+        return {
+            ...course,
+            questionCount: count
+        };
+    });
+  }, [filteredCourses, topicCounts]);
 
   const filteredUnits = useMemo(() => {
     if (!selection.courseId) return [];
@@ -291,11 +408,17 @@ export default function ExamQuestionBankPage() {
   }, [selection.courseId, allData.courses]);
 
   const filteredUnitsWithCounts = useMemo(() => {
-    return filteredUnits.map(unit => ({
-        ...unit,
-        questionCount: allData.questions.filter(q => q.unitId === unit.id).length
-    }));
-  }, [filteredUnits, allData.questions]);
+    return filteredUnits.map(unit => {
+        let count = 0;
+        for (const t of unit.topics || []) {
+            count += (topicCounts[t.id] || 0);
+        }
+        return {
+            ...unit,
+            questionCount: count
+        };
+    });
+  }, [filteredUnits, topicCounts]);
 
   const filteredTopics = useMemo(() => {
     if (!selection.unitId) return [];
@@ -305,23 +428,12 @@ export default function ExamQuestionBankPage() {
   const filteredTopicsWithCounts = useMemo(() => {
     return filteredTopics.map(topic => ({
         ...topic,
-        questionCount: allData.questions.filter(q => q.topicId === topic.id).length
+        questionCount: topicCounts[topic.id] || 0
     }));
-  }, [filteredTopics, allData.questions]);
+  }, [filteredTopics, topicCounts]);
   
   const filteredQuestions = useMemo(() => {
-    let tempQuestions = allData.questions;
-
-    if (selection.topicId && selection.topicId !== 'all') {
-        tempQuestions = tempQuestions.filter((q) => q.topicId === selection.topicId);
-    } else if (selection.unitId && selection.unitId !== 'all') {
-        tempQuestions = tempQuestions.filter((q) => q.unitId === selection.unitId);
-    } else if (selection.courseId) {
-        tempQuestions = tempQuestions.filter((q) => q.courseId === selection.courseId);
-    } else if (selection.classId) {
-        const courseIdsInClass = new Set(allData.courses.filter(c => c.classId === selection.classId).map(c => c.id));
-        tempQuestions = tempQuestions.filter(q => Boolean(q.courseId && courseIdsInClass.has(q.courseId)));
-    }
+    let tempQuestions = questions;
 
     if (searchTerm) {
         const lowercasedTerm = searchTerm.toLowerCase();
@@ -351,12 +463,10 @@ export default function ExamQuestionBankPage() {
     });
 
   }, [
-    allData.questions,
-    selection,
+    questions,
     searchTerm,
     selectedQuestionTypes,
     selectedDifficulties,
-    filteredCourses,
     sortBy,
   ]);
   
@@ -407,10 +517,24 @@ export default function ExamQuestionBankPage() {
 
     if (result.success && result.question) {
         toast({ title: "Başarılı", description: "Soru kaydedildi." });
-        await fetchData();
+        const savedQ = result.question as Question;
+        setQuestions(prev => {
+            const exists = prev.some(q => q.id === savedQ.id);
+            if (exists) {
+                return prev.map(q => q.id === savedQ.id ? savedQ : q);
+            } else {
+                return [savedQ, ...prev];
+            }
+        });
+        if (selection.topicId && selection.topicId !== 'all') {
+            setTopicCounts(prev => ({
+                ...prev,
+                [selection.topicId]: (prev[selection.topicId] || 0) + (questionToSave.id?.startsWith('new-') ? 1 : 0)
+            }));
+        }
         setIsSaving(false);
-        setEditingState(prev => prev ? { ...prev, question: result.question as Question } : null);
-        return result.question;
+        setEditingState(prev => prev ? { ...prev, question: savedQ } : null);
+        return savedQ;
     } else {
         toast({ title: "Hata", description: result.error, variant: "destructive" });
         setIsSaving(false);
@@ -434,20 +558,17 @@ export default function ExamQuestionBankPage() {
   };
   
   const handleDifficultyChange = async (questionId: string, difficulty: Question['difficulty']) => {
-    setAllData(prev => ({
-        ...prev,
-        questions: prev.questions.map(q => q.id === questionId ? { ...q, difficulty } : q)
-    }));
+    setQuestions(prev => prev.map(q => q.id === questionId ? { ...q, difficulty } : q));
 
     const result = await updateQuestionDifficulty(questionId, difficulty);
 
     if (!result.success) {
         toast({ title: "Hata", description: result.error, variant: "destructive" });
-        fetchData();
+        fetchQuestionsForSelection();
     } else {
         toast({ title: "Başarılı", description: "Zorluk seviyesi güncellendi." });
     }
-  }
+  };
   
   const handleSelectQuestion = (questionId: string) => {
     setSelectedQuestions(prev => {
@@ -476,11 +597,18 @@ export default function ExamQuestionBankPage() {
   
   const handleBulkDelete = async () => {
     setIsDeleting(true);
-    const result = await deleteBulkQuestions(Array.from(selectedQuestions));
+    const idsToDelete = Array.from(selectedQuestions);
+    const result = await deleteBulkQuestions(idsToDelete);
     if (result.success) {
         toast({ title: "Başarılı", description: `${result.count} soru silindi.` });
+        setQuestions(prev => prev.filter(q => !selectedQuestions.has(q.id)));
+        if (selection.topicId && selection.topicId !== 'all') {
+            setTopicCounts(prev => ({
+                ...prev,
+                [selection.topicId]: Math.max(0, (prev[selection.topicId] || 0) - idsToDelete.length)
+            }));
+        }
         setSelectedQuestions(new Set());
-        fetchData(); // Refresh data
     } else {
         toast({ title: "Hata", description: result.error, variant: "destructive" });
     }
@@ -491,8 +619,18 @@ export default function ExamQuestionBankPage() {
     const result = await deleteBulkQuestions([questionId]);
     if (result.success) {
         toast({ title: "Başarılı", description: "Soru silindi." });
-        setSelectedQuestions(new Set());
-        fetchData();
+        setQuestions(prev => prev.filter(q => q.id !== questionId));
+        if (selection.topicId && selection.topicId !== 'all') {
+            setTopicCounts(prev => ({
+                ...prev,
+                [selection.topicId]: Math.max(0, (prev[selection.topicId] || 0) - 1)
+            }));
+        }
+        setSelectedQuestions(prev => {
+            const next = new Set(prev);
+            next.delete(questionId);
+            return next;
+        });
     } else {
         toast({ title: "Hata", description: result.error, variant: "destructive" });
     }
@@ -525,7 +663,16 @@ export default function ExamQuestionBankPage() {
           case 2: return <SelectionGrid items={filteredCoursesWithCounts} onSelect={(id, name) => handleSelect('course', id, name)} titleKey="title" isLoading={isLoading} countKey="questionCount" countLabel="Soru"/>
           case 3: return <SelectionGrid items={filteredUnitsWithCounts} onSelect={(id, name) => handleSelect('unit', id, name)} specialOptions={[{id: 'all', name: 'Tüm Üniteler', questionCount: filteredCoursesWithCounts.find(c => c.id === selection.courseId)?.questionCount || 0} as any]} titleKey="title" isLoading={isLoading} countKey="questionCount" countLabel="Soru"/>
           case 4: return <SelectionGrid items={filteredTopicsWithCounts} onSelect={(id, name) => handleSelect('topic', id, name)} specialOptions={[{id: 'all', name: 'Tüm Konular', questionCount: filteredUnitsWithCounts.find(u => u.id === selection.unitId)?.questionCount || 0} as any]} titleKey="title" isLoading={isLoading} countKey="questionCount" countLabel="Soru"/>
-          case 5: return (
+          case 5:
+              if (isQuestionsLoading) {
+                  return (
+                      <div className="flex flex-col justify-center items-center h-64 gap-4">
+                          <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
+                          <p className="text-sm text-slate-400 font-medium">Sınav soruları veritabanından getiriliyor...</p>
+                      </div>
+                  );
+              }
+              return (
               <div>
                    <div className="flex flex-col xl:flex-row items-center gap-4 mb-6 p-4 rounded-2xl bg-slate-900/60 backdrop-blur-md border border-white/5 shadow-lg">
                       <div className="relative flex-grow w-full">
@@ -780,8 +927,13 @@ export default function ExamQuestionBankPage() {
                             {currentStep}
                         </span>
                         {steps.find(s => s.id === currentStep)?.name}
+                        {currentStep === 5 && selectionNames.topicName && (
+                            <span className="text-sm font-normal text-indigo-300 ml-2">
+                                ({selectionNames.className} &gt; {selectionNames.courseName} &gt; {selectionNames.topicName})
+                            </span>
+                        )}
                      </h2>
-                     {isLoading && <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />}
+                     {(isLoading || (isQuestionsLoading && currentStep === 5)) && <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />}
                 </div>
 
                 <div className="flex-grow p-6 md:p-10 bg-black/20">
@@ -820,14 +972,14 @@ export default function ExamQuestionBankPage() {
       <AIGenerationDialog 
         isOpen={isAIGenOpen} 
         onOpenChange={setIsAIGenOpen} 
-        onQuestionsGenerated={fetchData} 
+        onQuestionsGenerated={fetchQuestionsForSelection} 
         context={aiGenerationContext}
         onSave={saveGeneratedQuestions}
       />
       <BulkImportDialog 
         isOpen={isBulkOpen} 
         onOpenChange={setIsBulkOpen} 
-        onQuestionsImported={fetchData} 
+        onQuestionsImported={fetchQuestionsForSelection} 
         context={currentStep === 5 ? { selection, selectionNames } : null}
         onSave={saveBulkQuestions}
       />

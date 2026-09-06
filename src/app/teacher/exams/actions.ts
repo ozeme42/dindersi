@@ -141,21 +141,30 @@ export async function deleteExam(assignmentId: string): Promise<{ success: boole
 /**
  * Sınav Oluşturma Ekranı İçin Gerekli Veriler
  */
-export async function getExamCreationData(): Promise<any> {
+export async function getExamCreationData(options?: { includeQuestions?: boolean }): Promise<any> {
     noStore();
     try {
-        const [classesSnap, coursesSnap, studentsSnap, examQuestionsSnap] = await Promise.all([
+        const fetchQuestions = options?.includeQuestions ?? false;
+        const promises: Promise<any>[] = [
             getDocs(collection(db, 'classes')),
             getDocs(collection(db, 'courses')),
-            getDocs(query(collection(db, 'users'), where("role", "==", "student"))),
-            getDocs(collection(db, 'questions'))
-        ]);
+            getDocs(query(collection(db, 'users'), where("role", "==", "student")))
+        ];
+        if (fetchQuestions) {
+            promises.push(getDocs(collection(db, 'questions')));
+        }
         
-        let classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
-        let students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as any));
-        let courses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+        const results = await Promise.all(promises);
+        const classesSnap: any = results[0];
+        const coursesSnap: any = results[1];
+        const studentsSnap: any = results[2];
+        const examQuestionsSnap: any = fetchQuestions ? results[3] : null;
+        
+        let classes = classesSnap.docs.map((doc: any) => ({ id: doc.id, ...doc.data() } as any));
+        let students = studentsSnap.docs.map((doc: any) => ({ uid: doc.id, ...doc.data() } as any));
+        let courses = coursesSnap.docs.map((doc: any) => ({ id: doc.id, ...doc.data() } as any));
 
-        classes.sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'tr', { numeric: true }));
+        classes.sort((a: any, b: any) => String(a.name || '').localeCompare(String(b.name || ''), 'tr', { numeric: true }));
 
         // Fallback to manifest if classes or courses are empty in Firestore
         if (classes.length === 0 || courses.length === 0) {
@@ -194,7 +203,7 @@ export async function getExamCreationData(): Promise<any> {
             classes, 
             students,
             courses,
-            examQuestions: examQuestionsSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+            examQuestions: examQuestionsSnap ? examQuestionsSnap.docs.map((d: any) => ({ id: d.id, ...d.data() })) : []
         }));
     } catch(e) {
         console.error("Data Fetch Error:", e);

@@ -112,7 +112,7 @@ export default function CreateExamClientPage() {
     const fetchInitialData = useCallback(async () => {
         setIsLoading(true);
         try {
-            const data = await getExamCreationData();
+            const data = await getExamCreationData({ includeQuestions: true });
             if (data.error) {
                 toast({ title: 'Hata', description: "Sayfa verileri yüklenemedi.", variant: 'destructive'});
             } else {
