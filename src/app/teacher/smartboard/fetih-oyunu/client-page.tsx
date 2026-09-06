@@ -29,6 +29,7 @@ const steps = [
 
 type Team = { id: number; name: string; color: string; players: UserProfile[] };
 type TeamForUrl = { id: number; name: string; color: string; playerUids: string[] };
+type EnrichedCourse = Course & { units?: (Unit & { topics?: Topic[] })[] };
 
 export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -37,11 +38,11 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
   
   // Data states
   const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
-  const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [allCourses, setAllCourses] = useState<EnrichedCourse[]>([]);
   const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<UserProfile[]>([]);
   
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<EnrichedCourse[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   
@@ -73,17 +74,69 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
   const fetchInitialData = useCallback(async () => {
     setIsLoading(true);
     try {
-        const [classesSnap, coursesSnap, studentsSnap] = await Promise.all([
-            getDocs(query(collection(db, 'classes'), orderBy('name'))),
-            getDocs(query(collection(db, 'courses'))),
-            getDocs(query(collection(db, 'users'), where('role', '==', 'guest')))
+        const [manifestRes, classesSnap, coursesSnap, studentsSnap] = await Promise.all([
+            fetch('/curriculum/manifest.json').catch(() => null),
+            getDocs(query(collection(db, 'classes'), orderBy('name'))).catch(() => null),
+            getDocs(query(collection(db, 'courses'))).catch(() => null),
+            getDocs(query(collection(db, 'users'), where('role', '==', 'guest'))).catch(() => null)
         ]);
 
-        const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        const students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
-        setAllClasses(classes);
+        let mData: any = null;
+        if (manifestRes && manifestRes.ok) {
+          mData = await manifestRes.json();
+        }
+
+        const firestoreClasses = classesSnap 
+          ? classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass))
+          : [];
+
+        let classesList: SchoolClass[] = [];
+        const gradeNameToClassIdMap = new globalThis.Map<string, string>();
+        if (firestoreClasses.length > 0) {
+          classesList = firestoreClasses;
+          firestoreClasses.forEach(c => {
+            const grade = c.name.replace(/[^0-9]/g, '');
+            if (grade) gradeNameToClassIdMap.set(grade, c.id);
+            gradeNameToClassIdMap.set(c.id, c.id);
+            gradeNameToClassIdMap.set(c.name, c.id);
+          });
+        } else if (mData?.classGroups) {
+          classesList = mData.classGroups.map((cg: any) => ({
+            id: cg.name,
+            name: `${cg.name}. Sınıf`,
+            grade: cg.name,
+            branches: ['A', 'B', 'C', 'D'],
+            createdAt: new Date().toISOString()
+          }));
+        }
+
+        let coursesList: EnrichedCourse[] = [];
+        if (mData?.classGroups) {
+          for (const cg of mData.classGroups) {
+            const classId = gradeNameToClassIdMap.get(cg.name) || cg.name;
+            for (const c of cg.courses || []) {
+              coursesList.push({
+                ...c,
+                classId: classId,
+                units: (c.units || []).map((u: any) => ({
+                  ...u,
+                  courseId: c.id,
+                  topics: (u.topics || []).map((t: any) => ({
+                    ...t,
+                    unitId: u.id,
+                  }))
+                }))
+              });
+            }
+          }
+        } else if (coursesSnap) {
+          coursesList = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+        }
+
+        const students = studentsSnap ? studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)) : [];
+        setAllClasses(classesList);
         setAllStudents(students);
-        setAllCourses(coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
+        setAllCourses(coursesList);
         
     } catch (e) {
         console.error("Initial data fetch failed:", e);
@@ -134,6 +187,16 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' }));
+    
+    const foundCourse = allCourses.find(c => c.id === courseId);
+    if (foundCourse?.units && foundCourse.units.length > 0) {
+      setUnits(foundCourse.units);
+      setTopics([]);
+      setIsDataLoading(false);
+      handleNext();
+      return;
+    }
+
     setIsDataLoading(true);
     const unitsRef = collection(db, `courses/${courseId}/units`);
     const q = query(unitsRef, orderBy("title"));
@@ -146,12 +209,18 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
   
   const handleSelectUnit = async (unitId: string, unitName: string) => {
     setSelection(prev => ({...prev, unitId, unitName}));
-    setIsDataLoading(true);
-    const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
-    const q = query(topicsRef, orderBy("title"));
-    const topicsSnapshot = await getDocs(q);
-    setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-    setIsDataLoading(false);
+    const foundUnit = units.find(u => u.id === unitId);
+    if (foundUnit?.topics && foundUnit.topics.length > 0) {
+      setTopics(foundUnit.topics);
+      setIsDataLoading(false);
+    } else {
+      setIsDataLoading(true);
+      const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
+      const q = query(topicsRef, orderBy("title"));
+      const topicsSnapshot = await getDocs(q);
+      setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+      setIsDataLoading(false);
+    }
     handleNext();
   };
   

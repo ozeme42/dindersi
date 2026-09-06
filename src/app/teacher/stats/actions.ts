@@ -6,19 +6,42 @@ import { collection, getDocs, query, where, orderBy, limit, Timestamp, getCountF
 import type { UserProfile, Question, Course, QuestionBankStats, ScoreEvent, QuestionBankProgress, TestResult } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
+import fs from 'fs/promises';
+import path from 'path';
+
+let CACHED_MANIFEST: { timestamp: number; data: any } | null = null;
+const MANIFEST_TTL = 1000 * 60 * 30;
+
+async function getLoadedManifest(): Promise<any | null> {
+    if (CACHED_MANIFEST && (Date.now() - CACHED_MANIFEST.timestamp < MANIFEST_TTL)) {
+        return CACHED_MANIFEST.data;
+    }
+    const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+    try {
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const data = JSON.parse(fileContent);
+        CACHED_MANIFEST = { timestamp: Date.now(), data };
+        return data;
+    } catch (e) {
+        return null;
+    }
+}
 
 export async function getGeneralStats() {
     noStore();
     const studentQuery = query(collection(db, "users"), where("role", "==", "student"));
-    const questionsQuery = query(collection(db, "questions"));
+    const kolayQuery = query(collection(db, "questions"), where("difficulty", "in", ["Kolay", "kolay"]));
+    const ortaQuery = query(collection(db, "questions"), where("difficulty", "in", ["Orta", "orta"]));
+    const zorQuery = query(collection(db, "questions"), where("difficulty", "in", ["Zor", "zor"]));
 
-    const [studentSnap, questionSnap] = await Promise.all([
+    const [studentSnap, kolaySnap, ortaSnap, zorSnap] = await Promise.all([
         getDocs(studentQuery),
-        getDocs(questionsQuery)
+        getCountFromServer(kolayQuery).catch(() => null),
+        getCountFromServer(ortaQuery).catch(() => null),
+        getCountFromServer(zorQuery).catch(() => null),
     ]);
 
     const allStudents = studentSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
-    const allQuestions = questionSnap.docs.map(doc => doc.data() as Question);
     
     // Sort and take top 5 students in-memory
     const topStudents = allStudents
@@ -74,18 +97,11 @@ export async function getGeneralStats() {
         };
     }).reverse();
 
-
-    const questionsByDifficultyData = allQuestions.reduce((acc, question) => {
-        const difficulty = question.difficulty || "Bilinmiyor";
-        acc[difficulty] = (acc[difficulty] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
-
-    const questionsByDifficulty = Object.entries(questionsByDifficultyData).map(([name, value], index) => ({
-        name,
-        value,
-        fill: `hsl(var(--chart-${index + 1}))`
-    }));
+    const questionsByDifficulty = [
+        { name: "Kolay", value: kolaySnap ? (kolaySnap.data().count || 0) : 0, fill: "hsl(var(--chart-1))" },
+        { name: "Orta", value: ortaSnap ? (ortaSnap.data().count || 0) : 0, fill: "hsl(var(--chart-2))" },
+        { name: "Zor", value: zorSnap ? (zorSnap.data().count || 0) : 0, fill: "hsl(var(--chart-3))" }
+    ];
 
     return { studentsPerClass, signupsByDay, questionsByDifficulty, topStudents };
 }
@@ -118,14 +134,27 @@ export async function getStudentProgressReports(): Promise<{data?: StudentProgre
         const allScoreEvents = scoreEventsSnap.docs.map(doc => doc.data() as ScoreEvent);
 
         const totalTopicsPerCourse: { [courseId: string]: number } = {};
-        for (const course of allCourses) {
-            const unitsSnap = await getDocs(query(collection(db, `courses/${course.id}/units`)));
-            let topicCount = 0;
-            for (const unitDoc of unitsSnap.docs) {
-                const topicsSnap = await getCountFromServer(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
-                topicCount += topicsSnap.data().count;
+        const manifest = await getLoadedManifest();
+        if (manifest?.classGroups) {
+            for (const cg of manifest.classGroups) {
+                for (const c of cg.courses || []) {
+                    let topicCount = 0;
+                    for (const u of c.units || []) {
+                        topicCount += (u.topics || []).length;
+                    }
+                    totalTopicsPerCourse[c.id] = topicCount;
+                }
             }
-            totalTopicsPerCourse[course.id] = topicCount;
+        } else {
+            for (const course of allCourses) {
+                const unitsSnap = await getDocs(query(collection(db, `courses/${course.id}/units`)));
+                let topicCount = 0;
+                for (const unitDoc of unitsSnap.docs) {
+                    const topicsSnap = await getCountFromServer(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
+                    topicCount += topicsSnap.data().count;
+                }
+                totalTopicsPerCourse[course.id] = topicCount;
+            }
         }
 
         const studentReports: StudentProgressReport[] = await Promise.all(

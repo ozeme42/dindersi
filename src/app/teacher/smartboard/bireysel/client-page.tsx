@@ -30,6 +30,8 @@ const steps = [
   { id: 5, name: "Başlat", icon: <PartyPopper className="h-5 w-5" /> },
 ];
 
+type EnrichedCourse = Course & { units?: (Unit & { topics?: Topic[] })[] };
+
 export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, gameIconName }: { 
     gameConfig: any,
     gameName?: string,
@@ -43,9 +45,9 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
   const [isDataLoading, setIsDataLoading] = useState(false);
   
   const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
-  const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [allCourses, setAllCourses] = useState<EnrichedCourse[]>([]);
   
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<EnrichedCourse[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   
@@ -84,12 +86,66 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
     const fetchInitialData = async () => {
       setIsLoading(true);
       try {
-        const [coursesSnapshot, classesSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "courses"), orderBy("title"))),
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
+        const [manifestRes, coursesSnapshot, classesSnapshot] = await Promise.all([
+          fetch('/curriculum/manifest.json').catch(() => null),
+          getDocs(query(collection(db, "courses"), orderBy("title"))).catch(() => null),
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))).catch(() => null)
         ]);
-        setAllCourses(coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
-        setAllClasses(classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
+
+        let mData: any = null;
+        if (manifestRes && manifestRes.ok) {
+          mData = await manifestRes.json();
+        }
+
+        const firestoreClasses = classesSnapshot 
+          ? classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass))
+          : [];
+
+        let classesList: SchoolClass[] = [];
+        const gradeNameToClassIdMap = new Map<string, string>();
+        if (firestoreClasses.length > 0) {
+          classesList = firestoreClasses;
+          firestoreClasses.forEach(c => {
+            const grade = c.name.replace(/[^0-9]/g, '');
+            if (grade) gradeNameToClassIdMap.set(grade, c.id);
+            gradeNameToClassIdMap.set(c.id, c.id);
+            gradeNameToClassIdMap.set(c.name, c.id);
+          });
+        } else if (mData?.classGroups) {
+          classesList = mData.classGroups.map((cg: any) => ({
+            id: cg.name,
+            name: `${cg.name}. Sınıf`,
+            grade: cg.name,
+            branches: ['A', 'B', 'C', 'D'],
+            createdAt: new Date().toISOString()
+          }));
+        }
+
+        let coursesList: EnrichedCourse[] = [];
+        if (mData?.classGroups) {
+          for (const cg of mData.classGroups) {
+            const classId = gradeNameToClassIdMap.get(cg.name) || cg.name;
+            for (const c of cg.courses || []) {
+              coursesList.push({
+                ...c,
+                classId: classId,
+                units: (c.units || []).map((u: any) => ({
+                  ...u,
+                  courseId: c.id,
+                  topics: (u.topics || []).map((t: any) => ({
+                    ...t,
+                    unitId: u.id,
+                  }))
+                }))
+              });
+            }
+          }
+        } else if (coursesSnapshot) {
+          coursesList = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+        }
+
+        setAllCourses(coursesList);
+        setAllClasses(classesList);
       } catch (error) {
         console.error("Error fetching initial data: ", error);
         toast({ title: "Hata", description: "Veriler getirilirken bir sorun oluştu.", variant: "destructive" });
@@ -126,6 +182,16 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '' }));
+    
+    const foundCourse = allCourses.find(c => c.id === courseId);
+    if (foundCourse?.units && foundCourse.units.length > 0) {
+      setUnits(foundCourse.units);
+      setTopics([]);
+      setIsDataLoading(false);
+      handleNext();
+      return;
+    }
+
     setIsDataLoading(true);
     const unitsRef = collection(db, `courses/${courseId}/units`);
     const q = query(unitsRef, orderBy("title"));
@@ -142,12 +208,18 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
       setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Üniteler' }));
       setTopics([]);
     } else {
-      setIsDataLoading(true);
-      const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
-      const q = query(topicsRef, orderBy("title"));
-      const topicsSnapshot = await getDocs(q);
-      setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-      setIsDataLoading(false);
+      const foundUnit = units.find(u => u.id === unitId);
+      if (foundUnit?.topics && foundUnit.topics.length > 0) {
+        setTopics(foundUnit.topics);
+        setIsDataLoading(false);
+      } else {
+        setIsDataLoading(true);
+        const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
+        const q = query(topicsRef, orderBy("title"));
+        const topicsSnapshot = await getDocs(q);
+        setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+        setIsDataLoading(false);
+      }
     }
 
     if (finalGamePath === 'anlat-bakalim') {

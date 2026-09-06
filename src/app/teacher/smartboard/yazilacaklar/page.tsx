@@ -20,14 +20,16 @@ const steps = [
   { id: 4, name: "Konu Seçimi", icon: <ListTodo className="h-5 w-5" /> },
 ];
 
+type EnrichedCourse = Course & { units?: (Unit & { topics?: Topic[] })[] };
+
 export default function YazilacaklarSetupPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const [classes, setClasses] = useState<SchoolClass[]>([]);
-  const [allCourses, setAllCourses] = useState<Course[]>([]);
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [allCourses, setAllCourses] = useState<EnrichedCourse[]>([]);
+  const [courses, setCourses] = useState<EnrichedCourse[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   
@@ -42,12 +44,66 @@ export default function YazilacaklarSetupPage() {
     const fetchInitialData = async () => {
       setIsLoading(true);
       try {
-        const [coursesSnapshot, classesSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "courses"), orderBy("title"))),
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
+        const [manifestRes, coursesSnapshot, classesSnapshot] = await Promise.all([
+          fetch('/curriculum/manifest.json').catch(() => null),
+          getDocs(query(collection(db, "courses"), orderBy("title"))).catch(() => null),
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))).catch(() => null)
         ]);
-        setAllCourses(coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
-        setClasses(classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
+
+        let mData: any = null;
+        if (manifestRes && manifestRes.ok) {
+          mData = await manifestRes.json();
+        }
+
+        const firestoreClasses = classesSnapshot 
+          ? classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass))
+          : [];
+
+        let classesList: SchoolClass[] = [];
+        const gradeNameToClassIdMap = new Map<string, string>();
+        if (firestoreClasses.length > 0) {
+          classesList = firestoreClasses;
+          firestoreClasses.forEach(c => {
+            const grade = c.name.replace(/[^0-9]/g, '');
+            if (grade) gradeNameToClassIdMap.set(grade, c.id);
+            gradeNameToClassIdMap.set(c.id, c.id);
+            gradeNameToClassIdMap.set(c.name, c.id);
+          });
+        } else if (mData?.classGroups) {
+          classesList = mData.classGroups.map((cg: any) => ({
+            id: cg.name,
+            name: `${cg.name}. Sınıf`,
+            grade: cg.name,
+            branches: ['A', 'B', 'C', 'D'],
+            createdAt: new Date().toISOString()
+          }));
+        }
+
+        let coursesList: EnrichedCourse[] = [];
+        if (mData?.classGroups) {
+          for (const cg of mData.classGroups) {
+            const classId = gradeNameToClassIdMap.get(cg.name) || cg.name;
+            for (const c of cg.courses || []) {
+              coursesList.push({
+                ...c,
+                classId: classId,
+                units: (c.units || []).map((u: any) => ({
+                  ...u,
+                  courseId: c.id,
+                  topics: (u.topics || []).map((t: any) => ({
+                    ...t,
+                    unitId: u.id,
+                  }))
+                }))
+              });
+            }
+          }
+        } else if (coursesSnapshot) {
+          coursesList = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+        }
+
+        setAllCourses(coursesList);
+        setClasses(classesList);
       } catch (error) {
         console.error("Error fetching initial data: ", error);
       } finally {
@@ -81,6 +137,16 @@ export default function YazilacaklarSetupPage() {
 
   const handleSelectCourse = async (courseId: string) => {
     setSelection(prev => ({ ...prev, courseId, unitId: '', topicId: '' }));
+
+    const foundCourse = allCourses.find(c => c.id === courseId);
+    if (foundCourse?.units && foundCourse.units.length > 0) {
+      setUnits(foundCourse.units);
+      setTopics([]);
+      setIsLoading(false);
+      handleNext();
+      return;
+    }
+
     setIsLoading(true);
     const unitsRef = collection(db, `courses/${courseId}/units`);
     const q = query(unitsRef, orderBy("title"));
@@ -93,6 +159,15 @@ export default function YazilacaklarSetupPage() {
 
   const handleSelectUnit = async (unitId: string) => {
     setSelection(prev => ({ ...prev, unitId, topicId: '' }));
+
+    const foundUnit = units.find(u => u.id === unitId);
+    if (foundUnit?.topics && foundUnit.topics.length > 0) {
+      setTopics(foundUnit.topics);
+      setIsLoading(false);
+      handleNext();
+      return;
+    }
+
     setIsLoading(true);
     const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
     const q = query(topicsRef, orderBy("title"));

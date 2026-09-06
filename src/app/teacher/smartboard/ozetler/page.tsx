@@ -21,8 +21,8 @@ const steps = [
   { id: 4, name: "İçerik Seçimi", icon: <LayoutTemplate className="h-5 w-5" /> },
 ];
 
-type EnrichedUnit = Unit & { topics: Topic[] };
-type EnrichedCourse = Course & { units: EnrichedUnit[] };
+type EnrichedUnit = Unit & { topics: Topic[]; hasUnitOzet?: boolean };
+type EnrichedCourse = Omit<Course, 'units'> & { units: EnrichedUnit[] };
 
 export default function OzetlerSetupPage() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -31,7 +31,7 @@ export default function OzetlerSetupPage() {
   const router = useRouter();
 
   const [classes, setClasses] = useState<SchoolClass[]>([]);
-  const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [allCourses, setAllCourses] = useState<EnrichedCourse[]>([]);
   const [courses, setCourses] = useState<EnrichedCourse[]>([]);
   const [units, setUnits] = useState<EnrichedUnit[]>([]);
   
@@ -51,12 +51,66 @@ export default function OzetlerSetupPage() {
     const fetchInitialData = async () => {
       setIsLoading(true);
       try {
-        const [coursesSnapshot, classesSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "courses"), orderBy("title"))),
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
+        const [manifestRes, coursesSnapshot, classesSnapshot] = await Promise.all([
+          fetch('/curriculum/manifest.json').catch(() => null),
+          getDocs(query(collection(db, "courses"), orderBy("title"))).catch(() => null),
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))).catch(() => null)
         ]);
-        setAllCourses(coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
-        setClasses(classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
+
+        let mData: any = null;
+        if (manifestRes && manifestRes.ok) {
+          mData = await manifestRes.json();
+        }
+
+        const firestoreClasses = classesSnapshot 
+          ? classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass))
+          : [];
+
+        let classesList: SchoolClass[] = [];
+        const gradeNameToClassIdMap = new Map<string, string>();
+        if (firestoreClasses.length > 0) {
+          classesList = firestoreClasses;
+          firestoreClasses.forEach(c => {
+            const grade = c.name.replace(/[^0-9]/g, '');
+            if (grade) gradeNameToClassIdMap.set(grade, c.id);
+            gradeNameToClassIdMap.set(c.id, c.id);
+            gradeNameToClassIdMap.set(c.name, c.id);
+          });
+        } else if (mData?.classGroups) {
+          classesList = mData.classGroups.map((cg: any) => ({
+            id: cg.name,
+            name: `${cg.name}. Sınıf`,
+            grade: cg.name,
+            branches: ['A', 'B', 'C', 'D'],
+            createdAt: new Date().toISOString()
+          }));
+        }
+
+        let coursesList: EnrichedCourse[] = [];
+        if (mData?.classGroups) {
+          for (const cg of mData.classGroups) {
+            const classId = gradeNameToClassIdMap.get(cg.name) || cg.name;
+            for (const c of cg.courses || []) {
+              coursesList.push({
+                ...c,
+                classId: classId,
+                units: (c.units || []).map((u: any) => ({
+                  ...u,
+                  courseId: c.id,
+                  topics: (u.topics || []).map((t: any) => ({
+                    ...t,
+                    unitId: u.id,
+                  }))
+                }))
+              });
+            }
+          }
+        } else if (coursesSnapshot) {
+          coursesList = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), units: [] } as unknown as EnrichedCourse));
+        }
+
+        setAllCourses(coursesList);
+        setClasses(classesList);
       } catch (error) {
         console.error("Error fetching initial data: ", error);
       } finally {
@@ -91,6 +145,18 @@ export default function OzetlerSetupPage() {
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, unitId: '' }));
     setSelectionNames(prev => ({ ...prev, courseName, unitName: '' }));
+
+    const foundCourse = allCourses.find(c => c.id === courseId);
+    if (foundCourse?.units && foundCourse.units.length > 0) {
+      setUnits(foundCourse.units.filter(u => 
+        (u.isPublished ?? true) && 
+        (u.htmlContent || (u as any).hasUnitOzet || u.topics?.some(t => (t.isPublished ?? true) && (t.htmlContent || (t as any).hasOzetContent)))
+      ));
+      setIsDataLoading(false);
+      handleNext();
+      return;
+    }
+
     setIsDataLoading(true);
     const unitsRef = collection(db, `courses/${courseId}/units`);
     const q = query(unitsRef, orderBy("title"));
@@ -105,7 +171,7 @@ export default function OzetlerSetupPage() {
         } as EnrichedUnit
     }));
     
-    setUnits(unitsWithTopics.filter(u => (u.isPublished ?? true) && (u.htmlContent || u.topics.some(t => (t.isPublished ?? true) && t.htmlContent))));
+    setUnits(unitsWithTopics.filter(u => (u.isPublished ?? true) && (u.htmlContent || (u as any).hasUnitOzet || u.topics.some(t => (t.isPublished ?? true) && (t.htmlContent || (t as any).hasOzetContent)))));
 
     setIsDataLoading(false);
     handleNext();
@@ -145,17 +211,18 @@ export default function OzetlerSetupPage() {
             return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} disabled={!selection.courseId} titleKey="title" isLoading={isLoading}/>;
         case 4:
             const selectedUnit = units.find(u => u.id === selection.unitId);
-            const contentTopics = selectedUnit?.topics.filter(t => t.htmlContent && (t.isPublished ?? true)) || [];
+            const contentTopics = selectedUnit?.topics.filter(t => ((t.htmlContent || (t as any).hasOzetContent)) && (t.isPublished ?? true)) || [];
+            const hasUnitSummary = (selectedUnit?.isPublished ?? true) && (selectedUnit?.htmlContent || (selectedUnit as any)?.hasUnitOzet);
             return (
                 <div className="w-full max-w-4xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {selectedUnit?.htmlContent && (
+                        {hasUnitSummary && (
                             <Button
-                                onClick={() => handleSelectContent('unit', selectedUnit.id)}
+                                onClick={() => handleSelectContent('unit', selectedUnit!.id)}
                                 className="h-40 text-lg flex flex-col gap-2 bg-rose-600 hover:bg-rose-500 border-b-8 border-rose-800 active:border-b-0 active:translate-y-2 transition-all shadow-lg"
                             >
                                 <LayoutTemplate className="h-8 w-8"/>
-                                <span>{selectedUnit.title} (Ünite Özeti)</span>
+                                <span>{selectedUnit!.title} (Ünite Özeti)</span>
                             </Button>
                         )}
                         {contentTopics.map(topic => (

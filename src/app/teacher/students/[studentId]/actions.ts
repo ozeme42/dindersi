@@ -9,6 +9,27 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 
 
+import fs from 'fs/promises';
+import path from 'path';
+
+let CACHED_MANIFEST: { timestamp: number; data: any } | null = null;
+const MANIFEST_TTL = 1000 * 60 * 30;
+
+async function getLoadedManifest(): Promise<any | null> {
+    if (CACHED_MANIFEST && (Date.now() - CACHED_MANIFEST.timestamp < MANIFEST_TTL)) {
+        return CACHED_MANIFEST.data;
+    }
+    const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+    try {
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const data = JSON.parse(fileContent);
+        CACHED_MANIFEST = { timestamp: Date.now(), data };
+        return data;
+    } catch (e) {
+        return null;
+    }
+}
+
 // This new, single function fetches all necessary data in one go.
 export async function getStudentDetails(studentId: string): Promise<{ data?: StudentDetails; error?: string }> {
     noStore();
@@ -31,16 +52,26 @@ export async function getStudentDetails(studentId: string): Promise<{ data?: Stu
             uid: studentSnap.id,
             createdAt: (profileData.createdAt as Timestamp)?.toDate()?.toISOString() || null,
         } as UserProfile;
+
+        // Fetch remaining data in parallel
+        const recentActivityQuery = query(
+            collection(db, 'scoreEvents'),
+            where('userId', '==', studentId)
+        );
+
+        const [recentActivitySnapshot, coursesSnapshot, progressSnapshot, manifest] = await Promise.all([
+            getDocs(recentActivityQuery).catch((err) => {
+                console.warn("Could not fetch recent activity for student:", err);
+                return null;
+            }),
+            getDocs(collection(db, "courses")),
+            getDocs(collection(db, `users/${studentId}/progress`)),
+            getLoadedManifest(),
+        ]);
         
-        // Fetch recent activity safely
-        let recentActivity: ScoreEvent[] = [];
-        try {
-            const recentActivityQuery = query(
-                collection(db, 'scoreEvents'),
-                where('userId', '==', studentId)
-            );
-            const recentActivitySnapshot = await getDocs(recentActivityQuery);
-            recentActivity = recentActivitySnapshot.docs.map(doc => {
+        // Process recent activity
+        const recentActivity: ScoreEvent[] = recentActivitySnapshot 
+            ? recentActivitySnapshot.docs.map(doc => {
                 const data = doc.data();
                 return {
                     ...data,
@@ -51,18 +82,24 @@ export async function getStudentDetails(studentId: string): Promise<{ data?: Stu
                 const tA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
                 const tB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
                 return tB - tA;
-            }).slice(0, 10);
-        } catch (actErr) {
-            console.warn("Could not fetch recent activity for student:", actErr);
-        }
+            }).slice(0, 10)
+            : [];
         
-        // Fetch ALL courses to map names and calculate progress against
-        const coursesSnapshot = await getDocs(collection(db, "courses"));
         const allCoursesMap = new Map(coursesSnapshot.docs.map(doc => [doc.id, { id: doc.id, ...doc.data() } as Course]));
-        
-        // Fetch progress subcollection for the student
-        const progressCollectionRef = collection(db, `users/${studentId}/progress`);
-        const progressSnapshot = await getDocs(progressCollectionRef);
+
+        // Build course topic counts from manifest
+        const manifestTopicCounts = new Map<string, number>();
+        if (manifest?.classGroups) {
+            for (const cg of manifest.classGroups) {
+                for (const c of cg.courses || []) {
+                    let count = 0;
+                    for (const u of c.units || []) {
+                        count += (u.topics || []).length;
+                    }
+                    manifestTopicCounts.set(c.id, count);
+                }
+            }
+        }
         
         const coursesProgress = await Promise.all(progressSnapshot.docs.map(async (progressDoc) => {
             const courseId = progressDoc.id;
@@ -70,12 +107,16 @@ export async function getStudentDetails(studentId: string): Promise<{ data?: Stu
             
             if (!course) return null;
             
-            // This is an expensive operation, but necessary without denormalization
-            const unitsSnap = await getDocs(collection(db, 'courses', courseId, 'units'));
             let totalTopics = 0;
-            for (const unitDoc of unitsSnap.docs) {
-                const topicsSnap = await getDocs(collection(db, `courses/${courseId}/units/${unitDoc.id}/topics`));
-                totalTopics += topicsSnap.size;
+            if (manifestTopicCounts.has(courseId)) {
+                totalTopics = manifestTopicCounts.get(courseId) || 0;
+            } else {
+                // Fallback to Firestore
+                const unitsSnap = await getDocs(collection(db, 'courses', courseId, 'units'));
+                for (const unitDoc of unitsSnap.docs) {
+                    const topicsSnap = await getDocs(collection(db, `courses/${courseId}/units/${unitDoc.id}/topics`));
+                    totalTopics += topicsSnap.size;
+                }
             }
 
             const completedTopics = progressDoc.data().completedTopics || [];
@@ -89,18 +130,21 @@ export async function getStudentDetails(studentId: string): Promise<{ data?: Stu
             };
         }));
         
-        // Fetch Question Bank Stats
-        const questionBankStats: QuestionBankStats[] = [];
-        for (const course of allCoursesMap.values()) {
-            const stats = await getCourseQuestionBankStats(course.id, studentId);
-            if (stats.totalTests > 0 || stats.passedTests > 0) { // Only include courses with activity
-                 questionBankStats.push({
-                    ...stats,
-                    courseId: course.id,
-                    courseName: course.title,
-                });
-            }
-        }
+        // Fetch Question Bank Stats in parallel
+        const rawQBStats = await Promise.all(
+            Array.from(allCoursesMap.values()).map(async (course) => {
+                const stats = await getCourseQuestionBankStats(course.id, studentId);
+                if (stats.totalTests > 0 || stats.passedTests > 0) {
+                    return {
+                        ...stats,
+                        courseId: course.id,
+                        courseName: course.title,
+                    };
+                }
+                return null;
+            })
+        );
+        const questionBankStats: QuestionBankStats[] = rawQBStats.filter((s): s is QuestionBankStats => s !== null);
         
         const finalData = {
             profile: serializableProfile,
