@@ -3,17 +3,22 @@
 import { useState, useEffect, type RefObject } from 'react';
 import { Button } from '@/components/ui/button';
 import { Expand, Minimize } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function FullscreenToggle({ 
   elementRef,
   className,
   variant = "ghost",
-  size
+  size,
+  showLabel = false,
+  iconSize = "h-4 w-4"
 }: { 
   elementRef?: RefObject<HTMLElement | null>;
   className?: string;
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
   size?: "default" | "sm" | "lg" | "icon";
+  showLabel?: boolean;
+  iconSize?: string;
 }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -33,7 +38,7 @@ export function FullscreenToggle({
     if (!document.fullscreenElement) {
       // Using document.documentElement ensures body portals (Popovers, Selects, Dialogs)
       // remain inside the Fullscreen viewport and fully interactive.
-      const el = document.documentElement;
+      const el = (elementRef?.current) || document.documentElement;
       if (el.requestFullscreen) {
         el.requestFullscreen().catch(err => {
           console.error(`Error attempting to enable full-screen mode: ${err.message}`);
@@ -48,16 +53,26 @@ export function FullscreenToggle({
     }
   };
 
+  const titleText = isFullscreen ? "Tam Ekrandan Çık (F)" : "Tam Ekran Yap (F)";
+
   return (
     <Button 
       variant={variant} 
-      size={size || "default"} 
+      size={size || (showLabel ? "default" : "icon")} 
       onClick={toggleFullscreen} 
-      className={className}
-      title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap"}
+      className={cn("transition-all shrink-0", className)}
+      title={titleText}
+      aria-label={titleText}
     >
-      {isFullscreen ? <Minimize className="h-4 w-4 mr-1.5" /> : <Expand className="h-4 w-4 mr-1.5" />}
-      <span>{isFullscreen ? "Küçült" : "Tam Ekran"}</span>
+      {isFullscreen ? (
+        <Minimize className={cn(iconSize, showLabel && "mr-1.5")} />
+      ) : (
+        <Expand className={cn(iconSize, showLabel && "mr-1.5")} />
+      )}
+      {showLabel && (
+        <span className="text-xs font-semibold">{isFullscreen ? "Küçült" : "Tam Ekran"}</span>
+      )}
     </Button>
   );
 }
+

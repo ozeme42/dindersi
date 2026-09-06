@@ -506,8 +506,8 @@ function GameContent() {
                 <button className="bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm font-bold flex items-center gap-2 hover:bg-rose-500 hover:border-rose-400 transition text-white" onClick={handleExitClick}>
                     <Home size={16}/> Çıkış
                 </button>
-                <button className="bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm font-bold flex items-center gap-2 hover:bg-white/30 transition text-white" onClick={toggleFS}>
-                    <Maximize2 size={16}/> Tam Ekran
+                <button className="bg-white/10 border border-white/20 rounded-full px-3 py-1.5 md:px-4 md:py-2 text-sm font-bold flex items-center gap-2 hover:bg-white/30 transition text-white" onClick={toggleFS} title="Tam Ekran">
+                    <Maximize2 size={16}/> <span className="hidden sm:inline">Tam Ekran</span>
                 </button>
             </div>
 

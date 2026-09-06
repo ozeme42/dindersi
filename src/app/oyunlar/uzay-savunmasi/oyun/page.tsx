@@ -340,8 +340,8 @@ function SpaceDefenseGameContent() {
                     <button className="bg-white/10 border border-white/20 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-rose-500 hover:border-rose-400 transition" onClick={handleExitClick}>
                         <Home size={14}/> Çıkış
                     </button>
-                    <button className="bg-white/10 border border-white/20 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white/30 transition" onClick={toggleFS}>
-                        <Maximize2 size={14}/> Tam Ekran
+                    <button className="bg-white/10 border border-white/20 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white/30 transition text-white" onClick={toggleFS} title="Tam Ekran">
+                        <Maximize2 size={14}/> <span className="hidden sm:inline">Tam Ekran</span>
                     </button>
                 </div>
 

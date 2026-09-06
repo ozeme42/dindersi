@@ -440,8 +440,8 @@ function ClimbingDuelGameContent() {
                     <button className="bg-white/80 border border-gray-400 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white transition" onClick={() => { setSoundOn(!soundOn); initAudio(); }}>
                         {soundOn ? <Volume2 size={14}/> : <VolumeX size={14}/>} {soundOn ? "Ses: Açık" : "Ses: Kapalı"}
                     </button>
-                    <button className="bg-white/80 border border-gray-400 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white transition" onClick={toggleFS}>
-                        <Maximize2 size={14}/> Tam Ekran
+                    <button className="bg-white/80 border border-gray-400 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white transition" onClick={toggleFS} title="Tam Ekran">
+                        <Maximize2 size={14}/> <span className="hidden sm:inline">Tam Ekran</span>
                     </button>
                 </div>
 
