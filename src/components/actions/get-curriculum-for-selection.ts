@@ -17,28 +17,71 @@ export type ClassGroup = {
     courses: EnrichedCourse[] 
 };
 
+// In-memory cache for manifest.json (30 minutes TTL)
+let CACHED_MANIFEST: { timestamp: number; data: any } | null = null;
+const MANIFEST_TTL = 1000 * 60 * 30;
+
+export async function clearCurriculumSelectionCache() {
+    CACHED_MANIFEST = null;
+}
+
+async function getLoadedManifest(): Promise<any | null> {
+    if (CACHED_MANIFEST && (Date.now() - CACHED_MANIFEST.timestamp < MANIFEST_TTL)) {
+        return CACHED_MANIFEST.data;
+    }
+    const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+    try {
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const data = JSON.parse(fileContent);
+        CACHED_MANIFEST = { timestamp: Date.now(), data };
+        return data;
+    } catch (e) {
+        return null;
+    }
+}
+
 /**
  * Bu fonksiyon verinin statik mi yoksa canlı mı geleceğine karar verir.
- * Statik seçildiğinde 'public/curriculum/manifest.json' dosyasını okur.
+ * Statik öncelikli olarak 'public/curriculum/manifest.json' dosyasını ve RAM önbelleğini okur.
  */
 export async function getCurriculumForSelection(
     dataType: 'games' | 'yazilacaklar' | 'ozetler' | 'questions',
-    isStatic: boolean,
+    isStatic: boolean = true,
     userId?: string
 ): Promise<{ classGroups: ClassGroup[], error?: string }> {
     noStore();
     try {
-        if (isStatic) {
-            // DOSYALARI GÖRDÜĞÜ YER: public/curriculum/manifest.json
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-            try {
-                const fileContent = await fs.readFile(filePath, 'utf-8');
-                const data = JSON.parse(fileContent);
-                return { classGroups: data.classGroups || [] };
-            } catch (e) {
-                console.error("Manifest dosyası okunamadı, boş dönülüyor.");
-                return { classGroups: [] };
+        // 1. STATİK ÖNCELİK (0 FIRESTORE READS - In-memory Cached)
+        const manifest = await getLoadedManifest();
+        if (manifest && manifest.classGroups && (isStatic || isStatic === undefined)) {
+            let classGroups: ClassGroup[] = JSON.parse(JSON.stringify(manifest.classGroups));
+
+            // Veri tipine göre konuları ve üniteleri filtrele
+            if (dataType === 'ozetler' || dataType === 'yazilacaklar') {
+                classGroups = classGroups.map(group => ({
+                    ...group,
+                    courses: (group.courses || []).map(course => ({
+                        ...course,
+                        units: (course.units || []).map(unit => {
+                            const validTopics = (unit.topics || []).filter((topic: any) => {
+                                if (dataType === 'ozetler') return topic.hasOzetContent;
+                                if (dataType === 'yazilacaklar') return topic.hasYazilacaklarContent;
+                                return true;
+                            });
+                            return {
+                                ...unit,
+                                topics: validTopics
+                            };
+                        }).filter(unit => {
+                            if (dataType === 'ozetler') return unit.topics.length > 0 || (unit as any).hasUnitOzet;
+                            if (dataType === 'yazilacaklar') return unit.topics.length > 0;
+                            return true;
+                        })
+                    })).filter(course => course.units.length > 0)
+                })).filter(group => group.courses.length > 0);
             }
+
+            return { classGroups };
         }
 
         const db = getAdminDb();

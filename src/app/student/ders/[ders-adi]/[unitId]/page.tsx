@@ -90,7 +90,21 @@ function PageContent() {
             return cached;
         }
 
-        // 1. Check if Firestore has the topic steps
+        // 1. STATİK ÖNCELİK: /curriculum/flows/${contentId}.json (0ms, 0 Firestore reads)
+        try {
+            const res = await fetch(`/curriculum/flows/${contentId}.json`);
+            if (res.ok) {
+                const steps = await res.json();
+                if (Array.isArray(steps) && steps.length > 0) {
+                    setCachedSteps(contentId, steps);
+                    return steps;
+                }
+            }
+        } catch (e) {
+            console.warn(`Could not fetch static flow for ${contentId}:`, e);
+        }
+
+        // 2. FIRESTORE FALLBACK (Sadece statik dosya bulunamazsa çalışır)
         try {
             const targetUnitId = unitId || unitIdFromUrl;
             if (courseId && targetUnitId) {
@@ -106,19 +120,6 @@ function PageContent() {
             console.warn(`Firestore check for steps ${contentId} failed:`, e);
         }
 
-        // 2. Fallback to static flow JSON
-        try {
-            const res = await fetch(`/curriculum/flows/${contentId}.json?v=${Date.now()}`);
-            if (res.ok) {
-                const steps = await res.json();
-                if (Array.isArray(steps) && steps.length > 0) {
-                    setCachedSteps(contentId, steps);
-                    return steps;
-                }
-            }
-        } catch (e) {
-            console.warn(`Could not fetch static flow for ${contentId}:`, e);
-        }
         return [];
     };
 

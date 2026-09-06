@@ -10,6 +10,8 @@ import type { UserProfile, SchoolClass, Course, Unit, Topic, LessonStep, School,
 import fs from 'fs/promises';
 import path from 'path';
 import { clearStaticGameCache } from '@/lib/quiz-actions';
+import { clearCurriculumSelectionCache } from '@/components/actions/get-curriculum-for-selection';
+import { clearQuestionBankCache } from '@/app/student/soru-bankasi/actions';
 
 const serialize = (data: any): any => {
   if (data === null || data === undefined) return null;
@@ -305,6 +307,8 @@ export async function exportStaticAdvanced(
     }
 
     clearStaticGameCache();
+    clearCurriculumSelectionCache();
+    clearQuestionBankCache();
 
     return { 
       success: true, 

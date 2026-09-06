@@ -198,7 +198,7 @@ const STATIC_FILE_CACHE = new Map<string, any[]>();
 const STATIC_TOPIC_CACHE = new Map<string, (ActivityItem | Question)[]>();
 let CACHED_MANIFEST: any = null;
 
-export function clearStaticGameCache() {
+export async function clearStaticGameCache() {
     STATIC_FILE_CACHE.clear();
     STATIC_TOPIC_CACHE.clear();
     CACHED_MANIFEST = null;

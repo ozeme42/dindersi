@@ -51,6 +51,35 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
     const fetchInitialData = async () => {
       setIsLoading(true);
       try {
+        // 1. STATİK MANIFEST ÖNCELİĞİ (0 FIRESTORE READS):
+        try {
+          const mRes = await fetch('/curriculum/manifest.json');
+          if (mRes.ok) {
+            const mData = await mRes.json();
+            if (mData.classGroups && mData.classGroups.length > 0) {
+              const classes: SchoolClass[] = mData.classGroups.map((g: any, i: number) => ({
+                id: `class-${g.name}`,
+                name: g.name,
+                createdAt: i as any
+              }));
+              const loadedCourses: Course[] = mData.classGroups.flatMap((g: any) => 
+                (g.courses || []).map((c: any) => ({
+                  ...c,
+                  classId: `class-${g.name}`,
+                  className: g.name
+                }))
+              );
+              setAllClasses(classes);
+              setAllCourses(loadedCourses);
+              setIsLoading(false);
+              return;
+            }
+          }
+        } catch (mErr) {
+          console.warn("Manifest fetch error in tirmanma-yarisi, fallback to Firestore:", mErr);
+        }
+
+        // 2. FIRESTORE FALLBACK (Sadece statik dosya bulunamazsa)
         const [coursesSnapshot, classesSnapshot] = await Promise.all([
           getDocs(query(collection(db, "courses"), orderBy("title"))),
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
@@ -93,6 +122,16 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' }));
+    
+    // Statik veride üniteler zaten varsa doğrudan kullan (0ms, 0 Firestore reads)
+    const foundCourse = allCourses.find(c => c.id === courseId) || courses.find(c => c.id === courseId);
+    if (foundCourse && foundCourse.units && foundCourse.units.length > 0) {
+      setUnits(foundCourse.units);
+      setTopics([]);
+      handleNext();
+      return;
+    }
+
     setIsDataLoading(true);
     const unitsRef = collection(db, `courses/${courseId}/units`);
     const q = query(unitsRef, orderBy("title"));
@@ -108,14 +147,24 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
     if (unitId === 'all') {
       setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
       setTopics([]);
-    } else {
-      setIsDataLoading(true);
-      const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
-      const q = query(topicsRef, orderBy("title"));
-      const topicsSnapshot = await getDocs(q);
-      setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-      setIsDataLoading(false);
+      handleNext();
+      return;
     }
+
+    // Statik veride konular zaten varsa doğrudan kullan (0ms, 0 Firestore reads)
+    const foundUnit = units.find(u => u.id === unitId);
+    if (foundUnit && foundUnit.topics && foundUnit.topics.length > 0) {
+      setTopics(foundUnit.topics);
+      handleNext();
+      return;
+    }
+
+    setIsDataLoading(true);
+    const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
+    const q = query(topicsRef, orderBy("title"));
+    const topicsSnapshot = await getDocs(q);
+    setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+    setIsDataLoading(false);
     handleNext();
   };
   

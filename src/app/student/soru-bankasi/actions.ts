@@ -23,20 +23,44 @@ import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import fs from 'fs/promises';
 import path from 'path';
 
+// In-memory cache for manifest.json and question counts
+let CACHED_SB_MANIFEST: { timestamp: number; data: any } | null = null;
+const QUESTION_COUNTS_CACHE = new Map<string, { easy: number; medium: number; hard: number }>();
+const SB_CACHE_TTL = 1000 * 60 * 30; // 30 minutes
+
+export async function clearQuestionBankCache() {
+    CACHED_SB_MANIFEST = null;
+    QUESTION_COUNTS_CACHE.clear();
+}
+
+async function getLoadedSbManifest(): Promise<any | null> {
+    if (CACHED_SB_MANIFEST && (Date.now() - CACHED_SB_MANIFEST.timestamp < SB_CACHE_TTL)) {
+        return CACHED_SB_MANIFEST.data;
+    }
+    const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+    try {
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const data = JSON.parse(fileContent);
+        CACHED_SB_MANIFEST = { timestamp: Date.now(), data };
+        return data;
+    } catch (e) {
+        return null;
+    }
+}
+
 // 1. DERS BİLGİLERİNİ GETİR
 export async function getCourseForSoruBankasi(courseId: string): Promise<{ course: (Course & { units: { id: string; title: string; topics: { id: string; title: string; }[] }[] }) | null, error?: string }> {
     try {
         let courseData: any = null;
         try {
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const manifest = JSON.parse(fileContent);
-            
-            for (const group of manifest.classGroups || []) {
-                const found = group.courses?.find((c: any) => c.id === courseId);
-                if (found) {
-                    courseData = found;
-                    break;
+            const manifest = await getLoadedSbManifest();
+            if (manifest) {
+                for (const group of manifest.classGroups || []) {
+                    const found = group.courses?.find((c: any) => c.id === courseId);
+                    if (found) {
+                        courseData = found;
+                        break;
+                    }
                 }
             }
         } catch (e) {
@@ -178,9 +202,15 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
     }
 }
 
-// 4. SORU SAYILARINI GETİR
+// 4. SORU SAYILARINI GETİR (RAM Önbellekli & Statik Öncelikli)
 export async function getQuestionCounts(topicId: string): Promise<{ easy: number, medium: number, hard: number } | null> {
     if (!topicId) return null;
+    
+    // RAM Önbellek kontrolü (0ms, 0 disk I/O, 0 Firestore reads)
+    if (QUESTION_COUNTS_CACHE.has(topicId)) {
+        return QUESTION_COUNTS_CACHE.get(topicId)!;
+    }
+
     const counts = { easy: 0, medium: 0, hard: 0 };
     try {
         const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicId}.json`);
@@ -213,6 +243,7 @@ export async function getQuestionCounts(topicId: string): Promise<{ easy: number
         }
     }
 
+    QUESTION_COUNTS_CACHE.set(topicId, counts);
     return counts;
 }
 
@@ -402,15 +433,14 @@ export async function getCourseQuestionBankStats(courseId: string, userId: strin
     let totalScore = 0;
 
     if (courseResult.course?.units) {
-        for (const unit of courseResult.course.units) {
-            for (const topic of unit.topics) {
-                const counts = await getQuestionCounts(topic.id);
-                if (counts) {
-                    const easyTests = Math.ceil((counts.easy || 0) / 10);
-                    const mediumTests = Math.ceil((counts.medium || 0) / 10);
-                    const hardTests = Math.ceil((counts.hard || 0) / 10);
-                    totalTests += easyTests + mediumTests + hardTests;
-                }
+        const allTopics = courseResult.course.units.flatMap(u => u.topics || []);
+        const countsList = await Promise.all(allTopics.map(t => getQuestionCounts(t.id)));
+        for (const counts of countsList) {
+            if (counts) {
+                const easyTests = Math.ceil((counts.easy || 0) / 10);
+                const mediumTests = Math.ceil((counts.medium || 0) / 10);
+                const hardTests = Math.ceil((counts.hard || 0) / 10);
+                totalTests += easyTests + mediumTests + hardTests;
             }
         }
     }

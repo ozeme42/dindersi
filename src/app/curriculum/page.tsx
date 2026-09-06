@@ -39,8 +39,8 @@ function OzetDisplayPage() {
                 }
                 const htmlContent = await res.text();
                 
-                // Fetch title from Database instead of manifest.json
-                const { classGroups, error: fetchError } = await getCurriculumForSelection('ozetler', false);
+                // Fetch title from static manifest (0 Firestore reads)
+                const { classGroups, error: fetchError } = await getCurriculumForSelection('ozetler', true);
                 if (fetchError) throw new Error(fetchError);
                 
                 let title = '';

@@ -44,7 +44,7 @@ async function getAllDefinitionsForTopic(topicId: string, topicData?: any): Prom
 
     // 2. Statik yazılacaklar dosyası (/curriculum/yazilacaklar/${topicId}.json)
     try {
-        const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json?v=${Date.now()}`);
+        const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
         if (yRes.ok) {
             const yData = await yRes.json();
             if (Array.isArray(yData.conceptDefinitions)) {
@@ -55,7 +55,7 @@ async function getAllDefinitionsForTopic(topicId: string, topicData?: any): Prom
 
     // 3. Statik activities dosyası (/curriculum/activities/${topicId}.json)
     try {
-        const actRes = await fetch(`/curriculum/activities/${topicId}.json?v=${Date.now()}`);
+        const actRes = await fetch(`/curriculum/activities/${topicId}.json`);
         if (actRes.ok) {
             const items = await actRes.json();
             (items || []).forEach((item: any) => {
@@ -68,7 +68,7 @@ async function getAllDefinitionsForTopic(topicId: string, topicData?: any): Prom
 
     // 4. Statik flows dosyası (/curriculum/flows/${topicId}.json - conceptExplanation adımları)
     try {
-        const flowRes = await fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`);
+        const flowRes = await fetch(`/curriculum/flows/${topicId}.json`);
         if (flowRes.ok) {
             const steps = await flowRes.json();
             for (const step of steps || []) {
@@ -79,16 +79,18 @@ async function getAllDefinitionsForTopic(topicId: string, topicData?: any): Prom
         }
     } catch (e) {}
 
-    // 5. Firestore activityItems sorgusu (çevrimiçi eklenmiş yeni kavramlar varsa)
-    try {
-        const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.docs.forEach(doc => {
-            const item = doc.data();
-            addDef(item.content?.term || item.concept || item.term, item.content?.definition || item.definition);
-        });
-    } catch (error) {
-        console.warn("Firestore activityItems okuma uyarısı:", error);
+    // 5. Firestore activityItems sorgusu (Sadece statik dosyalarda kavram BULUNAMAZSA çalışır - 0 Firestore reads)
+    if (defsMap.size === 0) {
+        try {
+            const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.docs.forEach(doc => {
+                const item = doc.data();
+                addDef(item.content?.term || item.concept || item.term, item.content?.definition || item.definition);
+            });
+        } catch (error) {
+            console.warn("Firestore activityItems okuma uyarısı:", error);
+        }
     }
 
     const results = Array.from(defsMap.values());
@@ -112,7 +114,7 @@ async function getAllNotesForTopic(topicId: string, topicData?: any): Promise<st
     // Statik yazilacaklar
     if (notesSet.size === 0) {
         try {
-            const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json?v=${Date.now()}`);
+            const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
             if (yRes.ok) {
                 const yData = await yRes.json();
                 if (Array.isArray(yData.notes)) {
@@ -128,7 +130,7 @@ async function getAllNotesForTopic(topicId: string, topicData?: any): Promise<st
     // Statik flows
     if (notesSet.size === 0) {
         try {
-            const flowRes = await fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`);
+            const flowRes = await fetch(`/curriculum/flows/${topicId}.json`);
             if (flowRes.ok) {
                 const steps = await flowRes.json();
                 for (const step of steps || []) {
@@ -155,7 +157,7 @@ async function getHtmlContentForTopic(topicId: string, topicData?: any): Promise
         return topicData.htmlContent;
     }
     try {
-        const ozRes = await fetch(`/curriculum/ozetler/${topicId}.html?v=${Date.now()}`);
+        const ozRes = await fetch(`/curriculum/ozetler/${topicId}.html`);
         if (ozRes.ok) {
             return await ozRes.text();
         }
@@ -216,42 +218,55 @@ function DersNotlariDisplayPage() {
         setError(null);
         try {
             let courseData: any = null;
-            if (courseId) {
-                const courseSnap = await getDoc(doc(db, 'courses', courseId));
-                if (courseSnap.exists()) courseData = courseSnap.data();
-            }
+            let unitData: any = null;
+            let topicData: any = null;
+            let sortedTopics: any[] = [];
+            let topicTitle = '';
 
-            if (topicId === 'unit-summary') {
-                const unitRef = doc(db, 'courses', courseId, 'units', unitId);
-                const unitSnap = await getDoc(unitRef);
-                let unitData: any = null;
-                let sortedTopics: any[] = [];
-
-                if (unitSnap.exists()) {
-                    unitData = unitSnap.data() as any;
-                    const topicsSnap = await getDocs(query(collection(db, 'courses', courseId, 'units', unitId, 'topics')));
-                    sortedTopics = topicsSnap.docs
-                        .map(d => ({ id: d.id, ...d.data() as any }))
-                        .sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
-                }
-
-                // If topics not in Firestore, fallback to static manifest
-                if (sortedTopics.length === 0) {
-                    try {
-                        const manifestRes = await fetch('/curriculum/manifest.json');
-                        if (manifestRes.ok) {
-                            const manifest = await manifestRes.json();
-                            for (const g of manifest.classGroups || []) {
-                                for (const c of g.courses || []) {
-                                    if (c.id === courseId) {
-                                        const u = (c.units || []).find((un: any) => un.id === unitId);
-                                        if (u) {
-                                            if (!unitData) unitData = { title: u.title };
-                                            sortedTopics = (u.topics || []).sort((a: any, b: any) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
-                                        }
+            // 1. STATİK MANIFEST ÖNCELİĞİ (0 FIRESTORE READS):
+            try {
+                const manifestRes = await fetch('/curriculum/manifest.json');
+                if (manifestRes.ok) {
+                    const manifest = await manifestRes.json();
+                    for (const g of manifest.classGroups || []) {
+                        for (const c of g.courses || []) {
+                            if (c.id === courseId) {
+                                courseData = c;
+                                const u = (c.units || []).find((un: any) => un.id === unitId);
+                                if (u) {
+                                    unitData = u;
+                                    sortedTopics = (u.topics || []).sort((a: any, b: any) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+                                    const t = (u.topics || []).find((top: any) => top.id === topicId);
+                                    if (t) {
+                                        topicTitle = t.title;
+                                        topicData = t;
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            // 2. FIRESTORE FALLBACK (Sadece manifestte bulunamazsa):
+            if (!courseData && courseId) {
+                try {
+                    const courseSnap = await getDoc(doc(db, 'courses', courseId));
+                    if (courseSnap.exists()) courseData = courseSnap.data();
+                } catch (e) {}
+            }
+
+            if (topicId === 'unit-summary') {
+                if (sortedTopics.length === 0) {
+                    try {
+                        const unitRef = doc(db, 'courses', courseId, 'units', unitId);
+                        const unitSnap = await getDoc(unitRef);
+                        if (unitSnap.exists()) {
+                            unitData = unitSnap.data() as any;
+                            const topicsSnap = await getDocs(query(collection(db, 'courses', courseId, 'units', unitId, 'topics')));
+                            sortedTopics = topicsSnap.docs
+                                .map(d => ({ id: d.id, ...d.data() as any }))
+                                .sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
                         }
                     } catch (e) {}
                 }
@@ -278,7 +293,7 @@ function DersNotlariDisplayPage() {
                 let unitHtmlContent = unitData?.htmlContent || '';
                 if (!unitHtmlContent) {
                     try {
-                        const ozRes = await fetch(`/curriculum/ozetler/${unitId}.html?v=${Date.now()}`);
+                        const ozRes = await fetch(`/curriculum/ozetler/${unitId}.html`);
                         if (ozRes.ok) unitHtmlContent = await ozRes.text();
                     } catch (e) {}
                 }
@@ -295,29 +310,13 @@ function DersNotlariDisplayPage() {
                 setFlippedCards(new Array(allDefinitions.length).fill(false));
 
             } else {
-                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-                const topicSnap = await getDoc(topicRef);
-                const topicData = topicSnap.exists() ? (topicSnap.data() as any) : null;
-                
-                let topicTitle = topicData?.title || '';
-
                 if (!topicTitle) {
                     try {
-                        const manifestRes = await fetch('/curriculum/manifest.json');
-                        if (manifestRes.ok) {
-                            const manifest = await manifestRes.json();
-                            for (const g of manifest.classGroups || []) {
-                                for (const c of g.courses || []) {
-                                    if (c.id === courseId && !courseData) courseData = c;
-                                    for (const u of c.units || []) {
-                                        const t = u.topics?.find((top: any) => top.id === topicId);
-                                        if (t) {
-                                            topicTitle = t.title;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
+                        const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+                        const topicSnap = await getDoc(topicRef);
+                        if (topicSnap.exists()) {
+                            topicData = topicSnap.data() as any;
+                            topicTitle = topicData?.title || '';
                         }
                     } catch (e) {}
                 }
