@@ -375,7 +375,7 @@
               "id": "ARSRniTfx324ZswltLyy",
               "title": "3. Ünite: Rehberim Peygamberim",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "LuhvCsCnnHRijECrewoN",
@@ -446,14 +446,14 @@
                   "title": "2. Peltek Harfler",
                   "hasOzetContent": true,
                   "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
+                  "hasYazilacaklarContent": true
                 },
                 {
                   "id": "cONSl3a3UxrS7TmLpCcQ",
                   "title": "3. Bakara Suresinin 84-105. Ayetleri",
                   "hasOzetContent": true,
                   "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
+                  "hasYazilacaklarContent": true
                 },
                 {
                   "id": "DmQe81iBqwQN4tj4Ti4e",
@@ -473,9 +473,9 @@
                 {
                   "id": "rSisRECCjZf50AVCcHcS",
                   "title": "1. Med Çeşitleri",
-                  "hasOzetContent": false,
+                  "hasOzetContent": true,
                   "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
+                  "hasYazilacaklarContent": true
                 },
                 {
                   "id": "2p8trwfp4ILtZcaUHV2v",
@@ -499,6 +499,20 @@
                   "hasYazilacaklarContent": false
                 }
               ]
+            },
+            {
+              "id": "KrENViMJXNS0NcEGA9NA",
+              "title": "3. KUR'AN-I KERİM'İ ÖĞRENİYORUM",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": []
+            },
+            {
+              "id": "ACNDvhlmgWO1ai3MBYxa",
+              "title": "4. KUR'AN-I KERİM'İ OKUYORUM",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": []
             }
           ]
         },
@@ -510,7 +524,7 @@
               "id": "JiPLN1sC9hQG8PF6us3G",
               "title": "1️⃣ Peygamber ve İlahi Kitap İnancı",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "dUlyD8ZkXXJV4GUNBPnO",
@@ -546,7 +560,7 @@
               "id": "HaG39Z2i3AIE1XQznLZw",
               "title": "2️⃣ Ramazan ve Oruç",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "lqcPizeedgkmT1jt4Dll",
@@ -701,7 +715,7 @@
               "id": "UxthoHWEf7GS47946uOO",
               "title": "1. ÜNİTE: MELEK VE AHİRET İNANCI",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "Ukyvqbloj0GtGTMJy69q",
@@ -758,7 +772,7 @@
               "id": "cl2EvUjXPPI922VAJMbq",
               "title": "2. ÜNİTE: HAC VE KURBAN",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "I7Vz4s8Jx5JUdgawb9xV",
@@ -801,6 +815,93 @@
                   "hasOzetContent": true,
                   "hasFlowContent": true,
                   "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "S4vHNS7w2VUuvZqbVTT6",
+              "title": "3. ÜNİTE: AHLAKİ DAVRANIŞLAR",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "KCTvfHs1RNT4knKoIZMY",
+                  "title": "1.Güzel Ahlaki Tutum ve Davranışlar",
+                  "hasOzetContent": false,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "8FMpkTiJDwoz2umSkwV0",
+                  "title": "2.Bir Peygamber Tanıyorum: Hz. Salih (as)",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "odxVS39Y2izeqEWdHTrc",
+                  "title": "3.Bir Sure Tanıyorum: Felak Suresi ve Anlamı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "R6ulkTTFVnsPd764qowc",
+              "title": "4. ÜNİTE: ALLAH'IN KULU VE ELÇİSİ: HZ. MUHAMMED",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "lvfdJ9wBRN0Iq79Aq64I",
+                  "title": "1.Allah'ın (cc) Kulu Hz. Muhammed (sav)",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "AihejxFunV1NY7Ovqbxz",
+                  "title": "2.Allah'ın (cc) Elçisi Hz. Muhammed (sav)",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "q8MBLUpjdz79Tsxp3sQg",
+                  "title": "3.Bir Sure Tanıyorum: Kâfirun Suresi ve Anlamı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "MqW1hqa13Xs1eazQdLz8",
+              "title": "5. ÜNİTE: İSLAM DÜŞÜNCESİNDE YORUMLAR",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "IE0lbIBjejbHV1wpGXq8",
+                  "title": "1.Din Anlayışındaki Yorum Farklılıklarının Sebepleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "fIf8S6WYfRzOAF8pUKJP",
+                  "title": "2.İslam Düşüncesinde Yorum Biçimleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "yAitkNPFLaQUEP5eO0i4",
+                  "title": "3.İslam Düşüncesinde Tasavvufi Yorumlar",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
                 }
               ]
             }
@@ -923,6 +1024,85 @@
                   "hasYazilacaklarContent": false
                 }
               ]
+            },
+            {
+              "id": "PqkYDI0IbvELcbK6ooNX",
+              "title": "2. Ünite: Peygamberimizin Evrensel Mesajları",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "tt4v21i5nr1gWUL0aTmf",
+                  "title": "1. İnsanların Dokunulmazlıklarının Gözetilmesi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "YX3z80lliabfu86zXY0S",
+                  "title": "2. Adaletin Gözetilmesi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "lhsjMp5YQn1mVuxMGjxT",
+                  "title": "3. Kul Hakkının Gözetilmesi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "fxcdLENmB3QrRrZQN89p",
+                  "title": "4. Emanetin Gözetilmesi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "UiDbII92rXdWkFHhp5i7",
+              "title": "3. Ünite: Peygamberimiz ve Yakın Çevresi",
+              "hasUnitOzet": false,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "1tlWbYxDctomiuwNtCNS",
+                  "title": "1. Peygamberimizin Ehlibeyti",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "uJPG1H7YhrF8dGx9LGgs",
+                  "title": "2. İdeal Bir Eş Olarak Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "oN6xMOGO1pIDIVl3kMAi",
+                  "title": "3. Şefkatli Bir Baba Olarak Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "okvbNhNzAHZ5n76LuXql",
+                  "title": "4. Vefalı Bir Akraba Olarak Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "4OQHc69ENUrmTlPfnRSk",
+                  "title": "5. Hayırlı Bir Komşu Olarak Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
             }
           ]
         },
@@ -940,8 +1120,8 @@
                   "id": "boS1oBIqIGLq1IabkWbQ",
                   "title": "1. Kur'an-ı Kerim'in İslam Dinindeki Yeri ve Önemi",
                   "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
                 },
                 {
                   "id": "6d0INrzlzU8uzwQgrYTM",
@@ -1123,6 +1303,11 @@
               ]
             }
           ]
+        },
+        {
+          "id": "8h7JwF3M909ZeOTKqbrA",
+          "title": "DKAB",
+          "units": []
         }
       ]
     }
