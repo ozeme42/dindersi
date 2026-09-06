@@ -10,36 +10,7 @@ import { useParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { getCachedData, setCachedData } from '@/lib/lesson-cache';
-
-// Helper to fetch definitions directly from Firestore with smart cache
-async function getDefinitionsForTopic(topicId: string) {
-    if (!topicId) return [];
-    const cached = getCachedData<{ concept: string, definition: string }[]>(`defs_${topicId}`);
-    if (cached && cached.length > 0) return cached;
-
-    try {
-        const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
-        const querySnapshot = await getDocs(q);
-        const results = querySnapshot.docs.map(doc => {
-            const item = doc.data();
-            return {
-                concept: item.content.term || '',
-                definition: item.content.definition || ''
-            };
-        }).filter(item => item.concept && item.definition);
-
-        if (results.length > 0) {
-            setCachedData(`defs_${topicId}`, results);
-            return results;
-        }
-    } catch (error) {
-        console.error("Error fetching definitions for topic:", error);
-    }
-    return [];
-}
+import { getYazilacaklarContent } from '../actions';
 
 
 export function YazilacaklarDisplayPage() {
@@ -73,91 +44,18 @@ export function YazilacaklarDisplayPage() {
             setIsLoading(false);
             return;
         }
-
-        const cacheKey = `yazilacaklar_${courseId}_${unitId}_${topicId}`;
-        const cached = getCachedData<{ topicTitle: string; content: YazilacaklarContent }>(cacheKey);
-        if (cached) {
-            setTopicTitle(cached.topicTitle);
-            setContent(cached.content);
-            setIsLoading(false);
-            return;
-        }
-
         setIsLoading(true);
         setError(null);
         try {
-            const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-            const topicSnap = await getDoc(topicRef);
-            
-            if (topicSnap.exists()) {
-                const topicData = topicSnap.data() as Topic;
-                const title = topicData.title || '';
-                setTopicTitle(title);
-                
-                const definitions = await getDefinitionsForTopic(topicId);
-                const notes = topicData.writingContent?.notes || [];
-
-                if (definitions.length === 0 && notes.length === 0) {
-                     throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
+            const res = await getYazilacaklarContent(courseId, unitId, topicId);
+            if (res.data) {
+                setContent(res.data);
+                if (res.title) {
+                    setTopicTitle(res.title);
                 }
-                
-                const finalContent: YazilacaklarContent = { conceptDefinitions: definitions, notes: notes };
-                setCachedData(cacheKey, { topicTitle: title, content: finalContent });
-                setContent(finalContent);
-
             } else {
-                // Fallback to static yazilacaklar JSON and manifest
-                let foundTitle = 'Kavram Panosu';
-                try {
-                    const mRes = await fetch('/curriculum/manifest.json');
-                    if (mRes.ok) {
-                        const manifest = await mRes.json();
-                        for (const g of manifest.classGroups || []) {
-                            for (const c of g.courses || []) {
-                                for (const u of c.units || []) {
-                                    for (const t of u.topics || []) {
-                                        if (t.id === topicId) { foundTitle = t.title; break; }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } catch (mErr) {}
-                setTopicTitle(foundTitle);
-
-                try {
-                    const yRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
-                    if (yRes.ok) {
-                        const yData = await yRes.json();
-                        if ((yData.notes?.length || 0) > 0 || (yData.conceptDefinitions?.length || 0) > 0) {
-                            setCachedData(cacheKey, { topicTitle: foundTitle, content: yData });
-                            setContent(yData);
-                            return;
-                        }
-                    }
-                } catch (yErr) {}
-
-                // Try activities fallback
-                try {
-                    const aRes = await fetch(`/curriculum/activities/${topicId}.json`);
-                    if (aRes.ok) {
-                        const aData = await aRes.json();
-                        const defs = aData.filter((a: any) => a.type === 'definition' && a.content?.term && a.content?.definition)
-                                          .map((a: any) => ({ concept: a.content.term, definition: a.content.definition }));
-                        const notes = aData.filter((a: any) => a.type === 'sentence' && a.content?.text)
-                                           .map((a: any) => a.content.text);
-                        if (defs.length > 0 || notes.length > 0) {
-                            const fallbackContent: YazilacaklarContent = { conceptDefinitions: defs, notes };
-                            setCachedData(cacheKey, { topicTitle: foundTitle, content: fallbackContent });
-                            setContent(fallbackContent);
-                            return;
-                        }
-                    }
-                } catch (aErr) {}
-
-                throw new Error('Bu konu için yazılacak içerik bulunamadı.');
+                throw new Error(res.error || 'İçerik bulunamadı.');
             }
-
         } catch (e: any) {
             setError(e.message || 'İçerik alınırken bir hata oluştu.');
         } finally {

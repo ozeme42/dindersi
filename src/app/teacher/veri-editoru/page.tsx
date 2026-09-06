@@ -3,16 +3,17 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { ArrowLeft, Loader2, Book, Library, ListTodo, Users, FileJson, FileQuestion, Layers, FileText } from 'lucide-react';
+import { ArrowLeft, Loader2, Book, Library, ListTodo, Users, FileJson, FileQuestion, Layers, FileText, RefreshCw } from 'lucide-react';
 import { SelectionGrid } from '@/components/selection-grid';
 import { JsonDataEditor } from '@/components/json-data-editor';
 import { TextDataEditor } from '@/components/text-data-editor';
-import { getStaticData, saveStaticData, getStaticHtmlContent, saveStaticHtmlContent } from './actions';
+import { getStaticData, saveStaticData, getStaticHtmlContent, saveStaticHtmlContent, syncFirestoreToJson } from './actions';
 import { getExamCreationData } from '@/app/teacher/exams/actions';
 import type { Course, Unit, Topic, SchoolClass } from '@/lib/types';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils'; // Class birleştirme için eklendi (yoksa template literal kullanabilirsin)
+import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 type EnrichedCourse = Course & { units: (Unit & { topics: Topic[] })[] };
 
@@ -50,6 +51,36 @@ export default function VeriEditoruPage() {
     
     // --- YENİ: Editör aktif mi kontrolü ---
     const isEditorActive = activeData !== null;
+
+    const [isSyncing, setIsSyncing] = useState(false);
+    const { toast } = useToast();
+
+    const handleSync = async () => {
+        setIsSyncing(true);
+        try {
+            const res = await syncFirestoreToJson();
+            if (res.success) {
+                toast({
+                    title: "Senkronizasyon Başarılı!",
+                    description: res.message || `${res.syncedQuestions || 0} soru ve ${res.syncedActivities || 0} etkinlik JSON paketine eklendi. Artık %100 ücretsiz kota ile çalışacaktır.`,
+                });
+            } else {
+                toast({
+                    title: "Senkronizasyon Hatası",
+                    description: res.error || "İşlem sırasında hata oluştu.",
+                    variant: "destructive"
+                });
+            }
+        } catch (e: any) {
+            toast({
+                title: "Hata",
+                description: e.message || "Bağlantı hatası.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsSyncing(false);
+        }
+    };
 
     useEffect(() => {
         const fetchCurriculum = async () => {
@@ -198,7 +229,30 @@ export default function VeriEditoruPage() {
                         <Badge className="ml-3 bg-pink-500/20 text-pink-300 border-pink-500/30">STATİK DOSYA</Badge>
                       </div>
                   </h1>
-                  {!isEditorActive && <p className="text-slate-400 mt-1">Uygulamanın statik JSON dosyalarını doğrudan düzenleyin.</p>}
+                  {!isEditorActive && (
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-3">
+                          <p className="text-slate-400 text-sm">Uygulamanın statik JSON dosyalarını doğrudan düzenleyin.</p>
+                          <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handleSync}
+                              disabled={isSyncing}
+                              className="bg-purple-950/40 border-purple-500/30 hover:bg-purple-900/60 text-purple-200 text-xs font-semibold gap-2 transition-all shadow-sm h-8"
+                          >
+                              {isSyncing ? (
+                                  <>
+                                      <Loader2 className="h-3.5 w-3.5 animate-spin text-purple-400" />
+                                      Senkronize Ediliyor...
+                                  </>
+                              ) : (
+                                  <>
+                                      <RefreshCw className="h-3.5 w-3.5 text-purple-400" />
+                                      Firestore &rarr; JSON Senkronize Et (Kota Tasarrufu)
+                                  </>
+                              )}
+                          </Button>
+                      </div>
+                  )}
                 </div>
                 
                  {/* DEĞİŞİKLİK 2: Card yüksekliği ve padding 

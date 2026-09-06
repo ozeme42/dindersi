@@ -11,105 +11,71 @@ import {
   getDoc, 
   runTransaction, 
   serverTimestamp, 
-  increment 
+  increment,
+  arrayUnion
 } from "firebase/firestore";
-import type { Course, Unit, Topic, UserProgress } from "@/lib/types";
-
-// --- SUNUCU TARAFLI SERİLEŞTİRİCİ ---
-// Firebase Timestamp objelerini ve diğer karmaşık yapıları Client'a geçmeden önce 
-// Next.js'in kabul edeceği saf (plain) string veya objelere dönüştürür.
-function serializeData(data: any): any {
-  if (data === null || data === undefined) return data;
-  
-  // Aktif Firestore Timestamp objesi ise
-  if (typeof data === 'object' && typeof data.toDate === 'function') {
-    return data.toDate().toISOString();
-  }
-  
-  // Raw Timestamp formatında gelmişse
-  if (typeof data === 'object' && 'seconds' in data && 'nanoseconds' in data) {
-    return new Date(data.seconds * 1000).toISOString();
-  }
-
-  // JS Date objesi ise
-  if (data instanceof Date) {
-    return data.toISOString();
-  }
-
-  // Array ise içindeki tüm elemanları gez
-  if (Array.isArray(data)) {
-    return data.map(serializeData);
-  }
-
-  // Obje ise içindeki tüm key'leri gez
-  if (typeof data === 'object') {
-    const newData: any = {};
-    for (const key of Object.keys(data)) {
-      newData[key] = serializeData(data[key]);
-    }
-    return newData;
-  }
-  
-  return data;
-}
-
 import fs from 'fs/promises';
 import path from 'path';
 
-// 1. Öğrencinin sınıfına ait dersleri ve içeriklerini getir
-export async function getStudentCurriculum(classId?: string | null, userClassString?: string | null) {
+let MANIFEST_CACHE: any = null;
+
+// 1. Öğrencinin sınıfına ait dersleri ve içeriklerini getir (STATİK MANIFEST ÖNCELİKLİ - 0 KOTA MALİYETİ)
+export async function getStudentCurriculum(classId: string, className?: string) {
   try {
-    let courses: (Course & { units: any[] })[] = [];
-
-    if (classId) {
-      const q = query(
-        collection(db, "courses"), 
-        where("classId", "==", classId),
-        orderBy("title", "asc")
-      );
-      const coursesSnap = await getDocs(q);
-
-      for (const courseDoc of coursesSnap.docs) {
-        const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
-        
-        const unitsRef = collection(db, `courses/${courseDoc.id}/units`);
-        const unitsSnap = await getDocs(query(unitsRef, orderBy("title", "asc")));
-        
-        const units = [];
-        for (const unitDoc of unitsSnap.docs) {
-          const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-          
-          const topicsRef = collection(db, `courses/${courseDoc.id}/units/${unitDoc.id}/topics`);
-          const topicsSnap = await getDocs(query(topicsRef, orderBy("title", "asc")));
-          const topics = topicsSnap.docs.map(t => ({ id: t.id, ...t.data() } as Topic));
-          
-          units.push({ ...unitData, topics });
-        }
-        
-        courses.push({ ...courseData, units });
+    // 1. Statik Manifest Önceliği (0 Firestore Okuması):
+    try {
+      if (!MANIFEST_CACHE) {
+        const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+        const content = await fs.readFile(manifestPath, 'utf-8');
+        MANIFEST_CACHE = JSON.parse(content);
       }
+      
+      if (MANIFEST_CACHE && MANIFEST_CACHE.classGroups) {
+        const cleanName = className ? className.replace(/[^0-9]/g, '') || className : '';
+        const group = MANIFEST_CACHE.classGroups.find((g: any) => 
+          (cleanName && g.name === cleanName) ||
+          (className && g.name === className) || 
+          (classId && g.id === classId)
+        );
+        if (group && group.courses && group.courses.length > 0) {
+          return group.courses;
+        }
+      }
+    } catch(e) {
+      console.warn("Manifest okuma uyarısı:", e);
     }
 
-    // If courses from Firestore is empty or all courses have 0 units, load from manifest.json
-    if (courses.length === 0 || courses.every(c => !c.units || c.units.length === 0)) {
-      try {
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        const manifest = JSON.parse(fileContent);
+    // 2. Fallback: Firestore (Sadece manifestte bulunamazsa)
+    const q = query(
+      collection(db, "courses"), 
+      where("classId", "==", classId),
+      orderBy("title", "asc")
+    );
+    const coursesSnap = await getDocs(q);
+    
+    const courses: (Course & { units: any[] })[] = [];
+
+    for (const courseDoc of coursesSnap.docs) {
+      const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
+      
+      const unitsRef = collection(db, `courses/${courseDoc.id}/units`);
+      const unitsSnap = await getDocs(query(unitsRef, orderBy("title", "asc")));
+      
+      const units = [];
+      for (const unitDoc of unitsSnap.docs) {
+        const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
         
-        const gradeStr = (userClassString || '').match(/\d+/)?.[0] || '5';
-        const targetGroup = manifest.classGroups?.find((g: any) => g.name === gradeStr || String(g.name).includes(gradeStr)) || manifest.classGroups?.[0];
+        const topicsRef = collection(db, `courses/${courseDoc.id}/units/${unitDoc.id}/topics`);
+        const topicsSnap = await getDocs(query(topicsRef, orderBy("title", "asc")));
+        const topics = topicsSnap.docs.map(t => ({ id: t.id, ...t.data() } as Topic));
         
-        if (targetGroup && targetGroup.courses && targetGroup.courses.length > 0) {
-          courses = targetGroup.courses;
-        }
-      } catch (manifestErr) {
-        console.error("Manifest fallback error in getStudentCurriculum:", manifestErr);
+        units.push({ ...unitData, topics });
       }
+      
+      courses.push({ ...courseData, units });
     }
 
-    // KRİTİK NOKTA: Veriyi Client'a göndermeden önce serileştiriyoruz.
-    return serializeData(courses);
+    return courses;
   } catch (error) {
     console.error("Müfredat hatası:", error);
     return [];
@@ -123,8 +89,7 @@ export async function getUserTopicProgress(userId: string) {
     const docSnap = await getDoc(docRef);
     
     if (docSnap.exists()) {
-      // KRİTİK NOKTA: İlerleme verisini de serileştiriyoruz.
-      return serializeData(docSnap.data() as UserProgress);
+      return docSnap.data() as UserProgress;
     }
     return {};
   } catch (error) {
@@ -152,7 +117,6 @@ export async function getUserTopicGameScores(userId: string, topicId: string) {
             }
         });
         
-        // Puanlar sadece sayı olduğu için burada serileştirmeye gerek yok
         return scores;
     } catch (error) {
         console.error("Skorlar çekilemedi", error);
@@ -160,7 +124,7 @@ export async function getUserTopicGameScores(userId: string, topicId: string) {
     }
 }
 
-// 4. Bölüm Sonu Ödülünü Al, Puanı İşle ve KONUYU TAMAMLANDI SAY
+// 4. Bölüm Sonu Ödülünü Al, Puanı İşle ve KONUYU TAMAMLANDI SAY (DÜZELTİLEN KISIM)
 export async function claimTopicRewardAction(userId: string, topicId: string, reward: number, topicTitle: string) {
   try {
     // 1. Kontrol: Bu ödül daha önce alınmış mı?
@@ -187,9 +151,10 @@ export async function claimTopicRewardAction(userId: string, topicId: string, re
       const userDoc = await transaction.get(userRef);
       if (!userDoc.exists()) throw new Error("Kullanıcı bulunamadı.");
 
-      // A: Kullanıcıya puanı ekle
+      // A: Kullanıcıya puanı ekle ve tamamlanan konuyu profile işle
       transaction.update(userRef, {
-        score: increment(reward)
+        score: increment(reward),
+        completedTopics: arrayUnion(topicId)
       });
 
       // B: ScoreEvents'e kayıt at (Log)
@@ -205,13 +170,14 @@ export async function claimTopicRewardAction(userId: string, topicId: string, re
       });
 
       // C: KRİTİK KISIM - Konuyu 'Tamamlandı' olarak işaretle
+      // Bu sayede bir sonraki konunun kilidi açılacak.
       transaction.set(userProgressRef, {
         [topicId]: {
-            completionCount: increment(1), 
+            completionCount: increment(1), // Tamamlanma sayısını artır
             completed: true,
             lastCompletedAt: serverTimestamp()
         }
-      }, { merge: true }); 
+      }, { merge: true }); // Diğer konuların verisini silmemek için merge: true
     });
 
     return { success: true };

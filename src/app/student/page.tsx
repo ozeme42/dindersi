@@ -10,7 +10,7 @@ import {
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, where, orderBy, Timestamp, onSnapshot, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy, Timestamp, onSnapshot, doc, getDoc, getCountFromServer, limit } from "firebase/firestore";
 import type { UserProfile } from "@/lib/types";
 import { getStudentExams } from "@/app/student/deneme/actions";
 import { forceStreakCheck } from "@/app/student/actions"; 
@@ -27,12 +27,30 @@ function HardestWorkersToday() {
 
     useEffect(() => {
         const fetchDailyTop = async () => {
+            const cacheKey = 'hardest_workers_today_cache';
+            try {
+                const cached = sessionStorage.getItem(cacheKey);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (parsed.timestamp && Date.now() - parsed.timestamp < 15 * 60 * 1000 && Array.isArray(parsed.data)) {
+                        setDailyTop(parsed.data);
+                        setIsLoading(false);
+                        return;
+                    }
+                }
+            } catch (e) {}
+
             setIsLoading(true);
             try {
                 const now = new Date();
                 const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
                 const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-                const q = query(collection(db, 'scoreEvents'), where('timestamp', '>=', Timestamp.fromDate(startOfDay)), where('timestamp', '<=', Timestamp.fromDate(endOfDay)));
+                const q = query(
+                    collection(db, 'scoreEvents'),
+                    where('timestamp', '>=', Timestamp.fromDate(startOfDay)),
+                    where('timestamp', '<=', Timestamp.fromDate(endOfDay)),
+                    limit(60)
+                );
                 const snapshot = await getDocs(q);
                 const userScores: Record<string, number> = {};
                 snapshot.docs.forEach(d => {
@@ -47,6 +65,9 @@ function HardestWorkersToday() {
                     if(userDoc.exists()) topUsers.push({ ...userDoc.data() as UserProfile, uid, score: calculatedDailyScore });
                 }
                 setDailyTop(topUsers);
+                try {
+                    sessionStorage.setItem(cacheKey, JSON.stringify({ data: topUsers, timestamp: Date.now() }));
+                } catch (e) {}
             } catch(e) { console.error(e); } finally { setIsLoading(false); }
         };
         fetchDailyTop();
@@ -189,35 +210,118 @@ function PageContent() {
     async function fetchData() {
       if (loading) return;
       if (!user?.uid) { setIsLoading(false); router.push('/login'); return; }
+
+      // 1. SESSION STORAGE CACHE (15 DAKİKA - 0 FIRESTORE READS):
+      const cacheKey = `student_dashboard_stats_${user.uid}`;
+      try {
+          const cached = sessionStorage.getItem(cacheKey);
+          if (cached) {
+              const parsed = JSON.parse(cached);
+              if (parsed.timestamp && Date.now() - parsed.timestamp < 15 * 60 * 1000 && parsed.stats && parsed.examStats) {
+                  setStats(parsed.stats);
+                  setExamStats(parsed.examStats);
+                  setIsLoading(false);
+                  return;
+              }
+          }
+      } catch (e) {}
+
       setIsLoading(true);
       try {
         const now = new Date();
         const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-        const [, allCoursesSnapshot, allUsersSnapshot, examsSnapshot, todayScoreSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-          getDocs(collection(db, "courses")),
-          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+
+        // KOTA KORUMASI:
+        // 1. Tüm öğrencileri (allUsersSnapshot) çekmek KALDIRILDI.
+        // 2. getCountFromServer ile sunucudan sadece 1 sayısal okuma.
+        // 3. classes ve courses tabloları sorgulanmaz.
+        // 4. scoreEvents için limit(50) uygulandı.
+
+        const [examsSnapshot, todayScoreSnapshot, higherScoreUsers] = await Promise.all([
           getStudentExams(user.uid),
-          getDocs(query(collection(db, 'scoreEvents'), where('userId', '==', user.uid), where('timestamp', '>=', Timestamp.fromDate(startOfDay)), where('timestamp', '<=', Timestamp.fromDate(endOfDay))))
+          getDocs(query(
+              collection(db, 'scoreEvents'),
+              where('userId', '==', user.uid),
+              where('timestamp', '>=', Timestamp.fromDate(startOfDay)),
+              where('timestamp', '<=', Timestamp.fromDate(endOfDay)),
+              limit(50)
+          )),
+          getCountFromServer(query(
+              collection(db, 'users'),
+              where('role', '==', 'student'),
+              where('score', '>', user.score || 0)
+          ))
         ]);
-        if(examsSnapshot.success && examsSnapshot.data) {
-            const pending = examsSnapshot.data.filter((a: any) => !a.solvedEvent).length;
-            setExamStats({ pending, solved: examsSnapshot.data.length - pending });
+
+        let pendingExams = 0;
+        let solvedExams = 0;
+        if (examsSnapshot.success && examsSnapshot.data) {
+            pendingExams = examsSnapshot.data.filter((a: any) => !a.solvedEvent).length;
+            solvedExams = examsSnapshot.data.length - pendingExams;
+            setExamStats({ pending: pendingExams, solved: solvedExams });
         }
+
         const todayTotal = todayScoreSnapshot.docs.reduce((s, d) => s + (d.data().points || 0), 0);
-        const allStudents = allUsersSnapshot.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile & {uid: string}));
-        const sorted = [...allStudents].sort((a,b) => (b.score||0)-(a.score||0));
-        let classRank = 0, branchRank = 0;
-        if(user.class) {
+        const generalRank = (higherScoreUsers.data().count || 0) + 1;
+
+        let classRank = 1;
+        let branchRank = 1;
+
+        if (user.class) {
             const userGrade = user.class.match(/\d+/)?.[0] || user.class.split(' - ')[0];
-            classRank = allStudents.filter(s => {
-                const sGrade = s.class?.match(/\d+/)?.[0];
-                return (sGrade && sGrade === userGrade) || s.class?.startsWith(userGrade);
-            }).sort((a,b) => (b.score||0)-(a.score||0)).findIndex(s => s.uid === user.uid) + 1;
-            branchRank = allStudents.filter(s => s.class === user.class).sort((a,b) => (b.score||0)-(a.score||0)).findIndex(s => s.uid === user.uid) + 1;
+            try {
+                const [higherInGrade, higherInBranch] = await Promise.all([
+                    getCountFromServer(query(
+                        collection(db, 'users'),
+                        where('role', '==', 'student'),
+                        where('class', '>=', userGrade),
+                        where('class', '<=', userGrade + '\uf8ff'),
+                        where('score', '>', user.score || 0)
+                    )),
+                    getCountFromServer(query(
+                        collection(db, 'users'),
+                        where('role', '==', 'student'),
+                        where('class', '==', user.class),
+                        where('score', '>', user.score || 0)
+                    ))
+                ]);
+                classRank = (higherInGrade.data().count || 0) + 1;
+                branchRank = (higherInBranch.data().count || 0) + 1;
+            } catch (rErr) {
+                console.warn("Rank count error:", rErr);
+            }
         }
-        setStats({ totalCourses: allCoursesSnapshot.size, generalRank: sorted.findIndex(s => s.uid === user.uid)+1, classRank, branchRank, todayScore: todayTotal });
+
+        let totalCoursesCount = 1;
+        try {
+            const mRes = await fetch('/curriculum/manifest.json');
+            if (mRes.ok) {
+                const mData = await mRes.json();
+                const studentGrade = user.class?.match(/\d+/)?.[0];
+                const group = mData.classGroups?.find((g: any) => g.name === studentGrade);
+                totalCoursesCount = group?.courses?.length || 1;
+            }
+        } catch (mErr) {}
+
+        const newStats = {
+            totalCourses: totalCoursesCount,
+            generalRank,
+            classRank,
+            branchRank,
+            todayScore: todayTotal
+        };
+        const newExamStats = { pending: pendingExams, solved: solvedExams };
+
+        setStats(newStats);
+        try {
+            sessionStorage.setItem(cacheKey, JSON.stringify({
+                stats: newStats,
+                examStats: newExamStats,
+                timestamp: Date.now()
+            }));
+        } catch (e) {}
+
       } catch(e) { console.error(e); } finally { setIsLoading(false); }
     }
     fetchData();

@@ -7,9 +7,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { getCachedData, setCachedData } from '@/lib/lesson-cache';
+import { getSingleOzet } from '../actions';
 
 function OzetDisplayPage() {
     const params = useParams();
@@ -41,80 +39,14 @@ function OzetDisplayPage() {
         }
 
         const fetchData = async () => {
-            const targetId = topicId || unitId;
-            const cacheKey = `ozet_${courseId}_${unitId}_${targetId}`;
-            const cached = getCachedData<{title: string, htmlContent: string, courseName: string}>(cacheKey);
-            if (cached) {
-                setContent(cached);
-                setIsLoading(false);
-                return;
-            }
-
             setIsLoading(true);
             try {
-                const docRef = topicId 
-                    ? doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId)
-                    : doc(db, 'courses', courseId, 'units', unitId);
-                
-                const [docSnap, courseSnap] = await Promise.all([
-                    getDoc(docRef),
-                    getDoc(doc(db, 'courses', courseId))
-                ]);
-
-                if (!docSnap.exists() || !docSnap.data()?.htmlContent) {
-                    try {
-                        const ozRes = await fetch(`/curriculum/ozetler/${targetId}.html`);
-                        if (ozRes.ok) {
-                            const htmlContent = await ozRes.text();
-                            let foundTitle = topicId ? 'Konu Özeti' : 'Ünite Özeti';
-                            let courseTitle = courseSnap.exists() ? courseSnap.data()?.title : 'Ders';
-
-                            try {
-                                const mRes = await fetch('/curriculum/manifest.json');
-                                if (mRes.ok) {
-                                    const manifest = await mRes.json();
-                                    for (const g of manifest.classGroups || []) {
-                                        for (const c of g.courses || []) {
-                                            if (c.id === courseId) courseTitle = c.title;
-                                            for (const u of c.units || []) {
-                                                if (u.id === targetId) foundTitle = u.title;
-                                                for (const t of u.topics || []) {
-                                                    if (t.id === targetId) { foundTitle = t.title; break; }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (mErr) {}
-
-                            const resData = {
-                                title: foundTitle,
-                                htmlContent,
-                                courseName: courseTitle
-                            };
-                            setCachedData(cacheKey, resData);
-                            setContent(resData);
-                            setIsLoading(false);
-                            return;
-                        }
-                    } catch (ozErr) {}
-
-                    setError("Bu konu için interaktif özet içeriği henüz eklenmemiş.");
-                    setIsLoading(false);
-                    return;
+                const res = await getSingleOzet(courseId, unitId, topicId);
+                if (res.data) {
+                    setContent(res.data);
+                } else {
+                    setError(res.error || "İçerik bulunamadı.");
                 }
-
-                const data = docSnap.data();
-                const courseData = courseSnap.data();
-
-                const finalData = { 
-                    title: data.title, 
-                    htmlContent: data.htmlContent, 
-                    courseName: courseData?.title || 'Ders' 
-                };
-                setCachedData(cacheKey, finalData);
-                setContent(finalData);
-
             } catch (e: any) {
                 console.error(e);
                 setError("Veri çekilirken bir hata oluştu.");
