@@ -2,6 +2,7 @@
 
 import fs from 'fs/promises';
 import path from 'path';
+import { clearStaticGameCache } from '@/lib/quiz-actions';
 
 // Helper to ensure the directory exists
 async function ensureDirExists(filePath: string) {
@@ -42,6 +43,7 @@ export async function saveStaticData(dataType: string, id: string, data: any): P
         await ensureDirExists(filePath);
         const fileContent = JSON.stringify(data, null, 2); // Pretty-print
         await fs.writeFile(filePath, fileContent, 'utf-8');
+        clearStaticGameCache();
         return { success: true };
     } catch (error: any) {
         return { success: false, error: 'Dosya yazılırken hata oluştu.' };
@@ -172,6 +174,8 @@ export async function syncFirestoreToJson(): Promise<{ success: boolean; message
 
             await fs.writeFile(filePath, JSON.stringify(merged, null, 2), 'utf-8');
         }
+
+        clearStaticGameCache();
 
         return {
             success: true,

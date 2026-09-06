@@ -198,6 +198,13 @@ const STATIC_FILE_CACHE = new Map<string, any[]>();
 const STATIC_TOPIC_CACHE = new Map<string, (ActivityItem | Question)[]>();
 let CACHED_MANIFEST: any = null;
 
+export function clearStaticGameCache() {
+    STATIC_FILE_CACHE.clear();
+    STATIC_TOPIC_CACHE.clear();
+    CACHED_MANIFEST = null;
+    MEMORY_CACHE.clear();
+}
+
 const readJsonFile = async (filePath: string): Promise<any[] | null> => {
     if (STATIC_FILE_CACHE.has(filePath)) {
         return STATIC_FILE_CACHE.get(filePath) || null;

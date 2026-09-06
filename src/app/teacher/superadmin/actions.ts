@@ -9,6 +9,7 @@ import type { UserProfile, SchoolClass, Course, Unit, Topic, LessonStep, School,
 
 import fs from 'fs/promises';
 import path from 'path';
+import { clearStaticGameCache } from '@/lib/quiz-actions';
 
 const serialize = (data: any): any => {
   if (data === null || data === undefined) return null;
@@ -302,6 +303,8 @@ export async function exportStaticAdvanced(
         const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);
         await Promise.all(chunk.map(file => fs.writeFile(file.path, file.content)));
     }
+
+    clearStaticGameCache();
 
     return { 
       success: true, 
