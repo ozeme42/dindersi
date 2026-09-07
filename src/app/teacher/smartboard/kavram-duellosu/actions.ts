@@ -35,7 +35,17 @@ export async function getKavramDuellosuQuestions(
         }
 
         if (pairs.length < 1) {
-            return { error: "Bu oyun için en az 1 tanım/soru gereklidir.", questions: [] };
+            const defaultPairs = [
+                { term: 'Tevhit', definition: 'Allah’ın bir ve tek olduğuna, eşi ve benzeri bulunmadığına inanmak.' },
+                { term: 'İman', definition: 'Allah’ın varlığına, birliğine ve Hz. Peygamber’in getirdiklerine yürekten inanmak.' },
+                { term: 'İbadet', definition: 'Allah’ın rızasını kazanmak amacıyla yapılan her türlü güzel amel ve kulluk görevi.' },
+                { term: 'Ahlak', definition: 'İnsanın iyi veya kötü olarak nitelendirilmesine yol açan manevi nitelikleri ve davranışları.' },
+                { term: 'Nübüvvet', definition: 'Peygamberlik müessesesi; Allah’ın kullarına elçi göndermesi.' },
+                { term: 'Kuran', definition: 'Allah tarafından Hz. Muhammed’e vahiy yoluyla indirilen son ilahi kitap.' },
+                { term: 'Sünnet', definition: 'Hz. Peygamber’in sözleri, fiilleri ve sahabilerin yaptıklarını onaylaması.' },
+                { term: 'Takva', definition: 'Allah’a karşı sorumluluk bilinciyle günahlardan sakınma ve emirlerine uyma hali.' }
+            ];
+            pairs.push(...defaultPairs);
         }
 
         const allTerms = [...new Set([...pairs.map(p => p.term), ...(pairs.length < 4 ? fallbackPool : [])])];
