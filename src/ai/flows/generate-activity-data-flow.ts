@@ -14,6 +14,8 @@ const AiActivityDataInputSchema = z.object({
   generateConcepts: z.boolean().describe('Generate a list of key concepts?'),
   generateDefinitions: z.boolean().describe('Generate concept-definition pairs?'),
   generateSentences: z.boolean().describe('Generate summary sentences?'),
+  countPerType: z.number().optional().describe('Target count of items to generate per type.'),
+  customPrompt: z.string().optional().describe('Optional teacher specific instructions.'),
   apiKey: z.string().optional(),
   modelName: z.string().optional(),
 });
@@ -35,17 +37,24 @@ export async function generateActivityData(input: AiActivityDataInput): Promise<
     throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı kaydedin.');
   }
 
+  const targetCount = input.countPerType && input.countPerType > 0 ? input.countPerType : 6;
   const instructions: string[] = [];
 
   if (input.generateConcepts || input.generateDefinitions) {
     instructions.push(
-      `- **Kavram - Tanım Çiftleri (conceptDefinitions)**: Konuyla ilgili 5-10 adet "Ben Kimim?" tarzı soru/ipucu tanımı ve kavram üret. 'definition' alanında ipucu tanımı, 'concept' alanında ise tek kelimelik veya kısa kavram adı yer almalıdır. Tanım metninde kavramın kendi adı KESİNLİKLE GEÇMEMELİDİR.`
+      `- **Kavram - Tanım Çiftleri (conceptDefinitions)**: Konuyla ilgili tam ${targetCount} adet "Ben Kimim?" tarzı soru/ipucu tanımı ve kavram üret. 'definition' alanında ipucu tanımı, 'concept' alanında ise tek kelimelik veya kısa kavram adı yer almalıdır. Tanım metninde kavramın kendi adı KESİNLİKLE GEÇMEMELİDİR.`
     );
   }
 
   if (input.generateSentences) {
     instructions.push(
-      `- **Özet Cümleler (summarySentences)**: Konunun en önemli noktalarını özetleyen 5-10 adet cümle üret. ZORUNLU KURAL: Her bir cümle EN FAZLA 6 KELİMEDEN oluşmalıdır. Asla 6 kelimeden uzun cümle üretme.`
+      `- **Özet Cümleler (summarySentences)**: Konunun en önemli noktalarını özetleyen tam ${targetCount} adet cümle üret. ZORUNLU KURAL: Her bir cümle EN FAZLA 6 KELİMEDEN oluşmalıdır. Anagram ve cümle kurma oyunlarında kullanıldığı için asla 6 kelimeden uzun cümle üretme.`
+    );
+  }
+
+  if (input.customPrompt && input.customPrompt.trim().length > 0) {
+    instructions.push(
+      `- **ÖĞRETMEN ÖZEL TALİMATI**: """${input.customPrompt.trim()}""" Bu talimata kesinlikle uymalısın.`
     );
   }
 

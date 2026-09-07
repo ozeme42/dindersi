@@ -31,8 +31,21 @@ import {
     CalendarClock,
     Search,
     Filter,
-    Home
+    Home,
+    BookOpen,
+    Eye,
+    Copy
 } from "lucide-react";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { saveTopicSourceText } from "@/app/teacher/source-texts/actions";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -55,7 +68,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, where, Timestamp } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, orderBy, where, Timestamp } from "firebase/firestore";
 import type { Question, Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { AIGenerationDialog } from "@/components/ai-generation-dialog";
@@ -171,7 +184,32 @@ export default function ExamQuestionBankPage() {
   const [editingState, setEditingState] = useState<{ question: Question, index: number } | null>(null);
   const [isBulkOpen, setIsBulkOpen] = useState(false);
   const [isAIGenOpen, setIsAIGenOpen] = useState(false);
+  const [topicSourceText, setTopicSourceText] = useState<string>('');
+  const [isSourceTextLoading, setIsSourceTextLoading] = useState<boolean>(false);
+  const [isSourceTextEditorOpen, setIsSourceTextEditorOpen] = useState<boolean>(false);
+  const [isSourceTextReaderOpen, setIsSourceTextReaderOpen] = useState<boolean>(false);
+  const [editableSourceText, setEditableSourceText] = useState<string>('');
+  const [isSavingSourceText, setIsSavingSourceText] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  const handleSaveSourceTextFromQuestions = async () => {
+    if (!selection.courseId || !selection.unitId || !selection.topicId) return;
+    setIsSavingSourceText(true);
+    try {
+      const res = await saveTopicSourceText(selection.courseId, selection.unitId, selection.topicId, editableSourceText);
+      if (res.success) {
+        setTopicSourceText(editableSourceText.trim());
+        setIsSourceTextEditorOpen(false);
+        toast({ title: "Başarılı", description: "Konu kaynak metni güncellendi." });
+      } else {
+        toast({ title: "Hata", description: res.error || "Kaynak metin kaydedilemedi.", variant: "destructive" });
+      }
+    } catch (err: any) {
+      toast({ title: "Hata", description: err.message, variant: "destructive" });
+    } finally {
+      setIsSavingSourceText(false);
+    }
+  };
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedQuestionTypes, setSelectedQuestionTypes] = useState<string[]>([]);
@@ -349,6 +387,31 @@ export default function ExamQuestionBankPage() {
       fetchQuestionsForSelection();
     }
   }, [currentStep, fetchQuestionsForSelection]);
+
+  useEffect(() => {
+    if (!selection.topicId || selection.topicId === 'all' || !selection.courseId || !selection.unitId) {
+      setTopicSourceText('');
+      return;
+    }
+    let isMounted = true;
+    setIsSourceTextLoading(true);
+    const fetchTopicSource = async () => {
+      try {
+        const topicRef = doc(db, 'courses', selection.courseId, 'units', selection.unitId, 'topics', selection.topicId);
+        const snap = await getDoc(topicRef);
+        if (isMounted && snap.exists()) {
+          const data = snap.data();
+          setTopicSourceText(data.sourceText || '');
+        }
+      } catch (err) {
+        console.warn("Could not fetch topic source text:", err);
+      } finally {
+        if (isMounted) setIsSourceTextLoading(false);
+      }
+    };
+    fetchTopicSource();
+    return () => { isMounted = false; };
+  }, [selection.courseId, selection.unitId, selection.topicId]);
   
   const handleNext = () => currentStep < steps.length && setCurrentStep(currentStep + 1);
   const handleBack = () => {
@@ -662,9 +725,10 @@ export default function ExamQuestionBankPage() {
     return {
         selection,
         selectionNames,
-        sourceText: topic.sourceText || ''
+        sourceText: topicSourceText || topic.sourceText || '',
+        isLoadingSourceText: isSourceTextLoading,
     };
-}, [currentStep, selection, selectionNames, allData.courses]);
+}, [currentStep, selection, selectionNames, allData.courses, topicSourceText, isSourceTextLoading]);
 
   const renderContent = () => {
       if(isLoading) return <div className="flex justify-center items-center h-full"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>;
@@ -757,6 +821,56 @@ export default function ExamQuestionBankPage() {
                           </SelectContent>
                         </Select>
                       </div>
+                </div>
+
+                {/* ══ KONU KAYNAK METNİ BİLGİ BARI ══ */}
+                <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-teal-950/50 via-slate-900 to-indigo-950/50 border border-teal-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30">
+                            <BookOpen className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs font-bold text-teal-300 uppercase tracking-wider">Konu Kaynak Metni</span>
+                                {topicSourceText ? (
+                                    <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
+                                        {topicSourceText.split(/\s+/).filter(Boolean).length} kelime
+                                    </Badge>
+                                ) : (
+                                    <Badge variant="outline" className="bg-amber-500/10 text-amber-300 border-amber-500/30 text-[10px]">
+                                        Metin Yok
+                                    </Badge>
+                                )}
+                            </div>
+                            <p className="text-xs text-slate-400 line-clamp-1 max-w-xl mt-0.5">
+                                {topicSourceText || 'Bu konuya ait kaynak metin bulunmuyor. AI soru üretimi için metin ekleyebilirsiniz.'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 self-end sm:self-center">
+                        {topicSourceText && (
+                            <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => setIsSourceTextReaderOpen(true)}
+                                className="h-8 px-3 text-xs text-slate-300 hover:text-white hover:bg-white/10"
+                            >
+                                <Eye className="w-3.5 h-3.5 mr-1 text-teal-400" /> İncele
+                            </Button>
+                        )}
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                                setEditableSourceText(topicSourceText);
+                                setIsSourceTextEditorOpen(true);
+                            }}
+                            className="h-8 px-3 text-xs border-white/10 text-teal-300 hover:text-white hover:bg-teal-500/20 font-bold rounded-xl"
+                        >
+                            <FilePenLine className="w-3.5 h-3.5 mr-1" /> {topicSourceText ? 'Düzenle' : '+ Metin Ekle'}
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -1020,6 +1134,135 @@ export default function ExamQuestionBankPage() {
         context={currentStep === 5 ? { selection, selectionNames } : null}
         onSave={saveBulkQuestions}
       />
+
+      {/* ══ KAYNAK METİN DÜZENLEME MODALI ══ */}
+      <Dialog open={isSourceTextEditorOpen} onOpenChange={setIsSourceTextEditorOpen}>
+          <DialogContent className="max-w-3xl bg-slate-900 border-white/10 text-white max-h-[90vh] flex flex-col">
+              <DialogHeader>
+                  <div className="flex items-center gap-2 mb-1">
+                      <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30 text-xs">
+                          {selectionNames.className}
+                      </Badge>
+                      <span className="text-xs text-slate-400">›</span>
+                      <span className="text-xs text-slate-400">{selectionNames.unitName}</span>
+                  </div>
+                  <DialogTitle className="text-xl font-black text-white">
+                      {selectionNames.topicName} - Kaynak Metin
+                  </DialogTitle>
+                  <DialogDescription className="text-slate-400 text-xs">
+                      Bu konu için ders kitabı metnini veya özetini girin. Kaydettiğinizde soru bankası ve AI soru üretimi ile anında senkronize olur.
+                  </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-3 py-2 flex-grow flex flex-col">
+                  <div className="flex items-center justify-between text-xs text-slate-400">
+                      <span className="font-semibold text-teal-300">
+                          {editableSourceText.trim() ? editableSourceText.trim().split(/\s+/).filter(Boolean).length : 0} kelime • {editableSourceText.length.toLocaleString('tr-TR')} karakter
+                      </span>
+                  </div>
+
+                  <Textarea
+                      value={editableSourceText}
+                      onChange={(e) => setEditableSourceText(e.target.value)}
+                      placeholder="Konu kaynak metnini buraya yapıştırın..."
+                      className="min-h-[320px] bg-slate-950 border-white/10 text-white font-sans text-sm leading-relaxed p-4 rounded-xl resize-y flex-grow"
+                  />
+              </div>
+
+              <DialogFooter className="border-t border-white/5 pt-3 gap-2">
+                  <Button
+                      variant="outline"
+                      onClick={() => setIsSourceTextEditorOpen(false)}
+                      disabled={isSavingSourceText}
+                      className="border-white/10 text-slate-300 hover:bg-white/5"
+                  >
+                      Vazgeç
+                  </Button>
+                  <Button
+                      onClick={handleSaveSourceTextFromQuestions}
+                      disabled={isSavingSourceText}
+                      className="bg-teal-600 hover:bg-teal-500 text-white font-bold px-6 shadow-lg shadow-teal-900/30"
+                  >
+                      {isSavingSourceText ? (
+                          <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Kaydediliyor...
+                          </>
+                      ) : (
+                          <>
+                              <Check className="w-4 h-4 mr-1.5" /> Kaydet
+                          </>
+                      )}
+                  </Button>
+              </DialogFooter>
+          </DialogContent>
+      </Dialog>
+
+      {/* ══ KAYNAK METİN OKUMA / İNCELEME MODALI ══ */}
+      <Dialog open={isSourceTextReaderOpen} onOpenChange={setIsSourceTextReaderOpen}>
+          <DialogContent className="max-w-3xl bg-slate-900 border-white/10 text-white max-h-[90vh] flex flex-col">
+              <DialogHeader>
+                  <div className="flex items-center gap-2 mb-1">
+                      <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30 text-xs">
+                          {selectionNames.className}
+                      </Badge>
+                      <span className="text-xs text-slate-400">›</span>
+                      <span className="text-xs text-slate-400">{selectionNames.unitName}</span>
+                  </div>
+                  <DialogTitle className="text-xl font-black text-white">
+                      {selectionNames.topicName} - Kaynak Metin
+                  </DialogTitle>
+                  <div className="flex items-center gap-3 text-xs text-slate-400 pt-1">
+                      <span>{topicSourceText ? topicSourceText.trim().split(/\s+/).filter(Boolean).length : 0} kelime</span>
+                      <span>•</span>
+                      <span>{topicSourceText.length.toLocaleString('tr-TR')} karakter</span>
+                  </div>
+              </DialogHeader>
+
+              <div className="flex-grow overflow-y-auto pr-2 py-4 my-2 border-y border-white/5 bg-slate-950/60 rounded-xl p-5 shadow-inner">
+                  <div className="text-base leading-relaxed whitespace-pre-wrap font-sans text-slate-200 selection:bg-teal-500/30">
+                      {topicSourceText}
+                  </div>
+              </div>
+
+              <DialogFooter className="pt-2 flex items-center justify-between gap-3">
+                  <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={async () => {
+                          try {
+                              await navigator.clipboard.writeText(topicSourceText);
+                              toast({ title: "Kopyalandı", description: "Kaynak metin panoya kopyalandı." });
+                          } catch(e) {}
+                      }}
+                      className="border-white/10 text-slate-300 hover:text-white"
+                  >
+                      <Copy className="w-3.5 h-3.5 mr-1.5 text-teal-400" /> Metni Kopyala
+                  </Button>
+
+                  <div className="flex items-center gap-2">
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsSourceTextReaderOpen(false)}
+                          className="border-white/10 text-slate-300 hover:bg-white/5"
+                      >
+                          Kapat
+                      </Button>
+                      <Button
+                          size="sm"
+                          onClick={() => {
+                              setIsSourceTextReaderOpen(false);
+                              setEditableSourceText(topicSourceText);
+                              setIsSourceTextEditorOpen(true);
+                          }}
+                          className="bg-teal-600 hover:bg-teal-500 text-white font-bold"
+                      >
+                          <FilePenLine className="w-3.5 h-3.5 mr-1.5" /> Düzenle
+                      </Button>
+                  </div>
+              </DialogFooter>
+          </DialogContent>
+      </Dialog>
     </div>
   )
 }

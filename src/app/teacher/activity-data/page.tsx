@@ -27,7 +27,13 @@ import {
     ArrowLeft,
     ArrowRight,
     Check,
-    Home
+    Home,
+    BookOpen,
+    X,
+    ChevronRight,
+    GraduationCap,
+    Copy,
+    Eye
 } from "lucide-react";
 import {
     Select,
@@ -56,7 +62,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, deleteDoc, doc, where, limit } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, deleteDoc, doc, getDoc, where, limit } from "firebase/firestore";
 import type { ActivityItem, Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { AiActivityGenerationPanel } from "@/components/ai-activity-generation-panel";
@@ -64,6 +70,16 @@ import { deleteBulkActivityItems, saveActivityItem } from "./actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ActivityItemEditorDialog } from "@/components/activity-item-editor-dialog";
 import { BulkActivityImportDialog } from "@/components/bulk-activity-import-dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { saveTopicSourceText } from "@/app/teacher/source-texts/actions";
 import { cn } from "@/lib/utils";
 import Link from 'next/link';
 
@@ -194,6 +210,14 @@ export default function ActivityDataManagementPage() {
   const [dataTypeFilter, setDataTypeFilter] = useState('all');
   const [isAIGenOpen, setIsAIGenOpen] = useState(false);
   const [isBulkOpen, setIsBulkOpen] = useState(false);
+  const [topicSourceText, setTopicSourceText] = useState<string>('');
+  const [isSourceTextLoading, setIsSourceTextLoading] = useState<boolean>(false);
+  const [isSourceTextEditorOpen, setIsSourceTextEditorOpen] = useState(false);
+  const [isSourceTextReaderOpen, setIsSourceTextReaderOpen] = useState(false);
+  const [editableSourceText, setEditableSourceText] = useState('');
+  const [isSavingSourceText, setIsSavingSourceText] = useState(false);
+  const [topicSearchQuery, setTopicSearchQuery] = useState<string>('');
+  const [quickClassTab, setQuickClassTab] = useState<string>('all');
   
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -306,53 +330,78 @@ export default function ActivityDataManagementPage() {
     fetchInitialTree();
   }, [fetchInitialTree]);
 
+  useEffect(() => {
+    if (!filters.topicId || filters.topicId === 'all' || !filters.courseId || filters.courseId === 'all' || !filters.unitId || filters.unitId === 'all') {
+      setTopicSourceText('');
+      return;
+    }
+    let isMounted = true;
+    setIsSourceTextLoading(true);
+    const fetchTopicSource = async () => {
+      try {
+        const topicRef = doc(db, 'courses', filters.courseId, 'units', filters.unitId, 'topics', filters.topicId);
+        const snap = await getDoc(topicRef);
+        if (isMounted && snap.exists()) {
+          const data = snap.data();
+          setTopicSourceText(data.sourceText || '');
+        }
+      } catch (err) {
+        console.warn("Could not fetch topic source text in activity-data:", err);
+      } finally {
+        if (isMounted) setIsSourceTextLoading(false);
+      }
+    };
+    fetchTopicSource();
+    return () => { isMounted = false; };
+  }, [filters.courseId, filters.unitId, filters.topicId]);
+
   const allTopics = useMemo(() => {
-    return allData.courses.flatMap(c => c.units?.flatMap(u => (u.topics || []).map(t => ({ ...t, courseId: c.id, unitId: u.id, classId: c.classId }))) || []);
-  }, [allData.courses]);
+    return allData.courses.flatMap(c => 
+      c.units?.flatMap(u => 
+        (u.topics || []).map(t => ({ 
+          ...t, 
+          courseId: c.id, 
+          courseTitle: c.title,
+          unitId: u.id, 
+          unitTitle: u.title,
+          classId: c.classId, 
+          className: c.className || (allData.classes.find(cl => cl.id === c.classId)?.name) || '',
+        }))
+      ) || []
+    );
+  }, [allData.courses, allData.classes]);
 
   const fetchItemsForFilter = useCallback(async () => {
+    // 💡 Kullanıcı isteği: Konu seçilene kadar sayfaya önce hiç veri gelmesin!
+    if (!filters.topicId || filters.topicId === 'all') {
+      setActivityItems([]);
+      setIsItemsLoading(false);
+      return;
+    }
+
     setIsItemsLoading(true);
     try {
-      let qRef;
-      if (filters.topicId && filters.topicId !== 'all') {
-        qRef = query(collection(db, "activityItems"), where("topicId", "==", filters.topicId));
-      } else if (filters.unitId && filters.unitId !== 'all') {
-        qRef = query(collection(db, "activityItems"), where("unitId", "==", filters.unitId));
-      } else if (filters.courseId && filters.courseId !== 'all') {
-        qRef = query(collection(db, "activityItems"), where("courseId", "==", filters.courseId));
-      } else {
-        try {
-          qRef = query(collection(db, "activityItems"), orderBy("createdAt", "desc"), limit(50));
-        } catch {
-          qRef = query(collection(db, "activityItems"), limit(50));
-        }
-      }
-
+      const qRef = query(collection(db, "activityItems"), where("topicId", "==", filters.topicId));
       let fetchedItems: ActivityItem[] = [];
-      if (qRef) {
-        try {
-          const snap = await getDocs(qRef);
-          fetchedItems = snap.docs.map(doc => {
-            const data = doc.data();
-            const createdAt = (data.createdAt as any)?.toDate?.()?.toISOString?.() ||
-              (typeof data.createdAt === 'string' ? data.createdAt : new Date(0).toISOString());
-            return {
-              id: doc.id,
-              ...data,
-              createdAt,
-            } as ActivityItem;
-          });
-        } catch (queryErr) {
-          console.warn("Firestore query error, trying un-ordered limit fallback:", queryErr);
-          if (!filters.topicId || filters.topicId === 'all') {
-            const fallbackSnap = await getDocs(query(collection(db, "activityItems"), limit(50)));
-            fetchedItems = fallbackSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as ActivityItem));
-          }
-        }
+
+      try {
+        const snap = await getDocs(qRef);
+        fetchedItems = snap.docs.map(doc => {
+          const data = doc.data();
+          const createdAt = (data.createdAt as any)?.toDate?.()?.toISOString?.() ||
+            (typeof data.createdAt === 'string' ? data.createdAt : new Date(0).toISOString());
+          return {
+            id: doc.id,
+            ...data,
+            createdAt,
+          } as ActivityItem;
+        });
+      } catch (queryErr) {
+        console.warn("Firestore query error for topic items:", queryErr);
       }
 
-      // Static fallback if Firestore returned 0 items
-      if (fetchedItems.length === 0 && filters.topicId && filters.topicId !== 'all') {
+      // Firestore'da veri yoksa statik müfredat dosyasından yükle
+      if (fetchedItems.length === 0) {
         try {
           const staticRes = await fetch(`/curriculum/activityItems/${filters.topicId}.json`);
           if (staticRes.ok) {
@@ -365,35 +414,17 @@ export default function ActivityDataManagementPage() {
         } catch (err) {
           console.warn("Could not load static activity items:", err);
         }
-      } else if (fetchedItems.length === 0 && filters.unitId && filters.unitId !== 'all') {
-        const unitTopics = allTopics.filter(t => t.unitId === filters.unitId);
-        const staticResults = await Promise.all(
-          unitTopics.map(async (t) => {
-            try {
-              const r = await fetch(`/curriculum/activityItems/${t.id}.json`);
-              return r.ok ? await r.json() : [];
-            } catch {
-              return [];
-            }
-          })
-        );
-        fetchedItems = staticResults.flat().map((item: any) => ({
-          ...item,
-          createdAt: item.createdAt || new Date(0).toISOString(),
-        }));
       }
 
       setActivityItems(fetchedItems);
-      if (filters.topicId && filters.topicId !== 'all') {
-        setTopicCounts(prev => ({ ...prev, [filters.topicId]: fetchedItems.length }));
-      }
+      setTopicCounts(prev => ({ ...prev, [filters.topicId]: fetchedItems.length }));
     } catch (error) {
       console.error("Error fetching activity items:", error);
       toast({ title: "Hata", description: "Veriler yüklenirken bir hata oluştu.", variant: "destructive" });
     } finally {
       setIsItemsLoading(false);
     }
-  }, [filters.topicId, filters.unitId, filters.courseId, allTopics, toast]);
+  }, [filters.topicId, toast]);
 
   useEffect(() => {
     fetchItemsForFilter();
@@ -532,9 +563,62 @@ export default function ActivityDataManagementPage() {
           unitId: topic.unitId, 
           topicId: topic.id, 
           topicTitle: topic.title,
-          sourceText: topic.sourceText || ''
+          sourceText: topicSourceText || topic.sourceText || '',
+          isLoadingSourceText: isSourceTextLoading,
       };
-  }, [filters, allTopics]);
+  }, [filters, allTopics, topicSourceText, isSourceTextLoading]);
+
+  const selectedTopicObj = useMemo(() => {
+    if (!filters.topicId || filters.topicId === 'all') return null;
+    return allTopics.find(t => t.id === filters.topicId) || null;
+  }, [filters.topicId, allTopics]);
+
+  const searchableTopics = useMemo(() => {
+    let list = allTopics;
+    if (quickClassTab !== 'all') {
+      list = list.filter(t => t.classId === quickClassTab);
+    }
+    if (topicSearchQuery.trim()) {
+      const q = topicSearchQuery.toLowerCase();
+      list = list.filter(t => 
+        (t.title || '').toLowerCase().includes(q) ||
+        (t.unitTitle || '').toLowerCase().includes(q) ||
+        (t.courseTitle || '').toLowerCase().includes(q) ||
+        (t.className || '').toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [allTopics, quickClassTab, topicSearchQuery]);
+
+  const handleSelectTopicDirectly = (topic: typeof allTopics[0]) => {
+    setFilters({
+      classId: topic.classId || 'all',
+      courseId: topic.courseId || 'all',
+      unitId: topic.unitId || 'all',
+      topicId: topic.id,
+    });
+    setCurrentPage(1);
+    setTopicSearchQuery('');
+  };
+
+  const handleClearTopicSelection = () => {
+    setFilters(f => ({ ...f, topicId: 'all' }));
+    setCurrentPage(1);
+  };
+
+  const handleSaveSourceTextFromActivity = async () => {
+    if (!filters.courseId || filters.courseId === 'all' || !filters.unitId || filters.unitId === 'all' || !filters.topicId || filters.topicId === 'all') return;
+    setIsSavingSourceText(true);
+    const result = await saveTopicSourceText(filters.courseId, filters.unitId, filters.topicId, editableSourceText);
+    if (result.success) {
+      toast({ title: "Başarılı", description: "Konu kaynak metni kaydedildi." });
+      setTopicSourceText(editableSourceText);
+      setIsSourceTextEditorOpen(false);
+    } else {
+      toast({ title: "Hata", description: result.error, variant: "destructive" });
+    }
+    setIsSavingSourceText(false);
+  };
 
   const handleSave = async (itemToSave: Partial<ActivityItem>) => {
     if (!itemToSave.courseId || !itemToSave.unitId || !itemToSave.topicId) {
@@ -681,98 +765,349 @@ export default function ActivityDataManagementPage() {
                     </Select>
                  </div>
 
-                 {/* Actions & Search */}
-                 <div className="flex flex-col xl:flex-row items-center gap-4">
-                     <div className="relative flex-grow w-full">
-                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-                         <Input 
-                             placeholder="İçerikte ara..." 
-                             value={searchTerm} 
-                             onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }} 
-                             className="pl-10 bg-slate-950 border-white/10 text-white focus:border-indigo-500/50 h-11 w-full"
-                         />
-                     </div>
-                     <div className="flex flex-wrap gap-2 w-full xl:w-auto justify-end">
-                        <Button onClick={() => handleOpenDialog({})} disabled={!aiGenerationContext} className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20"><PlusCircle className="mr-2 h-4 w-4"/> Yeni Veri</Button>
-                        <Button onClick={() => setIsBulkOpen(true)} variant="outline" disabled={!aiGenerationContext} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950"><Upload className="mr-2 h-4 w-4"/> Toplu Ekle</Button>
-                        <Button onClick={() => setIsAIGenOpen(true)} disabled={!aiGenerationContext} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-900/20"><Sparkles className="mr-2 h-4 w-4"/> AI ile Üret</Button>
-                        <Button onClick={handleDownload} variant="outline" disabled={filteredActivityItems.length === 0} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950"><Download className="mr-2 h-4 w-4"/> JSON İndir</Button>
-                     </div>
-                 </div>
+                  {/* Actions & Search - Sadece konu seçiliyken gösterilir */}
+                  {selectedTopicObj && (
+                    <div className="flex flex-col xl:flex-row items-center gap-4 animate-in fade-in duration-200">
+                        <div className="relative flex-grow w-full">
+                            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                            <Input 
+                                placeholder="Bu konunun verilerinde ara..." 
+                                value={searchTerm} 
+                                onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }} 
+                                className="pl-10 bg-slate-950 border-white/10 text-white focus:border-teal-500/50 h-11 w-full text-xs"
+                            />
+                        </div>
+                        <div className="flex flex-wrap gap-2 w-full xl:w-auto justify-end">
+                           <Button onClick={() => handleOpenDialog({})} className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20 text-xs font-bold h-11 px-4 rounded-xl"><PlusCircle className="mr-1.5 h-4 w-4"/> Yeni Veri</Button>
+                           <Button onClick={() => setIsBulkOpen(true)} variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950 text-xs font-bold h-11 px-4 rounded-xl"><Upload className="mr-1.5 h-4 w-4"/> Toplu Ekle</Button>
+                           <Button onClick={() => setIsAIGenOpen(true)} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-900/20 text-xs font-bold h-11 px-4 rounded-xl transition-all hover:scale-105"><Sparkles className="mr-1.5 h-4 w-4 text-yellow-300 animate-pulse"/> AI ile Üret</Button>
+                           <Button onClick={handleDownload} variant="outline" disabled={filteredActivityItems.length === 0} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950 text-xs font-bold h-11 px-4 rounded-xl"><Download className="mr-1.5 h-4 w-4"/> JSON İndir</Button>
+                        </div>
+                    </div>
+                  )}
             </div>
 
             <div className="flex-grow p-6 md:p-8 bg-black/20">
-                {filters.topicId === 'all' && filters.unitId === 'all' && filters.courseId === 'all' && (
-                    <div className="text-xs text-amber-400/90 bg-amber-500/10 border border-amber-500/20 px-4 py-2.5 rounded-xl mb-6 flex items-center gap-2">
-                        <span>💡</span>
-                        <span>Sayfanın donmaması ve hızlı açılması için son eklenen 50 veri listelenmektedir. Belirli bir konudaki tüm verileri listelemek, düzenlemek veya AI ile veri üretmek için lütfen yukarıdan Sınıf / Ders / Ünite / Konu seçiniz.</span>
+                {!selectedTopicObj ? (
+                    /* ════ 1. KONU SEÇİLMEDEN ÖNCE: PRATİK KONU SEÇİM VE ARAMA HUB'I ════ */
+                    <div className="py-4 space-y-6">
+                        <div className="p-6 md:p-8 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl space-y-6">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div className="flex items-center gap-3.5">
+                                    <div className="p-3 bg-gradient-to-br from-teal-500/20 via-indigo-500/20 to-purple-500/20 rounded-2xl border border-teal-500/30 text-teal-300 shadow-md">
+                                        <BookOpen className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black text-white uppercase tracking-tight flex items-center gap-2">
+                                            Etkinlik Verileri İçin Konu Seçin
+                                        </h3>
+                                        <p className="text-xs text-slate-400">
+                                            Sayfa performansını korumak için veriler konu bazlı yüklenir. Başlamak için aşağıdaki konulardan birine tıklayın.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Hızlı Sınıf Sekmeleri */}
+                                <div className="flex items-center gap-1.5 p-1 bg-slate-950/80 rounded-xl border border-white/10 self-start md:self-auto overflow-x-auto max-w-full">
+                                    <button
+                                        type="button"
+                                        onClick={() => setQuickClassTab('all')}
+                                        className={cn(
+                                            "px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap",
+                                            quickClassTab === 'all'
+                                                ? "bg-teal-600 text-white shadow-sm"
+                                                : "text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        Tüm Sınıflar
+                                    </button>
+                                    {allData.classes.map(c => (
+                                        <button
+                                            key={c.id}
+                                            type="button"
+                                            onClick={() => setQuickClassTab(c.id)}
+                                            className={cn(
+                                                "px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap",
+                                                quickClassTab === c.id
+                                                    ? "bg-teal-600 text-white shadow-sm"
+                                                    : "text-slate-400 hover:text-white"
+                                            )}
+                                        >
+                                            {c.name.includes('Sınıf') ? c.name : `${c.name}. Sınıf`}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Canlı Konu Arama Çubuğu */}
+                            <div className="relative">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                <Input
+                                    value={topicSearchQuery}
+                                    onChange={(e) => setTopicSearchQuery(e.target.value)}
+                                    placeholder="Konu adı veya kavram ile anında filtrele (Örn: Zekat, Kader, Namaz, İhlas, Tevhid, Hac)..."
+                                    className="pl-11 pr-10 h-12 bg-slate-950 border-white/10 text-sm text-white placeholder:text-slate-500 rounded-2xl focus:border-teal-500/60 shadow-inner"
+                                />
+                                {topicSearchQuery && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setTopicSearchQuery('')}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                )}
+                            </div>
+
+                            <div className="flex items-center justify-between text-xs text-slate-400 pt-1 border-t border-white/5">
+                                <span>
+                                    Listelenen Konu: <strong className="text-teal-300 font-bold">{searchableTopics.length}</strong>
+                                </span>
+                                <span className="text-[11px] text-slate-500 hidden sm:inline">
+                                    Konu kartına tıkladığınızda veriler ve AI Stüdyosu otomatik açılacaktır
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Konu Kartları Izgarası */}
+                        {searchableTopics.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                {searchableTopics.map(t => {
+                                    const count = topicCounts[t.id];
+                                    return (
+                                        <div
+                                            key={t.id}
+                                            onClick={() => handleSelectTopicDirectly(t)}
+                                            className="p-4 rounded-2xl bg-slate-900/60 border border-white/5 hover:border-teal-500/50 hover:bg-slate-900/95 transition-all cursor-pointer group flex flex-col justify-between space-y-3 hover:shadow-xl hover:shadow-teal-950/30"
+                                        >
+                                            <div className="space-y-2">
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <Badge variant="outline" className="bg-teal-500/10 text-teal-300 border-teal-500/30 text-[10px] font-bold">
+                                                        {t.className || 'Din Kültürü'}
+                                                    </Badge>
+                                                    <span className="text-[10px] text-slate-500 truncate max-w-[150px]">{t.unitTitle}</span>
+                                                </div>
+                                                <h4 className="text-sm font-bold text-white group-hover:text-teal-300 transition-colors line-clamp-2 leading-snug">
+                                                    {t.title}
+                                                </h4>
+                                            </div>
+
+                                            <div className="flex items-center justify-between pt-2.5 border-t border-white/5 text-[11px]">
+                                                <span className="text-slate-400">
+                                                    {count !== undefined ? (
+                                                        <span className={count > 0 ? "text-emerald-400 font-semibold" : "text-slate-500"}>
+                                                            {count} veri kayıtlı
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-slate-500">Kayıt kontrolü</span>
+                                                    )}
+                                                </span>
+                                                <span className="text-teal-400 font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                                                    Verileri Aç <ChevronRight className="w-3.5 h-3.5" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-16 text-slate-500 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/40 space-y-2">
+                                <Search className="h-10 w-10 opacity-20" />
+                                <p className="text-base font-medium">"{topicSearchQuery}" aramasına uygun konu bulunamadı.</p>
+                                <p className="text-xs text-slate-500">Farklı bir arama terimi deneyebilir veya sınıf filtresini temizleyebilirsiniz.</p>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    /* ════ 2. KONU SEÇİLDİKTEN SONRA: AKTİF KONU VERİ ÇALIŞMA ALANI ════ */
+                    <div className="space-y-6">
+                        {/* Aktif Konu Bilgi Kartı */}
+                        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-teal-950/60 via-slate-900 to-indigo-950/60 border border-teal-500/30 shadow-xl">
+                            <div className="flex items-center gap-3.5">
+                                <div className="p-3 bg-teal-500/20 text-teal-300 rounded-2xl border border-teal-500/40">
+                                    <BookOpen className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                                        <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30 text-[11px] font-bold">
+                                            {selectedTopicObj.className}
+                                        </Badge>
+                                        <span className="text-xs text-slate-500">›</span>
+                                        <span className="text-xs text-slate-300 font-medium">{selectedTopicObj.unitTitle}</span>
+                                    </div>
+                                    <h2 className="text-xl font-extrabold text-white flex items-center gap-2.5">
+                                        {selectedTopicObj.title}
+                                        <Badge variant="outline" className="bg-white/10 border-white/20 text-xs text-slate-200">
+                                            {filteredActivityItems.length} Veri
+                                        </Badge>
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 w-full lg:w-auto justify-end flex-wrap">
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={handleClearTopicSelection}
+                                    className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900 h-9 text-xs font-bold rounded-xl"
+                                >
+                                    <X className="w-3.5 h-3.5 mr-1" /> Başka Konu Seç
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                        setEditableSourceText(topicSourceText);
+                                        if (topicSourceText) {
+                                            setIsSourceTextReaderOpen(true);
+                                        } else {
+                                            setIsSourceTextEditorOpen(true);
+                                        }
+                                    }}
+                                    className="border-teal-500/30 text-teal-300 hover:text-white hover:bg-teal-500/20 bg-teal-950/40 h-9 text-xs font-bold rounded-xl"
+                                >
+                                    <BookOpen className="w-3.5 h-3.5 mr-1.5 text-teal-400" />
+                                    {topicSourceText ? `Kaynak Metin (${topicSourceText.split(/\s+/).filter(Boolean).length} kelime)` : '+ Kaynak Metin Ekle'}
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    onClick={() => setIsAIGenOpen(true)}
+                                    className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs h-9 px-4 rounded-xl shadow-lg shadow-purple-900/30 transition-all hover:scale-105"
+                                >
+                                    <Sparkles className="w-3.5 h-3.5 mr-1.5 text-yellow-300 animate-pulse" /> ✨ AI ile Üret
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* ══ KONU KAYNAK METNİ BİLGİ BARI ══ */}
+                        <div className="p-4 rounded-2xl bg-gradient-to-r from-teal-950/40 via-slate-900/80 to-indigo-950/40 border border-teal-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2.5 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30">
+                                    <BookOpen className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs font-bold text-teal-300 uppercase tracking-wider">Konu Kaynak Metni</span>
+                                        {topicSourceText ? (
+                                            <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
+                                                {topicSourceText.split(/\s+/).filter(Boolean).length} kelime
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="outline" className="bg-amber-500/10 text-amber-300 border-amber-500/30 text-[10px]">
+                                                Metin Yok
+                                            </Badge>
+                                        )}
+                                    </div>
+                                    <p className="text-xs text-slate-400 line-clamp-1 max-w-xl mt-0.5">
+                                        {topicSourceText || 'Bu konuya ait kaynak metin bulunmuyor. AI veri üretimi ve etkinlik içerikleri için metin ekleyebilirsiniz.'}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 self-end sm:self-center">
+                                {topicSourceText && (
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => setIsSourceTextReaderOpen(true)}
+                                        className="h-8 px-3 text-xs text-slate-300 hover:text-white hover:bg-white/10"
+                                    >
+                                        <Eye className="w-3.5 h-3.5 mr-1 text-teal-400" /> İncele
+                                    </Button>
+                                )}
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                        setEditableSourceText(topicSourceText);
+                                        setIsSourceTextEditorOpen(true);
+                                    }}
+                                    className="h-8 px-3 text-xs border-white/10 text-teal-300 hover:text-white hover:bg-teal-500/20 font-bold rounded-xl"
+                                >
+                                    <FilePenLine className="w-3.5 h-3.5 mr-1" /> {topicSourceText ? 'Düzenle' : '+ Metin Ekle'}
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Seçim ve Toplu Silme Barı */}
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 bg-slate-900/40 p-2 rounded-lg border border-white/5">
+                                <Checkbox id="select-all" checked={paginatedItems.length > 0 && paginatedItems.every(d => selectedItemIds.has(d.id))} onCheckedChange={handleSelectAllOnPage} disabled={paginatedItems.length === 0} className="border-white/20 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500"/>
+                                <Label htmlFor="select-all" className="text-xs font-medium text-slate-300 cursor-pointer">Tümünü Seç ({paginatedItems.length})</Label>
+                            </div>
+                            {selectedItemIds.size > 0 && (
+                                <div className="flex items-center gap-3 animate-in fade-in slide-in-from-right-5 duration-300">
+                                    <Badge variant="secondary" className="bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 border-indigo-500/30 px-3 py-1.5 text-xs">
+                                        {selectedItemIds.size} öğe seçildi
+                                    </Badge>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild><Button variant="destructive" size="sm" disabled={isDeleting} className="bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900/20 text-xs"><Trash2 className="mr-1.5 h-3.5 w-3.5"/> Sil</Button></AlertDialogTrigger>
+                                        <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                            <AlertDialogHeader><AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle><AlertDialogDescription className="text-slate-400">Bu işlem geri alınamaz. Seçilen {selectedItemIds.size} veri öğesi kalıcı olarak silinecektir.</AlertDialogDescription></AlertDialogHeader>
+                                            <AlertDialogFooter><AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel><AlertDialogAction onClick={handleBulkDelete} className="bg-destructive hover:bg-destructive/90" disabled={isDeleting}>{isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>} Evet, Sil</AlertDialogAction></AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Veri Kartları Izgarası veya Boş Durum */}
+                        {isLoading || isItemsLoading ? (
+                            <div className="flex flex-col justify-center items-center h-64 gap-3">
+                                <Loader2 className="h-10 w-10 animate-spin text-teal-500"/>
+                                <span className="text-sm text-slate-400 font-medium">Bu konunun verileri yükleniyor...</span>
+                            </div>
+                        ) : paginatedItems.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            {paginatedItems.map((item, index) => {
+                                const topic = allTopics.find(t => t.id === item.topicId);
+                                const globalIndex = (currentPage - 1) * itemsPerPage + index;
+                                return (
+                                    <ActivityItemCard 
+                                        key={item.id} 
+                                        item={item} 
+                                        topicName={topic?.title}
+                                        onEdit={() => handleOpenDialog(item)}
+                                        onDelete={handleDelete}
+                                        onSelect={handleSelectId}
+                                        isSelected={selectedItemIds.has(item.id)}
+                                        index={globalIndex}
+                                    />
+                                )
+                            })}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-16 text-slate-500 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/50 space-y-3">
+                                <Database className="h-12 w-12 opacity-20 text-teal-400" />
+                                <p className="text-base font-bold text-slate-300">Bu konuda henüz kayıtlı etkinlik verisi bulunmuyor.</p>
+                                <p className="text-xs text-slate-500 max-w-sm text-center">
+                                    Yapay zekâ stüdyosunu kullanarak saniyeler içinde anahtar kavramlar, tanımlar ve özet cümleleri üretebilirsiniz.
+                                </p>
+                                <Button
+                                    onClick={() => setIsAIGenOpen(true)}
+                                    className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs h-9 px-5 rounded-xl shadow-lg shadow-purple-900/30 mt-2"
+                                >
+                                    <Sparkles className="w-3.5 h-3.5 mr-1.5 text-yellow-300 animate-pulse" /> ✨ AI ile Hemen Veri Üret
+                                </Button>
+                            </div>
+                        )}
+
+                        {/* Sayfalama */}
+                        {totalPages > 1 && (
+                            <div className="flex justify-between items-center pt-6 border-t border-white/5">
+                                <span className="text-sm text-slate-500 font-medium">
+                                    Toplam {filteredActivityItems.length} veri
+                                </span>
+                                <div className="flex items-center gap-2">
+                                    <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => p - 1)} disabled={currentPage === 1} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950">Önceki</Button>
+                                    <span className="text-sm font-bold text-white px-4 bg-slate-900 py-1.5 rounded-lg border border-white/10">{currentPage} / {totalPages}</span>
+                                    <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => p + 1)} disabled={currentPage >= totalPages} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950">Sonraki</Button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
-
-                <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3 bg-slate-900/40 p-2 rounded-lg border border-white/5">
-                        <Checkbox id="select-all" checked={paginatedItems.length > 0 && paginatedItems.every(d => selectedItemIds.has(d.id))} onCheckedChange={handleSelectAllOnPage} disabled={paginatedItems.length === 0} className="border-white/20 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500"/>
-                        <Label htmlFor="select-all" className="text-sm font-medium text-slate-300 cursor-pointer">Tümünü Seç ({paginatedItems.length})</Label>
-                    </div>
-                    {selectedItemIds.size > 0 && (
-                        <div className="flex items-center gap-3 animate-in fade-in slide-in-from-right-5 duration-300">
-                            <Badge variant="secondary" className="bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 border-indigo-500/30 px-3 py-1.5 text-sm">
-                                {selectedItemIds.size} öğe seçildi
-                            </Badge>
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild><Button variant="destructive" size="sm" disabled={isDeleting} className="bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900/20"><Trash2 className="mr-2 h-4 w-4"/> Sil</Button></AlertDialogTrigger>
-                                <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                                    <AlertDialogHeader><AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle><AlertDialogDescription className="text-slate-400">Bu işlem geri alınamaz. Seçilen {selectedItemIds.size} veri öğesi kalıcı olarak silinecektir.</AlertDialogDescription></AlertDialogHeader>
-                                    <AlertDialogFooter><AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel><AlertDialogAction onClick={handleBulkDelete} className="bg-destructive hover:bg-destructive/90" disabled={isDeleting}>{isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>} Evet, Sil</AlertDialogAction></AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </div>
-                    )}
-                </div>
-
-                {isLoading || isItemsLoading ? (
-                    <div className="flex flex-col justify-center items-center h-64 gap-3">
-                        <Loader2 className="h-10 w-10 animate-spin text-teal-500"/>
-                        <span className="text-sm text-slate-400 font-medium">Veriler yükleniyor...</span>
-                    </div>
-                ) : paginatedItems.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {paginatedItems.map((item, index) => {
-                        const topic = allTopics.find(t => t.id === item.topicId);
-                        const globalIndex = (currentPage - 1) * itemsPerPage + index;
-                        return (
-                            <ActivityItemCard 
-                                key={item.id} 
-                                item={item} 
-                                topicName={topic?.title}
-                                onEdit={() => handleOpenDialog(item)}
-                                onDelete={handleDelete}
-                                onSelect={handleSelectId}
-                                isSelected={selectedItemIds.has(item.id)}
-                                index={globalIndex}
-                            />
-                        )
-                    })}
-                    </div>
-                ) : <div className="flex flex-col items-center justify-center py-20 text-slate-500 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/50">
-                        <Filter className="h-12 w-12 mb-4 opacity-20" />
-                        <p className="text-lg font-medium">Bu filtrelerle eşleşen veri bulunamadı.</p>
-                    </div>
-                }
             </div>
-
-            {totalPages > 1 && (
-                <div className="flex justify-between items-center p-6 border-t border-white/5 bg-slate-900/50">
-                    <span className="text-sm text-slate-500 font-medium">
-                        Toplam {filteredActivityItems.length} veri {filters.topicId === 'all' && filters.unitId === 'all' && filters.courseId === 'all' ? '(son eklenenler)' : ''}
-                    </span>
-                    <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => p - 1)} disabled={currentPage === 1} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950">Önceki</Button>
-                        <span className="text-sm font-bold text-white px-4 bg-slate-900 py-1.5 rounded-lg border border-white/10">{currentPage} / {totalPages}</span>
-                        <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => p + 1)} disabled={currentPage >= totalPages} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950">Sonraki</Button>
-                    </div>
-                </div>
-            )}
         </div>
       </div>
 
@@ -797,6 +1132,138 @@ export default function ActivityDataManagementPage() {
             isSaving={isSaving}
         />
       )}
+
+      {/* ══ KAYNAK METİN DÜZENLEME MODALI ══ */}
+      <Dialog open={isSourceTextEditorOpen} onOpenChange={setIsSourceTextEditorOpen}>
+          <DialogContent className="max-w-3xl bg-slate-900 border-white/10 text-white max-h-[90vh] flex flex-col">
+              <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2 text-lg font-bold text-teal-300">
+                      <BookOpen className="w-5 h-5 text-teal-400" /> Konu Kaynak Metnini Düzenle
+                  </DialogTitle>
+                  <DialogDescription className="text-xs text-slate-400">
+                      Bu metin Sunum, Soru Bankası, Etkinlik Veri Bankası ve Yapay Zekâ stüdyolarında ortak birincil referans olarak kullanılır.
+                  </DialogDescription>
+              </DialogHeader>
+
+              <div className="flex-grow my-2 space-y-3">
+                  <div className="flex items-center justify-between text-xs text-slate-400">
+                      <span>{selectedTopicObj?.title}</span>
+                      <span>
+                          {editableSourceText.trim().length > 0
+                              ? `${editableSourceText.trim().split(/\s+/).length} kelime · ${editableSourceText.length} karakter`
+                              : 'Henüz metin girilmedi'}
+                      </span>
+                  </div>
+                  <Textarea
+                      value={editableSourceText}
+                      onChange={(e) => setEditableSourceText(e.target.value)}
+                      placeholder="Müfredat ders kitabı veya konu anlatım metnini buraya yapıştırın veya yazın..."
+                      className="min-h-[320px] max-h-[50vh] bg-slate-950 border-white/10 text-slate-200 font-mono text-sm leading-relaxed p-4 resize-y focus:border-teal-500"
+                  />
+              </div>
+
+              <DialogFooter className="pt-2 flex items-center justify-between gap-3">
+                  <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setEditableSourceText('')}
+                      disabled={!editableSourceText}
+                      className="text-xs text-red-400 hover:text-red-300 hover:bg-red-950/30"
+                  >
+                      Temizle
+                  </Button>
+                  <div className="flex items-center gap-2">
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsSourceTextEditorOpen(false)}
+                          className="border-white/10 text-slate-300 hover:bg-white/5"
+                      >
+                          İptal
+                      </Button>
+                      <Button
+                          size="sm"
+                          onClick={handleSaveSourceTextFromActivity}
+                          disabled={isSavingSourceText}
+                          className="bg-teal-600 hover:bg-teal-500 text-white font-bold"
+                      >
+                          {isSavingSourceText ? (
+                              <>
+                                  <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Kaydediliyor...
+                              </>
+                          ) : (
+                              <>
+                                  <Check className="w-3.5 h-3.5 mr-1.5" /> Kaydet
+                              </>
+                          )}
+                      </Button>
+                  </div>
+              </DialogFooter>
+          </DialogContent>
+      </Dialog>
+
+      {/* ══ KAYNAK METİN OKUMA MODALI ══ */}
+      <Dialog open={isSourceTextReaderOpen} onOpenChange={setIsSourceTextReaderOpen}>
+          <DialogContent className="max-w-3xl bg-slate-900 border-white/10 text-white max-h-[85vh] flex flex-col">
+              <DialogHeader>
+                  <DialogTitle className="flex items-center justify-between text-lg font-bold text-teal-300 pr-6">
+                      <span className="flex items-center gap-2">
+                          <BookOpen className="w-5 h-5 text-teal-400" /> {selectedTopicObj?.title}
+                      </span>
+                      <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30 text-xs">
+                          {topicSourceText.split(/\s+/).filter(Boolean).length} kelime
+                      </Badge>
+                  </DialogTitle>
+                  <DialogDescription className="text-xs text-slate-400">
+                      {selectedTopicObj?.unitTitle}
+                  </DialogDescription>
+              </DialogHeader>
+
+              <div className="flex-grow overflow-y-auto pr-2 py-4 my-2 border-y border-white/5 bg-slate-950/60 rounded-xl p-5 shadow-inner">
+                  <div className="text-base leading-relaxed whitespace-pre-wrap font-sans text-slate-200 selection:bg-teal-500/30">
+                      {topicSourceText}
+                  </div>
+              </div>
+
+              <DialogFooter className="pt-2 flex items-center justify-between gap-3">
+                  <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={async () => {
+                          try {
+                              await navigator.clipboard.writeText(topicSourceText);
+                              toast({ title: "Kopyalandı", description: "Kaynak metin panoya kopyalandı." });
+                          } catch(e) {}
+                      }}
+                      className="border-white/10 text-slate-300 hover:text-white"
+                  >
+                      <Copy className="w-3.5 h-3.5 mr-1.5 text-teal-400" /> Metni Kopyala
+                  </Button>
+
+                  <div className="flex items-center gap-2">
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsSourceTextReaderOpen(false)}
+                          className="border-white/10 text-slate-300 hover:bg-white/5"
+                      >
+                          Kapat
+                      </Button>
+                      <Button
+                          size="sm"
+                          onClick={() => {
+                              setIsSourceTextReaderOpen(false);
+                              setEditableSourceText(topicSourceText);
+                              setIsSourceTextEditorOpen(true);
+                          }}
+                          className="bg-teal-600 hover:bg-teal-500 text-white font-bold"
+                      >
+                          <FilePenLine className="w-3.5 h-3.5 mr-1.5" /> Düzenle
+                      </Button>
+                  </div>
+              </DialogFooter>
+          </DialogContent>
+      </Dialog>
     </div>
     </>
   );

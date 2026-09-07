@@ -123,9 +123,9 @@ export async function generateQuestionsWithAI(input: GenerateQuestionsInput) {
     try {
         const result = await generateQuestions(input);
         return result;
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error in AI Question Generation action:", error);
-        return { error: "Yapay zeka ile soru üretilirken bir hata oluştu." };
+        return { error: error?.message || "Yapay zeka ile soru üretilirken bir hata oluştu." };
     }
 }
 

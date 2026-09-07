@@ -19,6 +19,7 @@ const GenerateQuestionsInputSchema = z.object({
   questionCountPerType: z.number().int().min(1).max(50).describe("The number of questions to generate for each selected type."),
   apiKey: z.string().optional(),
   modelName: z.string().optional(),
+  customPrompt: z.string().optional(),
 });
 export type GenerateQuestionsInput = z.infer<typeof GenerateQuestionsInputSchema>;
 
@@ -79,7 +80,7 @@ ${questionTypesFormatted}
 
 Her tip için üretilecek soru sayısı: ${input.questionCountPerType} adet
 Zorluk seviyeleri dağılımı: ${difficultiesFormatted}
-
+${input.customPrompt?.trim() ? `\nÖZEL ÖĞRETMEN TALİMATI / ODAK ALANI:\n${input.customPrompt.trim()}\n` : ''}
 KRİTİK KURALLAR:
 1. Sorular bağımsız olmalı, "Metne göre" veya "Yukarıdaki metne göre" gibi kalıplar içermemelidir.
 2. Çoktan seçmeli sorular için 4 seçenek (options) ve seçeneklerden biriyle birebir aynı olan correctAnswer olmalıdır.

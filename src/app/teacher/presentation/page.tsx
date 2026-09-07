@@ -6,7 +6,8 @@ import {
     Loader2, ArrowLeft, Presentation, Settings, Sun, Moon, LayoutList, 
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
-    ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil, Minus, Plus
+    ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil, Minus, Plus,
+    Copy
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -17,6 +18,7 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { PresentationDrawingBoard } from '@/components/presentation-drawing-board';
 import { PresentationWheelModal } from '@/components/presentation-wheel-modal';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
@@ -25,6 +27,8 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTheme } from '@/context/theme-provider';
+import { useToast } from '@/hooks/use-toast';
+import { saveTopicSourceText } from '@/app/teacher/source-texts/actions';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { playSound } from '@/lib/audio-service';
@@ -59,9 +63,45 @@ function PresentationPageContent() {
     const [animationSpeed, setAnimationSpeed] = useState<'off' | 'slow' | 'normal' | 'fast'>('normal');
     const [fontSizeScale, setFontSizeScale] = useState<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'>('sm');
     const [isToolsOpen, setIsToolsOpen] = useState(false);
+    const { toast } = useToast();
+    const [sourceText, setSourceText] = useState<string>('');
+    const [isSourceTextOpen, setIsSourceTextOpen] = useState(false);
+    const [isEditingSourceText, setIsEditingSourceText] = useState(false);
+    const [editableSourceText, setEditableSourceText] = useState('');
+    const [isSavingSourceText, setIsSavingSourceText] = useState(false);
     const { themeMode, setThemeMode } = useTheme();
     const isDarkMode = themeMode === 'dark';
     const setIsDarkMode = (checked: boolean) => setThemeMode(checked ? 'dark' : 'light');
+
+    const handleSaveSourceText = async () => {
+        if (!courseId || !unitId || (!topicId && !unitId)) return;
+        setIsSavingSourceText(true);
+        try {
+            const targetTopicId = topicId || unitId;
+            const res = await saveTopicSourceText(courseId, unitId, targetTopicId, editableSourceText);
+            if (res.success) {
+                setSourceText(editableSourceText.trim());
+                setIsEditingSourceText(false);
+                toast({ title: "Kaydedildi", description: "Kaynak metin başarıyla güncellendi." });
+            } else {
+                toast({ title: "Hata", description: res.error || "Kaydedilemedi.", variant: "destructive" });
+            }
+        } catch (e: any) {
+            toast({ title: "Hata", description: e.message, variant: "destructive" });
+        } finally {
+            setIsSavingSourceText(false);
+        }
+    };
+
+    const handleCopySourceText = async () => {
+        if (!sourceText) return;
+        try {
+            await navigator.clipboard.writeText(sourceText);
+            toast({ title: "Kopyalandı", description: "Kaynak metin panoya kopyalandı." });
+        } catch (e) {
+            toast({ title: "Hata", description: "Panoya kopyalanamadı.", variant: "destructive" });
+        }
+    };
 
     const getCurrentScaleIndex = () => {
         if (fontSizeScale === 'normal') return 1; // 'sm'
@@ -191,12 +231,16 @@ function PresentationPageContent() {
             } else if (e.key === 'd' || e.key === 'D') {
                 e.preventDefault();
                 setIsDrawingOpen(prev => !prev);
+            } else if (e.key === 'k' || e.key === 'K') {
+                e.preventDefault();
+                setIsSourceTextOpen(prev => !prev);
             } else if (e.key === 'Escape') {
                 setIsBlackout(false);
                 setIsTimerOpen(false);
                 setIsPickerOpen(false);
                 setIsSlideDrawerOpen(false);
                 setIsDrawingOpen(false);
+                setIsSourceTextOpen(false);
             }
         };
 
@@ -242,8 +286,21 @@ function PresentationPageContent() {
 
         try {
             const targetId = topicId || unitId;
+            let contentRef = topicId 
+                ? doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId)
+                : doc(db, 'courses', courseId, 'units', unitId);
+
             // 0. Check client cache first if topicId is specified
             if (topicId) {
+                // Also fetch sourceText in background for cached topics
+                getDoc(contentRef).then(snap => {
+                    if (snap.exists()) {
+                        const txt = snap.data()?.sourceText || '';
+                        setSourceText(txt);
+                        setEditableSourceText(txt);
+                    }
+                }).catch(() => {});
+
                 const cached = getCachedSteps(topicId);
                 if (cached && cached.length > 0) {
                     let finalSteps = cached;
@@ -257,18 +314,14 @@ function PresentationPageContent() {
                 }
             }
 
-            let contentRef;
-            if (topicId) {
-                contentRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-            } else {
-                contentRef = doc(db, 'courses', courseId, 'units', unitId);
-            }
-
             const contentSnap = await getDoc(contentRef);
             
             if (contentSnap.exists()) {
                  const data = contentSnap.data();
                  const contentId = contentSnap.id;
+                 const loadedSourceText = data.sourceText || '';
+                 setSourceText(loadedSourceText);
+                 setEditableSourceText(loadedSourceText);
                  let steps = data.steps || [];
 
                  if (!topicId && steps.length === 0) {
@@ -460,6 +513,23 @@ function PresentationPageContent() {
                             <Pencil className="w-3.5 h-3.5 text-cyan-400" />
                             <span className="hidden sm:inline">Çizim (D)</span>
                         </Button>
+
+                        {/* Hızlı Kaynak Metin Butonu (K) */}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setIsSourceTextOpen(prev => !prev)}
+                            className={cn(
+                                "h-9 px-3 rounded-xl font-bold text-xs gap-1.5 transition-all border cursor-pointer",
+                                isSourceTextOpen 
+                                    ? "bg-teal-500/20 text-teal-400 border-teal-500/50 shadow-md shadow-teal-500/20" 
+                                    : "bg-white/5 hover:bg-white/10 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10"
+                            )}
+                            title="Konu Kaynak Metni (K)"
+                        >
+                            <BookOpen className="w-3.5 h-3.5 text-teal-400" />
+                            <span className="hidden sm:inline">Kaynak Metin (K)</span>
+                        </Button>
                     </div>
                 </header>
             )}
@@ -591,8 +661,21 @@ function PresentationPageContent() {
                                         </button>
 
                                         <button
+                                            onClick={() => { setIsSourceTextOpen(true); setIsToolsOpen(false); }}
+                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-teal-500/20 bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-400 transition-all text-left group cursor-pointer"
+                                        >
+                                            <div className="p-2 rounded-lg bg-teal-500/20 group-hover:bg-teal-500 group-hover:text-slate-950 transition-colors">
+                                                <BookOpen className="w-4 h-4" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="font-bold text-xs">Kaynak Metin (K)</span>
+                                                <span className="text-[10px] opacity-75">Ders Notu & Özet</span>
+                                            </div>
+                                        </button>
+
+                                        <button
                                             onClick={() => { setIsBlackout(true); setIsToolsOpen(false); }}
-                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-all text-left group col-span-2 cursor-pointer"
+                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-all text-left group cursor-pointer"
                                         >
                                             <div className="p-2 rounded-lg bg-rose-500/20 group-hover:bg-rose-500 group-hover:text-white transition-colors">
                                                 <EyeOff className="w-4 h-4" />
@@ -926,6 +1009,121 @@ function PresentationPageContent() {
                             </p>
                         </div>
                     </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* ══ 6. KAYNAK METİN & ÖZET ÇEKMECESİ (K) ══ */}
+            <AnimatePresence>
+                {isSourceTextOpen && (
+                    <div 
+                        className="fixed inset-0 z-50 flex items-center justify-end bg-slate-900/60 backdrop-blur-xl" 
+                        onClick={() => setIsSourceTextOpen(false)}
+                    >
+                        <motion.div 
+                            initial={{ x: '100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '100%' }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className="relative w-full max-w-xl h-full bg-slate-900/95 border-l border-white/10 p-6 flex flex-col text-slate-100 shadow-2xl overflow-hidden"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                                <div className="flex items-center gap-2.5">
+                                    <div className="p-2.5 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30">
+                                        <BookOpen className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-black text-base text-white">Kaynak Metin & Özet (K)</h3>
+                                        <p className="text-xs text-slate-400 line-clamp-1">{content?.title || topicName || 'Konu'}</p>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={() => setIsSourceTextOpen(false)} 
+                                    className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            {/* Araç Çubuğu */}
+                            <div className="flex items-center justify-between py-3 border-b border-white/5 text-xs text-slate-400">
+                                <span className="font-semibold text-teal-300">
+                                    {sourceText ? `${sourceText.trim().split(/\s+/).filter(Boolean).length} kelime` : 'Metin yok'}
+                                </span>
+                                <div className="flex items-center gap-2">
+                                    {sourceText && (
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={handleCopySourceText}
+                                            className="h-7 px-2 text-xs text-slate-300 hover:text-white hover:bg-white/10"
+                                        >
+                                            <Copy className="w-3.5 h-3.5 mr-1 text-teal-400" /> Kopyala
+                                        </Button>
+                                    )}
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => {
+                                            if (!isEditingSourceText) setEditableSourceText(sourceText);
+                                            setIsEditingSourceText(prev => !prev);
+                                        }}
+                                        className="h-7 px-2.5 text-xs border-white/10 text-teal-300 hover:text-white hover:bg-teal-500/20"
+                                    >
+                                        {isEditingSourceText ? 'Okuma Modu' : 'Düzenle'}
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {/* İçerik */}
+                            <div className="flex-grow overflow-y-auto my-3 pr-2 scrollbar-thin">
+                                {isEditingSourceText ? (
+                                    <div className="space-y-3 h-full flex flex-col">
+                                        <Textarea
+                                            value={editableSourceText}
+                                            onChange={(e) => setEditableSourceText(e.target.value)}
+                                            placeholder="Bu konuya ait ders kitabı veya kaynak metnini buraya yapıştırın..."
+                                            className="min-h-[360px] flex-grow bg-slate-950 border-white/10 text-white font-sans text-sm leading-relaxed p-4 rounded-xl resize-y"
+                                        />
+                                        <Button
+                                            onClick={handleSaveSourceText}
+                                            disabled={isSavingSourceText}
+                                            className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold h-10 shadow-lg shadow-teal-950/40"
+                                        >
+                                            {isSavingSourceText ? (
+                                                <>
+                                                    <Loader2 className="w-4 h-4 animate-spin mr-2" /> Kaydediliyor...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Check className="w-4 h-4 mr-1.5" /> Kaydet ve Güncelle
+                                                </>
+                                            )}
+                                        </Button>
+                                    </div>
+                                ) : sourceText ? (
+                                    <div className="p-5 rounded-2xl bg-black/30 border border-white/5 text-sm md:text-base leading-relaxed whitespace-pre-wrap font-sans text-slate-200 selection:bg-teal-500/30">
+                                        {sourceText}
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center py-20 text-center space-y-3">
+                                        <BookOpen className="w-12 h-12 text-slate-600" />
+                                        <p className="text-sm font-medium text-slate-400">Bu konuya ait kayıtlı kaynak metin bulunamadı.</p>
+                                        <Button
+                                            size="sm"
+                                            onClick={() => {
+                                                setEditableSourceText('');
+                                                setIsEditingSourceText(true);
+                                            }}
+                                            className="bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs"
+                                        >
+                                            + Kaynak Metin Ekle
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
 

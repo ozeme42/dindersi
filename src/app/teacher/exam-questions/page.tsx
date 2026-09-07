@@ -55,7 +55,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, where, Timestamp } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, orderBy, where, Timestamp } from "firebase/firestore";
 import type { Question, Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { AIGenerationDialog } from "@/components/ai-generation-dialog";
@@ -171,6 +171,8 @@ export default function ExamQuestionBankPage() {
   const [editingState, setEditingState] = useState<{ question: Question, index: number } | null>(null);
   const [isBulkOpen, setIsBulkOpen] = useState(false);
   const [isAIGenOpen, setIsAIGenOpen] = useState(false);
+  const [topicSourceText, setTopicSourceText] = useState<string>('');
+  const [isSourceTextLoading, setIsSourceTextLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -334,6 +336,31 @@ export default function ExamQuestionBankPage() {
       fetchQuestionsForSelection();
     }
   }, [currentStep, fetchQuestionsForSelection]);
+
+  useEffect(() => {
+    if (!selection.topicId || selection.topicId === 'all' || !selection.courseId || !selection.unitId) {
+      setTopicSourceText('');
+      return;
+    }
+    let isMounted = true;
+    setIsSourceTextLoading(true);
+    const fetchTopicSource = async () => {
+      try {
+        const topicRef = doc(db, 'courses', selection.courseId, 'units', selection.unitId, 'topics', selection.topicId);
+        const snap = await getDoc(topicRef);
+        if (isMounted && snap.exists()) {
+          const data = snap.data();
+          setTopicSourceText(data.sourceText || '');
+        }
+      } catch (err) {
+        console.warn("Could not fetch topic source text:", err);
+      } finally {
+        if (isMounted) setIsSourceTextLoading(false);
+      }
+    };
+    fetchTopicSource();
+    return () => { isMounted = false; };
+  }, [selection.courseId, selection.unitId, selection.topicId]);
   
   const handleNext = () => currentStep < steps.length && setCurrentStep(currentStep + 1);
   const handleBack = () => {
@@ -653,9 +680,10 @@ export default function ExamQuestionBankPage() {
     return {
         selection,
         selectionNames,
-        sourceText: topic.sourceText || ''
+        sourceText: topicSourceText || topic.sourceText || '',
+        isLoadingSourceText: isSourceTextLoading,
     };
-}, [currentStep, selection, selectionNames, allData.courses]);
+}, [currentStep, selection, selectionNames, allData.courses, topicSourceText, isSourceTextLoading]);
 
   const renderContent = () => {
       if(isLoading) return <div className="flex justify-center items-center h-full"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>;
