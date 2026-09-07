@@ -28,7 +28,7 @@ import { updateMultipleStudentScores } from "@/app/teacher/smartboard/actions";
 import { QuestionDialog } from "@/components/question-dialog";
 import { addStudentToClass } from "@/app/teacher/students/actions";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/auth-context";
 
@@ -544,7 +544,7 @@ function TeamCompetitionComponent() {
             }
             return t;
         }));
-        playSound(amount > 0 ? 'correct' : 'wrong');
+        playSound(amount > 0 ? 'correct' : 'error');
     };
 
     // Takımdan Öğrenci Çıkarma
