@@ -30,7 +30,7 @@ import {
     SelectTrigger, SelectValue 
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { saveTopicSourceText, clearTopicSourceText } from './actions';
+import { saveTopicSourceText, clearTopicSourceText, cleanAndFormatSourceTextWithAi } from './actions';
 import { cn } from '@/lib/utils';
 import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
 
@@ -104,6 +104,8 @@ export default function SourceTextsManagementPage() {
     const [pdfEndPage, setPdfEndPage] = useState<number | string>(1);
     const [isExtractingPdf, setIsExtractingPdf] = useState(false);
     const [pdfExtractProgress, setPdfExtractProgress] = useState<string>('');
+    const [isAiFormattingActive, setIsAiFormattingActive] = useState<boolean>(true);
+    const [isAiCleaning, setIsAiCleaning] = useState<boolean>(false);
     const pdfFileInputRef = useRef<HTMLInputElement>(null);
 
     // Load Data
@@ -644,22 +646,49 @@ export default function SourceTextsManagementPage() {
         setPdfExtractProgress(`${start}. sayfa okunuyor...`);
 
         try {
-            const { fullText, totalWords, pages } = await extractTextFromPageRange(
+            const { fullText: rawExtractedText, totalWords, pages } = await extractTextFromPageRange(
                 pdfDoc, 
                 start, 
                 end,
-                (current, total) => setPdfExtractProgress(`${current} / ${total} sayfa`)
+                (current, total) => setPdfExtractProgress(`${current} / ${total} sayfa okunuyor...`)
             );
 
-            if (!fullText.trim()) {
+            if (!rawExtractedText.trim()) {
                 toast({ title: "Metin Bulunamadı", description: "Seçilen sayfalarda okunabilir metin katmanı bulunamadı (Taranmış resim olabilir).", variant: "destructive" });
                 return;
             }
 
+            let finalText = rawExtractedText.trim();
+
+            // Ayet, Hadis ve Metin Düzenleyici AI aktifse çalıştır
+            if (isAiFormattingActive) {
+                setPdfExtractProgress("✨ Ayet ve hadisler AI ile düzenleniyor...");
+                try {
+                    const aiRes = await cleanAndFormatSourceTextWithAi(rawExtractedText, activeSelectedTopic?.title);
+                    if (aiRes.success && aiRes.cleanedText) {
+                        finalText = aiRes.cleanedText;
+                        toast({ 
+                            title: "Ayet & Hadis Düzeni Tamamlandı! ✨", 
+                            description: "Arapça ayetler, hadisler ve konu metni orijinal hat düzeninde eksiksiz aktarıldı." 
+                        });
+                    } else if (aiRes.error) {
+                        console.warn("AI formatting skipped/failed:", aiRes.error);
+                        toast({ 
+                            title: "Ham Metin Aktarıldı", 
+                            description: aiRes.error.includes("API anahtarı") 
+                                ? "Gemini API anahtarı ayarlanmadığı için düzenlenmiş ham metin aktarıldı." 
+                                : aiRes.error 
+                        });
+                    }
+                } catch (aiErr: any) {
+                    console.warn("AI clean call error:", aiErr);
+                }
+            }
+
             if (mode === 'append' && inlineEditText.trim()) {
-                setInlineEditText(prev => prev.trim() + '\n\n' + fullText.trim());
+                setInlineEditText(prev => prev.trim() + '\n\n' + finalText);
             } else {
-                setInlineEditText(fullText.trim());
+                setInlineEditText(finalText);
             }
 
             // Otomatik düzenleme moduna geç
@@ -672,16 +701,44 @@ export default function SourceTextsManagementPage() {
                 setPdfEndPage(Math.min(nextStart + 3, pdfTotalPages));
             }
 
-            toast({
-                title: "Metin Başarıyla Aktarıldı! ⚡",
-                description: `${pages.length} sayfa (${start} - ${end}) eksiksiz aktarıldı. (${totalWords.toLocaleString('tr-TR')} kelime)`
-            });
+            if (!isAiFormattingActive) {
+                toast({
+                    title: "Metin Başarıyla Aktarıldı! ⚡",
+                    description: `${pages.length} sayfa (${start} - ${end}) aktarıldı. (${totalWords.toLocaleString('tr-TR')} kelime)`
+                });
+            }
         } catch (err: any) {
             console.error("PDF extract error:", err);
             toast({ title: "Hata", description: "Metin çıkarılırken bir hata oluştu: " + err.message, variant: "destructive" });
         } finally {
             setIsExtractingPdf(false);
             setPdfExtractProgress('');
+        }
+    };
+
+    const handleManualAiClean = async () => {
+        if (!inlineEditText.trim()) {
+            toast({ title: "Boş Metin", description: "Düzenlenecek bir metin bulunamadı.", variant: "destructive" });
+            return;
+        }
+
+        setIsAiCleaning(true);
+        try {
+            toast({ title: "Yapay Zeka Çalışıyor... ✨", description: "Arapça ayet/hadisler ve ders kitabı düzeni hazırlanıyor..." });
+            const aiRes = await cleanAndFormatSourceTextWithAi(inlineEditText, activeSelectedTopic?.title);
+            if (aiRes.success && aiRes.cleanedText) {
+                setInlineEditText(aiRes.cleanedText);
+                toast({ 
+                    title: "Harika! Düzenlendi ✨", 
+                    description: "Arapça ayetler, hadisler ve konu başlıkları orijinal hat düzeninde biçimlendirildi." 
+                });
+            } else {
+                toast({ title: "Düzenleme Yapılamadı", description: aiRes.error || "Bilinmeyen hata", variant: "destructive" });
+            }
+        } catch (err: any) {
+            toast({ title: "Hata", description: err.message, variant: "destructive" });
+        } finally {
+            setIsAiCleaning(false);
         }
     };
 
@@ -1448,6 +1505,25 @@ export default function SourceTextsManagementPage() {
                                                     <Button
                                                         size="sm"
                                                         variant="outline"
+                                                        disabled={isAiCleaning || isSaving || !inlineEditText.trim()}
+                                                        onClick={handleManualAiClean}
+                                                        className="h-8 px-3 text-xs border-purple-500/30 text-purple-300 hover:bg-purple-950/40 hover:text-white rounded-xl shadow-sm"
+                                                        title="Metindeki Arapça ayet ve hadisleri, başlıkları ve paragrafları yapay zeka ile hatasız düzenler"
+                                                    >
+                                                        {isAiCleaning ? (
+                                                            <>
+                                                                <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin text-purple-400" /> Düzenleniyor...
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Sparkles className="w-3.5 h-3.5 mr-1.5 text-purple-400" /> Ayet/Hadis Düzenle (AI)
+                                                            </>
+                                                        )}
+                                                    </Button>
+
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
                                                         onClick={() => setIsInlineEditing(false)}
                                                         disabled={isSaving}
                                                         className="h-8 px-3 text-xs border-white/10 text-slate-300 hover:text-white rounded-xl"
@@ -1532,6 +1608,21 @@ export default function SourceTextsManagementPage() {
                                                             className="w-14 h-7 text-xs bg-slate-900 text-white text-center p-0.5 rounded-lg border-white/10 font-mono"
                                                         />
                                                     </div>
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setIsAiFormattingActive(!isAiFormattingActive)}
+                                                        className={cn(
+                                                            "px-2.5 py-1 rounded-xl font-bold text-[11px] transition-all border flex items-center gap-1.5 h-8",
+                                                            isAiFormattingActive
+                                                                ? "bg-purple-500/20 text-purple-200 border-purple-500/40 hover:bg-purple-500/30 shadow-sm"
+                                                                : "bg-slate-900/60 text-slate-400 border-white/10 hover:text-white"
+                                                        )}
+                                                        title="Arapça ayet ve hadisleri yapay zeka ile hat ve meal düzeninde yapılandırır"
+                                                    >
+                                                        <Sparkles className={cn("w-3.5 h-3.5", isAiFormattingActive ? "text-purple-400 animate-pulse" : "text-slate-500")} />
+                                                        <span>Ayet Düzeni: {isAiFormattingActive ? 'Açık (AI)' : 'Kapalı'}</span>
+                                                    </button>
 
                                                     <Button
                                                         size="sm"
