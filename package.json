@@ -56,6 +56,7 @@
     "next": "latest",
     "next-themes": "^0.3.0",
     "patch-package": "^8.0.0",
+    "pdfjs-dist": "^3.11.174",
     "react": "latest",
     "react-day-picker": "^8.10.1",
     "react-dom": "latest",

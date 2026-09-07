@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { 
     BookOpen, Search, Filter, Home, ArrowLeft, PlusCircle, 
@@ -8,7 +8,7 @@ import {
     Loader2, BookMarked, Layers, FileText, AlertCircle, 
     ChevronRight, ChevronLeft, X, ExternalLink, RefreshCw, ArrowUpDown, 
     ClipboardPaste, Eraser, CheckCircle2, Type, GraduationCap,
-    RotateCcw, FilterX, Book, Maximize2, Bookmark
+    RotateCcw, FilterX, Book, Maximize2, Bookmark, FileUp, Wand2
 } from 'lucide-react';
 import { collectionGroup, getDocs, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -32,6 +32,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { saveTopicSourceText, clearTopicSourceText } from './actions';
 import { cn } from '@/lib/utils';
+import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
 
 interface TopicItem {
     id: string;
@@ -48,7 +49,7 @@ interface TopicItem {
     charCount: number;
 }
 
-export const formatCourseTitle = (title: string): string => {
+const formatCourseTitle = (title: string): string => {
     if (!title) return '';
     const lower = title.toLocaleLowerCase('tr').trim();
     if (lower === 'dkab' || lower.includes('dkab') || lower === 'din' || lower.includes('din kültürü')) {
@@ -94,6 +95,16 @@ export default function SourceTextsManagementPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [readerFontSize, setReaderFontSize] = useState<'sm' | 'base' | 'lg' | 'xl'>('base');
+
+    // PDF Assistant State (Sıfır Hata Sayfa Bazlı Metin Çıkarıcı)
+    const [pdfDoc, setPdfDoc] = useState<any>(null);
+    const [pdfFileName, setPdfFileName] = useState<string>('');
+    const [pdfTotalPages, setPdfTotalPages] = useState<number>(0);
+    const [pdfStartPage, setPdfStartPage] = useState<number | string>(1);
+    const [pdfEndPage, setPdfEndPage] = useState<number | string>(1);
+    const [isExtractingPdf, setIsExtractingPdf] = useState(false);
+    const [pdfExtractProgress, setPdfExtractProgress] = useState<string>('');
+    const pdfFileInputRef = useRef<HTMLInputElement>(null);
 
     // Load Data
     const loadData = async (showRefreshToast = false) => {
@@ -584,6 +595,96 @@ export default function SourceTextsManagementPage() {
         }
     };
 
+    // PDF Handlers (Sıfır Hata Sayfa Bazlı Metin Çıkarıcı)
+    const handlePdfFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+            toast({ title: "PDF Açılıyor...", description: `${file.name} taranıyor, lütfen bekleyin.` });
+            const { pdfDoc: doc, numPages, title } = await loadPdf(file);
+            setPdfDoc(doc);
+            setPdfFileName(title);
+            setPdfTotalPages(numPages);
+            setPdfStartPage(1);
+            setPdfEndPage(Math.min(5, numPages));
+            toast({ 
+                title: "PDF Hazır! 🎉", 
+                description: `${title} yüklendi. Toplam ${numPages} sayfa. Şimdi istediğiniz sayfa aralığını seçip tek tıkla aktarabilirsiniz.` 
+            });
+        } catch (err: any) {
+            console.error("PDF load error:", err);
+            toast({ title: "PDF Hatası", description: err.message || "PDF açılamadı.", variant: "destructive" });
+        } finally {
+            if (pdfFileInputRef.current) {
+                pdfFileInputRef.current.value = '';
+            }
+        }
+    };
+
+    const handleExtractPdfPages = async (mode: 'replace' | 'append' = 'replace') => {
+        if (!pdfDoc) {
+            pdfFileInputRef.current?.click();
+            return;
+        }
+
+        const start = Number(pdfStartPage);
+        const end = Number(pdfEndPage);
+
+        if (!start || !end || start < 1 || end < start) {
+            toast({ title: "Geçersiz Sayfa Aralığı", description: "Lütfen geçerli bir başlangıç ve bitiş sayfası girin.", variant: "destructive" });
+            return;
+        }
+
+        if (end > pdfTotalPages) {
+            toast({ title: "Sayfa Sınırı Aşıldı", description: `PDF toplam ${pdfTotalPages} sayfadır.`, variant: "destructive" });
+            return;
+        }
+
+        setIsExtractingPdf(true);
+        setPdfExtractProgress(`${start}. sayfa okunuyor...`);
+
+        try {
+            const { fullText, totalWords, pages } = await extractTextFromPageRange(
+                pdfDoc, 
+                start, 
+                end,
+                (current, total) => setPdfExtractProgress(`${current} / ${total} sayfa`)
+            );
+
+            if (!fullText.trim()) {
+                toast({ title: "Metin Bulunamadı", description: "Seçilen sayfalarda okunabilir metin katmanı bulunamadı (Taranmış resim olabilir).", variant: "destructive" });
+                return;
+            }
+
+            if (mode === 'append' && inlineEditText.trim()) {
+                setInlineEditText(prev => prev.trim() + '\n\n' + fullText.trim());
+            } else {
+                setInlineEditText(fullText.trim());
+            }
+
+            // Otomatik düzenleme moduna geç
+            setIsInlineEditing(true);
+
+            // Bir sonraki konu için başlangıç sayfasını otomatik hazırla
+            if (end < pdfTotalPages) {
+                const nextStart = end + 1;
+                setPdfStartPage(nextStart);
+                setPdfEndPage(Math.min(nextStart + 3, pdfTotalPages));
+            }
+
+            toast({
+                title: "Metin Başarıyla Aktarıldı! ⚡",
+                description: `${pages.length} sayfa (${start} - ${end}) eksiksiz aktarıldı. (${totalWords.toLocaleString('tr-TR')} kelime)`
+            });
+        } catch (err: any) {
+            console.error("PDF extract error:", err);
+            toast({ title: "Hata", description: "Metin çıkarılırken bir hata oluştu: " + err.message, variant: "destructive" });
+        } finally {
+            setIsExtractingPdf(false);
+            setPdfExtractProgress('');
+        }
+    };
+
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 px-2 sm:px-4 md:px-6 py-4 md:py-6 relative overflow-x-hidden">
             {/* Arka Plan Efektleri */}
@@ -610,6 +711,36 @@ export default function SourceTextsManagementPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
+                        {/* Gizli PDF Dosya Seçici */}
+                        <input 
+                            type="file" 
+                            ref={pdfFileInputRef} 
+                            accept="application/pdf" 
+                            className="hidden" 
+                            onChange={handlePdfFileSelect} 
+                        />
+
+                        <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => pdfFileInputRef.current?.click()}
+                            className={cn(
+                                "rounded-xl h-11 px-4 font-bold text-xs transition-all shadow-lg flex items-center gap-2",
+                                pdfDoc 
+                                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20" 
+                                    : "bg-indigo-600/15 border-indigo-500/30 text-indigo-300 hover:bg-indigo-600/25 hover:text-white"
+                            )}
+                        >
+                            <FileUp className="h-4 w-4 text-indigo-400" />
+                            {pdfDoc ? (
+                                <span className="truncate max-w-[150px] sm:max-w-[220px]" title={pdfFileName}>
+                                    📗 {pdfFileName} ({pdfTotalPages} sf)
+                                </span>
+                            ) : (
+                                "Ders Kitabı PDF'i Yükle"
+                            )}
+                        </Button>
+
                         <Button 
                             variant="outline" 
                             size="sm"
@@ -1345,6 +1476,108 @@ export default function SourceTextsManagementPage() {
                                         </div>
                                     </div>
 
+                                    {/* ══ PDF SAYFA AKTARMA ASİSTANI (HIZLI ÇIKARICI) ══ */}
+                                    <div className="px-4 py-2.5 sm:px-5 sm:py-3 bg-gradient-to-r from-indigo-950/60 via-purple-950/40 to-slate-900 border-b border-indigo-500/20 flex items-center justify-between gap-3 text-xs flex-wrap">
+                                        <div className="flex items-center gap-2.5 min-w-0">
+                                            <div className="p-1.5 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex-shrink-0">
+                                                <BookOpen className="w-4 h-4" />
+                                            </div>
+                                            {pdfDoc ? (
+                                                <div className="flex items-center gap-2 flex-wrap min-w-0">
+                                                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+                                                    <span className="font-bold text-white max-w-[160px] sm:max-w-[240px] truncate" title={pdfFileName}>
+                                                        {pdfFileName}
+                                                    </span>
+                                                    <Badge variant="outline" className="text-[10px] text-emerald-300 border-emerald-500/40 bg-emerald-500/10 font-mono">
+                                                        {pdfTotalPages} Sayfa
+                                                    </Badge>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => pdfFileInputRef.current?.click()}
+                                                        className="text-[11px] text-indigo-300 hover:text-white underline ml-1"
+                                                    >
+                                                        PDF Değiştir
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-slate-200 font-bold">PDF Metin Asistanı:</span>
+                                                    <span className="text-slate-400 hidden sm:inline">Ders kitabı PDF'inden sayfa aralığıyla tek tıkla metin aktarımı</span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-center gap-2 flex-wrap ml-auto">
+                                            {pdfDoc ? (
+                                                <>
+                                                    <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1 rounded-xl border border-white/10">
+                                                        <span className="text-slate-400 text-[11px] font-semibold">Sayfa:</span>
+                                                        <Input 
+                                                            type="number" 
+                                                            min={1} 
+                                                            max={pdfTotalPages}
+                                                            value={pdfStartPage} 
+                                                            onChange={(e) => setPdfStartPage(e.target.value)}
+                                                            placeholder="İlk"
+                                                            className="w-14 h-7 text-xs bg-slate-900 text-white text-center p-0.5 rounded-lg border-white/10 font-mono"
+                                                        />
+                                                        <span className="text-slate-500">-</span>
+                                                        <Input 
+                                                            type="number" 
+                                                            min={1} 
+                                                            max={pdfTotalPages}
+                                                            value={pdfEndPage} 
+                                                            onChange={(e) => setPdfEndPage(e.target.value)}
+                                                            placeholder="Son"
+                                                            className="w-14 h-7 text-xs bg-slate-900 text-white text-center p-0.5 rounded-lg border-white/10 font-mono"
+                                                        />
+                                                    </div>
+
+                                                    <Button
+                                                        size="sm"
+                                                        disabled={isExtractingPdf}
+                                                        onClick={() => handleExtractPdfPages('replace')}
+                                                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold h-8 px-3.5 rounded-xl shadow-lg transition-all text-xs flex items-center gap-1.5"
+                                                    >
+                                                        {isExtractingPdf ? (
+                                                            <>
+                                                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                                                <span>{pdfExtractProgress || 'Aktarılıyor...'}</span>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                                                                <span>Sayfaları Aktar</span>
+                                                            </>
+                                                        )}
+                                                    </Button>
+
+                                                    {isInlineEditing && inlineEditText.trim() && (
+                                                        <Button
+                                                            size="sm"
+                                                            variant="outline"
+                                                            disabled={isExtractingPdf}
+                                                            onClick={() => handleExtractPdfPages('append')}
+                                                            className="h-8 px-2.5 text-xs border-indigo-500/30 text-indigo-300 hover:text-white rounded-xl"
+                                                            title="Mevcut metnin sonuna ekle"
+                                                        >
+                                                            + Sona Ekle
+                                                        </Button>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => pdfFileInputRef.current?.click()}
+                                                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold h-8 px-3.5 rounded-xl shadow-md transition-all text-xs flex items-center gap-1.5"
+                                                >
+                                                    <FileUp className="w-3.5 h-3.5" />
+                                                    <span>Ders Kitabı PDF'i Seç</span>
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
+
                                     {/* Kitap İçerik Gövdesi */}
                                     <div className="flex-1 overflow-y-auto p-6 sm:p-8 bg-slate-950/60 border-y border-white/5 scrollbar-thin">
                                         {!isInlineEditing ? (
@@ -1369,12 +1602,43 @@ export default function SourceTextsManagementPage() {
                                                     <p className="text-sm text-slate-400 max-w-md">
                                                         Ders kitabı metnini buraya eklediğinizde; sunum oluşturucu, soru bankası sihirbazı ve etkinlik veri tabanında bu metin otomatik olarak kullanılır.
                                                     </p>
-                                                    <Button
-                                                        onClick={() => setIsInlineEditing(true)}
-                                                        className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl px-5 h-10 shadow-lg shadow-indigo-950/50"
-                                                    >
-                                                        <FilePenLine className="w-4 h-4 mr-2" /> Metin Yaz veya Yapıştır
-                                                    </Button>
+                                                    <div className="flex items-center gap-3 flex-wrap justify-center pt-2">
+                                                        {pdfDoc ? (
+                                                            <Button
+                                                                onClick={() => handleExtractPdfPages('replace')}
+                                                                disabled={isExtractingPdf}
+                                                                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl px-5 h-10 shadow-lg shadow-emerald-950/50 flex items-center gap-2"
+                                                            >
+                                                                {isExtractingPdf ? (
+                                                                    <>
+                                                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                                                        <span>{pdfExtractProgress || 'Aktarılıyor...'}</span>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+                                                                        <span>PDF'ten Aktar (Sayfa {pdfStartPage}-{pdfEndPage})</span>
+                                                                    </>
+                                                                )}
+                                                            </Button>
+                                                        ) : (
+                                                            <Button
+                                                                onClick={() => pdfFileInputRef.current?.click()}
+                                                                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl px-5 h-10 shadow-lg shadow-indigo-950/50 flex items-center gap-2"
+                                                            >
+                                                                <FileUp className="w-4 h-4" />
+                                                                <span>PDF Seçerek Otomatik Aktar</span>
+                                                            </Button>
+                                                        )}
+
+                                                        <Button
+                                                            variant="outline"
+                                                            onClick={() => setIsInlineEditing(true)}
+                                                            className="border-white/10 hover:border-white/20 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold rounded-xl px-4 h-10"
+                                                        >
+                                                            <FilePenLine className="w-4 h-4 mr-2" /> Manuel Yaz veya Yapıştır
+                                                        </Button>
+                                                    </div>
                                                 </div>
                                             )
                                         ) : (
