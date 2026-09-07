@@ -6,12 +6,25 @@ import { unstable_noStore as noStore } from 'next/cache';
 
 export type AnagramWallWord = string;
 
+const DEFAULT_ANAGRAM_WORDS: string[] = [
+    'ZEKÂT', 'SADAKA', 'NAMAZ', 'ORUÇ', 'HAC', 'KÂBE', 'FATİHA', 'İHLAS', 
+    'MEKKE', 'MEDİNE', 'PEYGAMBER', 'MÜMİN', 'SEVAP', 'GÜNAH', 'CENNET', 
+    'TEVHİD', 'ADALET', 'SABIR', 'MERHAMET', 'ŞÜKÜR', 'ABDEST', 'EZAN', 
+    'CAMİ', 'HİCRET', 'KANDİL', 'RAMAZAN', 'KURAN', 'AYET', 'SÜNNET', 'İMAN'
+];
+
 export async function getAnagramWallWords(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
 ): Promise<{ words: AnagramWallWord[]; error?: string }> {
     noStore();
     try {
-        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        let allItems: any[] = [];
+        try {
+            allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' }) || [];
+        } catch (e) {
+            console.warn("Static questions fetch warning in anagram:", e);
+        }
+
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
         const validWords: string[] = [];
 
@@ -20,11 +33,11 @@ export async function getAnagramWallWords(
                 .replace(/[âÂ]/g, 'A')
                 .replace(/[îÎ]/g, 'İ')
                 .replace(/[ûÛ]/g, 'U')
-                .replace(/['’\-]/g, '')
+                .replace(/['’-]/g, '')
                 .trim();
         };
 
-        for (const item of allItems || []) {
+        for (const item of allItems) {
             if ('type' in item) {
                 let term = '';
                 if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.term) {
@@ -54,17 +67,17 @@ export async function getAnagramWallWords(
             }
         }
 
-        const uniqueWords = [...new Set(validWords)];
+        let uniqueWords = [...new Set(validWords)];
 
-        if (uniqueWords.length < 2) {
-            return { error: "Anagram Duvarı oynamak için bu konuda en az 2 uygun kelime bulunmalıdır.", words: [] };
+        if (uniqueWords.length < 5) {
+            uniqueWords = [...new Set([...uniqueWords, ...DEFAULT_ANAGRAM_WORDS])];
         }
 
         const shuffled = [...uniqueWords].sort(() => 0.5 - Math.random());
-        return { words: JSON.parse(JSON.stringify(shuffled.slice(0, 30))) };
+        return { words: JSON.parse(JSON.stringify(shuffled.slice(0, 25))) };
 
     } catch (error: any) {
         console.error("Error getting Anagram words:", error);
-        return { error: "Veri alınırken hata oluştu.", words: [] };
+        return { words: [...DEFAULT_ANAGRAM_WORDS].sort(() => 0.5 - Math.random()).slice(0, 20) };
     }
 }
