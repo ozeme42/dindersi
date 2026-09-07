@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
@@ -7,7 +7,8 @@ import {
     FilePenLine, Trash2, Copy, Check, Eye, Sparkles, 
     Loader2, BookMarked, Layers, FileText, AlertCircle, 
     ChevronRight, X, ExternalLink, RefreshCw, ArrowUpDown, 
-    ClipboardPaste, Eraser, CheckCircle2, Type
+    ClipboardPaste, Eraser, CheckCircle2, Type, GraduationCap,
+    RotateCcw, FilterX
 } from 'lucide-react';
 import { collectionGroup, getDocs, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -56,6 +57,9 @@ export default function SourceTextsManagementPage() {
     // Filters & Search
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedGrade, setSelectedGrade] = useState<string>('all');
+    const [selectedCourseId, setSelectedCourseId] = useState<string>('all');
+    const [selectedUnitId, setSelectedUnitId] = useState<string>('all');
+    const [selectedTopicId, setSelectedTopicId] = useState<string>('all');
     const [statusFilter, setStatusFilter] = useState<'all' | 'has_text' | 'no_text'>('all');
     const [sortBy, setSortBy] = useState<'order' | 'word_desc' | 'word_asc' | 'title'>('order');
 
@@ -108,41 +112,76 @@ export default function SourceTextsManagementPage() {
             }
 
             const snapshot = await getDocs(query(collectionGroup(db, 'topics')));
-            const topicList: TopicItem[] = [];
-
+            const firestoreTopicsMap = new Map<string, any>();
             snapshot.forEach(docSnap => {
-                const d = docSnap.data();
-                const pathParts = docSnap.ref.path.split('/');
-                const courseId = pathParts[1] || '';
-                const unitId = pathParts[3] || '';
-                const topicId = docSnap.id;
-
-                const meta = topicMetaMap.get(topicId);
-                const title = d.title || meta?.topicTitle || 'İsimsiz Konu';
-                const sourceText = (d.sourceText || '').trim();
-                const wordCount = sourceText ? sourceText.split(/\s+/).filter(Boolean).length : 0;
-                const charCount = sourceText.length;
-
-                topicList.push({
-                    id: topicId,
-                    topicId,
-                    courseId: courseId || meta?.courseId || '',
-                    unitId: unitId || meta?.unitId || '',
-                    title,
-                    sourceText,
-                    className: meta?.className || 'Din Kültürü',
-                    grade: meta?.grade || '5',
-                    unitTitle: meta?.unitTitle || 'Ünite',
-                    courseTitle: meta?.courseTitle || 'DKAB',
-                    wordCount,
-                    charCount
+                firestoreTopicsMap.set(docSnap.id, {
+                    data: docSnap.data(),
+                    path: docSnap.ref.path
                 });
             });
 
-            topicList.sort((a, b) => {
-                const gradeDiff = Number(a.grade) - Number(b.grade);
-                if (gradeDiff !== 0) return gradeDiff;
-                return a.unitTitle.localeCompare(b.unitTitle, 'tr');
+            const topicList: TopicItem[] = [];
+            const seenTopicIds = new Set<string>();
+
+            // 1. Önce manifest sırasına göre tüm konuları ekle (doğal müfredat sıralaması)
+            for (const cg of manifest.classGroups || []) {
+                const grade = cg.name;
+                const className = `${grade}. Sınıf`;
+                for (const course of cg.courses || []) {
+                    for (const unit of course.units || []) {
+                        for (const topic of unit.topics || []) {
+                            seenTopicIds.add(topic.id);
+                            const firestoreDoc = firestoreTopicsMap.get(topic.id);
+                            const sourceText = ((firestoreDoc?.data?.sourceText ?? topic.sourceText) || '').trim();
+                            const wordCount = sourceText ? sourceText.split(/\s+/).filter(Boolean).length : 0;
+                            const charCount = sourceText.length;
+
+                            topicList.push({
+                                id: topic.id,
+                                topicId: topic.id,
+                                courseId: course.id,
+                                unitId: unit.id,
+                                title: topic.title,
+                                sourceText,
+                                className,
+                                grade,
+                                unitTitle: unit.title,
+                                courseTitle: course.title,
+                                wordCount,
+                                charCount
+                            });
+                        }
+                    }
+                }
+            }
+
+            // 2. Firestore'da olup manifest'te bulunmayan ek konular varsa onları da ekle
+            firestoreTopicsMap.forEach((val, topicId) => {
+                if (!seenTopicIds.has(topicId)) {
+                    const d = val.data;
+                    const pathParts = val.path.split('/');
+                    const courseId = pathParts[1] || '';
+                    const unitId = pathParts[3] || '';
+                    const meta = topicMetaMap.get(topicId);
+                    const sourceText = (d.sourceText || '').trim();
+                    const wordCount = sourceText ? sourceText.split(/\s+/).filter(Boolean).length : 0;
+                    const charCount = sourceText.length;
+
+                    topicList.push({
+                        id: topicId,
+                        topicId,
+                        courseId: courseId || meta?.courseId || '',
+                        unitId: unitId || meta?.unitId || '',
+                        title: d.title || meta?.topicTitle || 'İsimsiz Konu',
+                        sourceText,
+                        className: meta?.className || 'Din Kültürü',
+                        grade: meta?.grade || '5',
+                        unitTitle: meta?.unitTitle || 'Ünite',
+                        courseTitle: meta?.courseTitle || 'DKAB',
+                        wordCount,
+                        charCount
+                    });
+                }
             });
 
             setTopics(topicList);
@@ -180,10 +219,149 @@ export default function SourceTextsManagementPage() {
         return Array.from(grades).sort((a, b) => Number(a) - Number(b));
     }, [topics]);
 
+    // Cascading Filter Handlers
+    const handleGradeChange = (grade: string) => {
+        setSelectedGrade(grade);
+        setSelectedCourseId('all');
+        setSelectedUnitId('all');
+        setSelectedTopicId('all');
+    };
+
+    const handleCourseChange = (courseId: string) => {
+        setSelectedCourseId(courseId);
+        setSelectedUnitId('all');
+        setSelectedTopicId('all');
+        if (courseId !== 'all') {
+            const sample = topics.find(t => t.courseId === courseId);
+            if (sample && selectedGrade === 'all') {
+                setSelectedGrade(sample.grade);
+            }
+        }
+    };
+
+    const handleUnitChange = (unitId: string) => {
+        setSelectedUnitId(unitId);
+        setSelectedTopicId('all');
+        if (unitId !== 'all') {
+            const sample = topics.find(t => t.unitId === unitId);
+            if (sample) {
+                if (selectedGrade === 'all') setSelectedGrade(sample.grade);
+                if (selectedCourseId === 'all') setSelectedCourseId(sample.courseId);
+            }
+        }
+    };
+
+    const handleTopicChange = (topicId: string) => {
+        setSelectedTopicId(topicId);
+        if (topicId !== 'all') {
+            const sample = topics.find(t => t.topicId === topicId);
+            if (sample) {
+                if (selectedGrade === 'all') setSelectedGrade(sample.grade);
+                if (selectedCourseId === 'all') setSelectedCourseId(sample.courseId);
+                if (selectedUnitId === 'all') setSelectedUnitId(sample.unitId);
+            }
+        }
+    };
+
+    const handleResetFilters = () => {
+        setSelectedGrade('all');
+        setSelectedCourseId('all');
+        setSelectedUnitId('all');
+        setSelectedTopicId('all');
+        setStatusFilter('all');
+        setSearchQuery('');
+        setSortBy('order');
+    };
+
+    // Derived Available Courses (filtered by selectedGrade)
+    const availableCourses = useMemo(() => {
+        const map = new Map<string, { id: string; title: string; count: number; grade: string }>();
+        topics.forEach(t => {
+            if (selectedGrade !== 'all' && t.grade !== selectedGrade) return;
+            if (!t.courseId) return;
+            const existing = map.get(t.courseId);
+            if (existing) {
+                existing.count++;
+            } else {
+                map.set(t.courseId, {
+                    id: t.courseId,
+                    title: t.courseTitle || 'Ders',
+                    count: 1,
+                    grade: t.grade
+                });
+            }
+        });
+        return Array.from(map.values()).sort((a, b) => a.title.localeCompare(b.title, 'tr'));
+    }, [topics, selectedGrade]);
+
+    // Derived Available Units (filtered by selectedGrade and selectedCourseId)
+    const availableUnits = useMemo(() => {
+        const map = new Map<string, { id: string; title: string; count: number; courseId: string }>();
+        topics.forEach(t => {
+            if (selectedGrade !== 'all' && t.grade !== selectedGrade) return;
+            if (selectedCourseId !== 'all' && t.courseId !== selectedCourseId) return;
+            if (!t.unitId) return;
+            const existing = map.get(t.unitId);
+            if (existing) {
+                existing.count++;
+            } else {
+                map.set(t.unitId, {
+                    id: t.unitId,
+                    title: t.unitTitle || 'Ünite',
+                    count: 1,
+                    courseId: t.courseId
+                });
+            }
+        });
+        return Array.from(map.values()).sort((a, b) => a.title.localeCompare(b.title, 'tr'));
+    }, [topics, selectedGrade, selectedCourseId]);
+
+    // Derived Available Topics for topic picker
+    const availableTopics = useMemo(() => {
+        return topics.filter(t => {
+            if (selectedGrade !== 'all' && t.grade !== selectedGrade) return false;
+            if (selectedCourseId !== 'all' && t.courseId !== selectedCourseId) return false;
+            if (selectedUnitId !== 'all' && t.unitId !== selectedUnitId) return false;
+            return true;
+        });
+    }, [topics, selectedGrade, selectedCourseId, selectedUnitId]);
+
+    // Check if any filters are active
+    const hasActiveFilters = useMemo(() => {
+        return (
+            selectedGrade !== 'all' ||
+            selectedCourseId !== 'all' ||
+            selectedUnitId !== 'all' ||
+            selectedTopicId !== 'all' ||
+            statusFilter !== 'all' ||
+            searchQuery.trim().length > 0 ||
+            sortBy !== 'order'
+        );
+    }, [selectedGrade, selectedCourseId, selectedUnitId, selectedTopicId, statusFilter, searchQuery, sortBy]);
+
+    // Active Filter Labels (for chips)
+    const activeSelectedCourse = useMemo(() => {
+        if (selectedCourseId === 'all') return null;
+        return topics.find(t => t.courseId === selectedCourseId)?.courseTitle || 'Ders';
+    }, [topics, selectedCourseId]);
+
+    const activeSelectedUnit = useMemo(() => {
+        if (selectedUnitId === 'all') return null;
+        return topics.find(t => t.unitId === selectedUnitId)?.unitTitle || 'Ünite';
+    }, [topics, selectedUnitId]);
+
+    const activeSelectedTopic = useMemo(() => {
+        if (selectedTopicId === 'all') return null;
+        return topics.find(t => t.topicId === selectedTopicId)?.title || 'Konu';
+    }, [topics, selectedTopicId]);
+
     // Filtered & Sorted Topics
     const filteredTopics = useMemo(() => {
         return topics.filter(t => {
             if (selectedGrade !== 'all' && t.grade !== selectedGrade) return false;
+            if (selectedCourseId !== 'all' && t.courseId !== selectedCourseId) return false;
+            if (selectedUnitId !== 'all' && t.unitId !== selectedUnitId) return false;
+            if (selectedTopicId !== 'all' && t.topicId !== selectedTopicId) return false;
             if (statusFilter === 'has_text' && t.sourceText.length === 0) return false;
             if (statusFilter === 'no_text' && t.sourceText.length > 0) return false;
             
@@ -192,19 +370,18 @@ export default function SourceTextsManagementPage() {
                 const matchTitle = t.title.toLowerCase().includes(q);
                 const matchUnit = t.unitTitle.toLowerCase().includes(q);
                 const matchClass = t.className.toLowerCase().includes(q);
+                const matchCourse = t.courseTitle.toLowerCase().includes(q);
                 const matchText = t.sourceText.toLowerCase().includes(q);
-                if (!matchTitle && !matchUnit && !matchClass && !matchText) return false;
+                if (!matchTitle && !matchUnit && !matchClass && !matchCourse && !matchText) return false;
             }
             return true;
         }).sort((a, b) => {
             if (sortBy === 'word_desc') return b.wordCount - a.wordCount;
             if (sortBy === 'word_asc') return a.wordCount - b.wordCount;
             if (sortBy === 'title') return a.title.localeCompare(b.title, 'tr');
-            const gradeDiff = Number(a.grade) - Number(b.grade);
-            if (gradeDiff !== 0) return gradeDiff;
-            return a.unitTitle.localeCompare(b.unitTitle, 'tr');
+            return 0; // Default natural order
         });
-    }, [topics, selectedGrade, statusFilter, searchQuery, sortBy]);
+    }, [topics, selectedGrade, selectedCourseId, selectedUnitId, selectedTopicId, statusFilter, searchQuery, sortBy]);
 
     // Copy action
     const handleCopy = async (id: string, text: string) => {
@@ -388,65 +565,160 @@ export default function SourceTextsManagementPage() {
                     </div>
                 </div>
 
-                {/* ══ FİLTRELER VE ARAMA ÇUBUĞU ══ */}
-                <div className="p-5 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-xl shadow-2xl space-y-4">
-                    {/* Sınıf Sekmeleri */}
-                    <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                        <button
-                            onClick={() => setSelectedGrade('all')}
-                            className={cn(
-                                "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
-                                selectedGrade === 'all' 
-                                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/40" 
-                                    : "bg-slate-950/60 text-slate-400 hover:text-white border border-white/5"
-                            )}
-                        >
-                            Tüm Sınıflar ({topics.length})
-                        </button>
-                        {availableGrades.map(grade => {
-                            const count = topics.filter(t => t.grade === grade).length;
-                            return (
+                {/* ══ FİLTRELER VE ARAMA KONTROLLERİ ══ */}
+                <div className="p-5 sm:p-6 rounded-3xl bg-slate-900/70 border border-white/10 backdrop-blur-xl shadow-2xl space-y-5">
+                    
+                    {/* 1. Sınıf Hızlı Seçim Sekmeleri */}
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <GraduationCap className="w-4 h-4 text-indigo-400" /> Sınıf Seviyesi
+                            </span>
+                            {hasActiveFilters && (
                                 <button
-                                    key={grade}
-                                    onClick={() => setSelectedGrade(grade)}
-                                    className={cn(
-                                        "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
-                                        selectedGrade === grade 
-                                            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/40" 
-                                            : "bg-slate-950/60 text-slate-400 hover:text-white border border-white/5"
-                                    )}
+                                    onClick={handleResetFilters}
+                                    className="text-xs text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1 transition-colors"
                                 >
-                                    {grade}. Sınıf ({count})
+                                    <RotateCcw className="w-3.5 h-3.5" /> Filtreleri Sıfırla
                                 </button>
-                            );
-                        })}
+                            )}
+                        </div>
+                        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                            <button
+                                onClick={() => handleGradeChange('all')}
+                                className={cn(
+                                    "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
+                                    selectedGrade === 'all' 
+                                        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/40" 
+                                        : "bg-slate-950/60 text-slate-400 hover:text-white border border-white/5"
+                                )}
+                            >
+                                Tüm Sınıflar ({topics.length})
+                            </button>
+                            {availableGrades.map(grade => {
+                                const count = topics.filter(t => t.grade === grade).length;
+                                return (
+                                    <button
+                                        key={grade}
+                                        onClick={() => handleGradeChange(grade)}
+                                        className={cn(
+                                            "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
+                                            selectedGrade === grade 
+                                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/40" 
+                                                : "bg-slate-950/60 text-slate-400 hover:text-white border border-white/5"
+                                        )}
+                                    >
+                                        {grade}. Sınıf ({count})
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
 
-                    {/* Arama ve Alt Filtreler */}
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                        {/* Canlı Arama */}
+                    {/* 2. Ders, Ünite, Konu Hiyerarşik Seçicileri */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-white/5">
+                        {/* Ders Seçici */}
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                                <GraduationCap className="w-3.5 h-3.5 text-indigo-400" /> Ders
+                            </label>
+                            <Select value={selectedCourseId} onValueChange={handleCourseChange}>
+                                <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
+                                    <SelectValue placeholder="Tüm Dersler" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white max-h-72">
+                                    <SelectItem value="all">
+                                        Tüm Dersler ({selectedGrade === 'all' ? topics.length : topics.filter(t => t.grade === selectedGrade).length} Konu)
+                                    </SelectItem>
+                                    {availableCourses.map(c => (
+                                        <SelectItem key={c.id} value={c.id}>
+                                            {c.title} ({c.count} Konu)
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Ünite Seçici */}
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                                <Layers className="w-3.5 h-3.5 text-indigo-400" /> Ünite
+                            </label>
+                            <Select value={selectedUnitId} onValueChange={handleUnitChange}>
+                                <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
+                                    <SelectValue placeholder="Tüm Üniteler" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white max-h-72">
+                                    <SelectItem value="all">Tüm Üniteler ({availableUnits.reduce((acc, u) => acc + u.count, 0)} Konu)</SelectItem>
+                                    {availableUnits.map(u => (
+                                        <SelectItem key={u.id} value={u.id}>
+                                            {u.title} ({u.count} Konu)
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Konu Seçici */}
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                                <BookOpen className="w-3.5 h-3.5 text-indigo-400" /> Konu (Doğrudan Seç)
+                            </label>
+                            <Select value={selectedTopicId} onValueChange={handleTopicChange}>
+                                <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
+                                    <SelectValue placeholder="Tüm Konular" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white max-h-72">
+                                    <SelectItem value="all">Tüm Konular ({availableTopics.length})</SelectItem>
+                                    {availableTopics.map(top => (
+                                        <SelectItem key={top.topicId} value={top.topicId}>
+                                            <span className="flex items-center gap-2">
+                                                <span 
+                                                    className={cn(
+                                                        "w-2 h-2 rounded-full flex-shrink-0", 
+                                                        top.sourceText.length > 0 ? "bg-emerald-400" : "bg-slate-600"
+                                                    )} 
+                                                    title={top.sourceText.length > 0 ? "Metin var" : "Metin yok"}
+                                                />
+                                                <span className="truncate max-w-[280px]">{top.title}</span>
+                                                {top.sourceText.length > 0 && (
+                                                    <span className="text-[10px] text-emerald-400/80 font-mono">
+                                                        ({top.wordCount} k.)
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    {/* 3. Arama, Metin Durumu ve Sıralama */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pt-2 border-t border-white/5">
+                        {/* Canlı Arama (6 sütun) */}
                         <div className="md:col-span-6 relative">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <Input
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Konu, ünite adı veya metin içinde ara..."
-                                className="pl-11 pr-10 h-12 bg-slate-950 border-white/10 text-sm text-white placeholder:text-slate-500 rounded-xl focus:border-indigo-500/60"
+                                placeholder="Konu, ünite, ders adı veya metin içinde ara..."
+                                className="pl-11 pr-10 h-11 bg-slate-950 border-white/10 text-sm text-white placeholder:text-slate-500 rounded-xl focus:border-indigo-500/60"
                             />
                             {searchQuery && (
                                 <button
                                     onClick={() => setSearchQuery('')}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
                                 >
                                     <X className="w-4 h-4" />
                                 </button>
                             )}
                         </div>
 
-                        {/* Durum Filtresi */}
+                        {/* Metin Durumu Filtresi (3 sütun) */}
                         <div className="md:col-span-3">
                             <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
-                                <SelectTrigger className="h-12 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
+                                <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
                                     <SelectValue placeholder="Metin Durumu" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -457,10 +729,10 @@ export default function SourceTextsManagementPage() {
                             </Select>
                         </div>
 
-                        {/* Sıralama */}
+                        {/* Sıralama (3 sütun) */}
                         <div className="md:col-span-3">
                             <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-                                <SelectTrigger className="h-12 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
+                                <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
                                     <SelectValue placeholder="Sırala" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -473,9 +745,88 @@ export default function SourceTextsManagementPage() {
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-white/5">
-                        <span>Listelenen Konu: <strong className="text-indigo-400">{filteredTopics.length}</strong></span>
-                        <span className="text-[11px] text-slate-500">Düzenlenen metinler Sunum, Soru Bankası ve Etkinlik Veri Bankası ile anında senkronize olur.</span>
+                    {/* 4. Aktif Filtre Çipleri & Bilgi Çubuğu */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/5 text-xs text-slate-400">
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[11px] font-semibold text-slate-500">
+                                {hasActiveFilters ? "Aktif Filtreler:" : "Filtreler:"}
+                            </span>
+
+                            {selectedGrade !== 'all' && (
+                                <Badge variant="secondary" className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
+                                    <span>{selectedGrade}. Sınıf</span>
+                                    <button onClick={() => handleGradeChange('all')} className="hover:text-white ml-0.5">
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </Badge>
+                            )}
+
+                            {activeSelectedCourse && (
+                                <Badge variant="secondary" className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
+                                    <GraduationCap className="w-3 h-3 mr-0.5" />
+                                    <span className="truncate max-w-[150px]">{activeSelectedCourse}</span>
+                                    <button onClick={() => setSelectedCourseId('all')} className="hover:text-white ml-0.5">
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </Badge>
+                            )}
+
+                            {activeSelectedUnit && (
+                                <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 border-blue-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
+                                    <Layers className="w-3 h-3 mr-0.5" />
+                                    <span className="truncate max-w-[180px]">{activeSelectedUnit}</span>
+                                    <button onClick={() => setSelectedUnitId('all')} className="hover:text-white ml-0.5">
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </Badge>
+                            )}
+
+                            {activeSelectedTopic && (
+                                <Badge variant="secondary" className="bg-teal-500/20 text-teal-300 border-teal-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
+                                    <BookOpen className="w-3 h-3 mr-0.5" />
+                                    <span className="truncate max-w-[200px]">{activeSelectedTopic}</span>
+                                    <button onClick={() => setSelectedTopicId('all')} className="hover:text-white ml-0.5">
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </Badge>
+                            )}
+
+                            {statusFilter !== 'all' && (
+                                <Badge variant="secondary" className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
+                                    <span>{statusFilter === 'has_text' ? 'Metni Olanlar' : 'Metni Olmayanlar'}</span>
+                                    <button onClick={() => setStatusFilter('all')} className="hover:text-white ml-0.5">
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </Badge>
+                            )}
+
+                            {searchQuery.trim() && (
+                                <Badge variant="secondary" className="bg-slate-700/50 text-slate-200 border-white/10 text-xs py-1 px-2.5 flex items-center gap-1.5">
+                                    <span>Ara: "{searchQuery}"</span>
+                                    <button onClick={() => setSearchQuery('')} className="hover:text-white ml-0.5">
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </Badge>
+                            )}
+
+                            {!hasActiveFilters && (
+                                <span className="text-[11px] text-slate-500 italic">Tüm müfredat gösteriliyor.</span>
+                            )}
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <span>Listelenen Konu: <strong className="text-indigo-400 font-bold">{filteredTopics.length}</strong></span>
+                            {hasActiveFilters && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={handleResetFilters}
+                                    className="h-7 px-2 text-xs text-slate-400 hover:text-white hover:bg-white/5"
+                                >
+                                    <FilterX className="w-3 h-3 mr-1" /> Temizle
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -489,11 +840,11 @@ export default function SourceTextsManagementPage() {
                     <div className="py-20 flex flex-col items-center justify-center space-y-3 bg-slate-900/30 border-2 border-dashed border-white/10 rounded-3xl text-center">
                         <BookMarked className="h-12 w-12 text-slate-600" />
                         <h3 className="text-lg font-bold text-white">Eşleşen kaynak metin bulunamadı</h3>
-                        <p className="text-xs text-slate-400 max-w-md">Arama kriterlerinizi temizleyebilir veya sınıf filtresini değiştirebilirsiniz.</p>
+                        <p className="text-xs text-slate-400 max-w-md">Arama kriterlerinizi temizleyebilir veya sınıf/ünite filtrelerini değiştirebilirsiniz.</p>
                         <Button 
                             variant="outline" 
                             size="sm" 
-                            onClick={() => { setSearchQuery(''); setSelectedGrade('all'); setStatusFilter('all'); }}
+                            onClick={handleResetFilters}
                             className="border-white/10 text-slate-300 hover:text-white"
                         >
                             Filtreleri Sıfırla
@@ -515,14 +866,26 @@ export default function SourceTextsManagementPage() {
                                     )}
                                 >
                                     <div className="space-y-3">
-                                        {/* Üst Bilgi Rozetleri */}
-                                        <div className="flex items-center justify-between gap-2">
-                                            <Badge variant="outline" className="bg-indigo-500/10 text-indigo-300 border-indigo-500/30 text-[11px] font-bold">
-                                                {topic.className}
-                                            </Badge>
-                                            <span className="text-[11px] text-slate-500 truncate max-w-[170px]" title={topic.unitTitle}>
-                                                {topic.unitTitle}
-                                            </span>
+                                        {/* Üst Bilgi Rozetleri & Hiyerarşi */}
+                                        <div className="flex items-center justify-between gap-2 flex-wrap">
+                                            <div className="flex items-center gap-1.5 flex-wrap">
+                                                <Badge variant="outline" className="bg-indigo-500/10 text-indigo-300 border-indigo-500/30 text-[11px] font-bold">
+                                                    {topic.className}
+                                                </Badge>
+                                                <span className="text-[11px] text-slate-500">›</span>
+                                                <span className="text-[11px] text-slate-400 font-medium truncate max-w-[160px]" title={topic.unitTitle}>
+                                                    {topic.unitTitle}
+                                                </span>
+                                            </div>
+                                            {hasText ? (
+                                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                                                    <CheckCircle2 className="w-3 h-3" /> Metin Var
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                                                    <AlertCircle className="w-3 h-3" /> Metin Yok
+                                                </span>
+                                            )}
                                         </div>
 
                                         {/* Konu Başlığı */}
