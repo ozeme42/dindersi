@@ -9,7 +9,7 @@ import {
   ClipboardCheck, Wind, Star, Milestone, Lock, Rocket, Target, 
   Grid3x3, Swords, Castle, Users, Check, ChevronRight, 
   ChevronLeft, Sparkles, X, Play, FolderOpen, BookMarked,
-  GraduationCap, Book, Layers3, Flame, Compass
+  GraduationCap, Book, Layers3, Flame, Compass, ArrowLeft, Home
 } from 'lucide-react';
 import type { EnrichedClass } from './actions';
 import { cn } from '@/lib/utils';
@@ -401,8 +401,18 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
         <div className="container mx-auto px-4 sm:px-6 py-3">
           <div className="flex items-center justify-between gap-4">
             
-            {/* SOLA YASLI: Logo, Başlık ve Hızlı Durum */}
-            <div className="flex items-center gap-3">
+            {/* SOLA YASLI: Geri Dön Butonu, Logo, Başlık ve Hızlı Durum */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link
+                href="/"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-slate-200 hover:text-white border border-white/15 text-xs font-bold transition-all shadow-md group shrink-0"
+                title="Öğretmen Paneline Geri Dön"
+              >
+                <ArrowLeft className="w-4 h-4 text-cyan-400 group-hover:-translate-x-1 transition-transform" />
+                <span className="hidden sm:inline">Panele Dön</span>
+                <span className="sm:hidden">Geri</span>
+              </Link>
+
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur-sm opacity-70 group-hover:opacity-100 transition duration-300" />
                 <div className="relative w-10 h-10 rounded-2xl bg-slate-900 border border-white/20 flex items-center justify-center text-cyan-400">
@@ -841,6 +851,23 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
             </Button>
           </div>
         )}
+
+        {/* Sayfa Altı Panele Dönüş Barı */}
+        <div className="mt-14 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/15 text-xs sm:text-sm font-bold transition-all shadow-lg active:scale-95 group"
+          >
+            <ArrowLeft className="w-4 h-4 text-cyan-400 group-hover:-translate-x-1 transition-transform" />
+            <span>Öğretmen Paneline Geri Dön</span>
+          </Link>
+          <div className="text-xs text-slate-400 flex items-center gap-2">
+            <span>Aktif Seçim:</span>
+            <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 bg-cyan-950/40 text-[11px]">
+              {selectedClass?.name} • {selectedCourse?.title}
+            </Badge>
+          </div>
+        </div>
       </main>
     </div>
   );
