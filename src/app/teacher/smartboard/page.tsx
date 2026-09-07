@@ -64,7 +64,7 @@ export default function SmartboardPage() {
             key: 'smartboard_bireysel',
             href: "/teacher/smartboard/bireysel",
             title: "Bireysel Yarışma",
-            description: "Her öğrencinin kendi başına yarıştığı klasik mod.",
+            description: "Sanal öğrencilerinizin bireysel yarıştığı klasik mod.",
             icon: <User />,
             colorClass: "bg-indigo-600 border-indigo-800 hover:bg-indigo-500",
         },
@@ -72,7 +72,7 @@ export default function SmartboardPage() {
             key: 'smartboard_takim',
             href: "/teacher/smartboard/takim",
             title: "Takım Yarışması",
-            description: "Öğrencileri gruplandırıp takım ruhuyla yarıştırın.",
+            description: "Sanal öğrencileri takımlara ayırıp takım ruhuyla yarıştırın.",
             icon: <Users />,
             colorClass: "bg-teal-600 border-teal-800 hover:bg-teal-500",
         },
@@ -180,7 +180,7 @@ export default function SmartboardPage() {
             key: 'carkifelek',
             href: "/teacher/smartboard/carkifelek",
             title: "Çarkıfelek",
-            description: "Rastgele bir öğrenci seçmek için çarkı çevir.",
+            description: "Sanal öğrenci havuzundan rastgele seçim için çarkı çevirin.",
             icon: <Trophy />,
             colorClass: "bg-yellow-600 border-yellow-800 hover:bg-yellow-500",
         },
@@ -258,7 +258,7 @@ export default function SmartboardPage() {
                 <Button asChild className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white text-base font-bold shadow-lg shadow-amber-900/40 h-12 px-6 rounded-xl transition-all border-b-4 border-orange-800 active:border-b-0 active:translate-y-1 w-full md:w-auto">
                     <Link href="/teacher/smartboard/leaderboard">
                         <Trophy className="mr-2 h-5 w-5" />
-                        Turnuva Liderliği
+                        Sanal Öğrenci Liderliği
                     </Link>
                 </Button>
                 <div className="h-px w-full md:w-px md:h-8 bg-white/10"></div>

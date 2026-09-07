@@ -345,27 +345,24 @@ function TeamCompetitionComponent() {
 
                     if (cData) {
                         try {
-                            const targetClassName = cData.name;
+                            // AKILLI TAHTA TAKIM YARIŞMASI: SADECE Sanal Öğrenciler (role === 'guest')
                             const sQuery = query(
                                 collection(db, "users"), 
-                                where("class", ">=", targetClassName), 
-                                where("class", "<", targetClassName + '\uf8ff')
+                                where("role", "==", "guest")
                             );
                             const sSnap = await getDocs(sQuery);
-                            let students = sSnap.docs
-                                .map(d => ({ uid: d.id, ...d.data() } as UserProfile))
-                                .filter(u => u.role === 'guest' || u.role === 'student' || !u.role);
+                            const allGuests = sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile));
 
-                            if (students.length === 0 && gradeVal) {
-                                const fallbackQ = query(
-                                    collection(db, "users"), 
-                                    where("class", ">=", gradeVal), 
-                                    where("class", "<", gradeVal + '\uf8ff')
-                                );
-                                const fbSnap = await getDocs(fallbackQ);
-                                students = fbSnap.docs
-                                    .map(d => ({ uid: d.id, ...d.data() } as UserProfile))
-                                    .filter(u => u.role === 'guest' || u.role === 'student' || !u.role);
+                            const targetClassName = (cData.name || '').trim().toLowerCase();
+                            const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
+
+                            let students = allGuests.filter(u => {
+                                const sc = (u.class || '').trim().toLowerCase();
+                                return sc.includes(targetClassName) || (gradeVal && sc.startsWith(gradeVal));
+                            });
+
+                            if (students.length === 0) {
+                                students = allGuests;
                             }
                             setStudentPool(students);
                         } catch (e) {
@@ -654,7 +651,7 @@ function TeamCompetitionComponent() {
                         <h1 className="text-3xl font-black tracking-tight text-white flex items-center gap-3">
                             <Settings2 className="h-8 w-8 text-purple-400" /> TAKIM YARIŞMASI KURULUMU
                         </h1>
-                        <p className="text-slate-400 mt-1">Sınıftan öğrencileri seçin ve takımlara dağıtın.</p>
+                        <p className="text-slate-400 mt-1">Sanal öğrencileri seçin ve takımlara dağıtın.</p>
                     </div>
                     <div className="flex gap-3">
                         <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:bg-white/10">
@@ -672,7 +669,7 @@ function TeamCompetitionComponent() {
                     <Card className="lg:col-span-4 bg-slate-900/50 border-white/10 flex flex-col overflow-hidden">
                         <CardHeader className="pb-3 border-b border-white/5 bg-slate-900">
                             <CardTitle className="text-lg flex justify-between items-center">
-                                <span>Sınıf Listesi</span>
+                                <span>Sanal Öğrenci Havuzu</span>
                                 <span className="text-xs font-normal text-slate-400 bg-slate-800 px-2 py-1 rounded">{filteredPool.length} Öğrenci</span>
                             </CardTitle>
                             <div className="flex gap-2 mt-2">
@@ -688,7 +685,7 @@ function TeamCompetitionComponent() {
                                 <Button size="sm" variant="secondary" className="h-8 text-xs flex-1" onClick={addAllFiltered} disabled={filteredPool.length === 0}>
                                     <Users className="mr-2 h-3 w-3" /> Tümünü Ekle
                                 </Button>
-                                <Button size="icon" className="h-8 w-8 bg-purple-600 hover:bg-purple-500" onClick={() => setIsAddStudentOpen(true)} title="Yeni Öğrenci Ekle">
+                                <Button size="icon" className="h-8 w-8 bg-purple-600 hover:bg-purple-500" onClick={() => setIsAddStudentOpen(true)} title="Yeni Sanal Öğrenci Ekle">
                                     <UserPlus className="h-4 w-4" />
                                 </Button>
                             </div>
@@ -697,7 +694,7 @@ function TeamCompetitionComponent() {
                             <ScrollArea className="h-full pr-2">
                                 {filteredPool.length === 0 ? (
                                     <div className="p-4 text-center space-y-3">
-                                        <p className="text-xs text-slate-400">Bu sınıfta kayıtlı öğrenci bulunamadı.</p>
+                                        <p className="text-xs text-slate-400">Bu sınıfta kayıtlı sanal öğrenci bulunamadı.</p>
                                         <Button 
                                             size="sm" 
                                             onClick={handleGenerateDemoStudents} 
@@ -705,7 +702,7 @@ function TeamCompetitionComponent() {
                                             className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold"
                                         >
                                             {isAddingStudent ? <Loader2 className="animate-spin mr-2 h-3 w-3" /> : <Sparkles className="mr-2 h-3 w-3" />}
-                                            Hızlı Örnek Sınıf Oluştur (8 Kişi)
+                                            Hızlı Örnek Sanal Sınıf Oluştur (8 Sanal Öğrenci)
                                         </Button>
                                     </div>
                                 ) : (

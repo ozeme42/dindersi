@@ -152,8 +152,8 @@ function AddStudentDialog({ isOpen, onOpenChange, onAdd, isSaving, poolClassName
         <Dialog open={isOpen} onOpenChange={(open) => { if (!open) { setDisplayName('') }; onOpenChange(open); }}>
             <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Yeni Yarışmacı Ekle</DialogTitle>
-                    <DialogDescription>Havuza geçici öğrenci ekleyin.</DialogDescription>
+                    <DialogTitle>Yeni Sanal Öğrenci Ekle</DialogTitle>
+                    <DialogDescription>Havuza yeni sanal öğrenci ekleyin.</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4 py-4">
                     <div className="space-y-2"><Label>Ad Soyad</Label><Input value={displayName} onChange={e => setDisplayName(e.target.value)} required className="bg-slate-950 border-white/10 text-white" /></div>
@@ -499,7 +499,7 @@ function IndividualCompetitionComponent() {
                         <h1 className="text-3xl font-black tracking-tight text-white flex items-center gap-3">
                             <Settings2 className="h-8 w-8 text-cyan-400" /> BİREYSEL YARIŞMA
                         </h1>
-                        <p className="text-slate-400 mt-1">Sınıftan öğrencileri seç ve bireysel yarıştır.</p>
+                        <p className="text-slate-400 mt-1">Sanal öğrencileri seç ve bireysel yarıştır.</p>
                     </div>
                     <div className="flex items-center gap-2">
                         <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
@@ -515,7 +515,7 @@ function IndividualCompetitionComponent() {
                     <Card className="bg-slate-900/50 border-white/10 flex flex-col overflow-hidden">
                         <CardHeader className="pb-3 border-b border-white/5 bg-slate-900">
                             <CardTitle className="text-lg flex justify-between items-center">
-                                <span>Sınıf Listesi</span>
+                                <span>Sanal Öğrenci Havuzu</span>
                                 <span className="text-xs font-normal text-slate-400 bg-slate-800 px-2 py-1 rounded">{filteredPool.length} Öğrenci</span>
                             </CardTitle>
                             <div className="flex gap-2 mt-2">
@@ -531,7 +531,7 @@ function IndividualCompetitionComponent() {
                                 <Button size="sm" variant="secondary" className="h-9 text-xs flex-1" onClick={addAllFiltered} disabled={filteredPool.length === 0}>
                                     <Users className="mr-2 h-3 w-3" /> Tümünü Ekle
                                 </Button>
-                                <Button size="icon" className="h-9 w-9 bg-cyan-600 hover:bg-cyan-500" onClick={() => setIsAddStudentOpen(true)} title="Tek Öğrenci Ekle">
+                                <Button size="icon" className="h-9 w-9 bg-cyan-600 hover:bg-cyan-500" onClick={() => setIsAddStudentOpen(true)} title="Sanal Öğrenci Ekle">
                                     <UserPlus className="h-4 w-4" />
                                 </Button>
                             </div>
@@ -544,9 +544,9 @@ function IndividualCompetitionComponent() {
                                             <Users className="w-7 h-7" />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-bold text-slate-200">Bu sınıfta kayıtlı öğrenci yok</p>
+                                            <p className="text-sm font-bold text-slate-200">Bu sınıfta kayıtlı sanal öğrenci yok</p>
                                             <p className="text-xs text-slate-400 mt-1 max-w-xs">
-                                                Hemen yarışmaya başlamak için tek tıkla 8 kişilik örnek sınıf oluşturabilirsiniz.
+                                                Hemen yarışmaya başlamak için tek tıkla 8 kişilik örnek sanal sınıf oluşturabilirsiniz.
                                             </p>
                                         </div>
                                         <Button 
@@ -556,7 +556,7 @@ function IndividualCompetitionComponent() {
                                             className="bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-md rounded-xl mt-2 px-4 h-9"
                                         >
                                             {isAddingStudent ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
-                                            Hızlı Örnek Sınıf Oluştur (8 Kişi)
+                                            Hızlı Örnek Sanal Sınıf Oluştur (8 Sanal Öğrenci)
                                         </Button>
                                     </div>
                                 ) : (

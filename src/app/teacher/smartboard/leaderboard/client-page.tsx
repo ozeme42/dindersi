@@ -77,10 +77,15 @@ export function SmartboardLeaderboardClientPage() {
     const filteredLeaderboard = useMemo(() => {
         let filtered = leaderboardData;
         if (classFilter !== 'all') {
-            filtered = filtered.filter(player => player.class?.startsWith(selectedClassData?.name || ''));
+            const targetClassName = (selectedClassData?.name || '').trim().toLowerCase();
+            const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
+            filtered = filtered.filter(player => {
+                const pc = (player.class || '').trim().toLowerCase();
+                return pc.includes(targetClassName) || (gradeVal && pc.startsWith(gradeVal));
+            });
         }
         if (branchFilter !== 'all' && classFilter !== 'all' && selectedClassData) {
-            filtered = filtered.filter(player => player.class === `${selectedClassData.name} - ${branchFilter}`);
+            filtered = filtered.filter(player => (player.class || '').toLowerCase().includes(branchFilter.toLowerCase()));
         }
         return filtered;
     }, [leaderboardData, classFilter, branchFilter, selectedClassData]);
@@ -147,9 +152,9 @@ export function SmartboardLeaderboardClientPage() {
                             <div className="p-2 bg-yellow-500/20 rounded-xl border border-yellow-500/30">
                                 <Trophy className="h-8 w-8 text-yellow-400" />
                             </div>
-                            Turnuva Liderliği
+                            Sanal Öğrenci Turnuva Liderliği
                         </h1>
-                        <p className="text-slate-400 mt-2 font-medium">Bu liderlik tablosu sadece Akıllı Tahta yarışmalarından kazanılan puanları gösterir.</p>
+                        <p className="text-slate-400 mt-2 font-medium">Bu liderlik tablosu sadece Akıllı Tahta yarışmalarından sanal öğrencilerin kazandığı puanları gösterir.</p>
                      </div>
                      <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
                         <Link href="/teacher/smartboard">

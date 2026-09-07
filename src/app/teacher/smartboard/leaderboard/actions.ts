@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -82,18 +81,21 @@ export async function getSmartboardLeaderboard(params: {
         const studentsSnapshot = await getDocs(studentsQuery);
         studentsSnapshot.forEach(docSnap => {
             const data = docSnap.data();
-            studentProfiles.push({
-                 uid: docSnap.id, 
-                 ...data,
-                 createdAt: (data.createdAt as Timestamp)?.toDate().toISOString() || null
-            } as UserProfile);
+            // AKILLI TAHTA LİDERLİĞİ: Sadece Sanal Öğrenciler (role === 'guest') listelenir
+            if (data.role === 'guest' || !data.role) {
+                studentProfiles.push({
+                     uid: docSnap.id, 
+                     ...data,
+                     createdAt: (data.createdAt as Timestamp)?.toDate().toISOString() || null
+                } as UserProfile);
+            }
         });
     }
 
     const leaderboard = studentProfiles.map(student => ({
         ...student,
         score: scoresByStudent.get(student.uid) || 0,
-    })).filter(player => player.score > 0) // Filter out players with zero score
+    })).filter(player => player.score > 0)
       .sort((a, b) => (b.score || 0) - (a.score || 0));
 
     return JSON.parse(JSON.stringify(leaderboard));
@@ -117,9 +119,8 @@ export async function resetSmartboardScores(): Promise<{ success: boolean; error
 
         await batch.commit();
         return { success: true };
-
-    } catch(error: any) {
-        console.error("Error resetting smartboard scores:", error);
-        return { success: false, error: "Puanlar sıfırlanırken bir hata oluştu." };
+    } catch (e: any) {
+        console.error("Error resetting smartboard scores:", e);
+        return { success: false, error: "Skorlar sıfırlanırken bir hata oluştu." };
     }
 }

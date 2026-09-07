@@ -78,7 +78,7 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
             fetch('/curriculum/manifest.json').catch(() => null),
             getDocs(query(collection(db, 'classes'), orderBy('name'))).catch(() => null),
             getDocs(query(collection(db, 'courses'))).catch(() => null),
-            getDocs(query(collection(db, 'users'))).catch(() => null)
+            getDocs(query(collection(db, 'users'), where('role', '==', 'guest'))).catch(() => null)
         ]);
 
         let mData: any = null;
@@ -133,7 +133,7 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
           coursesList = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         }
 
-        const students = studentsSnap ? studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)).filter(u => u.role === 'guest' || u.role === 'student' || !u.role) : [];
+        const students = studentsSnap ? studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)).filter(u => u.role === 'guest' || !u.role) : [];
         setAllClasses(classesList);
         setAllStudents(students);
         setAllCourses(coursesList);
@@ -175,7 +175,15 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
     setUnits([]);
     setTopics([]);
     
-    const studentsInClass = allStudents.filter(s => s.class?.startsWith(className));
+    const targetClassName = (className || '').trim().toLowerCase();
+    const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
+    let studentsInClass = allStudents.filter(u => {
+      const sc = (u.class || '').trim().toLowerCase();
+      return sc.includes(targetClassName) || (gradeVal && sc.startsWith(gradeVal));
+    });
+    if (studentsInClass.length === 0) {
+      studentsInClass = allStudents;
+    }
     setFilteredStudents(studentsInClass);
     setTeams([
       { id: 1, name: "Mavi Takım", color: "blue", players: [] },
@@ -235,10 +243,22 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
     if (!selectedClass) return;
 
     if (branch === 'all') {
-      setFilteredStudents(allStudents.filter(s => s.class?.startsWith(selectedClass.name)));
+      const targetClassName = (selectedClass.name || '').trim().toLowerCase();
+      const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
+      let list = allStudents.filter(u => {
+        const sc = (u.class || '').trim().toLowerCase();
+        return sc.includes(targetClassName) || (gradeVal && sc.startsWith(gradeVal));
+      });
+      if (list.length === 0) list = allStudents;
+      setFilteredStudents(list);
     } else {
-      const branchClassName = `${selectedClass.name} - ${branch}`;
-      setFilteredStudents(allStudents.filter(s => s.class === branchClassName || s.class?.startsWith(`${branchClassName} (Havuz)`)));
+      const branchLower = branch.trim().toLowerCase();
+      let list = allStudents.filter(s => {
+        const sc = (s.class || '').toLowerCase();
+        return sc.includes(branchLower);
+      });
+      if (list.length === 0) list = allStudents;
+      setFilteredStudents(list);
     }
     setTeams([
         { id: 1, name: "Mavi Takım", color: "blue", players: [] },
@@ -320,7 +340,7 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-900/50 p-4 rounded-xl border border-white/5">
                     <div>
                         <h3 className="text-xl font-bold text-white">Takım Yönetimi</h3>
-                        <p className="text-sm text-slate-400">Öğrencileri takımlara yerleştirin.</p>
+                        <p className="text-sm text-slate-400">Sanal öğrencileri takımlara yerleştirin.</p>
                     </div>
                     <div className="flex gap-3">
                         <Button onClick={distributeStudents} variant="outline" size="sm" disabled={teams.length === 0 || filteredStudents.length === 0} className="border-emerald-500/30 text-emerald-300 hover:text-emerald-200 hover:bg-emerald-500/10"><Shuffle className="mr-2 h-4 w-4"/>Rastgele Dağıt</Button>
@@ -332,7 +352,7 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
                     <Card className="lg:col-span-1 bg-slate-900/40 border-white/5 flex flex-col overflow-hidden">
                         <CardHeader className="py-4 border-b border-white/5 bg-slate-900/50">
                           <CardTitle className="text-base font-bold text-slate-300 flex justify-between items-center">
-                              <span>Sınıf Listesi ({unassignedStudents.length})</span>
+                              <span>Sanal Öğrenci Havuzu ({unassignedStudents.length})</span>
                           </CardTitle>
                           <div className="pt-2">
                              <Select value={selection.branch} onValueChange={handleBranchSelect} disabled={!selectedClassData}>
@@ -360,7 +380,7 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
                                        </div>
                                    </div>
                                ))}
-                               {unassignedStudents.length === 0 && <p className="text-center text-xs text-slate-500 p-8 font-medium">Tüm öğrenciler takımlara yerleşti.</p>}
+                               {unassignedStudents.length === 0 && <p className="text-center text-xs text-slate-500 p-8 font-medium">Tüm sanal öğrenciler takımlara yerleşti.</p>}
                                </div>
                            </ScrollArea>
                         </CardContent>
@@ -390,7 +410,7 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
                                                 <Button size="icon" variant="ghost" className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-slate-500 hover:text-red-400" onClick={() => unassignStudent(player, team.id)}><Trash2 className="h-3 w-3"/></Button>
                                             </div>
                                         ))}
-                                        {team.players.length === 0 && <p className="text-center text-xs text-slate-600 p-8 border-2 border-dashed border-slate-800 rounded-xl m-2">Öğrenci sürükleyin veya ekleyin.</p>}
+                                        {team.players.length === 0 && <p className="text-center text-xs text-slate-600 p-8 border-2 border-dashed border-slate-800 rounded-xl m-2">Sanal öğrenci ekleyin.</p>}
                                       </div>
                                     </ScrollArea>
                                 </CardContent>

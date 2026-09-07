@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
     Trophy, User, ArrowLeft, Trash2, Zap, UserMinus, RotateCcw,
     Maximize2, Minimize2, PartyPopper, Settings, Users, Plus, UserPlus,
-    Volume2, VolumeX, Sparkles
+    Volume2, VolumeX, Sparkles, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,28 +18,32 @@ import { Label } from '@/components/ui/label';
 import { UserAvatar } from '@/components/user-avatar';
 import { playSound } from '@/lib/audio-service';
 import confetti from 'canvas-confetti';
+import { addStudentToClass } from '@/app/teacher/students/actions';
+import { useAuth } from '@/context/auth-context';
 
 const WHEEL_COLORS = [
     '#4f46e5', '#db2777', '#2563eb', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444',
     '#14b8a6', '#64748b', '#ec4899', '#0ea5e9', '#f97316'
 ];
 
-const DEMO_STUDENTS: UserProfile[] = [
-    { uid: 'demo-1', displayName: 'Ahmet Yılmaz', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-2', displayName: 'Ayşe Kaya', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-3', displayName: 'Mehmet Demir', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-4', displayName: 'Fatma Çelik', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-5', displayName: 'Ali Şahin', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-6', displayName: 'Zeynep Yıldız', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-7', displayName: 'Mustafa Aydın', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-8', displayName: 'Elif Öztürk', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-9', displayName: 'Emir Arslan', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-10', displayName: 'Hira Doğan', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-11', displayName: 'Burak Koç', class: '5-A', role: 'student' } as any,
-    { uid: 'demo-12', displayName: 'Merve Yavuz', class: '5-A', role: 'student' } as any,
+const DEMO_SANAL_OGRENCILER: UserProfile[] = [
+    { uid: 'sanal-1', displayName: 'Ahmet Yılmaz', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-2', displayName: 'Ayşe Kaya', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-3', displayName: 'Mehmet Demir', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-4', displayName: 'Fatma Çelik', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-5', displayName: 'Ali Şahin', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-6', displayName: 'Zeynep Yıldız', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-7', displayName: 'Mustafa Aydın', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-8', displayName: 'Elif Öztürk', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-9', displayName: 'Emir Arslan', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-10', displayName: 'Hira Doğan', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-11', displayName: 'Burak Koç', class: '5-A', role: 'guest' } as any,
+    { uid: 'sanal-12', displayName: 'Merve Yavuz', class: '5-A', role: 'guest' } as any,
 ];
 
 export default function WheelOfFortunePage() {
+    const { user } = useAuth();
+
     // Data States
     const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
     const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
@@ -49,6 +53,7 @@ export default function WheelOfFortunePage() {
 
     // Manual Student Addition
     const [customStudentName, setCustomStudentName] = useState('');
+    const [isAddingCustom, setIsAddingCustom] = useState(false);
 
     // Wheel States
     const [isRolling, setIsRolling] = useState(false);
@@ -63,7 +68,7 @@ export default function WheelOfFortunePage() {
     const totalRotationRef = useRef<number>(0);
     const [tickerShake, setTickerShake] = useState(false);
 
-    // Veri Çekme (Guest + Student rolleri ve fallback)
+    // Veri Çekme: SADECE SANAL ÖĞRENCİLER (role === 'guest')
     useEffect(() => {
         const fetchInitialData = async () => {
             setIsLoadingData(true);
@@ -73,33 +78,29 @@ export default function WheelOfFortunePage() {
                     const classesSnap = await getDocs(query(collection(db, "classes"), orderBy("name")));
                     fetchedClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
                 } catch (e) {
-                    console.warn("Could not load classes:", e);
+                    console.warn("Classes could not be loaded:", e);
                 }
                 setAllClasses(fetchedClasses);
 
-                let loadedStudents: UserProfile[] = [];
+                let loadedGuests: UserProfile[] = [];
                 try {
-                    const guestsQuery = query(collection(db, "users"), where("role", "in", ["guest", "student"]));
-                    const studentsSnap = await getDocs(guestsQuery);
-                    loadedStudents = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+                    // AKILLI TAHTA ÇARKI: SADECE Sanal Öğrenciler (role === 'guest')
+                    const guestsQuery = query(collection(db, "users"), where("role", "==", "guest"));
+                    const guestsSnap = await getDocs(guestsQuery);
+                    loadedGuests = guestsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
                 } catch (e) {
-                    try {
-                        const fallbackSnap = await getDocs(query(collection(db, "users"), where("role", "==", "guest")));
-                        loadedStudents = fallbackSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
-                    } catch (e2) {
-                        console.warn("Could not load users:", e2);
-                    }
+                    console.warn("Could not query guest users:", e);
                 }
 
-                if (loadedStudents.length === 0) {
-                    // Hiç öğrenci yoksa akıllı tahta oyununun kilitlenmemesi için demo öğrencileri ata
-                    loadedStudents = [...DEMO_STUDENTS];
+                if (loadedGuests.length === 0) {
+                    // Veritabanında sanal öğrenci yoksa hazır örnek sanal öğrencileri kullan
+                    loadedGuests = [...DEMO_SANAL_OGRENCILER];
                 }
 
-                setAllStudents(loadedStudents);
+                setAllStudents(loadedGuests);
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setAllStudents([...DEMO_STUDENTS]);
+                setAllStudents([...DEMO_SANAL_OGRENCILER]);
             } finally {
                 setIsLoadingData(false);
             }
@@ -112,20 +113,22 @@ export default function WheelOfFortunePage() {
     const filteredStudents = useMemo(() => {
         let students = allStudents;
         if (classFilter !== 'all' && selectedClassData) {
-            const rawClassName = (selectedClassData.name || '').trim();
+            const rawClassName = (selectedClassData.name || '').trim().toLowerCase();
             const gradeNum = rawClassName.match(/\d+/)?.[0] || '';
 
             if (branchFilter === 'all') {
-                students = students.filter(s => {
-                    const sc = (s.class || '').trim();
-                    return sc.startsWith(rawClassName) || (gradeNum && sc.startsWith(gradeNum));
+                const matched = students.filter(s => {
+                    const sc = (s.class || '').trim().toLowerCase();
+                    return sc.includes(rawClassName) || (gradeNum && sc.startsWith(gradeNum));
                 });
+                if (matched.length > 0) students = matched;
             } else {
-                const fullClassName = `${selectedClassData.name} - ${branchFilter}`;
-                students = students.filter(s => {
-                    const sc = (s.class || '').trim();
-                    return sc === fullClassName || sc.includes(branchFilter);
+                const fullClassName = `${selectedClassData.name} - ${branchFilter}`.toLowerCase();
+                const matched = students.filter(s => {
+                    const sc = (s.class || '').trim().toLowerCase();
+                    return sc === fullClassName || sc.includes(branchFilter.toLowerCase());
                 });
+                if (matched.length > 0) students = matched;
             }
         }
         return students.filter(s => !removedStudentIds.has(s.uid));
@@ -135,27 +138,49 @@ export default function WheelOfFortunePage() {
     const totalSlices = students.length;
     const sliceAngle = 360 / (totalSlices || 1);
 
-    // Hızlı Öğrenci Ekleme
-    const handleAddCustomStudent = (e?: React.FormEvent) => {
+    // Hızlı Sanal Öğrenci Ekleme (Firestore'a guest olarak kaydeder)
+    const handleAddCustomStudent = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         const trimmed = customStudentName.trim();
-        if (!trimmed) return;
+        if (!trimmed || isAddingCustom) return;
 
-        const newStudent: UserProfile = {
-            uid: `custom-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-            displayName: trimmed,
-            class: selectedClassData ? selectedClassData.name : 'Sınıf',
-            role: 'student'
-        } as any;
+        setIsAddingCustom(true);
+        const targetClassName = selectedClassData 
+            ? (branchFilter !== 'all' ? `${selectedClassData.name} - ${branchFilter}` : selectedClassData.name)
+            : '5-A';
 
-        setAllStudents(prev => [newStudent, ...prev]);
-        setCustomStudentName('');
-        try { playSound('pop'); } catch (e) {}
+        try {
+            const res = await addStudentToClass(trimmed, targetClassName, user?.uid || null);
+            if (res.success && res.newUser) {
+                setAllStudents(prev => [res.newUser!, ...prev]);
+            } else {
+                // Fallback local sanal öğrenci
+                const localUser: UserProfile = {
+                    uid: `sanal-${Date.now()}`,
+                    displayName: trimmed,
+                    class: targetClassName,
+                    role: 'guest'
+                } as any;
+                setAllStudents(prev => [localUser, ...prev]);
+            }
+            try { playSound('pop'); } catch (e) {}
+        } catch (err) {
+            const localUser: UserProfile = {
+                uid: `sanal-${Date.now()}`,
+                displayName: trimmed,
+                class: targetClassName,
+                role: 'guest'
+            } as any;
+            setAllStudents(prev => [localUser, ...prev]);
+        } finally {
+            setCustomStudentName('');
+            setIsAddingCustom(false);
+        }
     };
 
-    // Demo Öğrencileri Yükle
+    // Örnek Sanal Öğrencileri Yükle
     const handleLoadDemoStudents = () => {
-        setAllStudents([...DEMO_STUDENTS]);
+        setAllStudents([...DEMO_SANAL_OGRENCILER]);
         setRemovedStudentIds(new Set());
         setClassFilter('all');
         setBranchFilter('all');
@@ -273,7 +298,7 @@ export default function WheelOfFortunePage() {
                     </Link>
                     <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white uppercase flex items-center gap-2.5">
                         <Zap className="text-yellow-400 h-6 w-6 fill-yellow-400" />
-                        Şanslı Çark (Çarkıfelek)
+                        Şanslı Çark (Sanal Öğrenciler)
                     </h1>
                 </div>
 
@@ -296,7 +321,7 @@ export default function WheelOfFortunePage() {
                         {/* Ayarlar Kartı */}
                         <div className="bg-slate-900/70 backdrop-blur-xl p-5 rounded-3xl border border-white/10 space-y-4 shadow-xl">
                             <div className="flex items-center gap-2 text-slate-400 font-bold uppercase tracking-wider text-xs">
-                                <Settings className="w-4 h-4 text-purple-400" /> Sınıf ve Şube Seçimi
+                                <Settings className="w-4 h-4 text-purple-400" /> Sanal Sınıf ve Şube
                             </div>
                             
                             <div className="space-y-1.5">
@@ -306,7 +331,7 @@ export default function WheelOfFortunePage() {
                                         <SelectValue placeholder="Sınıf Seçiniz"/>
                                     </SelectTrigger>
                                     <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                        <SelectItem value="all">Tüm Öğrenciler ({allStudents.length})</SelectItem>
+                                        <SelectItem value="all">Tüm Sanal Öğrenciler ({allStudents.length})</SelectItem>
                                         {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                                     </SelectContent>
                                 </Select>
@@ -325,9 +350,9 @@ export default function WheelOfFortunePage() {
                                 </Select>
                             </div>
 
-                            {/* Hızlı Öğrenci Ekle */}
+                            {/* Hızlı Sanal Öğrenci Ekle */}
                             <form onSubmit={handleAddCustomStudent} className="pt-2 border-t border-white/10">
-                                <Label className="text-slate-300 text-xs font-semibold mb-1.5 block">Hızlı İsim Ekle</Label>
+                                <Label className="text-slate-300 text-xs font-semibold mb-1.5 block">Hızlı Sanal Öğrenci Ekle</Label>
                                 <div className="flex gap-2">
                                     <Input
                                         type="text"
@@ -335,10 +360,10 @@ export default function WheelOfFortunePage() {
                                         value={customStudentName}
                                         onChange={(e) => setCustomStudentName(e.target.value)}
                                         className="h-10 bg-slate-950/60 border-white/10 text-sm text-white rounded-xl"
-                                        disabled={isRolling}
+                                        disabled={isRolling || isAddingCustom}
                                     />
-                                    <Button type="submit" size="sm" className="h-10 px-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl" disabled={!customStudentName.trim() || isRolling}>
-                                        <Plus className="w-4 h-4" />
+                                    <Button type="submit" size="sm" className="h-10 px-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl" disabled={!customStudentName.trim() || isRolling || isAddingCustom}>
+                                        {isAddingCustom ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                                     </Button>
                                 </div>
                             </form>
@@ -347,7 +372,7 @@ export default function WheelOfFortunePage() {
                             <div className="pt-3 border-t border-white/10 flex justify-between items-center text-xs text-slate-400">
                                 <div className="flex items-center gap-1.5 font-bold">
                                     <Users className="w-4 h-4 text-purple-400" />
-                                    <span>{students.length} Öğrenci Çarkta</span>
+                                    <span>{students.length} Sanal Öğrenci Çarkta</span>
                                 </div>
                                 {removedStudentIds.size > 0 && (
                                     <Button variant="ghost" size="sm" onClick={resetStudentList} disabled={isRolling} className="h-7 text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 px-2 rounded-lg">
@@ -363,7 +388,7 @@ export default function WheelOfFortunePage() {
                                     size="sm" 
                                     className="w-full h-10 border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-bold rounded-xl"
                                 >
-                                    <Sparkles className="mr-1.5 w-3.5 h-3.5" /> Örnek Öğrenci Listesi Yükle
+                                    <Sparkles className="mr-1.5 w-3.5 h-3.5" /> Örnek Sanal Öğrencileri Yükle
                                 </Button>
                             )}
                         </div>
@@ -492,9 +517,9 @@ export default function WheelOfFortunePage() {
                                      </div>
                                      
                                      <div className="space-y-1 mb-8">
-                                         <span className="text-xs font-black uppercase tracking-widest text-yellow-400">ŞANSLI ÖĞRENCİ</span>
+                                         <span className="text-xs font-black uppercase tracking-widest text-yellow-400">ŞANSLI SANAL ÖĞRENCİ</span>
                                          <h3 className="text-3xl sm:text-4xl font-black text-white">{winner.displayName}</h3>
-                                         <p className="text-lg text-slate-400 font-medium">{winner.class || "Öğrenci"}</p>
+                                         <p className="text-lg text-slate-400 font-medium">{winner.class || "Sanal Öğrenci"}</p>
                                      </div>
 
                                      <div className="grid grid-cols-2 gap-3">
