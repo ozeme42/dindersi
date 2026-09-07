@@ -281,6 +281,18 @@ type EnrichedCourse = Course & { units?: (Unit & { topics?: Topic[] })[] };
         </div>
 
       <div className="max-w-5xl mx-auto w-full relative z-10 flex-grow flex flex-col">
+        {/* Üst Menü Navigasyonu */}
+        <div className="flex items-center justify-between mb-4">
+          <Button asChild variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/10">
+            <NextLink href="/teacher/smartboard">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Akıllı Tahta Menüsü
+            </NextLink>
+          </Button>
+          <div className="text-xs text-purple-400 font-bold uppercase tracking-wider">
+            Akıllı Tahta Modu
+          </div>
+        </div>
+
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg">Takım Yarışması Kurulumu</h1>
           <p className="text-slate-400 mt-1">Konuyu seç ve yarışmaya başla.</p>
