@@ -4,7 +4,8 @@ import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "rea
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { ArrowLeft, Swords, Repeat, Award, Trophy, Castle, Map, ShieldAlert, Skull, Home, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowLeft, Swords, Repeat, Award, Trophy, Castle, Map, ShieldAlert, Skull, Home, CheckCircle2, XCircle, Flag, AlertTriangle } from "lucide-react";
+import { updateMultipleStudentScores } from "@/app/teacher/smartboard/actions";
 import Link from "next/link";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
@@ -205,15 +206,18 @@ function FetihGameComponent() {
             };
             
             const result = await getQuestionsFromBank(params);
-            if ('error' in result) throw new Error(result.error);
-            if (!result.questions || result.questions.length < TOTAL_TERRITORIES) {
-                // Yeterli soru yoksa havuzdan rastgele doldur veya hata ver
-                // Şimdilik hata verelim
-                 throw new Error(`Yeterli soru yok. En az ${TOTAL_TERRITORIES} soru gerekli.`);
+            if ('error' in result && result.error) throw new Error(result.error);
+            if (!result.questions || result.questions.length === 0) {
+                 throw new Error("Bu ünite veya konuda soru bulunamadı. Lütfen kurulumdan başka bir konu veya tüm üniteyi seçin.");
+            }
+
+            let pool = [...result.questions];
+            while (pool.length < TOTAL_TERRITORIES) {
+                pool = [...pool, ...result.questions];
             }
 
             // Haritayı Oluştur
-            const gameTerritories: Territory[] = result.questions.slice(0, TOTAL_TERRITORIES).map((q, i) => ({
+            const gameTerritories: Territory[] = pool.slice(0, TOTAL_TERRITORIES).map((q, i) => ({
                 id: i,
                 question: q,
                 ownerId: null,
@@ -267,6 +271,36 @@ function FetihGameComponent() {
         return false;
     };
 
+    // Skor Kaydetme
+    const saveWinnerScores = async (winTeam: Team) => {
+        try {
+            const updates = winTeam.playerUids
+                .filter(uid => uid && !uid.startsWith('temp_'))
+                .map(uid => ({
+                    userId: uid,
+                    points: 50,
+                    gameType: 'smartboard_takim' as const,
+                    context: `Fetih Oyunu Zaferi - ${winTeam.name}`
+                }));
+            if (updates.length > 0) {
+                await updateMultipleStudentScores(updates);
+                toast({ title: "Skorlar Kaydedildi", description: `${winTeam.name} oyuncularına zafer puanları verildi!` });
+            }
+        } catch (e) {
+            console.error("Fetih skorları kaydedilemedi:", e);
+        }
+    };
+
+    // Erken Bitirme
+    const handleEarlyFinish = () => {
+        const sorted = [...teams].sort((a,b) => b.score - a.score);
+        const winTeam = sorted[0];
+        setWinner(winTeam);
+        setGameState('finished');
+        playSound('win');
+        saveWinnerScores(winTeam);
+    };
+
     // Soru Cevaplandığında
     const handleAnswer = (isCorrect: boolean) => {
         if (!openedQuestion || activeTeamId === null) return;
@@ -279,21 +313,29 @@ function FetihGameComponent() {
             const targetTerritory = newTerritories.find(t => t.id === openedQuestion.territoryId);
             
             if (targetTerritory) {
-                // Eğer rakip üs ise OYUN BİTER
+                const prevOwnerId = targetTerritory.ownerId;
                 const opponentTeam = teams.find(t => t.id !== activeTeamId);
-                if (targetTerritory.isBase && targetTerritory.ownerId === opponentTeam?.id) {
+
+                // Eğer rakip üs ise OYUN BİTER
+                if (targetTerritory.isBase && prevOwnerId === opponentTeam?.id) {
                      targetTerritory.ownerId = activeTeamId;
-                     setWinner(teams.find(t => t.id === activeTeamId) || null);
+                     const winTeam = teams.find(t => t.id === activeTeamId) || null;
+                     setWinner(winTeam);
                      setGameState('finished');
+                     if (winTeam) saveWinnerScores(winTeam);
                      return;
                 }
 
-                // Normal Fetih
+                // Normal Fetih (tarafsız veya rakip bölge)
                 targetTerritory.ownerId = activeTeamId;
                 setTerritories(newTerritories);
 
                 // Skoru Güncelle
-                setTeams(prev => prev.map(t => t.id === activeTeamId ? { ...t, score: t.score + 1 } : t));
+                setTeams(prev => prev.map(t => {
+                    if (t.id === activeTeamId) return { ...t, score: t.score + 1 };
+                    if (prevOwnerId && t.id === prevOwnerId) return { ...t, score: Math.max(1, t.score - 1) };
+                    return t;
+                }));
             }
         } else {
             playSound('error');
@@ -341,12 +383,15 @@ function FetihGameComponent() {
                             {winner.name}
                         </div>
                     </CardContent>
-                    <CardFooter className="justify-center gap-4">
+                    <CardFooter className="justify-center gap-3">
                          <Button onClick={() => window.location.reload()} size="lg" className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold">
                              <Repeat className="mr-2 h-5 w-5"/> Yeni Savaş
                          </Button>
-                         <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300">
-                             <Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Ana Menü</Link>
+                         <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white">
+                             <Link href="/teacher/smartboard/fetih-oyunu"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Dön</Link>
+                         </Button>
+                         <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white">
+                             <Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Menü</Link>
                          </Button>
                     </CardFooter>
                 </Card>
@@ -366,10 +411,22 @@ function FetihGameComponent() {
 
             {/* Üst Bar (HUD) */}
             <header className="flex-shrink-0 z-20 mb-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                     <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white"><Link href="/teacher/smartboard/fetih-oyunu"><ArrowLeft className="h-6 w-6"/></Link></Button>
-                     <h1 className="text-2xl font-black text-white tracking-tight uppercase flex items-center gap-2">
-                         <Map className="h-6 w-6 text-emerald-500" /> Fetih Haritası
+                <div className="flex items-center gap-3">
+                     <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => {
+                            if (confirm("Fetih oyunundan çıkmak istediğinize emin misiniz?")) {
+                                window.location.href = "/teacher/smartboard/fetih-oyunu";
+                            }
+                        }}
+                        className="text-slate-400 hover:text-white hover:bg-white/10"
+                     >
+                        <ArrowLeft className="mr-1.5 h-4 w-4"/> Çıkış
+                     </Button>
+                     <div className="h-6 w-px bg-white/10" />
+                     <h1 className="text-xl font-black text-white tracking-tight uppercase flex items-center gap-2">
+                         <Map className="h-5 w-5 text-emerald-500" /> Fetih Haritası
                      </h1>
                 </div>
                 
@@ -381,6 +438,13 @@ function FetihGameComponent() {
                 </div>
 
                 <div className="flex items-center gap-2">
+                    <Button 
+                        size="sm" 
+                        onClick={handleEarlyFinish} 
+                        className="bg-white text-slate-900 hover:bg-slate-200 font-bold"
+                    >
+                        <Flag className="mr-1.5 h-4 w-4"/> Savaşı Bitir
+                    </Button>
                     <FullscreenToggle className="bg-slate-800 text-slate-300 hover:text-white border-0 h-10 w-10 rounded-lg" />
                 </div>
             </header>
@@ -403,7 +467,7 @@ function FetihGameComponent() {
                                 territory={t}
                                 activeTeamId={activeTeamId}
                                 teams={teams}
-                                canAttack={t.ownerId === null && activeTeamId !== null && isAdjacent(t.id, activeTeamId)}
+                                canAttack={t.ownerId !== activeTeamId && activeTeamId !== null && isAdjacent(t.id, activeTeamId)}
                                 onClick={() => setOpenedQuestion({ territoryId: t.id, question: t.question })}
                             />
                         ))}
