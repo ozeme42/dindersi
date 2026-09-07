@@ -1,12 +1,13 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
     Trophy, User, ArrowLeft, Trash2, Zap, UserMinus, RotateCcw,
-    Maximize2, Minimize2, PartyPopper, Settings, Users
+    Maximize2, Minimize2, PartyPopper, Settings, Users, Plus, UserPlus,
+    Volume2, VolumeX, Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
@@ -16,67 +17,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { UserAvatar } from '@/components/user-avatar';
 import { playSound } from '@/lib/audio-service';
-
-// --- TİPLER ---
-// Konfeti tipi tanımı burada gerekli değil, kaldırıldı.
+import confetti from 'canvas-confetti';
 
 const WHEEL_COLORS = [
     '#4f46e5', '#db2777', '#2563eb', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444',
     '#14b8a6', '#64748b', '#ec4899', '#0ea5e9', '#f97316'
 ];
 
-
-// --- KONFETİ EFEKTİ ---
-const Confetti = () => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particles: any[] = [];
-        const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#ffffff'];
-
-        for (let i = 0; i < 400; i++) {
-            particles.push({
-                x: canvas.width / 2,
-                y: canvas.height / 2,
-                vx: (Math.random() - 0.5) * 40,
-                vy: (Math.random() - 0.5) * 40 - 10,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                size: Math.random() * 8 + 4,
-                gravity: 0.6,
-                drag: 0.96
-            });
-        }
-
-        const animate = () => {
-            if (!ctx) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, index) => {
-                p.x += p.vx;
-                p.y += p.vy;
-                p.vx *= p.drag;
-                p.vy *= p.drag;
-                p.vy += p.gravity;
-                ctx.fillStyle = p.color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
-                if (p.y > canvas.height + 100) particles.splice(index, 1);
-            });
-            if (particles.length > 0) requestAnimationFrame(animate);
-        };
-        animate();
-    }, []);
-
-    return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-[100]" />;
-};
+const DEMO_STUDENTS: UserProfile[] = [
+    { uid: 'demo-1', displayName: 'Ahmet Yılmaz', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-2', displayName: 'Ayşe Kaya', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-3', displayName: 'Mehmet Demir', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-4', displayName: 'Fatma Çelik', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-5', displayName: 'Ali Şahin', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-6', displayName: 'Zeynep Yıldız', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-7', displayName: 'Mustafa Aydın', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-8', displayName: 'Elif Öztürk', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-9', displayName: 'Emir Arslan', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-10', displayName: 'Hira Doğan', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-11', displayName: 'Burak Koç', class: '5-A', role: 'student' } as any,
+    { uid: 'demo-12', displayName: 'Merve Yavuz', class: '5-A', role: 'student' } as any,
+];
 
 export default function WheelOfFortunePage() {
     // Data States
@@ -85,6 +46,9 @@ export default function WheelOfFortunePage() {
     const [classFilter, setClassFilter] = useState('all');
     const [branchFilter, setBranchFilter] = useState('all');
     const [isLoadingData, setIsLoadingData] = useState(true);
+
+    // Manual Student Addition
+    const [customStudentName, setCustomStudentName] = useState('');
 
     // Wheel States
     const [isRolling, setIsRolling] = useState(false);
@@ -97,21 +61,45 @@ export default function WheelOfFortunePage() {
     const requestRef = useRef<number>();
     const startTimeRef = useRef<number>();
     const totalRotationRef = useRef<number>(0);
-    const [tickerShake, setTickerShake] = useState(false); // İbre titremesi için
+    const [tickerShake, setTickerShake] = useState(false);
 
-    // Veri Çekme
+    // Veri Çekme (Guest + Student rolleri ve fallback)
     useEffect(() => {
         const fetchInitialData = async () => {
             setIsLoadingData(true);
             try {
-                const [classesSnap, studentsSnap] = await Promise.all([
-                    getDocs(query(collection(db, "classes"), orderBy("name"))),
-                    getDocs(query(collection(db, "users"), where("role", "==", "guest")))
-                ]);
-                setAllClasses(classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
-                setAllStudents(studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
+                let fetchedClasses: SchoolClass[] = [];
+                try {
+                    const classesSnap = await getDocs(query(collection(db, "classes"), orderBy("name")));
+                    fetchedClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+                } catch (e) {
+                    console.warn("Could not load classes:", e);
+                }
+                setAllClasses(fetchedClasses);
+
+                let loadedStudents: UserProfile[] = [];
+                try {
+                    const guestsQuery = query(collection(db, "users"), where("role", "in", ["guest", "student"]));
+                    const studentsSnap = await getDocs(guestsQuery);
+                    loadedStudents = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+                } catch (e) {
+                    try {
+                        const fallbackSnap = await getDocs(query(collection(db, "users"), where("role", "==", "guest")));
+                        loadedStudents = fallbackSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+                    } catch (e2) {
+                        console.warn("Could not load users:", e2);
+                    }
+                }
+
+                if (loadedStudents.length === 0) {
+                    // Hiç öğrenci yoksa akıllı tahta oyununun kilitlenmemesi için demo öğrencileri ata
+                    loadedStudents = [...DEMO_STUDENTS];
+                }
+
+                setAllStudents(loadedStudents);
             } catch (error) {
                 console.error("Error fetching data:", error);
+                setAllStudents([...DEMO_STUDENTS]);
             } finally {
                 setIsLoadingData(false);
             }
@@ -124,11 +112,20 @@ export default function WheelOfFortunePage() {
     const filteredStudents = useMemo(() => {
         let students = allStudents;
         if (classFilter !== 'all' && selectedClassData) {
+            const rawClassName = (selectedClassData.name || '').trim();
+            const gradeNum = rawClassName.match(/\d+/)?.[0] || '';
+
             if (branchFilter === 'all') {
-                students = students.filter(s => s.class?.startsWith(selectedClassData.name));
+                students = students.filter(s => {
+                    const sc = (s.class || '').trim();
+                    return sc.startsWith(rawClassName) || (gradeNum && sc.startsWith(gradeNum));
+                });
             } else {
                 const fullClassName = `${selectedClassData.name} - ${branchFilter}`;
-                students = students.filter(s => s.class === fullClassName);
+                students = students.filter(s => {
+                    const sc = (s.class || '').trim();
+                    return sc === fullClassName || sc.includes(branchFilter);
+                });
             }
         }
         return students.filter(s => !removedStudentIds.has(s.uid));
@@ -138,10 +135,36 @@ export default function WheelOfFortunePage() {
     const totalSlices = students.length;
     const sliceAngle = 360 / (totalSlices || 1);
 
+    // Hızlı Öğrenci Ekleme
+    const handleAddCustomStudent = (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        const trimmed = customStudentName.trim();
+        if (!trimmed) return;
+
+        const newStudent: UserProfile = {
+            uid: `custom-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+            displayName: trimmed,
+            class: selectedClassData ? selectedClassData.name : 'Sınıf',
+            role: 'student'
+        } as any;
+
+        setAllStudents(prev => [newStudent, ...prev]);
+        setCustomStudentName('');
+        try { playSound('pop'); } catch (e) {}
+    };
+
+    // Demo Öğrencileri Yükle
+    const handleLoadDemoStudents = () => {
+        setAllStudents([...DEMO_STUDENTS]);
+        setRemovedStudentIds(new Set());
+        setClassFilter('all');
+        setBranchFilter('all');
+        try { playSound('pop'); } catch (e) {}
+    };
+
     // --- FİZİK TABANLI DÖNÜŞ MANTIĞI ---
     const spinWheel = () => {
         if (students.length < 2) {
-            alert("Çarkı çevirmek için en az 2 öğrenci gereklidir.");
             return;
         }
         if (isRolling) return;
@@ -149,8 +172,8 @@ export default function WheelOfFortunePage() {
         setIsRolling(true);
         setWinner(null);
         
-        const duration = 8000 + Math.random() * 4000;
-        const initialSpeed = 50 + Math.random() * 20;
+        const duration = 6500 + Math.random() * 2500;
+        const initialSpeed = 45 + Math.random() * 15;
         
         startTimeRef.current = performance.now();
         const easeOut = (t: number) => 1 - Math.pow(1 - t, 3); 
@@ -172,8 +195,8 @@ export default function WheelOfFortunePage() {
             
             if (sliceIndex !== prevSliceIndex) {
                 setTickerShake(true);
-                playSound('click');
-                setTimeout(() => setTickerShake(false), 50); 
+                try { playSound('click'); } catch (e) {}
+                setTimeout(() => setTickerShake(false), 40); 
             }
 
             if (progress < 1) {
@@ -197,19 +220,28 @@ export default function WheelOfFortunePage() {
         const winnerStudent = students[winningIndex];
         
         setWinner(winnerStudent);
-        playSound('win');
+        try { playSound('win'); } catch (e) {}
+        try {
+            confetti({
+                particleCount: 100,
+                spread: 90,
+                origin: { y: 0.6 }
+            });
+        } catch (e) {}
     };
 
     const removeCurrentStudent = () => {
         if (winner) {
             setRemovedStudentIds(prev => new Set(prev).add(winner.uid));
             setWinner(null);
+            try { playSound('pop'); } catch (e) {}
         }
     };
     
     const resetStudentList = () => {
         setRemovedStudentIds(new Set());
         setWinner(null);
+        try { playSound('pop'); } catch (e) {}
     };
 
     const getCoordinatesForPercent = (percent: number) => {
@@ -219,57 +251,73 @@ export default function WheelOfFortunePage() {
     };
 
     return (
-        <div className="flex flex-col h-screen bg-slate-950 text-white overflow-hidden relative selection:bg-cyan-500/30 font-sans">
-            
+        <div className="flex flex-col h-screen bg-slate-950 text-white overflow-hidden relative selection:bg-cyan-500/30 font-sans select-none">
+            {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/20 rounded-full blur-[180px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-fuchsia-900/20 rounded-full blur-[180px]" />
+                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/15 rounded-full blur-[180px]" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-fuchsia-900/15 rounded-full blur-[180px]" />
             </div>
 
+            {/* Üst Menü Navigasyonu */}
             <header className={cn(
-                "flex-shrink-0 p-6 flex items-center justify-between z-20 bg-slate-900/50 backdrop-blur-md border-b border-white/5",
+                "flex-shrink-0 p-4 sm:p-5 flex items-center justify-between z-20 bg-slate-900/60 backdrop-blur-md border-b border-white/10",
                 isWheelFullscreen && "hidden"
             )}>
-                <div className="flex items-center gap-6">
-                    <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white h-14 w-14 rounded-2xl">
-                        <Link href="/teacher/smartboard">
-                            <ArrowLeft className="h-8 w-8" />
-                        </Link>
-                    </Button>
-                    <h1 className="text-3xl font-black tracking-tight text-white uppercase flex items-center gap-3">
-                        <Zap className="text-yellow-400 h-8 w-8 fill-yellow-400" />
-                        Şanslı Çark
+                <div className="flex items-center gap-4">
+                    <Link
+                        href="/teacher/smartboard"
+                        className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/15 text-xs font-bold transition-all shadow-md group active:scale-95"
+                    >
+                        <ArrowLeft className="w-4 h-4 text-purple-400 group-hover:-translate-x-1 transition-transform" />
+                        <span>Akıllı Tahta Menüsü</span>
+                    </Link>
+                    <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white uppercase flex items-center gap-2.5">
+                        <Zap className="text-yellow-400 h-6 w-6 fill-yellow-400" />
+                        Şanslı Çark (Çarkıfelek)
                     </h1>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <Button 
+                        size="sm" 
+                        variant="secondary"
+                        onClick={() => setIsWheelFullscreen(true)} 
+                        className="h-10 bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-xl font-bold text-xs"
+                    >
+                        <Maximize2 className="mr-1.5 h-4 w-4"/> Tam Ekran
+                    </Button>
                 </div>
             </header>
 
-            <main className="flex-1 flex overflow-hidden z-10 p-4 md:p-8 gap-8">
-                 
-                 {winner && <Confetti />}
-
+            <main className="flex-1 flex overflow-hidden z-10 p-3 sm:p-6 gap-4 sm:gap-6">
+                 {/* Sol Panel: Ayarlar ve Liste */}
                  {!isWheelFullscreen && (
-                     <div className="w-80 md:w-96 flex flex-col gap-6 h-full overflow-y-auto pr-2 custom-scrollbar">
-                        
-                        <div className="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-white/10 space-y-5 shadow-2xl">
-                            <div className="flex items-center gap-2 text-slate-400 font-bold uppercase tracking-wider text-sm mb-1">
-                                <Settings className="w-4 h-4" /> Ayarlar
+                     <div className="w-80 md:w-96 flex flex-col gap-4 h-full overflow-y-auto pr-1 custom-scrollbar shrink-0">
+                        {/* Ayarlar Kartı */}
+                        <div className="bg-slate-900/70 backdrop-blur-xl p-5 rounded-3xl border border-white/10 space-y-4 shadow-xl">
+                            <div className="flex items-center gap-2 text-slate-400 font-bold uppercase tracking-wider text-xs">
+                                <Settings className="w-4 h-4 text-purple-400" /> Sınıf ve Şube Seçimi
                             </div>
                             
-                            <div className="space-y-2">
-                                <Label className="text-slate-300 ml-1">Sınıf Seçimi</Label>
+                            <div className="space-y-1.5">
+                                <Label className="text-slate-300 text-xs font-semibold">Sınıf</Label>
                                 <Select value={classFilter} onValueChange={(val) => { setClassFilter(val); setBranchFilter('all'); }} disabled={isRolling}>
-                                    <SelectTrigger className="bg-slate-950/50 border-white/10 h-12 text-lg text-white rounded-xl focus:ring-purple-500/50"><SelectValue/></SelectTrigger>
+                                    <SelectTrigger className="bg-slate-950/60 border-white/10 h-11 text-sm text-white rounded-xl focus:ring-purple-500/50">
+                                        <SelectValue placeholder="Sınıf Seçiniz"/>
+                                    </SelectTrigger>
                                     <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                        <SelectItem value="all">Tüm Öğrenciler</SelectItem>
+                                        <SelectItem value="all">Tüm Öğrenciler ({allStudents.length})</SelectItem>
                                         {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                                     </SelectContent>
                                 </Select>
                             </div>
                             
-                            <div className="space-y-2">
-                                <Label className="text-slate-300 ml-1">Şube</Label>
-                                <Select value={branchFilter} onValueChange={(val) => { setBranchFilter(val); }} disabled={!selectedClassData || isRolling}>
-                                    <SelectTrigger className="bg-slate-950/50 border-white/10 h-12 text-lg text-white rounded-xl focus:ring-purple-500/50"><SelectValue placeholder="Şube Seçin..."/></SelectTrigger>
+                            <div className="space-y-1.5">
+                                <Label className="text-slate-300 text-xs font-semibold">Şube</Label>
+                                <Select value={branchFilter} onValueChange={(val) => setBranchFilter(val)} disabled={!selectedClassData || isRolling}>
+                                    <SelectTrigger className="bg-slate-950/60 border-white/10 h-11 text-sm text-white rounded-xl focus:ring-purple-500/50">
+                                        <SelectValue placeholder="Tüm Şubeler"/>
+                                    </SelectTrigger>
                                     <SelectContent className="bg-slate-900 border-white/10 text-white">
                                         <SelectItem value="all">Tüm Şubeler</SelectItem>
                                         {selectedClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
@@ -277,81 +325,109 @@ export default function WheelOfFortunePage() {
                                 </Select>
                             </div>
 
-                            <div className="pt-4 border-t border-white/5 flex justify-between items-center text-sm text-slate-400">
-                                <div className="flex items-center gap-2">
-                                    <Users className="w-4 h-4" />
-                                    <span>{students.length} Kişi</span>
+                            {/* Hızlı Öğrenci Ekle */}
+                            <form onSubmit={handleAddCustomStudent} className="pt-2 border-t border-white/10">
+                                <Label className="text-slate-300 text-xs font-semibold mb-1.5 block">Hızlı İsim Ekle</Label>
+                                <div className="flex gap-2">
+                                    <Input
+                                        type="text"
+                                        placeholder="Öğrenci Adı..."
+                                        value={customStudentName}
+                                        onChange={(e) => setCustomStudentName(e.target.value)}
+                                        className="h-10 bg-slate-950/60 border-white/10 text-sm text-white rounded-xl"
+                                        disabled={isRolling}
+                                    />
+                                    <Button type="submit" size="sm" className="h-10 px-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl" disabled={!customStudentName.trim() || isRolling}>
+                                        <Plus className="w-4 h-4" />
+                                    </Button>
+                                </div>
+                            </form>
+
+                            {/* Durum Özeti */}
+                            <div className="pt-3 border-t border-white/10 flex justify-between items-center text-xs text-slate-400">
+                                <div className="flex items-center gap-1.5 font-bold">
+                                    <Users className="w-4 h-4 text-purple-400" />
+                                    <span>{students.length} Öğrenci Çarkta</span>
                                 </div>
                                 {removedStudentIds.size > 0 && (
-                                    <Button variant="ghost" size="sm" onClick={resetStudentList} disabled={isRolling} className="h-8 text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10">
-                                        <RotateCcw className="mr-1.5 h-3 w-3"/> Sıfırla ({removedStudentIds.size})
+                                    <Button variant="ghost" size="sm" onClick={resetStudentList} disabled={isRolling} className="h-7 text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 px-2 rounded-lg">
+                                        <RotateCcw className="mr-1 h-3 w-3"/> Sıfırla ({removedStudentIds.size})
                                     </Button>
                                 )}
                             </div>
+
+                            {students.length < 2 && (
+                                <Button 
+                                    onClick={handleLoadDemoStudents} 
+                                    variant="outline" 
+                                    size="sm" 
+                                    className="w-full h-10 border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-bold rounded-xl"
+                                >
+                                    <Sparkles className="mr-1.5 w-3.5 h-3.5" /> Örnek Öğrenci Listesi Yükle
+                                </Button>
+                            )}
                         </div>
 
                          <Button 
                             size="lg" 
                             onClick={spinWheel} 
                             disabled={isRolling || students.length < 2}
-                            className="w-full h-20 text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-lg shadow-purple-900/30 rounded-2xl transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
+                            className="w-full h-16 sm:h-20 text-2xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 shadow-xl shadow-purple-900/30 rounded-2xl transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
                         >
-                            {isRolling ? "DÖNÜYOR..." : "ÇEVİR"}
+                            {isRolling ? "ÇARK DÖNÜYOR..." : "ÇARKI ÇEVİR"}
                         </Button>
-
-                         <div className="mt-auto">
-                             <Button 
-                                size="lg" 
-                                variant="secondary"
-                                onClick={() => setIsWheelFullscreen(true)} 
-                                className="w-full h-14 bg-slate-800 hover:bg-slate-700 text-white border border-white/5 rounded-2xl"
-                            >
-                                <Maximize2 className="mr-2 h-5 w-5"/> Tam Ekran Modu
-                            </Button>
-                         </div>
                      </div>
                  )}
                  
+                 {/* Çark Alanı */}
                  <div className={cn(
-                     "relative flex items-center justify-center transition-all duration-500", 
+                     "relative flex items-center justify-center transition-all duration-500 flex-1 overflow-hidden", 
                      isWheelFullscreen 
                         ? "fixed inset-0 z-50 bg-slate-950 p-4" 
-                        : "flex-1 h-[500px] md:h-full bg-slate-900/30 border-4 border-slate-800 rounded-[3rem] shadow-inner"
+                        : "bg-slate-900/40 border-2 border-white/10 rounded-3xl shadow-2xl p-4"
                     )}>
                      
                      {isWheelFullscreen && (
-                         <div className="absolute top-8 right-8 z-50 flex gap-4">
-                            <Button onClick={spinWheel} disabled={isRolling || students.length < 2} className="h-16 px-8 text-xl font-bold bg-cyan-600 hover:bg-cyan-500 text-white rounded-2xl">
-                                {isRolling ? "Dönüyor..." : "Çevir"}
+                         <div className="absolute top-6 right-6 z-50 flex gap-3">
+                            <Button 
+                                onClick={spinWheel} 
+                                disabled={isRolling || students.length < 2} 
+                                className="h-14 px-8 text-xl font-black bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white rounded-2xl shadow-lg"
+                            >
+                                {isRolling ? "Dönüyor..." : "Çarkı Çevir"}
                             </Button>
-                            <Button onClick={() => setIsWheelFullscreen(false)} className="bg-slate-800/80 hover:bg-slate-700 text-white rounded-full h-16 w-16 border border-white/10">
-                                <Minimize2 className="h-8 w-8"/>
+                            <Button onClick={() => setIsWheelFullscreen(false)} className="bg-slate-800/90 hover:bg-slate-700 text-white rounded-2xl h-14 w-14 border border-white/15 shadow-md">
+                                <Minimize2 className="h-6 w-6"/>
                             </Button>
                          </div>
                      )}
 
-                     <div className={cn("relative aspect-square flex items-center justify-center transition-all duration-500", isWheelFullscreen ? "w-[90vh]" : "w-full max-w-[70vh]")}>
-                         
+                     <div className={cn(
+                         "relative aspect-square flex items-center justify-center transition-all duration-500", 
+                         isWheelFullscreen ? "w-[88vh]" : "w-full max-w-[68vh]"
+                     )}>
+                         {/* İbre (Ticker) */}
                          <div className={cn(
-                             "absolute right-[-25px] top-1/2 -translate-y-1/2 z-30 filter drop-shadow-2xl transition-transform origin-right",
-                             tickerShake ? "rotate-[-15deg]" : "rotate-0"
+                             "absolute right-[-20px] top-1/2 -translate-y-1/2 z-30 filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] transition-transform origin-right",
+                             tickerShake ? "rotate-[-18deg]" : "rotate-0"
                          )}>
                              <div className="relative">
-                                 <div className="w-0 h-0 border-t-[30px] border-t-transparent border-r-[70px] border-r-white border-b-[30px] border-b-transparent drop-shadow-lg" />
-                                 <div className="absolute top-1/2 right-2 -translate-y-1/2 w-4 h-4 bg-slate-300 rounded-full shadow-inner" />
+                                 <div className="w-0 h-0 border-t-[26px] border-t-transparent border-r-[60px] border-r-white border-b-[26px] border-b-transparent drop-shadow-md" />
+                                 <div className="absolute top-1/2 right-1.5 -translate-y-1/2 w-4 h-4 bg-slate-400 rounded-full shadow-inner" />
                              </div>
                          </div>
 
+                         {/* Dönen Çark */}
                          <div 
-                            className="w-full h-full rounded-full border-[12px] border-slate-800 shadow-[0_0_80px_rgba(0,0,0,0.8)] relative overflow-hidden bg-slate-900"
+                            className="w-full h-full rounded-full border-[10px] sm:border-[14px] border-slate-900 shadow-[0_0_80px_rgba(0,0,0,0.9)] relative overflow-hidden bg-slate-900"
                             style={{ 
                                 transform: `rotate(${rotation}deg)`,
                                 transition: 'none'
                             }}
                          >
-                            <div className="absolute inset-0 rounded-full shadow-[inset_0_0_40px_rgba(0,0,0,0.5)] z-10 pointer-events-none border-[4px] border-white/5" />
+                            <div className="absolute inset-0 rounded-full shadow-[inset_0_0_40px_rgba(0,0,0,0.6)] z-10 pointer-events-none border-[3px] border-white/10" />
 
-                            <svg viewBox="-1 -1 2 2" className="w-full h-full" style={{ transform: 'rotate(0deg)' }}>
+                            <svg viewBox="-1 -1 2 2" className="w-full h-full">
                                 {students.map((student, index) => {
                                     const startPercent = index / totalSlices;
                                     const endPercent = (index + 1) / totalSlices;
@@ -368,22 +444,22 @@ export default function WheelOfFortunePage() {
                                     const textX = Math.cos(midAngle) * textRadius;
                                     const textY = Math.sin(midAngle) * textRadius;
                                     const rotationDeg = (midAngle * 180) / Math.PI;
-                                    const fontSize = Math.max(0.035, Math.min(0.07, 0.4 / (totalSlices > 0 ? totalSlices : 1)));
+                                    const fontSize = Math.max(0.032, Math.min(0.065, 0.38 / (totalSlices > 0 ? totalSlices : 1)));
 
                                     return (
                                         <g key={student.uid}>
-                                            <path d={pathData} fill={color} stroke="#1e293b" strokeWidth="0.008" />
+                                            <path d={pathData} fill={color} stroke="#0f172a" strokeWidth="0.008" />
                                             <text 
                                                 x={textX} 
                                                 y={textY} 
                                                 fill="white" 
                                                 fontSize={fontSize}
                                                 fontWeight="900"
-                                                fontFamily="Arial Black, sans-serif"
+                                                fontFamily="system-ui, -apple-system, sans-serif"
                                                 textAnchor="middle" 
                                                 alignmentBaseline="middle"
                                                 transform={`rotate(${rotationDeg}, ${textX}, ${textY})`}
-                                                style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.3)' }}
+                                                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}
                                             >
                                                 {student.displayName.split(' ')[0].toUpperCase()}
                                             </text>
@@ -393,37 +469,46 @@ export default function WheelOfFortunePage() {
                             </svg>
                          </div>
                          
+                         {/* Merkez Buton */}
                          <div 
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 bg-white rounded-full border-[8px] border-slate-800 shadow-[0_0_40px_rgba(255,255,255,0.3)] flex items-center justify-center z-20 cursor-pointer hover:scale-105 active:scale-95 transition-transform group"
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-full border-[8px] border-slate-900 shadow-[0_0_40px_rgba(255,255,255,0.4)] flex items-center justify-center z-20 cursor-pointer hover:scale-105 active:scale-95 transition-transform group"
                             onClick={spinWheel}
                          >
-                             <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 rounded-full" />
-                             <span className="relative text-slate-900 font-black text-xl tracking-tighter group-hover:text-indigo-600 transition-colors">ÇEVİR</span>
+                             <div className="absolute inset-0 bg-gradient-to-br from-white to-slate-200 rounded-full" />
+                             <span className="relative text-slate-900 font-black text-lg sm:text-xl tracking-tight group-hover:text-purple-600 transition-colors">ÇEVİR</span>
                          </div>
 
+                         {/* Kazanan Modalı */}
                          {winner && !isRolling && (
                              <div className="absolute inset-0 z-50 flex items-center justify-center">
-                                 <div className="absolute inset-0 bg-black/80 backdrop-blur-md animate-in fade-in duration-500" />
-                                 <div className="relative z-50 text-center animate-in zoom-in-50 slide-in-from-bottom-10 duration-500 p-10 bg-slate-900 border-4 border-yellow-500 rounded-[3rem] shadow-[0_0_100px_rgba(234,179,8,0.8)] max-w-lg mx-6">
+                                 <div className="absolute inset-0 bg-black/80 backdrop-blur-md animate-in fade-in duration-300" />
+                                 <div className="relative z-50 text-center animate-in zoom-in-75 duration-300 p-8 sm:p-10 bg-slate-900 border-4 border-yellow-500 rounded-[2.5rem] shadow-[0_0_100px_rgba(234,179,8,0.7)] max-w-md w-full mx-4">
+                                     <PartyPopper className="w-16 h-16 text-yellow-400 mx-auto mb-4 animate-bounce" />
                                      
-                                     <PartyPopper className="w-20 h-20 text-yellow-400 mx-auto mb-6 animate-bounce" />
-                                     
-                                     <div className="absolute -top-14 left-1/2 -translate-x-1/2">
-                                        <div className="p-2 bg-yellow-500 rounded-full shadow-2xl">
-                                            <UserAvatar user={winner} className="w-28 h-28 border-4 border-slate-900 text-5xl bg-slate-800" />
-                                        </div>
+                                     <div className="mb-4">
+                                         <div className="w-24 h-24 mx-auto p-1.5 bg-yellow-500 rounded-full shadow-2xl">
+                                             <UserAvatar user={winner} className="w-full h-full border-4 border-slate-900 text-4xl bg-slate-800" />
+                                         </div>
                                      </div>
                                      
-                                     <div className="mt-16 space-y-3">
-                                         <h3 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-600 drop-shadow-sm">{winner.displayName}</h3>
-                                         <p className="text-2xl text-slate-400 font-bold">{winner.class || "Öğrenci"}</p>
+                                     <div className="space-y-1 mb-8">
+                                         <span className="text-xs font-black uppercase tracking-widest text-yellow-400">ŞANSLI ÖĞRENCİ</span>
+                                         <h3 className="text-3xl sm:text-4xl font-black text-white">{winner.displayName}</h3>
+                                         <p className="text-lg text-slate-400 font-medium">{winner.class || "Öğrenci"}</p>
                                      </div>
 
-                                     <div className="grid grid-cols-2 gap-4 mt-10">
-                                         <Button onClick={removeCurrentStudent} variant="destructive" className="h-16 text-xl font-bold border-2 border-red-700 shadow-lg hover:shadow-red-900/50 rounded-2xl">
-                                             <UserMinus className="mr-3 h-6 w-6"/> Çıkar
+                                     <div className="grid grid-cols-2 gap-3">
+                                         <Button 
+                                            onClick={removeCurrentStudent} 
+                                            variant="destructive" 
+                                            className="h-14 text-base font-black rounded-xl border border-rose-700 bg-rose-600 hover:bg-rose-500 shadow-md"
+                                         >
+                                             <UserMinus className="mr-2 h-5 w-5"/> Listeden Çıkar
                                          </Button>
-                                         <Button onClick={() => setWinner(null)} className="h-16 text-xl font-bold bg-emerald-600 hover:bg-emerald-500 border-2 border-emerald-400 text-white shadow-lg hover:shadow-emerald-900/50 rounded-2xl">
+                                         <Button 
+                                            onClick={() => setWinner(null)} 
+                                            className="h-14 text-base font-black bg-emerald-600 hover:bg-emerald-500 border border-emerald-400 text-white rounded-xl shadow-md"
+                                         >
                                              Devam Et
                                          </Button>
                                      </div>
