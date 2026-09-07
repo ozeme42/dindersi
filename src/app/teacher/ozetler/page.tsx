@@ -8,7 +8,8 @@ import {
     FileText, AlertCircle, ChevronRight, ChevronLeft, X,
     RefreshCw, GraduationCap, Maximize2, Minimize2, Plus,
     Minus, Wand2, MonitorPlay, Code2, BookmarkCheck, CheckCircle2,
-    SlidersHorizontal, ArrowUpDown, BookMarked, Sparkle
+    SlidersHorizontal, ArrowUpDown, BookMarked, Sparkle,
+    Zap, Columns, ExternalLink, CheckCircle, HelpCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -30,6 +31,7 @@ import {
     saveOzetContent, 
     clearOzetContent, 
     generateOzetWithAi, 
+    batchGenerateUnitTopicSummaries,
     type OzetItem 
 } from './actions';
 
@@ -54,6 +56,7 @@ export default function OzetlerManagementPage() {
     const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'source'>('preview');
     const [zoomLevel, setZoomLevel] = useState<number>(1.0);
     const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+    const [isSplitView, setIsSplitView] = useState<boolean>(false);
     const readerContainerRef = useRef<HTMLDivElement>(null);
 
     // Editor Modal State
@@ -62,6 +65,7 @@ export default function OzetlerManagementPage() {
     const [editorTab, setEditorTab] = useState<'edit' | 'preview'>('edit');
     const [isSaving, setIsSaving] = useState(false);
     const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+    const [isBatchGenerating, setIsBatchGenerating] = useState(false);
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
     // Fullscreen event listener
@@ -81,7 +85,7 @@ export default function OzetlerManagementPage() {
             if (res.success && res.items) {
                 setItems(res.items);
                 if (showToast) {
-                    toast({ title: "Veriler Güncellendi", description: "Tüm ünite ve konu özetleri başarıyla yüklendi." });
+                    toast({ title: "Veriler Güncellendi", description: "Tüm ünite ve konu özetleri kaynak metinleriyle birlikte yüklendi." });
                 }
             } else {
                 toast({ title: "Hata", description: res.error || "Özetler yüklenemedi.", variant: "destructive" });
@@ -109,6 +113,8 @@ export default function OzetlerManagementPage() {
         const topicItems = items.filter(i => i.type === 'topic');
         const topicWithOzet = topicItems.filter(i => i.hasOzet).length;
         const totalWords = items.reduce((acc, i) => acc + (i.wordCount || 0), 0);
+        const totalSourceWords = items.reduce((acc, i) => acc + (i.sourceWordCount || 0), 0);
+        const topicWithSource = topicItems.filter(i => i.sourceWordCount > 0).length;
         return {
             total,
             withOzet,
@@ -117,7 +123,9 @@ export default function OzetlerManagementPage() {
             unitWithOzet,
             topicTotal: topicItems.length,
             topicWithOzet,
-            totalWords
+            topicWithSource,
+            totalWords,
+            totalSourceWords
         };
     }, [items]);
 
@@ -192,6 +200,19 @@ export default function OzetlerManagementPage() {
         if (filterStatus === 'missing_ozet') return list.filter(t => !t.hasOzet);
         return list;
     }, [currentUnitItems, filterStatus]);
+
+    // Unit-level Source Text Metrics
+    const unitSourceMetrics = useMemo(() => {
+        const topics = currentUnitItems.filter(i => i.type === 'topic');
+        const topicsWithSource = topics.filter(t => t.sourceText && t.sourceWordCount > 0);
+        const totalSourceWords = topics.reduce((acc, t) => acc + (t.sourceWordCount || 0), 0);
+        return {
+            totalTopics: topics.length,
+            topicsWithSourceCount: topicsWithSource.length,
+            totalSourceWords,
+            hasSource: topicsWithSource.length > 0
+        };
+    }, [currentUnitItems]);
 
     // Auto-selection synchronization
     useEffect(() => {
@@ -412,13 +433,13 @@ export default function OzetlerManagementPage() {
         }
     };
 
-    // AI Generate Summary Action
+    // AI Generate Summary Action (Strictly from Source Text)
     const handleAiGenerate = async (item: OzetItem) => {
         setIsGeneratingAi(true);
         try {
             toast({ 
-                title: "Yapay Zeka Hazırlanıyor... ✨", 
-                description: `${item.title} için pedagojik ve interaktif HTML özet üretiliyor...` 
+                title: "Ders Kitabı Kaynak Metni İnceleniyor... ✨", 
+                description: `${item.title} için kaynak metin taranarak pedagojik ve interaktif HTML özet hazırlanıyor...` 
             });
 
             const unitTopics = items.filter(i => i.unitId === item.unitId && i.type === 'topic').map(t => t.title);
@@ -438,7 +459,7 @@ export default function OzetlerManagementPage() {
                 setEditText(res.htmlContent);
                 setEditorTab('preview');
                 toast({ 
-                    title: "Özet Üretildi! 🌟", 
+                    title: "Özet Başarıyla Üretildi! 🌟", 
                     description: "Üretilen özeti önizleyin ve kaydetmek için 'Değişiklikleri Kaydet' butonuna basın." 
                 });
             } else {
@@ -448,6 +469,43 @@ export default function OzetlerManagementPage() {
             toast({ title: "Hata", description: err.message, variant: "destructive" });
         } finally {
             setIsGeneratingAi(false);
+        }
+    };
+
+    // Batch Generate Summaries for All Topics in Unit from Source Texts
+    const handleBatchGenerateUnitTopics = async () => {
+        if (!selectedCourseId || !selectedUnitId) return;
+        setIsBatchGenerating(true);
+        try {
+            toast({
+                title: "Toplu Özet Üretimi Başlatıldı ⚡",
+                description: `${activeSelectedUnit} ünitesindeki kaynak metni hazır konular taranıyor ve yapay zeka ile özetler oluşturuluyor...`
+            });
+
+            const res = await batchGenerateUnitTopicSummaries(selectedCourseId, selectedUnitId);
+
+            if (res.success) {
+                toast({
+                    title: "Toplu Üretim Tamamlandı! 🎉",
+                    description: `${res.generatedCount} konunun özeti kaynak metinlerden başarıyla üretildi ve kütüphaneye kaydedildi.`
+                });
+                await loadData(false);
+            } else {
+                toast({
+                    title: "Toplu Üretim Uyarısı",
+                    description: res.errors?.join('; ') || "Kaynak metin bulunamadı veya üretim yapılamadı.",
+                    variant: "destructive"
+                });
+            }
+        } catch (err: any) {
+            console.error("Batch generate error:", err);
+            toast({
+                title: "Hata",
+                description: err.message || "Toplu üretim sırasında bir hata oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsBatchGenerating(false);
         }
     };
 
@@ -545,14 +603,14 @@ export default function OzetlerManagementPage() {
                     <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-purple-500/20 rounded-3xl shadow-2xl shadow-purple-950/50 mb-1">
                         <LayoutTemplate className="h-10 w-10 text-purple-400" />
                     </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase drop-shadow-lg flex items-center justify-center gap-3">
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase drop-shadow-lg flex items-center justify-center gap-3 flex-wrap">
                         Özet Kütüphanesi & Sunum Yönetimi
                         <Badge className="bg-gradient-to-r from-purple-500/20 to-rose-500/20 text-purple-300 border-purple-500/30 text-xs font-bold px-3 py-1">
-                            ÜNİTE & KONU ÖZETLERİ
+                            KAYNAK METİNDEN ÜRETİM
                         </Badge>
                     </h1>
                     <p className="text-slate-400 text-sm md:text-base max-w-2xl mx-auto font-medium">
-                        Akıllı tahtada sunulan, ders tekrarlarında kullanılan tüm <strong className="text-purple-300">Ünite Özetleri</strong> ve <strong className="text-indigo-300">Konu Özetleri</strong>ni tek bir merkezden görüntüleyin, AI ile üretin ve yönetin.
+                        Ders kitabı kaynak metinlerine %100 sadık kalarak <strong className="text-purple-300">Ünite Özetleri</strong> ve <strong className="text-indigo-300">Konu Özetleri</strong> üretin, inceleyin ve akıllı tahtada sunun.
                     </p>
                 </div>
 
@@ -564,7 +622,7 @@ export default function OzetlerManagementPage() {
                         </div>
                         <div>
                             <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Toplam İçerik</p>
-                            <p className="text-2xl font-black text-white">{stats.total} <span className="text-xs font-normal text-slate-500">(Ünite + Konu)</span></p>
+                            <p className="text-2xl font-black text-white">{stats.total} <span className="text-xs font-normal text-slate-500">({stats.unitTotal} Ünite, {stats.topicTotal} Konu)</span></p>
                         </div>
                     </div>
 
@@ -574,17 +632,17 @@ export default function OzetlerManagementPage() {
                         </div>
                         <div>
                             <p className="text-xs text-emerald-300 font-bold uppercase tracking-wider">Özeti Hazır</p>
-                            <p className="text-2xl font-black text-emerald-400">{stats.withOzet}</p>
+                            <p className="text-2xl font-black text-emerald-400">{stats.withOzet} <span className="text-xs font-normal text-slate-500">({stats.totalWords.toLocaleString('tr-TR')} kelime)</span></p>
                         </div>
                     </div>
 
-                    <div className="p-5 rounded-2xl bg-slate-900/60 border border-rose-500/20 backdrop-blur-md shadow-xl flex items-center gap-4">
-                        <div className="p-3 bg-rose-500/10 text-rose-400 rounded-xl border border-rose-500/20">
-                            <BookmarkCheck className="h-6 w-6" />
+                    <div className="p-5 rounded-2xl bg-slate-900/60 border border-cyan-500/20 backdrop-blur-md shadow-xl flex items-center gap-4">
+                        <div className="p-3 bg-cyan-500/10 text-cyan-400 rounded-xl border border-cyan-500/20">
+                            <BookOpen className="h-6 w-6" />
                         </div>
                         <div>
-                            <p className="text-xs text-rose-300 font-bold uppercase tracking-wider">Ünite Özetleri</p>
-                            <p className="text-2xl font-black text-rose-400">{stats.unitWithOzet} <span className="text-xs font-normal text-slate-500">/ {stats.unitTotal} Hazır</span></p>
+                            <p className="text-xs text-cyan-300 font-bold uppercase tracking-wider">Kaynak Metinler</p>
+                            <p className="text-2xl font-black text-cyan-400">{stats.topicWithSource} <span className="text-xs font-normal text-slate-500">/ {stats.topicTotal} Konu ({stats.totalSourceWords.toLocaleString('tr-TR')} kelime)</span></p>
                         </div>
                     </div>
 
@@ -659,9 +717,14 @@ export default function OzetlerManagementPage() {
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-2 flex-shrink-0">
+                                            {item.sourceWordCount > 0 && (
+                                                <span className="text-[10px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                                    <BookOpen className="w-3 h-3" /> {item.sourceWordCount} k. kaynak
+                                                </span>
+                                            )}
                                             {item.hasOzet ? (
-                                                <span className="text-[11px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded-md">
-                                                    {item.wordCount} kelime
+                                                <span className="text-[11px] text-purple-300 font-mono bg-purple-500/10 px-2 py-0.5 rounded-md">
+                                                    {item.wordCount} k. özet
                                                 </span>
                                             ) : (
                                                 <span className="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md">
@@ -681,7 +744,7 @@ export default function OzetlerManagementPage() {
                 <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 2xl:gap-6 items-start w-full">
                     
                     {/* ── SOL BÖLÜM: 4 KADEMELİ ÖZET FİHRİSTİ (MILLER COLUMNS) ── */}
-                    <div className="xl:col-span-5 2xl:col-span-5 flex flex-col h-[780px] xl:h-[840px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl">
+                    <div className="xl:col-span-5 2xl:col-span-5 flex flex-col h-[800px] xl:h-[860px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl">
                         {/* Fihrist Üst Başlık Barı */}
                         <div className="p-4 border-b border-white/10 bg-slate-950/60 flex items-center justify-between">
                             <div className="flex items-center gap-2">
@@ -968,8 +1031,8 @@ export default function OzetlerManagementPage() {
                                 </div>
                             )}
 
-                            {/* ── KOLON 4: ÖZETLER (ÜNİTE ÖZETİ PINNED + KONU ÖZETLERİ) ── */}
-                            <div className="flex-1 min-w-[250px] bg-slate-900/40 flex flex-col transition-all duration-300">
+                            {/* ── KOLON 4: ÖZETLER (ÜNİTE ÖZETİ PINNED + KONU ÖZETLERİ + KAYNAK METİN DURUMU) ── */}
+                            <div className="flex-1 min-w-[260px] bg-slate-900/40 flex flex-col transition-all duration-300">
                                 <div className="p-3 border-b border-white/5 flex items-center justify-between bg-slate-950/30">
                                     <div className="flex items-center gap-2 truncate">
                                         <LayoutTemplate className="w-4 h-4 text-purple-400 flex-shrink-0" />
@@ -1024,23 +1087,27 @@ export default function OzetlerManagementPage() {
                                                     {activeSelectedUnit} Genel Özeti
                                                 </p>
 
-                                                <div className="flex items-center justify-between text-[11px] pt-1 border-t border-white/10">
+                                                {/* Kaynak Metin Durum Satırı */}
+                                                <div className="flex items-center justify-between text-[10px] pt-1 border-t border-white/10 font-semibold">
                                                     <span className={cn(
-                                                        "text-[10px] font-bold",
-                                                        selectedItemId === unitSummaryItem.id ? "text-purple-100" : "text-purple-400"
+                                                        "flex items-center gap-1",
+                                                        unitSourceMetrics.topicsWithSourceCount > 0
+                                                            ? (selectedItemId === unitSummaryItem.id ? "text-emerald-100" : "text-emerald-400")
+                                                            : (selectedItemId === unitSummaryItem.id ? "text-amber-100" : "text-amber-400")
                                                     )}>
-                                                        Tüm Ünite Tekrarı
+                                                        <BookOpen className="w-3 h-3" />
+                                                        {unitSourceMetrics.topicsWithSourceCount}/{unitSourceMetrics.totalTopics} Konu Kaynağı
                                                     </span>
                                                     {unitSummaryItem.hasOzet ? (
                                                         <span className={cn(
-                                                            "font-mono text-[10px] px-1.5 py-0.5 rounded font-bold",
+                                                            "font-mono px-1.5 py-0.5 rounded font-bold",
                                                             selectedItemId === unitSummaryItem.id ? "bg-white/20 text-white" : "bg-emerald-500/20 text-emerald-300"
                                                         )}>
                                                             {unitSummaryItem.wordCount} kelime
                                                         </span>
                                                     ) : (
                                                         <span className={cn(
-                                                            "text-[10px] px-1.5 py-0.5 rounded",
+                                                            "px-1.5 py-0.5 rounded",
                                                             selectedItemId === unitSummaryItem.id ? "text-rose-100" : "text-amber-400/80 bg-amber-500/10"
                                                         )}>
                                                             Özet Yok
@@ -1058,15 +1125,16 @@ export default function OzetlerManagementPage() {
                                         </div>
                                     )}
 
-                                    {/* 2. KONU ÖZETLERİ (TOPIC SUMMARIES) */}
+                                    {/* 2. KONU ÖZETLERİ (TOPIC SUMMARIES + KAYNAK DURUMU) */}
                                     {topicSummaryItems.map((topic, idx) => {
                                         const isSelected = selectedItemId === topic.id;
+                                        const hasSource = topic.sourceText && topic.sourceWordCount > 0;
                                         return (
                                             <button
                                                 key={topic.id}
                                                 onClick={() => handleItemChange(topic.id)}
                                                 className={cn(
-                                                    "w-full text-left p-3.5 rounded-2xl transition-all flex flex-col gap-1.5 group border",
+                                                    "w-full text-left p-3 rounded-2xl transition-all flex flex-col gap-2 group border",
                                                     isSelected
                                                         ? "bg-indigo-600 text-white shadow-xl shadow-indigo-950/60 border-indigo-400/60 font-bold"
                                                         : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border-white/5"
@@ -1089,16 +1157,30 @@ export default function OzetlerManagementPage() {
                                                         <ChevronRight className="w-4 h-4 flex-shrink-0 text-white" />
                                                     )}
                                                 </div>
-                                                <div className="flex items-center justify-between text-[11px] pl-4.5 pt-0.5">
-                                                    <span className={cn(isSelected ? "text-indigo-200" : "text-slate-500 font-mono")}>
-                                                        {idx + 1}. Konu
+
+                                                <div className="flex items-center justify-between text-[10px] pt-1 border-t border-white/5">
+                                                    <span className={cn(
+                                                        "flex items-center gap-1 font-medium",
+                                                        hasSource 
+                                                            ? (isSelected ? "text-emerald-200" : "text-emerald-400")
+                                                            : (isSelected ? "text-amber-200" : "text-slate-500")
+                                                    )}>
+                                                        <BookOpen className="w-3 h-3 flex-shrink-0" />
+                                                        {hasSource ? `${topic.sourceWordCount} k. Kaynak` : 'Kaynak Yok'}
                                                     </span>
+
                                                     {topic.hasOzet ? (
-                                                        <span className={cn("font-mono text-[10px] px-1.5 py-0.5 rounded", isSelected ? "bg-indigo-700 text-emerald-200 font-bold" : "bg-emerald-500/10 text-emerald-400")}>
-                                                            {topic.wordCount} kelime
+                                                        <span className={cn(
+                                                            "font-mono px-1.5 py-0.5 rounded font-bold", 
+                                                            isSelected ? "bg-indigo-700 text-emerald-200" : "bg-emerald-500/10 text-emerald-400"
+                                                        )}>
+                                                            {topic.wordCount} k. Özet
                                                         </span>
                                                     ) : (
-                                                        <span className={cn("text-[10px]", isSelected ? "text-amber-200" : "text-amber-400/70")}>
+                                                        <span className={cn(
+                                                            "px-1.5 py-0.5 rounded", 
+                                                            isSelected ? "bg-amber-500/30 text-amber-200" : "bg-amber-500/10 text-amber-400/80"
+                                                        )}>
                                                             Özet Yok
                                                         </span>
                                                     )}
@@ -1111,8 +1193,8 @@ export default function OzetlerManagementPage() {
                         </div>
                     </div>
 
-                    {/* ── SAĞ BÖLÜM: DİJİTAL ÖZET OKUYUCU & İNTERAKTİF ÖNİZLEME ── */}
-                    <div className="xl:col-span-7 2xl:col-span-7 flex flex-col h-[780px] xl:h-[840px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl">
+                    {/* ── SAĞ BÖLÜM: DİJİTAL ÖZET OKUYUCU & İNTERAKTİF ÖNİZLEME & KAYNAK SENTEZLEME ── */}
+                    <div className="xl:col-span-7 2xl:col-span-7 flex flex-col h-[800px] xl:h-[860px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl">
                         
                         {/* Okuyucu Üst Başlık ve Hiyerarşi */}
                         <div className="p-4 border-b border-white/10 bg-slate-950/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 flex-wrap">
@@ -1164,22 +1246,176 @@ export default function OzetlerManagementPage() {
                             </div>
                         </div>
 
+                        {/* ══ KAYNAK METİN DURUM & HIZLI ÜRETİM BARI ══ */}
+                        {activeSelectedItem && (
+                            <div className={cn(
+                                "p-3.5 px-4 border-b flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors",
+                                activeSelectedItem.type === 'unit'
+                                    ? "bg-purple-950/40 border-purple-500/20"
+                                    : (activeSelectedItem.sourceText && activeSelectedItem.sourceWordCount > 0
+                                        ? "bg-emerald-950/30 border-emerald-500/20"
+                                        : "bg-amber-950/30 border-amber-500/20")
+                            )}>
+                                {activeSelectedItem.type === 'unit' ? (
+                                    <>
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 flex-shrink-0">
+                                                <Layers className="w-5 h-5" />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <div className="flex items-center gap-2 flex-wrap">
+                                                    <span className="text-xs font-black uppercase tracking-wider text-purple-300">Ünite Kaynak Metinleri</span>
+                                                    <Badge className="bg-purple-500/20 text-purple-200 border-purple-400/30 text-[10px]">
+                                                        {unitSourceMetrics.topicsWithSourceCount} / {unitSourceMetrics.totalTopics} Konu Hazır
+                                                    </Badge>
+                                                    <span className="text-[11px] font-mono text-emerald-400 font-bold">
+                                                        ({unitSourceMetrics.totalSourceWords.toLocaleString('tr-TR')} kelime)
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs text-slate-300 mt-0.5 truncate">
+                                                    Ünitedeki tüm konu kaynak metinleri taranarak MEB müfredatına %100 sadık genel özet sentezlenir.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2 flex-wrap flex-shrink-0">
+                                            <Button
+                                                size="sm"
+                                                disabled={isGeneratingAi || !unitSourceMetrics.hasSource}
+                                                onClick={() => handleAiGenerate(activeSelectedItem)}
+                                                className="bg-gradient-to-r from-purple-600 to-rose-600 hover:from-purple-500 hover:to-rose-500 text-white font-bold rounded-xl h-9 px-4 text-xs shadow-lg shadow-purple-950/50"
+                                            >
+                                                <Sparkles className={cn("w-3.5 h-3.5 mr-1.5", isGeneratingAi && "animate-spin")} />
+                                                {isGeneratingAi ? "Sentezleniyor..." : "✨ Kaynaklardan Ünite Özeti Sentezle"}
+                                            </Button>
+
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                disabled={isBatchGenerating || !unitSourceMetrics.hasSource}
+                                                onClick={handleBatchGenerateUnitTopics}
+                                                className="border-amber-500/40 bg-amber-950/40 text-amber-300 hover:bg-amber-900/60 hover:text-white rounded-xl h-9 px-3 text-xs font-bold"
+                                                title="Bu ünitedeki tüm konuların özetlerini kaynak metinlerinden sırayla otomatik üretir"
+                                            >
+                                                <Zap className={cn("w-3.5 h-3.5 mr-1.5", isBatchGenerating && "animate-spin text-amber-400")} />
+                                                {isBatchGenerating ? "Toplu Üretiliyor..." : "⚡ Konuları Toplu Özetle"}
+                                            </Button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="flex items-center gap-3">
+                                            <div className={cn(
+                                                "p-2.5 rounded-xl border flex-shrink-0",
+                                                activeSelectedItem.sourceText && activeSelectedItem.sourceWordCount > 0
+                                                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                                                    : "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                                            )}>
+                                                <BookOpen className="w-5 h-5" />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <div className="flex items-center gap-2 flex-wrap">
+                                                    <span className={cn(
+                                                        "text-xs font-black uppercase tracking-wider",
+                                                        activeSelectedItem.sourceText && activeSelectedItem.sourceWordCount > 0
+                                                            ? "text-emerald-300"
+                                                            : "text-amber-300"
+                                                    )}>
+                                                        {activeSelectedItem.sourceText && activeSelectedItem.sourceWordCount > 0
+                                                            ? "Ders Kitabı Kaynak Metni Hazır"
+                                                            : "Kaynak Metin Eksik"}
+                                                    </span>
+                                                    {activeSelectedItem.sourceText && activeSelectedItem.sourceWordCount > 0 ? (
+                                                        <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px] font-mono">
+                                                            {activeSelectedItem.sourceWordCount.toLocaleString('tr-TR')} kelime
+                                                        </Badge>
+                                                    ) : (
+                                                        <Badge className="bg-amber-500/20 text-amber-300 border-amber-400/30 text-[10px]">
+                                                            Kitap metni taranmadı
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                                <p className="text-xs text-slate-300 mt-0.5 truncate">
+                                                    {activeSelectedItem.sourceText && activeSelectedItem.sourceWordCount > 0
+                                                        ? "Bu konunun özeti doğrudan MEB ders kitabı metnine %100 sadık kalınarak oluşturulur."
+                                                        : "Özetin müfredata tam uyumlu olması için önce ders kitabı kaynak metnini ekleyin."}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2 flex-wrap flex-shrink-0">
+                                            {activeSelectedItem.sourceText && activeSelectedItem.sourceWordCount > 0 ? (
+                                                <>
+                                                    <Button
+                                                        size="sm"
+                                                        disabled={isGeneratingAi}
+                                                        onClick={() => handleAiGenerate(activeSelectedItem)}
+                                                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl h-9 px-4 text-xs shadow-lg shadow-emerald-950/50"
+                                                    >
+                                                        <Sparkles className={cn("w-3.5 h-3.5 mr-1.5", isGeneratingAi && "animate-spin")} />
+                                                        {isGeneratingAi ? "Üretiliyor..." : "✨ Kaynak Metinden Özet Üret"}
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => setIsSplitView(v => !v)}
+                                                        className={cn(
+                                                            "rounded-xl h-9 px-3 text-xs font-bold transition-colors",
+                                                            isSplitView 
+                                                                ? "bg-indigo-600 text-white border-indigo-500 shadow-md" 
+                                                                : "border-white/10 bg-slate-900/60 text-slate-300 hover:text-white"
+                                                        )}
+                                                    >
+                                                        <Columns className="w-3.5 h-3.5 mr-1.5" />
+                                                        {isSplitView ? "Tekli Görünüm" : "Yan Yana Karşılaştır"}
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Button
+                                                        asChild
+                                                        size="sm"
+                                                        className="bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl h-9 px-4 text-xs shadow-md"
+                                                    >
+                                                        <Link href={`/teacher/source-texts`}>
+                                                            <BookOpen className="w-3.5 h-3.5 mr-1.5" />
+                                                            Kaynak Metin Ekle / Tara
+                                                        </Link>
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        disabled={isGeneratingAi}
+                                                        onClick={() => handleAiGenerate(activeSelectedItem)}
+                                                        className="border-white/10 text-slate-400 hover:text-white rounded-xl h-9 px-3 text-xs"
+                                                    >
+                                                        <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                                                        Genel AI Özeti Üret
+                                                    </Button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )}
+
                         {/* Aksiyon Araç Çubuğu (Toolbar) */}
-                        <div className="px-4 py-3 bg-slate-950/40 border-b border-white/5 flex items-center justify-between gap-3 flex-wrap">
+                        <div className="px-4 py-2.5 bg-slate-950/40 border-b border-white/5 flex items-center justify-between gap-3 flex-wrap">
                             {/* Sekme Seçiciler */}
                             <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-white/10">
                                 <button
-                                    onClick={() => setActiveTab('preview')}
+                                    onClick={() => { setActiveTab('preview'); setIsSplitView(false); }}
                                     className={cn(
                                         "px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5",
-                                        activeTab === 'preview' ? "bg-purple-600 text-white shadow-md" : "text-slate-400 hover:text-white"
+                                        activeTab === 'preview' && !isSplitView ? "bg-purple-600 text-white shadow-md" : "text-slate-400 hover:text-white"
                                     )}
                                 >
                                     <Eye className="w-3.5 h-3.5" />
                                     <span>Önizleme</span>
                                 </button>
                                 <button
-                                    onClick={() => setActiveTab('code')}
+                                    onClick={() => { setActiveTab('code'); setIsSplitView(false); }}
                                     className={cn(
                                         "px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5",
                                         activeTab === 'code' ? "bg-purple-600 text-white shadow-md" : "text-slate-400 hover:text-white"
@@ -1188,21 +1424,19 @@ export default function OzetlerManagementPage() {
                                     <Code2 className="w-3.5 h-3.5" />
                                     <span>HTML Kodu</span>
                                 </button>
-                                {activeSelectedItem?.sourceText && (
-                                    <button
-                                        onClick={() => setActiveTab('source')}
-                                        className={cn(
-                                            "px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5",
-                                            activeTab === 'source' ? "bg-indigo-600 text-white shadow-md" : "text-indigo-400 hover:text-white"
-                                        )}
-                                    >
-                                        <BookOpen className="w-3.5 h-3.5" />
-                                        <span>Kaynak Metin</span>
-                                    </button>
-                                )}
+                                <button
+                                    onClick={() => { setActiveTab('source'); setIsSplitView(false); }}
+                                    className={cn(
+                                        "px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5",
+                                        activeTab === 'source' ? "bg-indigo-600 text-white shadow-md" : "text-indigo-400 hover:text-white"
+                                    )}
+                                >
+                                    <BookOpen className="w-3.5 h-3.5" />
+                                    <span>Kaynak Metin</span>
+                                </button>
                             </div>
 
-                            {/* Sağ Butonlar: Tahtada Aç, AI, Düzenle, Kopyala, Sil */}
+                            {/* Sağ Butonlar: Tahtada Aç, Düzenle, Kopyala, Sil */}
                             <div className="flex items-center gap-2 flex-wrap">
                                 {activeSelectedItem && (
                                     <>
@@ -1216,18 +1450,6 @@ export default function OzetlerManagementPage() {
                                                 <MonitorPlay className="w-3.5 h-3.5 mr-1.5" />
                                                 Tahtada Sun
                                             </a>
-                                        </Button>
-
-                                        {/* AI ile Özet Üret */}
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            disabled={isGeneratingAi}
-                                            onClick={() => handleAiGenerate(activeSelectedItem)}
-                                            className="border-purple-500/30 bg-purple-950/40 text-purple-300 hover:bg-purple-900/60 hover:text-white rounded-xl h-9 px-3 text-xs"
-                                        >
-                                            <Sparkles className={cn("w-3.5 h-3.5 mr-1.5", isGeneratingAi && "animate-spin text-purple-400")} />
-                                            {isGeneratingAi ? "Üretiliyor..." : "AI ile Hazırla"}
                                         </Button>
 
                                         {/* Düzenle */}
@@ -1274,7 +1496,7 @@ export default function OzetlerManagementPage() {
                                                     <AlertDialogHeader>
                                                         <AlertDialogTitle className="text-lg font-black text-white">Özeti Temizlemek İstediğinize Emin Misiniz?</AlertDialogTitle>
                                                         <AlertDialogDescription className="text-slate-400 text-sm">
-                                                            <strong>{activeSelectedItem.title}</strong> için kayıtlı özet içeriği silinecektir. Bu işlem sonrasında tekrar AI ile özet oluşturabilirsiniz.
+                                                            <strong>{activeSelectedItem.title}</strong> için kayıtlı özet içeriği silinecektir. Bu işlem sonrasında tekrar kaynak metinden özet oluşturabilirsiniz.
                                                         </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
@@ -1296,142 +1518,239 @@ export default function OzetlerManagementPage() {
 
                         {/* Okuyucu Ana Gövdesi */}
                         <div ref={readerContainerRef} className="flex-1 overflow-hidden relative flex flex-col bg-slate-950/60">
-                            {activeTab === 'preview' && (
-                                <>
-                                    {/* Zoom ve Tam Ekran Kontrolleri */}
-                                    <div className="px-4 py-2 bg-slate-900/60 border-b border-white/5 flex items-center justify-between text-xs text-slate-400">
-                                        <div className="flex items-center gap-2 font-mono">
-                                            {activeSelectedItem?.hasOzet ? (
-                                                <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                                                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                                                    {activeSelectedItem.wordCount.toLocaleString('tr-TR')} kelime ({activeSelectedItem.charCount.toLocaleString('tr-TR')} karakter)
-                                                </span>
+                            {/* Yan Yana Karşılaştırma Modu (Split View: Sol Kaynak Metin, Sağ Özet) */}
+                            {isSplitView && activeSelectedItem?.sourceText ? (
+                                <div className="flex-1 w-full h-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-white/10 overflow-hidden">
+                                    {/* Sol Kolon: Orijinal Kitap Kaynak Metni */}
+                                    <div className="flex-1 h-full flex flex-col bg-slate-950/90 overflow-hidden">
+                                        <div className="p-3 bg-slate-950 border-b border-white/10 flex items-center justify-between">
+                                            <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+                                                <BookOpen className="w-4 h-4" />
+                                                <span>Ders Kitabı Kaynak Metni ({activeSelectedItem.sourceWordCount} kelime)</span>
+                                            </div>
+                                            <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-300">
+                                                Müfredat Aslı
+                                            </Badge>
+                                        </div>
+                                        <div className="flex-1 p-5 overflow-y-auto font-sans text-sm text-slate-200 leading-relaxed whitespace-pre-wrap select-text scrollbar-thin">
+                                            {activeSelectedItem.sourceText}
+                                        </div>
+                                    </div>
+
+                                    {/* Sağ Kolon: Özet Önizleme */}
+                                    <div className="flex-1 h-full flex flex-col bg-slate-950/60 overflow-hidden">
+                                        <div className="p-3 bg-slate-950 border-b border-white/10 flex items-center justify-between">
+                                            <div className="flex items-center gap-2 text-xs font-bold text-purple-400">
+                                                <Eye className="w-4 h-4" />
+                                                <span>Üretilen İnteraktif Özet ({activeSelectedItem.wordCount} kelime)</span>
+                                            </div>
+                                            {activeSelectedItem.hasOzet ? (
+                                                <Badge className="text-[10px] bg-emerald-500/20 text-emerald-300 border-emerald-400/30">
+                                                    Hazır
+                                                </Badge>
                                             ) : (
-                                                <span className="text-amber-400 font-bold flex items-center gap-1.5">
-                                                    <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
-                                                    Özet Bulunmuyor
-                                                </span>
+                                                <Badge className="text-[10px] bg-amber-500/20 text-amber-300 border-amber-400/30">
+                                                    Bekliyor
+                                                </Badge>
                                             )}
                                         </div>
-
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex items-center bg-slate-800/80 rounded-lg p-0.5 border border-white/10">
-                                                <Button 
-                                                    variant="ghost" 
-                                                    size="icon" 
-                                                    onClick={() => setZoomLevel(z => Math.max(0.6, z - 0.1))} 
-                                                    className="h-7 w-7 text-white hover:bg-white/10 rounded-md"
-                                                    title="Küçült"
-                                                >
-                                                    <Minus className="h-3.5 w-3.5" />
-                                                </Button>
-                                                <span className="text-[10px] font-bold text-slate-300 w-12 text-center font-mono">
-                                                    %{Math.round(zoomLevel * 100)}
-                                                </span>
-                                                <Button 
-                                                    variant="ghost" 
-                                                    size="icon" 
-                                                    onClick={() => setZoomLevel(z => Math.min(2.0, z + 0.1))} 
-                                                    className="h-7 w-7 text-white hover:bg-white/10 rounded-md"
-                                                    title="Büyüt"
-                                                >
-                                                    <Plus className="h-3.5 w-3.5" />
-                                                </Button>
-                                            </div>
-
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                onClick={() => {
-                                                    if (!document.fullscreenElement) {
-                                                        readerContainerRef.current?.requestFullscreen();
-                                                    } else {
-                                                        document.exitFullscreen();
-                                                    }
-                                                }}
-                                                className="h-7 w-7 text-slate-300 hover:text-white rounded-md"
-                                                title="Tam Ekran"
-                                            >
-                                                {isFullscreen ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
-                                            </Button>
-                                        </div>
-                                    </div>
-
-                                    {/* iFrame veya Boş Durum */}
-                                    <div className="flex-1 w-full h-full overflow-hidden relative">
-                                        {activeSelectedItem?.htmlContent ? (
-                                            <iframe
-                                                srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }</style>`}
-                                                className="w-full h-full border-0 bg-white"
-                                                title={activeSelectedItem.title}
-                                                sandbox="allow-scripts allow-same-origin"
-                                            />
-                                        ) : (
-                                            <div className="flex flex-col items-center justify-center h-full p-8 text-center space-y-4">
-                                                <div className="p-4 rounded-3xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
-                                                    <LayoutTemplate className="w-12 h-12" />
-                                                </div>
-                                                <div className="space-y-1 max-w-md">
-                                                    <h3 className="text-lg font-black text-white">Bu İçerik İçin Henüz Özet Hazırlanmamış</h3>
-                                                    <p className="text-slate-400 text-sm">
-                                                        {activeSelectedItem?.type === 'unit' 
-                                                            ? "Bu ünite için genel tekrar özeti ekleyebilir veya aşağıdaki yapay zeka butonu ile ünite konularından otomatik özet derleyebilirsiniz."
-                                                            : "Bu konu için interaktif özet hazırlayabilir veya kaynak metinden tek tıkla yapay zeka özeti üretebilirsiniz."}
-                                                    </p>
-                                                </div>
-                                                <div className="flex items-center gap-3 pt-2">
+                                        <div className="flex-1 w-full h-full overflow-hidden relative">
+                                            {activeSelectedItem.htmlContent ? (
+                                                <iframe
+                                                    srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }</style>`}
+                                                    className="w-full h-full border-0 bg-white"
+                                                    title="Özet Önizleme"
+                                                    sandbox="allow-scripts allow-same-origin"
+                                                />
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center h-full p-6 text-center space-y-3">
+                                                    <p className="text-slate-400 text-sm">Bu konu için henüz özet üretilmedi.</p>
                                                     <Button
-                                                        onClick={() => activeSelectedItem && handleAiGenerate(activeSelectedItem)}
+                                                        size="sm"
+                                                        onClick={() => handleAiGenerate(activeSelectedItem)}
                                                         disabled={isGeneratingAi}
-                                                        className="bg-gradient-to-r from-purple-600 to-rose-600 hover:from-purple-500 hover:to-rose-500 text-white rounded-xl font-bold shadow-lg shadow-purple-950/50"
+                                                        className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs"
                                                     >
-                                                        <Sparkles className="w-4 h-4 mr-2" />
-                                                        {isGeneratingAi ? "Üretiliyor..." : "AI ile Otomatik Oluştur"}
+                                                        <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                                                        Soldaki Metinden Özet Üret
                                                     </Button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    {activeTab === 'preview' && (
+                                        <>
+                                            {/* Zoom ve Tam Ekran Kontrolleri */}
+                                            <div className="px-4 py-2 bg-slate-900/60 border-b border-white/5 flex items-center justify-between text-xs text-slate-400">
+                                                <div className="flex items-center gap-2 font-mono">
+                                                    {activeSelectedItem?.hasOzet ? (
+                                                        <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                                                            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                                                            {activeSelectedItem.wordCount.toLocaleString('tr-TR')} kelime ({activeSelectedItem.charCount.toLocaleString('tr-TR')} karakter)
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-amber-400 font-bold flex items-center gap-1.5">
+                                                            <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+                                                            Özet Bulunmuyor
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div className="flex items-center gap-2">
+                                                    <div className="flex items-center bg-slate-800/80 rounded-lg p-0.5 border border-white/10">
+                                                        <Button 
+                                                            variant="ghost" 
+                                                            size="icon" 
+                                                            onClick={() => setZoomLevel(z => Math.max(0.6, z - 0.1))} 
+                                                            className="h-7 w-7 text-white hover:bg-white/10 rounded-md"
+                                                            title="Küçült"
+                                                        >
+                                                            <Minus className="h-3.5 w-3.5" />
+                                                        </Button>
+                                                        <span className="text-[10px] font-bold text-slate-300 w-12 text-center font-mono">
+                                                            %{Math.round(zoomLevel * 100)}
+                                                        </span>
+                                                        <Button 
+                                                            variant="ghost" 
+                                                            size="icon" 
+                                                            onClick={() => setZoomLevel(z => Math.min(2.0, z + 0.1))} 
+                                                            className="h-7 w-7 text-white hover:bg-white/10 rounded-md"
+                                                            title="Büyüt"
+                                                        >
+                                                            <Plus className="h-3.5 w-3.5" />
+                                                        </Button>
+                                                    </div>
+
                                                     <Button
-                                                        variant="outline"
-                                                        onClick={() => activeSelectedItem && handleOpenEdit(activeSelectedItem)}
-                                                        className="border-white/10 text-slate-300 hover:text-white rounded-xl"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => {
+                                                            if (!document.fullscreenElement) {
+                                                                readerContainerRef.current?.requestFullscreen();
+                                                            } else {
+                                                                document.exitFullscreen();
+                                                            }
+                                                        }}
+                                                        className="h-7 w-7 text-slate-300 hover:text-white rounded-md"
+                                                        title="Tam Ekran"
                                                     >
-                                                        <Plus className="w-4 h-4 mr-2" />
-                                                        Manuel Özet Yaz
+                                                        {isFullscreen ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
                                                     </Button>
                                                 </div>
                                             </div>
-                                        )}
-                                    </div>
-                                </>
-                            )}
 
-                            {activeTab === 'code' && (
-                                <div className="flex-1 w-full h-full p-4 overflow-y-auto font-mono text-xs text-purple-200 bg-slate-950 scrollbar-thin select-text">
-                                    <pre className="whitespace-pre-wrap break-all leading-relaxed">
-                                        {activeSelectedItem?.htmlContent || '<!-- Henüz HTML özet içeriği bulunmuyor -->'}
-                                    </pre>
-                                </div>
-                            )}
+                                            {/* iFrame veya Boş Durum */}
+                                            <div className="flex-1 w-full h-full overflow-hidden relative">
+                                                {activeSelectedItem?.htmlContent ? (
+                                                    <iframe
+                                                        srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }</style>`}
+                                                        className="w-full h-full border-0 bg-white"
+                                                        title={activeSelectedItem.title}
+                                                        sandbox="allow-scripts allow-same-origin"
+                                                    />
+                                                ) : (
+                                                    <div className="flex flex-col items-center justify-center h-full p-8 text-center space-y-4">
+                                                        <div className="p-4 rounded-3xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                                                            <LayoutTemplate className="w-12 h-12" />
+                                                        </div>
+                                                        <div className="space-y-1 max-w-md">
+                                                            <h3 className="text-lg font-black text-white">Bu İçerik İçin Henüz Özet Hazırlanmamış</h3>
+                                                            <p className="text-slate-400 text-sm">
+                                                                {activeSelectedItem?.type === 'unit' 
+                                                                    ? "Bu ünite için genel tekrar özeti ekleyebilir veya yukarıdaki buton ile tüm konu kaynak metinlerinden sentezlenmiş yapay zeka özeti oluşturabilirsiniz."
+                                                                    : (activeSelectedItem?.sourceText 
+                                                                        ? "Bu konunun ders kitabı kaynak metni hazır. Tek tıkla müfredata %100 sadık interaktif özet üretebilirsiniz."
+                                                                        : "Bu konu için interaktif özet hazırlayabilir veya önce kaynak metin ekleyip ardından yapay zeka ile üretebilirsiniz.")}
+                                                            </p>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 pt-2 flex-wrap justify-center">
+                                                            <Button
+                                                                onClick={() => activeSelectedItem && handleAiGenerate(activeSelectedItem)}
+                                                                disabled={isGeneratingAi}
+                                                                className="bg-gradient-to-r from-purple-600 to-rose-600 hover:from-purple-500 hover:to-rose-500 text-white rounded-xl font-bold shadow-lg shadow-purple-950/50"
+                                                            >
+                                                                <Sparkles className="w-4 h-4 mr-2" />
+                                                                {isGeneratingAi ? "Üretiliyor..." : (activeSelectedItem?.sourceText ? "Kaynak Metinden AI ile Üret" : "AI ile Otomatik Oluştur")}
+                                                            </Button>
+                                                            <Button
+                                                                variant="outline"
+                                                                onClick={() => activeSelectedItem && handleOpenEdit(activeSelectedItem)}
+                                                                className="border-white/10 text-slate-300 hover:text-white rounded-xl"
+                                                            >
+                                                                <Plus className="w-4 h-4 mr-2" />
+                                                                Manuel Özet Yaz
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </>
+                                    )}
 
-                            {activeTab === 'source' && (
-                                <div className="flex-1 w-full h-full p-6 overflow-y-auto text-sm text-slate-200 bg-slate-950/80 scrollbar-thin space-y-4 select-text">
-                                    <div className="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
-                                            <BookOpen className="w-4 h-4" />
-                                            <span>Müfredat Kaynak Metni (Ders Kitabı)</span>
+                                    {activeTab === 'code' && (
+                                        <div className="flex-1 w-full h-full p-4 overflow-y-auto font-mono text-xs text-purple-200 bg-slate-950 scrollbar-thin select-text">
+                                            <pre className="whitespace-pre-wrap break-all leading-relaxed">
+                                                {activeSelectedItem?.htmlContent || '<!-- Henüz HTML özet içeriği bulunmuyor -->'}
+                                            </pre>
                                         </div>
-                                        <Button
-                                            size="sm"
-                                            onClick={() => activeSelectedItem && handleAiGenerate(activeSelectedItem)}
-                                            disabled={isGeneratingAi}
-                                            className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold h-8"
-                                        >
-                                            <Sparkles className="w-3.5 h-3.5 mr-1" />
-                                            Bu Metinden Özet Üret
-                                        </Button>
-                                    </div>
-                                    <div className="p-4 rounded-2xl bg-slate-900 border border-white/10 whitespace-pre-wrap leading-relaxed">
-                                        {activeSelectedItem?.sourceText || 'Bu konu için kayıtlı kaynak metin bulunmuyor.'}
-                                    </div>
-                                </div>
+                                    )}
+
+                                    {activeTab === 'source' && (
+                                        <div className="flex-1 w-full h-full p-6 overflow-y-auto text-sm text-slate-200 bg-slate-950/80 scrollbar-thin space-y-4 select-text">
+                                            <div className="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex items-center justify-between flex-wrap gap-2">
+                                                <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
+                                                    <BookOpen className="w-4 h-4" />
+                                                    <span>Müfredat Kaynak Metni (Ders Kitabı)</span>
+                                                    {activeSelectedItem?.sourceWordCount ? (
+                                                        <Badge className="bg-indigo-500/20 text-indigo-300 border-indigo-400/30 text-[10px]">
+                                                            {activeSelectedItem.sourceWordCount} kelime
+                                                        </Badge>
+                                                    ) : null}
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    {activeSelectedItem?.sourceText && (
+                                                        <Button
+                                                            size="sm"
+                                                            onClick={() => activeSelectedItem && handleAiGenerate(activeSelectedItem)}
+                                                            disabled={isGeneratingAi}
+                                                            className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold h-8"
+                                                        >
+                                                            <Sparkles className="w-3.5 h-3.5 mr-1" />
+                                                            Bu Metinden Özet Üret
+                                                        </Button>
+                                                    )}
+                                                    <Button
+                                                        asChild
+                                                        size="sm"
+                                                        variant="outline"
+                                                        className="border-indigo-500/30 text-indigo-300 hover:bg-indigo-900/40 rounded-xl text-xs h-8"
+                                                    >
+                                                        <Link href="/teacher/source-texts">
+                                                            <ExternalLink className="w-3.5 h-3.5 mr-1" />
+                                                            Kaynak Metinler Sayfasına Git
+                                                        </Link>
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                            <div className="p-5 rounded-2xl bg-slate-900 border border-white/10 whitespace-pre-wrap leading-relaxed">
+                                                {activeSelectedItem?.sourceText || (
+                                                    <div className="text-center py-8 text-slate-400 space-y-3">
+                                                        <p>Bu konu için kayıtlı kaynak metin bulunmuyor.</p>
+                                                        <Button asChild size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl">
+                                                            <Link href="/teacher/source-texts">
+                                                                <BookOpen className="w-3.5 h-3.5 mr-1.5" />
+                                                                Kaynak Metin Girişi Yap
+                                                            </Link>
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     </div>

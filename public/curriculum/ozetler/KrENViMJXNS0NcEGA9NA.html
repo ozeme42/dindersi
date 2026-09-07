@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. Sınıf Kur'an-ı Kerim - 3. Ünite Özet Kartı</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        display: ['Fredoka', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        mora: {
+                            50: '#fbf7ff',
+                            100: '#f4ebff',
+                            500: '#9e53e0',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            line-height: 2.2;
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.15);
+        }
+        .interactive-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(16, 185, 129, 0.25);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-slate-50 to-teal-50 min-h-screen text-slate-800 font-sans p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+
+        <!-- 1. GÖZ ALICI BAŞLIK KARTI -->
+        <header class="relative overflow-hidden bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white rounded-3xl p-6 md:p-8 shadow-xl">
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl select-none pointer-events-none">
+                <i class="fa-solid fa-book-quran"></i>
+            </div>
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-5">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl md:text-4xl shadow-inner border border-white/30 shrink-0">
+                        <i class="fa-solid fa-book-open text-amber-300"></i>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                            <span class="bg-amber-400 text-amber-950 font-display font-bold text-xs md:text-sm px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                                6. SINIF
+                            </span>
+                            <span class="bg-white/20 backdrop-blur-sm text-white font-medium text-xs md:text-sm px-3 py-1 rounded-full border border-white/20">
+                                3. ÜNİTE
+                            </span>
+                        </div>
+                        <h1 class="font-display font-extrabold text-2xl md:text-4xl tracking-tight text-white drop-shadow-sm">
+                            KUR'AN-I KERİM'İ ÖĞRENİYORUM
+                        </h1>
+                        <p class="text-emerald-100 text-sm md:text-base font-medium mt-1">
+                            Tecvid Kuralları, Harfler, Medd (Uzatma) ve Doğru Okuma Esasları
+                        </p>
+                    </div>
+                </div>
+                <div class="hidden lg:flex items-center gap-3 bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-xl"></i>
+                    <span class="text-xs font-semibold text-emerald-50">Akıllı Tahta & Tablet<br>Uyumlu Etkileşimli Özet</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. KAVRAM KUTULARI (4 Temel Kavram) -->
+        <section>
+            <div class="flex items-center gap-2 mb-4 px-1">
+                <i class="fa-solid fa-tags text-emerald-600 text-xl"></i>
+                <h2 class="font-display font-bold text-xl text-slate-800">Ünitenin Temel Kavramları</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Kavram 1 -->
+                <div class="interactive-card bg-white rounded-2xl p-5 border border-emerald-100 shadow-sm relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-500"></div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-display font-bold text-lg text-emerald-800">Tecvid</span>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-ribbon"></i>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs md:text-sm leading-relaxed">
+                        Kur'an-ı Kerim'i harflerin mahreçlerine (çıkış yerlerine) ve kurallarına uyarak doğru, güzel ve usulüne uygun okuma ilmidir.
+                    </p>
+                </div>
+
+                <!-- Kavram 2 -->
+                <div class="interactive-card bg-white rounded-2xl p-5 border border-teal-100 shadow-sm relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-teal-500"></div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-display font-bold text-lg text-teal-800">Mahreç</span>
+                        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-lg group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs md:text-sm leading-relaxed">
+                        Harflerin ses olarak ağız, boğaz ve dudak içerisinde çıktığı ve ayrıştığı özel bölgelerdir.
+                    </p>
+                </div>
+
+                <!-- Kavram 3 -->
+                <div class="interactive-card bg-white rounded-2xl p-5 border border-cyan-100 shadow-sm relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-cyan-500"></div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-display font-bold text-lg text-cyan-800">Tartîl</span>
+                        <div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center font-bold text-lg group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-music"></i>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs md:text-sm leading-relaxed">
+                        Kur'an'ı acele etmeden, kelimeleri tane tane, harflerin hakkını vererek ve anlamını düşünerek okuma biçimidir.
+                    </p>
+                </div>
+
+                <!-- Kavram 4 -->
+                <div class="interactive-card bg-white rounded-2xl p-5 border border-amber-100 shadow-sm relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-display font-bold text-lg text-amber-800">Medd (Uzatma)</span>
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-lg group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-arrows-left-right"></i>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs md:text-sm leading-relaxed">
+                        Belirli harflerle sesin normalden daha fazla uzatılarak okunmasını sağlayan tecvid kuralıdır.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. ANA İÇERİK SEKSİYONU (2 Sütunlu Yapı) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- SOL KOLON: Konu Kazanım Özeti (7 Sütun) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Konu Kartı 1: Med Harfleri ve Uzatma -->
+                <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                    <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-text-height"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-slate-800">1. Med (Uzatma) Harfleri</h3>
+                    </div>
+
+                    <p class="text-slate-600 text-sm">
+                        Kendinden önceki harekeli harfi uzatarak okutan <strong>üç temel med harfi</strong> vardır:
+                    </p>
+
+                    <!-- Harf Kartları -->
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3 text-center">
+                            <div class="arabic-text text-3xl font-bold text-emerald-800 mb-1">ا</div>
+                            <div class="font-display font-bold text-xs text-emerald-900">ELİF</div>
+                            <div class="text-[11px] text-emerald-700">Öncesi Üstün ( َ )</div>
+                        </div>
+
+                        <div class="bg-teal-50/70 border border-teal-200 rounded-2xl p-3 text-center">
+                            <div class="arabic-text text-3xl font-bold text-teal-800 mb-1">و</div>
+                            <div class="font-display font-bold text-xs text-teal-900">VAV</div>
+                            <div class="text-[11px] text-teal-700">Öncesi Ötre ( ُ )</div>
+                        </div>
+
+                        <div class="bg-cyan-50/70 border border-cyan-200 rounded-2xl p-3 text-center">
+                            <div class="arabic-text text-3xl font-bold text-cyan-800 mb-1">ي</div>
+                            <div class="font-display font-bold text-xs text-cyan-900">YE</div>
+                            <div class="text-[11px] text-cyan-700">Öncesi Esre ( ِ )</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/60 text-xs text-slate-700 space-y-1.5">
+                        <div class="flex items-center gap-2 font-bold text-slate-800">
+                            <i class="fa-solid fa-circle-info text-emerald-600"></i>
+                            <span>Medd-i Tabiî (Doğal Uzatma):</span>
+                        </div>
+                        <p class="pl-6">Harf-i med bulunup sebebi med bulunmayan durumlarda <strong>1 elif miktarı</strong> (yaklaşık bir parmak kaldıracak kadar) uzatılır.</p>
+                    </div>
+                </div>
+
+                <!-- Konu Kartı 2: Sebeb-i Med ve Diğer Temel Bilgiler -->
+                <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                    <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-slate-800">2. Kur'an Okuma Kuralları ve Önemli Özellikler</h3>
+                    </div>
+
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="text-sm text-slate-700">
+                                <strong>Sebeb-i Med (Uzatma Sebebi):</strong> Sesi 1 elif miktarından daha fazla uzatmaya yarayan sebeptir. Bunlar <strong>Hemze (ء)</strong> ve <strong>Sükûn ( ۡ / Hareketsizlik)</strong>'dur.
+                            </div>
+                        </li>
+
+                        <li class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="text-sm text-slate-700">
+                                <strong>Sakin Nûn ve Tenvin:</strong> Sakin nûn (نۡ) ve tenvin ( ً   ٍ   ٌ ) ses olarak "n" duraklamasına sahip olduğu için tecvid kurallarının ana merkezinde yer alır.
+                            </div>
+                        </li>
+
+                        <li class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="text-sm text-slate-700">
+                                <strong>Kur'an Okuma Adabı:</strong> Abdestli olmak, temiz bir yerde kıbleye yönelmek, Eûzü-Besmele ile başlamak ve saygıyla okumak esastır.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- SAĞ KOLON: Ayet/Hadis & Görsel Vurgular (5 Sütun) -->
+            <div class="lg:col-span-5 space-y-6">
+
+                <!-- 4. AYET KUTUSU -->
+                <div class="bg-gradient-to-br from-emerald-900 to-teal-900 text-white rounded-3xl p-6 shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-8xl pointer-events-none">
+                        <i class="fa-solid fa-quote-right"></i>
+                    </div>
+
+                    <div class="flex items-center gap-2 text-amber-300 font-display font-semibold text-xs tracking-wider uppercase mb-3">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                        <span>REHBER AYET-İ KERİME</span>
+                    </div>
+
+                    <!-- Arapça Ayet -->
+                    <div class="arabic-text text-2xl md:text-3xl text-emerald-100 text-right dir-rtl leading-loose mb-4 border-b border-emerald-700/60 pb-4">
+                        وَرَتِّلِ الْقُرْاٰنَ تَرْت۪يلًاۜ
+                    </div>
+
+                    <!-- Türkçe Meal -->
+                    <div class="space-y-2">
+                        <p class="text-sm md:text-base text-emerald-50 italic font-light leading-relaxed">
+                            "...Ve Kur'an'ı tane tane, anlama üzerine ve tecvid kurallarına uyarak ağır ağır oku."
+                        </p>
+                        <p class="text-xs text-amber-300 font-semibold text-right">
+                            — Müzzemmil Suresi, 4. Ayet
+                        </p>
+                    </div>
+                </div>
+
+                <!-- HADİS KUTUSU -->
+                <div class="bg-amber-500/10 border-2 border-amber-400/40 rounded-3xl p-6 relative">
+                    <div class="flex items-center gap-2 text-amber-800 font-display font-semibold text-xs tracking-wider uppercase mb-3">
+                        <i class="fa-solid fa-hands-praying"></i>
+                        <span>PEYGAMBERİMİZDEN (S.A.V.) HADİS-İ ŞERİF</span>
+                    </div>
+
+                    <div class="arabic-text text-xl md:text-2xl text-amber-950 text-center mb-3">
+                        خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ
+                    </div>
+
+                    <p class="text-xs md:text-sm text-amber-900 font-semibold text-center italic">
+                        "Sizin en hayırlınız, Kur'an'ı öğrenen ve öğreteninizdir."
+                    </p>
+                    <span class="block text-right text-[11px] text-amber-800 font-bold mt-2">(Buhârî, Fezâilü'l-Kur'ân, 21)</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 5. AKILDA KALICI PÜF NOKTA / 'UNUTMA!' KUTUSU -->
+        <section class="bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 rounded-3xl p-6 text-slate-900 shadow-xl relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 opacity-20 text-9xl text-white select-none pointer-events-none">
+                <i class="fa-solid fa-lightbulb"></i>
+            </div>
+
+            <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-4">
+                <div class="w-14 h-14 bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl text-slate-900 shrink-0 border border-white/40">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2 font-display font-extrabold text-lg text-slate-900 uppercase tracking-wide">
+                        <span>Sınav ve Ders İçin Altın Püf Noktası!</span>
+                    </div>
+                    <p class="text-xs md:text-sm font-medium text-slate-900/90 leading-relaxed">
+                        Bir harfin <strong>Med Harfi (ا - و - ي)</strong> olabilmesi için kendisinin <u>harekesiz (sakin)</u> olması ve kendinden önceki harfin harekesinin uygun olması gerekir (Elif'ten önce Üstün, Vav'dan önce Ötre, Ye'den önce Esre). Eğer uzatan harfin kendi harekesi varsa, o artık bir med harfi değil, normal bir harftir!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER / MEB BİLGİ DİPNOTU -->
+        <footer class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 px-2 py-2 border-t border-slate-200">
+            <div class="flex items-center gap-2 mb-2 sm:mb-0">
+                <i class="fa-solid fa-graduation-cap text-emerald-600"></i>
+                <span>MEB Müfredatına Uygun Özet Materyali</span>
+            </div>
+            <div>
+                Din Kültürü ve Ahlak Bilgisi / İmam Hatip Ortaokulu İçeriği
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>

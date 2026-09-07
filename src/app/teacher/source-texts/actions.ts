@@ -3,6 +3,30 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { syncCurriculumManifest } from '@/app/teacher/content-creation/actions';
 
+import fs from 'fs/promises';
+import path from 'path';
+
+const SOURCE_TEXTS_PATH = path.join(process.cwd(), 'public', 'curriculum', 'source-texts.json');
+
+async function updateLocalSourceText(topicId: string, text: string) {
+    try {
+        let data: { topics: Record<string, string>; units: Record<string, string> } = { topics: {}, units: {} };
+        try {
+            const raw = await fs.readFile(SOURCE_TEXTS_PATH, 'utf-8');
+            data = JSON.parse(raw);
+        } catch {}
+        if (!data.topics) data.topics = {};
+        if (text) {
+            data.topics[topicId] = text;
+        } else {
+            delete data.topics[topicId];
+        }
+        await fs.writeFile(SOURCE_TEXTS_PATH, JSON.stringify(data, null, 2), 'utf-8');
+    } catch (e) {
+        console.warn('Failed to update local source-texts.json:', e);
+    }
+}
+
 export async function saveTopicSourceText(courseId: string, unitId: string, topicId: string, sourceText: string) {
     if (!courseId || !unitId || !topicId) {
         return { success: false, error: "Eksik parametre: ders, ünite veya konu ID'si bulunamadı." };
@@ -22,6 +46,9 @@ export async function saveTopicSourceText(courseId: string, unitId: string, topi
                 sourceText: trimmed,
                 updatedAt: new Date()
             });
+
+        // Yerel source-texts.json dosyasını güncelle
+        updateLocalSourceText(topicId, trimmed).catch(() => {});
 
         // Manifest dosyasını senkronize et
         syncCurriculumManifest().catch((err) => {
@@ -52,6 +79,9 @@ export async function clearTopicSourceText(courseId: string, unitId: string, top
                 sourceText: '',
                 updatedAt: new Date()
             });
+
+        // Yerel source-texts.json dosyasını güncelle
+        updateLocalSourceText(topicId, '').catch(() => {});
 
         syncCurriculumManifest().catch(() => {});
 

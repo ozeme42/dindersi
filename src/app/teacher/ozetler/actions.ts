@@ -18,6 +18,7 @@ export interface OzetItem {
     title: string;
     htmlContent: string;
     sourceText?: string;
+    sourceWordCount: number;
     className: string;
     grade: string;
     unitTitle: string;
@@ -25,10 +26,13 @@ export interface OzetItem {
     wordCount: number;
     charCount: number;
     hasOzet: boolean;
+    topicsCountInUnit?: number;
+    topicsWithSourceCountInUnit?: number;
 }
 
 const OZETLER_DIR = path.join(process.cwd(), 'public', 'curriculum', 'ozetler');
 const MANIFEST_PATH = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+const SOURCE_TEXTS_PATH = path.join(process.cwd(), 'public', 'curriculum', 'source-texts.json');
 
 const formatCourseTitle = (title: string): string => {
     if (!title) return '';
@@ -54,10 +58,19 @@ function getHtmlWordCount(html: string): number {
     return cleanText ? cleanText.split(/\s+/).filter(Boolean).length : 0;
 }
 
+function getTextWordCount(text: string): number {
+    if (!text) return 0;
+    return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+/**
+ * Loads all unit and topic summaries with their associated textbook source texts.
+ */
 export async function loadAllOzetlerData(): Promise<{ success: boolean; items: OzetItem[]; error?: string }> {
     try {
         await fs.mkdir(OZETLER_DIR, { recursive: true });
 
+        // 1. Manifest
         let manifest: any = { classGroups: [] };
         try {
             const manifestRaw = await fs.readFile(MANIFEST_PATH, 'utf-8');
@@ -66,6 +79,16 @@ export async function loadAllOzetlerData(): Promise<{ success: boolean; items: O
             console.warn('Manifest read error in loadAllOzetlerData:', e);
         }
 
+        // 2. Local Source Texts (public/curriculum/source-texts.json)
+        let sourceTextsMap: { topics: Record<string, string>; units: Record<string, string> } = { topics: {}, units: {} };
+        try {
+            const sourceRaw = await fs.readFile(SOURCE_TEXTS_PATH, 'utf-8');
+            sourceTextsMap = JSON.parse(sourceRaw);
+        } catch (e) {
+            console.warn('source-texts.json read warning:', e);
+        }
+
+        // 3. Available HTML files in public/curriculum/ozetler
         let existingFiles: Set<string> = new Set();
         try {
             const fileList = await fs.readdir(OZETLER_DIR);
@@ -84,6 +107,25 @@ export async function loadAllOzetlerData(): Promise<{ success: boolean; items: O
                 const fullCourseTitle = formatCourseTitle(course.title);
 
                 for (const unit of course.units || []) {
+                    // Konu kaynak metinlerini topla (Ünite özeti sentezi için)
+                    const unitTopics = unit.topics || [];
+                    let topicsWithSourceCount = 0;
+                    const compositeTopicTexts: string[] = [];
+
+                    for (let idx = 0; idx < unitTopics.length; idx++) {
+                        const t = unitTopics[idx];
+                        const tSource = (sourceTextsMap.topics[t.id] || t.sourceText || '').trim();
+                        if (tSource) {
+                            topicsWithSourceCount++;
+                            compositeTopicTexts.push(`=== ${idx + 1}. KONU: ${t.title} ===\n${tSource}`);
+                        }
+                    }
+
+                    const unitDirectSource = (sourceTextsMap.units[unit.id] || unit.sourceText || '').trim();
+                    const combinedUnitSourceText = unitDirectSource 
+                        ? (unitDirectSource + (compositeTopicTexts.length > 0 ? '\n\n' + compositeTopicTexts.join('\n\n') : ''))
+                        : compositeTopicTexts.join('\n\n');
+
                     // 1. ÜNİTE ÖZETİ (Unit Summary)
                     const unitFile = `${unit.id}.html`.toLowerCase();
                     let unitHtml = '';
@@ -107,18 +149,21 @@ export async function loadAllOzetlerData(): Promise<{ success: boolean; items: O
                         type: 'unit',
                         title: `${unit.title} (Ünite Özeti)`,
                         htmlContent: unitTrimmed,
-                        sourceText: unit.sourceText || '',
+                        sourceText: combinedUnitSourceText,
+                        sourceWordCount: getTextWordCount(combinedUnitSourceText),
                         className,
                         grade,
                         unitTitle: unit.title,
                         courseTitle: fullCourseTitle,
                         wordCount: unitWordCount,
                         charCount: unitTrimmed.length,
-                        hasOzet: unitWordCount > 0 || !!unit.hasUnitOzet
+                        hasOzet: unitWordCount > 0 || !!unit.hasUnitOzet,
+                        topicsCountInUnit: unitTopics.length,
+                        topicsWithSourceCountInUnit: topicsWithSourceCount
                     });
 
                     // 2. KONU ÖZETLERİ (Topic Summaries)
-                    for (const topic of unit.topics || []) {
+                    for (const topic of unitTopics) {
                         const topicFile = `${topic.id}.html`.toLowerCase();
                         let topicHtml = '';
                         if (existingFiles.has(topicFile)) {
@@ -131,6 +176,7 @@ export async function loadAllOzetlerData(): Promise<{ success: boolean; items: O
 
                         const topicTrimmed = (topicHtml || '').trim();
                         const topicWordCount = getHtmlWordCount(topicTrimmed);
+                        const topicSource = (sourceTextsMap.topics[topic.id] || topic.sourceText || '').trim();
 
                         items.push({
                             id: `topic_${topic.id}`,
@@ -141,7 +187,8 @@ export async function loadAllOzetlerData(): Promise<{ success: boolean; items: O
                             type: 'topic',
                             title: topic.title,
                             htmlContent: topicTrimmed,
-                            sourceText: topic.sourceText || '',
+                            sourceText: topicSource,
+                            sourceWordCount: getTextWordCount(topicSource),
                             className,
                             grade,
                             unitTitle: unit.title,
@@ -162,6 +209,9 @@ export async function loadAllOzetlerData(): Promise<{ success: boolean; items: O
     }
 }
 
+/**
+ * Saves a unit summary or topic summary.
+ */
 export async function saveOzetContent(
     courseId: string,
     unitId: string,
@@ -258,10 +308,8 @@ export async function saveOzetContent(
             console.warn('Manifest local update warning:', mErr);
         }
 
-        // Arka planda manifest senkronizasyonunu tetikle
         syncCurriculumManifest().catch(() => {});
 
-        // Önbellekleri yenile
         try {
             (revalidateTag as any)('curriculum');
             revalidatePath('/teacher/ozetler');
@@ -277,6 +325,9 @@ export async function saveOzetContent(
     }
 }
 
+/**
+ * Clears / deletes a summary.
+ */
 export async function clearOzetContent(
     courseId: string,
     unitId: string,
@@ -285,6 +336,9 @@ export async function clearOzetContent(
     return saveOzetContent(courseId, unitId, topicId, '');
 }
 
+/**
+ * AI Summary Generator (Strictly derived from Textbook Source Text).
+ */
 export async function generateOzetWithAi(params: {
     title: string;
     type: 'unit' | 'topic';
@@ -306,35 +360,77 @@ export async function generateOzetWithAi(params: {
         }
 
         const isUnit = type === 'unit';
-        const targetDesc = isUnit ? `ÜNİTE GENEL ÖZETİ (${unitTitle})` : `KONU ÖZETİ (${title})`;
 
-        const prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi ile İmam Hatip ders kitapları alanında uzman bir başyazar ve kıdemli eğitim teknolojisi tasarımcısısın.
-Akıllı tahtalarda ve tabletlerde öğrencinin kolayca anlayabileceği, görsel olarak son derece estetik, canlı ve interaktif bir HTML özet hazırlayacaksın.
+        let prompt = '';
 
-HEDEF: ${targetDesc}
+        if (isUnit) {
+            // ════════════════════════════════════════════════════════════
+            // ÜNİTE GENEL ÖZETİ (TÜM KONU KAYNAK METİNLERİNDEN SENTEZ)
+            // ════════════════════════════════════════════════════════════
+            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi ile İmam Hatip ders kitapları alanında uzman bir başyazar ve kıdemli eğitim teknolojisi uzmanısın.
+GÖREVİN: Aşağıda verilen ders kitabı kaynak metinlerinin TAMAMINI inceleyerek, bu ünitenin bütünü için akıllı tahtada, tablette ve ders tekrarlarında kullanılabilecek MÜKEMMEL BİR ÜNİTE GENEL TEKRAR ÖZETİ VE KAVRAM HARİTASI (HTML) hazırlamaktır.
+
+HEDEF: ${unitTitle} - ÜNİTE GENEL ÖZETİ & TEKRAR REHBERİ
+SINIF: ${grade ? `${grade}. Sınıf` : 'Ortaokul'}
+DERS: ${courseTitle || 'Din Kültürü ve Ahlak Bilgisi'}
+${topicTitles && topicTitles.length > 0 ? `ÜNİTEDEKİ KONULAR:\n${topicTitles.map((t, idx) => `${idx + 1}. ${t}`).join('\n')}\n` : ''}
+
+DERS KİTABI ÜNİTE KAYNAK METİNLERİ:
+"""
+${sourceText || 'Ünite konularının MEB Din Kültürü müfredatındaki standart bilgilerini temel al.'}
+"""
+
+KESİN KURALLAR:
+1. KAYNAK METNE %100 SADAKAT:
+   - Sadece verilen ders kitabı metinlerindeki bilgileri, kavramları ve ayet/hadisleri özetle. Metinde geçmeyen yabancı bilgi uydurma.
+2. ÜNİTE BÜTÜNLÜĞÜ:
+   - Ünitedeki her konudan en az 1 ana fikir ve temel kazanımı kapsa.
+3. KAVRAMLAR KUTUSU:
+   - Ünitede geçen tüm temel kavramları (Örn: Vahiy, Nübüvvet, Mucize, İhlas, Tevhit vb.) kartlar halinde listele.
+4. AYET & HADİS BÖLÜMÜ:
+   - Metinde geçen kilit ayet ve hadisleri düzgün Arapça hatla ve Türkçe mealiyle öne çıkar.
+5. SINAV İPUÇLARI / ALTIN NOTLAR:
+   - "📌 Üniteyi Bitirirken Unutma!" başlığı altında 3-5 can alıcı püf noktasını kutula.
+6. FORMAT:
+   - Bağımsız, doğrudan render edilebilir geçerli HTML.
+   - Tailwind CSS CDN (<script src="https://cdn.tailwindcss.com"></script>) ve FontAwesome (<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />) ekle.
+   - Açık, göz yormayan, ferah ve modern renk tonları (bg-slate-50 veya bg-emerald-50).
+   - Çıktı olarak SADECE HTML kodunu döndür, selamlama veya markdown backtick kullanma.`;
+        } else {
+            // ════════════════════════════════════════════════════════════
+            // KONU ÖZETİ (KONU DERS KİTABI KAYNAK METNİNDEN)
+            // ════════════════════════════════════════════════════════════
+            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi alanında uzman bir başyazar ve kıdemli eğitim teknolojisi tasarımcısısın.
+GÖREVİN: Aşağıda verilen ders kitabı kaynak metnine %100 SADIK KALARAK, bu konunun akıllı tahtada sunulabilecek ve öğrencilerin tek bakışta anlayabileceği EN NİTELİKLİ VE ÇEKİCİ İNTERAKTİF DERS ÖZETİNİ (HTML) hazırlamaktır.
+
+HEDEF: ${title} (Konu Özeti)
 SINIF: ${grade ? `${grade}. Sınıf` : 'Ortaokul'}
 DERS: ${courseTitle || 'Din Kültürü ve Ahlak Bilgisi'}
 ÜNİTE: ${unitTitle || 'İlgili Ünite'}
-${isUnit && topicTitles && topicTitles.length > 0 ? `ÜNİTEDEKİ KONULAR:\n${topicTitles.map((t, idx) => `${idx + 1}. ${t}`).join('\n')}` : ''}
-${sourceText ? `DERS KİTABI KAYNAK METNİ:\n"""\n${sourceText}\n"""` : 'Kaynak metin doğrudan girilmemiştir; MEB müfredatındaki kesin ve standart bilgileri temel al.'}
 
-UYULMASI GEREKEN KESİN KURALLAR:
-1. FORMAT:
-   - Yanıtın geçerli, bağımsız ve doğrudan render edilebilir bir HTML kodu olmalıdır.
+DERS KİTABI KAYNAK METNİ:
+"""
+${sourceText || 'Bu konunun MEB Din Kültürü müfredatındaki standart ders kitabı bilgilerini temel al.'}
+"""
+
+KESİN KURALLAR:
+1. DERS KİTABINA %100 SADAKAT (EN KRİTİK):
+   - Kaynak metinde geçen hiçbir temel kavramı, ayeti veya açıklamayı atlama.
+   - Metinde geçmeyen bilgileri kafana göre ekleme.
+2. KAVRAMLAR VE TANIMLARI:
+   - Metindeki kilit kavramları (Örn: Tevhit, İman, Esma-i Hüsna, Sadaka vb.) belirgin renkli kartlar olarak yerleştir.
+3. KAZANIM MADDELERİ:
+   - Konunun ana fikrini 3-5 maddelik şık ikonlu maddelerle özetle.
+4. AYET VE HADİS KUTUSU (ÖNCELİKLİ):
+   - Metinde ayet veya hadis geçiyorsa mutlaka Arapça hat metnini (font-arabic veya text-xl text-emerald-900) ve Türkçe mealini ekle.
+5. AKILDA KALICI PÜF NOKTA:
+   - "💡 Unutmayalım!" veya "🎯 Sınav İpucu" kutusu ekle.
+6. FORMAT:
+   - Bağımsız, doğrudan render edilebilir geçerli HTML.
    - Tailwind CSS CDN (<script src="https://cdn.tailwindcss.com"></script>) ve FontAwesome (<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />) ekle.
-   - Google Font 'Nunito' ve 'Fredoka' ekle.
-   - Body etiketinde modern, açık veya göz yormayan hoş tonlar (bg-slate-50 veya bg-emerald-50, text-slate-800) kullan.
-   - Responsive, akıllı tahtaya tam uyumlu, geniş padding ve yuvarlak köşeli kartlar (rounded-2xl / rounded-3xl) olsun.
-
-2. İÇERİK YAPISI:
-   - **Göz Alıcı Başlık Kartı**: Ünite/Konu adı, ikon, sınıf rozeti.
-   - **Kavram Kutuları**: Metinde geçen en temel kavramlar (örneğin: Vahiy, Tevhit, İhlas, Sadaka vb.) kartlar halinde tanımıyla birlikte.
-   - **Önemli Bilgiler & Maddeler**: 3-5 maddelik net, sade ve vurucu kazanım özetleri (renkli madde ikonlarıyla).
-   - **Ayet / Hadis Kutusu**: Eğer konuda ayet veya hadis geçiyorsa, Arapça metnini düzgün hatla (text-xl text-emerald-800) koy, altına Türkçe mealini ekle.
-   - **Akılda Kalıcı Püf Nokta / 'Unutma!' Kutusu**: Sınavlarda ve ders tekrarlarında çıkacak altın değerinde bir özet notu.
-
-3. ÇIKTI ŞARTI:
-   - SADECE HTML kodunu döndür. Başında veya sonunda selamlama, markdown backtick ("\`\`\`html" veya "\`\`\`") KULLANMA.`;
+   - Ferah, göz yormayan, okunaklı modern kart tasarımı (rounded-2xl / rounded-3xl).
+   - Çıktı olarak SADECE HTML kodunu döndür, selamlama veya markdown backtick kullanma.`;
+        }
 
         const generatedRaw = await runGeminiWithFallback({
             apiKey,
@@ -357,5 +453,61 @@ UYULMASI GEREKEN KESİN KURALLAR:
     } catch (err: any) {
         console.error('Error generating summary with AI:', err);
         return { success: false, error: err.message || 'Yapay zeka ile özet üretilirken bir hata oluştu.' };
+    }
+}
+
+/**
+ * Batch Generates Summaries for all topics in a unit from their source texts.
+ */
+export async function batchGenerateUnitTopicSummaries(
+    courseId: string, 
+    unitId: string
+): Promise<{ success: boolean; generatedCount: number; errors: string[] }> {
+    try {
+        const dataRes = await loadAllOzetlerData();
+        if (!dataRes.success || !dataRes.items) {
+            return { success: false, generatedCount: 0, errors: ['Veriler yüklenemedi.'] };
+        }
+
+        const unitTopics = dataRes.items.filter(i => 
+            i.courseId === courseId && 
+            i.unitId === unitId && 
+            i.type === 'topic' &&
+            i.sourceText && 
+            i.sourceText.trim().length > 50
+        );
+
+        if (unitTopics.length === 0) {
+            return { success: false, generatedCount: 0, errors: ['Bu ünitede kaynak metni olan konu bulunamadı.'] };
+        }
+
+        let count = 0;
+        const errors: string[] = [];
+
+        for (const topic of unitTopics) {
+            try {
+                const aiRes = await generateOzetWithAi({
+                    title: topic.title,
+                    type: 'topic',
+                    sourceText: topic.sourceText,
+                    grade: topic.grade,
+                    courseTitle: topic.courseTitle,
+                    unitTitle: topic.unitTitle
+                });
+
+                if (aiRes.success && aiRes.htmlContent) {
+                    await saveOzetContent(courseId, unitId, topic.topicId, aiRes.htmlContent);
+                    count++;
+                } else if (aiRes.error) {
+                    errors.push(`${topic.title}: ${aiRes.error}`);
+                }
+            } catch (err: any) {
+                errors.push(`${topic.title}: ${err.message}`);
+            }
+        }
+
+        return { success: count > 0, generatedCount: count, errors };
+    } catch (err: any) {
+        return { success: false, generatedCount: 0, errors: [err.message] };
     }
 }
