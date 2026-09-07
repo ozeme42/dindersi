@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sahabeden Örnek Davranışlar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap');
+
+        html { font-size: 100%; transition: font-size 0.3s ease; background-color: #0f172a; }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%) !important;
+            overflow: hidden; margin: 0; padding: 0; height: 100vh; height: 100dvh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        h1, h2, h3, .title-font { font-family: 'Quicksand', sans-serif; }
+
+        /* DİNAMİK TİPOGRAFİ */
+        .text-huge { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.1; }
+        .text-x-large { font-size: clamp(1.6rem, 3.5vw, 3rem); line-height: 1.2; }
+        .text-large { font-size: clamp(1.3rem, 2.5vw, 2.2rem); line-height: 1.2; }
+        .text-medium { font-size: clamp(1rem, 2vw, 1.8rem); line-height: 1.3; }
+        
+        .slide {
+            display: none; opacity: 0; height: 100%; width: 100%; padding: 0.5rem; 
+            box-sizing: border-box; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; position: absolute; top: 0; left: 0;
+        }
+        .slide.active { display: flex; opacity: 1; z-index: 10; }
+        .slide.slide-in-right { animation: slideInRight 0.4s forwards; }
+        .slide.slide-in-left { animation: slideInLeft 0.4s forwards; }
+
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Sunum Kartı */
+        .presentation-card {
+            background-color: #ffffff; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            width: 98vw; max-width: 100%; height: 96vh; display: flex; flex-direction: column;
+            overflow: hidden; position: relative; margin: auto; border: 4px solid #f59e0b;
+        }
+        @media (min-width: 768px) { .presentation-card { border-radius: 1.5rem; border-width: 8px; } }
+        .presentation-card.bg-slate-800 { background-color: #1e293b !important; border-color: transparent !important; }
+        .presentation-card.bg-indigo-900 { background-color: #312e81 !important; border-color: transparent !important; }
+        .presentation-card.bg-emerald-800 { background-color: #065f46 !important; border-color: transparent !important; }
+
+        .card-header { background: #d97706; color: white; padding: 0.5rem 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap;}
+        @media (min-width: 768px) { .card-header { padding: 1rem 2rem; } }
+
+        .card-body { flex-grow: 1; padding: 0.5rem; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+        @media (min-width: 768px) { .card-body { padding: 1.5rem 2.5rem; } }
+
+        /* SIFIR BOŞLUKLU SLAYT İÇİN */
+        .slide.\!p-0 { padding: 0 !important; }
+
+        /* Toolbar */
+        .toolbar-pill {
+            position: fixed; bottom: 0.5rem; left: 50%; transform: translateX(-50%); z-index: 9999; 
+            background: rgba(255, 255, 255, 0.95); border-radius: 9999px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+            border: 2px solid rgba(245, 158, 11, 0.6); display: flex; align-items: center; padding: 0.4rem; gap: 0.5rem; transition: all 0.4s; width: max-content;
+        }
+        .toolbar-pill.collapsed { width: 3.8rem; height: 3.8rem; padding: 0; justify-content: center; border-radius: 50%; }
+        .drag-handle { cursor: grab; color: #94a3b8; padding: 0.5rem 0.8rem; font-size: 1.2rem; }
+        .toolbar-content { display: flex; align-items: center; gap: 0.8rem; overflow: hidden; transition: all 0.3s; }
+        .toolbar-pill.collapsed .toolbar-content, .toolbar-pill.collapsed .drag-handle { width: 0; opacity: 0; pointer-events: none; display: none; }
+        .slide-counter { font-weight: 800; color: #d97706; font-size: 1.2rem; min-width: 5rem; text-align: center; }
+        
+        .nav-btn { background: #f59e0b; color: white; border: none; width: 2.8rem; height: 2.8rem; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;}
+        .nav-btn:hover { transform: scale(1.1); background: #d97706; }
+        .nav-btn:disabled { background: #f1f5f9; color: #cbd5e1; cursor: not-allowed; transform: none; }
+        .zoom-btn { background: transparent; color: #64748b; } .zoom-btn:hover { background: #fef3c7; color: #d97706; }
+        .fs-btn { color: #059669; } .fs-btn:hover { color: #047857; background: #d1fae5; }
+        .minimize-btn { background: transparent; color: #64748b; cursor: pointer; font-size: 1.2rem; width: 3rem; height: 3rem; border-radius: 50%; border: none;}
+
+        /* Kutu ve Liste Stilleri */
+        .info-box { background: white; border-radius: 1rem; padding: 1.5rem; border: 3px solid #e2e8f0; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 6px 10px rgba(0,0,0,0.05); flex: 1;}
+        .bullet-list { list-style: none; padding: 0; margin: 0; width: 100%; }
+        .bullet-list li { margin-bottom: 1.2rem; position: relative; padding-left: 2.5rem; font-weight: 700; color: #334155; font-size: clamp(1.2rem, 2.5vw, 1.8rem); line-height: 1.3;}
+        .bullet-list li::before { content: '\f0da'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; left: 0; color: #d97706; font-size: 1.5em; top: -0.1em;}
+        .blue-bullets li::before { color: #2563eb; } .teal-bullets li::before { color: #0d9488; } .rose-bullets li::before { color: #e11d48; }
+        
+        .quote-box { background: #f8fafc; border-left: 8px solid #f59e0b; padding: 1.5rem; border-radius: 0 1rem 1rem 0; margin-bottom: 1rem; }
+        .quote-title { font-size: 1.5rem; font-weight: 800; color: #b45309; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .quote-text { font-size: clamp(1.2rem, 2.5vw, 2rem); font-weight: 700; color: #334155; font-style: italic; }
+
+        /* Oyunlar ve Etkinlikler Genel */
+        .game-title { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800; text-align: center; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px;}
+        .game-feedback { display: none; margin-top: 1rem; font-size: 1.5rem; font-weight: bold; text-align: center; animation: popIn 0.3s; padding: 1rem; border-radius: 1rem;}
+
+        /* Kriptogram (Sayı Şifresi) */
+        .crypto-box { width: clamp(2rem, 3.5vw, 3rem); height: clamp(2rem, 3.5vw, 3rem); border: 3px solid #6366f1; background: white; border-radius: 0.6rem; display: inline-flex; align-items: center; justify-content: center; font-size: clamp(1rem, 2vw, 1.5rem); font-weight: 900; color: #312e81; margin: 0.15rem; box-shadow: 0 3px 6px rgba(0,0,0,0.15); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .crypto-box.revealed { background-color: #10b981; color: white; border-color: #059669; transform: rotateY(360deg); font-size: clamp(1.2rem, 2.5vw, 1.8rem); }
+        .alpha-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; max-width: 1000px; background: #f1f5f9; padding: 1rem; border-radius: 1rem; border: 2px solid #cbd5e1; margin-bottom: 1.5rem;}
+        .alpha-cell { min-width: 3.8rem; text-align: center; background: white; border: 2px solid #94a3b8; border-radius: 0.5rem; padding: 0.4rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.2s; cursor: default; }
+        .alpha-cell:hover { transform: scale(1.1); border-color: #6366f1; }
+
+        /* Kelime Bulmacası (Word Search) 12x12 */
+        #ws-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 0.15rem; width: max-content; margin: 0 auto; background: #cbd5e1; padding: 0.3rem; border-radius: 0.5rem; }
+        .ws-cell { width: clamp(1.5rem, 3vw, 2.5rem); height: clamp(1.5rem, 3vw, 2.5rem); background: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: clamp(0.8rem, 1.5vw, 1.2rem); cursor: pointer; transition: 0.2s; user-select: none; border-radius: 0.2rem; }
+        .ws-cell.selected { background: #22d3ee; color: white; }
+        .ws-cell.found { background: #10b981; color: white; cursor: default; }
+        .ws-word-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-top: 1rem; }
+        .ws-word-item { background: #f1f5f9; padding: 0.3rem 0.8rem; border-radius: 999px; font-weight: bold; color: #475569; border: 2px solid #cbd5e1; transition: all 0.3s; font-size: 0.95rem; }
+        .ws-word-item.found { background: #dcfce7; color: #166534; border-color: #4ade80; text-decoration: line-through; opacity: 0.7; }
+
+        .match-btn { background: white; border: 3px solid #e2e8f0; border-radius: 1rem; padding: 1rem; font-size: clamp(1.1rem, 2vw, 1.6rem); font-weight: bold; color: #475569; cursor: pointer; transition: all 0.2s; text-align: left; width: 100%; display: flex; align-items: center; gap: 0.5rem; min-height: 60px;}
+        .match-btn:hover { border-color: #94a3b8; transform: translateY(-2px); }
+        .match-btn.selected { border-color: #d97706; background: #fffbeb; color: #b45309; transform: scale(1.02); }
+        .match-btn.correct { border-color: #10b981; background: #ecfdf5; color: #047857; cursor: default; transform: none; opacity: 0.9; }
+        .match-btn.wrong { animation: shake 0.4s; border-color: #ef4444; background: #fef2f2; color: #b91c1c; }
+
+        .tf-btn { padding: 1.5rem; font-size: 2.5rem; font-weight: bold; border-radius: 1.5rem; cursor: pointer; transition: all 0.3s; flex: 1; text-align: center; border: none; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; gap: 1rem; }
+        .tf-btn.true { background: linear-gradient(135deg, #10b981 0%, #059669 100%); } .tf-btn.false { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
+        .tf-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,0,0,0.2); } .tf-btn:active { transform: scale(0.95); }
+        .tf-feedback { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; border-radius: 1.5rem; z-index: 20; background: rgba(255,255,255,0.95); flex-direction: column; text-align: center;}
+        .tf-feedback.show { display: flex; animation: fadeIn 0.3s forwards;}
+
+        /* DEĞERLENDİRME: BOŞLUK DOLDURMA STİLLERİ */
+        .fill-blank-btn { padding: 0.8rem 1.5rem; border-radius: 1rem; background: #e2e8f0; font-weight: bold; cursor: pointer; border: 3px solid #94a3b8; font-size: clamp(1.2rem, 2vw, 1.8rem); transition: all 0.2s;}
+        .fill-blank-btn:hover { background: #cbd5e1; border-color: #64748b; }
+        .fill-blank-btn.selected { background: #3b82f6; color: white; border-color: #2563eb; transform: scale(1.1); box-shadow: 0 5px 15px rgba(59,130,246,0.3); }
+        .fill-slot { display: inline-block; min-width: 150px; border-bottom: 4px dashed #3b82f6; text-align: center; color: #2563eb; font-weight: bold; cursor: pointer; padding: 0 0.5rem; margin: 0 0.5rem; transition: all 0.2s;}
+        .fill-slot:hover { background: #eff6ff; border-radius: 0.5rem 0.5rem 0 0; }
+
+        /* DEĞERLENDİRME: ÇOKTAN SEÇMELİ STİLLERİ */
+        .quiz-opt { background: white; border: 3px solid #cbd5e1; border-radius: 1rem; padding: 1.5rem; font-size: clamp(1.2rem, 2vw, 1.8rem); font-weight: bold; color: #334155; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.8rem; text-align: left; min-height: 80px;}
+        .quiz-opt:hover { border-color: #6366f1; background: #f8fafc; transform: translateX(5px);}
+        .quiz-opt.selected-opt { border-color: #d97706; background: #fffbeb; color: #b45309; transform: scale(1.02); }
+        .quiz-opt.correct { border-color: #10b981 !important; background: #ecfdf5 !important; color: #047857 !important; pointer-events: none;}
+        .quiz-opt.wrong { border-color: #ef4444 !important; background: #fef2f2 !important; color: #b91c1c !important; pointer-events: none; animation: shake 0.4s;}
+        .quiz-expl { display: none; background: #f0fdfa; border: 3px solid #2dd4bf; padding: 1.5rem; border-radius: 1rem; color: #0f766e; font-weight: bold; margin-top: 1.5rem; font-size: clamp(1.2rem, 2vw, 1.6rem); animation: popIn 0.3s;}
+        
+        /* DEĞERLENDİRME: AÇIK UÇLU STİLLERİ */
+        .open-q-box { background: white; border: 4px dashed #818cf8; border-radius: 1.5rem; padding: 2rem; text-align: left; width: 100%; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.05);}
+        .open-a-box { display: none; background: #eef2ff; border-top: 3px solid #818cf8; padding-top: 1.5rem; margin-top: 1.5rem; color: #3730a3; font-weight: bold; font-size: clamp(1.3rem, 2.2vw, 1.8rem); animation: popIn 0.4s;}
+        .show-ans-btn { background: #4f46e5; color: white; padding: 0.8rem 1.5rem; border-radius: 0.8rem; font-weight: bold; cursor: pointer; border: none; font-size: clamp(1.2rem, 2vw, 1.6rem); transition: all 0.2s; box-shadow: 0 4px 10px rgba(79,70,229,0.3); margin-top: 1rem; display: inline-flex; align-items: center; justify-content: center;}
+        .show-ans-btn:hover { background: #4338ca; transform: translateY(-2px); }
+
+        /* Anagram / Kelime Bulmaca Stilleri */
+        .ana-slot { width: 70px; height: 90px; border: 4px dashed #cbd5e1; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; font-weight: bold; color: #1e293b; background: white; margin: 0.3rem;}
+        .ana-slot.filled { border-style: solid; border-color: #f59e0b; background: #fffbeb; color: #d97706;}
+        .ana-slot.correct { border-color: #10b981; background: #ecfdf5; color: #047857; animation: popIn 0.3s; }
+        .ana-slot.wrong { border-color: #ef4444; background: #fef2f2; color: #b91c1c; animation: shake 0.4s; }
+        .ana-letter { width: 70px; height: 90px; border-radius: 1rem; background: #3b82f6; color: white; border: none; font-size: 3.5rem; font-weight: bold; cursor: pointer; box-shadow: 0 8px 0 #1d4ed8; margin: 0.5rem; transition: all 0.1s; }
+        .ana-letter:active { transform: translateY(6px); box-shadow: 0 0 0 #1d4ed8; } .ana-letter.used { opacity: 0; pointer-events: none; transform: scale(0); }
+
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .confetti { position: absolute; width: 12px; height: 12px; background-color: #f00; opacity: 0; z-index: 100; pointer-events: none;}
+        
+        .scrollable-area::-webkit-scrollbar { width: 12px; }
+        .scrollable-area::-webkit-scrollbar-track { background: transparent; }
+        .scrollable-area::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; border: 3px solid white;}
+    </style>
+</head>
+<body>
+
+    <div id="slides-container" class="relative w-full h-full">
+        
+        <!-- Slayt 0: Kapak -->
+        <div class="slide active" id="slide-0">
+            <div class="presentation-card bg-slate-800 text-white justify-center items-center text-center p-8 border-none" style="background-color: #1e293b !important;">
+                <i class="fas fa-users text-7xl md:text-9xl text-amber-400 mb-6 opacity-90 drop-shadow-lg"></i>
+                <h2 class="text-2xl md:text-4xl tracking-widest text-slate-300 mb-2 uppercase font-bold">5. Ünite • 7. Sınıf Siyer</h2>
+                <h1 class="text-huge font-bold mb-6 leading-tight text-white drop-shadow-md">Sahabeden <br><span class="text-amber-400">Örnek Davranışlar</span></h1>
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-600/50 max-w-5xl">
+                    <p class="text-x-large italic font-serif text-amber-100">"Siz, insanlar için ortaya çıkarılmış en hayırlı ümmetsiniz..." <br><span class="text-xl text-slate-400 not-italic">(Âl-i İmrân, 110)</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 1: ETKİNLİK 1 - Sayı Şifresi (Kriptogram) -->
+        <div class="slide" id="slide-1">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-800">
+                    <h2 class="text-lg md:text-2xl font-bold"><i class="fas fa-user-secret mr-2"></i>Süper Şifre Kırıcı</h2>
+                </div>
+                <div class="card-body bg-purple-50 items-center overflow-y-auto scrollable-area" id="crypto-area">
+                    <p class="text-center font-bold text-purple-900 mb-4 text-sm md:text-base">Aşağıdaki 3 basamaklı kodları tabloyu kullanarak çözmeye çalışın.</p>
+                    <div class="alpha-grid shadow-lg" id="alpha-grid-container"></div>
+                    
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-xl text-center w-full max-w-5xl mb-4 border-4 border-indigo-200">
+                        <div class="flex flex-wrap justify-center gap-x-4 gap-y-3" id="crypto-word-container">
+                            <!-- JS ile dolacak -->
+                        </div>
+                        <button id="crypto-btn" onclick="revealCrypto()" class="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 px-12 rounded-full text-2xl shadow-lg transition-transform hover:scale-105">
+                            <i class="fas fa-magic mr-2"></i> Şifreyi Çöz ve Göster
+                        </button>
+                    </div>
+
+                    <div id="crypto-feedback" class="game-feedback bg-green-50 text-green-800 border-4 border-green-500 w-full max-w-5xl p-6">
+                        <i class="fas fa-quote-left text-4xl text-green-400 mb-2"></i>
+                        <h2 class="text-2xl md:text-3xl font-black text-green-900 leading-tight">"SİZ İNSANLAR İÇİN ORTAYA ÇIKARILMIŞ EN HAYIRLI ÜMMETSİNİZ"</h2>
+                        <p class="mt-4 text-xl font-bold text-gray-600">(Âl-i İmrân Suresi, 110. Ayet)</p>
+                        <button onclick="changeSlide(1)" class="mt-8 bg-green-600 hover:bg-green-700 text-white px-10 py-4 rounded-full font-bold text-xl shadow-lg">Derse Başla <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slayt 2: ETKİNLİK 1.5 - Kelime Bulmacası (Word Search) -->
+        <div class="slide" id="slide-2">
+            <div class="presentation-card">
+                <div class="card-header bg-cyan-700">
+                    <h2 class="text-lg md:text-2xl font-bold"><i class="fas fa-search mr-2"></i>Ekstrem Kavram Bulmacası (12x12)</h2>
+                </div>
+                <div class="card-body bg-cyan-50 items-center overflow-y-auto scrollable-area" id="ws-area">
+                    <p class="text-center font-bold text-cyan-900 mb-2 text-xs md:text-sm">Kelimeler: Yatay, dikey, çapraz ve TERS olabilir! Sadece bulduğun kelimenin <span class="text-red-600 bg-red-100 px-1 rounded">İLK</span> ve <span class="text-red-600 bg-red-100 px-1 rounded">SON</span> harfine dokun.</p>
+                    <div class="flex flex-col lg:flex-row gap-4 items-start w-full max-w-6xl justify-center">
+                        <div class="bg-white p-2 rounded-xl shadow-lg border-4 border-cyan-300">
+                            <div id="ws-grid"></div>
+                            <button onclick="clearWsSelection()" class="mt-3 w-full py-3 bg-red-100 text-red-600 rounded-lg text-lg font-bold hover:bg-red-200 transition"><i class="fas fa-eraser mr-1"></i> Seçimi Temizle</button>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-md border-4 border-cyan-300 w-full lg:w-56">
+                            <h4 class="font-black text-gray-800 border-b-2 border-gray-200 pb-2 mb-3 text-lg text-center">Hedef Kavramlar:</h4>
+                            <div id="ws-word-list" class="flex flex-wrap lg:flex-col gap-2"></div>
+                        </div>
+                    </div>
+                    <div id="ws-feedback" class="game-feedback">
+                        <i class="fas fa-trophy text-7xl text-yellow-500 mb-4 drop-shadow-md"></i>
+                        <h2 class="text-4xl font-black text-cyan-900">MÜTHİŞ DİKKAT!</h2>
+                        <p class="text-xl text-gray-600 mt-2 font-bold">Bu ünitenin tüm anahtar kavramlarını başarıyla ortaya çıkardın.</p>
+                        <button onclick="changeSlide(1)" class="mt-6 bg-cyan-600 hover:bg-cyan-700 text-white px-10 py-4 rounded-full font-bold text-xl shadow-lg">Devam Et <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. KONU: Cesaret ve Sadakat -->
+        <div class="slide" id="slide-3">
+            <div class="presentation-card">
+                <div class="card-header bg-blue-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-shield-alt text-blue-200 mr-2"></i>1. Sahabenin Cesareti ve Sadakati</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col h-full gap-4">
+                        <div class="quote-box border-blue-500 bg-blue-50">
+                            <div class="quote-title text-blue-700"><i class="fas fa-book-open"></i> Bilgi Kuşağı</div>
+                            <div class="quote-text text-blue-900">Sahabe: Peygamberimize (sav) gönülden iman etmiş ve ona sadakatle (içtenlikle) bağlanmış kimselerdir.</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
+                            <div class="info-box border-blue-300 items-start text-left">
+                                <h3 class="text-x-large font-bold text-blue-800 mb-4 border-b-4 border-blue-200 pb-2">Hz. Hatice ve Hz. Ebu Bekir</h3>
+                                <ul class="bullet-list blue-bullets">
+                                    <li><strong>Hz. Hatice:</strong> Peygamberimizi tereddütsüz doğrulayan ve ona tüm varlığıyla destek olan ilk kişidir.</li>
+                                    <li><strong>Hz. Ebu Bekir:</strong> Müşriklerin eziyetlerine karşı peygamberi canı pahasına korumuştur.</li>
+                                    <li>Miraç olayını hiç düşünmeden "O diyorsa doğrudur" diyerek onaylamış ve <strong>Sıddîk (doğrulayan)</strong> lakabını almıştır.</li>
+                                </ul>
+                            </div>
+                            <div class="info-box border-rose-300 items-start text-left bg-rose-50">
+                                <h3 class="text-x-large font-bold text-rose-800 mb-4 border-b-4 border-rose-200 pb-2">Cihat ve Cesaret</h3>
+                                <ul class="bullet-list rose-bullets">
+                                    <li><strong>Cihat:</strong> İslam'ı yaymak ve korumak için verilen mücadeledir.</li>
+                                    <li><strong>Ebu Talha (ra):</strong> Uhud Savaşı'nda kalkanıyla vücudunu Peygamberimize siper etmiş, üzerine gelen oklara elini uzatmıştır.</li>
+                                    <li><strong>Enes b. Nadr:</strong> "Uhud'un ardında cennet var, kokusunu alıyorum" diyerek şehit düşene kadar cesurca savaşmıştır.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK: Eşleştirme -->
+        <div class="slide" id="slide-4">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-puzzle-piece text-orange-200 mr-2"></i>Etkinlik 1: Sahabeyi Eşleştir</h2>
+                </div>
+                <div class="card-body bg-orange-50" id="match1-game-area">
+                    <p class="text-center text-xl font-bold text-orange-900 mb-6 bg-orange-200 p-4 rounded-xl border-2 border-orange-300">Örnek davranış sergileyen sahabiyi, yaptığı davranışla eşleştirin.</p>
+                    <div class="flex flex-row gap-6 h-full">
+                        <div class="flex flex-col gap-4 w-[40%]" id="left-col-1">
+                            <button class="match-btn left-btn" data-id="1"><i class="fas fa-female mr-2 text-rose-500"></i>Hz. Hatice</button>
+                            <button class="match-btn left-btn" data-id="2"><i class="fas fa-user-shield mr-2 text-blue-500"></i>Hz. Ebu Bekir</button>
+                            <button class="match-btn left-btn" data-id="3"><i class="fas fa-hand-paper mr-2 text-teal-500"></i>Ebu Talha</button>
+                            <button class="match-btn left-btn" data-id="4"><i class="fas fa-star mr-2 text-amber-500"></i>Enes b. Nadr</button>
+                        </div>
+                        <div class="flex flex-col gap-4 w-[60%]" id="right-col-1">
+                            <button class="match-btn right-btn" data-match="2">Miraç olayını anında tasdik edip "Sıddîk" lakabını alan sahabi.</button>
+                            <button class="match-btn right-btn" data-match="4">"Uhud'un ardında cennet var" diyerek şehit düşen sahabi.</button>
+                            <button class="match-btn right-btn" data-match="1">Peygamberimizi tereddütsüz ilk doğrulayan ve destekleyen kişi.</button>
+                            <button class="match-btn right-btn" data-match="3">Uhud'da kendi vücudunu Peygamberimize siper eden sahabi.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. KONU: Yardımlaşma ve Dayanışma (Îsâr) -->
+        <div class="slide" id="slide-5">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-hands-helping text-indigo-200 mr-2"></i>2. Yardımlaşma ve Dayanışma (Îsâr)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col h-full gap-4">
+                        <div class="quote-box border-indigo-500 bg-indigo-50">
+                            <div class="quote-title text-indigo-700"><i class="fas fa-star"></i> Îsâr Ne Demektir?</div>
+                            <div class="quote-text text-indigo-900">Kişinin, başkasının yararını ve ihtiyacını kendi çıkarına ve ihtiyacına tercih etmesidir. Din kardeşliğinin en üst seviyesidir.</div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
+                            <div class="info-box border-indigo-300 items-start text-left">
+                                <h3 class="text-x-large font-bold text-indigo-800 mb-4 border-b-4 border-indigo-200 pb-2">Ensar ve Muhacir Kardeşliği</h3>
+                                <ul class="bullet-list indigo-bullets">
+                                    <li>Mekke'den her şeyini bırakıp göç edenlere <strong>Muhacir</strong> denir.</li>
+                                    <li>Onlara Medine'de kucak açan ve mallarını paylaşanlara <strong>Ensar</strong> denir.</li>
+                                    <li>Ensar, kendi ihtiyacı olduğu hâlde yiyeceklerini ve evlerini muhacirlerle paylaşarak <strong>Îsâr</strong> yapmıştır.</li>
+                                </ul>
+                            </div>
+                            <div class="info-box border-teal-300 items-start text-left bg-teal-50">
+                                <h3 class="text-x-large font-bold text-teal-800 mb-4 border-b-4 border-teal-200 pb-2">Yermük'teki Muhteşem Fedakârlık</h3>
+                                <ul class="bullet-list teal-bullets">
+                                    <li>Yermük Savaşı'nda ağır yaralanan üç sahabi, kendilerine getirilen bir yudum suyu tam içecekken, diğerinin inlemesini duymuştur.</li>
+                                    <li>Her biri <strong>"Suyu ona götür"</strong> diyerek kendi ihtiyacından vazgeçmiş ve hepsi su içemeden şehit olmuştur.</li>
+                                    <li>Bu olay <strong>Îsâr'ın (diğergamlık)</strong> tarihteki en büyük örneklerindendir.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK: Doğru Yanlış Testi (Îsâr) -->
+        <div class="slide" id="slide-6">
+            <div class="presentation-card">
+                <div class="card-header bg-slate-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-check-double text-slate-200 mr-2"></i>Etkinlik 2: Doğru mu, Yanlış mı?</h2>
+                </div>
+                <div class="card-body bg-slate-50 relative flex flex-col justify-center items-center" id="tf1-game-area">
+                    <div id="tf1-feedback" class="tf-feedback">
+                        <div id="tf1-feedback-icon" class="text-8xl mb-6 text-center w-full block"></div>
+                        <h2 id="tf1-feedback-text" class="text-4xl md:text-5xl font-bold text-gray-800 mb-8 max-w-4xl leading-tight text-center block w-full"></h2>
+                        <button onclick="nextTf1()" class="bg-slate-800 text-white px-12 py-5 rounded-full text-3xl font-bold shadow-2xl hover:bg-slate-700 transition border-4 border-slate-600 mx-auto block mt-4">Sonraki İfade <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                    <div class="text-center mb-8 w-full">
+                        <span class="bg-slate-200 text-slate-800 px-8 py-3 rounded-full font-bold text-2xl shadow-md border-2 border-slate-300">Soru <span id="tf1-current-num">1</span> / 4</span>
+                    </div>
+                    <div class="bg-white border-4 border-slate-300 rounded-3xl p-12 w-full max-w-5xl shadow-2xl text-center mb-12 flex flex-col justify-center min-h-[300px]">
+                        <h3 id="tf1-question-text" class="text-3xl md:text-5xl font-bold text-gray-800 leading-tight">...</h3>
+                        <button id="tf1-restart" class="hidden bg-slate-800 text-white px-12 py-5 rounded-full text-3xl font-bold shadow-xl mx-auto mt-10 hover:bg-slate-700 transition" onclick="changeSlide(1)"><i class="fas fa-arrow-right mr-2"></i> Sonraki Konu</button>
+                    </div>
+                    <div class="flex flex-row w-full max-w-5xl gap-10" id="tf1-buttons-container">
+                        <button class="tf-btn true" onclick="checkTf1(true)"><i class="fas fa-check-circle text-5xl mr-2"></i> DOĞRU</button>
+                        <button class="tf-btn false" onclick="checkTf1(false)"><i class="fas fa-times-circle text-5xl mr-2"></i> YANLIŞ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. KONU: Azim ve Fedakârlık -->
+        <div class="slide" id="slide-7">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-fist-raised text-teal-200 mr-2"></i>3. Sahabenin Azmi ve Fedakârlığı</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col h-full gap-4">
+                        <div class="quote-box border-teal-500 bg-teal-50">
+                            <div class="quote-title text-teal-700"><i class="fas fa-users"></i> En Hayırlı Nesil</div>
+                            <div class="quote-text text-teal-900">Sahabe, İslam için canlarını ve mallarını feda ettikleri için bizzat Peygamberimiz tarafından "İnsanların en hayırlıları" olarak övülmüştür.</div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
+                            <div class="info-box border-teal-300 items-start text-left">
+                                <h3 class="text-x-large font-bold text-teal-800 mb-4 border-b-4 border-teal-200 pb-2">Şehitlik İçin Yarışanlar</h3>
+                                <ul class="bullet-list teal-bullets">
+                                    <li><strong>Sa'd b. Hayseme ve Babası:</strong> Bedir'e katılmak için birbirleriyle kura çekmiş, kazanan oğul şehit olmuştur.</li>
+                                    <li><strong>Umeyr (ra):</strong> Yaşı küçük olduğu için orduya alınmak istenmemiş, ancak ağlayıp yalvararak savaşa katılmış ve şehit düşmüştür.</li>
+                                    <li><strong>Mus'ab b. Umeyr:</strong> Uhud'da İslam sancağını kahramanca muhafaza ederek şehit olmuştur.</li>
+                                </ul>
+                            </div>
+                            <div class="info-box border-pink-300 items-start text-left bg-pink-50">
+                                <h3 class="text-x-large font-bold text-pink-800 mb-4 border-b-4 border-pink-200 pb-2">Hanım Sahabiler</h3>
+                                <ul class="bullet-list rose-bullets">
+                                    <li>Kadın sahabiler de büyük fedakârlıklar göstermiştir.</li>
+                                    <li><strong>Ümmü Ümare (ra):</strong> Uhud'da kılıç kuşanıp peygamberimizi korumak için cephede savaşmış ve yaralanmıştır.</li>
+                                    <li><strong>Ümmü Atıyye (ra):</strong> Yedi savaşa katılarak cephe gerisinde askerlere yemek yapmış, yaralıları tedavi etmiştir.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. KONU: Ashabıbedir -->
+        <div class="slide" id="slide-8">
+            <div class="presentation-card">
+                <div class="card-header bg-rose-800">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-medal text-rose-200 mr-2"></i>4. Ashabıbedir'in Fazileti (Hadis)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex flex-col h-full gap-4">
+                        <div class="quote-box border-rose-500 bg-rose-50">
+                            <div class="quote-title text-rose-700"><i class="fas fa-comment-dots"></i> Cebrail (as) ve Bedir Ehli</div>
+                            <div class="quote-text text-rose-900">Cebrâil (as), Peygamberimize gelerek "İçinizdeki Bedir ehlini nasıl görüyorsunuz?" diye sordu. Resulullah "Müslümanların en faziletlisi (en üstünü) olarak." buyurdu. Cebrâil (as) de "Biz de Bedir'e katılan melekleri en faziletlilerimiz olarak görüyoruz." dedi.</div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 flex-grow">
+                            <div class="info-box border-rose-300 items-start text-left bg-white">
+                                <h3 class="text-x-large font-bold text-rose-800 mb-4 border-b-4 border-rose-200 pb-2">Bedir: Bir Varlık Mücadelesi</h3>
+                                <ul class="bullet-list rose-bullets">
+                                    <li>Bedir, İslam tarihinin ilk büyük savaşıdır.</li>
+                                    <li>Sadece 300 kişi olan donanımsız İslam ordusu, 1000 kişilik donanımlı müşrik ordusuyla savaşmıştır.</li>
+                                    <li>Müslümanlar zor şartlara rağmen <strong>sabır ve cesaretle</strong> savaşmış, Allah da onlara <strong>melekleriyle</strong> yardım etmiş ve büyük bir zafer nasip olmuştur.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ETKİNLİK 3: Kelime Avı (Anagram) -->
+        <div class="slide" id="slide-9">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-sort-alpha-down text-indigo-200 mr-2"></i>Etkinlik 3: Şifreyi Çöz (Kelime Avı)</h2>
+                </div>
+                <div class="card-body bg-indigo-50 relative flex flex-col justify-center items-center" id="pass-game-area">
+                    <div class="text-center mb-6 w-full">
+                        <span class="bg-indigo-200 text-indigo-800 px-6 py-2 rounded-full font-bold text-2xl shadow-md border-2 border-indigo-300">Kelime <span id="pass-num">1</span> / 4</span>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border-4 border-indigo-400 w-full max-w-5xl text-center mb-10">
+                        <h3 id="pass-hint" class="text-3xl font-bold text-gray-800 leading-tight">...</h3>
+                    </div>
+                    
+                    <div id="pass-slots" class="flex flex-wrap gap-4 justify-center mb-10 w-full max-w-5xl"></div>
+                    <div id="pass-letters" class="flex flex-wrap gap-4 justify-center mb-10 w-full max-w-5xl"></div>
+                    
+                    <div class="flex gap-6 mt-auto">
+                        <button onclick="clearPass()" class="bg-slate-300 text-slate-800 px-8 py-4 rounded-full text-2xl font-bold hover:bg-slate-400 shadow-lg"><i class="fas fa-undo mr-2"></i> Harfleri Geri Al</button>
+                        <button id="pass-next-btn" onclick="nextPass()" class="hidden bg-indigo-600 text-white px-8 py-4 rounded-full text-2xl font-bold hover:bg-indigo-700 shadow-xl border-2 border-indigo-500">Sonraki <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIFIR BOŞLUKLU DEV NOT EKRANI -->
+        <div class="slide !p-0" id="slide-10">
+            <div class="w-full h-full bg-[#fefce8] flex flex-col relative overflow-hidden">
+                <!-- Üst Başlık Şeridi -->
+                <div class="bg-red-600 text-white flex justify-between items-center px-4 md:px-8 py-2 shadow-md z-20 w-full flex-shrink-0">
+                    <h2 class="text-lg md:text-2xl font-black uppercase tracking-wide"><i class="fas fa-pen-nib mr-2"></i> 5. Ünite: Kavramlar ve Özet</h2>
+                </div>
+                
+                <!-- İçerik Alanı: Tek Kaydırma Alanı -->
+                <div class="flex-grow overflow-y-auto px-4 md:px-8 pt-4 md:pt-6 pb-24 w-full scrollable-area">
+                    <div class="flex flex-col lg:flex-row gap-6 md:gap-10 w-full">
+                        
+                        <!-- SOL SÜTUN: KAVRAMLAR -->
+                        <div class="flex-1 flex flex-col gap-3 md:gap-4">
+                            <div class="bg-yellow-400 text-yellow-900 font-black text-lg md:text-2xl p-2 rounded-xl text-center shadow-md border-2 md:border-4 border-yellow-500 uppercase tracking-wide">
+                                <i class="fas fa-book-open mr-2"></i> Kavram Sözlüğü
+                            </div>
+                            
+                            <div class="bg-white border-2 md:border-4 border-yellow-400 rounded-2xl p-4 shadow-sm flex flex-col justify-center">
+                                <span class="font-black text-blue-700 text-lg md:text-2xl mb-1 border-b-2 border-gray-100 pb-1">Sahabe & Sadakat</span>
+                                <span class="text-base md:text-xl text-gray-800 font-bold leading-snug"><span class="text-blue-700">Sahabe:</span> Peygamberi gören, iman edenler.<br><span class="text-blue-700">Sadakat:</span> İçten ve gönülden bağlılık.</span>
+                            </div>
+
+                            <div class="bg-white border-2 md:border-4 border-yellow-400 rounded-2xl p-4 shadow-sm flex flex-col justify-center">
+                                <span class="font-black text-rose-700 text-lg md:text-2xl mb-1 border-b-2 border-gray-100 pb-1">Cihat & Îsâr</span>
+                                <span class="text-base md:text-xl text-gray-800 font-bold leading-snug"><span class="text-rose-700">Cihat:</span> İslam'ı yaymak için mücadele etmek.<br><span class="text-rose-700">Îsâr:</span> Başkasının ihtiyacını kendine tercih etmek.</span>
+                            </div>
+
+                            <div class="bg-white border-2 md:border-4 border-yellow-400 rounded-2xl p-4 shadow-sm flex flex-col justify-center">
+                                <span class="font-black text-indigo-700 text-lg md:text-2xl mb-1 border-b-2 border-gray-100 pb-1">Şehitlik & Gazilik</span>
+                                <span class="text-base md:text-xl text-gray-800 font-bold leading-snug"><span class="text-indigo-700">Şehitlik:</span> Din ve vatan uğruna can vermek.<br><span class="text-indigo-700">Gazilik:</span> Savaşa katılıp sağ dönmek.</span>
+                            </div>
+
+                            <div class="bg-white border-2 md:border-4 border-yellow-400 rounded-2xl p-4 shadow-sm flex flex-col justify-center">
+                                <span class="font-black text-teal-700 text-lg md:text-2xl mb-1 border-b-2 border-gray-100 pb-1">Muhacir & Ensar</span>
+                                <span class="text-base md:text-xl text-gray-800 font-bold leading-snug"><span class="text-teal-700">Muhacir:</span> Mekke'den Medine'ye göç edenler.<br><span class="text-teal-700">Ensar:</span> Onlara kucak açan Medineliler.</span>
+                            </div>
+                        </div>
+
+                        <!-- SAĞ SÜTUN: ÖZET CÜMLELER -->
+                        <div class="flex-1 flex flex-col gap-3 md:gap-4">
+                            <div class="bg-blue-600 text-white font-black text-lg md:text-2xl p-2 rounded-xl text-center shadow-md border-2 md:border-4 border-blue-800 uppercase tracking-wide">
+                                <i class="fas fa-list-ul mr-2"></i> Konu Özeti
+                            </div>
+
+                            <div class="bg-white border-2 md:border-4 border-blue-400 rounded-2xl p-4 shadow-sm flex flex-col justify-center">
+                                <ul class="list-none space-y-3 md:space-y-4 m-0 p-0">
+                                    <li class="flex items-start gap-3 border-b border-gray-100 pb-3">
+                                        <i class="fas fa-check-circle text-blue-600 text-xl md:text-2xl mt-1"></i>
+                                        <p class="text-base md:text-xl text-gray-800 font-bold leading-snug"><span class="text-blue-700">Sadakat:</span> Hz. Ebu Bekir, miraç olayında hiç tereddüt etmeden peygamberi onaylamış ve "Sıddîk" olmuştur.</p>
+                                    </li>
+                                    <li class="flex items-start gap-3 border-b border-gray-100 pb-3">
+                                        <i class="fas fa-check-circle text-blue-600 text-xl md:text-2xl mt-1"></i>
+                                        <p class="text-base md:text-xl text-gray-800 font-bold leading-snug"><span class="text-blue-700">Îsâr (Diğergamlık):</span> Yermük'te üç yaralı sahabi, suyu birbirine ikram ederek şehit olmuşlardır.</p>
+                                    </li>
+                                    <li class="flex items-start gap-3 border-b border-gray-100 pb-3">
+                                        <i class="fas fa-check-circle text-blue-600 text-xl md:text-2xl mt-1"></i>
+                                        <p class="text-base md:text-xl text-gray-800 font-bold leading-snug"><span class="text-blue-700">Cesaret:</span> Ebu Talha Uhud'da kalkan olup oklara elini uzatmış, Enes b. Nadr korkusuzca savaşmıştır.</p>
+                                    </li>
+                                    <li class="flex items-start gap-3 border-b border-gray-100 pb-3">
+                                        <i class="fas fa-check-circle text-blue-600 text-xl md:text-2xl mt-1"></i>
+                                        <p class="text-base md:text-xl text-gray-800 font-bold leading-snug"><span class="text-blue-700">Kadınların Azmi:</span> Ümmü Ümare Uhud'da savaşmış, Ümmü Atıyye cephe gerisinde görev almıştır.</p>
+                                    </li>
+                                    <li class="flex items-start gap-3 border-b border-gray-100 pb-3">
+                                        <i class="fas fa-check-circle text-blue-600 text-xl md:text-2xl mt-1"></i>
+                                        <p class="text-base md:text-xl text-gray-800 font-bold leading-snug"><span class="text-blue-700">Ashabıbedir:</span> Bedir'e katılanlar melekler ve peygamber tarafından "en faziletliler" olarak övülmüştür.</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEĞERLENDİRME KAPAK -->
+        <div class="slide" id="slide-11">
+            <div class="presentation-card bg-indigo-900 text-white justify-center items-center text-center p-6 md:p-12 border-4 md:border-8 border-indigo-700">
+                <i class="fas fa-gamepad text-7xl md:text-9xl text-green-400 mb-6 opacity-90 drop-shadow-lg"></i>
+                <h2 class="text-2xl md:text-5xl tracking-widest text-indigo-200 mb-2 uppercase font-bold">Özet Bitti!</h2>
+                <h1 class="text-huge font-bold mb-6 leading-tight text-white drop-shadow-md">Ölçme ve Değerlendirme</h1>
+                <div class="bg-indigo-800/80 p-4 md:p-8 rounded-2xl border border-indigo-600/50 max-w-4xl shadow-inner">
+                    <p class="text-xl md:text-3xl italic font-semibold text-indigo-100">Öğrendiklerimizi interaktif oyunlar ve testlerle pekiştirelim. Hazırsanız başlayalım!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOŞLUK DOLDURMA -->
+        <div class="slide" id="slide-12">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-pen text-teal-200 mr-2 md:mr-4"></i>Bölüm A: Boşluk Doldurma</h2>
+                </div>
+                <div class="card-body bg-slate-50 flex flex-col justify-start" id="fill-game-area">
+                    <p class="text-center text-sm md:text-xl text-teal-800 mb-4 md:mb-6 font-bold p-2 md:p-3 bg-teal-100 rounded-xl border border-teal-200">Aşağıdaki kelimelere dokun, sonra yerleştireceğin boşluğa dokun!</p>
+                    
+                    <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6 md:mb-8" id="fill-word-bank">
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Îsâr')">Îsâr</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Cihat')">Cihat</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Ensar')">Ensar</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Sahabe')">Sahabe</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Şehitlik')">Şehitlik</button>
+                    </div>
+
+                    <div class="bg-white p-4 md:p-8 rounded-2xl border-4 border-gray-200 shadow-md flex flex-col gap-4 md:gap-6 text-base md:text-2xl text-gray-800 font-semibold overflow-y-auto flex-grow scrollable-area">
+                        <p class="leading-relaxed">1. Allah’a (cc) gönülden iman etmiş, Hz. Peygamber’e sadakatle tabi olmuş, onun getirdiği dini en iyi şekilde öğrenmiş kimselere <span class="fill-slot" data-ans="Sahabe" onclick="placeWord(this)">________</span> denir.</p>
+                        <p class="leading-relaxed">2. İslam dininin daha geniş coğrafyalara yayılması ve korunması için verilen büyük mücadeleye <span class="fill-slot" data-ans="Cihat" onclick="placeWord(this)">________</span> denir.</p>
+                        <p class="leading-relaxed">3. Allah yolunda, din, vatan, namus, mal ve can güvenliği gibi kutsal değerlerin uğruna can vermeye <span class="fill-slot" data-ans="Şehitlik" onclick="placeWord(this)">________</span> denir.</p>
+                        <p class="leading-relaxed">4. Mekke'den Medine'ye göç eden muhacir kardeşlerine hiç düşünmeden ellerindeki imkânları paylaşan ve onlara kol kanat geren Medineli Müslümanlara <span class="fill-slot" data-ans="Ensar" onclick="placeWord(this)">________</span> denir.</p>
+                        <p class="leading-relaxed">5. Kişinin, kendi ihtiyacı varken başkasının yararını kendi çıkarına tercih etmesine <span class="fill-slot" data-ans="Îsâr" onclick="placeWord(this)">________</span> denir.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KAVRAM EŞLEŞTİRME -->
+        <div class="slide" id="slide-13">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-puzzle-piece text-orange-200 mr-2 md:mr-4"></i>Bölüm B: Kavram Eşleştirme</h2>
+                </div>
+                <div class="card-body bg-orange-50 relative" id="match-eval-area">
+                    <p class="text-center text-sm md:text-xl text-orange-800 mb-4 md:mb-6 font-bold p-2 md:p-3 bg-orange-100 rounded-xl border border-orange-200">Sahabileri ve kavramları ilgili olaylarla eşleştirin.</p>
+                    <div class="flex flex-col md:flex-row gap-4 md:gap-8 h-full overflow-y-auto pb-4 scrollable-area">
+                        <div class="flex flex-col gap-2 md:gap-4 w-full md:w-[35%]" id="left-col-eval">
+                            <button class="match-btn left-btn" data-id="ebubekir">Hz. Ebu Bekir</button>
+                            <button class="match-btn left-btn" data-id="musab">Mus'ab b. Umeyr</button>
+                            <button class="match-btn left-btn" data-id="ebutalha">Ebu Talha</button>
+                            <button class="match-btn left-btn" data-id="ummumare">Ümmü Ümare</button>
+                            <button class="match-btn left-btn" data-id="gazilik">Gazilik</button>
+                        </div>
+                        <div class="flex flex-col gap-2 md:gap-4 w-full md:w-[65%]" id="right-col-eval">
+                            <button class="match-btn right-btn" data-match="gazilik">İslam dinini korumak için savaşa gidip büyük yararlılıklar gösterip sağ olarak dönmektir.</button>
+                            <button class="match-btn right-btn" data-match="ummumare">Uhud Savaşı'nda kılıç kullanıp yay çekerek Hz. Peygamber'i korumak için savaşan hanım sahabidir.</button>
+                            <button class="match-btn right-btn" data-match="ebubekir">Miraç olayını duyar duymaz "O söylüyorsa doğrudur" diyerek Sıddîk unvanını alan sahabidir.</button>
+                            <button class="match-btn right-btn" data-match="ebutalha">Uhud Savaşı'nda kalkanıyla vücudunu Hz. Peygamber'e siper eden ve okları eliyle karşılayan sahabidir.</button>
+                            <button class="match-btn right-btn" data-match="musab">Uhud'da İslam sancağını kahramanca muhafaza eden ve onu düşmana teslim etmemek için şehit düşen sahabidir.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOĞRU / YANLIŞ -->
+        <div class="slide" id="slide-14">
+            <div class="presentation-card">
+                <div class="card-header bg-cyan-700">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-check-double text-cyan-200 mr-2 md:mr-4"></i>Bölüm C: Doğru mu, Yanlış mı?</h2>
+                </div>
+                <div class="card-body bg-cyan-50 relative flex flex-col justify-center items-center" id="tf-eval-area">
+                    
+                    <div id="tfeval-feedback" class="tf-feedback">
+                        <div id="tfeval-feedback-icon" class="text-6xl md:text-8xl mb-2 md:mb-4"></div>
+                        <h2 id="tfeval-feedback-text" class="text-xl md:text-4xl font-bold text-gray-800 mb-4 md:mb-6 leading-tight"></h2>
+                        <button onclick="nextTfEval()" class="bg-cyan-600 text-white px-6 md:px-10 py-2 md:py-4 rounded-full text-base md:text-2xl font-bold hover:bg-cyan-700 shadow-xl">Sonraki İfade <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+
+                    <div class="text-center mb-2 md:mb-6 w-full">
+                        <span class="bg-cyan-200 text-cyan-800 px-4 md:px-6 py-1 md:py-2 rounded-full font-bold text-sm md:text-2xl shadow-sm border border-cyan-300">Soru <span id="tfeval-current-num">1</span> / 5</span>
+                    </div>
+
+                    <div class="bg-white border-2 md:border-4 border-cyan-200 rounded-2xl md:rounded-3xl p-5 md:p-12 w-full max-w-5xl shadow-md md:shadow-xl text-center mb-6 md:mb-10 flex flex-col justify-center min-h-[150px] md:min-h-[300px]">
+                        <h3 id="tfeval-question-text" class="text-xl md:text-4xl font-bold text-gray-800 leading-tight">...</h3>
+                    </div>
+
+                    <div class="flex flex-row w-full max-w-5xl gap-4 md:gap-10" id="tfeval-buttons-container">
+                        <button class="tf-btn true" onclick="checkTfEval(true)"><i class="fas fa-check-circle md:mr-3"></i> DOĞRU</button>
+                        <button class="tf-btn false" onclick="checkTfEval(false)"><i class="fas fa-times-circle md:mr-3"></i> YANLIŞ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÇOKTAN SEÇMELİ Soru 1 (Metinli) -->
+        <div class="slide" id="slide-15">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-book-reader text-orange-200 mr-2 md:mr-4"></i>Bölüm D: Okuduğunu Anlama (Soru 1)</h2>
+                </div>
+                <div class="card-body bg-slate-50 flex flex-col justify-start items-center p-4 md:p-8 overflow-y-auto scrollable-area">
+                    
+                    <div class="bg-yellow-50 border-4 border-yellow-300 rounded-2xl p-4 md:p-6 shadow-md mb-6 w-full max-w-5xl">
+                        <p class="text-sm md:text-xl text-gray-800 leading-relaxed font-semibold">
+                            Hz. Peygamber, Bedir Savaşı öncesi kalabalık ve donanımlı müşrik ordusu karşısında nasıl bir strateji izleyecekleri konusunda ashabının fikirlerini aldı. Bu toplantıda Mikdâd b. Amr ayağa kalkarak şunları söyledi: <br><br>
+                            — Ey Allah’ın Resulü! Allah sana ne emrettiyse onu yap. Biz seninle beraberiz. "Sen ve Rabb’in gidin ve birlikte savaşın, biz burada oturacağız." demeyiz. Biz sana ancak "Düşman üzerine yürü, biz de seninle beraberiz!" diyoruz.<br><br>
+                            Ensarı temsilen Sa’d b. Muâz da "Ey Allah’ın Resulü! Seni hak üzere gönderen Allah’a yemin olsun ki sen denize dalacak olsan biz de seninle birlikte dalarız…" dedi.
+                        </p>
+                    </div>
+
+                    <div class="bg-white border-2 md:border-4 border-gray-300 rounded-xl md:rounded-3xl p-6 shadow-md w-full max-w-5xl">
+                        <h3 class="text-lg md:text-3xl font-bold text-gray-800 mb-6 leading-tight">1. Metinden çıkarılabilecek en kapsamlı yargı aşağıdakilerden hangisidir?</h3>
+                        <div class="grid grid-cols-1 gap-3" id="q1-opts">
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q1-expl')">A) Ensar fedakâr davranmıştır.</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, true, 'q1-expl')">B) Ashabıbedir cesur ve kararlı davranmıştır.</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q1-expl')">C) Muhacirler, Mekkelilerle barış yollarını aramıştır.</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q1-expl')">D) Bazı peygamberlerin ümmetleri savaşta isteksiz davranmıştır.</button>
+                        </div>
+                        <div id="q1-expl" class="quiz-expl mt-4"><i class="fas fa-info-circle mr-2"></i>Cevap B. Metinde hem Muhacirlerin (Mikdad) hem de Ensar'ın (Sa'd) savaştan kaçmayıp cesaret ve kararlılıkla peygamberin yanında durdukları vurgulanmaktadır.</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ÇOKTAN SEÇMELİ Soru 2 -->
+        <div class="slide" id="slide-16">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-lg md:text-3xl font-bold"><i class="fas fa-book-reader text-orange-200 mr-2 md:mr-4"></i>Bölüm D: Okuduğunu Anlama (Soru 2)</h2>
+                </div>
+                <div class="card-body bg-slate-50 flex flex-col justify-start items-center p-4 md:p-8 overflow-y-auto scrollable-area">
+                    
+                    <div class="bg-yellow-50 border-4 border-yellow-300 rounded-2xl p-4 md:p-6 shadow-md mb-6 w-full max-w-5xl">
+                        <p class="text-sm md:text-xl text-gray-800 leading-relaxed font-semibold">
+                            İkinci Akabe Biatı’nda Medineli Müslümanlar Allah Resulü'ne (sav) Medine’ye hicret ettiğinde kendisini; canlarını, mallarını ve ailelerini korudukları gibi koruyacaklarına, zor zamanlarda da ona itaat edeceklerine yemin ettiler. 
+                            <br><br>
+                            Bir önceki metinde ensarı temsilen konuşan Sa’d b. Muâz: "Seni hak üzere gönderen Allah’a yemin olsun ki sen denize dalacak olsan biz de seninle birlikte dalarız…" demişti.
+                        </p>
+                    </div>
+
+                    <div class="bg-white border-2 md:border-4 border-gray-300 rounded-xl md:rounded-3xl p-6 shadow-md w-full max-w-5xl">
+                        <h3 class="text-lg md:text-3xl font-bold text-gray-800 mb-6 leading-tight">2. Sa’d b. Muâz’ın söyledikleri, İkinci Akabe Biatı’nda vermiş oldukları hangi sözü doğrudan desteklemektedir?</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="q2-opts">
+                            <button class="quiz-opt" onclick="checkQuiz(this, true, 'q2-expl')">A) Hz. Peygamber’i her durumda koruma ve itaat etme</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q2-expl')">B) Muhacirlere maddi-manevi destek verme</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q2-expl')">C) İyiliği emredip kötülükten alıkoyma</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q2-expl')">D) İslam’ı herkese ulaştırmaya gayret etme</button>
+                        </div>
+                        <div id="q2-expl" class="quiz-expl mt-4"><i class="fas fa-info-circle mr-2"></i>Cevap A. "Sen denize dalacak olsan biz de dalarız" ifadesi, zor zamanlarda bile onu koruma ve ona kayıtsız şartsız itaat etme (sadakat) sözünü yansıtmaktadır.</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- BİTİŞ EKRANI -->
+        <div class="slide" id="slide-17">
+            <div class="presentation-card bg-emerald-800 text-white justify-center items-center text-center p-6 border-8 border-emerald-600">
+                <i class="fas fa-trophy text-7xl md:text-9xl text-yellow-400 mb-4 opacity-90 drop-shadow-lg"></i>
+                <h1 class="text-huge font-bold mb-4 leading-tight text-white">Harika Bir İş Çıkardınız!</h1>
+                <p class="text-x-large text-emerald-200 max-w-5xl mx-auto">"Sahabeden Örnek Davranışlar" ünitesinin konu anlatımlarını ve tüm değerlendirme sorularını kusursuzca tamamladınız.</p>
+                <button onclick="goToSlide(0)" class="mt-8 bg-emerald-600 text-white px-8 py-4 rounded-full text-2xl md:text-4xl font-bold shadow-xl border-4 border-emerald-400 hover:bg-emerald-500 transition"><i class="fas fa-home mr-2"></i> En Başa Dön</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Yüzen, Sürüklenebilir Şeffaf Araç Çubuğu -->
+    <div id="toolbar" class="toolbar-pill">
+        <div class="drag-handle" id="toolbar-drag" title="Sürükle"><i class="fas fa-grip-vertical"></i></div>
+        <div class="toolbar-content" id="toolbar-content">
+            <button class="nav-btn zoom-btn fs-btn" onclick="toggleFullScreen()" title="Tam Ekran"><i id="fs-icon" class="fas fa-expand"></i></button>
+            <div class="divider" style="width: 2px; height: 1.5rem; background: #cbd5e1; margin: 0 0.2rem;"></div>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(-5)" title="Küçült"><i class="fas fa-search-minus"></i></button>
+            <button class="nav-btn zoom-btn font-bold font-sans" onclick="resetZoom()" title="Orijinal Boyut">A</button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(5)" title="Büyüt"><i class="fas fa-search-plus"></i></button>
+            <div class="divider" style="width: 2px; height: 1.5rem; background: #cbd5e1; margin: 0 0.2rem;"></div>
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled><i class="fas fa-chevron-left"></i></button>
+            <div class="slide-counter" id="slide-counter-text">1 / 18</div>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <button class="minimize-btn" onclick="toggleToolbar()" title="Küçült/Büyüt"><i id="toolbar-toggle-icon" class="fas fa-compress-alt"></i></button>
+    </div>
+
+    <script>
+        // --- 1. SLAYT VE ZOOM KONTROLLERİ ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentZoom = 100;
+
+        function changeZoom(amount) {
+            currentZoom += amount;
+            if(currentZoom > 150) currentZoom = 150;
+            if(currentZoom < 70) currentZoom = 70;
+            document.documentElement.style.fontSize = currentZoom + '%';
+        }
+        function resetZoom() { currentZoom = 100; document.documentElement.style.fontSize = '100%'; }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {});
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById('fs-icon');
+            if (document.fullscreenElement) {
+                icon.classList.replace('fa-expand', 'fa-compress');
+                icon.parentElement.classList.add('text-green-600');
+            } else {
+                icon.classList.replace('fa-compress', 'fa-expand');
+                icon.parentElement.classList.remove('text-green-600');
+            }
+        });
+
+        function updateControls() {
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            document.getElementById('slide-counter-text').innerText = `${currentSlide + 1} / ${totalSlides}`;
+            
+            // Oyun tetikleyicileri
+            if(currentSlide === 1) initCrypto();
+            if(currentSlide === 2) renderWordSearch();
+            if(currentSlide === 8) initPass();
+            if(currentSlide === 12) loadTfEval();
+        }
+
+        function goToSlide(index) {
+            if (index === currentSlide) return;
+            const direction = index > currentSlide ? 'right' : 'left';
+            const outAnim = direction === 'right' ? 'slide-out-left' : 'slide-out-right';
+            const inAnim = direction === 'right' ? 'slide-in-right' : 'slide-in-left';
+
+            slides[currentSlide].classList.add('active', outAnim);
+            slides[index].classList.add('active', inAnim);
+
+            let oldIndex = currentSlide;
+            currentSlide = index;
+            updateControls();
+
+            setTimeout(() => {
+                slides[oldIndex].className = 'slide';
+                slides[currentSlide].className = 'slide active';
+            }, 400);
+        }
+
+        function changeSlide(step) {
+            const newIndex = currentSlide + step;
+            if (newIndex >= 0 && newIndex < totalSlides) goToSlide(newIndex);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                if (e.key === 'ArrowRight' || e.key === 'Space') { e.preventDefault(); changeSlide(1); }
+                else if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+            }
+        });
+
+        // --- 2. ARAÇ ÇUBUĞU SÜRÜKLEME ---
+        function toggleToolbar() {
+            const toolbar = document.getElementById('toolbar');
+            const icon = document.getElementById('toolbar-toggle-icon');
+            if (toolbar.classList.contains('collapsed')) { 
+                toolbar.classList.remove('collapsed'); icon.className = 'fas fa-compress-alt';
+            } else { 
+                toolbar.classList.add('collapsed'); icon.className = 'fas fa-expand-arrows-alt'; 
+            }
+        }
+
+        const toolbar = document.getElementById('toolbar');
+        const handle = document.getElementById('toolbar-drag');
+        let isDragging = false, startX, startY, initialLeft, initialTop;
+
+        handle.addEventListener('mousedown', dragStart); document.addEventListener('mousemove', drag); document.addEventListener('mouseup', dragEnd);
+        handle.addEventListener('touchstart', dragStart, { passive: false }); document.addEventListener('touchmove', drag, { passive: false }); document.addEventListener('touchend', dragEnd);
+
+        function dragStart(e) {
+            if (e.target.closest('.minimize-btn')) return; 
+            e.preventDefault(); isDragging = true;
+            if (!toolbar.classList.contains('is-dragged')) {
+                const rect = toolbar.getBoundingClientRect();
+                toolbar.classList.add('is-dragged');
+                toolbar.style.left = rect.left + 'px'; toolbar.style.top = rect.top + 'px';
+                toolbar.style.bottom = 'auto'; toolbar.style.right = 'auto';
+            }
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            startX = clientX; startY = clientY;
+            initialLeft = toolbar.offsetLeft; initialTop = toolbar.offsetTop;
+        }
+
+        function drag(e) {
+            if (!isDragging) return; e.preventDefault();
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            let newLeft = initialLeft + (clientX - startX);
+            let newTop = initialTop + (clientY - startY);
+            
+            const rect = toolbar.getBoundingClientRect();
+            if (newLeft < 0) newLeft = 0; if (newTop < 0) newTop = 0;
+            if (newLeft + rect.width > window.innerWidth) newLeft = window.innerWidth - rect.width;
+            if (newTop + rect.height > window.innerHeight) newTop = window.innerHeight - rect.height;
+            toolbar.style.left = newLeft + 'px'; toolbar.style.top = newTop + 'px';
+        }
+        function dragEnd() { isDragging = false; }
+
+        // --- ORTAK: KONFETİ EFEKTİ ---
+        function fireConfetti(areaId, baseCount = 50) {
+            const area = document.getElementById(areaId);
+            if(!area) return;
+            const colors = ['#fcd34d', '#34d399', '#60a5fa', '#f472b6', '#a78bfa'];
+            for (let i = 0; i < baseCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                if (Math.random() > 0.5) confetti.style.borderRadius = '50%';
+                area.appendChild(confetti);
+                const duration = Math.random() * 3 + 2; 
+                const delay = Math.random() * 0.2;
+                confetti.animate([
+                    { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${Math.random()*200 - 100}px, ${area.offsetHeight}px, 0) rotate(${Math.random()*720}deg)`, opacity: 0 }
+                ], { duration: duration * 1000, delay: delay * 1000, fill: 'forwards' });
+                setTimeout(() => confetti.remove(), (duration + delay) * 1000);
+            }
+        }
+
+        // ==========================================
+        // YENİ OYUNLAR (KRİPTOGRAM VE KELİME BULMACA)
+        // ==========================================
+
+        // 1. KRİPTOGRAM (ŞİFRE KIRICI)
+        const cryptoTarget = "SİZ İNSANLAR İÇİN ORTAYA ÇIKARILMIŞ EN HAYIRLI ÜMMETSİNİZ";
+        // Benzersiz karakterleri çıkar ve onlara karışık kodlar ata
+        const uniqueChars = [...new Set(cryptoTarget.replace(/\s/g, '').split(''))];
+        const cryptoCodes = {};
+        
+        let startCode = 101;
+        // Fisher-Yates karıştırma
+        let shuffledChars = [...uniqueChars];
+        for (let i = shuffledChars.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledChars[i], shuffledChars[j]] = [shuffledChars[j], shuffledChars[i]];
+        }
+        
+        shuffledChars.forEach(char => {
+            cryptoCodes[char] = startCode;
+            startCode += 13; // Benzer ama sıralı olmayan görünüm için
+        });
+
+        let isCryptoInitialized = false;
+
+        function initCrypto() {
+            if(isCryptoInitialized) return;
+            const grid = document.getElementById('alpha-grid-container');
+            
+            // Alfabetik sıraya göre gridi doldur (öğrenci ararken kolay bulsun diye tablo alfabetik, ama sayılar karışık)
+            const sortedChars = [...uniqueChars].sort((a, b) => a.localeCompare(b, 'tr'));
+            
+            sortedChars.forEach(l => {
+                const cell = document.createElement('div');
+                cell.className = "alpha-cell";
+                cell.innerHTML = `<span class='text-indigo-700 block text-base md:text-xl font-black leading-none mb-1'>${cryptoCodes[l]}</span><span class='text-xl md:text-3xl text-slate-800 font-black leading-none'>${l}</span>`;
+                grid.appendChild(cell);
+            });
+
+            const sentenceWords = cryptoTarget.split(" ");
+            const wordContainer = document.getElementById('crypto-word-container');
+            
+            sentenceWords.forEach(word => {
+                const wDiv = document.createElement('div'); wDiv.className = "flex gap-0.5";
+                [...word].forEach(char => {
+                    const cDiv = document.createElement('div'); cDiv.className = "crypto-box";
+                    cDiv.innerText = cryptoCodes[char];
+                    cDiv.dataset.l = char;
+                    wDiv.appendChild(cDiv);
+                });
+                wordContainer.appendChild(wDiv);
+            });
+            isCryptoInitialized = true;
+        }
+
+        function revealCrypto() {
+            const btn = document.getElementById('crypto-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Çözülüyor...';
+            
+            const boxes = document.querySelectorAll('.crypto-box');
+            boxes.forEach((box, index) => {
+                setTimeout(() => {
+                    box.innerText = box.getAttribute('data-l');
+                    box.classList.add('revealed');
+                }, index * 60); 
+            });
+
+            setTimeout(() => {
+                document.getElementById('crypto-feedback').style.display = 'block';
+                fireConfetti('crypto-area', 80);
+                btn.style.display = 'none';
+            }, boxes.length * 60 + 400);
+        }
+
+        // 2. KELİME BULMACASI (12x12 - İlk ve Son Harf Mekaniği)
+        const wsWords = ["SAHABE", "SADAKAT", "ENSAR", "MUHACİR", "CİHAT", "İSAR", "ŞEHİTLİK", "GAZİLİK"];
+        const wsGridData = [
+            ['R','İ','C','A','H','U','M','X','A','B','C','D'],
+            ['E','K','İ','L','T','İ','H','E','Ş','Y','Z','F'],
+            ['S','A','D','A','K','A','T','X','Q','W','E','R'],
+            ['L','X','Y','T','X','M','S','A','H','A','B','E'],
+            ['K','İ','L','İ','Z','A','G','V','N','B','M','P'],
+            ['X','Y','Z','A','B','C','D','E','F','G','H','I'],
+            ['S','A','H','A','B','E','K','L','İ','T','E','Ş'],
+            ['X','Y','E','N','S','A','R','A','B','C','D','E'],
+            ['R','İ','S','A','T','R','X','M','U','H','A','C'],
+            ['X','Z','R','A','S','İ','B','V','C','İ','H','A'],
+            ['C','İ','H','A','T','Q','W','E','S','A','H','A'],
+            ['X','Y','Z','A','B','C','D','E','F','G','H','I']
+        ];
+        // Note: I manually embedded words in different directions to ensure they exist.
+        // M-U-H-A-C-İ-R (Reverse Horizontal Row 0), Ş-E-H-İ-T-L-İ-K (Reverse Horiz Row 1)
+        // S-A-D-A-K-A-T (Row 2), S-A-H-A-B-E (Row 3 & Row 6)
+        // G-A-Z-İ-L-İ-K (Reverse Row 4), E-N-S-A-R (Row 7)
+        // İ-S-A-R (Reverse Row 8), C-İ-H-A-T (Row 10)
+
+        let wsFirstNode = null;
+        let wsCellsData = [];
+        let wsFoundCount = 0;
+        let isWsInitialized = false;
+
+        function renderWordSearch() {
+            if(isWsInitialized) return;
+            const container = document.getElementById('ws-grid');
+            const list = document.getElementById('ws-word-list');
+            
+            wsWords.forEach(w => { 
+                const s = document.createElement('span'); 
+                s.id = 'ws-l-'+w; 
+                s.className = 'ws-word-item'; 
+                s.innerText = w; 
+                list.appendChild(s); 
+            });
+
+            for(let r=0; r<12; r++){
+                wsCellsData[r] = [];
+                for(let c=0; c<12; c++){
+                    const div = document.createElement('div'); 
+                    div.className = "ws-cell"; 
+                    div.innerText = wsGridData[r][c];
+                    div.onclick = () => handleWsClick(r, c);
+                    wsCellsData[r][c] = div;
+                    container.appendChild(div);
+                }
+            }
+            isWsInitialized = true;
+        }
+
+        function handleWsClick(r, c) {
+            const cell = wsCellsData[r][c];
+            if(cell.classList.contains('found')) return; 
+
+            if(!wsFirstNode) {
+                // İlk tıklama
+                wsFirstNode = {r: r, c: c, el: cell};
+                cell.classList.add('selected');
+            } else {
+                // İkinci tıklama
+                let endNode = {r: r, c: c, el: cell};
+                checkWsPath(wsFirstNode, endNode);
+                
+                // Seçimi sıfırla
+                wsFirstNode.el.classList.remove('selected');
+                wsFirstNode = null;
+            }
+        }
+
+        function checkWsPath(start, end) {
+            if(start.r === end.r && start.c === end.c) return;
+
+            let dr = end.r - start.r;
+            let dc = end.c - start.c;
+            
+            // Düz bir çizgi mi kontrol et (Yatay, Dikey, Çapraz)
+            if(dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) {
+                showWrongWs(start, end); return;
+            }
+
+            let steps = Math.max(Math.abs(dr), Math.abs(dc));
+            let stepR = dr === 0 ? 0 : dr / steps;
+            let stepC = dc === 0 ? 0 : dc / steps;
+
+            let wordStr = "";
+            let pathCells = [];
+
+            for(let i=0; i<=steps; i++) {
+                let currentR = start.r + (i * stepR);
+                let currentC = start.c + (i * stepC);
+                wordStr += wsGridData[currentR][currentC];
+                pathCells.push(wsCellsData[currentR][currentC]);
+            }
+
+            let revWord = wordStr.split('').reverse().join('');
+            
+            let matchedWord = null;
+            if(wsWords.includes(wordStr)) matchedWord = wordStr;
+            else if(wsWords.includes(revWord)) matchedWord = revWord;
+
+            if(matchedWord) {
+                const listEl = document.getElementById('ws-l-'+matchedWord);
+                if(!listEl.classList.contains('found')) {
+                    // Doğru!
+                    pathCells.forEach(cEl => {
+                        cEl.classList.add('found');
+                        cEl.classList.remove('selected');
+                    });
+                    listEl.classList.add('found');
+                    wsFoundCount++;
+                    if(wsFoundCount === wsWords.length) { 
+                        document.getElementById('ws-feedback').style.display = 'flex'; 
+                        fireConfetti('ws-area', 100); 
+                    }
+                }
+            } else {
+                showWrongWs(start, end);
+            }
+        }
+
+        function showWrongWs(start, end) {
+            start.el.classList.add('bg-red-500', 'text-white');
+            end.el.classList.add('bg-red-500', 'text-white');
+            setTimeout(() => {
+                start.el.classList.remove('bg-red-500', 'text-white');
+                end.el.classList.remove('bg-red-500', 'text-white');
+            }, 500);
+        }
+
+        function clearWsSelection() { 
+            if(wsFirstNode) {
+                wsFirstNode.el.classList.remove('selected');
+                wsFirstNode = null;
+            }
+        }
+
+        // ==========================================
+        // DİĞER ETKİNLİK MANTIKLARI
+        // ==========================================
+
+        // ETKİNLİK 1 & 2: BOŞLUK DOLDURMA & EŞLEŞTİRME (ORTAK MANTIK)
+        let selectedFillWord = null; let selectedFillBtn = null; let correctFillCount = 0;
+        function selectWord(btn, word) {
+            if(selectedFillBtn) selectedFillBtn.classList.remove('selected');
+            selectedFillBtn = btn; selectedFillWord = word; btn.classList.add('selected');
+        }
+        function placeWord(slot) {
+            if(!selectedFillWord) return;
+            if(slot.getAttribute('data-ans') === selectedFillWord) {
+                slot.innerText = selectedFillWord; slot.classList.add('border-none', 'text-emerald-600', 'font-black'); slot.classList.remove('border-b-4', 'border-dashed');
+                selectedFillBtn.style.visibility = "hidden"; selectedFillWord = null; selectedFillBtn = null; correctFillCount++;
+                if(correctFillCount === 5) fireConfetti('fill-game-area', 80);
+            } else {
+                const oText = slot.innerText; slot.style.color = "#ef4444"; slot.innerText = "Yanlış";
+                setTimeout(() => { slot.style.color = ""; slot.innerText = oText; }, 600);
+            }
+        }
+
+        function setupMatchGame(col1Id, col2Id, areaId, targetMatches) {
+            const leftBtns = document.getElementById(col1Id).querySelectorAll('.left-btn');
+            const rightBtns = document.getElementById(col2Id).querySelectorAll('.right-btn');
+            let selectedLeft = null, selectedRight = null, matched = 0;
+
+            function clickHandler(e) {
+                const btn = e.target.closest('.match-btn');
+                if(!btn || btn.classList.contains('correct')) return;
+
+                leftBtns.forEach(b => b.classList.remove('wrong'));
+                rightBtns.forEach(b => b.classList.remove('wrong'));
+
+                if(btn.classList.contains('left-btn')) {
+                    leftBtns.forEach(b => { if(!b.classList.contains('correct')) b.classList.remove('selected') });
+                    btn.classList.add('selected'); selectedLeft = btn;
+                } else if(btn.classList.contains('right-btn')) {
+                    rightBtns.forEach(b => { if(!b.classList.contains('correct')) b.classList.remove('selected') });
+                    btn.classList.add('selected'); selectedRight = btn;
+                }
+
+                if(selectedLeft && selectedRight) {
+                    if(selectedLeft.dataset.id === selectedRight.dataset.match) {
+                        selectedLeft.classList.replace('selected', 'correct'); selectedRight.classList.replace('selected', 'correct');
+                        selectedLeft.innerHTML += ' <i class="fas fa-check-circle ml-auto text-2xl"></i>';
+                        selectedRight.innerHTML += ' <i class="fas fa-check-circle ml-auto text-2xl"></i>';
+                        matched++;
+                        if(matched === targetMatches) setTimeout(() => fireConfetti(areaId, 80), 300);
+                    } else {
+                        selectedLeft.classList.add('wrong'); selectedRight.classList.add('wrong');
+                        selectedLeft.classList.remove('selected'); selectedRight.classList.remove('selected');
+                        const tempLeft = selectedLeft; const tempRight = selectedRight;
+                        setTimeout(() => { if(tempLeft) tempLeft.classList.remove('wrong'); if(tempRight) tempRight.classList.remove('wrong'); }, 800);
+                    }
+                    selectedLeft = null; selectedRight = null;
+                }
+            }
+            leftBtns.forEach(b => b.addEventListener('click', clickHandler));
+            rightBtns.forEach(b => b.addEventListener('click', clickHandler));
+        }
+        setupMatchGame('left-col-1', 'right-col-1', 'match1-game-area', 4);
+        setupMatchGame('left-col-eval', 'right-col-eval', 'match-eval-area', 5);
+
+        // DOĞRU YANLIŞ TESTLERİ
+        function createTfLogic(qs, currentIdxVar, textId, numId, fBoxId, fIconId, fTextId, btnContId, restartBtnId, areaId) {
+            return {
+                load: function() {
+                    if(window[currentIdxVar] >= qs.length) {
+                        document.getElementById(textId).innerHTML = "<i class='fas fa-star text-yellow-400 text-6xl md:text-8xl block mb-4'></i> Harika! Bu bölümü tamamladınız.";
+                        document.getElementById(btnContId).classList.add('hidden');
+                        document.getElementById(numId).parentElement.classList.add('hidden');
+                        if(restartBtnId) document.getElementById(restartBtnId).classList.remove('hidden');
+                        fireConfetti(areaId, 80);
+                        return;
+                    }
+                    document.getElementById(textId).innerText = qs[window[currentIdxVar]].q;
+                    document.getElementById(numId).innerText = (qs[0].q.startsWith("11.")) ? window[currentIdxVar] + 11 : window[currentIdxVar] + 1; 
+                },
+                check: function(userAnswer) {
+                    const isCorrect = userAnswer === qs[window[currentIdxVar]].a;
+                    const icon = document.getElementById(fIconId);
+                    const text = document.getElementById(fTextId);
+                    if(isCorrect) {
+                        icon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+                        text.innerHTML = '<span class="text-green-600 block text-3xl md:text-5xl mb-2">Doğru Bildiniz!</span><span class="text-lg md:text-3xl text-gray-700 font-normal">' + qs[window[currentIdxVar]].expl + '</span>';
+                    } else {
+                        icon.innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+                        text.innerHTML = '<span class="text-red-600 block text-3xl md:text-5xl mb-2">Hatalı Bildiniz!</span><span class="text-lg md:text-3xl text-gray-700 font-normal">' + qs[window[currentIdxVar]].expl + '</span>';
+                    }
+                    document.getElementById(fBoxId).classList.add('show');
+                },
+                next: function() {
+                    document.getElementById(fBoxId).classList.remove('show');
+                    window[currentIdxVar]++;
+                    this.load();
+                }
+            };
+        }
+
+        const tf1Qs = [
+            { q: "1. Ensar, Mekke'den göç eden muhacir kardeşlerine evlerini ve yiyeceklerini paylaşarak Îsâr yapmıştır.", a: true, expl: "Doğru! Ensar, muhacirlere kucak açarak din kardeşliğinin en güzel örneğini göstermiştir." },
+            { q: "2. Îsâr, sadece kendi ihtiyacımız olmadığında başkalarına yardım etmektir.", a: false, expl: "Yanlış! Îsâr, KENDİ İHTİYACIN VARKEN BİLE başkasını kendine tercih etmektir." },
+            { q: "3. Yermük Savaşı'nda üç sahabinin bir yudum suyu birbirlerine ikram edip şehit olmaları Îsâr'ın en güzel örneklerindendir.", a: true, expl: "Doğru! Hiçbiri suyu içemeden şehit olmuştur." },
+            { q: "4. Muhacirler, Medine'ye göç ettiklerinde Ensar'ın onlara yardım etmesini istememiş, her şeyi kendileri yapmışlardır.", a: false, expl: "Yanlış! Muhacirler, Ensar'ın fedakârlıklarını her zaman takdir etmişlerdir." }
+        ];
+        window.currentTf1Index = 0;
+        const tf1Game = createTfLogic(tf1Qs, 'currentTf1Index', 'tf1-question-text', 'tf1-current-num', 'tf1-feedback', 'tf1-feedback-icon', 'tf1-feedback-text', 'tf1-buttons-container', 'tf1-restart', 'tf1-game-area');
+        tf1Game.load();
+        function checkTf1(ans) { tf1Game.check(ans); }
+        function nextTf1() { tf1Game.next(); }
+
+        const tfEvalQs = [
+            { q: "11. Sahabiler inançları sebebiyle baskı ve şiddete uğrayıp yurtlarını terk etmek zorunda kalmalarına rağmen verdikleri sözde durmuşlardır.", a: true, expl: "Doğru! Onlar Allah'a ve peygamberine sadakatle bağlıydılar." },
+            { q: "12. Allah Resulü’nün (sav) peygamberliğine inanan ilk kişi Hz. Ebu Bekir olmuştur.", a: false, expl: "Yanlış! Peygamberimize inanan ve onu destekleyen ilk kişi eşi Hz. Hatice'dir." },
+            { q: "13. Allah’ın (cc) rızasına uygun şekilde yaşayan sahabeyi cihat yolunda motive eden iki yüce mertebe gazilik ve şehitliktir.", a: true, expl: "Doğru! Bu mertebelere ulaşmak için canlarını feda etmekten çekinmemişlerdir." },
+            { q: "14. Îsârda asıl hedef, hiçbir karşılık beklemeksizin insanların rızasını kazanmaktır.", a: false, expl: "Yanlış! Îsârda asıl hedef insanların değil, ALLAH'IN (cc) rızasını kazanmaktır." },
+            { q: "15. Sahabeyi faziletli kılan önemli sebeplerden biri, İslam’ı kabul ettikleri ilk yıllardan itibaren gösterdikleri fedakârlıktır.", a: true, expl: "Doğru! Mallarını ve canlarını bu yolda feda etmişlerdir." }
+        ];
+        window.currentTfEvalIndex = 0;
+        const tfEvalGame = createTfLogic(tfEvalQs, 'currentTfEvalIndex', 'tfeval-question-text', 'tfeval-current-num', 'tfeval-feedback', 'tfeval-feedback-icon', 'tfeval-feedback-text', 'tfeval-buttons-container', null, 'tf-eval-area');
+        function loadTfEval() { tfEvalGame.load(); }
+        function checkTfEval(ans) { tfEvalGame.check(ans); }
+        function nextTfEval() { tfEvalGame.next(); }
+
+        // --- ANAGRAM (ŞİFRE ÇÖZÜCÜ) ---
+        const passQs = [
+            { q: "Müslümanların dinini korumak ve yaymak için verdiği her türlü mücadele.", a: "CİHAT" },
+            { q: "Bir kimsenin diğerini kendine tercih edip özveride bulunması, diğergamlık.", a: "İSAR" },
+            { q: "Allah'a ve Peygamber'e içten ve gönülden bağlılık, doğruluk.", a: "SADAKAT" },
+            { q: "İslam dinini korumak için savaşa katılıp sağ dönen kişi.", a: "GAZİ" }
+        ];
+        let passIdx = 0;
+        let passFilled = [];
+        
+        function initPass() {
+            if(passIdx >= passQs.length) {
+                document.getElementById('pass-hint').innerHTML = "<i class='fas fa-trophy text-yellow-500 text-8xl mb-4'></i><br><span class='text-indigo-700'>Tebrikler! Tüm kavramları buldunuz.</span>";
+                document.getElementById('pass-slots').innerHTML = "";
+                document.getElementById('pass-letters').innerHTML = "";
+                document.getElementById('pass-next-btn').classList.add('hidden');
+                fireConfetti('pass-game-area', 100);
+                setTimeout(() => changeSlide(1), 3000); 
+                return;
+            }
+            document.getElementById('pass-hint').innerText = passQs[passIdx].q;
+            document.getElementById('pass-num').innerText = passIdx + 1;
+            document.getElementById('pass-next-btn').classList.add('hidden');
+            passFilled = [];
+            
+            const slots = document.getElementById('pass-slots');
+            slots.innerHTML = "";
+            for(let i=0; i<passQs[passIdx].a.length; i++) {
+                slots.innerHTML += `<div class="ana-slot" id="pass-slot-${i}"></div>`;
+            }
+
+            const letters = passQs[passIdx].a.split('').sort(()=> Math.random()-0.5);
+            const lContainer = document.getElementById('pass-letters');
+            lContainer.innerHTML = "";
+            letters.forEach((l, i) => {
+                lContainer.innerHTML += `<button class="ana-letter" onclick="pushPass(this)">${l}</button>`;
+            });
+        }
+
+        function pushPass(btn) {
+            if(btn.classList.contains('used')) return;
+            const l = btn.innerText;
+            const targetLen = passQs[passIdx].a.length;
+            if(passFilled.length < targetLen) {
+                const slot = document.getElementById(`pass-slot-${passFilled.length}`);
+                slot.innerText = l;
+                slot.classList.add('filled');
+                passFilled.push(l);
+                btn.classList.add('used');
+
+                if(passFilled.length === targetLen) checkPass();
+            }
+        }
+
+        function checkPass() {
+            const userW = passFilled.join('');
+            const slots = document.querySelectorAll('#pass-slots .ana-slot');
+            if(userW === passQs[passIdx].a) {
+                slots.forEach(s => s.classList.add('correct'));
+                document.getElementById('pass-next-btn').classList.remove('hidden');
+                fireConfetti('pass-game-area', 40);
+            } else {
+                slots.forEach(s => s.classList.add('wrong'));
+                setTimeout(clearPass, 600);
+            }
+        }
+
+        function clearPass() { initPass(); }
+        function nextPass() { passIdx++; initPass(); }
+
+        // --- ÇOKTAN SEÇMELİ TESTLER ---
+        function checkQuiz(btn, isCorrect, explId) {
+            const container = btn.parentElement;
+            const buttons = container.querySelectorAll('.quiz-opt');
+            
+            buttons.forEach(b => { b.style.pointerEvents = 'none'; });
+
+            if(isCorrect) {
+                btn.classList.add('correct');
+                btn.innerHTML += ' <i class="fas fa-check-circle ml-auto text-2xl"></i>';
+                fireConfetti(container.parentElement.id, 40);
+            } else {
+                btn.classList.add('wrong');
+                btn.innerHTML += ' <i class="fas fa-times-circle ml-auto text-2xl"></i>';
+                
+                buttons.forEach(b => {
+                    if(b.onclick.toString().includes('true')) {
+                        b.classList.add('correct');
+                    }
+                });
+            }
+            
+            document.getElementById(explId).style.display = 'block';
+        }
+
+        updateControls();
+    </script>
+</body>
+</html>

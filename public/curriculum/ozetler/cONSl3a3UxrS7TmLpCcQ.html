@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kur'an-ı Kerim: Bakara Suresi Okuma Çalışması</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Nunito', 'sans-serif'], arabic: ['Amiri', 'serif'] },
+                    colors: { primary: '#059669', secondary: '#d97706', mushaf: '#fefce8' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background: linear-gradient(135deg, #f8fafc 0%, #ecfdf5 100%); }
+
+        /* Slayt Geçişleri */
+        .slide { display: none; width: 100%; height: 100%; opacity: 0; transition: opacity 0.4s ease-in-out; position: absolute; top: 0; left: 0; overflow-y: auto; padding-bottom: 80px; padding-top: 10px; }
+        .slide.active { display: flex; flex-direction: column; opacity: 1; z-index: 10; }
+
+        /* Animasyonlar */
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .pop { animation: pop 0.3s ease-in-out; }
+        
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Buton efektleri */
+        .huge-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); cursor: pointer; }
+        .huge-btn:hover:not(:disabled) { transform: translateY(-3px) box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+
+        .badge-konu { background-color: #059669; color: white; }
+        .badge-etkinlik { background-color: #d97706; color: white; }
+
+        /* Kuran Sayfası Görünümü (Mushaf Layout) */
+        .mushaf-container {
+            background-color: #fefce8;
+            background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23d97706" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+            border: 12px solid #b45309;
+            border-radius: 1rem;
+            box-shadow: inset 0 0 30px rgba(180,83,9,0.2), 0 15px 25px -5px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .mushaf-border-inner {
+            border: 3px double #d97706;
+            margin: 8px;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            height: calc(100% - 16px);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Uzun ayetler için kaydırma çubuğu */
+        }
+        .durak-circle {
+            background-image: radial-gradient(circle, #fcd34d 0%, #b45309 100%);
+            color: white;
+            text-shadow: 1px 1px 0px #78350f;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid #78350f;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+        
+        /* Satırların birbirine girmemesi için çok geniş satır aralığı */
+        .arabic-text { 
+            line-height: 2.5 !important; 
+            text-shadow: 0px 1px 1px rgba(0,0,0,0.1); 
+            padding: 10px 0 30px 0 !important; /* Esrelerin (alt harekelerin) kesilmemesi için alt boşluk artırıldı */
+            overflow: visible !important;
+        }
+
+        /* Yazdırma */
+        @media print {
+            body, html { overflow: visible !important; height: auto !important; background-color: white !important; font-size: 11pt !important; }
+            .fixed.bottom-0 { display: none !important; }
+            .slide { display: none !important; opacity: 1 !important; position: static !important; padding: 0 !important; }
+            #slide-ozet { display: block !important; }
+            button, .badge-konu { display: none !important; }
+            .mushaf-container { box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="text-gray-800 text-base md:text-lg">
+
+    <!-- Alt Navigasyon -->
+    <div class="fixed bottom-0 left-0 w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] p-2 md:p-3 flex justify-between items-center z-50 border-t border-gray-100 flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <button onclick="toggleFullScreen()" class="px-3 py-2 bg-gray-800 text-white rounded-lg text-sm md:text-base font-bold hover:bg-gray-700 transition flex items-center">
+                <i class="fas fa-expand md:mr-2"></i> <span class="hidden md:inline">Tam Ekran</span>
+            </button>
+            <div class="w-px h-5 bg-gray-300 mx-1"></div>
+            <button onclick="changeZoom(-10)" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-gray-100 text-gray-800 rounded-lg text-lg font-bold hover:bg-gray-200 transition" title="Küçült"><i class="fas fa-search-minus"></i></button>
+            <button onclick="changeZoom(10)" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-gray-100 text-gray-800 rounded-lg text-lg font-bold hover:bg-gray-200 transition" title="Büyüt"><i class="fas fa-search-plus"></i></button>
+        </div>
+        
+        <div class="text-sm md:text-lg font-extrabold text-gray-500 bg-gray-100 px-3 md:px-5 py-1 rounded-full border border-gray-200" id="page-counter">1 / 8</div>
+        
+        <div class="flex gap-2">
+            <button onclick="prevSlide()" class="px-3 md:px-5 py-2 bg-gray-200 text-gray-800 rounded-lg text-sm md:text-base font-bold hover:bg-gray-300 transition flex items-center"><i class="fas fa-chevron-left md:mr-2"></i> <span class="hidden md:inline">Geri</span></button>
+            <button onclick="nextSlide()" class="px-4 md:px-6 py-2 bg-emerald-600 text-white rounded-lg text-sm md:text-base font-bold hover:bg-emerald-700 transition flex items-center shadow-md"><span class="hidden md:inline">İleri</span> <i class="fas fa-chevron-right md:ml-2"></i></button>
+        </div>
+    </div>
+
+    <!-- Slayt Konteyneri -->
+    <main id="slider-container" class="relative w-full h-full">
+
+        <!-- SLAYT 1: HAZIRLIK & GİRİŞ -->
+        <div class="slide active bg-emerald-50 px-4 md:px-8" id="slide-1">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-10 flex flex-col h-full">
+                <span class="badge-konu px-3 py-1 rounded-full text-sm md:text-lg font-bold uppercase tracking-widest inline-block mb-3 w-max shadow-sm">KONUYA BAŞLARKEN</span>
+                <h1 class="text-2xl md:text-4xl font-black text-emerald-900 mb-4 flex items-center gap-3">
+                    <i class="fas fa-mosque text-emerald-600"></i> Kur'an-ı Kerim'i Okuma Adabı
+                </h1>
+                
+                <div class="bg-white p-6 md:p-8 rounded-2xl border-4 border-emerald-200 shadow-sm mb-6 flex flex-col items-center">
+                    <p class="text-base md:text-xl font-bold text-gray-700 mb-6 text-center leading-relaxed">
+                        Namazların son oturuşlarında okunan dualardan bildiklerinizin adını söyleyiniz.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4 w-full">
+                        <div class="bg-gray-100 px-6 py-3 rounded-xl text-lg md:text-xl font-bold text-gray-600 border-2 border-gray-200">Tahiyyat</div>
+                        <div class="bg-gray-100 px-6 py-3 rounded-xl text-lg md:text-xl font-bold text-gray-600 border-2 border-gray-200">Salli - Barik</div>
+                        <div class="bg-gray-100 px-6 py-3 rounded-xl text-lg md:text-xl font-bold text-gray-600 border-2 border-gray-200">Rabbena</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-2">
+                    <div class="bg-emerald-100 p-6 rounded-2xl border-l-8 border-emerald-500 shadow-sm flex items-start gap-4">
+                        <i class="fas fa-tint text-4xl text-emerald-600 mt-1"></i>
+                        <div>
+                            <h3 class="text-xl font-bold text-emerald-800 mb-2">Abdestli Olmak</h3>
+                            <p class="text-gray-700 font-semibold">Kur'an'a dokunurken veya onu okurken abdestli olmaya gayret edilir.</p>
+                        </div>
+                    </div>
+                    <div class="bg-teal-100 p-6 rounded-2xl border-l-8 border-teal-500 shadow-sm flex items-start gap-4">
+                        <i class="fas fa-shield-alt text-4xl text-teal-600 mt-1"></i>
+                        <div>
+                            <h3 class="text-xl font-bold text-teal-800 mb-2">Euzübesmele</h3>
+                            <p class="text-gray-700 font-semibold">Bir ayet dahi olsa Kur'an okumaya <strong>"Euzübillahimineşşeytanirracim"</strong> diyerek başlanır.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 2: ETKİNLİK YÖNERGELERİ -->
+        <div class="slide bg-white px-4 md:px-8" id="slide-2">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-10">
+                <span class="badge-etkinlik px-3 py-1 rounded-full text-sm md:text-lg font-bold uppercase tracking-widest inline-block mb-3">ETKİNLİKLER (6 ve 7)</span>
+                <h1 class="text-2xl md:text-4xl font-black text-amber-900 mb-6 flex items-center gap-3"><i class="fas fa-users text-amber-500"></i> Kur'an'ı Okuyorum ve Takip Ediyorum</h1>
+                
+                <div class="bg-amber-50 p-6 md:p-8 rounded-2xl border-4 border-amber-200 shadow-sm mb-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-amber-800 mb-4 border-b-2 border-amber-300 pb-2">Okuma ve Takip Adımları</h2>
+                    <ul class="space-y-4 text-base md:text-xl text-gray-700 font-semibold">
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-amber-500 text-2xl"></i> Ekrana gelecek 5 ayeti sırasıyla takip et.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-amber-500 text-2xl"></i> <strong>Peltek harfleri (ث ذ ظ)</strong> mahreçlerine uygun seslendir.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-amber-500 text-2xl"></i> Arkadaşların okurken onları saygıyla dinle.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-amber-500 text-2xl"></i> Hata yapan arkadaşlarına nazikçe yardımcı ol.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 3: AYET 86 -->
+        <div class="slide bg-gray-900 px-2 md:px-8 py-4" id="slide-3">
+            <div class="max-w-6xl mx-auto w-full h-full flex flex-col relative pt-4 md:pt-6 pb-10">
+                <div class="flex justify-between items-center mb-4 md:mb-6 px-2">
+                    <span class="badge-konu bg-emerald-600 px-4 py-2 rounded-full text-sm md:text-lg font-bold uppercase tracking-widest shadow-md border border-emerald-400">
+                        <i class="fas fa-book-reader mr-2"></i> Okuma Çalışması (1/5)
+                    </span>
+                    <div class="bg-yellow-100 text-yellow-900 px-4 py-2 rounded-lg text-sm md:text-xl font-black shadow-md border-2 border-yellow-500">
+                        Sayfa: 13 | Bakara Suresi, 86. Ayet
+                    </div>
+                </div>
+                <div class="mushaf-container flex-grow w-full flex flex-col relative">
+                    <div class="mushaf-border-inner">
+                        <div class="w-full text-center mb-6 md:mb-10 text-xl md:text-3xl font-arabic text-amber-900 font-bold">
+                            اَعُوذُ بِاللّٰهِ مِنَ الشَّيْطَانِ الرَّجِيمِ <br> بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ
+                        </div>
+                        <div class="text-center w-full flex-grow flex items-center justify-center px-4 md:px-12 my-auto">
+                            <p class="arabic-text font-arabic text-[2rem] md:text-[3.5rem] text-gray-900 font-bold" dir="rtl">
+                                اُولٰٓئِكَ الَّذِينَ اشْتَرَوُا الْحَيَاةَ الدُّنْيَا بِالْآخِرَةِ فَلَا يُخَفَّفُ عَنْهُمُ الْعَذَابُ وَلَا هُمْ يُنْصَرُونَ <span class="durak-circle w-10 h-10 md:w-14 md:h-14 text-lg md:text-2xl font-sans">٨٦</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 4: AYET 88 -->
+        <div class="slide bg-gray-900 px-2 md:px-8 py-4" id="slide-4">
+            <div class="max-w-6xl mx-auto w-full h-full flex flex-col relative pt-4 md:pt-6 pb-10">
+                <div class="flex justify-between items-center mb-4 md:mb-6 px-2">
+                    <span class="badge-konu bg-emerald-600 px-4 py-2 rounded-full text-sm md:text-lg font-bold uppercase tracking-widest shadow-md border border-emerald-400">
+                        <i class="fas fa-book-reader mr-2"></i> Okuma Çalışması (2/5)
+                    </span>
+                    <div class="bg-yellow-100 text-yellow-900 px-4 py-2 rounded-lg text-sm md:text-xl font-black shadow-md border-2 border-yellow-500">
+                        Sayfa: 13 | Bakara Suresi, 88. Ayet
+                    </div>
+                </div>
+                <div class="mushaf-container flex-grow w-full flex flex-col relative">
+                    <div class="mushaf-border-inner">
+                        <div class="text-center w-full flex-grow flex items-center justify-center px-4 md:px-12 my-auto">
+                            <p class="arabic-text font-arabic text-[2rem] md:text-[3.5rem] text-gray-900 font-bold" dir="rtl">
+                                وَقَالُوا قُلُوبُنَا غُلْفٌ بَلْ لَعَنَهُمُ اللّٰهُ بِكُفْرِهِمْ فَقَلِيلًا مَا يُؤْمِنُونَ <span class="durak-circle w-10 h-10 md:w-14 md:h-14 text-lg md:text-2xl font-sans">٨٨</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 5: AYET 95 -->
+        <div class="slide bg-gray-900 px-2 md:px-8 py-4" id="slide-5">
+            <div class="max-w-6xl mx-auto w-full h-full flex flex-col relative pt-4 md:pt-6 pb-10">
+                <div class="flex justify-between items-center mb-4 md:mb-6 px-2">
+                    <span class="badge-konu bg-emerald-600 px-4 py-2 rounded-full text-sm md:text-lg font-bold uppercase tracking-widest shadow-md border border-emerald-400">
+                        <i class="fas fa-book-reader mr-2"></i> Okuma Çalışması (3/5)
+                    </span>
+                    <div class="bg-yellow-100 text-yellow-900 px-4 py-2 rounded-lg text-sm md:text-xl font-black shadow-md border-2 border-yellow-500">
+                        Sayfa: 14 | Bakara Suresi, 95. Ayet
+                    </div>
+                </div>
+                <div class="mushaf-container flex-grow w-full flex flex-col relative">
+                    <div class="mushaf-border-inner">
+                        <div class="text-center w-full flex-grow flex items-center justify-center px-4 md:px-12 my-auto">
+                            <p class="arabic-text font-arabic text-[2rem] md:text-[3.5rem] text-gray-900 font-bold" dir="rtl">
+                                وَلَنْ يَتَمَنَّوْهُ اَبَدًا بِمَا قَدَّمَتْ اَيْدِيهِمْ وَاللّٰهُ عَلِيمٌ بِالظَّالِمِينَ <span class="durak-circle w-10 h-10 md:w-14 md:h-14 text-lg md:text-2xl font-sans">٩٥</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 6: AYET 98 -->
+        <div class="slide bg-gray-900 px-2 md:px-8 py-4" id="slide-6">
+            <div class="max-w-6xl mx-auto w-full h-full flex flex-col relative pt-4 md:pt-6 pb-10">
+                <div class="flex justify-between items-center mb-4 md:mb-6 px-2">
+                    <span class="badge-konu bg-emerald-600 px-4 py-2 rounded-full text-sm md:text-lg font-bold uppercase tracking-widest shadow-md border border-emerald-400">
+                        <i class="fas fa-book-reader mr-2"></i> Okuma Çalışması (4/5)
+                    </span>
+                    <div class="bg-yellow-100 text-yellow-900 px-4 py-2 rounded-lg text-sm md:text-xl font-black shadow-md border-2 border-yellow-500">
+                        Sayfa: 14 | Bakara Suresi, 98. Ayet
+                    </div>
+                </div>
+                <div class="mushaf-container flex-grow w-full flex flex-col relative">
+                    <div class="mushaf-border-inner">
+                        <div class="text-center w-full flex-grow flex items-center justify-center px-4 md:px-12 my-auto">
+                            <p class="arabic-text font-arabic text-[2rem] md:text-[3.5rem] text-gray-900 font-bold" dir="rtl">
+                                مَنْ كَانَ عَدُوًّا لِلّٰهِ وَمَلَٓائِكَتِهِ وَرُسُلِهِ وَجِبْرِيلَ وَمِيكَالَ فَاِنَّ اللّٰهَ عَدُوٌّ لِلْكَافِرِينَ <span class="durak-circle w-10 h-10 md:w-14 md:h-14 text-lg md:text-2xl font-sans">٩٨</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 7: AYET 104 -->
+        <div class="slide bg-gray-900 px-2 md:px-8 py-4" id="slide-7">
+            <div class="max-w-6xl mx-auto w-full h-full flex flex-col relative pt-4 md:pt-6 pb-10">
+                <div class="flex justify-between items-center mb-4 md:mb-6 px-2">
+                    <span class="badge-konu bg-emerald-600 px-4 py-2 rounded-full text-sm md:text-lg font-bold uppercase tracking-widest shadow-md border border-emerald-400">
+                        <i class="fas fa-book-reader mr-2"></i> Okuma Çalışması (5/5)
+                    </span>
+                    <div class="bg-yellow-100 text-yellow-900 px-4 py-2 rounded-lg text-sm md:text-xl font-black shadow-md border-2 border-yellow-500">
+                        Sayfa: 15 | Bakara Suresi, 104. Ayet
+                    </div>
+                </div>
+                <div class="mushaf-container flex-grow w-full flex flex-col relative">
+                    <div class="mushaf-border-inner">
+                        <div class="text-center w-full flex-grow flex items-center justify-center px-4 md:px-12 my-auto">
+                            <p class="arabic-text font-arabic text-[2rem] md:text-[3.5rem] text-gray-900 font-bold" dir="rtl">
+                                يَٓا اَيُّهَا الَّذِينَ اٰمَنُوا لَا تَقُولُوا رَاعِنَا وَقُولُوا انْظُرْنَا وَاسْمَعُوا وَلِلْكَافِرِينَ عَذَابٌ اَلِيمٌ <span class="durak-circle w-10 h-10 md:w-14 md:h-14 text-lg md:text-2xl font-sans">١٠٤</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 8: ÖZET VE NOTLAR -->
+        <div class="slide bg-white px-4 md:px-8" id="slide-ozet">
+            <div class="max-w-6xl mx-auto w-full pt-4 md:pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
+                    <span class="badge-konu px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest bg-gray-800">ÜNİTE ÖZETİ (YAZDIRILABİLİR)</span>
+                    <button onclick="window.print()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg text-sm md:text-base font-bold hover:bg-gray-300 transition flex items-center shadow-sm">
+                        <i class="fas fa-print mr-2"></i> Özeti Yazdır
+                    </button>
+                </div>
+                <h1 class="text-2xl md:text-4xl font-black text-emerald-900 mb-4 flex items-center gap-3">
+                    <i class="fas fa-book text-emerald-600 text-3xl md:text-4xl"></i> Okuma Çalışması Notları
+                </h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full mt-2">
+                    <div class="bg-gray-50 p-4 md:p-6 rounded-xl border-2 border-gray-200 h-full shadow-inner">
+                        <h2 class="text-lg md:text-2xl font-bold mb-3 text-gray-800 border-b-2 border-gray-300 pb-2"><i class="fas fa-check mr-2"></i>Okuma Adabı</h2>
+                        <ul class="space-y-2 md:space-y-3 text-sm md:text-lg text-gray-700 list-disc list-inside">
+                            <li>Kur'an'a dokunurken abdestli olmaya özen gösterilir.</li>
+                            <li>Okumaya daima <strong>Euzübesmele</strong> ile başlanır.</li>
+                            <li>Ayetler okunurken harflerin çıkış yerlerine (mahreç) ve özellikle <strong>peltek harflere</strong> çok dikkat edilir.</li>
+                            <li>Hatalar saygılı bir dille ve incitmeden düzeltilir.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 md:p-6 rounded-xl border-2 border-gray-200 h-full shadow-inner">
+                        <h2 class="text-lg md:text-2xl font-bold mb-3 text-gray-800 border-b-2 border-gray-300 pb-2"><i class="fas fa-heart mr-2"></i>Bakara Suresi</h2>
+                        <p class="text-sm md:text-lg text-gray-700 leading-relaxed">
+                            Bakara Suresi Kur'an-ı Kerim'in en uzun suresidir. Okuma çalışmalarında ayetleri tane tane, anlamına saygı duyarak ve tecvit kurallarına uyarak okumak, Kur'an'ın kalbimize yerleşmesi açısından çok önemlidir.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Slayt Navigasyonu
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 1;
+        let currentZoom = 100;
+
+        document.getElementById('page-counter').innerText = `${currentSlide} / ${totalSlides}`;
+
+        function changeZoom(step) {
+            currentZoom += step;
+            if(currentZoom < 60) currentZoom = 60; 
+            if(currentZoom > 200) currentZoom = 200; 
+            document.documentElement.style.fontSize = (16 * currentZoom / 100) + 'px';
+        }
+
+        function updateSlides() {
+            slides.forEach((el, index) => {
+                if(index + 1 === currentSlide) {
+                    el.classList.add('active');
+                    el.scrollTop = 0; 
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+            document.getElementById('page-counter').innerText = `${currentSlide} / ${totalSlides}`;
+        }
+
+        function nextSlide() { if(currentSlide < totalSlides) { currentSlide++; updateSlides(); } }
+        function prevSlide() { if(currentSlide > 1) { currentSlide--; updateSlides(); } }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => console.log(err)); } 
+            else { if (document.exitFullscreen) { document.exitFullscreen(); } }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight') nextSlide();
+            if(e.key === 'ArrowLeft') prevSlide();
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tecvid: Medler (Uzatmalar) Kuralları</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; overflow-x: hidden; background-color: #f0f9ff; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; }
+        .arabic { font-family: 'Amiri', serif; direction: rtl; }
+        .harf-i-med { color: #3b82f6; font-weight: bold; }
+        .sebeb-i-med { color: #ef4444; font-weight: bold; }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
+
+        /* ŞEMA TREE */
+        @media (min-width: 1024px) {
+            .tree ul { padding-top: 24px; position: relative; display: flex; justify-content: center; align-items: flex-start; }
+            .tree li { text-align: center; list-style-type: none; position: relative; padding: 24px 6px 0 6px; }
+            .tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 2px solid #3b82f6; width: 50%; height: 24px; }
+            .tree li::after { right: auto; left: 50%; border-left: 2px solid #3b82f6; }
+            .tree li:only-child::after, .tree li:only-child::before { display: none; }
+            .tree li:only-child { padding-top: 0; }
+            .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+            .tree li:last-child::before { border-right: 2px solid #3b82f6; border-radius: 0 10px 0 0; }
+            .tree li:first-child::after { border-radius: 10px 0 0 0; }
+            .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 2px solid #3b82f6; width: 0; height: 24px; transform: translateX(-50%); }
+            .tree-card { min-width: 160px; max-width: 250px; }
+        }
+        @media (max-width: 1023px) {
+            .zoom-controls { display: none !important; }
+            #tree-container { width: 100%; transform: none !important; padding-bottom: 2rem; }
+            .tree ul { display: flex; flex-direction: column; gap: 0.75rem; padding-left: 1rem; border-left: 2px solid #3b82f6; margin-top: 0.75rem; }
+            .tree > ul { padding-left: 0; border-left: none; margin-top: 0; }
+            .tree li { position: relative; list-style-type: none; text-align: left; display: block; }
+            .tree ul ul li::before { content: ''; position: absolute; top: 1.5rem; left: -1rem; width: 1rem; border-top: 2px solid #3b82f6; }
+            .tree-card { display: block; width: 100%; max-width: 100%; }
+        }
+        
+        /* INTERAKTIF KUTU (TREE-CARD) STİLLERİ */
+        .tree-card { 
+            background: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); 
+            border: 2px solid #e2e8f0; padding: 1rem; position: relative; z-index: 10; line-height: 1.4; 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: inline-block; cursor: pointer; 
+        }
+        @media (hover: hover) and (pointer: fine) { 
+            .tree-card:hover { 
+                transform: translateY(-4px) scale(1.02); 
+                box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.15), 0 0 0 4px rgba(59, 130, 246, 0.25); 
+                border-color: #60a5fa; z-index: 20; 
+            } 
+        }
+
+        /* MODAL İÇİ KART ZOOM AYARLARI */
+        #card-clone-wrapper { zoom: 1.35; }
+        @media (min-width: 640px) { #card-clone-wrapper { zoom: 1.6; } }
+        @media (min-width: 768px) { #card-clone-wrapper { zoom: 2.1; } }
+
+        /* QUIZ MODAL */
+        #quiz-modal { background-color: rgba(2, 6, 23, 0.96); }
+        #quiz-modal-inner { width:100%; height:100%; display:flex; flex-direction:column; overflow:hidden; }
+
+        /* TIMER BAR */
+        .timer-bar { transition: width 1s linear; }
+
+        /* SINGLE MODE OPTIONS */
+        .opt-single {
+            background: rgba(59, 130, 246, 0.1); color: #dbeafe; border: 2px solid rgba(59, 130, 246, 0.3);
+            border-bottom: 4px solid rgba(59, 130, 246, 0.5); transition: all 0.15s; cursor: pointer;
+            font-weight: 700; border-radius: 0.875rem; width: 100%; text-align: center; padding: 0.875rem 1rem;
+            font-size: 0.9rem; word-break: break-word; white-space: normal; line-height: 1.35;
+        }
+        @media (min-width: 768px) { .opt-single { font-size: 1.15rem; padding: 1.1rem 1.5rem; } }
+        .opt-single:hover:not(:disabled) { background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.7); transform: translateY(-2px); }
+        .opt-single:active:not(:disabled) { transform: translateY(1px); border-bottom-width: 2px; }
+
+        /* DUEL MODE OPTIONS */
+        .opt-blue {
+            background: rgba(99, 102, 241, 0.12); color: #e0e7ff; border: 2px solid rgba(99, 102, 241, 0.2);
+            border-bottom: 4px solid rgba(99, 102, 241, 0.35); transition: all 0.15s; cursor: pointer;
+            font-weight: 700; border-radius: 0.875rem; width: 100%; text-align: center; padding: 0 0.75rem;
+            word-break: break-word; white-space: normal; line-height: 1.3; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
+        }
+        .opt-blue:hover:not(:disabled) { background: rgba(99, 102, 241, 0.22); border-color: rgba(99, 102, 241, 0.55); }
+        .opt-blue:active:not(:disabled) { transform: scale(0.97); border-bottom-width: 2px; }
+
+        .opt-red {
+            background: rgba(239, 68, 68, 0.12); color: #fecaca; border: 2px solid rgba(239, 68, 68, 0.2);
+            border-bottom: 4px solid rgba(239, 68, 68, 0.35); transition: all 0.15s; cursor: pointer;
+            font-weight: 700; border-radius: 0.875rem; width: 100%; text-align: center; padding: 0 0.75rem;
+            word-break: break-word; white-space: normal; line-height: 1.3; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
+        }
+        .opt-red:hover:not(:disabled) { background: rgba(239, 68, 68, 0.22); border-color: rgba(239, 68, 68, 0.55); }
+        .opt-red:active:not(:disabled) { transform: scale(0.97); border-bottom-width: 2px; }
+
+        /* CORRECT / WRONG */
+        .opt-correct { background: rgba(16, 185, 129, 0.35) !important; border-color: #10b981 !important; color: #a7f3d0 !important; animation: blinkGreen 0.5s 2; }
+        .opt-wrong   { background: rgba(239, 68, 68, 0.25) !important; border-color: rgba(239, 68, 68, 0.6) !important; color: #fca5a5 !important; opacity: 0.65; }
+        @keyframes blinkGreen { 50% { background: rgba(52, 211, 153, 0.55) !important; } }
+
+        /* SCORE POP */
+        .score-pop { animation: scorePop 1.2s forwards; position:absolute; pointer-events:none; z-index:99; font-weight:900; }
+        @keyframes scorePop { 0%{opacity:0;transform:translateY(8px) scale(0.7);} 20%{opacity:1;transform:translateY(0) scale(1.3);} 80%{opacity:1;transform:translateY(-20px) scale(1);} 100%{opacity:0;transform:translateY(-40px) scale(0.9);} }
+
+        /* ARABIC BOX */
+        .arabic-box { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.25rem; position: relative; }
+
+        /* CONFETTI */
+        .confetti-piece { position:fixed; top:0; width:10px; height:10px; opacity:0; animation: confettiFall 1.5s ease forwards; border-radius: 2px; pointer-events:none; z-index:200; }
+        @keyframes confettiFall { 0%{opacity:1;transform:translateY(-10px) rotate(0deg);} 100%{opacity:0;transform:translateY(100vh) rotate(720deg);} }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+<!-- HEADER -->
+<header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-3 md:p-5 text-center shadow-xl sticky top-0 z-40 flex flex-col lg:flex-row justify-between items-center gap-3 border-b border-indigo-800">
+    <div class="flex gap-2 w-full lg:w-auto justify-end lg:justify-center px-2 relative">
+        <div class="zoom-controls flex gap-1 absolute lg:relative left-2 lg:left-0 top-0">
+            <button onclick="changeZoom(-0.1)" class="bg-indigo-800 hover:bg-indigo-700 px-3 py-1.5 rounded-lg text-sm font-bold border border-indigo-600 transition-colors">A -</button>
+            <button onclick="changeZoom(0.1)"  class="bg-indigo-800 hover:bg-indigo-700 px-3 py-1.5 rounded-lg text-sm font-bold border border-indigo-600 transition-colors">A +</button>
+        </div>
+    </div>
+    <div class="flex-1 text-center w-full mt-2 lg:mt-0">
+        <h1 class="text-xl md:text-3xl font-extrabold mb-1 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-400">🌿 Med (Uzatma) Haritası</h1>
+        <div class="flex flex-wrap justify-center gap-2 md:gap-3 text-[10px] md:text-xs font-medium mt-2">
+            <div class="bg-indigo-900/50 border border-blue-500/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span>
+                <span class="text-slate-300">Harf-i Med: <span class="text-blue-400 font-bold arabic text-base ml-1">و ي ا</span></span>
+            </div>
+            <div class="bg-indigo-900/50 border border-red-500/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+                <span class="text-slate-300">Sebeb-i Med: <span class="text-red-400 font-bold uppercase ml-1">Hemze &amp; Sükûn</span></span>
+            </div>
+            <div class="bg-indigo-900/50 border border-indigo-500/30 px-3 py-1 rounded-full flex items-center gap-1.5 animate-pulse">
+                <span class="text-indigo-300 font-bold ml-1">👆 Kutulara tıklayarak büyütebilirsiniz</span>
+            </div>
+        </div>
+    </div>
+    <div class="w-full lg:w-auto flex flex-row justify-center gap-2 px-2 pb-1 lg:pb-0">
+        <button onclick="startMode('single')" class="flex-1 lg:flex-none bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-lg flex items-center justify-center gap-1.5 border border-blue-400/50 transition-all hover:brightness-110">
+            <span class="text-base">👤</span> Süresiz Öğrenme
+        </button>
+        <button onclick="startMode('duel')" class="flex-1 lg:flex-none bg-gradient-to-r from-rose-500 to-pink-600 text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-lg flex items-center justify-center gap-1.5 border border-rose-400/50 transition-all hover:brightness-110">
+            <span class="text-base">⚔️</span> Düello (Süreli)
+        </button>
+    </div>
+</header>
+
+<!-- ŞEMA -->
+<main id="drag-container" class="flex-1 w-full overflow-x-auto text-center bg-[#f0f9ff] p-4 md:py-10 cursor-grab active:cursor-grabbing min-h-[calc(100vh-160px)] touch-pan-x touch-pan-y">
+    <div class="inline-block min-w-full text-center align-top">
+        <div id="tree-container" class="tree inline-block text-left w-full lg:w-max pb-24 origin-top mx-auto transition-transform duration-200">
+            <ul class="w-max mx-auto">
+                <li>
+                    <!-- ROOT -->
+                    <div class="tree-card border-t-4 border-t-slate-800 bg-white md:w-[320px] mx-auto text-center" onclick="openCardModal(this)">
+                        <span class="bg-slate-100 text-slate-800 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">KÖK</span>
+                        <h2 class="text-xl md:text-2xl font-black text-slate-800 mt-1 mb-1">MED (Uzatma)</h2>
+                        <p class="text-[11px] text-slate-500 font-medium">Sesin harf-i med ile (vav, ya, elif) uzatılmasıdır.</p>
+                    </div>
+                    <ul>
+                        <!-- ASLÎ MED -->
+                        <li>
+                            <div class="tree-card border-t-4 border-t-emerald-500 bg-emerald-50/80 mx-auto text-center" onclick="openCardModal(this)">
+                                <h3 class="text-base font-bold text-emerald-800">ASLÎ MED</h3>
+                                <p class="text-[11px] text-emerald-700 mt-2 font-medium">Sadece <b class="text-blue-600 bg-blue-100 px-1 rounded">Harf-i Med</b> vardır, sebeb-i med yoktur.</p>
+                            </div>
+                            <ul>
+                                <li>
+                                    <div class="tree-card border-emerald-200" onclick="openCardModal(this)">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <h4 class="font-bold text-slate-700 text-sm">Medd-i Tabii 🌿</h4>
+                                            <span class="bg-emerald-100 text-emerald-700 text-[10px] font-black px-2 py-1 rounded-md">1 Elif</span>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-xl text-center border border-slate-100 mt-1 shadow-sm">
+                                            <div class="arabic text-3xl mb-1 text-slate-800">نُ<span class="harf-i-med">و</span>حِ<span class="harf-i-med">ي</span>هَ<span class="harf-i-med">ا</span></div>
+                                            <p class="text-[10px] text-slate-500 mt-1">Nûhîhâ (Sebep yok)</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- FER'Î MED -->
+                        <li>
+                            <div class="tree-card border-t-4 border-t-indigo-500 bg-indigo-50/80 md:!max-w-[480px] mx-auto text-center" onclick="openCardModal(this)">
+                                <h3 class="text-base font-bold text-indigo-800">FER'Î MED (Dallanan)</h3>
+                                <p class="text-[11px] text-indigo-700 mt-2 font-medium"><b class="text-blue-600 bg-blue-100 px-1 rounded">Harf-i Med</b>'den sonra <b class="text-red-600 bg-red-100 px-1 rounded">Sebeb-i Med</b> gelir.</p>
+                            </div>
+                            <ul>
+                                <!-- SEBEP: HEMZE -->
+                                <li>
+                                    <div class="tree-card border-t-4 border-t-orange-400 bg-orange-50/80 mx-auto text-center" onclick="openCardModal(this)">
+                                        <h4 class="font-bold text-orange-900 text-sm">Sebep: Hemze (ء/أ)</h4>
+                                        <p class="text-[10px] text-orange-700 mt-1 font-medium">Uzatmadan sonra okunuşu olan Hemze.</p>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <div class="tree-card border-orange-200" onclick="openCardModal(this)">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <h4 class="font-bold text-slate-700 text-sm">Muttasıl 🤝</h4>
+                                                    <span class="bg-purple-100 text-purple-700 text-[10px] font-black px-2 py-1 rounded-md">4 Elif (Vacip)</span>
+                                                </div>
+                                                <p class="text-[10px] text-slate-500 mb-2"><b class="text-blue-500">Uzatma</b> ve <b class="text-red-500">Hemze</b> <b>aynı kelimede</b>.</p>
+                                                <div class="bg-white p-2 rounded-xl text-center border border-slate-100 shadow-sm">
+                                                    <div class="arabic text-3xl">جَ<span class="harf-i-med">ا</span><span class="sebeb-i-med">ءَ</span></div>
+                                                    <p class="text-[10px] text-slate-400 mt-1">Câ-e</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="tree-card border-orange-200" onclick="openCardModal(this)">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <h4 class="font-bold text-slate-700 text-sm">Munfasıl 💔</h4>
+                                                    <span class="bg-orange-100 text-orange-700 text-[10px] font-black px-2 py-1 rounded-md">4 Elif (Caiz)</span>
+                                                </div>
+                                                <p class="text-[10px] text-slate-500 mb-2"><b class="text-blue-500">Uzatma</b> ayrı, <b class="text-red-500">Hemze</b> <b>diğer kelimede</b>.</p>
+                                                <div class="bg-white p-2 rounded-xl text-center border border-slate-100 shadow-sm">
+                                                    <div class="arabic text-3xl">بِمَ<span class="harf-i-med">ا</span> <span class="sebeb-i-med">أُ</span>نْزِلَ</div>
+                                                    <p class="text-[10px] text-slate-400 mt-1">Bimâ - ünzile</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!-- SEBEP: SÜKUN -->
+                                <li>
+                                    <div class="tree-card border-t-4 border-t-rose-500 bg-rose-50/80 md:!max-w-[420px] mx-auto text-center" onclick="openCardModal(this)">
+                                        <h4 class="font-bold text-rose-900 text-sm">Sebep: Sükûn (Cezm/Şedde)</h4>
+                                        <p class="text-[10px] text-rose-700 mt-1 font-medium">Uzatmadan sonra hareketsiz bir harf.</p>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <div class="tree-card border-rose-200" onclick="openCardModal(this)">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <h4 class="font-bold text-slate-700 text-sm">Lâzım 🔒</h4>
+                                                    <span class="bg-rose-100 text-rose-700 text-[10px] font-black px-2 py-1 rounded-md">4 Elif (Lazım)</span>
+                                                </div>
+                                                <p class="text-[10px] text-slate-500 mb-2">Sükûn <b>kalıcıdır</b>. (Şedde/Cezm).</p>
+                                                <div class="bg-white p-2 rounded-xl text-center border border-slate-100 shadow-sm">
+                                                    <div class="arabic text-3xl">الْحَ<span class="harf-i-med">ا</span><span class="sebeb-i-med">قَّ</span>ةُ</div>
+                                                    <p class="text-[10px] text-slate-400 mt-1">El-Hâk-katü</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="tree-card border-rose-200" onclick="openCardModal(this)">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <h4 class="font-bold text-slate-700 text-sm">Arız 🛑</h4>
+                                                    <span class="bg-amber-100 text-amber-700 text-[10px] font-black px-2 py-1 rounded-md">1-4 Elif (Caiz)</span>
+                                                </div>
+                                                <p class="text-[10px] text-slate-500 mb-2">Sükûn <b>geçicidir</b>. Sadece durakta.</p>
+                                                <div class="bg-white p-2 rounded-xl text-center border border-slate-100 shadow-sm">
+                                                    <div class="arabic text-3xl">يَعْلَمُ<span class="harf-i-med">و</span>ن<span class="sebeb-i-med text-xl relative -top-1 font-bold">ْ</span></div>
+                                                    <p class="text-[10px] text-slate-400 mt-1">Ya'lemûn(e)</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="tree-card border-rose-200" onclick="openCardModal(this)">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <h4 class="font-bold text-slate-700 text-sm">Lin 〰️</h4>
+                                                    <span class="bg-teal-100 text-teal-700 text-[10px] font-black px-2 py-1 rounded-md">1-3 Elif (Caiz)</span>
+                                                </div>
+                                                <p class="text-[10px] text-slate-500 mb-2"><b class="text-blue-500">Lin Harfi</b> + <b>Sükun</b>.</p>
+                                                <div class="bg-white p-2 rounded-xl text-center border border-slate-100 shadow-sm">
+                                                    <div class="arabic text-3xl">خَ<span class="harf-i-med">وْ</span>ف<span class="sebeb-i-med text-xl relative -top-1 font-bold">ْ</span></div>
+                                                    <p class="text-[10px] text-slate-400 mt-1">Havf</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<!-- ===================== KART BÜYÜTME MODALI (POP-UP) ===================== -->
+<div id="card-modal" class="fixed inset-0 z-[100] hidden flex flex-col items-center justify-center p-4 sm:p-6 bg-slate-900/85 backdrop-blur-md opacity-0 transition-opacity duration-300" onclick="closeCardModal()">
+    <div id="card-modal-inner" class="bg-white/95 rounded-[2rem] shadow-[0_0_60px_rgba(59,130,246,0.25)] max-w-4xl w-full p-8 md:p-12 relative transform scale-95 transition-all duration-300 flex flex-col items-center justify-center overflow-y-auto max-h-[90vh]" onclick="event.stopPropagation()">
+        <!-- Kapatma Butonu -->
+        <button onclick="closeCardModal()" class="absolute top-4 right-4 sm:top-5 sm:right-5 bg-slate-100 hover:bg-rose-100 text-slate-500 hover:text-rose-600 rounded-full p-2.5 transition-colors z-10 shadow-sm border border-slate-200">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        
+        <!-- Büyütülecek Kartın Konulacağı Alan -->
+        <div class="w-full flex justify-center items-center py-6">
+            <div id="card-clone-wrapper" class="origin-top flex justify-center w-full">
+                <!-- Tıklanan kart buraya klonlanacak -->
+            </div>
+        </div>
+        
+        <!-- Bilgilendirme -->
+        <div class="mt-2 text-slate-400 text-xs sm:text-sm font-medium bg-slate-100 px-4 py-2 rounded-full border border-slate-200 shadow-inner">
+            Kapatmak için dışarı tıklayın veya çarpıya basın (ESC)
+        </div>
+    </div>
+</div>
+
+<!-- ===================== QUIZ MODAL ===================== -->
+<div id="quiz-modal" class="fixed inset-0 z-50 hidden">
+<div id="quiz-modal-inner">
+
+    <!-- ========= TEK KİŞİ MODU (SÜRESİZ) ========= -->
+    <div id="single-screen" class="hidden h-full flex-col bg-slate-950 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/50 to-slate-900 pointer-events-none"></div>
+
+        <div class="shrink-0 bg-slate-900/90 backdrop-blur border-b border-white/10 px-3 py-2 sm:px-5 sm:py-3 flex items-center justify-between relative z-10">
+            <button onclick="closeQuiz()" class="p-2 rounded-full bg-black/20 hover:bg-white/10 border border-white/10 transition-colors group">
+                <svg class="w-5 h-5 text-white/60 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5">
+                <span id="s-progress" class="text-[10px] font-bold tracking-widest text-blue-400 uppercase">1/20</span>
+                <span class="text-[11px] text-slate-400 font-bold bg-blue-950/50 px-3 py-0.5 rounded-full border border-blue-500/20">Süresiz Öğrenme Modu</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="relative">
+                    <div id="s-score-delta" class="hidden absolute -top-7 right-0 text-lg font-black score-pop"></div>
+                    <div class="bg-slate-900/80 px-3 py-1 rounded-lg border border-blue-500/20 text-right min-w-[80px]">
+                        <div class="text-[9px] text-blue-400 font-bold tracking-wider uppercase">Puan</div>
+                        <div id="s-score" class="text-xl sm:text-2xl font-black text-white leading-none">0</div>
+                    </div>
+                </div>
+                <button onclick="endSingle()" class="bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/40 text-rose-300 px-2 py-1.5 rounded-lg text-xs font-bold transition-all">
+                    Bitir
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col justify-start md:justify-center p-3 md:p-10 gap-3 md:gap-5 relative z-0 max-w-4xl mx-auto w-full min-h-0 overflow-y-auto">
+            <div class="arabic-box p-4 md:p-8 min-h-[100px] md:min-h-[160px] flex flex-col items-center justify-center relative overflow-hidden shrink-0">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 rounded-r"></div>
+                <div id="s-arabic" class="arabic text-4xl sm:text-6xl text-white hidden items-center justify-center mb-2" style="display:none"></div>
+                <p id="s-question" class="text-sm sm:text-lg md:text-2xl font-semibold text-center text-blue-50 leading-relaxed px-2"></p>
+            </div>
+            
+            <div id="s-options" class="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 pb-4"></div>
+            
+            <div id="s-explanation-box" class="hidden bg-blue-950/40 border border-blue-500/30 p-4 rounded-xl text-blue-100 text-xs sm:text-sm animate-fadeIn">
+                <h4 class="font-bold text-blue-400 mb-1">💡 Kural Açıklaması:</h4>
+                <p id="s-explanation-text"></p>
+            </div>
+        </div>
+
+        <div id="s-correct-overlay" class="hidden absolute inset-0 bg-blue-900/30 backdrop-blur-sm flex flex-col items-center justify-center z-40 pointer-events-none">
+            <div class="text-7xl md:text-9xl mb-2">✅</div>
+            <span class="text-3xl md:text-5xl font-black text-white drop-shadow-lg">DOĞRU!</span>
+        </div>
+
+        <div id="s-next-container" class="hidden shrink-0 bg-slate-900/90 border-t border-white/10 p-3 sm:p-4 flex justify-center z-50 relative">
+            <button id="s-next-btn" onclick="nextSingle()" class="bg-blue-600 hover:bg-blue-500 text-white font-black px-8 py-3 sm:px-12 sm:py-4 rounded-xl text-sm sm:text-base shadow-xl flex items-center gap-2 transition-all">
+                Sonraki Soru
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========= DÜELLO MODU (SÜRELİ) ========= -->
+    <div id="duel-screen" class="hidden h-full flex-col bg-slate-950 relative overflow-hidden">
+        <button onclick="closeQuiz()" class="absolute top-3 left-3 z-50 p-2 bg-black/30 hover:bg-white/10 rounded-full border border-white/10 group transition-colors">
+            <svg class="w-5 h-5 text-white/60 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] pointer-events-none">
+            <div id="d-center-timer" class="bg-slate-900 text-blue-400 font-black text-2xl md:text-4xl w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center border-4 border-slate-700 shadow-2xl transition-all">30</div>
+            <button id="d-next-btn" onclick="nextDuel()" class="hidden pointer-events-auto h-14 w-14 md:h-20 md:w-20 rounded-full bg-white text-slate-900 hover:bg-slate-100 border-4 border-slate-700 shadow-[0_0_30px_rgba(255,255,255,0.25)] flex items-center justify-center transition-all animate-bounce">
+                <svg class="w-7 h-7 md:w-9 md:h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+        </div>
+
+        <div class="flex h-full w-full">
+            <!-- SOL: MAVİ TAKIM -->
+            <div id="d-left-zone" class="flex-1 min-w-0 flex flex-col bg-indigo-950/60 border-r-2 border-white/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-indigo-800/20 to-transparent pointer-events-none"></div>
+                <div class="shrink-0 bg-indigo-900/80 backdrop-blur border-b border-white/10 px-2 py-2 sm:px-4 sm:py-3 flex items-center justify-between relative z-10">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
+                        <span class="text-xs sm:text-lg font-black text-indigo-100">MAVİ</span>
+                        <span class="hidden sm:inline text-[10px] text-indigo-400/70 font-bold ml-1">(Klavye: 1, 2, 3, 4)</span>
+                    </div>
+                    <span id="d-score-left" class="text-2xl sm:text-4xl md:text-5xl font-black text-white drop-shadow-lg">0</span>
+                </div>
+                <div class="p-2 sm:p-4 shrink-0 relative z-0">
+                    <div class="arabic-box p-2 sm:p-4 min-h-[70px] sm:min-h-[130px] flex flex-col items-center justify-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-indigo-500 rounded-r"></div>
+                        <div id="d-arabic-left" class="arabic text-3xl sm:text-5xl text-white hidden items-center justify-center mb-1" style="display:none"></div>
+                        <p id="d-question-left" class="text-xs sm:text-sm md:text-lg font-semibold text-center text-indigo-50 leading-snug px-1"></p>
+                    </div>
+                </div>
+                <div id="d-options-left" class="flex-1 grid grid-cols-2 gap-1.5 sm:gap-2 px-2 sm:px-4 pb-2 sm:pb-4 min-h-0 relative z-0" style="grid-template-rows: repeat(2, 1fr)"></div>
+                <div id="d-lock-left" class="hidden absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center z-40">
+                    <div class="text-4xl sm:text-6xl animate-pulse">🔒 YANLIŞ CEVAP!</div>
+                </div>
+                <div id="d-win-left" class="hidden absolute inset-0 bg-indigo-500/20 backdrop-blur-[2px] flex flex-col items-center justify-center z-40 pointer-events-none">
+                    <div class="text-5xl sm:text-7xl">✅ BİLDİ</div>
+                </div>
+            </div>
+
+            <!-- SAĞ: KIRMIZI TAKIM -->
+            <div id="d-right-zone" class="flex-1 min-w-0 flex flex-col bg-red-950/60 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-bl from-red-800/20 to-transparent pointer-events-none"></div>
+                <div class="shrink-0 bg-red-900/80 backdrop-blur border-b border-white/10 px-2 py-2 sm:px-4 sm:py-3 flex items-center justify-between relative z-10">
+                    <span id="d-score-right" class="text-2xl sm:text-4xl md:text-5xl font-black text-white drop-shadow-lg">0</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="hidden sm:inline text-[10px] text-red-400/70 font-bold mr-1">(Klavye: 7, 8, 9, 0)</span>
+                        <span class="text-xs sm:text-lg font-black text-red-100">KIRMIZI</span>
+                        <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-400 shadow-[0_0_8px_#f87171]"></div>
+                    </div>
+                </div>
+                <div class="p-2 sm:p-4 shrink-0 relative z-0">
+                    <div class="arabic-box p-2 sm:p-4 min-h-[70px] sm:min-h-[130px] flex flex-col items-center justify-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-1 h-full bg-red-500 rounded-l"></div>
+                        <div id="d-arabic-right" class="arabic text-3xl sm:text-5xl text-white hidden items-center justify-center mb-1" style="display:none"></div>
+                        <p id="d-question-right" class="text-xs sm:text-sm md:text-lg font-semibold text-center text-red-50 leading-snug px-1"></p>
+                    </div>
+                </div>
+                <div id="d-options-right" class="flex-1 grid grid-cols-2 gap-1.5 sm:gap-2 px-2 sm:px-4 pb-2 sm:pb-4 min-h-0 relative z-0" style="grid-template-rows: repeat(2, 1fr)"></div>
+                <div id="d-lock-right" class="hidden absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center z-40">
+                    <div class="text-4xl sm:text-6xl animate-pulse">🔒 YANLIŞ CEVAP!</div>
+                </div>
+                <div id="d-win-right" class="hidden absolute inset-0 bg-red-500/20 backdrop-blur-[2px] flex flex-col items-center justify-center z-40 pointer-events-none">
+                    <div class="text-5xl sm:text-7xl">✅ BİLDİ</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 left-0 right-0 h-1.5 bg-slate-800 z-20">
+            <div id="d-timer-bar" class="h-full bg-gradient-to-r from-indigo-500 via-blue-500 to-rose-500 timer-bar" style="width:100%"></div>
+        </div>
+    </div>
+
+    <!-- ========= SONUÇ EKRANI ========= -->
+    <div id="result-screen" class="hidden h-full flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-950 text-white p-6 sm:p-10 text-center overflow-y-auto relative">
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-rose-500"></div>
+        <div id="r-emoji" class="text-6xl sm:text-7xl mb-4 drop-shadow-xl">🏆</div>
+        <h2 id="r-title" class="text-3xl sm:text-4xl font-black mb-2 tracking-tight">Tebrikler!</h2>
+        <p id="r-desc" class="text-slate-300 text-sm sm:text-base mb-8 font-medium max-w-md"></p>
+        <div class="bg-slate-800/80 border border-white/10 rounded-2xl px-8 py-5 mb-8 min-w-[220px]">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Final Skoru</div>
+            <div id="r-score" class="text-4xl sm:text-6xl font-black">0</div>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
+            <button onclick="closeQuiz()" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white px-6 py-3 rounded-xl font-bold transition-all">
+                Kapat
+            </button>
+            <button onclick="restartMode()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg flex items-center justify-center gap-2">
+                Tekrar Oyna
+            </button>
+        </div>
+    </div>
+
+</div><!-- /quiz-modal-inner -->
+</div><!-- /quiz-modal -->
+
+<script>
+/* =========================================
+   SORU HAVUZU (MED KURALLARI)
+   ========================================= */
+const allQuestions = [
+    { type: "Tanım", text: "Sadece Harf-i Med (vav, ya, elif) bulunur, sonrasında hiçbir sebep (hemze veya sükun) gelmezse hangi kural oluşur?", arabic: "", options: ["Medd-i Tabii", "Medd-i Lazım", "Medd-i Arız", "Medd-i Muttasıl"], correct: 0, exp: "Sebebi med (hemze/sükûn) olmadığı için bu doğal uzatmadır ve adı Medd-i Tabii'dir." },
+    { type: "Ayet", text: "Bu kelimede hiçbir sebep yoktur. Uygulanacak tecvid kuralı nedir?", arabic: "قَالَ", options: ["Medd-i Lazım", "Medd-i Munfasıl", "Medd-i Tabii", "Medd-i Arız"], correct: 2, exp: "Elif (harfi med) vardır fakat hemze veya sükun yoktur. Medd-i Tabii (1 Elif) yapılır." },
+    { type: "Tanım", text: "Harf-i Med ile Hemze AYNI kelimede yan yana gelirse hangi med kuralı geçerlidir?", arabic: "", options: ["Medd-i Munfasıl", "Medd-i Tabii", "Medd-i Muttasıl", "Medd-i Lazım"], correct: 2, exp: "Muttasıl 'bitişik' demektir. Uzatma ve hemze aynı kelimede bitişik olduğu için Muttasıldır." },
+    { type: "Ayet", text: "Aşağıdaki kelimede kural nedir? (Elif ve Hemze yanyana)", arabic: "شَاءَ", options: ["Medd-i Arız", "Medd-i Munfasıl", "Medd-i Muttasıl", "Medd-i Tabii"], correct: 2, exp: "Şâe kelimesinde Elif (med) ve Hemze bitişiktir. (Medd-i Muttasıl)" },
+    { type: "Tanım", text: "Medd-i Muttasıl'ın hükmü (uzatma gerekliliği) nedir?", arabic: "", options: ["Sünnet", "Vacip", "Caiz", "Müstehap"], correct: 1, exp: "Kıraat imamlarının tamamı 1 elipten fazla uzatılmasında ittifak ettiği için 'Vacip'tir." },
+    { type: "Tanım", text: "Harf-i Med kelimenin sonunda, Hemze ise bir sonraki kelimenin başında ise ne olur?", arabic: "", options: ["Medd-i Munfasıl", "Medd-i Muttasıl", "Medd-i Lazım", "Medd-i Tabii"], correct: 0, exp: "Munfasıl 'ayrılmış' demektir. Uzatma bir kelimede, sebep (hemze) diğer kelimede olduğu için Munfasıldır." },
+    { type: "Ayet", text: "İki kelimeden oluşan bu ifadede hangi med vardır?", arabic: "يَا أَيُّهَا", options: ["Medd-i Muttasıl", "Medd-i Munfasıl", "Medd-i Lazım", "Medd-i Tabii"], correct: 1, exp: "Yâ (1. kelime sonu) Elif uzatması, Eyyühel (2. kelime başı) Hemzesi barındırır. Kelimeler ayrıdır: Munfasıl." },
+    { type: "Tanım", text: "Harf-i Med'den sonra 'Kalıcı Sükûn' (Cezm veya Şedde) gelirse hangi med olur?", arabic: "", options: ["Medd-i Lazım", "Medd-i Lin", "Medd-i Tabii", "Medd-i Arız"], correct: 0, exp: "Kalıcı sükun (durulduğunda da geçildiğinde de var olan sükûn) gelirse uzatmak 'Lazım' olur." },
+    { type: "Ayet", text: "Uzatma harfinden sonra ŞEDDE gelmiştir. Kural nedir?", arabic: "وَلَا الضَّالِّينَ", options: ["Medd-i Arız", "Medd-i Lazım", "Medd-i Muttasıl", "Medd-i Munfasıl"], correct: 1, exp: "Elif'ten sonra Şedde (Kalıcı sükûn) gelmiştir. Medd-i Lazım'dır ve tam 4 elif uzatılır." },
+    { type: "Ayet", text: "Sure başlarındaki harflerde (örneğin Sâd harfi) tecvid kuralı nedir?", arabic: "صۤ", options: ["Medd-i Arız", "Medd-i Muttasıl", "Medd-i Lazım", "Medd-i Lin"], correct: 2, exp: "Okunuşu Sâââd şeklindedir. Eliften sonra cezimli Dal harfi gelir (kalıcı sükun). Medd-i Lazım." },
+    { type: "Tanım", text: "Harf-i Med'den sonra 'Geçici Sükûn' (sadece durulduğu için oluşan) gelirse hangi med olur?", arabic: "", options: ["Medd-i Munfasıl", "Medd-i Arız", "Medd-i Lin", "Medd-i Lazım"], correct: 1, exp: "Durakta ortaya çıkan bu geçici (sonradan olan) duruma 'Arız' denir." },
+    { type: "Ayet", text: "Aşağıdaki kelimenin sonunda DURAK yaparsak hangi kuralı uygulamış oluruz?", arabic: "يَعْلَمُونَ", options: ["Medd-i Arız", "Medd-i Lazım", "Medd-i Muttasıl", "Medd-i Munfasıl"], correct: 0, exp: "Geçilse Medd-i Tabii olur, ancak durulduğunda Nun harfi cezimlenir (geçici sükun). Medd-i Arız oluşur." },
+    { type: "Ayet", text: "Fatiha suresinin sonunda durulduğunda hangi med oluşur?", arabic: "الْعَالَمِينَ", options: ["Medd-i Lin", "Medd-i Tabii", "Medd-i Lazım", "Medd-i Arız"], correct: 3, exp: "Durulunca Ya harfinden sonra geçici sükun oluşur (Nun cezimlenir). Kural Arız'dır." },
+    { type: "Tanım", text: "Lin harfleri (öncesi üstünlü, cezimli Vav veya Ya) sonrasında sükûn gelirse ne olur?", arabic: "", options: ["Medd-i Tabii", "Medd-i Muttasıl", "Medd-i Munfasıl", "Medd-i Lin"], correct: 3, exp: "Lin (yumuşaklık) harflerinden sonra durulduğunda Medd-i Lin kuralı oluşur." },
+    { type: "Ayet", text: "Lin harfi olan Vav'dan sonra DURULURSA ne olur?", arabic: "خَوْفٍ", options: ["Medd-i Muttasıl", "Medd-i Tabii", "Medd-i Lin", "Medd-i Arız"], correct: 2, exp: "Havf kelimesinde durulunca cezimli Vav'dan sonra Fe harfi cezimlenir. Kural Medd-i Lin olur." },
+    { type: "Ayet", text: "Bu kelimede uzatmadan sonra şedde var. Hangi kural oluşur?", arabic: "دَابَّةٍ", options: ["Medd-i Munfasıl", "Medd-i Lazım", "Medd-i Tabii", "Medd-i Lin"], correct: 1, exp: "Elif'ten sonra kalıcı sükun olan Şedde gelmiştir. Medd-i Lazım." },
+    { type: "Ayet", text: "Bu iki kelime arasında (ilk kelime sonu med, ikinci kelime başı hemze) oluşan kural nedir?", arabic: "فِي أَنْفُسِكُمْ", options: ["Medd-i Lazım", "Medd-i Munfasıl", "Medd-i Muttasıl", "Medd-i Lin"], correct: 1, exp: "Fî kelimesindeki Ya ve Enfüsiküm kelimesindeki Hemze ayrı kelimelerdedir. Medd-i Munfasıl." },
+    { type: "Ayet", text: "Aşağıdaki kelimede kural nedir? (Vav ve Hemze bir arada)", arabic: "سُوءَ", options: ["Medd-i Lazım", "Medd-i Muttasıl", "Medd-i Lin", "Medd-i Munfasıl"], correct: 1, exp: "Sûe kelimesinde Vav (med) ve Hemze AYNI kelimede yan yanadır. Medd-i Muttasıl." },
+    { type: "Tanım", text: "Sebebi Med olan 'Sükûn' kaça ayrılır?", arabic: "", options: ["Açık ve Gizli", "Lâzım (Kalıcı) ve Ârız (Geçici)", "İnce ve Kalın", "Caiz ve Vacip"], correct: 1, exp: "Sükun ikidir: Geçildiğinde de var olan kalıcı (Lazım) ve sadece durulduğunda ortaya çıkan (Arız)." },
+    { type: "Ayet", text: "Kureyş Suresinin sonundaki kelimede durulunca kural ne olur?", arabic: "قُرَيْشٍ", options: ["Medd-i Arız", "Medd-i Lin", "Medd-i Tabii", "Medd-i Lazım"], correct: 1, exp: "Öncesi üstün olan cezimli Ya (Lin Harfi) vardır. Durulunca Şın cezimlenir. Medd-i Lin oluşur." }
+];
+
+/* =========================================
+   KART POP-UP (MODAL) YÖNETİMİ
+   ========================================= */
+let isDraggingMap = false;
+
+function openCardModal(cardEl) {
+    if (isDraggingMap) {
+        isDraggingMap = false;
+        return; 
+    }
+
+    const modal = document.getElementById('card-modal');
+    const wrapper = document.getElementById('card-clone-wrapper');
+    const modalInner = document.getElementById('card-modal-inner');
+
+    const clone = cardEl.cloneNode(true);
+    
+    clone.removeAttribute('onclick');
+    clone.classList.remove('cursor-pointer', 'hover:ring-4', 'hover:z-20');
+    clone.style.transform = 'none'; 
+    clone.style.margin = '0 auto'; 
+    clone.style.pointerEvents = 'none'; 
+    
+    wrapper.innerHTML = '';
+    wrapper.appendChild(clone);
+
+    modal.classList.remove('hidden');
+    void modal.offsetWidth; 
+    
+    modal.classList.remove('opacity-0');
+    modalInner.classList.remove('scale-95');
+    modalInner.classList.add('scale-100');
+}
+
+function closeCardModal() {
+    const modal = document.getElementById('card-modal');
+    const modalInner = document.getElementById('card-modal-inner');
+
+    modal.classList.add('opacity-0');
+    modalInner.classList.remove('scale-100');
+    modalInner.classList.add('scale-95');
+
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.getElementById('card-clone-wrapper').innerHTML = ''; 
+    }, 300);
+}
+
+document.addEventListener('keydown', e => {
+    const cardModal = document.getElementById('card-modal');
+    if (e.key === 'Escape' && !cardModal.classList.contains('hidden')) {
+        closeCardModal();
+    }
+});
+
+
+/* =========================================
+   STATE
+   ========================================= */
+let currentMode   = null; 
+let questions      = [];
+let qIndex        = 0;
+
+let sScore        = 0;
+let sRoundOver    = false;
+
+let dScoreLeft    = 0;
+let dScoreRight   = 0;
+let dLeftLocked    = false;
+let dRightLocked  = false;
+let dRoundOver    = false;
+
+let timerVal      = 30;
+let timerRef      = null;
+
+/* =========================================
+   YARDIMCI FONKSİYONLAR
+   ========================================= */
+function shuffle(arr) {
+    let a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function buildShufflePool(baseQs) {
+    return shuffle(baseQs);
+}
+
+function el(id) { return document.getElementById(id); }
+
+function showScreen(name) {
+    ['single-screen','duel-screen','result-screen'].forEach(id => {
+        const e = el(id);
+        e.classList.add('hidden');
+        e.style.display = 'none';
+    });
+    const target = el(name);
+    target.classList.remove('hidden');
+    target.style.display = 'flex';
+}
+
+function spawnConfetti() {
+    const colors = ['#3b82f6','#8b5cf6','#ef4444','#10b981','#f59e0b','#6366f1'];
+    for (let i = 0; i < 65; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.width = (7 + Math.random() * 8) + 'px';
+        piece.style.height = (7 + Math.random() * 8) + 'px';
+        piece.style.animationDelay = (Math.random() * 0.4) + 's';
+        piece.style.animationDuration = (1.2 + Math.random() * 0.8) + 's';
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 2500);
+    }
+}
+
+function stopTimer() { if (timerRef) { clearInterval(timerRef); timerRef = null; } }
+
+/* =========================================
+   BAŞLATMA
+   ========================================= */
+function startMode(mode) {
+    currentMode = mode;
+    questions   = buildShufflePool(allQuestions);
+    qIndex      = 0;
+    sScore      = 0;
+    dScoreLeft  = 0;
+    dScoreRight = 0;
+
+    el('quiz-modal').classList.remove('hidden');
+    el('quiz-modal').style.display = 'flex';
+
+    if (mode === 'single') {
+        showScreen('single-screen');
+        loadSingleQuestion();
+    } else {
+        showScreen('duel-screen');
+        loadDuelQuestion();
+    }
+}
+
+function closeQuiz() {
+    stopTimer();
+    el('quiz-modal').classList.add('hidden');
+    el('quiz-modal').style.display = 'none';
+}
+
+function restartMode() { startMode(currentMode); }
+
+/* =========================================
+   TEK KİŞİ MODU (SÜRESİZ & AÇIKLAMALI)
+   ========================================= */
+function loadSingleQuestion() {
+    sRoundOver = false;
+    const q = questions[qIndex];
+
+    el('s-progress').innerText = `${qIndex+1}/${questions.length}`;
+    el('s-question').innerText = q.text;
+
+    el('s-explanation-box').classList.add('hidden');
+
+    const arabicEl = el('s-arabic');
+    if (q.arabic) {
+        arabicEl.innerHTML = q.arabic;
+        arabicEl.style.display = 'flex';
+    } else {
+        arabicEl.style.display = 'none';
+    }
+
+    const cont = el('s-options');
+    cont.innerHTML = '';
+    q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-single';
+        btn.textContent = opt;
+        btn.onclick = () => answerSingle(i, btn);
+        cont.appendChild(btn);
+    });
+
+    el('s-correct-overlay').style.display = 'none';
+    el('s-next-container').style.display  = 'none';
+    el('s-score-delta').classList.add('hidden');
+}
+
+function answerSingle(selectedIdx, btnEl) {
+    if (sRoundOver) return;
+    sRoundOver = true;
+
+    const q = questions[qIndex];
+    const isCorrect = selectedIdx === q.correct;
+
+    if (isCorrect) {
+        sScore += 10;
+        el('s-score').innerText = sScore;
+        btnEl.classList.add('opt-correct');
+        el('s-correct-overlay').style.display = 'flex';
+        setTimeout(() => el('s-correct-overlay').style.display = 'none', 1200);
+        spawnConfetti();
+        showScoreDelta(`+10`, true);
+    } else {
+        const pen = 5;
+        sScore = Math.max(0, sScore - pen);
+        el('s-score').innerText = sScore;
+        btnEl.classList.add('opt-wrong');
+        highlightCorrectSingle();
+        showScoreDelta(`-${pen}`, false);
+    }
+
+    el('s-explanation-text').innerText = q.exp;
+    el('s-explanation-box').classList.remove('hidden');
+
+    el('s-next-container').style.display = 'flex';
+    const isLast = qIndex === questions.length - 1;
+    const nextBtn = el('s-next-btn');
+    if (isLast) {
+        nextBtn.textContent = '🏆 Sonuçlar';
+        nextBtn.className = 'bg-amber-500 hover:bg-amber-400 text-white font-black px-8 py-3 sm:px-12 sm:py-4 rounded-xl text-sm sm:text-base shadow-xl flex items-center gap-2 transition-all';
+    } else {
+        nextBtn.innerHTML = 'Sonraki Soru <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>';
+        nextBtn.className = 'bg-blue-600 hover:bg-blue-500 text-white font-black px-8 py-3 sm:px-12 sm:py-4 rounded-xl text-sm sm:text-base shadow-xl flex items-center gap-2 transition-all';
+    }
+}
+
+function highlightCorrectSingle() {
+    const q = questions[qIndex];
+    const btns = el('s-options').children;
+    for (let i = 0; i < btns.length; i++) {
+        btns[i].disabled = true;
+        if (i === q.correct) btns[i].classList.add('opt-correct');
+        else if (!btns[i].classList.contains('opt-wrong')) btns[i].style.opacity = '0.3';
+    }
+}
+
+function showScoreDelta(text, positive) {
+    const d = el('s-score-delta');
+    d.innerText = text;
+    d.style.color = positive ? '#34d399' : '#f87171';
+    d.classList.remove('hidden');
+    d.style.animation = 'none';
+    setTimeout(() => { d.style.animation = ''; d.className = 'score-pop'; }, 10);
+    setTimeout(() => d.classList.add('hidden'), 1400);
+}
+
+function nextSingle() {
+    qIndex++;
+    if (qIndex < questions.length) {
+        loadSingleQuestion();
+    } else {
+        showResultScreen();
+    }
+}
+
+function endSingle() {
+    showResultScreen();
+}
+
+/* =========================================
+   DÜELLO MODU (SÜRELİ)
+   ========================================= */
+function loadDuelQuestion() {
+    dRoundOver  = false;
+    dLeftLocked = false;
+    dRightLocked = false;
+
+    const q = questions[qIndex];
+
+    ['left','right'].forEach(side => {
+        const arabicEl = el(`d-arabic-${side}`);
+        const qEl      = el(`d-question-${side}`);
+        if (q.arabic) {
+            arabicEl.innerHTML = q.arabic;
+            arabicEl.style.display = 'flex';
+        } else {
+            arabicEl.style.display = 'none';
+        }
+        qEl.innerText = q.text;
+    });
+
+    buildDuelOptions('left', q);
+    buildDuelOptions('right', q);
+
+    ['d-lock-left','d-lock-right','d-win-left','d-win-right'].forEach(id => {
+        el(id).style.display = 'none';
+    });
+
+    el('d-next-btn').style.display = 'none';
+    el('d-center-timer').style.display = 'flex';
+
+    el('d-score-left').innerText  = dScoreLeft;
+    el('d-score-right').innerText = dScoreRight;
+
+    startDuelTimer();
+}
+
+function buildDuelOptions(side, q) {
+    const isLeft  = side === 'left';
+    const contId  = isLeft ? 'd-options-left' : 'd-options-right';
+    const keys    = isLeft ? ['1','2','3','4'] : ['7','8','9','0'];
+    const cls     = isLeft ? 'opt-blue' : 'opt-red';
+    const cont    = el(contId);
+    cont.innerHTML = '';
+
+    q.options.forEach((opt, i) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'flex flex-col relative min-h-0';
+
+        const btn = document.createElement('button');
+        btn.className = cls + ' text-xs sm:text-sm md:text-base';
+        btn.dataset.optIndex = i;
+
+        btn.innerHTML = `<span class="absolute top-1 ${isLeft ? 'left-1.5' : 'right-1.5'} text-[9px] sm:text-[10px] font-black opacity-40 leading-none select-none">${keys[i]}</span><span class="px-2 text-center w-full">${opt}</span>`;
+
+        btn.onclick = () => answerDuel(side, i, btn);
+        wrap.appendChild(btn);
+        cont.appendChild(wrap);
+    });
+}
+
+function startDuelTimer() {
+    stopTimer();
+    timerVal = 30;
+    updateDuelTimerUI();
+    timerRef = setInterval(() => {
+        timerVal--;
+        updateDuelTimerUI();
+        if (timerVal <= 0) { stopTimer(); dTimeUp(); }
+    }, 1000);
+}
+
+function updateDuelTimerUI() {
+    const t = el('d-center-timer');
+    t.innerText = timerVal;
+    el('d-timer-bar').style.width = ((timerVal / 30) * 100) + '%';
+    const isRed = timerVal <= 8;
+    t.style.borderColor = isRed ? '#ef4444' : '#334155';
+    t.style.color        = isRed ? '#f87171' : '#60a5fa';
+    t.style.background   = isRed ? 'rgba(127,29,29,0.4)' : '#0f172a';
+    el('d-timer-bar').style.background = isRed
+        ? 'linear-gradient(to right, #ef4444, #f97316)'
+        : 'linear-gradient(to right, #6366f1, #3b82f6, #f43f5e)';
+}
+
+function dTimeUp() {
+    stopTimer();
+    dRoundOver = true;
+    highlightCorrectDuel();
+    el('d-center-timer').style.display = 'none';
+    el('d-next-btn').style.display = 'flex';
+}
+
+function answerDuel(side, selectedIdx, btnEl) {
+    if (dRoundOver) return;
+    if (side === 'left'  && dLeftLocked)  return;
+    if (side === 'right' && dRightLocked) return;
+
+    const q = questions[qIndex];
+    const isCorrect = selectedIdx === q.correct;
+
+    if (isCorrect) {
+        stopTimer();
+        dRoundOver = true;
+
+        if (side === 'left')  { dScoreLeft++;  el('d-score-left').innerText  = dScoreLeft;  el('d-win-left').style.display  = 'flex'; }
+        else                   { dScoreRight++; el('d-score-right').innerText = dScoreRight; el('d-win-right').style.display = 'flex'; }
+
+        btnEl.classList.add('opt-correct');
+        highlightCorrectDuel();
+        spawnConfetti();
+
+        el('d-center-timer').style.display = 'none';
+        el('d-next-btn').style.display = 'flex';
+
+    } else {
+        btnEl.classList.add('opt-wrong');
+        const zoneId = side === 'left' ? 'd-left-zone' : 'd-right-zone';
+        el(zoneId).classList.add('shake');
+        setTimeout(() => el(zoneId).classList.remove('shake'), 450);
+
+        if (side === 'left')  { dLeftLocked  = true; el('d-lock-left').style.display  = 'flex'; }
+        else                   { dRightLocked = true; el('d-lock-right').style.display = 'flex'; }
+
+        if (dLeftLocked && dRightLocked) {
+            stopTimer();
+            dRoundOver = true;
+            highlightCorrectDuel();
+            el('d-center-timer').style.display = 'none';
+            el('d-next-btn').style.display = 'flex';
+        }
+    }
+}
+
+function highlightCorrectDuel() {
+    const q = questions[qIndex];
+    ['d-options-left','d-options-right'].forEach(contId => {
+        const cont = el(contId);
+        if (!cont) return;
+        Array.from(cont.children).forEach((wrap, i) => {
+            const btn = wrap.querySelector('button');
+            if (!btn) return;
+            btn.disabled = true;
+            if (i === q.correct) {
+                btn.classList.add('opt-correct');
+            } else if (!btn.classList.contains('opt-wrong')) {
+                btn.style.opacity = '0.3';
+            }
+        });
+    });
+}
+
+function nextDuel() {
+    ['d-lock-left','d-lock-right','d-win-left','d-win-right'].forEach(id => {
+        el(id).style.display = 'none';
+    });
+    qIndex++;
+    if (qIndex < questions.length) {
+        loadDuelQuestion();
+    } else {
+        showResultScreen();
+    }
+}
+
+/* =========================================
+   SONUÇ EKRANI
+   ========================================= */
+function showResultScreen() {
+    stopTimer();
+    showScreen('result-screen');
+
+    const isTeam = currentMode === 'duel';
+    const emoji  = el('r-emoji');
+    const title  = el('r-title');
+    const desc   = el('r-desc');
+    const score  = el('r-score');
+
+    if (!isTeam) {
+        const maxScore = questions.length * 10;
+        const p = (sScore / maxScore) * 100;
+        score.innerHTML = `<span style="background:linear-gradient(to right,#60a5fa,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${sScore} Puan</span>`;
+        if (p >= 85) { 
+            emoji.innerText = '👑'; title.innerText = 'Med Kuralları Ustası!'; desc.innerText = 'Tebrikler! Soruların neredeyse tamamını doğru cevaplayarak harika bir başarı elde ettiniz.'; 
+        } else if (p >= 50) { 
+            emoji.innerText = '🌟'; title.innerText = 'Güzel Başarı!'; desc.innerText = 'Tebrikler, Uzatma (Med) kurallarını oldukça iyi kavramışsınız. Birkaç tekrarla kusursuz olabilirsiniz!'; 
+        } else { 
+            emoji.innerText = '📚'; title.innerText = 'Tekrar Denemelisin'; desc.innerText = 'Şemayı detaylıca inceleyip kuralların örneklerini tekrar gözden geçirmek yararlı olabilir.'; 
+        }
+    } else {
+        score.innerHTML = `<span style="color:#818cf8">${dScoreLeft}</span><span style="color:#475569;font-size:2rem;margin:0 0.75rem">—</span><span style="color:#f87171">${dScoreRight}</span>`;
+        if (dScoreLeft > dScoreRight) { 
+            emoji.innerText = '🔵🏆'; title.innerHTML = '<span style="color:#818cf8">Mavi Takım</span> Kazandı!'; desc.innerText = 'Hızlı ve doğru cevaplarla Mavi takım düelloyu domine etti!'; 
+        } else if (dScoreRight > dScoreLeft)  { 
+            emoji.innerText = '🔴🏆'; title.innerHTML = '<span style="color:#f87171">Kırmızı Takım</span> Kazandı!'; desc.innerText = 'Mükemmel refleksler! Kırmızı takım rakibini geçerek zafer kazandı.'; 
+        } else { 
+            emoji.innerText = '🤝'; title.innerText = 'Beraberlik!'; desc.innerText = 'Her iki oyuncu da eşit güçte! Kazanan çıkmadı ama bilgi kazandı.'; 
+        }
+    }
+}
+
+/* =========================================
+   KLAVYE KISAYOLLARI
+   ========================================= */
+document.addEventListener('keydown', e => {
+    if (el('quiz-modal').classList.contains('hidden')) return;
+
+    if (currentMode === 'duel' && !dRoundOver) {
+        const map1 = {'1':0,'2':1,'3':2,'4':3};
+        const map2 = {'7':0,'8':1,'9':2,'0':3};
+        if (e.key in map1 && !dLeftLocked) {
+            const btn = el('d-options-left').querySelectorAll('button')[map1[e.key]];
+            if (btn && !btn.disabled) btn.click();
+        }
+        if (e.key in map2 && !dRightLocked) {
+            const btn = el('d-options-right').querySelectorAll('button')[map2[e.key]];
+            if (btn && !btn.disabled) btn.click();
+        }
+    }
+
+    if (currentMode === 'single' && (e.key === 'Enter' || e.key === 'ArrowRight')) {
+        const nextCont = el('s-next-container');
+        if (nextCont.style.display !== 'none') nextSingle();
+    }
+});
+
+/* =========================================
+   ŞEMA ZOOM + SÜRÜKLEME
+   ========================================= */
+let currentScale = 1;
+function changeZoom(step) {
+    if (window.innerWidth < 1024) return;
+    currentScale = Math.min(1.4, Math.max(0.65, currentScale + step));
+    el('tree-container').style.transform = `scale(${currentScale})`;
+}
+
+const slider = el('drag-container');
+let isDown = false, startX, scrollLeft;
+
+slider.addEventListener('mousedown', e => { 
+    if (window.innerWidth < 1024) return; 
+    isDown = true; 
+    isDraggingMap = false; 
+    startX = e.pageX - slider.offsetLeft; 
+    scrollLeft = slider.scrollLeft; 
+});
+slider.addEventListener('mouseleave', () => { isDown = false; });
+slider.addEventListener('mouseup', () => { 
+    isDown = false; 
+    setTimeout(() => { isDraggingMap = false; }, 50);
+});
+slider.addEventListener('mousemove', e => { 
+    if (!isDown || window.innerWidth < 1024) return; 
+    e.preventDefault(); 
+    isDraggingMap = true; 
+    slider.scrollLeft = scrollLeft - (e.pageX - slider.offsetLeft - startX) * 2; 
+});
+</script>
+</body>
+</html>

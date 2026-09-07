@@ -9,7 +9,7 @@ import {
     Gamepad2, LayoutGrid, Library, ArrowRight, LogOut, MonitorPlay,
     CheckCircle2, Layers, Sparkles,
     LogIn, UserPlus, Download, Youtube, Quote,
-    MoreHorizontal, FileText, Globe
+    MoreHorizontal, FileText, Globe, LayoutTemplate
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -210,6 +210,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         superAdmin: { key: 'superAdmin', href: '/teacher/superadmin', title: 'Süper Admin', icon: <Shield />, color: "from-slate-700 to-slate-900" },
         activitiesTeacher: { key: 'activitiesTeacher', href: '/teacher/activities', title: 'Etkinlik Merkezi', icon: <Gamepad2 />, color: "from-rose-500 to-pink-600" },
         contentTeacher: { key: 'contentTeacher', href: "/teacher/content-creation", title: "İçerik Yönetimi", icon: <PenSquare />, color: "from-indigo-500 to-blue-600" },
+        summariesTeacher: { key: 'summariesTeacher', href: '/teacher/ozetler', title: 'Özet Kütüphanesi', icon: <LayoutTemplate />, color: "from-purple-500 to-rose-600" },
         sourceTexts: { key: 'sourceTexts', href: '/teacher/source-texts', title: 'Kaynak Metinler', icon: <BookOpen />, color: "from-teal-500 to-emerald-600" },
         extraPages: { key: 'extraPages', href: "/teacher/extra-pages", title: "Ekstra Sayfalar", icon: <Globe />, color: "from-cyan-500 to-blue-600" },
         studentsTeacher: { key: 'studentsTeacher', href: '/teacher/students', title: 'Öğrenci Yönetimi', icon: <UserCog />, color: "from-emerald-500 to-teal-600" },
@@ -228,10 +229,10 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
 
     const getManagementButtons = () => {
         if (user.role === 'teacher') {
-            return [managementButtons.activitiesTeacher, managementButtons.sourceTexts, managementButtons.studentsTeacher, managementButtons.leaderboard, managementButtons.evaluationScales];
+            return [managementButtons.activitiesTeacher, managementButtons.summariesTeacher, managementButtons.sourceTexts, managementButtons.studentsTeacher, managementButtons.leaderboard, managementButtons.evaluationScales];
         }
         const buttons = [
-            managementButtons.activitiesTeacher, managementButtons.contentTeacher, managementButtons.sourceTexts, managementButtons.extraPages, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
+            managementButtons.activitiesTeacher, managementButtons.contentTeacher, managementButtons.summariesTeacher, managementButtons.sourceTexts, managementButtons.extraPages, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
             managementButtons.examQuestions, managementButtons.activityDataBank, managementButtons.exams,
             managementButtons.evaluationScales, managementButtons.leaderboard, managementButtons.statsTeacher,
             managementButtons.imageLibrary, managementButtons.gameSettingsTeacher, managementButtons.scoreEvents,

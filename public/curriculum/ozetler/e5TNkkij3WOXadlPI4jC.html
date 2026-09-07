@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>İslam ve Günlük Hayat - Akıllı Tahta Uzman Modu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700;900&family=Nunito:wght@400;700;800;900&display=swap');
+
+        html { font-size: 100%; transition: font-size 0.3s ease; background-color: #0f172a; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%) !important;
+            overflow: hidden; margin: 0; padding: 0; height: 100vh; height: 100dvh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        h1, h2, h3, .title-font { font-family: 'Quicksand', sans-serif; }
+
+        .text-huge { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.1; }
+        .text-x-large { font-size: clamp(1.6rem, 3.5vw, 3rem); line-height: 1.2; }
+        
+        .slide {
+            display: none; opacity: 0; height: 100%; width: 100%; padding: 0.5rem; 
+            box-sizing: border-box; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; position: absolute; top: 0; left: 0;
+        }
+        .slide.active { display: flex; opacity: 1; z-index: 10; }
+
+        .presentation-card {
+            background-color: #ffffff; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            width: 98vw; max-width: 100%; height: 96vh; display: flex; flex-direction: column;
+            overflow: hidden; position: relative; margin: auto; border: 8px solid #f59e0b;
+        }
+
+        .card-header { background: #d97706; color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+        .card-body { flex-grow: 1; padding: 1.5rem; overflow: hidden; display: flex; flex-direction: column; justify-content: center; position: relative; }
+
+        .info-box { background: white; border-radius: 1rem; padding: 1.5rem; border: 3px solid #e2e8f0; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 6px 10px rgba(0,0,0,0.05); flex: 1;}
+        .bullet-list { list-style: none; padding: 0; margin: 0; width: 100%; }
+        .bullet-list li { margin-bottom: 1.2rem; position: relative; padding-left: 2.5rem; font-weight: 800; color: #334155; font-size: clamp(1.2rem, 2.5vw, 1.8rem); line-height: 1.3;}
+        .bullet-list li::before { content: '\f0da'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; left: 0; color: #d97706; font-size: 1.5em; top: -0.1em;}
+        
+        .quote-box { background: #f8fafc; border-left: 10px solid #f59e0b; padding: 1.5rem; border-radius: 0 1rem 1rem 0; margin-bottom: 1rem; }
+        .quote-title { font-size: 1.5rem; font-weight: 900; color: #b45309; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .quote-text { font-size: clamp(1.3rem, 2.5vw, 2.2rem); font-weight: 800; color: #334155; font-style: italic; }
+
+        .crypto-box { width: clamp(3rem, 5vw, 4.5rem); height: clamp(3rem, 5vw, 4.5rem); border: 4px solid #4f46e5; background: white; border-radius: 0.8rem; display: inline-flex; align-items: center; justify-content: center; font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 900; color: #312e81; margin: 0.2rem; box-shadow: 0 5px 10px rgba(0,0,0,0.15); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .crypto-box.revealed { background-color: #10b981; color: white; border-color: #059669; transform: rotateY(360deg); font-size: clamp(1.8rem, 3.5vw, 3rem); }
+        .alpha-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; max-width: 1200px; background: #f8fafc; padding: 1.5rem; border-radius: 1.5rem; border: 3px solid #cbd5e1; margin-bottom: 1.5rem; box-shadow: inset 0 4px 6px rgba(0,0,0,0.05);}
+        .alpha-cell { min-width: 4.5rem; text-align: center; background: white; border: 3px solid #94a3b8; border-radius: 0.8rem; padding: 0.5rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.2s; cursor: default; display: flex; flex-direction: column; align-items: center; }
+        .alpha-cell:hover { transform: scale(1.15); border-color: #4f46e5; z-index: 10; }
+
+        #ws-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 0.3rem; width: max-content; margin: 0 auto; background: #cbd5e1; padding: 0.5rem; border-radius: 1rem; border: 4px solid #94a3b8;}
+        .ws-cell { width: clamp(2.5rem, 4.5vw, 3.5rem); height: clamp(2.5rem, 4.5vw, 3.5rem); background: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: clamp(1.5rem, 3vw, 2.2rem); cursor: pointer; transition: all 0.2s; user-select: none; border-radius: 0.5rem; border: 2px solid transparent; }
+        .ws-cell:hover { transform: scale(1.1); box-shadow: 0 4px 8px rgba(0,0,0,0.2); border-color: #3b82f6; z-index: 5;}
+        .ws-cell.highlight { background: #fef08a; border-color: #f59e0b; color: #b45309; transform: scale(1.1); z-index: 10;}
+        .ws-cell.found { background: #10b981; color: white; border-color: #059669; pointer-events: none; animation: popIn 0.3s; }
+        .ws-word-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+        .ws-word-item { background: #f1f5f9; padding: 0.5rem 1.2rem; border-radius: 999px; font-weight: 900; color: #475569; border: 3px solid #cbd5e1; transition: all 0.3s; font-size: 1.2rem; }
+        .ws-word-item.found { background: #dcfce7; color: #166534; border-color: #4ade80; text-decoration: line-through; opacity: 0.5; }
+
+        .safe-dial { width: clamp(4rem, 8vw, 6rem); height: clamp(5rem, 10vw, 8rem); font-size: clamp(3rem, 6vw, 5rem); font-weight: 900; text-align: center; background: #e2e8f0; border: 6px solid #64748b; border-radius: 1rem; color: #0f172a; margin: 0 0.5rem; box-shadow: inset 0 5px 15px rgba(0,0,0,0.2); }
+        .safe-dial::-webkit-outer-spin-button, .safe-dial::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        .hm-slot { width: clamp(2rem, 4vw, 3.5rem); height: clamp(3rem, 6vw, 4.5rem); border-bottom: 6px solid #334155; display: inline-flex; align-items: flex-end; justify-content: center; font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; margin: 0 0.3rem; padding-bottom: 0.3rem;}
+        .hm-key { background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 0.8rem; padding: 0.8rem; font-size: 1.5rem; font-weight: 900; cursor: pointer; transition: all 0.1s; min-width: 3rem; }
+        .hm-key:active { transform: translateY(3px); }
+        .hm-key.correct { background: #10b981; color: white; border-color: #059669; pointer-events: none; }
+        .hm-key.wrong { background: #ef4444; color: white; border-color: #b91c1c; pointer-events: none; opacity: 0.5; }
+
+        .scenario-card { background: white; border: 5px solid #e2e8f0; border-radius: 1.5rem; padding: 2rem; cursor: pointer; transition: all 0.3s; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1rem; height: 100%; box-shadow: 0 10px 20px rgba(0,0,0,0.05);}
+        .scenario-card:hover { transform: translateY(-10px); border-color: #3b82f6; box-shadow: 0 20px 30px rgba(59,130,246,0.2); }
+        .scenario-card.correct-choice { border-color: #10b981; background: #ecfdf5; pointer-events: none;}
+        .scenario-card.wrong-choice { border-color: #ef4444; background: #fef2f2; animation: shake 0.4s; pointer-events: none;}
+
+        .quiz-opt { background: white; border: 3px solid #cbd5e1; border-radius: 1rem; padding: 1.5rem; font-size: 1.4rem; font-weight: 800; color: #334155; cursor: pointer; transition: 0.2s; text-align: left; margin-bottom: 0.8rem; display: block; width: 100%;}
+        .quiz-opt:hover { border-color: #f59e0b; background: #fffbeb; transform: translateX(5px); }
+        .quiz-opt.correct { background: #dcfce7; border-color: #22c55e; color: #166534; pointer-events: none; }
+        .quiz-opt.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; animation: shake 0.4s; pointer-events: none; }
+        .quiz-expl { display: none; background: #f0fdfa; border: 3px solid #2dd4bf; padding: 1.5rem; border-radius: 1rem; color: #0f766e; font-weight: 800; margin-top: 1.5rem; font-size: 1.3rem; animation: popIn 0.3s;}
+
+        .fill-blank-btn { padding: 0.8rem 1.5rem; border-radius: 1rem; background: #e2e8f0; font-weight: 900; cursor: pointer; border: 3px solid #94a3b8; font-size: 1.4rem; transition: all 0.2s;}
+        .fill-blank-btn:hover { background: #cbd5e1; border-color: #64748b; }
+        .fill-blank-btn.selected { background: #3b82f6; color: white; border-color: #2563eb; transform: scale(1.1); box-shadow: 0 5px 15px rgba(59,130,246,0.3); }
+        .fill-slot { display: inline-block; min-width: 150px; border-bottom: 4px dashed #3b82f6; text-align: center; color: #2563eb; font-weight: 900; cursor: pointer; padding: 0 5px; margin: 0 5px; transition: 0.2s;}
+        .fill-slot:hover { background: #eff6ff; border-radius: 0.5rem 0.5rem 0 0; }
+
+        .open-q-box { background: white; border: 4px dashed #818cf8; border-radius: 1.5rem; padding: 2rem; margin-bottom: 1.5rem; text-align: left;}
+        .open-a-box { display: none; background: #eef2ff; border-top: 3px solid #818cf8; margin-top: 1rem; padding-top: 1rem; color: #3730a3; font-weight: 800; font-size: 1.3rem; animation: popIn 0.4s;}
+        .show-ans-btn { background: #4f46e5; color: white; padding: 0.8rem 1.5rem; border-radius: 1rem; font-weight: 900; cursor: pointer; border: none; transition: 0.2s; display: inline-flex; align-items: center; font-size: 1.2rem;}
+        .show-ans-btn:hover { background: #4338ca; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        .tf-btn { padding: 1.5rem; font-size: 2.5rem; font-weight: 900; border-radius: 1.5rem; cursor: pointer; transition: all 0.3s; flex: 1; text-align: center; border: none; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .tf-btn.true { background: linear-gradient(135deg, #10b981 0%, #059669 100%); } 
+        .tf-btn.false { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
+        .tf-btn:active { transform: scale(0.95); }
+
+        .toolbar-pill {
+            position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); z-index: 9999; 
+            background: rgba(255, 255, 255, 0.95); border-radius: 9999px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+            display: flex; align-items: center; padding: 0.4rem; gap: 0.8rem; transition: all 0.4s; border: 3px solid rgba(245, 158, 11, 0.5);
+        }
+        .toolbar-pill.collapsed { width: 4rem; height: 4rem; padding: 0; justify-content: center; border-radius: 50%; }
+        .toolbar-content { display: flex; align-items: center; gap: 0.8rem; overflow: hidden; transition: all 0.3s; }
+        .toolbar-pill.collapsed .toolbar-content { width: 0; opacity: 0; pointer-events: none; display: none; }
+        .slide-counter { font-weight: 900; color: #d97706; font-size: 1.2rem; min-width: 5rem; text-align: center; }
+        .nav-btn { background: #f59e0b; color: white; border: none; width: 3rem; height: 3rem; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; font-size: 1.2rem;}
+        .nav-btn:hover { transform: scale(1.1); background: #d97706;}
+        .zoom-btn { background: #fef3c7; color: #d97706; }
+        .fs-btn { background: #d1fae5; color: #059669; }
+        .minimize-btn { color: #64748b; cursor: pointer; width: 3rem; height: 3rem; border-radius: 50%; border: none; background: transparent; font-size: 1.4rem;}
+
+        .game-feedback { display: none; position: absolute; inset: 0; background: rgba(255,255,255,0.95); z-index: 50; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 3rem; border-radius: 1rem; animation: popIn 0.3s; }
+        .confetti { position: absolute; width: 12px; height: 12px; z-index: 100; pointer-events: none; }
+
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .scrollable-area::-webkit-scrollbar { width: 12px; }
+        .scrollable-area::-webkit-scrollbar-track { background: transparent; }
+        .scrollable-area::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; border: 3px solid white;}
+    </style>
+</head>
+<body>
+
+    <div id="slides-container" class="relative w-full h-full">
+        
+        <div class="slide active" id="slide-0">
+            <div class="presentation-card bg-slate-800 text-white justify-center items-center text-center p-8 border-none" style="background-color: #1e293b !important;">
+                <i class="fas fa-book-open text-8xl text-amber-400 mb-6 drop-shadow-lg"></i>
+                <h2 class="text-2xl md:text-4xl tracking-widest text-slate-300 mb-2 uppercase font-bold">4. Ünite • 7. Sınıf Siyer</h2>
+                <h1 class="text-huge font-black mb-8 text-white">İslam ve Günlük Hayat<br><span class="text-amber-400">Temel Dinî Bilgiler</span></h1>
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-600/50 max-w-4xl shadow-2xl">
+                    <p class="text-x-large italic font-serif text-amber-100">"Ben ancak güzel ahlakı tamamlamak için gönderildim." <br><span class="text-xl text-slate-400 not-italic font-sans">(Hz. Muhammed sav.)</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-1">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-800">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-user-secret mr-3"></i>Dev Şifre Kırıcı</h2>
+                </div>
+                <div class="card-body bg-purple-50 items-center overflow-y-auto scrollable-area" id="crypto-area">
+                    <p class="text-center font-bold text-purple-900 mb-4 text-lg md:text-xl">Aşağıdaki 3 basamaklı kodlar (341'den başlayarak) birbirine çok yakın. Tabloyu kullanarak şifreyi çözün!</p>
+                    <div class="alpha-grid" id="alpha-grid-container"></div>
+                    
+                    <div class="bg-white p-6 rounded-2xl shadow-xl text-center w-full max-w-6xl mb-4 border-4 border-indigo-200">
+                        <div class="flex flex-wrap justify-center gap-x-6 gap-y-4" id="crypto-word-container">
+                            <!-- JS ile dolacak: İSLAM AHLAKININ ÖZÜ EDEP VE HAYADIR -->
+                        </div>
+                        <button id="crypto-btn" onclick="revealCrypto()" class="mt-8 bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 px-12 rounded-full text-2xl shadow-lg transition-transform hover:scale-105">
+                            <i class="fas fa-magic mr-2"></i> Şifreyi Çöz ve Göster
+                        </button>
+                    </div>
+
+                    <div id="crypto-feedback" class="game-feedback">
+                        <i class="fas fa-quote-left text-6xl text-purple-300 mb-4"></i>
+                        <h2 class="text-3xl md:text-5xl font-black text-purple-900">"İSLAM AHLAKININ ÖZÜ EDEP VE HAYADIR"</h2>
+                        <button onclick="changeSlide(1)" class="mt-8 bg-purple-600 text-white px-10 py-4 rounded-full font-bold text-2xl">Derse Başla <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-2">
+            <div class="presentation-card">
+                <div class="card-header bg-cyan-700">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-search mr-3"></i>Akıllı Kavram Bulmacası (12x12)</h2>
+                </div>
+                <div class="card-body bg-cyan-50 items-center overflow-y-auto scrollable-area" id="ws-area">
+                    <div class="bg-cyan-100 p-4 rounded-xl border-2 border-cyan-300 mb-4 max-w-5xl w-full text-center">
+                        <p class="font-black text-cyan-900 text-lg md:text-xl"><i class="fas fa-info-circle mr-2"></i>NASIL OYNANIR?</p>
+                        <p class="font-bold text-cyan-800 text-base md:text-lg mt-1">Bulduğunuz kelimenin önce <strong>İLK harfine</strong>, sonra <strong>SON harfine</strong> tıklayın. Arası otomatik çizilecektir. Kelimeler her yöne gizlenmiş olabilir!</p>
+                    </div>
+                    
+                    <div class="flex flex-col lg:flex-row gap-8 items-start w-full max-w-6xl justify-center">
+                        <div class="bg-white p-3 rounded-2xl shadow-2xl border-4 border-cyan-400 relative">
+                            <div id="ws-grid"></div>
+                            <button onclick="clearWsSelection()" class="mt-4 w-full py-3 bg-red-100 text-red-600 rounded-xl text-lg font-black hover:bg-red-200 transition"><i class="fas fa-eraser mr-2"></i> Seçimi İptal Et</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border-4 border-cyan-300 w-full lg:w-64">
+                            <h4 class="font-black text-gray-800 text-xl border-b-4 border-gray-200 pb-2 mb-4 text-center">Hedef Kavramlar</h4>
+                            <div id="ws-word-list" class="flex flex-wrap lg:flex-col gap-2"></div>
+                        </div>
+                    </div>
+
+                    <div id="ws-feedback" class="game-feedback">
+                        <i class="fas fa-trophy text-8xl text-yellow-500 mb-6"></i>
+                        <h2 class="text-4xl md:text-6xl font-black text-cyan-900 mb-4">GÖZLERİN KESKİN!</h2>
+                        <p class="text-2xl font-bold text-gray-600">Bu ünitenin tüm anahtar kelimelerini başarıyla ortaya çıkardın.</p>
+                        <button onclick="changeSlide(1)" class="mt-8 bg-cyan-600 text-white px-10 py-4 rounded-full font-black text-2xl hover:scale-105 transition-transform">Devam Et <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-3">
+            <div class="presentation-card">
+                <div class="card-header bg-blue-800">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-user-tie mr-3"></i>1. İslam Ahlakının Özü: Edep ve Hayâ</h2>
+                </div>
+                <div class="card-body">
+                    <div class="quote-box border-blue-500 bg-blue-50">
+                        <div class="quote-title text-blue-700"><i class="fas fa-book-open"></i> Edep Nedir?</div>
+                        <div class="quote-text text-blue-900">Kişinin niyet, söz, davranış ve her türlü hâlinin iyi ve güzel olmasıdır. Toplumda uyulması gereken görgü kurallarıdır.</div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
+                        <div class="info-box border-blue-300">
+                            <h3 class="text-2xl font-black text-blue-800 mb-4 border-b-4 border-blue-100 pb-2">Hayâ (Utanma Duygusu)</h3>
+                            <ul class="bullet-list">
+                                <li>Kişinin çirkin davranışlardan rahatsız olup onları terk etmesidir.</li>
+                                <li><strong>"Şayet utanmıyorsan, dilediğini yap!"</strong> hadisi, hayâsızlıktan sakındırır.</li>
+                                <li>Hayâ, insanı zarifleştirir ve kötülüklerden koruyan bir kalkandır.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box border-amber-300 bg-amber-50">
+                            <h3 class="text-2xl font-black text-amber-800 mb-4 border-b-4 border-amber-100 pb-2">En Güzel Örnek: Hz. Muhammed</h3>
+                            <ul class="bullet-list">
+                                <li>Peygamberimiz kesinlikle hakaret etmez, kaba söz söylemezdi.</li>
+                                <li>Birini azarlayacak olsa bile "Allah iyiliğini versin!" derdi.</li>
+                                <li>O, Yüce Allah'ın huzurunda olduğu bilinciyle (edeple) yaşardı.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-4">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-800">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-user-friends mr-3"></i>2. Dostluk ve Arkadaşlık</h2>
+                </div>
+                <div class="card-body">
+                    <div class="quote-box border-teal-500 bg-teal-50">
+                        <div class="quote-title text-teal-700"><i class="fas fa-users"></i> Gerçek Dostlar</div>
+                        <div class="quote-text text-teal-900">"Sizin dostunuz ve yardımcınız sadece Allah, O'nun peygamberi ve... müminlerdir." (Maide, 55)</div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
+                        <div class="info-box border-teal-300">
+                            <h3 class="text-2xl font-black text-teal-800 mb-4 border-b-4 border-teal-100 pb-2">Kardeşlik ve Yardımlaşma</h3>
+                            <ul class="bullet-list">
+                                <li>Müminler ancak kardeştir. (Ensar ve Muhacir kardeşliği gibi).</li>
+                                <li>İyilik ve takva üzere yardımlaşılır, <strong>günah ve düşmanlıkta yardımlaşılmaz.</strong></li>
+                                <li>Kardeşimiz zalimse onu zulümden alıkoyarak ona yardım etmeliyiz.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box border-rose-300 bg-rose-50">
+                            <h3 class="text-2xl font-black text-rose-800 mb-4 border-b-4 border-rose-100 pb-2">Arkadaş Seçimi</h3>
+                            <ul class="bullet-list">
+                                <li>"Kişi dostunun dini üzeredir." Hadisi arkadaşın etkisini vurgular.</li>
+                                <li>Kibirli olmayan, mütevazı ve cana yakın kişilerle dost olunmalıdır.</li>
+                                <li>Dostlarımız, bizi iyiliğe ve Yüce Allah'ın rızasına yöneltmelidir.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-5">
+            <div class="presentation-card">
+                <div class="card-header bg-rose-600">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-balance-scale-left mr-3"></i>Etkinlik: Durum Analizi</h2>
+                </div>
+                <div class="card-body bg-rose-50 flex flex-col justify-center items-center" id="scenario-area">
+                    <h3 class="text-4xl font-black text-rose-800 mb-6">Sen Olsan Ne Yapardın?</h3>
+                    <p class="text-2xl text-center mb-10 text-rose-900 font-bold max-w-5xl">Çok sevdiğin bir arkadaşın, sınıftan başka birisi hakkında haksız yere dedikodu (gıybet) yapıyor.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl h-[40vh] min-h-[350px]">
+                        <div class="scenario-card" onclick="scenarioFail(this)">
+                            <i class="fas fa-comments text-7xl text-red-500"></i>
+                            <h4 class="text-3xl font-black text-gray-800">1. Seçenek</h4>
+                            <p class="text-xl font-bold text-gray-600">Dostluğumuz bozulmasın diye onu dinler ve dedikoduya katılırım. Sonuçta o benim en yakın arkadaşım.</p>
+                        </div>
+                        
+                        <div class="scenario-card" onclick="scenarioSuccess(this)">
+                            <i class="fas fa-hand-paper text-7xl text-green-500"></i>
+                            <h4 class="text-3xl font-black text-gray-800">2. Seçenek</h4>
+                            <p class="text-xl font-bold text-gray-600">"Kardeşiniz zalimse onu zulümden alıkoyun" hadisini hatırlar, nazikçe bu yaptığı günahı durdurması için onu uyarırım.</p>
+                        </div>
+                    </div>
+
+                    <div id="scenario-feedback" class="game-feedback">
+                        <i class="fas fa-check-circle text-8xl text-green-500 mb-6"></i>
+                        <h2 class="text-4xl md:text-6xl font-black text-rose-900">DOĞRU SEÇİM!</h2>
+                        <p class="text-2xl mt-6 max-w-3xl font-bold text-gray-700">Müslüman, günah ve düşmanlıkta dostuna dahi yardım etmez. Gerçek dost, arkadaşını yanlıştan çevirendir.</p>
+                        <button onclick="changeSlide(1)" class="mt-10 bg-rose-600 text-white px-12 py-5 rounded-full font-black text-2xl hover:scale-105 transition-transform">Devam Et <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-6">
+            <div class="presentation-card">
+                <div class="card-header bg-emerald-700">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-leaf mr-3"></i>3. Nimetlerin Kadrini Bilmek: Şükür</h2>
+                </div>
+                <div class="card-body">
+                    <div class="quote-box border-emerald-500 bg-emerald-50">
+                        <div class="quote-title text-emerald-700"><i class="fas fa-hand-holding-heart"></i> Şükür Nedir?</div>
+                        <div class="quote-text text-emerald-900">Yüce Allah'a kalp, dil ve beden ile teşekkürde bulunmaktır. İyiliğini gördüğümüz insanlara da teşekkür etmektir.</div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
+                        <div class="info-box border-emerald-300 bg-emerald-50">
+                            <h3 class="text-2xl font-black text-emerald-800 mb-4 border-b-4 border-emerald-100 pb-2">Şükrün Boyutları</h3>
+                            <ul class="bullet-list">
+                                <li><strong>Dil ile:</strong> "Elhamdülillah", "Allah'a şükürler olsun" demek.</li>
+                                <li><strong>Beden ve Amel ile:</strong> Namaz kılmak, oruç tutmak, zekât ve sadaka vererek yardımlaşmak şükrün bir göstergesidir.</li>
+                                <li>Allah (cc) şükredenlerin nimetini artıracağını vadetmiştir.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box border-cyan-400">
+                            <h3 class="text-2xl font-black text-cyan-900 mb-4 border-b-4 border-cyan-100 pb-2">İnsanlara Teşekkür</h3>
+                            <ul class="bullet-list">
+                                <li>"İnsanlara teşekkür etmeyen, Allah'a da şükretmez." (Hadis)</li>
+                                <li>Bize iyilik yapana "Allah seni hayırla mükâfatlandırsın" diyerek en güzel teşekkürü etmeliyiz.</li>
+                                <li>Mümin hem nimete şükreder hem de belaya sabreder. İkisi de hayırdır.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-7">
+            <div class="presentation-card">
+                <div class="card-header bg-emerald-600">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-question-circle mr-3"></i>Adam Asmaca: İyiliğin Karşılığı</h2>
+                </div>
+                <div class="card-body bg-emerald-50 items-center scrollable-area overflow-y-auto" id="hm1-area">
+                    <div class="text-3xl md:text-4xl font-black text-red-600 mb-6 bg-red-100 px-6 py-2 rounded-2xl border-4 border-red-300">CAN: <span id="hm1-lives-count">6</span> ❤️</div>
+                    <p class="text-xl md:text-2xl font-bold text-emerald-900 mb-8 text-center max-w-5xl">İpucu: Allah'a şükretmenin bir göstergesi olarak, bize iyilik yapan insanlara sunmamız gereken sözlü nezaket ifadesi.</p>
+                    <div class="flex justify-center mb-12" id="hm1-word-container"></div>
+                    <div class="flex flex-wrap justify-center gap-3 max-w-4xl" id="hm1-keyboard"></div>
+                    
+                    <div id="hm1-feedback" class="game-feedback">
+                        <i class="fas fa-check-circle text-8xl text-green-500 mb-6"></i>
+                        <h2 class="text-4xl md:text-6xl font-black text-emerald-900">TEBRİKLER! CEVAP: TEŞEKKÜR</h2>
+                        <button onclick="changeSlide(1)" class="mt-10 bg-emerald-600 text-white px-10 py-4 rounded-full font-black text-2xl hover:scale-105 transition-transform">Devam Et <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                    <div id="hm1-fail" class="game-feedback bg-red-50 text-red-900 border-8 border-red-500">
+                        <i class="fas fa-times-circle text-8xl text-red-500 mb-6"></i>
+                        <h2 class="text-5xl font-black mb-4">CANIN BİTTİ!</h2>
+                        <p class="text-3xl font-bold mt-2">Doğru Cevap: TEŞEKKÜR</p>
+                        <button onclick="changeSlide(1)" class="mt-10 bg-red-600 text-white px-10 py-4 rounded-full font-black text-2xl hover:scale-105 transition-transform">Devam Et <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-8">
+            <div class="presentation-card">
+                <div class="card-header bg-rose-800">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-balance-scale mr-3"></i>4. Kul Hakkını Gözetmek</h2>
+                </div>
+                <div class="card-body">
+                    <div class="quote-box border-rose-500 bg-rose-50">
+                        <div class="quote-title text-rose-700"><i class="fas fa-exclamation-triangle"></i> Asıl Müflis (İflas Eden) Kimdir?</div>
+                        <div class="quote-text text-rose-900">Kıyamet gününde kıldığı namaz ve oruçla gelip, dünyadayken başkasına sövdüğü, malını yediği, dövdüğü için sevapları hak sahiplerine dağıtılan kişidir. (Hadis)</div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
+                        <div class="info-box border-pink-300">
+                            <h3 class="text-2xl font-black text-pink-800 mb-4 border-b-4 border-pink-100 pb-2">Kul Hakkı İhlalleri</h3>
+                            <ul class="bullet-list">
+                                <li>Hırsızlık, hile yapmak, yalan söylemek.</li>
+                                <li>Dedikodu yapmak, lakap takmak, küçümsemek, alay etmek.</li>
+                                <li>Çevreyi kirletmek, trafik kurallarını çiğnemek.</li>
+                                <li>Sadece insanların değil, <strong>hayvanların ve doğanın da</strong> üzerimizde hakkı vardır.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box border-blue-300 bg-blue-50">
+                            <h3 class="text-2xl font-black text-blue-800 mb-4 border-b-4 border-blue-100 pb-2">Nasıl Kurtuluruz?</h3>
+                            <ul class="bullet-list">
+                                <li>Sadece Allah'a tövbe etmek kul hakkı günahından kurtarmaz.</li>
+                                <li>Mutlaka hakkına girdiğimiz kişiyle dünyadayken <strong>helalleşmeliyiz.</strong></li>
+                                <li>Adalet emri; hak sahibine hakkını vermek ve dengeli davranmaktır.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-9">
+            <div class="presentation-card">
+                <div class="card-header bg-indigo-600">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-lock mr-3"></i>Etkinlik: Kul Hakkı Kasası</h2>
+                </div>
+                <div class="card-body bg-indigo-50 flex flex-col justify-center items-center" id="safe-area">
+                    <h3 class="text-4xl font-black text-indigo-800 mb-6">Kasayı Açmak İçin Mantığını Kullan!</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 w-full max-w-6xl text-left">
+                        <div class="bg-white p-6 rounded-2xl border-l-8 border-indigo-500 shadow-lg">
+                            <div class="font-black text-indigo-800 text-2xl mb-2">1. Rakam</div>
+                            <p class="text-xl font-bold text-gray-700">"İman, <strong>..........</strong> küsur parçadır. Hayâ da imandan bir parçadır." metindeki hadiste geçen sayının onlar basamağı kaçtır?</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border-l-8 border-indigo-500 shadow-lg">
+                            <div class="font-black text-indigo-800 text-2xl mb-2">2. Rakam</div>
+                            <p class="text-xl font-bold text-gray-700">Peygamberimize göre; "Müslümanın Müslüman üzerindeki hakkı" <strong>KAÇTIR?</strong> (Parçadaki 'Dikkat Edelim' kutusunda geçen sayı)</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border-l-8 border-indigo-500 shadow-lg">
+                            <div class="font-black text-indigo-800 text-2xl mb-2">3. Rakam</div>
+                            <p class="text-xl font-bold text-gray-700">Asıl müflis ahirete kıldığı namaz, tuttuğu <strong>........</strong> ve verdiği zekâtla gelir. (Hadiste sayılan temel ibadet sayısı)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 p-8 rounded-3xl border-8 border-gray-600 shadow-2xl flex flex-col items-center">
+                        <div class="flex gap-4 justify-center mb-8">
+                            <input type="number" id="safe-1" class="safe-dial" min="0" max="9" value="0">
+                            <input type="number" id="safe-2" class="safe-dial" min="0" max="9" value="0">
+                            <input type="number" id="safe-3" class="safe-dial" min="0" max="9" value="0">
+                        </div>
+                        <button onclick="checkSafe()" class="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-black py-4 px-12 rounded-full text-3xl shadow-xl transition-all w-full hover:scale-105"><i class="fas fa-key mr-2"></i> KİLİDİ AÇ</button>
+                    </div>
+
+                    <div id="safe-feedback" class="game-feedback">
+                        <i class="fas fa-box-open text-8xl text-indigo-500 mb-6"></i>
+                        <h2 class="text-4xl md:text-6xl font-black text-indigo-900">KASA AÇILDI!</h2>
+                        <p class="text-2xl font-bold mt-4 text-gray-700">Şifre: 7 (Yetmiş) - 5 (Beş Hak) - 3 (Namaz, Oruç, Zekat)</p>
+                        <button onclick="changeSlide(1)" class="mt-8 bg-indigo-600 text-white px-10 py-4 rounded-full font-bold text-2xl hover:scale-105 transition-transform">Devam Et <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-10">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-700">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-list-alt mr-3"></i>5. Esmayıhüsnayı Tanıyorum</h2>
+                </div>
+                <div class="card-body">
+                    <p class="text-center font-black text-2xl text-purple-900 mb-6 border-b-4 border-purple-200 pb-2 inline-block mx-auto">Allah'ın (cc) En Güzel İsimleri</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-grow">
+                        <div class="info-box border-purple-300 bg-purple-50">
+                            <h3 class="text-3xl font-black text-purple-800 mb-4 text-center">el-Afüv</h3>
+                            <p class="text-xl text-gray-700 font-bold mb-4">Kullarını kolaylıkla affeden, günahlarını silen ve cezalarını tamamen kaldıran anlamına gelir.</p>
+                            <ul class="bullet-list text-lg">
+                                <li>Kadir Gecesi Duası: "Allah'ım sen afüvsün, affetmeyi seversin, beni de affet."</li>
+                                <li>Mümin de diğer insanların hatalarını affedici olmalıdır.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box border-cyan-400 bg-cyan-50">
+                            <h3 class="text-3xl font-black text-cyan-800 mb-4 text-center">eş-Şekur</h3>
+                            <p class="text-xl text-gray-700 font-bold mb-4">Kullarının güzel amellerine çokça mükâfat veren, iyiliği karşılıksız bırakmayan anlamına gelir.</p>
+                            <ul class="bullet-list text-lg">
+                                <li>Yola sarkan dikeni iten kişiyi veya susuz köpeğe su vereni Allah Şekur ismiyle mükâfatlandırır.</li>
+                                <li>En küçük amel bile Allah katında değerlidir.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box border-rose-400 bg-rose-50">
+                            <h3 class="text-3xl font-black text-rose-800 mb-4 text-center">er-Rauf</h3>
+                            <p class="text-xl text-gray-700 font-bold mb-4">Son derece şefkatli ve merhametli anlamına gelir. Rahmetin enginliğini ifade eder.</p>
+                            <ul class="bullet-list text-lg">
+                                <li>Hataları hemen cezalandırmayıp tövbe fırsatı vermesi O'nun Rauf olmasındandır.</li>
+                                <li>Kur'an'da Peygamberimiz için de "müminlere karşı çok şefkatli (Rauf)" denilmiştir.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-11">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-600">
+                    <h2 class="text-xl md:text-3xl font-black"><i class="fas fa-font mr-3"></i>Adam Asmaca: İflas Eden Kim?</h2>
+                </div>
+                <div class="card-body bg-purple-50 items-center scrollable-area overflow-y-auto" id="hm2-area">
+                    <div class="text-3xl md:text-4xl font-black text-red-600 mb-6 bg-red-100 px-6 py-2 rounded-2xl border-4 border-red-300">CAN: <span id="hm2-lives-count">6</span> ❤️</div>
+                    <p class="text-xl md:text-2xl font-bold text-purple-900 mb-8 text-center max-w-5xl">İpucu: Ahirette kıldığı namazı, orucu olmasına rağmen, dünyadayken kul hakkı yediği için sevapları başkalarına dağıtılıp cehenneme atılan kişiye verilen isim.</p>
+                    <div class="flex justify-center mb-12" id="hm2-word-container"></div>
+                    <div class="flex flex-wrap justify-center gap-3 max-w-4xl" id="hm2-keyboard"></div>
+                    
+                    <div id="hm2-feedback" class="game-feedback">
+                        <i class="fas fa-check-circle text-8xl text-green-500 mb-6"></i>
+                        <h2 class="text-4xl md:text-6xl font-black text-purple-900">TEBRİKLER! CEVAP: MÜFLİS</h2>
+                        <button onclick="changeSlide(1)" class="mt-10 bg-purple-600 text-white px-10 py-4 rounded-full font-black text-2xl hover:scale-105 transition-transform">Devam Et <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                    <div id="hm2-fail" class="game-feedback bg-red-50 text-red-900 border-8 border-red-500">
+                        <i class="fas fa-times-circle text-8xl text-red-500 mb-6"></i>
+                        <h2 class="text-5xl font-black mb-4">CANIN BİTTİ!</h2>
+                        <p class="text-3xl font-bold mt-2">Doğru Cevap: MÜFLİS</p>
+                        <button onclick="changeSlide(1)" class="mt-10 bg-red-600 text-white px-10 py-4 rounded-full font-black text-2xl hover:scale-105 transition-transform">Devam Et <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide !p-0" id="slide-12">
+            <div class="w-full h-full bg-[#fefce8] flex flex-col relative overflow-hidden">
+                <div class="bg-red-600 text-white px-8 py-4 shadow-md flex justify-between items-center z-20">
+                    <h2 class="text-3xl font-black uppercase"><i class="fas fa-pen-nib mr-3"></i> Ünite Özeti ve Kavramlar</h2>
+                </div>
+                <div class="flex-grow overflow-y-auto p-6 md:p-10 scrollable-area">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full min-h-[600px]">
+                        <div class="bg-white border-8 border-yellow-400 p-6 md:p-8 rounded-3xl shadow-xl flex flex-col h-full overflow-hidden">
+                            <h4 class="font-black text-blue-700 text-3xl border-b-4 border-blue-200 pb-4 mb-6 flex-shrink-0"><i class="fas fa-book mr-3"></i> Kavram Sözlüğü</h4>
+                            <div class="space-y-5 text-xl md:text-2xl font-bold text-gray-700 overflow-y-auto pr-4 scrollable-area flex-grow">
+                                <p class="border-b-2 border-gray-100 pb-4"><strong class="text-indigo-900">Edep:</strong> Kişinin niyet, söz ve davranışlarının iyi ve güzel olması; toplumdaki <em>adabımuaşeret</em> kurallarıdır.</p>
+                                <p class="border-b-2 border-gray-100 pb-4"><strong class="text-indigo-900">Hayâ:</strong> Çirkin davranışlardan rahatsız olup terk etmek, utanma duygusudur. İnsanı kötülükten koruyan manevi kalkandır.</p>
+                                <p class="border-b-2 border-gray-100 pb-4"><strong class="text-indigo-900">Şükür:</strong> Allah'ın nimetlerine <span class="text-blue-600">kalp (inanmak)</span>, <span class="text-blue-600">dil (hamdetmek)</span> ve <span class="text-blue-600">beden (ibadet)</span> ile teşekkür etmektir.</p>
+                                <p class="border-b-2 border-gray-100 pb-4"><strong class="text-indigo-900">Kul Hakkı:</strong> Sadece insanların değil; hayvanların, doğanın ve kamu mallarının üzerimizdeki hukuki ve ahlaki haklarıdır. (Dedikodu, sıra ihlali, çevreyi kirletmek vb.)</p>
+                                <p class="border-b-2 border-gray-100 pb-4"><strong class="text-indigo-900">Afüv:</strong> Allah'ın (cc) kullarını kolaylıkla affedip, günahlarının izlerini tamamen silmesidir.</p>
+                                <p class="border-b-2 border-gray-100 pb-4"><strong class="text-indigo-900">Şekur:</strong> Yüce Allah'ın, yapılan küçük güzel amellere bile kat kat fazla mükâfat (sevap) vermesidir.</p>
+                                <p class="pb-2"><strong class="text-indigo-900">Rauf:</strong> Allah'ın kullarına karşı son derece şefkatli ve eşsiz merhametli olmasıdır.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white border-8 border-blue-400 p-6 md:p-8 rounded-3xl shadow-xl flex flex-col h-full overflow-hidden">
+                            <h4 class="font-black text-blue-700 text-3xl border-b-4 border-blue-200 pb-4 mb-6 flex-shrink-0"><i class="fas fa-list mr-3"></i> Altın Kurallar</h4>
+                            <div class="space-y-6 text-xl md:text-2xl font-bold text-gray-700 overflow-y-auto pr-4 scrollable-area flex-grow">
+                                <div class="flex items-start gap-4 border-b-2 border-gray-100 pb-4">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 text-3xl"></i>
+                                    <p>İnsanlara teşekkür etmeyen, Allah'a (cc) da şükretmiş olmaz.</p>
+                                </div>
+                                <div class="flex items-start gap-4 border-b-2 border-gray-100 pb-4">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 text-3xl"></i>
+                                    <p>Gerçek dostluk, arkadaşını yanlıştan çevirmeyi gerektirir. Kardeşin zalimse <strong>onu zulmünden alıkoyarak</strong> yardım etmelisin.</p>
+                                </div>
+                                <div class="flex items-start gap-4 border-b-2 border-gray-100 pb-4">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 text-3xl"></i>
+                                    <p><strong class="text-red-600">Asıl müflis (iflas eden);</strong> namazı ve orucu olduğu halde başkasının hakkını yediği için ahirette tüm sevaplarını hak sahiplerine kaptıran kişidir.</p>
+                                </div>
+                                <div class="flex items-start gap-4 border-b-2 border-gray-100 pb-4">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 text-3xl"></i>
+                                    <p>Kul hakkının tek telafisi sadece tövbe etmek değil, dünyadayken mutlaka <strong>helalleşmektir</strong>.</p>
+                                </div>
+                                <div class="flex items-start gap-4 border-b-2 border-gray-100 pb-4">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 text-3xl"></i>
+                                    <p><strong>"Şayet utanmıyorsan dilediğini yap!"</strong> hadisi, hayâsı olmayan bir insandan her türlü kötülüğün beklenebileceğini ifade eder.</p>
+                                </div>
+                                <div class="flex items-start gap-4 pb-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 text-3xl"></i>
+                                    <p>Müminin durumu hayret vericidir: Nimete şükreder kazanır, belaya sabreder yine kazanır. İkisi de onun için hayırdır.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-13">
+            <div class="presentation-card bg-indigo-900 text-white justify-center items-center text-center p-6 md:p-12 border-8 border-indigo-700">
+                <i class="fas fa-tasks text-8xl md:text-9xl text-green-400 mb-8 drop-shadow-lg"></i>
+                <h2 class="text-3xl md:text-5xl tracking-widest text-indigo-200 mb-4 uppercase font-black">Özet Bitti!</h2>
+                <h1 class="text-[5rem] font-black mb-8 leading-tight">Ölçme ve Değerlendirme</h1>
+                <div class="bg-indigo-800/80 p-6 rounded-2xl border-4 border-indigo-600/50 max-w-5xl shadow-2xl">
+                    <p class="text-2xl md:text-3xl italic font-bold text-indigo-100">Kitabınızın sonundaki tüm değerlendirme sorularını (Boşluk Doldurma, Doğru-Yanlış, Açık Uçlu ve Testler) şimdi interaktif olarak çözeceğiz.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-14">
+            <div class="presentation-card">
+                <div class="card-header bg-teal-700">
+                    <h2 class="text-xl md:text-3xl font-black">Bölüm A: Boşluk Doldurma</h2>
+                </div>
+                <div class="card-body bg-slate-50 overflow-y-auto scrollable-area" id="fill-area">
+                    <p class="text-center font-black text-teal-800 text-2xl mb-8 bg-teal-100 py-3 rounded-xl border-4 border-teal-200">Önce aşağıdaki kelimelere dokun, sonra yerleştireceğin boşluğa dokun!</p>
+                    <div class="flex flex-wrap justify-center gap-4 mb-10" id="fill-bank">
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'edep')">edep</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'kardeş')">kardeş</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'teşekkür')">teşekkür</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'toplumsal')">toplumsal</button>
+                        <button class="fill-blank-btn" onclick="selectWord(this, 'Afüv')">Afüv</button>
+                    </div>
+                    <div class="bg-white p-10 rounded-3xl shadow-xl space-y-8 text-2xl font-bold w-full max-w-6xl mx-auto border-4 border-gray-300 text-gray-700">
+                        <p class="leading-relaxed">1. Müslüman, sosyal hayatın her aşamasında <span class="fill-slot" data-ans="edep" onclick="placeWord(this)">________</span> sahibi olmalıdır.</p>
+                        <p class="leading-relaxed">2. Yüce Allah kendisine inananları <span class="fill-slot" data-ans="kardeş" onclick="placeWord(this)">________</span> olarak nitelemiştir.</p>
+                        <p class="leading-relaxed">3. İnsanlara <span class="fill-slot" data-ans="teşekkür" onclick="placeWord(this)">________</span> etmeyen Allah’a da şükretmez.</p>
+                        <p class="leading-relaxed">4. Kul hakları konusundaki tutum ve davranışlarımızın <span class="fill-slot" data-ans="toplumsal" onclick="placeWord(this)">________</span> sonuçları da vardır.</p>
+                        <p class="leading-relaxed">5. <span class="fill-slot" data-ans="Afüv" onclick="placeWord(this)">________</span>; kullarını kolaylıkla affeden, onların günahlarını silen ve cezalarını kaldıran anlamına gelir.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-15">
+            <div class="presentation-card">
+                <div class="card-header bg-cyan-700">
+                    <h2 class="text-xl md:text-3xl font-black">Bölüm B: Doğru mu, Yanlış mı?</h2>
+                </div>
+                <div class="card-body bg-cyan-50 items-center justify-center relative" id="tf-area">
+                    <div class="text-center mb-8"><span class="bg-cyan-200 text-cyan-900 px-8 py-3 rounded-full font-black text-2xl border-4 border-cyan-400">Soru <span id="tf-current-num">1</span> / 5</span></div>
+                    
+                    <div id="tf-q-box" class="bg-white p-12 rounded-3xl shadow-2xl text-center w-full max-w-5xl border-4 border-cyan-300 mb-12 min-h-[250px] flex items-center justify-center">
+                        <h3 id="tf-text" class="text-3xl md:text-4xl font-bold text-gray-800 leading-snug">...</h3>
+                    </div>
+                    <div class="flex gap-10 w-full max-w-4xl">
+                        <button class="tf-btn true" onclick="checkTF(true)"><i class="fas fa-check-circle mr-3"></i> DOĞRU</button>
+                        <button class="tf-btn false" onclick="checkTF(false)"><i class="fas fa-times-circle mr-3"></i> YANLIŞ</button>
+                    </div>
+                    
+                    <div id="tf-fb" class="game-feedback">
+                        <h2 id="tf-fb-text" class="text-4xl md:text-5xl font-black mb-8">Açıklama</h2>
+                        <button onclick="nextTF()" class="bg-cyan-600 text-white px-12 py-5 rounded-full font-black text-3xl hover:scale-105 transition-transform shadow-xl">Sıradaki Soru</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-16">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-xl md:text-3xl font-black">Bölüm C: Çoktan Seçmeli (Soru 1)</h2>
+                </div>
+                <div class="card-body bg-slate-50 items-center p-10 overflow-y-auto scrollable-area" id="t1-area">
+                    <div class="bg-white p-10 rounded-3xl shadow-2xl border-4 border-orange-200 w-full max-w-6xl">
+                        <p class="italic text-2xl text-gray-700 border-l-8 border-orange-400 pl-6 mb-8 bg-gray-50 py-4 pr-4 rounded-r-xl">Sözlükte iyi tutum ve alışkanlıklar, incelik, kibarlık, hayranlık ve takdir gibi anlamlara gelmektedir. Bir ahlak terimi olarak da toplumun iyi olarak kabul ettiği davranışlarda bulunmak, görgülü, nazik, güzel ahlak sahibi ve erdemli olmak demektir.</p>
+                        <h3 class="text-3xl font-black mb-8 text-gray-900">1. Bu parçada anlamı verilen kavram aşağıdakilerden hangisidir?</h3>
+                        <div class="space-y-4">
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q1-expl', 't1-area')">A) Ahlak</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, true, 'q1-expl', 't1-area')">B) Edep</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q1-expl', 't1-area')">C) Hayâ</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q1-expl', 't1-area')">D) Şükür</button>
+                        </div>
+                        <div id="q1-expl" class="quiz-expl"><i class="fas fa-info-circle mr-2"></i>Doğru: B. Verilen tanım 'Edep' kavramına aittir.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-17">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-xl md:text-3xl font-black">Bölüm C: Çoktan Seçmeli (Soru 2)</h2>
+                </div>
+                <div class="card-body bg-slate-50 items-center p-10 overflow-y-auto scrollable-area" id="t2-area">
+                    <div class="bg-white p-10 rounded-3xl shadow-2xl border-4 border-orange-200 w-full max-w-6xl">
+                        <p class="italic text-2xl text-gray-700 border-l-8 border-orange-400 pl-6 mb-8 bg-gray-50 py-4 pr-4 rounded-r-xl">İlk Müslümanlar, sadece inandıkları için on üç yıl boyunca Mekke’de dışlanma, hakaret, açlık, işkence gibi pek çok eziyete maruz kaldılar. Hicret izni geldiğinde sahip oldukları ne varsa bırakarak Medine’ye göçtüler. Onları orada Medineli Müslüman kardeşleri karşıladı. Medineli Müslümanlar Mekke’den gelen Müslüman kardeşleriyle her şeylerini paylaştılar.</p>
+                        <h3 class="text-3xl font-black mb-8 text-gray-900">2. Bu parçadan ulaşılabilecek en kapsamlı yargı aşağıdakilerden hangisidir?</h3>
+                        <div class="space-y-4">
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q2-expl', 't2-area')">A) İlk Müslümanlar, Mekke'de eziyete maruz kalmıştır.</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, true, 'q2-expl', 't2-area')">B) Müslümanların arasındaki ilişkilerin temelinde kardeşlik vardır.</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q2-expl', 't2-area')">C) Müslümanlar hicretten sonra Medine’de yeni bir hayata başladılar.</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q2-expl', 't2-area')">D) Müslümanlar sıkıntılı zamanlarında hicret etmek zorunda kalmışlardır.</button>
+                        </div>
+                        <div id="q2-expl" class="quiz-expl"><i class="fas fa-info-circle mr-2"></i>Doğru: B. Olayın genelinde Ensar ve Muhacir arasındaki eşsiz kardeşlik vurgulanmaktadır.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-18">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-xl md:text-3xl font-black">Bölüm C: Çoktan Seçmeli (Soru 3)</h2>
+                </div>
+                <div class="card-body bg-slate-50 items-center p-10 overflow-y-auto scrollable-area" id="t3-area">
+                    <div class="bg-white p-10 rounded-3xl shadow-2xl border-4 border-orange-200 w-full max-w-6xl">
+                        <p class="italic text-xl text-gray-700 border-l-8 border-orange-400 pl-6 mb-8 bg-gray-50 py-4 pr-4 rounded-r-xl">Şükür, Yüce Allah’ın sayısız nimetine karşı kalp, dil ve beden ile övgüde ve teşekkürde bulunmaktır. Kalbin şükrü nimetin Allah'tan olduğuna inanmak; dilin şükrü hamdetmek; bedenin şükrü namaz, oruç gibi ibadetleri eda etmektir. Malın şükrü ise sadaka ve zekât vermektir.</p>
+                        <h3 class="text-3xl font-black mb-8 text-gray-900">3. Bu parçadan şükürle ilgili hangilerine ulaşılabilir?<br><span class="text-2xl font-bold text-gray-600 mt-4 block">I. Allah’a şükretmenin farklı yolları vardır.<br>II. İnsan en çok malın şükrünü yerine getirmekte zorlanır.<br>III. Her nimetin şükrü kendi yapısına uygun olarak yerine getirilir.</span></h3>
+                        <div class="grid grid-cols-2 gap-6">
+                            <button class="quiz-opt text-center" onclick="checkQuiz(this, false, 'q3-expl', 't3-area')">A) Yalnız I</button>
+                            <button class="quiz-opt text-center" onclick="checkQuiz(this, false, 'q3-expl', 't3-area')">B) Yalnız II</button>
+                            <button class="quiz-opt text-center" onclick="checkQuiz(this, true, 'q3-expl', 't3-area')">C) I ve III</button>
+                            <button class="quiz-opt text-center" onclick="checkQuiz(this, false, 'q3-expl', 't3-area')">D) II ve III</button>
+                        </div>
+                        <div id="q3-expl" class="quiz-expl"><i class="fas fa-info-circle mr-2"></i>Doğru: C. Metinde zorluktan bahsedilmemiş, ancak farklı yollarından (kalp, dil, beden, mal) bahsedilmiştir.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-19">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-xl md:text-3xl font-black">Bölüm C: Çoktan Seçmeli (Soru 4)</h2>
+                </div>
+                <div class="card-body bg-slate-50 items-center p-10 overflow-y-auto scrollable-area" id="t4-area">
+                    <div class="bg-white p-10 rounded-3xl shadow-2xl border-4 border-orange-200 w-full max-w-6xl">
+                        <h3 class="text-3xl font-black mb-10 text-gray-900">4. Aşağıdaki davranışlardan hangisi bir kul hakkı ihlali değildir?</h3>
+                        <div class="space-y-4">
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q4-expl', 't4-area')">A) Lakap takmak</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q4-expl', 't4-area')">B) Hakaret etmek</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q4-expl', 't4-area')">C) Hırsızlık yapmak</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, true, 'q4-expl', 't4-area')">D) Sıra beklemek</button>
+                        </div>
+                        <div id="q4-expl" class="quiz-expl"><i class="fas fa-info-circle mr-2"></i>Doğru: D. Sıra beklemek bir hak ihlali değil, aksine başkalarının hakkına saygı göstermektir.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-20">
+            <div class="presentation-card">
+                <div class="card-header bg-orange-600">
+                    <h2 class="text-xl md:text-3xl font-black">Bölüm C: Çoktan Seçmeli (Soru 5)</h2>
+                </div>
+                <div class="card-body bg-slate-50 items-center p-10 overflow-y-auto scrollable-area" id="t5-area">
+                    <div class="bg-white p-10 rounded-3xl shadow-2xl border-4 border-orange-200 w-full max-w-6xl">
+                        <p class="italic text-2xl text-gray-700 border-l-8 border-orange-400 pl-6 mb-8 bg-gray-50 py-4 pr-4 rounded-r-xl">Bu ismin insanda tecelli etmesinin ilk şartı, hatalarını görebilme bilincine sahip olmaktır. Hatalarının farkında olanlar Allah’tan hayâ eder; bu hayâ onları tövbeye, tövbe de affa götürür. Bu ismin tecellisi sayesinde insanlar kimsenin kusuruna takılmaz, hoşgörülü ve affedici olmayı başarır.</p>
+                        <h3 class="text-3xl font-black mb-8 text-gray-900">5. Bu parçada Yüce Allah’ın aşağıdaki güzel isimlerinden hangisi anlatılmaktadır?</h3>
+                        <div class="space-y-4">
+                            <button class="quiz-opt" onclick="checkQuiz(this, true, 'q5-expl', 't5-area')">A) Afüv</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q5-expl', 't5-area')">B) Şekur</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q5-expl', 't5-area')">C) Muhsin</button>
+                            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q5-expl', 't5-area')">D) Rauf</button>
+                        </div>
+                        <div id="q5-expl" class="quiz-expl"><i class="fas fa-info-circle mr-2"></i>Doğru: A. Günahları affetmek, bağışlamak ve hoşgörülü olmak Allah'ın "Afüv" ismiyle ilgilidir.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-21">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-700">
+                    <h2 class="text-xl md:text-3xl font-black">Bölüm D: Açık Uçlu Sorular (1)</h2>
+                </div>
+                <div class="card-body bg-purple-50 overflow-y-auto scrollable-area p-10">
+                    <div class="open-q-box bg-white shadow-lg border-4 border-purple-200">
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-4">1. Toplumsal ilişkilerde edep ve hayânın önemini açıklayınız.</h3>
+                        <button class="show-ans-btn bg-purple-600 hover:bg-purple-700" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';"><i class="fas fa-eye mr-2"></i>Cevabı Göster</button>
+                        <div class="open-a-box text-xl text-purple-900 bg-purple-50 border-purple-400"><i class="fas fa-check-circle mr-2 text-green-500"></i>Edep ve hayâ, insanları utanılacak davranışlardan korur. Toplumda sevgi, saygı ve güven ortamı oluşturur. Kişiyi zarifleştirir ve kötülüklerden uzak tutar.</div>
+                    </div>
+                    <div class="open-q-box bg-white shadow-lg border-4 border-purple-200 mt-8">
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-4">2. Peygamber Efendimizin hayatından dostluk ve arkadaşlıkla ilgili bir örnek veriniz.</h3>
+                        <button class="show-ans-btn bg-purple-600 hover:bg-purple-700" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';"><i class="fas fa-eye mr-2"></i>Cevabı Göster</button>
+                        <div class="open-a-box text-xl text-purple-900 bg-purple-50 border-purple-400"><i class="fas fa-check-circle mr-2 text-green-500"></i>Hicret sonrası Mekkeli Muhacirler ile Medineli Ensar arasında kurduğu güçlü kardeşlik bağı (Muahat) eşsiz bir dostluk örneğidir.</div>
+                    </div>
+                    <div class="open-q-box bg-white shadow-lg border-4 border-purple-200 mt-8">
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-4">3. Allah’a (cc) şükretmek niçin önemlidir? Kısaca yazınız.</h3>
+                        <button class="show-ans-btn bg-purple-600 hover:bg-purple-700" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';"><i class="fas fa-eye mr-2"></i>Cevabı Göster</button>
+                        <div class="open-a-box text-xl text-purple-900 bg-purple-50 border-purple-400"><i class="fas fa-check-circle mr-2 text-green-500"></i>Verdiği sayısız nimetin farkına vararak kulluk bilincimizi gösteririz. Şükretmek, nimetlerin bereketlenmesini ve Allah'ın rızasını kazanmamızı sağlar.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-22">
+            <div class="presentation-card">
+                <div class="card-header bg-purple-700">
+                    <h2 class="text-xl md:text-3xl font-black">Bölüm D: Açık Uçlu Sorular (2)</h2>
+                </div>
+                <div class="card-body bg-purple-50 overflow-y-auto scrollable-area p-10">
+                    <div class="open-q-box bg-white shadow-lg border-4 border-purple-200">
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-4">4. Kul hakkına dikkat etmek insana neler kazandırır? Açıklayınız.</h3>
+                        <button class="show-ans-btn bg-purple-600 hover:bg-purple-700" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';"><i class="fas fa-eye mr-2"></i>Cevabı Göster</button>
+                        <div class="open-a-box text-xl text-purple-900 bg-purple-50 border-purple-400"><i class="fas fa-check-circle mr-2 text-green-500"></i>İnsanların birbirine olan güvenini artırır, toplumsal huzuru sağlar. Ahirette "müflis" (iflas etmiş) durumuna düşmekten ve sevaplarımızı kaybetmekten korur.</div>
+                    </div>
+                    <div class="open-q-box bg-white shadow-lg border-4 border-purple-200 mt-8">
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800 mb-4">5. Afüv isminin anlamını kavrayan bir Müslümanın nelere dikkat etmesi gerekir? Yorumlayınız.</h3>
+                        <button class="show-ans-btn bg-purple-600 hover:bg-purple-700" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';"><i class="fas fa-eye mr-2"></i>Cevabı Göster</button>
+                        <div class="open-a-box text-xl text-purple-900 bg-purple-50 border-purple-400"><i class="fas fa-check-circle mr-2 text-green-500"></i>Allah'ın günahları affedeceğinden ümidini kesmez ve daima tövbe eder. Ayrıca o da insanlara karşı merhametli, hoşgörülü ve hataları affedici olur.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-23">
+            <div class="presentation-card bg-emerald-800 text-white justify-center items-center text-center p-8 border-none" style="background-color: #064e3b !important;">
+                <i class="fas fa-medal text-9xl text-yellow-400 mb-8 drop-shadow-lg"></i>
+                <h1 class="text-[5rem] font-black mb-6 leading-tight">GÖREV TAMAMLANDI!</h1>
+                <p class="text-3xl text-emerald-100 mb-10 max-w-5xl font-bold">Zorlu şifreleri kırdınız, oyunları geçtiniz ve kitabınızdaki tüm değerlendirme sorularını mükemmel bir şekilde çözdünüz!</p>
+                <button onclick="goToSlide(0)" class="bg-yellow-500 text-gray-900 px-12 py-5 rounded-full text-3xl font-black shadow-2xl transition-transform hover:scale-105 hover:bg-yellow-400 border-4 border-yellow-300"><i class="fas fa-home mr-3"></i> En Başa Dön</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="toolbar" class="toolbar-pill">
+        <div class="toolbar-content" id="toolbar-content">
+            <button class="nav-btn fs-btn" onclick="toggleFullScreen()" title="Tam Ekran"><i id="fs-icon" class="fas fa-expand"></i></button>
+            <div style="width: 3px; height: 2rem; background: #cbd5e1; margin: 0 0.3rem;"></div>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(-10)" title="Yazıyı Küçült"><i class="fas fa-search-minus"></i></button>
+            <button class="nav-btn zoom-btn" onclick="resetZoom()" title="Orijinal Boyut" style="font-family: sans-serif; font-weight: 900;">A</button>
+            <button class="nav-btn zoom-btn" onclick="changeZoom(10)" title="Yazıyı Büyüt"><i class="fas fa-search-plus"></i></button>
+            <div style="width: 3px; height: 2rem; background: #cbd5e1; margin: 0 0.3rem;"></div>
+            <button class="nav-btn" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+            <div class="slide-counter" id="slide-counter-text">1 / 24</div>
+            <button class="nav-btn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <button class="minimize-btn" onclick="toggleToolbar()"><i id="toolbar-toggle-icon" class="fas fa-compress-alt"></i></button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentZoom = 100;
+
+        function changeZoom(amount) {
+            currentZoom += amount;
+            if(currentZoom > 150) currentZoom = 150;
+            if(currentZoom < 70) currentZoom = 70;
+            document.documentElement.style.fontSize = currentZoom + '%';
+        }
+        function resetZoom() { currentZoom = 100; document.documentElement.style.fontSize = '100%'; }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => { console.log(`Tam ekran hatası: ${err.message}`); });
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById('fs-icon');
+            if (document.fullscreenElement) { icon.classList.replace('fa-expand', 'fa-compress'); } 
+            else { icon.classList.replace('fa-compress', 'fa-expand'); }
+        });
+
+        function updateControls() {
+            document.getElementById('slide-counter-text').innerText = `${currentSlide + 1} / ${totalSlides}`;
+            if(currentSlide === 1) initCrypto();
+            if(currentSlide === 2) renderWordSearch();
+            if(currentSlide === 7) initHangman('TEŞEKKÜR', 'hm1-keyboard', 'hm1-word-container', 'hm1-feedback', 'hm1-area', 'hm1');
+            if(currentSlide === 11) initHangman('MÜFLİS', 'hm2-keyboard', 'hm2-word-container', 'hm2-feedback', 'hm2-area', 'hm2');
+            if(currentSlide === 15) loadTF();
+        }
+
+        function goToSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+            slides[currentSlide].classList.remove('active');
+            slides[index].classList.add('active');
+            currentSlide = index;
+            updateControls();
+        }
+        function changeSlide(step) { goToSlide(currentSlide + step); }
+        function toggleToolbar() { document.getElementById('toolbar').classList.toggle('collapsed'); }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+                else if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+            }
+        });
+
+        const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+        let codes = {};
+        let cryptoInitialized = false;
+
+        function initCrypto() {
+            const grid = document.getElementById('alpha-grid-container');
+            if(cryptoInitialized) return;
+            
+            // 3 Basamaklı, birbirine çok yakın sayılar (341 - 369 arası) ama KARIŞIK SIRADA
+            let baseNumbers = [];
+            for(let i=0; i<alphabet.length; i++) baseNumbers.push(341 + i);
+            
+            // Diziyi karıştır (Fisher-Yates Shuffle)
+            for (let i = baseNumbers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [baseNumbers[i], baseNumbers[j]] = [baseNumbers[j], baseNumbers[i]];
+            }
+            
+            alphabet.forEach((l, i) => codes[l] = baseNumbers[i]);
+
+            alphabet.forEach(l => {
+                const cell = document.createElement('div');
+                cell.className = "alpha-cell";
+                cell.innerHTML = `<span class='text-indigo-700 block text-xl md:text-2xl font-black mb-1 leading-none'>${codes[l]}</span><span class='text-2xl md:text-4xl text-slate-800 font-black leading-none'>${l}</span>`;
+                grid.appendChild(cell);
+            });
+            const sentence = "İSLAM AHLAKININ ÖZÜ EDEP VE HAYADIR".split(" ");
+            const wordContainer = document.getElementById('crypto-word-container');
+            wordContainer.innerHTML = "";
+            sentence.forEach(word => {
+                const wDiv = document.createElement('div'); wDiv.className = "flex gap-1";
+                [...word].forEach(char => {
+                    const cDiv = document.createElement('div'); cDiv.className = "crypto-box";
+                    cDiv.innerText = codes[char] || char;
+                    cDiv.dataset.l = char;
+                    wDiv.appendChild(cDiv);
+                });
+                wordContainer.appendChild(wDiv);
+            });
+            
+            cryptoInitialized = true;
+        }
+        function revealCrypto() {
+            const boxes = document.querySelectorAll('.crypto-box');
+            document.getElementById('crypto-btn').style.display = 'none';
+            boxes.forEach((b, i) => { setTimeout(() => { b.innerText = b.dataset.l; b.classList.add('revealed'); }, i * 60); });
+            setTimeout(() => { document.getElementById('crypto-feedback').style.display = 'flex'; fireConfetti('crypto-area', 80); }, boxes.length * 60 + 500);
+        }
+
+        const wsWords = ["EDEP", "HAYA", "DOSTLUK", "ŞÜKÜR", "MÜFLİS", "AFÜV", "ŞEKUR", "RAUF"];
+        // 12x12 Grid. Her kelime 1 defa var.
+        const wsGridData = [
+            ['E','D','E','P','Ç','G','T','Z','D','L','P','N'],
+            ['İ','H','A','Y','A','K','B','M','O','R','C','Ö'],
+            ['A','V','S','N','R','A','U','F','S','Ç','Ğ','İ'],
+            ['J','F','T','B','O','L','P','Z','T','U','M','Y'],
+            ['I','Y','Ü','G','E','Ş','D','V','L','A','N','C'],
+            ['R','K','C','V','H','I','M','Ç','U','F','O','S'],
+            ['U','P','L','Z','Ö','K','T','Ğ','K','İ','Ş','Ü'],
+            ['K','N','E','S','R','M','Y','C','A','H','P','B'],
+            ['E','B','G','Ü','A','F','V','D','O','U','K','L'],
+            ['Ş','Z','P','T','I','C','B','R','E','Y','N','A'],
+            ['V','A','L','H','Ç','N','S','İ','L','F','Ü','M'],
+            ['Ş','Ü','K','Ü','R','Z','Ğ','T','P','A','C','Y']
+        ];
+        
+        let wsFoundCount = 0;
+        let wsFirstNode = null;
+        let wsCellsData = []; // To keep references to DOM elements
+
+        function renderWordSearch() {
+            const grid = document.getElementById('ws-grid'); if(grid.innerHTML !== "") return;
+            const list = document.getElementById('ws-word-list');
+            wsWords.forEach(w => { const s = document.createElement('span'); s.id = 'ws-l-'+w; s.className = 'ws-word-item'; s.innerText = w; list.appendChild(s); });
+            
+            for(let r=0; r<12; r++){
+                wsCellsData[r] = [];
+                for(let c=0; c<12; c++){
+                    const div = document.createElement('div'); 
+                    div.className = "ws-cell"; 
+                    div.innerText = wsGridData[r][c];
+                    div.onclick = () => handleWsClick(r, c);
+                    wsCellsData[r][c] = div;
+                    grid.appendChild(div);
+                }
+            }
+        }
+
+        function handleWsClick(r, c) {
+            const cell = wsCellsData[r][c];
+            if(cell.classList.contains('found')) return; // Already solved
+
+            if(!wsFirstNode) {
+                // First click
+                wsFirstNode = {r: r, c: c, el: cell};
+                cell.classList.add('highlight');
+            } else {
+                // Second click
+                let endNode = {r: r, c: c, el: cell};
+                checkWsPath(wsFirstNode, endNode);
+                
+                // Reset interaction
+                wsFirstNode.el.classList.remove('highlight');
+                wsFirstNode = null;
+            }
+        }
+
+        function checkWsPath(start, end) {
+            // Same cell clicked twice -> cancel
+            if(start.r === end.r && start.c === end.c) return;
+
+            let dr = end.r - start.r;
+            let dc = end.c - start.c;
+            
+            // Determine if it's a valid straight line (horizontal, vertical, or diagonal)
+            if(dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) {
+                // Invalid line
+                showWrongWs(start, end);
+                return;
+            }
+
+            let steps = Math.max(Math.abs(dr), Math.abs(dc));
+            let stepR = dr === 0 ? 0 : dr / steps;
+            let stepC = dc === 0 ? 0 : dc / steps;
+
+            let wordStr = "";
+            let pathCells = [];
+
+            for(let i=0; i<=steps; i++) {
+                let currentR = start.r + (i * stepR);
+                let currentC = start.c + (i * stepC);
+                wordStr += wsGridData[currentR][currentC];
+                pathCells.push(wsCellsData[currentR][currentC]);
+            }
+
+            let revWord = wordStr.split('').reverse().join('');
+            
+            let matchedWord = null;
+            if(wsWords.includes(wordStr)) matchedWord = wordStr;
+            else if(wsWords.includes(revWord)) matchedWord = revWord;
+
+            if(matchedWord) {
+                const listEl = document.getElementById('ws-l-'+matchedWord);
+                if(!listEl.classList.contains('found')) {
+                    // Success!
+                    pathCells.forEach(cEl => {
+                        cEl.classList.add('found');
+                        cEl.classList.remove('highlight');
+                    });
+                    listEl.classList.add('found');
+                    wsFoundCount++;
+                    if(wsFoundCount === wsWords.length) { 
+                        document.getElementById('ws-feedback').style.display = 'flex'; 
+                        fireConfetti('ws-area', 100); 
+                    }
+                }
+            } else {
+                showWrongWs(start, end);
+            }
+        }
+
+        function showWrongWs(start, end) {
+            start.el.classList.add('bg-red-500', 'text-white');
+            end.el.classList.add('bg-red-500', 'text-white');
+            setTimeout(() => {
+                start.el.classList.remove('bg-red-500', 'text-white');
+                end.el.classList.remove('bg-red-500', 'text-white');
+            }, 500);
+        }
+
+        function clearWsSelection() { 
+            if(wsFirstNode) {
+                wsFirstNode.el.classList.remove('highlight');
+                wsFirstNode = null;
+            }
+        }
+
+        function checkSafe() {
+            // Cevap: 7 (Yetmiş), 5 (Beş hak), 3 (Namaz,Oruç,Zekat)
+            if(document.getElementById('safe-1').value == '7' && 
+               document.getElementById('safe-2').value == '5' && 
+               document.getElementById('safe-3').value == '3') {
+                document.getElementById('safe-feedback').style.display = 'flex'; 
+                fireConfetti('safe-area', 80);
+            } else {
+                const s1=document.getElementById('safe-1'), s2=document.getElementById('safe-2'), s3=document.getElementById('safe-3');
+                s1.style.color="red"; s2.style.color="red"; s3.style.color="red";
+                s1.style.borderColor="red"; s2.style.borderColor="red"; s3.style.borderColor="red";
+                setTimeout(()=>{
+                    s1.style.color=""; s2.style.color=""; s3.style.color="";
+                    s1.style.borderColor=""; s2.style.borderColor=""; s3.style.borderColor="";
+                }, 800);
+            }
+        }
+
+        let hmState = {};
+        function initHangman(targetWord, kbId, containerId, fbId, areaId, stateKey) {
+            const container = document.getElementById(containerId);
+            const kb = document.getElementById(kbId);
+            if(!container || container.innerHTML !== "") return;
+            
+            hmState[stateKey] = { guessed: [], target: targetWord, fb: fbId, area: areaId, cont: containerId, lives: 6 };
+            
+            [...targetWord].forEach(() => {
+                const div = document.createElement('div'); div.className = "hm-slot"; container.appendChild(div);
+            });
+
+            "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("").forEach(l => {
+                const btn = document.createElement('button'); btn.className = "hm-key"; btn.innerText = l;
+                btn.onclick = () => hmGuess(btn, l, stateKey);
+                kb.appendChild(btn);
+            });
+        }
+
+        function hmGuess(btn, letter, stateKey) {
+            const state = hmState[stateKey];
+            if(state.guessed.includes(letter) || state.lives <= 0) return;
+            state.guessed.push(letter);
+            
+            if(state.target.includes(letter)) {
+                btn.classList.add('correct');
+                const container = document.getElementById(state.cont);
+                [...state.target].forEach((char, i) => { if(char === letter) container.children[i].innerText = letter; });
+                
+                if([...state.target].every(c => state.guessed.includes(c))) {
+                    document.getElementById(state.fb).style.display = 'flex';
+                    fireConfetti(state.area, 60);
+                }
+            } else {
+                btn.classList.add('wrong'); state.lives--;
+                document.getElementById(stateKey+'-lives-count').innerText = state.lives;
+                if(state.lives <= 0) document.getElementById(stateKey+'-fail').style.display = 'flex';
+            }
+        }
+
+        function scenarioSuccess(card) { card.classList.add('correct-choice'); document.getElementById('scenario-feedback').style.display = 'flex'; fireConfetti('scenario-area', 80); }
+        function scenarioFail(card) { card.classList.add('wrong-choice'); }
+
+        let selFill = null;
+        function selectWord(btn, w) { document.querySelectorAll('.fill-blank-btn').forEach(b => b.classList.remove('bg-blue-400','text-white','scale-110')); btn.classList.add('bg-blue-400','text-white','scale-110'); selFill = w; }
+        function placeWord(slot) {
+            if(!selFill) return;
+            if(slot.dataset.ans === selFill) { slot.innerText = selFill; slot.classList.add('text-green-600','border-none'); selFill = null; document.querySelector('.fill-blank-btn.selected').style.display='none'; }
+            else { const old = slot.innerText; slot.innerText = "Hata!"; slot.style.color="red"; setTimeout(() => { slot.innerText = old; slot.style.color="";}, 600); }
+        }
+
+        const tfQs = [
+            {q: "1. İslam ahlakının özünde edep ve hayâ kavramları yer alır.", a: true, e: "Edep ve hayâ İslam ahlakının temelidir."},
+            {q: "2. İnsan, kendisinden başka kimseye ihtiyaç duymayan bir varlıktır.", a: false, e: "İnsan yaratılışı gereği topluma ve diğer insanlara ihtiyaç duyar."},
+            {q: "3. Şükür, Allah’ın verdiği sayısız nimetlere karşı kulun O’na teşekkür etmesidir.", a: true, e: "Kalp, dil ve beden ile Rabbimize minnettarlığımızı sunmaktır."},
+            {q: "4. Kul haklarına özen gösterilmeyen bir toplumda adaletsizlik ortaya çıkar.", a: true, e: "Kul hakkının ihlali toplumsal düzeni bozar ve adaletsizliği doğurur."},
+            {q: "5. Şekur, son derece şefkatli ve merhametli anlamına gelir.", a: false, e: "Şefkatli olan isim Rauf'tur. Şekur, az amele çok sevap veren demektir."}
+        ];
+        let tfIdx = 0;
+        function loadTF() {
+            if(tfIdx >= tfQs.length) { document.getElementById('tf-text').innerText = "Tebrikler! Bu bölüm bitti."; document.querySelector('.flex.gap-10.w-full').style.display = 'none'; return; }
+            document.getElementById('tf-current-num').innerText = tfIdx + 1;
+            document.getElementById('tf-text').innerText = tfQs[tfIdx].q;
+        }
+        function checkTF(ans) {
+            const correct = ans === tfQs[tfIdx].a;
+            document.getElementById('tf-fb-text').innerText = correct ? "DOĞRU! " + tfQs[tfIdx].e : "HATALI! " + tfQs[tfIdx].e;
+            document.getElementById('tf-fb-text').className = correct ? "text-green-600 text-3xl md:text-5xl font-black mb-8" : "text-red-600 text-3xl md:text-5xl font-black mb-8";
+            document.getElementById('tf-fb').style.display = 'flex';
+        }
+        function nextTF() { tfIdx++; document.getElementById('tf-fb').style.display = 'none'; loadTF(); }
+
+        function checkQuiz(btn, isC, explId, areaId) {
+            if(isC) { btn.classList.add('correct'); fireConfetti(areaId, 60); } else { btn.classList.add('wrong'); }
+            const parent = btn.parentElement; parent.querySelectorAll('button').forEach(b => {
+                b.style.pointerEvents = 'none'; if(b.onclick.toString().includes('true')) b.classList.add('correct');
+            });
+            document.getElementById(explId).style.display = 'block';
+        }
+
+        function fireConfetti(id, count=40) {
+            const area = document.getElementById(id); if(!area) return;
+            for(let i=0; i<count; i++) {
+                const c = document.createElement('div'); c.className = 'confetti';
+                c.style.left = Math.random() * 100 + '%'; c.style.backgroundColor = ['#f59e0b','#10b981','#3b82f6','#ef4444','#8b5cf6'][Math.floor(Math.random()*5)];
+                area.appendChild(c);
+                c.animate([{top:'-5%', opacity:1, transform:'rotate(0deg)'}, {top:'100%', opacity:0, transform:'rotate(720deg)'}], {duration: 1500 + Math.random()*2000});
+                setTimeout(() => c.remove(), 4000);
+            }
+        }
+
+        updateControls();
+    </script>
+</body>
+</html>

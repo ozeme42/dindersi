@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kur'an-ı Kerim: Peltek Harfler</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Nunito', 'sans-serif'], arabic: ['Amiri', 'serif'] },
+                    colors: { primary: '#3b82f6', secondary: '#10b981', accent: '#f59e0b', }
+                }
+            }
+        }
+    </script>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background: linear-gradient(135deg, #fdfbfb 0%, #f3f4f6 100%); }
+
+        /* Slayt Geçişleri */
+        .slide { display: none; width: 100%; height: 100%; opacity: 0; transition: opacity 0.4s ease-in-out; position: absolute; top: 0; left: 0; overflow-y: auto; padding-bottom: 80px; padding-top: 10px; }
+        .slide.active { display: flex; flex-direction: column; opacity: 1; z-index: 10; }
+
+        /* Animasyonlar */
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes tada { 0% { transform: scale(1); } 10%, 20% { transform: scale(0.9) rotate(-3deg); } 30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg); } 40%, 60%, 80% { transform: scale(1.1) rotate(-3deg); } 100% { transform: scale(1) rotate(0); } }
+        
+        .shake { animation: shake 0.4s; }
+        .pop { animation: pop 0.4s; }
+        .tada { animation: tada 1s; }
+
+        /* Buton efektleri */
+        .huge-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); cursor: pointer; }
+        .huge-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .huge-btn:disabled { cursor: not-allowed; opacity: 0.7; transform: none; box-shadow: none; }
+
+        .badge-konu { background-color: #3b82f6; color: white; }
+        .badge-etkinlik { background-color: #10b981; color: white; }
+        .badge-test { background-color: #8b5cf6; color: white; }
+        .badge-calisma { background-color: #f59e0b; color: white; }
+
+        /* 3D Kart Çevirme (Flip Card) CSS */
+        .flip-card { background-color: transparent; perspective: 1000px; width: 100%; height: 160px; cursor: pointer; }
+        @media(min-width: 768px) { .flip-card { height: 180px; } }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateX(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 1rem; }
+        .flip-card-front { background-color: white; border: 3px dashed #cbd5e1; }
+        .flip-card-front:hover { border-color: #94a3b8; background-color: #f8fafc; }
+        .flip-card-back { background: linear-gradient(135deg, #10b981, #059669); color: white; transform: rotateX(180deg); border: 3px solid #047857; }
+        .flip-card-back.indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); border-color: #4338ca; }
+
+        /* Eşleştirme CSS */
+        .match-btn.selected { border-color: #3b82f6; background-color: #eff6ff; transform: scale(1.05); }
+        .match-btn.matched { border-color: #10b981; background-color: #d1fae5; color: #047857; pointer-events: none; opacity: 0.8; }
+
+        /* Anagram Harf Kutuları */
+        .word-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+        .letter-box { width: 3rem; height: 3.5rem; font-size: 1.5rem; font-weight: 900; background: white; border: 3px solid #e2e8f0; border-radius: 0.5rem; display: flex; justify-content: center; align-items: center; text-transform: uppercase; color: transparent; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+        @media(min-width: 768px) { .letter-box { width: 4rem; height: 4.5rem; font-size: 2rem; } }
+        .letter-box.revealed { background: #8b5cf6; border-color: #6d28d9; color: white; transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4); }
+
+        /* Adam Asmaca SVG */
+        .hm-part { display: none; stroke: #ef4444; stroke-width: 5; stroke-linecap: round; fill: transparent; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Yazdırma */
+        @media print {
+            body, html { overflow: visible !important; height: auto !important; background-color: white !important; font-size: 11pt !important; }
+            .fixed.bottom-0 { display: none !important; }
+            .slide { display: none !important; opacity: 1 !important; position: static !important; padding: 0 !important; }
+            #slide-ozet { display: block !important; }
+            button, .badge-konu { display: none !important; }
+            * { text-shadow: none !important; box-shadow: none !important; }
+            .bg-gray-50 { background-color: white !important; border: 1px solid #ccc !important; }
+        }
+    </style>
+</head>
+<body class="text-gray-800 text-base md:text-lg">
+
+    <!-- Alt Navigasyon -->
+    <div class="fixed bottom-0 left-0 w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] p-2 md:p-3 flex justify-between items-center z-50 border-t border-gray-100 flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <button onclick="toggleFullScreen()" class="px-3 py-2 bg-gray-800 text-white rounded-lg text-sm md:text-base font-bold hover:bg-gray-700 transition flex items-center">
+                <i class="fas fa-expand md:mr-2"></i> <span class="hidden md:inline">Tam Ekran</span>
+            </button>
+            <div class="w-px h-5 bg-gray-300 mx-1"></div>
+            <button onclick="changeZoom(-10)" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-gray-100 text-gray-800 rounded-lg text-lg font-bold hover:bg-gray-200 transition" title="Küçült"><i class="fas fa-search-minus"></i></button>
+            <button onclick="changeZoom(10)" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-gray-100 text-gray-800 rounded-lg text-lg font-bold hover:bg-gray-200 transition" title="Büyüt"><i class="fas fa-search-plus"></i></button>
+        </div>
+        
+        <div class="text-sm md:text-lg font-extrabold text-gray-500 bg-gray-100 px-3 md:px-5 py-1 rounded-full border border-gray-200" id="page-counter">1 / 10</div>
+        
+        <div class="flex gap-2">
+            <button onclick="prevSlide()" class="px-3 md:px-5 py-2 bg-gray-200 text-gray-800 rounded-lg text-sm md:text-base font-bold hover:bg-gray-300 transition flex items-center"><i class="fas fa-chevron-left md:mr-2"></i> <span class="hidden md:inline">Geri</span></button>
+            <button onclick="nextSlide()" class="px-4 md:px-6 py-2 bg-blue-600 text-white rounded-lg text-sm md:text-base font-bold hover:bg-blue-700 transition flex items-center shadow-md"><span class="hidden md:inline">İleri</span> <i class="fas fa-chevron-right md:ml-2"></i></button>
+        </div>
+    </div>
+
+    <!-- Slayt Konteyneri -->
+    <main id="slider-container" class="relative w-full h-full">
+
+        <!-- SLAYT 1: HAZIRLIK -->
+        <div class="slide active bg-rose-50 px-4 md:px-8" id="slide-1">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-8 flex flex-col h-full">
+                <span class="badge-etkinlik bg-rose-500 px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest inline-block mb-3 w-max shadow-sm">KONUYA BAŞLARKEN</span>
+                <h1 class="text-2xl md:text-4xl font-black text-rose-900 mb-2 md:mb-4">Hangi Harfleri Seslendirebiliyorsun?</h1>
+                <p class="text-sm md:text-lg font-bold text-gray-600 mb-4 md:mb-8">Aşağıdaki harflerden doğru seslendirebildiklerini seç (✓). Unutma, bugün kırmızı olanları öğreneceğiz!</p>
+                
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-6 w-full">
+                    <button onclick="toggleCheck(this)" class="huge-btn bg-white border-2 border-gray-200 py-6 md:py-8 rounded-xl text-center flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                        <span class="font-arabic text-4xl md:text-6xl text-rose-600">ث</span><i class="far fa-circle text-xl text-gray-300 transition-all"></i>
+                    </button>
+                    <button onclick="toggleCheck(this)" class="huge-btn bg-white border-2 border-gray-200 py-6 md:py-8 rounded-xl text-center flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                        <span class="font-arabic text-4xl md:text-6xl text-gray-700">س</span><i class="far fa-circle text-xl text-gray-300 transition-all"></i>
+                    </button>
+                    <button onclick="toggleCheck(this)" class="huge-btn bg-white border-2 border-gray-200 py-6 md:py-8 rounded-xl text-center flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                        <span class="font-arabic text-4xl md:text-6xl text-rose-600">ذ</span><i class="far fa-circle text-xl text-gray-300 transition-all"></i>
+                    </button>
+                    <button onclick="toggleCheck(this)" class="huge-btn bg-white border-2 border-gray-200 py-6 md:py-8 rounded-xl text-center flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                        <span class="font-arabic text-4xl md:text-6xl text-gray-700">ز</span><i class="far fa-circle text-xl text-gray-300 transition-all"></i>
+                    </button>
+                    <button onclick="toggleCheck(this)" class="huge-btn bg-white border-2 border-gray-200 py-6 md:py-8 rounded-xl text-center flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                        <span class="font-arabic text-4xl md:text-6xl text-rose-600">ظ</span><i class="far fa-circle text-xl text-gray-300 transition-all"></i>
+                    </button>
+                    <button onclick="toggleCheck(this)" class="huge-btn bg-white border-2 border-gray-200 py-6 md:py-8 rounded-xl text-center flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
+                        <span class="font-arabic text-4xl md:text-6xl text-gray-700">ض</span><i class="far fa-circle text-xl text-gray-300 transition-all"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 2: KONU ANLATIMI 1 (Mahreç) -->
+        <div class="slide bg-white px-4 md:px-8" id="slide-2">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-8">
+                <span class="badge-konu px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest inline-block mb-3">KONU ANLATIMI</span>
+                <h1 class="text-2xl md:text-4xl font-black text-blue-900 mb-4 md:mb-6 flex items-center gap-3"><i class="fas fa-language text-blue-500"></i> Peltek Harfler ve Çıkış Yerleri</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-4">
+                    <div class="flex flex-col items-center text-center bg-blue-50 p-6 rounded-2xl border-t-4 border-blue-500 shadow-sm">
+                        <div class="text-5xl md:text-7xl font-bold text-blue-600 mb-4 font-arabic">ث ذ ظ</div>
+                        <h2 class="text-lg md:text-2xl font-bold mb-2 text-blue-800">Peltek Harfler Nelerdir?</h2>
+                        <p class="text-sm md:text-lg leading-relaxed text-gray-700">Kur'an alfabesinde 3 tane peltek harf vardır. Bunlar <strong>Peltek Se (ث), Peltek Zel (ذ) ve Peltek Zı (ظ)</strong> harfleridir.</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center bg-teal-50 p-6 rounded-2xl border-t-4 border-teal-500 shadow-sm">
+                        <i class="fas fa-teeth-open text-teal-500 text-5xl md:text-6xl mb-4"></i>
+                        <h2 class="text-lg md:text-2xl font-bold mb-2 text-teal-800">Mahreç (Çıkış Yeri) Neresi?</h2>
+                        <p class="text-sm md:text-lg leading-relaxed text-gray-700">Bu harfler <strong>dil ucunun üst yüzeyi, üst ön dişlerin ucuna</strong> değdirilerek seslendirilir. (Dil hafif dışarı çıkar).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 3: KONU ANLATIMI 2 (Anlam Değişimi) -->
+        <div class="slide bg-white px-4 md:px-8" id="slide-3">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-8">
+                <span class="badge-konu px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest inline-block mb-3">ÖNEMLİ BİLGİ</span>
+                <h1 class="text-2xl md:text-4xl font-black text-rose-900 mb-4 md:mb-6 flex items-center gap-3"><i class="fas fa-exclamation-triangle text-rose-500"></i> Yanlış Okursak Ne Olur?</h1>
+                
+                <div class="bg-rose-50 p-6 md:p-8 rounded-2xl border-l-4 border-rose-500 shadow-sm mb-6">
+                    <p class="text-base md:text-xl text-gray-800 leading-relaxed">
+                        Harflerin hatalı seslendirilmesi <strong>kelimenin anlamını değiştirir</strong> ve cümlenin yapısını bozar. Türkçede peltek ses olmadığı için bu harflere özel dikkat edilmelidir.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                    <div class="bg-white border-2 border-gray-200 rounded-xl p-4 md:p-6 text-center shadow-sm">
+                        <span class="font-arabic text-4xl md:text-5xl text-blue-600 block mb-2">نَذَرَ</span>
+                        <span class="text-lg md:text-xl font-bold text-gray-700">Adadı</span>
+                        <div class="text-sm text-gray-500 mt-2">(Peltek Zel ile)</div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-200 rounded-xl p-4 md:p-6 text-center shadow-sm">
+                        <span class="font-arabic text-4xl md:text-5xl text-red-600 block mb-2">نَظَرَ</span>
+                        <span class="text-lg md:text-xl font-bold text-gray-700">Baktı</span>
+                        <div class="text-sm text-gray-500 mt-2">(Peltek Zı ile)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 4: ETKİNLİK (PELTEK AVI) -->
+        <div class="slide bg-blue-50 px-4 md:px-8" id="slide-4">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-8 flex flex-col h-full">
+                <span class="badge-etkinlik px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest inline-block mb-3 w-max">ETKİNLİK 1</span>
+                <h1 class="text-2xl md:text-4xl font-black text-blue-900 mb-2">Peltek Harf Avı</h1>
+                <p class="text-sm md:text-lg font-bold text-gray-600 mb-4">Aşağıdaki kelimelerden içinde peltek harf (<span class="font-arabic text-blue-600 text-xl">ث ذ ظ</span>) <strong>BULUNANLARA</strong> tıkla!</p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mt-2">
+                    <button onclick="popPeltek(this, true)" class="huge-btn bg-white text-3xl md:text-5xl font-bold text-gray-800 p-4 md:p-6 rounded-xl border-2 border-blue-200 font-arabic">مَثَلْ</button>
+                    <button onclick="wrongPeltek(this)" class="huge-btn bg-white text-3xl md:text-5xl font-bold text-gray-800 p-4 md:p-6 rounded-xl border-2 border-gray-200 font-arabic">خَوْفٌ</button>
+                    <button onclick="popPeltek(this, true)" class="huge-btn bg-white text-3xl md:text-5xl font-bold text-gray-800 p-4 md:p-6 rounded-xl border-2 border-blue-200 font-arabic">ذٰلِكَ</button>
+                    <button onclick="popPeltek(this, true)" class="huge-btn bg-white text-3xl md:text-5xl font-bold text-gray-800 p-4 md:p-6 rounded-xl border-2 border-blue-200 font-arabic">ظَالِمٌ</button>
+                    
+                    <button onclick="wrongPeltek(this)" class="huge-btn bg-white text-3xl md:text-5xl font-bold text-gray-800 p-4 md:p-6 rounded-xl border-2 border-gray-200 font-arabic">كِتَابٌ</button>
+                    <button onclick="popPeltek(this, true)" class="huge-btn bg-white text-3xl md:text-5xl font-bold text-gray-800 p-4 md:p-6 rounded-xl border-2 border-blue-200 font-arabic">عَظِيمٌ</button>
+                    <button onclick="wrongPeltek(this)" class="huge-btn bg-white text-3xl md:text-5xl font-bold text-gray-800 p-4 md:p-6 rounded-xl border-2 border-gray-200 font-arabic">سَنَةٍ</button>
+                    <button onclick="popPeltek(this, true)" class="huge-btn bg-white text-3xl md:text-5xl font-bold text-gray-800 p-4 md:p-6 rounded-xl border-2 border-blue-200 font-arabic">كَثِيرٌ</button>
+                </div>
+                <div id="q4-feedback" class="text-lg md:text-xl font-black text-center mt-4 h-8 text-blue-600">5 tane peltek kelime bulmalısın!</div>
+            </div>
+        </div>
+
+        <!-- SLAYT 5: EŞLEŞTİRME OYUNU -->
+        <div class="slide bg-emerald-50 px-4 md:px-8" id="slide-5">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-8 flex flex-col h-full">
+                <span class="badge-etkinlik px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest inline-block mb-3 w-max">ETKİNLİK 2: EŞLEŞTİRME</span>
+                <h1 class="text-2xl md:text-4xl font-black text-emerald-900 mb-2">Özellikleri Eşleştir!</h1>
+                <p class="text-sm md:text-lg font-bold text-gray-600 mb-4">Önce soldaki bir kavrama, sonra sağdaki doğru açıklamasına tıkla.</p>
+                
+                <div class="flex flex-col md:flex-row gap-4 md:gap-8 w-full">
+                    <div class="flex flex-col gap-2 md:gap-4 w-full md:w-1/3" id="match-left">
+                        <button onclick="selectMatch(this, 'left', 'ince_se')" class="match-btn huge-btn bg-white border-2 border-gray-300 p-3 md:p-4 rounded-lg text-2xl font-bold font-arabic text-gray-700">ث (Se)</button>
+                        <button onclick="selectMatch(this, 'left', 'ince_zel')" class="match-btn huge-btn bg-white border-2 border-gray-300 p-3 md:p-4 rounded-lg text-2xl font-bold font-arabic text-gray-700">ذ (Zel)</button>
+                        <button onclick="selectMatch(this, 'left', 'kalin_zi')" class="match-btn huge-btn bg-white border-2 border-gray-300 p-3 md:p-4 rounded-lg text-2xl font-bold font-arabic text-gray-700">ظ (Zı)</button>
+                        <button onclick="selectMatch(this, 'left', 'mahrec')" class="match-btn huge-btn bg-white border-2 border-gray-300 p-3 md:p-4 rounded-lg text-base md:text-lg font-bold text-gray-700">Mahreç</button>
+                    </div>
+                    <div class="flex flex-col gap-2 md:gap-4 w-full md:w-2/3" id="match-right">
+                        <button onclick="selectMatch(this, 'right', 'mahrec')" class="match-btn huge-btn bg-white border-2 border-gray-300 p-3 md:p-4 rounded-lg text-sm md:text-base font-bold text-gray-700">Dil ucu ve üst ön dişlerin ucudur.</button>
+                        <button onclick="selectMatch(this, 'right', 'ince_se')" class="match-btn huge-btn bg-white border-2 border-gray-300 p-3 md:p-4 rounded-lg text-sm md:text-base font-bold text-gray-700">İnce ve yumuşak okunan ilk peltek harf.</button>
+                        <button onclick="selectMatch(this, 'right', 'kalin_zi')" class="match-btn huge-btn bg-white border-2 border-gray-300 p-3 md:p-4 rounded-lg text-sm md:text-base font-bold text-gray-700">Kalın ve kuvvetli okunan peltek harf.</button>
+                        <button onclick="selectMatch(this, 'right', 'ince_zel')" class="match-btn huge-btn bg-white border-2 border-gray-300 p-3 md:p-4 rounded-lg text-sm md:text-base font-bold text-gray-700">İnce okunan ikinci peltek harf.</button>
+                    </div>
+                </div>
+                <div id="match-feedback" class="text-lg md:text-xl font-black text-center mt-4 h-8 text-emerald-600"></div>
+            </div>
+        </div>
+
+        <!-- SLAYT 6: ANAGRAM OYUNU -->
+        <div class="slide bg-indigo-50 px-4 md:px-8" id="slide-6">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-8 flex flex-col h-full">
+                <span class="badge-etkinlik px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest inline-block mb-3 w-max">ETKİNLİK 3: ANAGRAM</span>
+                <h1 class="text-2xl md:text-4xl font-black text-indigo-900 mb-2">Gizli Kelimeyi Bul!</h1>
+                <p class="text-sm md:text-lg font-bold text-gray-600 mb-4">İpucu: Harflerin çıkış yerine verilen isim nedir?</p>
+                
+                <div class="bg-white p-6 md:p-10 rounded-2xl border-4 border-indigo-200 shadow-sm flex flex-col items-center w-full max-w-3xl mx-auto mt-2">
+                    <div id="anagram-target" class="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8 min-h-[3.5rem] md:min-h-[4.5rem]"></div>
+                    <div id="anagram-source" class="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8"></div>
+                    
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <button onclick="resetAnagram()" class="px-4 py-2 bg-gray-200 text-gray-700 text-sm md:text-base font-bold rounded-lg hover:bg-gray-300"><i class="fas fa-undo mr-2"></i>Sıfırla</button>
+                    </div>
+                    <div id="anagram-feedback" class="text-lg md:text-xl font-black text-center mt-4 h-8 text-indigo-600"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 7: CÜMLE DÜZELTME -->
+        <div class="slide bg-orange-50 px-4 md:px-8" id="slide-7">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-8 flex flex-col h-full">
+                <span class="badge-etkinlik px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest inline-block mb-3 w-max">ETKİNLİK 4: CÜMLE DÜZELTME</span>
+                <h1 class="text-2xl md:text-4xl font-black text-orange-900 mb-2">Yanlışı Bul ve Düzelt!</h1>
+                <p class="text-sm md:text-lg font-bold text-gray-600 mb-4">Aşağıdaki cümlelerde kırmızı butonlardaki kelimelerden bazıları YANLIŞ. Üzerlerine tıklayarak düzelt!</p>
+                
+                <div class="flex flex-col gap-4">
+                    <div class="bg-white p-4 md:p-6 rounded-xl border-2 md:border-4 border-orange-200 shadow-sm text-sm md:text-lg font-semibold text-gray-700 leading-loose">
+                        1. Peltek harfler okunurken dil ucu 
+                        <button onclick="fixSentence(this, 'alt', 'üst ön', true)" class="bg-red-100 text-red-700 border-2 border-red-300 px-2 py-0.5 rounded-lg mx-1 transition-colors hover:bg-red-200">alt</button> 
+                        dişlerin ucuna hafifçe değdirilir.
+                    </div>
+                    <div class="bg-white p-4 md:p-6 rounded-xl border-2 md:border-4 border-orange-200 shadow-sm text-sm md:text-lg font-semibold text-gray-700 leading-loose">
+                        2. Harfleri mahrecinden hatalı okumak kelimenin 
+                        <button onclick="fixSentence(this, 'şeklini', 'anlamını', true)" class="bg-red-100 text-red-700 border-2 border-red-300 px-2 py-0.5 rounded-lg mx-1 transition-colors hover:bg-red-200">şeklini</button> 
+                        ve cümlenin yapısını bozar.
+                    </div>
+                    <div class="bg-white p-4 md:p-6 rounded-xl border-2 md:border-4 border-orange-200 shadow-sm text-sm md:text-lg font-semibold text-gray-700 leading-loose">
+                        3. Kur'an alfabesinde peltek harflerden 
+                        <button onclick="fixSentence(this, 'Se ve Zel', 'Se ve Zı', false)" class="bg-green-100 text-green-700 border-2 border-green-400 px-2 py-0.5 rounded-lg mx-1 transition-colors hover:bg-green-200">Se ve Zel</button> 
+                        ince okunurken, 
+                        <button onclick="fixSentence(this, 'Zı', 'Zel', false)" class="bg-green-100 text-green-700 border-2 border-green-400 px-2 py-0.5 rounded-lg mx-1 transition-colors hover:bg-green-200">Zı</button> 
+                        kalın okunur.
+                    </div>
+                </div>
+                <div id="sentence-feedback" class="text-lg md:text-xl font-black text-center mt-4 h-8 text-orange-600"></div>
+            </div>
+        </div>
+
+        <!-- SLAYT 8: ADAM ASMACA -->
+        <div class="slide bg-red-50 px-4 md:px-8" id="slide-8">
+            <div class="max-w-5xl mx-auto w-full pt-4 md:pt-8 flex flex-col h-full items-center">
+                <div class="w-full flex justify-between items-end mb-2 md:mb-4">
+                    <div>
+                        <span class="badge-etkinlik px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest inline-block mb-2 w-max">ETKİNLİK 5: ADAM ASMACA</span>
+                        <h1 class="text-2xl md:text-4xl font-black text-red-900">Kelimeyi Tahmin Et!</h1>
+                    </div>
+                    <div class="text-sm md:text-base font-bold text-red-700 bg-red-100 px-3 py-1 rounded-lg">
+                        Kalan Hak: <span id="hm-lives" class="text-lg md:text-xl font-black">6</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row gap-4 md:gap-8 w-full bg-white p-4 md:p-8 rounded-2xl border-4 border-red-200 shadow-sm items-center">
+                    <!-- Sol: Çizim -->
+                    <div class="w-full md:w-1/3 flex flex-col items-center justify-center relative h-28 md:h-auto">
+                        <svg width="120" height="150" viewBox="0 0 200 250" class="md:w-auto md:h-auto max-h-full">
+                            <line x1="20" y1="240" x2="150" y2="240" class="stroke-gray-400" stroke-width="4"/>
+                            <line x1="50" y1="240" x2="50" y2="20" class="stroke-gray-400" stroke-width="4"/>
+                            <line x1="50" y1="20" x2="150" y2="20" class="stroke-gray-400" stroke-width="4"/>
+                            <line x1="150" y1="20" x2="150" y2="50" class="stroke-gray-400" stroke-width="4"/>
+                            <circle cx="150" cy="70" r="20" class="hm-part" id="hm-0"/>
+                            <line x1="150" y1="90" x2="150" y2="150" class="hm-part" id="hm-1"/>
+                            <line x1="150" y1="100" x2="120" y2="130" class="hm-part" id="hm-2"/>
+                            <line x1="150" y1="100" x2="180" y2="130" class="hm-part" id="hm-3"/>
+                            <line x1="150" y1="150" x2="120" y2="190" class="hm-part" id="hm-4"/>
+                            <line x1="150" y1="150" x2="180" y2="190" class="hm-part" id="hm-5"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Sağ: Klavye -->
+                    <div class="w-full md:w-2/3 flex flex-col items-center justify-between">
+                        <div class="text-sm md:text-base font-semibold text-gray-500 mb-2 md:mb-4 bg-gray-50 w-full text-center py-1 rounded-lg">İpucu: Öğrendiğimiz üç harfe verilen genel isim.</div>
+                        <div id="hm-word" class="flex gap-1 md:gap-2 mb-4 md:mb-6 flex-wrap justify-center"></div>
+                        <div class="flex flex-wrap justify-center gap-1 md:gap-2 w-full" id="hm-keyboard"></div>
+                        <div id="hm-feedback" class="text-base md:text-xl font-black text-center mt-2 h-6 text-red-600 w-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 9: KONTROL NOKTASI (3'LÜ KART) -->
+        <div class="slide bg-indigo-50 px-4 md:px-8" id="slide-9">
+            <div class="max-w-6xl mx-auto w-full pt-4 md:pt-8 flex flex-col h-full">
+                <span class="badge-test px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest inline-block mb-3 w-max">KONTROL NOKTASI</span>
+                <h1 class="text-2xl md:text-4xl font-black text-indigo-900 mb-2">Neler Öğrendik?</h1>
+                <p class="text-sm md:text-lg text-gray-700 mb-4">Soruların cevabını tahmin et ve görmek için kartlara tıkla!</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mt-2">
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-indigo-50 border-indigo-200 text-indigo-600">
+                                <span class="text-sm md:text-lg font-bold text-center">Peltek harfler<br>hangileridir?</span>
+                            </div>
+                            <div class="flip-card-back indigo">
+                                <span class="text-2xl md:text-4xl font-black font-arabic">ث ذ ظ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-teal-50 border-teal-200 text-teal-600">
+                                <span class="text-sm md:text-lg font-bold text-center">Peltek harflerin<br>çıkış bölgesi neresidir?</span>
+                            </div>
+                            <div class="flip-card-back" style="background: linear-gradient(135deg, #0d9488, #0f766e); border-color: #115e59;">
+                                <span class="text-lg md:text-xl font-black">Dil ucu ve<br>üst ön dişler</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-50 border-orange-200 text-orange-600">
+                                <span class="text-sm md:text-lg font-bold text-center">Peltek harflerden hangileri<br>ince, hangisi kalındır?</span>
+                            </div>
+                            <div class="flip-card-back amber">
+                                <span class="text-lg md:text-xl font-bold">İnce: <span class="font-arabic font-black">ث, ذ</span><br>Kalın: <span class="font-arabic font-black">ظ</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAYT 10: ÖZET VE NOTLAR -->
+        <div class="slide bg-white px-4 md:px-8" id="slide-ozet">
+            <div class="max-w-6xl mx-auto w-full pt-4 md:pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
+                    <span class="badge-konu px-3 py-1 rounded-full text-sm md:text-base font-bold uppercase tracking-widest bg-gray-800">ÜNİTE ÖZETİ (YAZDIRILABİLİR)</span>
+                    <button onclick="window.print()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg text-sm md:text-base font-bold hover:bg-gray-300 transition flex items-center shadow-sm">
+                        <i class="fas fa-print mr-2"></i> Yazdır
+                    </button>
+                </div>
+                <h1 class="text-2xl md:text-4xl font-black text-gray-900 mb-4 flex items-center gap-3">
+                    <i class="fas fa-language text-gray-600 text-3xl md:text-4xl"></i> Peltek Harfler Özeti
+                </h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full mt-2">
+                    <div class="bg-gray-50 p-4 md:p-6 rounded-xl border-2 border-gray-200 h-full shadow-inner">
+                        <h2 class="text-lg md:text-2xl font-bold mb-3 text-gray-800 border-b-2 border-gray-300 pb-2"><i class="fas fa-key mr-2"></i>Peltek Harfler ve Çıkış Yeri</h2>
+                        <ul class="space-y-2 md:space-y-3 text-sm md:text-base text-gray-700">
+                            <li>Kur'an-ı Kerim alfabesinde <strong class="text-blue-700 font-arabic text-xl">ث ذ ظ</strong> olmak üzere 3 tane peltek harf vardır.</li>
+                            <li><strong>Mahreç (Çıkış Yeri):</strong> Dil ucunun üst kısmı, üst ön dişlerin uçlarına değdirilerek okunur.</li>
+                            <li>Türkçede peltek ses bulunmadığı için bu harfleri çıkarırken dikkatli olunmalı, dil hafifçe dışarı çıkarılmalıdır.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 md:p-6 rounded-xl border-2 border-gray-200 h-full shadow-inner">
+                        <h2 class="text-lg md:text-2xl font-bold mb-3 text-gray-800 border-b-2 border-gray-300 pb-2"><i class="fas fa-info-circle mr-2"></i>Önemli Bilgiler</h2>
+                        <ul class="space-y-3 md:space-y-4 text-sm md:text-base text-gray-700 list-disc list-outside pl-6 pr-2">
+                            <li><strong class="font-arabic text-xl">ث</strong> (Se) ve <strong class="font-arabic text-xl">ذ</strong> (Zel) <strong>İnce ve yumuşak</strong> okunur.</li>
+                            <li><strong class="font-arabic text-xl">ظ</strong> (Zı) ise <strong>Kalın ve kuvvetli</strong> okunur.</li>
+                            <li>Peltek harfi normal okumak (Örn: ث yerine س demek) kelimenin <strong>anlamını değiştirir</strong>. (Örn: نَذَرَ "adadı", نَظَرَ "baktı" demektir).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 1;
+        let currentZoom = 100;
+
+        document.getElementById('page-counter').innerText = `${currentSlide} / ${totalSlides}`;
+
+        function changeZoom(step) {
+            currentZoom += step;
+            if(currentZoom < 60) currentZoom = 60; 
+            if(currentZoom > 200) currentZoom = 200; 
+            document.documentElement.style.fontSize = (16 * currentZoom / 100) + 'px';
+        }
+
+        function updateSlides() {
+            slides.forEach((el, index) => {
+                if(index + 1 === currentSlide) {
+                    el.classList.add('active');
+                    el.scrollTop = 0; 
+                    if(currentSlide === 8) initHangman(); // Adam asmaca slaytına gelince sıfırla
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+            document.getElementById('page-counter').innerText = `${currentSlide} / ${totalSlides}`;
+        }
+
+        function nextSlide() { if(currentSlide < totalSlides) { currentSlide++; updateSlides(); } }
+        function prevSlide() { if(currentSlide > 1) { currentSlide--; updateSlides(); } }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => console.log(err)); } 
+            else { if (document.exitFullscreen) { document.exitFullscreen(); } }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight') nextSlide();
+            if(e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // =================== 1. HAZIRLIK (Sadece Harfler) ===================
+        function toggleCheck(btn) {
+            let icon = btn.querySelector('i');
+            if(icon.classList.contains('fa-circle')) {
+                icon.classList.replace('fa-circle', 'fa-check-circle');
+                icon.classList.replace('far', 'fas');
+                icon.classList.replace('text-gray-300', 'text-green-500');
+                btn.classList.add('border-green-500', 'bg-green-50', 'pop');
+            } else {
+                icon.classList.replace('fa-check-circle', 'fa-circle');
+                icon.classList.replace('fas', 'far');
+                icon.classList.replace('text-green-500', 'text-gray-300');
+                btn.classList.remove('border-green-500', 'bg-green-50', 'pop');
+            }
+            setTimeout(() => btn.classList.remove('pop'), 400);
+        }
+
+        // =================== 4. PELTEK HARF AVI ===================
+        let peltekFound = 0;
+        function popPeltek(btn) {
+            btn.classList.replace('bg-white', 'bg-blue-500');
+            btn.classList.replace('border-blue-200', 'border-blue-600');
+            btn.classList.replace('text-gray-800', 'text-white');
+            btn.classList.add('pop');
+            btn.onclick = null; 
+            peltekFound++;
+            
+            if(peltekFound === 5) {
+                document.getElementById('q4-feedback').innerHTML = '<i class="fas fa-star text-yellow-500 mr-2"></i> MÜKEMMEL! TÜM PELTEK HARFLİ KELİMELERİ BULDUN!';
+            } else {
+                document.getElementById('q4-feedback').innerHTML = `Süper! Kaldı ${5 - peltekFound} tane.`;
+            }
+            setTimeout(() => btn.classList.remove('pop'), 400);
+        }
+
+        function wrongPeltek(btn) {
+            btn.classList.add('shake', 'bg-red-100');
+            document.getElementById('q4-feedback').innerHTML = '<span class="text-red-500">DİKKAT! Bu kelimede peltek harf yok.</span>';
+            setTimeout(() => { btn.classList.remove('shake', 'bg-red-100'); }, 400);
+        }
+
+        // =================== 5. EŞLEŞTİRME ===================
+        let selectedMatchBtn = null;
+        let selectedMatchType = null;
+        let matchCount = 0;
+
+        function selectMatch(btn, type, id) {
+            if(btn.classList.contains('matched')) return;
+
+            if(!selectedMatchBtn) {
+                selectedMatchBtn = btn;
+                selectedMatchType = type;
+                btn.classList.add('selected');
+                return;
+            }
+
+            if(selectedMatchType === type) {
+                selectedMatchBtn.classList.remove('selected');
+                selectedMatchBtn = btn;
+                btn.classList.add('selected');
+                return;
+            }
+
+            let id1 = selectedMatchBtn.getAttribute('onclick').split("'")[3];
+            let id2 = id;
+
+            if(id1 === id2) {
+                btn.classList.add('matched', 'pop');
+                selectedMatchBtn.classList.remove('selected');
+                selectedMatchBtn.classList.add('matched', 'pop');
+                matchCount++;
+                
+                document.getElementById('match-feedback').innerHTML = '<span class="text-green-600"><i class="fas fa-check-circle mr-2"></i> Doğru Eşleşme!</span>';
+                if(matchCount === 4) document.getElementById('match-feedback').innerHTML = '<span class="text-green-600 tada inline-block"><i class="fas fa-star text-yellow-500 mr-2"></i> TEBRİKLER, HEPSİNİ BULDUN!</span>';
+            } else {
+                btn.classList.add('shake', 'bg-red-50', 'border-red-400');
+                selectedMatchBtn.classList.add('shake', 'bg-red-50', 'border-red-400');
+                document.getElementById('match-feedback').innerHTML = '<span class="text-red-500"><i class="fas fa-times-circle mr-2"></i> Yanlış Eşleşme!</span>';
+                
+                let btn1 = selectedMatchBtn;
+                let btn2 = btn;
+                setTimeout(() => {
+                    btn1.classList.remove('shake', 'bg-red-50', 'border-red-400', 'selected');
+                    btn2.classList.remove('shake', 'bg-red-50', 'border-red-400');
+                }, 600);
+            }
+            
+            selectedMatchBtn = null;
+            selectedMatchType = null;
+        }
+
+        // =================== 6. ANAGRAM ===================
+        const anagramWord = { word: "MAHREÇ", letters: ["H", "M", "E", "Ç", "A", "R"] };
+        
+        function renderAnagram() {
+            let sourceHtml = "";
+            let targetHtml = "";
+
+            anagramWord.letters.forEach((l) => {
+                sourceHtml += `<button onclick="pickAnagram(this, '${l}')" class="huge-btn bg-indigo-100 text-indigo-800 text-xl md:text-2xl font-black w-10 h-12 md:w-14 md:h-16 rounded border-2 border-indigo-300">${l}</button>`;
+                targetHtml += `<div class="w-10 h-12 md:w-14 md:h-16 border-b-4 border-gray-300 flex items-center justify-center text-2xl md:text-4xl font-black text-gray-700 anagram-slot"></div>`;
+            });
+
+            document.getElementById('anagram-source').innerHTML = sourceHtml;
+            document.getElementById('anagram-target').innerHTML = targetHtml;
+            document.getElementById('anagram-feedback').innerHTML = "";
+        }
+
+        function pickAnagram(btn, letter) {
+            let slots = document.querySelectorAll('.anagram-slot');
+            let emptySlot = Array.from(slots).find(s => s.innerText === "");
+            
+            if(emptySlot) {
+                emptySlot.innerText = letter;
+                btn.style.visibility = 'hidden';
+                emptySlot.dataset.btnRef = btn; 
+                emptySlot.onclick = () => {
+                    emptySlot.innerText = "";
+                    btn.style.visibility = 'visible';
+                    emptySlot.onclick = null;
+                    checkAnagram();
+                };
+                checkAnagram();
+            }
+        }
+
+        function checkAnagram() {
+            let slots = document.querySelectorAll('.anagram-slot');
+            let word = Array.from(slots).map(s => s.innerText).join('');
+            if(word.length === anagramWord.word.length) {
+                if(word === anagramWord.word) {
+                    document.getElementById('anagram-feedback').innerHTML = '<span class="text-green-600 tada inline-block"><i class="fas fa-star mr-2"></i> TEBRİKLER! DOĞRU KELİME.</span>';
+                    slots.forEach(s => s.classList.add('text-green-600', 'pop'));
+                } else {
+                    document.getElementById('anagram-feedback').innerHTML = '<span class="text-red-500"><i class="fas fa-times-circle mr-2"></i> Yanlış sıralama! Geri almak için harfe tıkla.</span>';
+                }
+            } else {
+                document.getElementById('anagram-feedback').innerHTML = "";
+            }
+        }
+
+        function resetAnagram() { renderAnagram(); }
+        renderAnagram();
+
+        // =================== 7. CÜMLE DÜZELTME ===================
+        function fixSentence(btn, wrong, correct, isWrongInitially) {
+            // Eğer buton zaten doğruysa (yeşil ise) dokunmaya gerek yok. Sadece yanlış (kırmızı) ise düzelteceğiz.
+            if(btn.innerText === wrong && isWrongInitially) {
+                btn.innerText = correct;
+                btn.classList.replace('bg-red-100', 'bg-green-100');
+                btn.classList.replace('text-red-700', 'text-green-700');
+                btn.classList.replace('border-red-300', 'border-green-400');
+                btn.classList.add('pop');
+                
+                let allCorrect = true;
+                document.querySelectorAll('#slide-7 button').forEach(b => {
+                    if(b.classList.contains('bg-red-100')) allCorrect = false;
+                });
+                
+                if(allCorrect) {
+                    document.getElementById('sentence-feedback').innerHTML = '<span class="text-green-600 tada inline-block"><i class="fas fa-medal mr-2"></i> HARİKA! Bütün yanlışları düzelttin.</span>';
+                }
+            } else if (btn.innerText === correct && !isWrongInitially) {
+                 // Buton zaten doğru seçenek olarak tasarlandıysa
+                 btn.classList.add('pop');
+            } else if (btn.innerText === wrong && !isWrongInitially) {
+                 // Doğruyu yanlışa çevirmek yok
+                 btn.classList.add('shake');
+            }
+            setTimeout(() => btn.classList.remove('pop', 'shake'), 400);
+        }
+
+        // =================== 8. ADAM ASMACA ===================
+        const hmWord = "PELTEK";
+        let hmLives = 6;
+        let hmGuessed = [];
+
+        function initHangman() {
+            hmLives = 6;
+            hmGuessed = [];
+            document.getElementById('hm-lives').innerText = hmLives;
+            document.getElementById('hm-feedback').innerHTML = "";
+            
+            for(let i=0; i<6; i++) {
+                document.getElementById('hm-'+i).style.display = 'none';
+            }
+
+            let wordHtml = "";
+            for(let char of hmWord) {
+                wordHtml += `<div class="w-8 h-10 md:w-10 md:h-12 border-b-4 border-gray-400 text-2xl md:text-3xl font-black flex items-center justify-center" id="hm-l-${char}">_</div>`;
+            }
+            document.getElementById('hm-word').innerHTML = wordHtml;
+
+            let letters = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ";
+            let kbdHtml = "";
+            for(let char of letters) {
+                kbdHtml += `<button onclick="guessLetter('${char}', this)" class="w-8 h-8 md:w-10 md:h-10 bg-gray-100 border-2 border-gray-300 rounded text-sm md:text-base font-bold hover:bg-gray-200 transition-colors">${char}</button>`;
+            }
+            document.getElementById('hm-keyboard').innerHTML = kbdHtml;
+        }
+
+        function guessLetter(char, btn) {
+            if(hmLives <= 0 || hmGuessed.length === hmWord.length) return;
+            btn.disabled = true;
+            btn.classList.replace('hover:bg-gray-200', 'opacity-50');
+
+            if(hmWord.includes(char)) {
+                btn.classList.replace('bg-gray-100', 'bg-green-100');
+                btn.classList.replace('border-gray-300', 'border-green-400');
+                btn.classList.add('text-green-700');
+                
+                let count = 0;
+                for(let i=0; i<hmWord.length; i++) {
+                    if(hmWord[i] === char) {
+                        document.querySelectorAll(`#hm-l-${char}`)[count].innerText = char;
+                        document.querySelectorAll(`#hm-l-${char}`)[count].classList.add('text-green-600', 'pop');
+                        hmGuessed.push(char);
+                        count++;
+                    }
+                }
+                
+                if(hmGuessed.length === hmWord.length) {
+                    document.getElementById('hm-feedback').innerHTML = '<span class="text-green-600 tada inline-block">TEBRİKLER! Kelimeyi Buldun!</span>';
+                }
+            } else {
+                btn.classList.replace('bg-gray-100', 'bg-red-100');
+                btn.classList.replace('border-gray-300', 'border-red-400');
+                btn.classList.add('text-red-700');
+                
+                let partToDraw = 6 - hmLives;
+                if(partToDraw < 6) document.getElementById('hm-'+partToDraw).style.display = 'block';
+                
+                hmLives--;
+                document.getElementById('hm-lives').innerText = hmLives;
+                
+                if(hmLives === 0) {
+                    document.getElementById('hm-feedback').innerHTML = '<span class="text-red-600 shake inline-block">OYUN BİTTİ! Doğru cevap: '+hmWord+'</span>';
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>
