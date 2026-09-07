@@ -3,7 +3,8 @@
 import { useState, useEffect, Suspense, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Loader2, Volume2, VolumeX, Maximize2, Home, RefreshCw } from "lucide-react";
+import Link from "next/link";
+import { Loader2, Volume2, VolumeX, Maximize2, Home, RefreshCw, ArrowLeft, AlertTriangle } from "lucide-react";
 import { getClimbingDuelQuestions } from '../actions';
 import { cn } from "@/lib/utils";
 
@@ -288,8 +289,8 @@ function ClimbingDuelGameContent() {
                 resultQuestions = result.questions || [];
             }
 
-            if (resultQuestions.length < 5) {
-                setError("Bu oyun için en az 5 soru gerekli.");
+            if (resultQuestions.length < 2) {
+                setError("Bu konu için yarışmaya uygun soru bulunamadı. Lütfen kurulum ekranından başka bir konu veya tüm üniteyi seçin.");
                 setGameState('loading');
             } else {
                 setQuestions(resultQuestions);
@@ -427,7 +428,34 @@ function ClimbingDuelGameContent() {
     };
 
     if (isLoading) return <div className="h-screen w-full flex items-center justify-center bg-slate-900 text-white flex-col gap-4"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /><span>Oyun Yükleniyor...</span></div>;
-    if (error) return <div className="h-screen w-full flex items-center justify-center p-8 bg-red-950 text-red-200 text-center text-xl flex-col gap-4"><div>{error}</div><Button onClick={() => window.location.reload()} variant="outline" className="text-black"><RefreshCw className="mr-2 h-4 w-4"/> Yenile</Button></div>;
+    if (error) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 text-center">
+                <div className="max-w-md w-full bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-6 text-center space-y-4">
+                    <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto text-rose-400">
+                        <AlertTriangle className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white">Yarışma Başlatılamadı</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">{error}</p>
+                    <div className="flex flex-col gap-2 pt-4">
+                        <Button onClick={() => window.location.reload()} className="bg-rose-600 hover:bg-rose-500 text-white font-bold">
+                            <RefreshCw className="mr-2 h-4 w-4" /> Yeniden Dene
+                        </Button>
+                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                            <Link href="/teacher/smartboard/duello">
+                                <ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Dön
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                            <Link href="/teacher/smartboard">
+                                <Home className="mr-2 h-4 w-4" /> Akıllı Tahta Menüsü
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div id="sp11_wrapper" className="w-full max-w-[1400px] mx-auto"> {/* Wrapper genişletildi */}
@@ -480,6 +508,18 @@ function ClimbingDuelGameContent() {
                                 <button className="sp11_btn bg-orange-500 hover:bg-orange-600 text-white w-full py-5 rounded-xl text-2xl font-bold shadow-lg transform active:scale-95 transition" onClick={startGame}>
                                     YARIŞA BAŞLA
                                 </button>
+                                <div className="flex gap-3 mt-4">
+                                    <Button asChild variant="outline" className="flex-1 border-gray-300 text-slate-700">
+                                        <Link href="/teacher/smartboard/duello">
+                                            <ArrowLeft className="mr-1.5 h-4 w-4"/> Kuruluma Dön
+                                        </Link>
+                                    </Button>
+                                    <Button asChild variant="outline" className="flex-1 border-gray-300 text-slate-700">
+                                        <Link href="/teacher/smartboard">
+                                            <Home className="mr-1.5 h-4 w-4"/> Akıllı Tahta
+                                        </Link>
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -587,9 +627,22 @@ function ClimbingDuelGameContent() {
 
                         </div>
                         
-                        <Button variant="secondary" onClick={() => { setGameState('home'); setSunRotation(-90); setContainerClass('sky_morning'); }} className="absolute bottom-4 left-4 z-50 gap-2">
-                           <Home size={16}/> Menü
-                        </Button>
+                        <div className="absolute bottom-4 left-4 z-50 flex gap-2">
+                            <Button variant="secondary" onClick={() => { setGameState('home'); setSunRotation(-90); setContainerClass('sky_morning'); }} className="gap-2">
+                               <Home size={16}/> Oyun Menüsü
+                            </Button>
+                            <Button 
+                                variant="outline" 
+                                onClick={() => {
+                                    if (confirm("Yarıştan çıkmak istediğinize emin misiniz?")) {
+                                        window.location.href = "/teacher/smartboard/duello";
+                                    }
+                                }} 
+                                className="bg-black/50 text-white hover:bg-black/70 border-white/20 gap-2"
+                            >
+                                <ArrowLeft size={16}/> Çıkış
+                            </Button>
+                        </div>
                     </div>
                 )}
 
@@ -600,9 +653,23 @@ function ClimbingDuelGameContent() {
                             <h2 className="text-orange-500 text-3xl font-bold m-0">YARIŞ BİTTİ</h2>
                             <h3 className="text-gray-800 text-xl my-4">{winnerText}</h3>
                             <div className="text-6xl mb-6">🏆</div>
-                            <Button className="bg-teal-600 hover:bg-teal-700 text-white w-48 text-lg" onClick={() => {setGameState('home'); setSunRotation(-90); setContainerClass('sky_morning');}}>
-                                Tekrar Oyna
-                            </Button>
+                            <div className="flex flex-col gap-3 max-w-xs mx-auto">
+                                <Button className="bg-teal-600 hover:bg-teal-700 text-white w-full text-lg font-bold" onClick={() => {setGameState('home'); setSunRotation(-90); setContainerClass('sky_morning');}}>
+                                    Tekrar Oyna
+                                </Button>
+                                <div className="flex gap-2">
+                                    <Button asChild variant="outline" className="flex-1 text-slate-700 border-gray-300">
+                                        <Link href="/teacher/smartboard/duello">
+                                            <ArrowLeft className="mr-1 h-3.5 w-3.5"/> Kuruluma Dön
+                                        </Link>
+                                    </Button>
+                                    <Button asChild variant="outline" className="flex-1 text-slate-700 border-gray-300">
+                                        <Link href="/teacher/smartboard">
+                                            <Home className="mr-1 h-3.5 w-3.5"/> Menü
+                                        </Link>
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
