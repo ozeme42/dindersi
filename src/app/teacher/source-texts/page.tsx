@@ -48,6 +48,24 @@ interface TopicItem {
     charCount: number;
 }
 
+export const formatCourseTitle = (title: string): string => {
+    if (!title) return '';
+    const lower = title.toLocaleLowerCase('tr').trim();
+    if (lower === 'dkab' || lower.includes('dkab') || lower === 'din' || lower.includes('din kültürü')) {
+        return 'Din Kültürü ve Ahlak Bilgisi';
+    }
+    if (lower === 'siyer' || lower.includes('siyer') || lower.includes('peygamber')) {
+        return 'Peygamberimizin Hayatı';
+    }
+    if (lower.includes('kuran') || lower.includes('kur’an') || lower.includes('kur-an')) {
+        return "Kur'an-ı Kerim";
+    }
+    if (lower.includes('temel dini')) {
+        return 'Temel Dini Bilgiler';
+    }
+    return title;
+};
+
 export default function SourceTextsManagementPage() {
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(true);
@@ -101,6 +119,7 @@ export default function SourceTextsManagementPage() {
                 const grade = cg.name;
                 const className = `${grade}. Sınıf`;
                 for (const course of cg.courses || []) {
+                    const fullCourseTitle = formatCourseTitle(course.title);
                     for (const unit of course.units || []) {
                         for (const topic of unit.topics || []) {
                             topicMetaMap.set(topic.id, {
@@ -108,7 +127,7 @@ export default function SourceTextsManagementPage() {
                                 unitId: unit.id,
                                 className,
                                 grade,
-                                courseTitle: course.title,
+                                courseTitle: fullCourseTitle,
                                 unitTitle: unit.title,
                                 topicTitle: topic.title
                             });
@@ -134,6 +153,7 @@ export default function SourceTextsManagementPage() {
                 const grade = cg.name;
                 const className = `${grade}. Sınıf`;
                 for (const course of cg.courses || []) {
+                    const fullCourseTitle = formatCourseTitle(course.title);
                     for (const unit of course.units || []) {
                         for (const topic of unit.topics || []) {
                             seenTopicIds.add(topic.id);
@@ -152,7 +172,7 @@ export default function SourceTextsManagementPage() {
                                 className,
                                 grade,
                                 unitTitle: unit.title,
-                                courseTitle: course.title,
+                                courseTitle: fullCourseTitle,
                                 wordCount,
                                 charCount
                             });
@@ -183,7 +203,7 @@ export default function SourceTextsManagementPage() {
                         className: meta?.className || 'Din Kültürü',
                         grade: meta?.grade || '5',
                         unitTitle: meta?.unitTitle || 'Ünite',
-                        courseTitle: meta?.courseTitle || 'DKAB',
+                        courseTitle: formatCourseTitle(meta?.courseTitle || d.courseTitle || 'Din Kültürü ve Ahlak Bilgisi'),
                         wordCount,
                         charCount
                     });
@@ -231,13 +251,14 @@ export default function SourceTextsManagementPage() {
         topics.forEach(t => {
             if (t.grade !== selectedGrade) return;
             if (!t.courseId) return;
+            const fullTitle = formatCourseTitle(t.courseTitle || 'Ders');
             const existing = map.get(t.courseId);
             if (existing) {
                 existing.count++;
             } else {
                 map.set(t.courseId, {
                     id: t.courseId,
-                    title: t.courseTitle || 'Ders',
+                    title: fullTitle,
                     count: 1
                 });
             }
@@ -706,9 +727,12 @@ export default function SourceTextsManagementPage() {
                                             className="w-full text-left p-3 rounded-xl hover:bg-slate-800/80 transition-all flex items-center justify-between gap-3 group"
                                         >
                                             <div className="space-y-1 truncate">
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 flex-wrap">
                                                     <Badge variant="outline" className="text-[10px] bg-indigo-500/10 text-indigo-300 border-indigo-500/30">
                                                         {topic.className}
+                                                    </Badge>
+                                                    <Badge variant="outline" className="text-[10px] bg-purple-500/10 text-purple-300 border-purple-500/30">
+                                                        {topic.courseTitle}
                                                     </Badge>
                                                     <span className="text-[11px] text-slate-400 truncate">{topic.unitTitle}</span>
                                                 </div>
@@ -891,9 +915,9 @@ export default function SourceTextsManagementPage() {
                                                                 : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5"
                                                         )}
                                                     >
-                                                        <div className="flex items-center gap-2.5 truncate">
+                                                        <div className="flex items-center gap-2.5 min-w-0 pr-2">
                                                             <BookOpen className={cn("w-4 h-4 flex-shrink-0", isSelected ? "text-white" : "text-purple-400")} />
-                                                            <span className="truncate text-xs font-semibold">{course.title}</span>
+                                                            <span className="text-xs font-semibold leading-snug break-words">{course.title}</span>
                                                         </div>
                                                         <div className="flex items-center gap-1.5 flex-shrink-0">
                                                             <span className={cn("text-xs font-mono px-2 py-0.5 rounded-lg", isSelected ? "bg-purple-700/80 text-white" : "bg-white/5 text-slate-400")}>
@@ -910,7 +934,7 @@ export default function SourceTextsManagementPage() {
                                     <div 
                                         onClick={() => setFocusedColumn('course')}
                                         title="Dersleri genişletmek için tıklayın"
-                                        className="w-14 sm:w-16 flex-shrink-0 bg-slate-950/70 hover:bg-slate-900/90 transition-all duration-300 flex flex-col items-center py-3 cursor-pointer group"
+                                        className="w-28 sm:w-36 flex-shrink-0 bg-slate-950/70 hover:bg-slate-900/90 transition-all duration-300 flex flex-col items-center py-3 cursor-pointer group"
                                     >
                                         <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-400 mb-2 group-hover:scale-110 transition-transform">
                                             <BookOpen className="w-4 h-4" />
@@ -918,10 +942,9 @@ export default function SourceTextsManagementPage() {
                                         <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider group-hover:text-purple-400 mb-3">
                                             Ders
                                         </span>
-                                        <div className="flex flex-col gap-2 items-center">
+                                        <div className="flex flex-col gap-2 w-full px-2">
                                             {availableCourses.map(course => {
                                                 const isSelected = selectedCourseId === course.id;
-                                                const shortName = course.title.includes('Din Kültürü') ? 'DKAB' : (course.title.slice(0, 4).toUpperCase());
                                                 return (
                                                     <button
                                                         key={course.id}
@@ -932,13 +955,13 @@ export default function SourceTextsManagementPage() {
                                                         }}
                                                         title={course.title}
                                                         className={cn(
-                                                            "w-10 h-8 rounded-xl font-bold text-[10px] flex items-center justify-center transition-all px-1 tracking-tighter",
+                                                            "w-full min-h-[44px] py-2 px-2 rounded-xl font-bold text-[10px] sm:text-[11px] leading-tight flex items-center justify-center text-center transition-all",
                                                             isSelected
-                                                                ? "bg-purple-600 text-white shadow-lg shadow-purple-900/50 ring-2 ring-purple-400/50 scale-105"
-                                                                : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10"
+                                                                ? "bg-purple-600 text-white shadow-lg shadow-purple-900/50 ring-2 ring-purple-400/50 scale-[1.02]"
+                                                                : "bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/5"
                                                         )}
                                                     >
-                                                        {shortName}
+                                                        {course.title}
                                                     </button>
                                                 );
                                             })}
@@ -1431,9 +1454,13 @@ export default function SourceTextsManagementPage() {
             <Dialog open={!!editingTopic} onOpenChange={(open) => !open && setEditingTopic(null)}>
                 <DialogContent className="max-w-3xl bg-slate-900 border-white/10 text-white max-h-[90vh] flex flex-col">
                     <DialogHeader>
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <Badge className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30 text-xs">
                                 {editingTopic?.className}
+                            </Badge>
+                            <span className="text-xs text-slate-400">›</span>
+                            <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-xs">
+                                {editingTopic?.courseTitle}
                             </Badge>
                             <span className="text-xs text-slate-400">›</span>
                             <span className="text-xs text-slate-400">{editingTopic?.unitTitle}</span>
@@ -1527,9 +1554,13 @@ export default function SourceTextsManagementPage() {
                 <DialogContent className="max-w-3xl bg-slate-900 border-white/10 text-white max-h-[90vh] flex flex-col">
                     <DialogHeader>
                         <div className="flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
                                 <Badge className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30 text-xs">
                                     {readingTopic?.className}
+                                </Badge>
+                                <span className="text-xs text-slate-400">›</span>
+                                <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-xs">
+                                    {readingTopic?.courseTitle}
                                 </Badge>
                                 <span className="text-xs text-slate-400">›</span>
                                 <span className="text-xs text-slate-400">{readingTopic?.unitTitle}</span>
