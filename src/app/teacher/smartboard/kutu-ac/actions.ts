@@ -15,6 +15,99 @@ import { unstable_noStore as noStore } from 'next/cache';
 import type { Question } from '@/lib/types';
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
 
+const DEFAULT_FALLBACK_QUESTIONS: Question[] = [
+  {
+    id: 'kutu-default-1',
+    text: "İslam'ın ilk ve en temel şartı aşağıdakilerden hangisidir?",
+    correctAnswer: "Kelime-i Şehadet getirmek",
+    options: ["Kelime-i Şehadet getirmek", "Namaz kılmak", "Oruç tutmak", "Zekat vermek"],
+    type: "Çoktan Seçmeli",
+    difficulty: "Kolay",
+    topicId: ""
+  },
+  {
+    id: 'kutu-default-2',
+    text: "Kur'an-ı Kerim'in ilk indirilen suresi hangisidir?",
+    correctAnswer: "Alak Suresi",
+    options: ["Alak Suresi", "Fatiha Suresi", "İhlas Suresi", "Bakara Suresi"],
+    type: "Çoktan Seçmeli",
+    difficulty: "Kolay",
+    topicId: ""
+  },
+  {
+    id: 'kutu-default-3',
+    text: "Peygamber Efendimiz Hz. Muhammed (s.a.v.) hangi şehirde dünyaya gelmiştir?",
+    correctAnswer: "Mekke",
+    options: ["Mekke", "Medine", "Kudüs", "Taif"],
+    type: "Çoktan Seçmeli",
+    difficulty: "Kolay",
+    topicId: ""
+  },
+  {
+    id: 'kutu-default-4',
+    text: "İslam'da farz olan oruç ibadeti hangi ayda tutulur?",
+    correctAnswer: "Ramazan",
+    options: ["Ramazan", "Şaban", "Recep", "Muharrem"],
+    type: "Çoktan Seçmeli",
+    difficulty: "Kolay",
+    topicId: ""
+  },
+  {
+    id: 'kutu-default-5',
+    text: "Kur'an-ı Kerim'in en kısa suresi hangisidir?",
+    correctAnswer: "Kevser Suresi",
+    options: ["Kevser Suresi", "İhlas Suresi", "Felak Suresi", "Nas Suresi"],
+    type: "Çoktan Seçmeli",
+    difficulty: "Kolay",
+    topicId: ""
+  },
+  {
+    id: 'kutu-default-6',
+    text: "Müslümanların kıblesi olan Kâbe hangi kutsal şehirde yer alır?",
+    correctAnswer: "Mekke",
+    options: ["Mekke", "Medine", "Şam", "Kudüs"],
+    type: "Çoktan Seçmeli",
+    difficulty: "Kolay",
+    topicId: ""
+  },
+  {
+    id: 'kutu-default-7',
+    text: "İslam dini paylaşma, yardımlaşma ve dürüstlüğe büyük önem verir.",
+    correctAnswer: "Doğru",
+    options: ["Doğru", "Yanlış"],
+    type: "Doğru/Yanlış",
+    difficulty: "Kolay",
+    topicId: ""
+  },
+  {
+    id: 'kutu-default-8',
+    text: "Hz. Muhammed (s.a.v.) güvenilirliği nedeniyle gençliğinde 'el-Emin' lakabıyla anılmıştır.",
+    correctAnswer: "Doğru",
+    options: ["Doğru", "Yanlış"],
+    type: "Doğru/Yanlış",
+    difficulty: "Kolay",
+    topicId: ""
+  },
+  {
+    id: 'kutu-default-9',
+    text: "Namaz kılmadan önce temizlenmek amacıyla abdest almak farzdır.",
+    correctAnswer: "Doğru",
+    options: ["Doğru", "Yanlış"],
+    type: "Doğru/Yanlış",
+    difficulty: "Kolay",
+    topicId: ""
+  },
+  {
+    id: 'kutu-default-10',
+    text: "Zekât, maddi durumu yeterli olan Müslümanların yılda bir kez vermesi gereken bir ibadettir.",
+    correctAnswer: "Doğru",
+    options: ["Doğru", "Yanlış"],
+    type: "Doğru/Yanlış",
+    difficulty: "Kolay",
+    topicId: ""
+  }
+];
+
 export async function getKutuAcQuestionsAction(
   { courseId, unitId, topicId, questionCount }: { courseId?: string; unitId?: string; topicId?: string; questionCount?: number }
 ): Promise<{ questions: Question[]; error?: string }> {
@@ -30,8 +123,13 @@ export async function getKutuAcQuestionsAction(
       questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış', 'mcq', 'tf'],
     };
     
-    const result = await getQuestionsFromBank(params);
-    let questions = (result.questions || []) as Question[];
+    let questions: Question[] = [];
+    try {
+      const result = await getQuestionsFromBank(params);
+      questions = (result.questions || []) as Question[];
+    } catch (err) {
+      console.warn("Could not load from question bank, falling back:", err);
+    }
 
     if (questions.length < 5) {
       try {
@@ -63,8 +161,9 @@ export async function getKutuAcQuestionsAction(
       } catch (fallbackErr) {}
     }
     
+    // Eğer hala soru bulunamazsa varsayılan müfredat sorularını ekle
     if (questions.length < 2) {
-       return { questions: [], error: "Bu oyun için yeterli soru bulunamadı (En az 2 soru gereklidir)." };
+      questions = [...DEFAULT_FALLBACK_QUESTIONS];
     }
     
     const shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
@@ -73,7 +172,7 @@ export async function getKutuAcQuestionsAction(
     
   } catch (e: any) {
     console.error("Error getting Kutu Aç questions:", e);
-    return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
+    return { questions: [...DEFAULT_FALLBACK_QUESTIONS] };
   }
 }
 
