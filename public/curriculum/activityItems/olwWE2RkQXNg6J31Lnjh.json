@@ -1,29 +1,29 @@
 [
   {
     "id": "0sqm0QC4Ufj9UtlHkkYC",
+    "type": "definition",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
       "nanoseconds": 797000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "content": {
       "definition": "Bir şeyi anmak ve hatırlamak demektir.",
       "term": "Zikir"
-    },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "definition"
+    }
   },
   {
     "id": "4mLvI0y1m7syTUgpc4SC",
-    "type": "concept",
     "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "İbadet"
     },
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
@@ -32,8 +32,9 @@
   },
   {
     "id": "8wCiyNiR0IpYKDvKqwF1",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -43,65 +44,94 @@
     "content": {
       "term": "Hamd",
       "definition": "Sevgi ve tazimle Allah'a yönelen tüm övgü türleridir."
-    },
-    "type": "definition"
+    }
   },
   {
     "id": "AbnjSVDeslpVznmrGO01",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
       "nanoseconds": 797000000
     },
-    "content": {
-      "definition": "Allah'a kulluk amacıyla yapılan davranışlardır.",
-      "term": "İbadet"
-    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition"
+    "content": {
+      "term": "İbadet",
+      "definition": "Allah'a kulluk amacıyla yapılan davranışlardır."
+    }
   },
   {
     "id": "D37jBUFpaf8AjzfBDb8a",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384996,
-      "nanoseconds": 797000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "sentence",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "unitId": "ARSRniTfx324ZswltLyy",
     "content": {
       "text": "Şükür, nimetin kıymetini bilmektir."
     },
-    "topicId": "olwWE2RkQXNg6J31Lnjh"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384996,
+      "nanoseconds": 797000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "IRFzqhRBiak7ioB6nigh",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384996,
+      "nanoseconds": 797000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "type": "sentence",
+    "content": {
+      "text": "Namaz, şükrün en güzel ifadesidir."
+    }
+  },
+  {
+    "id": "K6UkYABmUyDqfKtQcVvH",
+    "type": "definition",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384996,
+      "nanoseconds": 797000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "definition": "Başkasından görülen iyiliğe karşı kendini borçlu hissetme duygusudur.",
+      "term": "Minnettarlık"
+    }
+  },
+  {
+    "id": "OJPK7sDIXh6MJ4pfb2oG",
+    "type": "concept",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
       "nanoseconds": 797000000
     },
-    "content": {
-      "text": "Namaz, şükrün en güzel ifadesidir."
-    },
     "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "unitId": "ARSRniTfx324ZswltLyy"
-  },
-  {
-    "id": "K6UkYABmUyDqfKtQcVvH",
-    "type": "definition",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy",
     "content": {
-      "term": "Minnettarlık",
-      "definition": "Başkasından görülen iyiliğe karşı kendini borçlu hissetme duygusudur."
+      "text": "Şükür"
+    }
+  },
+  {
+    "id": "QL7nfjRnqF3LiPX4ZmX6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "type": "sentence",
+    "content": {
+      "text": "Şükretmek, özgüveni ve mutluluğu artırır."
     },
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
@@ -109,13 +139,13 @@
     }
   },
   {
-    "id": "OJPK7sDIXh6MJ4pfb2oG",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "id": "Zgucxg0WxuU57p2v1eJV",
     "type": "concept",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
-      "text": "Şükür"
+      "text": "Şükür secdesi"
     },
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
@@ -124,44 +154,14 @@
     "topicId": "olwWE2RkQXNg6J31Lnjh"
   },
   {
-    "id": "QL7nfjRnqF3LiPX4ZmX6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384996,
-      "nanoseconds": 797000000
-    },
-    "content": {
-      "text": "Şükretmek, özgüveni ve mutluluğu artırır."
-    },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "Zgucxg0WxuU57p2v1eJV",
-    "content": {
-      "text": "Şükür secdesi"
-    },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384996,
-      "nanoseconds": 797000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "concept"
-  },
-  {
     "id": "Zh2FTlnKT7BXfj99tY00",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "content": {
       "text": "Peygamberimiz zorluklarda bile hamdetti."
     },
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
@@ -170,44 +170,60 @@
   },
   {
     "id": "duwJN8DiejAnxNLIsvZK",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
       "nanoseconds": 797000000
     },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "unitId": "ARSRniTfx324ZswltLyy",
     "content": {
       "definition": "Bir iyiliğe karşı söz ve davranışla hoşnutluk göstermektir.",
       "term": "Şükür"
     },
-    "type": "definition"
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "eYcD2FUbjgVOhZWCEnuN",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
       "nanoseconds": 797000000
     },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "content": {
       "text": "Elif kıyaslamayı bırakıp şükretti, mutlu oldu."
     },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "sentence"
+    "topicId": "olwWE2RkQXNg6J31Lnjh"
   },
   {
     "id": "efM2h3i2GwQjdny4Icrr",
     "content": {
       "text": "Namaz"
     },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "concept",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384996,
+      "nanoseconds": 797000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy"
+  },
+  {
+    "id": "fta1I2Rga3oenEi6hgF9",
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "content": {
+      "definition": "Müslümanların belirli vakitlerde Allah'a yönelerek yaptığı ibadettir.",
+      "term": "Namaz"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
@@ -215,45 +231,29 @@
     }
   },
   {
-    "id": "fta1I2Rga3oenEi6hgF9",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384996,
-      "nanoseconds": 797000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "definition",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "content": {
-      "definition": "Müslümanların belirli vakitlerde Allah'a yönelerek yaptığı ibadettir.",
-      "term": "Namaz"
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
     "id": "lBfEFjn4HoDuulTTWcb8",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384996,
-      "nanoseconds": 797000000
-    },
     "content": {
       "text": "Minnettarlık"
     },
-    "type": "concept",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384996,
+      "nanoseconds": 797000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "concept"
   },
   {
     "id": "nIUN3BAHa2PxUpWBF92i",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Sabır ve hamt zorlukları aşar."
     },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
@@ -262,37 +262,51 @@
   },
   {
     "id": "nlx2Ixo5nnbGuyG9SEqG",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
       "nanoseconds": 797000000
     },
+    "unitId": "ARSRniTfx324ZswltLyy",
     "content": {
       "text": "Hamd"
     },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "concept"
   },
   {
     "id": "q7i8WNFwh5SliQb65IzB",
+    "type": "sentence",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
       "nanoseconds": 797000000
     },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Hamt, yalnızca Allah'a mahsus övgüdür."
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    }
   },
   {
     "id": "qWVfu4l1I97PBB8Ffkhj",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "type": "sentence",
+    "content": {
+      "text": "Şükreden kulun nimeti artar."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384996,
+      "nanoseconds": 797000000
+    }
+  },
+  {
+    "id": "tBaDgcPWKJx57grJBrGV",
     "unitId": "ARSRniTfx324ZswltLyy",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
@@ -300,26 +314,12 @@
       "seconds": 1767384996,
       "nanoseconds": 797000000
     },
-    "content": {
-      "text": "Şükreden kulun nimeti artar."
-    },
-    "topicId": "olwWE2RkQXNg6J31Lnjh"
-  },
-  {
-    "id": "tBaDgcPWKJx57grJBrGV",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384996,
-      "nanoseconds": 797000000
-    },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "type": "definition",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "content": {
       "definition": "Bir nimete teşekkür etmek için yapılan özel bir secdedir.",
       "term": "Şükür secdesi"
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    }
   },
   {
     "id": "w0qWmOatP67wAn8uJqCU",
@@ -328,42 +328,42 @@
       "seconds": 1767384996,
       "nanoseconds": 797000000
     },
+    "type": "sentence",
     "content": {
       "text": "Peygamberimiz hayatını şükür temelli yaşamıştır."
     },
     "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "w74j65zoKvwLtGxkP659",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384996,
-      "nanoseconds": 797000000
-    },
-    "type": "concept",
     "content": {
       "text": "Zikir"
     },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "unitId": "ARSRniTfx324ZswltLyy"
-  },
-  {
-    "id": "xP51SNiqIVs736QrsJyX",
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "content": {
-      "text": "İnsanlara teşekkür, Allah'a şükürdür."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384996,
       "nanoseconds": 797000000
+    },
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "concept"
+  },
+  {
+    "id": "xP51SNiqIVs736QrsJyX",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384996,
+      "nanoseconds": 797000000
+    },
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "type": "sentence",
+    "content": {
+      "text": "İnsanlara teşekkür, Allah'a şükürdür."
     }
   }
 ]

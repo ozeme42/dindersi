@@ -6,6 +6,8 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import type { UserProfile } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 
+import { deduplicateStudents } from '@/lib/utils';
+
 const GUEST_STUDENTS_FILE_PATH = path.join(process.cwd(), 'public', 'curriculum', 'guest-students.json');
 const CLASSES_FILE_PATH = path.join(process.cwd(), 'public', 'curriculum', 'classes.json');
 
@@ -15,7 +17,7 @@ const CLASSES_FILE_PATH = path.join(process.cwd(), 'public', 'curriculum', 'clas
 export async function getLocalGuestStudents(): Promise<UserProfile[]> {
     try {
         const content = await fs.readFile(GUEST_STUDENTS_FILE_PATH, 'utf-8');
-        return JSON.parse(content);
+        return deduplicateStudents(JSON.parse(content));
     } catch (e) {
         return [];
     }
@@ -34,13 +36,22 @@ export async function saveLocalGuestStudent(student: UserProfile): Promise<boole
             students = [];
         }
 
-        const existingIndex = students.findIndex(s => s.uid === student.uid);
+        const normName = (student.displayName || '').trim().toLocaleLowerCase('tr-TR');
+        const normClass = (student.class || '').trim().toLocaleLowerCase('tr-TR');
+
+        const existingIndex = students.findIndex(s => 
+            (student.uid && s.uid === student.uid) ||
+            (normName && (s.displayName || '').trim().toLocaleLowerCase('tr-TR') === normName &&
+             normClass && (s.class || '').trim().toLocaleLowerCase('tr-TR') === normClass)
+        );
+
         if (existingIndex >= 0) {
             students[existingIndex] = { ...students[existingIndex], ...student };
         } else {
             students.push(student);
         }
 
+        students = deduplicateStudents(students);
         await fs.writeFile(GUEST_STUDENTS_FILE_PATH, JSON.stringify(students, null, 2), 'utf-8');
         return true;
     } catch (err) {
@@ -100,7 +111,8 @@ export async function syncSmartboardDataToFilesAction(): Promise<{ success: bool
         const dir = path.dirname(GUEST_STUDENTS_FILE_PATH);
         await fs.mkdir(dir, { recursive: true });
 
-        await fs.writeFile(GUEST_STUDENTS_FILE_PATH, JSON.stringify(guestStudents, null, 2), 'utf8');
+        const uniqueGuestStudents = deduplicateStudents(guestStudents);
+        await fs.writeFile(GUEST_STUDENTS_FILE_PATH, JSON.stringify(uniqueGuestStudents, null, 2), 'utf8');
 
         // 2. Sınıflar
         let classCount = 0;

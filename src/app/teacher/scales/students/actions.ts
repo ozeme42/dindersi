@@ -4,6 +4,7 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import type { SchoolClass, UserProfile, ScaleEntry } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
+import { deduplicateStudents } from "@/lib/utils";
 
 export type { SchoolClass };
 
@@ -51,10 +52,12 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
             return { success: true, data: [] }; 
         }
 
-        // KRİTİK: Sadece sanal öğrencileri (role: 'guest') alıyoruz
-        const studentsData = studentsSnap.docs
+        // KRİTİK: Sadece sanal öğrencileri (role: 'guest') alıyoruz ve mükerrerleri eliyoruz
+        const rawStudentsData = studentsSnap.docs
             .map(d => ({uid: d.id, ...d.data()}) as UserProfile)
             .filter(s => s.role === 'guest');
+
+        const studentsData = deduplicateStudents(rawStudentsData);
 
         const studentIds = studentsData.map(s => s.uid);
         if (studentIds.length === 0) return { success: true, data: [] };

@@ -4,6 +4,7 @@ import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
 import { saveLocalGuestStudent, removeLocalGuestStudent, syncSmartboardDataToFilesAction } from "@/app/teacher/smartboard/sync-actions";
+import { deduplicateStudents } from "@/lib/utils";
 
 // --- YARDIMCI: DATA TEMİZLEME (Firestore 'undefined' kabul etmez, 'null' ister) ---
 const cleanUndefined = (obj: any): any => {
@@ -70,7 +71,9 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
     let allUsers = allUsersSnap.docs.map(doc => {
         const serializedData = deepSerialize(doc.data());
         return { uid: doc.id, ...serializedData } as UserProfile
-    }).filter(user => ['student', 'guest', 'pending'].includes(user.role)); 
+    }).filter(user => user.role === 'guest'); 
+
+    allUsers = deduplicateStudents(allUsers);
 
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...deepSerialize(doc.data()) } as SchoolClass));
     
@@ -104,6 +107,21 @@ export async function addGuestStudent(
     try {
         const db = getAdminDb();
         
+        // Mükerrer kontrolü: Aynı sınıfta aynı isimde sanal öğrenci var mı?
+        const existingSnap = await db.collection("users")
+            .where("role", "==", "guest")
+            .where("class", "==", className)
+            .get();
+
+        const isDuplicate = existingSnap.docs.some(doc => {
+            const d = doc.data();
+            return (d.displayName || '').trim().toLocaleLowerCase('tr-TR') === finalDisplayName.toLocaleLowerCase('tr-TR');
+        });
+
+        if (isDuplicate) {
+            return { success: false, error: `"${finalDisplayName}" adlı sanal öğrenci "${className}" sınıfında zaten kayıtlı.` };
+        }
+
         let schoolName = "Tanımsız Okul";
         let schoolId = null;
 
@@ -156,7 +174,7 @@ export async function addGuestStudent(
     }
 }
 
-// --- TOPLU EKLEME (DÜZELTİLMİŞ VERSİYON) ---
+// --- TOPLU EKLEME (DÜZELTİLMİŞ & MÜKERRER ENGELLEYİCİ VERSİYON) ---
 export async function bulkAddStudents(
     names: string[], 
     className: string, 
@@ -172,6 +190,31 @@ export async function bulkAddStudents(
     const batch = db.batch();
     
     try {
+        // Girdi listesindeki mükerrerleri temizle
+        const uniqueNames: string[] = [];
+        const seenInInput = new Set<string>();
+        for (const n of names) {
+            const clean = n.trim();
+            if (!clean) continue;
+            const norm = clean.toLocaleLowerCase('tr-TR');
+            if (!seenInInput.has(norm)) {
+                seenInInput.add(norm);
+                uniqueNames.push(clean);
+            }
+        }
+
+        if (uniqueNames.length === 0) return { success: false, error: "Geçerli isim bulunamadı." };
+
+        // Firestore'daki mevcut sanal öğrencileri kontrol et (aynı sınıftakiler)
+        const existingSnap = await db.collection('users')
+            .where('role', '==', 'guest')
+            .where('class', '==', className)
+            .get();
+
+        const existingNames = new Set(
+            existingSnap.docs.map(doc => (doc.data().displayName || '').trim().toLocaleLowerCase('tr-TR'))
+        );
+
         let schoolName = "Tanımsız Okul";
         let schoolId = null;
 
@@ -187,9 +230,11 @@ export async function bulkAddStudents(
 
         let successCount = 0;
         
-        for (const name of names) {
-            const cleanName = name.trim();
-            if (!cleanName) continue;
+        for (const cleanName of uniqueNames) {
+            // Zaten mevcut olanı atla (mükerrer olmasın)
+            if (existingNames.has(cleanName.toLocaleLowerCase('tr-TR'))) {
+                continue;
+            }
 
             try {
                 const userRef = db.collection('users').doc();
@@ -203,17 +248,17 @@ export async function bulkAddStudents(
                     role: 'guest', 
                     class: className,
                     schoolName: schoolName,
-                    schoolId: schoolId, // Burası null olabilir ama undefined olmamalı
+                    schoolId: schoolId,
                     score: 0,
                     createdAt: FieldValue.serverTimestamp(),
                     ownedItems: [],
                     teacherId: teacherId,
                 };
 
-                // Undefined değerleri temizle (En önemli kısım)
                 const safeUser = cleanUndefined(rawUser);
 
                 batch.set(userRef, safeUser);
+                existingNames.add(cleanName.toLocaleLowerCase('tr-TR'));
                 successCount++;
             } catch (e) { 
                 console.error(`Satır Hatası (${cleanName}):`, e); 
@@ -225,7 +270,7 @@ export async function bulkAddStudents(
             syncSmartboardDataToFilesAction().catch(() => {});
             return { success: true, successCount };
         }
-        return { success: false, error: "Eklenecek geçerli isim bulunamadı." };
+        return { success: false, error: "Girdiğiniz isimler bu sınıfta zaten kayıtlı." };
 
     } catch(e: any) {
         console.error("Bulk Add Critical Error:", e);

@@ -25,6 +25,7 @@
       "seconds": 1750857125,
       "nanoseconds": 399000000
     },
+    "name": "7",
     "branches": [
       "A",
       "B",
@@ -34,12 +35,10 @@
       "F",
       "G",
       "H"
-    ],
-    "name": "7"
+    ]
   },
   {
     "id": "Qy12ql2XrP5uXPIdCBtB",
-    "isPublished": true,
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1750857125,
@@ -51,15 +50,11 @@
       "C",
       "D"
     ],
+    "isPublished": true,
     "name": "8"
   },
   {
     "id": "twWbpZwPI54mwIXyX7F0",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1750757869,
-      "nanoseconds": 538000000
-    },
     "branches": [
       "A",
       "B",
@@ -71,6 +66,11 @@
       "H"
     ],
     "name": "5",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1750757869,
+      "nanoseconds": 538000000
+    },
     "isPublished": true
   }
 ]

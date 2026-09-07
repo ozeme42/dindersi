@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check, PartyPopper, Users, UserPlus, Trash2, Shuffle, Book, Library, ListTodo, Settings, UserCheck, GitBranch, Map } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, deduplicateStudents } from "@/lib/utils";
 import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { UserProfile, Course, Unit, Topic, SchoolClass } from "@/lib/types";
@@ -148,7 +148,7 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
             }
         }
         setAllClasses(classesList);
-        setAllStudents(students);
+        setAllStudents(deduplicateStudents(students));
         setAllCourses(coursesList);
         
     } catch (e) {
@@ -192,12 +192,10 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
     const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
     let studentsInClass = allStudents.filter(u => {
       const sc = (u.class || '').trim().toLowerCase();
-      return sc.includes(targetClassName) || (gradeVal && sc.startsWith(gradeVal));
+      const sGrade = sc.match(/\d+/)?.[0] || '';
+      return gradeVal ? sGrade === gradeVal : sc.includes(targetClassName);
     });
-    if (studentsInClass.length === 0) {
-      studentsInClass = allStudents;
-    }
-    setFilteredStudents(studentsInClass);
+    setFilteredStudents(deduplicateStudents(studentsInClass));
     setTeams([
       { id: 1, name: "Mavi Takım", color: "blue", players: [] },
       { id: 2, name: "Kırmızı Takım", color: "red", players: [] },

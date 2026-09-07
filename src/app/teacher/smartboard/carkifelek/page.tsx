@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import { cn, deduplicateStudents, deduplicateByWheelName } from '@/lib/utils';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
@@ -112,7 +112,7 @@ export default function WheelOfFortunePage() {
                     loadedGuests = [...DEMO_SANAL_OGRENCILER];
                 }
 
-                setAllStudents(loadedGuests);
+                setAllStudents(deduplicateStudents(loadedGuests));
             } catch (error) {
                 console.error("Error fetching data:", error);
                 setAllStudents([...DEMO_SANAL_OGRENCILER]);
@@ -128,25 +128,34 @@ export default function WheelOfFortunePage() {
     const filteredStudents = useMemo(() => {
         let students = allStudents;
         if (classFilter !== 'all' && selectedClassData) {
-            const rawClassName = (selectedClassData.name || '').trim().toLowerCase();
-            const gradeNum = rawClassName.match(/\d+/)?.[0] || '';
+            const rawClassName = (selectedClassData.name || '').trim();
+            const gradeNum = rawClassName.match(/\d+/)?.[0] || rawClassName;
 
             if (branchFilter === 'all') {
-                const matched = students.filter(s => {
-                    const sc = (s.class || '').trim().toLowerCase();
-                    return sc.includes(rawClassName) || (gradeNum && sc.startsWith(gradeNum));
+                students = students.filter(s => {
+                    const sc = (s.class || '').trim();
+                    const sGrade = sc.match(/\d+/)?.[0] || '';
+                    return (gradeNum && sGrade === gradeNum) || sc.toLowerCase().includes(rawClassName.toLowerCase());
                 });
-                if (matched.length > 0) students = matched;
             } else {
-                const fullClassName = `${selectedClassData.name} - ${branchFilter}`.toLowerCase();
-                const matched = students.filter(s => {
-                    const sc = (s.class || '').trim().toLowerCase();
-                    return sc === fullClassName || sc.includes(branchFilter.toLowerCase());
+                const normBranch = branchFilter.trim().toLowerCase();
+                students = students.filter(s => {
+                    const sc = (s.class || '').trim();
+                    const sGrade = sc.match(/\d+/)?.[0] || '';
+                    const parts = sc.split(/[-/]/).map(p => p.trim());
+                    const sBranch = parts[1]?.toLowerCase() || '';
+
+                    const isGradeMatch = gradeNum ? sGrade === gradeNum : true;
+                    const isBranchMatch = sBranch === normBranch || 
+                                          sc.toLowerCase() === `${gradeNum} - ${normBranch}` || 
+                                          sc.toLowerCase() === `${gradeNum}-${normBranch}` ||
+                                          sc.toLowerCase().startsWith(`${gradeNum} - ${normBranch}`);
+                    return isGradeMatch && isBranchMatch;
                 });
-                if (matched.length > 0) students = matched;
             }
         }
-        return students.filter(s => !removedStudentIds.has(s.uid));
+        const activeList = students.filter(s => !removedStudentIds.has(s.uid));
+        return deduplicateByWheelName(activeList);
     }, [allStudents, classFilter, branchFilter, selectedClassData, removedStudentIds]);
 
     const students = filteredStudents;
@@ -159,6 +168,15 @@ export default function WheelOfFortunePage() {
         const trimmed = customStudentName.trim();
         if (!trimmed || isAddingCustom) return;
 
+        // Mükerrer kontrolü
+        const isAlreadyInPool = allStudents.some(
+            s => (s.displayName || '').trim().toLocaleLowerCase('tr-TR') === trimmed.toLocaleLowerCase('tr-TR')
+        );
+        if (isAlreadyInPool) {
+            setCustomStudentName('');
+            return;
+        }
+
         setIsAddingCustom(true);
         const targetClassName = selectedClassData 
             ? (branchFilter !== 'all' ? `${selectedClassData.name} - ${branchFilter}` : selectedClassData.name)
@@ -167,7 +185,7 @@ export default function WheelOfFortunePage() {
         try {
             const res = await addStudentToClass(trimmed, targetClassName, user?.uid || null);
             if (res.success && res.newUser) {
-                setAllStudents(prev => [res.newUser!, ...prev]);
+                setAllStudents(prev => deduplicateStudents([res.newUser!, ...prev]));
             } else {
                 // Fallback local sanal öğrenci
                 const localUser: UserProfile = {
@@ -176,7 +194,7 @@ export default function WheelOfFortunePage() {
                     class: targetClassName,
                     role: 'guest'
                 } as any;
-                setAllStudents(prev => [localUser, ...prev]);
+                setAllStudents(prev => deduplicateStudents([localUser, ...prev]));
             }
             try { playSound('pop'); } catch (e) {}
         } catch (err) {
@@ -186,7 +204,7 @@ export default function WheelOfFortunePage() {
                 class: targetClassName,
                 role: 'guest'
             } as any;
-            setAllStudents(prev => [localUser, ...prev]);
+            setAllStudents(prev => deduplicateStudents([localUser, ...prev]));
         } finally {
             setCustomStudentName('');
             setIsAddingCustom(false);

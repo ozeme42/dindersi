@@ -1,159 +1,158 @@
 [
   {
     "id": "1WVRAxuqyNh5pH1O7zcf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033386,
+      "nanoseconds": 603000000
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "content": {
       "text": "Hz. Amine"
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033386,
-      "nanoseconds": 603000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "type": "concept"
   },
   {
     "id": "2GYcC0GHJIuDMdSfgVy0",
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Hilfülfudul"
     },
+    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
       "nanoseconds": 809000000
-    },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    }
   },
   {
     "id": "2vWmZ5lD8sCu7GBUYzyA",
-    "content": {
-      "text": "Amcasıyla Şam'a yaptığı ticaret yolculuğunda Rahip Bahira ile karşılaşmıştır."
-    },
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033386,
       "nanoseconds": 603000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Amcasıyla Şam'a yaptığı ticaret yolculuğunda Rahip Bahira ile karşılaşmıştır."
     }
   },
   {
     "id": "3OHOTRSGnt7X4owfIdzv",
-    "type": "concept",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "content": {
+      "text": "Ümmü Eymen"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
       "nanoseconds": 809000000
     },
-    "content": {
-      "text": "Ümmü Eymen"
-    },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "type": "concept"
   },
   {
     "id": "4KYBPqj30jVUI7IoeaWl",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033386,
       "nanoseconds": 603000000
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "content": {
       "text": "Bu dönemde ailesine karşı sorumluluk sahibi ve yardımsever bir çocuktu."
     },
     "type": "sentence",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "topicId": "ngCKnAHYPnDqAsGhMhPb"
   },
   {
     "id": "76zYgE7bUrFLU5wqMXCn",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033386,
       "nanoseconds": 603000000
     },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "content": {
       "text": "Abdülmuttalib"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "type": "concept"
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "77aR1ktLq21wTMZY2PQf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033405,
+      "nanoseconds": 115000000
+    },
+    "type": "definition",
     "content": {
       "definition": "Peygamberimizin dedesi",
       "term": "Abdülmuttalib"
     },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033405,
-      "nanoseconds": 115000000
-    },
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "87Oedm4OvFZxxu9LIRqX",
-    "content": {
-      "text": "Rahip Bahira"
-    },
     "type": "concept",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033386,
       "nanoseconds": 603000000
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "content": {
+      "text": "Rahip Bahira"
+    }
   },
   {
     "id": "9fekH6QAFVX7zhm4JyWY",
-    "content": {
-      "term": "Sadoğulları",
-      "definition": "Peygamberimizin çocukluğunun bir kısmını geçirdiği yer"
-    },
-    "type": "definition",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033405,
       "nanoseconds": 115000000
     },
+    "type": "definition",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "content": {
+      "term": "Sadoğulları",
+      "definition": "Peygamberimizin çocukluğunun bir kısmını geçirdiği yer"
+    }
   },
   {
     "id": "BiIGlV1UTodAG6Eqnq1g",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "content": {
       "text": "Peygamberimizin çocukluğu, peygamberliğine hazırlık niteliğinde önemli olaylar ve tecrübelerle doludur."
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033386,
       "nanoseconds": 603000000
-    }
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7"
   },
   {
     "id": "BvFCbVGMLjxsUkA2hNcQ",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
@@ -164,7 +163,8 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033386,
       "nanoseconds": 603000000
-    }
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7"
   },
   {
     "id": "EMnNZjq5xs5i6mGkMySQ",
@@ -176,83 +176,83 @@
     "content": {
       "text": "Mekke"
     },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "concept",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "F4fuNNl0EXDLuwt8TZzX",
-    "content": {
-      "term": "Bahira",
-      "definition": "Peygamberimizin peygamberliğini önceden haber veren rahip"
-    },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "definition",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033405,
       "nanoseconds": 115000000
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "type": "definition"
+    "content": {
+      "definition": "Peygamberimizin peygamberliğini önceden haber veren rahip",
+      "term": "Bahira"
+    }
   },
   {
     "id": "FsYNxjEi6bXj49soqN5J",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "content": {
-      "definition": "Annesinin vefatından sonra Peygamberimizi dedesine getiren dadısı.",
-      "term": "Ümmü Eymen"
+      "term": "Ümmü Eymen",
+      "definition": "Annesinin vefatından sonra Peygamberimizi dedesine getiren dadısı."
     },
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "type": "definition",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
       "nanoseconds": 809000000
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    }
   },
   {
     "id": "GUYK8hQXgb5TXLbiUX7J",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "content": {
       "text": "Medine"
     },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033386,
       "nanoseconds": 603000000
     },
-    "type": "concept",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept"
   },
   {
     "id": "JddkB2LwLqaAPkt7OEKd",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
-    "content": {
-      "definition": "Peygamberimizin amcası",
-      "term": "Ebu Talip"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033405,
       "nanoseconds": 115000000
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Ebu Talip",
+      "definition": "Peygamberimizin amcası"
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "definition",
     "topicId": "ngCKnAHYPnDqAsGhMhPb"
   },
   {
     "id": "MBe1WeIb01bQHZ4YD89v",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "content": {
       "text": "Ebva"
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
@@ -262,22 +262,21 @@
   {
     "id": "Nou1avuxVPTa2SHOAb1Z",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033386,
+      "nanoseconds": 603000000
+    },
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "content": {
       "text": "Şam"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033386,
-      "nanoseconds": 603000000
-    }
+    "type": "concept"
   },
   {
     "id": "OPSNZ7cMnEDTSPlIDojE",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "type": "definition",
     "content": {
       "term": "Hilfülfudul",
       "definition": "Peygamberimizin gençliğinde katıldığı, haksızlıklara karşı kurulan Erdemliler Birliği."
@@ -287,159 +286,160 @@
       "seconds": 1767274332,
       "nanoseconds": 809000000
     },
-    "type": "definition",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "PdhAzE9JB0nknBcGzqZU",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "definition": "Ebu Talib’in eşi, Peygamberimizin \"Annemden sonraki annem\" dediği yengesi.",
-      "term": "Fatıma Hatun"
-    },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
       "nanoseconds": 809000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "content": {
+      "term": "Fatıma Hatun",
+      "definition": "Ebu Talib’in eşi, Peygamberimizin \"Annemden sonraki annem\" dediği yengesi."
     }
   },
   {
     "id": "PeWu0aCKNQ31xK3WbX8S",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
     "content": {
-      "definition": "Ebu Talib ve Hz. Hatice’nin vefat ettiği \"Hüzün Yılı\".",
-      "term": "Senetülhüzün"
+      "term": "Senetülhüzün",
+      "definition": "Ebu Talib ve Hz. Hatice’nin vefat ettiği \"Hüzün Yılı\"."
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
       "nanoseconds": 809000000
     },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb"
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "type": "definition",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "Swe4D6xMCA9GiILOgp5S",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033405,
       "nanoseconds": 115000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
-      "term": "Halime",
-      "definition": "Peygamberimizin sütannesi"
-    }
-  },
-  {
-    "id": "TmjpVBg65CU989CrM4E4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033386,
-      "nanoseconds": 603000000
+      "definition": "Peygamberimizin sütannesi",
+      "term": "Halime"
     },
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "content": {
-      "text": "Peygamberimizin çocukluk dönemi, onun ilerideki hayatını ve peygamberliğini anlamak için önemlidir."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence"
-  },
-  {
-    "id": "UJugozqG6MyK21RRKAxg",
-    "type": "sentence",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033386,
-      "nanoseconds": 603000000
-    },
-    "content": {
-      "text": "Annesi ve dedesi vefat ettikten sonra amcası Ebu Talib'in himayesine girmiştir."
-    },
     "topicId": "ngCKnAHYPnDqAsGhMhPb"
   },
   {
+    "id": "TmjpVBg65CU989CrM4E4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033386,
+      "nanoseconds": 603000000
+    },
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "type": "sentence",
+    "content": {
+      "text": "Peygamberimizin çocukluk dönemi, onun ilerideki hayatını ve peygamberliğini anlamak için önemlidir."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "UJugozqG6MyK21RRKAxg",
+    "content": {
+      "text": "Annesi ve dedesi vefat ettikten sonra amcası Ebu Talib'in himayesine girmiştir."
+    },
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033386,
+      "nanoseconds": 603000000
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
     "id": "VyLYO1POR2wW4WIbOsDe",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
       "nanoseconds": 809000000
     },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "type": "definition",
     "content": {
-      "definition": "Peygamberimizin sütannesinin çocukları; Abdullah, Üneyse ve Şeyma.",
-      "term": "Süt Kardeşler"
+      "term": "Süt Kardeşler",
+      "definition": "Peygamberimizin sütannesinin çocukları; Abdullah, Üneyse ve Şeyma."
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb"
+  },
+  {
+    "id": "Y71ue4q5gOdbLGauRIZN",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
+    "content": {
+      "text": "Sadoğulları'nda geçirdiği yıllar, sağlık ve karakter gelişimine olumlu etki etmiştir."
+    },
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033386,
+      "nanoseconds": 603000000
     },
     "unitId": "yz1rOJf7uA0eS6BRYJN7"
   },
   {
-    "id": "Y71ue4q5gOdbLGauRIZN",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033386,
-      "nanoseconds": 603000000
-    },
-    "content": {
-      "text": "Sadoğulları'nda geçirdiği yıllar, sağlık ve karakter gelişimine olumlu etki etmiştir."
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
     "id": "c9tx7J4XBOuvUA9ipp1z",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033405,
-      "nanoseconds": 115000000
-    },
+    "type": "definition",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "term": "Mekke",
       "definition": "Peygamberimizin doğduğu şehir"
     },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033405,
+      "nanoseconds": 115000000
+    }
   },
   {
     "id": "cA2lKJ2LI95q0aKCTk8T",
     "type": "sentence",
-    "content": {
-      "text": "Çocukluğunun ilk yıllarını sütannesi Halime'nin yanında Sadoğulları'nda geçirmiştir."
-    },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033386,
       "nanoseconds": 603000000
     },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "content": {
+      "text": "Çocukluğunun ilk yıllarını sütannesi Halime'nin yanında Sadoğulları'nda geçirmiştir."
+    }
   },
   {
     "id": "dGejcIiesKYx6mX9iEa9",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "content": {
       "definition": "Peygamberimizin annesi Hz. Amine’nin Mekke’ye dönüş yolunda vefat ettiği köy.",
       "term": "Ebva"
     },
-    "type": "definition",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
@@ -448,8 +448,8 @@
   },
   {
     "id": "dHHQzS6NwBcDXI4fAg1B",
-    "type": "sentence",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Hz. Muhammed (sav), çocukluk yıllarında dahi üstün ahlaki özellikleriyle çevresindekiler tarafından sevilen ve sayılan biriydi."
@@ -463,53 +463,54 @@
   },
   {
     "id": "fyMALqIZfbOguzTuqIcK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033405,
+      "nanoseconds": 115000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "content": {
       "term": "Amine",
       "definition": "Peygamberimizin annesi"
     },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033405,
-      "nanoseconds": 115000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "topicId": "ngCKnAHYPnDqAsGhMhPb"
   },
   {
     "id": "hErhnp5R7s5V8R3ftDrD",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767274332,
-      "nanoseconds": 809000000
-    },
-    "content": {
-      "text": "Süt Kardeşler"
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept"
-  },
-  {
-    "id": "k6rRtSHJA1pk5n49KOT8",
     "type": "concept",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
       "nanoseconds": 809000000
     },
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
-      "text": "Senetülhüzün"
+      "text": "Süt Kardeşler"
     }
   },
   {
+    "id": "k6rRtSHJA1pk5n49KOT8",
+    "content": {
+      "text": "Senetülhüzün"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274332,
+      "nanoseconds": 809000000
+    },
+    "type": "concept",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+  },
+  {
     "id": "kawb7RuyVtvMmFoOXYd0",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -517,34 +518,18 @@
       "nanoseconds": 115000000
     },
     "content": {
-      "definition": "Peygamberimizin hicret ettiği şehir",
-      "term": "Medine"
+      "term": "Medine",
+      "definition": "Peygamberimizin hicret ettiği şehir"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition"
+    "unitId": "yz1rOJf7uA0eS6BRYJN7"
   },
   {
     "id": "oSUDqzcIMi7ReoyERPP6",
     "type": "sentence",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033386,
-      "nanoseconds": 603000000
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Hz. Muhammed (sav) 571 yılında Mekke'de doğmuştur."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "sWIRlWXU03BEQjvnZ9jg",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Sadoğulları"
-    },
-    "type": "concept",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -554,33 +539,48 @@
     "unitId": "yz1rOJf7uA0eS6BRYJN7"
   },
   {
+    "id": "sWIRlWXU03BEQjvnZ9jg",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "content": {
+      "text": "Sadoğulları"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033386,
+      "nanoseconds": 603000000
+    },
+    "type": "concept",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb"
+  },
+  {
     "id": "vDPeSyYlrZc4XVakmsti",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033386,
       "nanoseconds": 603000000
     },
-    "type": "sentence",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "sentence",
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
     "content": {
       "text": "Çocukluğunda dürüstlüğü ve ahlakıyla tanınırdı."
     }
   },
   {
     "id": "zjMQRWOh6u9X7rGDm6uZ",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
-    "content": {
-      "text": "Fatıma Hatun"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274332,
       "nanoseconds": 809000000
     },
-    "topicId": "ngCKnAHYPnDqAsGhMhPb"
+    "topicId": "ngCKnAHYPnDqAsGhMhPb",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "content": {
+      "text": "Fatıma Hatun"
+    },
+    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   }
 ]

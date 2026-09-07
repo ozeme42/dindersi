@@ -2,20 +2,22 @@
   {
     "id": "4RflOIOWEk2kLZJK3qE2",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Kadir Gecesi"
-    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "concept",
     "topicId": "lqcPizeedgkmT1jt4Dll",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759149819,
       "nanoseconds": 522000000
     },
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "type": "concept"
+    "content": {
+      "text": "Kadir Gecesi"
+    }
   },
   {
     "id": "7XhcNj08E3sWXG4PEFnK",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361332,
@@ -24,101 +26,99 @@
     "content": {
       "text": "Ramazan ayı oruç ve Kur'an ayıdır."
     },
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "type": "sentence",
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "9tSWHQLNwKabrFrt6rk8",
     "type": "sentence",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "En hayırlınız Kur'an'ı öğrenen ve öğretendir."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361332,
       "nanoseconds": 686000000
     },
-    "content": {
-      "text": "En hayırlınız Kur'an'ı öğrenen ve öğretendir."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
+    "topicId": "lqcPizeedgkmT1jt4Dll"
   },
   {
     "id": "FbfnzES9slGHRWH5EW8Z",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759149717,
       "nanoseconds": 41000000
     },
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "type": "sentence",
     "topicId": "lqcPizeedgkmT1jt4Dll",
     "content": {
       "text": "O sayılı günler; insanlar için bir hidayet rehberi, doğru yolun ve hak ile batılı birbirinden ayırmanın apaçık delilleri olarak Kur’an’ın kendisinde indirildiği ramazan ayıdır."
-    }
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence"
   },
   {
     "id": "JGpnFGHbIx2e9e62dal2",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149480,
+      "nanoseconds": 137000000
+    },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "term": "Farz",
       "definition": "Allah'ın kesin olarak emrettiği ve Müslümanların yapması zorunlu olan dini bir hükümdür."
     },
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149480,
-      "nanoseconds": 137000000
-    }
+    "type": "definition",
+    "topicId": "lqcPizeedgkmT1jt4Dll"
   },
   {
     "id": "KNja3QQYCpXQpilgePFY",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
     "content": {
       "text": "Oruç"
     },
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759149819,
       "nanoseconds": 522000000
-    },
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
+    }
   },
   {
     "id": "M3QOOM1oc0ihGfC39dHS",
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Ramazan"
     },
-    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759149819,
       "nanoseconds": 522000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "concept"
   },
   {
     "id": "RAVpntfBf6GSKjDewNPi",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Hicri Takvim"
     },
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759149819,
       "nanoseconds": 522000000
-    },
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
+    }
   },
   {
     "id": "ScicAE78jZugcFM1SGWY",
@@ -127,13 +127,13 @@
       "seconds": 1759149819,
       "nanoseconds": 522000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "concept",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
     "content": {
       "text": "Farz"
     },
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "type": "concept"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "TCtZiDW8tHJPix1aiUKU",
@@ -142,177 +142,54 @@
       "seconds": 1767361332,
       "nanoseconds": 686000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "type": "sentence",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Kadir Gecesi bin aydan daha hayırlıdır."
-    }
+    },
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "unitId": "HaG39Z2i3AIE1XQznLZw"
   },
   {
     "id": "Ti4HoaMGoxqysazrOalA",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361332,
       "nanoseconds": 686000000
     },
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
     "content": {
       "text": "Oruç tutmak Müslümanlara farz kılınmıştır."
     },
-    "type": "sentence",
-    "topicId": "lqcPizeedgkmT1jt4Dll"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "dCWY0kIP6Lsxz8VUAGXF",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759149480,
       "nanoseconds": 137000000
     },
-    "type": "definition",
-    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "definition": "Hz. Muhammed'in Mekke'den Medine'ye göçünü başlangıç kabul eden, Ay'ın Dünya etrafındaki döngüsüyle belirlenen bir zaman ölçüsü sistemidir.",
       "term": "Hicri takvim"
     },
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "type": "definition"
   },
   {
     "id": "eb3ajDcL1Kiry9tLKrZQ",
-    "content": {
-      "definition": "Ramazan ayında indirilmeye başlanan, insanlara doğru yolu gösteren ve hak ile batılı birbirinden ayıran ilahi kitaptır.",
-      "term": "Kur'an"
-    },
     "topicId": "lqcPizeedgkmT1jt4Dll",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149480,
-      "nanoseconds": 137000000
+    "content": {
+      "term": "Kur'an",
+      "definition": "Ramazan ayında indirilmeye başlanan, insanlara doğru yolu gösteren ve hak ile batılı birbirinden ayıran ilahi kitaptır."
     },
-    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
-  },
-  {
-    "id": "g96L7FfDsvz2A5CoUin6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149717,
-      "nanoseconds": 41000000
-    },
-    "content": {
-      "text": "Şüphesiz, biz onu (Kur’an’ı) Kadir Gecesi’nde indirdik."
-    },
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
-  },
-  {
-    "id": "gJprUOmzxFE3wE4LD1xp",
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "content": {
-      "definition": "Allah'a saygı, sevgi ve bağlılığı göstermek, O'nun hoşnutluğunu kazanmak niyetiyle yapılan tutum ve davranışlara verilen genel adımdır.",
-      "term": "İbadet"
-    },
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149480,
-      "nanoseconds": 137000000
-    },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "oaeoQH808dQNToTXt4Kn",
-    "content": {
-      "text": "Kur'an-ı Kerim"
-    },
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149819,
-      "nanoseconds": 522000000
-    },
-    "type": "concept",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "ogsoryAtjl7RmcScGn8h",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "content": {
-      "definition": "Tan yerinin ağarmasından güneşin batışına kadar Allah rızası için yeme, içme ve bazı bedensel isteklerden uzak durmaktır. İslam'ın beş şartından biriyim.",
-      "term": "Oruç"
-    },
-    "type": "definition",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149480,
-      "nanoseconds": 137000000
-    }
-  },
-  {
-    "id": "qFuvWYTgc1L2t50nHnrj",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149819,
-      "nanoseconds": 522000000
-    },
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "content": {
-      "text": "İbadet"
-    },
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "snxNKl2zSMY0mtuOCGYk",
-    "type": "sentence",
-    "content": {
-      "text": "Kur'an Kadir Gecesi'nde indirilmeye başlanmıştır."
-    },
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361332,
-      "nanoseconds": 686000000
-    },
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "tME8cSHtmeYPkxcTEGtt",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "content": {
-      "text": "Mübarek ramazan ayına kavuştunuz. Yüce Allah bu ayda size oruç tutmayı farz kıldı."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149717,
-      "nanoseconds": 41000000
-    }
-  },
-  {
-    "id": "wUCzH4WX3Cvbryv3jh7e",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "lqcPizeedgkmT1jt4Dll",
-    "content": {
-      "term": "İmsak",
-      "definition": "Oruca başlama vaktidir. Gökyüzünün henüz tam aydınlanmadığı, tan yerinin ağarmaya başladığı zaman dilimini ifade ederim."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759149480,
@@ -321,35 +198,158 @@
     "type": "definition"
   },
   {
-    "id": "yhz0hUKgSrxl7X58c4tU",
+    "id": "g96L7FfDsvz2A5CoUin6",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149717,
+      "nanoseconds": 41000000
+    },
     "topicId": "lqcPizeedgkmT1jt4Dll",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Şüphesiz, biz onu (Kur’an’ı) Kadir Gecesi’nde indirdik."
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "gJprUOmzxFE3wE4LD1xp",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "type": "definition",
+    "content": {
+      "definition": "Allah'a saygı, sevgi ve bağlılığı göstermek, O'nun hoşnutluğunu kazanmak niyetiyle yapılan tutum ve davranışlara verilen genel adımdır.",
+      "term": "İbadet"
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149480,
+      "nanoseconds": 137000000
+    }
+  },
+  {
+    "id": "oaeoQH808dQNToTXt4Kn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149819,
+      "nanoseconds": 522000000
+    },
+    "content": {
+      "text": "Kur'an-ı Kerim"
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "lqcPizeedgkmT1jt4Dll"
+  },
+  {
+    "id": "ogsoryAtjl7RmcScGn8h",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149480,
+      "nanoseconds": 137000000
+    },
+    "type": "definition",
+    "content": {
+      "term": "Oruç",
+      "definition": "Tan yerinin ağarmasından güneşin batışına kadar Allah rızası için yeme, içme ve bazı bedensel isteklerden uzak durmaktır. İslam'ın beş şartından biriyim."
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "lqcPizeedgkmT1jt4Dll"
+  },
+  {
+    "id": "qFuvWYTgc1L2t50nHnrj",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149819,
+      "nanoseconds": 522000000
+    },
+    "content": {
+      "text": "İbadet"
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "snxNKl2zSMY0mtuOCGYk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361332,
+      "nanoseconds": 686000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "sentence",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "content": {
+      "text": "Kur'an Kadir Gecesi'nde indirilmeye başlanmıştır."
+    }
+  },
+  {
+    "id": "tME8cSHtmeYPkxcTEGtt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149717,
+      "nanoseconds": 41000000
+    },
+    "type": "sentence",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "content": {
+      "text": "Mübarek ramazan ayına kavuştunuz. Yüce Allah bu ayda size oruç tutmayı farz kıldı."
+    }
+  },
+  {
+    "id": "wUCzH4WX3Cvbryv3jh7e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149480,
+      "nanoseconds": 137000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "content": {
+      "term": "İmsak",
+      "definition": "Oruca başlama vaktidir. Gökyüzünün henüz tam aydınlanmadığı, tan yerinin ağarmaya başladığı zaman dilimini ifade ederim."
+    }
+  },
+  {
+    "id": "yhz0hUKgSrxl7X58c4tU",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149480,
+      "nanoseconds": 137000000
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "lqcPizeedgkmT1jt4Dll",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "definition": "Kur'an-ı Kerim'in indirilmeye başlandığı, bin aydan daha hayırlı olduğu belirtilen mübarek bir gecedir.",
       "term": "Kadir Gecesi"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149480,
-      "nanoseconds": 137000000
-    },
-    "type": "definition",
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
+    "type": "definition"
   },
   {
     "id": "ys6vGXQ50vRAP5OdHkcc",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759149480,
-      "nanoseconds": 137000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "definition": "Hicri takvimin dokuzuncu ayıyım. Bu ayda oruç tutmak Müslümanlara farz kılınmıştır. Kur'an-ı Kerim'in indirilmeye başlandığı ayım.",
       "term": "Ramazan"
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759149480,
+      "nanoseconds": 137000000
+    },
     "topicId": "lqcPizeedgkmT1jt4Dll",
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition"
   }
 ]

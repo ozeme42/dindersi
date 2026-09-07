@@ -39,8 +39,8 @@ import { UserEditorDialog } from "@/components/user-editor-dialog";
 import { getStudentData, addGuestStudent, bulkAddStudents, updateStudentClass, deleteBulkGuestStudents, bulkUpdateGuestStudents, saveUser } from "./actions";
 import { syncSmartboardDataToFilesAction } from "@/app/teacher/smartboard/sync-actions";
 
-// Types
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
+import { deduplicateStudents } from "@/lib/utils";
 
 // --- STUDENT TABLE COMPONENT ---
 function StudentTable({ 
@@ -306,10 +306,18 @@ export default function GuestStudentManagementPage() {
         if (activeClassId !== 'all') {
             const cls = classes.find(c => c.id === activeClassId);
             if(cls) {
+                const gradeVal = (cls.name || '').match(/\d+/)?.[0] || cls.name;
                 if (activeBranch === 'all') {
-                    list = list.filter(s => s.class?.startsWith(cls.name));
+                    list = list.filter(s => {
+                        const sc = (s.class || '').trim();
+                        const sGrade = sc.match(/\d+/)?.[0] || '';
+                        return sGrade === gradeVal || sc.startsWith(cls.name);
+                    });
                 } else {
-                    list = list.filter(s => s.class === `${cls.name} - ${activeBranch}`);
+                    list = list.filter(s => {
+                        const sc = (s.class || '').trim();
+                        return sc === `${cls.name} - ${activeBranch}` || sc === `${gradeVal} - ${activeBranch}`;
+                    });
                 }
             }
         }
@@ -319,6 +327,7 @@ export default function GuestStudentManagementPage() {
             list = list.filter(s => s.displayName && s.displayName.toLowerCase().includes(lowercasedTerm));
         }
         
+        list = deduplicateStudents(list);
         list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
         return list;
     }, [allStudents, activeClassId, activeBranch, classes, searchTerm, schoolFilter, schools, user, isSuperAdmin]);

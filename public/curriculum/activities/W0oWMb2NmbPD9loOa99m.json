@@ -1,104 +1,104 @@
 [
   {
     "id": "0bhFcIjMk7SLUPGo8deg",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "W0oWMb2NmbPD9loOa99m",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
     "content": {
       "text": "İslam"
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "4Ba4LYtIyqZ733PDgA6N",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033546,
       "nanoseconds": 832000000
     },
-    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Hz. Ali, Hz. Zeyd bin Harise ve Hz. Enes bin Malik, Peygamberimizin yanında yetişen önemli çocuk sahabelerdendir."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "W0oWMb2NmbPD9loOa99m"
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "type": "sentence"
   },
   {
     "id": "6WZjokzBvtEHmOrK4BNB",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "content": {
-      "definition": "Kişinin kendi değerini olduğundan aşağı göstermesi, alçakgönüllülük.",
-      "term": "Tevazu"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033567,
       "nanoseconds": 685000000
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "content": {
+      "definition": "Kişinin kendi değerini olduğundan aşağı göstermesi, alçakgönüllülük.",
+      "term": "Tevazu"
+    }
   },
   {
     "id": "7kpYB91RbOXd65DAOWqb",
     "content": {
-      "definition": "Beş yaşından itibaren Peygamberimizin evinde yaşamaya başlayan çocuk sahabe.",
-      "term": "Hz. Ali"
+      "term": "Hz. Ali",
+      "definition": "Beş yaşından itibaren Peygamberimizin evinde yaşamaya başlayan çocuk sahabe."
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
     "topicId": "W0oWMb2NmbPD9loOa99m",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033567,
       "nanoseconds": 685000000
-    },
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    }
   },
   {
     "id": "7m3aNLMoxmFvMP80Iwpl",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Sahabi"
-    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "concept",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033546,
       "nanoseconds": 832000000
     },
-    "type": "concept"
+    "content": {
+      "text": "Sahabi"
+    }
   },
   {
     "id": "8BBRNmRKVaLieXJKXTv8",
+    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Kabile"
     },
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033546,
       "nanoseconds": 832000000
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "topicId": "W0oWMb2NmbPD9loOa99m"
   },
   {
     "id": "8QFppIz7NQWV5OR4TOzj",
-    "type": "concept",
     "content": {
       "text": "Küçük Sırdaş"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "W0oWMb2NmbPD9loOa99m",
+    "type": "concept",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -108,135 +108,42 @@
   },
   {
     "id": "8YtGdyTz83otif60hlLI",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
       "text": "Hicret"
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "CipZfrTuVw1QYSNIWzVL",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767274881,
-      "nanoseconds": 34000000
-    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Hz. Zeyd bin Harise"
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
     "type": "concept"
   },
   {
-    "id": "D8UyVOvVWhzcBIzWORK4",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Peygamberimiz, çocuklara sevgi, şefkat ve merhametle yaklaşmıştır."
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    }
-  },
-  {
-    "id": "Ep5S9qBV6nV57caq92SO",
-    "content": {
-      "definition": "Bir kişiye veya şeye karşı duyulan değer ve önem verme.",
-      "term": "Saygı"
-    },
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033567,
-      "nanoseconds": 685000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "GB9eicaoKMm17ymV23uL",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "content": {
-      "text": "Kureyş"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
+    "id": "CipZfrTuVw1QYSNIWzVL",
     "type": "concept",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "HG4F0JXaDSsRrfQVlXpf",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
     "content": {
-      "term": "Hz. Zeyd bin Harise",
-      "definition": "Peygamberimizin hürriyetine kavuşturduğu ve evlat edindiği sahabi."
+      "text": "Hz. Zeyd bin Harise"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274881,
       "nanoseconds": 34000000
     },
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
-    "id": "HW6j85pN35LTdq6fhsAF",
+    "id": "D8UyVOvVWhzcBIzWORK4",
     "topicId": "W0oWMb2NmbPD9loOa99m",
-    "content": {
-      "text": "Peygamberimizin yanında yetişen çocuklar, Müslümanlar için örnek teşkil etmektedir."
-    },
-    "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "M1MlCLYUtfmqKAKeUBkT",
-    "content": {
-      "term": "Merhamet",
-      "definition": "Acıma, şefkat ve yardım duygularıyla dolu olmak."
-    },
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033567,
-      "nanoseconds": 685000000
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition"
-  },
-  {
-    "id": "MtWYb7D7twQTVYyNqfR2",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
-      "text": "Asrısaadet dönemi, Hz. Muhammed'in yaşadığı ve İslam'ın yayılmaya başladığı dönemdir."
+      "text": "Peygamberimiz, çocuklara sevgi, şefkat ve merhametle yaklaşmıştır."
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033546,
@@ -245,163 +152,254 @@
     "type": "sentence"
   },
   {
-    "id": "OWKtELyatdSzpJr9pfwO",
-    "content": {
-      "definition": "Başkasının acılarına karşı duyulan üzüntü ve yardım etme isteği.",
-      "term": "Şefkat"
-    },
+    "id": "Ep5S9qBV6nV57caq92SO",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "W0oWMb2NmbPD9loOa99m",
+    "content": {
+      "term": "Saygı",
+      "definition": "Bir kişiye veya şeye karşı duyulan değer ve önem verme."
+    },
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033567,
       "nanoseconds": 685000000
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition"
+    }
   },
   {
-    "id": "Q2K6Cp49F9T3xywsRmfH",
+    "id": "GB9eicaoKMm17ymV23uL",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
+    "content": {
+      "text": "Kureyş"
+    },
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "type": "concept"
+  },
+  {
+    "id": "HG4F0JXaDSsRrfQVlXpf",
+    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "definition": "Peygamberimizin hürriyetine kavuşturduğu ve evlat edindiği sahabi.",
+      "term": "Hz. Zeyd bin Harise"
+    },
+    "topicId": "W0oWMb2NmbPD9loOa99m",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274881,
       "nanoseconds": 34000000
     },
-    "content": {
-      "text": "Hz. Enes bin Malik"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "concept"
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
-    "id": "R838wMBzIwJkefhMkknN",
+    "id": "HW6j85pN35LTdq6fhsAF",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "content": {
+      "text": "Peygamberimizin yanında yetişen çocuklar, Müslümanlar için örnek teşkil etmektedir."
+    },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    }
+  },
+  {
+    "id": "M1MlCLYUtfmqKAKeUBkT",
+    "content": {
+      "term": "Merhamet",
+      "definition": "Acıma, şefkat ve yardım duygularıyla dolu olmak."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033567,
       "nanoseconds": 685000000
     },
     "topicId": "W0oWMb2NmbPD9loOa99m",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "definition"
+  },
+  {
+    "id": "MtWYb7D7twQTVYyNqfR2",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
+    "content": {
+      "text": "Asrısaadet dönemi, Hz. Muhammed'in yaşadığı ve İslam'ın yayılmaya başladığı dönemdir."
+    },
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
+  },
+  {
+    "id": "OWKtELyatdSzpJr9pfwO",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033567,
+      "nanoseconds": 685000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "content": {
+      "definition": "Başkasının acılarına karşı duyulan üzüntü ve yardım etme isteği.",
+      "term": "Şefkat"
+    }
+  },
+  {
+    "id": "Q2K6Cp49F9T3xywsRmfH",
+    "content": {
+      "text": "Hz. Enes bin Malik"
+    },
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274881,
+      "nanoseconds": 34000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
+  },
+  {
+    "id": "R838wMBzIwJkefhMkknN",
     "content": {
       "term": "Asrısaadet",
       "definition": "Hz. Muhammed'in yaşadığı dönem, mutluluk çağı."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition"
-  },
-  {
-    "id": "S4P72YqVIfy9xofOHA0U",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
-    "content": {
-      "text": "Çocuk sahabiler, Peygamberimizi örnek alarak yaşamışlardır."
-    },
-    "topicId": "W0oWMb2NmbPD9loOa99m"
-  },
-  {
-    "id": "VxkVfV0LSTwLSK9awRgQ",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "content": {
-      "text": "Hz. Zeyd bin Harise, Peygamberimiz tarafından hürriyetine kavuşturulan ilk köledir."
-    },
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "WC5Mc3fsYFRYuhhVfTAF",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "type": "concept",
-    "content": {
-      "text": "Vahiy"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "XTTOy1kp8nV7AzIuv7yt",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
-    "content": {
-      "text": "Halife"
-    },
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "concept"
-  },
-  {
-    "id": "YI1NBQ9gXnlcXmYiE56Q",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767274881,
-      "nanoseconds": 34000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "content": {
-      "text": "Hâdimü’n-nebi"
-    }
-  },
-  {
-    "id": "c1vmjWAlqwrTiWezltGc",
-    "content": {
-      "definition": "Bir kişiye veya şeye karşı duyulan derin ilgi ve bağlılık.",
-      "term": "Sevgi"
-    },
-    "topicId": "W0oWMb2NmbPD9loOa99m",
     "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033567,
       "nanoseconds": 685000000
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
-    "id": "jpKx5tJ1uvbW1jTPYJzP",
-    "type": "definition",
+    "id": "S4P72YqVIfy9xofOHA0U",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
+    "content": {
+      "text": "Çocuk sahabiler, Peygamberimizi örnek alarak yaşamışlardır."
+    },
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    }
+  },
+  {
+    "id": "VxkVfV0LSTwLSK9awRgQ",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "content": {
+      "text": "Hz. Zeyd bin Harise, Peygamberimiz tarafından hürriyetine kavuşturulan ilk köledir."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence"
+  },
+  {
+    "id": "WC5Mc3fsYFRYuhhVfTAF",
+    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Vahiy"
+    }
+  },
+  {
+    "id": "XTTOy1kp8nV7AzIuv7yt",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "W0oWMb2NmbPD9loOa99m",
+    "content": {
+      "text": "Halife"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
+    "type": "concept"
+  },
+  {
+    "id": "YI1NBQ9gXnlcXmYiE56Q",
+    "content": {
+      "text": "Hâdimü’n-nebi"
+    },
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274881,
       "nanoseconds": 34000000
     },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "W0oWMb2NmbPD9loOa99m"
+  },
+  {
+    "id": "c1vmjWAlqwrTiWezltGc",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "type": "definition",
+    "content": {
+      "term": "Sevgi",
+      "definition": "Bir kişiye veya şeye karşı duyulan derin ilgi ve bağlılık."
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033567,
+      "nanoseconds": 685000000
+    }
+  },
+  {
+    "id": "jpKx5tJ1uvbW1jTPYJzP",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
       "term": "Küçük Sırdaş",
       "definition": "Hz. Enes'in Peygamberimizin sırrını saklaması sebebiyle aldığı isim."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274881,
+      "nanoseconds": 34000000
     }
   },
   {
     "id": "nt4o4Cpg49Y5tFzqQDo5",
-    "type": "sentence",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "W0oWMb2NmbPD9loOa99m",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -411,12 +409,14 @@
     "content": {
       "text": "Hz. Enes bin Malik, Peygamberimize on yıl hizmet etmiştir ve \"Peygamberin küçük hizmetkarı\" olarak bilinir."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence"
   },
   {
     "id": "nupy4SUYNymSHbZP4k0P",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Hz. Peygamber, çocukların eğitimine ve ahlaklı yetişmesine önem vermiştir."
     },
@@ -425,109 +425,63 @@
       "seconds": 1752033546,
       "nanoseconds": 832000000
     },
-    "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "o7iajUMNnKk4nygrC8nv",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "content": {
+      "definition": "Müslümanların 622 yılında Mekke’den Medine’ye yaptıkları göç.",
+      "term": "Hicret"
+    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274881,
       "nanoseconds": 34000000
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "content": {
-      "definition": "Müslümanların 622 yılında Mekke’den Medine’ye yaptıkları göç.",
-      "term": "Hicret"
-    }
+    "type": "definition"
   },
   {
     "id": "oZj2VjqwWOaPpnfyqtBf",
     "content": {
-      "term": "Hz. Enes bin Malik",
-      "definition": "Peygamberimize on yıl hizmet eden, onun terbiyesinde yetişen çocuk."
+      "definition": "Peygamberimize on yıl hizmet eden, onun terbiyesinde yetişen çocuk.",
+      "term": "Hz. Enes bin Malik"
     },
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274881,
       "nanoseconds": 34000000
     },
-    "type": "definition",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition"
   },
   {
     "id": "oau0oKGNVfubB9rgyr1u",
+    "topicId": "W0oWMb2NmbPD9loOa99m",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
-    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
       "text": "Hadis"
     },
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
+    "type": "concept"
   },
   {
     "id": "ozF38YRzaxqsa09R12Vr",
+    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "W0oWMb2NmbPD9loOa99m",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
     "content": {
       "text": "Hz. Ali, Peygamberimize iman eden ilk çocuktur."
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "uRut2iIW0BemamZQl9zf",
-    "content": {
-      "text": "Asrısaadet"
-    },
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033546,
-      "nanoseconds": 832000000
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "uT03JOsa4tiaXhFimFke",
-    "content": {
-      "definition": "Peygamberin küçük hizmetkârı anlamına gelen, Hz. Enes'e verilen unvan.",
-      "term": "Hâdimü’n-nebi"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767274881,
-      "nanoseconds": 34000000
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
-    "topicId": "W0oWMb2NmbPD9loOa99m"
-  },
-  {
-    "id": "xbGQR5PaBoOwj0QRSJf1",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
-    "topicId": "W0oWMb2NmbPD9loOa99m",
-    "content": {
-      "text": "Şehit"
     },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
@@ -535,5 +489,51 @@
       "seconds": 1752033546,
       "nanoseconds": 832000000
     }
+  },
+  {
+    "id": "uRut2iIW0BemamZQl9zf",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "content": {
+      "text": "Asrısaadet"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "W0oWMb2NmbPD9loOa99m"
+  },
+  {
+    "id": "uT03JOsa4tiaXhFimFke",
+    "content": {
+      "term": "Hâdimü’n-nebi",
+      "definition": "Peygamberin küçük hizmetkârı anlamına gelen, Hz. Enes'e verilen unvan."
+    },
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274881,
+      "nanoseconds": 34000000
+    },
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
+  },
+  {
+    "id": "xbGQR5PaBoOwj0QRSJf1",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033546,
+      "nanoseconds": 832000000
+    },
+    "content": {
+      "text": "Şehit"
+    },
+    "topicId": "W0oWMb2NmbPD9loOa99m",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   }
 ]

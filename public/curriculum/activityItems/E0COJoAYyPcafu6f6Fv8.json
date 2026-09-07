@@ -1,146 +1,147 @@
 [
   {
     "id": "0y2FHJQBBbKNSdgC9kjH",
-    "type": "definition",
-    "content": {
-      "definition": "Müşriklerle yapılan ilk savaş",
-      "term": "Bedir Savaşı"
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "type": "definition",
+    "content": {
+      "term": "Bedir Savaşı",
+      "definition": "Müşriklerle yapılan ilk savaş"
+    }
   },
   {
     "id": "121eKnzTinyHYcORYDpy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "content": {
+      "text": "Cafer bin Ebu Talib"
+    },
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
-    },
-    "type": "concept",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "text": "Cafer bin Ebu Talib"
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    }
   },
   {
     "id": "12YAd5kOZIstBghsAxDo",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
       "text": "Hz. Muhammed (s.a.v.) Medine'ye hicret etmiş, Mescid-i Nebevi'yi inşa ettirmiş ve Medine Vesikası ile toplumsal düzeni sağlamıştır."
     },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
-    }
+    },
+    "type": "sentence"
   },
   {
     "id": "2bQ7hwoUgjIfsYCzldaV",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "sentence",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "content": {
+      "text": "Hz. Muhammed insanları uyardı."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
     },
-    "content": {
-      "text": "Hz. Muhammed insanları uyardı."
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    "type": "sentence"
   },
   {
     "id": "3POWiquYwywZNiY9O26h",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "type": "definition",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
       "term": "Boykot Yılları",
       "definition": "Mekke müşrikleri, Müslümanlar ve Haşimoğulları ile sosyal ilişkileri kesme ve ticareti yasaklama kararı almıştır.3 yıl sürdü."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "4KHBmWEeRX7M1jpYanT7",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Hendek Savaşı"
     },
     "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
-    }
+    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "58PmggmDuLiUE4zBQqnX",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "type": "sentence",
     "content": {
       "text": "Hz. Muhammed Veda Haccı'nı yaptı."
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "E0COJoAYyPcafu6f6Fv8"
   },
   {
     "id": "6LiDDs6mDe3aH3rYVC3h",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
     },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "sentence",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
       "text": "Mekkeli müşriklerle yapılan savaşlardan sonra Mekke fethedilmiş ve Hz. Muhammed (s.a.v.) Veda Haccı'nı yaparak Veda Hutbesi'ni okumuştur."
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    "type": "sentence"
   },
   {
     "id": "6crE59aZaWjTR7v7UFwk",
-    "content": {
-      "definition": "Peygamberimizin hicret sırasında gizlendiği yer.",
-      "term": "Sevr Mağarası"
-    },
     "type": "definition",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
+    "content": {
+      "definition": "Peygamberimizin hicret sırasında gizlendiği yer.",
+      "term": "Sevr Mağarası"
+    },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "A22FWEbdkhlYU8YsQMqx",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
       "text": "Suffe"
     },
@@ -149,8 +150,7 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    }
   },
   {
     "id": "AJO8YXFNXBoxWJpj5aHD",
@@ -163,101 +163,101 @@
     "content": {
       "text": "Medine"
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "AdVOauD7EZi0L7Sb000z",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
-      "term": "Veda Haccı",
-      "definition": "Peygamberimizin ilk ve son haccına verilen isim"
+      "definition": "Peygamberimizin ilk ve son haccına verilen isim",
+      "term": "Veda Haccı"
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "type": "definition",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8"
   },
   {
     "id": "BBdpgf10kcUDWfdZnMm1",
-    "type": "definition",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "term": "Mescid-i Nebevi",
-      "definition": "İslam’ın öğretildiği, ibadetlerin topluca yapıldığı ve devlet işlerinin görüşüldüğü, Medine'de bulunan cami."
-    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "content": {
+      "definition": "İslam’ın öğretildiği, ibadetlerin topluca yapıldığı ve devlet işlerinin görüşüldüğü, Medine'de bulunan cami.",
+      "term": "Mescid-i Nebevi"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "type": "definition"
   },
   {
     "id": "BhGx8fq7ClLHdH5HAiRf",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "concept",
+    "content": {
+      "text": "Tevhit"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
     },
-    "content": {
-      "text": "Tevhit"
-    }
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "C5JDgoP1Vt2WChboELYU",
-    "type": "definition",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "definition": "Ramazan ayında bulunan ve bin aydan daha hayırlı olan gece",
-      "term": "Kadir Gecesi"
-    },
+    "type": "definition",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+    "content": {
+      "definition": "Ramazan ayında bulunan ve bin aydan daha hayırlı olan gece",
+      "term": "Kadir Gecesi"
+    }
   },
   {
     "id": "C65eU8wCE6uvbr6FBdt0",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "type": "concept",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "text": "Medine Vesikası"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214030,
       "nanoseconds": 823000000
     },
+    "type": "concept",
+    "content": {
+      "text": "Medine Vesikası"
+    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "EY4BbyIYEJUBKYik4NnX",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "term": "Hira",
-      "definition": "İlk vahyin geldiği mağara"
-    },
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214130,
       "nanoseconds": 640000000
     },
+    "content": {
+      "term": "Hira",
+      "definition": "İlk vahyin geldiği mağara"
+    },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89"
   },
@@ -266,18 +266,20 @@
     "content": {
       "text": "İlk inananlar"
     },
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "FJesg928KNxytupr8vw9",
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "term": "İlk inananlar",
       "definition": "Hz.Hatice, Zeyd bin Harise, Hz.Ali, Hz.Ebubekir, Osman bin Affan, Zü­beyr bin Avvam ve Sad bin Ebu Vakkas"
@@ -288,56 +290,18 @@
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "type": "definition",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "FkDtVzus8VtjCxEoiTRy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758472316,
-      "nanoseconds": 425000000
-    },
-    "content": {
-      "definition": "Medinelilerin müslüman olup söz verdiği yer.",
-      "term": "Akabe Biati"
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "type": "definition"
-  },
-  {
-    "id": "I6faKtUuGPaUMQSTLvNS",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "type": "definition",
     "content": {
-      "definition": "Peygamberimizin amcasının oğlu",
-      "term": "Cafer bin Ebu Talib"
+      "term": "Akabe Biati",
+      "definition": "Medinelilerin müslüman olup söz verdiği yer."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758472316,
-      "nanoseconds": 425000000
-    },
-    "type": "definition"
-  },
-  {
-    "id": "InpJKJ7zdA5dxdy8GF1D",
-    "type": "concept",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "categories": [],
-      "term": "",
-      "definition": "",
-      "title": "",
-      "text": "Erkam bin Ebilerkam",
-      "items": []
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
@@ -345,67 +309,95 @@
     }
   },
   {
-    "id": "IwI99oIIguLygkd6MOrd",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "id": "I6faKtUuGPaUMQSTLvNS",
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758472316,
+      "nanoseconds": 425000000
+    },
     "content": {
-      "text": "Bedir Savaşı"
+      "definition": "Peygamberimizin amcasının oğlu",
+      "term": "Cafer bin Ebu Talib"
     },
     "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+  },
+  {
+    "id": "InpJKJ7zdA5dxdy8GF1D",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "title": "",
+      "term": "",
+      "text": "Erkam bin Ebilerkam",
+      "categories": [],
+      "items": [],
+      "definition": ""
+    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "topicId": "E0COJoAYyPcafu6f6Fv8"
+  },
+  {
+    "id": "IwI99oIIguLygkd6MOrd",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758472316,
+      "nanoseconds": 425000000
+    },
+    "content": {
+      "text": "Bedir Savaşı"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "type": "concept"
   },
   {
     "id": "Ja22yxlGKh0zcJLLN3Aw",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
     },
     "type": "concept",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Kâbe"
     },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "LYi8b29R8bYhs1diSZa3",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
+      "text": "Akabe Biatı",
       "title": "",
-      "term": "",
-      "categories": [],
-      "definition": "",
       "items": [],
-      "text": "Akabe Biatı"
-    }
+      "definition": "",
+      "term": "",
+      "categories": []
+    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "topicId": "E0COJoAYyPcafu6f6Fv8"
   },
   {
     "id": "M6EOsgSgRJ3TWGydLofG",
-    "type": "sorting",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761196892,
-      "nanoseconds": 759000000
-    },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
-      "categories": [],
+      "text": "",
       "title": "Peygamberimizin Hayatı Sıralama",
       "definition": "",
       "items": [
@@ -418,130 +410,138 @@
         "Hz. Peygamber, ilk ve son defa eda ettiği hac ibadeti esnasında Müslümanlara konuşma yapmıştır. Aynı yıl\nMedine’de vefat etmiştir."
       ],
       "term": "",
-      "text": ""
+      "categories": []
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761196892,
+      "nanoseconds": 759000000
+    },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "type": "sorting"
   },
   {
     "id": "MLz6T1YnH3Df59F39QXy",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "content": {
       "text": "Tefekkür"
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
     },
-    "type": "concept"
+    "type": "concept",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "MTREHFTSMMu6nwAMAh3K",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "content": {
+      "definition": "Medine’de yaşayan müşrik Araplar ve Yahudilerle yapılan antlaşma",
+      "term": "Medine Vesikası"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "definition",
-    "content": {
-      "term": "Medine Vesikası",
-      "definition": "Medine’de yaşayan müşrik Araplar ve Yahudilerle yapılan antlaşma"
-    }
+    "type": "definition"
   },
   {
     "id": "Mvnj45IomT5n3fDyKpUZ",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "İlk vahiy"
     },
-    "type": "concept"
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "O96AMdGEZjX8VToEq31G",
+    "content": {
+      "text": "Davet mektupları"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "content": {
-      "text": "Davet mektupları"
-    },
     "topicId": "E0COJoAYyPcafu6f6Fv8",
     "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "OCFETodSFgUiYnVO1PV5",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "type": "sentence",
     "content": {
       "text": "Mekke fethedildi."
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "sentence"
+    }
   },
   {
     "id": "OIiAhhZdbhWc0kMDt6hq",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "content": {
-      "definition": "Mekke'de bulunan Müslümanların kutsal yapısı",
-      "term": "Kâbe"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
+    },
+    "type": "definition",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "definition": "Mekke'de bulunan Müslümanların kutsal yapısı",
+      "term": "Kâbe"
     }
   },
   {
     "id": "PAGseW296KAznTy3L8RF",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "content": {
       "term": "Medine",
       "definition": "Hz. Muhammed'in hicret ettiği şehir"
     },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "definition",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "type": "definition"
   },
   {
     "id": "PJZyKKnZJt42Tf1PKhhN",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
       "categories": [],
-      "term": "Hanif",
-      "definition": "Tevhit inancına sahip kimseler",
       "text": "",
+      "definition": "Tevhit inancına sahip kimseler",
       "title": "",
-      "items": []
+      "items": [],
+      "term": "Hanif"
     },
     "type": "definition",
     "createdAt": {
@@ -552,8 +552,8 @@
   },
   {
     "id": "QGNvfTuP5pX4XBm9n5UL",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -563,75 +563,71 @@
     "content": {
       "text": "İlk vahiy Hira'da geldi."
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "QOSGec1bSkptbfccnSPh",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "type": "concept",
+    "content": {
+      "text": "Habeşistan"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214030,
       "nanoseconds": 823000000
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "text": "Habeşistan"
-    },
-    "type": "concept",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "QblJn0AxQd64jKePOMfg",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758214224,
-      "nanoseconds": 39000000
-    },
-    "content": {
-      "text": "Tevhit"
-    },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "Qz3OFypbd1vcCZDbmJFF",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "concept",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758214224,
-      "nanoseconds": 39000000
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "text": "Mescid-i Nebevi"
     }
   },
   {
+    "id": "QblJn0AxQd64jKePOMfg",
+    "content": {
+      "text": "Tevhit"
+    },
+    "type": "concept",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758214224,
+      "nanoseconds": 39000000
+    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+  },
+  {
+    "id": "Qz3OFypbd1vcCZDbmJFF",
+    "type": "concept",
+    "content": {
+      "text": "Mescid-i Nebevi"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758214224,
+      "nanoseconds": 39000000
+    },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+  },
+  {
     "id": "SclCaU80jvpJF1gzt11X",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition",
     "content": {
       "definition": "Peygamberimizin İslam'a davet için devletlere gönderdiği mektuplar.",
       "term": "Davet mektupları"
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "TcmPghxCsG7yCYuCYodW",
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
       "text": "Hz. Muhammed (s.a.v.), Mekke'deki toplumsal sorunlar ve putperestlik karşısında Hira Mağarası'nda tefekkür ederdi."
     },
@@ -639,49 +635,53 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
-    }
+    },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "TgkY6YDmofB24No8lSml",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
       "text": "Müslümanlar, Habeşistan’a deniz yoluyla hicret etmişlerdir."
-    }
+    },
+    "type": "sentence"
   },
   {
     "id": "TszwTg3rlZt2EPCeo9LH",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "content": {
+      "term": "Tefekkür",
+      "definition": "Düşünme, derin düşünme"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214130,
       "nanoseconds": 640000000
     },
-    "type": "definition",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "term": "Tefekkür",
-      "definition": "Düşünme, derin düşünme"
-    }
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition"
   },
   {
     "id": "VjZABsYEWBolVkOQ7FyT",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "definition",
     "content": {
       "term": "Habeşistan",
       "definition": "İlk Hicret"
     },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
@@ -690,231 +690,231 @@
   },
   {
     "id": "X5dNV44VEbLqOwMtZqyH",
-    "type": "definition",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "content": {
+      "definition": "Peygamberimizin İslam'ı tebliğ için gittiği şehir.",
+      "term": "Taif"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "content": {
-      "term": "Taif",
-      "definition": "Peygamberimizin İslam'ı tebliğ için gittiği şehir."
-    },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition"
   },
   {
     "id": "XbwXvojDpPmuZDwcAijj",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "content": {
-      "text": "Veda Haccı"
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
-    }
+    },
+    "content": {
+      "text": "Veda Haccı"
+    },
+    "type": "concept"
   },
   {
     "id": "XkA0AMAWbtIGkrwB2QmV",
+    "type": "concept",
     "content": {
       "text": "Hira Mağarası"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "concept",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
-    }
+    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8"
   },
   {
     "id": "YGOkHE6bAHRoT8iHjfgW",
-    "type": "definition",
-    "content": {
-      "definition": "Müşriklerle yapılan barış anlaşması.",
-      "term": "Hudeybiye Antlaşması"
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
-    }
+    },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "content": {
+      "definition": "Müşriklerle yapılan barış anlaşması.",
+      "term": "Hudeybiye Antlaşması"
+    },
+    "type": "definition"
   },
   {
     "id": "YKvsUhaBM920UUQj7wzb",
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "content": {
+      "text": "Hz. Muhammed (s.a.v.), İslam'ı yaymaya başlamış ve Mekkeli müşriklerin baskıları sonucu Müslümanlar Habeşistan'a hicret etmiştir."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
     },
-    "content": {
-      "text": "Hz. Muhammed (s.a.v.), İslam'ı yaymaya başlamış ve Mekkeli müşriklerin baskıları sonucu Müslümanlar Habeşistan'a hicret etmiştir."
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "YgowTz4PGhXq8dYJSmXb",
+    "type": "concept",
+    "content": {
+      "text": "Darülerkam"
+    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214030,
       "nanoseconds": 823000000
-    },
-    "content": {
-      "text": "Darülerkam"
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "type": "concept"
-  },
-  {
-    "id": "YxmypWvVYXoyP5zEg5Dk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758472316,
-      "nanoseconds": 425000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "concept",
-    "content": {
-      "text": "Veda Hutbesi"
     }
   },
   {
-    "id": "ZPrhBqjnmlpWEjNyxMvJ",
+    "id": "YxmypWvVYXoyP5zEg5Dk",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "concept",
+    "content": {
+      "text": "Veda Hutbesi"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "type": "concept"
+  },
+  {
+    "id": "ZPrhBqjnmlpWEjNyxMvJ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758472316,
+      "nanoseconds": 425000000
+    },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "type": "concept",
     "content": {
       "text": "Boykot Yılları"
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    }
   },
   {
     "id": "aJm2ybuRJYTwI8EeDy86",
+    "type": "definition",
+    "content": {
+      "term": "Hicret",
+      "definition": "Göç etmek"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "content": {
-      "definition": "Göç etmek",
-      "term": "Hicret"
-    },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition",
     "topicId": "E0COJoAYyPcafu6f6Fv8"
   },
   {
     "id": "aZjtzk8v45xIvThgYNVg",
-    "type": "concept",
-    "content": {
-      "text": "Taif"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "Taif"
+    },
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "E0COJoAYyPcafu6f6Fv8"
   },
   {
     "id": "b7TRtAVtf2qdtarwHyEC",
+    "content": {
+      "term": "Cebrail",
+      "definition": "Vahiy getiren melek"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214130,
       "nanoseconds": 640000000
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "term": "Cebrail",
-      "definition": "Vahiy getiren melek"
-    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "definition",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "dYdqwS9NExFsQ0ddFiPn",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "content": {
+      "text": "Kâbe Hakemliği"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214030,
       "nanoseconds": 823000000
     },
-    "content": {
-      "text": "Kâbe Hakemliği"
-    },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "type": "concept"
   },
   {
     "id": "daEswU3jWHJnne5STiha",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "sentence",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "type": "sentence",
     "content": {
       "text": "Müslümanlar Medine'ye hicret etti."
     }
   },
   {
     "id": "dw9bNQRpBMKMUXOdbFZn",
-    "type": "concept",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "text": "Cebrail"
-    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
-    }
+    },
+    "type": "concept",
+    "content": {
+      "text": "Cebrail"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "e8iVV4ZTh4ZwPO5HI1t4",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "Hz. Muhammed Mekke'de doğdu."
+    },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
-    },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "text": "Hz. Muhammed Mekke'de doğdu."
     }
   },
   {
@@ -928,43 +928,42 @@
     "content": {
       "text": "Uhud Savaşı"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "E0COJoAYyPcafu6f6Fv8"
   },
   {
     "id": "fCgydtAg1i8KHO8oH67I",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758472316,
-      "nanoseconds": 425000000
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Sevr Mağarası"
     },
-    "type": "concept",
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
-  },
-  {
-    "id": "g2PdhID72iTgQcVjdvgD",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "concept",
-    "content": {
-      "text": "Alak suresi"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
+    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+  },
+  {
+    "id": "g2PdhID72iTgQcVjdvgD",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758472316,
+      "nanoseconds": 425000000
+    },
+    "content": {
+      "text": "Alak suresi"
     }
   },
   {
     "id": "gZdfu0GMOisUkzWvvgEH",
-    "type": "sentence",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -975,58 +974,59 @@
     "topicId": "E0COJoAYyPcafu6f6Fv8",
     "content": {
       "text": "Size iki emanet bırakıyorum. Onlara sımsıkı sarıldıkça yolunuzu hiç şaşırmazsınız. Bu emanetler, Allah’ın kitabı Kur’an ve O’nun Peygamberinin sünnetidir."
-    }
+    },
+    "type": "sentence"
   },
   {
     "id": "hPK973mtsLFIJZImC6np",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "concept",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "content": {
+      "term": "",
+      "items": [],
+      "categories": [],
+      "title": "",
+      "definition": "",
+      "text": "Hanif"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214616,
       "nanoseconds": 573000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "term": "",
-      "definition": "",
-      "categories": [],
-      "title": "",
-      "text": "Hanif",
-      "items": []
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    }
   },
   {
     "id": "hZ0xBJzpGfciasGi8r1H",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "term": "İlk vahiy",
-      "definition": "Alak Suresi 1-5 ayetler"
-    },
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "type": "definition"
+    "type": "definition",
+    "content": {
+      "term": "İlk vahiy",
+      "definition": "Alak Suresi 1-5 ayetler"
+    }
   },
   {
     "id": "heF7uFjaM7hN1NcOtGyj",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "concept",
-    "content": {
-      "text": "Hüzün Yılı"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214030,
       "nanoseconds": 823000000
     },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+    "content": {
+      "text": "Hüzün Yılı"
+    }
   },
   {
     "id": "jKTt3vadyeaMSBZ0nejL",
@@ -1036,116 +1036,131 @@
       "seconds": 1758214130,
       "nanoseconds": 640000000
     },
-    "type": "definition",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "content": {
-      "definition": "Hz. Hatice ve Ebu Talib'in vefat ettiği yıl",
-      "term": "Hüzün Yılı"
+      "term": "Hüzün Yılı",
+      "definition": "Hz. Hatice ve Ebu Talib'in vefat ettiği yıl"
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition"
   },
   {
     "id": "k662EHEXtpKDSH33UZpd",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "type": "definition",
-    "content": {
-      "definition": "Mescid-i Nebevi'de bulunan eğitim verilen bölüm.",
-      "term": "Suffe"
-    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "content": {
+      "term": "Suffe",
+      "definition": "Mescid-i Nebevi'de bulunan eğitim verilen bölüm."
     }
   },
   {
     "id": "lYR9n2eV3WVaIWC2p349",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
     },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "type": "concept",
     "content": {
       "text": "Kadir Gecesi"
     },
-    "type": "concept",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "qPeD2K5HyQEIlrcaxwAc",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
     },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Müşrikler Müslümanlara zulmetti."
     },
-    "type": "sentence"
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "qub3FSCmdgWEuy2OygId",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214030,
       "nanoseconds": 823000000
     },
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
     "content": {
       "text": "Hicret"
-    },
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    }
   },
   {
     "id": "r18OFHKs26CoZ6SrJjYj",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "content": {
+      "definition": "İslama evini açan sahabi",
+      "term": "Erkam bin Ebülerkam"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "definition",
-    "content": {
-      "term": "Erkam bin Ebülerkam",
-      "definition": "İslama evini açan sahabi"
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+    }
   },
   {
     "id": "rSFpBbggiVDcqjNgWjIx",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "content": {
+      "term": "Tevhit",
+      "definition": "Allah'ın bir ve tek olduğuna inanmak"
+    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    }
+  },
+  {
+    "id": "sP4ZyjbmmJafqgl78lHc",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "content": {
-      "definition": "Allah'ın bir ve tek olduğuna inanmak",
-      "term": "Tevhit"
+      "term": "Muhacir",
+      "definition": "Mekkeli müslümanlar"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758472316,
+      "nanoseconds": 425000000
     },
     "type": "definition"
   },
   {
-    "id": "sP4ZyjbmmJafqgl78lHc",
+    "id": "tg9Lp9tdvrUBJm95OQFM",
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
-      "definition": "Mekkeli müslümanlar",
-      "term": "Muhacir"
+      "text": "Muhacir"
     },
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
@@ -1154,173 +1169,158 @@
     "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
-    "id": "tg9Lp9tdvrUBJm95OQFM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758472316,
-      "nanoseconds": 425000000
-    },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "content": {
-      "text": "Muhacir"
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "concept"
-  },
-  {
     "id": "tr2cj4JSY5FLaH3UIo97",
-    "type": "definition",
+    "content": {
+      "definition": "Hac sırasında yaptığı konuşma",
+      "term": "Veda Hutbesi"
+    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
-    },
-    "content": {
-      "term": "Veda Hutbesi",
-      "definition": "Hac sırasında yaptığı konuşma"
     }
   },
   {
     "id": "uH1JDgpRhHAqQ1wdjGK7",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "definition": "Medineli Müslümanlar",
       "term": "Ensar"
     },
-    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214130,
       "nanoseconds": 640000000
-    },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+    }
   },
   {
     "id": "ucATlaIjj6rOCXNdUhTe",
+    "content": {
+      "definition": "İslamın ilkokulu",
+      "term": "Darülerkâm"
+    },
+    "type": "definition",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
-    },
-    "content": {
-      "term": "Darülerkâm",
-      "definition": "İslamın ilkokulu"
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk"
+    }
   },
   {
     "id": "vzlllHAOyO5kCkZvCqhw",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758472316,
-      "nanoseconds": 425000000
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "type": "concept",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Hudeybiye Antlaşması"
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758472316,
+      "nanoseconds": 425000000
+    },
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "unitId": "0M2x5SEKuVmzS3qhwvPk"
   },
   {
     "id": "wPCp3w1hCwh9JKY7ZKe4",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "content": {
+      "text": "İlk vahiy, Ramazan ayında Kadir Gecesi'nde Hira Mağarası'nda Cebrail (a.s.) aracılığıyla gelmiştir."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "content": {
-      "text": "İlk vahiy, Ramazan ayında Kadir Gecesi'nde Hira Mağarası'nda Cebrail (a.s.) aracılığıyla gelmiştir."
     }
   },
   {
     "id": "z7YTE85H7uzS55MUw1hM",
+    "content": {
+      "text": "Medine'de İslam yayıldı."
+    },
     "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758219695,
       "nanoseconds": 709000000
     },
-    "content": {
-      "text": "Medine'de İslam yayıldı."
-    },
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "sentence"
   },
   {
     "id": "zLftnhhpbvNQNkH5jJHa",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "content": {
       "definition": "Üçüncü büyük savaş",
       "term": "Hendek Savaşı"
     },
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
-    },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    }
   },
   {
     "id": "zfVKGeQN9C28g4wfENFp",
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
     "content": {
-      "definition": "İkinci büyük savaş",
-      "term": "Uhud Savaşı"
+      "term": "Uhud Savaşı",
+      "definition": "İkinci büyük savaş"
     },
-    "type": "definition",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "type": "definition"
   },
   {
     "id": "zpy4UtOZ14Ys91V3LqDV",
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "concept",
+    "topicId": "E0COJoAYyPcafu6f6Fv8",
+    "content": {
+      "text": "Ensar"
+    },
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758472316,
       "nanoseconds": 425000000
-    },
-    "topicId": "E0COJoAYyPcafu6f6Fv8",
-    "content": {
-      "text": "Ensar"
     }
   },
   {
     "id": "zu8X4a1oN0yuSm4mRt5y",
-    "type": "definition",
+    "unitId": "0M2x5SEKuVmzS3qhwvPk",
+    "content": {
+      "term": "Mescid-i Nebevi",
+      "definition": "Hz. Muhammed (s.a.v.) tarafından Medine'de inşa ettirilen mescit"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758214224,
       "nanoseconds": 39000000
     },
-    "unitId": "0M2x5SEKuVmzS3qhwvPk",
-    "content": {
-      "definition": "Hz. Muhammed (s.a.v.) tarafından Medine'de inşa ettirilen mescit",
-      "term": "Mescid-i Nebevi"
-    },
+    "type": "definition",
     "topicId": "E0COJoAYyPcafu6f6Fv8",
     "courseId": "e6sa39FUi02TyzJpvQ89"
   }

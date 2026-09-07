@@ -17,24 +17,21 @@
   },
   {
     "id": "2O0s77LPJVQNkWZy3PvN",
+    "content": {
+      "text": "İlahi"
+    },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
-    },
-    "content": {
-      "text": "İlahi"
-    },
-    "type": "concept",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    }
   },
   {
     "id": "4oluVu7Q0YFDik4VHlQW",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "lzNigntTSFsCjjVPD7JY",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -43,230 +40,81 @@
     },
     "content": {
       "text": "Kur'an-ı Kerim makamlarla okunur."
-    }
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "sentence"
   },
   {
     "id": "8zLAVm1zG4WjdcSKzN2U",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "content": {
+      "text": "Ezan, namaz vaktini haber verir."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
     },
-    "content": {
-      "text": "Ezan, namaz vaktini haber verir."
-    },
     "type": "sentence",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "EzgdHEjAXj2kXGIxuIUT",
-    "type": "concept",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "lzNigntTSFsCjjVPD7JY",
-    "content": {
-      "text": "Ezan"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
-    }
+    },
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "content": {
+      "text": "Ezan"
+    },
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "LUrm61jVqBGdtNt0IbQE",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
     "content": {
       "text": "Kamet"
     },
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
     "type": "concept",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "M5RDeTHBDt2kzuGVT4Bd",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "content": {
-      "text": "İlahiler, Allah'a dua içerir."
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "content": {
+      "text": "İlahiler, Allah'a dua içerir."
     }
   },
   {
     "id": "NKotwhWWu16mr39rNZCw",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
-    "content": {
-      "definition": "İlk defa ezan okuyan kişidir.",
-      "term": "Bilal Habeşi"
-    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "definition",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
-  },
-  {
-    "id": "NfA40eciRnJXjK3BlCfS",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "sentence",
-    "content": {
-      "text": "Kültürümüzde dini eserler çoktur."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "lzNigntTSFsCjjVPD7JY"
-  },
-  {
-    "id": "P4SEFJHNFGSqDJ8aoEZw",
-    "content": {
-      "definition": "Peygambere saygı ve dua içeren sözlerdir.",
-      "term": "Salavat"
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "definition"
-  },
-  {
-    "id": "Q4prJTwTAQe21hvowFBc",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
-    "content": {
-      "text": "Musiki"
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY"
-  },
-  {
-    "id": "YJV2jL7x3Y8TBLeaohOj",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
     "topicId": "lzNigntTSFsCjjVPD7JY",
     "content": {
-      "text": "Itri, önemli bir bestekarımızdır."
+      "term": "Bilal Habeşi",
+      "definition": "İlk defa ezan okuyan kişidir."
     },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "adG8W1W8Ax0GmvvXtjw6",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Bilal Habeşi"
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY"
-  },
-  {
-    "id": "gHUvkWgPs5InEmzXtNBC",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
-    "content": {
-      "text": "Din, musikiyi derinden etkilemiştir."
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence"
-  },
-  {
-    "id": "gekioYbO41KvmRWgZGKW",
-    "content": {
-      "text": "Tekbir"
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
-  },
-  {
-    "id": "jBBGP8T3UvgNtPb97Idp",
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
-    "content": {
-      "text": "Sela"
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY"
-  },
-  {
-    "id": "la5qYnfw6JRHmuD64KDK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368056,
-      "nanoseconds": 706000000
-    },
-    "type": "definition",
-    "content": {
-      "definition": "Allah'ı öven, bestelenmiş dini şiirlerdir.",
-      "term": "İlahi"
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "lzNigntTSFsCjjVPD7JY"
-  },
-  {
-    "id": "mg53z66SiD6SJHqV70oN",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Musiki insanları rahatlatan bir sanattır."
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
@@ -274,36 +122,188 @@
     }
   },
   {
-    "id": "nBe0DDYJCkT84d5FbzIP",
-    "type": "definition",
+    "id": "NfA40eciRnJXjK3BlCfS",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Kültürümüzde dini eserler çoktur."
+    },
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+  },
+  {
+    "id": "P4SEFJHNFGSqDJ8aoEZw",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "content": {
+      "definition": "Peygambere saygı ve dua içeren sözlerdir.",
+      "term": "Salavat"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition"
+  },
+  {
+    "id": "Q4prJTwTAQe21hvowFBc",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Musiki"
+    }
+  },
+  {
+    "id": "YJV2jL7x3Y8TBLeaohOj",
+    "type": "sentence",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
+    "content": {
+      "text": "Itri, önemli bir bestekarımızdır."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "lzNigntTSFsCjjVPD7JY"
+  },
+  {
+    "id": "adG8W1W8Ax0GmvvXtjw6",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
+    "content": {
+      "text": "Bilal Habeşi"
+    }
+  },
+  {
+    "id": "gHUvkWgPs5InEmzXtNBC",
+    "content": {
+      "text": "Din, musikiyi derinden etkilemiştir."
+    },
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "gekioYbO41KvmRWgZGKW",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
+    "content": {
+      "text": "Tekbir"
+    },
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "jBBGP8T3UvgNtPb97Idp",
+    "content": {
+      "text": "Sela"
+    },
+    "topicId": "lzNigntTSFsCjjVPD7JY",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
     },
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "la5qYnfw6JRHmuD64KDK",
+    "content": {
+      "term": "İlahi",
+      "definition": "Allah'ı öven, bestelenmiş dini şiirlerdir."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
     "topicId": "lzNigntTSFsCjjVPD7JY",
+    "type": "definition",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+  },
+  {
+    "id": "mg53z66SiD6SJHqV70oN",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "content": {
+      "text": "Musiki insanları rahatlatan bir sanattır."
+    }
+  },
+  {
+    "id": "nBe0DDYJCkT84d5FbzIP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368056,
+      "nanoseconds": 706000000
+    },
     "content": {
       "definition": "Namaz vaktini duyuran kutsal çağrıdır.",
       "term": "Ezan"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition"
   },
   {
     "id": "oVg2E7mbCFJyzXZD8oBH",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "definition": "Farz namazdan hemen önce yapılan özel çağrıdır.",
+      "term": "Kamet"
+    },
+    "type": "definition",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
-    },
-    "type": "definition",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "content": {
-      "term": "Kamet",
-      "definition": "Farz namazdan hemen önce yapılan özel çağrıdır."
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    }
   },
   {
     "id": "rMnAQ6tgAQ5q7RBucOtg",
@@ -311,60 +311,60 @@
     "content": {
       "text": "Salavat"
     },
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    }
   },
   {
     "id": "rl2UaaEYUFelaLzS3tXu",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
     "content": {
       "text": "Güzel sesler insanlara huzur verir."
     },
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
-    },
-    "type": "sentence"
+    }
   },
   {
     "id": "sb6b4UvIilbn7fcxEbLX",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
     },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
     "content": {
       "term": "Tekbir",
       "definition": "Allah'ın yüceliğini ifade eden sözlerdir."
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY"
+    }
   },
   {
     "id": "vtYHNDJdrCKtfk7hQlLS",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "definition",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "content": {
-      "term": "Sela",
-      "definition": "Cenaze namazı öncesi okunan duadır."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368056,
       "nanoseconds": 706000000
+    },
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "term": "Sela",
+      "definition": "Cenaze namazı öncesi okunan duadır."
     }
   }
 ]

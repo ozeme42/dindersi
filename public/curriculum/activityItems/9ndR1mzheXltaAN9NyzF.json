@@ -1,30 +1,30 @@
 [
   {
     "id": "4C1vHNku8YacBf91cvM7",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "sentence",
     "topicId": "9ndR1mzheXltaAN9NyzF",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "sentence",
+    "content": {
+      "text": "Dünya hayatı bir imtihan yeridir."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
-    },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "content": {
-      "text": "Dünya hayatı bir imtihan yeridir."
     }
   },
   {
     "id": "FJd0rxJ9K3aLsqR3oo79",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
     },
+    "type": "definition",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "9ndR1mzheXltaAN9NyzF",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "definition": "Dünya hayatının geçici bir deneme olduğunu ifade eder.",
       "term": "İmtihan"
@@ -32,202 +32,202 @@
   },
   {
     "id": "H11SwSst8Q8m7bfoNmeo",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "9ndR1mzheXltaAN9NyzF",
+    "type": "concept",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "content": {
+      "text": "Sorumluluk"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
-    },
-    "content": {
-      "text": "Sorumluluk"
-    },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "9ndR1mzheXltaAN9NyzF",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept"
+    }
   },
   {
     "id": "KSg4KGpnTnKLHChOxZ2D",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Dünyadaki seçimlerimiz ahiretimizi belirler."
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "9ndR1mzheXltaAN9NyzF",
-    "type": "sentence",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758456900,
       "nanoseconds": 576000000
-    }
+    },
+    "topicId": "9ndR1mzheXltaAN9NyzF"
   },
   {
     "id": "NIjAurf7DTxIK2AvKCq3",
-    "content": {
-      "term": "Diriliş",
-      "definition": "Ölümden sonra yeniden hayata dönmektir."
-    },
-    "topicId": "9ndR1mzheXltaAN9NyzF",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "9ndR1mzheXltaAN9NyzF",
+    "content": {
+      "definition": "Ölümden sonra yeniden hayata dönmektir.",
+      "term": "Diriliş"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
-    }
+    },
+    "type": "definition",
+    "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "NMqTcTL9chS9tj9j2LYU",
-    "topicId": "9ndR1mzheXltaAN9NyzF",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759007225,
+      "nanoseconds": 407000000
+    },
+    "unitId": "UxthoHWEf7GS47946uOO",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Tövbe"
     },
-    "type": "concept",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759007225,
-      "nanoseconds": 407000000
-    }
+    "topicId": "9ndR1mzheXltaAN9NyzF"
   },
   {
     "id": "PiLoHHvgr3TmlDveVTDX",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "9ndR1mzheXltaAN9NyzF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
     },
+    "topicId": "9ndR1mzheXltaAN9NyzF",
+    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "definition": "Ölümden sonraki sonsuz yaşamın adıdır.",
       "term": "Ahiret"
-    },
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    }
   },
   {
     "id": "Ti7kc221j798vDbRYmqd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "9ndR1mzheXltaAN9NyzF",
     "type": "sentence",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758456900,
       "nanoseconds": 576000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "9ndR1mzheXltaAN9NyzF",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "text": "Her canlı, ölümü tadar. Bir deneme olarak sizi hayırla da şerle de imtihan ederiz. Ve siz, ancak bize döndürüleceksiniz."
     }
   },
   {
     "id": "V8p1fPJNL3v2EUB8C43o",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "9ndR1mzheXltaAN9NyzF",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "concept",
+    "content": {
+      "text": "Ahiret"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
     },
-    "topicId": "9ndR1mzheXltaAN9NyzF",
-    "content": {
-      "text": "Ahiret"
-    }
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "Xc6QB4vdpMCoZ0fm9431",
-    "topicId": "9ndR1mzheXltaAN9NyzF",
-    "content": {
-      "term": "Merhamet",
-      "definition": "Yüce Yaratıcı'nın kullarına gösterdiği şefkat duygusudur."
-    },
+    "type": "definition",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "definition": "Yüce Yaratıcı'nın kullarına gösterdiği şefkat duygusudur.",
+      "term": "Merhamet"
+    },
+    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition"
+    "topicId": "9ndR1mzheXltaAN9NyzF"
   },
   {
     "id": "Y9nG69NisuJs5ZEyVwxK",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "9ndR1mzheXltaAN9NyzF",
+    "type": "definition",
+    "content": {
+      "definition": "Günahlarından pişman olup af dilemek eylemidir.",
+      "term": "Tövbe"
+    },
+    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
     },
-    "content": {
-      "term": "Tövbe",
-      "definition": "Günahlarından pişman olup af dilemek eylemidir."
-    },
-    "type": "definition",
-    "topicId": "9ndR1mzheXltaAN9NyzF",
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "ZHUgok5NA7BQ5XWg1OvR",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "9ndR1mzheXltaAN9NyzF",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Adalet"
-    },
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
+    },
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "9ndR1mzheXltaAN9NyzF",
+    "content": {
+      "text": "Adalet"
     }
   },
   {
     "id": "b8nEnQ3ntDx6IMpAFqEF",
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "term": "Sorumluluk",
+      "definition": "Seçimlerinin sonuçlarını üstlenme yükümlülüğüdür."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
     },
+    "type": "definition",
     "topicId": "9ndR1mzheXltaAN9NyzF",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "content": {
-      "term": "Sorumluluk",
-      "definition": "Seçimlerinin sonuçlarını üstlenme yükümlülüğüdür."
-    }
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "eVgzBodpVuak9cPdHMhX",
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "9ndR1mzheXltaAN9NyzF",
-    "content": {
-      "text": "Allah’ım! Bize dünyada iyilik ver, ahirette de iyilik ver ve bizi cehennem azabından koru!"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758456900,
       "nanoseconds": 576000000
     },
-    "type": "sentence",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "content": {
+      "text": "Allah’ım! Bize dünyada iyilik ver, ahirette de iyilik ver ve bizi cehennem azabından koru!"
+    }
   },
   {
     "id": "eaxKmvovcuruOzFehT29",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Merhamet"
     },
-    "type": "concept",
     "topicId": "9ndR1mzheXltaAN9NyzF",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
     },
+    "type": "concept",
     "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
@@ -243,52 +243,52 @@
       "definition": "Hak edenin karşılığını mutlaka bulacağı hükümdür."
     },
     "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "9ndR1mzheXltaAN9NyzF"
+    "topicId": "9ndR1mzheXltaAN9NyzF",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "tdj9stI1djsSWHBRQU7f",
-    "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "9ndR1mzheXltaAN9NyzF",
     "unitId": "UxthoHWEf7GS47946uOO",
+    "content": {
+      "text": "Diriliş"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
     },
-    "content": {
-      "text": "Diriliş"
-    }
+    "type": "concept"
   },
   {
     "id": "vJvUL8tRubOEJtAAmlhi",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759007225,
-      "nanoseconds": 407000000
-    },
+    "topicId": "9ndR1mzheXltaAN9NyzF",
     "content": {
       "text": "Ahirete iman davranışları etkiler."
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "9ndR1mzheXltaAN9NyzF"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759007225,
+      "nanoseconds": 407000000
+    }
   },
   {
     "id": "vuY5Ph7E7D06fXZN8m5P",
+    "topicId": "9ndR1mzheXltaAN9NyzF",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "İmtihan"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759007225,
       "nanoseconds": 407000000
     },
-    "topicId": "9ndR1mzheXltaAN9NyzF",
-    "content": {
-      "text": "İmtihan"
-    },
-    "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "concept"
   }
 ]

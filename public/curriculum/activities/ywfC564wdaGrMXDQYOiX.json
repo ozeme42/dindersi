@@ -1,96 +1,66 @@
 [
   {
     "id": "2DL2X8NzPftK3crtglN7",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Sabır"
     },
+    "topicId": "ywfC564wdaGrMXDQYOiX",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759150672,
       "nanoseconds": 322000000
-    },
-    "topicId": "ywfC564wdaGrMXDQYOiX"
+    }
   },
   {
     "id": "4hsngAw0eST5lNyiNVrO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150672,
-      "nanoseconds": 322000000
-    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "ywfC564wdaGrMXDQYOiX",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Oruç"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "ywfC564wdaGrMXDQYOiX",
     "type": "concept",
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150672,
+      "nanoseconds": 322000000
+    }
   },
   {
     "id": "5VgaimwIRNAAjy13oe40",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761669329,
-      "nanoseconds": 828000000
-    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "sentence",
     "content": {
       "text": "Birlikte iftar etmek, paylaşma ve dayanışma duygularını güçlendirir."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "ywfC564wdaGrMXDQYOiX",
-    "type": "sentence"
-  },
-  {
-    "id": "M7oN2BiHxfRF29m45DJW",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150672,
-      "nanoseconds": 322000000
-    },
-    "content": {
-      "text": "Mukabele"
-    },
-    "type": "concept",
-    "topicId": "ywfC564wdaGrMXDQYOiX"
-  },
-  {
-    "id": "UnvKWyjRR2dYsHSEBb5k",
-    "content": {
-      "text": "Yardımlaşma"
-    },
-    "topicId": "ywfC564wdaGrMXDQYOiX",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150672,
-      "nanoseconds": 322000000
-    },
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
-  },
-  {
-    "id": "bLOXxEmIYAIYds7cDsDk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761669329,
       "nanoseconds": 828000000
     },
-    "topicId": "ywfC564wdaGrMXDQYOiX",
+    "topicId": "ywfC564wdaGrMXDQYOiX"
+  },
+  {
+    "id": "M7oN2BiHxfRF29m45DJW",
+    "type": "concept",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "ywfC564wdaGrMXDQYOiX",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150672,
+      "nanoseconds": 322000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
-      "text": "İftar davetleri, fitre ve sadakalar; yardımseverlik, cömertlik ve dayanışma gibi ahlaki değerlerin kazanılmasında önemli bir rol oynar."
+      "text": "Mukabele"
     }
   },
   {
-    "id": "cu5qfqakWlqZ5SeGM2zk",
+    "id": "UnvKWyjRR2dYsHSEBb5k",
     "type": "concept",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
@@ -101,127 +71,157 @@
     },
     "topicId": "ywfC564wdaGrMXDQYOiX",
     "content": {
-      "text": "Teravih"
+      "text": "Yardımlaşma"
     }
+  },
+  {
+    "id": "bLOXxEmIYAIYds7cDsDk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761669329,
+      "nanoseconds": 828000000
+    },
+    "type": "sentence",
+    "content": {
+      "text": "İftar davetleri, fitre ve sadakalar; yardımseverlik, cömertlik ve dayanışma gibi ahlaki değerlerin kazanılmasında önemli bir rol oynar."
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "ywfC564wdaGrMXDQYOiX"
+  },
+  {
+    "id": "cu5qfqakWlqZ5SeGM2zk",
+    "topicId": "ywfC564wdaGrMXDQYOiX",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150672,
+      "nanoseconds": 322000000
+    },
+    "content": {
+      "text": "Teravih"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw"
   },
   {
     "id": "eSGkV2tbuagynwPxrhtT",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "ywfC564wdaGrMXDQYOiX",
+    "type": "definition",
+    "content": {
+      "term": "Yardımlaşma",
+      "title": "",
+      "definition": "İnsanların birbirine destek olduğu, imkanlarını paylaştığı bir değer.",
+      "categories": [],
+      "items": [],
+      "text": ""
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759150672,
       "nanoseconds": 322000000
-    },
-    "content": {
-      "term": "Yardımlaşma",
-      "definition": "İnsanların birbirine destek olduğu, imkanlarını paylaştığı bir değer.",
-      "title": "",
-      "text": "",
-      "items": [],
-      "categories": []
-    },
-    "type": "definition"
+    }
   },
   {
     "id": "juSZvTN3XbQLDXdwUP2I",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "ywfC564wdaGrMXDQYOiX",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759150672,
       "nanoseconds": 322000000
     },
+    "topicId": "ywfC564wdaGrMXDQYOiX",
     "content": {
       "text": "İftar"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept"
-  },
-  {
-    "id": "l2opfpypfdvuXAdGnmIF",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150672,
-      "nanoseconds": 322000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition",
-    "content": {
-      "categories": [],
-      "text": "",
-      "definition": "Zorluklar karşısında dayanma gücü.",
-      "term": "Sabır",
-      "items": [],
-      "title": ""
-    },
-    "topicId": "ywfC564wdaGrMXDQYOiX"
-  },
-  {
-    "id": "mCd021tUvntaDrKwB7NM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761669329,
-      "nanoseconds": 828000000
-    },
-    "topicId": "ywfC564wdaGrMXDQYOiX",
-    "type": "sentence",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Kim Allah’a inanarak ve karşılığını Allah’tan bekleyerek ramazan orucunu tutarsa geçmiş günahları bağışlanır."
     }
   },
   {
-    "id": "yn7iMDGN7Zwix6DgJ3mf",
+    "id": "l2opfpypfdvuXAdGnmIF",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150672,
+      "nanoseconds": 322000000
+    },
+    "content": {
+      "text": "",
+      "title": "",
+      "definition": "Zorluklar karşısında dayanma gücü.",
+      "items": [],
+      "categories": [],
+      "term": "Sabır"
+    },
+    "topicId": "ywfC564wdaGrMXDQYOiX",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "mCd021tUvntaDrKwB7NM",
+    "topicId": "ywfC564wdaGrMXDQYOiX",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761669329,
       "nanoseconds": 828000000
     },
+    "content": {
+      "text": "Kim Allah’a inanarak ve karşılığını Allah’tan bekleyerek ramazan orucunu tutarsa geçmiş günahları bağışlanır."
+    },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence"
+  },
+  {
+    "id": "yn7iMDGN7Zwix6DgJ3mf",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "ywfC564wdaGrMXDQYOiX",
     "content": {
       "text": "Hz. Peygamber “Oruç sabrın yarısıdır.” buyurarak oruç ibadetiyle sabır arasındaki ilişkiye dikkat çekmiştir."
     },
-    "type": "sentence"
-  },
-  {
-    "id": "yz8lPZjXNxjVjACOXVG1",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
-      "seconds": 1759150672,
-      "nanoseconds": 322000000
-    },
-    "topicId": "ywfC564wdaGrMXDQYOiX",
-    "content": {
-      "term": "Şükür",
-      "definition": "Bana verilen tüm nimetler için duyduğum minnet duygusu.",
-      "categories": [],
-      "title": "",
-      "text": "",
-      "items": []
+      "seconds": 1761669329,
+      "nanoseconds": 828000000
     }
   },
   {
-    "id": "zzj4GCmihz6fUwfwJMCg",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "id": "yz8lPZjXNxjVjACOXVG1",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
+    "topicId": "ywfC564wdaGrMXDQYOiX",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759150672,
       "nanoseconds": 322000000
     },
+    "content": {
+      "text": "",
+      "title": "",
+      "items": [],
+      "definition": "Bana verilen tüm nimetler için duyduğum minnet duygusu.",
+      "term": "Şükür",
+      "categories": []
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw"
+  },
+  {
+    "id": "zzj4GCmihz6fUwfwJMCg",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150672,
+      "nanoseconds": 322000000
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "ywfC564wdaGrMXDQYOiX",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Şükür"
-    },
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    }
   }
 ]

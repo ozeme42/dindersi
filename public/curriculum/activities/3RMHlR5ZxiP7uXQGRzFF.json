@@ -1,53 +1,55 @@
 [
   {
     "id": "0kZTqfDilJx5fXrJr92Y",
-    "type": "definition",
-    "content": {
-      "definition": "Bedenin, elbisenin ve namaz kılınacak yerin temiz olması. Setriavret : Vücudun örtülmesi gereken yerlerini örtmek.",
-      "term": "Necasetten Taharet"
-    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213826,
       "nanoseconds": 128000000
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    "content": {
+      "definition": "Bedenin, elbisenin ve namaz kılınacak yerin temiz olması. Setriavret : Vücudun örtülmesi gereken yerlerini örtmek.",
+      "term": "Necasetten Taharet"
+    }
   },
   {
     "id": "3Y4srOkciquMCNInZsWu",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269331,
+      "nanoseconds": 772000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Cuma namazı Müslümanların haftalık bayramıdır."
     },
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269331,
-      "nanoseconds": 772000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "sentence"
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "524gI6TveDnwSJfDoDIz",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "content": {
-      "text": "Namazın farzlarından biri eksikse namaz bozulur."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269331,
       "nanoseconds": 772000000
     },
+    "content": {
+      "text": "Namazın farzlarından biri eksikse namaz bozulur."
+    },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "sentence"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "528L8sKoW8Cy2ocRFE9l",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Niyet"
     },
@@ -56,74 +58,71 @@
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
   },
   {
     "id": "68jTEdsW0EaxLQyuGect",
-    "type": "definition",
     "content": {
-      "term": "Rükû",
-      "definition": "Elleri dizlere koyarak eğilmek, sırtı düz tutmak."
+      "definition": "Elleri dizlere koyarak eğilmek, sırtı düz tutmak.",
+      "term": "Rükû"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
-    }
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "definition"
   },
   {
     "id": "6aFH4VYgSB8sCpI5v0ae",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "İstikbalikıble"
-    },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "type": "concept",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    "content": {
+      "text": "İstikbalikıble"
+    }
   },
   {
     "id": "6otgIg1UkVckAWw6qjDJ",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269331,
+      "nanoseconds": 772000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Cemaatle kılınan namaz daha faziletlidir."
     },
+    "type": "sentence",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269331,
-      "nanoseconds": 772000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
   },
   {
     "id": "AhukBWtJEHCyxsBmUhLZ",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Abdest namazın en temel hazırlık şartıdır."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269331,
       "nanoseconds": 772000000
     },
-    "type": "sentence"
+    "type": "sentence",
+    "content": {
+      "text": "Abdest namazın en temel hazırlık şartıdır."
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
   },
   {
     "id": "C0HmhAzKPu8g4VdcSX15",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Rükû ve secde namaz rükünleridir."
     },
@@ -134,56 +133,59 @@
       "nanoseconds": 909000000
     },
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "DDkN5jcTYb6W5Xv921vT",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213000,
       "nanoseconds": 909000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "content": {
       "text": "Cemaatle namaz daha faziletlidir."
     },
-    "type": "sentence"
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
   },
   {
     "id": "HNLByEj1dDZIQvXt9tn4",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "content": {
-      "term": "Selam",
-      "definition": "Başı önce sağa, sonra sola çevirerek namazı bitirmek."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "type": "definition"
+    "content": {
+      "definition": "Başı önce sağa, sonra sola çevirerek namazı bitirmek.",
+      "term": "Selam"
+    },
+    "type": "definition",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "IJYbxqe7au982p0F4A2S",
+    "content": {
+      "text": "Rükû"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "content": {
-      "text": "Rükû"
-    },
-    "type": "concept",
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    "type": "concept"
   },
   {
     "id": "J9zr8cOm0w2Qc3SYneVd",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
@@ -194,28 +196,28 @@
       "definition": "Alnı, burnu, elleri, dizleri ve ayakları yere koyarak kapanmak.",
       "term": "Secde"
     },
-    "type": "definition",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "JcYBOaUISoSIf7DamNvn",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "content": {
       "text": "Secde"
     },
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
-    },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    }
   },
   {
     "id": "K70IdMDzJx4boermadd9",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -224,23 +226,21 @@
     },
     "content": {
       "text": "Ka'de-i Ahîre"
-    },
-    "type": "concept",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
+    }
   },
   {
     "id": "KxmbB1FoFfSPkGaD0PBe",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
-    "content": {
-      "text": "Gusül, bedenin tamamen temizlenmesidir."
-    },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213000,
       "nanoseconds": 909000000
+    },
+    "content": {
+      "text": "Gusül, bedenin tamamen temizlenmesidir."
     }
   },
   {
@@ -248,109 +248,109 @@
     "content": {
       "text": "Gusül"
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "PEBfRW4gmwN2evkoDd5m",
-    "type": "definition",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "content": {
+      "definition": "Su bulunmadığı durumlarda yapılan temizlik.",
+      "term": "Teyemmüm"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "content": {
-      "term": "Teyemmüm",
-      "definition": "Su bulunmadığı durumlarda yapılan temizlik."
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
   },
   {
     "id": "Sq5P6L4eI2kBC7H7Lkxz",
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767213587,
+      "nanoseconds": 917000000
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
       "text": "Cuma Namazı"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767213587,
-      "nanoseconds": 917000000
-    },
-    "type": "concept",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept"
   },
   {
     "id": "TdZKm7hHycZOJA5gT1hJ",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "content": {
-      "definition": "Namazda Kur'an'dan sure veya ayet okumak.",
-      "term": "Kıraat"
+      "term": "Kıraat",
+      "definition": "Namazda Kur'an'dan sure veya ayet okumak."
     },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    "type": "definition"
   },
   {
     "id": "UX14elHqidON0UlNbzSI",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213826,
       "nanoseconds": 606000000
     },
     "content": {
-      "term": "Bayram Namazı",
-      "definition": "Yılda iki kez (Ramazan ve Kurban) kılınan, cemaatle yapılan vacip namaz."
+      "definition": "Yılda iki kez (Ramazan ve Kurban) kılınan, cemaatle yapılan vacip namaz.",
+      "term": "Bayram Namazı"
     },
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "definition"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "UkskciXrlYLrfGZmvybj",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
+    "content": {
+      "definition": "Tüm vücudun yıkandığı boy abdesti.",
+      "term": "Gusül"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "content": {
-      "term": "Gusül",
-      "definition": "Tüm vücudun yıkandığı boy abdesti."
-    }
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
   },
   {
     "id": "Urybv0DjBtnhft9v2Ftn",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "type": "concept",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "content": {
+      "text": "Kıraat"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
-    },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "content": {
-      "text": "Kıraat"
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
+    }
   },
   {
     "id": "V4cuXkcb8QaIrD8CNBrh",
@@ -359,256 +359,256 @@
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "content": {
       "text": "Teravih Namazı"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "concept"
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "XElO9SGJvWW4DvxeBpaC",
+    "content": {
+      "term": "Hadesten Taharet",
+      "definition": "Abdest, gusül veya teyemmüm alarak manevi kirlerden temizlenmek."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
-    },
-    "type": "definition",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "content": {
-      "definition": "Abdest, gusül veya teyemmüm alarak manevi kirlerden temizlenmek.",
-      "term": "Hadesten Taharet"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   },
   {
     "id": "XFg0HuJvf0n7MVVK5ohV",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
+    "content": {
+      "term": "İstikbalikıble",
+      "definition": "Namaz kılarken Kıbleye (Kâbe'ye) yönelmek."
+    },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "content": {
-      "definition": "Namaz kılarken Kıbleye (Kâbe'ye) yönelmek.",
-      "term": "İstikbalikıble"
-    },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
   },
   {
     "id": "YW5z1PRaokHm5vtEXlWc",
-    "type": "concept",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767213587,
-      "nanoseconds": 917000000
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "type": "concept",
     "content": {
       "text": "Vakit"
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767213587,
+      "nanoseconds": 917000000
+    }
   },
   {
     "id": "Z9IYqTxGA44lQsdluUOp",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "content": {
-      "term": "Niyet",
-      "definition": "Hangi namazın kılınacağına kalben karar verip niyet etmek."
+      "definition": "Hangi namazın kılınacağına kalben karar verip niyet etmek.",
+      "term": "Niyet"
     },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
   },
   {
     "id": "ZSG4K9DUZVQhqRBispbu",
-    "type": "concept",
+    "content": {
+      "text": "Hadesten Taharet"
+    },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Hadesten Taharet"
-    },
+    "type": "concept",
     "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "ZVDbP9db3YVCXWhj9Kbg",
-    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
       "text": "Her Müslüman namaz kılmalıdır."
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213000,
       "nanoseconds": 909000000
-    }
+    },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "type": "sentence"
   },
   {
     "id": "cmvy0rMVxWX6G9DyI2TD",
-    "type": "concept",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Selam"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
+    "content": {
+      "text": "Selam"
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "3RMHlR5ZxiP7uXQGRzFF"
   },
   {
     "id": "d7HiOQBRtnwicoPQs2xe",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Teyemmüm, su olmayınca yapılır."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213000,
       "nanoseconds": 909000000
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "content": {
+      "text": "Teyemmüm, su olmayınca yapılır."
+    },
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence"
   },
   {
     "id": "e6EnqM6i5uCmBOHeJgtD",
-    "content": {
-      "term": "Cuma Namazı",
-      "definition": "Erkeklere farz olan, cemaatle kılınan ve hutbe okunan haftalık namaz. "
-    },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767213587,
-      "nanoseconds": 917000000
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
-  },
-  {
-    "id": "hd7Jh3XPGw9NE1smJ9Ud",
     "content": {
-      "text": "Niyet, her ibadetin başıdır."
+      "definition": "Erkeklere farz olan, cemaatle kılınan ve hutbe okunan haftalık namaz. ",
+      "term": "Cuma Namazı"
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767213000,
-      "nanoseconds": 909000000
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
-  },
-  {
-    "id": "k5p1BRJ8Aab2l3hGxOTi",
-    "type": "sentence",
-    "content": {
-      "text": "Kıbleye dönmek namaz şartıdır."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767213000,
-      "nanoseconds": 909000000
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
-  },
-  {
-    "id": "knAsD6GaD1TzbcqxgTx4",
-    "content": {
-      "definition": "Namazın sonunda (son oturuşta) duaları okuyacak kadar oturmak.",
-      "term": "Ka'de-i Ahîre"
-    },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767213587,
-      "nanoseconds": 917000000
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
-  },
-  {
-    "id": "kqfEB01Xq9xQ7fIhZ79G",
-    "type": "definition",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
-    },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "content": {
-      "definition": "Namazı belirlenen zaman dilimi içinde (vaktinde) kılmak.",
-      "term": "Vakit"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
-    "id": "kzpCyE7qbWovg0FQZVgs",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "id": "hd7Jh3XPGw9NE1smJ9Ud",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213000,
       "nanoseconds": 909000000
     },
-    "type": "sentence",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "content": {
-      "text": "Cuma namazı erkeklere farzdır."
-    }
+      "text": "Niyet, her ibadetin başıdır."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "sentence"
   },
   {
-    "id": "lemak3AawJdp9bBh929j",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
+    "id": "k5p1BRJ8Aab2l3hGxOTi",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
-      "definition": "Ramazan ayında yatsıdan sonra kılınan sünnet namaz.",
-      "term": "Teravih Namazı"
+      "text": "Kıbleye dönmek namaz şartıdır."
     },
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
+      "seconds": 1767213000,
+      "nanoseconds": 909000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence"
+  },
+  {
+    "id": "knAsD6GaD1TzbcqxgTx4",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "definition",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "content": {
+      "definition": "Namazın sonunda (son oturuşta) duaları okuyacak kadar oturmak.",
+      "term": "Ka'de-i Ahîre"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
+    }
+  },
+  {
+    "id": "kqfEB01Xq9xQ7fIhZ79G",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "content": {
+      "definition": "Namazı belirlenen zaman dilimi içinde (vaktinde) kılmak.",
+      "term": "Vakit"
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767213587,
+      "nanoseconds": 917000000
+    }
+  },
+  {
+    "id": "kzpCyE7qbWovg0FQZVgs",
+    "content": {
+      "text": "Cuma namazı erkeklere farzdır."
+    },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767213000,
+      "nanoseconds": 909000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
-    "id": "p3OuyLGOPUAxaD1CkovQ",
-    "type": "definition",
+    "id": "lemak3AawJdp9bBh929j",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "content": {
+      "term": "Teravih Namazı",
+      "definition": "Ramazan ayında yatsıdan sonra kılınan sünnet namaz."
+    },
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767213587,
+      "nanoseconds": 917000000
+    }
+  },
+  {
+    "id": "p3OuyLGOPUAxaD1CkovQ",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "İftitah Tekbiri",
       "definition": "\"Allahüekber\" diyerek namaza başlamak."
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
@@ -617,44 +617,44 @@
   },
   {
     "id": "pSSkWL90LOu6zbUA3m2N",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "content": {
+      "text": "Namaz günde beş vakit kılınan ibadettir."
+    },
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269331,
       "nanoseconds": 772000000
     },
-    "content": {
-      "text": "Namaz günde beş vakit kılınan ibadettir."
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence"
+    "type": "sentence",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "pVLNjQC97PWDDWur6exY",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "type": "definition",
     "content": {
       "definition": "Ölen Müslüman için kılınan, rükûsu ve secdesi olmayan, ayakta yapılan dua niteliğindeki namaz.",
       "term": "Cenaze Namazı"
     },
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
+    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "q2EGd5Hxq8r9V9EKmds3",
-    "type": "concept",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Mesh"
     },
+    "type": "concept",
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
@@ -663,8 +663,6 @@
   },
   {
     "id": "r7SR47l1qFQYWyXmfcUH",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "type": "concept",
     "content": {
       "text": "Cenaze Namazı"
     },
@@ -673,114 +671,116 @@
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "concept",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "rhs8OKHW43IPJnsn6mDI",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
+    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "content": {
       "definition": "Abdest alırken başın dörtte birini ıslak elle silmek.",
       "term": "Mesh"
-    },
-    "type": "definition"
+    }
   },
   {
     "id": "s5x8PdAT3gIE2DuuF3IW",
+    "content": {
+      "text": "Teyemmüm"
+    },
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
-    },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "content": {
-      "text": "Teyemmüm"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   },
   {
     "id": "sRc238phRntsvq7O7Ast",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213000,
       "nanoseconds": 909000000
     },
+    "type": "sentence",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "content": {
       "text": "Namazın farzları on iki tanedir."
     }
   },
   {
     "id": "v2sGauBvZ9YaYyZM6Hwy",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767213587,
-      "nanoseconds": 917000000
-    },
     "content": {
       "term": "Kıyam",
       "definition": "Namazda ayakta durmak."
     },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
-  },
-  {
-    "id": "v6Jwxq2tBsWgmMTrWr8X",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "definition"
+  },
+  {
+    "id": "v6Jwxq2tBsWgmMTrWr8X",
     "content": {
       "text": "Kıyam"
     },
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767213587,
+      "nanoseconds": 917000000
+    },
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "wQujmoT5aVX4UXwb9df2",
-    "type": "sentence",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "content": {
+      "text": "Abdest, namaz için ön şarttır."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213000,
       "nanoseconds": 909000000
     },
-    "content": {
-      "text": "Abdest, namaz için ön şarttır."
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "sentence"
   },
   {
     "id": "y21K3TZbbIqIrM9EfcEP",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "content": {
-      "text": "İftitah Tekbiri"
-    },
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767213587,
       "nanoseconds": 917000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
+    "content": {
+      "text": "İftitah Tekbiri"
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF"
   }
 ]

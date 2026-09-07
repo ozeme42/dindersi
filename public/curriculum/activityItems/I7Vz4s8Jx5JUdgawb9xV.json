@@ -1,18 +1,18 @@
 [
   {
     "id": "1SoRXJ3OdFVaVXlLNAdQ",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
     },
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
     "content": {
       "text": "Tevekkül"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "concept"
+    }
   },
   {
     "id": "RQLZrGkiZKzvGQMKWKYd",
@@ -23,87 +23,87 @@
     },
     "type": "sentence",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "content": {
       "text": "Gitmeye gücü yetenin o evi ziyaret etmesi, Allah’ın insanlar üzerinde bir hakkıdır."
     },
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV"
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "jD8kef0BDjlEoxIoIqN8",
-    "type": "definition",
-    "content": {
-      "definition": "Sıkıntılar karşısında isyan etmek yerine Allah’a (cc) güvenme ve dayanma hali.",
-      "term": "Tevekkül"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672260,
-      "nanoseconds": 265000000
-    },
-    "unitId": "cl2EvUjXPPI922VAJMbq"
-  },
-  {
-    "id": "nF5rvPhgKhYxvFHSJzkd",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672260,
-      "nanoseconds": 265000000
-    },
     "unitId": "cl2EvUjXPPI922VAJMbq",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "I7Vz4s8Jx5JUdgawb9xV",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672260,
+      "nanoseconds": 265000000
+    },
+    "content": {
+      "definition": "Sıkıntılar karşısında isyan etmek yerine Allah’a (cc) güvenme ve dayanma hali.",
+      "term": "Tevekkül"
+    }
+  },
+  {
+    "id": "nF5rvPhgKhYxvFHSJzkd",
     "content": {
       "text": "Hac"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672260,
+      "nanoseconds": 265000000
     },
     "type": "concept"
   },
   {
     "id": "ozA3bjzE5dW76MHsOMuk",
-    "content": {
-      "text": "Allah tarafından kabul edilmiş haccın karşılığı ancak cennettir."
-    },
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
     },
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "type": "sentence",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq"
+    "content": {
+      "text": "Allah tarafından kabul edilmiş haccın karşılığı ancak cennettir."
+    }
   },
   {
     "id": "t1BeaIInD0GrriwZRml1",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Hacıların tüm gayret ve çabası, Yüce Allah’ın rızasını kazanmaktır."
     },
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV"
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "yXHAGjbey07SXgsniuLa",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
     },
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
-      "definition": "Bazı özellikleri taşıyan Müslümanların belirli bir vakitte, belirli kutsal mekânları usulüne uygun bir şekilde ziyaret etmesidir.",
-      "term": "Hac"
-    },
-    "unitId": "cl2EvUjXPPI922VAJMbq"
+      "term": "Hac",
+      "definition": "Bazı özellikleri taşıyan Müslümanların belirli bir vakitte, belirli kutsal mekânları usulüne uygun bir şekilde ziyaret etmesidir."
+    }
   }
 ]

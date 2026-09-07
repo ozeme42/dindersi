@@ -17,7 +17,7 @@ import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getQuestionsFromBank, type GetQuizOutput } from "@/lib/quiz-actions";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { cn } from "@/lib/utils";
+import { cn, deduplicateStudents } from "@/lib/utils";
 import type { SchoolClass, UserProfile, GetQuizInput } from "@/lib/types";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -276,13 +276,11 @@ function IndividualCompetitionComponent() {
 
                             let students = allGuests.filter(u => {
                                 const sc = (u.class || '').trim().toLowerCase();
-                                return sc.includes(targetClassName) || (gradeVal && sc.startsWith(gradeVal));
+                                const sGrade = sc.match(/\d+/)?.[0] || '';
+                                return gradeVal ? sGrade === gradeVal : sc.includes(targetClassName);
                             });
 
-                            if (students.length === 0) {
-                                students = allGuests;
-                            }
-                            setStudentPool(students);
+                            setStudentPool(deduplicateStudents(students));
                         } catch (e) {
                             console.warn("Öğrenciler çekilirken hata:", e);
                             setStudentPool([]);
@@ -296,11 +294,11 @@ function IndividualCompetitionComponent() {
                     } catch {}
                     if (allGuests.length > 0) {
                         const filtered = allGuests.filter(u => u.class === SUMMER_SCHOOL_CLASS_NAME);
-                        setStudentPool(filtered.length > 0 ? filtered : allGuests);
+                        setStudentPool(deduplicateStudents(filtered.length > 0 ? filtered : allGuests));
                     } else {
                         const sQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME));
                         const sSnap = await getDocs(sQuery);
-                        setStudentPool(sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile)));
+                        setStudentPool(deduplicateStudents(sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile))));
                     }
                 }
             } catch (err: any) {
@@ -320,21 +318,41 @@ function IndividualCompetitionComponent() {
     // --- SETUP FONKSİYONLARI ---
 
     const filteredPool = useMemo(() => {
-        if (!currentClass) return studentPool;
-        if (selectedBranch === 'all') return studentPool;
-        const target = `${currentClass.name} - ${selectedBranch}`;
-        return studentPool.filter(s => s.class === target || s.class?.startsWith(target + " ("));
+        if (!currentClass) return deduplicateStudents(studentPool);
+        const gradeVal = (currentClass.name || '').match(/\d+/)?.[0] || '';
+
+        let pool = studentPool;
+        if (selectedBranch !== 'all') {
+            const normBranch = selectedBranch.trim().toLowerCase();
+            pool = pool.filter(s => {
+                const sc = (s.class || '').trim().toLowerCase();
+                const sGrade = sc.match(/\d+/)?.[0] || '';
+                const parts = sc.split(/[-/]/).map(p => p.trim());
+                const sBranch = parts[1]?.toLowerCase() || '';
+
+                const isGradeMatch = gradeVal ? sGrade === gradeVal : true;
+                const isBranchMatch = sBranch === normBranch || 
+                                      sc === `${gradeVal} - ${normBranch}` || 
+                                      sc === `${gradeVal}-${normBranch}` ||
+                                      sc.startsWith(`${gradeVal} - ${normBranch}`);
+                return isGradeMatch && isBranchMatch;
+            });
+        }
+        return deduplicateStudents(pool);
     }, [studentPool, currentClass, selectedBranch]);
 
     const addToSelection = (student: UserProfile) => {
-        if (!selectedStudents.find(s => s.uid === student.uid)) {
-            setSelectedStudents(prev => [...prev, student]);
+        const normName = (student.displayName || '').trim().toLocaleLowerCase('tr-TR');
+        if (!selectedStudents.find(s => s.uid === student.uid || (s.displayName || '').trim().toLocaleLowerCase('tr-TR') === normName)) {
+            setSelectedStudents(prev => deduplicateStudents([...prev, student]));
         }
     };
 
     const addAllFiltered = () => {
-        const newStudents = filteredPool.filter(fp => !selectedStudents.some(ss => ss.uid === fp.uid));
-        setSelectedStudents(prev => [...prev, ...newStudents]);
+        const newStudents = filteredPool.filter(fp => 
+            !selectedStudents.some(ss => ss.uid === fp.uid || (ss.displayName || '').trim().toLocaleLowerCase('tr-TR') === (fp.displayName || '').trim().toLocaleLowerCase('tr-TR'))
+        );
+        setSelectedStudents(prev => deduplicateStudents([...prev, ...newStudents]));
     };
 
     const removeFromSelection = (uid: string) => {
@@ -343,10 +361,15 @@ function IndividualCompetitionComponent() {
 
     const handleAddGuest = async (name: string, className: string) => {
         if (!name.trim()) return;
+        const norm = name.trim().toLocaleLowerCase('tr-TR');
+        if (studentPool.some(s => (s.displayName || '').trim().toLocaleLowerCase('tr-TR') === norm)) {
+            toast({ title: "Uyarı", description: "Bu sanal öğrenci havuzda zaten mevcut.", variant: "destructive" });
+            return;
+        }
         setIsAddingStudent(true);
         const res = await addStudentToClass(name, className);
         if (res.success && res.newUser) {
-            setStudentPool(prev => [...prev, res.newUser!]);
+            setStudentPool(prev => deduplicateStudents([...prev, res.newUser!]));
             addToSelection(res.newUser!);
             setIsAddStudentOpen(false);
             toast({ title: "Eklendi", description: `${name} havuza eklendi.` });
@@ -361,7 +384,7 @@ function IndividualCompetitionComponent() {
         }
         const gameComps: GameCompetitor[] = selectedStudents.map((s, idx) => ({ 
             ...s, 
-            score: 0,
+            score: 0, 
             colorIndex: idx 
         }));
         setCompetitors(gameComps);
@@ -388,6 +411,9 @@ function IndividualCompetitionComponent() {
         
         const created: UserProfile[] = [];
         for (const name of demoNames) {
+            if (studentPool.some(s => (s.displayName || '').trim().toLocaleLowerCase('tr-TR') === name.toLocaleLowerCase('tr-TR'))) {
+                continue;
+            }
             try {
                 const res = await addStudentToClass(name, currentTargetClass);
                 if (res.success && res.newUser) {
@@ -398,11 +424,11 @@ function IndividualCompetitionComponent() {
             }
         }
         if (created.length > 0) {
-            setStudentPool(prev => [...prev, ...created]);
-            setSelectedStudents(prev => [...prev, ...created]);
+            setStudentPool(prev => deduplicateStudents([...prev, ...created]));
+            setSelectedStudents(prev => deduplicateStudents([...prev, ...created]));
             toast({ title: "Örnek Sınıf Oluşturuldu", description: `${created.length} öğrenci oluşturuldu ve yarışmaya eklendi!` });
         } else {
-            toast({ title: "Hata", description: "Öğrenciler oluşturulamadı.", variant: "destructive" });
+            toast({ title: "Bilgi", description: "Örnek öğrenciler havuzda zaten mevcut." });
         }
         setIsAddingStudent(false);
     };

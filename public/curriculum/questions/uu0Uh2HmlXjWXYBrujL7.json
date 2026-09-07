@@ -1,155 +1,143 @@
 [
   {
     "id": "2QIw7lFeZe6u4ZiC1rMP",
-    "options": [],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "text": "Din, insan hayatına yön veren temel unsurlardan biri değildir.",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "topic": "1.Geleneğimizde Dinin İzleri",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "className": "6",
+    "correctAnswer": "Yanlış",
+    "text": "Din, insan hayatına yön veren temel unsurlardan biri değildir.",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Doğru/Yanlış",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "correctAnswer": "Yanlış",
-    "type": "Doğru/Yanlış",
     "difficulty": "Kolay",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "2fL8VFTiPYAsGst6JiPy",
-    "correctAnswer": "aşure",
-    "type": "Boşluk Doldurma",
-    "topic": "1.Geleneğimizde Dinin İzleri",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
+    "text": "Muharrem ayının onuncu gününe verilen isim olan \"____\" kelimesi, Arapçadaki \"aşere\" (on) sayısından türemiştir.",
     "topicName": "1.Geleneğimizde Dinin İzleri",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "correctAnswer": "aşure",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "bayram",
       "oruç",
       "aşure",
       "takvim"
     ],
-    "className": "6",
-    "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "text": "Muharrem ayının onuncu gününe verilen isim olan \"____\" kelimesi, Arapçadaki \"aşere\" (on) sayısından türemiştir.",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "topic": "1.Geleneğimizde Dinin İzleri"
   },
   {
     "id": "3Sfc3KSuO2Ejm3lu6waf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "options": [],
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "className": "6",
-    "text": "Kandil geceleri, Osmanlı Dönemi'nden itibaren minarelerde kandiller yakılarak kutlandığı için bu ismi almıştır.",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "correctAnswer": "Doğru"
+    "correctAnswer": "Doğru",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "text": "Kandil geceleri, Osmanlı Dönemi'nden itibaren minarelerde kandiller yakılarak kutlandığı için bu ismi almıştır."
   },
   {
     "id": "68Axeqf1OANKEtdR4LTP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "type": "Çoktan Seçmeli",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "className": "6",
-    "text": "Aşağıdakilerden hangisi genellikle mevlit okutma gelenekleri arasında yer almaz?",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "correctAnswer": "Arkadaş doğum günü partisi",
     "topic": "1.Geleneğimizde Dinin İzleri",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Aşağıdakilerden hangisi genellikle mevlit okutma gelenekleri arasında yer almaz?",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Asker uğurlama",
       "Sünnet törenleri",
       "Kandil geceleri",
       "Arkadaş doğum günü partisi"
-    ]
-  },
-  {
-    "id": "7DZNaK4tuhmc69P9j7a3",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    ],
+    "correctAnswer": "Arkadaş doğum günü partisi",
+    "difficulty": "Kolay",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "text": "“Üç aylar” olarak bilinen Recep, Şaban ve Ramazan ayları, manevi duyguların yoğun yaşandığı dönemlerdir.",
-    "difficulty": "Orta",
-    "options": [],
     "topicName": "1.Geleneğimizde Dinin İzleri"
   },
   {
-    "id": "8GezatOHpSASqHc1WzZd",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "id": "7DZNaK4tuhmc69P9j7a3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Doğru",
+    "options": [],
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "correctAnswer": "sabırlı",
-    "type": "Boşluk Doldurma",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "text": "“Üç aylar” olarak bilinen Recep, Şaban ve Ramazan ayları, manevi duyguların yoğun yaşandığı dönemlerdir.",
+    "difficulty": "Orta",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "8GezatOHpSASqHc1WzZd",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
     "options": [
       "sabırlı",
       "üzgün",
       "metin",
       "dirayetli"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "difficulty": "Zor",
+    "className": "6",
+    "type": "Boşluk Doldurma",
     "text": "Taziyenin temel anlamı, yakını vefat eden birine başsağlığı dilemenin yanı sıra, acılara karşı ____ ve dirençli olmayı tavsiye etmektir.",
-    "className": "6"
+    "correctAnswer": "sabırlı",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "difficulty": "Zor"
   },
   {
     "id": "8XkLjIP6WmJVyWbNNGCT",
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "className": "6",
-    "type": "Çoktan Seçmeli",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "correctAnswer": "Sadaka",
     "text": "İslam’da paylaşma ve yardımlaşmayı teşvik eden zekât ve kurban dışında kalan, gizliliği esas alan bir ibadet türü aşağıdakilerden hangisidir?",
     "options": [
       "Hac",
@@ -157,187 +145,199 @@
       "Sadaka",
       "Oruç"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "8ZVAVZsWRDyj3XiaNW7D",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "difficulty": "Kolay",
-    "text": "Bir bebek görüldüğünde iyi dilekleri ifade etmek amacıyla sıkça kullanılan dinî motifli söz hangisidir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Maşallah",
+    "type": "Çoktan Seçmeli",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "correctAnswer": "Sadaka",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "className": "6",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7"
+  },
+  {
+    "id": "8ZVAVZsWRDyj3XiaNW7D",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "text": "Bir bebek görüldüğünde iyi dilekleri ifade etmek amacıyla sıkça kullanılan dinî motifli söz hangisidir?",
+    "className": "6",
     "type": "Çoktan Seçmeli",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "correctAnswer": "Maşallah",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
     "options": [
       "Elhamdülillah",
       "Estağfurullah",
       "Maşallah",
       "Bismillah"
-    ]
+    ],
+    "topicName": "1.Geleneğimizde Dinin İzleri"
   },
   {
     "id": "8p2z6azbbN47F5vRc1io",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "text": "\"Kandil Geceleri\" isminin ortaya çıkmasında Osmanlı padişahlarından II. Selim döneminde minarelerde yapılan hangi uygulama etkili olmuştur?",
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "difficulty": "Orta",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Kandiller yakılması",
+    "text": "\"Kandil Geceleri\" isminin ortaya çıkmasında Osmanlı padişahlarından II. Selim döneminde minarelerde yapılan hangi uygulama etkili olmuştur?",
     "options": [
       "Vaaz verilmesi",
       "Kandiller yakılması",
       "Ezan okunması",
       "Mevlit okutulması"
     ],
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "correctAnswer": "Kandiller yakılması",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "className": "6",
-    "type": "Çoktan Seçmeli"
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
   },
   {
     "id": "An9qK0WMiYr7RLOgsFuq",
-    "correctAnswer": "Ramazan",
-    "difficulty": "Zor",
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "1.Geleneğimizde Dinin İzleri",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
+    "correctAnswer": "Ramazan",
     "topic": "1.Geleneğimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Kadir Gecesi, Kur’an-ı Kerim’de bin aydan daha hayırlı olduğu bildirilen ve genellikle ____ ayının sonlarında yer alan mübarek bir gecedir.",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "options": [
       "Şaban",
       "Recep",
       "Ramazan",
       "Muharrem"
     ],
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "className": "6"
+    "text": "Kadir Gecesi, Kur’an-ı Kerim’de bin aydan daha hayırlı olduğu bildirilen ve genellikle ____ ayının sonlarında yer alan mübarek bir gecedir.",
+    "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "C87qtX7Wohdol5v1Gu19",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "difficulty": "Orta",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "correctAnswer": "vakıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "hibe",
       "bağış",
       "vakıf",
       "mülk"
     ],
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
     "type": "Boşluk Doldurma",
-    "correctAnswer": "vakıf",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "difficulty": "Orta",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "text": "Dinin onay verdiği, taşınan veya taşınmayan bir maldan Allah rızası için toplumun yararlanması ve mülkiyetinin devredilmemesi durumuna \"____\" denir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7"
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "DDdYCcvuqZDFwkDkhhWZ",
     "correctAnswer": "Ehlibeyt",
     "topicName": "1.Geleneğimizde Dinin İzleri",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
     "text": "Ahzab Suresi'nde geçen ve Hz. Muhammed’in (sav) aile fertleri için kullanılan kavram aşağıdakilerden hangisidir?",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Ashab",
       "Ensar",
       "Ehlibeyt",
       "Muhacir"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "difficulty": "Zor",
-    "type": "Çoktan Seçmeli",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topic": "1.Geleneğimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "className": "6",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "E2xrVwKilxPnD3pXp70J",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "difficulty": "Zor",
+    "options": [],
+    "className": "6",
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicName": "1.Geleneğimizde Dinin İzleri",
     "text": "Vakfiye, bir vakfın kurucusu tarafından düzenlenen, vakfın işleyişi ve gayeleriyle ilgili resmî bir belgedir.",
-    "topic": "1.Geleneğimizde Dinin İzleri",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "difficulty": "Zor",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Doğru",
-    "className": "6",
-    "options": [],
-    "type": "Doğru/Yanlış"
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
   },
   {
     "id": "EBtNbJ2Z1i9uUAFcHUt1",
-    "text": "Örf ve âdetler, toplumların hayatında kabul görmüş ortak değerler olup bir toplumu diğerlerinden ayıran özelliklere sahiptir.",
     "correctAnswer": "Doğru",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "options": [],
+    "className": "6",
+    "text": "Örf ve âdetler, toplumların hayatında kabul görmüş ortak değerler olup bir toplumu diğerlerinden ayıran özelliklere sahiptir.",
+    "type": "Doğru/Yanlış",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "options": [],
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "difficulty": "Kolay",
-    "className": "6",
-    "topic": "1.Geleneğimizde Dinin İzleri",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Doğru/Yanlış"
+    "difficulty": "Kolay"
   },
   {
     "id": "EXGYstkM70ZIEdiNpwFm",
-    "difficulty": "Zor",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "className": "6",
     "text": "Mevlit Kandili, Hz. Peygamber’in vefat yıldönümünü anmak ve onun mirasını hatırlamak için kutlanan bir gecedir.",
-    "correctAnswer": "Yanlış",
-    "options": [],
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Doğru/Yanlış",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "difficulty": "Zor",
+    "options": [],
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
+    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
@@ -346,707 +346,707 @@
   },
   {
     "id": "GQkzbeHYjM37ZG9u23fN",
-    "topic": "1.Geleneğimizde Dinin İzleri",
+    "correctAnswer": "Vakfiye",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "text": "Bir vakfın kurucusu tarafından düzenlenerek vakfın işleyişiyle ilgili bilgileri içeren resmî belgeye ne ad verilir?",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Berat",
       "Ferman",
       "Vakfiye",
       "Sened"
     ],
-    "difficulty": "Zor",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Vakfiye",
-    "type": "Çoktan Seçmeli",
-    "className": "6",
-    "text": "Bir vakfın kurucusu tarafından düzenlenerek vakfın işleyişiyle ilgili bilgileri içeren resmî belgeye ne ad verilir?",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7"
+    "topic": "1.Geleneğimizde Dinin İzleri"
   },
   {
     "id": "He81BHQa8swCpa7kNYRZ",
+    "correctAnswer": "Yanlış",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "text": "Ramazan ve Kurban Bayramları, sadece bir tatil fırsatı olarak görülmeli, manevi değerleri göz ardı edilmelidir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
+    "options": [],
     "type": "Doğru/Yanlış",
     "className": "6",
-    "options": [],
-    "difficulty": "Orta",
-    "correctAnswer": "Yanlış",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "text": "Ramazan ve Kurban Bayramları, sadece bir tatil fırsatı olarak görülmeli, manevi değerleri göz ardı edilmelidir.",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "topicId": "uu0Uh2HmlXjWXYBrujL7"
   },
   {
     "id": "JngjvtNYB09531Shhlhl",
-    "type": "Boşluk Doldurma",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "correctAnswer": "kamet",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
     "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "tekbir",
       "salavat",
       "kamet",
       "dua"
     ],
+    "difficulty": "Kolay",
+    "text": "Yeni doğmuş bebeklere isim verilirken sağ kulağa ezan, sol kulağa ____ okunması bir gelenektir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "correctAnswer": "kamet",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
-    },
-    "difficulty": "Kolay",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "text": "Yeni doğmuş bebeklere isim verilirken sağ kulağa ezan, sol kulağa ____ okunması bir gelenektir.",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    }
   },
   {
     "id": "LwVqmXOEH3SckFxdf3Dd",
+    "difficulty": "Zor",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "type": "Çoktan Seçmeli",
-    "text": "Sadaka taşı geleneği, İslam'ın hangi prensibini en güzel şekilde yansıtan uygulamalardan biridir?",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "correctAnswer": "Yardımlaşmada gizliliği ve alanın onurunu korumayı",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
     "options": [
       "Varlık gösterişi",
       "Toplumsal ayrımcılık",
       "Yardımlaşmada gizliliği ve alanın onurunu korumayı",
       "Veren ile alanı yüzleştirmeyi"
     ],
-    "difficulty": "Zor"
+    "type": "Çoktan Seçmeli",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "text": "Sadaka taşı geleneği, İslam'ın hangi prensibini en güzel şekilde yansıtan uygulamalardan biridir?",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "OWDKiR0UVR60ii6v4HJw",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "text": "Hz. Muhammed (sav), Kur’an-ı Kerim’de “en güzel örnek” olarak nitelendirilmiştir.",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
-    "difficulty": "Kolay",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
+    "text": "Hz. Muhammed (sav), Kur’an-ı Kerim’de “en güzel örnek” olarak nitelendirilmiştir.",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "correctAnswer": "Doğru",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "className": "6",
-    "type": "Doğru/Yanlış"
+    "difficulty": "Kolay",
+    "options": [],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6"
   },
   {
     "id": "OYnIejsu7K97sA5IICRU",
-    "correctAnswer": "Örf ve âdetler",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Kolay",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Toplumun uzun sürede oluşturup benimsediği yazılı olmayan kurallara ne ad verilir?",
     "options": [
       "Kanun",
       "Yönetmelik",
       "Örf ve âdetler",
       "Tüzük"
     ],
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "text": "Toplumun uzun sürede oluşturup benimsediği yazılı olmayan kurallara ne ad verilir?",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "topicName": "1.Geleneğimizde Dinin İzleri"
+    "correctAnswer": "Örf ve âdetler",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "THX6XjoQ9bBYgbT5Si4V",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "correctAnswer": "âdet",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Kolay",
     "options": [
       "töre",
       "âdet",
       "yasa",
       "kaide"
     ],
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "difficulty": "Kolay",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topic": "1.Geleneğimizde Dinin İzleri",
     "topicName": "1.Geleneğimizde Dinin İzleri",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "className": "6",
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "correctAnswer": "âdet",
+    "type": "Boşluk Doldurma",
     "text": "Toplumun uzun sürede oluşturup benimsediği yazılı olmayan kurallara \"örf ve ____\" denir."
   },
   {
     "id": "UpMRHqMqrRuGvE6wx7S8",
-    "options": [],
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "text": "Zimem defteri geleneği, borçlarını ödeyemeyenlerin isimlerini herkese açıkça ilan ederek toplumda farkındalık yaratmayı hedeflemiştir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "className": "6",
     "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "text": "Zimem defteri geleneği, borçlarını ödeyemeyenlerin isimlerini herkese açıkça ilan ederek toplumda farkındalık yaratmayı hedeflemiştir.",
+    "difficulty": "Zor",
+    "type": "Doğru/Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "className": "6",
+    "options": []
   },
   {
     "id": "VJR9e70NYTnaxKpQP43C",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
     "difficulty": "Orta",
+    "options": [],
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "text": "Sadaka taşı geleneği, sadaka veren ile alanın birbirini bilmesini ve şeffaflığı sağlamayı amaçlamıştır.",
-    "options": [],
     "topicName": "1.Geleneğimizde Dinin İzleri",
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Sadaka taşı geleneği, sadaka veren ile alanın birbirini bilmesini ve şeffaflığı sağlamayı amaçlamıştır.",
+    "type": "Doğru/Yanlış",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "topic": "1.Geleneğimizde Dinin İzleri",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "correctAnswer": "Yanlış"
+    "className": "6"
   },
   {
     "id": "XsoLp1rV6IYhMmnmwkzT",
-    "className": "6",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "Doğru/Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "className": "6",
+    "options": [],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "difficulty": "Orta",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "text": "Asker uğurlama törenlerinde gençlerin omzuna bayrak asılıp ellerine kına yakılması gibi uygulamalar, dinin geleneklerimiz üzerindeki etkilerinden bağımsız, sadece folklorik öğelerdir.",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "correctAnswer": "Yanlış",
-    "text": "Asker uğurlama törenlerinde gençlerin omzuna bayrak asılıp ellerine kına yakılması gibi uygulamalar, dinin geleneklerimiz üzerindeki etkilerinden bağımsız, sadece folklorik öğelerdir.",
-    "options": [],
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Orta",
-    "topicName": "1.Geleneğimizde Dinin İzleri"
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "correctAnswer": "Yanlış"
   },
   {
     "id": "arULcyH2NFvMvjjIWkQ0",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "yarım",
       "sabit",
       "tekne",
       "öğle"
     ],
-    "text": "Ramazan ayında çocukları oruca alıştırmak için uygulanan geleneğe \"____ orucu\" denir.",
     "difficulty": "Kolay",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "text": "Ramazan ayında çocukları oruca alıştırmak için uygulanan geleneğe \"____ orucu\" denir.",
     "type": "Boşluk Doldurma",
-    "correctAnswer": "tekne",
-    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "className": "6"
+    "correctAnswer": "tekne"
   },
   {
     "id": "du1Ukj5oBE2Ek3iV95Ca",
-    "className": "6",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "difficulty": "Zor",
     "topic": "1.Geleneğimizde Dinin İzleri",
-    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
+    "className": "6",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Hz. Peygamber'in hicreti",
       "Hz. Peygamber'in vefatı",
       "Hz. Peygamber'in doğumu",
       "Kabe'nin fethi"
     ],
-    "correctAnswer": "Hz. Peygamber'in doğumu",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "text": "Mevlit Kandili, İslam takviminde hangi önemli olayın anıldığı gecedir?",
-    "topicName": "1.Geleneğimizde Dinin İzleri"
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Hz. Peygamber'in doğumu",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "h8PRu5t6kK9PXQk3LMVZ",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
     "topicName": "1.Geleneğimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Zimem defteri",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "options": [
       "Zekât defteri",
       "Sadaka sandığı",
       "Zimem defteri",
       "Hazine sandığı"
     ],
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Zimem defteri",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "difficulty": "Orta",
     "className": "6",
+    "type": "Çoktan Seçmeli",
     "text": "Osmanlı Dönemi'nde zenginlerin, borçlarını ödeyemeyen fakirlerin borçlarını gizlice kapatmalarına imkan tanıyan uygulama nedir?"
   },
   {
     "id": "i1SFOSpX6C2AorQGpJGR",
-    "topic": "1.Geleneğimizde Dinin İzleri",
     "correctAnswer": "maşallah",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Bir bebek görüldüğünde iyi dilekleri ifade etmek amacıyla sıkça kullanılan dinî motifli söz \"____\" dir.",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "options": [
       "inşallah",
       "maşallah",
       "süphanallah",
       "barekallah"
     ],
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "difficulty": "Kolay",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "className": "6",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Bir bebek görüldüğünde iyi dilekleri ifade etmek amacıyla sıkça kullanılan dinî motifli söz \"____\" dir.",
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "jaHu77d3COKOkwSnp8fe",
-    "topic": "1.Geleneğimizde Dinin İzleri",
     "className": "6",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "options": [
       "Recep",
       "Şaban",
       "Ramazan",
       "Şevval"
     ],
-    "type": "Çoktan Seçmeli",
     "difficulty": "Kolay",
-    "text": "Aşağıdakilerden hangisi “Üç Aylar” olarak bilinen mübarek aylardan biri değildir?",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Aşağıdakilerden hangisi “Üç Aylar” olarak bilinen mübarek aylardan biri değildir?",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
     "topicName": "1.Geleneğimizde Dinin İzleri",
     "correctAnswer": "Şevval"
   },
   {
     "id": "kAJAfmEDu2SLhaLqFZ4F",
-    "text": "Yeni doğmuş bebeklere isim verilirken sağ kulağa ezan okunması, dinî unsurlarla bezenmiş bir gelenektir.",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "options": [],
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "className": "6",
     "difficulty": "Kolay",
+    "options": [],
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "text": "Yeni doğmuş bebeklere isim verilirken sağ kulağa ezan okunması, dinî unsurlarla bezenmiş bir gelenektir.",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış"
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "correctAnswer": "Doğru"
   },
   {
     "id": "kfsdPbupcaW1poLJhVB2",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "sadaka taşı",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "correctAnswer": "sadaka taşı",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "topic": "1.Geleneğimizde Dinin İzleri",
     "difficulty": "Orta",
-    "text": "İhtiyaç sahiplerinin alabilmeleri için altın, para gibi yardımların bırakıldığı ve alanla verenin birbirini bilmediği özel yere \"____\" denir.",
     "options": [
       "sadaka kutusu",
       "zakat sandığı",
       "yardım taşı",
       "sadaka taşı"
     ],
+    "type": "Boşluk Doldurma",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "className": "6"
+    "text": "İhtiyaç sahiplerinin alabilmeleri için altın, para gibi yardımların bırakıldığı ve alanla verenin birbirini bilmediği özel yere \"____\" denir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7"
   },
   {
     "id": "lAmVdnDoc6BaT1YxeBXk",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
+    "text": "Ramazan ayında çocukların oruca alışması ve bayram coşkusuna katılması amacıyla uygulanan geleneksel yöntem nedir?",
     "type": "Çoktan Seçmeli",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "correctAnswer": "Tekne orucu",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "options": [
+      "Sahur uykusu",
+      "Tekne orucu",
+      "İftar daveti",
+      "Teravih namazı"
+    ],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
     "difficulty": "Kolay",
-    "text": "Ramazan ayında çocukların oruca alışması ve bayram coşkusuna katılması amacıyla uygulanan geleneksel yöntem nedir?",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicName": "1.Geleneğimizde Dinin İzleri",
-    "options": [
-      "Sahur uykusu",
-      "Tekne orucu",
-      "İftar daveti",
-      "Teravih namazı"
-    ]
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "correctAnswer": "Tekne orucu"
   },
   {
     "id": "ngQQ4ovJTLv9G5UVbLza",
-    "type": "Boşluk Doldurma",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Orta",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
     "options": [
       "muhasebe",
       "veresiye",
       "zimem",
       "hesap"
     ],
-    "correctAnswer": "zimem",
-    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Boşluk Doldurma",
     "text": "Geçmiş dönemlerde veresiye alışveriş yapan kişilerin borçlarının yazıldığı ve zenginlerin gizlice ödeyebildiği deftere \"____\" defteri denirdi.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    }
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "className": "6",
+    "correctAnswer": "zimem",
+    "topic": "1.Geleneğimizde Dinin İzleri"
   },
   {
     "id": "o76dNbmLxo5JKJYw54I3",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "type": "Çoktan Seçmeli",
-    "className": "6",
-    "correctAnswer": "Ney",
     "text": "Türk kültüründe, dinin etkisiyle şekillenen müzik ve sanatta önemli bir yere sahip olan, özellikle tasavvuf müziğinde kullanılan üflemeli çalgı hangisidir?",
     "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "topic": "1.Geleneğimizde Dinin İzleri",
     "options": [
       "Gitar",
       "Piyano",
       "Ney",
       "Keman"
-    ]
-  },
-  {
-    "id": "pfNfcJACgxHPGthrShOM",
+    ],
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Ney",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "type": "Doğru/Yanlış",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Kadir Gecesi, Ramazan ayının yirmi yedinci gecesidir ve Kur’an-ı Kerim’de bin aydan daha hayırlı olduğu belirtilmiştir.",
-    "correctAnswer": "Doğru",
-    "difficulty": "Zor",
-    "topic": "1.Geleneğimizde Dinin İzleri",
     "className": "6",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "options": [],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    }
-  },
-  {
-    "id": "pvLIpd6xvUHqS37surIx",
-    "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "text": "Taziye ziyaretlerinde cenazeevine yemek pişmemesi ve komşuların yemek götürmesi geleneği, aileye destek ve dayanışma örneğidir.",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "className": "6",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "correctAnswer": "Doğru",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "topic": "1.Geleneğimizde Dinin İzleri"
+  },
+  {
+    "id": "pfNfcJACgxHPGthrShOM",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "correctAnswer": "Doğru",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "text": "Kadir Gecesi, Ramazan ayının yirmi yedinci gecesidir ve Kur’an-ı Kerim’de bin aydan daha hayırlı olduğu belirtilmiştir.",
+    "options": []
+  },
+  {
+    "id": "pvLIpd6xvUHqS37surIx",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "correctAnswer": "Doğru",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Taziye ziyaretlerinde cenazeevine yemek pişmemesi ve komşuların yemek götürmesi geleneği, aileye destek ve dayanışma örneğidir.",
+    "type": "Doğru/Yanlış",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "options": [],
+    "className": "6",
+    "difficulty": "Orta"
   },
   {
     "id": "qjHQTCr97fjz7EMocjdG",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Kız isteme",
+    "type": "Çoktan Seçmeli",
     "topicName": "1.Geleneğimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "text": "Evlilik teklifi sırasında \"Allah'ın emri, peygamberin kavliyle\" ifadesinin kullanılması hangi geleneğin bir parçasıdır?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
     "options": [
       "Söz kesme",
       "Nişan merasimi",
       "Kız isteme",
       "Düğün merasimi"
     ],
+    "correctAnswer": "Kız isteme",
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "className": "6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "text": "Evlilik teklifi sırasında \"Allah'ın emri, peygamberin kavliyle\" ifadesinin kullanılması hangi geleneğin bir parçasıdır?",
-    "topic": "1.Geleneğimizde Dinin İzleri"
+    "difficulty": "Orta",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7"
   },
   {
     "id": "tlfeE4XIewIJddle9QZy",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "correctAnswer": "Yanlış",
+    "options": [],
     "difficulty": "Zor",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "text": "Ehlibeyt kavramı, sadece Hz. Peygamber’in (sav) eşleri için kullanılan bir ifadedir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "options": [],
-    "className": "6",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "text": "Ehlibeyt kavramı, sadece Hz. Peygamber’in (sav) eşleri için kullanılan bir ifadedir.",
-    "correctAnswer": "Yanlış",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "type": "Doğru/Yanlış",
+    "topicName": "1.Geleneğimizde Dinin İzleri"
   },
   {
     "id": "vqSVP8yP2e09m9SkWq3y",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "correctAnswer": "salavat",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "options": [
       "tekbir",
       "salavat",
       "amin",
       "hamd"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
-    "topic": "1.Geleneğimizde Dinin İzleri",
     "className": "6",
-    "correctAnswer": "salavat",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
     "text": "Müslümanlar, Hz. Peygamber’in adı anıldığında ____ getirip dua ederek ona olan sevgilerini gösterirler.",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Kolay",
+    "type": "Boşluk Doldurma",
     "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "wEPiuEcvt2sboGGGoApQ",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "Boşluk Doldurma",
     "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Peygamber’in \"İnsanların en hayırlısı, insanlara faydalı olandır.\" hadisi, İslam'ın ____ ve dayanışma prensiplerini vurgular.",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "yardımlaşma",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
-    "difficulty": "Zor",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "correctAnswer": "yardımlaşma",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
     "options": [
       "adalet",
       "paylaşma",
       "yardımlaşma",
       "doğruluk"
-    ],
-    "topicName": "1.Geleneğimizde Dinin İzleri",
-    "text": "Hz. Peygamber’in \"İnsanların en hayırlısı, insanlara faydalı olandır.\" hadisi, İslam'ın ____ ve dayanışma prensiplerini vurgular."
+    ]
   },
   {
     "id": "wqdxegoQdd8lQvzUdGcL",
-    "correctAnswer": "Diş kirası",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1.Geleneğimizde Dinin İzleri",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "Çoktan Seçmeli",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "text": "Osmanlı Devleti'nde Ramazan ayında iftar davetlerinde misafirlere yemekten sonra verilen hediyelere ne ad verilirdi?",
     "className": "6",
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "options": [
       "Zekât",
       "Diş kirası",
       "Sadaka",
       "İnfak"
     ],
-    "text": "Osmanlı Devleti'nde Ramazan ayında iftar davetlerinde misafirlere yemekten sonra verilen hediyelere ne ad verilirdi?"
-  },
-  {
-    "id": "x5dAJj5JvWyHsOqsatoZ",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "className": "6",
-    "correctAnswer": "mahya",
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
+    "correctAnswer": "Diş kirası",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "x5dAJj5JvWyHsOqsatoZ",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "type": "Boşluk Doldurma",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "pankart",
       "ışıklı tabela",
       "mahya",
       "afiş"
     ],
-    "text": "Ramazan ayında camilerin iki minaresi arasına asılan ve genellikle dinî içerikli mesajlar taşıyan ışıklı yazılara \"____\" adı verilir.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Zor",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicName": "1.Geleneğimizde Dinin İzleri"
-  },
-  {
-    "id": "xi8AhCy9i4XGGspCj5mG",
-    "difficulty": "Orta",
-    "text": "Sevinçli veya üzüntülü günlerde düzenlenen mevlit programlarında Kur’an-ı Kerim’den sureler ve ____ okunur.",
+    "className": "6",
+    "correctAnswer": "mahya",
     "topicName": "1.Geleneğimizde Dinin İzleri",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368449,
       "nanoseconds": 13000000
     },
+    "difficulty": "Zor",
+    "topic": "1.Geleneğimizde Dinin İzleri",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "text": "Ramazan ayında camilerin iki minaresi arasına asılan ve genellikle dinî içerikli mesajlar taşıyan ışıklı yazılara \"____\" adı verilir.",
+    "type": "Boşluk Doldurma"
+  },
+  {
+    "id": "xi8AhCy9i4XGGspCj5mG",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "topicName": "1.Geleneğimizde Dinin İzleri",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Sevinçli veya üzüntülü günlerde düzenlenen mevlit programlarında Kur’an-ı Kerim’den sureler ve ____ okunur.",
     "options": [
       "ilahi",
       "Mevlid-i Şerif",
       "kaside",
       "hadis"
     ],
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "className": "6",
     "correctAnswer": "Mevlid-i Şerif",
-    "type": "Boşluk Doldurma"
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "topic": "1.Geleneğimizde Dinin İzleri"
   },
   {
     "id": "zOJ4K4V9KYmnwhPWSwPc",
-    "correctAnswer": "kandil",
-    "difficulty": "Orta",
-    "topic": "1.Geleneğimizde Dinin İzleri",
-    "className": "6",
-    "text": "Osmanlı padişahlarından II. Selim zamanında minarelerde kandiller yakılarak kutlandığı için bu mübarek gecelere \"____\" gecesi adı verilmiştir.",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368449,
-      "nanoseconds": 13000000
-    },
+    "className": "6",
     "type": "Boşluk Doldurma",
+    "topic": "1.Geleneğimizde Dinin İzleri",
     "options": [
       "ziyafet",
       "kandil",
       "şölen",
       "kutlu"
     ],
+    "text": "Osmanlı padişahlarından II. Selim zamanında minarelerde kandiller yakılarak kutlandığı için bu mübarek gecelere \"____\" gecesi adı verilmiştir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "correctAnswer": "kandil",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicName": "1.Geleneğimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368449,
+      "nanoseconds": 13000000
+    },
+    "topicId": "uu0Uh2HmlXjWXYBrujL7"
   }
 ]

@@ -1,95 +1,95 @@
 [
   {
     "id": "19AsFEGOqYHMUwjNAU3t",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Şehit"
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
-    "type": "concept"
+    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "1FYmxTlaIffZkQRgH1EH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Hz. Ümame'nin velayeti için Hz. Cafer, Hz. Ali ve Hz. Zeyd istekli olmuştur."
+    },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
     },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "type": "sentence",
-    "content": {
-      "text": "Hz. Ümame'nin velayeti için Hz. Cafer, Hz. Ali ve Hz. Zeyd istekli olmuştur."
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "topicId": "5leSpbBjVtIBxyaVqSZM"
   },
   {
     "id": "1OUChkrwc0gI48kNKlU6",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
       "text": "Asrısaadet dönemi, İslam'ın en güzel yaşandığı dönemdi."
-    }
+    },
+    "type": "sentence",
+    "topicId": "5leSpbBjVtIBxyaVqSZM"
   },
   {
     "id": "20LVKT7PlPQsG1OeR8hr",
-    "content": {
-      "definition": "Bir çocuğun bakımını ve eğitimini üstlenme sorumluluğu",
-      "term": "Velayet"
-    },
     "type": "definition",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "content": {
+      "definition": "Bir çocuğun bakımını ve eğitimini üstlenme sorumluluğu",
+      "term": "Velayet"
+    }
   },
   {
     "id": "2n7950umm6P4lVvxcrBZ",
-    "content": {
-      "text": "Cafer bin Ebi Talib"
-    },
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Cafer bin Ebi Talib"
+    },
     "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "3y0l4jxY7mNlgm1KuXrf",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "content": {
-      "term": "Asrısaadet",
-      "definition": "Peygamberimizin yaşadığı ve İslam'ın en güzel şekilde yaşandığı dönem"
-    },
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "type": "definition",
+    "content": {
+      "term": "Asrısaadet",
+      "definition": "Peygamberimizin yaşadığı ve İslam'ın en güzel şekilde yaşandığı dönem"
+    }
   },
   {
     "id": "45zU0nWITV2JaStMd5cE",
@@ -98,33 +98,32 @@
       "seconds": 1752033497,
       "nanoseconds": 517000000
     },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "type": "sentence",
     "content": {
       "text": "Yetim çocuklara özellikle önem verir, onların bakımını üstlenirdi."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "sentence"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "5leSpbBjVtIBxyaVqSZM"
   },
   {
     "id": "4LcpJ1aucztKOeCmCmEa",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
-      "definition": "Peygamberimizin evlatlığı, Hz. Hamza ile kardeş ilan edilen sahabi.",
-      "term": "Zeyd bin Harise"
+      "term": "Zeyd bin Harise",
+      "definition": "Peygamberimizin evlatlığı, Hz. Hamza ile kardeş ilan edilen sahabi."
     },
     "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "type": "definition",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition"
   },
   {
     "id": "4aXowMtKza5Xp2p36YQ0",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -132,71 +131,72 @@
       "nanoseconds": 704000000
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "content": {
       "term": "Peygamber",
       "definition": "Allah'ın elçisi"
-    }
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "5leSpbBjVtIBxyaVqSZM"
   },
   {
     "id": "54TtsNDlTRyTuJYGzghT",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "type": "concept",
-    "content": {
-      "text": "Ali bin Ebi Talib"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
-    }
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "content": {
+      "text": "Ali bin Ebi Talib"
+    },
+    "type": "concept"
   },
   {
     "id": "5Gpk49U4Q4c8gdsJFTNi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "content": {
+      "term": "Merhamet",
+      "definition": "Peygamberimizin hem çocuklara hem de yetimlere karşı duyduğu ve gösterdiği şefkat"
+    },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "type": "definition",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
-    },
-    "content": {
-      "definition": "Peygamberimizin hem çocuklara hem de yetimlere karşı duyduğu ve gösterdiği şefkat",
-      "term": "Merhamet"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    }
   },
   {
     "id": "5bk2mW71suEQq0onwNSK",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "type": "concept",
     "content": {
       "text": "Velayet"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    }
   },
   {
     "id": "6FnJo9f1IalRpbw3E1Gh",
     "content": {
       "text": "Peygamberimizi sevdiğimizi ifade etmek için salavat getiririz."
     },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
     },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "type": "sentence",
     "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
@@ -206,250 +206,53 @@
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "concept",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "content": {
       "text": "Yetim"
     },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "topicId": "5leSpbBjVtIBxyaVqSZM"
   },
   {
     "id": "7jfrLidFceuaKb9zERMG",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "type": "concept",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "content": {
+      "text": "Asrısaadet"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
-    },
-    "type": "concept",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Asrısaadet"
     }
   },
   {
     "id": "8aagk7yBCfOUNsRWdRh5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "content": {
-      "definition": "Peygamberimizin torunu, Hz. Ali ve Hz. Fatıma’nın oğlu.",
-      "term": "Hasan bin Ali"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "content": {
+      "definition": "Peygamberimizin torunu, Hz. Ali ve Hz. Fatıma’nın oğlu.",
+      "term": "Hasan bin Ali"
+    }
   },
   {
     "id": "9Q2rwYFg8jTDJi6MhNE8",
     "content": {
       "text": "Sahabiler Peygamberimizi örnek alırdı."
     },
-    "type": "sentence",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033523,
-      "nanoseconds": 704000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "BBJWduzKW61htV70VPE3",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033497,
-      "nanoseconds": 517000000
-    },
-    "content": {
-      "text": "Hicret"
-    }
-  },
-  {
-    "id": "CR9SheNJ80CBtRY6T8N0",
-    "type": "concept",
-    "content": {
-      "text": "Merhamet"
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033523,
-      "nanoseconds": 704000000
-    }
-  },
-  {
-    "id": "D6TqMBYixjzmXeSWcy2Y",
-    "content": {
-      "text": "Şehit"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033497,
-      "nanoseconds": 517000000
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "EA4UYj7nch0unlGkitG2",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033497,
-      "nanoseconds": 517000000
-    },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "content": {
-      "text": "Merhamet"
-    }
-  },
-  {
-    "id": "Fg37f1gXNeUY5Bhdxi5O",
-    "content": {
-      "text": "Hicret"
-    },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033523,
-      "nanoseconds": 704000000
-    },
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "GEKpXpIyp2waXYA0p0xK",
-    "content": {
-      "text": "Sevgi"
-    },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033523,
-      "nanoseconds": 704000000
-    }
-  },
-  {
-    "id": "J0PShRNQqKoKh7mCok3M",
-    "content": {
-      "text": "Peygamberimiz, teyzesinin yanında olması için Hz. Ümame'nin velayetini Hz. Cafer'e vermiştir."
-    },
-    "type": "sentence",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033497,
-      "nanoseconds": 517000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "KIDMAZwNhnCwOcNxISlx",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033497,
-      "nanoseconds": 517000000
-    },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Çocuklar, Peygamberimizin öğretilerini uygulayarak güzel ahlak sahibi olmaya çalışırlardı."
-    }
-  },
-  {
-    "id": "KeBD3lasU84dgOTeil2J",
-    "type": "sentence",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033497,
-      "nanoseconds": 517000000
-    },
-    "content": {
-      "text": "Hz. Beşir ve Hz. Cafer'in çocukları, Peygamberimizin yetimlere olan ilgisine örnektir."
-    },
-    "topicId": "5leSpbBjVtIBxyaVqSZM"
-  },
-  {
-    "id": "KsXXhCx5SDJfETAIbkoT",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033523,
-      "nanoseconds": 704000000
-    },
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "content": {
-      "term": "Mescid",
-      "definition": "Müslümanların ibadet ettiği yer"
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "M4L3cyoiPMArR3zY6uFD",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "content": {
-      "definition": "Peygamberimizin Mekke'den Medine'ye göç etmesi",
-      "term": "Hicret"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033523,
-      "nanoseconds": 704000000
-    },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "P025Id87yNunQ1wojP1V",
-    "type": "sentence",
-    "content": {
-      "text": "Peygamberimiz yetimlere ve ihtiyaç sahiplerine yardım ederdi."
-    },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033523,
-      "nanoseconds": 704000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "Pubp0mrbFNEqBCFkfz7S",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "content": {
-      "text": "Çocuklar Peygamberimizin etrafında olmaktan mutluluk duyarlardı."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
@@ -458,13 +261,103 @@
     "type": "sentence"
   },
   {
-    "id": "Pvzw4U8BrKxkTbHVnJPZ",
+    "id": "BBJWduzKW61htV70VPE3",
+    "content": {
+      "text": "Hicret"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033497,
+      "nanoseconds": 517000000
+    },
     "type": "concept",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "CR9SheNJ80CBtRY6T8N0",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033523,
+      "nanoseconds": 704000000
+    },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "content": {
+      "text": "Merhamet"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "D6TqMBYixjzmXeSWcy2Y",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033497,
+      "nanoseconds": 517000000
+    },
+    "content": {
+      "text": "Şehit"
+    },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
+  },
+  {
+    "id": "EA4UYj7nch0unlGkitG2",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033497,
+      "nanoseconds": 517000000
+    },
+    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Merhamet"
+    }
+  },
+  {
+    "id": "Fg37f1gXNeUY5Bhdxi5O",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033523,
+      "nanoseconds": 704000000
+    },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Hicret"
+    },
+    "type": "concept"
+  },
+  {
+    "id": "GEKpXpIyp2waXYA0p0xK",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "content": {
-      "text": "Yetim"
+      "text": "Sevgi"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033523,
+      "nanoseconds": 704000000
+    },
+    "type": "concept"
+  },
+  {
+    "id": "J0PShRNQqKoKh7mCok3M",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "type": "sentence",
+    "content": {
+      "text": "Peygamberimiz, teyzesinin yanında olması için Hz. Ümame'nin velayetini Hz. Cafer'e vermiştir."
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -473,96 +366,203 @@
     }
   },
   {
-    "id": "SqmuOxSGG2jOigZzwrtW",
+    "id": "KIDMAZwNhnCwOcNxISlx",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "type": "sentence",
+    "content": {
+      "text": "Çocuklar, Peygamberimizin öğretilerini uygulayarak güzel ahlak sahibi olmaya çalışırlardı."
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033497,
+      "nanoseconds": 517000000
+    }
+  },
+  {
+    "id": "KeBD3lasU84dgOTeil2J",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
     },
+    "content": {
+      "text": "Hz. Beşir ve Hz. Cafer'in çocukları, Peygamberimizin yetimlere olan ilgisine örnektir."
+    }
+  },
+  {
+    "id": "KsXXhCx5SDJfETAIbkoT",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "definition",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033523,
+      "nanoseconds": 704000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Mescid",
+      "definition": "Müslümanların ibadet ettiği yer"
+    }
+  },
+  {
+    "id": "M4L3cyoiPMArR3zY6uFD",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033523,
+      "nanoseconds": 704000000
+    },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "content": {
+      "definition": "Peygamberimizin Mekke'den Medine'ye göç etmesi",
+      "term": "Hicret"
+    }
+  },
+  {
+    "id": "P025Id87yNunQ1wojP1V",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033523,
+      "nanoseconds": 704000000
+    },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "content": {
+      "text": "Peygamberimiz yetimlere ve ihtiyaç sahiplerine yardım ederdi."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "Pubp0mrbFNEqBCFkfz7S",
+    "type": "sentence",
+    "content": {
+      "text": "Çocuklar Peygamberimizin etrafında olmaktan mutluluk duyarlardı."
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033523,
+      "nanoseconds": 704000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "5leSpbBjVtIBxyaVqSZM"
+  },
+  {
+    "id": "Pvzw4U8BrKxkTbHVnJPZ",
+    "type": "concept",
+    "content": {
+      "text": "Yetim"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033497,
+      "nanoseconds": 517000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
+  },
+  {
+    "id": "SqmuOxSGG2jOigZzwrtW",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033497,
+      "nanoseconds": 517000000
+    },
     "content": {
       "text": "Peygamberimiz çocuklara çok değer verir ve onlara sevgisini gösterirdi."
     }
   },
   {
     "id": "UAXmfeN3AZ3bCQjauqve",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033523,
-      "nanoseconds": 704000000
-    },
     "content": {
       "term": "Yetim",
       "definition": "Annesi veya babası olmayan çocuk"
     },
-    "topicId": "5leSpbBjVtIBxyaVqSZM"
-  },
-  {
-    "id": "Wm2jPhPcG6WA9uXlUDaK",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033497,
-      "nanoseconds": 517000000
-    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "content": {
-      "text": "Sahabiler, Peygamberimizin davranışlarını örnek alarak yetimlere yardım ederlerdi."
-    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
-  },
-  {
-    "id": "XFE8qIeOhT7O5flecyxX",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "content": {
-      "term": "Sevgi",
-      "definition": "Peygamberimizin çocuklara karşı gösterdiği en önemli duygu"
     },
     "type": "definition"
   },
   {
-    "id": "Y1vgNFqCk709W725zgfq",
-    "type": "concept",
+    "id": "Wm2jPhPcG6WA9uXlUDaK",
+    "content": {
+      "text": "Sahabiler, Peygamberimizin davranışlarını örnek alarak yetimlere yardım ederlerdi."
+    },
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Salavat"
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
-    }
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "sentence"
   },
   {
-    "id": "YOCIu87gbk2DTE5nctf6",
-    "type": "concept",
+    "id": "XFE8qIeOhT7O5flecyxX",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "definition",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Sevgi",
+      "definition": "Peygamberimizin çocuklara karşı gösterdiği en önemli duygu"
+    }
+  },
+  {
+    "id": "Y1vgNFqCk709W725zgfq",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Salavat"
+    },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033497,
+      "nanoseconds": 517000000
+    },
+    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
+  },
+  {
+    "id": "YOCIu87gbk2DTE5nctf6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033523,
+      "nanoseconds": 704000000
+    },
+    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
       "text": "Asrısaadet"
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    }
   },
   {
     "id": "YRg81U5Io4L3tq0K4k0X",
@@ -570,91 +570,91 @@
       "term": "Şehit",
       "definition": "Allah yolunda savaşırken ölen kimse"
     },
-    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "definition"
   },
   {
     "id": "ZyVyxnpiYoke0mMgaLuS",
+    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "content": {
+      "term": "Sahabe",
+      "definition": "Peygamberimizin arkadaşları"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
-    },
-    "content": {
-      "definition": "Peygamberimizin arkadaşları",
-      "term": "Sahabe"
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    }
   },
   {
     "id": "cgWRDbxj4d8XbQZphO5E",
-    "type": "definition",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "content": {
+      "definition": "Peygamberimizin damadı ve amcasının oğlu, Hz. Hasan ve Hüseyin’in babası.",
+      "term": "Ali bin Ebi Talib"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
     },
-    "content": {
-      "term": "Ali bin Ebi Talib",
-      "definition": "Peygamberimizin damadı ve amcasının oğlu, Hz. Hasan ve Hüseyin’in babası."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "type": "definition"
   },
   {
     "id": "cjON3MGbRqwbL9HUcqCA",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "content": {
+      "text": "Sahabe"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
-    "content": {
-      "text": "Sahabe"
-    },
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "topicId": "5leSpbBjVtIBxyaVqSZM"
   },
   {
     "id": "fGBCx5812kbrhrtxfzSj",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033497,
-      "nanoseconds": 517000000
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Peygamber Sevgisi"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "concept"
-  },
-  {
-    "id": "fZp7QfYTfczlYFsC3Mal",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "content": {
-      "text": "Müslümanlar, yetim ve ihtiyaç sahiplerine yardım etmenin önemini vurgularlar."
-    },
-    "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
+    }
+  },
+  {
+    "id": "fZp7QfYTfczlYFsC3Mal",
+    "type": "sentence",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033497,
+      "nanoseconds": 517000000
+    },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Müslümanlar, yetim ve ihtiyaç sahiplerine yardım etmenin önemini vurgularlar."
     }
   },
   {
@@ -662,6 +662,7 @@
     "content": {
       "text": "Peygamber"
     },
+    "type": "concept",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
@@ -669,14 +670,10 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
-    },
-    "type": "concept"
+    }
   },
   {
     "id": "jF3Qpb2Z8IRzlWBhoY1D",
-    "content": {
-      "text": "Zeyd bin Harise"
-    },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -684,59 +681,61 @@
       "nanoseconds": 941000000
     },
     "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept"
+    "type": "concept",
+    "content": {
+      "text": "Zeyd bin Harise"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "kbrYYYD9EPzujATfgWza",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
     },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
-      "definition": "Peygamberimizin adı anıldığında söylenen dua ifadesi (Sallallahü aleyhi ve sellem).",
-      "term": "Salavat"
-    }
+      "term": "Salavat",
+      "definition": "Peygamberimizin adı anıldığında söylenen dua ifadesi (Sallallahü aleyhi ve sellem)."
+    },
+    "type": "definition"
   },
   {
     "id": "lBtZjDZ8TzVb0oy41WxN",
-    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033523,
+      "nanoseconds": 704000000
+    },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "content": {
       "text": "Mescid"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033523,
-      "nanoseconds": 704000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "type": "concept"
   },
   {
     "id": "lwTU4DLec7PbDlApRw2M",
-    "content": {
-      "text": "Çocuk"
-    },
+    "type": "concept",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "content": {
+      "text": "Çocuk"
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "mIVmixRH1eh1M2Gc9V7Y",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
@@ -744,69 +743,70 @@
     },
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "sentence",
     "content": {
       "text": "Peygamberimiz çocuklara çok değer verir ve onları severdi."
     }
   },
   {
     "id": "pzbICaG3XADgKdJ3zIVL",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "content": {
+      "text": "Hz. Üsame, Peygamberimizin kendisini ve Hz. Hasan'ı kucağına alıp dua ettiğini anlatmıştır."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
-    },
-    "content": {
-      "text": "Hz. Üsame, Peygamberimizin kendisini ve Hz. Hasan'ı kucağına alıp dua ettiğini anlatmıştır."
     }
   },
   {
     "id": "qR1hKgpRaxzK4Gi7qb11",
-    "type": "concept",
     "content": {
       "text": "Velayet"
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033523,
       "nanoseconds": 704000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "concept"
   },
   {
     "id": "tIwMCC0NNNZXdnNveBNa",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
     },
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Üsame bin Zeyd"
     },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "tReFOsCfCu8XMRLXrbnd",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Sahabi"
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
     },
-    "type": "concept"
+    "topicId": "5leSpbBjVtIBxyaVqSZM"
   },
   {
     "id": "uELiM42LWxoo9EfowKnV",
@@ -815,89 +815,89 @@
       "seconds": 1752033497,
       "nanoseconds": 517000000
     },
-    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Asrısaadet dönemi, Peygamberimizin yaşadığı ve İslam'ın yayıldığı mutlu dönemdir."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    "type": "sentence"
   },
   {
     "id": "ukyESWlWNwUKlbuIUIId",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
     },
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "definition",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
-      "definition": "Peygamberimizin amcasının oğlu, Ümame’nin velayetini alan sahabi.",
-      "term": "Cafer bin Ebi Talib"
+      "term": "Cafer bin Ebi Talib",
+      "definition": "Peygamberimizin amcasının oğlu, Ümame’nin velayetini alan sahabi."
     },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM"
   },
   {
     "id": "wbiUPzenxkQ26H25BLEo",
-    "content": {
-      "text": "Hasan bin Ali"
-    },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
     },
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "content": {
+      "text": "Hasan bin Ali"
+    },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "type": "concept"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "xrNuODFBjbtwdq92LRyV",
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
     },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Tavaf"
-    },
-    "unitId": "cUF2X2vchdqDFkcWMNkj"
+    }
   },
   {
     "id": "yuPQ3bvv4gapEjnic1Vu",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "content": {
+      "definition": "Peygamberimizin torunu Hz. Hasan ile birlikte dizine oturtup sevdiği çocuk sahabe.",
+      "term": "Üsame bin Zeyd"
+    },
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767274693,
       "nanoseconds": 941000000
-    },
-    "content": {
-      "term": "Üsame bin Zeyd",
-      "definition": "Peygamberimizin torunu Hz. Hasan ile birlikte dizine oturtup sevdiği çocuk sahabe."
-    },
-    "type": "definition",
-    "topicId": "5leSpbBjVtIBxyaVqSZM"
+    }
   },
   {
     "id": "zZkf57JlsOTfSTNV0BLl",
-    "topicId": "5leSpbBjVtIBxyaVqSZM",
-    "content": {
-      "text": "Peygamberimiz, çocuk sahabilerle yakından ilgilenir, onlara şefkat ve merhamet gösterirdi."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033497,
       "nanoseconds": 517000000
     },
+    "topicId": "5leSpbBjVtIBxyaVqSZM",
+    "content": {
+      "text": "Peygamberimiz, çocuk sahabilerle yakından ilgilenir, onlara şefkat ve merhamet gösterirdi."
+    },
     "type": "sentence",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   }
 ]

@@ -1,110 +1,110 @@
 [
   {
     "id": "1Hod7KZHN4frKxHtOBJB",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767073887,
-      "nanoseconds": 582000000
-    },
     "content": {
       "text": "Vatan korunmalı ve geliştirilmelidir."
     },
-    "type": "sentence",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
-  },
-  {
-    "id": "62Db9FTJcktzPhlClppy",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767073887,
       "nanoseconds": 582000000
     },
+    "type": "sentence"
+  },
+  {
+    "id": "62Db9FTJcktzPhlClppy",
     "content": {
       "text": "Vatan"
     },
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073887,
+      "nanoseconds": 582000000
+    },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "type": "concept"
   },
   {
     "id": "9twfn8TApGg2mSV7W3ly",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073887,
+      "nanoseconds": 582000000
+    },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "type": "definition",
     "content": {
       "definition": "Vatan savunmasına katılıp sağ dönen kahramana denir.",
       "term": "Gazi"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767073887,
-      "nanoseconds": 582000000
-    },
-    "type": "definition"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "H0JO2beBWkKwdE5cWukV",
+    "content": {
+      "definition": "Aynı topraklarda yaşayan, ortak değerlere sahip insan topluluğudur.",
+      "term": "Millet"
+    },
+    "type": "definition",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767073887,
       "nanoseconds": 582000000
     },
-    "content": {
-      "term": "Millet",
-      "definition": "Aynı topraklarda yaşayan, ortak değerlere sahip insan topluluğudur."
-    },
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition",
     "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "Le7a6UZPUKKekRej7v0m",
+    "type": "concept",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "content": {
+      "text": "Gazi"
+    },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767073887,
       "nanoseconds": 582000000
     },
-    "content": {
-      "text": "Gazi"
-    },
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "concept"
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "UI7QEReKnZwuN2dLvXuS",
-    "type": "definition",
     "content": {
       "definition": "Din, vatan veya can güvenliği uğruna savaşırken ölen kişiye denir.",
       "term": "Şehit"
     },
     "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767073887,
       "nanoseconds": 582000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "c9BTYp2dpEpuLfKOl4Zh",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "content": {
+      "text": "Şehitler ve gaziler kahramanlardır."
+    },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767073887,
       "nanoseconds": 582000000
-    },
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "content": {
-      "text": "Şehitler ve gaziler kahramanlardır."
     }
   },
   {
@@ -119,27 +119,30 @@
     "content": {
       "text": "Millet"
     },
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept"
   },
   {
     "id": "nzmwNqxS5a5KfDUevJJ6",
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767073887,
       "nanoseconds": 582000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "content": {
       "text": "Sorumluluklarımızı yerine getirmeliyiz."
-    }
+    },
+    "type": "sentence"
   },
   {
     "id": "tWitYAEudEcH7Ngp5Qcz",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "content": {
+      "text": "Milli birlik bağımsızlığı sağlar."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767073887,
@@ -147,13 +150,13 @@
     },
     "type": "sentence",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "content": {
-      "text": "Milli birlik bağımsızlığı sağlar."
-    }
+    "topicId": "KE5H7oRL74FA4s1l7FTg"
   },
   {
     "id": "veV2iAYLFLg2vrQAogx5",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767073887,
@@ -162,25 +165,22 @@
     "topicId": "KE5H7oRL74FA4s1l7FTg",
     "content": {
       "text": "Şehit"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    }
   },
   {
     "id": "wW6Y3cVSE0SziO22mha4",
-    "type": "definition",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767073887,
       "nanoseconds": 582000000
     },
+    "type": "definition",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "term": "Vatan",
       "definition": "Bir milletin üzerinde egemen olduğu, belirli sınırları olan toprak parçasıdır."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    }
   }
 ]

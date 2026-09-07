@@ -1,6 +1,10 @@
 [
   {
     "id": "2fftOAv6lEhFT4g5VqXz",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "sentence",
     "content": {
       "text": "Hurufumukattaa sure başındaki bağımsız harflerdir."
     },
@@ -8,15 +12,14 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
-    },
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "type": "sentence",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+    }
   },
   {
     "id": "2k915DfRwya07D44vl0c",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "type": "sentence",
+    "topicId": "rSisRECCjZf50AVCcHcS",
     "content": {
       "text": "Meddi arız geçici sükûnla oluşur."
     },
@@ -24,10 +27,7 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc"
+    }
   },
   {
     "id": "3VvAoEFh0AEYIKNiNPME",
@@ -35,97 +35,51 @@
     "content": {
       "text": "Sebebi med hemze ve sükûndur."
     },
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "type": "sentence",
     "unitId": "yDwjSO7M7Ot3msZAAqLc"
   },
   {
     "id": "3XzxLUZtOzDeEAkbGXB6",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "type": "concept",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "topicId": "rSisRECCjZf50AVCcHcS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Meddi Tabii"
     }
   },
   {
     "id": "60boXnHLWGvMSb3MFt7a",
-    "type": "definition",
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "definition",
     "content": {
-      "term": "Meddi Arız",
-      "definition": "Uzatma harfinden sonra geçici duraklama hali geldiğinde oluşan tecvit kuralıdır."
+      "definition": "Uzatma harfinden sonra geçici duraklama hali geldiğinde oluşan tecvit kuralıdır.",
+      "term": "Meddi Arız"
     },
+    "topicId": "rSisRECCjZf50AVCcHcS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "8tfdQWRt2YuRj4FJl7Vr",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "content": {
       "text": "Tahkik en yavaş okuyuş şeklidir."
     },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "type": "sentence"
-  },
-  {
-    "id": "AMeNIxZDOGpmoBAiwFGO",
-    "type": "sentence",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "content": {
-      "text": "Meddi lin yumuşak uzatma demektir."
-    }
-  },
-  {
-    "id": "CNlGGNj5OSyMwXbstERP",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "content": {
-      "text": "Hadr"
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc"
-  },
-  {
-    "id": "CjUq8KMrvaidRkEIr4yC",
-    "type": "sentence",
-    "content": {
-      "text": "Harfi lin vav ve yadır."
-    },
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "topicId": "rSisRECCjZf50AVCcHcS",
     "createdAt": {
@@ -133,46 +87,91 @@
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
+    "type": "sentence",
     "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
-    "id": "CmkSovvDdQ7vfnsC21GJ",
-    "type": "definition",
+    "id": "AMeNIxZDOGpmoBAiwFGO",
     "content": {
-      "term": "Meddi Lin",
-      "definition": "Yumuşak harften sonra sükûn gelmesiyle oluşan tecvit kuralıdır."
+      "text": "Meddi lin yumuşak uzatma demektir."
     },
+    "type": "sentence",
     "topicId": "rSisRECCjZf50AVCcHcS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "unitId": "yDwjSO7M7Ot3msZAAqLc"
   },
   {
-    "id": "DY5b9CcHo75auIYsaET3",
-    "content": {
-      "term": "Sükûnu Lazım",
-      "definition": "Durulsa da geçilse de varlığını koruyan cezim veya şedde halidir."
+    "id": "CNlGGNj5OSyMwXbstERP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
     },
     "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "concept",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "definition",
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "content": {
+      "text": "Hadr"
+    }
+  },
+  {
+    "id": "CjUq8KMrvaidRkEIr4yC",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "sentence",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "content": {
+      "text": "Harfi lin vav ve yadır."
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     }
+  },
+  {
+    "id": "CmkSovvDdQ7vfnsC21GJ",
+    "content": {
+      "definition": "Yumuşak harften sonra sükûn gelmesiyle oluşan tecvit kuralıdır.",
+      "term": "Meddi Lin"
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    }
+  },
+  {
+    "id": "DY5b9CcHo75auIYsaET3",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    },
+    "content": {
+      "definition": "Durulsa da geçilse de varlığını koruyan cezim veya şedde halidir.",
+      "term": "Sükûnu Lazım"
+    },
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "FbOUmoCc0AQ5XmE2naEG",
     "content": {
       "text": "Meddi tabii bir elif uzatılır."
     },
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
@@ -180,38 +179,39 @@
     },
     "topicId": "rSisRECCjZf50AVCcHcS",
     "type": "sentence",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "Fiqq97okHFDsglqLGWut",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "type": "definition",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "term": "Hadr",
       "definition": "Kur'an tilavetinde en hızlı okuyuş tarzıdır."
-    }
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    },
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "definition",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc"
   },
   {
     "id": "GPztaFUMSVpmKaBd7upd",
-    "topicId": "rSisRECCjZf50AVCcHcS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Meddi lazım okumak vaciptir."
     },
-    "type": "sentence",
+    "topicId": "rSisRECCjZf50AVCcHcS",
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+    "type": "sentence"
   },
   {
     "id": "GTWBg727OWX0u2kH55KZ",
@@ -221,52 +221,36 @@
       "nanoseconds": 976000000
     },
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "content": {
       "text": "Caiz"
     },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "type": "concept"
+    "type": "concept",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "topicId": "rSisRECCjZf50AVCcHcS"
   },
   {
     "id": "HefmhJgZh9mgacIZ0Fpu",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "concept",
+    "topicId": "rSisRECCjZf50AVCcHcS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "concept",
     "content": {
       "text": "Vakıf"
     },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "unitId": "yDwjSO7M7Ot3msZAAqLc"
   },
   {
     "id": "JOVDL6wGIZbIaPDkuQwj",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Şeddeli harflerde sükûnu lazım bulunur."
     },
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS"
-  },
-  {
-    "id": "LUsdWTE5j8jVjhSrJn4r",
-    "content": {
-      "definition": "Sure başlarında yer alan ve isimleriyle tek tek okunan harflerdir.",
-      "term": "Hurufumukattaa"
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "definition",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "sentence",
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -275,162 +259,175 @@
     }
   },
   {
-    "id": "LwUuS1g4uUHLmGWORi7V",
-    "content": {
-      "definition": "Var olan gizli uzatma harfini temsil eden dik işarettir.",
-      "term": "Âsar"
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "type": "definition",
+    "id": "LUsdWTE5j8jVjhSrJn4r",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "unitId": "yDwjSO7M7Ot3msZAAqLc"
+    "type": "definition",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "content": {
+      "definition": "Sure başlarında yer alan ve isimleriyle tek tek okunan harflerdir.",
+      "term": "Hurufumukattaa"
+    }
+  },
+  {
+    "id": "LwUuS1g4uUHLmGWORi7V",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "content": {
+      "term": "Âsar",
+      "definition": "Var olan gizli uzatma harfini temsil eden dik işarettir."
+    },
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    }
   },
   {
     "id": "MsnTg2JqARnZtWP6G6NH",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "content": {
-      "text": "Meddi Lazım"
-    },
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
+    "type": "concept",
+    "content": {
+      "text": "Meddi Lazım"
+    },
+    "topicId": "rSisRECCjZf50AVCcHcS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "MwFWRYqXvMolDYScLGB3",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "type": "concept",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Vacip"
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS"
+    }
   },
   {
     "id": "NFdGhFMVu0Udx9683B0R",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "content": {
       "text": "Tedvir orta hızda okuyuş şeklidir."
     },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "rSisRECCjZf50AVCcHcS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "type": "sentence"
+    "type": "sentence",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc"
   },
   {
     "id": "PQE4bFW2x0xNPzTYN3oy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    },
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "topicId": "rSisRECCjZf50AVCcHcS",
     "content": {
       "text": "Hurufumukattaa"
     },
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
     "type": "concept"
   },
   {
     "id": "Q3e6RAbSjGBvopBDQn2J",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
     "topicId": "rSisRECCjZf50AVCcHcS",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "type": "sentence",
     "content": {
       "text": "Hadr en hızlı okuyuş şeklidir."
     },
-    "type": "sentence"
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "STbyPdnF53MFqpWzMHuY",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "type": "sentence",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicId": "rSisRECCjZf50AVCcHcS",
     "content": {
       "text": "Meddi arız okumak caizdir."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    }
-  },
-  {
-    "id": "UyPFrmLinv1TgRu4b79O",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
+    "unitId": "yDwjSO7M7Ot3msZAAqLc"
+  },
+  {
+    "id": "UyPFrmLinv1TgRu4b79O",
     "type": "definition",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "topicId": "rSisRECCjZf50AVCcHcS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "term": "Vakıf",
       "definition": "Kelime sonunda sesin kesilmesi ve nefesin tutulması işlemidir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
     }
   },
   {
     "id": "V4UY0oLmI9lS3dsIp9g0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    },
+    "type": "sentence",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "topicId": "rSisRECCjZf50AVCcHcS",
     "content": {
       "text": "Meddi lin okumak caizdir."
     },
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "type": "sentence",
     "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "YmvA06tcUIjgBYRr4QnT",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "content": {
+      "text": "Sükûnu lazım kalıcı sükûndur."
+    },
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "sentence",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
-    },
-    "type": "sentence",
-    "content": {
-      "text": "Sükûnu lazım kalıcı sükûndur."
-    },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "topicId": "rSisRECCjZf50AVCcHcS"
+    }
   },
   {
     "id": "Yu8ARu14Pz4C48Ob0iLA",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "topicId": "rSisRECCjZf50AVCcHcS",
     "content": {
       "text": "Tahkik"
     },
@@ -439,32 +436,35 @@
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "type": "concept"
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "type": "concept",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "aTflIyco03zg4OVHQgKl",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "sentence",
     "content": {
       "text": "Kur'an'da üç okuyuş şekli vardır."
-    }
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "bu5Wcgtf5rZdmRbNiwiw",
+    "topicId": "rSisRECCjZf50AVCcHcS",
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "content": {
       "term": "Caiz",
       "definition": "Uzatma miktarında okuyuş usulüne göre serbestlik tanıyan tecvit hükmüdür."
     },
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicId": "rSisRECCjZf50AVCcHcS",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -474,24 +474,21 @@
   },
   {
     "id": "cx1hRZNs91eC4MBovQMa",
-    "type": "concept",
+    "content": {
+      "text": "Sükûnu Arız"
+    },
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "concept",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
-    },
-    "content": {
-      "text": "Sükûnu Arız"
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc"
+    }
   },
   {
     "id": "ePGO1OUywL0p32k0D3yO",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "type": "definition",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "definition": "Tecvit uygulamasında yapılması zorunlu ve gerekli olan hükümdür.",
       "term": "Vacip"
@@ -501,34 +498,37 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
-    }
+    },
+    "type": "definition",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc"
   },
   {
     "id": "gRlIJw8I3hYlTOiv7j3T",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    },
     "content": {
       "definition": "Durulduğunda ortaya çıkan ancak okumaya devam edildiğinde düşen geçici durak halidir.",
       "term": "Sükûnu Arız"
     },
-    "topicId": "rSisRECCjZf50AVCcHcS",
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "definition"
   },
   {
     "id": "hXciQGhy4OAvwaMRdxVV",
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "concept",
     "topicId": "rSisRECCjZf50AVCcHcS",
     "content": {
       "text": "Sükûnu Lazım"
@@ -536,38 +536,41 @@
   },
   {
     "id": "hjux1un7uFWwv8Mmd5l2",
-    "type": "definition",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "definition",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "content": {
       "definition": "Öncesi üstün harekeli olan cezimli vav ve ya sesleridir.",
       "term": "Harfi Lin"
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc"
+    }
   },
   {
     "id": "lNXwoSiwvP0KbVcS7VmV",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "content": {
+      "text": "Âsar"
+    },
     "topicId": "rSisRECCjZf50AVCcHcS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "content": {
-      "text": "Âsar"
-    },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "type": "concept"
+    "type": "concept",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc"
   },
   {
     "id": "mUMfLELtyF00NRnlJUYX",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "content": {
+      "text": "Vakıf kelime sonunda durmak demektir."
+    },
     "topicId": "rSisRECCjZf50AVCcHcS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -575,72 +578,69 @@
       "nanoseconds": 976000000
     },
     "type": "sentence",
-    "content": {
-      "text": "Vakıf kelime sonunda durmak demektir."
-    },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+    "unitId": "yDwjSO7M7Ot3msZAAqLc"
   },
   {
     "id": "p2qABDF2H7WkBlKMxr51",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "content": {
+      "definition": "Kur'an tilavetinde orta hızdaki okuyuş tarzıdır.",
+      "term": "Tedvir"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "type": "definition",
-    "content": {
-      "definition": "Kur'an tilavetinde orta hızdaki okuyuş tarzıdır.",
-      "term": "Tedvir"
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc"
+    "type": "definition"
   },
   {
     "id": "pgZZ9qdjLqqPMS2UCtsY",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "concept",
     "content": {
       "text": "Meddi Arız"
     },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "concept",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    }
+  },
+  {
+    "id": "qT1Wd4Jm4igEzh4FDLkx",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    },
+    "type": "concept",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "content": {
+      "text": "Meddi Lin"
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "sHkoxswRC6y7fWt5UF2c",
+    "content": {
+      "definition": "Harfi bir elif miktarından fazla uzatmaya yönelten hemze veya sükûn etkeni.",
+      "term": "Sebebi Med"
+    },
+    "type": "definition",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
     "topicId": "rSisRECCjZf50AVCcHcS"
-  },
-  {
-    "id": "qT1Wd4Jm4igEzh4FDLkx",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "content": {
-      "text": "Meddi Lin"
-    },
-    "type": "concept"
-  },
-  {
-    "id": "sHkoxswRC6y7fWt5UF2c",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "type": "definition",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "content": {
-      "term": "Sebebi Med",
-      "definition": "Harfi bir elif miktarından fazla uzatmaya yönelten hemze veya sükûn etkeni."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    }
   },
   {
     "id": "srN0lzd1pq3Hnmob7IIx",
@@ -649,120 +649,120 @@
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "sentence",
     "content": {
       "text": "Sükûnu arız geçici sükûndur."
     },
-    "type": "sentence"
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "rSisRECCjZf50AVCcHcS"
   },
   {
     "id": "sv7yvmBgwP4QbZlPduLz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
+    "type": "definition",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "topicId": "rSisRECCjZf50AVCcHcS",
     "content": {
       "term": "Tahkik",
       "definition": "Kur'an tilavetinde en yavaş ve tane tane okuyuş tarzıdır."
     },
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "type": "definition",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH"
-  },
-  {
-    "id": "uNIYBftVeUGg6Qdf6EIN",
-    "type": "definition",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "content": {
-      "term": "Meddi Lazım",
-      "definition": "Uzatma harfinden sonra kalıcı duraklama hali geldiğinde oluşan tecvit kuralıdır."
-    },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
+    }
+  },
+  {
+    "id": "uNIYBftVeUGg6Qdf6EIN",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "definition",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    },
+    "content": {
+      "definition": "Uzatma harfinden sonra kalıcı duraklama hali geldiğinde oluşan tecvit kuralıdır.",
+      "term": "Meddi Lazım"
     }
   },
   {
     "id": "w9GcS4hD8XabFFM5Pz2f",
-    "type": "concept",
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "concept",
     "topicId": "rSisRECCjZf50AVCcHcS",
+    "content": {
+      "text": "Tedvir"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
-    },
-    "content": {
-      "text": "Tedvir"
     }
   },
   {
     "id": "x2Yc6RsOvAoxFz9H5Dua",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
     },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
+    "topicId": "rSisRECCjZf50AVCcHcS",
     "content": {
       "definition": "Herhangi bir ekstra sebep olmaksızın bir elif miktarı yapılan temel uzatmadır.",
       "term": "Meddi Tabii"
-    },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "type": "definition",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+    }
   },
   {
     "id": "yKH2HiA8Qq2QE6D472rd",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "type": "concept",
     "content": {
       "text": "Sebebi Med"
     },
     "unitId": "yDwjSO7M7Ot3msZAAqLc",
-    "topicId": "rSisRECCjZf50AVCcHcS"
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "yQ6fLNE5tQt2Dox2PYrP",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788798730,
+      "nanoseconds": 976000000
+    },
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "content": {
       "text": "Harfi Lin"
     },
-    "type": "concept",
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1788798730,
-      "nanoseconds": 976000000
-    },
-    "unitId": "yDwjSO7M7Ot3msZAAqLc"
+    "type": "concept"
   },
   {
     "id": "zhQsPyt5NG07lvgycE61",
-    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "content": {
       "text": "Meddi lazım kalıcı sükûnla oluşur."
     },
-    "topicId": "rSisRECCjZf50AVCcHcS",
-    "type": "sentence",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "rSisRECCjZf50AVCcHcS",
+    "unitId": "yDwjSO7M7Ot3msZAAqLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1788798730,
       "nanoseconds": 976000000
-    }
+    },
+    "type": "sentence"
   }
 ]

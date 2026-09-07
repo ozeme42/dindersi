@@ -1,27 +1,27 @@
 [
   {
     "id": "0ACzKNpmGvujOaZStLZu",
+    "type": "definition",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "CABMw8YASITwhLjQfkh3",
     "content": {
       "definition": "İslam öncesi dönemdeki bilgisizlik, ahlaki yozlaşma ve yanlış inanışlar dönemdir. ",
       "term": "Cahiliye"
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764151592,
       "nanoseconds": 975000000
-    },
-    "type": "definition"
+    }
   },
   {
     "id": "3kXG4PBSolSmdaE5F3ki",
-    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Cahiliye"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "concept",
     "topicId": "CABMw8YASITwhLjQfkh3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -32,50 +32,50 @@
   },
   {
     "id": "4g1F7NsuGQoJUinLIWVW",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764151592,
-      "nanoseconds": 975000000
-    },
     "content": {
       "text": "Sünnet"
     },
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764151592,
+      "nanoseconds": 975000000
+    }
   },
   {
     "id": "739un5nTWydaHnDy0cZN",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "content": {
-      "definition": "Hz. Peygamber'in söz, fiil ve onaylarının genel adıdır. ",
-      "term": "Sünnet"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764151592,
       "nanoseconds": 975000000
     },
+    "content": {
+      "term": "Sünnet",
+      "definition": "Hz. Peygamber'in söz, fiil ve onaylarının genel adıdır. "
+    },
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "definition",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition"
   },
   {
     "id": "IpGC6YVIosmfpjn7GX0I",
     "type": "definition",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "term": "Müezzin",
-      "definition": "Camide ezan okuma görevini üstlenen kişidir. "
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764151592,
       "nanoseconds": 975000000
     },
-    "topicId": "CABMw8YASITwhLjQfkh3"
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "content": {
+      "definition": "Camide ezan okuma görevini üstlenen kişidir. ",
+      "term": "Müezzin"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "KxI6sPnt8jCyfRGeDQLt",
@@ -85,47 +85,48 @@
       "seconds": 1764151592,
       "nanoseconds": 975000000
     },
-    "content": {
-      "text": "Tövbe"
-    },
+    "type": "concept",
     "topicId": "CABMw8YASITwhLjQfkh3",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "concept"
+    "content": {
+      "text": "Tövbe"
+    }
   },
   {
     "id": "L7DKcIlnTypMmIVSFJlL",
+    "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Merhametli ve şefkatli bir liderdi."
     },
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764151592,
       "nanoseconds": 975000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "LQwCl6iw3gbtuTaN7l14",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764151592,
       "nanoseconds": 975000000
     },
-    "content": {
-      "term": "İstişare",
-      "definition": "Önemli kararlar almadan önce başkalarının görüşlerini alma ve fikir alışverişinde bulunma eylemidir. "
-    },
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "content": {
+      "definition": "Önemli kararlar almadan önce başkalarının görüşlerini alma ve fikir alışverişinde bulunma eylemidir. ",
+      "term": "İstişare"
+    },
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "Pj7WTgWuZ1kNZbNmzjE9",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "definition",
     "topicId": "CABMw8YASITwhLjQfkh3",
     "content": {
       "term": "Tövbe",
@@ -136,18 +137,32 @@
       "seconds": 1764151592,
       "nanoseconds": 975000000
     },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "definition"
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "TqVW7kdZqAKNS0NHXLzn",
     "content": {
       "text": "Gençlerle doğru iletişim kurdu."
     },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "CABMw8YASITwhLjQfkh3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764151592,
+      "nanoseconds": 975000000
+    },
     "type": "sentence",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+  },
+  {
+    "id": "UDC8YpmMgoxRD55nAoe7",
+    "type": "concept",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "content": {
+      "text": "Rahmet"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764151592,
@@ -155,103 +170,26 @@
     }
   },
   {
-    "id": "UDC8YpmMgoxRD55nAoe7",
+    "id": "WgLXwD5AUUlPpOaJtGB2",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "CABMw8YASITwhLjQfkh3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764151592,
       "nanoseconds": 975000000
     },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "text": "Rahmet"
-    },
-    "type": "concept"
-  },
-  {
-    "id": "WgLXwD5AUUlPpOaJtGB2",
+    "type": "sentence",
     "content": {
       "text": "İstişareye önem verirdi. Hataları affeder, yol gösterirdi."
-    },
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764151592,
-      "nanoseconds": 975000000
-    },
-    "type": "sentence"
+    }
   },
   {
     "id": "XCg3fj7AVaaoETdphDMG",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764151592,
-      "nanoseconds": 975000000
-    },
+    "type": "sentence",
     "content": {
       "text": "Onlara güvenip sorumluluk verdi. Yeteneklerini keşfedip yönlendirdi."
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "type": "sentence"
-  },
-  {
-    "id": "amMcEHoCXxYfcH1b2KB7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764151592,
-      "nanoseconds": 975000000
-    },
-    "content": {
-      "definition": "Allah'ın insanlara gösterdiği merhamet, sevgi ve şefkatin genel adıdır. ",
-      "term": "Rahmet"
-    },
-    "type": "definition",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "CABMw8YASITwhLjQfkh3"
-  },
-  {
-    "id": "c20qraLI6yAfVmzYUSjH",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "text": "İstişare"
-    },
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764151592,
-      "nanoseconds": 975000000
-    }
-  },
-  {
-    "id": "f46LGrqqbOmxLtxNZHxk",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764151592,
-      "nanoseconds": 975000000
-    },
-    "type": "definition",
-    "content": {
-      "term": "Sahabi",
-      "definition": "Hz. Peygamber'i görmüş, ona inanmış ve Müslüman olarak vefat etmiş kişilerdir. "
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "CABMw8YASITwhLjQfkh3"
-  },
-  {
-    "id": "f4TqO9CP7h9T3OR3xMXB",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "concept",
-    "content": {
-      "text": "Müezzin"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -262,33 +200,95 @@
     "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
-    "id": "kCx6FBajLgQvEf9RYSbh",
+    "id": "amMcEHoCXxYfcH1b2KB7",
+    "type": "definition",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764151592,
+      "nanoseconds": 975000000
+    },
     "topicId": "CABMw8YASITwhLjQfkh3",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
-      "text": "Sahabi"
+      "term": "Rahmet",
+      "definition": "Allah'ın insanlara gösterdiği merhamet, sevgi ve şefkatin genel adıdır. "
+    }
+  },
+  {
+    "id": "c20qraLI6yAfVmzYUSjH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764151592,
+      "nanoseconds": 975000000
     },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "concept",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "content": {
+      "text": "İstişare"
+    }
+  },
+  {
+    "id": "f46LGrqqbOmxLtxNZHxk",
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "definition": "Hz. Peygamber'i görmüş, ona inanmış ve Müslüman olarak vefat etmiş kişilerdir. ",
+      "term": "Sahabi"
+    },
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764151592,
+      "nanoseconds": 975000000
+    },
+    "topicId": "CABMw8YASITwhLjQfkh3"
+  },
+  {
+    "id": "f4TqO9CP7h9T3OR3xMXB",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764151592,
       "nanoseconds": 975000000
-    }
+    },
+    "content": {
+      "text": "Müezzin"
+    },
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
-    "id": "lOFKY3yehSv3a3VriUF2",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "id": "kCx6FBajLgQvEf9RYSbh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764151592,
       "nanoseconds": 975000000
     },
+    "type": "concept",
+    "content": {
+      "text": "Sahabi"
+    },
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "CABMw8YASITwhLjQfkh3"
+  },
+  {
+    "id": "lOFKY3yehSv3a3VriUF2",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764151592,
+      "nanoseconds": 975000000
+    },
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "content": {
       "text": "Peygamberimiz gençlere değer verirdi."
     },
-    "type": "sentence",
-    "topicId": "CABMw8YASITwhLjQfkh3",
     "courseId": "e6sa39FUi02TyzJpvQ89"
   }
 ]

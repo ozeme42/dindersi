@@ -1,64 +1,65 @@
 [
   {
     "id": "1QZgrAX8fRXtcga3OTk1",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "correctAnswer": "Yanlış",
     "difficulty": "Kolay",
-    "className": "6",
+    "type": "Doğru/Yanlış",
     "text": "Cahiliye Dönemi'nde adalet ve insan hakları yaygın olarak uygulanmıştır.",
+    "className": "6",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "type": "Doğru/Yanlış"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler"
   },
   {
     "id": "1q7crAL3jAdt7ihhy2n8",
-    "type": "Çoktan Seçmeli",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "difficulty": "Orta",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Hz. Peygamber'in gençlere karşı sergilediği tutumda aşağıdakilerden hangisi yer almaz?",
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Onların görüşlerini dikkate almamak",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "Onlara sorumluluk vermek",
       "Onlarla yakın arkadaşlıklar kurmak",
       "Onların görüşlerini dikkate almamak",
       "Onların davetlerine icabet etmek"
     ],
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "Onların görüşlerini dikkate almamak",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "text": "Hz. Peygamber'in gençlere karşı sergilediği tutumda aşağıdakilerden hangisi yer almaz?"
+    "difficulty": "Orta"
   },
   {
     "id": "1snybDg7wCCpyR8zyuPO",
+    "difficulty": "Zor",
+    "text": "Hz. Zeyneb'in eşinin Müslüman olması sürecinde sergilediği davranış biçimi neydi?",
+    "type": "Çoktan Seçmeli",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "correctAnswer": "Sabırlı ve nazik bir tutum sergilemesi",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "text": "Hz. Zeyneb'in eşinin Müslüman olması sürecinde sergilediği davranış biçimi neydi?",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "correctAnswer": "Sabırlı ve nazik bir tutum sergilemesi",
-    "type": "Çoktan Seçmeli",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "Eşine baskı yapması",
@@ -66,380 +67,375 @@
       "Sabırlı ve nazik bir tutum sergilemesi",
       "Eşini terk etmesi"
     ],
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "38iAnkKOVkIxMbRbhwkk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "className": "6",
     "correctAnswer": "Takdir etmiştir",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Hz. Peygamber, genç sahabilerin gayretlerini nasıl değerlendirmiştir?",
+    "className": "6",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "difficulty": "Kolay",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "Görmezden gelmiştir",
       "Eleştirmiştir",
       "Takdir etmiştir",
       "Sorgulamıştır"
     ],
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler"
-  },
-  {
-    "id": "5EGPcJoUMUZxxrgQZE53",
-    "text": "İslam davetine koşanların çoğunluğunu gençler oluşturmuştur.",
-    "difficulty": "Kolay",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "text": "Hz. Peygamber, genç sahabilerin gayretlerini nasıl değerlendirmiştir?",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
+  },
+  {
+    "id": "5EGPcJoUMUZxxrgQZE53",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "text": "İslam davetine koşanların çoğunluğunu gençler oluşturmuştur.",
+    "type": "Doğru/Yanlış",
     "options": [],
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "className": "6",
-    "type": "Doğru/Yanlış"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "correctAnswer": "Doğru"
   },
   {
     "id": "5TaeMISrX7f3V9IuTuji",
-    "correctAnswer": "Bilimsel gelişmelere önem verme",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "Putlara tapma",
       "Akrabalık bağına riayet etmeme",
       "Güçlülerin zayıfları ezmesi",
       "Bilimsel gelişmelere önem verme"
     ],
-    "difficulty": "Zor",
+    "correctAnswer": "Bilimsel gelişmelere önem verme",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Çoktan Seçmeli",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "text": "Cafer bin Ebu Talib'in Habeşistan Kralı Necaşi huzurunda İslam'ı anlatırken vurguladığı Cahiliye Dönemi özelliklerinden biri aşağıdakilerden hangisi değildir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    }
-  },
-  {
-    "id": "8tbkbzTvBlzwKl7pa5ZV",
-    "text": "Musab bin Umeyr, İslam'ın ilk öğretmeni olarak kabul edilir.",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "correctAnswer": "Doğru",
     "className": "6",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Kolay",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "text": "Cafer bin Ebu Talib'in Habeşistan Kralı Necaşi huzurunda İslam'ı anlatırken vurguladığı Cahiliye Dönemi özelliklerinden biri aşağıdakilerden hangisi değildir?",
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "8tbkbzTvBlzwKl7pa5ZV",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "correctAnswer": "Doğru",
+    "text": "Musab bin Umeyr, İslam'ın ilk öğretmeni olarak kabul edilir.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "options": []
   },
   {
     "id": "BDPFn7N0z8AoHDIwx2os",
-    "difficulty": "Zor",
-    "className": "6",
-    "text": "Nesîbe (Ümmü Umara), Uhud Savaşı'nda Hz. Peygamber'i koruma konusunda aktif rol oynamıştır.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "difficulty": "Zor",
+    "options": [],
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "options": [],
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış"
-  },
-  {
-    "id": "BavpXRYrulAo1XxJnvIV",
-    "options": [],
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "correctAnswer": "Doğru",
-    "text": "Cafer bin Ebu Talib, Necaşi'nin huzurunda İslam'ı savunurken yalnızca kendi inançlarını değil, Cahiliye Dönemi'nin toplumsal sorunlarını da dile getirmiştir.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "difficulty": "Zor",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "type": "Doğru/Yanlış",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Nesîbe (Ümmü Umara), Uhud Savaşı'nda Hz. Peygamber'i koruma konusunda aktif rol oynamıştır.",
     "topicId": "PCxPOaMuvmnHDJoVXttx"
   },
   {
-    "id": "FufWbEUnmhEJP1bRqiYw",
-    "type": "Boşluk Doldurma",
+    "id": "BavpXRYrulAo1XxJnvIV",
+    "correctAnswer": "Doğru",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "difficulty": "Orta",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "className": "6",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "text": "Cafer bin Ebu Talib, Necaşi'nin huzurunda İslam'ı savunurken yalnızca kendi inançlarını değil, Cahiliye Dönemi'nin toplumsal sorunlarını da dile getirmiştir.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "options": [],
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "FufWbEUnmhEJP1bRqiYw",
     "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
     "correctAnswer": "davetlerine",
-    "className": "6",
     "options": [
       "çağrılarına",
       "davetlerine",
       "toplantılarına",
       "eğitimlerine"
     ],
+    "className": "6",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "text": "Hz. Peygamber, gençlerle vakit geçirmiş, onlara ikramda bulunmuş ve onların ___ icabet etmiştir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "G1KV6Kg6nuqziZd8vGQs",
+    "difficulty": "Orta",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "type": "Doğru/Yanlış",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "className": "6",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "difficulty": "Orta",
+    "correctAnswer": "Doğru",
     "text": "Abdullah bin Ömer, Hz. Peygamber'in hadislerini en çok nakleden sahabilerden biri olarak bilinir.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "Doğru/Yanlış",
     "options": []
   },
   {
     "id": "G2izvqmQJO8xgINzmnm7",
-    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "options": [
       "lider",
       "insan",
       "dost",
       "örnekti"
     ],
-    "difficulty": "Kolay",
-    "text": "Sevgili Peygamberimiz, anlattığı mesajı hayatında uygulayan en güzel ___ idi.",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "örnekti"
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "className": "6",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "correctAnswer": "örnekti",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "text": "Sevgili Peygamberimiz, anlattığı mesajı hayatında uygulayan en güzel ___ idi.",
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "H1qobxTTDjtlX1p3aIZL",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "text": "Hz. Peygamber'in, Attab bin Esid'i Mekke'de kadı olarak görevlendirmesi, onun gençlerin yönetim yeteneklerine olan güvenini gösterir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
     "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "type": "Doğru/Yanlış"
+    "correctAnswer": "Doğru",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "text": "Hz. Peygamber'in, Attab bin Esid'i Mekke'de kadı olarak görevlendirmesi, onun gençlerin yönetim yeteneklerine olan güvenini gösterir."
   },
   {
     "id": "IQqIO1sJtUjEIoLpb2AL",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Musab bin Umeyr, inancına her zaman bağlı kalmış ve İslam'ı anlatma konusunda büyük bir ___ sergilemiştir.",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
     "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "correctAnswer": "özveri",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "text": "Musab bin Umeyr, inancına her zaman bağlı kalmış ve İslam'ı anlatma konusunda büyük bir ___ sergilemiştir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
     "options": [
       "tembellik",
       "özveri",
       "isteksizlik",
       "korku"
     ],
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    }
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "correctAnswer": "özveri"
   },
   {
     "id": "IYZCtjNN8psxSV9g4Znk",
-    "type": "Doğru/Yanlış",
-    "options": [],
+    "correctAnswer": "Yanlış",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
-    "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
     "text": "Hz. Peygamber, gençlere sorumluluk vermekten çekinmiştir.",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "options": [],
+    "className": "6",
+    "difficulty": "Kolay",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "3. Peygamberimizin Yanında Yetişen Gençler"
   },
   {
     "id": "JE7HRXmJBBtVXWT1RBow",
-    "difficulty": "Orta",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "type": "Doğru/Yanlış",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "options": [],
     "text": "Hz. Zeyneb, eşinin baskısıyla inancından vazgeçmek zorunda kalmıştır.",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Orta",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "className": "6",
+    "topicId": "PCxPOaMuvmnHDJoVXttx"
   },
   {
     "id": "LXG6MqmVDJZbZpeHEU1J",
-    "correctAnswer": "Yol göstermiştir",
-    "difficulty": "Kolay",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Yol göstermiştir",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Peygamberimizin rehberliğinde yetişen genç sahabiler, öğrendiklerini hayata geçirerek başka insanlara ne yapmıştır?",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Mal dağıtmıştır",
       "Yol göstermiştir",
       "Tarım yapmıştır",
       "Ticaret yapmıştır"
-    ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "text": "Peygamberimizin rehberliğinde yetişen genç sahabiler, öğrendiklerini hayata geçirerek başka insanlara ne yapmıştır?",
-    "className": "6"
+    ]
   },
   {
     "id": "LYvmtRa6bmI7QU2ZAYtq",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
+    "difficulty": "Zor",
+    "text": "Peygamber Efendimiz, gençleri sorunun değil ___ bir parçası olmaya çağırmıştır.",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "type": "Boşluk Doldurma",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "correctAnswer": "çözümün",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "nedenin",
       "kaynağın",
       "çözümün",
       "başlangıcın"
     ],
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "text": "Peygamber Efendimiz, gençleri sorunun değil ___ bir parçası olmaya çağırmıştır."
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "Q5VcxH6ESjhYpBD0dRuE",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "difficulty": "Orta",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "correctAnswer": "dünyaya",
-    "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "text": "Genç sahabilerin gayreti, İslam'ın ___ yayılmasında önemli bir faktör olmuştur.",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "Mekke'ye",
       "Medine'ye",
       "dünyaya",
       "Hicaz'a"
     ],
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "className": "6",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "Boşluk Doldurma",
+    "text": "Genç sahabilerin gayreti, İslam'ın ___ yayılmasında önemli bir faktör olmuştur.",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "correctAnswer": "dünyaya",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
   },
   {
     "id": "Q6U444GXWJPWnJAUENmQ",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "text": "Hz. Peygamber, Üsame bin Zeyd'i henüz on sekiz yaşındayken ordu ___ yapmıştır.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "difficulty": "Orta",
     "className": "6",
-    "correctAnswer": "komutanı",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "yazıcısı",
       "komutanı",
@@ -451,602 +447,606 @@
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Peygamber, Üsame bin Zeyd'i henüz on sekiz yaşındayken ordu ___ yapmıştır.",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "komutanı",
     "type": "Boşluk Doldurma"
   },
   {
     "id": "Qe7n36tUGDHbDEAXW7Ew",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "type": "Çoktan Seçmeli",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "correctAnswer": "Musab bin Umeyr",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Musab bin Umeyr",
+    "type": "Çoktan Seçmeli",
+    "text": "Peygamberimizin Medine'ye davetçi olarak gönderdiği ve İslam'ın ilk öğretmeni kabul edilen genç sahabi kimdir?",
     "difficulty": "Orta",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Hz. Ali",
       "Musab bin Umeyr",
       "Abdullah bin Ömer",
       "Zeyd bin Harise"
-    ],
-    "text": "Peygamberimizin Medine'ye davetçi olarak gönderdiği ve İslam'ın ilk öğretmeni kabul edilen genç sahabi kimdir?",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    ]
   },
   {
     "id": "QkjuEqDjW7pfs6nllU7A",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "className": "6",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "text": "İnsanlar yeni şeyler öğrenmek veya bir alanda kendilerini yetiştirmek istediklerinde genellikle bir ___ ihtiyaç duyarlar.",
+    "difficulty": "Kolay",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "correctAnswer": "rehbere",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "öğretmen",
       "teknoloji",
       "rehbere",
       "araca"
     ],
-    "type": "Boşluk Doldurma",
-    "text": "İnsanlar yeni şeyler öğrenmek veya bir alanda kendilerini yetiştirmek istediklerinde genellikle bir ___ ihtiyaç duyarlar.",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "rehbere",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
+    "className": "6",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler"
   },
   {
     "id": "RzxYTTT5At7TTmnwsEfx",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "options": [],
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "difficulty": "Orta",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
+    "correctAnswer": "Doğru",
+    "options": [],
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "type": "Doğru/Yanlış",
+    "text": "Peygamberimiz, ordu komutanı seçerken yaştan ziyade liderlik kabiliyetine önem vermiştir.",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "className": "6",
-    "difficulty": "Orta",
-    "text": "Peygamberimiz, ordu komutanı seçerken yaştan ziyade liderlik kabiliyetine önem vermiştir."
+    "topicId": "PCxPOaMuvmnHDJoVXttx"
   },
   {
     "id": "YM0O3m73izRldNwE15lP",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "difficulty": "Zor",
+    "text": "Musab bin Umeyr'in İslam uğruna gösterdiği fedakarlıklar arasında aşağıdakilerden hangisi en belirgin olanıdır?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Ticaret kervanlarını yönetmesi",
       "Varlıklı hayatını terk edip zorlukları seçmesi",
       "Mekke'de putları kırması",
       "Şiirler yazarak İslam'ı savunması"
     ],
-    "correctAnswer": "Varlıklı hayatını terk edip zorlukları seçmesi",
-    "text": "Musab bin Umeyr'in İslam uğruna gösterdiği fedakarlıklar arasında aşağıdakilerden hangisi en belirgin olanıdır?",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
-  },
-  {
-    "id": "YmkvyXMOGormhbraNIAS",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Musab bin Umeyr, Medine'ye davetçi olarak gönderilerek İslam'ın ilk ___ kabul edilmiştir.",
-    "correctAnswer": "öğretmeni",
+    "correctAnswer": "Varlıklı hayatını terk edip zorlukları seçmesi",
+    "difficulty": "Zor",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "topicId": "PCxPOaMuvmnHDJoVXttx"
+  },
+  {
+    "id": "YmkvyXMOGormhbraNIAS",
     "options": [
       "komutanı",
       "öğretmeni",
       "yöneticisi",
       "yazıcısı"
     ],
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Boşluk Doldurma",
     "difficulty": "Kolay",
+    "type": "Boşluk Doldurma",
+    "text": "Musab bin Umeyr, Medine'ye davetçi olarak gönderilerek İslam'ın ilk ___ kabul edilmiştir.",
     "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "adogU4oJTVDuQ27H8U6J",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
-    "difficulty": "Orta",
-    "text": "Habeşistan'a hicret eden Müslümanlar, müşriklerin baskısından kurtulmak için gitmişlerdir.",
     "className": "6",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    }
-  },
-  {
-    "id": "ajY3uxmHC1XzW2EFquOI",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "difficulty": "Orta",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "Yanlış",
-    "className": "6",
-    "text": "Hz. Peygamber, gençlerle vakit geçirmek yerine sadece onlara emirler vermeyi tercih etmiştir.",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    }
-  },
-  {
-    "id": "bbIemavkJceBl2k7Y5bS",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "text": "Habeşistan'a hicret eden Müslüman grubun liderliğini Peygamberimiz kime vermiştir?",
-    "difficulty": "Kolay",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Cafer bin Ebu Talib",
+    "correctAnswer": "öğretmeni",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+  },
+  {
+    "id": "adogU4oJTVDuQ27H8U6J",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "text": "Habeşistan'a hicret eden Müslümanlar, müşriklerin baskısından kurtulmak için gitmişlerdir.",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "ajY3uxmHC1XzW2EFquOI",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "text": "Hz. Peygamber, gençlerle vakit geçirmek yerine sadece onlara emirler vermeyi tercih etmiştir.",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "correctAnswer": "Yanlış",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "difficulty": "Orta"
+  },
+  {
+    "id": "bbIemavkJceBl2k7Y5bS",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "difficulty": "Kolay",
+    "correctAnswer": "Cafer bin Ebu Talib",
     "options": [
       "Hz. Ömer",
       "Hz. Osman",
       "Cafer bin Ebu Talib",
       "Musab bin Umeyr"
     ],
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "text": "Habeşistan'a hicret eden Müslüman grubun liderliğini Peygamberimiz kime vermiştir?",
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
   },
   {
     "id": "bpXVlUY023oQxITYa1Je",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "Gençler",
-    "text": "Hz. Peygamber'in tebliğine en çok ilgi gösteren ve ona destek olan kesim kimlerdi?",
+    "className": "6",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "Yaşlılar",
       "Tüccarlar",
       "Gençler",
       "Kadınlar"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Kolay",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
     "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "text": "Hz. Peygamber'in tebliğine en çok ilgi gösteren ve ona destek olan kesim kimlerdi?",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "dxwWxHqh3f4dS94hUOLk",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "className": "6",
     "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "type": "Çoktan Seçmeli"
-  },
-  {
-    "id": "dxwWxHqh3f4dS94hUOLk",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Çocuklar ve gençler",
     "options": [
       "Yöneticiler",
       "Tüccarlar",
       "Çocuklar ve gençler",
       "Din adamları"
     ],
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "difficulty": "Kolay",
-    "type": "Çoktan Seçmeli",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Cahiliye Dönemi'nde toplumda yaygın olan olumsuz durumlardan en çok etkilenen kesim kimlerdi?",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Çocuklar ve gençler"
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Cahiliye Dönemi'nde toplumda yaygın olan olumsuz durumlardan en çok etkilenen kesim kimlerdi?"
   },
   {
     "id": "hapjioJfz7NQtTBRVTKZ",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "Dış görünüşün",
       "Liderin ilim düzeyinin",
       "Söz ve eylem birliğinin",
       "Mizah anlayışının"
     ],
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "difficulty": "Zor",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "text": "Peygamberimizin gençlere rehberlik etme modelinde yer alan \"Anlattıklarını önce kendi yaşamaya dikkat ederek\" prensibi, neyin önemini vurgular?",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "correctAnswer": "Söz ve eylem birliğinin"
-  },
-  {
-    "id": "ifXMXTK69SzgH6Km0Wx8",
-    "difficulty": "Zor",
-    "text": "Hz. Peygamber'in liderlik modeli ve gençlere görevlendirme prensipleri göz önüne alındığında, Üsame bin Zeyd'in 18 yaşında ordu komutanı atanmasının temel sebebi nedir?",
+    "correctAnswer": "Söz ve eylem birliğinin",
+    "type": "Çoktan Seçmeli",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
+  },
+  {
+    "id": "ifXMXTK69SzgH6Km0Wx8",
+    "difficulty": "Zor",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "Aile bağları",
       "Yaşının küçük olması",
       "Liderlik kabiliyeti",
       "Eğitim seviyesi"
     ],
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "className": "6",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "correctAnswer": "Liderlik kabiliyeti",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "correctAnswer": "Liderlik kabiliyeti",
+    "text": "Hz. Peygamber'in liderlik modeli ve gençlere görevlendirme prensipleri göz önüne alındığında, Üsame bin Zeyd'in 18 yaşında ordu komutanı atanmasının temel sebebi nedir?",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "ixMJXJYiOfKonfgJyokP",
+    "type": "Çoktan Seçmeli",
+    "text": "Aşağıdaki sahabilerden hangisi Hz. Peygamber'in hadislerini en çok nakledenlerden biri olarak bilinir?",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "correctAnswer": "Abdullah bin Ömer",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "className": "6",
     "difficulty": "Orta",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "text": "Aşağıdaki sahabilerden hangisi Hz. Peygamber'in hadislerini en çok nakledenlerden biri olarak bilinir?",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "className": "6",
     "options": [
       "Hz. Ali",
       "Hz. Ömer",
       "Abdullah bin Ömer",
       "Cafer bin Ebu Talib"
     ],
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "jcR2NuK62Ca4omlynBvG",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
+    "correctAnswer": "Doğru",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [],
     "difficulty": "Zor",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Peygamberimiz, gençleri \"sorunun değil çözümün bir parçası olmaya\" çağırmıştır."
+    "type": "Doğru/Yanlış",
+    "text": "Peygamberimiz, gençleri \"sorunun değil çözümün bir parçası olmaya\" çağırmıştır.",
+    "className": "6",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "kkkHl8zK92nbcm49xePq",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "correctAnswer": "Necaşi",
-    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "difficulty": "Kolay",
     "options": [
       "Firavun",
       "Necaşi",
       "Harun",
       "Cafer"
     ],
-    "text": "Habeşistan Kralı ___ , Cafer bin Ebu Talib'in tebliğinden etkilenerek Müslümanları ülkesinde ağırlamaya devam etmiştir.",
-    "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "type": "Boşluk Doldurma",
+    "text": "Habeşistan Kralı ___ , Cafer bin Ebu Talib'in tebliğinden etkilenerek Müslümanları ülkesinde ağırlamaya devam etmiştir."
   },
   {
     "id": "loLREf0722RME4vS7oTt",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "gençler",
-    "text": "Hz. Peygamber'in insanları karanlıktan aydınlığa çıkaran mesajına en çok ___ ilgi göstermiş ve ona destek olmuşlardır.",
-    "difficulty": "Kolay",
     "options": [
       "yaşlılar",
       "gençler",
       "kadınlar",
       "tüccarlar"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "className": "6",
+    "difficulty": "Kolay",
+    "correctAnswer": "gençler",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Hz. Peygamber'in insanları karanlıktan aydınlığa çıkaran mesajına en çok ___ ilgi göstermiş ve ona destek olmuşlardır."
   },
   {
     "id": "lzTZprZDZG7pwxWitbhF",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Orta",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "Nesîbe (Ümmü Umara)",
-    "text": "Uhud Savaşı'nda Hz. Peygamber'i korumak için eşi ve oğluyla birlikte siper olan kadın sahabi kimdir?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "Hz. Ayşe",
       "Hz. Fatıma",
       "Nesîbe (Ümmü Umara)",
       "Hz. Zeyneb"
-    ]
+    ],
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Nesîbe (Ümmü Umara)",
+    "text": "Uhud Savaşı'nda Hz. Peygamber'i korumak için eşi ve oğluyla birlikte siper olan kadın sahabi kimdir?",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "className": "6"
   },
   {
     "id": "oBGZHH439fAaH3Wp22AK",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "text": "Cahiliye Dönemi'nde yaşanan ___ toplumun büyük bir kesimini olumsuz etkilemiştir.",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Orta",
     "options": [
       "festivaller",
       "adaletsizlikler",
       "ticaret",
       "siyaset"
     ],
-    "className": "6",
-    "text": "Cahiliye Dönemi'nde yaşanan ___ toplumun büyük bir kesimini olumsuz etkilemiştir.",
+    "correctAnswer": "adaletsizlikler",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "correctAnswer": "adaletsizlikler",
-    "type": "Boşluk Doldurma",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "topicId": "PCxPOaMuvmnHDJoVXttx"
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
   },
   {
     "id": "rHwErOGDie3jn7OGy2XZ",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "type": "Çoktan Seçmeli",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "text": "Cahiliye toplumu gençlere neyi yasaklarken, Peygamberimiz onları neye teşvik etmiştir?",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "correctAnswer": "Sorgulama - Sorgulama",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Ticaret - Tarım",
       "Savaş - Barış",
       "Sorgulama - Sorgulama",
       "Eğitim - Çalışma"
-    ]
+    ],
+    "correctAnswer": "Sorgulama - Sorgulama",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "difficulty": "Orta"
   },
   {
     "id": "s0JtawOO9yGHaB01WAlJ",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
     "options": [
       "Hz. Fatıma",
       "Hz. Ayşe",
       "Hz. Zeynep",
       "Hz. Hatice"
     ],
-    "type": "Boşluk Doldurma",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "difficulty": "Zor",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
     "correctAnswer": "Hz. Zeynep",
-    "text": "Hz. Peygamber'in sabırlı ve mücadeleci bir davetçi olma özelliğini örnek alanlardan biri de kızı ___ idi.",
+    "className": "6",
+    "type": "Boşluk Doldurma",
     "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6"
+    "text": "Hz. Peygamber'in sabırlı ve mücadeleci bir davetçi olma özelliğini örnek alanlardan biri de kızı ___ idi."
   },
   {
     "id": "uzdHKd89CxjQz4pW6IHb",
-    "className": "6",
-    "difficulty": "Zor",
     "correctAnswer": "hanım",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "type": "Boşluk Doldurma",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "text": "Nesîbe (ra), çevresindeki insanları İslam'a davet etmek için büyük bir gayret gösteren ___ sahabilerden biriydi.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "type": "Boşluk Doldurma",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [
       "erkek",
       "genç",
       "hanım",
       "yaşlı"
     ],
-    "text": "Nesîbe (ra), çevresindeki insanları İslam'a davet etmek için büyük bir gayret gösteren ___ sahabilerden biriydi.",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
+    "difficulty": "Zor"
   },
   {
     "id": "wUl9IiZjhavYRbaoiZvA",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
-    "className": "6",
-    "correctAnswer": "Doğru",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
     "options": [],
-    "text": "Hz. Peygamber, gençlerin yeteneklerine göre yönlendirilmesini teşvik etmiştir."
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "text": "Hz. Peygamber, gençlerin yeteneklerine göre yönlendirilmesini teşvik etmiştir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "xyWT7OLfCFx83POMYDfL",
-    "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "className": "6",
+    "correctAnswer": "kafilenin",
+    "difficulty": "Zor",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "şehrin",
       "ordunun",
       "kafilenin",
       "ticaretin"
     ],
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "type": "Boşluk Doldurma",
+    "text": "Cafer bin Ebu Talib, doğup büyüdüğü topraklardan ayrılırken genç yaşında büyük bir ___ sorumluluğunu almıştır.",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "kafilenin",
-    "difficulty": "Zor",
-    "text": "Cafer bin Ebu Talib, doğup büyüdüğü topraklardan ayrılırken genç yaşında büyük bir ___ sorumluluğunu almıştır."
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler"
   },
   {
     "id": "z7tYpxly1IH5Oe3DUJ92",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "Boşluk Doldurma",
-    "correctAnswer": "aktarmıştır",
+    "text": "Abdullah bin Ömer, Hz. Peygamber'in davranışlarını ve sözlerini önce kendi hayatında uygulamış daha sonra da diğer insanlara ___ .",
     "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
     "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386057,
+      "nanoseconds": 200000000
+    },
+    "difficulty": "Orta",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "correctAnswer": "aktarmıştır",
     "options": [
       "eleştirmiştir",
       "aktarmıştır",
       "gizlemiştir",
       "tartışmıştır"
-    ],
-    "className": "6",
-    "difficulty": "Orta",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386057,
-      "nanoseconds": 200000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Abdullah bin Ömer, Hz. Peygamber'in davranışlarını ve sözlerini önce kendi hayatında uygulamış daha sonra da diğer insanlara ___ ."
+    ]
   },
   {
     "id": "zZmXRla8212D8jrplzaQ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Zor",
     "type": "Doğru/Yanlış",
-    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "correctAnswer": "Yanlış",
-    "className": "6",
-    "topic": "3. Peygamberimizin Yanında Yetişen Gençler",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Hz. Peygamber'in gençlere rehber olma modelinde, \"insanlar arasında ayrım yapmama\" prensibi sadece Müslümanları kapsar.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386057,
       "nanoseconds": 200000000
     },
-    "options": []
+    "text": "Hz. Peygamber'in gençlere rehber olma modelinde, \"insanlar arasında ayrım yapmama\" prensibi sadece Müslümanları kapsar.",
+    "correctAnswer": "Yanlış",
+    "topicName": "3. Peygamberimizin Yanında Yetişen Gençler",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "topicId": "PCxPOaMuvmnHDJoVXttx"
   }
 ]

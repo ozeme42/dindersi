@@ -57,3 +57,59 @@ export function scrambleAnagramWord(text: string): string {
 export function getTurkeyDateString(date: Date = new Date()): string {
     return new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })).toISOString().split('T')[0];
 }
+
+/**
+ * Deduplicates an array of students by:
+ * 1. uid (if present)
+ * 2. normalized displayName + class (if displayName is present)
+ */
+export function deduplicateStudents<T extends { uid?: string; displayName?: string; class?: string }>(students: T[]): T[] {
+  if (!Array.isArray(students)) return [];
+  const seenUids = new Set<string>();
+  const seenNameClass = new Set<string>();
+  
+  return students.filter(student => {
+    if (!student) return false;
+    
+    // Check UID
+    if (student.uid) {
+      if (seenUids.has(student.uid)) return false;
+      seenUids.add(student.uid);
+    }
+    
+    // Check normalized displayName + class
+    const name = (student.displayName || '').trim().toLocaleLowerCase('tr-TR');
+    const className = (student.class || '').trim().toLocaleLowerCase('tr-TR');
+    
+    if (name) {
+      const key = `${name}___${className}`;
+      if (seenNameClass.has(key)) return false;
+      seenNameClass.add(key);
+    }
+    
+    return true;
+  });
+}
+
+/**
+ * Deduplicates an array of students by normalized displayName (for wheel or single-pool views)
+ */
+export function deduplicateByWheelName<T extends { uid?: string; displayName?: string }>(students: T[]): T[] {
+  if (!Array.isArray(students)) return [];
+  const seenUids = new Set<string>();
+  const seenNames = new Set<string>();
+  
+  return students.filter(student => {
+    if (!student) return false;
+    if (student.uid) {
+      if (seenUids.has(student.uid)) return false;
+      seenUids.add(student.uid);
+    }
+    const name = (student.displayName || '').trim().toLocaleLowerCase('tr-TR');
+    if (name) {
+      if (seenNames.has(name)) return false;
+      seenNames.add(name);
+    }
+    return true;
+  });
+}

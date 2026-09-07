@@ -10,82 +10,82 @@
     "content": {
       "text": "Gizli Davet"
     },
-    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "1Z8sd8QGhWvxXSrvGNnv",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "content": {
+      "text": "Tefekkür"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
     "unitId": "C0M499utiLGh647x2cnp",
-    "type": "concept",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Tefekkür"
-    }
+    "topicId": "6FQTyaJFs3bjPjAa2OwO"
   },
   {
     "id": "4DOhwybH8KNOBPCv2QwY",
     "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "content": {
-      "text": "Sahabi"
-    },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
+    },
+    "content": {
+      "text": "Sahabi"
     },
     "type": "concept"
   },
   {
     "id": "5EXhpY2CiNt9sl0gF7ON",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "definition": "İlk kıblemiz",
       "term": "Mescid-i Aksa"
     },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
-    }
+    },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "5oE8ID4OzHK8mGrLDJaB",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
     "unitId": "C0M499utiLGh647x2cnp",
     "type": "sentence",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "İlk günden takva üzerine kurulan mescit (Kuba Mescidi) içinde namaz kılman elbette daha doğrudur."
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO"
-  },
-  {
-    "id": "7PrTkdakxCRyVvGj5LnZ",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "type": "definition",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "content": {
+      "text": "İlk günden takva üzerine kurulan mescit (Kuba Mescidi) içinde namaz kılman elbette daha doğrudur."
+    }
+  },
+  {
+    "id": "7PrTkdakxCRyVvGj5LnZ",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "term": "Ensar",
       "definition": "Medineli Müslümanlara denir."
@@ -94,24 +94,22 @@
   {
     "id": "9IGbnIIDyGczKHMLzS4n",
     "type": "definition",
-    "content": {
-      "term": "Ambargo",
-      "definition": "Boykot dönemi 616-619 arası"
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "term": "Ambargo",
+      "definition": "Boykot dönemi 616-619 arası"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO"
   },
   {
     "id": "BXouFh9n7NozHnCfaY3X",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "C0M499utiLGh647x2cnp",
-    "type": "concept",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "content": {
       "text": "Dârülerkam"
@@ -120,187 +118,95 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
-    }
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept"
   },
   {
     "id": "BYrQHdaDu2xw62xArLoC",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "sentence",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "sentence",
     "content": {
       "text": "Mescid-i Aksa Müslümanların ilk kıblesidir."
-    }
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO"
   },
   {
     "id": "Bm4xihnhbDG5OI1mgs1F",
-    "unitId": "C0M499utiLGh647x2cnp",
     "type": "sentence",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "text": "Allah Resulü’nün (sav) 610 yılında Mekke’de başlayan peygamberlik görevi 632’de Medine’de tamamlanmıştır."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
-    },
-    "content": {
-      "text": "Allah Resulü’nün (sav) 610 yılında Mekke’de başlayan peygamberlik görevi 632’de Medine’de tamamlanmıştır."
     }
   },
   {
     "id": "DpvkW6I2edQDdtYbMpaF",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "definition",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "definition": "Allah’ın (cc) dilediği emir, hüküm ve bilgileri peygamberine bildirmesidir.",
+      "term": "Vahiy"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "content": {
-      "term": "Vahiy",
-      "definition": "Allah’ın (cc) dilediği emir, hüküm ve bilgileri peygamberine bildirmesidir."
-    },
-    "unitId": "C0M499utiLGh647x2cnp"
+    "type": "definition"
   },
   {
     "id": "EnnJM372dUXYGh2seluZ",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "type": "definition",
-    "content": {
-      "term": "İsra",
-      "definition": "Allah Resulü’nün (sav) bir gece Kâbe'den Kudüs'teki Mescid-i Aksa'ya Allah'ın (cc) izniyle götürülmesi"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
-    }
+    },
+    "content": {
+      "definition": "Allah Resulü’nün (sav) bir gece Kâbe'den Kudüs'teki Mescid-i Aksa'ya Allah'ın (cc) izniyle götürülmesi",
+      "term": "İsra"
+    },
+    "type": "definition"
   },
   {
     "id": "FA1wZnkpVT1irUTUNhJw",
-    "content": {
-      "text": "Vahiy"
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
     "type": "concept",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp"
+    "content": {
+      "text": "Vahiy"
+    }
   },
   {
     "id": "FVpmxeTP6KZywBxLwTE0",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "content": {
       "definition": "Tek yaratıcı inancı",
       "term": "Tevhit"
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "FsXlSlG86HrVH132Km0C",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
-    "content": {
-      "term": "Gizli Davet",
-      "definition": "610-613 yılları arası dönem"
-    },
-    "type": "definition",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO"
-  },
-  {
-    "id": "GmdyESSnQRwBP95x4vI5",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "content": {
-      "definition": "Hz.Hatice, Zeyd bin Harise, Ali, Ebubekir",
-      "term": "İlk inanlar"
-    },
-    "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    }
-  },
-  {
-    "id": "HAZbzJf9lKnI1J1l5Kha",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "text": "Muhacir"
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept"
-  },
-  {
-    "id": "HzFyfKRZb8U2GtUvB3u7",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "content": {
-      "text": "Endişelenme, Allah bizimledir. Üçüncüleri Allah olan iki kişiye ne yapabilirler."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "K3j5KWwAWT7rcu4ZSAkt",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "definition": "İslam'ı tebliğ için gittiği şehir",
-      "term": "Taif"
-    },
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    }
-  },
-  {
-    "id": "Knv3dAOMaNVzZIRoKjiD",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "content": {
-      "definition": "Medinelilerin müslüman olup peygamberimize söz vermeleri",
-      "term": "Akabe Biatları"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -310,12 +216,91 @@
     "type": "definition"
   },
   {
-    "id": "LOWzHUIjZTOBLkU3QJaV",
+    "id": "FsXlSlG86HrVH132Km0C",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Gizli Davet",
+      "definition": "610-613 yılları arası dönem"
+    },
+    "unitId": "C0M499utiLGh647x2cnp"
+  },
+  {
+    "id": "GmdyESSnQRwBP95x4vI5",
+    "content": {
+      "definition": "Hz.Hatice, Zeyd bin Harise, Ali, Ebubekir",
+      "term": "İlk inanlar"
+    },
+    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    }
+  },
+  {
+    "id": "HAZbzJf9lKnI1J1l5Kha",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "concept",
     "content": {
-      "text": "İlk inanlar"
+      "text": "Muhacir"
     },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO"
+  },
+  {
+    "id": "HzFyfKRZb8U2GtUvB3u7",
+    "content": {
+      "text": "Endişelenme, Allah bizimledir. Üçüncüleri Allah olan iki kişiye ne yapabilirler."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
+    "type": "sentence",
+    "unitId": "C0M499utiLGh647x2cnp"
+  },
+  {
+    "id": "K3j5KWwAWT7rcu4ZSAkt",
+    "content": {
+      "term": "Taif",
+      "definition": "İslam'ı tebliğ için gittiği şehir"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
+  },
+  {
+    "id": "Knv3dAOMaNVzZIRoKjiD",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Akabe Biatları",
+      "definition": "Medinelilerin müslüman olup peygamberimize söz vermeleri"
+    },
+    "type": "definition",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -325,40 +310,54 @@
     "unitId": "C0M499utiLGh647x2cnp"
   },
   {
-    "id": "MDrQMGhfgWkEGvSKvT6f",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "text": "Erkam b. Ebi’l-Erkam"
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "id": "LOWzHUIjZTOBLkU3QJaV",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
     "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "text": "İlk inanlar"
+    },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "courseId": "XboyC5jGWhYxh8RHYtrC"
+  },
+  {
+    "id": "MDrQMGhfgWkEGvSKvT6f",
+    "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "content": {
+      "text": "Erkam b. Ebi’l-Erkam"
+    }
   },
   {
     "id": "MMbW34AdODv8JVQG2Qe9",
     "content": {
       "text": "Zeyd b. Hârise"
     },
-    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "Muebvh4UlIBAUQqj1ntO",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "type": "concept",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
@@ -367,70 +366,71 @@
     "content": {
       "text": "İnziva"
     },
-    "unitId": "C0M499utiLGh647x2cnp"
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "NZyxdxHLafxm502yrHM0",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "definition": "Köşeye çekilme, bir müddet insanlardan uzaklaşma anlamlarına gelmektedir.",
       "term": "İnziva"
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "definition"
   },
   {
     "id": "Q3XLiQSbf1awyPARLUzR",
     "unitId": "C0M499utiLGh647x2cnp",
-    "type": "definition",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "content": {
-      "definition": "Peygamberimize iman eden ve onu görmüş kişiler",
-      "term": "Sahabi"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "definition",
+    "content": {
+      "definition": "Peygamberimize iman eden ve onu görmüş kişiler",
+      "term": "Sahabi"
     }
   },
   {
     "id": "TW642kDTWJTYHItyjEzw",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "definition",
+    "content": {
+      "term": "Hüzün Yılı",
+      "definition": "Eşi hatice ve amcası Ebu Talibin vefat ettiği yıl"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
-    },
-    "type": "definition",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "definition": "Eşi hatice ve amcası Ebu Talibin vefat ettiği yıl",
-      "term": "Hüzün Yılı"
     }
   },
   {
     "id": "TYRIflzS9Oyt7gerBDfQ",
-    "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "concept",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "content": {
       "text": "İlk Hicret"
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO"
   },
   {
     "id": "U8bDXNvkrDwBWblVMtPb",
@@ -439,8 +439,8 @@
     },
     "type": "concept",
     "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
@@ -449,126 +449,126 @@
   },
   {
     "id": "UBS9jDbfpMb4bEWvQpOt",
-    "unitId": "C0M499utiLGh647x2cnp",
     "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Hüzün Yılı"
-    }
+    },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "VUE8uwhPVXAsyqlDhH5w",
+    "content": {
+      "term": "Kuba Mescidi",
+      "definition": "İlk mescid-cami"
+    },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "content": {
-      "term": "Kuba Mescidi",
-      "definition": "İlk mescid-cami"
-    }
+    "type": "definition"
   },
   {
     "id": "WEH3nFENSAKjvuqk5uqM",
     "type": "concept",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
     "content": {
       "text": "Mescid-i Aksa"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    }
-  },
-  {
-    "id": "XRMGf05WxF6l3AHGyRXy",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "definition",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "content": {
-      "term": "İlk Hicret",
-      "definition": "Habeşistan"
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    }
-  },
-  {
-    "id": "YCZX1uOfa5nX0K4bCltb",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
-    "type": "concept",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "content": {
-      "text": "Miraç"
-    },
     "unitId": "C0M499utiLGh647x2cnp"
   },
   {
-    "id": "ZwIWFhczPRwf1qf36OWG",
-    "type": "concept",
+    "id": "XRMGf05WxF6l3AHGyRXy",
+    "content": {
+      "definition": "Habeşistan",
+      "term": "İlk Hicret"
+    },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "definition",
     "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
+  },
+  {
+    "id": "YCZX1uOfa5nX0K4bCltb",
+    "content": {
+      "text": "Miraç"
+    },
+    "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
+  },
+  {
+    "id": "ZwIWFhczPRwf1qf36OWG",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "text": "Ranuna Vadisi"
-    }
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
+    "type": "concept"
   },
   {
     "id": "aCA3dV0gOI5kSyJYClUq",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "content": {
+      "definition": "Üvey oğlu",
+      "term": "Zeyd b. Hârise"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
-    },
-    "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "term": "Zeyd b. Hârise",
-      "definition": "Üvey oğlu"
     }
   },
   {
     "id": "bMKhvOIsD6BTGjjNIxgg",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Akabe Biatları"
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO"
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "cy4w6zQS7ZjsoxeEPcNZ",
@@ -577,19 +577,20 @@
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
     "content": {
       "text": "Ambargo"
     },
-    "type": "concept",
-    "unitId": "C0M499utiLGh647x2cnp"
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO"
   },
   {
     "id": "daUyTdrVd0F5zM8ZeIQj",
     "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
@@ -597,8 +598,7 @@
     },
     "content": {
       "text": "Hanif"
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO"
+    }
   },
   {
     "id": "f6v6bz4DJ0Oihcl3RIMa",
@@ -607,8 +607,8 @@
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "unitId": "C0M499utiLGh647x2cnp",
     "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
@@ -619,6 +619,7 @@
   {
     "id": "fxGuE56sJCheBSGkWL8R",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
@@ -627,67 +628,81 @@
     "content": {
       "text": "Mus’ab b. Umeyr"
     },
-    "type": "concept",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "hCSuV3RxfJPUVCga6A4b",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "concept",
     "content": {
       "text": "Ensar"
     },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept",
     "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "hd5Ste1niAvXnkCGEB7S",
-    "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "content": {
       "term": "Muhacir",
       "definition": "Mekke’den Medine’ye göç eden Müslümanlara denir."
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "hdT8iWaZP7KmQHU4jeaH",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "definition",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "content": {
+      "term": "Dârülerkam",
+      "definition": "İslamın ilkokulu"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "definition": "İslamın ilkokulu",
-      "term": "Dârülerkam"
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO"
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "ise6tKd7qANYp4E0K7nR",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    },
     "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "definition": "İlk Cuma namazının kılındığı yer",
       "term": "Ranuna Vadisi"
-    },
+    }
+  },
+  {
+    "id": "jphbAdC5kybn49tSFBhJ",
+    "type": "concept",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "text": "Taif"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
@@ -695,82 +710,67 @@
     }
   },
   {
-    "id": "jphbAdC5kybn49tSFBhJ",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "text": "Taif"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO"
-  },
-  {
     "id": "jwvwY4z1dD7w0Mt3vFLO",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "definition": "İlk öğretmen",
       "term": "Mus’ab b. Umeyr"
     },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
-    },
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    }
   },
   {
     "id": "khIRY6KXxPWBMEBrD9kf",
     "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Miraç",
+      "definition": "Allah Resulü’nün (sav) göklere yükseltilmesi"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "content": {
-      "definition": "Allah Resulü’nün (sav) göklere yükseltilmesi",
-      "term": "Miraç"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "mXd0dD5SxFhAd8CrFf47",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "definition",
     "content": {
-      "definition": "Hz. İbrahim'in getirdiği dine mensup, Allah'ın (c.c.) birliğine inanan ve şirkten uzak olan kimselerdir.",
-      "term": "Hanif"
+      "term": "Hanif",
+      "definition": "Hz. İbrahim'in getirdiği dine mensup, Allah'ın (c.c.) birliğine inanan ve şirkten uzak olan kimselerdir."
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "mxiSrYfGbwx7Kd6bf0xU",
-    "content": {
-      "definition": "Peygamberimizin amcası",
-      "term": "Hz.Hamza"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "type": "definition",
     "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
+    },
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "definition": "Peygamberimizin amcası",
+      "term": "Hz.Hamza"
     }
   },
   {
@@ -790,116 +790,116 @@
   },
   {
     "id": "rrcgnwFuixHfEJMaLSbv",
+    "content": {
+      "text": "Hz.Hamza"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
     "type": "concept",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    }
+  },
+  {
+    "id": "rzuzjIERavOp8frtIqI3",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "content": {
+      "definition": "Evini İslam'a açan sahabi",
+      "term": "Erkam b. Ebi’l-Erkam"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758542616,
+      "nanoseconds": 218000000
+    }
+  },
+  {
+    "id": "vbSq1gSh8bVCkMY6n873",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "content": {
-      "text": "Hz.Hamza"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "unitId": "C0M499utiLGh647x2cnp"
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Ey İnananlar! Sabır ve namazla Allah’tan yardım dileyin. Allah, muhakkak ki sabredenlerle beraberdir."
+    },
+    "type": "sentence"
   },
   {
-    "id": "rzuzjIERavOp8frtIqI3",
-    "content": {
-      "definition": "Evini İslam'a açan sahabi",
-      "term": "Erkam b. Ebi’l-Erkam"
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "id": "vmxn0WCbSKnXm24RmLO6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
     "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "vbSq1gSh8bVCkMY6n873",
-    "type": "sentence",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
-    "content": {
-      "text": "Ey İnananlar! Sabır ve namazla Allah’tan yardım dileyin. Allah, muhakkak ki sabredenlerle beraberdir."
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO"
-  },
-  {
-    "id": "vmxn0WCbSKnXm24RmLO6",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758542616,
-      "nanoseconds": 218000000
-    },
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
     "content": {
       "definition": "Alak Suresi 1-5 ayetler",
       "term": "İlk vahiy"
     },
-    "type": "definition",
     "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "vsjZYmNK1oBJZV4oeAkn",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO",
+    "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "text": "Tevhit"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
-    },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "concept",
-    "content": {
-      "text": "Tevhit"
     }
   },
   {
     "id": "yJqlY4GvgRdtlDPWOElv",
+    "type": "concept",
     "content": {
       "text": "İlk vahiy"
     },
-    "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
-    }
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "6FQTyaJFs3bjPjAa2OwO"
   },
   {
     "id": "zF3lP6oRzG1b2xyavXZ3",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
-      "term": "Tefekkür",
-      "definition": "Derin düşünme, fikir yürütme, kavramaya çalışma ve kafa yormadır."
+      "definition": "Derin düşünme, fikir yürütme, kavramaya çalışma ve kafa yormadır.",
+      "term": "Tefekkür"
     },
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "zn7sLnPOYnNNujP39SJq",
     "topicId": "6FQTyaJFs3bjPjAa2OwO",
-    "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "text": "İsra"
     },
@@ -909,6 +909,6 @@
       "seconds": 1758542616,
       "nanoseconds": 218000000
     },
-    "unitId": "C0M499utiLGh647x2cnp"
+    "type": "concept"
   }
 ]

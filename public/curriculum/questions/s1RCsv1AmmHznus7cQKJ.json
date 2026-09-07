@@ -1,103 +1,105 @@
 [
   {
     "id": "13wiH6EW8NmidQwtdY6J",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "options": [
       "Hz. Musa",
       "Hz. İsa",
       "Hz. Muhammed",
       "Hz. Davut"
     ],
-    "correctAnswer": "Hz. Muhammed",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Kolay",
-    "text": "Yüzündeki gülümseme ve tebessüm ile insanların gönlüne huzur veren peygamber kimdir?"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Hz. Muhammed",
+    "type": "Çoktan Seçmeli",
+    "className": "6",
+    "text": "Yüzündeki gülümseme ve tebessüm ile insanların gönlüne huzur veren peygamber kimdir?",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri"
   },
   {
     "id": "4GIZZF0yFEFbUGWPLDpJ",
-    "text": "Peygamberimizin hadislerinde, küçüklerimize merhamet etmeyen, büyüklerimize ne göstermeyenlerin bizden olmadığı belirtilmiştir?",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "correctAnswer": "Saygı",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "options": [
       "Şefkat",
       "Saygı",
       "İlgi",
       "Destek"
     ],
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli"
-  },
-  {
-    "id": "4ZZY3nNSyBaNKdda4zlC",
-    "text": "Selamlaşmak, insanlar arasındaki bağı zayıflatır.",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Peygamberimizin hadislerinde, küçüklerimize merhamet etmeyen, büyüklerimize ne göstermeyenlerin bizden olmadığı belirtilmiştir?",
+    "type": "Çoktan Seçmeli",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "correctAnswer": "Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "options": [],
     "className": "6",
-    "type": "Doğru/Yanlış",
+    "correctAnswer": "Saygı",
     "difficulty": "Kolay"
   },
   {
-    "id": "5PbyMRz8jGrw0FEsCzFk",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "correctAnswer": "akraba",
+    "id": "4ZZY3nNSyBaNKdda4zlC",
+    "difficulty": "Kolay",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "type": "Boşluk Doldurma",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "text": "Selamlaşmak, insanlar arasındaki bağı zayıflatır.",
+    "type": "Doğru/Yanlış",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "className": "6",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
+  },
+  {
+    "id": "5PbyMRz8jGrw0FEsCzFk",
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "text": "Hz. Hatice, Peygamberimize destek olurken onun ___ hakkına riayet etmesini, doğru konuşmasını ve fakiri doyurmasını örnek göstermiştir.",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "correctAnswer": "akraba",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "className": "6",
     "options": [
       "komşu",
       "yetim",
       "akraba",
       "misafir"
     ],
-    "difficulty": "Orta",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    }
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta"
   },
   {
     "id": "6Pgc7j3PfassVnWQ1Ih7",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
@@ -105,119 +107,117 @@
     },
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Peygamber Efendimiz, insanlarla iletişim kurarken her zaman sevgi ve ___ çerçevesinde hareket etmiştir.",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "correctAnswer": "saygı",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6",
-    "difficulty": "Kolay",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "type": "Boşluk Doldurma",
     "options": [
       "hoşgörü",
       "saygı",
       "şefkat",
       "merhamet"
     ],
-    "type": "Boşluk Doldurma"
+    "difficulty": "Kolay",
+    "correctAnswer": "saygı",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri"
   },
   {
     "id": "8Bh3oR5S5UbUzNFDbJux",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "zengin",
-    "className": "6",
-    "text": "Hz. Peygamber, malının üçte ikisini sadaka olarak vermek isteyen Sad bin Ebu Vakkas'a, mirasçılarını ___ bırakmanın daha hayırlı olduğunu belirtmiştir.",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "difficulty": "Zor",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "options": [
       "mutlu",
       "güvende",
       "zengin",
       "varlıklı"
     ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "className": "6",
     "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri"
+    "text": "Hz. Peygamber, malının üçte ikisini sadaka olarak vermek isteyen Sad bin Ebu Vakkas'a, mirasçılarını ___ bırakmanın daha hayırlı olduğunu belirtmiştir.",
+    "correctAnswer": "zengin"
   },
   {
     "id": "8le9U69SNlO3GrjcT97F",
-    "difficulty": "Orta",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "type": "Çoktan Seçmeli",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
     "correctAnswer": "Sılayırahim",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "className": "6",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "options": [
       "Vefa",
       "Sılayırahim",
       "Sadakat",
       "İhsan"
     ],
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Hz. Peygamber, akrabalık bağlarını koruyan kişilerin rızkının çoğalacağını ve ömrünün uzayacağını belirtmiştir. Bu durum İslam'da hangi kavramla ifade edilir?",
-    "className": "6",
-    "unitId": "03lmGqXTa8ejb174SiHt"
+    "type": "Çoktan Seçmeli",
+    "text": "Hz. Peygamber, akrabalık bağlarını koruyan kişilerin rızkının çoğalacağını ve ömrünün uzayacağını belirtmiştir. Bu durum İslam'da hangi kavramla ifade edilir?"
   },
   {
     "id": "B8Yg9n3gMdeMfre0ZfqE",
-    "difficulty": "Zor",
-    "type": "Boşluk Doldurma",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "correctAnswer": "akrabaya",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "komşuya",
       "yetime",
       "akrabaya",
       "fakire"
     ],
-    "text": "Kur'an-ı Kerim, Allah'ın adaleti, iyilik yapmayı ve ___ yardım etmeyi emrettiğini, hayâsızlığı, kötülüğü ve zorbalığı ise yasakladığını bildirir.",
     "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "difficulty": "Zor",
+    "text": "Kur'an-ı Kerim, Allah'ın adaleti, iyilik yapmayı ve ___ yardım etmeyi emrettiğini, hayâsızlığı, kötülüğü ve zorbalığı ise yasakladığını bildirir.",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "BuOjx1S1o6O2FMR9AzFt",
-    "text": "Sılayırahim, anne baba başta olmak üzere tüm akrabalar arasında güzel ilişki kurma, onları ziyaret etme ve onlara maddi manevi ___ bulunmadır.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "correctAnswer": "yardımda",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "className": "6",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "options": [
       "destekte",
       "ikramda",
       "yardımda",
       "bağışta"
     ],
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "difficulty": "Orta",
+    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "type": "Boşluk Doldurma"
+    "text": "Sılayırahim, anne baba başta olmak üzere tüm akrabalar arasında güzel ilişki kurma, onları ziyaret etme ve onlara maddi manevi ___ bulunmadır.",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "HsLDZUn2085eJ2LF9UyA",
@@ -226,83 +226,83 @@
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "type": "Doğru/Yanlış",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "difficulty": "Zor",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "correctAnswer": "Yanlış",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Hz. Peygamber, Medine’ye hicret ettikten sonra Mekke’ye asla geri dönmemiş ve Medineli Müslümanlara vefa borcunu ödemiştir.",
     "options": [],
-    "unitId": "03lmGqXTa8ejb174SiHt"
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "Doğru/Yanlış",
+    "text": "Hz. Peygamber, Medine’ye hicret ettikten sonra Mekke’ye asla geri dönmemiş ve Medineli Müslümanlara vefa borcunu ödemiştir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "difficulty": "Zor",
+    "className": "6",
+    "correctAnswer": "Yanlış"
   },
   {
     "id": "I72Dkm5lf3WsEq5WgEVP",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "options": [],
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "className": "6",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "correctAnswer": "Doğru",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "text": "Peygamber Efendimiz, emanete riayet etmeyen veya ahde vefa göstermeyenin imanının eksik olduğunu belirtmiştir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "text": "Peygamber Efendimiz, emanete riayet etmeyen veya ahde vefa göstermeyenin imanının eksik olduğunu belirtmiştir."
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "className": "6",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "ImBZxqJKIF2i1MOAjCAp",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "type": "Boşluk Doldurma",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "difficulty": "Orta",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "sevgi",
       "şefkat",
       "saygı",
       "yardım"
     ],
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "difficulty": "Orta",
+    "className": "6",
+    "correctAnswer": "saygı",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "text": "Hz. Peygamber’in \"O da bir insan değil mi?\" sözü, kim olursa olsun tüm insanlara ___ gösterilmesi gerektiğini vurgular.",
+    "type": "Boşluk Doldurma",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "correctAnswer": "saygı",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "text": "Hz. Peygamber’in \"O da bir insan değil mi?\" sözü, kim olursa olsun tüm insanlara ___ gösterilmesi gerektiğini vurgular."
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
   },
   {
     "id": "JSPvLFpo4RABm0ArPPTJ",
-    "correctAnswer": "Akrabayı koruyup gözetme",
     "text": "Sadaka verirken yoksula verilen sadakanın bir, akrabaya verilen sadakanın ise iki sevabı olduğu belirtilmiştir. İkinci sevap, hangi davranışı kapsar?",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Akrabayı koruyup gözetme",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "difficulty": "Orta",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "options": [
       "İkramda bulunma",
       "Misafir ağırlama",
       "Akrabayı koruyup gözetme",
       "Teşekkür etme"
     ],
-    "difficulty": "Orta",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
@@ -311,313 +311,305 @@
   },
   {
     "id": "KGDpEBL8KogNabKuw3je",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Peygamber Efendimiz, rızkının çoğalmasını ve ömrünün uzamasını isteyen kişiye akrabalarını kollayıp gözetmesini tavsiye etmiştir.",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "className": "6",
     "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Peygamber Efendimiz, rızkının çoğalmasını ve ömrünün uzamasını isteyen kişiye akrabalarını kollayıp gözetmesini tavsiye etmiştir.",
+    "className": "6",
     "options": [],
+    "difficulty": "Orta",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "difficulty": "Orta",
-    "type": "Doğru/Yanlış"
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri"
   },
   {
     "id": "Pn1jKOMoWZNmjZwtvuqy",
-    "type": "Boşluk Doldurma",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "difficulty": "Kolay",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "difficulty": "Kolay",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "correctAnswer": "rızasını",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "correctAnswer": "rızasını",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Akrabalık bağlarını korumak ve onlara iyi davranmak, Yüce Allah'ın ___ kazanmak için bir vesiledir.",
     "options": [
       "yardımını",
       "sevgisini",
       "rahmetini",
       "rızasını"
     ],
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "text": "Akrabalık bağlarını korumak ve onlara iyi davranmak, Yüce Allah'ın ___ kazanmak için bir vesiledir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "QD5AX3uK1Esu2gju7MKT",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Ebu Talha'nın en sevdiği hurma bahçesi \"Beyrahâ\"yı Allah yolunda sadaka olarak bağışlaması üzerine, Peygamberimiz onu ne şekilde değerlendirmesini tavsiye etmiştir?",
-    "difficulty": "Zor",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Akrabaları arasında taksim etmesini",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
+    "correctAnswer": "Akrabaları arasında taksim etmesini",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "difficulty": "Zor",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Ebu Talha'nın en sevdiği hurma bahçesi \"Beyrahâ\"yı Allah yolunda sadaka olarak bağışlaması üzerine, Peygamberimiz onu ne şekilde değerlendirmesini tavsiye etmiştir?",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6",
     "options": [
       "Fakirlere dağıtmasını",
       "Akrabaları arasında taksim etmesini",
       "Mescide vakfetmesini",
       "Yetimlere vermesini"
-    ]
+    ],
+    "type": "Çoktan Seçmeli",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "TfdwBjWxBfCRe0fVIcCa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "className": "6",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Yanlış",
     "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
     "text": "Hz. Hatice, Peygamberimizi teselli ederken onun akraba hakkına riayet etmediğini söylemiştir.",
     "options": [],
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "correctAnswer": "Yanlış"
-  },
-  {
-    "id": "UFwG1PK71dv4XrReE9Q2",
-    "text": "Peygamber Efendimiz’in Mekke fethinden sonra Medine’ye dönmesi, zor zamanında kendisine kucak açan Medinelilere karşı bir ___ örneğidir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
+    "difficulty": "Zor",
+    "className": "6",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "unitId": "03lmGqXTa8ejb174SiHt"
+  },
+  {
+    "id": "UFwG1PK71dv4XrReE9Q2",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Orta",
     "options": [
       "şükran",
       "minnet",
       "vefa",
       "sevgi"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "className": "6",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "correctAnswer": "vefa",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "difficulty": "Orta"
-  },
-  {
-    "id": "WNfBcEoI3wM6d1YwbiFM",
-    "type": "Doğru/Yanlış",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "options": [],
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "vefa",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "text": "Peygamber Efendimiz’in Mekke fethinden sonra Medine’ye dönmesi, zor zamanında kendisine kucak açan Medinelilere karşı bir ___ örneğidir.",
+    "type": "Boşluk Doldurma"
+  },
+  {
+    "id": "WNfBcEoI3wM6d1YwbiFM",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "className": "6",
     "text": "Hz. Peygamber, küçüklerine merhamet etmeyenlerin ve büyüklerine saygı göstermeyenlerin Müslümanlardan olmadığını belirtmiştir.",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "className": "6",
+    "type": "Doğru/Yanlış",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topic": "1. Peygamberimizin Toplumsal İlişkileri"
   },
   {
     "id": "WxOPTQLKhwWP0CdHNx9A",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
     "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
+    "text": "Hz. Peygamber, bir Yahudi cenazesi geçerken ayağa kalkarak insanlara değer verdiğini göstermiştir.",
     "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "difficulty": "Orta",
+    "options": [],
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    }
+  },
+  {
+    "id": "YFx4lBVwRHLrB7lSHArZ",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "correctAnswer": "muhabbeti",
+    "className": "6",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "text": "Peygamber Efendimiz, insanlara tebessüm etmeyi tavsiye ederek, bunun toplumda ___ artıracağını belirtmiştir.",
+    "difficulty": "Kolay",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "correctAnswer": "Doğru",
-    "options": [],
-    "text": "Hz. Peygamber, bir Yahudi cenazesi geçerken ayağa kalkarak insanlara değer verdiğini göstermiştir.",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri"
-  },
-  {
-    "id": "YFx4lBVwRHLrB7lSHArZ",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "muhabbeti",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "options": [
       "huzuru",
       "neşeyi",
       "muhabbeti",
       "mutluluğu"
-    ],
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Peygamber Efendimiz, insanlara tebessüm etmeyi tavsiye ederek, bunun toplumda ___ artıracağını belirtmiştir.",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Kolay"
+    ]
   },
   {
     "id": "bf0iYcsxmQXRY50jahcT",
-    "className": "6",
+    "correctAnswer": "Doğru",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "type": "Doğru/Yanlış",
-    "options": [],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "text": "Peygamber Efendimiz, sadece Müslümanlarla değil, toplumun her kesimiyle iyi ilişkiler kurmuştur.",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "correctAnswer": "Doğru",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "difficulty": "Kolay"
+    "options": [],
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "text": "Peygamber Efendimiz, sadece Müslümanlarla değil, toplumun her kesimiyle iyi ilişkiler kurmuştur.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "dTYYeMSb6gDIpJK6BKKw",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "type": "Çoktan Seçmeli",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "className": "6",
-    "correctAnswer": "Değer verme",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "text": "Peygamber Efendimiz’in toplumsal ilişkilerde gösterdiği hangi özellik, onun davetleri geri çevirmemesini ve kalpleri kırmamasını sağlamıştır?",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "type": "Çoktan Seçmeli",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Değer verme",
     "difficulty": "Orta",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "Hoşgörü",
       "Adalet",
       "Kibirli olmama",
       "Değer verme"
-    ]
+    ],
+    "className": "6"
   },
   {
     "id": "fEF15sjzlNB90pobohUZ",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "className": "6",
-    "difficulty": "Orta",
     "text": "Hz. Hatice'nin, ilk vahiyden sonra Peygamberimizi teselli ederken saydığı özelliklerinden biri aşağıdakilerden hangisidir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
     "correctAnswer": "Akraba hakkına riayet etmesi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Çok namaz kılması",
       "Akraba hakkına riayet etmesi",
       "Sadece zenginlere yardım etmesi",
       "Misafiri ağırlamaması"
     ],
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri"
+    "className": "6"
   },
   {
     "id": "fXwVpoVNT5QHSSwXK6Bc",
-    "difficulty": "Orta",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "options": [],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Peygamber, insanların birbirlerini sevmedikçe tam manasıyla iman etmiş olmayacağını belirtmiştir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
+    "type": "Doğru/Yanlış",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "text": "Hz. Peygamber, insanların birbirlerini sevmedikçe tam manasıyla iman etmiş olmayacağını belirtmiştir.",
-    "className": "6"
+    "difficulty": "Orta",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Doğru",
+    "className": "6",
+    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "g7Kb1mBtqsfxU67gkVFU",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Sevgi ve Saygı",
     "options": [
       "Güç",
       "Zenginlik",
       "Sevgi ve Saygı",
       "Makam"
     ],
-    "difficulty": "Kolay",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "correctAnswer": "Sevgi ve Saygı",
-    "type": "Çoktan Seçmeli",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "text": "Peygamber Efendimiz, insanlarla ilişkilerinde hangi temel değeri ön planda tutmuştur?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "className": "6",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "type": "Çoktan Seçmeli",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "className": "6"
   },
   {
     "id": "gBuPMPUopokllL7rdlkA",
-    "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
     "className": "6",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "sevgi",
       "ilgi",
@@ -625,74 +617,102 @@
       "şefkat"
     ],
     "text": "Sevgili Peygamberimiz, küçüklerimize merhamet etmeyi, büyüklerimize ise ___ göstermeyi emretmiştir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "correctAnswer": "saygı"
+    "type": "Boşluk Doldurma",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "difficulty": "Kolay",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "correctAnswer": "saygı",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    }
   },
   {
     "id": "h8OEcsXQrY692WmR0Mh8",
-    "text": "Sevgili Peygamberimiz, büyük küçük herkesle selamlaşmış ve hâl hatır sormuştur.",
-    "className": "6",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [],
     "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "correctAnswer": "Doğru",
+    "className": "6",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "text": "Sevgili Peygamberimiz, büyük küçük herkesle selamlaşmış ve hâl hatır sormuştur.",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "correctAnswer": "Doğru",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "type": "Doğru/Yanlış",
-    "unitId": "03lmGqXTa8ejb174SiHt"
+    "options": []
   },
   {
     "id": "ixIanTorKJewaNa4akI9",
     "type": "Çoktan Seçmeli",
-    "className": "6",
-    "correctAnswer": "Geniş kapsamlı iyilik yapma",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "difficulty": "Zor",
     "options": [
       "Misafirperverlik",
       "Geniş kapsamlı iyilik yapma",
       "Yalnızca Müslümanlara yardım",
       "Sosyal adaleti sağlama"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "text": "Kur’an-ı Kerim’de \"Allah’a ibadet edin ve O’na hiçbir şeyi ortak koşmayın. Anne babaya, akrabaya, yetimlere, yoksullara, yakın komşuya, uzak komşuya, yanınızdaki arkadaşa, yolcuya, elinizin altındakilere iyilik edin.\" ayeti, Peygamberimizin hangi toplumsal ilişkisini destekler niteliktedir?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "text": "Kur’an-ı Kerim’de \"Allah’a ibadet edin ve O’na hiçbir şeyi ortak koşmayın. Anne babaya, akrabaya, yetimlere, yoksullara, yakın komşuya, uzak komşuya, yanınızdaki arkadaşa, yolcuya, elinizin altındakilere iyilik edin.\" ayeti, Peygamberimizin hangi toplumsal ilişkisini destekler niteliktedir?"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "className": "6",
+    "difficulty": "Zor",
+    "correctAnswer": "Geniş kapsamlı iyilik yapma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri"
   },
   {
     "id": "kBeimi8gggPVeCnu02hQ",
-    "correctAnswer": "Herkese selam vermeyi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "className": "6",
     "options": [
       "Mal biriktirmeyi",
       "Uzun sohbetler etmeyi",
       "Herkese selam vermeyi",
       "Yalnızca akrabaları ziyaret etmeyi"
     ],
-    "type": "Çoktan Seçmeli",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "className": "6",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "difficulty": "Kolay",
+    "correctAnswer": "Herkese selam vermeyi",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Toplumda güven ortamının oluşması için Peygamber Efendimiz hangi davranışı tavsiye etmiştir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Toplumda güven ortamının oluşması için Peygamber Efendimiz hangi davranışı tavsiye etmiştir?"
+  },
+  {
+    "id": "kEvZAnHfAi0EbtcxNKpA",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "difficulty": "Zor",
+    "options": [],
     "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "text": "Peygamberimiz, insanlara yemek yedirmenin ve tanıdık tanımadık herkese selam vermenin en hayırlı amellerden olduğunu ifade etmiştir.",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
@@ -700,194 +720,194 @@
     }
   },
   {
-    "id": "kEvZAnHfAi0EbtcxNKpA",
-    "className": "6",
-    "type": "Doğru/Yanlış",
-    "options": [],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "difficulty": "Zor",
-    "text": "Peygamberimiz, insanlara yemek yedirmenin ve tanıdık tanımadık herkese selam vermenin en hayırlı amellerden olduğunu ifade etmiştir.",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "correctAnswer": "Doğru"
-  },
-  {
     "id": "lFj5fKdCPkmJpHghvHnt",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "correctAnswer": "selam",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Orta",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "options": [
       "hediye",
       "sadaka",
       "selam",
       "yemek"
     ],
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
     "text": "İslam'da en hayırlı amellerden biri, hem tanıdık hem de tanımadık herkese ___ vermektir.",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri"
-  },
-  {
-    "id": "mUH8GCZIRTyTaUVF7HL3",
-    "className": "6",
-    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "selam",
+    "className": "6",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "unitId": "03lmGqXTa8ejb174SiHt"
+  },
+  {
+    "id": "mUH8GCZIRTyTaUVF7HL3",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "correctAnswer": "akrabalarını",
+    "text": "Resulullah, \"Rızkının çoğalmasını ve ömrünün uzamasını isteyen kişi ___ kollayıp gözetsin.\" buyurmuştur.",
+    "type": "Boşluk Doldurma",
     "difficulty": "Zor",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "options": [
       "komşularını",
       "arkadaşlarını",
       "akrabalarını",
       "yetimleri"
     ],
-    "text": "Resulullah, \"Rızkının çoğalmasını ve ömrünün uzamasını isteyen kişi ___ kollayıp gözetsin.\" buyurmuştur.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "correctAnswer": "akrabalarını",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "mc0fim2OPpzQIVYqJeCK",
-    "text": "Hz. Peygamber’in \"O da bir insan değil mi?\" sözünü hangi olay üzerine söylediği rivayet edilir?",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "Çoktan Seçmeli",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "difficulty": "Kolay",
-    "correctAnswer": "Bir cenaze geçerken",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "className": "6",
+    "text": "Hz. Peygamber’in \"O da bir insan değil mi?\" sözünü hangi olay üzerine söylediği rivayet edilir?",
     "options": [
       "Bir hastayı ziyaret ederken",
       "Bir cenaze geçerken",
       "Bir misafiri ağırlarken",
       "Bir fakire yardım ederken"
     ],
+    "className": "6",
+    "correctAnswer": "Bir cenaze geçerken",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
-    }
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "difficulty": "Kolay",
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
   },
   {
     "id": "o0EpKBYQ2816hWifO3WU",
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "correctAnswer": "vefa",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "options": [
       "sadakat",
       "doğruluk",
       "vefa",
       "bağlılık"
     ],
-    "text": "Peygamber Efendimiz, emanete riayet etmeyenin imanı olmadığını, ahde ___ göstermeyenin ise dini olmadığını buyurmuştur.",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "vefa",
     "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    }
-  },
-  {
-    "id": "o9FUAYA2QcWG8Oy8YeEV",
+    "text": "Peygamber Efendimiz, emanete riayet etmeyenin imanı olmadığını, ahde ___ göstermeyenin ise dini olmadığını buyurmuştur.",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
     "difficulty": "Zor",
-    "text": "Yoksula verilen sadaka bir sevap iken, akrabaya verilen sadakanın hem sadaka hem de ___ sevabı olmak üzere iki sevabı vardır.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "unitId": "03lmGqXTa8ejb174SiHt"
+  },
+  {
+    "id": "o9FUAYA2QcWG8Oy8YeEV",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "difficulty": "Zor",
+    "className": "6",
+    "text": "Yoksula verilen sadaka bir sevap iken, akrabaya verilen sadakanın hem sadaka hem de ___ sevabı olmak üzere iki sevabı vardır.",
     "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "correctAnswer": "sılayırahim",
     "type": "Boşluk Doldurma",
+    "correctAnswer": "sılayırahim",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "options": [
       "bereket",
       "merhamet",
       "sılayırahim",
       "vefa"
-    ]
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "oiBz4BN2r9ExLSv6Rk6D",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "text": "Hz. Esma’nın gayrimüslim annesi geldiğinde ona nasıl davranması gerektiğini sorması üzerine Peygamberimiz’in cevabı, İslam’ın hangi evrensel ilkesine dikkat çeker?",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
     "options": [
       "İnanç özgürlüğü",
       "Akrabalık bağlarının korunması",
       "Misyonerlik faaliyetleri",
       "Toplumsal eşitlik"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Zor",
+    "type": "Çoktan Seçmeli",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "text": "Hz. Esma’nın gayrimüslim annesi geldiğinde ona nasıl davranması gerektiğini sorması üzerine Peygamberimiz’in cevabı, İslam’ın hangi evrensel ilkesine dikkat çeker?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "correctAnswer": "Akrabalık bağlarının korunması",
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
+  },
+  {
+    "id": "osZlpqTYl3eMYnw0GCjZ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "correctAnswer": "Akrabalık bağlarının korunması",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "type": "Çoktan Seçmeli",
-    "className": "6"
-  },
-  {
-    "id": "osZlpqTYl3eMYnw0GCjZ",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "difficulty": "Orta",
+    "correctAnswer": "Vallâhi iman etmiş olmaz",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "options": [
       "Cennete giremez",
       "Allah onu sevmez",
       "Vallâhi iman etmiş olmaz",
       "Müslüman değildir"
     ],
-    "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "className": "6",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Çoktan Seçmeli",
     "text": "Komşuluk ilişkilerinde Peygamber Efendimiz hangi uyarıyı yaparak, komşusunun kötülüklerinden emin olamayan kişinin iman etmiş olmadığını vurgulamıştır?",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "correctAnswer": "Vallâhi iman etmiş olmaz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6"
+  },
+  {
+    "id": "pfth7hl4CzaDge6ZP5dd",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "options": [],
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Peygamber Efendimiz, komşuluk ilişkilerinde sadece Müslüman komşulara iyilik yapılmasını emretmiştir.",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "difficulty": "Orta",
+    "correctAnswer": "Yanlış",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
@@ -895,51 +915,38 @@
     }
   },
   {
-    "id": "pfth7hl4CzaDge6ZP5dd",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    },
-    "text": "Peygamber Efendimiz, komşuluk ilişkilerinde sadece Müslüman komşulara iyilik yapılmasını emretmiştir.",
-    "correctAnswer": "Yanlış",
-    "options": [],
-    "difficulty": "Orta",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri"
-  },
-  {
     "id": "snvVCSwCLOWhxrQAyRa2",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "className": "6",
-    "text": "İslam dininde akrabalık ilişkilerine önem verilmemiştir.",
     "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "correctAnswer": "Yanlış",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "text": "İslam dininde akrabalık ilişkilerine önem verilmemiştir.",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "options": [],
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": []
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "uMzU9IGlZy3TwfYYV7ED",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "text": "Peygamber Efendimiz, \"Emanete riayet etmeyenin imanı yoktur, ahde vefa göstermeyenin ise dini yoktur.\" buyurmuştur. Bu hadis, hangi iki temel ahlaki ilkeye vurgu yapmaktadır?",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386416,
+      "nanoseconds": 160000000
+    },
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "className": "6",
+    "difficulty": "Zor",
     "options": [
       "Sabır ve şükür",
       "Doğruluk ve dürüstlük",
@@ -947,6 +954,19 @@
       "Adalet ve merhamet"
     ],
     "correctAnswer": "Emanet ve vefa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Peygamber Efendimiz, \"Emanete riayet etmeyenin imanı yoktur, ahde vefa göstermeyenin ise dini yoktur.\" buyurmuştur. Bu hadis, hangi iki temel ahlaki ilkeye vurgu yapmaktadır?",
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "xGtSElekMsQLlDTyFOEN",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "text": "Peygamber Efendimiz’in Medine'ye hicret etmesi ve vefatına kadar orada kalması, Medineli Müslümanlara karşı hangi değerin somut bir göstergesidir?",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
@@ -954,99 +974,79 @@
     },
     "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "className": "6",
-    "type": "Çoktan Seçmeli"
-  },
-  {
-    "id": "xGtSElekMsQLlDTyFOEN",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "difficulty": "Zor",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Vefa",
     "options": [
       "Minnet",
       "Vefa",
       "Şefkat",
       "Adalet"
     ],
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "text": "Peygamber Efendimiz’in Medine'ye hicret etmesi ve vefatına kadar orada kalması, Medineli Müslümanlara karşı hangi değerin somut bir göstergesidir?",
+    "correctAnswer": "Vefa",
     "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386416,
-      "nanoseconds": 160000000
-    }
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "zFTxNlYntNAR3YaSTRbC",
     "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "className": "6",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "type": "Doğru/Yanlış",
+    "text": "Sılayırahim, sadece akrabaları maddi olarak desteklemeyi ifade eder.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Yanlış",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "options": [],
     "difficulty": "Orta",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "text": "Sılayırahim, sadece akrabaları maddi olarak desteklemeyi ifade eder.",
-    "correctAnswer": "Yanlış",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "s1RCsv1AmmHznus7cQKJ"
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri"
   },
   {
     "id": "zGj1FvWQz2LKIAxRkTJf",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "text": "Akrabaya verilen sadakanın sadece sadaka sevabı vardır.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Zor",
-    "type": "Doğru/Yanlış",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "correctAnswer": "Yanlış",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
+    "className": "6",
     "options": [],
-    "className": "6"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Akrabaya verilen sadakanın sadece sadaka sevabı vardır.",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor"
   },
   {
     "id": "zIHBqWiVYvWsAz7rJNcV",
-    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "correctAnswer": "iman etmiş",
+    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
     "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "Boşluk Doldurma",
+    "text": "Hz. Peygamber, komşuluk ilişkilerine büyük önem vermiş ve kötülüklerinden emin olunmayan kişinin ___ olmadığını belirtmiştir.",
+    "topicName": "1. Peygamberimizin Toplumsal İlişkileri",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386416,
       "nanoseconds": 160000000
     },
-    "topic": "1. Peygamberimizin Toplumsal İlişkileri",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "options": [
       "Müslüman",
       "dost",
       "iman etmiş",
       "akraba"
     ],
-    "className": "6",
-    "correctAnswer": "iman etmiş",
-    "text": "Hz. Peygamber, komşuluk ilişkilerine büyük önem vermiş ve kötülüklerinden emin olunmayan kişinin ___ olmadığını belirtmiştir."
+    "unitId": "03lmGqXTa8ejb174SiHt"
   }
 ]

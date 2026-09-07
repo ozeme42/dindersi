@@ -1,13 +1,29 @@
 [
   {
     "id": "12qb6453ZKJYIzG2kKei",
-    "content": {
-      "definition": "Belli nitelikleri olan bir hayvanı belirli günlerde ibadet niyetiyle usulüne uygun bir biçimde kesmek.",
-      "term": "Kurban"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673370,
+      "nanoseconds": 718000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "definition",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "hfO1uzccryKQEoeNuJve",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "content": {
+      "term": "Kurban",
+      "definition": "Belli nitelikleri olan bir hayvanı belirli günlerde ibadet niyetiyle usulüne uygun bir biçimde kesmek."
+    }
+  },
+  {
+    "id": "1wV5XZKXc64jtkInmXhs",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "definition": "Herhangi bir sebeple kişinin Allah’a (cc) şükür için kestiği kurban.",
+      "term": "Şükür kurbanı"
+    },
+    "topicId": "hfO1uzccryKQEoeNuJve",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
@@ -16,134 +32,117 @@
     "type": "definition"
   },
   {
-    "id": "1wV5XZKXc64jtkInmXhs",
-    "type": "definition",
-    "topicId": "hfO1uzccryKQEoeNuJve",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "definition": "Herhangi bir sebeple kişinin Allah’a (cc) şükür için kestiği kurban.",
-      "term": "Şükür kurbanı"
-    },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761673370,
-      "nanoseconds": 718000000
-    }
-  },
-  {
     "id": "2kYNqOr0QGZ8vBDe6pUP",
-    "type": "concept",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "hfO1uzccryKQEoeNuJve",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761673370,
-      "nanoseconds": 718000000
-    },
     "content": {
       "text": "Nisap"
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq"
-  },
-  {
-    "id": "64yJ9teDB5oHg830ItTL",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
-    },
-    "type": "sentence",
-    "topicId": "hfO1uzccryKQEoeNuJve",
-    "content": {
-      "text": "Kurbanın Bismillâhi Allahu Ekber diyerek Allah’ın (cc) adıyla kesilmesi gerekir."
     }
   },
   {
-    "id": "7VKpo23HnWHc0iBw2H8J",
+    "id": "64yJ9teDB5oHg830ItTL",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "sentence",
     "content": {
-      "term": "Akika kurbanı",
-      "definition": "Doğan çocuk için Allah’a (cc) şükür amacıyla kesilen kurban."
+      "text": "Kurbanın Bismillâhi Allahu Ekber diyerek Allah’ın (cc) adıyla kesilmesi gerekir."
     },
     "topicId": "hfO1uzccryKQEoeNuJve",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition",
     "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
-    "id": "CmyKz6tw4FvtPNmrO39h",
+    "id": "7VKpo23HnWHc0iBw2H8J",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
     },
+    "topicId": "hfO1uzccryKQEoeNuJve",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "term": "Akika kurbanı",
+      "definition": "Doğan çocuk için Allah’a (cc) şükür amacıyla kesilen kurban."
+    }
+  },
+  {
+    "id": "CmyKz6tw4FvtPNmrO39h",
     "type": "definition",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "definition": "Hac ve umrede kesilen kurbanlar.",
       "term": "Hedy (kurbanı)"
     },
-    "topicId": "hfO1uzccryKQEoeNuJve"
-  },
-  {
-    "id": "E6GSGuJ2amwZFWVuNM56",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "hfO1uzccryKQEoeNuJve",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "hfO1uzccryKQEoeNuJve",
-    "type": "definition",
+    "unitId": "cl2EvUjXPPI922VAJMbq"
+  },
+  {
+    "id": "E6GSGuJ2amwZFWVuNM56",
     "content": {
-      "term": "Adak kurbanı",
-      "definition": "Kişinin bir dilekte bulunup da isteğinin gerçekleşmesi hâlinde yapacağına dair Allah’a (cc) verdiği söz doğrultusunda kesilen kurban."
+      "definition": "Kişinin bir dilekte bulunup da isteğinin gerçekleşmesi hâlinde yapacağına dair Allah’a (cc) verdiği söz doğrultusunda kesilen kurban.",
+      "term": "Adak kurbanı"
+    },
+    "type": "definition",
+    "topicId": "hfO1uzccryKQEoeNuJve",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673370,
+      "nanoseconds": 718000000
     }
   },
   {
     "id": "FJreo1fVak1Pg4xOV7Yx",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "hfO1uzccryKQEoeNuJve",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Kurban, yardımlaşma ve dayanışmanın bir örneğidir."
     },
-    "topicId": "hfO1uzccryKQEoeNuJve",
     "type": "sentence"
   },
   {
     "id": "JEDc9YVlWU71VvEeA9Zg",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "definition",
     "unitId": "cl2EvUjXPPI922VAJMbq",
+    "content": {
+      "term": "Nisap",
+      "definition": "Dinen zenginlik ölçüsü."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "hfO1uzccryKQEoeNuJve",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
-    },
-    "topicId": "hfO1uzccryKQEoeNuJve",
-    "content": {
-      "term": "Nisap",
-      "definition": "Dinen zenginlik ölçüsü."
     }
   },
   {
     "id": "WwgHVoKVl99Ium8PU6sy",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "concept",
     "topicId": "hfO1uzccryKQEoeNuJve",
     "content": {
       "text": "Akika kurbanı"
@@ -153,103 +152,105 @@
       "seconds": 1761673370,
       "nanoseconds": 718000000
     },
+    "type": "concept",
     "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "baWYl1qHDG1lEgAE97BA",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "hfO1uzccryKQEoeNuJve",
     "content": {
-      "definition": "(Alevi-Bektaşi geleneğinde kurbanın) kesilmesi.",
-      "term": "Tığlanma (Kurbanın tığlanması)"
+      "term": "Tığlanma (Kurbanın tığlanması)",
+      "definition": "(Alevi-Bektaşi geleneğinde kurbanın) kesilmesi."
     },
+    "topicId": "hfO1uzccryKQEoeNuJve",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
-    }
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "c4FQn05xzu1TtDOR4vtM",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "hfO1uzccryKQEoeNuJve",
-    "content": {
-      "text": "Adak kurbanı"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "concept",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "hfO1uzccryKQEoeNuJve",
+    "content": {
+      "text": "Adak kurbanı"
     }
   },
   {
     "id": "hN7iQn0vfORvJA9z2jaF",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
     },
-    "type": "sentence",
     "topicId": "hfO1uzccryKQEoeNuJve",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Onların ne etleri Allah’a ulaşır ne de kanları. O’na ulaşacak olan sadece sizin takvanızdır."
     }
   },
   {
     "id": "mDVI9RqqEAFP9pJqLmhI",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761673370,
-      "nanoseconds": 718000000
-    },
-    "topicId": "hfO1uzccryKQEoeNuJve",
     "content": {
       "text": "Tığlanma (Kurbanın tığlanması)"
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "concept",
-    "unitId": "cl2EvUjXPPI922VAJMbq"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "hfO1uzccryKQEoeNuJve",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673370,
+      "nanoseconds": 718000000
+    }
   },
   {
     "id": "nciPW5JixgclbWjqIcwO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
       "nanoseconds": 718000000
     },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Hedy (kurbanı)"
     },
-    "topicId": "hfO1uzccryKQEoeNuJve",
-    "unitId": "cl2EvUjXPPI922VAJMbq"
-  },
-  {
-    "id": "orwIZx4A7dTOLuwIapkz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761673370,
-      "nanoseconds": 718000000
-    },
     "type": "concept",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "content": {
-      "text": "Şükür kurbanı"
-    },
     "topicId": "hfO1uzccryKQEoeNuJve",
     "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
-    "id": "qEOAGPo5KHMuM7QpCGe4",
+    "id": "orwIZx4A7dTOLuwIapkz",
+    "content": {
+      "text": "Şükür kurbanı"
+    },
+    "topicId": "hfO1uzccryKQEoeNuJve",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673370,
+      "nanoseconds": 718000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "qEOAGPo5KHMuM7QpCGe4",
+    "content": {
+      "text": "Kurban"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673370,
@@ -257,8 +258,7 @@
     },
     "topicId": "hfO1uzccryKQEoeNuJve",
     "type": "concept",
-    "content": {
-      "text": "Kurban"
-    }
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   }
 ]
