@@ -3,6 +3,7 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
+import Link from "next/link";
 import {
     Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
@@ -878,6 +879,20 @@ export default function ExamQuestionBankPage() {
 
       <div className="max-w-7xl mx-auto relative z-10 space-y-8">
         
+        {/* Top Navigation */}
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+            <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/10 bg-slate-900/60 backdrop-blur-md rounded-xl h-11 px-5 shadow-lg">
+                <Link href="/">
+                    <Home className="mr-2 h-5 w-5 text-indigo-400" /> Ana Sayfaya Dön
+                </Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/5 rounded-xl h-11 px-5">
+                <Link href="/teacher">
+                    <ArrowLeft className="mr-2 h-5 w-5" /> Öğretmen Paneli
+                </Link>
+            </Button>
+        </div>
+
         {/* Header */}
         <div className="text-center space-y-4 py-6">
             <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-white/10 rounded-full shadow-2xl mb-2">
@@ -952,14 +967,25 @@ export default function ExamQuestionBankPage() {
                 </div>
                 
                 <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
-                    <Button 
-                        variant="outline" 
-                        onClick={handleBack}
-                        disabled={currentStep === 1}
-                        className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 px-6 rounded-xl text-lg bg-transparent disabled:opacity-30"
-                    >
-                        <ArrowLeft className="mr-2 h-5 w-5" /> Geri
-                    </Button>
+                    {currentStep === 1 ? (
+                        <Button 
+                            asChild 
+                            variant="outline" 
+                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 px-6 rounded-xl text-lg bg-transparent"
+                        >
+                            <Link href="/">
+                                <Home className="mr-2 h-5 w-5 text-indigo-400" /> Ana Sayfa
+                            </Link>
+                        </Button>
+                    ) : (
+                        <Button 
+                            variant="outline" 
+                            onClick={handleBack}
+                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 px-6 rounded-xl text-lg bg-transparent"
+                        >
+                            <ArrowLeft className="mr-2 h-5 w-5" /> Geri
+                        </Button>
+                    )}
                     {currentStep < steps.length && (
                          <Button 
                             onClick={handleNext} 
