@@ -181,14 +181,12 @@ export default function SourceTextsManagementPage() {
                 }
             }
 
-            // 2. Firestore'da olup manifest'te bulunmayan ek konular varsa onları da ekle
+            // 2. Firestore'da olup manifest'te bulunmayan ek konular varsa sadece geçerli meta bilgisi olanları ekle
             firestoreTopicsMap.forEach((val, topicId) => {
                 if (!seenTopicIds.has(topicId)) {
-                    const d = val.data;
-                    const pathParts = val.path.split('/');
-                    const courseId = pathParts[1] || '';
-                    const unitId = pathParts[3] || '';
                     const meta = topicMetaMap.get(topicId);
+                    if (!meta) return; // Yetim veya silinmiş derslere ait konuları fihriste ekleme
+                    const d = val.data;
                     const sourceText = (d.sourceText || '').trim();
                     const wordCount = sourceText ? sourceText.split(/\s+/).filter(Boolean).length : 0;
                     const charCount = sourceText.length;
@@ -196,14 +194,14 @@ export default function SourceTextsManagementPage() {
                     topicList.push({
                         id: topicId,
                         topicId,
-                        courseId: courseId || meta?.courseId || '',
-                        unitId: unitId || meta?.unitId || '',
-                        title: d.title || meta?.topicTitle || 'İsimsiz Konu',
+                        courseId: meta.courseId,
+                        unitId: meta.unitId,
+                        title: d.title || meta.topicTitle || 'İsimsiz Konu',
                         sourceText,
-                        className: meta?.className || 'Din Kültürü',
-                        grade: meta?.grade || '5',
-                        unitTitle: meta?.unitTitle || 'Ünite',
-                        courseTitle: formatCourseTitle(meta?.courseTitle || d.courseTitle || 'Din Kültürü ve Ahlak Bilgisi'),
+                        className: meta.className,
+                        grade: meta.grade,
+                        unitTitle: meta.unitTitle,
+                        courseTitle: meta.courseTitle,
                         wordCount,
                         charCount
                     });
