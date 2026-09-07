@@ -27,6 +27,7 @@ import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { QuestionDialog } from "@/components/question-dialog";
 import { addStudentToClass } from "@/app/teacher/students/actions";
+import { updateMultipleStudentScores } from "@/app/teacher/smartboard/actions";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,8 +51,18 @@ type GameCompetitor = UserProfile & { score: number; colorIndex: number };
 
 // --- BİLEŞENLER ---
 
-// Liderlik Tablosu Kartı (Kompakt ve Bilgilendirici)
-const LeaderboardCard = ({ competitor, rank, onClick }: { competitor: GameCompetitor, rank: number, onClick: () => void }) => {
+// Liderlik Tablosu Kartı (Kompakt, Bilgilendirici ve Hızlı Puan Düzeltmeli)
+const LeaderboardCard = ({ 
+    competitor, 
+    rank, 
+    onClick,
+    onAdjustScore
+}: { 
+    competitor: GameCompetitor, 
+    rank: number, 
+    onClick: () => void,
+    onAdjustScore?: (e: React.MouseEvent, delta: number) => void 
+}) => {
     const color = PLAYER_COLORS[competitor.colorIndex % PLAYER_COLORS.length];
     const getInitials = (name?: string) => name ? name.trim().charAt(0).toLocaleUpperCase('tr-TR') : '?';
 
@@ -59,34 +70,55 @@ const LeaderboardCard = ({ competitor, rank, onClick }: { competitor: GameCompet
         <div 
             onClick={onClick}
             className={cn(
-                "relative group cursor-pointer transition-all duration-300 transform rounded-lg border-l-4 flex items-center p-3 h-20 shadow-md hover:shadow-xl hover:translate-x-1 active:scale-95 bg-slate-900/50",
+                "relative group cursor-pointer transition-all duration-300 transform rounded-xl border-l-4 flex items-center p-3 h-20 shadow-md hover:shadow-xl hover:translate-x-1 active:scale-[0.99] bg-slate-900/70 backdrop-blur-md border border-white/5",
                 color.border, color.bg
             )}
         >
             {/* Sol: Sıralama */}
-            <div className="w-12 shrink-0 flex flex-col items-center justify-center border-r border-white/10 pr-3 mr-3">
-                {rank === 0 ? <Crown className="h-8 w-8 text-yellow-400 animate-pulse drop-shadow-md"/> : 
-                 rank === 1 ? <Medal className="h-7 w-7 text-slate-300"/> :
-                 rank === 2 ? <Medal className="h-7 w-7 text-amber-700"/> : 
-                 <span className="text-2xl font-black text-slate-500/50">#{rank + 1}</span>}
+            <div className="w-10 shrink-0 flex flex-col items-center justify-center border-r border-white/10 pr-2 mr-2">
+                {rank === 0 ? <Crown className="h-7 w-7 text-yellow-400 animate-pulse drop-shadow-md"/> : 
+                 rank === 1 ? <Medal className="h-6 w-6 text-slate-300"/> :
+                 rank === 2 ? <Medal className="h-6 w-6 text-amber-600"/> : 
+                 <span className="text-xl font-black text-slate-500/50">#{rank + 1}</span>}
             </div>
 
             {/* Orta: İsim ve Avatar */}
-            <div className="flex items-center gap-3 flex-1 min-w-0">
-                <Avatar className={cn("h-10 w-10 border-2", color.border)}>
+            <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                <Avatar className={cn("h-10 w-10 border-2 shrink-0", color.border)}>
                     <AvatarImage src={competitor.avatar || ''} />
                     <AvatarFallback className="bg-slate-950 font-bold text-white text-xs">{getInitials(competitor.displayName)}</AvatarFallback>
                 </Avatar>
                 <div className="truncate">
-                    <h3 className={cn("font-bold text-base md:text-lg truncate leading-tight", color.text)}>
+                    <h3 className={cn("font-bold text-sm md:text-base truncate leading-tight", color.text)}>
                         {competitor.displayName}
                     </h3>
+                    <span className="text-[10px] text-slate-400 hidden sm:block">Soru seçmek için dokun</span>
                 </div>
             </div>
 
-            {/* Sağ: Puan */}
-            <div className="shrink-0 pl-3">
-                <div className={cn("text-3xl font-black tabular-nums tracking-tighter drop-shadow-sm", color.score)}>
+            {/* Sağ: Manuel Puan Düzeltme & Puan */}
+            <div className="shrink-0 flex items-center gap-1.5 pl-2">
+                {onAdjustScore && (
+                    <div className="flex flex-col gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                        <button
+                            type="button"
+                            onClick={(e) => onAdjustScore(e, 5)}
+                            title="+5 Puan Ekle"
+                            className="w-5 h-5 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-300 font-bold text-[10px] flex items-center justify-center border border-emerald-500/30 active:scale-90"
+                        >
+                            +5
+                        </button>
+                        <button
+                            type="button"
+                            onClick={(e) => onAdjustScore(e, -5)}
+                            title="-5 Puan Düş"
+                            className="w-5 h-5 rounded bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 font-bold text-[10px] flex items-center justify-center border border-rose-500/30 active:scale-90"
+                        >
+                            -5
+                        </button>
+                    </div>
+                )}
+                <div className={cn("text-2xl md:text-3xl font-black tabular-nums tracking-tighter drop-shadow-sm min-w-[38px] text-right", color.score)}>
                     {competitor.score}
                 </div>
             </div>
@@ -178,26 +210,85 @@ function IndividualCompetitionComponent() {
                     questionTypes: ['mcq', 'tf', 'fitb', 'Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'],
                 };
                 const qResult = await getQuestionsFromBank(params);
-                if (qResult.questions) setQuestions(qResult.questions as GameQuestion[]);
+                if (qResult.questions && qResult.questions.length > 0) {
+                    setQuestions(qResult.questions as GameQuestion[]);
+                } else {
+                    setError(qResult.error || "Bu ünite veya konuda soru bulunamadı. Lütfen kurulum ekranından başka bir konu veya tüm üniteyi seçin.");
+                    setIsLoading(false);
+                    return;
+                }
                 
-                // 2. Sınıf ve Havuzu Getir
+                // 2. Sınıf ve Havuzu Getir (Gelişmiş Fallback'li)
                 const classId = searchParams.get('classId');
+                const classNameParam = searchParams.get('className') || '';
+                let cData: SchoolClass | null = null;
+
                 if (classId) {
-                    const classDoc = await getDoc(doc(db, "classes", classId));
-                    if (classDoc.exists()) {
-                        const cData = { id: classDoc.id, ...classDoc.data() } as SchoolClass;
-                        setCurrentClass(cData);
-                        const sQuery = query(collection(db, "users"), where("class", ">=", cData.name), where("class", "<", cData.name + '\uf8ff'), where("role", "==", "guest"));
-                        const sSnap = await getDocs(sQuery);
-                        const students = sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile));
-                        setStudentPool(students);
+                    try {
+                        const classDoc = await getDoc(doc(db, "classes", classId));
+                        if (classDoc.exists()) {
+                            cData = { id: classDoc.id, ...classDoc.data() } as SchoolClass;
+                        } else if (classNameParam) {
+                            const classQuery = query(collection(db, "classes"), where("name", "==", classNameParam));
+                            const classSnap = await getDocs(classQuery);
+                            if (!classSnap.empty) {
+                                cData = { id: classSnap.docs[0].id, ...classSnap.docs[0].data() } as SchoolClass;
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Sınıf Firestore'dan okunamadı, URL parametresi kullanılacak:", e);
+                    }
+
+                    const gradeVal = (classNameParam || classId).replace(/[^0-9]/g, '') || '5';
+                    if (!cData) {
+                        cData = {
+                            id: classId,
+                            name: classNameParam || `${gradeVal}. Sınıf`,
+                            branches: ['A', 'B', 'C', 'D'],
+                            createdAt: new Date().toISOString()
+                        };
+                    }
+                    setCurrentClass(cData);
+
+                    if (cData) {
+                        try {
+                            const targetClassName = cData.name;
+                            // Sınıf adına göre öğrencileri çek (guest ve student)
+                            const sQuery = query(
+                                collection(db, "users"), 
+                                where("class", ">=", targetClassName), 
+                                where("class", "<", targetClassName + '\uf8ff')
+                            );
+                            const sSnap = await getDocs(sQuery);
+                            let students = sSnap.docs
+                                .map(d => ({ uid: d.id, ...d.data() } as UserProfile))
+                                .filter(u => u.role === 'guest' || u.role === 'student' || !u.role);
+
+                            // Eğer bulunamazsa grade ile dene (örn: "5" veya "5/A")
+                            if (students.length === 0 && gradeVal) {
+                                const fallbackQ = query(
+                                    collection(db, "users"), 
+                                    where("class", ">=", gradeVal), 
+                                    where("class", "<", gradeVal + '\uf8ff')
+                                );
+                                const fbSnap = await getDocs(fallbackQ);
+                                students = fbSnap.docs
+                                    .map(d => ({ uid: d.id, ...d.data() } as UserProfile))
+                                    .filter(u => u.role === 'guest' || u.role === 'student' || !u.role);
+                            }
+                            setStudentPool(students);
+                        } catch (e) {
+                            console.warn("Öğrenciler çekilirken hata:", e);
+                            setStudentPool([]);
+                        }
                     }
                 } else {
-                    const sQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME), where("role", "==", "guest"));
+                    const sQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME));
                     const sSnap = await getDocs(sQuery);
                     setStudentPool(sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile)));
                 }
             } catch (err: any) {
+                console.error("Veri yükleme hatası:", err);
                 setError("Veriler yüklenirken hata oluştu.");
             } finally {
                 setIsLoading(false);
@@ -274,6 +365,64 @@ function IndividualCompetitionComponent() {
         toast({ title: "Seçildi", description: `Sıra: ${random.displayName}` });
     };
 
+    const handleGenerateDemoStudents = async () => {
+        setIsAddingStudent(true);
+        const demoNames = ["Ahmet Yılmaz", "Ayşe Kaya", "Mehmet Demir", "Zeynep Çelik", "Mustafa Şahin", "Fatma Yıldız", "Yusuf Aydın", "Elif Öztürk"];
+        const currentTargetClass = currentClass ? `${currentClass.name} - ${selectedBranch === 'all' ? 'A' : selectedBranch}` : SUMMER_SCHOOL_CLASS_NAME;
+        
+        const created: UserProfile[] = [];
+        for (const name of demoNames) {
+            try {
+                const res = await addStudentToClass(name, currentTargetClass);
+                if (res.success && res.newUser) {
+                    created.push(res.newUser);
+                }
+            } catch (e) {
+                console.error("Örnek öğrenci ekleme hatası:", e);
+            }
+        }
+        if (created.length > 0) {
+            setStudentPool(prev => [...prev, ...created]);
+            setSelectedStudents(prev => [...prev, ...created]);
+            toast({ title: "Örnek Sınıf Oluşturuldu", description: `${created.length} öğrenci oluşturuldu ve yarışmaya eklendi!` });
+        } else {
+            toast({ title: "Hata", description: "Öğrenciler oluşturulamadı.", variant: "destructive" });
+        }
+        setIsAddingStudent(false);
+    };
+
+    const handleAdjustScore = (e: React.MouseEvent, competitorId: string, delta: number) => {
+        e.stopPropagation();
+        setCompetitors(prev => prev.map(c => {
+            if (c.uid === competitorId) {
+                const updated = Math.max(0, c.score + delta);
+                return { ...c, score: updated };
+            }
+            return c;
+        }));
+    };
+
+    const saveScores = useCallback(async (comps: GameCompetitor[]) => {
+        const scoreUpdates = comps
+            .filter(c => c.score > 0)
+            .map(c => ({
+                userId: c.uid,
+                points: c.score,
+                gameType: 'smartboard_bireysel' as const,
+                context: `${searchParams.get('courseName') || 'Ders'} - ${searchParams.get('topicName') || 'Bireysel Yarışma'}`
+            }));
+        if (scoreUpdates.length > 0) {
+            try {
+                const res = await updateMultipleStudentScores(scoreUpdates);
+                if (res.success) {
+                    toast({ title: "Skorlar Kaydedildi", description: `${scoreUpdates.length} öğrencinin puanları turnuva liderliğine aktarıldı.` });
+                }
+            } catch (err) {
+                console.error("Skor kaydedilemedi:", err);
+            }
+        }
+    }, [searchParams, toast]);
+
     const handleAnswer = (qNum: number, isCorrect: boolean, scoreChange: number) => {
         if (!activeCompetitorId) return;
 
@@ -296,14 +445,16 @@ function IndividualCompetitionComponent() {
             setWinner(winnerFound);
             setGamePhase('finished');
             playSound('win');
+            saveScores(newCompetitors);
         }
     };
 
     const handleFinish = () => {
         const sorted = [...competitors].sort((a,b) => b.score - a.score);
-        setWinner(sorted[0]);
+        setWinner(sorted[0] || null);
         setGamePhase('finished');
         playSound('win');
+        saveScores(competitors);
     };
 
     useEffect(() => {
@@ -314,7 +465,30 @@ function IndividualCompetitionComponent() {
 
 
     if (isLoading) return <div className="h-screen flex items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>;
-    if (error) return <div className="h-screen flex items-center justify-center text-red-400 bg-slate-950">{error}</div>;
+    
+    if (error) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-slate-950 text-white font-sans">
+                <div className="p-8 rounded-3xl bg-slate-900 border border-white/10 max-w-md text-center shadow-2xl space-y-4">
+                    <AlertTriangle className="h-16 w-16 text-amber-400 mx-auto animate-pulse" />
+                    <h2 className="text-2xl font-black text-white">Yarışma Başlatılamadı</h2>
+                    <p className="text-slate-400 text-sm leading-relaxed">{error}</p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
+                        <Button asChild className="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-xl px-5 h-11">
+                            <Link href="/teacher/smartboard/bireysel">
+                                <ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Dön
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline" className="w-full sm:w-auto border-white/10 text-slate-300 hover:text-white rounded-xl px-5 h-11">
+                            <Link href="/teacher/smartboard">
+                                <Home className="mr-2 h-4 w-4" /> Akıllı Tahta
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (gamePhase === 'setup') {
         const poolClassName = currentClass ? `${currentClass.name} - ${selectedBranch === 'all' ? 'A' : selectedBranch} (Havuz)` : SUMMER_SCHOOL_CLASS_NAME;
@@ -327,9 +501,14 @@ function IndividualCompetitionComponent() {
                         </h1>
                         <p className="text-slate-400 mt-1">Sınıftan öğrencileri seç ve bireysel yarıştır.</p>
                     </div>
-                    <Button asChild variant="outline" className="border-white/10 text-slate-300">
-                        <Link href="/teacher/smartboard/bireysel"><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                            <Link href="/teacher/smartboard/bireysel"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Dön</Link>
+                        </Button>
+                        <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10">
+                            <Link href="/teacher/smartboard"><Home className="mr-2 h-4 w-4"/> Akıllı Tahta</Link>
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 h-[calc(100vh-140px)]">
@@ -352,19 +531,42 @@ function IndividualCompetitionComponent() {
                                 <Button size="sm" variant="secondary" className="h-9 text-xs flex-1" onClick={addAllFiltered} disabled={filteredPool.length === 0}>
                                     <Users className="mr-2 h-3 w-3" /> Tümünü Ekle
                                 </Button>
-                                <Button size="icon" className="h-9 w-9 bg-cyan-600 hover:bg-cyan-500" onClick={() => setIsAddStudentOpen(true)}>
+                                <Button size="icon" className="h-9 w-9 bg-cyan-600 hover:bg-cyan-500" onClick={() => setIsAddStudentOpen(true)} title="Tek Öğrenci Ekle">
                                     <UserPlus className="h-4 w-4" />
                                 </Button>
                             </div>
                         </CardHeader>
                         <CardContent className="p-2 flex-1 overflow-hidden">
                             <ScrollArea className="h-full pr-2">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                    {filteredPool.map(s => {
-                                        const isSelected = selectedStudents.some(ss => ss.uid === s.uid);
-                                        return <SetupStudentItem key={s.uid} student={s} isSelected={isSelected} onClick={() => !isSelected && addToSelection(s)} />
-                                    })}
-                                </div>
+                                {filteredPool.length === 0 ? (
+                                    <div className="flex flex-col items-center justify-center py-12 px-4 text-center space-y-3 h-full">
+                                        <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-lg">
+                                            <Users className="w-7 h-7" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-bold text-slate-200">Bu sınıfta kayıtlı öğrenci yok</p>
+                                            <p className="text-xs text-slate-400 mt-1 max-w-xs">
+                                                Hemen yarışmaya başlamak için tek tıkla 8 kişilik örnek sınıf oluşturabilirsiniz.
+                                            </p>
+                                        </div>
+                                        <Button 
+                                            size="sm" 
+                                            onClick={handleGenerateDemoStudents} 
+                                            disabled={isAddingStudent}
+                                            className="bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-md rounded-xl mt-2 px-4 h-9"
+                                        >
+                                            {isAddingStudent ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
+                                            Hızlı Örnek Sınıf Oluştur (8 Kişi)
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                        {filteredPool.map(s => {
+                                            const isSelected = selectedStudents.some(ss => ss.uid === s.uid);
+                                            return <SetupStudentItem key={s.uid} student={s} isSelected={isSelected} onClick={() => !isSelected && addToSelection(s)} />
+                                        })}
+                                    </div>
+                                )}
                             </ScrollArea>
                         </CardContent>
                     </Card>
@@ -439,7 +641,20 @@ function IndividualCompetitionComponent() {
                         </div>
                     </div>
                     
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-2">
+                        <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            onClick={() => { 
+                                if (confirm("Yarışmadan çıkmak ve akıllı tahta menüsüne dönmek istiyor musunuz?")) {
+                                    window.location.href = "/teacher/smartboard";
+                                }
+                            }} 
+                            className="text-slate-400 hover:text-white hover:bg-white/10 text-xs"
+                            title="Akıllı Tahta Menüsüne Çık"
+                        >
+                            <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Çıkış
+                        </Button>
                         <Button size="sm" variant="secondary" onClick={handleRandomStudent} className="bg-slate-800 text-cyan-400 hover:bg-slate-700">
                             <Shuffle className="mr-2 h-4 w-4" /> Rastgele
                         </Button>
@@ -458,6 +673,7 @@ function IndividualCompetitionComponent() {
                                 competitor={comp} 
                                 rank={idx} 
                                 onClick={() => setActiveCompetitorId(comp.uid)}
+                                onAdjustScore={(e, delta) => handleAdjustScore(e, comp.uid, delta)}
                             />
                         ))}
                     </div>

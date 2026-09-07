@@ -249,7 +249,8 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
         topicName: selection.topicName,
         classId: selection.classId,
         className: selection.className,
-        // Bireysel yarışma olduğu için oyuncu bilgisi göndermiyoruz
+        questionTimer: String(gameConfig?.timePerQuestion || 30),
+        finishScore: String(gameConfig?.finishScore || 100),
     });
     // Her oyunun kendi oyun sayfasına yönlendir
     return `/teacher/smartboard/${finalGamePath}/oyun?${params.toString()}`;
@@ -311,6 +312,21 @@ export function SmartboardBireyselClientPage({ gameConfig, gameName, gamePath, g
         </div>
 
       <div className="max-w-5xl mx-auto w-full relative z-10 flex-grow flex flex-col">
+        {/* Üst Menü Navigasyonu */}
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+            <Link
+                href="/teacher/smartboard"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/15 text-xs font-bold transition-all shadow-md group active:scale-95"
+            >
+                <ArrowLeft className="w-4 h-4 text-purple-400 group-hover:-translate-x-1 transition-transform" />
+                <span>Akıllı Tahta Menüsü</span>
+            </Link>
+            <div className="text-xs text-slate-400 font-bold hidden sm:flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+                <span>{finalGameName}</span>
+            </div>
+        </div>
+
         <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center p-3 bg-purple-500/10 rounded-full mb-2 border border-purple-500/20 shadow-lg">
                 <GameIcon className="h-8 w-8 text-purple-400"/>
