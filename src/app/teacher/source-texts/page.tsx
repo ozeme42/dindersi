@@ -54,13 +54,12 @@ export default function SourceTextsManagementPage() {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [topics, setTopics] = useState<TopicItem[]>([]);
     
-    // Filters & Search
+    // Filters & Search (Strictly hierarchical: Grade -> Course -> Unit -> Topic, NO 'all' option)
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedGrade, setSelectedGrade] = useState<string>('all');
-    const [selectedCourseId, setSelectedCourseId] = useState<string>('all');
-    const [selectedUnitId, setSelectedUnitId] = useState<string>('all');
-    const [selectedTopicId, setSelectedTopicId] = useState<string>('all');
-    const [statusFilter, setStatusFilter] = useState<'all' | 'has_text' | 'no_text'>('all');
+    const [selectedGrade, setSelectedGrade] = useState<string>('5');
+    const [selectedCourseId, setSelectedCourseId] = useState<string>('');
+    const [selectedUnitId, setSelectedUnitId] = useState<string>('');
+    const [selectedTopicId, setSelectedTopicId] = useState<string>('');
     const [sortBy, setSortBy] = useState<'order' | 'word_desc' | 'word_asc' | 'title'>('order');
 
     // Modals
@@ -210,7 +209,7 @@ export default function SourceTextsManagementPage() {
         return { total, withText, withoutText, totalWords };
     }, [topics]);
 
-    // Available Grades
+    // Available Grades (e.g. ['5', '6', '7', '8'])
     const availableGrades = useMemo(() => {
         const grades = new Set<string>();
         topics.forEach(t => {
@@ -219,65 +218,11 @@ export default function SourceTextsManagementPage() {
         return Array.from(grades).sort((a, b) => Number(a) - Number(b));
     }, [topics]);
 
-    // Cascading Filter Handlers
-    const handleGradeChange = (grade: string) => {
-        setSelectedGrade(grade);
-        setSelectedCourseId('all');
-        setSelectedUnitId('all');
-        setSelectedTopicId('all');
-    };
-
-    const handleCourseChange = (courseId: string) => {
-        setSelectedCourseId(courseId);
-        setSelectedUnitId('all');
-        setSelectedTopicId('all');
-        if (courseId !== 'all') {
-            const sample = topics.find(t => t.courseId === courseId);
-            if (sample && selectedGrade === 'all') {
-                setSelectedGrade(sample.grade);
-            }
-        }
-    };
-
-    const handleUnitChange = (unitId: string) => {
-        setSelectedUnitId(unitId);
-        setSelectedTopicId('all');
-        if (unitId !== 'all') {
-            const sample = topics.find(t => t.unitId === unitId);
-            if (sample) {
-                if (selectedGrade === 'all') setSelectedGrade(sample.grade);
-                if (selectedCourseId === 'all') setSelectedCourseId(sample.courseId);
-            }
-        }
-    };
-
-    const handleTopicChange = (topicId: string) => {
-        setSelectedTopicId(topicId);
-        if (topicId !== 'all') {
-            const sample = topics.find(t => t.topicId === topicId);
-            if (sample) {
-                if (selectedGrade === 'all') setSelectedGrade(sample.grade);
-                if (selectedCourseId === 'all') setSelectedCourseId(sample.courseId);
-                if (selectedUnitId === 'all') setSelectedUnitId(sample.unitId);
-            }
-        }
-    };
-
-    const handleResetFilters = () => {
-        setSelectedGrade('all');
-        setSelectedCourseId('all');
-        setSelectedUnitId('all');
-        setSelectedTopicId('all');
-        setStatusFilter('all');
-        setSearchQuery('');
-        setSortBy('order');
-    };
-
-    // Derived Available Courses (filtered by selectedGrade)
+    // Available Courses for selectedGrade (NO 'all')
     const availableCourses = useMemo(() => {
-        const map = new Map<string, { id: string; title: string; count: number; grade: string }>();
+        const map = new Map<string, { id: string; title: string; count: number }>();
         topics.forEach(t => {
-            if (selectedGrade !== 'all' && t.grade !== selectedGrade) return;
+            if (t.grade !== selectedGrade) return;
             if (!t.courseId) return;
             const existing = map.get(t.courseId);
             if (existing) {
@@ -286,20 +231,19 @@ export default function SourceTextsManagementPage() {
                 map.set(t.courseId, {
                     id: t.courseId,
                     title: t.courseTitle || 'Ders',
-                    count: 1,
-                    grade: t.grade
+                    count: 1
                 });
             }
         });
         return Array.from(map.values()).sort((a, b) => a.title.localeCompare(b.title, 'tr'));
     }, [topics, selectedGrade]);
 
-    // Derived Available Units (filtered by selectedGrade and selectedCourseId)
+    // Available Units for selectedGrade and selectedCourseId (NO 'all')
     const availableUnits = useMemo(() => {
-        const map = new Map<string, { id: string; title: string; count: number; courseId: string }>();
+        const map = new Map<string, { id: string; title: string; count: number }>();
         topics.forEach(t => {
-            if (selectedGrade !== 'all' && t.grade !== selectedGrade) return;
-            if (selectedCourseId !== 'all' && t.courseId !== selectedCourseId) return;
+            if (t.grade !== selectedGrade) return;
+            if (t.courseId !== selectedCourseId) return;
             if (!t.unitId) return;
             const existing = map.get(t.unitId);
             if (existing) {
@@ -308,80 +252,131 @@ export default function SourceTextsManagementPage() {
                 map.set(t.unitId, {
                     id: t.unitId,
                     title: t.unitTitle || 'Ünite',
-                    count: 1,
-                    courseId: t.courseId
+                    count: 1
                 });
             }
         });
-        return Array.from(map.values()).sort((a, b) => a.title.localeCompare(b.title, 'tr'));
+        return Array.from(map.values());
     }, [topics, selectedGrade, selectedCourseId]);
 
-    // Derived Available Topics for topic picker
+    // Available Topics for selectedGrade, selectedCourseId and selectedUnitId (NO 'all')
     const availableTopics = useMemo(() => {
-        return topics.filter(t => {
-            if (selectedGrade !== 'all' && t.grade !== selectedGrade) return false;
-            if (selectedCourseId !== 'all' && t.courseId !== selectedCourseId) return false;
-            if (selectedUnitId !== 'all' && t.unitId !== selectedUnitId) return false;
-            return true;
-        });
+        return topics.filter(t => 
+            t.grade === selectedGrade && 
+            t.courseId === selectedCourseId && 
+            t.unitId === selectedUnitId
+        );
     }, [topics, selectedGrade, selectedCourseId, selectedUnitId]);
 
-    // Check if any filters are active
-    const hasActiveFilters = useMemo(() => {
-        return (
-            selectedGrade !== 'all' ||
-            selectedCourseId !== 'all' ||
-            selectedUnitId !== 'all' ||
-            selectedTopicId !== 'all' ||
-            statusFilter !== 'all' ||
-            searchQuery.trim().length > 0 ||
-            sortBy !== 'order'
-        );
-    }, [selectedGrade, selectedCourseId, selectedUnitId, selectedTopicId, statusFilter, searchQuery, sortBy]);
+    // Auto-select valid items on initial load or change
+    useEffect(() => {
+        if (topics.length === 0) return;
 
-    // Active Filter Labels (for chips)
+        // 1. Sınıf kontrolü
+        let currentGrade = selectedGrade;
+        if (!currentGrade || !availableGrades.includes(currentGrade)) {
+            currentGrade = availableGrades[0] || '5';
+            setSelectedGrade(currentGrade);
+        }
+
+        // 2. Ders kontrolü
+        const gradeTopics = topics.filter(t => t.grade === currentGrade);
+        const validCourseIds = Array.from(new Set(gradeTopics.map(t => t.courseId)));
+        let currentCourse = selectedCourseId;
+        if (!currentCourse || !validCourseIds.includes(currentCourse)) {
+            currentCourse = validCourseIds[0] || '';
+            setSelectedCourseId(currentCourse);
+        }
+
+        // 3. Ünite kontrolü
+        const courseTopics = gradeTopics.filter(t => t.courseId === currentCourse);
+        const validUnitIds = Array.from(new Set(courseTopics.map(t => t.unitId)));
+        let currentUnit = selectedUnitId;
+        if (!currentUnit || !validUnitIds.includes(currentUnit)) {
+            currentUnit = validUnitIds[0] || '';
+            setSelectedUnitId(currentUnit);
+        }
+
+        // 4. Konu kontrolü
+        const unitTopics = courseTopics.filter(t => t.unitId === currentUnit);
+        const validTopicIds = unitTopics.map(t => t.topicId);
+        let currentTopic = selectedTopicId;
+        if (!currentTopic || !validTopicIds.includes(currentTopic)) {
+            currentTopic = validTopicIds[0] || '';
+            setSelectedTopicId(currentTopic);
+        }
+    }, [topics, availableGrades, selectedGrade, selectedCourseId, selectedUnitId, selectedTopicId]);
+
+    // Cascading Handlers (Strictly single selection, NO 'all' option)
+    const handleGradeChange = (grade: string) => {
+        setSelectedGrade(grade);
+        const gradeTopics = topics.filter(t => t.grade === grade);
+        const firstCourse = gradeTopics[0]?.courseId || '';
+        setSelectedCourseId(firstCourse);
+
+        const courseTopics = gradeTopics.filter(t => t.courseId === firstCourse);
+        const firstUnit = courseTopics[0]?.unitId || '';
+        setSelectedUnitId(firstUnit);
+
+        const unitTopics = courseTopics.filter(t => t.unitId === firstUnit);
+        const firstTopic = unitTopics[0]?.topicId || '';
+        setSelectedTopicId(firstTopic);
+    };
+
+    const handleCourseChange = (courseId: string) => {
+        setSelectedCourseId(courseId);
+        const courseTopics = topics.filter(t => t.grade === selectedGrade && t.courseId === courseId);
+        const firstUnit = courseTopics[0]?.unitId || '';
+        setSelectedUnitId(firstUnit);
+
+        const unitTopics = courseTopics.filter(t => t.unitId === firstUnit);
+        const firstTopic = unitTopics[0]?.topicId || '';
+        setSelectedTopicId(firstTopic);
+    };
+
+    const handleUnitChange = (unitId: string) => {
+        setSelectedUnitId(unitId);
+        const unitTopics = topics.filter(t => t.grade === selectedGrade && t.courseId === selectedCourseId && t.unitId === unitId);
+        const firstTopic = unitTopics[0]?.topicId || '';
+        setSelectedTopicId(firstTopic);
+    };
+
+    const handleTopicChange = (topicId: string) => {
+        setSelectedTopicId(topicId);
+    };
+
+    // Active Selection Names
     const activeSelectedCourse = useMemo(() => {
-        if (selectedCourseId === 'all') return null;
-        return topics.find(t => t.courseId === selectedCourseId)?.courseTitle || 'Ders';
-    }, [topics, selectedCourseId]);
+        return availableCourses.find(c => c.id === selectedCourseId)?.title || 'Ders';
+    }, [availableCourses, selectedCourseId]);
 
     const activeSelectedUnit = useMemo(() => {
-        if (selectedUnitId === 'all') return null;
-        return topics.find(t => t.unitId === selectedUnitId)?.unitTitle || 'Ünite';
-    }, [topics, selectedUnitId]);
+        return availableUnits.find(u => u.id === selectedUnitId)?.title || 'Ünite';
+    }, [availableUnits, selectedUnitId]);
 
     const activeSelectedTopic = useMemo(() => {
-        if (selectedTopicId === 'all') return null;
-        return topics.find(t => t.topicId === selectedTopicId)?.title || 'Konu';
-    }, [topics, selectedTopicId]);
+        return availableTopics.find(t => t.topicId === selectedTopicId) || availableTopics[0] || null;
+    }, [availableTopics, selectedTopicId]);
 
-    // Filtered & Sorted Topics
+    // Filtered Topics (current unit topics or global search results)
     const filteredTopics = useMemo(() => {
-        return topics.filter(t => {
-            if (selectedGrade !== 'all' && t.grade !== selectedGrade) return false;
-            if (selectedCourseId !== 'all' && t.courseId !== selectedCourseId) return false;
-            if (selectedUnitId !== 'all' && t.unitId !== selectedUnitId) return false;
-            if (selectedTopicId !== 'all' && t.topicId !== selectedTopicId) return false;
-            if (statusFilter === 'has_text' && t.sourceText.length === 0) return false;
-            if (statusFilter === 'no_text' && t.sourceText.length > 0) return false;
-            
-            if (searchQuery.trim()) {
-                const q = searchQuery.toLowerCase();
-                const matchTitle = t.title.toLowerCase().includes(q);
-                const matchUnit = t.unitTitle.toLowerCase().includes(q);
-                const matchClass = t.className.toLowerCase().includes(q);
-                const matchCourse = t.courseTitle.toLowerCase().includes(q);
-                const matchText = t.sourceText.toLowerCase().includes(q);
-                if (!matchTitle && !matchUnit && !matchClass && !matchCourse && !matchText) return false;
-            }
-            return true;
-        }).sort((a, b) => {
-            if (sortBy === 'word_desc') return b.wordCount - a.wordCount;
-            if (sortBy === 'word_asc') return a.wordCount - b.wordCount;
-            if (sortBy === 'title') return a.title.localeCompare(b.title, 'tr');
-            return 0; // Default natural order
-        });
-    }, [topics, selectedGrade, selectedCourseId, selectedUnitId, selectedTopicId, statusFilter, searchQuery, sortBy]);
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase();
+            return topics.filter(t => 
+                (t.title || '').toLowerCase().includes(q) ||
+                (t.unitTitle || '').toLowerCase().includes(q) ||
+                (t.courseTitle || '').toLowerCase().includes(q) ||
+                (t.className || '').toLowerCase().includes(q) ||
+                (t.sourceText || '').toLowerCase().includes(q)
+            );
+        }
+
+        let list = availableTopics;
+        if (sortBy === 'word_desc') return [...list].sort((a, b) => b.wordCount - a.wordCount);
+        if (sortBy === 'word_asc') return [...list].sort((a, b) => a.wordCount - b.wordCount);
+        if (sortBy === 'title') return [...list].sort((a, b) => a.title.localeCompare(b.title, 'tr'));
+        return list;
+    }, [topics, availableTopics, searchQuery, sortBy]);
 
     // Copy action
     const handleCopy = async (id: string, text: string) => {
@@ -565,50 +560,41 @@ export default function SourceTextsManagementPage() {
                     </div>
                 </div>
 
-                {/* ══ FİLTRELER VE ARAMA KONTROLLERİ ══ */}
+                {/* ══ FİLTRELER VE HİYERARŞİK SEÇİCİLER (NO 'TÜM') ══ */}
                 <div className="p-5 sm:p-6 rounded-3xl bg-slate-900/70 border border-white/10 backdrop-blur-xl shadow-2xl space-y-5">
                     
-                    {/* 1. Sınıf Hızlı Seçim Sekmeleri */}
+                    {/* 1. Sınıf Doğrudan Seçim Sekmeleri */}
                     <div className="space-y-2">
                         <div className="flex items-center justify-between">
                             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                                 <GraduationCap className="w-4 h-4 text-indigo-400" /> Sınıf Seviyesi
                             </span>
-                            {hasActiveFilters && (
-                                <button
-                                    onClick={handleResetFilters}
-                                    className="text-xs text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1 transition-colors"
-                                >
-                                    <RotateCcw className="w-3.5 h-3.5" /> Filtreleri Sıfırla
-                                </button>
-                            )}
+                            <span className="text-xs text-slate-500 font-medium">
+                                Seçili: <strong className="text-indigo-400 font-bold">{selectedGrade}. Sınıf</strong>
+                            </span>
                         </div>
                         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                            <button
-                                onClick={() => handleGradeChange('all')}
-                                className={cn(
-                                    "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
-                                    selectedGrade === 'all' 
-                                        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/40" 
-                                        : "bg-slate-950/60 text-slate-400 hover:text-white border border-white/5"
-                                )}
-                            >
-                                Tüm Sınıflar ({topics.length})
-                            </button>
                             {availableGrades.map(grade => {
                                 const count = topics.filter(t => t.grade === grade).length;
+                                const isSelected = selectedGrade === grade;
                                 return (
                                     <button
                                         key={grade}
                                         onClick={() => handleGradeChange(grade)}
                                         className={cn(
-                                            "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
-                                            selectedGrade === grade 
-                                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/40" 
-                                                : "bg-slate-950/60 text-slate-400 hover:text-white border border-white/5"
+                                            "px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2.5",
+                                            isSelected 
+                                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/50 ring-2 ring-indigo-400/40" 
+                                                : "bg-slate-950/60 text-slate-400 hover:text-white hover:bg-slate-800/80 border border-white/5"
                                         )}
                                     >
-                                        {grade}. Sınıf ({count})
+                                        <span>{grade}. Sınıf</span>
+                                        <span className={cn(
+                                            "text-[11px] px-2 py-0.5 rounded-md font-mono",
+                                            isSelected ? "bg-indigo-700/90 text-white" : "bg-white/5 text-slate-400"
+                                        )}>
+                                            {count}
+                                        </span>
                                     </button>
                                 );
                             })}
@@ -624,12 +610,9 @@ export default function SourceTextsManagementPage() {
                             </label>
                             <Select value={selectedCourseId} onValueChange={handleCourseChange}>
                                 <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
-                                    <SelectValue placeholder="Tüm Dersler" />
+                                    <SelectValue placeholder="Ders Seçin" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white max-h-72">
-                                    <SelectItem value="all">
-                                        Tüm Dersler ({selectedGrade === 'all' ? topics.length : topics.filter(t => t.grade === selectedGrade).length} Konu)
-                                    </SelectItem>
                                     {availableCourses.map(c => (
                                         <SelectItem key={c.id} value={c.id}>
                                             {c.title} ({c.count} Konu)
@@ -646,10 +629,9 @@ export default function SourceTextsManagementPage() {
                             </label>
                             <Select value={selectedUnitId} onValueChange={handleUnitChange}>
                                 <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
-                                    <SelectValue placeholder="Tüm Üniteler" />
+                                    <SelectValue placeholder="Ünite Seçin" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white max-h-72">
-                                    <SelectItem value="all">Tüm Üniteler ({availableUnits.reduce((acc, u) => acc + u.count, 0)} Konu)</SelectItem>
                                     {availableUnits.map(u => (
                                         <SelectItem key={u.id} value={u.id}>
                                             {u.title} ({u.count} Konu)
@@ -666,10 +648,9 @@ export default function SourceTextsManagementPage() {
                             </label>
                             <Select value={selectedTopicId} onValueChange={handleTopicChange}>
                                 <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
-                                    <SelectValue placeholder="Tüm Konular" />
+                                    <SelectValue placeholder="Konu Seçin" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white max-h-72">
-                                    <SelectItem value="all">Tüm Konular ({availableTopics.length})</SelectItem>
                                     {availableTopics.map(top => (
                                         <SelectItem key={top.topicId} value={top.topicId}>
                                             <span className="flex items-center gap-2">
@@ -694,43 +675,30 @@ export default function SourceTextsManagementPage() {
                         </div>
                     </div>
 
-                    {/* 3. Arama, Metin Durumu ve Sıralama */}
+                    {/* 3. Arama ve Sıralama */}
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pt-2 border-t border-white/5">
-                        {/* Canlı Arama (6 sütun) */}
-                        <div className="md:col-span-6 relative">
+                        {/* Canlı Arama (8 sütun) */}
+                        <div className="md:col-span-8 relative">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <Input
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Konu, ünite, ders adı veya metin içinde ara..."
+                                placeholder="Konu, ünite veya kaynak metin içinde canlı ara..."
                                 className="pl-11 pr-10 h-11 bg-slate-950 border-white/10 text-sm text-white placeholder:text-slate-500 rounded-xl focus:border-indigo-500/60"
                             />
                             {searchQuery && (
                                 <button
                                     onClick={() => setSearchQuery('')}
                                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
+                                    title="Aramayı temizle"
                                 >
                                     <X className="w-4 h-4" />
                                 </button>
                             )}
                         </div>
 
-                        {/* Metin Durumu Filtresi (3 sütun) */}
-                        <div className="md:col-span-3">
-                            <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
-                                <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
-                                    <SelectValue placeholder="Metin Durumu" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    <SelectItem value="all">Tüm Durumlar ({topics.length})</SelectItem>
-                                    <SelectItem value="has_text">Metni Olanlar ({stats.withText})</SelectItem>
-                                    <SelectItem value="no_text">Metni Olmayanlar ({stats.withoutText})</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        {/* Sıralama (3 sütun) */}
-                        <div className="md:col-span-3">
+                        {/* Sıralama (4 sütun) */}
+                        <div className="md:col-span-4">
                             <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
                                 <SelectTrigger className="h-11 bg-slate-950 border-white/10 text-sm text-white rounded-xl">
                                     <SelectValue placeholder="Sırala" />
@@ -745,85 +713,110 @@ export default function SourceTextsManagementPage() {
                         </div>
                     </div>
 
-                    {/* 4. Aktif Filtre Çipleri & Bilgi Çubuğu */}
+                    {/* 4. Konu Hızlı Erişim Hapları (Topic Pills) */}
+                    {availableTopics.length > 0 && !searchQuery && (
+                        <div className="pt-3 border-t border-white/5 space-y-2">
+                            <div className="flex items-center justify-between text-xs text-slate-400">
+                                <span className="font-semibold flex items-center gap-1.5 text-slate-300">
+                                    <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+                                    <span>{activeSelectedUnit} Konuları (Hızlı Seçim):</span>
+                                </span>
+                                <span className="text-[11px] text-slate-500 font-mono">
+                                    {availableTopics.length} Konu
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2 flex-wrap max-h-36 overflow-y-auto pr-1">
+                                {availableTopics.map(t => {
+                                    const isSelected = selectedTopicId === t.topicId;
+                                    const hasText = t.sourceText.length > 0;
+                                    return (
+                                        <button
+                                            key={t.topicId}
+                                            onClick={() => {
+                                                handleTopicChange(t.topicId);
+                                                const el = document.getElementById(`topic-card-${t.topicId}`);
+                                                if (el) {
+                                                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                }
+                                            }}
+                                            className={cn(
+                                                "text-xs px-3 py-1.5 rounded-xl font-medium transition-all flex items-center gap-2 border text-left",
+                                                isSelected
+                                                    ? "bg-indigo-600 text-white border-indigo-400 shadow-md shadow-indigo-900/40 font-bold"
+                                                    : "bg-slate-950/60 border-white/5 text-slate-300 hover:text-white hover:bg-slate-800"
+                                            )}
+                                        >
+                                            <span 
+                                                className={cn(
+                                                    "w-2 h-2 rounded-full flex-shrink-0",
+                                                    hasText ? (isSelected ? "bg-emerald-300" : "bg-emerald-400") : "bg-slate-600"
+                                                )} 
+                                                title={hasText ? "Metin var" : "Metin yok"}
+                                            />
+                                            <span className="truncate max-w-[220px]">{t.title}</span>
+                                            {hasText && (
+                                                <span className={cn(
+                                                    "text-[10px] font-mono",
+                                                    isSelected ? "text-indigo-200" : "text-slate-400"
+                                                )}>
+                                                    {t.wordCount}k
+                                                </span>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 5. Aktif Hiyerarşi Özeti / Yol Bilgisi */}
                     <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/5 text-xs text-slate-400">
                         <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-[11px] font-semibold text-slate-500">
-                                {hasActiveFilters ? "Aktif Filtreler:" : "Filtreler:"}
+                                Konum:
                             </span>
 
-                            {selectedGrade !== 'all' && (
-                                <Badge variant="secondary" className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
-                                    <span>{selectedGrade}. Sınıf</span>
-                                    <button onClick={() => handleGradeChange('all')} className="hover:text-white ml-0.5">
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </Badge>
-                            )}
+                            <Badge variant="secondary" className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30 text-xs py-1 px-2.5 font-bold">
+                                {selectedGrade}. Sınıf
+                            </Badge>
 
-                            {activeSelectedCourse && (
-                                <Badge variant="secondary" className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
-                                    <GraduationCap className="w-3 h-3 mr-0.5" />
-                                    <span className="truncate max-w-[150px]">{activeSelectedCourse}</span>
-                                    <button onClick={() => setSelectedCourseId('all')} className="hover:text-white ml-0.5">
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </Badge>
-                            )}
+                            <span className="text-slate-600">›</span>
 
-                            {activeSelectedUnit && (
-                                <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 border-blue-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
-                                    <Layers className="w-3 h-3 mr-0.5" />
-                                    <span className="truncate max-w-[180px]">{activeSelectedUnit}</span>
-                                    <button onClick={() => setSelectedUnitId('all')} className="hover:text-white ml-0.5">
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </Badge>
-                            )}
+                            <Badge variant="secondary" className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-xs py-1 px-2.5 font-semibold">
+                                <GraduationCap className="w-3 h-3 mr-1" />
+                                <span className="truncate max-w-[180px]">{activeSelectedCourse}</span>
+                            </Badge>
 
-                            {activeSelectedTopic && (
-                                <Badge variant="secondary" className="bg-teal-500/20 text-teal-300 border-teal-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
-                                    <BookOpen className="w-3 h-3 mr-0.5" />
-                                    <span className="truncate max-w-[200px]">{activeSelectedTopic}</span>
-                                    <button onClick={() => setSelectedTopicId('all')} className="hover:text-white ml-0.5">
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </Badge>
-                            )}
+                            <span className="text-slate-600">›</span>
 
-                            {statusFilter !== 'all' && (
-                                <Badge variant="secondary" className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
-                                    <span>{statusFilter === 'has_text' ? 'Metni Olanlar' : 'Metni Olmayanlar'}</span>
-                                    <button onClick={() => setStatusFilter('all')} className="hover:text-white ml-0.5">
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </Badge>
-                            )}
+                            <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 border-blue-500/30 text-xs py-1 px-2.5 font-semibold">
+                                <Layers className="w-3 h-3 mr-1" />
+                                <span className="truncate max-w-[240px]">{activeSelectedUnit}</span>
+                            </Badge>
 
                             {searchQuery.trim() && (
-                                <Badge variant="secondary" className="bg-slate-700/50 text-slate-200 border-white/10 text-xs py-1 px-2.5 flex items-center gap-1.5">
-                                    <span>Ara: "{searchQuery}"</span>
-                                    <button onClick={() => setSearchQuery('')} className="hover:text-white ml-0.5">
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </Badge>
-                            )}
-
-                            {!hasActiveFilters && (
-                                <span className="text-[11px] text-slate-500 italic">Tüm müfredat gösteriliyor.</span>
+                                <>
+                                    <span className="text-slate-600">•</span>
+                                    <Badge variant="secondary" className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-xs py-1 px-2.5 flex items-center gap-1.5">
+                                        <span>Arama: "{searchQuery}"</span>
+                                        <button onClick={() => setSearchQuery('')} className="hover:text-white ml-0.5">
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </Badge>
+                                </>
                             )}
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <span>Listelenen Konu: <strong className="text-indigo-400 font-bold">{filteredTopics.length}</strong></span>
-                            {hasActiveFilters && (
+                            <span>Gösterilen: <strong className="text-indigo-400 font-bold">{filteredTopics.length} Konu</strong></span>
+                            {searchQuery.trim() && (
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={handleResetFilters}
+                                    onClick={() => setSearchQuery('')}
                                     className="h-7 px-2 text-xs text-slate-400 hover:text-white hover:bg-white/5"
                                 >
-                                    <FilterX className="w-3 h-3 mr-1" /> Temizle
+                                    <X className="w-3 h-3 mr-1" /> Aramayı Temizle
                                 </Button>
                             )}
                         </div>
@@ -840,29 +833,35 @@ export default function SourceTextsManagementPage() {
                     <div className="py-20 flex flex-col items-center justify-center space-y-3 bg-slate-900/30 border-2 border-dashed border-white/10 rounded-3xl text-center">
                         <BookMarked className="h-12 w-12 text-slate-600" />
                         <h3 className="text-lg font-bold text-white">Eşleşen kaynak metin bulunamadı</h3>
-                        <p className="text-xs text-slate-400 max-w-md">Arama kriterlerinizi temizleyebilir veya sınıf/ünite filtrelerini değiştirebilirsiniz.</p>
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={handleResetFilters}
-                            className="border-white/10 text-slate-300 hover:text-white"
-                        >
-                            Filtreleri Sıfırla
-                        </Button>
+                        <p className="text-xs text-slate-400 max-w-md">Arama kriterlerinizi temizleyebilir veya sınıf/ders/ünite seçimlerinizi değiştirebilirsiniz.</p>
+                        {searchQuery && (
+                            <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={() => setSearchQuery('')}
+                                className="border-white/10 text-slate-300 hover:text-white"
+                            >
+                                Aramayı Temizle
+                            </Button>
+                        )}
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {filteredTopics.map((topic) => {
                             const hasText = topic.sourceText.length > 0;
+                            const isCurrentSelected = topic.topicId === selectedTopicId;
 
                             return (
                                 <div
                                     key={topic.id}
+                                    id={`topic-card-${topic.topicId}`}
                                     className={cn(
                                         "p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between space-y-4 backdrop-blur-md group hover:shadow-xl",
-                                        hasText 
-                                            ? "bg-slate-900/70 border-white/10 hover:border-indigo-500/40 hover:shadow-indigo-950/30" 
-                                            : "bg-slate-900/30 border-amber-500/20 hover:border-amber-500/40"
+                                        isCurrentSelected
+                                            ? "ring-2 ring-indigo-500 shadow-xl shadow-indigo-950/60 bg-slate-900/90 border-indigo-500/50"
+                                            : hasText 
+                                                ? "bg-slate-900/70 border-white/10 hover:border-indigo-500/40 hover:shadow-indigo-950/30" 
+                                                : "bg-slate-900/30 border-amber-500/20 hover:border-amber-500/40"
                                     )}
                                 >
                                     <div className="space-y-3">
@@ -877,15 +876,22 @@ export default function SourceTextsManagementPage() {
                                                     {topic.unitTitle}
                                                 </span>
                                             </div>
-                                            {hasText ? (
-                                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                                                    <CheckCircle2 className="w-3 h-3" /> Metin Var
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                                                    <AlertCircle className="w-3 h-3" /> Metin Yok
-                                                </span>
-                                            )}
+                                            <div className="flex items-center gap-1.5 flex-wrap">
+                                                {isCurrentSelected && (
+                                                    <span className="inline-flex items-center gap-1 text-[10px] font-black text-indigo-200 bg-indigo-500/30 px-2 py-0.5 rounded-full border border-indigo-400/50 shadow-sm">
+                                                        Seçili Konu
+                                                    </span>
+                                                )}
+                                                {hasText ? (
+                                                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                                                        <CheckCircle2 className="w-3 h-3" /> Metin Var
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                                                        <AlertCircle className="w-3 h-3" /> Metin Yok
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
 
                                         {/* Konu Başlığı */}
