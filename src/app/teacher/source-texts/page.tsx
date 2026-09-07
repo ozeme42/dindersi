@@ -585,14 +585,14 @@ export default function SourceTextsManagementPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+        <div className="min-h-screen bg-slate-950 font-sans text-slate-100 px-2 sm:px-4 md:px-6 py-4 md:py-6 relative overflow-x-hidden">
             {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[900px] h-[900px] bg-indigo-900/15 rounded-full blur-[160px]" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-emerald-900/15 rounded-full blur-[160px]" />
             </div>
 
-            <div className="max-w-7xl mx-auto relative z-10 space-y-8">
+            <div className="w-full relative z-10 space-y-6">
                 
                 {/* ══ ÜST GEZİNME VE BUTONLAR ══ */}
                 <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -758,10 +758,10 @@ export default function SourceTextsManagementPage() {
                     </div>
 
                     {/* ══ MILLER COLUMNS KİTAP GEZGİNİ & DİJİTAL KİTAP OKUYUCU ══ */}
-                    <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+                    <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 2xl:gap-6 items-start w-full">
                         
                         {/* ── SOL BÖLÜM: KADEMELİ KİTAP FİHRİSTİ (MILLER COLUMNS) ── */}
-                        <div className="xl:col-span-5 flex flex-col h-[740px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl">
+                        <div className="xl:col-span-5 2xl:col-span-5 flex flex-col h-[780px] xl:h-[820px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl">
                             {/* Fihrist Üst Başlık Barı */}
                             <div className="p-4 border-b border-white/10 bg-slate-950/60 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
@@ -1155,7 +1155,7 @@ export default function SourceTextsManagementPage() {
                         </div>
 
                         {/* ── SAĞ BÖLÜM: DİJİTAL KİTAP SAYFASI (READER & INLINE EDITOR) ── */}
-                        <div className="xl:col-span-7 flex flex-col h-[740px] rounded-3xl bg-slate-900/80 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl relative">
+                        <div className="xl:col-span-7 2xl:col-span-7 flex flex-col h-[780px] xl:h-[820px] rounded-3xl bg-slate-900/80 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl relative">
                             {activeSelectedTopic ? (
                                 <>
                                     {/* Kitap Üst Başlık & Yol Bilgisi */}
@@ -1170,7 +1170,7 @@ export default function SourceTextsManagementPage() {
                                                     {activeSelectedTopic.courseTitle}
                                                 </Badge>
                                                 <span className="text-slate-600">›</span>
-                                                <span className="text-xs text-slate-400 font-medium truncate max-w-[200px]" title={activeSelectedTopic.unitTitle}>
+                                                <span className="text-xs text-slate-400 font-medium truncate max-w-[320px] sm:max-w-[480px]" title={activeSelectedTopic.unitTitle}>
                                                     {activeSelectedTopic.unitTitle}
                                                 </span>
                                             </div>
@@ -1349,7 +1349,7 @@ export default function SourceTextsManagementPage() {
                                     <div className="flex-1 overflow-y-auto p-6 sm:p-8 bg-slate-950/60 border-y border-white/5 scrollbar-thin">
                                         {!isInlineEditing ? (
                                             activeSelectedTopic.sourceText ? (
-                                                <div className="max-w-prose mx-auto space-y-4">
+                                                <div className="w-full space-y-4">
                                                     <div className={cn(
                                                         "leading-relaxed whitespace-pre-wrap font-sans text-slate-200 selection:bg-indigo-500/40 select-text",
                                                         readerFontSize === 'sm' && "text-sm",
@@ -1412,7 +1412,7 @@ export default function SourceTextsManagementPage() {
                                             className="text-slate-300 hover:text-white disabled:opacity-30 rounded-xl text-xs font-semibold h-9 px-3"
                                         >
                                             <ChevronLeft className="w-4 h-4 mr-1 text-indigo-400" />
-                                            <span className="truncate max-w-[140px] sm:max-w-[180px]">
+                                            <span className="truncate max-w-[200px] sm:max-w-[320px]">
                                                 {prevTopic ? prevTopic.title : "Önceki Konu"}
                                             </span>
                                         </Button>
@@ -1430,7 +1430,7 @@ export default function SourceTextsManagementPage() {
                                             onClick={handleNextTopic}
                                             className="text-slate-300 hover:text-white disabled:opacity-30 rounded-xl text-xs font-semibold h-9 px-3"
                                         >
-                                            <span className="truncate max-w-[140px] sm:max-w-[180px]">
+                                            <span className="truncate max-w-[200px] sm:max-w-[320px]">
                                                 {nextTopic ? nextTopic.title : "Sonraki Konu"}
                                             </span>
                                             <ChevronRight className="w-4 h-4 ml-1 text-indigo-400" />
