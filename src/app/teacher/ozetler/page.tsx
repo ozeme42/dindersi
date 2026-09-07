@@ -10,7 +10,8 @@ import {
     Minus, Wand2, MonitorPlay, Code2, BookmarkCheck, CheckCircle2,
     SlidersHorizontal, ArrowUpDown, BookMarked, Sparkle,
     Zap, Columns, ExternalLink, CheckCircle, HelpCircle,
-    FileUp, Eraser, FileCheck, Edit3, Save, RotateCcw
+    FileUp, Eraser, FileCheck, Edit3, Save, RotateCcw,
+    PanelLeftClose, PanelLeftOpen
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -55,6 +56,9 @@ export default function OzetlerManagementPage() {
 
     // Focused Miller Column
     const [focusedColumn, setFocusedColumn] = useState<'grade' | 'course' | 'unit' | 'item'>('item');
+
+    // Collapsible Sidebar State (Konu seçilince sol taraf gizlenip tek tıkla açılsın)
+    const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
     // Studio Work Desk Tabs: 'source' (Ders Kitabı Metni), 'preview' (Akıllı Tahta Özeti), 'split' (Yan Yana Stüdyo), 'code' (HTML Kodu)
     const [activeTab, setActiveTab] = useState<'source' | 'preview' | 'split' | 'code'>('preview');
@@ -139,7 +143,10 @@ export default function OzetlerManagementPage() {
         const unitParam = params.get('unit');
         if (unitParam) setSelectedUnitId(unitParam);
         const topicParam = params.get('topic');
-        if (topicParam) setSelectedItemId(topicParam);
+        if (topicParam) {
+            setSelectedItemId(topicParam);
+            setIsSidebarOpen(false); // Doğrudan linkle gelindiğinde geniş çalışma masası açılsın
+        }
     }, []);
 
     // Statistics
@@ -353,9 +360,13 @@ export default function OzetlerManagementPage() {
         setFocusedColumn('item');
     };
 
-    const handleItemChange = (itemId: string) => {
+    // Konu seçilince sol tarafı otomatik gizle (kullanıcı isteği doğrultusunda)
+    const handleItemChange = (itemId: string, autoCollapse = true) => {
         setSelectedItemId(itemId);
         setFocusedColumn('item');
+        if (autoCollapse) {
+            setIsSidebarOpen(false);
+        }
     };
 
     // Sequential Navigation within Unit (Ünite Özeti -> 1. Konu -> 2. Konu ...)
@@ -394,6 +405,7 @@ export default function OzetlerManagementPage() {
         setSelectedItemId(item.id);
         setFocusedColumn('item');
         setSearchQuery('');
+        setIsSidebarOpen(false); // Aramadan seçildiğinde de tam ekran geniş çalışma masası açılsın
     };
 
     // Copy to Clipboard
@@ -950,495 +962,571 @@ export default function OzetlerManagementPage() {
                 </div>
 
                 {/* ══ MILLER COLUMNS STÜDYO GEZGİNİ & ÇALIŞMA MASASI ══ */}
-                <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 2xl:gap-6 items-start w-full">
+                <div className={cn(
+                    "grid gap-4 2xl:gap-6 items-start w-full transition-all duration-300",
+                    isSidebarOpen ? "grid-cols-1 xl:grid-cols-12" : "grid-cols-1"
+                )}>
                     
-                    {/* ── SOL BÖLÜM: 4 KADEMELİ MÜFREDAT FİHRİSTİ (MILLER COLUMNS) ── */}
-                    <div className="xl:col-span-5 2xl:col-span-5 flex flex-col h-[820px] xl:h-[880px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl">
-                        {/* Fihrist Üst Başlık Barı */}
-                        <div className="p-4 border-b border-white/10 bg-slate-950/60 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <LayoutTemplate className="w-5 h-5 text-purple-400" />
-                                <span className="font-bold text-sm text-white">Müfredat Fihristi</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-mono">
-                                <button 
-                                    onClick={() => setFocusedColumn('grade')}
-                                    className={cn("px-2 py-0.5 rounded-lg transition-colors", focusedColumn === 'grade' ? "bg-purple-600 text-white font-bold" : "text-slate-400 hover:text-white")}
-                                >
-                                    Sınıf
-                                </button>
-                                <span>›</span>
-                                <button 
-                                    onClick={() => setFocusedColumn('course')}
-                                    className={cn("px-2 py-0.5 rounded-lg transition-colors", focusedColumn === 'course' ? "bg-purple-600 text-white font-bold" : "text-slate-400 hover:text-white")}
-                                >
-                                    Ders
-                                </button>
-                                <span>›</span>
-                                <button 
-                                    onClick={() => setFocusedColumn('unit')}
-                                    className={cn("px-2 py-0.5 rounded-lg transition-colors", focusedColumn === 'unit' ? "bg-purple-600 text-white font-bold" : "text-slate-400 hover:text-white")}
-                                >
-                                    Ünite
-                                </button>
-                                <span>›</span>
-                                <button 
-                                    onClick={() => setFocusedColumn('item')}
-                                    className={cn("px-2 py-0.5 rounded-lg transition-colors", focusedColumn === 'item' ? "bg-purple-600 text-white font-bold" : "text-slate-400 hover:text-white")}
-                                >
-                                    Konu
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* 4 Kademeli Kolon Konteyneri */}
-                        <div className="flex flex-1 flex-row overflow-x-auto overflow-y-hidden divide-x divide-white/10 select-none">
-                            
-                            {/* ── KOLON 1: SINIFLAR ── */}
-                            {focusedColumn === 'grade' ? (
-                                <div className="flex-1 min-w-[190px] bg-slate-900/40 flex flex-col transition-all duration-300">
-                                    <div className="p-3 border-b border-white/5 flex items-center justify-between bg-slate-950/30">
-                                        <div className="flex items-center gap-2">
-                                            <GraduationCap className="w-4 h-4 text-purple-400" />
-                                            <span className="text-xs font-bold text-slate-200">Sınıf Seviyesi</span>
-                                        </div>
-                                        <span className="text-[10px] font-mono text-slate-500">{availableGrades.length} Seviye</span>
-                                    </div>
-                                    <div className="flex-1 overflow-y-auto p-2.5 space-y-2 scrollbar-thin">
-                                        {availableGrades.map(grade => {
-                                            const isSelected = selectedGrade === grade;
-                                            const count = items.filter(i => i.grade === grade).length;
-                                            return (
-                                                <button
-                                                    key={grade}
-                                                    onClick={() => {
-                                                        handleGradeChange(grade);
-                                                        setFocusedColumn('course');
-                                                    }}
-                                                    className={cn(
-                                                        "w-full text-left p-3.5 rounded-2xl transition-all flex items-center justify-between group",
-                                                        isSelected
-                                                            ? "bg-purple-600 text-white shadow-lg shadow-purple-900/50 font-bold"
-                                                            : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5"
-                                                    )}
-                                                >
-                                                    <div className="flex items-center gap-2.5">
-                                                        <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm", isSelected ? "bg-purple-700 text-white" : "bg-white/5 text-purple-400")}>
-                                                            {grade}
-                                                        </div>
-                                                        <span>{grade}. Sınıf</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-1.5">
-                                                        <span className={cn("text-xs font-mono px-2 py-0.5 rounded-lg", isSelected ? "bg-purple-700/80 text-white" : "bg-white/5 text-slate-400")}>
-                                                            {count}
-                                                        </span>
-                                                        <ChevronRight className={cn("w-4 h-4 transition-transform group-hover:translate-x-0.5", isSelected ? "text-white" : "text-slate-600")} />
-                                                    </div>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
+                    {/* ── SOL BÖLÜM: 4 KADEMELİ MÜFREDAT FİHRİSTİ (MILLER COLUMNS - GİZLENEBİLİR) ── */}
+                    {isSidebarOpen && (
+                        <div className="xl:col-span-5 2xl:col-span-5 flex flex-col h-[820px] xl:h-[880px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl animate-in fade-in duration-300">
+                            {/* Fihrist Üst Başlık Barı */}
+                            <div className="p-4 border-b border-white/10 bg-slate-950/60 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <LayoutTemplate className="w-5 h-5 text-purple-400" />
+                                    <span className="font-bold text-sm text-white">Müfredat Fihristi</span>
                                 </div>
-                            ) : (
-                                <div 
-                                    onClick={() => setFocusedColumn('grade')}
-                                    title="Sınıfları genişletmek için tıklayın"
-                                    className="w-14 sm:w-16 flex-shrink-0 bg-slate-950/70 hover:bg-slate-900/90 transition-all duration-300 flex flex-col items-center py-3 cursor-pointer group"
-                                >
-                                    <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-400 mb-2 group-hover:scale-110 transition-transform">
-                                        <GraduationCap className="w-4 h-4" />
-                                    </div>
-                                    <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider group-hover:text-purple-400 mb-3">
-                                        Sınıf
-                                    </span>
-                                    <div className="flex flex-col gap-2 items-center">
-                                        {availableGrades.map(grade => {
-                                            const isSelected = selectedGrade === grade;
-                                            return (
-                                                <button
-                                                    key={grade}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleGradeChange(grade);
-                                                        setFocusedColumn('course');
-                                                    }}
-                                                    title={`${grade}. Sınıf`}
-                                                    className={cn(
-                                                        "w-9 h-9 rounded-xl font-black text-xs flex items-center justify-center transition-all",
-                                                        isSelected
-                                                            ? "bg-purple-600 text-white shadow-lg shadow-purple-900/50 ring-2 ring-purple-400/50 scale-105"
-                                                            : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10"
-                                                    )}
-                                                >
-                                                    {grade}
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* ── KOLON 2: DERSLER ── */}
-                            {focusedColumn === 'course' ? (
-                                <div className="flex-1 min-w-[200px] bg-slate-900/40 flex flex-col transition-all duration-300">
-                                    <div className="p-3 border-b border-white/5 flex items-center justify-between bg-slate-950/30">
-                                        <div className="flex items-center gap-2">
-                                            <BookOpen className="w-4 h-4 text-indigo-400" />
-                                            <span className="text-xs font-bold text-slate-200">{selectedGrade}. Sınıf Dersleri</span>
-                                        </div>
-                                        <span className="text-[10px] font-mono text-slate-500">{availableCourses.length} Ders</span>
-                                    </div>
-                                    <div className="flex-1 overflow-y-auto p-2.5 space-y-2 scrollbar-thin">
-                                        {availableCourses.map(course => {
-                                            const isSelected = selectedCourseId === course.id;
-                                            return (
-                                                <button
-                                                    key={course.id}
-                                                    onClick={() => {
-                                                        handleCourseChange(course.id);
-                                                        setFocusedColumn('unit');
-                                                    }}
-                                                    className={cn(
-                                                        "w-full text-left p-3.5 rounded-2xl transition-all flex items-center justify-between group",
-                                                        isSelected
-                                                            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/50 font-bold"
-                                                            : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5"
-                                                    )}
-                                                >
-                                                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                                                        <BookOpen className={cn("w-4 h-4 flex-shrink-0", isSelected ? "text-white" : "text-indigo-400")} />
-                                                        <span className="text-xs font-semibold leading-snug break-words">{course.title}</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                                                        <span className={cn("text-xs font-mono px-2 py-0.5 rounded-lg", isSelected ? "bg-indigo-700/80 text-white" : "bg-white/5 text-slate-400")}>
-                                                            {course.count}
-                                                        </span>
-                                                        <ChevronRight className={cn("w-4 h-4 transition-transform group-hover:translate-x-0.5", isSelected ? "text-white" : "text-slate-600")} />
-                                                    </div>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div 
-                                    onClick={() => setFocusedColumn('course')}
-                                    title="Dersleri genişletmek için tıklayın"
-                                    className="w-28 sm:w-36 flex-shrink-0 bg-slate-950/70 hover:bg-slate-900/90 transition-all duration-300 flex flex-col items-center py-3 cursor-pointer group"
-                                >
-                                    <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 mb-2 group-hover:scale-110 transition-transform">
-                                        <BookOpen className="w-4 h-4" />
-                                    </div>
-                                    <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider group-hover:text-indigo-400 mb-3">
-                                        Ders
-                                    </span>
-                                    <div className="flex flex-col gap-2 w-full px-2">
-                                        {availableCourses.map(course => {
-                                            const isSelected = selectedCourseId === course.id;
-                                            return (
-                                                <button
-                                                    key={course.id}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleCourseChange(course.id);
-                                                        setFocusedColumn('unit');
-                                                    }}
-                                                    title={course.title}
-                                                    className={cn(
-                                                        "w-full min-h-[44px] py-2 px-2 rounded-xl font-bold text-[10px] sm:text-[11px] leading-tight flex items-center justify-center text-center transition-all",
-                                                        isSelected
-                                                            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/50 ring-2 ring-indigo-400/50 scale-[1.02]"
-                                                            : "bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/5"
-                                                    )}
-                                                >
-                                                    {course.title}
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* ── KOLON 3: ÜNİTELER ── */}
-                            {focusedColumn === 'unit' ? (
-                                <div className="flex-1 min-w-[220px] bg-slate-900/40 flex flex-col transition-all duration-300">
-                                    <div className="p-3 border-b border-white/5 flex items-center justify-between bg-slate-950/30">
-                                        <div className="flex items-center gap-2 truncate">
-                                            <Layers className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                                            <span className="text-xs font-bold text-slate-200 truncate">{activeSelectedCourse} Üniteleri</span>
-                                        </div>
-                                        <span className="text-[10px] font-mono text-slate-500 flex-shrink-0">{availableUnits.length} Ünite</span>
-                                    </div>
-                                    <div className="flex-1 overflow-y-auto p-2.5 space-y-2 scrollbar-thin">
-                                        {availableUnits.map(unit => {
-                                            const isSelected = selectedUnitId === unit.id;
-                                            return (
-                                                <button
-                                                    key={unit.id}
-                                                    onClick={() => {
-                                                        handleUnitChange(unit.id);
-                                                        setFocusedColumn('item');
-                                                    }}
-                                                    className={cn(
-                                                        "w-full text-left p-3.5 rounded-2xl transition-all flex items-center justify-between group",
-                                                        isSelected
-                                                            ? "bg-blue-600 text-white shadow-lg shadow-blue-900/50 font-bold"
-                                                            : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5"
-                                                    )}
-                                                >
-                                                    <div className="flex items-center gap-2.5 truncate">
-                                                        <Layers className={cn("w-4 h-4 flex-shrink-0", isSelected ? "text-white" : "text-blue-400")} />
-                                                        <span className="truncate text-xs font-semibold">{unit.title}</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                                                        {unit.hasUnitOzet && (
-                                                            <span className="w-2 h-2 rounded-full bg-rose-400" title="Ünite Özeti Hazır" />
-                                                        )}
-                                                        <ChevronRight className={cn("w-4 h-4 transition-transform group-hover:translate-x-0.5", isSelected ? "text-white" : "text-slate-600")} />
-                                                    </div>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div 
-                                    onClick={() => setFocusedColumn('unit')}
-                                    title="Üniteleri genişletmek için tıklayın"
-                                    className="w-16 sm:w-20 flex-shrink-0 bg-slate-950/70 hover:bg-slate-900/90 transition-all duration-300 flex flex-col items-center py-3 cursor-pointer group"
-                                >
-                                    <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 mb-2 group-hover:scale-110 transition-transform">
-                                        <Layers className="w-4 h-4" />
-                                    </div>
-                                    <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider group-hover:text-blue-400 mb-3">
-                                        Ünite
-                                    </span>
-                                    <div className="flex flex-col gap-1.5 items-center overflow-y-auto max-h-[580px] scrollbar-none">
-                                        {availableUnits.map((unit, idx) => {
-                                            const isSelected = selectedUnitId === unit.id;
-                                            return (
-                                                <button
-                                                    key={unit.id}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleUnitChange(unit.id);
-                                                        setFocusedColumn('item');
-                                                    }}
-                                                    title={unit.title}
-                                                    className={cn(
-                                                        "w-11 sm:w-14 h-7 rounded-lg font-bold text-[11px] flex items-center justify-center transition-all truncate px-1",
-                                                        isSelected
-                                                            ? "bg-blue-600 text-white shadow-md ring-1 ring-blue-400/50 scale-105"
-                                                            : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10"
-                                                    )}
-                                                >
-                                                    {idx + 1}.Ün
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* ── KOLON 4: İÇERİK LİSTESİ (ÜNİTE ÖZETİ PINNED + KONULAR) ── */}
-                            <div className="flex-1 min-w-[260px] bg-slate-900/40 flex flex-col transition-all duration-300">
-                                <div className="p-3 border-b border-white/5 flex items-center justify-between bg-slate-950/30">
-                                    <div className="flex items-center gap-2 truncate">
-                                        <LayoutTemplate className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                                        <span className="text-xs font-bold text-slate-200 truncate">{activeSelectedUnit}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <button
-                                            onClick={() => setFilterStatus(s => {
-                                                if (s === 'all') return 'has_source';
-                                                if (s === 'has_source') return 'missing_source';
-                                                if (s === 'missing_source') return 'has_ozet';
-                                                if (s === 'has_ozet') return 'missing_ozet';
-                                                return 'all';
-                                            })}
-                                            className={cn(
-                                                "text-[10px] font-mono px-2 py-0.5 rounded-lg border transition-colors",
-                                                filterStatus === 'all' ? "bg-white/5 border-white/10 text-slate-400" :
-                                                filterStatus === 'has_source' ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-300 font-bold" :
-                                                filterStatus === 'missing_source' ? "bg-amber-500/20 border-amber-500/30 text-amber-300 font-bold" :
-                                                filterStatus === 'has_ozet' ? "bg-purple-500/20 border-purple-500/30 text-purple-300 font-bold" :
-                                                "bg-rose-500/20 border-rose-500/30 text-rose-300 font-bold"
-                                            )}
-                                            title="Filtrele: Tümü / Kaynağı Olan / Kaynak Yok / Özeti Olan / Özet Yok"
+                                
+                                <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-mono">
+                                        <button 
+                                            onClick={() => setFocusedColumn('grade')}
+                                            className={cn("px-2 py-0.5 rounded-lg transition-colors", focusedColumn === 'grade' ? "bg-purple-600 text-white font-bold" : "text-slate-400 hover:text-white")}
                                         >
-                                            {filterStatus === 'all' ? 'Tümü' : 
-                                             filterStatus === 'has_source' ? 'Kaynak Var' :
-                                             filterStatus === 'missing_source' ? 'Kaynak Yok' :
-                                             filterStatus === 'has_ozet' ? 'Özeti Olan' : 'Özet Yok'}
+                                            Sınıf
+                                        </button>
+                                        <span>›</span>
+                                        <button 
+                                            onClick={() => setFocusedColumn('course')}
+                                            className={cn("px-2 py-0.5 rounded-lg transition-colors", focusedColumn === 'course' ? "bg-purple-600 text-white font-bold" : "text-slate-400 hover:text-white")}
+                                        >
+                                            Ders
+                                        </button>
+                                        <span>›</span>
+                                        <button 
+                                            onClick={() => setFocusedColumn('unit')}
+                                            className={cn("px-2 py-0.5 rounded-lg transition-colors", focusedColumn === 'unit' ? "bg-purple-600 text-white font-bold" : "text-slate-400 hover:text-white")}
+                                        >
+                                            Ünite
+                                        </button>
+                                        <span>›</span>
+                                        <button 
+                                            onClick={() => setFocusedColumn('item')}
+                                            className={cn("px-2 py-0.5 rounded-lg transition-colors", focusedColumn === 'item' ? "bg-purple-600 text-white font-bold" : "text-slate-400 hover:text-white")}
+                                        >
+                                            Konu
                                         </button>
                                     </div>
+
+                                    {/* Fihristi Gizle Butonu */}
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => setIsSidebarOpen(false)}
+                                        className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-8 px-2 text-xs flex items-center gap-1 border border-white/10 ml-1"
+                                        title="Fihristi Gizle (Geniş Çalışma Masası)"
+                                    >
+                                        <PanelLeftClose className="w-4 h-4 text-purple-400" />
+                                        <span className="hidden sm:inline">Gizle</span>
+                                    </Button>
                                 </div>
+                            </div>
 
-                                <div className="flex-1 overflow-y-auto p-2.5 space-y-2.5 scrollbar-thin">
-                                    {/* 🌟 1. EN TEPEDE SABİTLENMİŞ ÜNİTE ÖZETİ (UNIT SUMMARY) */}
-                                    {unitSummaryItem && (
-                                        <div className="space-y-1">
-                                            <button
-                                                onClick={() => handleItemChange(unitSummaryItem.id)}
-                                                className={cn(
-                                                    "w-full text-left p-3.5 rounded-2xl transition-all flex flex-col gap-2 group border relative overflow-hidden",
-                                                    selectedItemId === unitSummaryItem.id
-                                                        ? "bg-gradient-to-br from-purple-600 to-rose-600 text-white shadow-xl shadow-purple-950/70 border-purple-400/80 font-bold"
-                                                        : "bg-gradient-to-br from-purple-950/40 to-slate-900/60 hover:from-purple-900/50 hover:to-slate-800 text-slate-200 border-purple-500/30 shadow-md"
-                                                )}
-                                            >
-                                                <div className="flex items-start justify-between gap-2">
-                                                    <div className="flex items-center gap-2">
-                                                        <Badge className={cn(
-                                                            "text-[10px] font-black uppercase tracking-wider px-2 py-0.5",
-                                                            selectedItemId === unitSummaryItem.id
-                                                                ? "bg-white/20 text-white border-white/30"
-                                                                : "bg-purple-500/20 text-purple-300 border-purple-400/30"
-                                                        )}>
-                                                            ⭐ ÜNİTE ÖZETİ
-                                                        </Badge>
-                                                    </div>
-                                                    {selectedItemId === unitSummaryItem.id && (
-                                                        <ChevronRight className="w-4 h-4 flex-shrink-0 text-white" />
-                                                    )}
-                                                </div>
-
-                                                <p className="text-xs font-extrabold line-clamp-2 leading-snug">
-                                                    {activeSelectedUnit} Genel Özeti
-                                                </p>
-
-                                                {/* Kaynak Metin Durum Satırı */}
-                                                <div className="flex items-center justify-between text-[10px] pt-1 border-t border-white/10 font-semibold">
-                                                    <span className={cn(
-                                                        "flex items-center gap-1",
-                                                        unitSourceMetrics.topicsWithSourceCount > 0
-                                                            ? (selectedItemId === unitSummaryItem.id ? "text-emerald-100" : "text-emerald-400")
-                                                            : (selectedItemId === unitSummaryItem.id ? "text-amber-100" : "text-amber-400")
-                                                    )}>
-                                                        <BookOpen className="w-3 h-3" />
-                                                        {unitSourceMetrics.topicsWithSourceCount}/{unitSourceMetrics.totalTopics} Konu Kaynağı
-                                                    </span>
-                                                    {unitSummaryItem.hasOzet ? (
-                                                        <span className={cn(
-                                                            "font-mono px-1.5 py-0.5 rounded font-bold",
-                                                            selectedItemId === unitSummaryItem.id ? "bg-white/20 text-white" : "bg-emerald-500/20 text-emerald-300"
-                                                        )}>
-                                                            {unitSummaryItem.wordCount} kelime
-                                                        </span>
-                                                    ) : (
-                                                        <span className={cn(
-                                                            "px-1.5 py-0.5 rounded",
-                                                            selectedItemId === unitSummaryItem.id ? "text-rose-100" : "text-amber-400/80 bg-amber-500/10"
-                                                        )}>
-                                                            Özet Yok
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </button>
-
-                                            {/* Ayrım Çizgisi */}
-                                            <div className="flex items-center gap-2 px-2 py-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                                                <div className="h-px flex-1 bg-white/10" />
-                                                <span>Konular ({topicSummaryItems.length})</span>
-                                                <div className="h-px flex-1 bg-white/10" />
+                            {/* 4 Kademeli Kolon Konteyneri */}
+                            <div className="flex flex-1 flex-row overflow-x-auto overflow-y-hidden divide-x divide-white/10 select-none">
+                                
+                                {/* ── KOLON 1: SINIFLAR ── */}
+                                {focusedColumn === 'grade' ? (
+                                    <div className="flex-1 min-w-[190px] bg-slate-900/40 flex flex-col transition-all duration-300">
+                                        <div className="p-3 border-b border-white/5 flex items-center justify-between bg-slate-950/30">
+                                            <div className="flex items-center gap-2">
+                                                <GraduationCap className="w-4 h-4 text-purple-400" />
+                                                <span className="text-xs font-bold text-slate-200">Sınıf Seviyesi</span>
                                             </div>
+                                            <span className="text-[10px] font-mono text-slate-500">{availableGrades.length} Seviye</span>
                                         </div>
-                                    )}
+                                        <div className="flex-1 overflow-y-auto p-2.5 space-y-2 scrollbar-thin">
+                                            {availableGrades.map(grade => {
+                                                const isSelected = selectedGrade === grade;
+                                                const count = items.filter(i => i.grade === grade).length;
+                                                return (
+                                                    <button
+                                                        key={grade}
+                                                        onClick={() => {
+                                                            handleGradeChange(grade);
+                                                            setFocusedColumn('course');
+                                                        }}
+                                                        className={cn(
+                                                            "w-full text-left p-3.5 rounded-2xl transition-all flex items-center justify-between group",
+                                                            isSelected
+                                                                ? "bg-purple-600 text-white shadow-lg shadow-purple-900/50 font-bold"
+                                                                : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5"
+                                                        )}
+                                                    >
+                                                        <div className="flex items-center gap-2.5">
+                                                            <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm", isSelected ? "bg-purple-700 text-white" : "bg-white/5 text-purple-400")}>
+                                                                {grade}
+                                                            </div>
+                                                            <span>{grade}. Sınıf</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className={cn("text-xs font-mono px-2 py-0.5 rounded-lg", isSelected ? "bg-purple-700/80 text-white" : "bg-white/5 text-slate-400")}>
+                                                                {count}
+                                                            </span>
+                                                            <ChevronRight className={cn("w-4 h-4 transition-transform group-hover:translate-x-0.5", isSelected ? "text-white" : "text-slate-600")} />
+                                                        </div>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div 
+                                        onClick={() => setFocusedColumn('grade')}
+                                        title="Sınıfları genişletmek için tıklayın"
+                                        className="w-14 sm:w-16 flex-shrink-0 bg-slate-950/70 hover:bg-slate-900/90 transition-all duration-300 flex flex-col items-center py-3 cursor-pointer group"
+                                    >
+                                        <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-400 mb-2 group-hover:scale-110 transition-transform">
+                                            <GraduationCap className="w-4 h-4" />
+                                        </div>
+                                        <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider group-hover:text-purple-400 mb-3">
+                                            Sınıf
+                                        </span>
+                                        <div className="flex flex-col gap-2 items-center">
+                                            {availableGrades.map(grade => {
+                                                const isSelected = selectedGrade === grade;
+                                                return (
+                                                    <button
+                                                        key={grade}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleGradeChange(grade);
+                                                            setFocusedColumn('course');
+                                                        }}
+                                                        title={`${grade}. Sınıf`}
+                                                        className={cn(
+                                                            "w-9 h-9 rounded-xl font-black text-xs flex items-center justify-center transition-all",
+                                                            isSelected
+                                                                ? "bg-purple-600 text-white shadow-lg shadow-purple-900/50 ring-2 ring-purple-400/50 scale-105"
+                                                                : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10"
+                                                        )}
+                                                    >
+                                                        {grade}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
 
-                                    {/* 2. KONU LİSTESİ (ÇİFT DURUM: KAYNAK METİN + ÖZET) */}
-                                    {topicSummaryItems.map((topic) => {
-                                        const isSelected = selectedItemId === topic.id;
-                                        const hasSource = topic.sourceText && topic.sourceWordCount > 0;
-                                        return (
+                                {/* ── KOLON 2: DERSLER ── */}
+                                {focusedColumn === 'course' ? (
+                                    <div className="flex-1 min-w-[200px] bg-slate-900/40 flex flex-col transition-all duration-300">
+                                        <div className="p-3 border-b border-white/5 flex items-center justify-between bg-slate-950/30">
+                                            <div className="flex items-center gap-2">
+                                                <BookOpen className="w-4 h-4 text-indigo-400" />
+                                                <span className="text-xs font-bold text-slate-200">{selectedGrade}. Sınıf Dersleri</span>
+                                            </div>
+                                            <span className="text-[10px] font-mono text-slate-500">{availableCourses.length} Ders</span>
+                                        </div>
+                                        <div className="flex-1 overflow-y-auto p-2.5 space-y-2 scrollbar-thin">
+                                            {availableCourses.map(course => {
+                                                const isSelected = selectedCourseId === course.id;
+                                                return (
+                                                    <button
+                                                        key={course.id}
+                                                        onClick={() => {
+                                                            handleCourseChange(course.id);
+                                                            setFocusedColumn('unit');
+                                                        }}
+                                                        className={cn(
+                                                            "w-full text-left p-3.5 rounded-2xl transition-all flex items-center justify-between group",
+                                                            isSelected
+                                                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/50 font-bold"
+                                                                : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5"
+                                                        )}
+                                                    >
+                                                        <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                                                            <BookOpen className={cn("w-4 h-4 flex-shrink-0", isSelected ? "text-white" : "text-indigo-400")} />
+                                                            <span className="text-xs font-semibold leading-snug break-words">{course.title}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                                                            <span className={cn("text-xs font-mono px-2 py-0.5 rounded-lg", isSelected ? "bg-indigo-700/80 text-white" : "bg-white/5 text-slate-400")}>
+                                                                {course.count}
+                                                            </span>
+                                                            <ChevronRight className={cn("w-4 h-4 transition-transform group-hover:translate-x-0.5", isSelected ? "text-white" : "text-slate-600")} />
+                                                        </div>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div 
+                                        onClick={() => setFocusedColumn('course')}
+                                        title="Dersleri genişletmek için tıklayın"
+                                        className="w-28 sm:w-36 flex-shrink-0 bg-slate-950/70 hover:bg-slate-900/90 transition-all duration-300 flex flex-col items-center py-3 cursor-pointer group"
+                                    >
+                                        <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 mb-2 group-hover:scale-110 transition-transform">
+                                            <BookOpen className="w-4 h-4" />
+                                        </div>
+                                        <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider group-hover:text-indigo-400 mb-3">
+                                            Ders
+                                        </span>
+                                        <div className="flex flex-col gap-2 w-full px-2">
+                                            {availableCourses.map(course => {
+                                                const isSelected = selectedCourseId === course.id;
+                                                return (
+                                                    <button
+                                                        key={course.id}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleCourseChange(course.id);
+                                                            setFocusedColumn('unit');
+                                                        }}
+                                                        title={course.title}
+                                                        className={cn(
+                                                            "w-full min-h-[44px] py-2 px-2 rounded-xl font-bold text-[10px] sm:text-[11px] leading-tight flex items-center justify-center text-center transition-all",
+                                                            isSelected
+                                                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/50 ring-2 ring-indigo-400/50 scale-[1.02]"
+                                                                : "bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/5"
+                                                        )}
+                                                    >
+                                                        {course.title}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* ── KOLON 3: ÜNİTELER ── */}
+                                {focusedColumn === 'unit' ? (
+                                    <div className="flex-1 min-w-[220px] bg-slate-900/40 flex flex-col transition-all duration-300">
+                                        <div className="p-3 border-b border-white/5 flex items-center justify-between bg-slate-950/30">
+                                            <div className="flex items-center gap-2 truncate">
+                                                <Layers className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                                                <span className="text-xs font-bold text-slate-200 truncate">{activeSelectedCourse} Üniteleri</span>
+                                            </div>
+                                            <span className="text-[10px] font-mono text-slate-500 flex-shrink-0">{availableUnits.length} Ünite</span>
+                                        </div>
+                                        <div className="flex-1 overflow-y-auto p-2.5 space-y-2 scrollbar-thin">
+                                            {availableUnits.map(unit => {
+                                                const isSelected = selectedUnitId === unit.id;
+                                                return (
+                                                    <button
+                                                        key={unit.id}
+                                                        onClick={() => {
+                                                            handleUnitChange(unit.id);
+                                                            setFocusedColumn('item');
+                                                        }}
+                                                        className={cn(
+                                                            "w-full text-left p-3.5 rounded-2xl transition-all flex items-center justify-between group",
+                                                            isSelected
+                                                                ? "bg-blue-600 text-white shadow-lg shadow-blue-900/50 font-bold"
+                                                                : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5"
+                                                        )}
+                                                    >
+                                                        <div className="flex items-center gap-2.5 truncate">
+                                                            <Layers className={cn("w-4 h-4 flex-shrink-0", isSelected ? "text-white" : "text-blue-400")} />
+                                                            <span className="truncate text-xs font-semibold">{unit.title}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                                                            {unit.hasUnitOzet && (
+                                                                <span className="w-2 h-2 rounded-full bg-rose-400" title="Ünite Özeti Hazır" />
+                                                            )}
+                                                            <ChevronRight className={cn("w-4 h-4 transition-transform group-hover:translate-x-0.5", isSelected ? "text-white" : "text-slate-600")} />
+                                                        </div>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div 
+                                        onClick={() => setFocusedColumn('unit')}
+                                        title="Üniteleri genişletmek için tıklayın"
+                                        className="w-16 sm:w-20 flex-shrink-0 bg-slate-950/70 hover:bg-slate-900/90 transition-all duration-300 flex flex-col items-center py-3 cursor-pointer group"
+                                    >
+                                        <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                                            <Layers className="w-4 h-4" />
+                                        </div>
+                                        <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider group-hover:text-blue-400 mb-3">
+                                            Ünite
+                                        </span>
+                                        <div className="flex flex-col gap-1.5 items-center overflow-y-auto max-h-[580px] scrollbar-none">
+                                            {availableUnits.map((unit, idx) => {
+                                                const isSelected = selectedUnitId === unit.id;
+                                                return (
+                                                    <button
+                                                        key={unit.id}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleUnitChange(unit.id);
+                                                            setFocusedColumn('item');
+                                                        }}
+                                                        title={unit.title}
+                                                        className={cn(
+                                                            "w-11 sm:w-14 h-7 rounded-lg font-bold text-[11px] flex items-center justify-center transition-all truncate px-1",
+                                                            isSelected
+                                                                ? "bg-blue-600 text-white shadow-md ring-1 ring-blue-400/50 scale-105"
+                                                                : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10"
+                                                        )}
+                                                    >
+                                                        {idx + 1}.Ün
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* ── KOLON 4: İÇERİK LİSTESİ (ÜNİTE ÖZETİ PINNED + KONULAR) ── */}
+                                <div className="flex-1 min-w-[260px] bg-slate-900/40 flex flex-col transition-all duration-300">
+                                    <div className="p-3 border-b border-white/5 flex items-center justify-between bg-slate-950/30">
+                                        <div className="flex items-center gap-2 truncate">
+                                            <LayoutTemplate className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                                            <span className="text-xs font-bold text-slate-200 truncate">{activeSelectedUnit}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
                                             <button
-                                                key={topic.id}
-                                                onClick={() => handleItemChange(topic.id)}
+                                                onClick={() => setFilterStatus(s => {
+                                                    if (s === 'all') return 'has_source';
+                                                    if (s === 'has_source') return 'missing_source';
+                                                    if (s === 'missing_source') return 'has_ozet';
+                                                    if (s === 'has_ozet') return 'missing_ozet';
+                                                    return 'all';
+                                                })}
                                                 className={cn(
-                                                    "w-full text-left p-3 rounded-2xl transition-all flex flex-col gap-2 group border",
-                                                    isSelected
-                                                        ? "bg-indigo-600 text-white shadow-xl shadow-indigo-950/60 border-indigo-400/60 font-bold"
-                                                        : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border-white/5"
+                                                    "text-[10px] font-mono px-2 py-0.5 rounded-lg border transition-colors",
+                                                    filterStatus === 'all' ? "bg-white/5 border-white/10 text-slate-400" :
+                                                    filterStatus === 'has_source' ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-300 font-bold" :
+                                                    filterStatus === 'missing_source' ? "bg-amber-500/20 border-amber-500/30 text-amber-300 font-bold" :
+                                                    filterStatus === 'has_ozet' ? "bg-purple-500/20 border-purple-500/30 text-purple-300 font-bold" :
+                                                    "bg-rose-500/20 border-rose-500/30 text-rose-300 font-bold"
                                                 )}
+                                                title="Filtrele: Tümü / Kaynağı Olan / Kaynak Yok / Özeti Olan / Özet Yok"
                                             >
-                                                <div className="flex items-start justify-between gap-2">
-                                                    <div className="flex items-center gap-2">
-                                                        <span 
-                                                            className={cn(
-                                                                "w-2.5 h-2.5 rounded-full flex-shrink-0 mt-0.5",
-                                                                hasSource ? (isSelected ? "bg-emerald-300" : "bg-emerald-400") : "bg-slate-600"
-                                                            )} 
-                                                            title={hasSource ? "Kaynak metin hazır" : "Kaynak metin henüz yok"}
-                                                        />
-                                                        <span className="text-xs font-semibold line-clamp-2 leading-tight">
-                                                            {topic.title}
-                                                        </span>
-                                                    </div>
-                                                    {isSelected && (
-                                                        <ChevronRight className="w-4 h-4 flex-shrink-0 text-white" />
-                                                    )}
-                                                </div>
-
-                                                <div className="flex items-center justify-between text-[10px] pt-1 border-t border-white/5">
-                                                    <span className={cn(
-                                                        "flex items-center gap-1 font-medium",
-                                                        hasSource 
-                                                            ? (isSelected ? "text-emerald-200" : "text-emerald-400")
-                                                            : (isSelected ? "text-amber-200" : "text-slate-500")
-                                                    )}>
-                                                        <BookOpen className="w-3 h-3 flex-shrink-0" />
-                                                        {hasSource ? `${topic.sourceWordCount} k. Kaynak` : 'Kaynak Yok'}
-                                                    </span>
-
-                                                    {topic.hasOzet ? (
-                                                        <span className={cn(
-                                                            "font-mono px-1.5 py-0.5 rounded font-bold", 
-                                                            isSelected ? "bg-indigo-700 text-emerald-200" : "bg-purple-500/15 text-purple-300"
-                                                        )}>
-                                                            {topic.wordCount} k. Özet
-                                                        </span>
-                                                    ) : (
-                                                        <span className={cn(
-                                                            "px-1.5 py-0.5 rounded", 
-                                                            isSelected ? "bg-amber-500/30 text-amber-200" : "bg-amber-500/10 text-amber-400/80"
-                                                        )}>
-                                                            Özet Yok
-                                                        </span>
-                                                    )}
-                                                </div>
+                                                {filterStatus === 'all' ? 'Tümü' : 
+                                                 filterStatus === 'has_source' ? 'Kaynak Var' :
+                                                 filterStatus === 'missing_source' ? 'Kaynak Yok' :
+                                                 filterStatus === 'has_ozet' ? 'Özeti Olan' : 'Özet Yok'}
                                             </button>
-                                        );
-                                    })}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-1 overflow-y-auto p-2.5 space-y-2.5 scrollbar-thin">
+                                        {/* 🌟 1. EN TEPEDE SABİTLENMİŞ ÜNİTE ÖZETİ (UNIT SUMMARY) */}
+                                        {unitSummaryItem && (
+                                            <div className="space-y-1">
+                                                <button
+                                                    onClick={() => handleItemChange(unitSummaryItem.id, true)}
+                                                    className={cn(
+                                                        "w-full text-left p-3.5 rounded-2xl transition-all flex flex-col gap-2 group border relative overflow-hidden",
+                                                        selectedItemId === unitSummaryItem.id
+                                                            ? "bg-gradient-to-br from-purple-600 to-rose-600 text-white shadow-xl shadow-purple-950/70 border-purple-400/80 font-bold"
+                                                            : "bg-gradient-to-br from-purple-950/40 to-slate-900/60 hover:from-purple-900/50 hover:to-slate-800 text-slate-200 border-purple-500/30 shadow-md"
+                                                    )}
+                                                >
+                                                    <div className="flex items-start justify-between gap-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <Badge className={cn(
+                                                                "text-[10px] font-black uppercase tracking-wider px-2 py-0.5",
+                                                                selectedItemId === unitSummaryItem.id
+                                                                    ? "bg-white/20 text-white border-white/30"
+                                                                    : "bg-purple-500/20 text-purple-300 border-purple-400/30"
+                                                            )}>
+                                                                ⭐ ÜNİTE ÖZETİ
+                                                            </Badge>
+                                                        </div>
+                                                        {selectedItemId === unitSummaryItem.id && (
+                                                            <ChevronRight className="w-4 h-4 flex-shrink-0 text-white" />
+                                                        )}
+                                                    </div>
+
+                                                    <p className="text-xs font-extrabold line-clamp-2 leading-snug">
+                                                        {activeSelectedUnit} Genel Özeti
+                                                    </p>
+
+                                                    {/* Kaynak Metin Durum Satırı */}
+                                                    <div className="flex items-center justify-between text-[10px] pt-1 border-t border-white/10 font-semibold">
+                                                        <span className={cn(
+                                                            "flex items-center gap-1",
+                                                            unitSourceMetrics.topicsWithSourceCount > 0
+                                                                ? (selectedItemId === unitSummaryItem.id ? "text-emerald-100" : "text-emerald-400")
+                                                                : (selectedItemId === unitSummaryItem.id ? "text-amber-100" : "text-amber-400")
+                                                        )}>
+                                                            <BookOpen className="w-3 h-3" />
+                                                            {unitSourceMetrics.topicsWithSourceCount}/{unitSourceMetrics.totalTopics} Konu Kaynağı
+                                                        </span>
+                                                        {unitSummaryItem.hasOzet ? (
+                                                            <span className={cn(
+                                                                "font-mono px-1.5 py-0.5 rounded font-bold",
+                                                                selectedItemId === unitSummaryItem.id ? "bg-white/20 text-white" : "bg-emerald-500/20 text-emerald-300"
+                                                            )}>
+                                                                {unitSummaryItem.wordCount} kelime
+                                                            </span>
+                                                        ) : (
+                                                            <span className={cn(
+                                                                "px-1.5 py-0.5 rounded",
+                                                                selectedItemId === unitSummaryItem.id ? "text-rose-100" : "text-amber-400/80 bg-amber-500/10"
+                                                            )}>
+                                                                Özet Yok
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </button>
+
+                                                {/* Ayrım Çizgisi */}
+                                                <div className="flex items-center gap-2 px-2 py-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                                    <div className="h-px flex-1 bg-white/10" />
+                                                    <span>Konular ({topicSummaryItems.length})</span>
+                                                    <div className="h-px flex-1 bg-white/10" />
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* 2. KONU LİSTESİ (ÇİFT DURUM: KAYNAK METİN + ÖZET) */}
+                                        {topicSummaryItems.map((topic) => {
+                                            const isSelected = selectedItemId === topic.id;
+                                            const hasSource = topic.sourceText && topic.sourceWordCount > 0;
+                                            return (
+                                                <button
+                                                    key={topic.id}
+                                                    onClick={() => handleItemChange(topic.id, true)}
+                                                    className={cn(
+                                                        "w-full text-left p-3 rounded-2xl transition-all flex flex-col gap-2 group border",
+                                                        isSelected
+                                                            ? "bg-indigo-600 text-white shadow-xl shadow-indigo-950/60 border-indigo-400/60 font-bold"
+                                                            : "bg-slate-950/60 hover:bg-slate-800 text-slate-300 hover:text-white border-white/5"
+                                                    )}
+                                                >
+                                                    <div className="flex items-start justify-between gap-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span 
+                                                                className={cn(
+                                                                  "w-2.5 h-2.5 rounded-full flex-shrink-0 mt-0.5",
+                                                                  hasSource ? (isSelected ? "bg-emerald-300" : "bg-emerald-400") : "bg-slate-600"
+                                                                )} 
+                                                                title={hasSource ? "Kaynak metin hazır" : "Kaynak metin henüz yok"}
+                                                            />
+                                                            <span className="text-xs font-semibold line-clamp-2 leading-tight">
+                                                                {topic.title}
+                                                            </span>
+                                                        </div>
+                                                        {isSelected && (
+                                                            <ChevronRight className="w-4 h-4 flex-shrink-0 text-white" />
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex items-center justify-between text-[10px] pt-1 border-t border-white/5">
+                                                        <span className={cn(
+                                                            "flex items-center gap-1 font-medium",
+                                                            hasSource 
+                                                                ? (isSelected ? "text-emerald-200" : "text-emerald-400")
+                                                                : (isSelected ? "text-amber-200" : "text-slate-500")
+                                                        )}>
+                                                            <BookOpen className="w-3 h-3 flex-shrink-0" />
+                                                            {hasSource ? `${topic.sourceWordCount} k. Kaynak` : 'Kaynak Yok'}
+                                                        </span>
+
+                                                        {topic.hasOzet ? (
+                                                            <span className={cn(
+                                                                "font-mono px-1.5 py-0.5 rounded font-bold", 
+                                                                isSelected ? "bg-indigo-700 text-emerald-200" : "bg-purple-500/15 text-purple-300"
+                                                            )}>
+                                                                {topic.wordCount} k. Özet
+                                                            </span>
+                                                        ) : (
+                                                            <span className={cn(
+                                                                "px-1.5 py-0.5 rounded", 
+                                                                isSelected ? "bg-amber-500/30 text-amber-200" : "bg-amber-500/10 text-amber-400/80"
+                                                            )}>
+                                                                Özet Yok
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    )}
 
-                    {/* ── SAĞ BÖLÜM: DİJİTAL ÇALIŞMA MASASI & STÜDYO (SEKMELER: KAYNAK METİN / ÖZET / YAN YANA / KOD) ── */}
-                    <div className="xl:col-span-7 2xl:col-span-7 flex flex-col h-[820px] xl:h-[880px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl">
+                    {/* ── SAĞ BÖLÜM: DİJİTAL ÇALIŞMA MASASI & STÜDYO (TAM GENİŞLİK VE SEKMELER) ── */}
+                    <div className={cn(
+                        "flex flex-col h-[820px] xl:h-[880px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl transition-all duration-300",
+                        isSidebarOpen ? "xl:col-span-7 2xl:col-span-7" : "col-span-12 w-full"
+                    )}>
                         
                         {/* Okuyucu Üst Başlık ve Hiyerarşi */}
                         <div className="p-4 border-b border-white/10 bg-slate-950/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 flex-wrap">
-                            <div className="space-y-1 min-w-0">
-                                <div className="flex items-center gap-2 flex-wrap text-xs text-slate-400 font-medium">
-                                    <span className="text-purple-400 font-bold">{selectedGrade}. Sınıf</span>
-                                    <span>›</span>
-                                    <span className="truncate max-w-[150px]">{activeSelectedCourse}</span>
-                                    <span>›</span>
-                                    <span className="truncate max-w-[150px]">{activeSelectedUnit}</span>
-                                    {activeSelectedItem && (
-                                        <Badge className={cn(
-                                            "text-[10px] font-black uppercase px-2 py-0.5 ml-1",
-                                            activeSelectedItem.type === 'unit' 
-                                                ? "bg-gradient-to-r from-purple-600 to-rose-600 text-white shadow-sm" 
-                                                : "bg-cyan-500/20 text-cyan-300 border-cyan-400/30"
-                                        )}>
-                                            {activeSelectedItem.type === 'unit' ? '⭐ ÜNİTE ÖZETİ' : 'KONU'}
-                                        </Badge>
+                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                                {/* Fihrist Aç / Kapat Butonu (Tek Tıkla Fihristi Göster/Gizle) */}
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setIsSidebarOpen(prev => !prev)}
+                                    className={cn(
+                                        "rounded-xl h-10 px-3.5 text-xs font-bold transition-all shadow-lg flex items-center gap-2 flex-shrink-0",
+                                        !isSidebarOpen 
+                                            ? "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-purple-400/60 shadow-purple-950/60 ring-2 ring-purple-400/30" 
+                                            : "border-white/10 text-slate-300 hover:text-white bg-slate-900"
                                     )}
+                                    title={isSidebarOpen ? "Fihristi Gizle (Geniş Çalışma Masası)" : "Müfredat Fihristini Aç (Sınıf, Ünite veya Konu Değiştir)"}
+                                >
+                                    {isSidebarOpen ? (
+                                        <>
+                                            <PanelLeftClose className="w-4 h-4 text-purple-300" />
+                                            <span className="hidden sm:inline">Fihristi Gizle</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <PanelLeftOpen className="w-4 h-4 text-white animate-pulse" />
+                                            <span>Fihristi Aç (Konu Değiştir)</span>
+                                        </>
+                                    )}
+                                </Button>
+
+                                <div className="space-y-1 min-w-0 flex-1">
+                                    <div className="flex items-center gap-2 flex-wrap text-xs text-slate-400 font-medium">
+                                        <button
+                                            type="button"
+                                            onClick={() => { setIsSidebarOpen(true); setFocusedColumn('grade'); }}
+                                            className="text-purple-400 font-bold hover:underline hover:text-purple-300 transition-colors cursor-pointer"
+                                            title="Sınıf değiştirmek için fihristi aç"
+                                        >
+                                            {selectedGrade}. Sınıf
+                                        </button>
+                                        <span>›</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => { setIsSidebarOpen(true); setFocusedColumn('course'); }}
+                                            className="truncate max-w-[140px] hover:underline hover:text-white transition-colors cursor-pointer"
+                                            title="Ders değiştirmek için fihristi aç"
+                                        >
+                                            {activeSelectedCourse}
+                                        </button>
+                                        <span>›</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => { setIsSidebarOpen(true); setFocusedColumn('unit'); }}
+                                            className="truncate max-w-[140px] hover:underline hover:text-white transition-colors cursor-pointer"
+                                            title="Ünite değiştirmek için fihristi aç"
+                                        >
+                                            {activeSelectedUnit}
+                                        </button>
+                                        {activeSelectedItem && (
+                                            <Badge
+                                                onClick={() => { setIsSidebarOpen(true); setFocusedColumn('item'); }}
+                                                className={cn(
+                                                    "text-[10px] font-black uppercase px-2 py-0.5 ml-1 cursor-pointer hover:opacity-80 transition-opacity",
+                                                    activeSelectedItem.type === 'unit'
+                                                        ? "bg-gradient-to-r from-purple-600 to-rose-600 text-white shadow-sm"
+                                                        : "bg-cyan-500/20 text-cyan-300 border-cyan-400/30"
+                                                )}
+                                                title="Konu listesini görmek için fihristi aç"
+                                            >
+                                                {activeSelectedItem.type === 'unit' ? '⭐ ÜNİTE ÖZETİ' : 'KONU'}
+                                            </Badge>
+                                        )}
+                                    </div>
+                                    <h2 className="text-base sm:text-lg font-black text-white truncate flex items-center gap-2">
+                                        {activeSelectedItem?.title || 'Seçim Yapılmadı'}
+                                    </h2>
                                 </div>
-                                <h2 className="text-base sm:text-lg font-black text-white truncate flex items-center gap-2">
-                                    {activeSelectedItem?.title || 'Seçim Yapılmadı'}
-                                </h2>
                             </div>
 
                             {/* Önceki & Sonraki Navigasyon */}
@@ -1447,7 +1535,7 @@ export default function OzetlerManagementPage() {
                                     variant="outline"
                                     size="sm"
                                     disabled={!prevItem}
-                                    onClick={() => prevItem && handleItemChange(prevItem.id)}
+                                    onClick={() => prevItem && handleItemChange(prevItem.id, false)}
                                     className="border-white/10 text-slate-300 hover:text-white bg-slate-900/60 rounded-xl h-9 px-3 text-xs"
                                     title={prevItem ? `Önceki: ${prevItem.title}` : 'Önceki içerik yok'}
                                 >
@@ -1457,7 +1545,7 @@ export default function OzetlerManagementPage() {
                                     variant="outline"
                                     size="sm"
                                     disabled={!nextItem}
-                                    onClick={() => nextItem && handleItemChange(nextItem.id)}
+                                    onClick={() => nextItem && handleItemChange(nextItem.id, false)}
                                     className="border-white/10 text-slate-300 hover:text-white bg-slate-900/60 rounded-xl h-9 px-3 text-xs"
                                     title={nextItem ? `Sonraki: ${nextItem.title}` : 'Sonraki içerik yok'}
                                 >
@@ -1516,7 +1604,7 @@ export default function OzetlerManagementPage() {
                                 <button
                                     onClick={() => setActiveTab('code')}
                                     className={cn(
-                                        "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
+                                        "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
                                         activeTab === 'code' ? "bg-slate-700 text-white shadow-md" : "text-slate-400 hover:text-white"
                                     )}
                                 >
@@ -1525,7 +1613,7 @@ export default function OzetlerManagementPage() {
                                 </button>
                             </div>
 
-                            {/* Akıllı Tahtada Başlat Butonu (Her zaman üstte erişilebilir) */}
+                            {/* Akıllı Tahtada Başlat Butonu */}
                             {activeSelectedItem && (
                                 <Button
                                     asChild
