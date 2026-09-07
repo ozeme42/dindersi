@@ -6,12 +6,25 @@ import { unstable_noStore as noStore } from 'next/cache';
 
 export type AnlatBakalimWord = string;
 
+const DEFAULT_ANLAT_BAKALIM_WORDS: string[] = [
+    'ZEKÂT', 'SADAKA', 'NAMAZ', 'ORUÇ', 'HAC', 'KÂBE', 'FATİHA', 'İHLAS', 
+    'MEKKE', 'MEDİNE', 'PEYGAMBER', 'MÜMİN', 'SEVAP', 'GÜNAH', 'CENNET', 
+    'TEVHİD', 'ADALET', 'SABIR', 'MERHAMET', 'ŞÜKÜR', 'ABDEST', 'EZAN', 
+    'CAMİ', 'MİHRAP', 'MİNBER', 'HİCRET', 'KANDİL', 'RAMAZAN', 'KURAN', 'AYET'
+];
+
 export async function getAnlatBakalimWords(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
 ): Promise<{ words: AnlatBakalimWord[]; error?: string }> {
     noStore();
     try {
-        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        let allItems: any[] = [];
+        try {
+            allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' }) || [];
+        } catch (e) {
+            console.warn("Static questions fetch warning:", e);
+        }
+
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
         const validWords: string[] = [];
 
@@ -20,11 +33,11 @@ export async function getAnlatBakalimWords(
                 .replace(/[âÂ]/g, 'A')
                 .replace(/[îÎ]/g, 'İ')
                 .replace(/[ûÛ]/g, 'U')
-                .replace(/['’\-]/g, '')
+                .replace(/['’-]/g, '')
                 .trim();
         };
 
-        for (const item of allItems || []) {
+        for (const item of allItems) {
             if ('type' in item) {
                 let term = '';
                 if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.term) {
@@ -54,10 +67,11 @@ export async function getAnlatBakalimWords(
             }
         }
 
-        const uniqueWords = [...new Set(validWords)];
+        let uniqueWords = [...new Set(validWords)];
 
-        if (uniqueWords.length < 2) {
-            return { error: "Anlat Bakalım oynamak için bu konuda en az 2 adet uygun kelime bulunmalıdır.", words: [] };
+        // Yetersiz kelime varsa genel müfredat kelimeleri ile zenginleştir
+        if (uniqueWords.length < 5) {
+            uniqueWords = [...new Set([...uniqueWords, ...DEFAULT_ANLAT_BAKALIM_WORDS])];
         }
 
         const shuffled = [...uniqueWords].sort(() => 0.5 - Math.random());
@@ -65,6 +79,6 @@ export async function getAnlatBakalimWords(
 
     } catch (error: any) {
         console.error("Error getting Anlat Bakalım words:", error);
-        return { error: "Oyun için kelimeler alınırken bir hata oluştu.", words: [] };
+        return { words: [...DEFAULT_ANLAT_BAKALIM_WORDS].sort(() => 0.5 - Math.random()) };
     }
 }
