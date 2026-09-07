@@ -37,19 +37,32 @@ export async function generateActivityData(input: AiActivityDataInput): Promise<
     throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı kaydedin.');
   }
 
-  const targetCount = input.countPerType && input.countPerType > 0 ? input.countPerType : 6;
+  const isUnlimited = !input.countPerType || input.countPerType <= 0;
+  const targetCount = input.countPerType || 6;
   const instructions: string[] = [];
 
   if (input.generateConcepts || input.generateDefinitions) {
-    instructions.push(
-      `- **Kavram - Tanım Çiftleri (conceptDefinitions)**: Konuyla ilgili tam ${targetCount} adet "Ben Kimim?" tarzı soru/ipucu tanımı ve kavram üret. 'definition' alanında ipucu tanımı, 'concept' alanında ise tek kelimelik veya kısa kavram adı yer almalıdır. Tanım metninde kavramın kendi adı KESİNLİKLE GEÇMEMELİDİR.`
-    );
+    if (isUnlimited) {
+      instructions.push(
+        `- **Kavram - Tanım Çiftleri (conceptDefinitions)**: Konu ve kaynak metindeki BÜTÜN temel ve yan kavramları, dini terimleri, önemli isimleri ve bunların "Ben Kimim?" tarzı soru/ipucu tanımlarını EKSİKSİZ olarak çıkar. Sayı sınırlaması YOKTUR; metinde geçen, oyunlara ve kazanımlara uygun olan TÜM kavram ve tanımları (bulabildiğin kadar çok, hiçbir kavramı atlamadan) üret. 'definition' alanında ipucu tanımı, 'concept' alanında ise tek kelimelik veya kısa kavram adı yer almalıdır. Tanım metninde kavramın kendi adı KESİNLİKLE GEÇMEMELİDİR.`
+      );
+    } else {
+      instructions.push(
+        `- **Kavram - Tanım Çiftleri (conceptDefinitions)**: Konuyla ilgili en az ${targetCount} adet "Ben Kimim?" tarzı soru/ipucu tanımı ve kavram üret. 'definition' alanında ipucu tanımı, 'concept' alanında ise tek kelimelik veya kısa kavram adı yer almalıdır. Tanım metninde kavramın kendi adı KESİNLİKLE GEÇMEMELİDİR.`
+      );
+    }
   }
 
   if (input.generateSentences) {
-    instructions.push(
-      `- **Özet Cümleler (summarySentences)**: Konunun en önemli noktalarını özetleyen tam ${targetCount} adet cümle üret. ZORUNLU KURAL: Her bir cümle EN FAZLA 6 KELİMEDEN oluşmalıdır. Anagram ve cümle kurma oyunlarında kullanıldığı için asla 6 kelimeden uzun cümle üretme.`
-    );
+    if (isUnlimited) {
+      instructions.push(
+        `- **Özet Cümleler (summarySentences)**: Konunun bütün kazanımlarını, önemli noktalarını, ayet ve hadis mesajlarını kapsayan çıkarabileceğin TÜM özet cümleleri eksiksiz üret. Sayı sınırlaması YOKTUR; konudaki bütün önemli bilgileri kapsasın. ZORUNLU KURAL: Her bir cümle EN FAZLA 6 KELİMEDEN oluşmalıdır. Anagram ve cümle kurma oyunlarında kullanıldığı için asla 6 kelimeden uzun cümle üretme.`
+      );
+    } else {
+      instructions.push(
+        `- **Özet Cümleler (summarySentences)**: Konunun en önemli noktalarını özetleyen en az ${targetCount} adet cümle üret. ZORUNLU KURAL: Her bir cümle EN FAZLA 6 KELİMEDEN oluşmalıdır. Anagram ve cümle kurma oyunlarında kullanıldığı için asla 6 kelimeden uzun cümle üretme.`
+      );
+    }
   }
 
   if (input.customPrompt && input.customPrompt.trim().length > 0) {

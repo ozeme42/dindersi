@@ -139,7 +139,7 @@ export function AiActivityGenerationPanel({
 
   // ══ VERİ ÜRETİM KONFİGÜRASYONU ══
   const [selectedTypes, setSelectedTypes] = useState<string[]>(['concepts', 'definitions', 'sentences']);
-  const [countPerType, setCountPerType] = useState<number>(6);
+  const [countPerType, setCountPerType] = useState<number>(0); // 0 = Sınırsız / Tümünü Bul
   const [customPrompt, setCustomPrompt] = useState<string>('');
 
   // ══ İNCELENEN / DÜZENLENEN ÇIKTI ══
@@ -200,20 +200,20 @@ export function AiActivityGenerationPanel({
   const applyPreset = (preset: 'all' | 'conceptsOnly' | 'definitionsOnly' | 'sentencesOnly') => {
     if (preset === 'all') {
       setSelectedTypes(['concepts', 'definitions', 'sentences']);
-      setCountPerType(6);
-      setCustomPrompt('Konunun tüm temel kavramlarını, eşleştirmelerini ve özet cümlelerini kapsayan dengeli paket.');
+      setCountPerType(0);
+      setCustomPrompt('Konudaki tüm temel kavramları, eşleştirmeleri ve özet cümleleri kapsayan eksiksiz ve zengin paket.');
     } else if (preset === 'conceptsOnly') {
       setSelectedTypes(['concepts']);
-      setCountPerType(8);
-      setCustomPrompt('Kelime çarkı ve hafıza oyunu için önemli anahtar kavramlar ve terimler.');
+      setCountPerType(0);
+      setCustomPrompt('Kelime çarkı ve hafıza oyunu için konudaki tüm anahtar kavramlar ve terimler.');
     } else if (preset === 'definitionsOnly') {
       setSelectedTypes(['definitions']);
-      setCountPerType(6);
-      setCustomPrompt('"Ben Kimim?" oyunu için net, akılda kalıcı ipuçları ve kavram çiftleri.');
+      setCountPerType(0);
+      setCustomPrompt('"Ben Kimim?" oyunu için konudaki tüm kavram-tanım çiftleri ve net ipuçları.');
     } else if (preset === 'sentencesOnly') {
       setSelectedTypes(['sentences']);
-      setCountPerType(8);
-      setCustomPrompt('Anagram ve cümle sıralama oyunları için en fazla 6 kelimelik vurucu özet cümleler.');
+      setCountPerType(0);
+      setCustomPrompt('Anagram ve cümle sıralama oyunları için en fazla 6 kelimelik tüm vurucu özet cümleler.');
     }
   };
 
@@ -437,7 +437,7 @@ export function AiActivityGenerationPanel({
                              (reviewedData.conceptDefinitions?.length || 0) + 
                              (reviewedData.summarySentences?.length || 0);
 
-  const estimatedTotal = selectedTypes.length * countPerType;
+  const estimatedTotal = countPerType === 0 ? 'Tüm İçerikler' : selectedTypes.length * countPerType;
 
   // Erken çıkış ifadesi TÜM hook'lardan sonra, JSX return satırının hemen öncesinde yer alır!
   if (!isOpen) return null;
@@ -779,9 +779,29 @@ export function AiActivityGenerationPanel({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-2xl bg-slate-900/60 border border-white/10">
                 {/* Miktar Seçimi */}
                 <div className="space-y-1.5">
-                  <Label className="text-xs font-bold text-slate-300">Her Tür İçin Hedef Sayı</Label>
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {[3, 5, 6, 8].map(count => (
+                  <Label className="text-xs font-bold text-slate-300 flex items-center justify-between">
+                    <span>Üretim Kapsamı / Hedef Sayı</span>
+                    {countPerType === 0 && (
+                      <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+                        Sınırsız Mod
+                      </span>
+                    )}
+                  </Label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setCountPerType(0)}
+                      className={cn(
+                        "h-8 rounded-lg text-xs font-bold border transition-all col-span-2 flex items-center justify-center gap-1.5",
+                        countPerType === 0
+                          ? "bg-gradient-to-r from-indigo-600 to-purple-600 border-indigo-400 text-white shadow-md shadow-indigo-950/50"
+                          : "bg-slate-950 border-white/10 text-slate-300 hover:text-white hover:border-indigo-500/30"
+                      )}
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-yellow-300 animate-pulse" />
+                      <span>🌟 Tümünü Bul (Sınırsız)</span>
+                    </button>
+                    {[10, 20].map(count => (
                       <button
                         key={count}
                         type="button"
@@ -797,8 +817,16 @@ export function AiActivityGenerationPanel({
                       </button>
                     ))}
                   </div>
-                  <p className="text-[10px] text-slate-500">
-                    Seçilen {selectedTypes.length} türe göre yaklaşık <span className="text-indigo-400 font-bold">{estimatedTotal} öğe</span> üretilecek.
+                  <p className="text-[10px] text-slate-400">
+                    {countPerType === 0 ? (
+                      <span className="text-emerald-300 font-semibold">
+                        ✓ Sayı sınırı yok: Konudaki tüm kavramlar, tanımlar ve özet cümleler eksiksiz taranıp çıkarılır.
+                      </span>
+                    ) : (
+                      <span>
+                        Seçilen {selectedTypes.length} türe göre yaklaşık <span className="text-indigo-400 font-bold">{estimatedTotal} öğe</span> üretilecek.
+                      </span>
+                    )}
                   </p>
                 </div>
 
