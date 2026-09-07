@@ -58,7 +58,7 @@ export function TeacherMainButtons() {
     const mainButtons = [
         { key: 'smartboard', href: '/teacher/smartboard', title: 'Akıllı Tahta', description: 'Sınıfınızla etkileşimli yarışmalar düzenleyin.', icon: <MonitorPlay />, colorClass: 'bg-indigo-600 border-indigo-800 hover:bg-indigo-500' },
         { key: 'dersAkisi', href: '/teacher/ders-akisi', title: 'Ders Akışı', description: 'Derslerin ve konuların akışını görselleştirin ve yönetin.', icon: <Workflow />, colorClass: 'bg-teal-600 border-teal-800 hover:bg-teal-500' },
-        { key: 'oyunlar', href: '/oyunlar', title: 'Etkinlikler', description: 'Tüm oyun ve etkinlikleri görüntüleyin.', icon: <Gamepad2 />, colorClass: 'bg-rose-600 border-rose-800 hover:bg-rose-500' },
+        { key: 'oyunlar', href: '/teacher/activities', title: 'Etkinlikler', description: 'Tüm oyun ve etkinlikleri görüntüleyin.', icon: <Gamepad2 />, colorClass: 'bg-rose-600 border-rose-800 hover:bg-rose-500' },
     ];
     
     return (
