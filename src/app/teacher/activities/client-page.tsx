@@ -8,22 +8,14 @@ import {
   Layers, MousePointerClick, Trophy, Link2, Pencil, BookOpen, Coins, 
   ClipboardCheck, Wind, Star, Milestone, Lock, Rocket, Target, 
   Grid3x3, Swords, Castle, Users, Check, ChevronRight, 
-  ChevronLeft, Sparkles, X, Play,
-  FolderOpen, Compass
+  ChevronLeft, Sparkles, X, Play, FolderOpen, BookMarked,
+  GraduationCap, Book, Layers3
 } from 'lucide-react';
 import type { EnrichedClass } from './actions';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 
 // --- AKTİVİTE VE OYUN TANIMLARI (26 ADET ETKİNLİK) ---
 export interface ActivityGame {
@@ -87,7 +79,6 @@ const colorStyles: Record<string, { bg: string; border: string; glow: string; te
   zinc:    { bg: "from-zinc-700 to-neutral-800", border: "border-zinc-500/40 hover:border-zinc-400", glow: "shadow-zinc-500/25", text: "text-zinc-300", iconBg: "bg-zinc-500/20 text-zinc-200" },
 };
 
-// --- DÜZLEŞTİRİLMİŞ MÜFREDAT NESNESİ ---
 export interface FlatTopicItem {
   classId: string;
   className: string;
@@ -104,7 +95,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // 1. Tüm konuları düz bir liste olarak hazırla (hızlı arama ve sıralama için)
+  // 1. Tüm konuları düz bir liste olarak hazırla (hızlı canlı arama ve sıralama için)
   const allFlatTopics = useMemo<FlatTopicItem[]>(() => {
     const list: FlatTopicItem[] = [];
     data.forEach(schoolClass => {
@@ -130,80 +121,94 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     return list;
   }, [data]);
 
-  // 2. Seçili konu state'i
-  const [selectedTopic, setSelectedTopic] = useState<FlatTopicItem | null>(() => {
-    const classIdParam = searchParams.get('classId');
-    const courseIdParam = searchParams.get('courseId');
-    const unitIdParam = searchParams.get('unitId');
-    const topicIdParam = searchParams.get('topicId');
-
-    if (topicIdParam && allFlatTopics.length > 0) {
-      const found = allFlatTopics.find(t => 
-        t.topicId === topicIdParam && 
-        (!unitIdParam || t.unitId === unitIdParam)
-      );
-      if (found) return found;
-    }
-
-    if (unitIdParam && allFlatTopics.length > 0) {
-      const found = allFlatTopics.find(t => t.unitId === unitIdParam);
-      if (found) return found;
-    }
-
-    if (courseIdParam && allFlatTopics.length > 0) {
-      const found = allFlatTopics.find(t => t.courseId === courseIdParam);
-      if (found) return found;
-    }
-
-    return allFlatTopics.length > 0 ? allFlatTopics[0] : null;
+  // --- SEÇİM STATE'LERİ (DİREKT SAYFA ÜZERİNDE KULLANILAN) ---
+  const [selectedClassId, setSelectedClassId] = useState<string>(() => {
+    const p = searchParams.get('classId');
+    if (p && data.some(c => c.id === p)) return p;
+    return data.length > 0 ? data[0].id : "";
   });
 
-  // Ünite geneli modu (topicId=all)
-  const [isUnitLevel, setIsUnitLevel] = useState<boolean>(() => {
-    return searchParams.get('topicId') === 'all';
-  });
+  const selectedClass = useMemo(() => {
+    return data.find(c => c.id === selectedClassId) || data[0] || null;
+  }, [data, selectedClassId]);
 
-  // Modal ve arama state'leri
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const courses = useMemo(() => {
+    return selectedClass?.courses || [];
+  }, [selectedClass]);
 
-  // Modal içindeki sekmeli gezinti state'leri
-  const [browseClassId, setBrowseClassId] = useState<string>(() => {
-    return selectedTopic?.classId || (data.length > 0 ? data[0].id : "");
-  });
-
-  const selectedBrowseClass = useMemo(() => {
-    return data.find(c => c.id === browseClassId) || data[0] || null;
-  }, [data, browseClassId]);
-
-  const [browseCourseId, setBrowseCourseId] = useState<string>(() => {
-    if (selectedTopic && selectedTopic.classId === browseClassId) {
-      return selectedTopic.courseId;
-    }
-    return selectedBrowseClass?.courses[0]?.id || "";
+  const [selectedCourseId, setSelectedCourseId] = useState<string>(() => {
+    const p = searchParams.get('courseId');
+    if (p && courses.some(c => c.id === p)) return p;
+    return courses.length > 0 ? courses[0].id : "";
   });
 
   // Seçili sınıf değiştiğinde varsayılan dersi güncelle
   useEffect(() => {
-    if (selectedBrowseClass && selectedBrowseClass.courses.length > 0) {
-      const exists = selectedBrowseClass.courses.some(c => c.id === browseCourseId);
-      if (!exists) {
-        setBrowseCourseId(selectedBrowseClass.courses[0].id);
-      }
+    if (courses.length > 0 && !courses.some(c => c.id === selectedCourseId)) {
+      setSelectedCourseId(courses[0].id);
     }
-  }, [selectedBrowseClass, browseCourseId]);
+  }, [courses, selectedCourseId]);
 
-  // Modal açıldığında arama kutusuna odaklan
+  const selectedCourse = useMemo(() => {
+    return courses.find(c => c.id === selectedCourseId) || courses[0] || null;
+  }, [courses, selectedCourseId]);
+
+  const units = useMemo(() => {
+    return selectedCourse?.units || [];
+  }, [selectedCourse]);
+
+  const [selectedUnitId, setSelectedUnitId] = useState<string>(() => {
+    const p = searchParams.get('unitId');
+    if (p && units.some(u => u.id === p)) return p;
+    return units.length > 0 ? units[0].id : "";
+  });
+
+  // Seçili ders değiştiğinde varsayılan üniteyi güncelle
   useEffect(() => {
-    if (isModalOpen) {
-      setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 100);
+    if (units.length > 0 && !units.some(u => u.id === selectedUnitId)) {
+      setSelectedUnitId(units[0].id);
     }
-  }, [isModalOpen]);
+  }, [units, selectedUnitId]);
 
-  // Filtrelenmiş arama sonuçları (Canlı Arama)
+  const selectedUnit = useMemo(() => {
+    return units.find(u => u.id === selectedUnitId) || units[0] || null;
+  }, [units, selectedUnitId]);
+
+  const topics = useMemo(() => {
+    return selectedUnit?.topics || [];
+  }, [selectedUnit]);
+
+  // Seçili konu ID'si: ya bir konu ID'si ya da 'all' (Tüm Ünite)
+  const [selectedTopicId, setSelectedTopicId] = useState<string>(() => {
+    const p = searchParams.get('topicId');
+    if (p === 'all') return 'all';
+    if (p && topics.some(t => t.id === p)) return p;
+    return topics.length > 0 ? topics[0].id : (p === 'all' ? 'all' : (topics[0]?.id || 'all'));
+  });
+
+  // Seçili ünite değiştiğinde konuyu güncelle
+  useEffect(() => {
+    if (selectedTopicId === 'all') return;
+    if (topics.length > 0 && !topics.some(t => t.id === selectedTopicId)) {
+      setSelectedTopicId(topics[0].id);
+    }
+  }, [topics, selectedTopicId]);
+
+  const selectedTopic = useMemo(() => {
+    if (selectedTopicId === 'all') {
+      return {
+        id: 'all',
+        title: 'Tüm Konular (Genel Etkinlikler)',
+        unitId: selectedUnit?.id || '',
+      };
+    }
+    return topics.find(t => t.id === selectedTopicId) || topics[0] || null;
+  }, [topics, selectedTopicId, selectedUnit]);
+
+  // Canlı arama kutusu state'i
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filtrelenmiş canlı arama sonuçları
   const searchResults = useMemo(() => {
     const q = searchQuery.trim().toLocaleLowerCase('tr-TR');
     if (!q) return [];
@@ -213,52 +218,92 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     });
   }, [allFlatTopics, searchQuery]);
 
-  // URL'yi senkronize et
-  const syncUrlWithTopic = useCallback((topic: FlatTopicItem, unitAll: boolean) => {
+  // URL Senkronizasyonu
+  const updateUrl = useCallback((classId: string, courseId: string, unitId: string, topicId: string, courseName: string, unitName: string, topicName: string) => {
     const params = new URLSearchParams();
-    params.set('classId', topic.classId);
-    params.set('courseId', topic.courseId);
-    params.set('unitId', topic.unitId);
-    params.set('topicId', unitAll ? 'all' : topic.topicId);
-    params.set('courseName', topic.courseTitle);
-    params.set('unitName', topic.unitTitle);
-    params.set('topicName', unitAll ? 'Tüm Konular' : topic.topicTitle);
-    
-    // Tarayıcı geçmişini temiz güncelle
+    params.set('classId', classId);
+    params.set('courseId', courseId);
+    params.set('unitId', unitId);
+    params.set('topicId', topicId);
+    params.set('courseName', courseName);
+    params.set('unitName', unitName);
+    params.set('topicName', topicName);
     window.history.replaceState(null, '', `?${params.toString()}`);
   }, []);
 
-  // Konu seçme fonksiyonu
-  const handleSelectTopic = (topic: FlatTopicItem, unitAll: boolean = false) => {
-    setSelectedTopic(topic);
-    setIsUnitLevel(unitAll);
-    setIsModalOpen(false);
+  // Kullanıcı doğrudan bir sınıf tıkladığında
+  const handleSelectClass = (cls: EnrichedClass) => {
+    setSelectedClassId(cls.id);
+    const firstCourse = cls.courses[0];
+    if (firstCourse) {
+      setSelectedCourseId(firstCourse.id);
+      const firstUnit = firstCourse.units[0];
+      if (firstUnit) {
+        setSelectedUnitId(firstUnit.id);
+        const firstTopic = firstUnit.topics[0];
+        const newTopicId = firstTopic ? firstTopic.id : 'all';
+        setSelectedTopicId(newTopicId);
+        updateUrl(cls.id, firstCourse.id, firstUnit.id, newTopicId, firstCourse.title, firstUnit.title, firstTopic ? firstTopic.title : 'Tüm Konular');
+      }
+    }
+  };
+
+  // Kullanıcı doğrudan bir ders tıkladığında
+  const handleSelectCourse = (crs: any) => {
+    setSelectedCourseId(crs.id);
+    const firstUnit = crs.units[0];
+    if (firstUnit) {
+      setSelectedUnitId(firstUnit.id);
+      const firstTopic = firstUnit.topics[0];
+      const newTopicId = firstTopic ? firstTopic.id : 'all';
+      setSelectedTopicId(newTopicId);
+      updateUrl(selectedClass?.id || '', crs.id, firstUnit.id, newTopicId, crs.title, firstUnit.title, firstTopic ? firstTopic.title : 'Tüm Konular');
+    }
+  };
+
+  // Kullanıcı doğrudan bir ünite tıkladığında
+  const handleSelectUnit = (unit: any) => {
+    setSelectedUnitId(unit.id);
+    const firstTopic = unit.topics[0];
+    const newTopicId = firstTopic ? firstTopic.id : 'all';
+    setSelectedTopicId(newTopicId);
+    updateUrl(selectedClass?.id || '', selectedCourse?.id || '', unit.id, newTopicId, selectedCourse?.title || '', unit.title, firstTopic ? firstTopic.title : 'Tüm Konular');
+  };
+
+  // Kullanıcı doğrudan bir konu tıkladığında
+  const handleSelectTopic = (topicId: string, topicTitle: string) => {
+    setSelectedTopicId(topicId);
+    updateUrl(selectedClass?.id || '', selectedCourse?.id || '', selectedUnit?.id || '', topicId, selectedCourse?.title || '', selectedUnit?.title || '', topicTitle);
+  };
+
+  // Arama sonucundan tek tıkla seçildiğinde
+  const handleSelectFromSearch = (item: FlatTopicItem) => {
+    setSelectedClassId(item.classId);
+    setSelectedCourseId(item.courseId);
+    setSelectedUnitId(item.unitId);
+    setSelectedTopicId(item.topicId);
     setSearchQuery("");
-    syncUrlWithTopic(topic, unitAll);
+    updateUrl(item.classId, item.courseId, item.unitId, item.topicId, item.courseTitle, item.unitTitle, item.topicTitle);
   };
 
   // Sıralı gezinme (Önceki / Sonraki Konu)
   const currentTopicIndex = useMemo(() => {
-    if (!selectedTopic) return -1;
-    return allFlatTopics.findIndex(t => 
-      t.courseId === selectedTopic.courseId && 
-      t.unitId === selectedTopic.unitId && 
-      t.topicId === selectedTopic.topicId
-    );
-  }, [allFlatTopics, selectedTopic]);
+    if (!selectedTopic || selectedTopicId === 'all') return -1;
+    return topics.findIndex(t => t.id === selectedTopic.id);
+  }, [topics, selectedTopic, selectedTopicId]);
 
-  const prevTopic = currentTopicIndex > 0 ? allFlatTopics[currentTopicIndex - 1] : null;
-  const nextTopic = currentTopicIndex >= 0 && currentTopicIndex < allFlatTopics.length - 1 ? allFlatTopics[currentTopicIndex + 1] : null;
+  const prevTopic = currentTopicIndex > 0 ? topics[currentTopicIndex - 1] : null;
+  const nextTopic = currentTopicIndex >= 0 && currentTopicIndex < topics.length - 1 ? topics[currentTopicIndex + 1] : null;
 
   const handlePrevTopic = () => {
     if (prevTopic) {
-      handleSelectTopic(prevTopic, false);
+      handleSelectTopic(prevTopic.id, prevTopic.title);
     }
   };
 
   const handleNextTopic = () => {
     if (nextTopic) {
-      handleSelectTopic(nextTopic, false);
+      handleSelectTopic(nextTopic.id, nextTopic.title);
     }
   };
 
@@ -280,17 +325,18 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
 
   // Oyun URL'si oluşturucu
   const buildGameUrl = (activity: ActivityGame) => {
-    if (!selectedTopic) return '#';
-    const topicIdVal = isUnitLevel ? 'all' : selectedTopic.topicId;
-    const topicNameVal = isUnitLevel ? 'Tüm Konular' : selectedTopic.topicTitle;
+    if (!selectedClass || !selectedCourse || !selectedUnit) return '#';
+    const isAll = selectedTopicId === 'all' || !selectedTopic;
+    const topicIdVal = isAll ? 'all' : selectedTopic.id;
+    const topicNameVal = isAll ? 'Tüm Konular' : selectedTopic.title;
 
     const params = new URLSearchParams({
-      classId: selectedTopic.classId || '',
-      courseId: selectedTopic.courseId || '',
-      unitId: selectedTopic.unitId || '',
+      classId: selectedClass.id || '',
+      courseId: selectedCourse.id || '',
+      unitId: selectedUnit.id || '',
       topicId: topicIdVal,
-      courseName: selectedTopic.courseTitle || '',
-      unitName: selectedTopic.unitTitle || '',
+      courseName: selectedCourse.title || '',
+      unitName: selectedUnit.title || '',
       topicName: topicNameVal,
       isStatic: 'false'
     });
@@ -298,180 +344,307 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     return `${activity.href}/oyun?${params.toString()}`;
   };
 
-  // Seçili dersteki üniteler
-  const activeCourseData = useMemo(() => {
-    return selectedBrowseClass?.courses.find(c => c.id === browseCourseId) || selectedBrowseClass?.courses[0] || null;
-  }, [selectedBrowseClass, browseCourseId]);
+  const isAllUnitSelected = selectedTopicId === 'all';
 
   return (
-    <div className="min-h-screen pb-16 bg-slate-50/60 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100">
+    <div className="min-h-screen pb-20 bg-slate-50/70 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100">
       
-      {/* --- ÜST BAŞLIK VE HIZLI KONTROL MERKEZİ --- */}
-      <div className="border-b border-slate-200 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-30 shadow-xs">
-        <div className="container mx-auto px-4 py-3 sm:py-4">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3">
+      {/* --- SAYFA ÜST ÇUBUĞU --- */}
+      <div className="border-b border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md sticky top-0 z-30 shadow-xs">
+        <div className="container mx-auto px-4 py-3 sm:py-3.5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             
-            {/* Sayfa Logosu ve Başlık */}
+            {/* Başlık ve Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/25">
                 <Gamepad2 className="w-6 h-6" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-                    Öğretmen Etkinlik Merkezi
-                  </h1>
-                  <Badge variant="secondary" className="text-[10px] font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">
-                    26 Oyun
-                  </Badge>
-                </div>
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                  Öğretmen Etkinlik Merkezi
+                </h1>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Sınıfta akıllı tahtada veya bireysel kullanımda tek tıkla oyunu başlatın.
+                  Sınıf, ders, ünite ve konuyu doğrudan aşağıdaki düğmelerden seçin.
                 </p>
               </div>
             </div>
 
-            {/* Konu Değiştir Butonu & Hızlı Navigasyon */}
-            <div className="flex items-center gap-2 w-full lg:w-auto justify-between lg:justify-end">
-              <div className="flex items-center gap-1.5">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handlePrevTopic}
-                  disabled={!prevTopic}
-                  className="h-9 px-2.5 rounded-xl border-slate-300 dark:border-slate-700 text-xs font-semibold gap-1"
-                  title={prevTopic ? `Önceki: ${prevTopic.topicTitle}` : 'İlk konu'}
+            {/* Hızlı Canlı Arama Çubuğu (Direkt Sayfa Üzerinde) */}
+            <div className="relative w-full sm:w-80">
+              <Search className="w-4 h-4 text-indigo-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Konu veya ünite ara (örn: Zekat, Meddi)..."
+                className="pl-9 pr-8 h-9 text-xs sm:text-sm rounded-xl bg-slate-100/80 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 focus-visible:ring-indigo-500"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
                 >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span className="hidden sm:inline">Önceki</span>
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleNextTopic}
-                  disabled={!nextTopic}
-                  className="h-9 px-2.5 rounded-xl border-slate-300 dark:border-slate-700 text-xs font-semibold gap-1"
-                  title={nextTopic ? `Sonraki: ${nextTopic.topicTitle}` : 'Son konu'}
-                >
-                  <span className="hidden sm:inline">Sonraki</span>
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              </div>
-
-              {/* Ana Seçim Penceresini Açan Buton */}
-              <Button
-                onClick={() => setIsModalOpen(true)}
-                className="h-9 sm:h-10 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-indigo-500/20 gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <Search className="w-4 h-4" />
-                <span>Konu / Ünite Değiştir</span>
-              </Button>
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 pt-6">
+      <div className="container mx-auto px-4 pt-5 space-y-6">
 
-        {/* --- AKTİF SEÇİLEN KONU KARTI (HERO BANNER) --- */}
-        {selectedTopic ? (
-          <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-indigo-200 dark:border-indigo-500/20 bg-gradient-to-br from-indigo-50/90 via-white to-purple-50/50 dark:from-slate-900/90 dark:via-slate-900/60 dark:to-indigo-950/40 p-5 md:p-6 shadow-xl mb-8 backdrop-blur-md">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-            
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
-              <div className="space-y-2 max-w-3xl">
-                
-                {/* Hiyerarşik Rozetler */}
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  <Badge className="bg-indigo-600 text-white text-xs font-black px-2.5 py-0.5 shadow-xs">
-                    {selectedTopic.className}
-                  </Badge>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                  <Badge variant="outline" className="bg-white/80 dark:bg-slate-800 text-xs font-bold border-indigo-200 dark:border-slate-700 text-indigo-700 dark:text-indigo-300">
-                    {selectedTopic.courseTitle}
-                  </Badge>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                  <Badge variant="outline" className="bg-white/80 dark:bg-slate-800 text-xs font-medium border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 truncate max-w-[280px]">
-                    {selectedTopic.unitTitle}
-                  </Badge>
-                </div>
-
-                {/* Konu Başlığı */}
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
-                  {isUnitLevel ? (
-                    <span className="flex items-center gap-2">
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-300">
-                        {selectedTopic.unitTitle}
-                      </span>
-                      <span className="text-sm font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/30">
-                        Tüm Ünite Etkinlikleri
-                      </span>
-                    </span>
-                  ) : (
-                    selectedTopic.topicTitle
-                  )}
-                </h2>
-
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-indigo-500" />
-                  <span>Aşağıdaki etkinliklerden dilediğinize tıklayarak bu konunun sorularıyla doğrudan oyunu başlatabilirsiniz.</span>
-                </p>
+        {/* --- ARAMA SONUÇLARI TEPESİ (Arama kutusuna yazı yazıldığında anında görünür) --- */}
+        {searchQuery.trim().length > 0 && (
+          <div className="rounded-2xl border border-indigo-200 dark:border-indigo-800/60 bg-white dark:bg-slate-900 p-4 shadow-xl animate-in fade-in-50 duration-200">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                <Search className="w-4 h-4" />
+                <span>"{searchQuery}" için bulunan konular ({searchResults.length})</span>
               </div>
-
-              {/* Konu vs Tüm Ünite Seçim Düğmeleri */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-shrink-0 bg-white/70 dark:bg-slate-800/80 p-1.5 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-sm">
-                <Button
-                  size="sm"
-                  variant={!isUnitLevel ? "default" : "ghost"}
-                  onClick={() => {
-                    setIsUnitLevel(false);
-                    syncUrlWithTopic(selectedTopic, false);
-                  }}
-                  className={cn(
-                    "rounded-xl font-bold text-xs h-9 transition-all",
-                    !isUnitLevel 
-                      ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs" 
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                  )}
-                >
-                  <Target className="w-3.5 h-3.5 mr-1.5" />
-                  Bu Konu ({selectedTopic.topicTitle.length > 18 ? selectedTopic.topicTitle.substring(0, 18) + '...' : selectedTopic.topicTitle})
-                </Button>
-
-                <Button
-                  size="sm"
-                  variant={isUnitLevel ? "default" : "ghost"}
-                  onClick={() => {
-                    setIsUnitLevel(true);
-                    syncUrlWithTopic(selectedTopic, true);
-                  }}
-                  className={cn(
-                    "rounded-xl font-bold text-xs h-9 transition-all",
-                    isUnitLevel 
-                      ? "bg-purple-600 hover:bg-purple-700 text-white shadow-xs" 
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                  )}
-                >
-                  <BookOpen className="w-3.5 h-3.5 mr-1.5" />
-                  Tüm Ünite (Genel)
-                </Button>
-              </div>
+              <Button size="sm" variant="ghost" onClick={() => setSearchQuery("")} className="h-7 text-xs text-slate-400 hover:text-slate-600">
+                Kapat
+              </Button>
             </div>
-          </div>
-        ) : (
-          <div className="rounded-3xl border-2 border-dashed border-slate-300 dark:border-slate-700 p-8 text-center my-8">
-            <Compass className="w-12 h-12 mx-auto text-slate-400 mb-3 animate-spin-slow" />
-            <h3 className="text-xl font-bold text-slate-700 dark:text-slate-300 mb-1">Müfredattan Bir Konu Seçin</h3>
-            <p className="text-sm text-slate-500 mb-4">Etkinlikleri görüntülemek için sınıf, ders ve konuyu belirleyin.</p>
-            <Button onClick={() => setIsModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold">
-              Konu Seç
-            </Button>
+
+            {searchResults.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+                {searchResults.map((item) => (
+                  <button
+                    key={`${item.classId}-${item.courseId}-${item.unitId}-${item.topicId}`}
+                    onClick={() => handleSelectFromSearch(item)}
+                    className="text-left p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all flex flex-col justify-between gap-1.5 group"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-black bg-indigo-600 text-white px-1.5 py-0.5 rounded-md">
+                        {item.className}
+                      </span>
+                      <span className="text-[11px] font-bold text-slate-500 truncate">
+                        {item.courseTitle}
+                      </span>
+                    </div>
+                    <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      {item.topicTitle}
+                    </div>
+                    <div className="text-[10px] text-slate-400 truncate">
+                      {item.unitTitle}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6 text-xs text-slate-500 font-medium">
+                Aradığınız kelimeye uygun bir konu bulunamadı.
+              </div>
+            )}
           </div>
         )}
 
-        {/* --- OYUN FİLTRE VE ARAMA ÇUBUĞU --- */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+        {/* --- DİREKT SAYFA ÜZERİNDEKİ MÜFREDAT SEÇİCİ (KOKPİT PANELİ) --- */}
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 p-4 sm:p-6 shadow-md space-y-4">
+          
+          {/* 1. ADIM: SINIF SEÇİMİ */}
+          <div>
+            <div className="flex items-center gap-2 mb-2 text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              <GraduationCap className="w-4 h-4 text-indigo-500" />
+              <span>1. Sınıf Seçin</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {data.map((schoolClass) => {
+                const isSelected = schoolClass.id === selectedClassId;
+                return (
+                  <button
+                    key={schoolClass.id}
+                    onClick={() => handleSelectClass(schoolClass)}
+                    className={cn(
+                      "h-12 sm:h-14 rounded-2xl font-black text-sm sm:text-base transition-all duration-200 flex items-center justify-center gap-2.5 border shadow-xs relative overflow-hidden",
+                      isSelected
+                        ? "bg-gradient-to-r from-indigo-600 to-indigo-700 text-white border-indigo-600 shadow-md shadow-indigo-600/30 ring-2 ring-indigo-500/50 scale-[1.01]"
+                        : "bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-300"
+                    )}
+                  >
+                    <span>{schoolClass.name}</span>
+                    {isSelected && (
+                      <span className="w-5 h-5 rounded-full bg-white/25 flex items-center justify-center text-white">
+                        <Check className="w-3.5 h-3.5" />
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 2. ADIM: DERS SEÇİMİ */}
+          {courses.length > 0 && (
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80">
+              <div className="flex items-center gap-2 mb-2 text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                <Book className="w-4 h-4 text-purple-500" />
+                <span>2. Ders Seçin ({selectedClass?.name})</span>
+              </div>
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar">
+                {courses.map((course) => {
+                  const isSelected = course.id === selectedCourseId;
+                  return (
+                    <button
+                      key={course.id}
+                      onClick={() => handleSelectCourse(course)}
+                      className={cn(
+                        "h-10 px-4 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 flex items-center gap-2 border shadow-xs",
+                        isSelected
+                          ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white border-purple-600 shadow-md shadow-purple-600/25 ring-2 ring-purple-500/40"
+                          : "bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
+                      )}
+                    >
+                      <span>{course.title}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5 ml-0.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 3. ADIM: ÜNİTE SEÇİMİ */}
+          {units.length > 0 && (
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80">
+              <div className="flex items-center gap-2 mb-2 text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                <Layers3 className="w-4 h-4 text-teal-500" />
+                <span>3. Ünite Seçin ({units.length} Ünite)</span>
+              </div>
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar">
+                {units.map((unit) => {
+                  const isSelected = unit.id === selectedUnitId;
+                  return (
+                    <button
+                      key={unit.id}
+                      onClick={() => handleSelectUnit(unit)}
+                      className={cn(
+                        "h-10 px-4 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 flex items-center gap-2 border shadow-xs",
+                        isSelected
+                          ? "bg-gradient-to-r from-teal-600 to-emerald-600 text-white border-teal-600 shadow-md shadow-teal-600/25 ring-2 ring-teal-500/40"
+                          : "bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
+                      )}
+                    >
+                      <span className="truncate max-w-[240px] sm:max-w-[320px]">{unit.title}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5 ml-0.5 flex-shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 4. ADIM: KONU SEÇİMİ (Veya Tüm Ünite) */}
+          {selectedUnit && (
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-800/40 -mx-4 -mb-4 sm:-mx-6 sm:-mb-6 p-4 sm:p-6 rounded-b-3xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <Target className="w-4 h-4 text-amber-500" />
+                  <span>4. Konu Seçin ({topics.length} Konu)</span>
+                </div>
+
+                {/* Sıralı Konu Gezinme Butonları */}
+                <div className="flex items-center gap-1.5 self-start sm:self-auto">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handlePrevTopic}
+                    disabled={!prevTopic}
+                    className="h-8 px-2.5 rounded-lg text-xs font-bold border-slate-300 dark:border-slate-700"
+                    title={prevTopic ? `Önceki: ${prevTopic.title}` : 'İlk konu'}
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5 mr-1" /> Önceki Konu
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleNextTopic}
+                    disabled={!nextTopic}
+                    className="h-8 px-2.5 rounded-lg text-xs font-bold border-slate-300 dark:border-slate-700"
+                    title={nextTopic ? `Sonraki: ${nextTopic.title}` : 'Son konu'}
+                  >
+                    Sonraki Konu <ChevronRight className="w-3.5 h-3.5 ml-1" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Konu Butonları Grid/Listesi */}
+              <div className="flex flex-wrap items-center gap-2">
+                
+                {/* 1. SEÇENEK: TÜM ÜNİTEYİ OYNA */}
+                <button
+                  onClick={() => {
+                    setSelectedTopicId('all');
+                    updateUrl(selectedClass?.id || '', selectedCourse?.id || '', selectedUnit.id, 'all', selectedCourse?.title || '', selectedUnit.title, 'Tüm Konular');
+                  }}
+                  className={cn(
+                    "h-10 px-4 rounded-xl font-black text-xs sm:text-sm whitespace-nowrap transition-all duration-200 flex items-center gap-2 border shadow-xs",
+                    isAllUnitSelected
+                      ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white border-amber-500 shadow-md shadow-orange-500/30 ring-2 ring-amber-400"
+                      : "bg-white dark:bg-slate-800 text-amber-700 dark:text-amber-400 border-amber-300/80 dark:border-amber-700/60 hover:bg-amber-50 dark:hover:bg-amber-950/30"
+                  )}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>★ Tüm Ünite (Genel Etkinlikler)</span>
+                  {isAllUnitSelected && <Check className="w-3.5 h-3.5 ml-0.5" />}
+                </button>
+
+                {/* 2. TEKİL KONULAR */}
+                {topics.map((topic) => {
+                  const isSelected = selectedTopicId === topic.id;
+                  return (
+                    <button
+                      key={topic.id}
+                      onClick={() => handleSelectTopic(topic.id, topic.title)}
+                      className={cn(
+                        "h-10 px-3.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 flex items-center gap-2 border shadow-xs",
+                        isSelected
+                          ? "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-600/30 ring-2 ring-indigo-500/50"
+                          : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-indigo-50/50 dark:hover:bg-slate-700"
+                      )}
+                    >
+                      <div className={cn("w-2 h-2 rounded-full", isSelected ? "bg-white" : "bg-slate-300 dark:bg-slate-600")} />
+                      <span className="truncate max-w-[260px] sm:max-w-[340px]">{topic.title}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5 ml-0.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* --- SEÇİLİ OLAN ETKİNLİK BAŞLIĞI ÖZETİ --- */}
+        <div className="rounded-2xl border border-indigo-200 dark:border-indigo-900/40 bg-gradient-to-r from-indigo-50/90 via-purple-50/50 to-white dark:from-slate-900 dark:via-indigo-950/30 dark:to-slate-900 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">
+              <span className="text-indigo-600 dark:text-indigo-400 font-black">{selectedClass?.name}</span>
+              <span>›</span>
+              <span>{selectedCourse?.title}</span>
+              <span>›</span>
+              <span className="truncate max-w-[260px]">{selectedUnit?.title}</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              {isAllUnitSelected ? (
+                <span className="text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                  <span>{selectedUnit?.title}</span>
+                  <Badge className="bg-amber-500 text-white text-[11px] font-black">Genel Ünite Modu</Badge>
+                </span>
+              ) : (
+                selectedTopic?.title || 'Seçili Konu'
+              )}
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+              Başlatmak istediğiniz oyuna tıklayın:
+            </span>
+          </div>
+        </div>
+
+        {/* --- OYUN FİLTRELERİ VE ARAMA --- */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-1.5 bg-slate-200/60 dark:bg-slate-900 p-1 rounded-xl border border-slate-300/60 dark:border-slate-800 w-full sm:w-auto">
             <button
               onClick={() => setGameCategory('all')}
@@ -541,7 +714,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
           </div>
         </div>
 
-        {/* --- 26 ADET OYUN KARTLARI VİTRİNİ --- */}
+        {/* --- 26 OYUN VİTRİNİ --- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
           {filteredGames.map((activity) => {
             const Icon = activity.icon;
@@ -617,304 +790,6 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
           </div>
         )}
       </div>
-
-      {/* --- MÜFREDAT SEÇİM MODALI (MODERN DIALOG) --- */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col p-0 overflow-hidden bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl">
-          
-          {/* Modal Header */}
-          <DialogHeader className="p-5 sm:p-6 pb-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/50">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/30">
-                <Search className="w-5 h-5" />
-              </div>
-              <div>
-                <DialogTitle className="text-xl font-black tracking-tight text-slate-900 dark:text-white">
-                  Ders, Ünite ve Konu Seçimi
-                </DialogTitle>
-                <DialogDescription className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                  Aşağıdaki arama çubuğundan konuyu anında bulun veya sınıf sekmelerinden seçin.
-                </DialogDescription>
-              </div>
-            </div>
-
-            {/* Canlı Arama Çubuğu */}
-            <div className="relative mt-4">
-              <Search className="w-5 h-5 text-indigo-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <Input
-                ref={searchInputRef}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Konu, ünite veya kavram ara... (örn: Med Çeşitleri, Zekat, Kader, Tevekkül)"
-                className="pl-11 pr-10 h-12 text-sm sm:text-base rounded-2xl bg-white dark:bg-slate-800 border-indigo-200 dark:border-slate-700 shadow-inner focus-visible:ring-indigo-500"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-          </DialogHeader>
-
-          {/* Modal İçerik Alanı */}
-          <div className="flex-1 overflow-hidden flex flex-col min-h-0">
-
-            {/* DURUM 1: ARAMA MODU (Kullanıcı arama kutusuna yazı yazdığında) */}
-            {searchQuery.trim().length > 0 ? (
-              <ScrollArea className="flex-1 p-4 sm:p-6">
-                <div className="mb-3 text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                  <span>Arama Sonuçları ({searchResults.length} Konu Bulundu)</span>
-                  <span className="text-[11px] text-indigo-500 font-semibold">Tıklayarak konuyu seçin</span>
-                </div>
-
-                {searchResults.length > 0 ? (
-                  <div className="space-y-2">
-                    {searchResults.map((item) => {
-                      const isCurrent = selectedTopic?.topicId === item.topicId && selectedTopic?.unitId === item.unitId;
-                      return (
-                        <button
-                          key={`${item.classId}-${item.courseId}-${item.unitId}-${item.topicId}`}
-                          onClick={() => handleSelectTopic(item, false)}
-                          className={cn(
-                            "w-full text-left p-3.5 sm:p-4 rounded-2xl border transition-all duration-200 flex items-center justify-between gap-4 group",
-                            isCurrent
-                              ? "border-indigo-500 bg-indigo-50/80 dark:bg-indigo-950/40 shadow-xs"
-                              : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-slate-50 dark:hover:bg-slate-800/60"
-                          )}
-                        >
-                          <div className="flex-1 min-w-0">
-                            <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                              <Badge variant="outline" className="text-[10px] font-black bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">
-                                {item.className}
-                              </Badge>
-                              <span className="text-slate-300 dark:text-slate-700">•</span>
-                              <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                                {item.courseTitle}
-                              </span>
-                              <span className="text-slate-300 dark:text-slate-700">•</span>
-                              <span className="text-xs text-slate-500 dark:text-slate-500 truncate max-w-[250px]">
-                                {item.unitTitle}
-                              </span>
-                            </div>
-                            <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                              {item.topicTitle}
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-2 flex-shrink-0">
-                            {isCurrent && (
-                              <span className="flex items-center gap-1 text-xs font-black text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full">
-                                <Check className="w-3.5 h-3.5" /> Seçili
-                              </span>
-                            )}
-                            <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                              <ChevronRight className="w-4 h-4" />
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="text-center py-16">
-                    <Search className="w-12 h-12 text-slate-300 dark:text-slate-700 mx-auto mb-3" />
-                    <p className="font-bold text-slate-700 dark:text-slate-300">
-                      "{searchQuery}" için sonuç bulunamadı
-                    </p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      Farklı bir anahtar kelime deneyin veya arama çubuğunu temizleyin.
-                    </p>
-                  </div>
-                )}
-              </ScrollArea>
-            ) : (
-
-              // DURUM 2: SEKME VE KATEGORİ MODU (Arama yapılmadığında sınıf ve dersler arası gezinti)
-              <div className="flex-1 flex flex-col min-h-0">
-                
-                {/* 1. Sınıf Sekmeleri (5, 6, 7, 8) */}
-                <div className="border-b border-slate-200 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-900/40 px-4 sm:px-6 pt-3">
-                  <div className="flex items-center gap-2 overflow-x-auto pb-3 custom-scrollbar">
-                    {data.map((schoolClass) => {
-                      const isSelected = schoolClass.id === browseClassId;
-                      return (
-                        <button
-                          key={schoolClass.id}
-                          onClick={() => {
-                            setBrowseClassId(schoolClass.id);
-                            if (schoolClass.courses.length > 0) {
-                              setBrowseCourseId(schoolClass.courses[0].id);
-                            }
-                          }}
-                          className={cn(
-                            "px-4 py-2 rounded-xl font-black text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 shadow-xs",
-                            isSelected
-                              ? "bg-indigo-600 text-white shadow-indigo-600/30"
-                              : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
-                          )}
-                        >
-                          <span>{schoolClass.name}</span>
-                          <span className={cn(
-                            "text-[10px] px-1.5 py-0.2 rounded-full font-bold",
-                            isSelected ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-500"
-                          )}>
-                            {schoolClass.courses.length} Ders
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 2. Ders Butonları */}
-                {selectedBrowseClass && (
-                  <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 sm:px-6 py-2.5">
-                    <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar">
-                      <span className="text-xs font-bold text-slate-400 whitespace-nowrap mr-1">Dersler:</span>
-                      {selectedBrowseClass.courses.map((course) => {
-                        const isCourseSelected = course.id === browseCourseId;
-                        return (
-                          <button
-                            key={course.id}
-                            onClick={() => setBrowseCourseId(course.id)}
-                            className={cn(
-                              "px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all",
-                              isCourseSelected
-                                ? "bg-purple-600 text-white shadow-xs"
-                                : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
-                            )}
-                          >
-                            {course.title}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* 3. Üniteler ve Konular Listesi */}
-                <ScrollArea className="flex-1 p-4 sm:p-6">
-                  {activeCourseData && activeCourseData.units.length > 0 ? (
-                    <div className="space-y-4">
-                      {activeCourseData.units.map((unit) => {
-                        return (
-                          <div
-                            key={unit.id}
-                            className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 overflow-hidden shadow-xs"
-                          >
-                            {/* Ünite Başlığı & "Tüm Üniteyi Oyna" Butonu */}
-                            <div className="p-3.5 sm:p-4 bg-white dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                              <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-lg bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-black text-xs">
-                                  {unit.title.match(/^\d+/) ? unit.title.match(/^\d+/)?.[0] : "Ü"}
-                                </div>
-                                <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white">
-                                  {unit.title}
-                                </h4>
-                              </div>
-
-                              {/* Tüm Ünite İçin Tek Tıkla Etkinlik Başlatma */}
-                              {unit.topics && unit.topics.length > 0 && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => {
-                                    const firstTopic = unit.topics?.[0];
-                                    if (!firstTopic) return;
-                                    const item: FlatTopicItem = {
-                                      classId: selectedBrowseClass?.id || '',
-                                      className: selectedBrowseClass?.name || '',
-                                      grade: (selectedBrowseClass as any)?.grade || selectedBrowseClass?.name.replace(/[^0-9]/g, '') || '',
-                                      courseId: activeCourseData.id,
-                                      courseTitle: activeCourseData.title,
-                                      unitId: unit.id,
-                                      unitTitle: unit.title,
-                                      topicId: firstTopic.id,
-                                      topicTitle: firstTopic.title,
-                                    };
-                                    handleSelectTopic(item, true); // unitAll = true
-                                  }}
-                                  className="text-xs h-8 rounded-xl font-bold bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800 hover:bg-purple-600 hover:text-white transition-all whitespace-nowrap self-start sm:self-auto"
-                                >
-                                  <Sparkles className="w-3.5 h-3.5 mr-1" />
-                                  ★ Tüm Üniteyi Oyna (Genel)
-                                </Button>
-                              )}
-                            </div>
-
-                            {/* Konu Hapları / Kartları */}
-                            <div className="p-3 sm:p-4">
-                              {unit.topics && unit.topics.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                  {unit.topics.map((topic) => {
-                                    const isCurrent = selectedTopic?.topicId === topic.id && selectedTopic?.unitId === unit.id;
-                                    const item: FlatTopicItem = {
-                                      classId: selectedBrowseClass?.id || '',
-                                      className: selectedBrowseClass?.name || '',
-                                      grade: (selectedBrowseClass as any)?.grade || selectedBrowseClass?.name.replace(/[^0-9]/g, '') || '',
-                                      courseId: activeCourseData.id,
-                                      courseTitle: activeCourseData.title,
-                                      unitId: unit.id,
-                                      unitTitle: unit.title,
-                                      topicId: topic.id,
-                                      topicTitle: topic.title,
-                                    };
-
-                                    return (
-                                      <button
-                                        key={topic.id}
-                                        onClick={() => handleSelectTopic(item, false)}
-                                        className={cn(
-                                          "text-left p-3 rounded-xl border transition-all flex items-center justify-between gap-2 group",
-                                          isCurrent
-                                            ? "border-indigo-500 bg-indigo-50/80 dark:bg-indigo-950/50 shadow-xs ring-1 ring-indigo-500"
-                                            : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/60 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-slate-50 dark:hover:bg-slate-700/50"
-                                        )}
-                                      >
-                                        <div className="flex items-center gap-2 min-w-0">
-                                          <div className={cn(
-                                            "w-2 h-2 rounded-full flex-shrink-0",
-                                            isCurrent ? "bg-indigo-600" : "bg-slate-300 dark:bg-slate-600 group-hover:bg-indigo-400"
-                                          )} />
-                                          <span className={cn(
-                                            "text-xs sm:text-sm font-semibold truncate",
-                                            isCurrent ? "font-bold text-indigo-700 dark:text-indigo-300" : "text-slate-800 dark:text-slate-200"
-                                          )}>
-                                            {topic.title}
-                                          </span>
-                                        </div>
-
-                                        {isCurrent && (
-                                          <span className="text-indigo-600 dark:text-indigo-400 flex-shrink-0">
-                                            <Check className="w-4 h-4" />
-                                          </span>
-                                        )}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
-                              ) : (
-                                <p className="text-xs text-slate-400 italic">Bu üniteye ait konu bulunmuyor.</p>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div className="text-center py-12">
-                      <p className="text-slate-500 text-sm">Bu ders için ünite verisi bulunamadı.</p>
-                    </div>
-                  )}
-                </ScrollArea>
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
