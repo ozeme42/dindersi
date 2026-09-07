@@ -210,8 +210,9 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         superAdmin: { key: 'superAdmin', href: '/teacher/superadmin', title: 'Süper Admin', icon: <Shield />, color: "from-slate-700 to-slate-900" },
         activitiesTeacher: { key: 'activitiesTeacher', href: '/teacher/activities', title: 'Etkinlik Merkezi', icon: <Gamepad2 />, color: "from-rose-500 to-pink-600" },
         contentTeacher: { key: 'contentTeacher', href: "/teacher/content-creation", title: "İçerik Yönetimi", icon: <PenSquare />, color: "from-indigo-500 to-blue-600" },
-        summariesTeacher: { key: 'summariesTeacher', href: '/teacher/ozetler', title: 'Özet Kütüphanesi', icon: <LayoutTemplate />, color: "from-purple-500 to-rose-600" },
-        sourceTexts: { key: 'sourceTexts', href: '/teacher/source-texts', title: 'Kaynak Metinler', icon: <BookOpen />, color: "from-teal-500 to-emerald-600" },
+        studioTeacher: { key: 'studioTeacher', href: '/teacher/ozetler', title: 'Ders Kitabı & Özet Stüdyosu', icon: <BookOpen />, color: "from-purple-600 to-emerald-600" },
+        summariesTeacher: { key: 'summariesTeacher', href: '/teacher/ozetler', title: 'Ders Kitabı & Özet Stüdyosu', icon: <LayoutTemplate />, color: "from-purple-600 to-rose-600" },
+        sourceTexts: { key: 'sourceTexts', href: '/teacher/ozetler?tab=source', title: 'Kaynak Metinler', icon: <BookOpen />, color: "from-teal-500 to-emerald-600" },
         extraPages: { key: 'extraPages', href: "/teacher/extra-pages", title: "Ekstra Sayfalar", icon: <Globe />, color: "from-cyan-500 to-blue-600" },
         studentsTeacher: { key: 'studentsTeacher', href: '/teacher/students', title: 'Öğrenci Yönetimi', icon: <UserCog />, color: "from-emerald-500 to-teal-600" },
         questionsTeacher: { key: 'questionsTeacher', href: '/teacher/questions', title: 'Soru Bankası', icon: <FileCog />, color: "from-amber-500 to-orange-600" },
@@ -229,10 +230,10 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
 
     const getManagementButtons = () => {
         if (user.role === 'teacher') {
-            return [managementButtons.activitiesTeacher, managementButtons.summariesTeacher, managementButtons.sourceTexts, managementButtons.studentsTeacher, managementButtons.leaderboard, managementButtons.evaluationScales];
+            return [managementButtons.activitiesTeacher, managementButtons.studioTeacher, managementButtons.studentsTeacher, managementButtons.leaderboard, managementButtons.evaluationScales];
         }
         const buttons = [
-            managementButtons.activitiesTeacher, managementButtons.contentTeacher, managementButtons.summariesTeacher, managementButtons.sourceTexts, managementButtons.extraPages, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
+            managementButtons.activitiesTeacher, managementButtons.contentTeacher, managementButtons.studioTeacher, managementButtons.extraPages, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
             managementButtons.examQuestions, managementButtons.activityDataBank, managementButtons.exams,
             managementButtons.evaluationScales, managementButtons.leaderboard, managementButtons.statsTeacher,
             managementButtons.imageLibrary, managementButtons.gameSettingsTeacher, managementButtons.scoreEvents,

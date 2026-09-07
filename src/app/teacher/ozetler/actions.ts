@@ -511,3 +511,91 @@ export async function batchGenerateUnitTopicSummaries(
         return { success: false, generatedCount: 0, errors: [err.message] };
     }
 }
+
+/**
+ * Saves source text for a topic or unit both to Firestore and to public/curriculum/source-texts.json.
+ */
+export async function saveItemSourceText(
+    courseId: string,
+    unitId: string,
+    topicId: string | null | undefined,
+    sourceText: string
+): Promise<{ success: boolean; wordCount: number; error?: string }> {
+    if (!courseId || !unitId) {
+        return { success: false, wordCount: 0, error: "Eksik parametre: ders veya ünite ID'si bulunamadı." };
+    }
+
+    try {
+        const db = getAdminDb();
+        const trimmed = (sourceText || '').trim();
+        const wordCount = getTextWordCount(trimmed);
+        const isTopic = !!topicId;
+
+        // 1. Firestore güncelle
+        if (isTopic) {
+            await db.collection('courses')
+                .doc(courseId)
+                .collection('units')
+                .doc(unitId)
+                .collection('topics')
+                .doc(topicId!)
+                .update({
+                    sourceText: trimmed,
+                    updatedAt: new Date()
+                });
+        } else {
+            await db.collection('courses')
+                .doc(courseId)
+                .collection('units')
+                .doc(unitId)
+                .set({
+                    sourceText: trimmed,
+                    updatedAt: new Date()
+                }, { merge: true });
+        }
+
+        // 2. Yerel source-texts.json güncelle
+        try {
+            let data: { topics: Record<string, string>; units: Record<string, string> } = { topics: {}, units: {} };
+            try {
+                const raw = await fs.readFile(SOURCE_TEXTS_PATH, 'utf-8');
+                data = JSON.parse(raw);
+            } catch {}
+            if (!data.topics) data.topics = {};
+            if (!data.units) data.units = {};
+
+            const targetKey = isTopic ? topicId! : unitId;
+            const targetCategory = isTopic ? data.topics : data.units;
+
+            if (trimmed) {
+                targetCategory[targetKey] = trimmed;
+            } else {
+                delete targetCategory[targetKey];
+            }
+
+            await fs.writeFile(SOURCE_TEXTS_PATH, JSON.stringify(data, null, 2), 'utf-8');
+        } catch (fErr) {
+            console.warn('source-texts.json update warning:', fErr);
+        }
+
+        // 3. Manifest senkronizasyonu
+        syncCurriculumManifest().catch(() => {});
+
+        try {
+            (revalidateTag as any)('curriculum');
+            revalidatePath('/teacher/ozetler');
+            revalidatePath('/teacher/source-texts');
+        } catch {}
+
+        return { success: true, wordCount };
+    } catch (error: any) {
+        console.error('Error saving item source text:', error);
+        return { success: false, wordCount: 0, error: error.message || 'Kaynak metin kaydedilirken bir hata oluştu.' };
+    }
+}
+
+import { cleanAndFormatSourceTextWithAi as cleanAndFormatAi } from '@/app/teacher/source-texts/actions';
+
+export async function cleanAndFormatSourceTextWithAi(rawText: string, topicTitle?: string) {
+    return cleanAndFormatAi(rawText, topicTitle);
+}
