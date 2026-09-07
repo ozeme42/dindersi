@@ -5,7 +5,7 @@ import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "rea
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Loader2, Wind, PartyPopper, Repeat, Home, ArrowLeft, Check, AlertTriangle, Trophy, CheckCheck } from "lucide-react";
+import { Loader2, Wind, PartyPopper, Repeat, Home, ArrowLeft, Check, AlertTriangle, Trophy, CheckCheck, Flag, Maximize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getTornadoGameQuestions } from "../actions";
 import type { Question } from "@/lib/types";
@@ -201,11 +201,15 @@ function TornadoGame() {
                 questionCount: KUTU_SAYISI,
             };
             const result = await getTornadoGameQuestions(params);
-            if (result.error || result.questions.length < SORU_SAYISI) {
-                setError(result.error || `Bu oyun için yeterli soru bulunamadı (En az ${SORU_SAYISI} gerekli).`);
+            if (result.error || !result.questions || result.questions.length === 0) {
+                setError(result.error || "Bu konu için soru bulunamadı. Lütfen kurulumdan başka bir konu seçin.");
                 setGameState('error');
             } else {
-                setSoruBankasi(result.questions);
+                let pool = [...result.questions];
+                while (pool.length < SORU_SAYISI) {
+                    pool = [...pool, ...result.questions];
+                }
+                setSoruBankasi(pool);
                 setGameState('setup');
             }
             setIsLoading(false);
@@ -245,9 +249,12 @@ function TornadoGame() {
                 <Alert variant="destructive" className="max-w-lg bg-card text-card-foreground">
                     <AlertTitle>Hata!</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
-                     <div className="mt-4">
+                     <div className="mt-4 flex gap-3">
                         <Button asChild variant="outline">
-                            <Link href="/teacher/smartboard/tornado"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Geri Dön</Link>
+                            <Link href="/teacher/smartboard/tornado"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Dön</Link>
+                        </Button>
+                        <Button asChild variant="outline">
+                            <Link href="/teacher/smartboard"><Home className="mr-2 h-4 w-4"/> Akıllı Tahta Menüsü</Link>
                         </Button>
                     </div>
                 </Alert>
@@ -276,9 +283,10 @@ function TornadoGame() {
                             ))}
                         </div>
                     </CardContent>
-                    <CardFooter className="flex-col gap-4">
-                        <Button size="lg" onClick={oyunuBaslat}><Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna</Button>
-                        <Button asChild variant="outline"><Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Ana Menü</Link></Button>
+                    <CardFooter className="flex-col sm:flex-row justify-center gap-3">
+                        <Button size="lg" onClick={oyunuBaslat} className="bg-cyan-600 hover:bg-cyan-500 font-bold"><Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna</Button>
+                        <Button asChild variant="outline" size="lg"><Link href="/teacher/smartboard/tornado"><ArrowLeft className="mr-2 h-5 w-5"/> Kuruluma Dön</Link></Button>
+                        <Button asChild variant="outline" size="lg"><Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Menü</Link></Button>
                     </CardFooter>
                 </Card>
             </div>
@@ -297,8 +305,41 @@ function TornadoGame() {
                 :fullscreen #ana-kapsayici { height: 100vh !important; overflow-y: hidden !important; }
              `}</style>
             
-            <div className="flex items-center justify-center mb-2 relative">
-                <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-center text-teal-300">Tornado Oyunu</h1>
+            <div className="flex items-center justify-between px-2 py-1 mb-2 bg-gray-950/60 rounded-xl border border-white/10">
+                <div className="flex items-center gap-3">
+                    <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => {
+                            if (confirm("Tornado oyunundan çıkmak istediğinize emin misiniz?")) {
+                                window.location.href = "/teacher/smartboard/tornado";
+                            }
+                        }}
+                        className="text-slate-400 hover:text-white hover:bg-white/10"
+                    >
+                        <ArrowLeft className="mr-1.5 h-4 w-4" /> Çıkış
+                    </Button>
+                    <div className="h-4 w-px bg-white/10" />
+                    <h1 className="text-lg sm:text-2xl font-extrabold text-teal-300 flex items-center gap-2">
+                        <Wind className="h-5 w-5 text-teal-400" /> Tornado
+                    </h1>
+                </div>
+
+                {searchParams.get('topicName') && (
+                    <div className="text-xs text-slate-300 font-medium hidden md:block">
+                        <span className="text-teal-400 font-bold">Konu:</span> {searchParams.get('topicName')}
+                    </div>
+                )}
+
+                <div className="flex items-center gap-2">
+                    <Button 
+                        size="sm" 
+                        onClick={handleEndGame} 
+                        className="bg-white text-slate-900 hover:bg-slate-200 font-bold text-xs"
+                    >
+                        <Flag className="mr-1 h-3.5 w-3.5"/> Oyunu Bitir
+                    </Button>
+                </div>
             </div>
 
             <div id="puan-durumu-alani" className={`grid grid-cols-2 md:grid-cols-${takimSayisi} gap-2 mb-2`}>

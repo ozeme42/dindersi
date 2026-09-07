@@ -195,9 +195,14 @@ export function TornadoSetupClientPage() {
   
     const getGameUrl = (teamCount: number) => {
         const params = new URLSearchParams({
+            classId: selection.classId,
+            className: selection.className,
             courseId: selection.courseId,
+            courseName: selection.courseName,
             unitId: selection.unitId,
+            unitName: selection.unitName,
             topicId: selection.topicId,
+            topicName: selection.topicName,
             teamCount: teamCount.toString()
         });
         return `/teacher/smartboard/tornado/oyun?${params.toString()}`;
@@ -291,6 +296,17 @@ export function TornadoSetupClientPage() {
             </div>
 
             <div className="relative z-10 w-full max-w-5xl space-y-8">
+                {/* Üst Menü Navigasyonu */}
+                <div className="flex items-center justify-between mb-4 w-full">
+                  <Button asChild variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/10">
+                    <Link href="/teacher/smartboard">
+                      <ArrowLeft className="mr-2 h-4 w-4" /> Akıllı Tahta Menüsü
+                    </Link>
+                  </Button>
+                  <div className="text-xs text-cyan-400 font-bold uppercase tracking-wider">
+                    Akıllı Tahta Modu
+                  </div>
+                </div>
         
                 {/* Başlık Alanı */}
                 <div className="text-center space-y-4 py-4">
