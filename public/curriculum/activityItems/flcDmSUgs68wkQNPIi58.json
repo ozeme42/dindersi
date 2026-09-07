@@ -1,59 +1,59 @@
 [
   {
     "id": "5NQibLQrnY5Pgt4jnsei",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "content": {
-      "term": "Adalet",
-      "definition": "Herkese eşit ve dürüst davranmaktır."
-    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
       "nanoseconds": 654000000
+    },
+    "type": "definition",
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "content": {
+      "definition": "Herkese eşit ve dürüst davranmaktır.",
+      "term": "Adalet"
     }
   },
   {
     "id": "HIL8SXo0jsTXRHQdmdUr",
+    "topicId": "flcDmSUgs68wkQNPIi58",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
       "nanoseconds": 654000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence",
     "content": {
       "text": "Doğru sözlü olmak güven kazandırır."
     },
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "sentence"
   },
   {
     "id": "HOvRQWQbyddQ0DfLScVi",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767040226,
-      "nanoseconds": 654000000
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "El-Emin"
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767040226,
+      "nanoseconds": 654000000
+    },
     "topicId": "flcDmSUgs68wkQNPIi58",
-    "type": "concept",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "concept"
   },
   {
     "id": "Ih2qZcQU0FMn92aBdewO",
     "content": {
       "text": "Hz. Şuayb"
     },
-    "topicId": "flcDmSUgs68wkQNPIi58",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "flcDmSUgs68wkQNPIi58",
     "type": "concept",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040359,
@@ -62,57 +62,11 @@
   },
   {
     "id": "J5HhHflYuhTynZ7gGKIU",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767040226,
-      "nanoseconds": 654000000
-    },
     "content": {
       "text": "Doğruluk"
     },
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "LCjiCd1xaQ4ZYiNDuJed",
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "content": {
-      "term": "Yalan",
-      "definition": "Sosyal barışı bozan kötü bir davranıştır."
-    },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767040226,
-      "nanoseconds": 654000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "LxQvA1RpKuLhgaMsZ6HD",
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767040226,
-      "nanoseconds": 654000000
-    },
-    "content": {
-      "text": "Dostluklar doğru sözle güçlenir."
-    },
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "MK44IgSwc28MEV66hs7g",
-    "content": {
-      "text": "Ahlak"
-    },
-    "topicId": "flcDmSUgs68wkQNPIi58",
     "type": "concept",
+    "topicId": "flcDmSUgs68wkQNPIi58",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
@@ -122,12 +76,12 @@
     }
   },
   {
-    "id": "OTrkNVfZZ7Ovy0PCTRD2",
-    "content": {
-      "definition": "Samimiyet ve iyilikle hareket etmektir.",
-      "term": "Dürüstlük"
-    },
+    "id": "LCjiCd1xaQ4ZYiNDuJed",
     "topicId": "flcDmSUgs68wkQNPIi58",
+    "content": {
+      "term": "Yalan",
+      "definition": "Sosyal barışı bozan kötü bir davranıştır."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
@@ -138,40 +92,84 @@
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
-    "id": "QY0badTjdby6jP3FsCkt",
-    "content": {
-      "text": "Doğruluk, söz ve eylemde dürüstlüktür."
-    },
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "id": "LxQvA1RpKuLhgaMsZ6HD",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
       "nanoseconds": 654000000
     },
+    "content": {
+      "text": "Dostluklar doğru sözle güçlenir."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "flcDmSUgs68wkQNPIi58",
     "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
-    "id": "RfXr1nKUJOfHGls3TWLu",
+    "id": "MK44IgSwc28MEV66hs7g",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "concept",
+    "content": {
+      "text": "Ahlak"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
       "nanoseconds": 654000000
     },
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "OTrkNVfZZ7Ovy0PCTRD2",
+    "type": "definition",
+    "content": {
+      "term": "Dürüstlük",
+      "definition": "Samimiyet ve iyilikle hareket etmektir."
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767040226,
+      "nanoseconds": 654000000
+    }
+  },
+  {
+    "id": "QY0badTjdby6jP3FsCkt",
+    "content": {
+      "text": "Doğruluk, söz ve eylemde dürüstlüktür."
+    },
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767040226,
+      "nanoseconds": 654000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "sentence"
+  },
+  {
+    "id": "RfXr1nKUJOfHGls3TWLu",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767040226,
+      "nanoseconds": 654000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "flcDmSUgs68wkQNPIi58",
     "content": {
       "term": "Doğruluk",
       "definition": "Söz, niyet ve eylemde dürüst ve iyilikten yana olmaktır."
     },
-    "type": "definition",
-    "topicId": "flcDmSUgs68wkQNPIi58"
+    "type": "definition"
   },
   {
     "id": "Tj3ginKfzjBsUFtXJ2io",
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
@@ -181,92 +179,48 @@
       "text": "Dürüstlük"
     },
     "topicId": "flcDmSUgs68wkQNPIi58",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept",
     "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "Ucw63GxdaTMhUmUBKVhc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767040226,
-      "nanoseconds": 654000000
-    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "flcDmSUgs68wkQNPIi58",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
     "content": {
       "text": "Cennet"
     },
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767040226,
+      "nanoseconds": 654000000
+    },
+    "type": "concept"
   },
   {
     "id": "X2EYRBTxEiPbiZiFDZe5",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767040226,
-      "nanoseconds": 654000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "type": "sentence",
     "content": {
       "text": "Doğru sözlü olmak çok önemlidir."
-    }
-  },
-  {
-    "id": "ZfJ5TDpXsRFKxpzWy6eT",
+    },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "flcDmSUgs68wkQNPIi58",
-    "content": {
-      "text": "Ahlak toplum huzuru için esastır."
-    },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
       "nanoseconds": 654000000
     },
-    "type": "sentence",
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
-    "id": "ZkK7xRNpj6KCG6tBqspF",
-    "type": "definition",
+    "id": "ZfJ5TDpXsRFKxpzWy6eT",
     "content": {
-      "definition": "İyiliklerin karşılığının alındığı ödüldür.",
-      "term": "Cennet"
+      "text": "Ahlak toplum huzuru için esastır."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767040226,
-      "nanoseconds": 654000000
-    },
     "topicId": "flcDmSUgs68wkQNPIi58",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
-  },
-  {
-    "id": "bA9WydesogMgXGWIAn5l",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "content": {
-      "text": "Yalan"
-    },
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767040226,
-      "nanoseconds": 654000000
-    }
-  },
-  {
-    "id": "bV1rgbLcq1QCZtJECHji",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Doğruluk kalbe huzur verir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
@@ -275,71 +229,120 @@
     "type": "sentence"
   },
   {
-    "id": "eVoUUb0UK6oS6NX7Mspn",
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "content": {
-      "definition": "İnsanın manevi nitelikleri ve iradeli davranışlar bütünü nedir?",
-      "term": "Ahlak"
-    },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "id": "ZkK7xRNpj6KCG6tBqspF",
     "type": "definition",
+    "content": {
+      "term": "Cennet",
+      "definition": "İyiliklerin karşılığının alındığı ödüldür."
+    },
+    "topicId": "flcDmSUgs68wkQNPIi58",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
       "nanoseconds": 654000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "bA9WydesogMgXGWIAn5l",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767040226,
+      "nanoseconds": 654000000
+    },
+    "type": "concept",
+    "content": {
+      "text": "Yalan"
+    },
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "bV1rgbLcq1QCZtJECHji",
+    "type": "sentence",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767040226,
+      "nanoseconds": 654000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "content": {
+      "text": "Doğruluk kalbe huzur verir."
     }
   },
   {
+    "id": "eVoUUb0UK6oS6NX7Mspn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767040226,
+      "nanoseconds": 654000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "type": "definition",
+    "content": {
+      "definition": "İnsanın manevi nitelikleri ve iradeli davranışlar bütünü nedir?",
+      "term": "Ahlak"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
     "id": "fZk1DDQnGuaDMm7GQRrY",
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "content": {
+      "term": "Hz. Şuayb",
+      "definition": "Medyen halkına gönderilen peygamber."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040359,
       "nanoseconds": 840000000
     },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "content": {
-      "definition": "Medyen halkına gönderilen peygamber.",
-      "term": "Hz. Şuayb"
-    },
-    "topicId": "flcDmSUgs68wkQNPIi58",
     "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "fyuhNL5tnAwmZ1OcVRNq",
+    "type": "definition",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "definition": "Dostlukların temelini oluşturan duygudur.",
+      "term": "Güven"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
       "nanoseconds": 654000000
     },
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "content": {
-      "term": "Güven",
-      "definition": "Dostlukların temelini oluşturan duygudur."
-    },
-    "type": "definition"
+    "topicId": "flcDmSUgs68wkQNPIi58"
   },
   {
     "id": "mQRcxEfEC6hokQSF6GTS",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "flcDmSUgs68wkQNPIi58",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "sentence",
-    "content": {
-      "text": "Doğruluk iyiliğe, iyilik cennete götürür."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
       "nanoseconds": 654000000
-    }
+    },
+    "content": {
+      "text": "Doğruluk iyiliğe, iyilik cennete götürür."
+    },
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "type": "sentence"
   },
   {
     "id": "tteAZ9q1RQhTFh8ThahX",
+    "type": "concept",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "flcDmSUgs68wkQNPIi58",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
@@ -347,39 +350,36 @@
     },
     "content": {
       "text": "Adalet"
-    },
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "concept"
-  },
-  {
-    "id": "wULz8bR5lMcphX5sBIgY",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767040226,
-      "nanoseconds": 654000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "flcDmSUgs68wkQNPIi58",
-    "type": "sentence",
-    "content": {
-      "text": "Yalan sosyal barışı bozar."
     }
   },
   {
-    "id": "y7VtefxDZndSZQ3qmt9i",
-    "type": "concept",
+    "id": "wULz8bR5lMcphX5sBIgY",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767040226,
       "nanoseconds": 654000000
     },
     "content": {
-      "text": "Güven"
+      "text": "Yalan sosyal barışı bozar."
+    },
+    "type": "sentence",
+    "topicId": "flcDmSUgs68wkQNPIi58"
+  },
+  {
+    "id": "y7VtefxDZndSZQ3qmt9i",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767040226,
+      "nanoseconds": 654000000
     },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "flcDmSUgs68wkQNPIi58"
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "flcDmSUgs68wkQNPIi58",
+    "content": {
+      "text": "Güven"
+    }
   }
 ]

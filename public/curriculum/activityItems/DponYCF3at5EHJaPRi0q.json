@@ -1,12 +1,12 @@
 [
   {
     "id": "3yasyAVtNMhWSjMVX0wd",
+    "type": "sentence",
     "content": {
       "text": "Afetlerde Allah'a sığınılır."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "DponYCF3at5EHJaPRi0q",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
@@ -22,38 +22,53 @@
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
+    "topicId": "DponYCF3at5EHJaPRi0q",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "content": {
       "text": "Kunut"
     },
-    "topicId": "DponYCF3at5EHJaPRi0q",
     "type": "concept"
   },
   {
     "id": "7OQnqINGTNnfqmkKeful",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "content": {
+      "text": "İtaat"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "DponYCF3at5EHJaPRi0q",
-    "content": {
-      "text": "İtaat"
-    }
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "8V8NmZIUvxmcm0u3CptO",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "definition": "Zor durumda Allah'a yönelme, O'ndan yardım istemektir.",
       "term": "Sığınmak"
     },
     "topicId": "DponYCF3at5EHJaPRi0q",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767074347,
+      "nanoseconds": 266000000
+    },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "definition"
+  },
+  {
+    "id": "8q4o7ltv6QHlC2CGMVkl",
+    "content": {
+      "text": "Yatsı namazı sonrası okunur."
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
@@ -61,165 +76,146 @@
     }
   },
   {
-    "id": "8q4o7ltv6QHlC2CGMVkl",
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "content": {
-      "text": "Yatsı namazı sonrası okunur."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767074347,
-      "nanoseconds": 266000000
-    },
-    "topicId": "DponYCF3at5EHJaPRi0q"
-  },
-  {
     "id": "95vy5hQsLh4WrOxK7wKU",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "definition": "İnsanların Allah'tan yardım ve bağışlanma dilemesidir.",
       "term": "Dua"
     },
+    "topicId": "DponYCF3at5EHJaPRi0q",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
-    "topicId": "DponYCF3at5EHJaPRi0q",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "definition"
   },
   {
     "id": "AAMBvMARQesTbIcbETBY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767074347,
+      "nanoseconds": 266000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "type": "definition",
     "content": {
       "term": "Bağışlanma",
       "definition": "Allah'tan günahların affedilmesini dileme eylemidir."
     },
-    "topicId": "DponYCF3at5EHJaPRi0q",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767074347,
-      "nanoseconds": 266000000
-    },
-    "type": "definition"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "B79TVOjZXbTjq3Z8umha",
-    "content": {
-      "text": "Yalnız Allah'a kulluk ederiz."
-    },
-    "topicId": "DponYCF3at5EHJaPRi0q",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
-    "type": "sentence"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "sentence",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "content": {
+      "text": "Yalnız Allah'a kulluk ederiz."
+    }
   },
   {
     "id": "NvHGq7NvQS1rAKO2gCBa",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "DponYCF3at5EHJaPRi0q",
-    "content": {
-      "text": "Secde"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
+    },
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "content": {
+      "text": "Secde"
     }
   },
   {
     "id": "Ov201O1WoNrvswpUWAXS",
-    "content": {
-      "term": "Vitir",
-      "definition": "Yatsı namazının son rekatında kılınan namazdır."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "definition",
-    "topicId": "DponYCF3at5EHJaPRi0q",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "definition": "Yatsı namazının son rekatında kılınan namazdır.",
+      "term": "Vitir"
+    }
   },
   {
     "id": "OzydPPk349ru9u2IOdKh",
-    "content": {
-      "text": "Kunut 'itaat etmek' demektir."
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence",
-    "topicId": "DponYCF3at5EHJaPRi0q",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "type": "sentence",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "content": {
+      "text": "Kunut 'itaat etmek' demektir."
+    }
   },
   {
     "id": "S5rXDDGjeIUuZ55j6fvP",
-    "type": "sentence",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "DponYCF3at5EHJaPRi0q",
     "content": {
       "text": "Dua insan hayatında önemlidir."
-    }
+    },
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "TK9kcehjDyXuwuAnJWx1",
     "content": {
       "text": "Rahmet diler, azaptan korkarız."
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "type": "sentence",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "DponYCF3at5EHJaPRi0q",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "sentence"
+    }
   },
   {
     "id": "VSlnXuwDUYXsAXkm9uKb",
-    "content": {
-      "text": "Allah'tan yardım dilenir."
-    },
-    "topicId": "DponYCF3at5EHJaPRi0q",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "sentence"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "content": {
+      "text": "Allah'tan yardım dilenir."
+    }
   },
   {
     "id": "YE04fGTuMYVOwu7jqcKk",
     "type": "definition",
-    "content": {
-      "term": "Kunut",
-      "definition": "Namazda Allah'a sığınmak ve yakarmak anlamına gelen terimdir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
@@ -227,12 +223,18 @@
     },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "DponYCF3at5EHJaPRi0q",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "term": "Kunut",
+      "definition": "Namazda Allah'a sığınmak ve yakarmak anlamına gelen terimdir."
+    }
   },
   {
     "id": "ao5KtzUvOMabJhbvL9qw",
-    "type": "concept",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "type": "concept",
     "content": {
       "text": "Sığınmak"
     },
@@ -240,141 +242,123 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
-    },
-    "topicId": "DponYCF3at5EHJaPRi0q",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    }
   },
   {
     "id": "cfrV2kFWRm7Q0GhKh9jq",
-    "topicId": "DponYCF3at5EHJaPRi0q",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "DponYCF3at5EHJaPRi0q",
     "content": {
       "term": "İtaat",
       "definition": "Sözlükte ibadet etmek ve ayakta durmakla tanımlanır."
     },
-    "type": "definition",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "cn4xioemBS1phIgtY2zN",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Yatsı"
     },
-    "topicId": "DponYCF3at5EHJaPRi0q",
-    "type": "concept"
+    "type": "concept",
+    "topicId": "DponYCF3at5EHJaPRi0q"
   },
   {
     "id": "hG3AVzOycZHlm49RsyK6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767074347,
-      "nanoseconds": 266000000
-    },
+    "type": "concept",
     "content": {
       "text": "Bağışlanma"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "DponYCF3at5EHJaPRi0q",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767074347,
+      "nanoseconds": 266000000
+    },
     "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "iYr99E4tneK3lCCKhGBJ",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "sentence",
+    "content": {
+      "text": "Kunut duaları çok önemlidir."
+    },
+    "topicId": "DponYCF3at5EHJaPRi0q",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
-    "topicId": "DponYCF3at5EHJaPRi0q",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Kunut duaları çok önemlidir."
-    }
+    "type": "sentence"
   },
   {
     "id": "kkD5uJCoed7zd4PDA411",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "content": {
+      "text": "Vitir"
+    },
+    "type": "concept",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
-    },
-    "topicId": "DponYCF3at5EHJaPRi0q",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
-    "content": {
-      "text": "Vitir"
     }
   },
   {
     "id": "pLHFecCZCsTlbT779CpB",
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
     "topicId": "DponYCF3at5EHJaPRi0q",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "content": {
       "text": "Dua"
-    }
+    },
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "sH9Hj9uICehPEVSgioSb",
     "type": "definition",
-    "topicId": "DponYCF3at5EHJaPRi0q",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "content": {
-      "term": "Yatsı",
-      "definition": "Vitir namazının öncesinde kılınan farz namazıdır."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767074347,
-      "nanoseconds": 266000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "x4ccsJrZv4azm44UGVL1",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "DponYCF3at5EHJaPRi0q",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "content": {
+      "definition": "Vitir namazının öncesinde kılınan farz namazıdır.",
+      "term": "Yatsı"
+    }
+  },
+  {
+    "id": "x4ccsJrZv4azm44UGVL1",
+    "topicId": "DponYCF3at5EHJaPRi0q",
     "type": "sentence",
     "content": {
       "text": "Zor zamanlarda okunabilir."
     },
-    "topicId": "DponYCF3at5EHJaPRi0q"
-  },
-  {
-    "id": "xj5oB8nJSVWQnByHa7DI",
-    "topicId": "DponYCF3at5EHJaPRi0q",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "content": {
-      "definition": "Namazda alnı yere koyarak yapılan ibadet hareketidir.",
-      "term": "Secde"
-    },
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
@@ -383,18 +367,34 @@
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
-    "id": "yaER1oId0c1jSOIhlccS",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "id": "xj5oB8nJSVWQnByHa7DI",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767074347,
       "nanoseconds": 266000000
     },
+    "topicId": "DponYCF3at5EHJaPRi0q",
+    "type": "definition",
+    "content": {
+      "term": "Secde",
+      "definition": "Namazda alnı yere koyarak yapılan ibadet hareketidir."
+    }
+  },
+  {
+    "id": "yaER1oId0c1jSOIhlccS",
+    "type": "sentence",
     "content": {
       "text": "Günahların affı istenir."
     },
     "topicId": "DponYCF3at5EHJaPRi0q",
-    "type": "sentence"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767074347,
+      "nanoseconds": 266000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
   }
 ]

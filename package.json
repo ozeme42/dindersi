@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "export-curriculum": "node scripts/sync-curriculum.js"
+    "export-curriculum": "node scripts/sync-curriculum.js",
+    "sync:all": "node scripts/sync-all-to-files.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",

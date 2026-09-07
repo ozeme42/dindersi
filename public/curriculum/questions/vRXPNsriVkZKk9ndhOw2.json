@@ -2,822 +2,912 @@
   {
     "id": "5cTHargfPYiMpbKiuggA",
     "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
     "type": "Doğru/Yanlış",
-    "text": "Selam, Müslümanların birbirlerine kötü dileklerini bildirmek üzere söyledikleri bir cümledir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "options": [],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Orta",
-    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "correctAnswer": "Yanlış",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "options": [],
+    "text": "Selam, Müslümanların birbirlerine kötü dileklerini bildirmek üzere söyledikleri bir cümledir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak"
   },
   {
     "id": "5qJ6PV4L3Z644LgH7Oip",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "difficulty": "Orta",
-    "options": [],
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "correctAnswer": "Doğru",
+    "className": "6",
+    "text": "İletişim ve konuşma adabına uygun davranmanın en önemli kuralı yalandan uzak durmaktır.",
+    "options": [],
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "type": "Doğru/Yanlış",
-    "text": "İletişim ve konuşma adabına uygun davranmanın en önemli kuralı yalandan uzak durmaktır."
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "difficulty": "Orta"
   },
   {
     "id": "6OsgFLKAC4Lst4fk7Iap",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "type": "Boşluk Doldurma",
-    "text": "Hz. Peygamber, doğruluğundan emin olunmayan bilgiyi paylaşmamak gerektiğini “Duyduğu her şeyi söylemesi, kişiye _______ olarak yeter.” sözüyle ifade eder.",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "correctAnswer": "günah",
-    "difficulty": "Zor",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "text": "Hz. Peygamber, doğruluğundan emin olunmayan bilgiyi paylaşmamak gerektiğini “Duyduğu her şeyi söylemesi, kişiye _______ olarak yeter.” sözüyle ifade eder.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "sevap",
       "fayda",
       "günah",
       "hak"
-    ]
-  },
-  {
-    "id": "73e5ztc3aT03gNCQaZ5l",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Doğru/Yanlış",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "Hz. Muhammed (sav) yumuşak davranmayı eleştirmiş, kaba davranmayı teşvik etmiştir.",
+    ],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
-    }
+    },
+    "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "73e5ztc3aT03gNCQaZ5l",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Yanlış",
+    "className": "6",
+    "text": "Hz. Muhammed (sav) yumuşak davranmayı eleştirmiş, kaba davranmayı teşvik etmiştir.",
+    "options": [],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak"
   },
   {
     "id": "7z8YhoX8lhG4wuGCEFxf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
     "correctAnswer": "doğru",
     "text": "İletişim ve konuşma adabına uygun davranmanın en önemli kuralı _______ sözlü olmaktır.",
+    "className": "6",
     "difficulty": "Kolay",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "yalancı",
       "doğru",
       "kötü",
       "karmaşık"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
     "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Boşluk Doldurma",
     "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak"
   },
   {
     "id": "8MRf4vuQWoT7makHCuDy",
-    "difficulty": "Kolay",
+    "className": "6",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "correctAnswer": "teşekkür",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Yapılan bir iyiliğe _______ etmek, nezaket sahibi olmanın en temel göstergelerindendir.",
+    "difficulty": "Kolay",
     "options": [
       "beklemek",
       "unutmak",
       "teşekkür",
       "reddetmek"
     ],
-    "type": "Boşluk Doldurma",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Yapılan bir iyiliğe _______ etmek, nezaket sahibi olmanın en temel göstergelerindendir.",
-    "correctAnswer": "teşekkür",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak"
   },
   {
     "id": "8fV2sKQkDMXO21xc72F5",
     "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "correctAnswer": "Sadece kendi çıkarlarını düşünmek",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "type": "Çoktan Seçmeli",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "correctAnswer": "Sadece kendi çıkarlarını düşünmek",
     "options": [
       "Yapılan bir iyiliğe teşekkür etmek",
       "İnsanlara güler yüzle yaklaşmak",
       "Yanlışlıkla çarpılan arkadaştan özür dilemek",
       "Sadece kendi çıkarlarını düşünmek"
     ],
+    "difficulty": "Kolay",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "Aşağıdakilerden hangisi nezaket sahibi olmanın sonuçlarından biri değildir?"
+    "text": "Aşağıdakilerden hangisi nezaket sahibi olmanın sonuçlarından biri değildir?",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak"
   },
   {
     "id": "CcRdmnMGIgccD7WmlVcV",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
+    "text": "Toplumsal yaşamda adap ve nezaket kurallarına uyulmasının temel nedeni nedir?",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "correctAnswer": "İnsanlar arasındaki ilişkileri düzenlemek ve yaşamı kolaylaştırmak",
     "options": [
       "Sadece dini vecibeleri yerine getirmek",
       "Toplumda karmaşa ve düzensizlik yaratmak",
       "İnsanlar arasındaki ilişkileri düzenlemek ve yaşamı kolaylaştırmak",
       "Başkaları üzerinde üstünlük sağlamak"
     ],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "correctAnswer": "İnsanlar arasındaki ilişkileri düzenlemek ve yaşamı kolaylaştırmak",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "className": "6",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "text": "Toplumsal yaşamda adap ve nezaket kurallarına uyulmasının temel nedeni nedir?",
+    "type": "Çoktan Seçmeli",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli"
+    "difficulty": "Kolay"
   },
   {
     "id": "CfXVwKk45BpWvCXIB8Rg",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Bana hiç 'Öf!' demedi.",
     "options": [
       "Bana sık sık kızardı.",
       "Bana hiç 'Öf!' demedi.",
       "Yaptığım her şeyi sorguladı.",
       "Bana sadece önemli konularda konuşurdu."
     ],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "correctAnswer": "Bana hiç 'Öf!' demedi.",
     "text": "Hz. Peygamber'in on yıl yanında kalan Enes bin Malik, onun nezaketini anlatırken hangi ifadesini kullanmıştır?",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "type": "Çoktan Seçmeli"
-  },
-  {
-    "id": "CoH1Siogrw679qU22t8s",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "correctAnswer": "kurallara",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "text": "İnsan toplumsal bir varlıktır ve toplumsal yaşamın düzen içinde devam edebilmesi, insanların uyacağı birtakım _______ varlığına bağlıdır.",
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [
-      "arzulara",
-      "kurallara",
-      "beklentilere",
-      "isteğe"
-    ],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "difficulty": "Kolay",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "CoH1Siogrw679qU22t8s",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "text": "İnsan toplumsal bir varlıktır ve toplumsal yaşamın düzen içinde devam edebilmesi, insanların uyacağı birtakım _______ varlığına bağlıdır.",
+    "difficulty": "Kolay",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "correctAnswer": "kurallara",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "type": "Boşluk Doldurma",
+    "options": [
+      "arzulara",
+      "kurallara",
+      "beklentilere",
+      "isteğe"
+    ]
   },
   {
     "id": "DDvJvj6hIZMLKvuwnc2a",
-    "type": "Çoktan Seçmeli",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "options": [
       "Acele etmesini",
       "Sadece kendi yemeğini yemesini",
       "Besmele çekmesini, sağ elle ve önünden yemesini",
       "Sadece belirli yiyecekleri tercih etmesini"
     ],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Hz. Peygamber, yemekte eli tabağın her tarafında dolaşan Ömer İbni Ebu Seleme'ye hangi ikazı yapmıştır?",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Zor",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "correctAnswer": "Besmele çekmesini, sağ elle ve önünden yemesini",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Hz. Peygamber, yemekte eli tabağın her tarafında dolaşan Ömer İbni Ebu Seleme'ye hangi ikazı yapmıştır?",
-    "correctAnswer": "Besmele çekmesini, sağ elle ve önünden yemesini",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak"
+    }
   },
   {
     "id": "EUkj3TftKLIcbyGVzyga",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Kolay",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Aşağıdakilerden hangisi sofra adabı kurallarından biri değildir?",
+    "correctAnswer": "Ağzımızda yiyecek varken konuşmak",
     "options": [
       "Yemeğe besmeleyle başlamak",
       "Yemekten önce elleri yıkamak",
       "Ağzımızda yiyecek varken konuşmak",
       "Yemeği oturarak yemek"
     ],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "correctAnswer": "Ağzımızda yiyecek varken konuşmak",
-    "text": "Aşağıdakilerden hangisi sofra adabı kurallarından biri değildir?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Çoktan Seçmeli",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6"
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    }
   },
   {
     "id": "G93p4U3PO4rJoTGZ99Hr",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "text": "Sosyal medyada yüz yüze iletişimde yapılamayacak kaba davranışlar sergilenebilir.",
     "type": "Doğru/Yanlış",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "correctAnswer": "Yanlış",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "options": [],
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "difficulty": "Orta",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "correctAnswer": "Yanlış",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "text": "Sosyal medyada yüz yüze iletişimde yapılamayacak kaba davranışlar sergilenebilir.",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
-    },
-    "options": [],
-    "topicId": "vRXPNsriVkZKk9ndhOw2"
+    }
   },
   {
     "id": "IEACvrFotAUmxtsut1WU",
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "text": "İslam'da selamlaşma adabı 'Size bir selam verildiği zaman ya daha güzeliyle veya dengi ile karşılık verin' ifadeleriyle açıklanır.",
-    "options": [],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
+    "correctAnswer": "Doğru",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
+    "difficulty": "Orta",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "options": [],
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "type": "Doğru/Yanlış"
   },
   {
     "id": "JH74Wtl9XcOW5lGi7ZFk",
-    "correctAnswer": "huzur",
-    "difficulty": "Orta",
-    "text": "Toplumda adap ve nezaket kurallarına uyan kişiler arttıkça insanların birbirlerine karşı sevgi ve saygıları artar, toplumdaki birlik ve _______ pekişir.",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
+    "correctAnswer": "huzur",
+    "type": "Boşluk Doldurma",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Toplumda adap ve nezaket kurallarına uyan kişiler arttıkça insanların birbirlerine karşı sevgi ve saygıları artar, toplumdaki birlik ve _______ pekişir.",
     "options": [
       "rekabet",
       "gerginlik",
       "huzur",
       "çekişme"
-    ],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    ]
   },
   {
     "id": "JNprs3J1RRCzg2z6s2vt",
+    "text": "Nezaket, insanı yormayan bununla birlikte diğer insanları mutlu eden ince _______ davranışlardır.",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "correctAnswer": "nazik",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "correctAnswer": "nazik",
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "difficulty": "Kolay",
-    "text": "Nezaket, insanı yormayan bununla birlikte diğer insanları mutlu eden ince _______ davranışlardır.",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "type": "Boşluk Doldurma",
     "options": [
       "zorlayıcı",
       "bencil",
       "önemsiz",
       "nazik"
-    ],
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    ]
   },
   {
     "id": "L55qcr6QIg4QRyTdf4N1",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "Boşluk Doldurma",
     "text": "Hz. Muhammed (sav), sofra adabıyla ilgili önem verdiği konulardan biri de _______ olup, yemekten önce ve sonra ellerin yıkanmasını öğütlemiştir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "temizlik",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
     "className": "6",
     "difficulty": "Kolay",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "correctAnswer": "temizlik",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "temizlik",
       "hız",
       "sakinlik",
       "sessizlik"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
-  },
-  {
-    "id": "MmTOXFXWsyqaEUzBvt4o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak"
+  },
+  {
+    "id": "MmTOXFXWsyqaEUzBvt4o",
+    "correctAnswer": "şükredilmesi",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
     "options": [
       "istemek",
       "saymak",
       "şükredilmesi",
       "aramak"
     ],
-    "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "şükredilmesi",
-    "text": "İslam’da rızkın helal yollardan kazanılması ve verdiği nimetlerden dolayı Allah’a (cc) _______ edilmesi de sofra adabı kapsamında değerlendirilmiştir.",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "İslam’da rızkın helal yollardan kazanılması ve verdiği nimetlerden dolayı Allah’a (cc) _______ edilmesi de sofra adabı kapsamında değerlendirilmiştir.",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
     "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6"
+    "difficulty": "Zor"
   },
   {
     "id": "O827ofqMfmk3rYFkRNts",
+    "text": "İslam’da selamlaşma adabına göre aşağıdakilerden hangisi yanlıştır?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "correctAnswer": "Her zaman büyük olan küçük olana selam vermelidir.",
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "İslam’da selamlaşma adabına göre aşağıdakilerden hangisi yanlıştır?",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
     "options": [
       "Sayıca az olanlar sayıca çok olanlara selam verir.",
       "Yürüyen, oturana selam verir.",
       "Küçük olan büyüğe selam verir.",
       "Her zaman büyük olan küçük olana selam vermelidir."
     ],
-    "type": "Çoktan Seçmeli",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "Q2ToW6XC1mHfq5DV8iWT",
+    "difficulty": "Kolay",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
+    "text": "Nezaket kelimesi hangi kelimeden türemiştir?",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Nazik",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
     "options": [
       "Nazik",
       "Edebiyat",
       "Saygı",
       "İnce"
-    ],
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "text": "Nezaket kelimesi hangi kelimeden türemiştir?",
-    "difficulty": "Kolay",
-    "correctAnswer": "Nazik"
+    ]
   },
   {
     "id": "SGvRvoEmUGvUYazIbnnZ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Sosyal medyayı kullanırken Türkçeyi doğru kullanmaya özen gösterilmeli ve paylaşılması gereken bilgilerin _______ kontrol edilmelidir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "correctAnswer": "doğruluğu",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
     "type": "Boşluk Doldurma",
     "options": [
       "kaynağı",
       "uzunluğu",
       "doğruluğu",
       "hızı"
-    ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "Sosyal medyayı kullanırken Türkçeyi doğru kullanmaya özen gösterilmeli ve paylaşılması gereken bilgilerin _______ kontrol edilmelidir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "correctAnswer": "doğruluğu",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Orta"
+    ]
   },
   {
     "id": "UkkMHnwjxMNBFPVJ00hf",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "Doğru/Yanlış",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "text": "Adap ve nezaket kurallarına uymak insanlara saygı duymanın bir gereğidir.",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
     "className": "6",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "difficulty": "Kolay",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "correctAnswer": "Doğru",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "options": [],
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "difficulty": "Kolay",
+    "text": "Adap ve nezaket kurallarına uymak insanlara saygı duymanın bir gereğidir.",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Doğru"
   },
   {
     "id": "WrI9TC9OlM1LAYebHaG1",
-    "correctAnswer": "Sesinizi yükseltmeyiniz.",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Orta",
+    "text": "Kur'an-ı Kerim'de iletişim adabıyla ilgili olarak insanlara hangi öğüt verilir?",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "options": [
       "İnsanlara kötü söz söyleyiniz.",
       "Sesinizi yükseltmeyiniz.",
       "Her zaman bağırarak konuşunuz.",
       "Sadece sessiz kalınız."
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
-    "text": "Kur'an-ı Kerim'de iletişim adabıyla ilgili olarak insanlara hangi öğüt verilir?"
+    "className": "6",
+    "correctAnswer": "Sesinizi yükseltmeyiniz.",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "ZrGE7Y1d4hdazFVxkBEr",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Bir toplumda örf, âdet, kural hâlini almış iyi ve güzel davranışlar",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "type": "Çoktan Seçmeli",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "difficulty": "Orta",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Edep kelimesinin anlamı aşağıdakilerden hangisidir?",
     "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Bir toplumda örf, âdet, kural hâlini almış iyi ve güzel davranışlar",
-    "type": "Çoktan Seçmeli",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Kötü ve çirkin davranışlar",
       "Bir toplumda örf, âdet, kural hâlini almış iyi ve güzel davranışlar",
       "Sadece belirli bir zümrenin uyması gereken kurallar",
       "Sözlü iletişim kuralları"
-    ],
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Edep kelimesinin anlamı aşağıdakilerden hangisidir?",
-    "difficulty": "Orta"
+    ]
   },
   {
     "id": "baWgowogZu0o4CEP1oy8",
-    "text": "Nezaket kelimesi 'kaba' kelimesinden türetilmiştir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
     "options": [],
     "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Kolay",
     "correctAnswer": "Yanlış",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Nezaket kelimesi 'kaba' kelimesinden türetilmiştir."
   },
   {
     "id": "bjM1EJGeQmGR8ReJG8jI",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "difficulty": "Orta",
-    "correctAnswer": "özenle",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Nazik insanlar, etrafındaki insanlara saygıyla yaklaşır ve onlarla konuşurken kullandığı kelimeleri _______ seçer.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "options": [
       "gelişigüzel",
       "hızlıca",
       "bilinçsizce",
       "özenle"
     ],
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Nazik insanlar, etrafındaki insanlara saygıyla yaklaşır ve onlarla konuşurken kullandığı kelimeleri _______ seçer."
-  },
-  {
-    "id": "bqtKpEveSnM5YitORFkj",
-    "difficulty": "Orta",
-    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Kur'an-ı Kerim'de sofra adabıyla ilgili hangi konuda uyarı yer almaktadır?",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "correctAnswer": "özenle",
+    "type": "Boşluk Doldurma",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6"
+  },
+  {
+    "id": "bqtKpEveSnM5YitORFkj",
+    "type": "Çoktan Seçmeli",
+    "className": "6",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
     "options": [
       "Sadece tatlı yemek",
       "Aşırı baharat kullanmak",
       "İsraftan kaçınmak",
       "Sadece el ile yemek"
     ],
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Orta",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Kur'an-ı Kerim'de sofra adabıyla ilgili hangi konuda uyarı yer almaktadır?",
     "correctAnswer": "İsraftan kaçınmak"
   },
   {
     "id": "bsPipnLhMpMLUYPYkeEG",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "text": "Sosyal medyada paylaşılması gereken bilgilerle ilgili olarak adap kuralları neyi önermektedir?",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "correctAnswer": "Bilgilerin doğruluğunu kontrol etmek",
     "options": [
       "Her bilgiyi anında paylaşmak",
       "Bilgilerin doğruluğunu kontrol etmek",
       "Sadece beğeni toplamak için paylaşım yapmak",
       "Kişisel düşünceleri doğruluk kontrolü yapmadan yaymak"
-    ],
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "correctAnswer": "Bilgilerin doğruluğunu kontrol etmek",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    ]
+  },
+  {
+    "id": "bxy1LSF3DP9JBsuu0J5n",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "type": "Çoktan Seçmeli",
-    "text": "Sosyal medyada paylaşılması gereken bilgilerle ilgili olarak adap kuralları neyi önermektedir?",
-    "difficulty": "Zor",
+    "difficulty": "Orta",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Müslümanların birbirlerine iyi niyet ve saygı dileklerini bildirmek üzere söyledikleri “Allah sana sağlık, afiyet, esenlik, barış, güven, huzur, sevgi versin.” anlamındaki dua cümlesi _______ olarak adlandırılır.",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
-    }
-  },
-  {
-    "id": "bxy1LSF3DP9JBsuu0J5n",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    },
     "options": [
       "dua",
       "selam",
       "şükür",
       "istemek"
     ],
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "selam",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "type": "Boşluk Doldurma",
-    "text": "Müslümanların birbirlerine iyi niyet ve saygı dileklerini bildirmek üzere söyledikleri “Allah sana sağlık, afiyet, esenlik, barış, güven, huzur, sevgi versin.” anlamındaki dua cümlesi _______ olarak adlandırılır.",
-    "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    }
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6"
   },
   {
     "id": "dJaphPd5hDrQuufJ7VlN",
-    "type": "Doğru/Yanlış",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "options": [],
-    "text": "Sofra adabında yemek yerken aşırı yemek yemek tavsiye edilir.",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Doğru/Yanlış",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
     "correctAnswer": "Yanlış",
+    "className": "6",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak"
+    "text": "Sofra adabında yemek yerken aşırı yemek yemek tavsiye edilir.",
+    "options": []
   },
   {
     "id": "dNbQnX5zfi0CvtDcoRVU",
-    "type": "Boşluk Doldurma",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Orta",
-    "correctAnswer": "edep",
-    "text": "Adap, _______ kelimesinin çoğuludur ve bir toplumda örf, âdet, kural hâlini almış iyi ve güzel davranışlar demektir.",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Adap, _______ kelimesinin çoğuludur ve bir toplumda örf, âdet, kural hâlini almış iyi ve güzel davranışlar demektir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
     "options": [
       "edep",
       "adaplı",
       "saygı",
       "kural"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak"
+    "difficulty": "Orta",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "correctAnswer": "edep",
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "eqG3tqfs4QmMMte1fMDR",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Yemek yerken _______ kaçınmak, tabağımıza yiyebileceğimiz kadar yemek almak ve yemeği bitirmek sofra adabının önemli kurallarındandır.",
+    "className": "6",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "correctAnswer": "israftan",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "options": [
       "konuşmaktan",
       "acele etmekten",
       "israftan",
       "oturmaktan"
-    ],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "israftan"
+    ]
   },
   {
     "id": "g54TDksDVQ8xE5rBDEWZ",
+    "options": [],
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "text": "İslam'da rızkın helal yollardan kazanılması sofra adabı kapsamında değerlendirilmez.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "type": "Doğru/Yanlış",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "difficulty": "Zor",
+    "className": "6",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
+    "topicId": "vRXPNsriVkZKk9ndhOw2"
+  },
+  {
+    "id": "gqUPwN9mNd47c7DEZoiG",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "text": "Hz. Peygamber, yemekten önce ve sonra elleri yıkamanın yemeği bereketlendireceğini belirtmiştir.",
+    "type": "Doğru/Yanlış",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "correctAnswer": "Doğru",
+    "difficulty": "Zor",
+    "options": [],
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "huEpeEt3vVXJhOFSdev6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "options": [],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "correctAnswer": "Yanlış",
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Zor"
-  },
-  {
-    "id": "gqUPwN9mNd47c7DEZoiG",
-    "options": [],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "correctAnswer": "Doğru",
-    "text": "Hz. Peygamber, yemekten önce ve sonra elleri yıkamanın yemeği bereketlendireceğini belirtmiştir.",
-    "difficulty": "Zor",
-    "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    }
-  },
-  {
-    "id": "huEpeEt3vVXJhOFSdev6",
-    "text": "Aşağıdakilerden hangisi selamlaşma adabının temel amacıdır?",
-    "correctAnswer": "Karşılıklı iyi dileklerde bulunmak",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
     "options": [
       "Sadece bir ritüel gerçekleştirmek",
       "Karşılıklı iyi dileklerde bulunmak",
       "Karşıdaki kişiyi denemek",
       "Daha iyi olduğunu göstermek"
     ],
+    "text": "Aşağıdakilerden hangisi selamlaşma adabının temel amacıdır?",
+    "correctAnswer": "Karşılıklı iyi dileklerde bulunmak",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak"
+  },
+  {
+    "id": "kyBOSpTz4uCS7XAStvKp",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "Çoktan Seçmeli",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "type": "Çoktan Seçmeli",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "Hz. Muhammed'in (sav) iletişim şekli hakkında verilen bilgi nedir?",
+    "correctAnswer": "Her dinleyenin rahatlıkla anlayabileceği şekilde açıktı.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "options": [
+      "Konuşması herkes tarafından anlaşılmazdı.",
+      "Her dinleyenin rahatlıkla anlayabileceği şekilde açıktı.",
+      "Sadece belirli kişilere özgü bir konuşma tarzı vardı.",
+      "Genellikle sessiz kalmayı tercih ederdi."
+    ]
+  },
+  {
+    "id": "lGxoGeF7iT3d6PFxDe5d",
+    "correctAnswer": "Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "className": "6",
+    "text": "Toplumda adap ve nezaket kurallarına uyan kişiler arttıkça insanların birbirlerine karşı sevgi ve saygıları azalır.",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "difficulty": "Kolay"
+  },
+  {
+    "id": "lYZa6SFWyvwjRQzY6hTd",
+    "className": "6",
+    "type": "Boşluk Doldurma",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "difficulty": "Kolay",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "correctAnswer": "açık",
+    "text": "İletişim adabının önemli kurallarından biri de konuşmada _______ anlaşılır ifadeler kullanmaktır.",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "options": [
+      "karmaşık",
+      "uzun",
+      "açık",
+      "gizli"
+    ]
+  },
+  {
+    "id": "oXPKxC7L5B0e2uC5ZTrO",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "difficulty": "Kolay",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "correctAnswer": "Yanlış",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "type": "Doğru/Yanlış",
+    "text": "Nezaket, insanı yoran ama diğer insanları mutlu eden davranışlardır.",
+    "className": "6",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
@@ -825,228 +915,138 @@
     }
   },
   {
-    "id": "kyBOSpTz4uCS7XAStvKp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [
-      "Konuşması herkes tarafından anlaşılmazdı.",
-      "Her dinleyenin rahatlıkla anlayabileceği şekilde açıktı.",
-      "Sadece belirli kişilere özgü bir konuşma tarzı vardı.",
-      "Genellikle sessiz kalmayı tercih ederdi."
-    ],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Orta",
-    "correctAnswer": "Her dinleyenin rahatlıkla anlayabileceği şekilde açıktı.",
-    "text": "Hz. Muhammed'in (sav) iletişim şekli hakkında verilen bilgi nedir?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak"
-  },
-  {
-    "id": "lGxoGeF7iT3d6PFxDe5d",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
-    "text": "Toplumda adap ve nezaket kurallarına uyan kişiler arttıkça insanların birbirlerine karşı sevgi ve saygıları azalır.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "options": [],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "correctAnswer": "Yanlış",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak"
-  },
-  {
-    "id": "lYZa6SFWyvwjRQzY6hTd",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
-    "options": [
-      "karmaşık",
-      "uzun",
-      "açık",
-      "gizli"
-    ],
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "İletişim adabının önemli kurallarından biri de konuşmada _______ anlaşılır ifadeler kullanmaktır.",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "açık",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "difficulty": "Kolay"
-  },
-  {
-    "id": "oXPKxC7L5B0e2uC5ZTrO",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "type": "Doğru/Yanlış",
-    "options": [],
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "difficulty": "Kolay",
-    "text": "Nezaket, insanı yoran ama diğer insanları mutlu eden davranışlardır.",
-    "correctAnswer": "Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
     "id": "ofGc5zw1EbwlcrsrKH4D",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Sosyal medyada iletişim ve kimlik bilgileri herkese açık şekilde paylaşılmalıdır.",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "options": [],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Sosyal medyada iletişim ve kimlik bilgileri herkese açık şekilde paylaşılmalıdır.",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "options": [],
+    "correctAnswer": "Yanlış",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "correctAnswer": "Yanlış"
+    "type": "Doğru/Yanlış",
+    "className": "6"
   },
   {
     "id": "oiP0HaPSEoWslg1lkOdb",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Kolay",
-    "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "text": "Birisiyle karşılaşınca selam vermek, adap ve nezaket kurallarındandır.",
-    "options": [],
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "className": "6",
+    "options": [],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Birisiyle karşılaşınca selam vermek, adap ve nezaket kurallarındandır.",
+    "difficulty": "Kolay"
   },
   {
     "id": "ptMianWA44YneOeJCHn9",
-    "difficulty": "Orta",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
     "options": [],
     "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
-    "text": "Hz. Muhammed (sav), konuşmasında her dinleyenin rahatlıkla anlayabileceği şekilde açık ifadeler kullanırdı.",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "correctAnswer": "Doğru",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
+    "text": "Hz. Muhammed (sav), konuşmasında her dinleyenin rahatlıkla anlayabileceği şekilde açık ifadeler kullanırdı.",
+    "difficulty": "Orta",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak"
+    "correctAnswer": "Doğru"
   },
   {
     "id": "rjqqYoDSkAMfJ04DrG6N",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
-    "correctAnswer": "Her zaman ölçülü hareket ederler.",
-    "difficulty": "Orta",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "type": "Çoktan Seçmeli",
+    "className": "6",
+    "correctAnswer": "Her zaman ölçülü hareket ederler.",
+    "text": "Nazik insanların hareket etme biçimi için aşağıdakilerden hangisi söylenebilir?",
+    "difficulty": "Orta",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
     },
-    "text": "Nazik insanların hareket etme biçimi için aşağıdakilerden hangisi söylenebilir?",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "options": [
       "İnsanların kalbini kırmaya dikkat etmezler.",
       "Her zaman ölçülü hareket ederler.",
       "Her zaman kendi çıkarlarını gözetirler.",
       "Sadece tanıdıklarıyla nazik olurlar."
-    ],
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    ]
   },
   {
     "id": "tVT6qZlhklFHAmdszQFD",
-    "type": "Boşluk Doldurma",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "difficulty": "Kolay",
+    "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "dua",
       "şükür",
       "tekbir",
       "besmele"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360883,
-      "nanoseconds": 370000000
-    },
+    "type": "Boşluk Doldurma",
     "correctAnswer": "besmele",
     "text": "Sofra adabında Allah’ın Resulü, yemek yiyeceği zaman _______ çekmeyi tavsiye etmiştir.",
     "className": "6",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "difficulty": "Kolay",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Adap ve Nezaket Kurallarına Uymak"
-  },
-  {
-    "id": "tnUcn7gv3hqsZa1pujtr",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360883,
       "nanoseconds": 370000000
-    },
-    "correctAnswer": "Özel bilgiler herkesle paylaşılmamalıdır.",
-    "text": "Sosyal medyayı kullanırken adap ve nezaket kurallarına göre aşağıdakilerden hangisine dikkat edilmelidir?",
+    }
+  },
+  {
+    "id": "tnUcn7gv3hqsZa1pujtr",
     "topic": "3.Adap ve Nezaket Kurallarına Uymak",
+    "text": "Sosyal medyayı kullanırken adap ve nezaket kurallarına göre aşağıdakilerden hangisine dikkat edilmelidir?",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
-    "className": "6",
     "options": [
       "Türkçeyi yanlış kullanmak serbesttir.",
       "İletişim ve kimlik bilgileri herkese açık şekilde paylaşılmalıdır.",
       "Özel bilgiler herkesle paylaşılmamalıdır.",
       "Kaba ve kırıcı sözler kullanılabilir."
     ],
+    "topicName": "3.Adap ve Nezaket Kurallarına Uymak",
+    "className": "6",
+    "correctAnswer": "Özel bilgiler herkesle paylaşılmamalıdır.",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta"
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360883,
+      "nanoseconds": 370000000
+    },
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli"
   }
 ]

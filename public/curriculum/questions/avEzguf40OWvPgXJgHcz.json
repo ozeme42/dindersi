@@ -1,23 +1,113 @@
 [
   {
     "id": "2CWKyeQGnMGzZXXbdAFG",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "text": "“Namaz, dinin ___.” hadisi, namazın İslam dinindeki merkezi yerini belirtir.",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "className": "6",
+    "text": "“Namaz, dinin ___.” hadisi, namazın İslam dinindeki merkezi yerini belirtir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "correctAnswer": "direğidir",
     "options": [
       "temelidir",
       "kapısıdır",
       "direğidir",
       "çatısıdır"
-    ],
+    ]
+  },
+  {
+    "id": "3483hYXhIF40W7LJS4PE",
+    "correctAnswer": "Çünkü namaz cennete giden yolu açar.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
     "topicId": "avEzguf40OWvPgXJgHcz",
-    "difficulty": "Orta",
+    "difficulty": "Kolay",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "Boşluk Doldurma",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "className": "6",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "options": [
+      "Çünkü sadece namaz kılanlar cennete girebilir.",
+      "Çünkü namaz cennete giden yolu açar.",
+      "Çünkü namaz çok zor bir ibadettir.",
+      "Çünkü cennete anahtarla girilir."
+    ],
+    "text": "Peygamber Efendimiz namazı neden cennetin anahtarına benzetmiştir?"
+  },
+  {
+    "id": "BaZeZ1cHK2GqSWCNv7uj",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "text": "Namaz ibadeti, Kur'an-ı Kerim'de hangi terimle de ifade edilir?",
+    "correctAnswer": "Salat",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "options": [
+      "Sıyam",
+      "Zekat",
+      "Salat",
+      "Hac"
+    ],
+    "className": "6"
+  },
+  {
+    "id": "BoMDqJC4JwhRASGKgRYC",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "text": "Kur'an-ı Kerim'de namaz için kullanılan terimlerden biri de \"salat\"tır.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
+  },
+  {
+    "id": "D9qSnUJ5X7dBN3hZEvFv",
+    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "text": "Peygamber Efendimiz, namazı cennetin anahtarı olarak nitelendirmiştir.",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "Doğru",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
@@ -25,109 +115,19 @@
     }
   },
   {
-    "id": "3483hYXhIF40W7LJS4PE",
-    "correctAnswer": "Çünkü namaz cennete giden yolu açar.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
-    "text": "Peygamber Efendimiz namazı neden cennetin anahtarına benzetmiştir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "options": [
-      "Çünkü sadece namaz kılanlar cennete girebilir.",
-      "Çünkü namaz cennete giden yolu açar.",
-      "Çünkü namaz çok zor bir ibadettir.",
-      "Çünkü cennete anahtarla girilir."
-    ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2. Peygamberimizin Hayatında Namaz"
-  },
-  {
-    "id": "BaZeZ1cHK2GqSWCNv7uj",
-    "text": "Namaz ibadeti, Kur'an-ı Kerim'de hangi terimle de ifade edilir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [
-      "Sıyam",
-      "Zekat",
-      "Salat",
-      "Hac"
-    ],
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Kolay",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Salat",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy"
-  },
-  {
-    "id": "BoMDqJC4JwhRASGKgRYC",
-    "type": "Doğru/Yanlış",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "options": [],
-    "text": "Kur'an-ı Kerim'de namaz için kullanılan terimlerden biri de \"salat\"tır.",
-    "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Doğru",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy"
-  },
-  {
-    "id": "D9qSnUJ5X7dBN3hZEvFv",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Doğru",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "options": [],
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Peygamber Efendimiz, namazı cennetin anahtarı olarak nitelendirmiştir.",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "difficulty": "Kolay"
-  },
-  {
     "id": "EU5RsjIHZl7k0oPMEKDs",
     "options": [],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Orta",
-    "className": "6",
     "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
     "text": "Peygamber Efendimiz'in, \"Namazı gözünün nuru\" olarak görmesi, namazın kendisine bir yük olduğunu ifade eder.",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "className": "6",
+    "difficulty": "Orta",
     "type": "Doğru/Yanlış",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
@@ -136,406 +136,411 @@
   },
   {
     "id": "FIasTtewYzgneurEKLbM",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "avEzguf40OWvPgXJgHcz",
+    "className": "6",
+    "difficulty": "Kolay",
+    "text": "Peygamber Efendimiz namazı ___ olarak görmüştür.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "gözünün nuru",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
     "options": [
       "yük",
       "oyun",
       "gözünün nuru",
       "sıkıntı"
     ],
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Peygamber Efendimiz namazı ___ olarak görmüştür.",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "gözünün nuru",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    }
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "FfJiY2ALq5EoIgwtfeDy",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Orta",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "className": "6",
     "text": "Peygamberimizin hayatındaki örnekliğe göre, namaz, şartlar ne kadar zor olursa olsun asla ___ bir ibadet değildir.",
+    "correctAnswer": "aksatılan",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "Boşluk Doldurma",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "kolaylaştırılan",
       "aksatılan",
       "terkedilen",
       "ertelenen"
-    ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "correctAnswer": "aksatılan",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    ]
   },
   {
     "id": "HHxR5OH2Bl4ZJOaE9IdK",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "text": "Peygamber Efendimiz'in beş vakit namazı, kirleri temizleyen bir nehir benzetmesiyle açıklaması, namazın hangi etkisini belirtir?",
     "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
     "options": [
       "Fiziksel temizlik sağladığını.",
       "Günahları silip yok ettiğini.",
       "İnsanları dünyadan uzaklaştırdığını.",
       "Sadece ruhsal bir ibadet olduğunu."
     ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "type": "Çoktan Seçmeli",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "correctAnswer": "Günahları silip yok ettiğini.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "difficulty": "Zor"
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "HVldJhzYma7BtqCrW0GE",
-    "type": "Doğru/Yanlış",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "text": "Yüce Allah'ın \"Namazı dosdoğru kılın...\" ayeti, namazın sadece şeklen yerine getirilmesinin yeterli olduğunu belirtir.",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "avEzguf40OWvPgXJgHcz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "text": "Yüce Allah'ın \"Namazı dosdoğru kılın...\" ayeti, namazın sadece şeklen yerine getirilmesinin yeterli olduğunu belirtir.",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "options": [],
-    "correctAnswer": "Yanlış"
+    "difficulty": "Zor"
   },
   {
     "id": "I6Nv60CCEKwGyNqFqZ3L",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Orta",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
     "className": "6",
-    "type": "Çoktan Seçmeli",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "Namazın insanlara manevi huzur verdiğini.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "difficulty": "Orta",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "topicId": "avEzguf40OWvPgXJgHcz",
+    "text": "Peygamber Efendimiz'in Hz. Bilal'e \"Kalk ey Bilal! Ezan okuyup da namaz kılmamızı sağlayarak bizi rahatlat!\" demesi, namazın hangi yönünü vurgular?",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Namazın sadece cemaatle kılınması gerektiğini.",
       "Namazın insanlara manevi huzur verdiğini.",
       "Namaz vaktinin gelmesini istemediğini.",
       "Namazın zor bir ibadet olduğunu."
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "text": "Peygamber Efendimiz'in Hz. Bilal'e \"Kalk ey Bilal! Ezan okuyup da namaz kılmamızı sağlayarak bizi rahatlat!\" demesi, namazın hangi yönünü vurgular?"
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "Namazın insanlara manevi huzur verdiğini.",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "IKKiUUuWc55eOL9oKuUO",
+    "type": "Çoktan Seçmeli",
+    "className": "6",
     "topicId": "avEzguf40OWvPgXJgHcz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "difficulty": "Zor",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "correctAnswer": "Allah'ın nimetlerine şükrederek O'na yönelmesini.",
+    "text": "Evrendeki bütün canlıların Allah'ı kendi dilleriyle zikretmesi (Güneşin ısıtması, Ayın aydınlatması gibi) insanların namaz ibadetiyle hangi ilişkiyi kurmasını teşvik eder?",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "Doğayı taklit etmesini.",
       "Doğanın bir parçası olduğunu anlamasını.",
       "Allah'ın nimetlerine şükrederek O'na yönelmesini.",
       "Bilimsel araştırmalar yapmasını."
-    ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "text": "Evrendeki bütün canlıların Allah'ı kendi dilleriyle zikretmesi (Güneşin ısıtması, Ayın aydınlatması gibi) insanların namaz ibadetiyle hangi ilişkiyi kurmasını teşvik eder?",
-    "difficulty": "Zor",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "correctAnswer": "Allah'ın nimetlerine şükrederek O'na yönelmesini.",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    ]
   },
   {
     "id": "IoPJpPYtptDBH0tDSMjY",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "difficulty": "Kolay",
-    "text": "Peygamber Efendimiz'e zor ve sıkıntılı zamanlarda huzur veren ibadet aşağıdakilerden hangisidir?",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "options": [
       "Oruç",
       "Zekat",
       "Namaz",
       "Hac"
     ],
-    "correctAnswer": "Namaz",
-    "topicId": "avEzguf40OWvPgXJgHcz",
     "type": "Çoktan Seçmeli",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "difficulty": "Kolay",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Namaz",
+    "text": "Peygamber Efendimiz'e zor ve sıkıntılı zamanlarda huzur veren ibadet aşağıdakilerden hangisidir?",
     "topic": "2. Peygamberimizin Hayatında Namaz",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimizin Hayatında Namaz"
   },
   {
     "id": "Oe8COLn5Othr6vRhgC0M",
-    "text": "Abdullah bin Mesud'un aktardığına göre, Allah katında en güzel amel ___ kılınan namazdır.",
-    "correctAnswer": "vaktinde",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "className": "6",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "vaktinde",
+    "text": "Abdullah bin Mesud'un aktardığına göre, Allah katında en güzel amel ___ kılınan namazdır.",
     "difficulty": "Orta",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "cemaatle",
       "vaktinde",
       "uzun",
       "kısık sesle"
     ],
-    "topicId": "avEzguf40OWvPgXJgHcz"
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "2. Peygamberimizin Hayatında Namaz"
   },
   {
     "id": "PFuACBgPoJblzIsQuNTv",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "text": "“Cennetin anahtarı ___.” hadisinde, ibadetin önemi vurgulanmıştır.",
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "correctAnswer": "namazdır",
     "options": [
       "oruçtur",
       "zekattır",
       "namazdır",
       "hacdır"
     ],
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "difficulty": "Kolay",
-    "text": "“Cennetin anahtarı ___.” hadisinde, ibadetin önemi vurgulanmıştır.",
-    "correctAnswer": "namazdır",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "type": "Boşluk Doldurma"
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Kolay"
   },
   {
     "id": "QGjxwOXzoSdfujiRco8G",
-    "topicId": "avEzguf40OWvPgXJgHcz",
+    "type": "Çoktan Seçmeli",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "correctAnswer": "İnanma, sığınma ve dua etme gibi manevi ihtiyaçları karşılaması.",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "Maddi ihtiyaçları karşılaması.",
       "Sadece bedensel faydaları olması.",
       "İnanma, sığınma ve dua etme gibi manevi ihtiyaçları karşılaması.",
       "Sadece toplumsal faydaları olması."
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
-    "text": "Namazın, insanın ruh sağlığını koruması için yapabileceği en önemli ibadet olmasının nedeni aşağıdakilerden hangisidir?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Namazın, insanın ruh sağlığını koruması için yapabileceği en önemli ibadet olmasının nedeni aşağıdakilerden hangisidir?",
     "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "İnanma, sığınma ve dua etme gibi manevi ihtiyaçları karşılaması.",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "avEzguf40OWvPgXJgHcz"
   },
   {
     "id": "YVyD4LvaET1phICI7b7G",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Zor",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "options": [],
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "text": "Peygamber Efendimiz, beş vakit namazın günahları silip yok ettiğini, bir nehirde yıkanmanın kiri temizlemesine benzeterek açıklamıştır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "difficulty": "Zor",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "className": "6",
+    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
-    },
-    "type": "Doğru/Yanlış"
+    }
   },
   {
     "id": "aHbLT1yRh1ciXf8G7UVn",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "topicId": "avEzguf40OWvPgXJgHcz",
+    "difficulty": "Orta",
+    "className": "6",
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "meleklerle",
       "kendisiyle",
       "Rabbiyle",
       "insanlarla"
     ],
-    "correctAnswer": "Rabbiyle",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "difficulty": "Orta",
-    "text": "Peygamber Efendimiz, bir müminin namaz kıldığında ___ özel olarak konuştuğunu buyurmuştur.",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6"
-  },
-  {
-    "id": "b1RcMaCMUaW8i6SAkHT1",
-    "text": "Peygamber Efendimiz, müezzini Hz. Bilal'e ezan okumasını söyleyerek kendilerini ___ istedi.",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "correctAnswer": "rahatlatmasını",
-    "type": "Boşluk Doldurma",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "text": "Peygamber Efendimiz, bir müminin namaz kıldığında ___ özel olarak konuştuğunu buyurmuştur.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "Rabbiyle"
+  },
+  {
+    "id": "b1RcMaCMUaW8i6SAkHT1",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "className": "6",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "rahatlatmasını",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy",
     "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Peygamber Efendimiz, müezzini Hz. Bilal'e ezan okumasını söyleyerek kendilerini ___ istedi.",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "dinlendirmesini",
       "rahatlatmasını",
       "uyandırmasını",
       "sevindirmesini"
-    ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    ]
   },
   {
     "id": "cRyNwIloUFtdiqUVzpkZ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "Yanlış",
+    "className": "6",
     "topic": "2. Peygamberimizin Hayatında Namaz",
+    "difficulty": "Kolay",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [],
-    "correctAnswer": "Yanlış",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Namaz, insanın sadece maddi ihtiyaçlarını karşılamasına yardımcı olur.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Kolay",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "type": "Doğru/Yanlış"
+    "text": "Namaz, insanın sadece maddi ihtiyaçlarını karşılamasına yardımcı olur."
   },
   {
     "id": "dxVFU60DxrvIrotudoZM",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Doğru",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Orta",
+    "className": "6",
     "topic": "2. Peygamberimizin Hayatında Namaz",
-    "options": [],
-    "correctAnswer": "Doğru",
     "topicId": "avEzguf40OWvPgXJgHcz",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Peygamber Efendimiz, savaş zamanlarında bile namaz kılmayı ihmal etmemiştir.",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta"
+    "text": "Peygamber Efendimiz, savaş zamanlarında bile namaz kılmayı ihmal etmemiştir."
   },
   {
     "id": "e42Gan8QKfTbc7qwALjz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Peygamber Efendimiz, namazı ___ kirleri temizleyen bir nehre benzeterek, günahları temizleyici özelliğini vurgulamıştır.",
     "topicId": "avEzguf40OWvPgXJgHcz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "manevi",
+    "difficulty": "Zor",
+    "className": "6",
     "options": [
       "bedensel",
       "maddi",
       "manevi",
       "dünyevi"
     ],
+    "type": "Boşluk Doldurma",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
-    },
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Peygamber Efendimiz, namazı ___ kirleri temizleyen bir nehre benzeterek, günahları temizleyici özelliğini vurgulamıştır.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Zor",
-    "correctAnswer": "manevi",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6"
+    }
   },
   {
     "id": "f4deMSK0t4LAtGjDo6DW",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
     "options": [],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "Doğru",
     "text": "Peygamber Efendimiz, gücü yetmeyenlerin namazı oturarak veya yan üstü yatarak kılabileceğini belirterek, namazın her durumda kılınabilirliğini vurgulamıştır.",
     "type": "Doğru/Yanlış",
     "topic": "2. Peygamberimizin Hayatında Namaz",
     "difficulty": "Zor",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topicId": "avEzguf40OWvPgXJgHcz"
   },
   {
     "id": "gixx1ojJxGl3RGRHan6z",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "2. Peygamberimizin Hayatında Namaz",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -543,126 +548,141 @@
       "nanoseconds": 798000000
     },
     "unitId": "ARSRniTfx324ZswltLyy",
-    "difficulty": "Orta",
-    "correctAnswer": "Yanlış",
-    "options": [],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
     "text": "Peygamber Efendimiz, Hz. Bilal'e ezan okuyarak kendilerini dinlendirmesini istemiştir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "type": "Doğru/Yanlış"
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "topicName": "2. Peygamberimizin Hayatında Namaz"
   },
   {
     "id": "hpKRExjv1CkjPV3bLHVz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
+    "correctAnswer": "Yanlış",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "type": "Doğru/Yanlış",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "options": [],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "text": "Evrendeki tüm varlıkların Allah'ı kendi dillerince tesbih etmesi, insanların Allah'a şükretme zorunluluğunu ortadan kaldırır.",
-    "correctAnswer": "Yanlış",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "difficulty": "Zor",
+    "className": "6"
   },
   {
     "id": "iS2TFukt23GqMflrrL7V",
-    "correctAnswer": "Namazın zamanında ifa edilmesinin faziletine.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
     "difficulty": "Zor",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "\"Allah katında en güzel amel hangisidir?\" sorusuna Resulullah'ın (sav) \"Vaktinde kılınan namaz.\" buyurması, namazın hangi özelliğine dikkat çeker?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "Namazın cemaatle kılınmasının önemine.",
       "Namazın sadece farz olmasına.",
       "Namazın zamanında ifa edilmesinin faziletine.",
       "Namazın uzun kılınmasının sevabına."
     ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "type": "Çoktan Seçmeli",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz"
-  },
-  {
-    "id": "id4QmozVBjqZ7OTCztgm",
-    "difficulty": "Kolay",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Peygamber Efendimiz namaz kılmayı çok severdi ve ona huzur verirdi.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "\"Allah katında en güzel amel hangisidir?\" sorusuna Resulullah'ın (sav) \"Vaktinde kılınan namaz.\" buyurması, namazın hangi özelliğine dikkat çeker?",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "Namazın zamanında ifa edilmesinin faziletine.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "avEzguf40OWvPgXJgHcz",
+    "className": "6"
+  },
+  {
+    "id": "id4QmozVBjqZ7OTCztgm",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Peygamber Efendimiz namaz kılmayı çok severdi ve ona huzur verirdi.",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
     "options": [],
-    "topic": "2. Peygamberimizin Hayatında Namaz"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "j0lCJZ858H83qCnddv0j",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "avEzguf40OWvPgXJgHcz",
     "options": [
       "Namazı sadece özel zamanlarda kıldığını.",
       "Namazı hiçbir zaman ihmal etmediğini.",
       "Namazı savaşta cemaatle kıldığını.",
       "Namazı zor durumda bırakabildiğini."
     ],
+    "type": "Çoktan Seçmeli",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "Namazı hiçbir zaman ihmal etmediğini.",
+    "difficulty": "Orta",
+    "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "text": "Hz. Huzeyfe'nin \"Ben Peygamber Efendimiz'le birlikte savaş zamanında namaz kıldım.\" sözü, Peygamberimizin namaz ibadetiyle ilgili hangi özelliğini gösterir?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
-    },
-    "difficulty": "Orta",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Hz. Huzeyfe'nin \"Ben Peygamber Efendimiz'le birlikte savaş zamanında namaz kıldım.\" sözü, Peygamberimizin namaz ibadetiyle ilgili hangi özelliğini gösterir?",
-    "correctAnswer": "Namazı hiçbir zaman ihmal etmediğini."
+    }
   },
   {
     "id": "j8Djq0ozVfY2j55Ejk3P",
-    "text": "Yüce Allah'ın \"Namazı dosdoğru kılın...\" ayetiyle namazı emretmesinin temel gerekçelerinden biri nedir?",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
     "difficulty": "Orta",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
+    "text": "Yüce Allah'ın \"Namazı dosdoğru kılın...\" ayetiyle namazı emretmesinin temel gerekçelerinden biri nedir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "İnsanın var olması ve sahip olduğu nimetlere karşı şükretmesi.",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "İnsanın var olması ve sahip olduğu nimetlere karşı şükretmesi.",
       "İnsanların bir araya gelmesini sağlamak.",
       "İnsanları disipline etmek.",
       "Sadece belli kişilerin namaz kılması."
     ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
     "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "İnsanın var olması ve sahip olduğu nimetlere karşı şükretmesi.",
+    "type": "Çoktan Seçmeli",
+    "className": "6"
+  },
+  {
+    "id": "jCsBb9TGjNe6ixEyNGMe",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "correctAnswer": "Doğru",
+    "difficulty": "Orta",
+    "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "avEzguf40OWvPgXJgHcz",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "text": "Namaz, kulun Rabb'iyle kurduğu özel bir bağ olarak kabul edilir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
@@ -670,64 +690,89 @@
     }
   },
   {
-    "id": "jCsBb9TGjNe6ixEyNGMe",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Namaz, kulun Rabb'iyle kurduğu özel bir bağ olarak kabul edilir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "topic": "2. Peygamberimizin Hayatında Namaz"
-  },
-  {
     "id": "jzKOxF4cVgWYfUaKygxK",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "text": "Peygamber Efendimiz, namazı bir Müslüman olmanın en önemli alametlerinden biri olarak görmüştür.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "text": "Peygamber Efendimiz, namazı bir Müslüman olmanın en önemli alametlerinden biri olarak görmüştür.",
-    "options": [],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Zor",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
     "correctAnswer": "Doğru",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6"
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "jzSQ3Ilum4ulqYJT0ZSk",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
     "text": "Peygamber Efendimiz, zor ve sıkıntılı zamanlarında ___ vaktini gözlerdi.",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "yemek",
       "uyku",
       "namaz",
       "çalışma"
     ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "correctAnswer": "namaz",
     "difficulty": "Kolay",
+    "type": "Boşluk Doldurma"
+  },
+  {
+    "id": "k7dO6uehPDYMZvk0DADT",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Peygamber Efendimiz, namazı dinin çatısı olarak ifade etmiştir.",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "unitId": "ARSRniTfx324ZswltLyy",
+    "className": "6",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış"
+  },
+  {
+    "id": "kNoEecTxCpDb0sxR1kt7",
+    "type": "Çoktan Seçmeli",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "options": [
+      "Sadece özel kişilerin yapması gereken bir ibadet olduğunu.",
+      "İnsanların sadece zor zamanlarda sığınacağı bir eylem olduğunu.",
+      "Müslüman hayatının ayrılmaz ve vazgeçilmez bir parçası olduğunu.",
+      "Sadece dini liderlerin örnek alması gereken bir davranış olduğunu."
+    ],
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "className": "6",
+    "text": "Peygamber Efendimiz'in namazı hiçbir zaman yük olarak görmemesi ve şartlar ne kadar zor olursa olsun aksatmaması, namazın Müslümanlar için hangi anlamını pekiştirir?",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "correctAnswer": "Müslüman hayatının ayrılmaz ve vazgeçilmez bir parçası olduğunu.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
@@ -735,229 +780,182 @@
     }
   },
   {
-    "id": "k7dO6uehPDYMZvk0DADT",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
-    "type": "Doğru/Yanlış",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "options": [],
-    "text": "Peygamber Efendimiz, namazı dinin çatısı olarak ifade etmiştir."
-  },
-  {
-    "id": "kNoEecTxCpDb0sxR1kt7",
-    "correctAnswer": "Müslüman hayatının ayrılmaz ve vazgeçilmez bir parçası olduğunu.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Peygamber Efendimiz'in namazı hiçbir zaman yük olarak görmemesi ve şartlar ne kadar zor olursa olsun aksatmaması, namazın Müslümanlar için hangi anlamını pekiştirir?",
-    "type": "Çoktan Seçmeli",
-    "options": [
-      "Sadece özel kişilerin yapması gereken bir ibadet olduğunu.",
-      "İnsanların sadece zor zamanlarda sığınacağı bir eylem olduğunu.",
-      "Müslüman hayatının ayrılmaz ve vazgeçilmez bir parçası olduğunu.",
-      "Sadece dini liderlerin örnek alması gereken bir davranış olduğunu."
-    ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor"
-  },
-  {
     "id": "kQzlW2yvn0KG1p1DKQz2",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "text": "Kur'an-ı Kerim'de namaz kelimesi ___ olarak da geçer.",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "className": "6",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "dua",
       "salat",
       "ibadet",
       "secde"
     ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "difficulty": "Kolay",
-    "type": "Boşluk Doldurma",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "correctAnswer": "salat",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "topic": "2. Peygamberimizin Hayatında Namaz"
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "ltrDZiD4zE4pUK345mhL",
-    "text": "Kur'an-ı Kerim'de geçen \"Namazı dosdoğru kılın...\" ayeti, namazın sadece şekil olarak değil, aynı zamanda ___ yönüyle de önemine işaret eder.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
     "correctAnswer": "huşu içinde",
-    "type": "Boşluk Doldurma",
+    "text": "Kur'an-ı Kerim'de geçen \"Namazı dosdoğru kılın...\" ayeti, namazın sadece şekil olarak değil, aynı zamanda ___ yönüyle de önemine işaret eder.",
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "topic": "2. Peygamberimizin Hayatında Namaz",
+    "difficulty": "Zor",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "options": [
       "cemaatle",
       "huşu içinde",
       "gizlice",
       "hızlıca"
     ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "difficulty": "Zor",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    }
   },
   {
     "id": "n6zC4sM2cu70WYEC1nBg",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "difficulty": "Kolay",
-    "correctAnswer": "Dinin direği",
-    "type": "Çoktan Seçmeli",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "topicId": "avEzguf40OWvPgXJgHcz",
+    "text": "Peygamber Efendimiz, namazın dinimizdeki önemini vurgulamak için hangi benzetmeyi kullanmıştır?",
     "options": [
       "Dinin kapısı",
       "Dinin direği",
       "Dinin yolu",
       "Dinin güneşi"
     ],
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Peygamber Efendimiz, namazın dinimizdeki önemini vurgulamak için hangi benzetmeyi kullanmıştır?"
+    "className": "6",
+    "correctAnswer": "Dinin direği"
   },
   {
     "id": "rMwKI4H6HqvSL5Z3HAza",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "correctAnswer": "Bireysel bir dua ve iletişim aracı olduğunu.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
     "text": "Peygamber Efendimiz'in \"Bir Mümin namaz kıldığı zaman Rabb'iyle özel olarak konuşmaktadır.\" hadisi, namazın hangi yönünü ön plana çıkarır?",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "Toplumsal bir ibadet olduğunu.",
       "Bireysel bir dua ve iletişim aracı olduğunu.",
       "Zorunlu bir görev olduğunu.",
       "Sadece dünya işleri için olduğunu."
     ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
     "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
+    "className": "6",
+    "correctAnswer": "Bireysel bir dua ve iletişim aracı olduğunu.",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "tFVIwgyhaSXepfYOdXlE",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Gözünün nuru",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "type": "Çoktan Seçmeli",
+    "className": "6",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "text": "Peygamber Efendimiz namazı ne olarak nitelendirmiştir?",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "options": [
       "Bir görev",
       "Bir zorunluluk",
       "Gözünün nuru",
       "Bir yük"
     ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "correctAnswer": "Gözünün nuru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Peygamber Efendimiz namazı ne olarak nitelendirmiştir?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "topic": "2. Peygamberimizin Hayatında Namaz"
+    "difficulty": "Kolay"
   },
   {
     "id": "tMfzR7KrHNXkGxkG8kRY",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "Doğru/Yanlış",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "options": [],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "correctAnswer": "Doğru",
-    "text": "Abdullah bin Mesud'a göre Allah katında en güzel amel, vaktinde kılınan namazdır.",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "type": "Doğru/Yanlış",
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Doğru",
+    "options": [],
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "difficulty": "Orta",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "2. Peygamberimizin Hayatında Namaz"
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "text": "Abdullah bin Mesud'a göre Allah katında en güzel amel, vaktinde kılınan namazdır.",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "teB9PkSjndsFkqmnlIbY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "şükrünün",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
     "topicId": "avEzguf40OWvPgXJgHcz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
     "options": [
       "güveninin",
       "sevgisinin",
       "şükrünün",
       "korkusunun"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
-    "correctAnswer": "şükrünün",
-    "type": "Boşluk Doldurma",
     "text": "Namazın kul ile Rabbi arasında özel bir bağ kurması, aynı zamanda insanın Yüce Allah'a karşı ___ en büyük göstergesidir.",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "topic": "2. Peygamberimizin Hayatında Namaz"
   },
   {
     "id": "tn0wpstyYnghEMjkSx99",
     "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "difficulty": "Zor",
-    "text": "Peygamberimizin, \"Namazı ayakta kıl. Eğer buna gücün yetmezse oturarak kıl. Buna da gücün yetmezse o zaman yan üstü yatarak kıl.\" hadisi hangi ilkeyi vurgular?",
     "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Namazın her durumda kolaylaştırılabileceğini.",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topic": "2. Peygamberimizin Hayatında Namaz",
     "options": [
       "Namazın sadece ayakta kılınması gerektiğini.",
       "Namazın her durumda kolaylaştırılabileceğini.",
@@ -966,87 +964,89 @@
     ],
     "topicId": "avEzguf40OWvPgXJgHcz",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Namazın her durumda kolaylaştırılabileceğini.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "className": "6",
+    "difficulty": "Zor",
+    "text": "Peygamberimizin, \"Namazı ayakta kıl. Eğer buna gücün yetmezse oturarak kıl. Buna da gücün yetmezse o zaman yan üstü yatarak kıl.\" hadisi hangi ilkeyi vurgular?"
   },
   {
     "id": "v4qgvwvPIgcqsfVFWz33",
-    "type": "Boşluk Doldurma",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "text": "İnsanın inanma, sığınma ve dua etme gibi temel ___ ihtiyaçlarını karşılayan namaz, ruh sağlığı için önemlidir.",
-    "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "manevi",
-    "topicId": "avEzguf40OWvPgXJgHcz",
+    "type": "Boşluk Doldurma",
+    "className": "6",
     "topic": "2. Peygamberimizin Hayatında Namaz",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
     "options": [
       "maddi",
       "bedensel",
       "sosyal",
       "manevi"
     ],
-    "className": "6",
+    "correctAnswer": "manevi",
     "topicName": "2. Peygamberimizin Hayatında Namaz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "İnsanın inanma, sığınma ve dua etme gibi temel ___ ihtiyaçlarını karşılayan namaz, ruh sağlığı için önemlidir.",
     "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "xZmvieeelINPKOlrRquR",
+    "className": "6",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386289,
+      "nanoseconds": 798000000
+    },
+    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "difficulty": "Zor",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "barış",
       "savaş",
       "eğlence",
       "dinlenme"
     ],
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "correctAnswer": "savaş",
     "text": "Hz. Huzeyfe'nin anlattıklarına göre, Peygamber Efendimiz ___ zamanlarda bile namazını kılmayı ihmal etmemiştir.",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
+    "topicName": "2. Peygamberimizin Hayatında Namaz"
+  },
+  {
+    "id": "yAhVvrQY0bTXK8HfnFsi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386289,
       "nanoseconds": 798000000
     },
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "savaş"
-  },
-  {
-    "id": "yAhVvrQY0bTXK8HfnFsi",
-    "topic": "2. Peygamberimizin Hayatında Namaz",
-    "className": "6",
-    "topicName": "2. Peygamberimizin Hayatında Namaz",
-    "correctAnswer": "yan üstü yatarak",
     "text": "Peygamber Efendimiz, gücü yetmeyenlerin namazı önce oturarak, buna da gücü yetmezse ___ kılabileceğini belirtmiştir.",
-    "type": "Boşluk Doldurma",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
+    "correctAnswer": "yan üstü yatarak",
+    "className": "6",
     "options": [
       "dışarıda",
       "yan üstü yatarak",
       "sessizce",
       "cemaatsiz"
     ],
+    "topicName": "2. Peygamberimizin Hayatında Namaz",
     "topicId": "avEzguf40OWvPgXJgHcz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386289,
-      "nanoseconds": 798000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "difficulty": "Zor",
+    "topic": "2. Peygamberimizin Hayatında Namaz"
   }
 ]

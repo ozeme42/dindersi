@@ -345,16 +345,27 @@ function TeamCompetitionComponent() {
 
                     if (cData) {
                         try {
-                            // AKILLI TAHTA TAKIM YARIŞMASI: SADECE Sanal Öğrenciler (role === 'guest')
-                            const sQuery = query(
-                                collection(db, "users"), 
-                                where("role", "==", "guest")
-                            );
-                            const sSnap = await getDocs(sQuery);
-                            const allGuests = sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile));
-
                             const targetClassName = (cData.name || '').trim().toLowerCase();
                             const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
+
+                            let allGuests: UserProfile[] = [];
+
+                            // 1. Önce yerel JSON dosyasını dene (0ms, 0 Firestore reads)
+                            try {
+                                const fileRes = await fetch('/curriculum/guest-students.json');
+                                if (fileRes.ok) {
+                                    allGuests = await fileRes.json();
+                                }
+                            } catch (fErr) {
+                                console.warn("Yerel sanal öğrenciler dosyası okunamadı, Firestore'a geçiliyor:", fErr);
+                            }
+
+                            // 2. Yerel dosya yoksa veya boşsa Firestore fallback
+                            if (!allGuests || allGuests.length === 0) {
+                                const sQuery = query(collection(db, "users"), where("role", "==", "guest"));
+                                const sSnap = await getDocs(sQuery);
+                                allGuests = sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile));
+                            }
 
                             let students = allGuests.filter(u => {
                                 const sc = (u.class || '').trim().toLowerCase();
@@ -371,9 +382,19 @@ function TeamCompetitionComponent() {
                         }
                     }
                 } else {
-                    const sQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME));
-                    const sSnap = await getDocs(sQuery);
-                    setStudentPool(sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile)));
+                    let allGuests: UserProfile[] = [];
+                    try {
+                        const fileRes = await fetch('/curriculum/guest-students.json');
+                        if (fileRes.ok) allGuests = await fileRes.json();
+                    } catch {}
+                    if (allGuests.length > 0) {
+                        const filtered = allGuests.filter(u => u.class === SUMMER_SCHOOL_CLASS_NAME);
+                        setStudentPool(filtered.length > 0 ? filtered : allGuests);
+                    } else {
+                        const sQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME));
+                        const sSnap = await getDocs(sQuery);
+                        setStudentPool(sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile)));
+                    }
                 }
             } catch (err: any) {
                 console.error("Veriler yüklenirken hata:", err);

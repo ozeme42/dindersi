@@ -1,458 +1,43 @@
 [
   {
     "id": "0wIdojeHkEdiuNXf4NBG",
-    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "2.Merhametli Olmak",
+    "className": "6",
+    "difficulty": "Kolay",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "2.Merhametli Olmak",
+    "correctAnswer": "Yanlış",
     "text": "Osmanlı'da kuş evleri, estetikten çok savunma amaçlı yapılmıştır.",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "topic": "2.Merhametli Olmak",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "48JrdyuRRKe4tU8Y30YF",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topic": "2.Merhametli Olmak",
     "correctAnswer": "Empati becerisini geliştirme",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
+    "topic": "2.Merhametli Olmak",
     "difficulty": "Kolay",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "topicName": "2.Merhametli Olmak",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Kaba davranışları artırma",
       "Empati becerisini geliştirme",
       "Nefret duygusu oluşturma",
       "Huzursuzluk yaratma"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "type": "Çoktan Seçmeli",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Merhametin bireysel faydalarından biri aşağıdakilerden hangisidir?"
-  },
-  {
-    "id": "4s01yEVLiwPl49GqpiTM",
-    "type": "Boşluk Doldurma",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "correctAnswer": "Merhametli",
-    "text": "\"Karıncayı bile incitmez.\" ifadesi _______ bir kişiyi tanımlar.",
+    "text": "Merhametin bireysel faydalarından biri aşağıdakilerden hangisidir?",
     "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [
-      "Kibirli",
-      "Bencil",
-      "Merhametli",
-      "Kaba"
-    ],
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "difficulty": "Kolay",
-    "topic": "2.Merhametli Olmak"
-  },
-  {
-    "id": "5gqAl1s5w4QnIzvro2cY",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Doğru",
-    "difficulty": "Kolay",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "type": "Doğru/Yanlış",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Merhametli olmak, bireyin empati becerilerini geliştirmesine yardımcı olur.",
-    "topic": "2.Merhametli Olmak"
-  },
-  {
-    "id": "7GbjWymI3vJvvXGugPD6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "type": "Boşluk Doldurma",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "correctAnswer": "Can",
-    "options": [
-      "Varlık",
-      "Can",
-      "Nesne",
-      "Araç"
-    ],
-    "text": "Bireyin tüm canlılara merhamet etmesi, karşısındakini bir _______ olarak kabul etmesini ve anlamaya çalışmasını gerektirir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2.Merhametli Olmak",
-    "difficulty": "Zor",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak"
-  },
-  {
-    "id": "7HMoN8XTRG1fJ7vHgTPk",
-    "text": "Hz. Peygamber, Kur'an'da âlemlere rahmet olarak gönderilmiştir.",
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "topic": "2.Merhametli Olmak",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
-  },
-  {
-    "id": "8L09mRarjT1ocMl3vmT8",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [
-      "Camiler",
-      "Hanlar",
-      "Kuş evleri",
-      "Kervansaraylar"
-    ],
-    "correctAnswer": "Kuş evleri",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "text": "Osmanlı'da estetiğin ve merhametin sembolü olarak _______ inşa edilmiştir.",
-    "difficulty": "Orta",
-    "topic": "2.Merhametli Olmak",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "DNEkfTeKAJBXUC2Nr9Mh",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [
-      "Çalışkanlığı",
-      "Cömertliği",
-      "Tüm canlılara duyarlılığı",
-      "Bilgeliği"
-    ],
-    "correctAnswer": "Tüm canlılara duyarlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Merhametli bir kişinin \"Karıncayı bile incitmez.\" diye tanımlanması, onun hangi özelliğiyle doğrudan ilişkilidir?",
-    "topic": "2.Merhametli Olmak"
-  },
-  {
-    "id": "DRQtx2vKylU5VSlXLb4u",
-    "topic": "2.Merhametli Olmak",
-    "options": [
-      "Nezaket",
-      "Yapıcı",
-      "Kaba ve kırıcı",
-      "Yardımsever"
-    ],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Merhametli olmak, bireyin empatik becerilerini geliştirerek hangi tür davranışlardan uzak durmasını sağlar?",
-    "correctAnswer": "Kaba ve kırıcı",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Zor",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "type": "Çoktan Seçmeli"
-  },
-  {
-    "id": "ENg0YPLjRqVZZkgn7E8J",
-    "correctAnswer": "Yanlış",
-    "difficulty": "Kolay",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [],
-    "text": "\"Rahman\" ismi, Allah'ın (cc) ahirette sadece inananlara merhamet etmesini ifade eder.",
-    "topic": "2.Merhametli Olmak"
-  },
-  {
-    "id": "G9pQz0b5Ealur5Gsk9pu",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "text": "Merhamet, yaratılanlara sevgiyle yaklaşmakla mümkündür.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2.Merhametli Olmak",
-    "options": [],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "correctAnswer": "Doğru",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "KOJFsO7QnM5Q97pYRis3",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "correctAnswer": "Yanlış",
-    "options": [],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "text": "Merhamet, bireylerin güven ve huzur içinde yaşamalarında önemsiz bir yere sahiptir.",
-    "topic": "2.Merhametli Olmak",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Zor",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "KcApdAGsLOJBoceqEZ40",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Rahmet",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [
-      "Savaşçı",
-      "Hakim",
-      "Rahmet",
-      "Rehber"
-    ],
-    "text": "Hz. Peygamber, Kur'an'da âlemlere _______ olarak gönderilmiştir.",
-    "topic": "2.Merhametli Olmak",
-    "difficulty": "Orta"
-  },
-  {
-    "id": "OUbeYF41AvPCzyzeLKLu",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [
-      "Adalet",
-      "Birlik",
-      "Sevgi",
-      "Cesaret"
-    ],
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "Merhametin, bütün varlıklara sevgiyle yaklaşıldığında anlam kazanması, hangi kavramla güçlü bir bağını gösterir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "correctAnswer": "Sevgi",
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "2.Merhametli Olmak"
-  },
-  {
-    "id": "OmMOS6oapubMwZujCH5d",
-    "type": "Çoktan Seçmeli",
-    "topic": "2.Merhametli Olmak",
-    "difficulty": "Orta",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "correctAnswer": "Rahîm",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Allah'ın (cc) ahirette sadece inananlara merhamet etmesini ve onları bağışlayacak olmasını ifade eden ismi hangisidir?",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [
-      "Rahman",
-      "Rezzak",
-      "Rahîm",
-      "Kerim"
-    ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "R3sLP1a8XPfXeenHy8rQ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [],
-    "topic": "2.Merhametli Olmak",
-    "type": "Doğru/Yanlış",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "correctAnswer": "Doğru",
-    "difficulty": "Orta",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "Tüm canlıların acıları karşısında duyarlı davranmak vicdani bir sorumluluktur."
-  },
-  {
-    "id": "SrEmcbyuLjjSkXHPbfa3",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "text": "Merhamet, insanların _______ yapma becerilerini geliştirerek kaba ve kırıcı davranışlardan uzak durmalarını sağlar.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2.Merhametli Olmak",
-    "options": [
-      "Rekabet",
-      "Eleştiri",
-      "Empati",
-      "Korku"
-    ],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "correctAnswer": "Empati",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "UQj9LZbvedsgaaz07mkG",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "difficulty": "Orta",
-    "options": [],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "correctAnswer": "Doğru",
-    "text": "Merhametle ilişkili kavramlar arasında şefkat ve vicdan bulunur.",
-    "type": "Doğru/Yanlış",
-    "topic": "2.Merhametli Olmak",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak"
-  },
-  {
-    "id": "UoAU71PZK3piDX2KEhxn",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [
-      "Hz. İsa",
-      "Hz. Musa",
-      "Hz. İbrahim",
-      "Hz. Muhammed (sav)"
-    ],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "difficulty": "Zor",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "correctAnswer": "Hz. Muhammed (sav)",
-    "text": "\"Ant olsun, size kendi içinizden öyle bir peygamber gelmiştir ki sizin sıkıntıya düşmeniz ona çok ağır gelir. O size çok düşkün, müminlere karşı da çok şefkatli ve merhametlidir.\" ayeti kime işaret etmektedir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "2.Merhametli Olmak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "Çoktan Seçmeli"
-  },
-  {
-    "id": "VO5sjK9ThIiDdBFkvPu7",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [
-      "Kudretli",
-      "Adaletli",
-      "Esirgeyen",
-      "Yüce"
-    ],
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "correctAnswer": "Esirgeyen",
-    "type": "Boşluk Doldurma",
-    "topic": "2.Merhametli Olmak",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "\"Ayetlerimize inananlar sana geldiğinde onlara de ki: Selam size! Rabb'iniz kendine merhamet etmeyi yazdı. Gerçek şu ki sizden kim bilmeyerek bir kötülük yapar da ardından tövbe edip kendisini düzeltirse bilsin ki Allah çok bağışlayan, çok _______'dir.\"",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
@@ -460,23 +45,438 @@
     }
   },
   {
-    "id": "YK1ET1xSjl7OYOO5yoD7",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Rahmet",
+    "id": "4s01yEVLiwPl49GqpiTM",
+    "options": [
+      "Kibirli",
+      "Bencil",
+      "Merhametli",
+      "Kaba"
+    ],
+    "className": "6",
+    "text": "\"Karıncayı bile incitmez.\" ifadesi _______ bir kişiyi tanımlar.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "2.Merhametli Olmak",
+    "correctAnswer": "Merhametli",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
+    "topicName": "2.Merhametli Olmak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "5gqAl1s5w4QnIzvro2cY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "Merhametli olmak, bireyin empati becerilerini geliştirmesine yardımcı olur.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "topicName": "2.Merhametli Olmak",
+    "options": [],
+    "topic": "2.Merhametli Olmak",
+    "correctAnswer": "Doğru"
+  },
+  {
+    "id": "7GbjWymI3vJvvXGugPD6",
+    "difficulty": "Zor",
+    "topic": "2.Merhametli Olmak",
+    "topicName": "2.Merhametli Olmak",
+    "text": "Bireyin tüm canlılara merhamet etmesi, karşısındakini bir _______ olarak kabul etmesini ve anlamaya çalışmasını gerektirir.",
+    "correctAnswer": "Can",
+    "options": [
+      "Varlık",
+      "Can",
+      "Nesne",
+      "Araç"
+    ],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    }
+  },
+  {
+    "id": "7HMoN8XTRG1fJ7vHgTPk",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "options": [],
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "2.Merhametli Olmak",
+    "topic": "2.Merhametli Olmak",
+    "text": "Hz. Peygamber, Kur'an'da âlemlere rahmet olarak gönderilmiştir.",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "8L09mRarjT1ocMl3vmT8",
+    "topicName": "2.Merhametli Olmak",
+    "options": [
+      "Camiler",
+      "Hanlar",
+      "Kuş evleri",
+      "Kervansaraylar"
+    ],
+    "difficulty": "Orta",
+    "type": "Boşluk Doldurma",
+    "text": "Osmanlı'da estetiğin ve merhametin sembolü olarak _______ inşa edilmiştir.",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Kuş evleri",
+    "topic": "2.Merhametli Olmak",
+    "className": "6",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "DNEkfTeKAJBXUC2Nr9Mh",
+    "className": "6",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "text": "Merhametli bir kişinin \"Karıncayı bile incitmez.\" diye tanımlanması, onun hangi özelliğiyle doğrudan ilişkilidir?",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Çalışkanlığı",
+      "Cömertliği",
+      "Tüm canlılara duyarlılığı",
+      "Bilgeliği"
+    ],
+    "difficulty": "Zor",
+    "correctAnswer": "Tüm canlılara duyarlılığı",
+    "topicName": "2.Merhametli Olmak",
+    "topic": "2.Merhametli Olmak",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "DRQtx2vKylU5VSlXLb4u",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Kaba ve kırıcı",
+    "topicName": "2.Merhametli Olmak",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "options": [
+      "Nezaket",
+      "Yapıcı",
+      "Kaba ve kırıcı",
+      "Yardımsever"
+    ],
+    "className": "6",
+    "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "2.Merhametli Olmak",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "Merhametli olmak, bireyin empatik becerilerini geliştirerek hangi tür davranışlardan uzak durmasını sağlar?"
+  },
+  {
+    "id": "ENg0YPLjRqVZZkgn7E8J",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "topicName": "2.Merhametli Olmak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "topic": "2.Merhametli Olmak",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
+    "text": "\"Rahman\" ismi, Allah'ın (cc) ahirette sadece inananlara merhamet etmesini ifade eder."
+  },
+  {
+    "id": "G9pQz0b5Ealur5Gsk9pu",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "topicName": "2.Merhametli Olmak",
+    "topic": "2.Merhametli Olmak",
+    "className": "6",
+    "options": [],
+    "difficulty": "Kolay",
+    "text": "Merhamet, yaratılanlara sevgiyle yaklaşmakla mümkündür.",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    }
+  },
+  {
+    "id": "KOJFsO7QnM5Q97pYRis3",
+    "topic": "2.Merhametli Olmak",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "options": [],
     "topicName": "2.Merhametli Olmak",
     "className": "6",
-    "text": "Peygamber Efendimiz Hz. Muhammed (sav) Kur'an'da âlemlere ne olarak gönderilmiştir?",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "correctAnswer": "Yanlış",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
     "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "text": "Merhamet, bireylerin güven ve huzur içinde yaşamalarında önemsiz bir yere sahiptir."
+  },
+  {
+    "id": "KcApdAGsLOJBoceqEZ40",
+    "correctAnswer": "Rahmet",
+    "options": [
+      "Savaşçı",
+      "Hakim",
+      "Rahmet",
+      "Rehber"
+    ],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "2.Merhametli Olmak",
+    "text": "Hz. Peygamber, Kur'an'da âlemlere _______ olarak gönderilmiştir.",
+    "difficulty": "Orta",
+    "className": "6",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "Boşluk Doldurma",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2.Merhametli Olmak",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    }
+  },
+  {
+    "id": "OUbeYF41AvPCzyzeLKLu",
+    "text": "Merhametin, bütün varlıklara sevgiyle yaklaşıldığında anlam kazanması, hangi kavramla güçlü bir bağını gösterir?",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "correctAnswer": "Sevgi",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "topic": "2.Merhametli Olmak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "difficulty": "Zor",
+    "options": [
+      "Adalet",
+      "Birlik",
+      "Sevgi",
+      "Cesaret"
+    ],
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "2.Merhametli Olmak",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "OmMOS6oapubMwZujCH5d",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "2.Merhametli Olmak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "type": "Çoktan Seçmeli",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "2.Merhametli Olmak",
+    "text": "Allah'ın (cc) ahirette sadece inananlara merhamet etmesini ve onları bağışlayacak olmasını ifade eden ismi hangisidir?",
+    "className": "6",
+    "options": [
+      "Rahman",
+      "Rezzak",
+      "Rahîm",
+      "Kerim"
+    ],
+    "correctAnswer": "Rahîm",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "difficulty": "Orta"
+  },
+  {
+    "id": "R3sLP1a8XPfXeenHy8rQ",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2.Merhametli Olmak",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "text": "Tüm canlıların acıları karşısında duyarlı davranmak vicdani bir sorumluluktur.",
+    "className": "6",
+    "topicName": "2.Merhametli Olmak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "options": []
+  },
+  {
+    "id": "SrEmcbyuLjjSkXHPbfa3",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "difficulty": "Orta",
+    "className": "6",
+    "correctAnswer": "Empati",
+    "options": [
+      "Rekabet",
+      "Eleştiri",
+      "Empati",
+      "Korku"
+    ],
+    "topicName": "2.Merhametli Olmak",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "Merhamet, insanların _______ yapma becerilerini geliştirerek kaba ve kırıcı davranışlardan uzak durmalarını sağlar.",
+    "topic": "2.Merhametli Olmak"
+  },
+  {
+    "id": "UQj9LZbvedsgaaz07mkG",
+    "className": "6",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "Merhametle ilişkili kavramlar arasında şefkat ve vicdan bulunur.",
+    "correctAnswer": "Doğru",
+    "topicName": "2.Merhametli Olmak",
+    "options": [],
+    "topic": "2.Merhametli Olmak"
+  },
+  {
+    "id": "UoAU71PZK3piDX2KEhxn",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Hz. Muhammed (sav)",
+    "topicName": "2.Merhametli Olmak",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "options": [
+      "Hz. İsa",
+      "Hz. Musa",
+      "Hz. İbrahim",
+      "Hz. Muhammed (sav)"
+    ],
+    "className": "6",
+    "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "topic": "2.Merhametli Olmak",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "\"Ant olsun, size kendi içinizden öyle bir peygamber gelmiştir ki sizin sıkıntıya düşmeniz ona çok ağır gelir. O size çok düşkün, müminlere karşı da çok şefkatli ve merhametlidir.\" ayeti kime işaret etmektedir?"
+  },
+  {
+    "id": "VO5sjK9ThIiDdBFkvPu7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "type": "Boşluk Doldurma",
+    "options": [
+      "Kudretli",
+      "Adaletli",
+      "Esirgeyen",
+      "Yüce"
+    ],
+    "className": "6",
+    "topic": "2.Merhametli Olmak",
+    "topicName": "2.Merhametli Olmak",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "correctAnswer": "Esirgeyen",
+    "text": "\"Ayetlerimize inananlar sana geldiğinde onlara de ki: Selam size! Rabb'iniz kendine merhamet etmeyi yazdı. Gerçek şu ki sizden kim bilmeyerek bir kötülük yapar da ardından tövbe edip kendisini düzeltirse bilsin ki Allah çok bağışlayan, çok _______'dir.\""
+  },
+  {
+    "id": "YK1ET1xSjl7OYOO5yoD7",
+    "correctAnswer": "Rahmet",
     "options": [
       "Savaşçı",
       "Rahmet",
       "Hakim",
       "Tüccar"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "2.Merhametli Olmak",
+    "className": "6",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "difficulty": "Kolay",
+    "text": "Peygamber Efendimiz Hz. Muhammed (sav) Kur'an'da âlemlere ne olarak gönderilmiştir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "2.Merhametli Olmak",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -486,384 +486,381 @@
   },
   {
     "id": "YQxmUnhnwjj1Gx8Txgg0",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Merhametin",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Boşluk Doldurma",
     "options": [
       "Adaletin",
       "Merhametin",
       "Cömertliğin",
       "Korkunun"
     ],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Orta",
-    "text": "Tüm canlıların acıları karşısında duyarlı davranmak vicdani bir sorumluluk olduğu kadar _______ gereğidir.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Boşluk Doldurma",
-    "topic": "2.Merhametli Olmak",
-    "correctAnswer": "Merhametin",
     "topicName": "2.Merhametli Olmak",
-    "className": "6"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "2.Merhametli Olmak",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "text": "Tüm canlıların acıları karşısında duyarlı davranmak vicdani bir sorumluluk olduğu kadar _______ gereğidir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "difficulty": "Orta"
   },
   {
     "id": "ZABcpMeOj3HYBMIsiqLh",
-    "text": "Merhametli insanlar, toplumsal sorunların çözümüne katkıda bulunmazlar.",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
+    "text": "Merhametli insanlar, toplumsal sorunların çözümüne katkıda bulunmazlar.",
+    "className": "6",
+    "topicName": "2.Merhametli Olmak",
+    "difficulty": "Orta",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Orta",
-    "type": "Doğru/Yanlış",
-    "topic": "2.Merhametli Olmak",
-    "options": [],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
     "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "type": "Doğru/Yanlış",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2.Merhametli Olmak"
   },
   {
     "id": "ZLIHYJFalHldgnnNXqqY",
+    "topicName": "2.Merhametli Olmak",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
+    "topic": "2.Merhametli Olmak",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "text": "Allah'ın (cc) \"Rahîm\" ismi, dünyadaki bütün varlıklara merhamet etmesini ifade eder.",
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "2.Merhametli Olmak",
-    "correctAnswer": "Yanlış",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
     "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "text": "Allah'ın (cc) \"Rahîm\" ismi, dünyadaki bütün varlıklara merhamet etmesini ifade eder.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Zor"
   },
   {
     "id": "ZWEpFFtyr0ZgwXrYULW8",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topic": "2.Merhametli Olmak",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
     "difficulty": "Orta",
+    "className": "6",
     "options": [
       "Neşe",
       "Sevgi",
       "Kin",
       "Saygı"
     ],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
     "text": "Merhamet, hangi olumsuz duyguların önüne geçerek birey ve toplumda pozitif bir etki yaratır?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Kin",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "topicName": "2.Merhametli Olmak",
     "type": "Çoktan Seçmeli",
-    "correctAnswer": "Kin"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2.Merhametli Olmak"
   },
   {
     "id": "aCiIPU3YqvtKFBIx5vli",
-    "topic": "2.Merhametli Olmak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "text": "Osmanlı Devleti'nde hayvanlara gösterilen merhametin sembollerinden biri nedir?",
-    "difficulty": "Kolay",
     "correctAnswer": "Kuş evleri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "type": "Çoktan Seçmeli",
+    "topic": "2.Merhametli Olmak",
+    "className": "6",
+    "topicName": "2.Merhametli Olmak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Osmanlı Devleti'nde hayvanlara gösterilen merhametin sembollerinden biri nedir?",
     "options": [
       "Hanlar",
       "Köprüler",
       "Kuş evleri",
       "Camiler"
-    ],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli"
+    ]
   },
   {
     "id": "akDvz9mzjcRkKQ9Savnp",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "correctAnswer": "Dayanışma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "difficulty": "Zor",
     "options": [
       "Rekabet",
       "Gelişme",
       "Dayanışma",
       "Kâr"
     ],
+    "correctAnswer": "Dayanışma",
+    "text": "Merhametli insanlar, yaşamın her alanında sorunların çözümü için gayret göstererek _______ ve paylaşmanın artmasına katkıda bulunur.",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Boşluk Doldurma",
+    "topicName": "2.Merhametli Olmak",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "2.Merhametli Olmak"
+  },
+  {
+    "id": "bJh6IjufJhdA8xiXGqdX",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Zor",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "text": "Merhametli insanlar, yaşamın her alanında sorunların çözümü için gayret göstererek _______ ve paylaşmanın artmasına katkıda bulunur.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "2.Merhametli Olmak"
-  },
-  {
-    "id": "bJh6IjufJhdA8xiXGqdX",
-    "difficulty": "Orta",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "text": "Merhametin tanımı içinde aşağıdaki eylemlerden hangisi bulunmaz?",
     "options": [
       "Şefkat gösterme",
       "Acıma",
       "Yumuşak huylu olma",
       "İntikam alma"
     ],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "2.Merhametli Olmak",
+    "topicName": "2.Merhametli Olmak",
+    "difficulty": "Orta",
+    "correctAnswer": "İntikam alma"
+  },
+  {
+    "id": "bpcnmGr2Fu8Rjppht5Me",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "Çoktan Seçmeli",
+    "text": "Merhamet, yaratılanlara _______ ile yaklaşmakla mümkündür.",
     "topic": "2.Merhametli Olmak",
-    "text": "Merhametin tanımı içinde aşağıdaki eylemlerden hangisi bulunmaz?",
-    "correctAnswer": "İntikam alma",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6"
-  },
-  {
-    "id": "bpcnmGr2Fu8Rjppht5Me",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2.Merhametli Olmak",
     "className": "6",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "correctAnswer": "Sevgi",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Kolay",
+    "topicName": "2.Merhametli Olmak",
+    "type": "Boşluk Doldurma",
     "options": [
       "Saygı",
       "Korku",
       "Sevgi",
       "Uzaklık"
-    ],
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "Boşluk Doldurma",
+    ]
+  },
+  {
+    "id": "celCmXamxmPXuVKzewqF",
     "topic": "2.Merhametli Olmak",
-    "text": "Merhamet, yaratılanlara _______ ile yaklaşmakla mümkündür.",
-    "correctAnswer": "Sevgi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "difficulty": "Kolay",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "celCmXamxmPXuVKzewqF",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [],
-    "text": "Merhamet, kin, kibir, kıskançlık ve nefret gibi olumsuz duyguların oluşmasına yol açar.",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "difficulty": "Zor",
-    "type": "Doğru/Yanlış",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topic": "2.Merhametli Olmak",
     "correctAnswer": "Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    }
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "text": "Merhamet, kin, kibir, kıskançlık ve nefret gibi olumsuz duyguların oluşmasına yol açar.",
+    "difficulty": "Zor",
+    "topicName": "2.Merhametli Olmak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "feYxSuJxVNqfJKMgprSI",
     "type": "Doğru/Yanlış",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "correctAnswer": "Doğru",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "Kur'an-ı Kerim'de Allah'ın rahmetini ifade eden pek çok ayet bulunmaktadır.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2.Merhametli Olmak",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [],
-    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
-    }
+    },
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topicName": "2.Merhametli Olmak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "text": "Kur'an-ı Kerim'de Allah'ın rahmetini ifade eden pek çok ayet bulunmaktadır.",
+    "difficulty": "Zor",
+    "topic": "2.Merhametli Olmak",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "hcMJ57PXyJH27oe1430M",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "difficulty": "Orta",
+    "className": "6",
+    "text": "Allah'ın (cc) ahirette sadece inananlara merhamet etmesini ifade eden ismi _______'dir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "topicName": "2.Merhametli Olmak",
+    "topic": "2.Merhametli Olmak",
     "options": [
       "Rahman",
       "Rezzak",
       "Rahîm",
       "Settar"
     ],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Allah'ın (cc) ahirette sadece inananlara merhamet etmesini ifade eden ismi _______'dir.",
-    "topic": "2.Merhametli Olmak",
-    "type": "Boşluk Doldurma",
     "correctAnswer": "Rahîm",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    }
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "hiUow7tHoeSbywq1lwWd",
-    "topic": "2.Merhametli Olmak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Doğru/Yanlış",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Kolay",
-    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "2.Merhametli Olmak",
+    "difficulty": "Kolay",
+    "options": [],
+    "text": "Merhamet, İslam'da övülen ahlaki davranışlardandır.",
+    "className": "6",
+    "topic": "2.Merhametli Olmak",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
-    "text": "Merhamet, İslam'da övülen ahlaki davranışlardandır.",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "correctAnswer": "Doğru"
   },
   {
     "id": "jheZvhn99kVcnmB04R8k",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "2.Merhametli Olmak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "correctAnswer": "Şefkat",
-    "difficulty": "Kolay",
     "type": "Boşluk Doldurma",
-    "text": "Şefkat gösterme, acıma ve bağışlama merhametin ilişkili olduğu _______ kavramlardan biridir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "2.Merhametli Olmak",
+    "topicName": "2.Merhametli Olmak",
     "options": [
       "Adalet",
       "Şefkat",
       "Cesaret",
       "Öfke"
     ],
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "correctAnswer": "Şefkat",
+    "text": "Şefkat gösterme, acıma ve bağışlama merhametin ilişkili olduğu _______ kavramlardan biridir.",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "lPCjGDt5iDouy36rrz4F",
+    "className": "6",
     "text": "İslam ahlakında övülen ve tavsiye edilen davranışlardan biri olan merhamet, Kur'an'da genellikle hangi kelime ile ifade edilir?",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
     "options": [
       "Hikmet",
       "Adalet",
       "İhsan",
       "Rahmet"
     ],
+    "topic": "2.Merhametli Olmak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "correctAnswer": "Rahmet",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
+    "topicName": "2.Merhametli Olmak"
+  },
+  {
+    "id": "nKuUXPlb6oYy8d8omv4o",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "difficulty": "Orta",
-    "type": "Çoktan Seçmeli",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "correctAnswer": "Rahmet",
-    "topic": "2.Merhametli Olmak"
-  },
-  {
-    "id": "nKuUXPlb6oYy8d8omv4o",
-    "difficulty": "Zor",
     "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "text": "Merhamet, kin, kibir, kıskançlık ve _______ gibi olumsuz duyguların önüne geçerek huzur ortamı sağlar.",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Zor",
+    "correctAnswer": "Nefret",
+    "topic": "2.Merhametli Olmak",
+    "type": "Boşluk Doldurma",
     "options": [
       "Neşe",
       "Sevgi",
       "Nefret",
       "Saygı"
     ],
-    "topic": "2.Merhametli Olmak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "text": "Merhamet, kin, kibir, kıskançlık ve _______ gibi olumsuz duyguların önüne geçerek huzur ortamı sağlar.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "correctAnswer": "Nefret",
     "topicName": "2.Merhametli Olmak",
-    "className": "6"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "nlozgmLCYPyu5TNuhue4",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "Rahîm",
       "Rahman",
       "Malik",
       "Semi"
     ],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "topicName": "2.Merhametli Olmak",
+    "difficulty": "Kolay",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "text": "Allah'ın (cc) tüm varlıklara dünyada gösterdiği merhameti ifade eden ismi hangisidir?",
-    "correctAnswer": "Rahman",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "type": "Çoktan Seçmeli",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topic": "2.Merhametli Olmak",
-    "difficulty": "Kolay",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Rahman",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "topicName": "2.Merhametli Olmak"
+    "topicId": "oqBiWJeIxUHCq4hogKQc"
   },
   {
     "id": "o16nJTJWW3JJ6f6vvMjQ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "options": [
       "Kudret",
       "İlim",
@@ -871,153 +868,66 @@
       "Azamet"
     ],
     "text": "Kur'an-ı Kerim'deki bir ayette \"Allah'ın nimetlerini saymaya kalksanız başa çıkamazsınız. Allah gerçekten bağışlayıcıdır, merhametlidir.\" ifadesi Allah'ın hangi özelliğine vurgu yapar?",
+    "correctAnswer": "Rahmet",
+    "topicName": "2.Merhametli Olmak",
     "topic": "2.Merhametli Olmak",
+    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Rahmet",
     "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "difficulty": "Zor",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "okbjsMDkhao0ywkPYxjd",
-    "type": "Çoktan Seçmeli",
-    "text": "Aşağıdakilerden hangisi merhametli olmanın toplumsal boyutlarından biri değildir?",
-    "topicName": "2.Merhametli Olmak",
     "className": "6",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "Aşağıdakilerden hangisi merhametli olmanın toplumsal boyutlarından biri değildir?",
     "topic": "2.Merhametli Olmak",
-    "correctAnswer": "Toplumsal huzuru azaltma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Toplumsal huzuru azaltma",
     "options": [
       "Dayanışmayı artırma",
       "Sorunların çözümüne katkı sağlama",
       "Toplumsal huzuru azaltma",
       "Paylaşmayı teşvik etme"
     ],
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Orta"
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
+    "topicName": "2.Merhametli Olmak"
   },
   {
     "id": "tp58SL41iPHKio6dk1D5",
+    "topic": "2.Merhametli Olmak",
     "correctAnswer": "Merhamet",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "options": [
       "Sevgi",
       "Merhamet",
       "Kudret",
       "Adalet"
     ],
-    "topic": "2.Merhametli Olmak",
-    "type": "Boşluk Doldurma",
     "text": "Kur'an-ı Kerim'de \"Rabb'iniz kendine _______ etmeyi yazdı.\" buyrularak Yüce Allah'ın rahmetine vurgu yapılır.",
-    "className": "6",
     "topicName": "2.Merhametli Olmak",
-    "difficulty": "Zor",
+    "className": "6",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "u391whDS9k8kK5s1EQ5s",
-    "correctAnswer": "Rahman",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Zor",
     "type": "Boşluk Doldurma",
     "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "options": [
-      "Rahîm",
-      "Malik",
-      "Rahman",
-      "Kadîr"
-    ],
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "text": "Allah'ın (cc) dünyadaki bütün varlıklara merhamet etmesini ifade eden ismi _______'dır.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "2.Merhametli Olmak",
-    "difficulty": "Kolay",
-    "topic": "2.Merhametli Olmak"
-  },
-  {
-    "id": "uQESrsBFGfz6bdPbcuMC",
-    "difficulty": "Kolay",
-    "topic": "2.Merhametli Olmak",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "correctAnswer": "Merhamet",
-    "type": "Boşluk Doldurma",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "options": [
-      "İlim",
-      "Sabır",
-      "Cömertlik",
-      "Merhamet"
-    ],
-    "text": "Müminlerin başlıca nitelikleri arasında sayılan ve Kur'an'da sıkça ele alınan kavram _______'tir."
-  },
-  {
-    "id": "vMMcnILfikLgCtb0lbro",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "correctAnswer": "Yanlış",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "topic": "2.Merhametli Olmak",
-    "options": [],
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Merhametli bir kişi, kin ve nefret duygularını güçlendirir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767360816,
-      "nanoseconds": 699000000
-    },
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta"
-  },
-  {
-    "id": "vuvlUjENksl7wDNyWyBQ",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6",
-    "text": "Bireyin tüm canlılara merhamet etmesi, karşısındakini bir can olarak kabul etmesini gerektirir.",
-    "difficulty": "Zor",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış",
-    "topic": "2.Merhametli Olmak",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "options": [],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
@@ -1025,28 +935,118 @@
     }
   },
   {
-    "id": "zzWUGCW7n746eOvAMGpJ",
-    "type": "Çoktan Seçmeli",
+    "id": "u391whDS9k8kK5s1EQ5s",
+    "text": "Allah'ın (cc) dünyadaki bütün varlıklara merhamet etmesini ifade eden ismi _______'dır.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767360816,
       "nanoseconds": 699000000
     },
+    "options": [
+      "Rahîm",
+      "Malik",
+      "Rahman",
+      "Kadîr"
+    ],
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Kolay",
-    "text": "Aşağıdakilerden hangisi merhametle en doğrudan ilişkili kavramlardan biridir?",
+    "topic": "2.Merhametli Olmak",
+    "className": "6",
     "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "correctAnswer": "Rahman",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2.Merhametli Olmak",
+    "type": "Boşluk Doldurma",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Kolay"
+  },
+  {
+    "id": "uQESrsBFGfz6bdPbcuMC",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Merhamet",
+    "type": "Boşluk Doldurma",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2.Merhametli Olmak",
+    "options": [
+      "İlim",
+      "Sabır",
+      "Cömertlik",
+      "Merhamet"
+    ],
+    "className": "6",
+    "text": "Müminlerin başlıca nitelikleri arasında sayılan ve Kur'an'da sıkça ele alınan kavram _______'tir.",
+    "topic": "2.Merhametli Olmak",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "vMMcnILfikLgCtb0lbro",
+    "options": [],
+    "topicName": "2.Merhametli Olmak",
+    "topic": "2.Merhametli Olmak",
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Merhametli bir kişi, kin ve nefret duygularını güçlendirir.",
+    "correctAnswer": "Yanlış",
+    "className": "6",
+    "topicId": "oqBiWJeIxUHCq4hogKQc"
+  },
+  {
+    "id": "vuvlUjENksl7wDNyWyBQ",
+    "topic": "2.Merhametli Olmak",
+    "text": "Bireyin tüm canlılara merhamet etmesi, karşısındakini bir can olarak kabul etmesini gerektirir.",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "options": [],
+    "topicName": "2.Merhametli Olmak",
+    "className": "6",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "difficulty": "Zor",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "zzWUGCW7n746eOvAMGpJ",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767360816,
+      "nanoseconds": 699000000
+    },
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "2.Merhametli Olmak",
+    "topicName": "2.Merhametli Olmak",
     "options": [
       "Öfke",
       "Kin",
       "Şefkat",
       "Kıskançlık"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "Şefkat",
-    "topic": "2.Merhametli Olmak",
-    "topicName": "2.Merhametli Olmak",
-    "className": "6"
+    "text": "Aşağıdakilerden hangisi merhametle en doğrudan ilişkili kavramlardan biridir?",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   }
 ]

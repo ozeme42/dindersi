@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { 
     FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, 
-    Search, UserCog, PencilRuler, Save, Upload, ArrowLeft // YENİ: ArrowLeft ikonu eklendi
+    Search, UserCog, PencilRuler, Save, Upload, ArrowLeft, Database // YENİ: ArrowLeft ve Database eklendi
 } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
@@ -37,6 +37,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { UserEditorDialog } from "@/components/user-editor-dialog"; 
 import { getStudentData, addGuestStudent, bulkAddStudents, updateStudentClass, deleteBulkGuestStudents, bulkUpdateGuestStudents, saveUser } from "./actions";
+import { syncSmartboardDataToFilesAction } from "@/app/teacher/smartboard/sync-actions";
 
 // Types
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
@@ -220,8 +221,36 @@ export default function GuestStudentManagementPage() {
     const [bulkEditSchoolId, setBulkEditSchoolId] = useState<string>("");
     const [bulkEditClassId, setBulkEditClassId] = useState<string>("");
     const [bulkEditBranch, setBulkEditBranch] = useState<string>("");
+    const [isSyncing, setIsSyncing] = useState(false);
 
     const { toast } = useToast();
+
+    const handleSyncToFiles = async () => {
+        setIsSyncing(true);
+        try {
+            const res = await syncSmartboardDataToFilesAction();
+            if (res.success) {
+                toast({
+                    title: "Veriler Dosyalara Aktarıldı! ⚡",
+                    description: `${res.studentCount || 0} sanal öğrenci yerel dosyalara kaydedildi.`
+                });
+            } else {
+                toast({
+                    title: "Hata",
+                    description: res.error || "Aktarım başarısız oldu.",
+                    variant: "destructive"
+                });
+            }
+        } catch (e: any) {
+            toast({
+                title: "Hata",
+                description: e.message || "İşlem sırasında hata oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsSyncing(false);
+        }
+    };
 
     // --- DATA FETCHING ---
     const fetchAllData = useCallback(async () => {
@@ -513,6 +542,16 @@ export default function GuestStudentManagementPage() {
                             {isSuperAdmin ? "Yönetici Sanal Öğrenci Paneli" : "Sanal Öğrenci Yönetimi"}
                         </h1>
                      </div>
+                     <Button
+                        onClick={handleSyncToFiles}
+                        disabled={isSyncing}
+                        variant="outline"
+                        className="bg-cyan-500/10 border-cyan-500/30 text-cyan-300 hover:text-cyan-200 hover:bg-cyan-500/20 font-bold h-10 px-4 rounded-xl shadow-lg transition-all"
+                        title="Firestore'daki tüm sanal öğrencileri ve sınıfları yerel JSON dosyasına aktarır"
+                     >
+                        {isSyncing ? <Loader2 className="mr-2 h-4 w-4 animate-spin text-cyan-400" /> : <Database className="mr-2 h-4 w-4 text-cyan-400" />}
+                        {isSyncing ? "Aktarılıyor..." : "Akıllı Tahta Dosyasını Güncelle"}
+                     </Button>
                 </div>
 
                 {/* Sekmeler: Liste ve Ekleme */}

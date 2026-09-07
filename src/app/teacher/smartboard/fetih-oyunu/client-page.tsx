@@ -74,11 +74,11 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
   const fetchInitialData = useCallback(async () => {
     setIsLoading(true);
     try {
-        const [manifestRes, classesSnap, coursesSnap, studentsSnap] = await Promise.all([
+        const [manifestRes, guestRes, classesSnap, coursesSnap] = await Promise.all([
             fetch('/curriculum/manifest.json').catch(() => null),
+            fetch('/curriculum/guest-students.json').catch(() => null),
             getDocs(query(collection(db, 'classes'), orderBy('name'))).catch(() => null),
-            getDocs(query(collection(db, 'courses'))).catch(() => null),
-            getDocs(query(collection(db, 'users'), where('role', '==', 'guest'))).catch(() => null)
+            getDocs(query(collection(db, 'courses'))).catch(() => null)
         ]);
 
         let mData: any = null;
@@ -133,7 +133,20 @@ export function FetihOyunuSetupClientPage({ gameConfig }: { gameConfig: any }) {
           coursesList = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         }
 
-        const students = studentsSnap ? studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)).filter(u => u.role === 'guest' || !u.role) : [];
+        let students: UserProfile[] = [];
+        if (guestRes && guestRes.ok) {
+            try {
+                students = await guestRes.json();
+            } catch {}
+        }
+        if (!students || students.length === 0) {
+            try {
+                const studentsSnap = await getDocs(query(collection(db, 'users'), where('role', '==', 'guest')));
+                students = studentsSnap ? studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)) : [];
+            } catch (err) {
+                console.warn("Firestore fallback error in fetih-oyunu:", err);
+            }
+        }
         setAllClasses(classesList);
         setAllStudents(students);
         setAllCourses(coursesList);

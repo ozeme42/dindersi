@@ -3,6 +3,7 @@
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
+import { saveLocalGuestStudent, removeLocalGuestStudent, syncSmartboardDataToFilesAction } from "@/app/teacher/smartboard/sync-actions";
 
 // --- YARDIMCI: DATA TEMİZLEME (Firestore 'undefined' kabul etmez, 'null' ister) ---
 const cleanUndefined = (obj: any): any => {
@@ -137,13 +138,17 @@ export async function addGuestStudent(
 
         await docRef.set(newUserProfile);
         
+        const createdUser: UserProfile = { 
+            ...newUserProfile, 
+            uid: docRef.id, 
+            createdAt: new Date().toISOString() 
+        };
+
+        saveLocalGuestStudent(createdUser).catch(err => console.warn("Failed saving to local guest-students.json:", err));
+
         return { 
             success: true, 
-            newUser: { 
-                ...newUserProfile, 
-                uid: docRef.id, 
-                createdAt: new Date().toISOString() 
-            } as UserProfile
+            newUser: createdUser
         };
     } catch (error: any) {
         console.error("Add Guest Error:", error);
@@ -217,6 +222,7 @@ export async function bulkAddStudents(
 
         if (successCount > 0) {
             await batch.commit();
+            syncSmartboardDataToFilesAction().catch(() => {});
             return { success: true, successCount };
         }
         return { success: false, error: "Eklenecek geçerli isim bulunamadı." };
@@ -237,6 +243,7 @@ export async function deleteBulkGuestStudents(userIds: string[]): Promise<{ succ
         for (const uid of userIds) {
             batch.delete(db.collection("users").doc(uid));
             try { await auth.deleteUser(uid); } catch {}
+            removeLocalGuestStudent(uid).catch(() => {});
         }
         await batch.commit();
         return { success: true };

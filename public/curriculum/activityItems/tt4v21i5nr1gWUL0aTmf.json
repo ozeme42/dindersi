@@ -1,120 +1,120 @@
 [
   {
     "id": "381wFe9f6vvPnJlCw3qA",
-    "type": "definition",
-    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "content": {
       "term": "Dokunulmazlık",
       "definition": "Can, mal ve namus gibi değerlerin koruma altında olması"
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
-    "topicId": "tt4v21i5nr1gWUL0aTmf"
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition"
   },
   {
     "id": "3QgYRa7T4YpRtsuhmAE5",
     "type": "concept",
-    "unitId": "PqkYDI0IbvELcbK6ooNX",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1765344742,
-      "nanoseconds": 986000000
+    "content": {
+      "text": "Namus"
     },
     "topicId": "tt4v21i5nr1gWUL0aTmf",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Namus"
-    }
-  },
-  {
-    "id": "5I6v1AOXLg7oALUryK7L",
-    "unitId": "PqkYDI0IbvELcbK6ooNX",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
+    "unitId": "PqkYDI0IbvELcbK6ooNX"
+  },
+  {
+    "id": "5I6v1AOXLg7oALUryK7L",
     "content": {
       "text": "Peygamber"
     },
     "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
-  },
-  {
-    "id": "98jUJBzBjxFJV6sBM0sA",
-    "content": {
-      "text": "Her canın yaşama hakkı vardır."
-    },
-    "type": "sentence",
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1765344742,
-      "nanoseconds": 986000000
-    },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "PqkYDI0IbvELcbK6ooNX"
-  },
-  {
-    "id": "AbCLdnKazI9MlwVwQFvN",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
     "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "type": "concept"
+  },
+  {
+    "id": "98jUJBzBjxFJV6sBM0sA",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
     "type": "sentence",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "content": {
-      "text": "Peygamber mesajı tüm insanlığa yöneliktir."
+      "text": "Her canın yaşama hakkı vardır."
+    },
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1765344742,
+      "nanoseconds": 986000000
     }
   },
   {
-    "id": "DJShjgLYvqzGGyWwzbwL",
+    "id": "AbCLdnKazI9MlwVwQFvN",
+    "type": "sentence",
     "topicId": "tt4v21i5nr1gWUL0aTmf",
     "content": {
-      "definition": "Her insanın sahip olduğu yaşama hakkı",
-      "term": "Can"
+      "text": "Peygamber mesajı tüm insanlığa yöneliktir."
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
+  },
+  {
+    "id": "DJShjgLYvqzGGyWwzbwL",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "definition",
+    "content": {
+      "term": "Can",
+      "definition": "Her insanın sahip olduğu yaşama hakkı"
+    },
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1765344742,
+      "nanoseconds": 986000000
+    },
     "unitId": "PqkYDI0IbvELcbK6ooNX"
   },
   {
     "id": "HKi0iTfDiMxDFjpHRsbh",
-    "type": "sentence",
     "content": {
       "text": "Malın helal yoldan kazanılması gerekir."
     },
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
     "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
-    "unitId": "PqkYDI0IbvELcbK6ooNX",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "type": "sentence"
   },
   {
     "id": "J6XpwvlJ7PuYGPHDJfCu",
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "content": {
       "text": "Mal"
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "concept",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
@@ -124,63 +124,63 @@
   {
     "id": "JivW5PJlm2Qy0OD2WZNw",
     "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1765344742,
-      "nanoseconds": 986000000
-    },
+    "type": "concept",
     "content": {
       "text": "Dokunulmazlık"
     },
     "unitId": "PqkYDI0IbvELcbK6ooNX",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept"
-  },
-  {
-    "id": "JpPKBoSer0IJeR2vtgMO",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
-    },
-    "unitId": "PqkYDI0IbvELcbK6ooNX",
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "content": {
-      "term": "Namus",
-      "definition": "İffetli olmak ve kendine ait olmayana göz dikmemek"
     }
   },
   {
-    "id": "KrM5s9FrkvfolaxECIAy",
+    "id": "JpPKBoSer0IJeR2vtgMO",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
-    "type": "concept",
+    "content": {
+      "definition": "İffetli olmak ve kendine ait olmayana göz dikmemek",
+      "term": "Namus"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "type": "definition"
+  },
+  {
+    "id": "KrM5s9FrkvfolaxECIAy",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "content": {
       "text": "Akıl"
     },
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "type": "concept",
     "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1765344742,
+      "nanoseconds": 986000000
+    },
     "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "buZzIELs7tRLs0C0n7j2",
     "type": "concept",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "content": {
       "text": "İslam"
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
-    },
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "PqkYDI0IbvELcbK6ooNX"
+    }
   },
   {
     "id": "dNCUTThauZXJGM7wcCza",
@@ -188,105 +188,105 @@
       "text": "Namus ve iffet korunmalıdır."
     },
     "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "sentence",
-    "unitId": "PqkYDI0IbvELcbK6ooNX",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
-    }
+    },
+    "type": "sentence",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "dcrTY5ZIok9oYgZHQWfX",
     "content": {
       "text": "İnsan onuru İslam'da çok değerlidir."
     },
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "sentence",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "unitId": "PqkYDI0IbvELcbK6ooNX",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
-    }
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "fPOlTvSoeQcfbCqNy0ty",
     "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "unitId": "PqkYDI0IbvELcbK6ooNX",
     "content": {
       "text": "Can"
-    }
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX"
   },
   {
     "id": "lPYSVwN0zwL2qJFAG19h",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1765344742,
-      "nanoseconds": 986000000
-    },
-    "unitId": "PqkYDI0IbvELcbK6ooNX",
     "content": {
       "text": "Akıl en büyük nimettir."
     },
     "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "type": "sentence"
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1765344742,
+      "nanoseconds": 986000000
+    },
+    "type": "sentence",
+    "unitId": "PqkYDI0IbvELcbK6ooNX"
   },
   {
     "id": "o3zbeaLsRbBdxbB1NAjK",
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "content": {
       "text": "İnanç özgürlüğü esastır, zorlama yoktur."
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
-    "unitId": "PqkYDI0IbvELcbK6ooNX"
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "rm2kYHggFcI0b6OKilBf",
-    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "content": {
+      "definition": "Helal yoldan kazanılan kişisel varlıklar",
+      "term": "Mal"
+    },
     "type": "definition",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "content": {
-      "term": "Mal",
-      "definition": "Helal yoldan kazanılan kişisel varlıklar"
-    }
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "s2CDMcEXsWDaZBBJ5YfT",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1765344742,
       "nanoseconds": 986000000
     },
     "type": "definition",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
     "content": {
       "term": "Akıl",
       "definition": "İnsana verilen en büyük nimetlerden biri"
-    },
-    "topicId": "tt4v21i5nr1gWUL0aTmf",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "PqkYDI0IbvELcbK6ooNX"
+    }
   }
 ]

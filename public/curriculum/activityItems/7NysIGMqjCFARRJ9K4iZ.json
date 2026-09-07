@@ -1,195 +1,195 @@
 [
   {
     "id": "1I0IZ0Y24mCePm4CNYTr",
-    "type": "definition",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "content": {
+      "term": "Şehadet",
+      "definition": "Allah'ın birliğine kalben inanıp dile getirmektir."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
     },
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "content": {
-      "definition": "Allah'ın birliğine kalben inanıp dile getirmektir.",
-      "term": "Şehadet"
-    }
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition"
   },
   {
     "id": "2uv37saQutILuOeqjOvv",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764152591,
-      "nanoseconds": 138000000
-    },
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Tebliğ"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "concept"
-  },
-  {
-    "id": "3W3Wt1UZtbT6eUjnJhtE",
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "text": "Salatüselam"
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
+    }
+  },
+  {
+    "id": "3W3Wt1UZtbT6eUjnJhtE",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764152591,
+      "nanoseconds": 138000000
+    },
+    "type": "concept",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "Salatüselam"
     }
   },
   {
     "id": "EOuZdrnBaIfEoem0UFcW",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764152591,
-      "nanoseconds": 138000000
-    },
+    "type": "definition",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "content": {
       "definition": "Peygamberimizin manevi öğretilerine verilen isim.",
       "term": "Miras"
     },
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "type": "definition",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764152591,
+      "nanoseconds": 138000000
+    }
   },
   {
     "id": "GcqZiFCLMccEBwrSRNoV",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "content": {
-      "text": "Gençler, peygamberimize itaat etti."
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
     },
+    "content": {
+      "text": "Gençler, peygamberimize itaat etti."
+    },
+    "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "GwJzCSBXqMJ1v4B3Q4Ft",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "content": {
-      "text": "Asrısaadet"
-    },
-    "type": "concept",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
+    },
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "content": {
+      "text": "Asrısaadet"
     }
   },
   {
     "id": "HM9Gd6j9qEWTn0c75KH0",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "text": "Hz. Ali, peygamberimizi çok severdi."
-    },
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
-    }
+    },
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "content": {
+      "text": "Hz. Ali, peygamberimizi çok severdi."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence"
   },
   {
     "id": "JExtpeAAOWNbghnZXvOJ",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "definition": "Peygamberimizin görev yaptığı kutlu döneme ne ad verilir?",
       "term": "Asrısaadet"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
     },
-    "type": "definition",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "topicId": "7NysIGMqjCFARRJ9K4iZ"
   },
   {
     "id": "bygON6WpHHx5I1nckTqG",
+    "content": {
+      "text": "Şehadet, en büyük tanıklıktır."
+    },
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
-    },
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "content": {
-      "text": "Şehadet, en büyük tanıklıktır."
     }
   },
   {
     "id": "goBk2jqS9Twgiy9cWPsE",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence",
     "content": {
       "text": "Sahabiler, peygamberimize bağlılık gösterdi."
     },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
     },
-    "type": "sentence"
-  },
-  {
-    "id": "gsuDD9zDEfAvFIZGKwMs",
-    "type": "sentence",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "content": {
-      "text": "Asrısaadet, kutlu dönem anlamına gelir."
-    },
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764152591,
-      "nanoseconds": 138000000
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
-    "id": "jbCvwIPrCNHm8GVeNniL",
+    "id": "gsuDD9zDEfAvFIZGKwMs",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "Asrısaadet, kutlu dönem anlamına gelir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764152591,
+      "nanoseconds": 138000000
+    },
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "sentence"
+  },
+  {
+    "id": "jbCvwIPrCNHm8GVeNniL",
     "content": {
       "text": "Şehadet"
     },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
     },
-    "type": "concept"
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "kXlQT17Sb5ueLZpou4cJ",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "concept",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "content": {
       "text": "Sahabi"
     },
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -199,156 +199,156 @@
   },
   {
     "id": "myEs6ShQbywru1wMNpXn",
+    "type": "sentence",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764152591,
+      "nanoseconds": 138000000
+    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "content": {
       "text": "Peygamberimiz gençlere görevler verdi."
     },
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764152591,
-      "nanoseconds": 138000000
-    }
-  },
-  {
-    "id": "nkNsFNXxqpipGQn21sh9",
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764152591,
-      "nanoseconds": 138000000
-    },
-    "content": {
-      "text": "Miras"
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ"
   },
   {
-    "id": "ooIf19QUIZ9yiEIgeCfV",
-    "type": "definition",
+    "id": "nkNsFNXxqpipGQn21sh9",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "content": {
+      "text": "Miras"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
     },
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "concept"
+  },
+  {
+    "id": "ooIf19QUIZ9yiEIgeCfV",
     "content": {
       "term": "Cihat",
       "definition": "Allah yolunda her türlü gayreti göstermektir."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764152591,
+      "nanoseconds": 138000000
     }
   },
   {
     "id": "pPMjMKM4ghsh5OOQS4Z2",
-    "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764152591,
+      "nanoseconds": 138000000
+    },
     "content": {
       "text": "Cihat, nefisle mücadele etmektir."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764152591,
-      "nanoseconds": 138000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "qIRNBO3s3GiYViOVcM0J",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764152591,
-      "nanoseconds": 138000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "content": {
-      "text": "Tebliğ, insanları hakka davettir."
-    }
-  },
-  {
-    "id": "x45iEe9vm10YJe84iIrK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764152591,
-      "nanoseconds": 138000000
-    },
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "content": {
-      "text": "Ebu Hüreyre, ilmi miras saydı."
     },
     "topicId": "7NysIGMqjCFARRJ9K4iZ"
   },
   {
-    "id": "yZ7szwZzzcwNcpg2TT6q",
+    "id": "qIRNBO3s3GiYViOVcM0J",
+    "content": {
+      "text": "Tebliğ, insanları hakka davettir."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
     },
-    "type": "definition",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence"
+  },
+  {
+    "id": "x45iEe9vm10YJe84iIrK",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764152591,
+      "nanoseconds": 138000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "type": "sentence",
+    "content": {
+      "text": "Ebu Hüreyre, ilmi miras saydı."
+    }
+  },
+  {
+    "id": "yZ7szwZzzcwNcpg2TT6q",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "content": {
       "term": "Tebliğ",
       "definition": "Vahiyleri insanlara eksiksiz ulaştırmaktır."
     },
-    "topicId": "7NysIGMqjCFARRJ9K4iZ"
-  },
-  {
-    "id": "yZUFPoHyOHWJzSkilzul",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
     },
-    "content": {
-      "definition": "Peygamber Efendimize gönderilen dualardır.",
-      "term": "Salatüselam"
-    },
-    "type": "definition",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "definition"
   },
   {
-    "id": "zSbj0e84KGDlx1iuUK08",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "id": "yZUFPoHyOHWJzSkilzul",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1764152591,
       "nanoseconds": 138000000
     },
-    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "type": "definition",
+    "content": {
+      "definition": "Peygamber Efendimize gönderilen dualardır.",
+      "term": "Salatüselam"
+    }
+  },
+  {
+    "id": "zSbj0e84KGDlx1iuUK08",
     "content": {
       "text": "Cihat"
+    },
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764152591,
+      "nanoseconds": 138000000
     }
   },
   {
     "id": "zyVd5MWm7q1LvSH6TfGV",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1764152591,
-      "nanoseconds": 138000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "content": {
       "definition": "Peygamberimizi görüp iman eden müminlerdir.",
       "term": "Sahabi"
     },
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "type": "definition",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1764152591,
+      "nanoseconds": 138000000
+    }
   }
 ]

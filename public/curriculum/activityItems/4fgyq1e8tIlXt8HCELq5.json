@@ -1,55 +1,55 @@
 [
   {
     "id": "2mqFJLSpnRRywJVtDvDr",
+    "content": {
+      "term": "Bereket",
+      "definition": "Bolluk, feyiz ve artış demektir."
+    },
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
-    },
-    "content": {
-      "term": "Bereket",
-      "definition": "Bolluk, feyiz ve artış demektir."
     }
   },
   {
     "id": "31R8eeUgIwAvqYXBdtu7",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
-      "definition": "İslam'ın temel esaslarından biridir.",
-      "term": "Kelimeişehadet"
+      "term": "Kelimeişehadet",
+      "definition": "İslam'ın temel esaslarından biridir."
     }
   },
   {
     "id": "3yujdlkUy5NnKWedayWD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
     },
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Namaz"
     },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "concept"
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "469KsbEcDWq0nb35XsmM",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254998,
@@ -59,36 +59,36 @@
       "text": "Tahiyyat duası çocukların ilk öğrendiğidir."
     },
     "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "4fgyq1e8tIlXt8HCELq5"
   },
   {
     "id": "7c749R9bRN665Nphppl6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269647,
+      "nanoseconds": 647000000
+    },
+    "type": "concept",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "content": {
       "text": "Kelimeişehadet"
     },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269647,
-      "nanoseconds": 647000000
-    }
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "8lDGeYUVXCoE7LCrgpeF",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Bereket"
     },
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
     },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "concept"
   },
   {
@@ -97,17 +97,33 @@
     "content": {
       "text": "Kelime-i Şehadet (Sözü)"
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "4fgyq1e8tIlXt8HCELq5",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269726,
       "nanoseconds": 993000000
-    }
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "CedOLr0O3sslgMzW7oOK",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "content": {
+      "text": "Müslümanlar Tahiyyat ile selamlaşmayı hatırlar."
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767254998,
+      "nanoseconds": 855000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence"
+  },
+  {
+    "id": "Dpw4j8CpEC6LeLGbgXLb",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -116,25 +132,9 @@
     },
     "topicId": "4fgyq1e8tIlXt8HCELq5",
     "content": {
-      "text": "Müslümanlar Tahiyyat ile selamlaşmayı hatırlar."
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "Dpw4j8CpEC6LeLGbgXLb",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767254998,
-      "nanoseconds": 855000000
-    },
-    "type": "sentence",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "content": {
       "text": "Allah'tan başka ilah yoktur."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "4fgyq1e8tIlXt8HCELq5"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "FMVGK7LFe4scXub3NjSt",
@@ -142,59 +142,59 @@
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
     "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "content": {
+      "term": "Salih Kullar",
+      "definition": "Tahiyyat duasında selam gönderilen Allah’ın iyi kulları."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269726,
       "nanoseconds": 993000000
-    },
-    "content": {
-      "definition": "Tahiyyat duasında selam gönderilen Allah’ın iyi kulları.",
-      "term": "Salih Kullar"
     }
   },
   {
     "id": "FQI2vMCAmB3fZ9rDWVvv",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269647,
-      "nanoseconds": 647000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "content": {
-      "text": "Dua"
-    },
-    "type": "concept"
-  },
-  {
-    "id": "GgyWL8oi1R9ryrKO6DKq",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
     },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "text": "Tahiyyat"
+      "text": "Dua"
     }
   },
   {
-    "id": "KbvP6M9pYcazDalPK7TV",
+    "id": "GgyWL8oi1R9ryrKO6DKq",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "content": {
+      "text": "Tahiyyat"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269647,
+      "nanoseconds": 647000000
+    },
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "concept"
+  },
+  {
+    "id": "KbvP6M9pYcazDalPK7TV",
+    "content": {
+      "text": "Tahiyyat Allah'ı, kulları selamlamaktır."
+    },
     "type": "sentence",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254998,
       "nanoseconds": 855000000
-    },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "content": {
-      "text": "Tahiyyat Allah'ı, kulları selamlamaktır."
     }
   },
   {
@@ -204,118 +204,118 @@
       "seconds": 1767269647,
       "nanoseconds": 647000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "content": {
-      "definition": "Esenlik, ikram ve hürmet anlamlarına gelir.",
-      "term": "Selam"
-    },
     "type": "definition",
-    "topicId": "4fgyq1e8tIlXt8HCELq5"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "term": "Selam",
+      "definition": "Esenlik, ikram ve hürmet anlamlarına gelir."
+    },
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "Mr8XbFhwOA4J0iHot56B",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "content": {
+      "definition": "Allah'ın merhameti ve acımasıdır.",
+      "term": "Rahmet"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "definition",
-    "content": {
-      "definition": "Allah'ın merhameti ve acımasıdır.",
-      "term": "Rahmet"
     }
   },
   {
     "id": "P7HOuliOggWD6pyE15y8",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
     },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "content": {
       "text": "Müslüman"
     }
   },
   {
     "id": "RjuHa5yF5NBTkgvxN68J",
+    "content": {
+      "text": "Tahiyyat duası namazda otururken okunur, bu dua kelimeişehadet ile biter."
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269726,
       "nanoseconds": 993000000
-    },
-    "type": "sentence",
-    "content": {
-      "text": "Tahiyyat duası namazda otururken okunur, bu dua kelimeişehadet ile biter."
-    },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    }
   },
   {
     "id": "WXjc43C0n91Rnklr3GTm",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269647,
+      "nanoseconds": 647000000
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
       "term": "Hadis",
       "definition": "Peygamberimizin sözleri ve uygulamalarıdır."
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "4fgyq1e8tIlXt8HCELq5",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269647,
-      "nanoseconds": 647000000
-    }
+    "type": "definition"
   },
   {
     "id": "WhFpxylW77dTdv21udX8",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269726,
       "nanoseconds": 993000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "content": {
       "term": "Kelime-i Şehadet (Sözü)",
       "definition": "\"Eşhedü en lâ ilâhe illallah ve eşhedü enne Muhammeden abdühü ve resûlüh\" cümlesidir."
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "definition"
+    }
   },
   {
     "id": "YhAE2YUQZ5KPDBmSULsG",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
       "text": "Selam"
     },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "4fgyq1e8tIlXt8HCELq5"
   },
   {
     "id": "Z2saPN7ILk28KleTS083",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "concept",
     "content": {
       "text": "Ashab"
     },
@@ -323,8 +323,7 @@
   },
   {
     "id": "em4FLAgcXot3oAPbWgd4",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
     "content": {
       "text": "Tahiyyat selam ve ikram demektir."
@@ -334,12 +333,12 @@
       "seconds": 1767269726,
       "nanoseconds": 993000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "fMk6zKMeK1ucPEwlIKHV",
-    "type": "definition",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
@@ -350,52 +349,53 @@
       "definition": "Müslümanların günde beş vakit yaptığı ibadettir.",
       "term": "Namaz"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "definition",
+    "topicId": "4fgyq1e8tIlXt8HCELq5"
   },
   {
     "id": "ipzLMlyiKlEohC3E6HmT",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "content": {
       "text": "Namazda tüm iyi kullar selamlanır."
     },
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269726,
       "nanoseconds": 993000000
-    }
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "jHR6x7048Eg9LVOBC8Fe",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254998,
       "nanoseconds": 855000000
     },
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "type": "sentence",
     "content": {
       "text": "Muhammed Allah'ın kulu ve elçisidir."
-    }
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "k1UM2JvlGziQlH2CanAh",
-    "content": {
-      "definition": "Namazlarda otururken okunan bir ibadettir.",
-      "term": "Tahiyyat"
-    },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "definition",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
+    },
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "content": {
+      "term": "Tahiyyat",
+      "definition": "Namazlarda otururken okunan bir ibadettir."
     }
   },
   {
@@ -403,104 +403,104 @@
     "content": {
       "text": "Salih Kullar"
     },
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "type": "concept",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269726,
       "nanoseconds": 993000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "nATBITsjtaTwGkGXG3eD",
-    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254998,
       "nanoseconds": 855000000
     },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "type": "sentence",
     "content": {
       "text": "Selam ve rahmet Allah içindir."
+    }
+  },
+  {
+    "id": "nZFYnqsQCzbhw2LGyEyc",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "definition",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "content": {
+      "definition": "Peygamberimizin arkadaşlarıdır.",
+      "term": "Ashab"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269647,
+      "nanoseconds": 647000000
+    }
+  },
+  {
+    "id": "oYN8bdi0lASOAD9SSXlN",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269647,
+      "nanoseconds": 647000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "content": {
+      "text": "Rahmet"
     },
     "topicId": "4fgyq1e8tIlXt8HCELq5"
   },
   {
-    "id": "nZFYnqsQCzbhw2LGyEyc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269647,
-      "nanoseconds": 647000000
-    },
-    "type": "definition",
-    "content": {
-      "term": "Ashab",
-      "definition": "Peygamberimizin arkadaşlarıdır."
-    },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
-  },
-  {
-    "id": "oYN8bdi0lASOAD9SSXlN",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Rahmet"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269647,
-      "nanoseconds": 647000000
-    },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "concept"
-  },
-  {
     "id": "pYTCzFH2H4gcCovWblHt",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
       "nanoseconds": 647000000
     },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "content": {
-      "term": "Dua",
-      "definition": "Allah'tan yardım dileme, yalvarma eylemidir."
-    }
+      "definition": "Allah'tan yardım dileme, yalvarma eylemidir.",
+      "term": "Dua"
+    },
+    "topicId": "4fgyq1e8tIlXt8HCELq5"
   },
   {
     "id": "sQuUCA7qZLjpVhmgwVMr",
-    "content": {
-      "text": "Bütün güzellikler ve iyilikler Allah içindir."
-    },
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269726,
       "nanoseconds": 993000000
-    }
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "content": {
+      "text": "Bütün güzellikler ve iyilikler Allah içindir."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence"
   },
   {
     "id": "wbcSK4wQKCFOP35b8jpa",
+    "type": "sentence",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254998,
       "nanoseconds": 855000000
     },
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "content": {
       "text": "Peygamber ashabına Tahiyyat'ı öğretti."
     }
@@ -510,37 +510,33 @@
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767254998,
-      "nanoseconds": 855000000
-    },
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
     "content": {
       "text": "Allah ve Peygamber konuşması içerir."
     },
-    "topicId": "4fgyq1e8tIlXt8HCELq5"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767254998,
+      "nanoseconds": 855000000
+    }
   },
   {
     "id": "xvwIo338978LCJIf2qa0",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "content": {
-      "text": "Tahiyyat namazlarda otururken okunur."
-    },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254998,
       "nanoseconds": 855000000
     },
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "content": {
+      "text": "Tahiyyat namazlarda otururken okunur."
+    }
   },
   {
     "id": "zcUhbrDoQN8EReTKmyL8",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "4fgyq1e8tIlXt8HCELq5",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269647,
@@ -548,6 +544,10 @@
     },
     "content": {
       "text": "Hadis"
-    }
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "type": "concept",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   }
 ]

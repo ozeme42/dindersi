@@ -1,57 +1,103 @@
 [
   {
     "id": "0aSOfV0np0KgY1myWVQN",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Hz. Hatice ile evlenip aile kurdu."
     },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "type": "sentence"
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
   },
   {
     "id": "1MZvCB7DnxPx3gC4xy2M",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "type": "sentence",
     "content": {
       "text": "Hz. Muhammed gençlikte örnek insandı."
-    }
+    },
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "1sMMgbkeKpbRB244LgGD",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
     },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "content": {
       "text": "Hz. Hatice"
-    }
+    },
+    "type": "concept",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
   },
   {
     "id": "48IiTmLXVH1RSI9hqtpW",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
     "content": {
       "text": "Hilfülfudul"
     },
-    "type": "concept",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept"
+  },
+  {
+    "id": "4sJl3TODs40gUlxvDMkm",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
+    "type": "definition",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "content": {
+      "term": "Hz. Hatice",
+      "definition": "Hz. Muhammed'in ilk eşi ve en büyük destekçisi."
+    }
+  },
+  {
+    "id": "EV0Q6fIaBI3V4WLBtiMm",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Ona 'el-emin' lakabı verildi."
+    },
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
+  },
+  {
+    "id": "Eg4gBN4AeCmDh9gLSSDx",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "sentence",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "content": {
+      "text": "Adaleti ve zekası takdir edildi."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
@@ -60,54 +106,10 @@
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
-    "id": "4sJl3TODs40gUlxvDMkm",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    },
-    "type": "definition",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "content": {
-      "definition": "Hz. Muhammed'in ilk eşi ve en büyük destekçisi.",
-      "term": "Hz. Hatice"
-    }
-  },
-  {
-    "id": "EV0Q6fIaBI3V4WLBtiMm",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    },
-    "content": {
-      "text": "Ona 'el-emin' lakabı verildi."
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "sentence",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
-  },
-  {
-    "id": "Eg4gBN4AeCmDh9gLSSDx",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    },
-    "type": "sentence",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "content": {
-      "text": "Adaleti ve zekası takdir edildi."
-    }
-  },
-  {
     "id": "F8HC1IfRTJt4N1rMkU4o",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
@@ -117,171 +119,122 @@
       "term": "Hilfülfudul",
       "definition": "Haksızlığa uğrayanlara yardım amacıyla kurulan sözleşme."
     },
-    "type": "definition",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
   },
   {
     "id": "GjCg37kC9OCe4jSjxvSv",
-    "content": {
-      "text": "Toplumun kötülüklerinden uzak yaşamıştır."
-    },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
-    }
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Toplumun kötülüklerinden uzak yaşamıştır."
+    },
+    "type": "sentence",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
   },
   {
     "id": "HOkHK9hi5U3akZteD8Yf",
-    "type": "definition",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "content": {
       "term": "el-emin",
       "definition": "Mekke halkının Hz. Muhammed'e verdiği güvenilir unvan."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
-    }
+    },
+    "type": "definition",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "KpjBDxzsM45pANdfBafo",
     "type": "sentence",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "content": {
       "text": "Hz. Hatice ona büyük destek oldu."
     },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
-    }
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "Mx70lySxt2DocrKaSaKH",
+    "content": {
+      "term": "Hacerülesved",
+      "definition": "Kâbe'deki tavafın başlangıç noktasını belirleyen taş."
+    },
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "definition",
-    "content": {
-      "definition": "Kâbe'deki tavafın başlangıç noktasını belirleyen taş.",
-      "term": "Hacerülesved"
-    },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "OB99GxvJ1Lh97mYaMH5S",
     "type": "sentence",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Dürüstlüğü, güvenilirliği herkesçe bilindi."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
   },
   {
     "id": "OJ6fiiohpL9QZ8pWwYlb",
-    "content": {
-      "text": "Haksızlıklara karşı Hilfülfudul'e katıldı."
-    },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "sentence",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "content": {
+      "text": "Haksızlıklara karşı Hilfülfudul'e katıldı."
+    },
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
   },
   {
     "id": "QCptkpIWE0Blin2wIuEt",
     "type": "definition",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "term": "Ebülkasım",
       "definition": "Hz. Muhammed'in ilk oğlunun adından gelen künyesi."
     },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "SGj9RlaOO1NNHpfi9hje",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
     "content": {
       "text": "el-emin"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
-  },
-  {
-    "id": "ZZkYructbTJ6pzOdsn8s",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "content": {
-      "definition": "Hz. Hatice'ye iffetinden dolayı verilen lakap.",
-      "term": "Tahire"
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    }
-  },
-  {
-    "id": "h9ZLnXZOxaZXIjTudzpg",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "content": {
-      "text": "Aile yaşamında örnek ilkeler sundu."
-    },
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "iA2i0OOjGJEZwDF4PW6P",
-    "type": "definition",
-    "content": {
-      "term": "Künye",
-      "definition": "Arap toplumunda 'ebû' kelimesiyle yapılan tanıtıcı ibare."
-    },
+    "type": "concept",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -292,23 +245,69 @@
     "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
-    "id": "kYCQqATI6QjquW0D2ekN",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "id": "ZZkYructbTJ6pzOdsn8s",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
     },
-    "type": "concept",
+    "content": {
+      "definition": "Hz. Hatice'ye iffetinden dolayı verilen lakap.",
+      "term": "Tahire"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
+  },
+  {
+    "id": "h9ZLnXZOxaZXIjTudzpg",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
-      "text": "Künye"
+      "text": "Aile yaşamında örnek ilkeler sundu."
     }
   },
   {
-    "id": "mgteU8lSUYcUMSRnXbjR",
+    "id": "iA2i0OOjGJEZwDF4PW6P",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
+    "type": "definition",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "content": {
+      "term": "Künye",
+      "definition": "Arap toplumunda 'ebû' kelimesiyle yapılan tanıtıcı ibare."
+    }
+  },
+  {
+    "id": "kYCQqATI6QjquW0D2ekN",
+    "content": {
+      "text": "Künye"
+    },
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
+  },
+  {
+    "id": "mgteU8lSUYcUMSRnXbjR",
     "content": {
       "text": "Hacerülesved"
     },
@@ -318,74 +317,73 @@
       "seconds": 1767363479,
       "nanoseconds": 512000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "pgDoK9Q1rlYUpM9bLgoE",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "sentence",
+    "content": {
+      "text": "Kâbe tamirinde hakem seçildi."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
-    },
-    "type": "sentence",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "content": {
-      "text": "Kâbe tamirinde hakem seçildi."
     }
   },
   {
     "id": "rT8uWgVCaaifdHUHZnGS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
     "content": {
       "text": "Tahire"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    },
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "concept"
   },
   {
     "id": "rq6hD2LVZOagiXGx1vn7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363479,
-      "nanoseconds": 512000000
-    },
     "content": {
       "text": "Ebülkasım"
     },
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
-  },
-  {
-    "id": "yBW9ayzmXiu94KZlvGJD",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363479,
       "nanoseconds": 512000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "yBW9ayzmXiu94KZlvGJD",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "concept",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363479,
+      "nanoseconds": 512000000
+    },
     "content": {
       "text": "Cahiliye"
-    },
-    "type": "concept",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
+    }
   },
   {
     "id": "yyKVbhkEwzah5UywoZT9",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -395,6 +393,8 @@
     "content": {
       "definition": "Mekke'de can ve mal güvenliğinin olmadığı dönem.",
       "term": "Cahiliye"
-    }
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition"
   }
 ]

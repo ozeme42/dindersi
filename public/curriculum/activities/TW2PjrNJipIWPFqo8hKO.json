@@ -1,103 +1,103 @@
 [
   {
     "id": "0CJFyjO1qZYj978xXTgF",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "term": "Fil Yılı",
+      "definition": "Peygamberimizden önce meydana gelen olayın yılı."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "definition",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "content": {
-      "definition": "Peygamberimizden önce meydana gelen olayın yılı.",
-      "term": "Fil Yılı"
-    }
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "2lYWSOPtRo7QOzAivrQG",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363785,
-      "nanoseconds": 443000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
       "text": "Fil suresi adını Yemen Valisi Ebrehe’den almıştır."
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "sentence",
-    "topicId": "TW2PjrNJipIWPFqo8hKO"
-  },
-  {
-    "id": "AdOXSHI7w8c2ACxV11SW",
-    "type": "concept",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363573,
-      "nanoseconds": 986000000
-    },
-    "content": {
-      "text": "Fil Suresi"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "TW2PjrNJipIWPFqo8hKO"
-  },
-  {
-    "id": "E89xJYtA4exnfHR9wkKN",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363785,
       "nanoseconds": 443000000
     },
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "type": "sentence",
-    "content": {
-      "text": "Kâbe’yi yıkmaya gelen Ebrehe’nin fil ordusunun Ebabil kuşları tarafından helak edilmesini (Fil Vakası) anlatır."
-    }
+    "type": "sentence"
   },
   {
-    "id": "O2R3zpJnBIRkXCQaGEvz",
-    "content": {
-      "text": "Ebâbîl"
-    },
+    "id": "AdOXSHI7w8c2ACxV11SW",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
     "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "type": "concept",
+    "content": {
+      "text": "Fil Suresi"
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
+  },
+  {
+    "id": "E89xJYtA4exnfHR9wkKN",
+    "content": {
+      "text": "Kâbe’yi yıkmaya gelen Ebrehe’nin fil ordusunun Ebabil kuşları tarafından helak edilmesini (Fil Vakası) anlatır."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363785,
+      "nanoseconds": 443000000
+    },
+    "type": "sentence",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
-    "id": "WWPR8EQvwQbjfuJ89VDT",
-    "type": "concept",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "content": {
-      "text": "Ebrehe"
-    },
+    "id": "O2R3zpJnBIRkXCQaGEvz",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "TW2PjrNJipIWPFqo8hKO"
+    "content": {
+      "text": "Ebâbîl"
+    },
+    "type": "concept"
+  },
+  {
+    "id": "WWPR8EQvwQbjfuJ89VDT",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "content": {
+      "text": "Ebrehe"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "concept"
   },
   {
     "id": "Y7ARMPMoYfn0SFhLl3yL",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "sentence",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "content": {
       "text": "Fil suresinde “Fil Vakası” anlatılmaktadır."
     },
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "sentence",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -107,158 +107,158 @@
   },
   {
     "id": "cH1ap6gGVgCjcW5JglZX",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
-    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "definition": "Kutsal evi yıkmaya kalkan orduyu anlatan kısa sure.",
       "term": "Fil Suresi"
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO"
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "hMmHNq1qjBimmlld8eaz",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "definition",
+    "content": {
+      "term": "Kâbe",
+      "definition": "Mekke'de bulunan ilk kutsal ibadet yeridir."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
-    },
-    "content": {
-      "definition": "Mekke'de bulunan ilk kutsal ibadet yeridir.",
-      "term": "Kâbe"
-    },
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    }
   },
   {
     "id": "lZbr7UGZwA89IqHFeLIl",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "definition",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "term": "Abdülmuttalib",
+      "definition": "Peygamberimizin dedesi, develerini istemişti."
+    },
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
-    },
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "content": {
-      "definition": "Peygamberimizin dedesi, develerini istemişti.",
-      "term": "Abdülmuttalib"
     }
   },
   {
     "id": "mxn7exVG8An9A123Usqn",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
-    "type": "concept",
     "content": {
       "text": "Fil Vakası"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    }
   },
   {
     "id": "ncyqKmetO5OZedFK8ICF",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Abdülmuttalib"
     },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
-    "type": "concept",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "type": "concept"
   },
   {
     "id": "tvhLhUA2McX1snUhI7gC",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "type": "concept",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
       "text": "Kâbe"
-    }
+    },
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept"
   },
   {
     "id": "uANI1twYWjuIwSlWhI8I",
     "content": {
       "text": "Fil ashabının yaşadıklarından ders almak gerekir."
     },
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "type": "sentence",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363785,
       "nanoseconds": 443000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "umxAbCmALyrrdMQ4u7Nv",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "term": "Ebrehe",
+      "definition": "Kabe'ye saldıran fillerle donatılmış Yemen valisi."
+    },
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
-    "type": "definition",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "content": {
-      "definition": "Kabe'ye saldıran fillerle donatılmış Yemen valisi.",
-      "term": "Ebrehe"
-    }
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition"
   },
   {
     "id": "vIqpLJtNmXBL2xYVD8nz",
-    "type": "definition",
+    "content": {
+      "definition": "Ebrehe ordusunun helak olduğu büyük olay.",
+      "term": "Fil Vakası"
+    },
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
-    "content": {
-      "term": "Fil Vakası",
-      "definition": "Ebrehe ordusunun helak olduğu büyük olay."
-    },
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition"
   },
   {
     "id": "y4wLVw9CU0ecvOwYsxu1",
-    "type": "definition",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363573,
       "nanoseconds": 986000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "content": {
-      "definition": "Ordunun üzerine taş atan sürü kuşları.",
-      "term": "Ebâbîl"
-    }
+      "term": "Ebâbîl",
+      "definition": "Ordunun üzerine taş atan sürü kuşları."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "definition"
   }
 ]

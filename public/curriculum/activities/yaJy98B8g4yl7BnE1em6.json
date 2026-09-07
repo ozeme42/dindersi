@@ -2,113 +2,117 @@
   {
     "id": "0oxlO9WNrdvQqfjP3V4O",
     "type": "concept",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
     },
+    "topicId": "yaJy98B8g4yl7BnE1em6",
     "content": {
       "text": "Hz.Zekeriyya(a.s)"
     },
-    "topicId": "yaJy98B8g4yl7BnE1em6"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "2C0dXjlzQY0jZyr0pYey",
+    "topicId": "yaJy98B8g4yl7BnE1em6",
+    "content": {
+      "text": "Hz.İsa babasız dünyaya gelmiştir. Allah’ın (cc) Resulü’dür."
+    },
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
-    },
-    "type": "sentence",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "yaJy98B8g4yl7BnE1em6",
-    "content": {
-      "text": "Hz.İsa babasız dünyaya gelmiştir. Allah’ın (cc) Resulü’dür."
     }
   },
   {
     "id": "63N81h72lzJNLSROj475",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "yaJy98B8g4yl7BnE1em6",
     "content": {
       "term": "Hz.İsa (as)",
       "definition": "İsrailoğulları’na gönderilmiş peygamber."
-    },
-    "topicId": "yaJy98B8g4yl7BnE1em6"
+    }
   },
   {
     "id": "7ZEIayFkcNfpHbfswEJK",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
     },
-    "type": "sentence",
+    "topicId": "yaJy98B8g4yl7BnE1em6",
     "content": {
       "text": "Meryem oğlu Mesih sadece bir peygamberdir. Ondan önce de nice peygamberler geldi geçti. Onun annesi de dosdoğru bir kadındır."
     },
-    "topicId": "yaJy98B8g4yl7BnE1em6"
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "AEZhQHysDhec8er2HAfh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "yaJy98B8g4yl7BnE1em6",
+    "content": {
+      "text": "Hz.Meryem"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
     },
-    "content": {
-      "text": "Hz.Meryem"
-    },
-    "topicId": "yaJy98B8g4yl7BnE1em6",
     "type": "concept",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "ATH8aMSuAoNEr50OeVS7",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "yaJy98B8g4yl7BnE1em6",
     "content": {
       "text": "Kudüs"
     },
-    "topicId": "yaJy98B8g4yl7BnE1em6",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457516,
+      "nanoseconds": 135000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "B8NYpnOs969qoYCkgBeh",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
-    }
-  },
-  {
-    "id": "B8NYpnOs969qoYCkgBeh",
-    "topicId": "yaJy98B8g4yl7BnE1em6",
-    "type": "definition",
+    },
     "content": {
-      "term": "Havari",
-      "definition": "Hz.İsa'ya iman eden kişiler"
+      "definition": "Hz.İsa'ya iman eden kişiler",
+      "term": "Havari"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457516,
-      "nanoseconds": 135000000
-    },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "topicId": "yaJy98B8g4yl7BnE1em6",
+    "type": "definition"
   },
   {
     "id": "Dh3s7lYBV5MALowG2gGQ",
     "type": "definition",
+    "content": {
+      "definition": "Hz.İsa'nın (a.s) annesi",
+      "term": "Hz.Meryem"
+    },
     "topicId": "yaJy98B8g4yl7BnE1em6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -116,38 +120,34 @@
       "nanoseconds": 135000000
     },
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "definition": "Hz.İsa'nın (a.s) annesi",
-      "term": "Hz.Meryem"
-    },
     "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "GbUBh6bhFuiznlg6wg3w",
-    "type": "sentence",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Hz.İsa Allah'ın (c.c) izniyle hastaları iyileştirme ve ölüleri diriltme gibi mucizeler göstermiştir."
-    },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
     },
+    "topicId": "yaJy98B8g4yl7BnE1em6",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "yaJy98B8g4yl7BnE1em6"
+    "content": {
+      "text": "Hz.İsa Allah'ın (c.c) izniyle hastaları iyileştirme ve ölüleri diriltme gibi mucizeler göstermiştir."
+    }
   },
   {
     "id": "IbxEuGUE17unCAwS8t8l",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
     },
     "type": "definition",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "yaJy98B8g4yl7BnE1em6",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "definition": "Hz.İsa'nın (a.s) doğduğu yer",
       "term": "Kudüs"
@@ -155,104 +155,74 @@
   },
   {
     "id": "ZfDzgenS3mHbLDBzOcb7",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
     },
+    "topicId": "yaJy98B8g4yl7BnE1em6",
     "content": {
       "text": "İncil"
     },
-    "topicId": "yaJy98B8g4yl7BnE1em6",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
     "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "bcltuCoaZswRs4Te4xyc",
+    "type": "concept",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457516,
+      "nanoseconds": 135000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "HZ. İSA (as)"
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457516,
-      "nanoseconds": 135000000
-    },
-    "topicId": "yaJy98B8g4yl7BnE1em6",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept"
+    "topicId": "yaJy98B8g4yl7BnE1em6"
   },
   {
     "id": "jNDCOZZg5TQASOEECDgn",
-    "topicId": "yaJy98B8g4yl7BnE1em6",
     "content": {
-      "definition": "Hz. İsa'ya (a.s) verilen kutsal kitap",
-      "term": "İncil"
+      "term": "İncil",
+      "definition": "Hz. İsa'ya (a.s) verilen kutsal kitap"
     },
+    "topicId": "yaJy98B8g4yl7BnE1em6",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457516,
+      "nanoseconds": 135000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO"
+  },
+  {
+    "id": "jNUDqCbPcpyHhJhJI8KM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
     },
     "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition"
-  },
-  {
-    "id": "jNUDqCbPcpyHhJhJI8KM",
-    "topicId": "yaJy98B8g4yl7BnE1em6",
     "content": {
       "text": "İsrailoğulları"
     },
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457516,
-      "nanoseconds": 135000000
-    },
+    "topicId": "yaJy98B8g4yl7BnE1em6",
     "type": "concept"
   },
   {
     "id": "lTAYsViwlKAywV7tWJ8r",
+    "type": "definition",
     "content": {
-      "definition": "Hz.Meryem'i büyüten peygamber",
-      "term": "Zekeriyya (as)"
-    },
-    "topicId": "yaJy98B8g4yl7BnE1em6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457516,
-      "nanoseconds": 135000000
-    },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition"
-  },
-  {
-    "id": "q0WwjhCpz1d8jDpJljwz",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457516,
-      "nanoseconds": 135000000
+      "term": "Zekeriyya (as)",
+      "definition": "Hz.Meryem'i büyüten peygamber"
     },
     "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "yaJy98B8g4yl7BnE1em6",
-    "type": "concept",
-    "content": {
-      "text": "Havari"
-    }
-  },
-  {
-    "id": "utxgpby0lw9dehMcKruO",
-    "content": {
-      "text": "Mescid-i Aksâ"
-    },
-    "type": "concept",
-    "topicId": "yaJy98B8g4yl7BnE1em6",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
@@ -261,35 +231,65 @@
     "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
-    "id": "vYOs8Un3uKUwNnXaEcOm",
+    "id": "q0WwjhCpz1d8jDpJljwz",
+    "topicId": "yaJy98B8g4yl7BnE1em6",
+    "content": {
+      "text": "Havari"
+    },
     "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
-    },
-    "topicId": "yaJy98B8g4yl7BnE1em6",
-    "content": {
-      "definition": "Hz.İsa'nın gönderildiği kavim(toplum)",
-      "term": "İsrailoğulları"
     },
     "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
-    "id": "yzwA5zUJnYoZJ7yZPfEn",
+    "id": "utxgpby0lw9dehMcKruO",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition",
+    "type": "concept",
     "topicId": "yaJy98B8g4yl7BnE1em6",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457516,
       "nanoseconds": 135000000
     },
     "content": {
-      "term": "Mescid-i Aksâ",
-      "definition": "Hz.Meryem'in büyüdüğü yer"
+      "text": "Mescid-i Aksâ"
+    }
+  },
+  {
+    "id": "vYOs8Un3uKUwNnXaEcOm",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "content": {
+      "definition": "Hz.İsa'nın gönderildiği kavim(toplum)",
+      "term": "İsrailoğulları"
+    },
+    "topicId": "yaJy98B8g4yl7BnE1em6",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457516,
+      "nanoseconds": 135000000
+    }
+  },
+  {
+    "id": "yzwA5zUJnYoZJ7yZPfEn",
+    "content": {
+      "definition": "Hz.Meryem'in büyüdüğü yer",
+      "term": "Mescid-i Aksâ"
+    },
+    "topicId": "yaJy98B8g4yl7BnE1em6",
+    "type": "definition",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457516,
+      "nanoseconds": 135000000
     }
   }
 ]

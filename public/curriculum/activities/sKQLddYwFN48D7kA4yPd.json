@@ -1,27 +1,28 @@
 [
   {
     "id": "9ENWJZtT1B89V5vFGdY5",
-    "topicId": "sKQLddYwFN48D7kA4yPd",
-    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
       "text": "Muavvizeteyn"
     },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "sKQLddYwFN48D7kA4yPd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758454227,
       "nanoseconds": 715000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "type": "concept"
   },
   {
     "id": "astOFiWJKP8LJHNZiKXG",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758534520,
-      "nanoseconds": 585000000
-    },
+    "type": "sorting",
     "content": {
+      "definition": "",
+      "term": "",
+      "categories": [],
+      "title": "Felak Suresi Anlamı",
+      "text": "",
       "items": [
         "Rahman ve rahîm olan Allah’ın adıyla",
         "De ki: “Sabahın Rabb’ine sığınırım;",
@@ -29,27 +30,26 @@
         "Karanlığı çöktüğü zaman gecenin şerrinden,",
         "Düğümlere üfleyenlerin şerrinden,",
         "Ve hased ettiği zaman hasedçinin şerrinden. (Allah’a sığınırım)."
-      ],
-      "title": "Felak Suresi Anlamı",
-      "text": "",
-      "term": "",
-      "definition": "",
-      "categories": []
+      ]
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758534520,
+      "nanoseconds": 585000000
     },
     "topicId": "sKQLddYwFN48D7kA4yPd",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sorting"
+    "unitId": "JiPLN1sC9hQG8PF6us3G"
   },
   {
     "id": "bF0vZEjhd0HtldYsLhW0",
-    "content": {
-      "term": "Haset",
-      "definition": "Kıskançlık"
-    },
     "type": "definition",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
     "topicId": "sKQLddYwFN48D7kA4yPd",
+    "content": {
+      "definition": "Kıskançlık",
+      "term": "Haset"
+    },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -59,11 +59,7 @@
   },
   {
     "id": "cw2PU40TDyg75wI6JjFc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758454227,
-      "nanoseconds": 715000000
-    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "definition",
     "content": {
       "definition": "Felak ve Nâs surelerinin ikisine birden “kendileriyle Allah’a (cc) sığınılan” iki sure",
@@ -71,129 +67,137 @@
     },
     "topicId": "sKQLddYwFN48D7kA4yPd",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758454227,
+      "nanoseconds": 715000000
+    }
   },
   {
     "id": "gW0xFeknhDe8yU9DELUv",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Haset"
+    },
     "type": "concept",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "topicId": "sKQLddYwFN48D7kA4yPd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758454227,
       "nanoseconds": 715000000
     },
-    "content": {
-      "text": "Haset"
-    }
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G"
   },
   {
     "id": "gozvCk9b46UL5YXCTX8H",
     "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
     "topicId": "sKQLddYwFN48D7kA4yPd",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Hz. Muhammed (sav), Felak ve Nâs surelerinin kötülüklere karşı sabah ve akşam üçer defa okunmasını tavsiye etmiş, kendisi de bunu uygulayarak Müslümanlara örnek olmuştur."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758454227,
       "nanoseconds": 715000000
-    },
-    "content": {
-      "text": "Hz. Muhammed (sav), Felak ve Nâs surelerinin kötülüklere karşı sabah ve akşam üçer defa okunmasını tavsiye etmiş, kendisi de bunu uygulayarak Müslümanlara örnek olmuştur."
     }
   },
   {
     "id": "gt93upkVFZZclRqoavsm",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767359815,
+      "nanoseconds": 15000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "sKQLddYwFN48D7kA4yPd",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
       "term": "Şer",
       "definition": "Yaratılmış şeylerden gelebilecek her türlü kötülük."
     },
-    "type": "definition",
-    "topicId": "sKQLddYwFN48D7kA4yPd",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767359815,
-      "nanoseconds": 15000000
-    },
-    "unitId": "JiPLN1sC9hQG8PF6us3G"
+    "type": "definition"
   },
   {
     "id": "nnuPjW8sBh9nwPNIGmta",
     "type": "concept",
-    "content": {
-      "text": "Felak"
-    },
-    "topicId": "sKQLddYwFN48D7kA4yPd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758454227,
       "nanoseconds": 715000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "sKQLddYwFN48D7kA4yPd",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "content": {
+      "text": "Felak"
+    }
   },
   {
     "id": "rdEQBQtYouilLrZAo3hT",
+    "topicId": "sKQLddYwFN48D7kA4yPd",
     "content": {
       "text": "Felak ve Nâs surelerinin ikisine birden “kendileriyle Allah’a (cc) sığınılan” anlamında “Muavvizeteyn” denir."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "sKQLddYwFN48D7kA4yPd",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758454227,
       "nanoseconds": 715000000
     },
-    "type": "sentence",
     "unitId": "JiPLN1sC9hQG8PF6us3G"
   },
   {
     "id": "sOEARZDbB8YROIIe5MbT",
+    "topicId": "sKQLddYwFN48D7kA4yPd",
+    "content": {
+      "term": "Felak",
+      "title": "",
+      "definition": "Sabah aydınlığı, şafak",
+      "categories": [],
+      "items": [],
+      "text": ""
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758454227,
       "nanoseconds": 715000000
-    },
-    "type": "definition",
-    "content": {
-      "definition": "Sabah aydınlığı, şafak",
-      "categories": [],
-      "title": "",
-      "text": "",
-      "term": "Felak",
-      "items": []
-    },
-    "topicId": "sKQLddYwFN48D7kA4yPd",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    }
   },
   {
     "id": "uoNgHpwmPyvGWqWJsgPm",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767359815,
       "nanoseconds": 15000000
     },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "type": "concept",
+    "topicId": "sKQLddYwFN48D7kA4yPd",
     "content": {
       "text": "Şer"
     },
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "sKQLddYwFN48D7kA4yPd"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "vZbIENtDszJWRq9G1vsK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "type": "sorting",
+    "topicId": "sKQLddYwFN48D7kA4yPd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758534058,
       "nanoseconds": 981000000
     },
-    "topicId": "sKQLddYwFN48D7kA4yPd",
     "content": {
+      "definition": "",
+      "text": "",
       "items": [
         "Bismillâhirraḥmânirraḥîm",
         "Ḳul eûzü birabbil felaḳ",
@@ -202,28 +206,24 @@
         "Ve min şerrin neffâsâti fil uḳad",
         "Ve min şerri ḥâsidin iẕâ ḥased"
       ],
-      "text": "",
-      "term": "",
       "title": "Felak Suresi",
-      "definition": "",
-      "categories": []
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sorting"
+      "categories": [],
+      "term": ""
+    }
   },
   {
     "id": "x9u5XO7wMIrDujqzvIWd",
-    "type": "sentence",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "topicId": "sKQLddYwFN48D7kA4yPd",
-    "content": {
-      "text": "Felak suresi, adını birinci ayette geçen “sabah aydınlığı, şafak” anlamlarına gelen “felak” kelimesinden alır."
-    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758454227,
       "nanoseconds": 715000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "topicId": "sKQLddYwFN48D7kA4yPd",
+    "content": {
+      "text": "Felak suresi, adını birinci ayette geçen “sabah aydınlığı, şafak” anlamlarına gelen “felak” kelimesinden alır."
+    }
   }
 ]

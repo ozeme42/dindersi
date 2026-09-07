@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import React, { type ReactNode } from 'react';
+import React, { useState, type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
-  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Megaphone, Puzzle 
+  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Megaphone, Puzzle, Database, Loader2 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
+import { syncSmartboardDataToFilesAction } from './sync-actions';
 
 // GÜNCELLEME: Daha kompakt kart bileşeni
 const SmartboardCard = ({ href, title, description, icon, colorClass, isExternal }: { href: string, title: string, description: string, icon: ReactNode, colorClass: string, isExternal?: boolean }) => {
@@ -57,6 +59,35 @@ const SmartboardCard = ({ href, title, description, icon, colorClass, isExternal
 
 
 export default function SmartboardPage() {
+    const [isSyncing, setIsSyncing] = useState(false);
+    const { toast } = useToast();
+
+    const handleSyncToFiles = async () => {
+        setIsSyncing(true);
+        try {
+            const res = await syncSmartboardDataToFilesAction();
+            if (res.success) {
+                toast({
+                    title: "Veriler Dosyalara Aktarıldı! ⚡",
+                    description: `${res.studentCount || 0} sanal öğrenci ve sınıflar yerel dosyalara kaydedildi. Artık oyunlar doğrudan dosyalardan ultra hızlı yüklenecek.`
+                });
+            } else {
+                toast({
+                    title: "Senkronizasyon Hatası",
+                    description: res.error || "Bilinmeyen bir hata oluştu.",
+                    variant: "destructive"
+                });
+            }
+        } catch (e: any) {
+            toast({
+                title: "Hata",
+                description: e.message || "İşlem sırasında hata oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsSyncing(false);
+        }
+    };
   
     // Yarışma Modları
     const yarışmalar = [
@@ -273,6 +304,17 @@ export default function SmartboardPage() {
                         <Settings className="mr-2 h-5 w-5 text-purple-400" />
                         Oyun Ayarları
                     </Link>
+                </Button>
+                <div className="h-px w-full md:w-px md:h-8 bg-white/10"></div>
+                <Button 
+                    onClick={handleSyncToFiles}
+                    disabled={isSyncing}
+                    variant="ghost" 
+                    className="text-cyan-300 hover:text-cyan-200 hover:bg-cyan-500/10 text-base font-bold h-12 px-4 rounded-lg w-full md:w-auto justify-start md:justify-center transition-all border border-cyan-500/20"
+                    title="Firestore'daki tüm sanal öğrencileri ve sınıfları yerel JSON dosyalarına aktarır"
+                >
+                    {isSyncing ? <Loader2 className="mr-2 h-5 w-5 animate-spin text-cyan-400" /> : <Database className="mr-2 h-5 w-5 text-cyan-400" />}
+                    {isSyncing ? "Aktarılıyor..." : "Dosyaları Güncelle"}
                 </Button>
             </div>
             

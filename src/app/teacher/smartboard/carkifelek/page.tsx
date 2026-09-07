@@ -74,26 +74,41 @@ export default function WheelOfFortunePage() {
             setIsLoadingData(true);
             try {
                 let fetchedClasses: SchoolClass[] = [];
+                // 1. Sınıfları önce yerel dosyadan oku
                 try {
-                    const classesSnap = await getDocs(query(collection(db, "classes"), orderBy("name")));
-                    fetchedClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-                } catch (e) {
-                    console.warn("Classes could not be loaded:", e);
+                    const cRes = await fetch('/curriculum/classes.json');
+                    if (cRes.ok) fetchedClasses = await cRes.json();
+                } catch {}
+                if (!fetchedClasses || fetchedClasses.length === 0) {
+                    try {
+                        const classesSnap = await getDocs(query(collection(db, "classes"), orderBy("name")));
+                        fetchedClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+                    } catch (e) {
+                        console.warn("Classes could not be loaded:", e);
+                    }
                 }
                 setAllClasses(fetchedClasses);
 
                 let loadedGuests: UserProfile[] = [];
+                // 2. Sanal öğrencileri önce yerel JSON dosyasından oku (0ms, 0 Firestore reads)
                 try {
-                    // AKILLI TAHTA ÇARKI: SADECE Sanal Öğrenciler (role === 'guest')
-                    const guestsQuery = query(collection(db, "users"), where("role", "==", "guest"));
-                    const guestsSnap = await getDocs(guestsQuery);
-                    loadedGuests = guestsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
-                } catch (e) {
-                    console.warn("Could not query guest users:", e);
+                    const gRes = await fetch('/curriculum/guest-students.json');
+                    if (gRes.ok) loadedGuests = await gRes.json();
+                } catch (fErr) {
+                    console.warn("Yerel sanal öğrenciler dosyası okunamadı, Firestore'a geçiliyor:", fErr);
+                }
+
+                if (!loadedGuests || loadedGuests.length === 0) {
+                    try {
+                        const guestsQuery = query(collection(db, "users"), where("role", "==", "guest"));
+                        const guestsSnap = await getDocs(guestsQuery);
+                        loadedGuests = guestsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+                    } catch (e) {
+                        console.warn("Could not query guest users:", e);
+                    }
                 }
 
                 if (loadedGuests.length === 0) {
-                    // Veritabanında sanal öğrenci yoksa hazır örnek sanal öğrencileri kullan
                     loadedGuests = [...DEMO_SANAL_OGRENCILER];
                 }
 

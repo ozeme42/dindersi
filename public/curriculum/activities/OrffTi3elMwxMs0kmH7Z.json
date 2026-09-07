@@ -1,118 +1,118 @@
 [
   {
     "id": "1s0P9x92f45HVu8NgK6J",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384466,
+      "nanoseconds": 180000000
+    },
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Ağaç dikmek büyük sevaptır."
     },
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384466,
-      "nanoseconds": 180000000
-    },
     "type": "sentence"
   },
   {
     "id": "1s8kpBQI4h9ox9gyx8rH",
+    "content": {
+      "text": "Doğal dengeyi bozmamalıyız."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
     "type": "sentence",
-    "content": {
-      "text": "Doğal dengeyi bozmamalıyız."
-    },
-    "unitId": "03lmGqXTa8ejb174SiHt"
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "2KZI5CiD1Rw4YpxG9IG9",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "content": {
-      "text": "Sadaka"
-    },
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "content": {
+      "text": "Sadaka"
     }
   },
   {
     "id": "5CuyhnMpWI22ydUyvm1W",
-    "content": {
-      "term": "İsraf",
-      "definition": "Kaynakların gereksiz yere harcanması eylemi."
-    },
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "type": "definition",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "content": {
+      "definition": "Kaynakların gereksiz yere harcanması eylemi.",
+      "term": "İsraf"
+    },
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
-    }
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "6NfEGN78aBp2DiughTnx",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "definition": "Her canlıya iyilikte elde edilen sevap.",
+      "term": "Sadaka"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
-    "type": "definition",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "content": {
-      "term": "Sadaka",
-      "definition": "Her canlıya iyilikte elde edilen sevap."
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "OrffTi3elMwxMs0kmH7Z"
   },
   {
     "id": "AbrDKiJ8aG64jzzbuzOi",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "content": {
-      "text": "Fidan"
-    },
-    "type": "concept",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "concept",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "Fidan"
     }
   },
   {
     "id": "EwMfLvAzgbYR9jXySlvB",
+    "content": {
+      "text": "Ahlak"
+    },
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "content": {
-      "text": "Ahlak"
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "OrffTi3elMwxMs0kmH7Z"
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "Fj5qiprmE80UKdAW4qMZ",
     "content": {
       "text": "Su ve toprak israf edilmemeli."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -123,86 +123,83 @@
   },
   {
     "id": "GvHNP4qSLtmSkGgzFOdI",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "content": {
-      "term": "Vakıf",
-      "definition": "Topluma fayda sağlayan hayır kurumlarının adı."
-    }
+      "definition": "Topluma fayda sağlayan hayır kurumlarının adı.",
+      "term": "Vakıf"
+    },
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "type": "definition"
   },
   {
     "id": "K2Qx9iJ13hlLiEqOKVDo",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "type": "sentence",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
+    "type": "sentence",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Vakıflar çevreye fayda sağladı."
-    }
+    },
+    "topicId": "OrffTi3elMwxMs0kmH7Z"
   },
   {
     "id": "MTIdE6TUOB84f2bqiHT9",
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "content": {
       "text": "Vicdan"
     },
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
-    },
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    }
   },
   {
     "id": "OARezM9VG4h11YKoL6ST",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Temizlik"
     },
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "concept"
+    }
   },
   {
     "id": "QC9dMZ9Ymweq8tVhcd3B",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "term": "Ahlak",
+      "definition": "Davranışlarda ölçülü ve dengeli olmayı ifade eden ilke."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "type": "definition",
-    "content": {
-      "definition": "Davranışlarda ölçülü ve dengeli olmayı ifade eden ilke.",
-      "term": "Ahlak"
-    }
+    "type": "definition"
   },
   {
     "id": "SzYXU4Rm7ybgaZCc8A4Q",
-    "type": "sentence",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
@@ -211,28 +208,45 @@
     "content": {
       "text": "Doğayı korumak bir sorumluluktur."
     },
-    "topicId": "OrffTi3elMwxMs0kmH7Z"
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "TF8rJAwM7DSYsLzu3YGy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Müslümanlar dünyayı güzelleştirmelidir."
     },
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "OrffTi3elMwxMs0kmH7Z"
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "type": "sentence",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "WC7RzCUYIJgNBH1QVTF8",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "definition": "Kıyamet koparken bile dikilmesi öğütlenen bitki.",
+      "term": "Fidan"
+    },
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384466,
+      "nanoseconds": 180000000
+    }
+  },
+  {
+    "id": "YwHQuBd7hsaoty58Tx2L",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
@@ -240,34 +254,50 @@
     },
     "topicId": "OrffTi3elMwxMs0kmH7Z",
     "content": {
-      "definition": "Kıyamet koparken bile dikilmesi öğütlenen bitki.",
-      "term": "Fidan"
-    }
+      "definition": "İmanın yarısı olarak kabul edilen durum.",
+      "term": "Temizlik"
+    },
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
-    "id": "YwHQuBd7hsaoty58Tx2L",
-    "type": "definition",
+    "id": "ZhCHyqvCgzm3zsS5eBTB",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
-    "content": {
-      "definition": "İmanın yarısı olarak kabul edilen durum.",
-      "term": "Temizlik"
-    },
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "OrffTi3elMwxMs0kmH7Z"
-  },
-  {
-    "id": "ZhCHyqvCgzm3zsS5eBTB",
     "content": {
       "definition": "Çevremizdeki canlılara davranışımızı düzenleyen iç ses.",
       "term": "Vicdan"
     },
     "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition"
+  },
+  {
+    "id": "eLNs9rNaChmcPiyKPrJw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384466,
+      "nanoseconds": 180000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "Peygamberimiz çevre bilincini önemsedi."
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "gQIwO9UHQwG9CRFokMF4",
+    "type": "concept",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "content": {
+      "text": "Vakıf"
+    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -275,72 +305,39 @@
       "nanoseconds": 180000000
     },
     "unitId": "03lmGqXTa8ejb174SiHt"
-  },
-  {
-    "id": "eLNs9rNaChmcPiyKPrJw",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384466,
-      "nanoseconds": 180000000
-    },
-    "type": "sentence",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "content": {
-      "text": "Peygamberimiz çevre bilincini önemsedi."
-    }
-  },
-  {
-    "id": "gQIwO9UHQwG9CRFokMF4",
-    "type": "concept",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "text": "Vakıf"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384466,
-      "nanoseconds": 180000000
-    },
-    "topicId": "OrffTi3elMwxMs0kmH7Z"
   },
   {
     "id": "hRQnQ2iMr89eRGtxq0yk",
     "content": {
       "text": "Hayvanlara merhametli davranılmalıdır."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
-    "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "lORpIZ5iWhWyCnY9R0CE",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "type": "sentence",
     "content": {
       "text": "Temizlik imanın yarısıdır."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
-    }
+    },
+    "type": "sentence"
   },
   {
     "id": "oFL57jowwwtkoUE7K3kE",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "type": "concept",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "content": {
       "text": "Emanet"
     },
@@ -349,52 +346,55 @@
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "type": "concept",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "rKK00ibA09kGoqsjckJ6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384466,
-      "nanoseconds": 180000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition",
     "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
     "content": {
       "term": "Emanet",
       "definition": "Yeryüzü ve üzerindeki her şeyin insana yüklediği sorumluluk."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384466,
+      "nanoseconds": 180000000
     }
   },
   {
     "id": "wlEbUjgmoN7S1G020pSC",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384466,
+      "nanoseconds": 180000000
+    },
     "topicId": "OrffTi3elMwxMs0kmH7Z",
     "content": {
       "text": "Gelecek nesillere miras bırakalım."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384466,
-      "nanoseconds": 180000000
-    },
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    }
   },
   {
     "id": "zgUJ6dSMZbGAkfIee9st",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "content": {
-      "text": "İsraf"
-    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384466,
       "nanoseconds": 180000000
     },
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "concept"
+    "type": "concept",
+    "content": {
+      "text": "İsraf"
+    },
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   }
 ]

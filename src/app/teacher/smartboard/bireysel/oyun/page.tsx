@@ -252,29 +252,35 @@ function IndividualCompetitionComponent() {
 
                     if (cData) {
                         try {
-                            const targetClassName = cData.name;
-                            // Sınıf adına göre öğrencileri çek (guest ve student)
-                            const sQuery = query(
-                                collection(db, "users"), 
-                                where("class", ">=", targetClassName), 
-                                where("class", "<", targetClassName + '\uf8ff')
-                            );
-                            const sSnap = await getDocs(sQuery);
-                            let students = sSnap.docs
-                                .map(d => ({ uid: d.id, ...d.data() } as UserProfile))
-                                .filter(u => u.role === 'guest' || u.role === 'student' || !u.role);
+                            const targetClassName = (cData.name || '').trim().toLowerCase();
+                            const gradeVal = targetClassName.match(/\d+/)?.[0] || '';
 
-                            // Eğer bulunamazsa grade ile dene (örn: "5" veya "5/A")
-                            if (students.length === 0 && gradeVal) {
-                                const fallbackQ = query(
-                                    collection(db, "users"), 
-                                    where("class", ">=", gradeVal), 
-                                    where("class", "<", gradeVal + '\uf8ff')
-                                );
-                                const fbSnap = await getDocs(fallbackQ);
-                                students = fbSnap.docs
-                                    .map(d => ({ uid: d.id, ...d.data() } as UserProfile))
-                                    .filter(u => u.role === 'guest' || u.role === 'student' || !u.role);
+                            let allGuests: UserProfile[] = [];
+
+                            // 1. Önce yerel JSON dosyasını dene (0ms, 0 Firestore reads)
+                            try {
+                                const fileRes = await fetch('/curriculum/guest-students.json');
+                                if (fileRes.ok) {
+                                    allGuests = await fileRes.json();
+                                }
+                            } catch (fErr) {
+                                console.warn("Yerel sanal öğrenciler dosyası okunamadı, Firestore'a geçiliyor:", fErr);
+                            }
+
+                            // 2. Yerel dosya yoksa veya boşsa Firestore fallback
+                            if (!allGuests || allGuests.length === 0) {
+                                const sQuery = query(collection(db, "users"), where("role", "==", "guest"));
+                                const sSnap = await getDocs(sQuery);
+                                allGuests = sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile));
+                            }
+
+                            let students = allGuests.filter(u => {
+                                const sc = (u.class || '').trim().toLowerCase();
+                                return sc.includes(targetClassName) || (gradeVal && sc.startsWith(gradeVal));
+                            });
+
+                            if (students.length === 0) {
+                                students = allGuests;
                             }
                             setStudentPool(students);
                         } catch (e) {
@@ -283,9 +289,19 @@ function IndividualCompetitionComponent() {
                         }
                     }
                 } else {
-                    const sQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME));
-                    const sSnap = await getDocs(sQuery);
-                    setStudentPool(sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile)));
+                    let allGuests: UserProfile[] = [];
+                    try {
+                        const fileRes = await fetch('/curriculum/guest-students.json');
+                        if (fileRes.ok) allGuests = await fileRes.json();
+                    } catch {}
+                    if (allGuests.length > 0) {
+                        const filtered = allGuests.filter(u => u.class === SUMMER_SCHOOL_CLASS_NAME);
+                        setStudentPool(filtered.length > 0 ? filtered : allGuests);
+                    } else {
+                        const sQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME));
+                        const sSnap = await getDocs(sQuery);
+                        setStudentPool(sSnap.docs.map(d => ({ uid: d.id, ...d.data() } as UserProfile)));
+                    }
                 }
             } catch (err: any) {
                 console.error("Veri yükleme hatası:", err);

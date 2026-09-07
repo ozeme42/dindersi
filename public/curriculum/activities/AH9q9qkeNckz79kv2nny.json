@@ -1,61 +1,61 @@
 [
   {
     "id": "01g3uyQTG9Re1eYJTUXq",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457859,
-      "nanoseconds": 28000000
-    },
+    "type": "concept",
+    "topicId": "AH9q9qkeNckz79kv2nny",
     "content": {
       "text": "Hakim"
     },
-    "type": "concept",
-    "topicId": "AH9q9qkeNckz79kv2nny"
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457859,
+      "nanoseconds": 28000000
+    }
   },
   {
     "id": "1twrI0c8zxLpAsK2f2V9",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457859,
+      "nanoseconds": 28000000
+    },
     "topicId": "AH9q9qkeNckz79kv2nny",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Sure"
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457859,
-      "nanoseconds": 28000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept"
+    "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "27i5O9bYtYFEFvYX3r0K",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "AH9q9qkeNckz79kv2nny",
+    "content": {
+      "term": "Muavvizeteyn",
+      "definition": "Nas ve Felak Sureleri, İki koruyucu sure"
+    },
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
-    },
-    "topicId": "AH9q9qkeNckz79kv2nny",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition",
-    "content": {
-      "term": "Muavvizeteyn",
-      "definition": "Nas ve Felak Sureleri, İki koruyucu sure"
     },
     "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "76xC9gNEk4kXDEM7tdrA",
-    "type": "definition",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
     },
+    "type": "definition",
     "topicId": "AH9q9qkeNckz79kv2nny",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "definition": "Allah'ın sözü",
       "term": "Ayet"
@@ -63,241 +63,227 @@
   },
   {
     "id": "8Ld2ZnX26yFry4KEE8CG",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
     },
-    "topicId": "AH9q9qkeNckz79kv2nny",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Nâs suresi, kendinden bir önceki sure olan Felak suresi ile birlikte muavvizeteyn olarak anılır."
     },
+    "topicId": "AH9q9qkeNckz79kv2nny",
     "type": "sentence"
   },
   {
     "id": "Cf40UQhFjqmJitBr8fw2",
+    "type": "definition",
+    "content": {
+      "term": "Hakim",
+      "definition": "Herşeyi yöneten"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
     },
-    "content": {
-      "definition": "Herşeyi yöneten",
-      "term": "Hakim"
-    },
     "topicId": "AH9q9qkeNckz79kv2nny",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition"
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "CraVJaqyeWbcFHM68CWc",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457859,
+      "nanoseconds": 28000000
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "AH9q9qkeNckz79kv2nny",
+    "type": "definition",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "definition": "Gerçek iyilik",
       "term": "Hayr"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457859,
-      "nanoseconds": 28000000
-    }
+    "topicId": "AH9q9qkeNckz79kv2nny"
   },
   {
     "id": "G1r11dkqhRIvMED574MF",
     "content": {
-      "term": "Şer",
-      "definition": "Gerçek kötülük"
+      "definition": "Gerçek kötülük",
+      "term": "Şer"
     },
     "topicId": "AH9q9qkeNckz79kv2nny",
-    "type": "definition",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
-    }
+    },
+    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "GNHihaqwDmeEEU1eMf18",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "type": "concept",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "Şer"
+    },
+    "topicId": "AH9q9qkeNckz79kv2nny",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
-    },
-    "topicId": "AH9q9qkeNckz79kv2nny",
-    "content": {
-      "text": "Şer"
     }
   },
   {
     "id": "HNICbLgvYMLjjOPBbDzM",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457859,
-      "nanoseconds": 28000000
-    },
     "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "definition": "Kur'an-ı Kerim'in bölümleri",
       "term": "Sure"
     },
-    "topicId": "AH9q9qkeNckz79kv2nny"
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "AH9q9qkeNckz79kv2nny",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457859,
+      "nanoseconds": 28000000
+    }
   },
   {
     "id": "ITnK4XfvtTuE648YkU5v",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "AH9q9qkeNckz79kv2nny",
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Tüm kötülüklerden, vesvese ve şüphelerden Allah’a (cc) sığınılmalıdır."
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
-    },
-    "type": "sentence",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    }
   },
   {
     "id": "KWREsfkwGHKzy0FCJqoi",
-    "topicId": "AH9q9qkeNckz79kv2nny",
-    "type": "definition",
-    "content": {
-      "term": "Nas",
-      "definition": "İnsanlar"
-    },
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "definition": "İnsanlar",
+      "term": "Nas"
+    },
+    "type": "definition",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "AH9q9qkeNckz79kv2nny",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
-    },
-    "unitId": "UxthoHWEf7GS47946uOO"
+    }
   },
   {
     "id": "L7feXFib4HVXJOyoWaH8",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "AH9q9qkeNckz79kv2nny",
     "content": {
       "text": "Muavvizeteyn"
     },
-    "type": "concept",
+    "topicId": "AH9q9qkeNckz79kv2nny",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
-    }
+    },
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "LCeKkBbGeTGj80JkvJNl",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "AH9q9qkeNckz79kv2nny",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Nas"
-    }
+    },
+    "type": "concept"
   },
   {
     "id": "Npc98lvAhMJKxQ18YrcN",
-    "type": "sentence",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
     },
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "AH9q9qkeNckz79kv2nny",
     "content": {
       "text": "Hz. Peygamber yatmadan önce Felak ve Nâs surelerini okur, uykuya öyle dalardı."
-    },
-    "topicId": "AH9q9qkeNckz79kv2nny",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh"
-  },
-  {
-    "id": "SjAuP7Yv5tr79U31Uk2x",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition",
-    "topicId": "AH9q9qkeNckz79kv2nny",
-    "content": {
-      "definition": "Çok fazla şüphecilik",
-      "term": "Vesvese"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457859,
-      "nanoseconds": 28000000
     }
   },
   {
-    "id": "dlBzb17zr60yOk2ohVtb",
-    "type": "definition",
+    "id": "SjAuP7Yv5tr79U31Uk2x",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
     },
+    "type": "definition",
+    "content": {
+      "term": "Vesvese",
+      "definition": "Çok fazla şüphecilik"
+    },
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "AH9q9qkeNckz79kv2nny",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "dlBzb17zr60yOk2ohVtb",
     "unitId": "UxthoHWEf7GS47946uOO",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "AH9q9qkeNckz79kv2nny",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457859,
+      "nanoseconds": 28000000
+    },
     "content": {
       "term": "Melik",
       "definition": "Her şeyin sahibi"
     },
-    "topicId": "AH9q9qkeNckz79kv2nny"
+    "type": "definition"
   },
   {
     "id": "k25E2BKXyF3knj3WAtA3",
-    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "Vesvese"
+    },
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept",
     "topicId": "AH9q9qkeNckz79kv2nny",
-    "content": {
-      "text": "Vesvese"
-    }
+    "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "qqbWmduhQe3TWiSwg72N",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457859,
-      "nanoseconds": 28000000
-    },
-    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "text": "Ayet"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "AH9q9qkeNckz79kv2nny"
-  },
-  {
-    "id": "r6EBrC1yQvpYLikx4qjd",
-    "type": "concept",
-    "content": {
-      "text": "Hayr"
     },
     "topicId": "AH9q9qkeNckz79kv2nny",
     "createdAt": {
@@ -305,53 +291,67 @@
       "seconds": 1758457859,
       "nanoseconds": 28000000
     },
+    "unitId": "UxthoHWEf7GS47946uOO"
+  },
+  {
+    "id": "r6EBrC1yQvpYLikx4qjd",
+    "topicId": "AH9q9qkeNckz79kv2nny",
+    "content": {
+      "text": "Hayr"
+    },
     "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457859,
+      "nanoseconds": 28000000
+    },
+    "type": "concept"
   },
   {
     "id": "trblhfM9HMZ3j1FjD4sS",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758457859,
+      "nanoseconds": 28000000
+    },
+    "type": "concept",
     "content": {
       "text": "Rabb"
     },
     "topicId": "AH9q9qkeNckz79kv2nny",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758457859,
-      "nanoseconds": 28000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept",
     "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "uTeqz7ql8k7I3D5vrojq",
-    "topicId": "AH9q9qkeNckz79kv2nny",
-    "content": {
-      "text": "Melik"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "type": "concept",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "AH9q9qkeNckz79kv2nny",
+    "content": {
+      "text": "Melik"
     }
   },
   {
     "id": "v0YvhhzrBqB0Nl2lpISY",
-    "type": "definition",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "AH9q9qkeNckz79kv2nny",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758457859,
       "nanoseconds": 28000000
     },
-    "topicId": "AH9q9qkeNckz79kv2nny",
     "content": {
       "definition": "Terbiye eden",
       "term": "Rabb"
     },
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "type": "definition"
   }
 ]

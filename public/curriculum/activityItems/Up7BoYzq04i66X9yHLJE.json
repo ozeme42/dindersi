@@ -1,22 +1,23 @@
 [
   {
     "id": "0zjMb7ZKsu9DtE2tZ3bt",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "content": {
       "definition": "Dinen pis kabul edilen şeyleri su veya temizleyici başka şeylerle temizleme.",
       "term": "Taharet"
     },
-    "type": "definition",
-    "topicId": "Up7BoYzq04i66X9yHLJE"
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "type": "definition"
   },
   {
     "id": "1egXWTmBurdYqb6Dn4pg",
+    "type": "concept",
     "content": {
       "text": "Maddi Temizlik"
     },
@@ -25,79 +26,63 @@
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "26wQDzljkSa09jdR84zs",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Manevi Temizlik"
-    }
+    },
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "concept"
   },
   {
     "id": "4t73WL4i0XMsHeSANTg8",
     "type": "sentence",
-    "content": {
-      "text": "Elbise temizliği, namaz gibi ibadetler için bir ön şarttır."
-    },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
-    }
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Elbise temizliği, namaz gibi ibadetler için bir ön şarttır."
+    },
+    "topicId": "Up7BoYzq04i66X9yHLJE"
   },
   {
     "id": "5RC8GtKPeimb4dV0DJOA",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "content": {
       "text": "Ağız ve diş temizliği, beden temizliği, elbise temizliği ve çevre temizliği önemlidir."
     },
-    "type": "sentence",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
-    }
+    },
+    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "6g27oR2yr8wzwB3PSM1a",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033719,
-      "nanoseconds": 889000000
-    },
     "type": "sentence",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "content": {
       "text": "Temizlik, hem fiziksel hem de ruhsal sağlığımız için önemlidir ve İslam'da imanın yarısı olarak kabul edilir."
-    }
-  },
-  {
-    "id": "7LIkPFYuJrIi78QVCfOZ",
-    "type": "sentence",
-    "content": {
-      "text": "Peygamberimiz, temizliğe büyük önem vermiş ve bunu hem sözleriyle hem de uygulamalarıyla göstermiştir."
     },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
@@ -106,137 +91,152 @@
     "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
-    "id": "80gX8pD7ZTU6kdCdKqJ3",
+    "id": "7LIkPFYuJrIi78QVCfOZ",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
-      "seconds": 1752033801,
-      "nanoseconds": 330000000
+      "seconds": 1752033719,
+      "nanoseconds": 889000000
     },
+    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "content": {
+      "text": "Peygamberimiz, temizliğe büyük önem vermiş ve bunu hem sözleriyle hem de uygulamalarıyla göstermiştir."
+    }
+  },
+  {
+    "id": "80gX8pD7ZTU6kdCdKqJ3",
     "topicId": "Up7BoYzq04i66X9yHLJE",
     "content": {
       "term": "Manevi Temizlik",
       "definition": "Kalbi kötü düşünce ve duygulardan arındırma, günahlardan tövbe etme."
-    }
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033801,
+      "nanoseconds": 330000000
+    },
+    "type": "definition"
   },
   {
     "id": "DUWF1XYPJheLQOwBJbzk",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033801,
+      "nanoseconds": 330000000
+    },
     "content": {
       "text": "Gusül"
     },
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033801,
-      "nanoseconds": 330000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept"
   },
   {
     "id": "F6LeL7jfp6S4L3Uu60oB",
+    "content": {
+      "text": "Maddi temizlik beden, elbise ve çevre temizliğini kapsar."
+    },
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
-    "content": {
-      "text": "Maddi temizlik beden, elbise ve çevre temizliğini kapsar."
-    },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "Up7BoYzq04i66X9yHLJE"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "G8sOMwjAJsIWaxMShJkO",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "Up7BoYzq04i66X9yHLJE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033801,
-      "nanoseconds": 330000000
-    },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "content": {
       "text": "Temizlik, İslam'da imanin yarısı olarak kabul edilir ve hem maddi hem manevi yönleri vardır."
     },
-    "type": "sentence"
-  },
-  {
-    "id": "IEnccjQgypburEVpBZJr",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033719,
-      "nanoseconds": 889000000
-    },
-    "content": {
-      "text": "Ağız ve diş temizliği, beden temizliğinin önemli bir parçasıdır ve Peygamberimiz misvak kullanımını tavsiye etmiştir."
-    },
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "KXWJRftR1ouzaUJUwgJo",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033719,
-      "nanoseconds": 889000000
-    },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "type": "concept",
-    "content": {
-      "text": "Misvak"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "Kzso0MdZomjPsqcOwxud",
-    "type": "definition",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
+    }
+  },
+  {
+    "id": "IEnccjQgypburEVpBZJr",
+    "content": {
+      "text": "Ağız ve diş temizliği, beden temizliğinin önemli bir parçasıdır ve Peygamberimiz misvak kullanımını tavsiye etmiştir."
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "sentence",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033719,
+      "nanoseconds": 889000000
+    }
+  },
+  {
+    "id": "KXWJRftR1ouzaUJUwgJo",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "content": {
+      "text": "Misvak"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033719,
+      "nanoseconds": 889000000
+    },
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "type": "concept"
+  },
+  {
+    "id": "Kzso0MdZomjPsqcOwxud",
     "content": {
       "term": "Temizlik",
       "definition": "İnsan sağlığı ve sosyal ilişkiler için önemli olan, kirlerden arınma durumu."
     },
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033801,
+      "nanoseconds": 330000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition"
   },
   {
     "id": "QTs7KouIu9cisp42NcEq",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Kişisel Bakım"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "Up7BoYzq04i66X9yHLJE",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
-    },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
+    }
   },
   {
     "id": "QgAC27OCta4VHK9UmLvg",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "content": {
       "term": "Misvak",
       "definition": "Peygamberimizin de kullandığı, ağız ve diş temizliği için kullanılan araç."
     },
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "type": "definition",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
@@ -245,19 +245,19 @@
   },
   {
     "id": "Rc5oo9C96vj05uQQ18MP",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "content": {
-      "term": "Tövbe",
-      "definition": "İşlenen günahlardan pişmanlık duyup Allah'a yönelme."
-    },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "type": "definition"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "definition": "İşlenen günahlardan pişmanlık duyup Allah'a yönelme.",
+      "term": "Tövbe"
+    },
+    "type": "definition",
+    "topicId": "Up7BoYzq04i66X9yHLJE"
   },
   {
     "id": "SWVAMkXKSuXG9z7hIDaR",
@@ -267,148 +267,148 @@
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "sentence",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "content": {
       "text": "Peygamberimiz temizliğe çok önem vermiş ve insanlara örnek olmuştur."
     },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "type": "sentence"
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "WUPsHDYwG7Sz4oKweYv8",
-    "type": "concept",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "content": {
       "text": "Tövbe"
     },
-    "topicId": "Up7BoYzq04i66X9yHLJE"
+    "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "WZ5yrtwbT7jOO3ORNfRg",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "content": {
-      "text": "Temizlik"
-    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "content": {
+      "text": "Temizlik"
+    },
+    "type": "concept"
   },
   {
     "id": "XXAs1l2pGqUpKgxaG6iV",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "content": {
-      "text": "Manevi temizlik ise kalbi kötü düşüncelerden arındırmayı ve günahlardan tövbe etmeyi içerir."
-    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "content": {
+      "text": "Manevi temizlik ise kalbi kötü düşüncelerden arındırmayı ve günahlardan tövbe etmeyi içerir."
+    },
     "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "ZtAnKoXO4ECfWgB6p5LA",
-    "type": "concept",
     "content": {
       "text": "Abdest"
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "bBCpV92UOZztHP6FMiDq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033719,
-      "nanoseconds": 889000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
     "content": {
       "text": "Gusül"
     },
     "topicId": "Up7BoYzq04i66X9yHLJE",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
-  },
-  {
-    "id": "bHDLVlHUfymbnMphwkJC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
     "type": "concept",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "content": {
-      "text": "Abdest"
-    },
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
-    "id": "dMHjnwJlHL4KuKsNR5N2",
+    "id": "bHDLVlHUfymbnMphwkJC",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "content": {
+      "text": "Abdest"
+    },
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "dMHjnwJlHL4KuKsNR5N2",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
     "content": {
       "text": "Çevre Temizliği"
+    },
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033719,
+      "nanoseconds": 889000000
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
+  },
+  {
+    "id": "drs9F2t9fa2BEzHLl7xA",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Misvak"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033801,
+      "nanoseconds": 330000000
     },
     "topicId": "Up7BoYzq04i66X9yHLJE",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "type": "concept"
   },
   {
-    "id": "drs9F2t9fa2BEzHLl7xA",
-    "type": "concept",
-    "content": {
-      "text": "Misvak"
-    },
+    "id": "es1t5LZib73vX9WyFZwn",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
-  },
-  {
-    "id": "es1t5LZib73vX9WyFZwn",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "definition": "Beden, elbise ve çevre temizliği gibi görünen kirlerden arınma.",
       "term": "Maddi Temizlik"
     },
     "type": "definition",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033801,
-      "nanoseconds": 330000000
-    }
+    "topicId": "Up7BoYzq04i66X9yHLJE"
   },
   {
     "id": "iZKUgHaVuQhS4TVRDN4Z",
@@ -418,16 +418,18 @@
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
+    "type": "sentence",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "content": {
       "text": "Maddi temizlik, bedenimizi, kıyafetlerimizi ve çevrimizi temiz tutmayı içerir."
     },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "type": "sentence"
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "j18kdOpCSO4aWKUQVXs2",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "content": {
       "text": "Manevi temizlik ise kalbimizi kötü düşüncelerden ve günahlardan arındırmayı ifade eder."
     },
@@ -436,106 +438,104 @@
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
-    "type": "sentence",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "mVopUykWWXDO8sss1FXd",
-    "type": "sentence",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Abdest, namazdan önce alınır ve hem maddi hem manevi temizlik sağlar."
     },
+    "type": "sentence",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    }
   },
   {
     "id": "mpM045nzjVPTpi1fFMTT",
-    "content": {
-      "text": "Manevi Temizlik"
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
     "topicId": "Up7BoYzq04i66X9yHLJE",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
+    "content": {
+      "text": "Manevi Temizlik"
+    }
   },
   {
     "id": "n54H0Cw1c17p2fBxtA8a",
     "topicId": "Up7BoYzq04i66X9yHLJE",
-    "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Temizlik"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
+    "type": "concept"
   },
   {
     "id": "p01W0y1Wu5betblHqTnW",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Taharet"
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "Up7BoYzq04i66X9yHLJE",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
-    }
-  },
-  {
-    "id": "pmxiLQrkimmJf0Wzxzoc",
-    "content": {
-      "definition": "Bütün bedenin yıkanması, boy abdesti.",
-      "term": "Gusül"
-    },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033801,
-      "nanoseconds": 330000000
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
     "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
-    "id": "qIuywNKORLjyYw5dOn0M",
+    "id": "pmxiLQrkimmJf0Wzxzoc",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "content": {
+      "term": "Gusül",
+      "definition": "Bütün bedenin yıkanması, boy abdesti."
+    },
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033801,
+      "nanoseconds": 330000000
+    },
+    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "qIuywNKORLjyYw5dOn0M",
+    "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "content": {
       "text": "Maddi Temizlik"
-    }
+    },
+    "topicId": "Up7BoYzq04i66X9yHLJE"
   },
   {
     "id": "t3vYYAaA9I8DqaBwifsp",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "type": "concept",
     "topicId": "Up7BoYzq04i66X9yHLJE",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "content": {
       "text": "Hijyen"
     },
@@ -553,73 +553,73 @@
       "text": "Gusül, tüm vücudu yıkamak anlamına gelir ve belirli durumlarda gereklidir."
     },
     "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "uZDKikD4h9nD0gcm8Qtv",
-    "content": {
-      "term": "Abdest",
-      "definition": "Namaz gibi ibadetlerden önce alınan, bedenin bazı bölgelerinin yıkanması."
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033801,
       "nanoseconds": 330000000
     },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "type": "definition"
+    "content": {
+      "definition": "Namaz gibi ibadetlerden önce alınan, bedenin bazı bölgelerinin yıkanması.",
+      "term": "Abdest"
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "vhl8hTXVRFgABL7eXzvX",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "content": {
+      "text": "Taharet"
+    },
     "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033719,
+      "nanoseconds": 889000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "yM7P1mrroN6fWOD51xnP",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
+    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
-      "text": "Taharet"
+      "text": "Tövbe etmek, manevi temizliğin önemli bir yoludur ve günahlardan arınmayı sağlar."
     },
     "topicId": "Up7BoYzq04i66X9yHLJE"
   },
   {
-    "id": "yM7P1mrroN6fWOD51xnP",
-    "type": "sentence",
+    "id": "yyNvjwuF4r8a9BFjCZsd",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033719,
       "nanoseconds": 889000000
     },
-    "content": {
-      "text": "Tövbe etmek, manevi temizliğin önemli bir yoludur ve günahlardan arınmayı sağlar."
-    },
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
-  },
-  {
-    "id": "yyNvjwuF4r8a9BFjCZsd",
-    "type": "sentence",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "Up7BoYzq04i66X9yHLJE",
     "content": {
       "text": "Çevre temizliği, tüm canlıların sağlığı için önemlidir ve bir ibadet olarak kabul edilir."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033719,
-      "nanoseconds": 889000000
-    }
+    "type": "sentence"
   }
 ]

@@ -1,578 +1,468 @@
 [
   {
     "id": "1PumMNclPKcE2Ee2ZSkA",
-    "correctAnswer": "Çanakkale",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "topic": "4.Vatanımızı Sevmek",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Orta",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "options": [
       "Kurtuluş",
       "Balkan",
       "I. Dünya",
       "Çanakkale"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "correctAnswer": "Çanakkale",
     "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "topicName": "4.Vatanımızı Sevmek",
-    "text": "__________ Savaşı, vatan için gösterilen mücadeleye en güzel örneklerden biridir."
+    "topic": "4.Vatanımızı Sevmek",
+    "className": "6",
+    "text": "__________ Savaşı, vatan için gösterilen mücadeleye en güzel örneklerden biridir.",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "KE5H7oRL74FA4s1l7FTg"
   },
   {
     "id": "8atkpuvHhluwcfwhlI4K",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Kaan",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "text": "Savunma sanayimizde yerli ve millî imkânlarla geliştirilen savaş uçağımızın adı __________.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "topic": "4.Vatanımızı Sevmek",
+    "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "4.Vatanımızı Sevmek",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Akıncı",
       "Hürjet",
       "Kaan",
       "Atak"
-    ],
-    "topic": "4.Vatanımızı Sevmek",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
-    "text": "Savunma sanayimizde yerli ve millî imkânlarla geliştirilen savaş uçağımızın adı __________.",
-    "correctAnswer": "Kaan",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    ]
   },
   {
     "id": "9aC3cO1Jo8e7vUl9UiqR",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
+    "topic": "4.Vatanımızı Sevmek",
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "4.Vatanımızı Sevmek",
+    "text": "Türk tarihinde vatan savunması için verilen mücadelelerden biri aşağıdakilerden hangisidir?",
+    "correctAnswer": "Çanakkale Savaşı",
     "options": [
       "Sanayi Devrimi",
       "Çanakkale Savaşı",
       "Rönesans",
       "Fransız İhtilali"
-    ],
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "correctAnswer": "Çanakkale Savaşı",
-    "text": "Türk tarihinde vatan savunması için verilen mücadelelerden biri aşağıdakilerden hangisidir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
-    "topic": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek"
+    ]
   },
   {
     "id": "COaYKyn7IFMVY4i0bVxs",
+    "topicName": "4.Vatanımızı Sevmek",
+    "difficulty": "Orta",
+    "correctAnswer": "kahramanlıklarıyla",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "text": "Tarihimiz, vatanı için gözünü kırpmadan canını verenlerin __________ doludur.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "4.Vatanımızı Sevmek",
+    "type": "Boşluk Doldurma",
     "options": [
       "acılarıyla",
       "kayıplarıyla",
       "kahramanlıklarıyla",
       "zaaflarıyla"
     ],
-    "topic": "4.Vatanımızı Sevmek",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "topicName": "4.Vatanımızı Sevmek",
     "className": "6",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "Boşluk Doldurma",
-    "text": "Tarihimiz, vatanı için gözünü kırpmadan canını verenlerin __________ doludur.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "kahramanlıklarıyla",
-    "difficulty": "Orta"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "HwVQGM5SUMGvMec20OS3",
-    "topic": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
     "difficulty": "Kolay",
-    "correctAnswer": "Bağımsızlık sevgisi",
-    "text": "Mehmet Akif Ersoy'un İstiklal Marşı'nda vatan için vurguladığı önemli duygu nedir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Korku",
       "Bencillik",
       "Bağımsızlık sevgisi",
       "Kayıtsızlık"
     ],
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "topicName": "4.Vatanımızı Sevmek",
+    "topic": "4.Vatanımızı Sevmek",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Mehmet Akif Ersoy'un İstiklal Marşı'nda vatan için vurguladığı önemli duygu nedir?",
+    "correctAnswer": "Bağımsızlık sevgisi",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topicId": "KE5H7oRL74FA4s1l7FTg"
   },
   {
     "id": "IZ0f1euTwF0UAa6CSiKb",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "4.Vatanımızı Sevmek",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
+    "type": "Boşluk Doldurma",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "4.Vatanımızı Sevmek",
+    "difficulty": "Kolay",
+    "text": "Bağımsız bir vatana sahip olanlar dilini özgürce __________, ibadetlerini serbestçe yapabilir.",
+    "correctAnswer": "konuşabilir",
     "options": [
       "unutabilir",
       "konuşabilir",
       "değiştirebilir",
       "yazabilir"
-    ],
-    "correctAnswer": "konuşabilir",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
-    "text": "Bağımsız bir vatana sahip olanlar dilini özgürce __________, ibadetlerini serbestçe yapabilir.",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    ]
   },
   {
     "id": "JXXTUM4Z9PNJcETZbueE",
-    "correctAnswer": "Yanlış",
-    "text": "Şehitlik, sadece savaşta ölenlere verilen bir unvandır.",
-    "difficulty": "Orta",
+    "topic": "4.Vatanımızı Sevmek",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
     "options": [],
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "topic": "4.Vatanımızı Sevmek",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "4.Vatanımızı Sevmek",
     "className": "6",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "4.Vatanımızı Sevmek",
+    "text": "Şehitlik, sadece savaşta ölenlere verilen bir unvandır.",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "KE5H7oRL74FA4s1l7FTg"
   },
   {
     "id": "JaKchrH0crFnsy97mQSr",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "text": "Belli bir topluluğun ve milletin hâkim güç olarak yaşadığı, sınırları belli toprak parçasına ne denir?",
-    "topic": "4.Vatanımızı Sevmek",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "Vatan",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "options": [
       "Köy",
       "Şehir",
       "Vatan",
       "Bölge"
-    ]
+    ],
+    "className": "6",
+    "text": "Belli bir topluluğun ve milletin hâkim güç olarak yaşadığı, sınırları belli toprak parçasına ne denir?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "difficulty": "Kolay",
+    "type": "Çoktan Seçmeli",
+    "topic": "4.Vatanımızı Sevmek",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "4.Vatanımızı Sevmek",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "KE5H7oRL74FA4s1l7FTg"
   },
   {
     "id": "K7LQLRPoZt9MPVn0q9pr",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
     "topic": "4.Vatanımızı Sevmek",
-    "options": [],
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
     "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
     "correctAnswer": "Yanlış",
+    "className": "6",
+    "topicName": "4.Vatanımızı Sevmek",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Vatan, sadece üzerinde yaşanılan toprak parçasıdır."
+    "text": "Vatan, sadece üzerinde yaşanılan toprak parçasıdır.",
+    "difficulty": "Kolay",
+    "options": []
   },
   {
     "id": "L6z4foFgoN4SCxREFSqn",
-    "text": "Vatan, milleti geçmişiyle birleştirir ve __________ bağlar.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "geleceğe",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topic": "4.Vatanımızı Sevmek",
+    "className": "6",
     "options": [
       "bugüne",
       "geçmişe",
       "geleceğe",
       "hiçbir yere"
     ],
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Kolay",
-    "correctAnswer": "geleceğe",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek"
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicName": "4.Vatanımızı Sevmek",
+    "text": "Vatan, milleti geçmişiyle birleştirir ve __________ bağlar.",
+    "difficulty": "Kolay"
   },
   {
     "id": "LvEXjk8u4ExFRHJ4nuWL",
-    "text": "Bağımsız bir vatana sahip olmak, dilini özgürce konuşma imkanı sunar.",
+    "className": "6",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "4.Vatanımızı Sevmek",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "difficulty": "Kolay",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
     "type": "Doğru/Yanlış",
+    "options": [],
     "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "correctAnswer": "Doğru",
-    "topic": "4.Vatanımızı Sevmek",
-    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "text": "Bağımsız bir vatana sahip olmak, dilini özgürce konuşma imkanı sunar.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicName": "4.Vatanımızı Sevmek"
   },
   {
     "id": "MFn04GaYd6GFxbFPKxq6",
-    "type": "Çoktan Seçmeli",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "topic": "4.Vatanımızı Sevmek",
+    "text": "Mehmet Akif Ersoy'un \"Sahipsiz olan vatanın batması haktır. Sen sahip çıkarsan bu vatan batmayacaktır.\" sözünden çıkarılabilecek en önemli sonuç aşağıdakilerden hangisidir?",
+    "topicName": "4.Vatanımızı Sevmek",
     "options": [
       "Vatanın kaderi tamamen dış güçlere bağlıdır.",
       "Vatanı korumak sadece askerin görevidir.",
       "Vatanın geleceği, vatandaşların sahip çıkmasına bağlıdır.",
       "Vatanın batması kaçınılmaz bir sondur."
     ],
+    "difficulty": "Zor",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "text": "Mehmet Akif Ersoy'un \"Sahipsiz olan vatanın batması haktır. Sen sahip çıkarsan bu vatan batmayacaktır.\" sözünden çıkarılabilecek en önemli sonuç aşağıdakilerden hangisidir?",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "difficulty": "Zor",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Vatanımızı Sevmek",
+    "type": "Çoktan Seçmeli",
     "correctAnswer": "Vatanın geleceği, vatandaşların sahip çıkmasına bağlıdır."
   },
   {
     "id": "QPfGgRlQNkYwfMpxvpYN",
-    "correctAnswer": "İslam'ın",
-    "difficulty": "Orta",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Vatanımızı Sevmek",
-    "type": "Boşluk Doldurma",
-    "text": "Vatanını korumak ve düşmana karşı canla başla mücadele etmek __________ emirlerindendir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "correctAnswer": "İslam'ın",
     "options": [
       "hükümetin",
       "vatandaşın",
       "İslam'ın",
       "askerin"
-    ]
+    ],
+    "difficulty": "Orta",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "Vatanını korumak ve düşmana karşı canla başla mücadele etmek __________ emirlerindendir.",
+    "topicName": "4.Vatanımızı Sevmek",
+    "topic": "4.Vatanımızı Sevmek"
   },
   {
     "id": "Qr7k7qq49QJQvJoAH2fj",
-    "text": "Ömer Halisdemir, 15 Temmuz 2016’da meydana gelen darbe girişimini önlemek için çekinmeden canını feda etmiş ve __________ Komutanlığına girmeye çalışan darbecilere engel olmuştur.",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "difficulty": "Zor",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "type": "Boşluk Doldurma",
     "correctAnswer": "Özel Kuvvetler",
-    "topic": "4.Vatanımızı Sevmek",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "4.Vatanımızı Sevmek",
+    "topicName": "4.Vatanımızı Sevmek",
+    "className": "6",
+    "text": "Ömer Halisdemir, 15 Temmuz 2016’da meydana gelen darbe girişimini önlemek için çekinmeden canını feda etmiş ve __________ Komutanlığına girmeye çalışan darbecilere engel olmuştur.",
     "options": [
       "Jandarma Genel",
       "Hava Kuvvetleri",
       "Deniz Kuvvetleri",
       "Özel Kuvvetler"
     ],
-    "topicId": "KE5H7oRL74FA4s1l7FTg"
-  },
-  {
-    "id": "TPEa8mPMNWXrhEEak7fa",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Vatanımızı Sevmek",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
+    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
-    },
-    "correctAnswer": "Kıbrıs Barış",
+    }
+  },
+  {
+    "id": "TPEa8mPMNWXrhEEak7fa",
     "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Kıbrıs Türk halkının güvenliğinin sağlandığı __________ Harekâtı sırasında Türk ordusu 498, Kıbrıs Türkleri ise 1672 şehit vermiştir.",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Kıbrıs Barış",
     "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "4.Vatanımızı Sevmek",
+    "topic": "4.Vatanımızı Sevmek",
+    "className": "6",
     "options": [
       "Zeytin Dalı",
       "Barış Pınarı",
       "Fırat Kalkanı",
       "Kıbrıs Barış"
-    ]
-  },
-  {
-    "id": "WWcCjxuBvE7LRiD9HhI9",
+    ],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "correctAnswer": "şehit",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "4.Vatanımızı Sevmek",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "text": "Kıbrıs Türk halkının güvenliğinin sağlandığı __________ Harekâtı sırasında Türk ordusu 498, Kıbrıs Türkleri ise 1672 şehit vermiştir."
+  },
+  {
+    "id": "WWcCjxuBvE7LRiD9HhI9",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "className": "6",
     "options": [
       "gazi",
       "kahraman",
       "şehit",
       "yiğit"
     ],
-    "type": "Boşluk Doldurma",
+    "topic": "4.Vatanımızı Sevmek",
     "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
     "topicName": "4.Vatanımızı Sevmek",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "şehit",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "text": "Allah (cc) yolunda veya O'nun kutsal kabul ettiği din, vatan, namus, mal ve can güvenliği için savaşırken öldürülen müminlere __________ denir."
   },
   {
     "id": "XDFEXyuD1OGLVBGqG953",
-    "difficulty": "Zor",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "4.Vatanımızı Sevmek",
+    "text": "Mehmet Akif Ersoy'un sözlerine göre, vatanın batmaması için sadece devleti yönetenlerin çaba göstermesi yeterlidir.",
     "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "type": "Doğru/Yanlış",
-    "options": [],
     "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "4.Vatanımızı Sevmek",
-    "text": "Mehmet Akif Ersoy'un sözlerine göre, vatanın batmaması için sadece devleti yönetenlerin çaba göstermesi yeterlidir."
+    "options": [],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Doğru/Yanlış",
+    "className": "6"
   },
   {
     "id": "aTb99Fyzkjurwbz9OK8m",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
     "correctAnswer": "Yanlış",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "topic": "4.Vatanımızı Sevmek",
-    "text": "Ömer Halisdemir'in eylemi, sadece kişisel cesaret örneği olup vatan savunmasına bir katkı sağlamamıştır.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
     "difficulty": "Zor",
+    "text": "Ömer Halisdemir'in eylemi, sadece kişisel cesaret örneği olup vatan savunmasına bir katkı sağlamamıştır.",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "Doğru/Yanlış"
+    "topicName": "4.Vatanımızı Sevmek",
+    "options": []
   },
   {
     "id": "b0VhnNznuE9bcoxUZ7ze",
-    "className": "6",
     "topicName": "4.Vatanımızı Sevmek",
-    "difficulty": "Orta",
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Vatanımızı Sevmek",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Vatanseverliğin bir göstergesi olarak milli savunma sanayisinin geliştirilmesi önemlidir.",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "correctAnswer": "Doğru",
-    "options": [],
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "4.Vatanımızı Sevmek",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
-    }
+    },
+    "text": "Vatanseverliğin bir göstergesi olarak milli savunma sanayisinin geliştirilmesi önemlidir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "correctAnswer": "Doğru"
   },
   {
     "id": "bGAl6xVhVb3DdWOl5Bi2",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
-    "type": "Boşluk Doldurma",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "topic": "4.Vatanımızı Sevmek",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Kolay",
+    "correctAnswer": "millet",
+    "topicName": "4.Vatanımızı Sevmek",
     "options": [
       "kavim",
       "millet",
       "aşiret",
       "cemaat"
     ],
+    "type": "Boşluk Doldurma",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "text": "Aynı topraklar üzerinde yaşayan, aralarında din, dil, tarih, ülkü birliği olan insan topluluğuna __________ denir.",
-    "correctAnswer": "millet",
-    "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "topic": "4.Vatanımızı Sevmek"
-  },
-  {
-    "id": "cRDKADUoynUWOzU5jb18",
-    "text": "Gazilik, vatan savunması için savaşa katılan ve savaştan sağ dönen kişiye verilen unvandır.",
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Vatanımızı Sevmek",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "correctAnswer": "Doğru",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "options": [],
-    "topicId": "KE5H7oRL74FA4s1l7FTg"
-  },
-  {
-    "id": "chxDWUQls6kgiP39syAZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "difficulty": "Zor",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "options": [],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topic": "4.Vatanımızı Sevmek",
-    "correctAnswer": "Yanlış",
-    "text": "15 Temmuz 2016 darbe girişiminde halkın sokağa çıkması, darbecilerin başarılı olmasında etkili olmuştur.",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6"
-  },
-  {
-    "id": "dzLo4oOljAsBO7yvMBwl",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "topic": "4.Vatanımızı Sevmek",
-    "difficulty": "Orta",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "İhanet",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "options": [
-      "Birlik",
-      "Sadakat",
-      "İhanet",
-      "Beraberlik"
-    ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "text": "Aşağıdakilerden hangisi vatanseverlikle ilişkilendirilebilecek bir kavram değildir?"
-  },
-  {
-    "id": "eXpChCBc7NoSz8P0Mu46",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
-    "type": "Çoktan Seçmeli",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "options": [
-      "Ticaret antlaşmaları",
-      "Vatan savunması",
-      "Teknolojik gelişmeler",
-      "Kültürel festivaller"
-    ],
-    "text": "Vatan sevgisinin göstergelerinden biri olarak kabul edilen \"kahramanlık\" aşağıdaki hangi olayda en net şekilde görülmüştür?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Vatan savunması",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "topic": "4.Vatanımızı Sevmek"
-  },
-  {
-    "id": "fvw3aGvwOeA2YfsO4TgO",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "difficulty": "Zor",
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Kurtuluş Savaşı, sadece toprak kazanmak amacıyla yapılmış bir mücadeledir.",
-    "correctAnswer": "Yanlış",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "options": [],
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "4.Vatanımızı Sevmek",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
@@ -580,80 +470,28 @@
     }
   },
   {
-    "id": "gUl4GG9u0Hj193KFsfFJ",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Vatanımızı Sevmek",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "correctAnswer": "Kurtuluş",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
-    "type": "Boşluk Doldurma",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "options": [
-      "Trablusgarp",
-      "Kore",
-      "Kurtuluş",
-      "Kıbrıs"
-    ],
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
-    "text": "Egemenliğin, bağımsızlığın ve yurt bütünlüğünün korunması için bütün imkânların seferber edildiği __________ Savaşı, vatan savunmasının bir diğer güzel örneğidir."
-  },
-  {
-    "id": "gv64Ll7BgQT9gOY8N87I",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "options": [
-      "Sadece askere gitmek",
-      "Çok çalışmak ve sorumlulukları yerine getirmek",
-      "Başka ülkelere göç etmek",
-      "Siyasetle uğraşmak"
-    ],
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Çok çalışmak ve sorumlulukları yerine getirmek",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Orta",
-    "topic": "4.Vatanımızı Sevmek",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Vatanımızı korumak ve geliştirmek için barış zamanında yapmamız gereken en önemli görev nedir?"
-  },
-  {
-    "id": "hLz7VvCWHZLcHu5CHbqK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Doğru/Yanlış",
-    "text": "Çanakkale Savaşı, vatan savunmasının güzel örneklerinden biri olarak tarihimizde yer alır.",
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
+    "id": "cRDKADUoynUWOzU5jb18",
     "options": [],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Gazilik, vatan savunması için savaşa katılan ve savaştan sağ dönen kişiye verilen unvandır.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "4.Vatanımızı Sevmek",
     "correctAnswer": "Doğru",
-    "topic": "4.Vatanımızı Sevmek"
+    "difficulty": "Orta",
+    "className": "6",
+    "topic": "4.Vatanımızı Sevmek",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
-    "id": "i9CELXNIZuDDmHUuq5Ar",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "4.Vatanımızı Sevmek",
-    "options": [],
+    "id": "chxDWUQls6kgiP39syAZ",
+    "text": "15 Temmuz 2016 darbe girişiminde halkın sokağa çıkması, darbecilerin başarılı olmasında etkili olmuştur.",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
     "correctAnswer": "Yanlış",
     "createdAt": {
@@ -661,19 +499,184 @@
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicName": "4.Vatanımızı Sevmek",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "topic": "4.Vatanımızı Sevmek",
+    "difficulty": "Zor",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "dzLo4oOljAsBO7yvMBwl",
+    "type": "Çoktan Seçmeli",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "4.Vatanımızı Sevmek",
+    "topic": "4.Vatanımızı Sevmek",
+    "options": [
+      "Birlik",
+      "Sadakat",
+      "İhanet",
+      "Beraberlik"
+    ],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "İhanet",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "difficulty": "Orta",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "className": "6",
+    "text": "Aşağıdakilerden hangisi vatanseverlikle ilişkilendirilebilecek bir kavram değildir?"
+  },
+  {
+    "id": "eXpChCBc7NoSz8P0Mu46",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "text": "Vatan sevgisinin göstergelerinden biri olarak kabul edilen \"kahramanlık\" aşağıdaki hangi olayda en net şekilde görülmüştür?",
+    "className": "6",
+    "correctAnswer": "Vatan savunması",
+    "topic": "4.Vatanımızı Sevmek",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "options": [
+      "Ticaret antlaşmaları",
+      "Vatan savunması",
+      "Teknolojik gelişmeler",
+      "Kültürel festivaller"
+    ],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "4.Vatanımızı Sevmek",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "fvw3aGvwOeA2YfsO4TgO",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "topicName": "4.Vatanımızı Sevmek",
+    "text": "Kurtuluş Savaşı, sadece toprak kazanmak amacıyla yapılmış bir mücadeledir.",
+    "className": "6",
+    "topic": "4.Vatanımızı Sevmek",
+    "difficulty": "Zor",
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "gUl4GG9u0Hj193KFsfFJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "correctAnswer": "Kurtuluş",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Boşluk Doldurma",
+    "topic": "4.Vatanımızı Sevmek",
+    "className": "6",
+    "options": [
+      "Trablusgarp",
+      "Kore",
+      "Kurtuluş",
+      "Kıbrıs"
+    ],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "topicName": "4.Vatanımızı Sevmek",
+    "difficulty": "Zor",
+    "text": "Egemenliğin, bağımsızlığın ve yurt bütünlüğünün korunması için bütün imkânların seferber edildiği __________ Savaşı, vatan savunmasının bir diğer güzel örneğidir."
+  },
+  {
+    "id": "gv64Ll7BgQT9gOY8N87I",
+    "className": "6",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Çok çalışmak ve sorumlulukları yerine getirmek",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "Vatanımızı korumak ve geliştirmek için barış zamanında yapmamız gereken en önemli görev nedir?",
+    "topicName": "4.Vatanımızı Sevmek",
+    "options": [
+      "Sadece askere gitmek",
+      "Çok çalışmak ve sorumlulukları yerine getirmek",
+      "Başka ülkelere göç etmek",
+      "Siyasetle uğraşmak"
+    ],
+    "topic": "4.Vatanımızı Sevmek"
+  },
+  {
+    "id": "hLz7VvCWHZLcHu5CHbqK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "options": [],
+    "text": "Çanakkale Savaşı, vatan savunmasının güzel örneklerinden biri olarak tarihimizde yer alır.",
+    "className": "6",
+    "difficulty": "Orta",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "correctAnswer": "Doğru",
+    "topicName": "4.Vatanımızı Sevmek",
+    "topic": "4.Vatanımızı Sevmek",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "i9CELXNIZuDDmHUuq5Ar",
+    "correctAnswer": "Yanlış",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "text": "Vatanı sevmek, sadece savaş zamanında geçerli bir duygudur.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "topic": "4.Vatanımızı Sevmek",
+    "difficulty": "Kolay",
     "type": "Doğru/Yanlış",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Kolay"
+    "topicName": "4.Vatanımızı Sevmek",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "options": []
   },
   {
     "id": "jjb2hpZsZZhjeTmFGr4C",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
+    "topic": "4.Vatanımızı Sevmek",
+    "correctAnswer": "Halkın büyük bir cesaretle sokaklara çıkması",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicName": "4.Vatanımızı Sevmek",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
     "type": "Çoktan Seçmeli",
     "options": [
@@ -682,33 +685,21 @@
       "Halkın büyük bir cesaretle sokaklara çıkması",
       "Ordunun tamamının karşı çıkması"
     ],
-    "topic": "4.Vatanımızı Sevmek",
-    "difficulty": "Zor",
-    "correctAnswer": "Halkın büyük bir cesaretle sokaklara çıkması",
-    "text": "15 Temmuz 2016 darbe girişiminin başarısız olmasında en etkili faktörlerden biri nedir?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    }
-  },
-  {
-    "id": "o2EBPAMfmGVTyyKng1CN",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "Kurtuluş Savaşı'nın temel amacı aşağıdakilerden hangisidir?",
-    "correctAnswer": "Egemenliği, bağımsızlığı ve yurt bütünlüğünü korumak",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "15 Temmuz 2016 darbe girişiminin başarısız olmasında en etkili faktörlerden biri nedir?",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6"
+  },
+  {
+    "id": "o2EBPAMfmGVTyyKng1CN",
+    "difficulty": "Zor",
+    "correctAnswer": "Egemenliği, bağımsızlığı ve yurt bütünlüğünü korumak",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6",
     "topic": "4.Vatanımızı Sevmek",
     "options": [
       "Yeni topraklar fethetmek",
@@ -716,337 +707,346 @@
       "Egemenliği, bağımsızlığı ve yurt bütünlüğünü korumak",
       "Komşu ülkelerle ittifak kurmak"
     ],
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
-  },
-  {
-    "id": "p8jkpn3tRPVZymyNZ9Yb",
-    "text": "Kıbrıs Barış Harekâtı'nın gerçekleştirilme amacı aşağıdakilerden hangisidir?",
-    "correctAnswer": "Kıbrıs Türklerini Rum baskı ve katliamlarından kurtarmak ve barışı sağlamak",
     "type": "Çoktan Seçmeli",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
-    "difficulty": "Zor",
-    "topic": "4.Vatanımızı Sevmek",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "text": "Kurtuluş Savaşı'nın temel amacı aşağıdakilerden hangisidir?",
+    "topicName": "4.Vatanımızı Sevmek",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "p8jkpn3tRPVZymyNZ9Yb",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "difficulty": "Zor",
     "options": [
       "Kıbrıs'ın ekonomik kalkınmasını sağlamak",
       "Kıbrıs Türklerini Rum baskı ve katliamlarından kurtarmak ve barışı sağlamak",
       "Adada yeni bir rejim kurmak",
       "Bölgede turizmi geliştirmek"
     ],
-    "topicId": "KE5H7oRL74FA4s1l7FTg"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topic": "4.Vatanımızı Sevmek",
+    "text": "Kıbrıs Barış Harekâtı'nın gerçekleştirilme amacı aşağıdakilerden hangisidir?",
+    "topicName": "4.Vatanımızı Sevmek",
+    "correctAnswer": "Kıbrıs Türklerini Rum baskı ve katliamlarından kurtarmak ve barışı sağlamak"
   },
   {
     "id": "pD8cRNKUK8kpsR5p8zva",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "correctAnswer": "beraberliğin",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "topic": "4.Vatanımızı Sevmek",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "4.Vatanımızı Sevmek",
     "options": [
       "kalkınmanın",
       "huzurun",
       "beraberliğin",
       "istikrarın"
     ],
+    "className": "6",
+    "text": "15 Temmuz 2016’da meydana gelen darbe girişiminin kısa sürede bastırılması, millî birlik ve __________ sağlanması ile mümkündür.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
-    "type": "Boşluk Doldurma",
-    "text": "15 Temmuz 2016’da meydana gelen darbe girişiminin kısa sürede bastırılması, millî birlik ve __________ sağlanması ile mümkündür.",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "topic": "4.Vatanımızı Sevmek"
   },
   {
     "id": "r1NCLtCk35lsvr4eLTyy",
-    "topic": "4.Vatanımızı Sevmek",
-    "correctAnswer": "Üzerinde ortak değerlerin paylaşılması",
-    "difficulty": "Kolay",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "text": "Vatanı bir toprak parçası olmaktan farklı kılan en temel özelliklerden biri nedir?",
+    "topic": "4.Vatanımızı Sevmek",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Üzerinde ortak değerlerin paylaşılması",
     "options": [
       "Topraklarının verimli olması",
       "Üzerinde ortak değerlerin paylaşılması",
       "İkliminin güzel olması",
       "Nüfusunun kalabalık olması"
     ],
-    "type": "Çoktan Seçmeli",
-    "topicId": "KE5H7oRL74FA4s1l7FTg"
+    "className": "6",
+    "difficulty": "Kolay",
+    "topicName": "4.Vatanımızı Sevmek",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "rM9avsMrn9VccyVkN0m0",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "type": "Doğru/Yanlış",
-    "options": [],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
+    "options": [],
+    "type": "Doğru/Yanlış",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "text": "Şehitler ve gaziler, vatan sevgisini canları pahasına ortaya koyan kahramanlardır.",
+    "topic": "4.Vatanımızı Sevmek",
+    "correctAnswer": "Doğru",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "topic": "4.Vatanımızı Sevmek",
-    "difficulty": "Kolay",
-    "correctAnswer": "Doğru"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "className": "6"
   },
   {
     "id": "sPcQuV9lMOXY9Yxaw8Hf",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "type": "Çoktan Seçmeli",
-    "text": "Vatan savunması sırasında şehit olanların, Allah katındaki mertebesiyle ilgili hangi ifade doğrudur?",
-    "correctAnswer": "Cennette yüksek bir makama sahiptirler",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topic": "4.Vatanımızı Sevmek",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
-    "difficulty": "Orta",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "options": [
       "Dünya nimetlerinden faydalanırlar",
       "Yeniden dünyaya gelirler",
       "Cennette yüksek bir makama sahiptirler",
       "Unutulmazlar"
-    ]
+    ],
+    "topicName": "4.Vatanımızı Sevmek",
+    "topic": "4.Vatanımızı Sevmek",
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Vatan savunması sırasında şehit olanların, Allah katındaki mertebesiyle ilgili hangi ifade doğrudur?",
+    "correctAnswer": "Cennette yüksek bir makama sahiptirler",
+    "className": "6",
+    "topicId": "KE5H7oRL74FA4s1l7FTg"
   },
   {
     "id": "sog04meDB7ptgZh6eFma",
+    "topicName": "4.Vatanımızı Sevmek",
+    "difficulty": "Kolay",
+    "text": "Aşağıdakilerden hangisi vatan sevgisini ifade eden bir duygu değildir?",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Kayıtsızlık",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "Sadakat",
       "Gurur",
       "Kayıtsızlık",
       "Şefkat"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
-    "text": "Aşağıdakilerden hangisi vatan sevgisini ifade eden bir duygu değildir?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
     "topic": "4.Vatanımızı Sevmek",
-    "difficulty": "Kolay",
-    "correctAnswer": "Kayıtsızlık"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "uSQAOn8mVRivpQSNzFDA",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "difficulty": "Zor",
-    "topic": "4.Vatanımızı Sevmek",
-    "text": "Ömer Halisdemir'in 15 Temmuz darbe girişimindeki kahramanlığı, hangi kavramla en doğru şekilde ilişkilendirilebilir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Çoktan Seçmeli",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "4.Vatanımızı Sevmek",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "4.Vatanımızı Sevmek",
+    "correctAnswer": "Vatanseverlik ve şehitlik",
     "options": [
       "Siyasi başarı",
       "Vatanseverlik ve şehitlik",
       "Ekonomik kalkınma",
       "Teknolojik ilerleme"
     ],
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "correctAnswer": "Vatanseverlik ve şehitlik",
+    "className": "6",
+    "difficulty": "Zor",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "text": "Ömer Halisdemir'in 15 Temmuz darbe girişimindeki kahramanlığı, hangi kavramla en doğru şekilde ilişkilendirilebilir?",
     "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "uyn9cJ810uu9JVok8Iq9",
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "options": [],
+    "topicName": "4.Vatanımızı Sevmek",
+    "text": "Kıbrıs Barış Harekâtı, Türkiye'nin Kıbrıs adasını tamamen ilhak etme amacıyla yapılmıştır.",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "options": [],
+    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "text": "Kıbrıs Barış Harekâtı, Türkiye'nin Kıbrıs adasını tamamen ilhak etme amacıyla yapılmıştır.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
+    "topic": "4.Vatanımızı Sevmek",
     "difficulty": "Zor",
-    "topic": "4.Vatanımızı Sevmek"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "className": "6",
+    "type": "Doğru/Yanlış"
   },
   {
     "id": "v1RVyYi6Uvd7ONeNYEhE",
-    "correctAnswer": "gazi",
-    "topic": "4.Vatanımızı Sevmek",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
-    "className": "6",
-    "topicName": "4.Vatanımızı Sevmek",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Vatan savunması için savaşa katılan ve savaştan sağ dönen kişiye ise __________ denilmektedir.",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "options": [
       "komutan",
       "gazi",
       "asker",
       "kurban"
-    ]
+    ],
+    "text": "Vatan savunması için savaşa katılan ve savaştan sağ dönen kişiye ise __________ denilmektedir.",
+    "topicName": "4.Vatanımızı Sevmek",
+    "correctAnswer": "gazi",
+    "topic": "4.Vatanımızı Sevmek",
+    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "v4aWHtx6zH3A6px9KAoT",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "topic": "4.Vatanımızı Sevmek",
-    "text": "Bağımsız bir vatana sahip olmanın sağladığı imkânlardan biri nedir?",
-    "difficulty": "Kolay",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "Başka bir ülkeye göç etmek",
       "Kendi dilini özgürce konuşmak",
       "Yabancı bir dil öğrenmek",
       "Sınırları kapatmak"
     ],
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Kendi dilini özgürce konuşmak",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
-  },
-  {
-    "id": "vSNz8uEEpj3H1ZmvHiwO",
-    "topic": "4.Vatanımızı Sevmek",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "Vatanını korumak ve düşmana karşı mücadele etmek, İslam'ın emrettiklerinden biridir.",
-    "difficulty": "Orta",
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
+    "text": "Bağımsız bir vatana sahip olmanın sağladığı imkânlardan biri nedir?",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Kendi dilini özgürce konuşmak",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "4.Vatanımızı Sevmek",
     "topicName": "4.Vatanımızı Sevmek",
-    "options": [],
-    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "KE5H7oRL74FA4s1l7FTg"
   },
   {
-    "id": "wKKtRIoi0G81RULgSKXp",
-    "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Doğru",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "id": "vSNz8uEEpj3H1ZmvHiwO",
     "type": "Doğru/Yanlış",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "correctAnswer": "Doğru",
     "options": [],
+    "topicName": "4.Vatanımızı Sevmek",
+    "difficulty": "Orta",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "text": "Millet, aynı topraklar üzerinde yaşayan, aralarında din, dil, tarih, ülkü birliği olan insan topluluğuna denir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "text": "Vatanını korumak ve düşmana karşı mücadele etmek, İslam'ın emrettiklerinden biridir.",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "4.Vatanımızı Sevmek"
   },
   {
-    "id": "xQAsbamfU6ITSuIHCEfN",
+    "id": "wKKtRIoi0G81RULgSKXp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "type": "Doğru/Yanlış",
     "difficulty": "Kolay",
-    "type": "Boşluk Doldurma",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Vatanımızı Sevmek",
-    "topicName": "4.Vatanımızı Sevmek",
     "className": "6",
-    "text": "Hz. Muhammed (sav), şehitliğin önemini anlattığı bir sözünde \"Cennete giren hiçbir kimse, yeryüzündeki her şey kendisinin olsa dahi dünyaya geri dönmeyi __________ arzu etmez.\" buyurmaktadır.",
+    "topic": "4.Vatanımızı Sevmek",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "options": [],
+    "topicName": "4.Vatanımızı Sevmek",
+    "correctAnswer": "Doğru",
+    "text": "Millet, aynı topraklar üzerinde yaşayan, aralarında din, dil, tarih, ülkü birliği olan insan topluluğuna denir.",
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "xQAsbamfU6ITSuIHCEfN",
+    "topicName": "4.Vatanımızı Sevmek",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "dünyaya geri dönmeyi",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361021,
+      "nanoseconds": 419000000
+    },
+    "topic": "4.Vatanımızı Sevmek",
+    "difficulty": "Kolay",
+    "text": "Hz. Muhammed (sav), şehitliğin önemini anlattığı bir sözünde \"Cennete giren hiçbir kimse, yeryüzündeki her şey kendisinin olsa dahi dünyaya geri dönmeyi __________ arzu etmez.\" buyurmaktadır.",
     "options": [
       "sonsuza dek",
       "dünyaya geri dönmeyi",
       "hiçbir şekilde",
       "cennete gitmeyi"
     ],
-    "correctAnswer": "dünyaya geri dönmeyi",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767361021,
-      "nanoseconds": 419000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "className": "6"
   },
   {
     "id": "zlFmj7Sf64x488IsK7aq",
-    "difficulty": "Kolay",
-    "topicId": "KE5H7oRL74FA4s1l7FTg",
     "options": [
       "sıcak",
       "verimli",
       "güzel",
       "cennet"
     ],
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "4.Vatanımızı Sevmek",
-    "className": "6",
     "text": "Mehmet Akif Ersoy, İstiklal Marşı'nda \"Verme, dünyaları alsan da bu __________ vatanı.\" diyerek vatan sevgisini vurgular.",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "correctAnswer": "cennet",
+    "topic": "4.Vatanımızı Sevmek",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767361021,
       "nanoseconds": 419000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Vatanımızı Sevmek"
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "KE5H7oRL74FA4s1l7FTg",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   }
 ]

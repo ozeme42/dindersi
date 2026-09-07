@@ -2,48 +2,48 @@
   {
     "id": "0pgaaQbcHyoEiGnuU1Qq",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
+    "content": {
+      "text": "Araştırma"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
     },
-    "content": {
-      "text": "Araştırma"
-    },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy"
-  },
-  {
-    "id": "19OAY98PMNPOcqjqpqzV",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "content": {
-      "text": "Düzen"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1751285872,
-      "nanoseconds": 271000000
-    },
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "type": "concept"
   },
   {
-    "id": "3X1oJUOKSMbjKAqZJNRv",
+    "id": "19OAY98PMNPOcqjqpqzV",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "text": "Düzen"
+    }
+  },
+  {
+    "id": "3X1oJUOKSMbjKAqZJNRv",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1751285872,
+      "nanoseconds": 271000000
+    },
     "content": {
       "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk.",
       "term": "Evren"
     },
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "type": "definition"
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "46aon7BqnFKkEBiHnn9N",
@@ -52,145 +52,145 @@
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "content": {
       "term": "Uyum",
       "definition": "Evrendeki tüm varlıkların birbiriyle dengeli bir şekilde var olması."
-    }
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "4LhfpJN0WtHLNuYI4MVp",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
     },
     "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Gece ve gündüz birbirini takip eder."
     },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "type": "sentence"
   },
   {
     "id": "4eWosbKtbGHMsglkaMZe",
+    "topicTitle": "1.Evrendeki Mükemmel Düzen",
+    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
-      "title": "",
-      "term": "Akıl",
-      "text": "",
       "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir.",
+      "text": "",
       "categories": [],
-      "items": []
+      "term": "Akıl",
+      "items": [],
+      "title": ""
     },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753880783,
       "nanoseconds": 497000000
     },
-    "type": "definition",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
-    "topicTitle": "1.Evrendeki Mükemmel Düzen",
-    "unitId": "jjotqKbHyi504QHH40ko"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "6tlYeQWgMjo3DMRleP6p",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "content": {
       "text": "Evrendeki her şey bir amaç için yaratılmıştır ve tesadüfi değildir."
     },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "6xu1oWnwVVPjR3CITy5a",
-    "content": {
-      "text": "İnsan, evreni anlamaya çalışır."
-    },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "text": "İnsan, evreni anlamaya çalışır."
+    },
+    "type": "sentence"
   },
   {
     "id": "E6iFGHMRmHbhxsLt4IGP",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1751285872,
+      "nanoseconds": 271000000
+    },
+    "type": "concept",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "content": {
       "text": "Gözlem"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1751285872,
-      "nanoseconds": 271000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
     "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "EuTvUNfSv1C9B8BJwJRJ",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "sentence",
-    "content": {
-      "text": "Evren mükemmel bir düzen içindedir."
-    },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "text": "Evren mükemmel bir düzen içindedir."
+    }
   },
   {
     "id": "Ew9M0fsDpMolsfX9ZjuL",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "text": "Mevsimler düzenli olarak değişir."
+    },
+    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "type": "sentence",
-    "content": {
-      "text": "Mevsimler düzenli olarak değişir."
     }
   },
   {
     "id": "F1h1v9sQJO30ua7rbaTR",
-    "type": "concept",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
-      "items": [],
-      "text": "Alem",
-      "term": "",
-      "title": "",
       "categories": [],
-      "definition": ""
+      "term": "",
+      "definition": "",
+      "title": "",
+      "text": "Alem",
+      "items": []
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
@@ -201,210 +201,210 @@
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "content": {
       "text": "İnsan, gözlem yaparak ve sorgulayarak evrendeki düzeni anlayabilir."
     },
-    "type": "sentence"
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "GU9nB1Gx7A1oqkyFzUON",
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1751285872,
+      "nanoseconds": 271000000
+    },
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "content": {
       "text": "Merak"
     },
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1751285872,
-      "nanoseconds": 271000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "J1ZCyQ1YiYCDaoEAyTVW",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753854316,
+      "nanoseconds": 106000000
+    },
+    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "Gözlem ve araştırma önemlidir."
     },
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753854316,
-      "nanoseconds": 106000000
-    }
+    "topicId": "QS6SmMl5nG9VgWL9LNEy"
   },
   {
     "id": "KGhuuuoxrC7X3hMcU2T0",
-    "content": {
-      "text": "Doğada uyum ve denge vardır."
-    },
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "text": "Doğada uyum ve denge vardır."
+    },
     "type": "sentence"
   },
   {
     "id": "KbTvz92XejpqxjEXBIvY",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "concept",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Denge"
-    },
-    "type": "concept",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko"
+    }
   },
   {
     "id": "MsHFxgi8WC3pvSyTQ5uX",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "İnsan, akıl sahibi olmasıyla diğer canlılardan ayrılır ve evrendeki düzeni anlamaya çalışır."
+    },
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
-    },
-    "content": {
-      "text": "İnsan, akıl sahibi olmasıyla diğer canlılardan ayrılır ve evrendeki düzeni anlamaya çalışır."
-    },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko"
+    }
   },
   {
     "id": "OqWOiNUQfdiIlUfRWMyq",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Su döngüsü yaşam için önemlidir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
     },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "type": "sentence",
     "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "Qn9640qIQNSNz7s5SCkN",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Uyum"
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "concept"
   },
   {
     "id": "RyM9LEHVgkoZ502EuJVf",
-    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "definition": "Evrendeki her şeyin bir amaç için yaratıldığını gösteren kusursuz sistem.",
-      "term": "Düzen"
+      "term": "Düzen",
+      "definition": "Evrendeki her şeyin bir amaç için yaratıldığını gösteren kusursuz sistem."
     },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko"
+    "type": "definition"
   },
   {
     "id": "WMyxvaKz53KcsgP28xGT",
-    "content": {
-      "text": "Evren, mükemmel bir düzen içinde işleyen bir sistemdir."
-    },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
-    }
+    },
+    "content": {
+      "text": "Evren, mükemmel bir düzen içinde işleyen bir sistemdir."
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence"
   },
   {
     "id": "cEDs7UzpRmycC0F9d7VA",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Her şey bir amaç için yaratılmıştır."
-    },
     "unitId": "jjotqKbHyi504QHH40ko",
     "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
+    },
+    "content": {
+      "text": "Her şey bir amaç için yaratılmıştır."
     }
   },
   {
     "id": "enoHHwhkYePRkHD9cjhx",
-    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
     },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Döngü"
-    }
+    },
+    "type": "concept",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy"
   },
   {
     "id": "ha6VpR8EcmGUxzeQe3xN",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1751285872,
-      "nanoseconds": 271000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "content": {
       "term": "Denge",
       "definition": "Vücudumuzdaki ve evrendeki her şeyin uyumlu bir şekilde çalışmasını sağlayan düzen."
     },
-    "type": "definition"
-  },
-  {
-    "id": "hrh6CUirPTU8rmQ4mkz3",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "hrh6CUirPTU8rmQ4mkz3",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "content": {
-      "term": "Toprak",
-      "definition": "Tohumun ağaca, ağacın meyveye dönüşmesini sağlayan fabrika gibi çalışan doğal yapı."
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1751285872,
+      "nanoseconds": 271000000
     },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy"
+    "content": {
+      "definition": "Tohumun ağaca, ağacın meyveye dönüşmesini sağlayan fabrika gibi çalışan doğal yapı.",
+      "term": "Toprak"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
   },
   {
     "id": "iElPLp9VQ61IbRLw0oa9",
@@ -414,12 +414,12 @@
       "text": "Su döngüsü"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
-    }
+    },
+    "type": "concept"
   },
   {
     "id": "iJAh5KizXO4eGc1wL9m5",
@@ -428,266 +428,266 @@
       "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç.",
       "term": "Su Döngüsü"
     },
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
-    },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   },
   {
     "id": "jkssHR1Of00G4PqJZbnb",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753880715,
       "nanoseconds": 110000000
     },
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicTitle": "1.Evrendeki Mükemmel Düzen",
     "content": {
-      "title": "",
-      "definition": "Kusursuz bir denge, orantı ve amaca uygunluk",
       "term": "Ölçü",
       "text": "",
+      "title": "",
       "categories": [],
-      "items": []
+      "items": [],
+      "definition": "Kusursuz bir denge, orantı ve amaca uygunluk"
     },
-    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
-    "topicTitle": "1.Evrendeki Mükemmel Düzen"
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "definition"
   },
   {
     "id": "kdbG85sYoMR172zqjhEg",
-    "content": {
-      "term": "Gece ve Gündüz",
-      "definition": "Dünya'nın kendi etrafında dönmesiyle oluşur."
-    },
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854556,
       "nanoseconds": 385000000
     },
-    "type": "definition"
+    "content": {
+      "definition": "Dünya'nın kendi etrafında dönmesiyle oluşur.",
+      "term": "Gece ve Gündüz"
+    },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy"
   },
   {
     "id": "kqzUKi4pIwWnLuuc8RIO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "Mevsimler"
     },
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854556,
       "nanoseconds": 385000000
-    }
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept"
   },
   {
     "id": "kw8QE4RReis478SW3lxh",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
     "content": {
       "text": "Döngüler doğanın dengesini sağlar."
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854316,
       "nanoseconds": 106000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "QS6SmMl5nG9VgWL9LNEy"
   },
   {
     "id": "mUYDdEahI6WBog0avTUg",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "content": {
-      "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme.",
-      "term": "Gözlem"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
-    "unitId": "jjotqKbHyi504QHH40ko"
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "term": "Gözlem",
+      "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "pEwONvHQKFbnCsycSNSj",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "term": "İnsan",
-      "definition": "Düşünen, sorgulayan, akıl sahibi canlı."
-    },
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "definition": "Düşünen, sorgulayan, akıl sahibi canlı.",
+      "term": "İnsan"
+    },
     "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "pjTnzuQE9cncCbOp9X7q",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1751285872,
-      "nanoseconds": 271000000
-    },
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "İnsan"
     },
-    "unitId": "jjotqKbHyi504QHH40ko"
-  },
-  {
-    "id": "q9UjeSN19am9IuT3PE8P",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
-    "type": "sentence",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept"
+  },
+  {
+    "id": "q9UjeSN19am9IuT3PE8P",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "content": {
       "text": "İnsan vücudundaki ve evrendeki döngüler, dengenin korunmasını sağlar."
     },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1751285872,
+      "nanoseconds": 271000000
+    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "sJQkO2wPaCl3G1ici9Qx",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
     "topicTitle": "1.Evrendeki Mükemmel Düzen",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
+    "content": {
+      "items": [],
+      "title": "",
+      "text": "Ölçü",
+      "term": "",
+      "categories": [],
+      "definition": ""
+    },
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753880252,
       "nanoseconds": 504000000
-    },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "type": "concept",
-    "content": {
-      "title": "",
-      "term": "",
-      "text": "Ölçü",
-      "items": [],
-      "categories": [],
-      "definition": ""
     }
   },
   {
     "id": "smUzIeiiD2RJ93R2cZl1",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "term": "Mevsimler",
+      "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753854556,
       "nanoseconds": 385000000
     },
-    "content": {
-      "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur.",
-      "term": "Mevsimler"
-    },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "type": "definition",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
   },
   {
     "id": "tZNxCdqfmOCgZyihwnjo",
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicTitle": "1.Evrendeki Mükemmel Düzen",
     "content": {
-      "term": "",
-      "text": "Akıl",
       "title": "",
       "items": [],
-      "definition": "",
-      "categories": []
+      "term": "",
+      "categories": [],
+      "text": "Akıl",
+      "definition": ""
     },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753880185,
       "nanoseconds": 406000000
-    },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicTitle": "1.Evrendeki Mükemmel Düzen",
-    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
+    }
   },
   {
     "id": "ttgOdq4NjPWkFAfivK5Q",
+    "content": {
+      "definition": "Bilgiye ulaşma isteği, öğrenme arzusu.",
+      "term": "Merak"
+    },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
     "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "term": "Merak",
-      "definition": "Bilgiye ulaşma isteği, öğrenme arzusu."
-    },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "vo74zaTHYwIvldUAN4mR",
+    "topicTitle": "1.Evrendeki Mükemmel Düzen",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
+    "content": {
+      "categories": [],
+      "title": "",
+      "items": [],
+      "term": "Alem",
+      "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
+      "text": ""
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753938283,
       "nanoseconds": 251000000
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "definition",
-    "content": {
-      "categories": [],
-      "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
-      "title": "",
-      "text": "",
-      "term": "Alem",
-      "items": []
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicTitle": "1.Evrendeki Mükemmel Düzen",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "sourceText": "EVRENDEKİ MÜKEMMEL DÜZEN\nEvren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri\niçine alan varlıklar bütünüdür. Bu varlıklar âleminde insan, akıl sahibi olması yönüyle diğer canlılardan ayrılır. Düşünen, sorgulayan\nve akleden bir varlık olarak insan, her şeyi bilmek ve anlamak ister.\nBunun için çevresini gözlemler, gördükleri üzerine düşünür. Gözlemleri hakkında araştırma yaparak olaylar arasında ilişki kurar.\nİnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. İnsan vücudundaki her bir\nsistem birbiriyle etkileşime girerek vücudun sağlıklı bir şekilde çalışmasına ve vücut dengesinin korunmasına yardımcı olur. Evrendeki tabiat olaylarının gerçekleşmesi de doğal\ndengenin korunmasını sağlar. Örneğin insan susadığında vücut, su içme ihtiyacı hisseder.\nBenzer şekilde yeryüzündeki varlıkların su ihtiyacının karşılanması için su döngüsü gerçekleşir. Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.\nİnsan vücudunun ölçülü ve dengeli yapısı, evrende var olan düzenin ipuçlarını içerir. İnsan\nkendi vücudunu gözlemleyerek de mükemmel düzenle ilgili sorularına cevaplar bulabilir.\nVücudun genel dengesine göre her bir organ, kendi görevine uygun olarak yaratılmıştır.\nÖrneğin göz, kulak, burun gibi uzuvlar insanın ihtiyaçlarına uygun olarak yerleştirilip şekillendirilmiştir. Hayvanların bedenlerinin, onların yaşayışlarına uygun olarak farklı farklı\ntasarlanmış olması da evrendeki düzenin varlığına işarettir. Havada, karada ve suda yaşayan canlıların her biri ihtiyaçlarını karşılayabilecek şekilde donatılmıştır.\nYaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir\nuyum ve denge içindedir. Bu dengenin farkında olan insan, günlük hayatta karşılaştığı\nolayları anlamaya çalışır. Öncelikle üzerinde yaşadığı toprağın ne işe yaradığını düşünür.\nToprağın bir fabrika gibi tohumu nasıl ağaca dönüştürdüğünü ve bu ağacın nasıl meyve\nverdiğini gözlemler. Ekinlerin nasıl yeşerdiğini, kuşların nasıl uçtuğunu, balıkların nasıl\nyüzdüğünü merak eder. Yağmur ve karın nasıl yağdığını; ayın, güneşin, bulutların ve rüzgârın niçin var olduğunu sorgular. İnsan, varlıkların bir amaç için yaratıldığını fark eder.\nBunların kendiliğinden meydana gelemeyeceğini anlar.\nâlem:Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "definition"
   },
   {
     "id": "xakSoopaA3yvOjRVlMCn",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "content": {
-      "text": "Evren"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1751285872,
       "nanoseconds": 271000000
     },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Evren"
+    },
     "type": "concept"
   },
   {
     "id": "xph8YZVzKV5JzR9Sobox",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "content": {
       "text": "Gece ve Gündüz"
     },
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",

@@ -1,53 +1,53 @@
 [
   {
     "id": "0lhUOj0OssCV5V2ISQDx",
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "content": {
       "text": "Vefa"
     },
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "type": "concept",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
-    },
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    }
   },
   {
     "id": "1hXLF7mPRs8cFvJubA6j",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034102,
-      "nanoseconds": 542000000
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "content": {
       "text": "Hz. Peygamber, aile bireylerine zaman ayırır ve onlarla ilgilenirdi."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752034102,
+      "nanoseconds": 542000000
+    }
   },
   {
     "id": "2phWwnVP7dd195QfsTaM",
     "content": {
       "text": "Nezaket"
     },
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "concept"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "2tJfyuS8Jn7LxhNYR9xA",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "sentence",
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Peygamberimiz, Hz. Hatice'ye olan sevgisini ve vefasını her zaman dile getirmiştir."
@@ -57,151 +57,153 @@
       "seconds": 1752034102,
       "nanoseconds": 542000000
     },
-    "topicId": "ZbuhKsMwd4wNNdqKjmix"
+    "type": "sentence"
   },
   {
     "id": "4z91XrmSGnQJdOZ7tuTq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034102,
-      "nanoseconds": 542000000
-    },
     "type": "concept",
     "content": {
       "text": "Saygı"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
-  },
-  {
-    "id": "AABEHzHd1rmXA4r9DPdD",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
     },
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
+  },
+  {
+    "id": "AABEHzHd1rmXA4r9DPdD",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "concept",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752034102,
+      "nanoseconds": 542000000
+    },
     "content": {
       "text": "Sevgi"
     },
-    "topicId": "ZbuhKsMwd4wNNdqKjmix"
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "ACZAnHugB8RLL10z7PVc",
+    "content": {
+      "definition": "Peygamberimizin ilk eşi",
+      "term": "Hz. Hatice"
+    },
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "type": "definition",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034132,
       "nanoseconds": 401000000
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "content": {
-      "term": "Hz. Hatice",
-      "definition": "Peygamberimizin ilk eşi"
-    },
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "type": "definition"
+    }
   },
   {
     "id": "COtlIBYneO66Ca80sMkc",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752034132,
+      "nanoseconds": 401000000
+    },
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "content": {
       "term": "Nezaket",
       "definition": "Başkalarına karşı saygılı ve kibar davranma"
     },
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034132,
-      "nanoseconds": 401000000
-    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition"
   },
   {
     "id": "DintaEMfe8Vtz46noDEM",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034132,
       "nanoseconds": 401000000
     },
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "content": {
       "term": "Sevgi",
       "definition": "Birine veya bir şeye karşı duyulan derin ilgi ve bağlılık"
-    },
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    }
   },
   {
     "id": "G7AoSzjxgSJXJfDz7JaQ",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034102,
-      "nanoseconds": 542000000
-    },
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "content": {
       "text": "Hz. Aişe"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept"
-  },
-  {
-    "id": "HR23rxuSmilRayh70xoO",
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "content": {
-      "text": "Aile"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
     },
     "type": "concept",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
+  },
+  {
+    "id": "HR23rxuSmilRayh70xoO",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752034102,
+      "nanoseconds": 542000000
+    },
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "content": {
+      "text": "Aile"
+    },
+    "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "KtZ75NmAfaJraTOOSySh",
+    "content": {
+      "term": "Nikah",
+      "definition": "Evlilik bağı kurma"
+    },
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034132,
       "nanoseconds": 401000000
-    },
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "term": "Nikah",
-      "definition": "Evlilik bağı kurma"
     }
   },
   {
     "id": "LDfn9UIKH7EAt5b1l1W3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034132,
-      "nanoseconds": 401000000
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "type": "definition",
     "content": {
       "term": "Sorumluluk",
       "definition": "Üstlenilen görevi yerine getirme yükümlülüğü"
     },
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752034132,
+      "nanoseconds": 401000000
+    }
   },
   {
     "id": "Nq2trwfrIkwZYvtxIGKZ",
+    "type": "sentence",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "content": {
       "text": "Peygamberimiz, Hz. Hatice'nin vefatından sonra bile onun sevdikleriyle ilişkisini sürdürmüştür."
@@ -210,13 +212,12 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence"
+    }
   },
   {
     "id": "PSdWliUU9HLlNEedyT9D",
     "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
@@ -225,35 +226,34 @@
     "content": {
       "text": "Peygamberimiz, ev işlerinde ailesine yardım ederdi."
     },
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "topicId": "ZbuhKsMwd4wNNdqKjmix"
   },
   {
     "id": "PskFgBgzmnWNpT2rxRL7",
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "content": {
-      "text": "Hz. Hatice, Peygamberimize ilk iman eden kişidir ve ona destek olmuştur."
-    },
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
+    },
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "content": {
+      "text": "Hz. Hatice, Peygamberimize ilk iman eden kişidir ve ona destek olmuştur."
     }
   },
   {
     "id": "S2c5cowKvosDxiZb7wn5",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "content": {
       "text": "Peygamberimiz, vefa duygusuna önem verirdi ve Hz. Hatice'nin vefatından sonra bile onun arkadaşlarına iyi davranırdı."
@@ -261,43 +261,43 @@
   },
   {
     "id": "THbUOklbqW3cV88s9jo3",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
     },
     "type": "sentence",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "content": {
       "text": "Hz. Aişe, Peygamberimiz ile yarış yaptığı bir anısını anlatır."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "ZbuhKsMwd4wNNdqKjmix"
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "Xtf2vboUHBzzc921si3e",
-    "type": "sentence",
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "content": {
+      "text": "Peygamber Efendimiz, aile hayatında Müslümanlara örnek olmuştur."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Peygamber Efendimiz, aile hayatında Müslümanlara örnek olmuştur."
-    },
+    "type": "sentence",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "ZbuhKsMwd4wNNdqKjmix"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "Yw7vEONnhWlhtI7x8GtJ",
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
-      "term": "Aile",
-      "definition": "Bireylerin sevgi, saygı ve güven temelinde bir araya geldiği topluluk"
+      "definition": "Bireylerin sevgi, saygı ve güven temelinde bir araya geldiği topluluk",
+      "term": "Aile"
     },
     "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -307,50 +307,50 @@
   },
   {
     "id": "c59J1JZqrKZs8WYFweBM",
+    "type": "concept",
+    "content": {
+      "text": "Hz. Hatice"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "content": {
-      "text": "Hz. Hatice"
-    },
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "type": "concept"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "dw53kGrYlXZG4YjakGSU",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752034132,
+      "nanoseconds": 401000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "content": {
       "definition": "Sevgi ve dostluk bağını sürdürme",
       "term": "Vefa"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034132,
-      "nanoseconds": 401000000
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
+    "type": "definition"
   },
   {
     "id": "l4qVUyXu8rSZ1C5gGTSZ",
+    "content": {
+      "definition": "Peygamberimizin Hz. Hatice'den sonraki eşi",
+      "term": "Hz. Aişe"
+    },
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "type": "definition",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034132,
       "nanoseconds": 401000000
     },
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "content": {
-      "definition": "Peygamberimizin Hz. Hatice'den sonraki eşi",
-      "term": "Hz. Aişe"
-    }
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "ohdzPGFsX2A6oqIapoVn",
@@ -359,57 +359,57 @@
       "seconds": 1752034102,
       "nanoseconds": 542000000
     },
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "content": {
       "text": "Peygamberimiz, eşlerine karşı nazik davranır ve onların isteklerini geri çevirmezdi."
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "sentence"
   },
   {
     "id": "sbcEEMSRDcljAfcdW5IR",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034102,
-      "nanoseconds": 542000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
     "content": {
       "text": "Sorumluluk"
     },
-    "type": "concept",
-    "topicId": "ZbuhKsMwd4wNNdqKjmix"
-  },
-  {
-    "id": "wyVEuGInrcglMBlBI8lk",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "content": {
-      "text": "Peygamberimiz, Hz. Aişe ile evlendikten sonra ona sevgi ve saygı göstermiştir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
+    },
+    "type": "concept"
+  },
+  {
+    "id": "wyVEuGInrcglMBlBI8lk",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752034102,
+      "nanoseconds": 542000000
+    },
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "content": {
+      "text": "Peygamberimiz, Hz. Aişe ile evlendikten sonra ona sevgi ve saygı göstermiştir."
     }
   },
   {
     "id": "z4RZBuRKcd00c4GPmTAD",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "ZbuhKsMwd4wNNdqKjmix",
-    "type": "concept",
-    "content": {
-      "text": "Peygamber"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034102,
       "nanoseconds": 542000000
-    }
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Peygamber"
+    },
+    "type": "concept",
+    "topicId": "ZbuhKsMwd4wNNdqKjmix",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   }
 ]

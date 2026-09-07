@@ -1,43 +1,13 @@
 [
   {
     "id": "1Pde9t7p9E3zgSur5lqn",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384965,
-      "nanoseconds": 6000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "definition",
-    "content": {
-      "definition": "İnsanın Rabb'iyle konuştuğu, sığınma şeklidir.",
-      "term": "Dua"
-    },
-    "topicId": "avEzguf40OWvPgXJgHcz"
-  },
-  {
-    "id": "34Z2471p855AiXy0FKty",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384965,
-      "nanoseconds": 6000000
-    },
-    "type": "sentence",
-    "content": {
-      "text": "Namaz en büyük şükürdür."
-    },
-    "topicId": "avEzguf40OWvPgXJgHcz"
-  },
-  {
-    "id": "5qZsg8W6kJVoSK1Whq3O",
     "topicId": "avEzguf40OWvPgXJgHcz",
     "content": {
-      "text": "Namaz dinin direğidir."
+      "term": "Dua",
+      "definition": "İnsanın Rabb'iyle konuştuğu, sığınma şeklidir."
     },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -46,49 +16,79 @@
     }
   },
   {
-    "id": "6jqP0eQuypeoKSgb2Wxh",
+    "id": "34Z2471p855AiXy0FKty",
+    "content": {
+      "text": "Namaz en büyük şükürdür."
+    },
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
+    "type": "sentence"
+  },
+  {
+    "id": "5qZsg8W6kJVoSK1Whq3O",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384965,
+      "nanoseconds": 6000000
+    },
+    "content": {
+      "text": "Namaz dinin direğidir."
+    },
+    "topicId": "avEzguf40OWvPgXJgHcz"
+  },
+  {
+    "id": "6jqP0eQuypeoKSgb2Wxh",
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "content": {
       "text": "Peygamberimiz namazı çok severdi."
     },
+    "unitId": "ARSRniTfx324ZswltLyy",
     "type": "sentence",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384965,
+      "nanoseconds": 6000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "8f3OgraqE0MydWoaJlJD",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Allah namazı emretmiştir."
     },
+    "type": "sentence",
     "topicId": "avEzguf40OWvPgXJgHcz",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "9lmlqDxgwipil28BLstf",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Namaz insana huzur verirdi."
     },
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "sentence",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
-    }
+    },
+    "type": "sentence"
   },
   {
     "id": "BP4SSf3Iv0H7Nqq4tHGd",
@@ -97,76 +97,76 @@
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
+    "type": "concept",
     "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Namaz"
     },
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "CmEgsGCqAqr8TqWHEBWV",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384965,
-      "nanoseconds": 6000000
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "definition": "Kur'an-ı Kerim'de ibadet için kullanılan terimdir.",
-      "term": "Salat"
-    },
-    "topicId": "avEzguf40OWvPgXJgHcz"
-  },
-  {
-    "id": "IWknmk1ukdC5sTpjpmyU",
-    "type": "concept",
-    "content": {
-      "text": "Şükür"
-    },
     "topicId": "avEzguf40OWvPgXJgHcz",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
+    "type": "definition",
+    "content": {
+      "definition": "Kur'an-ı Kerim'de ibadet için kullanılan terimdir.",
+      "term": "Salat"
+    }
+  },
+  {
+    "id": "IWknmk1ukdC5sTpjpmyU",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "content": {
+      "text": "Şükür"
+    },
+    "type": "concept",
     "unitId": "ARSRniTfx324ZswltLyy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384965,
+      "nanoseconds": 6000000
+    },
     "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "KaAdIjDsiFTDe7CWGPZ8",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384965,
-      "nanoseconds": 6000000
-    },
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "definition",
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "content": {
       "definition": "İnsanı Allah'a ulaştıran, cennetin anahtarı sayılan ibadettir.",
       "term": "Namaz"
     },
-    "type": "definition",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384965,
+      "nanoseconds": 6000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "SZQTYiEQbiMbqzedWVet",
-    "topicId": "avEzguf40OWvPgXJgHcz",
     "content": {
       "term": "Cennet",
       "definition": "Salih kulların gideceği ebedi bir yurttur."
     },
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "ShR6Ghw97xugxs46yBZg",
@@ -175,65 +175,66 @@
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "content": {
       "definition": "Allah'ın nimetlerine karşı minnettarlığı ifade etmektir.",
       "term": "Şükür"
     },
     "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "definition"
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "WTocqRWpVkBQPYW69sDX",
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "avEzguf40OWvPgXJgHcz",
     "content": {
       "text": "Bilal"
-    },
-    "type": "concept",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    }
   },
   {
     "id": "bPbwvgMFc6NZASe8KYkx",
+    "content": {
+      "text": "Namaz ruhun şifasıdır."
+    },
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
     "type": "sentence",
-    "content": {
-      "text": "Namaz ruhun şifasıdır."
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "avEzguf40OWvPgXJgHcz",
     "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "bxokocZhbgccgzfY3o4O",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "content": {
+      "definition": "Peygamberimizin müezzinliğini yapan sahabedir.",
+      "term": "Bilal"
+    },
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "type": "definition",
-    "content": {
-      "definition": "Peygamberimizin müezzinliğini yapan sahabedir.",
-      "term": "Bilal"
-    }
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "definition"
   },
   {
     "id": "ctv4dekMEYYulibZTcSM",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "avEzguf40OWvPgXJgHcz",
-    "type": "concept",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
@@ -242,46 +243,60 @@
     "content": {
       "text": "Cennet"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "type": "concept"
   },
   {
     "id": "e3my8oxqAJTLa6mP12JR",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "avEzguf40OWvPgXJgHcz",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "content": {
       "text": "Dua"
     }
   },
   {
     "id": "i73DnPKl0oAgZ5gCGMr0",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384965,
+      "nanoseconds": 6000000
+    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "avEzguf40OWvPgXJgHcz",
     "unitId": "ARSRniTfx324ZswltLyy",
+    "content": {
+      "text": "İbadet"
+    },
+    "type": "concept"
+  },
+  {
+    "id": "m3xRjaGUng76TjbBdqP9",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
     "content": {
-      "text": "İbadet"
+      "text": "Peygamberimiz savaşta dahi namaz kıldı."
     },
+    "type": "sentence",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "avEzguf40OWvPgXJgHcz"
   },
   {
-    "id": "m3xRjaGUng76TjbBdqP9",
-    "content": {
-      "text": "Peygamberimiz savaşta dahi namaz kıldı."
-    },
+    "id": "nKDPSR7AMywJknL8d3qi",
     "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "avEzguf40OWvPgXJgHcz",
+    "content": {
+      "text": "Namaz Rabb'le özel bağdır."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
@@ -291,44 +306,29 @@
     "type": "sentence"
   },
   {
-    "id": "nKDPSR7AMywJknL8d3qi",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384965,
-      "nanoseconds": 6000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "content": {
-      "text": "Namaz Rabb'le özel bağdır."
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
     "id": "nzZrYW5UX4yEUrK3lMaN",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384965,
-      "nanoseconds": 6000000
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384965,
+      "nanoseconds": 6000000
+    },
     "content": {
       "text": "Beş vakit namaz günahları siler."
     },
-    "topicId": "avEzguf40OWvPgXJgHcz"
+    "type": "sentence"
   },
   {
     "id": "r0Ge8GsZ4CmwrZZYM8wm",
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "type": "concept",
     "content": {
       "text": "Salat"
     },
-    "type": "concept",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
@@ -338,32 +338,32 @@
   {
     "id": "wflAXtqvJtGAPRcTHyuM",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "topicId": "avEzguf40OWvPgXJgHcz",
-    "content": {
-      "term": "İbadet",
-      "definition": "Allah'a kulluk etme ve boyun eğme eylemidir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition"
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "type": "definition",
+    "content": {
+      "definition": "Allah'a kulluk etme ve boyun eğme eylemidir.",
+      "term": "İbadet"
+    }
   },
   {
     "id": "zeKEJjpcmbVUVxvZAzTt",
-    "type": "sentence",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384965,
       "nanoseconds": 6000000
     },
-    "topicId": "avEzguf40OWvPgXJgHcz",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "sentence",
     "content": {
       "text": "Namaz cennetin anahtarıdır."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "avEzguf40OWvPgXJgHcz",
+    "unitId": "ARSRniTfx324ZswltLyy"
   }
 ]

@@ -1,455 +1,132 @@
 [
   {
     "id": "05Er111NT7nxUjxO04Es",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
+    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Yaratılış"
     },
+    "type": "concept",
     "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    }
   },
   {
     "id": "4IpYF6s8TS1RSXEsCX1f",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "text": "İbadet"
-    },
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767268975,
       "nanoseconds": 787000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "text": "İbadet"
     }
   },
   {
     "id": "4lKfDSD0GugXTyUW3KKJ",
+    "type": "definition",
+    "content": {
+      "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak ne olarak adlandırılır?",
+      "term": "Tevhit"
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753938656,
       "nanoseconds": 714000000
     },
-    "type": "definition",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "content": {
-      "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak ne olarak adlandırılır?",
-      "term": "Tevhit"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "5erzCzLuCjKGVfOSrxXw",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicTitle": "2.Allah’ın Varlığı ve Birliği",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753938925,
       "nanoseconds": 227000000
     },
-    "sourceText": "ALLAH’IN VARLIĞI VE BİRLİĞİ\nİnsan, duyu organları sayesinde çevresini anlamaya çalışır. Evrendeki düzenin nasıl oluştuğu sorusuna da aklını kullanarak mantıklı cevaplar arar. Sonunda hiçbir varlığın kendi kendine ya da tesadüfen var\nolamayacağı hakikatine ulaşır. Her kitabın bir yazarı, her tablonun bir\nressamı, her masanın bir ustası olduğunu düşünür. Böylece kâinattaki\nbu mükemmel düzenin de bir yaratıcısı ve sahibi olduğunu fark eder.\nBu yüce yaratıcı ise Allah’tır (cc). O, tüm varlıkları mükemmel bir uyum\niçinde yoktan var etmiştir. Kur’an-ı Kerim’de de buyrulduğu gibi: “O,\nyaratıp şekillendiren, ahenk veren ve düzene koyandır.”1\n Çevremizde\ngözlemlediğimiz ahenk ve düzen ancak O’nun eseridir.\nBir şeyi yoktan var etmek, sadece Yüce Allah’a ait bir özelliktir. Hiçbir\nşey kendiliğinden ya da tesadüfen var olmamıştır. Kur’an-ı Kerim’de bu\ndurum “O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi\nona sadece ‘Ol!’ der, o da hemen oluverir.”2\n ayetiyle ifade edilmiştir.\nGörsel 1.15\nkâinat:\nEvren. Allah’ın (cc)\nyarattığı varlık ve\nolayların tamamıdır.\n(bk. Bolay, 1989)\n(cc):\nCelle celâluhû,\nyüceler yücesi\ndemektir.\nOkuduğunuz ve çok beğendiğiniz bir kitabı düşünerek aşağıdaki soruları cevaplayınız.\n1. Bu kitap kendiliğinden yazılmış olabilir mi?\n2. Kitaba güzellik ve duygu katan ifadelerin kendiliğinden art arda gelmesi, harflerin tesadüfen birleşip anlamlı ve güzel cümlelere dönüşmesi mümkün olabilir mi?\n3. Sizce evrende gözlemlediğimiz sayısız güzellikler ve mükemmel denge kendiliğinden mi\noluştu?\nALLAH İNANCI\n21\nAdı Evrenin Ahengine Yolculuk\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirebilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-3\n15 dk.\n1. Çevrenizde gözlemlediğiniz tabiat olaylarını ve günlük hayatınızı düşünerek aşağıdaki\ntabloyu uygun örneklerle tamamlayınız.\n2. Tamamladığınız tabloyu sınıf arkadaşlarınızla paylaşınız.\nYönerge\nevrendeki\ndüzene ve yüce\nbir yaratıcının\nvarlığına işaret\neder.\nÖrnek: Güneş'in her gün doğudan doğup batıdan batması,\ncanlıların varlığının devamı için Dünya’ya ısı ve ışık sağlaması\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n1.Ünite\n22\nDeğerlendirme\nAşağıdaki tabloyu bu etkinliğe göre doldurunuz.\nÖnceden bildiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nŞimdi öğrendiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nYaşadığımız dünyayı gözlemlediğimizde Allah’ın (cc), yerdeki ve gökteki\nvarlıkları birbiriyle uyum içinde yaratmış olduğunu görürüz. Gezegenlerin,\nGüneş’in ve Ay’ın arasındaki ahenk bu düzene işaret eder. Dünya’nın hareketlerinden dolayı gece ve gündüz birbirini takip eder, mevsimler oluşur.\nGüneş’e olan mesafe sayesinde Dünya’daki varlıklar hayat bulur. İşte bunların hepsi Yüce Allah’ın yaratmasındaki mükemmelliğin bir sonucudur.\n“Gerçekten biz,\nher şeyi bir ölçü\nve dengede\nyarattık.”\n(Kamer 54/49.)\nGörsel 1.16: Gece ve gündüzün birbiri ardına gelişi Yüce Allah’ın evrene koyduğu düzenin bir göstergesidir.\nALLAH İNANCI\n23\nKur’an-ı Kerim’de “Yeri döşeyen, onda oturaklı dağlar ve ırmaklar yaratan ve orada bütün meyvelerden çifter çifter yaratan O’dur. Geceyi de gündüzün üzerine O örtüyor. Şüphesiz bütün bunlarda düşü-\nnen bir toplum için ibretler vardır.”3\n buyrularak Yüce Allah’ın evrene\nkoyduğu düzene dikkat çekilir.\nAllah (cc), her varlığa bulunduğu ortamda yaşamını sürdürebilecek ve\nihtiyaçlarını karşılayabilecek özellikler vermiştir. Bu özellikler sayesinde\ntohumlar hangi meyve ağacı olacağını, arılar nasıl bal yapacağını, hayvanlar yavrularını nasıl koruyacağını bilir. Her mevsimde yaşanan tabiat\nolayları da bu duruma örnektir. Kışın yağan kar, toprağı korur ve yer altı\nsularının artmasını sağlar. Böylece bahar aylarında ekinlerin, bitkilerin ve\nağaçların su ihtiyacı karşılanır. Yazın artan sıcaklık sayesinde ise ekinler\nve diğer bitkiler olgunlaşır. Bu durum, Allah’ın (cc) eşsiz bir yaratıcı olmasının sonucudur.\nAllah (cc), evrenin yanı sıra insanı da mükemmel bir şekilde yaratmış,\nonu diğer varlıklardan üstün kılmıştır. Bu konu \"... Onları yarattıklarımızın birçoğundan üstün kıldık.\"4\n ayetiyle bildirilmiştir. Akılla donatılan\ninsanın yeryüzünde sorumluluk sahibi bir varlık olması istenmiştir.\nİnsan vücudu da yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir. Vücuttaki her organın bir görevi bulunmaktadır. Çoğu zaman\nfark etmesek de organlar bu görevlerini yerine getirerek varlığımızın\ndevam etmesini sağlar. Diğer varlıklar için de bu durum geçerlidir. Hayatlarını suda, karada ve havada sürdüren canlıların her biri, yaratılıştaki\nahengin birer örneğidir.\n“… Rahman olan\nAllah’ın yaratışında\nhiçbir uygunsuzluk\ngöremezsin. Gözü-\nnü çevir de bir bak,\nbir bozukluk görebiliyor musun?”\n(Mülk 67/3.)\nGörsel 1.17: Her mevsimde tabiatta ortaya çıkan güzellikler, Allah’ın (cc) eseridir.\n1.Ünite\n24\nAdı Kur’an-ı Kerim’den Mesajlar\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi,\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirerek çıkarım yapabilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-4\n15 dk.\nYönerge\nAşağıda evrendeki düzenle ilgili ayetler ve bu ayetlerle ilgili görseller verilmiştir. Ayetleri\nokuyunuz ve okuduğunuz ayetin hangi görsellerle ilgili olduğunu örnekteki gibi görselin\nüstündeki kutucuğa yazınız.\nGörsel 1.18\nGörsel 1.21\nGörsel 1.19\nGörsel 1.22\nGörsel 1.20\nGörsel 1.23\n1\nALLAH İNANCI\n25\n1. Günlük hayatta karşılaştığınız hangi durumlar evrendeki mükemmel düzene örnek olabilir?\nİki örnek veriniz.\n_________________________________________________________________\n_________________________________________________________________\n2. Evrendeki mükemmel düzenle ilgili çıkarımlarınızdan yola çıkarak aşağıdaki boşlukları\nuygun ifadelerle tamamlayınız.\na. Evrende mükemmel bir ……………… vardır.\nb. Varlıklar arasındaki ……………….. evrendeki ahengin göstergesidir.\nc. Evrendeki her şey bir ……………….. ile yaratılmıştır.\nç. Tüm varlıkların yaratıcısı ………………………\nDeğerlendirme\nCanlıların yaratılışı ile evrendeki yaşam koşulları arasında sıkı bir ilişki\nvardır. Örneğin insan nefes almak için temiz havaya ihtiyaç duyar; bir fidan ağaca dönüşmek için toprağa, suya ve güneşe ihtiyaç duyar. Yeryüzü\nve gökyüzü arasındaki bu mükemmel denge, Allah’ın (cc) varlığının ve\nbirliğinin delillerinden biridir. Toprağı, tohumu, bitkiyi yaratan Allah (cc);\nhavayı, atmosferi, güneşi de yaratmıştır. Evrendeki bu birlik ve düzen\nyalnızca bir ve tek olan Allah’ın (cc) eseridir.\nBu durum Kur’an-ı Kerim’de “Ey insanlar! Allah’ın size olan nimetini\nhatırlayın. Allah’tan başka size göklerden ve yerden rızık veren bir\nyaratıcı var mı? O’ndan başka hiçbir ilah yoktur…”5\n ayetiyle açıklanmıştır. Hz. Peygamber de bir hadisinde “Yaratılmış her canlının yaratıcısı\nyalnızca Allah’tır.”6\n buyurmuştur.\n“Eğer yerde ve\ngökte Allah’tan\nbaşka ilahlar\nolsaydı kesinlikle\nikisinin de düzeni\nbozulurdu...”\n(Enbiya 21/22.)\n1. “Ve Rabbin bal arısına şöyle ilham etti: “Dağlardan, ağaçlardan ve insanların kurdukları\nçardaklardan kendine yuvalar edin.” (Nahl 16/68.)\n2. “Böylece onun (yağmurun) sayesinde sizin yararınıza hurma bahçeleri ve üzüm bağları\nmeydana getirdik. Bunlarda sizin için birçok meyveler vardır ve siz onlardan yersiniz.”\n(Müminun 23/19.)\n3. “Eti yenen büyük ve küçük baş hayvanları da O yarattı. Onlarda sizin için soğuktan koruyucu\nşeyler ve başka yararlar vardır, ayrıca onlardan beslenirsiniz.” (Nahl 16/5.)\n4. “Şüphesiz biz insanı en güzel biçimde yaratmışızdır.” (Tin 95/4.)\n5. “... Gemilerin denizi yararak gittiklerini görürsün ki, bu da O’nun lütfuna nâil olmanız ve\nO’na şükretmeniz içindir.” (Nahl 16/14.)\n6. “Ey iman edenler! Allah’a karşı gelmekten sakının ve doğrularla beraber olun.” (Tevbe 9/119.)\n7. “Tohumu ve çekirdeği çatlatan şüphesiz Allah’tır; O, ölüden diriyi çıkarır, diriden de ölüyü\nçıkarmaktadır...” (Enam 6/95.)\n1.Ünite\n26\nYaşadığımız evrende duyu organlarımızla hissettiğimiz ya da hissedemediğimiz büyük küçük her varlık, Yüce Allah’ın emriyle meydana gelmiştir.\nEvrende var olan bu olağanüstü düzenin sebebi, Allah’ın (cc) bir ve tek\nolmasıdır. Allah’ın (cc) bir ve tek olduğuna, O’nun eşi ve benzerinin olmadığına inanmak, O’na hiçbir şeyi şirk koşmadan ibadeti yalnızca Allah\n(cc) için yapmak İslam dininde tevhit inancı olarak adlandırılır.7\nTevhit, İslam’ın temel inanç esaslarından biridir ve İslam dininin özüdür. Bu nedenle tevhit; Müslümanların Allah’a (cc) olan bağlılıklarını,\nibadetlerini ve hayat tarzlarını belirleyen bir unsurdur. Tevhit inancı\nolmadan İslam’dan bahsetmek mümkün değildir.\nGörsel 1.24 Görsel 1.25\nGörsel 1.26: Kâinattaki güzelliklerin her biri Allah’ın (cc) varlığının ve birliğinin işaretidir.\nşirk:\nAllah’a (cc) inanmakla\nbirlikte başka\nvarlıkları da tanrı\nkabul etmek,\nAllah’a (cc) başka\nbir varlığı denk\ngörmek demektir\n(bk. Serinsu, 2009).\nALLAH İNANCI\n27\nAdı Bil Bakalım\nTevhit inancına ilişkin sonuç çıkarma\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-5\n15 dk.\nYönerge\nTanılayıcı dallanmış ağaçta Allah’ın (cc) varlığı ve birliği ile ilgili ifadeler verilmiştir. En\nüstteki ifadeden başlamak şartıyla ifadelerin doğru ya da yanlış olduğuna karar vererek\nilerleyiniz ve ulaştığınız tek çıkışı işaretleyiniz.\nAllah’ın (cc) bir ve ibadet\nedilecek tek ilah olduğunu\nbilmektir.\nAllah’ın (cc), hiçbir varlığa\nbenzemeyeceğini bilmektir.\nAllah’ın (cc) her şeyi yoktan\nvar eden ve her şeyin sahibi\nolduğunu bilmektir.\nAllah’ın (cc) eşi, benzeri ve\nortağı olmadığını bilmektir.\nTEVHİT\nBilgi Görseli 1.2: Tevhidin tanımı\n1.Ü",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "sentence",
     "content": {
-      "categories": [],
       "definition": "",
-      "items": [],
+      "categories": [],
       "text": "Rahman olan Allah’ın yaratışında hiçbir uygunsuzluk göremezsin. Gözünü çevir de bir bak, bir bozukluk görebiliyor musun?",
+      "items": [],
       "term": "",
       "title": ""
-    }
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "sourceText": "ALLAH’IN VARLIĞI VE BİRLİĞİ\nİnsan, duyu organları sayesinde çevresini anlamaya çalışır. Evrendeki düzenin nasıl oluştuğu sorusuna da aklını kullanarak mantıklı cevaplar arar. Sonunda hiçbir varlığın kendi kendine ya da tesadüfen var\nolamayacağı hakikatine ulaşır. Her kitabın bir yazarı, her tablonun bir\nressamı, her masanın bir ustası olduğunu düşünür. Böylece kâinattaki\nbu mükemmel düzenin de bir yaratıcısı ve sahibi olduğunu fark eder.\nBu yüce yaratıcı ise Allah’tır (cc). O, tüm varlıkları mükemmel bir uyum\niçinde yoktan var etmiştir. Kur’an-ı Kerim’de de buyrulduğu gibi: “O,\nyaratıp şekillendiren, ahenk veren ve düzene koyandır.”1\n Çevremizde\ngözlemlediğimiz ahenk ve düzen ancak O’nun eseridir.\nBir şeyi yoktan var etmek, sadece Yüce Allah’a ait bir özelliktir. Hiçbir\nşey kendiliğinden ya da tesadüfen var olmamıştır. Kur’an-ı Kerim’de bu\ndurum “O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi\nona sadece ‘Ol!’ der, o da hemen oluverir.”2\n ayetiyle ifade edilmiştir.\nGörsel 1.15\nkâinat:\nEvren. Allah’ın (cc)\nyarattığı varlık ve\nolayların tamamıdır.\n(bk. Bolay, 1989)\n(cc):\nCelle celâluhû,\nyüceler yücesi\ndemektir.\nOkuduğunuz ve çok beğendiğiniz bir kitabı düşünerek aşağıdaki soruları cevaplayınız.\n1. Bu kitap kendiliğinden yazılmış olabilir mi?\n2. Kitaba güzellik ve duygu katan ifadelerin kendiliğinden art arda gelmesi, harflerin tesadüfen birleşip anlamlı ve güzel cümlelere dönüşmesi mümkün olabilir mi?\n3. Sizce evrende gözlemlediğimiz sayısız güzellikler ve mükemmel denge kendiliğinden mi\noluştu?\nALLAH İNANCI\n21\nAdı Evrenin Ahengine Yolculuk\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirebilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-3\n15 dk.\n1. Çevrenizde gözlemlediğiniz tabiat olaylarını ve günlük hayatınızı düşünerek aşağıdaki\ntabloyu uygun örneklerle tamamlayınız.\n2. Tamamladığınız tabloyu sınıf arkadaşlarınızla paylaşınız.\nYönerge\nevrendeki\ndüzene ve yüce\nbir yaratıcının\nvarlığına işaret\neder.\nÖrnek: Güneş'in her gün doğudan doğup batıdan batması,\ncanlıların varlığının devamı için Dünya’ya ısı ve ışık sağlaması\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n1.Ünite\n22\nDeğerlendirme\nAşağıdaki tabloyu bu etkinliğe göre doldurunuz.\nÖnceden bildiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nŞimdi öğrendiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nYaşadığımız dünyayı gözlemlediğimizde Allah’ın (cc), yerdeki ve gökteki\nvarlıkları birbiriyle uyum içinde yaratmış olduğunu görürüz. Gezegenlerin,\nGüneş’in ve Ay’ın arasındaki ahenk bu düzene işaret eder. Dünya’nın hareketlerinden dolayı gece ve gündüz birbirini takip eder, mevsimler oluşur.\nGüneş’e olan mesafe sayesinde Dünya’daki varlıklar hayat bulur. İşte bunların hepsi Yüce Allah’ın yaratmasındaki mükemmelliğin bir sonucudur.\n“Gerçekten biz,\nher şeyi bir ölçü\nve dengede\nyarattık.”\n(Kamer 54/49.)\nGörsel 1.16: Gece ve gündüzün birbiri ardına gelişi Yüce Allah’ın evrene koyduğu düzenin bir göstergesidir.\nALLAH İNANCI\n23\nKur’an-ı Kerim’de “Yeri döşeyen, onda oturaklı dağlar ve ırmaklar yaratan ve orada bütün meyvelerden çifter çifter yaratan O’dur. Geceyi de gündüzün üzerine O örtüyor. Şüphesiz bütün bunlarda düşü-\nnen bir toplum için ibretler vardır.”3\n buyrularak Yüce Allah’ın evrene\nkoyduğu düzene dikkat çekilir.\nAllah (cc), her varlığa bulunduğu ortamda yaşamını sürdürebilecek ve\nihtiyaçlarını karşılayabilecek özellikler vermiştir. Bu özellikler sayesinde\ntohumlar hangi meyve ağacı olacağını, arılar nasıl bal yapacağını, hayvanlar yavrularını nasıl koruyacağını bilir. Her mevsimde yaşanan tabiat\nolayları da bu duruma örnektir. Kışın yağan kar, toprağı korur ve yer altı\nsularının artmasını sağlar. Böylece bahar aylarında ekinlerin, bitkilerin ve\nağaçların su ihtiyacı karşılanır. Yazın artan sıcaklık sayesinde ise ekinler\nve diğer bitkiler olgunlaşır. Bu durum, Allah’ın (cc) eşsiz bir yaratıcı olmasının sonucudur.\nAllah (cc), evrenin yanı sıra insanı da mükemmel bir şekilde yaratmış,\nonu diğer varlıklardan üstün kılmıştır. Bu konu \"... Onları yarattıklarımızın birçoğundan üstün kıldık.\"4\n ayetiyle bildirilmiştir. Akılla donatılan\ninsanın yeryüzünde sorumluluk sahibi bir varlık olması istenmiştir.\nİnsan vücudu da yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir. Vücuttaki her organın bir görevi bulunmaktadır. Çoğu zaman\nfark etmesek de organlar bu görevlerini yerine getirerek varlığımızın\ndevam etmesini sağlar. Diğer varlıklar için de bu durum geçerlidir. Hayatlarını suda, karada ve havada sürdüren canlıların her biri, yaratılıştaki\nahengin birer örneğidir.\n“… Rahman olan\nAllah’ın yaratışında\nhiçbir uygunsuzluk\ngöremezsin. Gözü-\nnü çevir de bir bak,\nbir bozukluk görebiliyor musun?”\n(Mülk 67/3.)\nGörsel 1.17: Her mevsimde tabiatta ortaya çıkan güzellikler, Allah’ın (cc) eseridir.\n1.Ünite\n24\nAdı Kur’an-ı Kerim’den Mesajlar\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi,\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirerek çıkarım yapabilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-4\n15 dk.\nYönerge\nAşağıda evrendeki düzenle ilgili ayetler ve bu ayetlerle ilgili görseller verilmiştir. Ayetleri\nokuyunuz ve okuduğunuz ayetin hangi görsellerle ilgili olduğunu örnekteki gibi görselin\nüstündeki kutucuğa yazınız.\nGörsel 1.18\nGörsel 1.21\nGörsel 1.19\nGörsel 1.22\nGörsel 1.20\nGörsel 1.23\n1\nALLAH İNANCI\n25\n1. Günlük hayatta karşılaştığınız hangi durumlar evrendeki mükemmel düzene örnek olabilir?\nİki örnek veriniz.\n_________________________________________________________________\n_________________________________________________________________\n2. Evrendeki mükemmel düzenle ilgili çıkarımlarınızdan yola çıkarak aşağıdaki boşlukları\nuygun ifadelerle tamamlayınız.\na. Evrende mükemmel bir ……………… vardır.\nb. Varlıklar arasındaki ……………….. evrendeki ahengin göstergesidir.\nc. Evrendeki her şey bir ……………….. ile yaratılmıştır.\nç. Tüm varlıkların yaratıcısı ………………………\nDeğerlendirme\nCanlıların yaratılışı ile evrendeki yaşam koşulları arasında sıkı bir ilişki\nvardır. Örneğin insan nefes almak için temiz havaya ihtiyaç duyar; bir fidan ağaca dönüşmek için toprağa, suya ve güneşe ihtiyaç duyar. Yeryüzü\nve gökyüzü arasındaki bu mükemmel denge, Allah’ın (cc) varlığının ve\nbirliğinin delillerinden biridir. Toprağı, tohumu, bitkiyi yaratan Allah (cc);\nhavayı, atmosferi, güneşi de yaratmıştır. Evrendeki bu birlik ve düzen\nyalnızca bir ve tek olan Allah’ın (cc) eseridir.\nBu durum Kur’an-ı Kerim’de “Ey insanlar! Allah’ın size olan nimetini\nhatırlayın. Allah’tan başka size göklerden ve yerden rızık veren bir\nyaratıcı var mı? O’ndan başka hiçbir ilah yoktur…”5\n ayetiyle açıklanmıştır. Hz. Peygamber de bir hadisinde “Yaratılmış her canlının yaratıcısı\nyalnızca Allah’tır.”6\n buyurmuştur.\n“Eğer yerde ve\ngökte Allah’tan\nbaşka ilahlar\nolsaydı kesinlikle\nikisinin de düzeni\nbozulurdu...”\n(Enbiya 21/22.)\n1. “Ve Rabbin bal arısına şöyle ilham etti: “Dağlardan, ağaçlardan ve insanların kurdukları\nçardaklardan kendine yuvalar edin.” (Nahl 16/68.)\n2. “Böylece onun (yağmurun) sayesinde sizin yararınıza hurma bahçeleri ve üzüm bağları\nmeydana getirdik. Bunlarda sizin için birçok meyveler vardır ve siz onlardan yersiniz.”\n(Müminun 23/19.)\n3. “Eti yenen büyük ve küçük baş hayvanları da O yarattı. Onlarda sizin için soğuktan koruyucu\nşeyler ve başka yararlar vardır, ayrıca onlardan beslenirsiniz.” (Nahl 16/5.)\n4. “Şüphesiz biz insanı en güzel biçimde yaratmışızdır.” (Tin 95/4.)\n5. “... Gemilerin denizi yararak gittiklerini görürsün ki, bu da O’nun lütfuna nâil olmanız ve\nO’na şükretmeniz içindir.” (Nahl 16/14.)\n6. “Ey iman edenler! Allah’a karşı gelmekten sakının ve doğrularla beraber olun.” (Tevbe 9/119.)\n7. “Tohumu ve çekirdeği çatlatan şüphesiz Allah’tır; O, ölüden diriyi çıkarır, diriden de ölüyü\nçıkarmaktadır...” (Enam 6/95.)\n1.Ünite\n26\nYaşadığımız evrende duyu organlarımızla hissettiğimiz ya da hissedemediğimiz büyük küçük her varlık, Yüce Allah’ın emriyle meydana gelmiştir.\nEvrende var olan bu olağanüstü düzenin sebebi, Allah’ın (cc) bir ve tek\nolmasıdır. Allah’ın (cc) bir ve tek olduğuna, O’nun eşi ve benzerinin olmadığına inanmak, O’na hiçbir şeyi şirk koşmadan ibadeti yalnızca Allah\n(cc) için yapmak İslam dininde tevhit inancı olarak adlandırılır.7\nTevhit, İslam’ın temel inanç esaslarından biridir ve İslam dininin özüdür. Bu nedenle tevhit; Müslümanların Allah’a (cc) olan bağlılıklarını,\nibadetlerini ve hayat tarzlarını belirleyen bir unsurdur. Tevhit inancı\nolmadan İslam’dan bahsetmek mümkün değildir.\nGörsel 1.24 Görsel 1.25\nGörsel 1.26: Kâinattaki güzelliklerin her biri Allah’ın (cc) varlığının ve birliğinin işaretidir.\nşirk:\nAllah’a (cc) inanmakla\nbirlikte başka\nvarlıkları da tanrı\nkabul etmek,\nAllah’a (cc) başka\nbir varlığı denk\ngörmek demektir\n(bk. Serinsu, 2009).\nALLAH İNANCI\n27\nAdı Bil Bakalım\nTevhit inancına ilişkin sonuç çıkarma\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-5\n15 dk.\nYönerge\nTanılayıcı dallanmış ağaçta Allah’ın (cc) varlığı ve birliği ile ilgili ifadeler verilmiştir. En\nüstteki ifadeden başlamak şartıyla ifadelerin doğru ya da yanlış olduğuna karar vererek\nilerleyiniz ve ulaştığınız tek çıkışı işaretleyiniz.\nAllah’ın (cc) bir ve ibadet\nedilecek tek ilah olduğunu\nbilmektir.\nAllah’ın (cc), hiçbir varlığa\nbenzemeyeceğini bilmektir.\nAllah’ın (cc) her şeyi yoktan\nvar eden ve her şeyin sahibi\nolduğunu bilmektir.\nAllah’ın (cc) eşi, benzeri ve\nortağı olmadığını bilmektir.\nTEVHİT\nBilgi Görseli 1.2: Tevhidin tanımı\n1.Ü",
+    "topicTitle": "2.Allah’ın Varlığı ve Birliği",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "9w9pVXlf5sfvsg5sB1yA",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "items": [],
-      "term": "",
-      "text": "O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi ona sadece ‘Ol!’ der, o da hemen oluverir.",
-      "categories": [],
-      "definition": "",
-      "title": ""
-    },
-    "topicTitle": "2.Allah’ın Varlığı ve Birliği",
     "sourceText": "ALLAH’IN VARLIĞI VE BİRLİĞİ\nİnsan, duyu organları sayesinde çevresini anlamaya çalışır. Evrendeki düzenin nasıl oluştuğu sorusuna da aklını kullanarak mantıklı cevaplar arar. Sonunda hiçbir varlığın kendi kendine ya da tesadüfen var\nolamayacağı hakikatine ulaşır. Her kitabın bir yazarı, her tablonun bir\nressamı, her masanın bir ustası olduğunu düşünür. Böylece kâinattaki\nbu mükemmel düzenin de bir yaratıcısı ve sahibi olduğunu fark eder.\nBu yüce yaratıcı ise Allah’tır (cc). O, tüm varlıkları mükemmel bir uyum\niçinde yoktan var etmiştir. Kur’an-ı Kerim’de de buyrulduğu gibi: “O,\nyaratıp şekillendiren, ahenk veren ve düzene koyandır.”1\n Çevremizde\ngözlemlediğimiz ahenk ve düzen ancak O’nun eseridir.\nBir şeyi yoktan var etmek, sadece Yüce Allah’a ait bir özelliktir. Hiçbir\nşey kendiliğinden ya da tesadüfen var olmamıştır. Kur’an-ı Kerim’de bu\ndurum “O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi\nona sadece ‘Ol!’ der, o da hemen oluverir.”2\n ayetiyle ifade edilmiştir.\nGörsel 1.15\nkâinat:\nEvren. Allah’ın (cc)\nyarattığı varlık ve\nolayların tamamıdır.\n(bk. Bolay, 1989)\n(cc):\nCelle celâluhû,\nyüceler yücesi\ndemektir.\nOkuduğunuz ve çok beğendiğiniz bir kitabı düşünerek aşağıdaki soruları cevaplayınız.\n1. Bu kitap kendiliğinden yazılmış olabilir mi?\n2. Kitaba güzellik ve duygu katan ifadelerin kendiliğinden art arda gelmesi, harflerin tesadüfen birleşip anlamlı ve güzel cümlelere dönüşmesi mümkün olabilir mi?\n3. Sizce evrende gözlemlediğimiz sayısız güzellikler ve mükemmel denge kendiliğinden mi\noluştu?\nALLAH İNANCI\n21\nAdı Evrenin Ahengine Yolculuk\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirebilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-3\n15 dk.\n1. Çevrenizde gözlemlediğiniz tabiat olaylarını ve günlük hayatınızı düşünerek aşağıdaki\ntabloyu uygun örneklerle tamamlayınız.\n2. Tamamladığınız tabloyu sınıf arkadaşlarınızla paylaşınız.\nYönerge\nevrendeki\ndüzene ve yüce\nbir yaratıcının\nvarlığına işaret\neder.\nÖrnek: Güneş'in her gün doğudan doğup batıdan batması,\ncanlıların varlığının devamı için Dünya’ya ısı ve ışık sağlaması\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n1.Ünite\n22\nDeğerlendirme\nAşağıdaki tabloyu bu etkinliğe göre doldurunuz.\nÖnceden bildiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nŞimdi öğrendiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nYaşadığımız dünyayı gözlemlediğimizde Allah’ın (cc), yerdeki ve gökteki\nvarlıkları birbiriyle uyum içinde yaratmış olduğunu görürüz. Gezegenlerin,\nGüneş’in ve Ay’ın arasındaki ahenk bu düzene işaret eder. Dünya’nın hareketlerinden dolayı gece ve gündüz birbirini takip eder, mevsimler oluşur.\nGüneş’e olan mesafe sayesinde Dünya’daki varlıklar hayat bulur. İşte bunların hepsi Yüce Allah’ın yaratmasındaki mükemmelliğin bir sonucudur.\n“Gerçekten biz,\nher şeyi bir ölçü\nve dengede\nyarattık.”\n(Kamer 54/49.)\nGörsel 1.16: Gece ve gündüzün birbiri ardına gelişi Yüce Allah’ın evrene koyduğu düzenin bir göstergesidir.\nALLAH İNANCI\n23\nKur’an-ı Kerim’de “Yeri döşeyen, onda oturaklı dağlar ve ırmaklar yaratan ve orada bütün meyvelerden çifter çifter yaratan O’dur. Geceyi de gündüzün üzerine O örtüyor. Şüphesiz bütün bunlarda düşü-\nnen bir toplum için ibretler vardır.”3\n buyrularak Yüce Allah’ın evrene\nkoyduğu düzene dikkat çekilir.\nAllah (cc), her varlığa bulunduğu ortamda yaşamını sürdürebilecek ve\nihtiyaçlarını karşılayabilecek özellikler vermiştir. Bu özellikler sayesinde\ntohumlar hangi meyve ağacı olacağını, arılar nasıl bal yapacağını, hayvanlar yavrularını nasıl koruyacağını bilir. Her mevsimde yaşanan tabiat\nolayları da bu duruma örnektir. Kışın yağan kar, toprağı korur ve yer altı\nsularının artmasını sağlar. Böylece bahar aylarında ekinlerin, bitkilerin ve\nağaçların su ihtiyacı karşılanır. Yazın artan sıcaklık sayesinde ise ekinler\nve diğer bitkiler olgunlaşır. Bu durum, Allah’ın (cc) eşsiz bir yaratıcı olmasının sonucudur.\nAllah (cc), evrenin yanı sıra insanı da mükemmel bir şekilde yaratmış,\nonu diğer varlıklardan üstün kılmıştır. Bu konu \"... Onları yarattıklarımızın birçoğundan üstün kıldık.\"4\n ayetiyle bildirilmiştir. Akılla donatılan\ninsanın yeryüzünde sorumluluk sahibi bir varlık olması istenmiştir.\nİnsan vücudu da yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir. Vücuttaki her organın bir görevi bulunmaktadır. Çoğu zaman\nfark etmesek de organlar bu görevlerini yerine getirerek varlığımızın\ndevam etmesini sağlar. Diğer varlıklar için de bu durum geçerlidir. Hayatlarını suda, karada ve havada sürdüren canlıların her biri, yaratılıştaki\nahengin birer örneğidir.\n“… Rahman olan\nAllah’ın yaratışında\nhiçbir uygunsuzluk\ngöremezsin. Gözü-\nnü çevir de bir bak,\nbir bozukluk görebiliyor musun?”\n(Mülk 67/3.)\nGörsel 1.17: Her mevsimde tabiatta ortaya çıkan güzellikler, Allah’ın (cc) eseridir.\n1.Ünite\n24\nAdı Kur’an-ı Kerim’den Mesajlar\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi,\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirerek çıkarım yapabilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-4\n15 dk.\nYönerge\nAşağıda evrendeki düzenle ilgili ayetler ve bu ayetlerle ilgili görseller verilmiştir. Ayetleri\nokuyunuz ve okuduğunuz ayetin hangi görsellerle ilgili olduğunu örnekteki gibi görselin\nüstündeki kutucuğa yazınız.\nGörsel 1.18\nGörsel 1.21\nGörsel 1.19\nGörsel 1.22\nGörsel 1.20\nGörsel 1.23\n1\nALLAH İNANCI\n25\n1. Günlük hayatta karşılaştığınız hangi durumlar evrendeki mükemmel düzene örnek olabilir?\nİki örnek veriniz.\n_________________________________________________________________\n_________________________________________________________________\n2. Evrendeki mükemmel düzenle ilgili çıkarımlarınızdan yola çıkarak aşağıdaki boşlukları\nuygun ifadelerle tamamlayınız.\na. Evrende mükemmel bir ……………… vardır.\nb. Varlıklar arasındaki ……………….. evrendeki ahengin göstergesidir.\nc. Evrendeki her şey bir ……………….. ile yaratılmıştır.\nç. Tüm varlıkların yaratıcısı ………………………\nDeğerlendirme\nCanlıların yaratılışı ile evrendeki yaşam koşulları arasında sıkı bir ilişki\nvardır. Örneğin insan nefes almak için temiz havaya ihtiyaç duyar; bir fidan ağaca dönüşmek için toprağa, suya ve güneşe ihtiyaç duyar. Yeryüzü\nve gökyüzü arasındaki bu mükemmel denge, Allah’ın (cc) varlığının ve\nbirliğinin delillerinden biridir. Toprağı, tohumu, bitkiyi yaratan Allah (cc);\nhavayı, atmosferi, güneşi de yaratmıştır. Evrendeki bu birlik ve düzen\nyalnızca bir ve tek olan Allah’ın (cc) eseridir.\nBu durum Kur’an-ı Kerim’de “Ey insanlar! Allah’ın size olan nimetini\nhatırlayın. Allah’tan başka size göklerden ve yerden rızık veren bir\nyaratıcı var mı? O’ndan başka hiçbir ilah yoktur…”5\n ayetiyle açıklanmıştır. Hz. Peygamber de bir hadisinde “Yaratılmış her canlının yaratıcısı\nyalnızca Allah’tır.”6\n buyurmuştur.\n“Eğer yerde ve\ngökte Allah’tan\nbaşka ilahlar\nolsaydı kesinlikle\nikisinin de düzeni\nbozulurdu...”\n(Enbiya 21/22.)\n1. “Ve Rabbin bal arısına şöyle ilham etti: “Dağlardan, ağaçlardan ve insanların kurdukları\nçardaklardan kendine yuvalar edin.” (Nahl 16/68.)\n2. “Böylece onun (yağmurun) sayesinde sizin yararınıza hurma bahçeleri ve üzüm bağları\nmeydana getirdik. Bunlarda sizin için birçok meyveler vardır ve siz onlardan yersiniz.”\n(Müminun 23/19.)\n3. “Eti yenen büyük ve küçük baş hayvanları da O yarattı. Onlarda sizin için soğuktan koruyucu\nşeyler ve başka yararlar vardır, ayrıca onlardan beslenirsiniz.” (Nahl 16/5.)\n4. “Şüphesiz biz insanı en güzel biçimde yaratmışızdır.” (Tin 95/4.)\n5. “... Gemilerin denizi yararak gittiklerini görürsün ki, bu da O’nun lütfuna nâil olmanız ve\nO’na şükretmeniz içindir.” (Nahl 16/14.)\n6. “Ey iman edenler! Allah’a karşı gelmekten sakının ve doğrularla beraber olun.” (Tevbe 9/119.)\n7. “Tohumu ve çekirdeği çatlatan şüphesiz Allah’tır; O, ölüden diriyi çıkarır, diriden de ölüyü\nçıkarmaktadır...” (Enam 6/95.)\n1.Ünite\n26\nYaşadığımız evrende duyu organlarımızla hissettiğimiz ya da hissedemediğimiz büyük küçük her varlık, Yüce Allah’ın emriyle meydana gelmiştir.\nEvrende var olan bu olağanüstü düzenin sebebi, Allah’ın (cc) bir ve tek\nolmasıdır. Allah’ın (cc) bir ve tek olduğuna, O’nun eşi ve benzerinin olmadığına inanmak, O’na hiçbir şeyi şirk koşmadan ibadeti yalnızca Allah\n(cc) için yapmak İslam dininde tevhit inancı olarak adlandırılır.7\nTevhit, İslam’ın temel inanç esaslarından biridir ve İslam dininin özüdür. Bu nedenle tevhit; Müslümanların Allah’a (cc) olan bağlılıklarını,\nibadetlerini ve hayat tarzlarını belirleyen bir unsurdur. Tevhit inancı\nolmadan İslam’dan bahsetmek mümkün değildir.\nGörsel 1.24 Görsel 1.25\nGörsel 1.26: Kâinattaki güzelliklerin her biri Allah’ın (cc) varlığının ve birliğinin işaretidir.\nşirk:\nAllah’a (cc) inanmakla\nbirlikte başka\nvarlıkları da tanrı\nkabul etmek,\nAllah’a (cc) başka\nbir varlığı denk\ngörmek demektir\n(bk. Serinsu, 2009).\nALLAH İNANCI\n27\nAdı Bil Bakalım\nTevhit inancına ilişkin sonuç çıkarma\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-5\n15 dk.\nYönerge\nTanılayıcı dallanmış ağaçta Allah’ın (cc) varlığı ve birliği ile ilgili ifadeler verilmiştir. En\nüstteki ifadeden başlamak şartıyla ifadelerin doğru ya da yanlış olduğuna karar vererek\nilerleyiniz ve ulaştığınız tek çıkışı işaretleyiniz.\nAllah’ın (cc) bir ve ibadet\nedilecek tek ilah olduğunu\nbilmektir.\nAllah’ın (cc), hiçbir varlığa\nbenzemeyeceğini bilmektir.\nAllah’ın (cc) her şeyi yoktan\nvar eden ve her şeyin sahibi\nolduğunu bilmektir.\nAllah’ın (cc) eşi, benzeri ve\nortağı olmadığını bilmektir.\nTEVHİT\nBilgi Görseli 1.2: Tevhidin tanımı\n1.Ü",
+    "type": "sentence",
+    "topicTitle": "2.Allah’ın Varlığı ve Birliği",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753938813,
       "nanoseconds": 69000000
     },
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence"
+    "content": {
+      "definition": "",
+      "text": "O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi ona sadece ‘Ol!’ der, o da hemen oluverir.",
+      "categories": [],
+      "term": "",
+      "items": [],
+      "title": ""
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "DEalifOBEA7VMDVgPbhZ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "concept",
-    "topicId": "swndbszog1ziSH0ODMbD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
     "content": {
       "text": "Tevhit"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "FG9sd8bwV1TzmkcAZx8A",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
     "content": {
       "text": "Kur'an-ı Kerim, Allah'ın kelamıdır ve evrendeki düzene dikkat çeker."
     },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
-    "topicId": "swndbszog1ziSH0ODMbD"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "Fjh7fG9riSoBpZtsWd85",
-    "content": {
-      "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı nedir?",
-      "term": "Kâinat"
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753938656,
-      "nanoseconds": 714000000
-    },
-    "type": "definition",
-    "unitId": "jjotqKbHyi504QHH40ko"
-  },
-  {
-    "id": "G8MsPRzuO2Acfuycyy6I",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "definition",
     "topicId": "swndbszog1ziSH0ODMbD",
     "content": {
-      "term": "Kur'an-ı Kerim",
-      "definition": "Allah'ın sözlerini içeren kutsal kitap nedir?"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753938656,
-      "nanoseconds": 714000000
-    }
-  },
-  {
-    "id": "J56JBmTQHXl4nIhSbIcK",
-    "content": {
-      "definition": "Hiçbir şeyi ortak koşmadan sadece Allah için yapılan kulluk görevi.",
-      "term": "İbadet"
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767268975,
-      "nanoseconds": 787000000
-    }
-  },
-  {
-    "id": "J8i80UtrMgf9bkNDmXHY",
-    "type": "definition",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "definition": "Gezegenlerden canlılara kadar her şeyin uyum içinde olması.",
-      "term": "Ahenk"
+      "term": "Kâinat",
+      "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı nedir?"
     },
     "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767268975,
-      "nanoseconds": 787000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "JcEP8CnCk3B8lWBpGYSd",
-    "type": "definition",
-    "content": {
-      "definition": "Allah tarafından insanlara dini tebliğ etmek için gönderilen elçi.",
-      "term": "Peygamber"
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030801,
-      "nanoseconds": 351000000
-    }
-  },
-  {
-    "id": "KKhyYv9IEuJCEwcCC8h4",
-    "content": {
-      "text": "Tevhit, Allah'ın birliğine inanmak ve O'na hiçbir şeyi ortak koşmamaktır."
-    },
-    "type": "sentence",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko"
-  },
-  {
-    "id": "Kzc2NK40X2zP9LzZdCVX",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
-    "content": {
-      "text": "Şirk"
-    },
-    "type": "concept"
-  },
-  {
-    "id": "L3JbDuMm21kUk4mxPBfs",
-    "type": "definition",
-    "content": {
-      "definition": "Bir şeyi örneksiz ve yoktan var etmek; sadece Allah’a ait özellik.",
-      "term": "Yaratma"
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767268975,
-      "nanoseconds": 787000000
-    },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "LgQtqVMEBDZv2qwEmssI",
-    "type": "definition",
-    "content": {
-      "definition": "Allah'a inanmakla birlikte başka varlıkları da tanrı kabul etmek nedir?",
-      "term": "Şirk"
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753938656,
-      "nanoseconds": 714000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "M3TCpYGDJT3SChSKYedD",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "topicTitle": "2.Allah’ın Varlığı ve Birliği",
-    "content": {
-      "title": "",
-      "text": "O, yaratıp şekillendiren, ahenk veren ve düzene koyandır.",
-      "term": "",
-      "definition": "",
-      "items": [],
-      "categories": []
-    },
-    "sourceText": "ALLAH’IN VARLIĞI VE BİRLİĞİ\nİnsan, duyu organları sayesinde çevresini anlamaya çalışır. Evrendeki düzenin nasıl oluştuğu sorusuna da aklını kullanarak mantıklı cevaplar arar. Sonunda hiçbir varlığın kendi kendine ya da tesadüfen var\nolamayacağı hakikatine ulaşır. Her kitabın bir yazarı, her tablonun bir\nressamı, her masanın bir ustası olduğunu düşünür. Böylece kâinattaki\nbu mükemmel düzenin de bir yaratıcısı ve sahibi olduğunu fark eder.\nBu yüce yaratıcı ise Allah’tır (cc). O, tüm varlıkları mükemmel bir uyum\niçinde yoktan var etmiştir. Kur’an-ı Kerim’de de buyrulduğu gibi: “O,\nyaratıp şekillendiren, ahenk veren ve düzene koyandır.”1\n Çevremizde\ngözlemlediğimiz ahenk ve düzen ancak O’nun eseridir.\nBir şeyi yoktan var etmek, sadece Yüce Allah’a ait bir özelliktir. Hiçbir\nşey kendiliğinden ya da tesadüfen var olmamıştır. Kur’an-ı Kerim’de bu\ndurum “O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi\nona sadece ‘Ol!’ der, o da hemen oluverir.”2\n ayetiyle ifade edilmiştir.\nGörsel 1.15\nkâinat:\nEvren. Allah’ın (cc)\nyarattığı varlık ve\nolayların tamamıdır.\n(bk. Bolay, 1989)\n(cc):\nCelle celâluhû,\nyüceler yücesi\ndemektir.\nOkuduğunuz ve çok beğendiğiniz bir kitabı düşünerek aşağıdaki soruları cevaplayınız.\n1. Bu kitap kendiliğinden yazılmış olabilir mi?\n2. Kitaba güzellik ve duygu katan ifadelerin kendiliğinden art arda gelmesi, harflerin tesadüfen birleşip anlamlı ve güzel cümlelere dönüşmesi mümkün olabilir mi?\n3. Sizce evrende gözlemlediğimiz sayısız güzellikler ve mükemmel denge kendiliğinden mi\noluştu?\nALLAH İNANCI\n21\nAdı Evrenin Ahengine Yolculuk\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirebilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-3\n15 dk.\n1. Çevrenizde gözlemlediğiniz tabiat olaylarını ve günlük hayatınızı düşünerek aşağıdaki\ntabloyu uygun örneklerle tamamlayınız.\n2. Tamamladığınız tabloyu sınıf arkadaşlarınızla paylaşınız.\nYönerge\nevrendeki\ndüzene ve yüce\nbir yaratıcının\nvarlığına işaret\neder.\nÖrnek: Güneş'in her gün doğudan doğup batıdan batması,\ncanlıların varlığının devamı için Dünya’ya ısı ve ışık sağlaması\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n1.Ünite\n22\nDeğerlendirme\nAşağıdaki tabloyu bu etkinliğe göre doldurunuz.\nÖnceden bildiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nŞimdi öğrendiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nYaşadığımız dünyayı gözlemlediğimizde Allah’ın (cc), yerdeki ve gökteki\nvarlıkları birbiriyle uyum içinde yaratmış olduğunu görürüz. Gezegenlerin,\nGüneş’in ve Ay’ın arasındaki ahenk bu düzene işaret eder. Dünya’nın hareketlerinden dolayı gece ve gündüz birbirini takip eder, mevsimler oluşur.\nGüneş’e olan mesafe sayesinde Dünya’daki varlıklar hayat bulur. İşte bunların hepsi Yüce Allah’ın yaratmasındaki mükemmelliğin bir sonucudur.\n“Gerçekten biz,\nher şeyi bir ölçü\nve dengede\nyarattık.”\n(Kamer 54/49.)\nGörsel 1.16: Gece ve gündüzün birbiri ardına gelişi Yüce Allah’ın evrene koyduğu düzenin bir göstergesidir.\nALLAH İNANCI\n23\nKur’an-ı Kerim’de “Yeri döşeyen, onda oturaklı dağlar ve ırmaklar yaratan ve orada bütün meyvelerden çifter çifter yaratan O’dur. Geceyi de gündüzün üzerine O örtüyor. Şüphesiz bütün bunlarda düşü-\nnen bir toplum için ibretler vardır.”3\n buyrularak Yüce Allah’ın evrene\nkoyduğu düzene dikkat çekilir.\nAllah (cc), her varlığa bulunduğu ortamda yaşamını sürdürebilecek ve\nihtiyaçlarını karşılayabilecek özellikler vermiştir. Bu özellikler sayesinde\ntohumlar hangi meyve ağacı olacağını, arılar nasıl bal yapacağını, hayvanlar yavrularını nasıl koruyacağını bilir. Her mevsimde yaşanan tabiat\nolayları da bu duruma örnektir. Kışın yağan kar, toprağı korur ve yer altı\nsularının artmasını sağlar. Böylece bahar aylarında ekinlerin, bitkilerin ve\nağaçların su ihtiyacı karşılanır. Yazın artan sıcaklık sayesinde ise ekinler\nve diğer bitkiler olgunlaşır. Bu durum, Allah’ın (cc) eşsiz bir yaratıcı olmasının sonucudur.\nAllah (cc), evrenin yanı sıra insanı da mükemmel bir şekilde yaratmış,\nonu diğer varlıklardan üstün kılmıştır. Bu konu \"... Onları yarattıklarımızın birçoğundan üstün kıldık.\"4\n ayetiyle bildirilmiştir. Akılla donatılan\ninsanın yeryüzünde sorumluluk sahibi bir varlık olması istenmiştir.\nİnsan vücudu da yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir. Vücuttaki her organın bir görevi bulunmaktadır. Çoğu zaman\nfark etmesek de organlar bu görevlerini yerine getirerek varlığımızın\ndevam etmesini sağlar. Diğer varlıklar için de bu durum geçerlidir. Hayatlarını suda, karada ve havada sürdüren canlıların her biri, yaratılıştaki\nahengin birer örneğidir.\n“… Rahman olan\nAllah’ın yaratışında\nhiçbir uygunsuzluk\ngöremezsin. Gözü-\nnü çevir de bir bak,\nbir bozukluk görebiliyor musun?”\n(Mülk 67/3.)\nGörsel 1.17: Her mevsimde tabiatta ortaya çıkan güzellikler, Allah’ın (cc) eseridir.\n1.Ünite\n24\nAdı Kur’an-ı Kerim’den Mesajlar\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi,\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirerek çıkarım yapabilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-4\n15 dk.\nYönerge\nAşağıda evrendeki düzenle ilgili ayetler ve bu ayetlerle ilgili görseller verilmiştir. Ayetleri\nokuyunuz ve okuduğunuz ayetin hangi görsellerle ilgili olduğunu örnekteki gibi görselin\nüstündeki kutucuğa yazınız.\nGörsel 1.18\nGörsel 1.21\nGörsel 1.19\nGörsel 1.22\nGörsel 1.20\nGörsel 1.23\n1\nALLAH İNANCI\n25\n1. Günlük hayatta karşılaştığınız hangi durumlar evrendeki mükemmel düzene örnek olabilir?\nİki örnek veriniz.\n_________________________________________________________________\n_________________________________________________________________\n2. Evrendeki mükemmel düzenle ilgili çıkarımlarınızdan yola çıkarak aşağıdaki boşlukları\nuygun ifadelerle tamamlayınız.\na. Evrende mükemmel bir ……………… vardır.\nb. Varlıklar arasındaki ……………….. evrendeki ahengin göstergesidir.\nc. Evrendeki her şey bir ……………….. ile yaratılmıştır.\nç. Tüm varlıkların yaratıcısı ………………………\nDeğerlendirme\nCanlıların yaratılışı ile evrendeki yaşam koşulları arasında sıkı bir ilişki\nvardır. Örneğin insan nefes almak için temiz havaya ihtiyaç duyar; bir fidan ağaca dönüşmek için toprağa, suya ve güneşe ihtiyaç duyar. Yeryüzü\nve gökyüzü arasındaki bu mükemmel denge, Allah’ın (cc) varlığının ve\nbirliğinin delillerinden biridir. Toprağı, tohumu, bitkiyi yaratan Allah (cc);\nhavayı, atmosferi, güneşi de yaratmıştır. Evrendeki bu birlik ve düzen\nyalnızca bir ve tek olan Allah’ın (cc) eseridir.\nBu durum Kur’an-ı Kerim’de “Ey insanlar! Allah’ın size olan nimetini\nhatırlayın. Allah’tan başka size göklerden ve yerden rızık veren bir\nyaratıcı var mı? O’ndan başka hiçbir ilah yoktur…”5\n ayetiyle açıklanmıştır. Hz. Peygamber de bir hadisinde “Yaratılmış her canlının yaratıcısı\nyalnızca Allah’tır.”6\n buyurmuştur.\n“Eğer yerde ve\ngökte Allah’tan\nbaşka ilahlar\nolsaydı kesinlikle\nikisinin de düzeni\nbozulurdu...”\n(Enbiya 21/22.)\n1. “Ve Rabbin bal arısına şöyle ilham etti: “Dağlardan, ağaçlardan ve insanların kurdukları\nçardaklardan kendine yuvalar edin.” (Nahl 16/68.)\n2. “Böylece onun (yağmurun) sayesinde sizin yararınıza hurma bahçeleri ve üzüm bağları\nmeydana getirdik. Bunlarda sizin için birçok meyveler vardır ve siz onlardan yersiniz.”\n(Müminun 23/19.)\n3. “Eti yenen büyük ve küçük baş hayvanları da O yarattı. Onlarda sizin için soğuktan koruyucu\nşeyler ve başka yararlar vardır, ayrıca onlardan beslenirsiniz.” (Nahl 16/5.)\n4. “Şüphesiz biz insanı en güzel biçimde yaratmışızdır.” (Tin 95/4.)\n5. “... Gemilerin denizi yararak gittiklerini görürsün ki, bu da O’nun lütfuna nâil olmanız ve\nO’na şükretmeniz içindir.” (Nahl 16/14.)\n6. “Ey iman edenler! Allah’a karşı gelmekten sakının ve doğrularla beraber olun.” (Tevbe 9/119.)\n7. “Tohumu ve çekirdeği çatlatan şüphesiz Allah’tır; O, ölüden diriyi çıkarır, diriden de ölüyü\nçıkarmaktadır...” (Enam 6/95.)\n1.Ünite\n26\nYaşadığımız evrende duyu organlarımızla hissettiğimiz ya da hissedemediğimiz büyük küçük her varlık, Yüce Allah’ın emriyle meydana gelmiştir.\nEvrende var olan bu olağanüstü düzenin sebebi, Allah’ın (cc) bir ve tek\nolmasıdır. Allah’ın (cc) bir ve tek olduğuna, O’nun eşi ve benzerinin olmadığına inanmak, O’na hiçbir şeyi şirk koşmadan ibadeti yalnızca Allah\n(cc) için yapmak İslam dininde tevhit inancı olarak adlandırılır.7\nTevhit, İslam’ın temel inanç esaslarından biridir ve İslam dininin özüdür. Bu nedenle tevhit; Müslümanların Allah’a (cc) olan bağlılıklarını,\nibadetlerini ve hayat tarzlarını belirleyen bir unsurdur. Tevhit inancı\nolmadan İslam’dan bahsetmek mümkün değildir.\nGörsel 1.24 Görsel 1.25\nGörsel 1.26: Kâinattaki güzelliklerin her biri Allah’ın (cc) varlığının ve birliğinin işaretidir.\nşirk:\nAllah’a (cc) inanmakla\nbirlikte başka\nvarlıkları da tanrı\nkabul etmek,\nAllah’a (cc) başka\nbir varlığı denk\ngörmek demektir\n(bk. Serinsu, 2009).\nALLAH İNANCI\n27\nAdı Bil Bakalım\nTevhit inancına ilişkin sonuç çıkarma\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-5\n15 dk.\nYönerge\nTanılayıcı dallanmış ağaçta Allah’ın (cc) varlığı ve birliği ile ilgili ifadeler verilmiştir. En\nüstteki ifadeden başlamak şartıyla ifadelerin doğru ya da yanlış olduğuna karar vererek\nilerleyiniz ve ulaştığınız tek çıkışı işaretleyiniz.\nAllah’ın (cc) bir ve ibadet\nedilecek tek ilah olduğunu\nbilmektir.\nAllah’ın (cc), hiçbir varlığa\nbenzemeyeceğini bilmektir.\nAllah’ın (cc) her şeyi yoktan\nvar eden ve her şeyin sahibi\nolduğunu bilmektir.\nAllah’ın (cc) eşi, benzeri ve\nortağı olmadığını bilmektir.\nTEVHİT\nBilgi Görseli 1.2: Tevhidin tanımı\n1.Ü",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753938787,
-      "nanoseconds": 278000000
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "OKuaAn3UoIrkOZpMxULw",
-    "content": {
-      "term": "Dua",
-      "definition": "Allah'a istek ve dileklerimizi iletmek için yaptığımız yalvarış."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030801,
-      "nanoseconds": 351000000
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "unitId": "jjotqKbHyi504QHH40ko"
-  },
-  {
-    "id": "QyJRhAofSdJPEiIPnemu",
-    "content": {
-      "text": "Evrendeki mükemmel düzen, Allah'ın varlığına ve birliğine işaret eder."
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "type": "sentence",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    }
-  },
-  {
-    "id": "RBdfEr7R1wMIW14IX3z2",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "text": "İnsan, akıl sahibi bir varlık olarak yaratılmıştır ve yeryüzünde sorumlulukları vardır."
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "Sc0xGaxbGLMViGzx0i2T",
-    "content": {
-      "text": "Şirk, Allah'a ortak koşmaktır ve İslam'da en büyük günahtır."
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence"
-  },
-  {
-    "id": "TSWjg0SqyJq5IvVeTKtn",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "definition": "İnsanı diğer varlıklardan ayıran, düşünmesini ve sorumluluk almasını sağlayan yetenek.",
-      "term": "Akıl"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767268975,
-      "nanoseconds": 787000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "unitId": "jjotqKbHyi504QHH40ko"
-  },
-  {
-    "id": "X2n6l9TSDWLKafLaQxV7",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "text": "Evrendeki birlik ve düzen, yalnızca bir ve tek olan Allah'ın eseridir."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "Y7f1Gh2NAZnLisWwYxs8",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
-    "content": {
-      "text": "Kâinat"
-    },
-    "type": "concept"
-  },
-  {
-    "id": "YfrD1vOP7urUQWBiv7S9",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753938867,
-      "nanoseconds": 504000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "definition": "",
-      "categories": [],
-      "title": "",
-      "text": "Gerçekten biz, her şeyi bir ölçü ve dengede yarattık.",
-      "term": "",
-      "items": []
-    },
-    "type": "sentence",
-    "sourceText": "ALLAH’IN VARLIĞI VE BİRLİĞİ\nİnsan, duyu organları sayesinde çevresini anlamaya çalışır. Evrendeki düzenin nasıl oluştuğu sorusuna da aklını kullanarak mantıklı cevaplar arar. Sonunda hiçbir varlığın kendi kendine ya da tesadüfen var\nolamayacağı hakikatine ulaşır. Her kitabın bir yazarı, her tablonun bir\nressamı, her masanın bir ustası olduğunu düşünür. Böylece kâinattaki\nbu mükemmel düzenin de bir yaratıcısı ve sahibi olduğunu fark eder.\nBu yüce yaratıcı ise Allah’tır (cc). O, tüm varlıkları mükemmel bir uyum\niçinde yoktan var etmiştir. Kur’an-ı Kerim’de de buyrulduğu gibi: “O,\nyaratıp şekillendiren, ahenk veren ve düzene koyandır.”1\n Çevremizde\ngözlemlediğimiz ahenk ve düzen ancak O’nun eseridir.\nBir şeyi yoktan var etmek, sadece Yüce Allah’a ait bir özelliktir. Hiçbir\nşey kendiliğinden ya da tesadüfen var olmamıştır. Kur’an-ı Kerim’de bu\ndurum “O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi\nona sadece ‘Ol!’ der, o da hemen oluverir.”2\n ayetiyle ifade edilmiştir.\nGörsel 1.15\nkâinat:\nEvren. Allah’ın (cc)\nyarattığı varlık ve\nolayların tamamıdır.\n(bk. Bolay, 1989)\n(cc):\nCelle celâluhû,\nyüceler yücesi\ndemektir.\nOkuduğunuz ve çok beğendiğiniz bir kitabı düşünerek aşağıdaki soruları cevaplayınız.\n1. Bu kitap kendiliğinden yazılmış olabilir mi?\n2. Kitaba güzellik ve duygu katan ifadelerin kendiliğinden art arda gelmesi, harflerin tesadüfen birleşip anlamlı ve güzel cümlelere dönüşmesi mümkün olabilir mi?\n3. Sizce evrende gözlemlediğimiz sayısız güzellikler ve mükemmel denge kendiliğinden mi\noluştu?\nALLAH İNANCI\n21\nAdı Evrenin Ahengine Yolculuk\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirebilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-3\n15 dk.\n1. Çevrenizde gözlemlediğiniz tabiat olaylarını ve günlük hayatınızı düşünerek aşağıdaki\ntabloyu uygun örneklerle tamamlayınız.\n2. Tamamladığınız tabloyu sınıf arkadaşlarınızla paylaşınız.\nYönerge\nevrendeki\ndüzene ve yüce\nbir yaratıcının\nvarlığına işaret\neder.\nÖrnek: Güneş'in her gün doğudan doğup batıdan batması,\ncanlıların varlığının devamı için Dünya’ya ısı ve ışık sağlaması\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n1.Ünite\n22\nDeğerlendirme\nAşağıdaki tabloyu bu etkinliğe göre doldurunuz.\nÖnceden bildiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nŞimdi öğrendiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nYaşadığımız dünyayı gözlemlediğimizde Allah’ın (cc), yerdeki ve gökteki\nvarlıkları birbiriyle uyum içinde yaratmış olduğunu görürüz. Gezegenlerin,\nGüneş’in ve Ay’ın arasındaki ahenk bu düzene işaret eder. Dünya’nın hareketlerinden dolayı gece ve gündüz birbirini takip eder, mevsimler oluşur.\nGüneş’e olan mesafe sayesinde Dünya’daki varlıklar hayat bulur. İşte bunların hepsi Yüce Allah’ın yaratmasındaki mükemmelliğin bir sonucudur.\n“Gerçekten biz,\nher şeyi bir ölçü\nve dengede\nyarattık.”\n(Kamer 54/49.)\nGörsel 1.16: Gece ve gündüzün birbiri ardına gelişi Yüce Allah’ın evrene koyduğu düzenin bir göstergesidir.\nALLAH İNANCI\n23\nKur’an-ı Kerim’de “Yeri döşeyen, onda oturaklı dağlar ve ırmaklar yaratan ve orada bütün meyvelerden çifter çifter yaratan O’dur. Geceyi de gündüzün üzerine O örtüyor. Şüphesiz bütün bunlarda düşü-\nnen bir toplum için ibretler vardır.”3\n buyrularak Yüce Allah’ın evrene\nkoyduğu düzene dikkat çekilir.\nAllah (cc), her varlığa bulunduğu ortamda yaşamını sürdürebilecek ve\nihtiyaçlarını karşılayabilecek özellikler vermiştir. Bu özellikler sayesinde\ntohumlar hangi meyve ağacı olacağını, arılar nasıl bal yapacağını, hayvanlar yavrularını nasıl koruyacağını bilir. Her mevsimde yaşanan tabiat\nolayları da bu duruma örnektir. Kışın yağan kar, toprağı korur ve yer altı\nsularının artmasını sağlar. Böylece bahar aylarında ekinlerin, bitkilerin ve\nağaçların su ihtiyacı karşılanır. Yazın artan sıcaklık sayesinde ise ekinler\nve diğer bitkiler olgunlaşır. Bu durum, Allah’ın (cc) eşsiz bir yaratıcı olmasının sonucudur.\nAllah (cc), evrenin yanı sıra insanı da mükemmel bir şekilde yaratmış,\nonu diğer varlıklardan üstün kılmıştır. Bu konu \"... Onları yarattıklarımızın birçoğundan üstün kıldık.\"4\n ayetiyle bildirilmiştir. Akılla donatılan\ninsanın yeryüzünde sorumluluk sahibi bir varlık olması istenmiştir.\nİnsan vücudu da yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir. Vücuttaki her organın bir görevi bulunmaktadır. Çoğu zaman\nfark etmesek de organlar bu görevlerini yerine getirerek varlığımızın\ndevam etmesini sağlar. Diğer varlıklar için de bu durum geçerlidir. Hayatlarını suda, karada ve havada sürdüren canlıların her biri, yaratılıştaki\nahengin birer örneğidir.\n“… Rahman olan\nAllah’ın yaratışında\nhiçbir uygunsuzluk\ngöremezsin. Gözü-\nnü çevir de bir bak,\nbir bozukluk görebiliyor musun?”\n(Mülk 67/3.)\nGörsel 1.17: Her mevsimde tabiatta ortaya çıkan güzellikler, Allah’ın (cc) eseridir.\n1.Ünite\n24\nAdı Kur’an-ı Kerim’den Mesajlar\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi,\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirerek çıkarım yapabilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-4\n15 dk.\nYönerge\nAşağıda evrendeki düzenle ilgili ayetler ve bu ayetlerle ilgili görseller verilmiştir. Ayetleri\nokuyunuz ve okuduğunuz ayetin hangi görsellerle ilgili olduğunu örnekteki gibi görselin\nüstündeki kutucuğa yazınız.\nGörsel 1.18\nGörsel 1.21\nGörsel 1.19\nGörsel 1.22\nGörsel 1.20\nGörsel 1.23\n1\nALLAH İNANCI\n25\n1. Günlük hayatta karşılaştığınız hangi durumlar evrendeki mükemmel düzene örnek olabilir?\nİki örnek veriniz.\n_________________________________________________________________\n_________________________________________________________________\n2. Evrendeki mükemmel düzenle ilgili çıkarımlarınızdan yola çıkarak aşağıdaki boşlukları\nuygun ifadelerle tamamlayınız.\na. Evrende mükemmel bir ……………… vardır.\nb. Varlıklar arasındaki ……………….. evrendeki ahengin göstergesidir.\nc. Evrendeki her şey bir ……………….. ile yaratılmıştır.\nç. Tüm varlıkların yaratıcısı ………………………\nDeğerlendirme\nCanlıların yaratılışı ile evrendeki yaşam koşulları arasında sıkı bir ilişki\nvardır. Örneğin insan nefes almak için temiz havaya ihtiyaç duyar; bir fidan ağaca dönüşmek için toprağa, suya ve güneşe ihtiyaç duyar. Yeryüzü\nve gökyüzü arasındaki bu mükemmel denge, Allah’ın (cc) varlığının ve\nbirliğinin delillerinden biridir. Toprağı, tohumu, bitkiyi yaratan Allah (cc);\nhavayı, atmosferi, güneşi de yaratmıştır. Evrendeki bu birlik ve düzen\nyalnızca bir ve tek olan Allah’ın (cc) eseridir.\nBu durum Kur’an-ı Kerim’de “Ey insanlar! Allah’ın size olan nimetini\nhatırlayın. Allah’tan başka size göklerden ve yerden rızık veren bir\nyaratıcı var mı? O’ndan başka hiçbir ilah yoktur…”5\n ayetiyle açıklanmıştır. Hz. Peygamber de bir hadisinde “Yaratılmış her canlının yaratıcısı\nyalnızca Allah’tır.”6\n buyurmuştur.\n“Eğer yerde ve\ngökte Allah’tan\nbaşka ilahlar\nolsaydı kesinlikle\nikisinin de düzeni\nbozulurdu...”\n(Enbiya 21/22.)\n1. “Ve Rabbin bal arısına şöyle ilham etti: “Dağlardan, ağaçlardan ve insanların kurdukları\nçardaklardan kendine yuvalar edin.” (Nahl 16/68.)\n2. “Böylece onun (yağmurun) sayesinde sizin yararınıza hurma bahçeleri ve üzüm bağları\nmeydana getirdik. Bunlarda sizin için birçok meyveler vardır ve siz onlardan yersiniz.”\n(Müminun 23/19.)\n3. “Eti yenen büyük ve küçük baş hayvanları da O yarattı. Onlarda sizin için soğuktan koruyucu\nşeyler ve başka yararlar vardır, ayrıca onlardan beslenirsiniz.” (Nahl 16/5.)\n4. “Şüphesiz biz insanı en güzel biçimde yaratmışızdır.” (Tin 95/4.)\n5. “... Gemilerin denizi yararak gittiklerini görürsün ki, bu da O’nun lütfuna nâil olmanız ve\nO’na şükretmeniz içindir.” (Nahl 16/14.)\n6. “Ey iman edenler! Allah’a karşı gelmekten sakının ve doğrularla beraber olun.” (Tevbe 9/119.)\n7. “Tohumu ve çekirdeği çatlatan şüphesiz Allah’tır; O, ölüden diriyi çıkarır, diriden de ölüyü\nçıkarmaktadır...” (Enam 6/95.)\n1.Ünite\n26\nYaşadığımız evrende duyu organlarımızla hissettiğimiz ya da hissedemediğimiz büyük küçük her varlık, Yüce Allah’ın emriyle meydana gelmiştir.\nEvrende var olan bu olağanüstü düzenin sebebi, Allah’ın (cc) bir ve tek\nolmasıdır. Allah’ın (cc) bir ve tek olduğuna, O’nun eşi ve benzerinin olmadığına inanmak, O’na hiçbir şeyi şirk koşmadan ibadeti yalnızca Allah\n(cc) için yapmak İslam dininde tevhit inancı olarak adlandırılır.7\nTevhit, İslam’ın temel inanç esaslarından biridir ve İslam dininin özüdür. Bu nedenle tevhit; Müslümanların Allah’a (cc) olan bağlılıklarını,\nibadetlerini ve hayat tarzlarını belirleyen bir unsurdur. Tevhit inancı\nolmadan İslam’dan bahsetmek mümkün değildir.\nGörsel 1.24 Görsel 1.25\nGörsel 1.26: Kâinattaki güzelliklerin her biri Allah’ın (cc) varlığının ve birliğinin işaretidir.\nşirk:\nAllah’a (cc) inanmakla\nbirlikte başka\nvarlıkları da tanrı\nkabul etmek,\nAllah’a (cc) başka\nbir varlığı denk\ngörmek demektir\n(bk. Serinsu, 2009).\nALLAH İNANCI\n27\nAdı Bil Bakalım\nTevhit inancına ilişkin sonuç çıkarma\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-5\n15 dk.\nYönerge\nTanılayıcı dallanmış ağaçta Allah’ın (cc) varlığı ve birliği ile ilgili ifadeler verilmiştir. En\nüstteki ifadeden başlamak şartıyla ifadelerin doğru ya da yanlış olduğuna karar vererek\nilerleyiniz ve ulaştığınız tek çıkışı işaretleyiniz.\nAllah’ın (cc) bir ve ibadet\nedilecek tek ilah olduğunu\nbilmektir.\nAllah’ın (cc), hiçbir varlığa\nbenzemeyeceğini bilmektir.\nAllah’ın (cc) her şeyi yoktan\nvar eden ve her şeyin sahibi\nolduğunu bilmektir.\nAllah’ın (cc) eşi, benzeri ve\nortağı olmadığını bilmektir.\nTEVHİT\nBilgi Görseli 1.2: Tevhidin tanımı\n1.Ü",
-    "topicTitle": "2.Allah’ın Varlığı ve Birliği"
-  },
-  {
-    "id": "Z4h0w56gcjTGnnG8Za5A",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "text": "Her şeyin yaratıcısı Allah'tır ve O'nun eşi ve benzeri yoktur."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    }
-  },
-  {
-    "id": "ZzUuxbx3szRwuGxqJVoi",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "concept",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "text": "Celle Celâluhû (cc)"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767268975,
-      "nanoseconds": 787000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "cjsIQDT0XQBLvrE4fOCT",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "term": "(cc)",
-      "definition": "\"Yüceler Yücesi\" anlamına gelen kısaltma nedir?"
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -459,186 +136,509 @@
     "type": "definition"
   },
   {
-    "id": "dhyud1ejDELgviTQEEdX",
+    "id": "G8MsPRzuO2Acfuycyy6I",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753938656,
+      "nanoseconds": 714000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "term": "Kur'an-ı Kerim",
+      "definition": "Allah'ın sözlerini içeren kutsal kitap nedir?"
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "J56JBmTQHXl4nIhSbIcK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767268975,
+      "nanoseconds": 787000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "term": "İbadet",
+      "definition": "Hiçbir şeyi ortak koşmadan sadece Allah için yapılan kulluk görevi."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
+  },
+  {
+    "id": "J8i80UtrMgf9bkNDmXHY",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767268975,
+      "nanoseconds": 787000000
+    },
+    "content": {
+      "definition": "Gezegenlerden canlılara kadar her şeyin uyum içinde olması.",
+      "term": "Ahenk"
+    },
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "JcEP8CnCk3B8lWBpGYSd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030801,
+      "nanoseconds": 351000000
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "definition": "Allah tarafından insanlara dini tebliğ etmek için gönderilen elçi.",
+      "term": "Peygamber"
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
+  },
+  {
+    "id": "KKhyYv9IEuJCEwcCC8h4",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Tevhit, Allah'ın birliğine inanmak ve O'na hiçbir şeyi ortak koşmamaktır."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    }
+  },
+  {
+    "id": "Kzc2NK40X2zP9LzZdCVX",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "content": {
+      "text": "Şirk"
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "L3JbDuMm21kUk4mxPBfs",
+    "content": {
+      "term": "Yaratma",
+      "definition": "Bir şeyi örneksiz ve yoktan var etmek; sadece Allah’a ait özellik."
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767268975,
+      "nanoseconds": 787000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "LgQtqVMEBDZv2qwEmssI",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753938656,
+      "nanoseconds": 714000000
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "definition": "Allah'a inanmakla birlikte başka varlıkları da tanrı kabul etmek nedir?",
+      "term": "Şirk"
+    }
+  },
+  {
+    "id": "M3TCpYGDJT3SChSKYedD",
+    "content": {
+      "items": [],
+      "definition": "",
+      "text": "O, yaratıp şekillendiren, ahenk veren ve düzene koyandır.",
+      "categories": [],
+      "title": "",
+      "term": ""
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753938787,
+      "nanoseconds": 278000000
+    },
+    "type": "sentence",
+    "sourceText": "ALLAH’IN VARLIĞI VE BİRLİĞİ\nİnsan, duyu organları sayesinde çevresini anlamaya çalışır. Evrendeki düzenin nasıl oluştuğu sorusuna da aklını kullanarak mantıklı cevaplar arar. Sonunda hiçbir varlığın kendi kendine ya da tesadüfen var\nolamayacağı hakikatine ulaşır. Her kitabın bir yazarı, her tablonun bir\nressamı, her masanın bir ustası olduğunu düşünür. Böylece kâinattaki\nbu mükemmel düzenin de bir yaratıcısı ve sahibi olduğunu fark eder.\nBu yüce yaratıcı ise Allah’tır (cc). O, tüm varlıkları mükemmel bir uyum\niçinde yoktan var etmiştir. Kur’an-ı Kerim’de de buyrulduğu gibi: “O,\nyaratıp şekillendiren, ahenk veren ve düzene koyandır.”1\n Çevremizde\ngözlemlediğimiz ahenk ve düzen ancak O’nun eseridir.\nBir şeyi yoktan var etmek, sadece Yüce Allah’a ait bir özelliktir. Hiçbir\nşey kendiliğinden ya da tesadüfen var olmamıştır. Kur’an-ı Kerim’de bu\ndurum “O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi\nona sadece ‘Ol!’ der, o da hemen oluverir.”2\n ayetiyle ifade edilmiştir.\nGörsel 1.15\nkâinat:\nEvren. Allah’ın (cc)\nyarattığı varlık ve\nolayların tamamıdır.\n(bk. Bolay, 1989)\n(cc):\nCelle celâluhû,\nyüceler yücesi\ndemektir.\nOkuduğunuz ve çok beğendiğiniz bir kitabı düşünerek aşağıdaki soruları cevaplayınız.\n1. Bu kitap kendiliğinden yazılmış olabilir mi?\n2. Kitaba güzellik ve duygu katan ifadelerin kendiliğinden art arda gelmesi, harflerin tesadüfen birleşip anlamlı ve güzel cümlelere dönüşmesi mümkün olabilir mi?\n3. Sizce evrende gözlemlediğimiz sayısız güzellikler ve mükemmel denge kendiliğinden mi\noluştu?\nALLAH İNANCI\n21\nAdı Evrenin Ahengine Yolculuk\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirebilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-3\n15 dk.\n1. Çevrenizde gözlemlediğiniz tabiat olaylarını ve günlük hayatınızı düşünerek aşağıdaki\ntabloyu uygun örneklerle tamamlayınız.\n2. Tamamladığınız tabloyu sınıf arkadaşlarınızla paylaşınız.\nYönerge\nevrendeki\ndüzene ve yüce\nbir yaratıcının\nvarlığına işaret\neder.\nÖrnek: Güneş'in her gün doğudan doğup batıdan batması,\ncanlıların varlığının devamı için Dünya’ya ısı ve ışık sağlaması\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n1.Ünite\n22\nDeğerlendirme\nAşağıdaki tabloyu bu etkinliğe göre doldurunuz.\nÖnceden bildiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nŞimdi öğrendiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nYaşadığımız dünyayı gözlemlediğimizde Allah’ın (cc), yerdeki ve gökteki\nvarlıkları birbiriyle uyum içinde yaratmış olduğunu görürüz. Gezegenlerin,\nGüneş’in ve Ay’ın arasındaki ahenk bu düzene işaret eder. Dünya’nın hareketlerinden dolayı gece ve gündüz birbirini takip eder, mevsimler oluşur.\nGüneş’e olan mesafe sayesinde Dünya’daki varlıklar hayat bulur. İşte bunların hepsi Yüce Allah’ın yaratmasındaki mükemmelliğin bir sonucudur.\n“Gerçekten biz,\nher şeyi bir ölçü\nve dengede\nyarattık.”\n(Kamer 54/49.)\nGörsel 1.16: Gece ve gündüzün birbiri ardına gelişi Yüce Allah’ın evrene koyduğu düzenin bir göstergesidir.\nALLAH İNANCI\n23\nKur’an-ı Kerim’de “Yeri döşeyen, onda oturaklı dağlar ve ırmaklar yaratan ve orada bütün meyvelerden çifter çifter yaratan O’dur. Geceyi de gündüzün üzerine O örtüyor. Şüphesiz bütün bunlarda düşü-\nnen bir toplum için ibretler vardır.”3\n buyrularak Yüce Allah’ın evrene\nkoyduğu düzene dikkat çekilir.\nAllah (cc), her varlığa bulunduğu ortamda yaşamını sürdürebilecek ve\nihtiyaçlarını karşılayabilecek özellikler vermiştir. Bu özellikler sayesinde\ntohumlar hangi meyve ağacı olacağını, arılar nasıl bal yapacağını, hayvanlar yavrularını nasıl koruyacağını bilir. Her mevsimde yaşanan tabiat\nolayları da bu duruma örnektir. Kışın yağan kar, toprağı korur ve yer altı\nsularının artmasını sağlar. Böylece bahar aylarında ekinlerin, bitkilerin ve\nağaçların su ihtiyacı karşılanır. Yazın artan sıcaklık sayesinde ise ekinler\nve diğer bitkiler olgunlaşır. Bu durum, Allah’ın (cc) eşsiz bir yaratıcı olmasının sonucudur.\nAllah (cc), evrenin yanı sıra insanı da mükemmel bir şekilde yaratmış,\nonu diğer varlıklardan üstün kılmıştır. Bu konu \"... Onları yarattıklarımızın birçoğundan üstün kıldık.\"4\n ayetiyle bildirilmiştir. Akılla donatılan\ninsanın yeryüzünde sorumluluk sahibi bir varlık olması istenmiştir.\nİnsan vücudu da yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir. Vücuttaki her organın bir görevi bulunmaktadır. Çoğu zaman\nfark etmesek de organlar bu görevlerini yerine getirerek varlığımızın\ndevam etmesini sağlar. Diğer varlıklar için de bu durum geçerlidir. Hayatlarını suda, karada ve havada sürdüren canlıların her biri, yaratılıştaki\nahengin birer örneğidir.\n“… Rahman olan\nAllah’ın yaratışında\nhiçbir uygunsuzluk\ngöremezsin. Gözü-\nnü çevir de bir bak,\nbir bozukluk görebiliyor musun?”\n(Mülk 67/3.)\nGörsel 1.17: Her mevsimde tabiatta ortaya çıkan güzellikler, Allah’ın (cc) eseridir.\n1.Ünite\n24\nAdı Kur’an-ı Kerim’den Mesajlar\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi,\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirerek çıkarım yapabilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-4\n15 dk.\nYönerge\nAşağıda evrendeki düzenle ilgili ayetler ve bu ayetlerle ilgili görseller verilmiştir. Ayetleri\nokuyunuz ve okuduğunuz ayetin hangi görsellerle ilgili olduğunu örnekteki gibi görselin\nüstündeki kutucuğa yazınız.\nGörsel 1.18\nGörsel 1.21\nGörsel 1.19\nGörsel 1.22\nGörsel 1.20\nGörsel 1.23\n1\nALLAH İNANCI\n25\n1. Günlük hayatta karşılaştığınız hangi durumlar evrendeki mükemmel düzene örnek olabilir?\nİki örnek veriniz.\n_________________________________________________________________\n_________________________________________________________________\n2. Evrendeki mükemmel düzenle ilgili çıkarımlarınızdan yola çıkarak aşağıdaki boşlukları\nuygun ifadelerle tamamlayınız.\na. Evrende mükemmel bir ……………… vardır.\nb. Varlıklar arasındaki ……………….. evrendeki ahengin göstergesidir.\nc. Evrendeki her şey bir ……………….. ile yaratılmıştır.\nç. Tüm varlıkların yaratıcısı ………………………\nDeğerlendirme\nCanlıların yaratılışı ile evrendeki yaşam koşulları arasında sıkı bir ilişki\nvardır. Örneğin insan nefes almak için temiz havaya ihtiyaç duyar; bir fidan ağaca dönüşmek için toprağa, suya ve güneşe ihtiyaç duyar. Yeryüzü\nve gökyüzü arasındaki bu mükemmel denge, Allah’ın (cc) varlığının ve\nbirliğinin delillerinden biridir. Toprağı, tohumu, bitkiyi yaratan Allah (cc);\nhavayı, atmosferi, güneşi de yaratmıştır. Evrendeki bu birlik ve düzen\nyalnızca bir ve tek olan Allah’ın (cc) eseridir.\nBu durum Kur’an-ı Kerim’de “Ey insanlar! Allah’ın size olan nimetini\nhatırlayın. Allah’tan başka size göklerden ve yerden rızık veren bir\nyaratıcı var mı? O’ndan başka hiçbir ilah yoktur…”5\n ayetiyle açıklanmıştır. Hz. Peygamber de bir hadisinde “Yaratılmış her canlının yaratıcısı\nyalnızca Allah’tır.”6\n buyurmuştur.\n“Eğer yerde ve\ngökte Allah’tan\nbaşka ilahlar\nolsaydı kesinlikle\nikisinin de düzeni\nbozulurdu...”\n(Enbiya 21/22.)\n1. “Ve Rabbin bal arısına şöyle ilham etti: “Dağlardan, ağaçlardan ve insanların kurdukları\nçardaklardan kendine yuvalar edin.” (Nahl 16/68.)\n2. “Böylece onun (yağmurun) sayesinde sizin yararınıza hurma bahçeleri ve üzüm bağları\nmeydana getirdik. Bunlarda sizin için birçok meyveler vardır ve siz onlardan yersiniz.”\n(Müminun 23/19.)\n3. “Eti yenen büyük ve küçük baş hayvanları da O yarattı. Onlarda sizin için soğuktan koruyucu\nşeyler ve başka yararlar vardır, ayrıca onlardan beslenirsiniz.” (Nahl 16/5.)\n4. “Şüphesiz biz insanı en güzel biçimde yaratmışızdır.” (Tin 95/4.)\n5. “... Gemilerin denizi yararak gittiklerini görürsün ki, bu da O’nun lütfuna nâil olmanız ve\nO’na şükretmeniz içindir.” (Nahl 16/14.)\n6. “Ey iman edenler! Allah’a karşı gelmekten sakının ve doğrularla beraber olun.” (Tevbe 9/119.)\n7. “Tohumu ve çekirdeği çatlatan şüphesiz Allah’tır; O, ölüden diriyi çıkarır, diriden de ölüyü\nçıkarmaktadır...” (Enam 6/95.)\n1.Ünite\n26\nYaşadığımız evrende duyu organlarımızla hissettiğimiz ya da hissedemediğimiz büyük küçük her varlık, Yüce Allah’ın emriyle meydana gelmiştir.\nEvrende var olan bu olağanüstü düzenin sebebi, Allah’ın (cc) bir ve tek\nolmasıdır. Allah’ın (cc) bir ve tek olduğuna, O’nun eşi ve benzerinin olmadığına inanmak, O’na hiçbir şeyi şirk koşmadan ibadeti yalnızca Allah\n(cc) için yapmak İslam dininde tevhit inancı olarak adlandırılır.7\nTevhit, İslam’ın temel inanç esaslarından biridir ve İslam dininin özüdür. Bu nedenle tevhit; Müslümanların Allah’a (cc) olan bağlılıklarını,\nibadetlerini ve hayat tarzlarını belirleyen bir unsurdur. Tevhit inancı\nolmadan İslam’dan bahsetmek mümkün değildir.\nGörsel 1.24 Görsel 1.25\nGörsel 1.26: Kâinattaki güzelliklerin her biri Allah’ın (cc) varlığının ve birliğinin işaretidir.\nşirk:\nAllah’a (cc) inanmakla\nbirlikte başka\nvarlıkları da tanrı\nkabul etmek,\nAllah’a (cc) başka\nbir varlığı denk\ngörmek demektir\n(bk. Serinsu, 2009).\nALLAH İNANCI\n27\nAdı Bil Bakalım\nTevhit inancına ilişkin sonuç çıkarma\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-5\n15 dk.\nYönerge\nTanılayıcı dallanmış ağaçta Allah’ın (cc) varlığı ve birliği ile ilgili ifadeler verilmiştir. En\nüstteki ifadeden başlamak şartıyla ifadelerin doğru ya da yanlış olduğuna karar vererek\nilerleyiniz ve ulaştığınız tek çıkışı işaretleyiniz.\nAllah’ın (cc) bir ve ibadet\nedilecek tek ilah olduğunu\nbilmektir.\nAllah’ın (cc), hiçbir varlığa\nbenzemeyeceğini bilmektir.\nAllah’ın (cc) her şeyi yoktan\nvar eden ve her şeyin sahibi\nolduğunu bilmektir.\nAllah’ın (cc) eşi, benzeri ve\nortağı olmadığını bilmektir.\nTEVHİT\nBilgi Görseli 1.2: Tevhidin tanımı\n1.Ü",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicTitle": "2.Allah’ın Varlığı ve Birliği",
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "OKuaAn3UoIrkOZpMxULw",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
     "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030801,
       "nanoseconds": 351000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "topicId": "swndbszog1ziSH0ODMbD",
     "content": {
-      "term": "İbadet",
-      "definition": "Allah'a karşı sevgi, saygı ve bağlılığı göstermek için yapılan davranışlar."
+      "definition": "Allah'a istek ve dileklerimizi iletmek için yaptığımız yalvarış.",
+      "term": "Dua"
+    },
+    "topicId": "swndbszog1ziSH0ODMbD"
+  },
+  {
+    "id": "QyJRhAofSdJPEiIPnemu",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Evrendeki mükemmel düzen, Allah'ın varlığına ve birliğine işaret eder."
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "RBdfEr7R1wMIW14IX3z2",
+    "type": "sentence",
+    "content": {
+      "text": "İnsan, akıl sahibi bir varlık olarak yaratılmıştır ve yeryüzünde sorumlulukları vardır."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "Sc0xGaxbGLMViGzx0i2T",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Şirk, Allah'a ortak koşmaktır ve İslam'da en büyük günahtır."
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "TSWjg0SqyJq5IvVeTKtn",
+    "content": {
+      "term": "Akıl",
+      "definition": "İnsanı diğer varlıklardan ayıran, düşünmesini ve sorumluluk almasını sağlayan yetenek."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767268975,
+      "nanoseconds": 787000000
     }
   },
   {
-    "id": "hgKfiFLaDT8NpZcpAhZ6",
-    "type": "concept",
+    "id": "X2n6l9TSDWLKafLaQxV7",
+    "type": "sentence",
+    "topicId": "swndbszog1ziSH0ODMbD",
     "content": {
-      "text": "Ahenk"
+      "text": "Evrendeki birlik ve düzen, yalnızca bir ve tek olan Allah'ın eseridir."
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "Y7f1Gh2NAZnLisWwYxs8",
+    "content": {
+      "text": "Kâinat"
+    },
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    }
+  },
+  {
+    "id": "YfrD1vOP7urUQWBiv7S9",
+    "sourceText": "ALLAH’IN VARLIĞI VE BİRLİĞİ\nİnsan, duyu organları sayesinde çevresini anlamaya çalışır. Evrendeki düzenin nasıl oluştuğu sorusuna da aklını kullanarak mantıklı cevaplar arar. Sonunda hiçbir varlığın kendi kendine ya da tesadüfen var\nolamayacağı hakikatine ulaşır. Her kitabın bir yazarı, her tablonun bir\nressamı, her masanın bir ustası olduğunu düşünür. Böylece kâinattaki\nbu mükemmel düzenin de bir yaratıcısı ve sahibi olduğunu fark eder.\nBu yüce yaratıcı ise Allah’tır (cc). O, tüm varlıkları mükemmel bir uyum\niçinde yoktan var etmiştir. Kur’an-ı Kerim’de de buyrulduğu gibi: “O,\nyaratıp şekillendiren, ahenk veren ve düzene koyandır.”1\n Çevremizde\ngözlemlediğimiz ahenk ve düzen ancak O’nun eseridir.\nBir şeyi yoktan var etmek, sadece Yüce Allah’a ait bir özelliktir. Hiçbir\nşey kendiliğinden ya da tesadüfen var olmamıştır. Kur’an-ı Kerim’de bu\ndurum “O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi\nona sadece ‘Ol!’ der, o da hemen oluverir.”2\n ayetiyle ifade edilmiştir.\nGörsel 1.15\nkâinat:\nEvren. Allah’ın (cc)\nyarattığı varlık ve\nolayların tamamıdır.\n(bk. Bolay, 1989)\n(cc):\nCelle celâluhû,\nyüceler yücesi\ndemektir.\nOkuduğunuz ve çok beğendiğiniz bir kitabı düşünerek aşağıdaki soruları cevaplayınız.\n1. Bu kitap kendiliğinden yazılmış olabilir mi?\n2. Kitaba güzellik ve duygu katan ifadelerin kendiliğinden art arda gelmesi, harflerin tesadüfen birleşip anlamlı ve güzel cümlelere dönüşmesi mümkün olabilir mi?\n3. Sizce evrende gözlemlediğimiz sayısız güzellikler ve mükemmel denge kendiliğinden mi\noluştu?\nALLAH İNANCI\n21\nAdı Evrenin Ahengine Yolculuk\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirebilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-3\n15 dk.\n1. Çevrenizde gözlemlediğiniz tabiat olaylarını ve günlük hayatınızı düşünerek aşağıdaki\ntabloyu uygun örneklerle tamamlayınız.\n2. Tamamladığınız tabloyu sınıf arkadaşlarınızla paylaşınız.\nYönerge\nevrendeki\ndüzene ve yüce\nbir yaratıcının\nvarlığına işaret\neder.\nÖrnek: Güneş'in her gün doğudan doğup batıdan batması,\ncanlıların varlığının devamı için Dünya’ya ısı ve ışık sağlaması\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n______________________________________\n______________________________________\n______________________________________\n_______________________________________\n1.Ünite\n22\nDeğerlendirme\nAşağıdaki tabloyu bu etkinliğe göre doldurunuz.\nÖnceden bildiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nŞimdi öğrendiklerim:\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n................................................................................................................\n.................................................................................................................\n.................................................................................................................\n.................................................................................................................\nYaşadığımız dünyayı gözlemlediğimizde Allah’ın (cc), yerdeki ve gökteki\nvarlıkları birbiriyle uyum içinde yaratmış olduğunu görürüz. Gezegenlerin,\nGüneş’in ve Ay’ın arasındaki ahenk bu düzene işaret eder. Dünya’nın hareketlerinden dolayı gece ve gündüz birbirini takip eder, mevsimler oluşur.\nGüneş’e olan mesafe sayesinde Dünya’daki varlıklar hayat bulur. İşte bunların hepsi Yüce Allah’ın yaratmasındaki mükemmelliğin bir sonucudur.\n“Gerçekten biz,\nher şeyi bir ölçü\nve dengede\nyarattık.”\n(Kamer 54/49.)\nGörsel 1.16: Gece ve gündüzün birbiri ardına gelişi Yüce Allah’ın evrene koyduğu düzenin bir göstergesidir.\nALLAH İNANCI\n23\nKur’an-ı Kerim’de “Yeri döşeyen, onda oturaklı dağlar ve ırmaklar yaratan ve orada bütün meyvelerden çifter çifter yaratan O’dur. Geceyi de gündüzün üzerine O örtüyor. Şüphesiz bütün bunlarda düşü-\nnen bir toplum için ibretler vardır.”3\n buyrularak Yüce Allah’ın evrene\nkoyduğu düzene dikkat çekilir.\nAllah (cc), her varlığa bulunduğu ortamda yaşamını sürdürebilecek ve\nihtiyaçlarını karşılayabilecek özellikler vermiştir. Bu özellikler sayesinde\ntohumlar hangi meyve ağacı olacağını, arılar nasıl bal yapacağını, hayvanlar yavrularını nasıl koruyacağını bilir. Her mevsimde yaşanan tabiat\nolayları da bu duruma örnektir. Kışın yağan kar, toprağı korur ve yer altı\nsularının artmasını sağlar. Böylece bahar aylarında ekinlerin, bitkilerin ve\nağaçların su ihtiyacı karşılanır. Yazın artan sıcaklık sayesinde ise ekinler\nve diğer bitkiler olgunlaşır. Bu durum, Allah’ın (cc) eşsiz bir yaratıcı olmasının sonucudur.\nAllah (cc), evrenin yanı sıra insanı da mükemmel bir şekilde yaratmış,\nonu diğer varlıklardan üstün kılmıştır. Bu konu \"... Onları yarattıklarımızın birçoğundan üstün kıldık.\"4\n ayetiyle bildirilmiştir. Akılla donatılan\ninsanın yeryüzünde sorumluluk sahibi bir varlık olması istenmiştir.\nİnsan vücudu da yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir. Vücuttaki her organın bir görevi bulunmaktadır. Çoğu zaman\nfark etmesek de organlar bu görevlerini yerine getirerek varlığımızın\ndevam etmesini sağlar. Diğer varlıklar için de bu durum geçerlidir. Hayatlarını suda, karada ve havada sürdüren canlıların her biri, yaratılıştaki\nahengin birer örneğidir.\n“… Rahman olan\nAllah’ın yaratışında\nhiçbir uygunsuzluk\ngöremezsin. Gözü-\nnü çevir de bir bak,\nbir bozukluk görebiliyor musun?”\n(Mülk 67/3.)\nGörsel 1.17: Her mevsimde tabiatta ortaya çıkan güzellikler, Allah’ın (cc) eseridir.\n1.Ünite\n24\nAdı Kur’an-ı Kerim’den Mesajlar\nEvrendeki mükemmel düzene ilişkin ön gözlem veya tecrübeyi,\nAllah’ın (cc) varlığı ve birliği ile ilişkilendirerek çıkarım yapabilme\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-4\n15 dk.\nYönerge\nAşağıda evrendeki düzenle ilgili ayetler ve bu ayetlerle ilgili görseller verilmiştir. Ayetleri\nokuyunuz ve okuduğunuz ayetin hangi görsellerle ilgili olduğunu örnekteki gibi görselin\nüstündeki kutucuğa yazınız.\nGörsel 1.18\nGörsel 1.21\nGörsel 1.19\nGörsel 1.22\nGörsel 1.20\nGörsel 1.23\n1\nALLAH İNANCI\n25\n1. Günlük hayatta karşılaştığınız hangi durumlar evrendeki mükemmel düzene örnek olabilir?\nİki örnek veriniz.\n_________________________________________________________________\n_________________________________________________________________\n2. Evrendeki mükemmel düzenle ilgili çıkarımlarınızdan yola çıkarak aşağıdaki boşlukları\nuygun ifadelerle tamamlayınız.\na. Evrende mükemmel bir ……………… vardır.\nb. Varlıklar arasındaki ……………….. evrendeki ahengin göstergesidir.\nc. Evrendeki her şey bir ……………….. ile yaratılmıştır.\nç. Tüm varlıkların yaratıcısı ………………………\nDeğerlendirme\nCanlıların yaratılışı ile evrendeki yaşam koşulları arasında sıkı bir ilişki\nvardır. Örneğin insan nefes almak için temiz havaya ihtiyaç duyar; bir fidan ağaca dönüşmek için toprağa, suya ve güneşe ihtiyaç duyar. Yeryüzü\nve gökyüzü arasındaki bu mükemmel denge, Allah’ın (cc) varlığının ve\nbirliğinin delillerinden biridir. Toprağı, tohumu, bitkiyi yaratan Allah (cc);\nhavayı, atmosferi, güneşi de yaratmıştır. Evrendeki bu birlik ve düzen\nyalnızca bir ve tek olan Allah’ın (cc) eseridir.\nBu durum Kur’an-ı Kerim’de “Ey insanlar! Allah’ın size olan nimetini\nhatırlayın. Allah’tan başka size göklerden ve yerden rızık veren bir\nyaratıcı var mı? O’ndan başka hiçbir ilah yoktur…”5\n ayetiyle açıklanmıştır. Hz. Peygamber de bir hadisinde “Yaratılmış her canlının yaratıcısı\nyalnızca Allah’tır.”6\n buyurmuştur.\n“Eğer yerde ve\ngökte Allah’tan\nbaşka ilahlar\nolsaydı kesinlikle\nikisinin de düzeni\nbozulurdu...”\n(Enbiya 21/22.)\n1. “Ve Rabbin bal arısına şöyle ilham etti: “Dağlardan, ağaçlardan ve insanların kurdukları\nçardaklardan kendine yuvalar edin.” (Nahl 16/68.)\n2. “Böylece onun (yağmurun) sayesinde sizin yararınıza hurma bahçeleri ve üzüm bağları\nmeydana getirdik. Bunlarda sizin için birçok meyveler vardır ve siz onlardan yersiniz.”\n(Müminun 23/19.)\n3. “Eti yenen büyük ve küçük baş hayvanları da O yarattı. Onlarda sizin için soğuktan koruyucu\nşeyler ve başka yararlar vardır, ayrıca onlardan beslenirsiniz.” (Nahl 16/5.)\n4. “Şüphesiz biz insanı en güzel biçimde yaratmışızdır.” (Tin 95/4.)\n5. “... Gemilerin denizi yararak gittiklerini görürsün ki, bu da O’nun lütfuna nâil olmanız ve\nO’na şükretmeniz içindir.” (Nahl 16/14.)\n6. “Ey iman edenler! Allah’a karşı gelmekten sakının ve doğrularla beraber olun.” (Tevbe 9/119.)\n7. “Tohumu ve çekirdeği çatlatan şüphesiz Allah’tır; O, ölüden diriyi çıkarır, diriden de ölüyü\nçıkarmaktadır...” (Enam 6/95.)\n1.Ünite\n26\nYaşadığımız evrende duyu organlarımızla hissettiğimiz ya da hissedemediğimiz büyük küçük her varlık, Yüce Allah’ın emriyle meydana gelmiştir.\nEvrende var olan bu olağanüstü düzenin sebebi, Allah’ın (cc) bir ve tek\nolmasıdır. Allah’ın (cc) bir ve tek olduğuna, O’nun eşi ve benzerinin olmadığına inanmak, O’na hiçbir şeyi şirk koşmadan ibadeti yalnızca Allah\n(cc) için yapmak İslam dininde tevhit inancı olarak adlandırılır.7\nTevhit, İslam’ın temel inanç esaslarından biridir ve İslam dininin özüdür. Bu nedenle tevhit; Müslümanların Allah’a (cc) olan bağlılıklarını,\nibadetlerini ve hayat tarzlarını belirleyen bir unsurdur. Tevhit inancı\nolmadan İslam’dan bahsetmek mümkün değildir.\nGörsel 1.24 Görsel 1.25\nGörsel 1.26: Kâinattaki güzelliklerin her biri Allah’ın (cc) varlığının ve birliğinin işaretidir.\nşirk:\nAllah’a (cc) inanmakla\nbirlikte başka\nvarlıkları da tanrı\nkabul etmek,\nAllah’a (cc) başka\nbir varlığı denk\ngörmek demektir\n(bk. Serinsu, 2009).\nALLAH İNANCI\n27\nAdı Bil Bakalım\nTevhit inancına ilişkin sonuç çıkarma\nGözleme dayalı tahmin etme\nAmaç\nBeceri\nEtkinlik-5\n15 dk.\nYönerge\nTanılayıcı dallanmış ağaçta Allah’ın (cc) varlığı ve birliği ile ilgili ifadeler verilmiştir. En\nüstteki ifadeden başlamak şartıyla ifadelerin doğru ya da yanlış olduğuna karar vererek\nilerleyiniz ve ulaştığınız tek çıkışı işaretleyiniz.\nAllah’ın (cc) bir ve ibadet\nedilecek tek ilah olduğunu\nbilmektir.\nAllah’ın (cc), hiçbir varlığa\nbenzemeyeceğini bilmektir.\nAllah’ın (cc) her şeyi yoktan\nvar eden ve her şeyin sahibi\nolduğunu bilmektir.\nAllah’ın (cc) eşi, benzeri ve\nortağı olmadığını bilmektir.\nTEVHİT\nBilgi Görseli 1.2: Tevhidin tanımı\n1.Ü",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Gerçekten biz, her şeyi bir ölçü ve dengede yarattık.",
+      "definition": "",
+      "term": "",
+      "items": [],
+      "title": "",
+      "categories": []
+    },
+    "topicTitle": "2.Allah’ın Varlığı ve Birliği",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753938867,
+      "nanoseconds": 504000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence"
+  },
+  {
+    "id": "Z4h0w56gcjTGnnG8Za5A",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "content": {
+      "text": "Her şeyin yaratıcısı Allah'tır ve O'nun eşi ve benzeri yoktur."
+    },
+    "type": "sentence",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "ZzUuxbx3szRwuGxqJVoi",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767268975,
       "nanoseconds": 787000000
     },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko"
-  },
-  {
-    "id": "jsf4fSusVWrjLl2xLJeP",
-    "type": "sentence",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
-    "content": {
-      "text": "İnsan vücudu, yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD"
-  },
-  {
-    "id": "mx3wVpEBhmUI2QkFjNSL",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "text": "Düzen"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
-    "type": "concept"
-  },
-  {
-    "id": "nSacfTVsywGLhZ5Y65oP",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
-    },
-    "content": {
-      "text": "Kur'an-ı Kerim"
-    },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "type": "concept"
-  },
-  {
-    "id": "nkSwm92lUa2AN9qi9Isg",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "text": "Allah"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030774,
-      "nanoseconds": 750000000
+      "text": "Celle Celâluhû (cc)"
     },
     "topicId": "swndbszog1ziSH0ODMbD",
     "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
-    "id": "ovhA9l8rgewlyXPWSd8A",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "content": {
-      "definition": "Evrendeki her şeyin yaratıcısı ve sahibi, tek ilah kimdir?",
-      "term": "Allah"
-    },
+    "id": "cjsIQDT0XQBLvrE4fOCT",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1753938656,
       "nanoseconds": 714000000
     },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "term": "(cc)",
+      "definition": "\"Yüceler Yücesi\" anlamına gelen kısaltma nedir?"
+    }
+  },
+  {
+    "id": "dhyud1ejDELgviTQEEdX",
     "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030801,
+      "nanoseconds": 351000000
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "definition": "Allah'a karşı sevgi, saygı ve bağlılığı göstermek için yapılan davranışlar.",
+      "term": "İbadet"
+    }
+  },
+  {
+    "id": "hgKfiFLaDT8NpZcpAhZ6",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "text": "Ahenk"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767268975,
+      "nanoseconds": 787000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "jsf4fSusVWrjLl2xLJeP",
+    "content": {
+      "text": "İnsan vücudu, yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "mx3wVpEBhmUI2QkFjNSL",
+    "content": {
+      "text": "Düzen"
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "nSacfTVsywGLhZ5Y65oP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "text": "Kur'an-ı Kerim"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "nkSwm92lUa2AN9qi9Isg",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "text": "Allah"
+    },
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030774,
+      "nanoseconds": 750000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "ovhA9l8rgewlyXPWSd8A",
+    "type": "definition",
+    "content": {
+      "term": "Allah",
+      "definition": "Evrendeki her şeyin yaratıcısı ve sahibi, tek ilah kimdir?"
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753938656,
+      "nanoseconds": 714000000
+    }
   },
   {
     "id": "pupfC3KdG9IANuh99wGX",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767268975,
       "nanoseconds": 787000000
     },
+    "type": "concept",
+    "topicId": "swndbszog1ziSH0ODMbD",
     "content": {
       "text": "Akıl"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
+    }
   },
   {
     "id": "s0lrYPzOLXQ0WwlYfHl4",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "type": "concept",
     "content": {
       "text": "Yaratma"
     },
+    "type": "concept",
+    "topicId": "swndbszog1ziSH0ODMbD",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767268975,
       "nanoseconds": 787000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   },
   {
     "id": "tTw2ZZXSU9Wbgs7SGfNa",
-    "content": {
-      "term": "Celle Celâluhû (cc)",
-      "definition": "Yüceler yücesi anlamına gelen saygı ifadesi."
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767268975,
       "nanoseconds": 787000000
     },
-    "unitId": "jjotqKbHyi504QHH40ko"
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "definition": "Yüceler yücesi anlamına gelen saygı ifadesi.",
+      "term": "Celle Celâluhû (cc)"
+    },
+    "topicId": "swndbszog1ziSH0ODMbD"
   },
   {
     "id": "tU8GXd2N9cNNHBddDoV8",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030774,
       "nanoseconds": 750000000
     },
-    "type": "sentence",
-    "content": {
-      "text": "Gece ve gündüz, mevsimler, canlıların özellikleri gibi her şey Allah'ın yaratma sanatının örnekleridir."
-    },
     "topicId": "swndbszog1ziSH0ODMbD",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko"
+    "content": {
+      "text": "Gece ve gündüz, mevsimler, canlıların özellikleri gibi her şey Allah'ın yaratma sanatının örnekleridir."
+    }
   },
   {
     "id": "trvuvJSpfZKD5T6pDYVS",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
     "content": {
       "text": "Allah, her varlığa bulunduğu ortamda yaşamını sürdürebilecek özellikler vermiştir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030774,
       "nanoseconds": 750000000
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "sentence"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   }
 ]

@@ -1,67 +1,52 @@
 [
   {
     "id": "0OyHD8Q0SlZMz80DsPLY",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030924,
+      "nanoseconds": 738000000
+    },
     "topicId": "H3jmr9SzfiEk77swWSlj",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "content": {
       "text": "Hz. Muhammed (sav), Allah'ın son peygamberidir ve Mekke'de doğmuştur."
     },
-    "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030924,
-      "nanoseconds": 738000000
-    }
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "0TdHIYfZA9gkzw05UYoo",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "content": {
+      "text": "Fil Vakası"
+    },
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "content": {
-      "text": "Fil Vakası"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "concept"
   },
   {
     "id": "1vRvsalnnFsHN2Sie1Kz",
-    "type": "definition",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
     "content": {
       "term": "Ebrehe",
       "definition": "Kâbe'yi yıkmak isteyen Yemen Valisi"
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030955,
       "nanoseconds": 757000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "definition"
   },
   {
     "id": "33ycHcPBoZ5OEcEH3EnX",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030924,
-      "nanoseconds": 738000000
-    },
-    "content": {
-      "text": "Ebrehe, Yemen Valisi ve Fil Vakası'nın sorumlusudur. "
-    },
-    "topicId": "H3jmr9SzfiEk77swWSlj"
-  },
-  {
-    "id": "AFowaEOOcr7SRQVCYhp5",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
@@ -70,32 +55,46 @@
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "H3jmr9SzfiEk77swWSlj",
+    "content": {
+      "text": "Ebrehe, Yemen Valisi ve Fil Vakası'nın sorumlusudur. "
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "AFowaEOOcr7SRQVCYhp5",
     "type": "concept",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "content": {
       "text": "Peygamber"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030924,
+      "nanoseconds": 738000000
     }
   },
   {
     "id": "BjdZ4LubYgoC16MYvyaC",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "content": {
-      "term": "Fil Vakası",
-      "definition": "Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırdığı olay"
-    },
-    "type": "definition",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030955,
       "nanoseconds": 757000000
-    }
+    },
+    "content": {
+      "definition": "Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırdığı olay",
+      "term": "Fil Vakası"
+    },
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "definition"
   },
   {
     "id": "DRRGvhNgHmVdU1rIf1jb",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "topicId": "H3jmr9SzfiEk77swWSlj",
-    "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Ebrehe"
@@ -104,121 +103,122 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
-    }
+    },
+    "type": "concept"
   },
   {
     "id": "F037jvkWjG1yUG3yn94S",
-    "type": "sentence",
+    "content": {
+      "text": "Mekke, Kâbe'nin bulunduğu şehir ve Müslümanların kutsal saydığı bir yerdir."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
     },
+    "topicId": "H3jmr9SzfiEk77swWSlj",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "content": {
-      "text": "Mekke, Kâbe'nin bulunduğu şehir ve Müslümanların kutsal saydığı bir yerdir."
-    }
+    "type": "sentence"
   },
   {
     "id": "Fm4IiNUWS43auKS83hQS",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "content": {
+      "definition": "Çöllerde göçebe olarak yaşayan, hayvancılıkla geçinen Arap topluluğu.",
+      "term": "Bedevi"
+    },
+    "type": "definition",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767273996,
       "nanoseconds": 376000000
     },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+  },
+  {
+    "id": "GM7mXiCvjUVTPSBi1VPR",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
     "content": {
-      "definition": "Çöllerde göçebe olarak yaşayan, hayvancılıkla geçinen Arap topluluğu.",
-      "term": "Bedevi"
+      "definition": "Hz. Muhammed'in peygamberliğinden önceki dönem",
+      "term": "Cahiliye Dönemi"
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030955,
+      "nanoseconds": 757000000
+    }
+  },
+  {
+    "id": "HyaMlDNIRd38iQpR25Xm",
+    "content": {
+      "text": "Hicaz Bölgesi"
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "concept",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030924,
+      "nanoseconds": 738000000
+    }
+  },
+  {
+    "id": "MA58Ei6iYxIilfZvR6O6",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030955,
+      "nanoseconds": 757000000
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "content": {
+      "term": "Kâbe",
+      "definition": "Müslümanların kıblesi olan, Mekke'de bulunan kutsal yapı"
     },
     "type": "definition",
     "topicId": "H3jmr9SzfiEk77swWSlj"
   },
   {
-    "id": "GM7mXiCvjUVTPSBi1VPR",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "term": "Cahiliye Dönemi",
-      "definition": "Hz. Muhammed'in peygamberliğinden önceki dönem"
-    },
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030955,
-      "nanoseconds": 757000000
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
-  },
-  {
-    "id": "HyaMlDNIRd38iQpR25Xm",
+    "id": "Pu5c6EGJVtkjqMUXCKiJ",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "content": {
-      "text": "Hicaz Bölgesi"
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "MA58Ei6iYxIilfZvR6O6",
-    "type": "definition",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030955,
-      "nanoseconds": 757000000
-    },
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "content": {
-      "term": "Kâbe",
-      "definition": "Müslümanların kıblesi olan, Mekke'de bulunan kutsal yapı"
-    }
-  },
-  {
-    "id": "Pu5c6EGJVtkjqMUXCKiJ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
     "content": {
       "text": "Mekke"
     },
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030924,
-      "nanoseconds": 738000000
-    }
+    "topicId": "H3jmr9SzfiEk77swWSlj"
   },
   {
     "id": "QOkLMLaCCDsWKrBw3xC2",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "content": {
-      "term": "Hicaz",
-      "definition": "Peygamberimizin çocukluk yıllarının geçtiği bölge"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030955,
       "nanoseconds": 757000000
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Hicaz",
+      "definition": "Peygamberimizin çocukluk yıllarının geçtiği bölge"
+    }
   },
   {
     "id": "UcWnA1xQIzogmeNt6pvp",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "topicId": "H3jmr9SzfiEk77swWSlj",
+    "type": "concept",
     "content": {
       "text": "Hadari"
     },
@@ -227,31 +227,46 @@
       "seconds": 1767273996,
       "nanoseconds": 376000000
     },
-    "type": "concept",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "VbAdQb2doIXvVAk2qQ6I",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
     "type": "concept",
     "content": {
       "text": "Haniflik"
     },
-    "topicId": "H3jmr9SzfiEk77swWSlj"
+    "unitId": "yz1rOJf7uA0eS6BRYJN7"
   },
   {
     "id": "WoBS75Zuitkatnn2n4xm",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
     "content": {
       "text": "Zemzem Kuyusu, Kâbe yakınlarında bulunan ve kutsal kabul edilen bir kuyudur."
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752030924,
+      "nanoseconds": 738000000
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "ZpsBXKfnO75Rwu1Kp3AE",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "content": {
+      "text": "Fil Vakası, Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırması fakat Allah'ın ebabil kuşları ile ordusunu yok etmesi olayıdır."
+    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
     "createdAt": {
@@ -261,91 +276,76 @@
     }
   },
   {
-    "id": "ZpsBXKfnO75Rwu1Kp3AE",
+    "id": "d9t6UgzxNm0CHn5hkWCH",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
-      "seconds": 1752030924,
-      "nanoseconds": 738000000
+      "seconds": 1752030955,
+      "nanoseconds": 757000000
     },
-    "type": "sentence",
-    "content": {
-      "text": "Fil Vakası, Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırması fakat Allah'ın ebabil kuşları ile ordusunu yok etmesi olayıdır."
-    },
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "d9t6UgzxNm0CHn5hkWCH",
+    "type": "definition",
     "topicId": "H3jmr9SzfiEk77swWSlj",
     "content": {
       "definition": "Hz. Hacer ve oğlu Hz. İsmail'e Allah tarafından verilen su kaynağı",
       "term": "Zemzem"
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752030955,
-      "nanoseconds": 757000000
     }
   },
   {
     "id": "dKp42odC8E6MqQYJc7ao",
+    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
     },
-    "type": "sentence",
     "topicId": "H3jmr9SzfiEk77swWSlj",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "content": {
       "text": "Cahiliye Dönemi, Hz. Muhammed'in peygamberliğinden önceki dönem olup, putperestlik, sosyal adaletsizlik ve savaşların yaygın olduğu bir dönemdir."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    }
   },
   {
     "id": "gRKvGINE5YDkwkflycta",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "content": {
-      "term": "Putperestlik",
-      "definition": "İnsanların cansız varlıklara tapması"
-    },
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
     "type": "definition",
+    "content": {
+      "definition": "İnsanların cansız varlıklara tapması",
+      "term": "Putperestlik"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030955,
       "nanoseconds": 757000000
-    }
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "i3eGabNT5wp0UxLEEcY9",
-    "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
     },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "topicId": "H3jmr9SzfiEk77swWSlj",
+    "type": "concept",
     "content": {
       "text": "Kâbe"
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    }
   },
   {
     "id": "mUDULoJWzKlYMAKXI7OV",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
     "content": {
       "text": "Bedevi"
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
     "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767273996,
@@ -354,86 +354,83 @@
   },
   {
     "id": "u17qlzTjV3iIMOZeMJ42",
+    "content": {
+      "text": "Hicaz Bölgesi, Mekke, Medine ve Taif şehirlerini içeren ve Peygamberimizin çocukluk yıllarının geçtiği bölgedir."
+    },
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
     },
-    "type": "sentence",
-    "content": {
-      "text": "Hicaz Bölgesi, Mekke, Medine ve Taif şehirlerini içeren ve Peygamberimizin çocukluk yıllarının geçtiği bölgedir."
-    },
-    "topicId": "H3jmr9SzfiEk77swWSlj",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "type": "sentence"
   },
   {
     "id": "ub7WqGhIy8f750xNe9D5",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "definition": "Peygamberimizin doğduğu şehir ve Kâbe'nin bulunduğu yer",
-      "term": "Mekke"
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030955,
       "nanoseconds": 757000000
     },
-    "type": "definition"
+    "content": {
+      "term": "Mekke",
+      "definition": "Peygamberimizin doğduğu şehir ve Kâbe'nin bulunduğu yer"
+    },
+    "type": "definition",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7"
   },
   {
     "id": "v528Yng9j72iMfs5sCwV",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767273996,
       "nanoseconds": 376000000
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "topicId": "H3jmr9SzfiEk77swWSlj",
     "content": {
       "text": "Ümmülkura"
-    }
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7"
   },
   {
     "id": "vTPcKcv26UQmr53J7PN7",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "definition",
     "topicId": "H3jmr9SzfiEk77swWSlj",
-    "content": {
-      "definition": "Savaşmanın yasak olduğu aylar",
-      "term": "Haram aylar"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030955,
       "nanoseconds": 757000000
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "type": "definition"
+    "content": {
+      "definition": "Savaşmanın yasak olduğu aylar",
+      "term": "Haram aylar"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "wVCLPdeZ8d8hIZU1qR13",
-    "type": "concept",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "content": {
+      "text": "Zemzem Kuyusu"
+    },
+    "topicId": "H3jmr9SzfiEk77swWSlj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Zemzem Kuyusu"
-    },
-    "topicId": "H3jmr9SzfiEk77swWSlj"
+    "type": "concept"
   },
   {
     "id": "x5pJ8bBebkvaGw8g5dUK",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767273996,
@@ -443,53 +440,56 @@
       "term": "Hadari",
       "definition": "Şehirlerde yerleşik yaşayan, ticaret ve tarımla uğraşan Arap topluluğu."
     },
-    "topicId": "H3jmr9SzfiEk77swWSlj"
+    "type": "definition",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "y0QgJFqjdLeN6Etypalb",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767273996,
       "nanoseconds": 376000000
     },
-    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "content": {
       "term": "Ümmülkura",
       "definition": "Şehirlerin anası anlamına gelen, Kur'an-ı Kerim'de Mekke için kullanılan ifade."
     },
-    "type": "definition"
+    "topicId": "H3jmr9SzfiEk77swWSlj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "yUsUpd0KLbcgpCOsXlWw",
-    "content": {
-      "text": "Cahiliye Dönemi"
-    },
     "topicId": "H3jmr9SzfiEk77swWSlj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030924,
       "nanoseconds": 738000000
     },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "content": {
+      "text": "Cahiliye Dönemi"
+    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "concept"
+    "type": "concept",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7"
   },
   {
     "id": "zUmB6l2ILHBv96nOwjkt",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "type": "definition",
+    "content": {
+      "term": "Haniflik",
+      "definition": "Hz. İbrahim'in dinine inen ve putperestliği reddeden kişilerin inancı"
+    },
     "topicId": "H3jmr9SzfiEk77swWSlj",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752030955,
       "nanoseconds": 757000000
-    },
-    "content": {
-      "definition": "Hz. İbrahim'in dinine inen ve putperestliği reddeden kişilerin inancı",
-      "term": "Haniflik"
     }
   }
 ]

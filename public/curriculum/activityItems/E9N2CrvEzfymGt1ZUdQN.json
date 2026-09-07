@@ -1,195 +1,195 @@
 [
   {
     "id": "0OwF4TFi1Fts5SbE3r8A",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
-      "term": "Mütevazı",
-      "definition": "Gösterişsiz, alçakgönüllü"
+      "definition": "Gösterişsiz, alçakgönüllü",
+      "term": "Mütevazı"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033943,
       "nanoseconds": 443000000
-    }
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "7WR85JEgqEMLGfFkRLmY",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "text": "İsraf ve kibirden kaçınılması, İslam dininin önemli öğütlerindendir."
     },
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033943,
       "nanoseconds": 443000000
     },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "type": "sentence"
   },
   {
     "id": "7rPXdmWwJLmeyUupvDEm",
     "type": "sentence",
-    "content": {
-      "text": "Giyim kuşamda israftan ve kibirden kaçınılması gerektiğini öğütlemiştir."
-    },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
-    }
+    },
+    "content": {
+      "text": "Giyim kuşamda israftan ve kibirden kaçınılması gerektiğini öğütlemiştir."
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN"
   },
   {
     "id": "9MrukidPClBYsne50bOo",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Hz. Muhammed (sav), giyim kuşamında temizlik, sadelik ve ölçülülük ilkelerini benimsemiştir."
+    },
+    "type": "sentence",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033943,
       "nanoseconds": 443000000
-    },
-    "content": {
-      "text": "Hz. Muhammed (sav), giyim kuşamında temizlik, sadelik ve ölçülülük ilkelerini benimsemiştir."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN"
+    }
   },
   {
     "id": "Aqp3rEdy23EpCbp3JC0a",
     "topicId": "E9N2CrvEzfymGt1ZUdQN",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Giyim Kuşam Adabı"
     },
-    "type": "concept",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
-    }
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "concept"
   },
   {
     "id": "D5jn0EBomReGjeQPlzXj",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Giyimde marka ısrarcılığı ve aşırı harcama yapmak israftır."
     },
+    "type": "sentence",
     "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
     },
-    "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "GTSpseJiqNOJa4acxgfW",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033915,
-      "nanoseconds": 576000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "content": {
       "text": "Mütevazılık"
     },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN"
-  },
-  {
-    "id": "IyGk52MKhDgRdkvZzsFZ",
-    "content": {
-      "text": "Temizlik"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
-    "type": "concept",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
     }
+  },
+  {
+    "id": "IyGk52MKhDgRdkvZzsFZ",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "content": {
+      "text": "Temizlik"
+    },
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033915,
+      "nanoseconds": 576000000
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "OYOgXt6L5W2uVhycaYZn",
     "content": {
-      "term": "İsraf",
-      "definition": "İhtiyaçtan fazla tüketim"
+      "definition": "İhtiyaçtan fazla tüketim",
+      "term": "İsraf"
     },
     "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "type": "definition",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033943,
       "nanoseconds": 443000000
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "OggT2vOFmmXAFyMzjau1",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033915,
+      "nanoseconds": 576000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "content": {
+      "text": "Hz. Muhammed (sav), giyim kuşamında temizlik, sadelik ve ölçülülük ilkelerine dikkat etmiştir."
+    }
+  },
+  {
+    "id": "REh5u9B6MCKppowtbxBK",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033943,
+      "nanoseconds": 443000000
+    },
+    "content": {
+      "text": "Müslümanlar, giyim kuşamlarında başkalarının gözünü yormayacak renk, desen ve dokuları tercih etmelidir."
+    },
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
-    "id": "OggT2vOFmmXAFyMzjau1",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
-    "content": {
-      "text": "Hz. Muhammed (sav), giyim kuşamında temizlik, sadelik ve ölçülülük ilkelerine dikkat etmiştir."
-    },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033915,
-      "nanoseconds": 576000000
-    },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN"
-  },
-  {
-    "id": "REh5u9B6MCKppowtbxBK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033943,
-      "nanoseconds": 443000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "content": {
-      "text": "Müslümanlar, giyim kuşamlarında başkalarının gözünü yormayacak renk, desen ve dokuları tercih etmelidir."
-    },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN"
-  },
-  {
     "id": "RLI0x97WRXMLrUUWEv4q",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033915,
-      "nanoseconds": 576000000
-    },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "type": "concept",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "text": "Tasarruf"
-    }
+    },
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033915,
+      "nanoseconds": 576000000
+    },
+    "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "SCciPhsnLIzQAdZ1cNTn",
-    "type": "sentence",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "text": "Tasarruf etmek, kaynakları verimli kullanmak ve israftan kaçınmak önemlidir."
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033943,
@@ -198,28 +198,28 @@
   },
   {
     "id": "UYMt9zqqnrQ22GfJjD0K",
-    "type": "concept",
-    "content": {
-      "text": "İtidal"
-    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
+    "content": {
+      "text": "İtidal"
+    },
+    "topicId": "E9N2CrvEzfymGt1ZUdQN"
   },
   {
     "id": "Z0ZJc6dbwLrF7By2PH90",
-    "type": "definition",
     "content": {
       "term": "İtidal",
       "definition": "Yeme içme ve giyim kuşamda dengeli ve ölçülü olmaktır."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033943,
@@ -229,150 +229,196 @@
   },
   {
     "id": "aO3TpL99WwQYlWKhgWEX",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033915,
-      "nanoseconds": 576000000
-    },
-    "type": "concept",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "text": "Kibir"
-    }
-  },
-  {
-    "id": "cSSO4CFSSuEjiwe2N22Q",
-    "content": {
-      "text": "Tesettür, kadın ve erkeklerin dinen örtülmesi gereken yerleri kapatmasıdır."
     },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
-    "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
     },
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
-    "id": "czD2QohZVrAh3dHAPd1X",
+    "id": "cSSO4CFSSuEjiwe2N22Q",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
-      "seconds": 1752033943,
-      "nanoseconds": 443000000
+      "seconds": 1752033915,
+      "nanoseconds": 576000000
     },
+    "content": {
+      "text": "Tesettür, kadın ve erkeklerin dinen örtülmesi gereken yerleri kapatmasıdır."
+    },
+    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN"
+  },
+  {
+    "id": "czD2QohZVrAh3dHAPd1X",
     "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "content": {
       "term": "Tesettür",
       "definition": "Dinen örtülmesi gereken yerleri kapatmaktır."
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033943,
+      "nanoseconds": 443000000
+    }
   },
   {
     "id": "dVyQQ5eQoxeHqj1kXr7w",
+    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033943,
       "nanoseconds": 443000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
-      "definition": "Kaynakları bilinçli ve dikkatli kullanmaktır.",
-      "term": "Tasarruf"
+      "term": "Tasarruf",
+      "definition": "Kaynakları bilinçli ve dikkatli kullanmaktır."
     }
   },
   {
     "id": "g3HnKqsC3sDo09tYggGN",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "text": "İsraf"
     },
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
     },
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept"
   },
   {
     "id": "gZ5nVSSWxjYvc2iq8BJl",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "type": "definition",
+    "content": {
+      "definition": "İslami kaynaklarda temizlik anlamında kullanılan kavramdır.",
+      "term": "Taharet"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033943,
       "nanoseconds": 443000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
-    "content": {
-      "term": "Taharet",
-      "definition": "İslami kaynaklarda temizlik anlamında kullanılan kavramdır."
     }
   },
   {
     "id": "gqe8OY5BIc9u38syvdit",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "content": {
+      "text": "Peygamberimizin sade giyimi, mütevazı kişiliğinin bir yansımasıdır."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033943,
       "nanoseconds": 443000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
-    "content": {
-      "text": "Peygamberimizin sade giyimi, mütevazı kişiliğinin bir yansımasıdır."
-    }
+    "type": "sentence"
   },
   {
     "id": "hYHo6SnBLszCrpJ1Ggtz",
-    "type": "sentence",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033915,
-      "nanoseconds": 576000000
-    },
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "text": "Mütevazı giyinmek, kişinin sahip olduklarını başkalarına üstünlük aracı olarak kullanmaması anlamına gelir."
     },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN"
-  },
-  {
-    "id": "iMMKV1JmHMkcJjhxCQ3d",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "type": "sentence",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
     },
-    "type": "concept",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "iMMKV1JmHMkcJjhxCQ3d",
     "content": {
       "text": "Ölçülülük"
+    },
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033915,
+      "nanoseconds": 576000000
     }
   },
   {
     "id": "iOm94kkPRfLlC4wtcKYq",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "definition": "İhtiyaç sahiplerine yapılan maddi ve manevi yardıma denir.",
       "term": "Sadaka"
+    },
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "type": "definition",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033943,
+      "nanoseconds": 443000000
+    }
+  },
+  {
+    "id": "it8LzlowsQlw1t3vJF1a",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "content": {
+      "text": "Hz. Muhammed, tutumlu olmayı tavsiye etmiştir."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033915,
+      "nanoseconds": 576000000
+    }
+  },
+  {
+    "id": "jQnkQB3VeMCf92E2qjST",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "content": {
+      "text": "Tesettür"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033915,
+      "nanoseconds": 576000000
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "mFAAIdvB1KHDPgmAfIpd",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "content": {
+      "definition": "Kendini başkalarından üstün görmektir.",
+      "term": "Kibir"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -382,65 +428,19 @@
     "type": "definition"
   },
   {
-    "id": "it8LzlowsQlw1t3vJF1a",
-    "content": {
-      "text": "Hz. Muhammed, tutumlu olmayı tavsiye etmiştir."
-    },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033915,
-      "nanoseconds": 576000000
-    },
-    "type": "sentence",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
-  },
-  {
-    "id": "jQnkQB3VeMCf92E2qjST",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033915,
-      "nanoseconds": 576000000
-    },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Tesettür"
-    },
-    "type": "concept",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN"
-  },
-  {
-    "id": "mFAAIdvB1KHDPgmAfIpd",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033943,
-      "nanoseconds": 443000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "type": "definition",
-    "content": {
-      "definition": "Kendini başkalarından üstün görmektir.",
-      "term": "Kibir"
-    },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN"
-  },
-  {
     "id": "mf22gjRsxnfENwx2UxWn",
     "type": "concept",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "text": "Sadelik"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
-    },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN"
+    }
   },
   {
     "id": "nsd8UZW47ThwYwEriggH",
@@ -449,57 +449,57 @@
       "seconds": 1752033915,
       "nanoseconds": 576000000
     },
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "text": "Peygamberimiz, Allah'ın nimetinin kulunun üzerinde görülmesini sever."
-    }
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN"
   },
   {
     "id": "qEilokos5JE0ngtX3r9h",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
     },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "sentence",
     "content": {
       "text": "Peygamberimizin giyim kuşamı sade ve mütevazıydı."
     },
     "topicId": "E9N2CrvEzfymGt1ZUdQN",
-    "type": "sentence"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "romXrLaC7T4wgGXobuUU",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033915,
+      "nanoseconds": 576000000
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "content": {
       "text": "Tasarruf, kaynakları verimli kullanmak ve israftan kaçınmak demektir."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033915,
-      "nanoseconds": 576000000
-    }
+    "type": "sentence"
   },
   {
     "id": "v7irKyp2Q6CNa2gjqQUi",
-    "content": {
-      "text": "İtidal, yeme içme ve giyim kuşamda dengeli ve ölçülü olmaktır."
-    },
-    "topicId": "E9N2CrvEzfymGt1ZUdQN",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752033915,
       "nanoseconds": 576000000
     },
-    "type": "sentence",
+    "topicId": "E9N2CrvEzfymGt1ZUdQN",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR"
+    "content": {
+      "text": "İtidal, yeme içme ve giyim kuşamda dengeli ve ölçülü olmaktır."
+    },
+    "type": "sentence"
   }
 ]

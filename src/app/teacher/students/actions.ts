@@ -2,6 +2,7 @@
 
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
+import { saveLocalGuestStudent } from "@/app/teacher/smartboard/sync-actions";
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
@@ -303,6 +304,8 @@ export async function addStudentToClass(displayName: string, className: string, 
             uid: docRef.id,
             createdAt: new Date().toISOString(),
         };
+        
+        saveLocalGuestStudent(serializableNewUser).catch(err => console.warn("Failed saving to local guest students file:", err));
         
         return { success: true, newUser: serializableNewUser };
 
