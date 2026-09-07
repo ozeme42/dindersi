@@ -52,12 +52,66 @@ export function HizliButonSetupClientPage({ gameConfig }: { gameConfig: any }) {
     const fetchInitialData = async () => {
       setIsLoading(true);
       try {
-        const [coursesSnapshot, classesSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "courses"), orderBy("title"))),
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
+        const [manifestRes, coursesSnapshot, classesSnapshot] = await Promise.all([
+          fetch('/curriculum/manifest.json').catch(() => null),
+          getDocs(query(collection(db, "courses"), orderBy("title"))).catch(() => null),
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))).catch(() => null)
         ]);
-        setAllCourses(coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
-        setAllClasses(classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
+
+        let mData: any = null;
+        if (manifestRes && manifestRes.ok) {
+          mData = await manifestRes.json();
+        }
+
+        const firestoreClasses = classesSnapshot 
+          ? classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass))
+          : [];
+
+        let classesList: SchoolClass[] = [];
+        const gradeNameToClassIdMap = new Map<string, string>();
+        if (firestoreClasses.length > 0) {
+          classesList = firestoreClasses;
+          firestoreClasses.forEach(c => {
+            const grade = c.name.replace(/[^0-9]/g, '');
+            if (grade) gradeNameToClassIdMap.set(grade, c.id);
+            gradeNameToClassIdMap.set(c.id, c.id);
+            gradeNameToClassIdMap.set(c.name, c.id);
+          });
+        } else if (mData?.classGroups) {
+          classesList = mData.classGroups.map((cg: any) => ({
+            id: cg.name,
+            name: `${cg.name}. Sınıf`,
+            grade: cg.name,
+            branches: ['A', 'B', 'C', 'D'],
+            createdAt: new Date().toISOString()
+          }));
+        }
+
+        let coursesList: any[] = [];
+        if (mData?.classGroups) {
+          for (const cg of mData.classGroups) {
+            const classId = gradeNameToClassIdMap.get(cg.name) || cg.name;
+            for (const c of cg.courses || []) {
+              coursesList.push({
+                ...c,
+                classId: classId,
+                units: (c.units || []).map((u: any) => ({
+                  ...u,
+                  courseId: c.id,
+                  topics: (u.topics || []).map((t: any) => ({
+                    ...t,
+                    unitId: u.id,
+                  }))
+                }))
+              });
+            }
+          }
+        } else if (coursesSnapshot) {
+          coursesList = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+        }
+
+        setAllCourses(coursesList);
+        setAllClasses(classesList);
       } catch (error) {
         console.error("Error fetching initial data: ", error);
         toast({ title: "Hata", description: "Veriler getirilirken bir sorun oluştu.", variant: "destructive" });
@@ -92,6 +146,16 @@ export function HizliButonSetupClientPage({ gameConfig }: { gameConfig: any }) {
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '' }));
+    
+    const foundCourse = allCourses.find(c => c.id === courseId) as any;
+    if (foundCourse?.units && foundCourse.units.length > 0) {
+      setUnits(foundCourse.units);
+      setTopics([]);
+      setIsDataLoading(false);
+      handleNext();
+      return;
+    }
+
     setIsDataLoading(true);
     const unitsRef = collection(db, `courses/${courseId}/units`);
     const q = query(unitsRef, orderBy("title"));
@@ -125,9 +189,14 @@ export function HizliButonSetupClientPage({ gameConfig }: { gameConfig: any }) {
 
   const getGameUrl = () => {
     const params = new URLSearchParams({
+        classId: selection.classId,
+        className: selection.className,
         courseId: selection.courseId,
+        courseName: selection.courseName,
         unitId: selection.unitId,
+        unitName: selection.unitName,
         topicId: selection.topicId,
+        topicName: selection.topicName,
     });
     return `/teacher/smartboard/hizli-buton/oyun?${params.toString()}`;
   }
@@ -180,6 +249,18 @@ export function HizliButonSetupClientPage({ gameConfig }: { gameConfig: any }) {
       </div>
 
       <div className="max-w-5xl mx-auto w-full relative z-10 flex-grow flex flex-col">
+        {/* Üst Menü Navigasyonu */}
+        <div className="flex items-center justify-between mb-4">
+          <Button asChild variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/10">
+            <Link href="/teacher/smartboard">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Akıllı Tahta Menüsü
+            </Link>
+          </Button>
+          <div className="text-xs text-rose-400 font-bold uppercase tracking-wider">
+            Akıllı Tahta Modu
+          </div>
+        </div>
+
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg">Hızlı Buton Kurulumu</h1>
           <p className="text-slate-400 mt-1">Yarışmayı başlatmak için adımları takip edin.</p>

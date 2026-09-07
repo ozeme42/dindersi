@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Loader2, Repeat, Home, CheckCircle2, XCircle, User, ArrowRight, ArrowLeft, Trophy, Hand, HelpCircle } from "lucide-react";
+import { Loader2, Repeat, Home, CheckCircle2, XCircle, User, ArrowRight, ArrowLeft, Trophy, Hand, HelpCircle, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { getHizliButonQuestions } from '../actions';
 import type { HizliButonQuestion } from '../actions';
@@ -201,7 +201,31 @@ function SpeedBuzzerGameComponent() {
     }
     
     if (isLoading) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>;
-    if (error) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900 text-red-400 text-2xl p-8 text-center">{error}</div>;
+    if (error) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 text-center">
+                <Card className="max-w-md w-full bg-slate-900 border border-white/10 shadow-2xl p-6 text-center space-y-4">
+                    <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto text-rose-400">
+                        <AlertTriangle className="h-8 w-8" />
+                    </div>
+                    <CardTitle className="text-xl font-bold text-white">Yarışma Başlatılamadı</CardTitle>
+                    <p className="text-slate-400 text-sm leading-relaxed">{error}</p>
+                    <div className="flex flex-col gap-2 pt-4">
+                        <Button asChild className="bg-rose-600 hover:bg-rose-500 text-white font-bold">
+                            <Link href="/teacher/smartboard/hizli-buton">
+                                <ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Dön
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+                            <Link href="/teacher/smartboard">
+                                <Home className="mr-2 h-4 w-4" /> Akıllı Tahta Menüsü
+                            </Link>
+                        </Button>
+                    </div>
+                </Card>
+            </div>
+        );
+    }
 
     if (state.gameState === 'finished') {
         const p1s = state.p1Score;
@@ -231,8 +255,11 @@ function SpeedBuzzerGameComponent() {
                             </div>
                          </div>
                     </CardContent>
-                    <CardFooter className="flex-col sm:flex-row justify-center gap-4 p-6">
+                    <CardFooter className="flex-col sm:flex-row justify-center gap-3 p-6">
                         <Button onClick={resetGame} size="lg" className="bg-indigo-600 hover:bg-indigo-500 font-bold"><Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna</Button>
+                        <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-transparent">
+                            <Link href="/teacher/smartboard/hizli-buton"><ArrowLeft className="mr-2 h-5 w-5"/> Kuruluma Dön</Link>
+                        </Button>
                         <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-transparent">
                             <Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Ana Menü</Link>
                         </Button>
@@ -346,11 +373,24 @@ function SpeedBuzzerGameComponent() {
                 )}
             </div>
             
-            <Link href="/teacher/smartboard/hizli-buton" className="absolute top-6 left-6 z-50 pointer-events-auto">
-                 <Button variant="ghost" size="icon" className="h-14 w-14 rounded-2xl bg-slate-900/50 hover:bg-slate-800 text-white border border-white/10">
-                    <ArrowLeft className="w-8 h-8" />
+            <div className="absolute top-6 left-6 z-50 pointer-events-auto flex items-center gap-3">
+                 <Button 
+                    variant="ghost" 
+                    onClick={() => {
+                        if (confirm("Hızlı Buton oyunundan çıkmak istediğinize emin misiniz?")) {
+                            window.location.href = "/teacher/smartboard/hizli-buton";
+                        }
+                    }}
+                    className="h-11 px-4 rounded-xl bg-slate-900/70 hover:bg-slate-800 text-white border border-white/10 flex items-center gap-2 font-bold text-sm"
+                 >
+                    <ArrowLeft className="w-4 h-4" /> Çıkış
                  </Button>
-            </Link>
+            </div>
+            {searchParams.get('topicName') && (
+                <div className="absolute top-6 right-6 z-50 bg-slate-900/70 border border-white/10 px-4 py-2 rounded-xl text-xs text-slate-300 backdrop-blur-sm hidden sm:block">
+                    <span className="text-yellow-400 font-bold">Hızlı Buton:</span> {searchParams.get('topicName')}
+                </div>
+            )}
         </div>
     );
 }

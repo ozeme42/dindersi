@@ -34,7 +34,17 @@ export async function getHizliButonQuestions(
         }
 
         if (pairs.length < 1) {
-            return { error: "Bu oyun için en az 1 tanım/soru gereklidir.", questions: [] };
+            const defaultPairs: HizliButonQuestion[] = [
+                { q: 'Allah’ın bir ve tek olduğuna, eşi ve benzeri bulunmadığına inanmak.', a: 'Tevhit' },
+                { q: 'Allah’ın varlığına, birliğine ve Hz. Peygamber’in getirdiklerine kalpten inanmak.', a: 'İman' },
+                { q: 'Allah’ın rızasını kazanmak amacıyla yapılan her türlü güzel amel ve kulluk görevi.', a: 'İbadet' },
+                { q: 'İnsanın iyi veya kötü olarak nitelendirilmesine yol açan manevi nitelikleri ve davranışları.', a: 'Ahlak' },
+                { q: 'Peygamberlik müessesesi; Allah’ın kullarına doğru yolu göstermek için elçi göndermesi.', a: 'Nübüvvet' },
+                { q: 'Allah tarafından Hz. Muhammed’e vahiy yoluyla indirilen son ilahi kitap.', a: 'Kuran-ı Kerim' },
+                { q: 'Hz. Peygamber’in sözleri, uygulamaları ve sahabilerin davranışlarını onaylaması.', a: 'Sünnet' },
+                { q: 'Allah’a karşı derin saygı ve sorumluluk bilinciyle günahlardan sakınma hali.', a: 'Takva' }
+            ];
+            pairs.push(...defaultPairs);
         }
 
         const shuffled = [...pairs].sort(() => 0.5 - Math.random());
