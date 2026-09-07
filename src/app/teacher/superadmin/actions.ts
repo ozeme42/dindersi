@@ -317,6 +317,12 @@ export async function exportStaticAdvanced(
 
   } catch (error: any) {
     console.error("Export error:", error);
+    if (error.code === 'EROFS' || error.message?.includes('read-only')) {
+        return { 
+            success: false, 
+            error: "Vercel bulut sunucusu güvenlik gereği salt-okunurdur (read-only). Canlı sitede doğrudan sunucu diskine dosya yazılamaz. Verileriniz zaten Firestore veritabanına başarıyla kaydedilmiştir ve tüm oyunlar canlıda bu verilerle anında çalışmaktadır. Dosyaları yerel diske aktarıp repoya yüklemek için kendi bilgisayarınızda 'npm run export-curriculum' komutunu çalıştırabilirsiniz." 
+        };
+    }
     return { success: false, error: "Dışa aktarma hatası: " + error.message };
   }
 }
