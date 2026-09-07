@@ -39,24 +39,45 @@ export async function getAdamAsmacaAction(
         const validWords: HangmanData[] = [];
         const seenWords = new Set<string>();
 
+        const cleanWord = (raw: string) => {
+            return raw
+                .replace(/[âÂ]/g, 'A')
+                .replace(/[îÎ]/g, 'İ')
+                .replace(/[ûÛ]/g, 'U')
+                .replace(/['’\-]/g, '')
+                .trim();
+        };
+
         for (const item of allItems || []) {
             if ('type' in item) {
                 const itemType = (item as any).type;
+                let rawTerm = '';
+                let hint = '';
+
                 if ((itemType === 'definition' || itemType === 'concept') && (item as any).content?.term) {
-                    const w = String((item as any).content.term).trim();
-                    const hint = String((item as any).content.definition || (item as any).content.text || `${w} kavramı`).trim();
-                    const upper = w.toLocaleUpperCase('tr-TR');
-                    if (w.length >= 3 && w.length <= 16 && !w.includes(' ') && turkishAlphabetRegex.test(w) && !seenWords.has(upper)) {
-                        seenWords.add(upper);
-                        validWords.push({ word: upper, hint });
-                    }
+                    rawTerm = String((item as any).content.term).trim();
+                    hint = String((item as any).content.definition || (item as any).content.text || `${rawTerm} kavramı`).trim();
                 } else if ((itemType === 'Boşluk Doldurma' || itemType === 'fitb' || itemType === 'Çoktan Seçmeli' || itemType === 'mcq') && (item as any).correctAnswer) {
-                    const w = String((item as any).correctAnswer).trim();
-                    const hint = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${w} kavramı`).trim();
-                    const upper = w.toLocaleUpperCase('tr-TR');
-                    if (w.length >= 3 && w.length <= 16 && !w.includes(' ') && turkishAlphabetRegex.test(w) && !seenWords.has(upper)) {
-                        seenWords.add(upper);
-                        validWords.push({ word: upper, hint });
+                    rawTerm = String((item as any).correctAnswer).trim();
+                    hint = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${rawTerm} kavramı`).trim();
+                }
+
+                if (rawTerm) {
+                    const cleaned = cleanWord(rawTerm);
+                    const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
+                    if (noSpace.length >= 3 && noSpace.length <= 16 && turkishAlphabetRegex.test(noSpace) && !seenWords.has(noSpace)) {
+                        seenWords.add(noSpace);
+                        validWords.push({ word: noSpace, hint });
+                    }
+                    if (cleaned.includes(' ')) {
+                        const parts = cleaned.split(/\s+/);
+                        for (const part of parts) {
+                            const upperPart = part.toLocaleUpperCase('tr-TR');
+                            if (upperPart.length >= 3 && upperPart.length <= 16 && turkishAlphabetRegex.test(upperPart) && !seenWords.has(upperPart)) {
+                                seenWords.add(upperPart);
+                                validWords.push({ word: upperPart, hint });
+                            }
+                        }
                     }
                 }
             }

@@ -54,7 +54,7 @@ export async function getConceptQuizAction(
             return { error: "Bu konu için oynanabilir tanım veya soru verisi bulunamadı.", questions: null };
         }
 
-        const allTermsFromDefinitions = [...new Set([...pairs.map(p => p.term), ...fallbackTerms])];
+        const allTermsFromDefinitions = [...new Set([...pairs.map(p => p.term), ...(pairs.length < 4 ? fallbackTerms : [])])];
         
         const gameQuestions: ConceptQuizQuestion[] = [];
 

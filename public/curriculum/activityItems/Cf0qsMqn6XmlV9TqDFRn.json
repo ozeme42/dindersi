@@ -1,333 +1,449 @@
 [
   {
     "id": "3qgg7xg5QORBvMJFIX2i",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
       "term": "Cami",
       "definition": "Müslümanların ibadet etmek, toplanmak ve sosyalleşmek amacıyla bir araya geldikleri mekân."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "7YWjYAOGI4hhrdyGKwT6",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
     "type": "sentence",
     "content": {
       "text": "Mihrap camide kıble yönünü gösterir."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    }
   },
   {
     "id": "7kfYhNFKPvXogpnCH4Tb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept",
     "content": {
       "text": "Şerefe"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn"
   },
   {
     "id": "7qn8aMcQZxGD1EJYKjA9",
-    "type": "definition",
     "content": {
-      "term": "Şadırvan",
-      "definition": "Cami avlularında bulunan, abdest almak için yapılmış su tesisi."
+      "definition": "Cami avlularında bulunan, abdest almak için yapılmış su tesisi.",
+      "term": "Şadırvan"
+    },
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "unitId": "GBVRETHGn5BmIihw6Hfb"
   },
   {
     "id": "9TRlzPJrAsJhwvM67gxs",
     "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
-      "term": "Minber",
-      "definition": "Cuma ve bayram namazlarında hutbe okumak için çıkılan merdivenli yüksek yer."
+      "definition": "Cuma ve bayram namazlarında hutbe okumak için çıkılan merdivenli yüksek yer.",
+      "term": "Minber"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "unitId": "GBVRETHGn5BmIihw6Hfb"
   },
   {
     "id": "9qhwLrLXbFaRJU1x0HUS",
-    "type": "concept",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
       "text": "Mescid-i Nebevi"
     },
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "unitId": "GBVRETHGn5BmIihw6Hfb"
   },
   {
     "id": "Ao2oYVbVfpdHhkkTvGQ1",
     "type": "definition",
-    "content": {
-      "term": "Külliye",
-      "definition": "Merkezinde cami bulunan, çevresinde medrese, aşevi gibi yapıların olduğu topluluk."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "content": {
+      "definition": "Merkezinde cami bulunan, çevresinde medrese, aşevi gibi yapıların olduğu topluluk.",
+      "term": "Külliye"
+    },
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn"
   },
   {
     "id": "BeGQRTO0yOx5Rsb9nwMa",
-    "type": "definition",
     "content": {
-      "term": "Mescit",
-      "definition": "Secde edilen yer anlamına gelen, namaz kılmak için ayrılmış ibadet alanı."
+      "definition": "Secde edilen yer anlamına gelen, namaz kılmak için ayrılmış ibadet alanı.",
+      "term": "Mescit"
+    },
+    "type": "definition",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "unitId": "GBVRETHGn5BmIihw6Hfb"
   },
   {
     "id": "CJ5f8Y9qftKbM6khSghC",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
     "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
       "text": "Vaaz Kürsüsü"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    }
   },
   {
     "id": "EC5QXkNNHfhIxZFm30XU",
-    "type": "sentence",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
     "content": {
       "text": "Şadırvan abdest almak için kullanılan bölümdür."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "sentence"
   },
   {
     "id": "HW8120VD72b97Iq9vWLo",
-    "type": "concept",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
       "text": "Mescit"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
-  },
-  {
-    "id": "JtnCkt1y405ioXyH4qFZ",
-    "type": "concept",
-    "content": {
-      "text": "Mihrap"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "type": "concept"
+  },
+  {
+    "id": "JtnCkt1y405ioXyH4qFZ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "content": {
+      "text": "Mihrap"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
     "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "concept"
   },
   {
     "id": "KoYRddBMGZnIEpvCwByI",
     "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
     "content": {
       "term": "Mescid-i Nebevi",
       "definition": "Hz. Peygamber’in Medine’ye hicretinden sonra inşa ettiği, evi ve ibadet yeri."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn"
   },
   {
     "id": "MwiGsrQF1TDdX4Kg9LeF",
-    "type": "concept",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
       "text": "Kubâ Mescidi"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "NU7axXJ4XfgRjfWGfqXi",
-    "type": "concept",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "content": {
       "text": "Kubbe"
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "concept"
   },
   {
     "id": "QTz5edDSe97Al3bX22hg",
-    "type": "concept",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
       "text": "Minare"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
     "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept"
   },
   {
     "id": "QV0XOaj1UvSJ8VxuQTZs",
-    "type": "definition",
-    "content": {
-      "term": "Mihrap",
-      "definition": "Caminin içinde kıble yönünü gösteren ve imamın namaz kıldırdığı yer."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "content": {
+      "definition": "Caminin içinde kıble yönünü gösteren ve imamın namaz kıldırdığı yer.",
+      "term": "Mihrap"
+    }
   },
   {
     "id": "U8edPNZTQgx3W2mTqy90",
-    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
       "text": "Şadırvan"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "concept"
   },
   {
     "id": "YEJ0Eff8XgxnwIDNSdPD",
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Minareler ezan okumak için yapılmıştır."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    }
   },
   {
     "id": "aArHrcdulM4d8sYRO7ql",
-    "type": "definition",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Minare",
       "definition": "Müezzinin ezan okuduğu, caminin bitişiğinde bulunan yüksek ve ince yapı."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "type": "definition"
   },
   {
     "id": "bIyVEnE09LxNNw1e79IE",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "type": "definition",
     "content": {
       "term": "Kubbe",
       "definition": "Caminin üzerini örten, yarım küre biçimindeki mimari yapı."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    }
   },
   {
     "id": "eq0gmup6kvv6nwcs2JzC",
-    "type": "sentence",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
     "content": {
       "text": "Camiler Müslümanları birleştiren kutsal mekânlardır."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "sentence"
   },
   {
     "id": "jsDC06rm1HcHClqlTRUh",
-    "type": "definition",
-    "content": {
-      "term": "Şerefe",
-      "definition": "Minarenin etrafını saran, müezzinin ezan okumak için çıktığı balkon."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "definition": "Minarenin etrafını saran, müezzinin ezan okumak için çıktığı balkon.",
+      "term": "Şerefe"
+    },
+    "type": "definition",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    }
   },
   {
     "id": "nL1O3OfXZ3MC3xnmzLSy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
     "content": {
       "text": "Mescid-i Nebevi Medine’de inşa edilmiştir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn"
   },
   {
     "id": "u5PY5M0ABhWDi5lIkPhr",
-    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "content": {
       "term": "Kubâ Mescidi",
       "definition": "Hz. Peygamber’in hicret yolculuğu esnasında inşa ettirdiği İslam’ın ilk mescidi."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "definition",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn"
   },
   {
     "id": "uGmrMWcJb0E7ZMl3kYqk",
-    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
       "term": "Vaaz Kürsüsü",
       "definition": "İmamın cemaate dinî konularda ders ve öğüt vermek için oturduğu yer."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "definition"
   },
   {
     "id": "va50Gpg9kvLb68VShVeE",
-    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "content": {
       "text": "Minber"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    },
+    "type": "concept",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn"
   },
   {
     "id": "wgCeGaet7JUIGyoYdr2E",
     "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
     "content": {
       "text": "Külliye"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    }
   },
   {
     "id": "xHpFvLvVniGP4NVNaqyf",
-    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Cami"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "Cf0qsMqn6XmlV9TqDFRn",
-    "createdAt": "2026-01-01T12:43:54.270Z"
+    "type": "concept",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271434,
+      "nanoseconds": 270000000
+    }
   }
 ]

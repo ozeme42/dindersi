@@ -34,6 +34,15 @@ export async function getKelimeAviAction(
         const validTerms: string[] = [];
         const fallbackTerms = ['İMAN', 'İSLAM', 'AHLAK', 'İBADET', 'TEVHİT', 'KURAN', 'SÜNNET', 'ADALET', 'MERHAMET', 'SABIR', 'ŞÜKÜR', 'İHLAS', 'TAKVA', 'FURKAN'];
 
+        const cleanWord = (raw: string) => {
+            return raw
+                .replace(/[âÂ]/g, 'A')
+                .replace(/[îÎ]/g, 'İ')
+                .replace(/[ûÛ]/g, 'U')
+                .replace(/['’\-]/g, '')
+                .trim();
+        };
+
         for (const item of allItems || []) {
             if ('type' in item) {
                 let term = '';
@@ -45,23 +54,42 @@ export async function getKelimeAviAction(
                     term = String((item as any).correctAnswer).trim();
                 }
 
-                if (term && term.length > 2 && term.length <= 14 && !term.includes(' ') && turkishAlphabetRegex.test(term)) {
-                    validTerms.push(term.toLocaleUpperCase('tr-TR'));
+                if (term) {
+                    const cleaned = cleanWord(term);
+                    // 1. Boşluksuz tam ifade (örn: "Meddi Tabii" -> "MEDDİTABİİ")
+                    const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
+                    if (noSpace.length >= 3 && noSpace.length <= 14 && turkishAlphabetRegex.test(noSpace)) {
+                        validTerms.push(noSpace);
+                    }
+                    // 2. Çok kelimeli ise anlamlı münferit parçalar (örn: "MEDDİ", "TABİİ")
+                    if (cleaned.includes(' ')) {
+                        const parts = cleaned.split(/\s+/);
+                        for (const part of parts) {
+                            const upperPart = part.toLocaleUpperCase('tr-TR');
+                            if (upperPart.length >= 3 && upperPart.length <= 14 && turkishAlphabetRegex.test(upperPart)) {
+                                validTerms.push(upperPart);
+                            }
+                        }
+                    }
                 }
             }
         }
 
         let uniqueConcepts = [...new Set(validTerms)];
 
-        if (uniqueConcepts.length < 5) {
-            for (const fb of fallbackTerms) {
-                if (!uniqueConcepts.includes(fb)) uniqueConcepts.push(fb);
-                if (uniqueConcepts.length >= 8) break;
-            }
-        }
-
+        // ASLA konu/ders bazlı oyunda alakasız yedek kavramları enjekte etme!
         if (uniqueConcepts.length < 3) {
-            return { error: "Kelime Avı oynamak için bu konuda en az 3 adet uygun kelime bulunmalıdır.", concepts: null };
+            if (!topicId && !courseId) {
+                for (const fb of fallbackTerms) {
+                    if (!uniqueConcepts.includes(fb)) uniqueConcepts.push(fb);
+                    if (uniqueConcepts.length >= 8) break;
+                }
+            } else {
+                return { 
+                    error: "Bu konuya ait Kelime Avı için yeterli kavram bulunamadı. Lütfen Etkinlik Veri Stüdyosu'ndan kavramları ekleyin veya üretin.", 
+                    concepts: null 
+                };
+            }
         }
         
         // Karıştır

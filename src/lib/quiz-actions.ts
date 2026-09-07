@@ -226,14 +226,46 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
     }
 
     const activityPath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicIdToFetch}.json`);
+    const activityItemsPath = path.join(process.cwd(), 'public', 'curriculum', 'activityItems', `${topicIdToFetch}.json`);
+    const activityItemsDashPath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', `${topicIdToFetch}.json`);
     const questionPath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicIdToFetch}.json`);
     const flowPath = path.join(process.cwd(), 'public', 'curriculum', 'flows', `${topicIdToFetch}.json`);
 
-    const [activityData, questionData, flowData] = await Promise.all([
+    let [activityData, questionData, flowData] = await Promise.all([
         readJsonFile(activityPath),
         readJsonFile(questionPath),
         readJsonFile(flowPath)
     ]);
+
+    if (!activityData || activityData.length === 0) {
+        activityData = await readJsonFile(activityItemsPath);
+    }
+    if (!activityData || activityData.length === 0) {
+        activityData = await readJsonFile(activityItemsDashPath);
+    }
+
+    // Firestore Fallback: Eğer yerel statik dosyalarda veri yoksa doğrudan Firestore'dan çek (0 kesinti)
+    let dbActivityItems: ActivityItem[] = [];
+    if (!activityData || activityData.length === 0) {
+        try {
+            const q = query(collection(db, "activityItems"), where("topicId", "==", topicIdToFetch));
+            const snap = await getDocs(q);
+            dbActivityItems = snap.docs.map(d => ({ id: d.id, ...d.data() } as ActivityItem));
+        } catch (err) {
+            console.warn(`Firestore activityItems fallback warning for ${topicIdToFetch}:`, err);
+        }
+    }
+
+    let dbQuestions: Question[] = [];
+    if (!questionData || questionData.length === 0) {
+        try {
+            const q = query(collection(db, "questions"), where("topicId", "==", topicIdToFetch));
+            const snap = await getDocs(q);
+            dbQuestions = snap.docs.map(d => ({ id: d.id, ...d.data() } as Question));
+        } catch (err) {
+            console.warn(`Firestore questions fallback warning for ${topicIdToFetch}:`, err);
+        }
+    }
 
     const flowItems: (ActivityItem | Question)[] = [];
     if (Array.isArray(flowData)) {
@@ -284,9 +316,27 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
         });
     }
 
-    const combined = [...(activityData || []), ...(questionData || []), ...flowItems];
-    STATIC_TOPIC_CACHE.set(topicIdToFetch, combined);
-    return combined;
+    const allCombined = [
+        ...(activityData || []),
+        ...dbActivityItems,
+        ...(questionData || []),
+        ...dbQuestions,
+        ...flowItems
+    ];
+
+    // Tekilleştirme (aynı id veya içerik tekrar etmesin)
+    const seenItemKeys = new Set<string>();
+    const deduplicated: (ActivityItem | Question)[] = [];
+    for (const item of allCombined) {
+        const itemKey = (item as any).id || `${item.type}_${(item as any).content?.term || (item as any).content?.text || (item as any).text}`;
+        if (!seenItemKeys.has(itemKey)) {
+            seenItemKeys.add(itemKey);
+            deduplicated.push(item);
+        }
+    }
+
+    STATIC_TOPIC_CACHE.set(topicIdToFetch, deduplicated);
+    return deduplicated;
 };
 
 /**

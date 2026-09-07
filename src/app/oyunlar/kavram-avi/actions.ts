@@ -34,23 +34,44 @@ export async function getConceptHuntAction({
         const validItems: { term: string; definition: string }[] = [];
         const seenTerms = new Set<string>();
 
+        const cleanWord = (raw: string) => {
+            return raw
+                .replace(/[âÂ]/g, 'A')
+                .replace(/[îÎ]/g, 'İ')
+                .replace(/[ûÛ]/g, 'U')
+                .replace(/['’\-]/g, '')
+                .trim();
+        };
+
         for (const item of allItems || []) {
             if ('type' in item) {
+                let rawTerm = '';
+                let definition = '';
+
                 if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term) {
-                    const t = String((item as any).content.term).trim();
-                    const d = String((item as any).content.definition || (item as any).content.text || `${t} kavramı`).trim();
-                    const upper = t.toLocaleUpperCase('tr-TR');
-                    if (t.length > 2 && t.length < 16 && !t.includes(' ') && !seenTerms.has(upper)) {
-                        seenTerms.add(upper);
-                        validItems.push({ term: t, definition: d });
-                    }
+                    rawTerm = String((item as any).content.term).trim();
+                    definition = String((item as any).content.definition || (item as any).content.text || `${rawTerm} kavramı`).trim();
                 } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
-                    const t = String((item as any).correctAnswer).trim();
-                    const d = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${t} kavramı`).trim();
-                    const upper = t.toLocaleUpperCase('tr-TR');
-                    if (t.length > 2 && t.length < 16 && !t.includes(' ') && !seenTerms.has(upper)) {
-                        seenTerms.add(upper);
-                        validItems.push({ term: t, definition: d });
+                    rawTerm = String((item as any).correctAnswer).trim();
+                    definition = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${rawTerm} kavramı`).trim();
+                }
+
+                if (rawTerm) {
+                    const cleaned = cleanWord(rawTerm);
+                    const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
+                    if (noSpace.length > 2 && noSpace.length < 16 && !seenTerms.has(noSpace)) {
+                        seenTerms.add(noSpace);
+                        validItems.push({ term: noSpace, definition });
+                    }
+                    if (cleaned.includes(' ')) {
+                        const parts = cleaned.split(/\s+/);
+                        for (const part of parts) {
+                            const upperPart = part.toLocaleUpperCase('tr-TR');
+                            if (upperPart.length > 2 && upperPart.length < 16 && !seenTerms.has(upperPart)) {
+                                seenTerms.add(upperPart);
+                                validItems.push({ term: upperPart, definition: `${rawTerm}: ${definition}` });
+                            }
+                        }
                     }
                 }
             }

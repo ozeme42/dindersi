@@ -1,43 +1,54 @@
 [
   {
     "id": "4vG7b7h71tPe60MsjJFz",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "sentence",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361452,
+      "nanoseconds": 545000000
+    },
     "content": {
       "text": "Kaza orucu mazeret sebebiyle sonradan tutulur."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2026-01-02T13:44:12.545Z"
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz"
   },
   {
     "id": "5J9V3LXBorfwtffm9yGL",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "content": {
-      "term": "İmsak",
-      "definition": "Oruca başlama vaktidir."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
     },
-    "type": "definition",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "content": {
+      "definition": "Oruca başlama vaktidir.",
+      "term": "İmsak"
+    },
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "definition"
   },
   {
     "id": "8aKRJXIEhariSYoEugvI",
     "type": "sentence",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Oruçlu kötü söz ve davranışlardan kaçınmalıdır."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2026-01-02T13:44:12.545Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361452,
+      "nanoseconds": 545000000
+    }
   },
   {
     "id": "95T7Z3lr7pzfIwpn7NZL",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "categorization",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "items": [
         {
@@ -53,67 +64,84 @@
           "text": "Ağza giren yağmur veya karı isteyerek yutmak."
         },
         {
-          "text": "Kendi isteğiyle ağız dolusu kusmak.",
-          "category": "Orucu Bozan Durumlar"
+          "category": "Orucu Bozan Durumlar",
+          "text": "Kendi isteğiyle ağız dolusu kusmak."
         },
         {
           "category": "Orucu Bozmayan Durumlar",
           "text": "Oruçlu olduğunu unutarak bir şey yemek, içmek."
         },
         {
-          "text": "Suyu yutmadan ağzı çalkalamak, burna su çekmek.",
-          "category": "Orucu Bozmayan Durumlar"
+          "category": "Orucu Bozmayan Durumlar",
+          "text": "Suyu yutmadan ağzı çalkalamak, burna su çekmek."
         },
         {
-          "text": "Banyo yapmak.",
-          "category": "Orucu Bozmayan Durumlar"
+          "category": "Orucu Bozmayan Durumlar",
+          "text": "Banyo yapmak."
         },
         {
-          "text": "Koku sürmek.",
-          "category": "Orucu Bozmayan Durumlar"
+          "category": "Orucu Bozmayan Durumlar",
+          "text": "Koku sürmek."
         }
       ],
-      "definition": "",
+      "text": "",
       "term": "",
       "categories": [
         "Orucu Bozan Durumlar",
         "Orucu Bozmayan Durumlar"
       ],
-      "text": "",
+      "definition": "",
       "title": "Oruç"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": "2025-09-29T12:54:59.125Z"
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150499,
+      "nanoseconds": 125000000
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw"
   },
   {
     "id": "9nAxU5We8cF6C7gtP9aq",
-    "type": "sentence",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "content": {
       "text": "Teravih namazı ramazan ayına özeldir."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2026-01-02T13:44:12.545Z"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361452,
+      "nanoseconds": 545000000
+    }
   },
   {
     "id": "DPVWdfkHUmTrvIVgJp0u",
-    "type": "sentence",
-    "content": {
-      "text": "Unutarak yemek içmek orucu bozmaz."
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2026-01-02T13:44:12.545Z"
+    "content": {
+      "text": "Unutarak yemek içmek orucu bozmaz."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361452,
+      "nanoseconds": 545000000
+    },
+    "type": "sentence"
   },
   {
     "id": "EKWSYsNXGpvJXSE8MdDf",
     "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150339,
+      "nanoseconds": 906000000
+    },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2025-09-29T12:52:19.906Z",
     "content": {
       "term": "Hatim",
       "definition": "Kur’an-ı Kerim’i ilk suresi olan Fatiha suresinden başlayıp en son suresi olan Nâs suresine kadar yüzüne veya ezberden okumak."
@@ -121,296 +149,383 @@
   },
   {
     "id": "FG4fNF0xDxTqUpDp9WSy",
-    "content": {
-      "term": "Mukabele",
-      "definition": "Kur'an'ın okunup takip edildiği ibadettir."
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "content": {
+      "definition": "Kur'an'ın okunup takip edildiği ibadettir.",
+      "term": "Mukabele"
+    },
+    "type": "definition"
   },
   {
     "id": "FhUy9JKa5tckKSKB26YU",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150339,
+      "nanoseconds": 906000000
+    },
     "content": {
       "text": "İftar vaktinin girmesiyle o günün orucu tamamlanmış olur."
     },
-    "createdAt": "2025-09-29T12:52:19.906Z"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "IlY5DGI8Ad1q5u3j0BmR",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
     "content": {
       "text": "Fitre"
     },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    }
   },
   {
     "id": "Ks2swoiXkBWEkrxrpCUA",
-    "type": "sentence",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Oruç (sahibini koruyan) bir kalkandır. Oruçlu saygısızlık yapmasın, kötü konuşmasın. Eğer biri kendisiyle kavga etmeye veya ona kötü söz söylemeye kalkışırsa iki defa ‘Ben oruçluyum.’ desin."
     },
-    "createdAt": "2025-09-29T12:52:19.906Z"
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150339,
+      "nanoseconds": 906000000
+    }
   },
   {
     "id": "L8UMWhYcbdXJURKnu6Jj",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "İmsakiye"
     },
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "type": "concept"
   },
   {
     "id": "LXQtZLrjTnQ2DJ9GAME0",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Teravih"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw"
   },
   {
     "id": "M2O2Il1Nlo8AgFoEI8Gu",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150339,
+      "nanoseconds": 906000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Kim oruçlu iken unutarak yerse orucunu tamamlasın. Çünkü ona Allah yedirmiş ve içirmiştir"
     },
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": "2025-09-29T12:52:19.906Z"
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz"
   },
   {
     "id": "NXpOCWIH5gbHGmBkWKAL",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
-      "definition": "Ramazanda yatsıdan sonra kılınan özel namazdır.",
-      "term": "Teravih"
+      "term": "Teravih",
+      "definition": "Ramazanda yatsıdan sonra kılınan özel namazdır."
+    },
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
     },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "type": "definition",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "type": "definition"
   },
   {
     "id": "OWPs9EE1zyrFIa62tsvQ",
-    "type": "sentence",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Ramazan ayında yapılan mukabelelerde Kur’an-ı Kerim baştan sona okunur."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": "2025-09-29T12:52:19.906Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150339,
+      "nanoseconds": 906000000
+    },
+    "type": "sentence"
   },
   {
     "id": "TYFFBMJQpzc40gi9gumI",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Kaza Orucu"
     },
-    "type": "concept",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz"
   },
   {
     "id": "XG30jqj1asVlfI6KsHSU",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "type": "definition",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150339,
+      "nanoseconds": 906000000
+    },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": "2025-09-29T12:52:19.906Z",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "type": "definition",
     "content": {
       "text": "",
       "term": "Fidye",
-      "definition": "İyileşemeyecek durumda olan hastaların oruçsuz geçirilen her gün için vermeleri gereken ücret.",
       "title": "",
-      "categories": [],
-      "items": []
+      "items": [],
+      "definition": "İyileşemeyecek durumda olan hastaların oruçsuz geçirilen her gün için vermeleri gereken ücret.",
+      "categories": []
     }
   },
   {
     "id": "XgnUBCn7caLl0BUrLMmO",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "content": {
       "text": "Mukabele"
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    }
   },
   {
     "id": "Y32dJuTYqXk7OLVVx9s0",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "type": "concept",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "type": "concept",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "İftar"
-    },
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    }
   },
   {
     "id": "afuIZRcCSNVTfni8wQUX",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361452,
+      "nanoseconds": 545000000
+    },
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "type": "sentence",
     "content": {
       "text": "Mukabele ile Kur’an hatmedilir."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2026-01-02T13:44:12.545Z"
+    }
   },
   {
     "id": "bRYBAvxTpXCkW7oXRR77",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "content": {
       "text": "Sahur"
-    },
-    "type": "concept",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    }
   },
   {
     "id": "cYvewB3NprZS8nOUS8yC",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "content": {
       "definition": "Orucun bitip yemeğe başlandığı vakittir.",
       "term": "İftar"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "type": "definition"
   },
   {
     "id": "fyKkNU9tFJvlLPPOX2et",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "type": "definition",
     "content": {
       "term": "Kaza Orucu",
       "definition": "Tutulamayan oruçların sonradan tutulmasıdır."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "type": "definition",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "unitId": "HaG39Z2i3AIE1XQznLZw"
   },
   {
     "id": "gSupOrVQ7SXsvjAHyJfJ",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "type": "definition",
     "content": {
-      "definition": "Oruca başlamadan önce yemek yenilen vakittir.",
-      "term": "Sahur"
+      "term": "Sahur",
+      "definition": "Oruca başlamadan önce yemek yenilen vakittir."
     },
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition"
   },
   {
     "id": "i381wuHGoiO4vdP1TDHn",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "sentence",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361452,
+      "nanoseconds": 545000000
+    },
     "content": {
       "text": "Sahura kalkmak sünnet ve berekettir."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2026-01-02T13:44:12.545Z"
+    "unitId": "HaG39Z2i3AIE1XQznLZw"
   },
   {
     "id": "jBJn9qtheGVTa2g41bj4",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "content": {
-      "term": "İmsakiye",
-      "definition": "Oruç vakitlerini gösteren çizelgedir."
+      "definition": "Oruç vakitlerini gösteren çizelgedir.",
+      "term": "İmsakiye"
     },
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "jtqzHOS2GQmCurvt2keu",
-    "type": "concept",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150339,
+      "nanoseconds": 906000000
+    },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": "2025-09-29T12:52:19.906Z",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
+    "type": "concept",
     "content": {
-      "text": "Fidye",
-      "term": "",
-      "definition": "",
+      "items": [],
       "title": "",
+      "definition": "",
       "categories": [],
-      "items": []
+      "term": "",
+      "text": "Fidye"
     }
   },
   {
     "id": "kuo5wD3L32ijwsMcj15H",
     "type": "sentence",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "content": {
-      "text": "Kim bir oruçluya iftar ettirirse iftar ettirdiği kimsenin sevabı kadar sevap ona da yazılır, iftar edenin sevabından da bir şey eksilmez."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150339,
+      "nanoseconds": 906000000
     },
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": "2025-09-29T12:52:19.906Z"
-  },
-  {
-    "id": "nc0tJQoBjkL7txwWPnpp",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "type": "concept",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": "2025-09-29T12:52:19.906Z",
     "content": {
-      "text": "Hatim",
-      "term": "",
-      "definition": "",
-      "title": "",
-      "categories": [],
-      "items": []
+      "text": "Kim bir oruçluya iftar ettirirse iftar ettirdiği kimsenin sevabı kadar sevap ona da yazılır, iftar edenin sevabından da bir şey eksilmez."
     }
   },
   {
-    "id": "qN45Lo8IjgYVwhDsWmQ6",
+    "id": "nc0tJQoBjkL7txwWPnpp",
+    "type": "concept",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "content": {
+      "items": [],
       "term": "",
-      "categories": [
-        "Farz Oruçlar",
-        "Sünnet Oruçlar"
-      ],
-      "text": "",
-      "title": "ORUÇ ÇEŞİTLERİ",
+      "text": "Hatim",
+      "title": "",
+      "categories": [],
+      "definition": ""
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150339,
+      "nanoseconds": 906000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "qN45Lo8IjgYVwhDsWmQ6",
+    "type": "categorization",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
       "items": [
         {
-          "text": "Ramazan Orucu",
-          "category": "Farz Oruçlar"
+          "category": "Farz Oruçlar",
+          "text": "Ramazan Orucu"
         },
         {
-          "text": "Kaza Orucu",
-          "category": "Farz Oruçlar"
+          "category": "Farz Oruçlar",
+          "text": "Kaza Orucu"
         },
         {
           "category": "Sünnet Oruçlar",
@@ -421,50 +536,71 @@
           "category": "Sünnet Oruçlar"
         },
         {
-          "text": "Pazartesi-Perşembe Orucu",
-          "category": "Sünnet Oruçlar"
+          "category": "Sünnet Oruçlar",
+          "text": "Pazartesi-Perşembe Orucu"
         }
       ],
-      "definition": ""
+      "term": "",
+      "text": "",
+      "title": "ORUÇ ÇEŞİTLERİ",
+      "definition": "",
+      "categories": [
+        "Farz Oruçlar",
+        "Sünnet Oruçlar"
+      ]
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "type": "categorization",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "createdAt": "2025-09-29T13:05:09.265Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759151109,
+      "nanoseconds": 265000000
+    }
   },
   {
     "id": "qkH45KbKED3kmDJHoW4Q",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "content": {
       "term": "Fitre",
       "definition": "Sağlıklı olmanın şükrü olarak verilen sadakadır."
     },
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "type": "definition",
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "type": "definition"
   },
   {
     "id": "u2k2zyPkZsee2uMMpiSm",
-    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767361452,
+      "nanoseconds": 545000000
+    },
     "content": {
       "text": "Fitre bayram namazına kadar verilmelidir."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "createdAt": "2026-01-02T13:44:12.545Z"
+    "type": "sentence"
   },
   {
     "id": "wFaedssUztMBEedk7tEt",
-    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "concept",
+    "topicId": "xFJRrKv6Pu6LK0Exwgjz",
     "content": {
       "text": "İmsak"
     },
-    "createdAt": "2025-09-29T12:47:01.581Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759150021,
+      "nanoseconds": 581000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3"
   }
 ]

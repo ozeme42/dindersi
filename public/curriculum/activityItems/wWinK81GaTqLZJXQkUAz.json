@@ -1,103 +1,139 @@
 [
   {
     "id": "1W92RjrIoz4jnOtv7zeS",
-    "type": "concept",
     "content": {
       "text": "Rahmet"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept"
   },
   {
     "id": "8EBsxAn4wFzCRIEFVat1",
-    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "wWinK81GaTqLZJXQkUAz",
     "content": {
       "text": "Peygamberimizin aile hayatı, Müslümanlar için örnek teşkil eder."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2025-07-09T04:06:09.186Z"
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033969,
+      "nanoseconds": 186000000
+    }
   },
   {
     "id": "9C9LyxY8gaTkRZsTgkCk",
-    "type": "definition",
-    "content": {
-      "term": "Sünnet",
-      "definition": "Hz. Peygamber’in sözleri, davranışları ve yaşam biçimi (Ehlibeyt bu mirasın aktarılmasında önemli rol oynar)."
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "type": "definition",
+    "content": {
+      "definition": "Hz. Peygamber’in sözleri, davranışları ve yaşam biçimi (Ehlibeyt bu mirasın aktarılmasında önemli rol oynar).",
+      "term": "Sünnet"
+    }
   },
   {
     "id": "BPIds7XTCe4WhcKxTWRe",
-    "type": "concept",
     "content": {
       "text": "Ehlibeyt"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    },
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "BeAhHscb9VJHItARzA1q",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033969,
+      "nanoseconds": 186000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "sentence",
     "content": {
       "text": "Öğrenciler, Peygamberimizin aile hayatını örnek alarak kendi aile ilişkilerini geliştirebilirler."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2025-07-09T04:06:09.186Z"
+    "topicId": "wWinK81GaTqLZJXQkUAz"
   },
   {
     "id": "GbH3SpIlnmveyJ8nr4Wc",
-    "type": "concept",
+    "topicId": "wWinK81GaTqLZJXQkUAz",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    },
     "content": {
       "text": "Salli ve Barik Duaları"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "type": "concept",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "L253TBP3m7r6BrorqQ7g",
+    "topicId": "wWinK81GaTqLZJXQkUAz",
     "type": "sentence",
     "content": {
       "text": "Bedir Savaşı'nda Hz. Zeyneb'in fidye olarak gönderdiği gerdanlık, Hz. Hatice'nin ona düğününde hediye ettiği gerdanlıktı."
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033969,
+      "nanoseconds": 186000000
+    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2025-07-09T04:06:09.186Z"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "MXMe2H52MevFduf2F43r",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033969,
+      "nanoseconds": 186000000
+    },
+    "topicId": "wWinK81GaTqLZJXQkUAz",
     "content": {
       "text": "Peygamberimizin aile hayatı, Kur'an-ı Kerim'deki ilkelerle uyumludur."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2025-07-09T04:06:09.186Z"
+    }
   },
   {
     "id": "RHbJVQfE4R2k4HpJFQxW",
     "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Sünnet"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    },
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "T81FoPDp0SIIABYYu6hI",
@@ -106,123 +142,167 @@
       "term": "Salli ve Barik Duaları",
       "definition": "Namazlarda okunan, Peygamberimize ve ailesine (Ehlibeyt'e) dua edilen metinler."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "USsnbZDnHATsPzJphJjC",
-    "type": "definition",
     "content": {
       "term": "Hürmet",
       "definition": "Saygı göstermek, değer vermek (Müslümanların Ehlibeyt'e karşı tutumu)."
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "type": "definition",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "Uen1o5s8kCfaYE0S0409",
-    "type": "definition",
     "content": {
       "term": "Ehlibeyt",
       "definition": "Sözlükte \"ev halkı\" anlamına gelen, İslam'da Hz. Peygamber’in ailesi ve soyu için kullanılan ifade."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    }
   },
   {
     "id": "XZ76hMbxk06gTv6LGtGN",
     "type": "sentence",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "wWinK81GaTqLZJXQkUAz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033969,
+      "nanoseconds": 186000000
+    },
     "content": {
       "text": "Etkinlikler, öğrencilerin konuyu daha iyi anlamalarını ve uygulamalarını sağlar."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2025-07-09T04:06:09.186Z"
+    }
   },
   {
     "id": "eT5I4mM2YXuviuCsUBwR",
     "type": "concept",
-    "content": {
-      "text": "Hürmet"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "content": {
+      "text": "Hürmet"
+    }
   },
   {
     "id": "fCn7brKpcYlQ2sErMETk",
-    "type": "sentence",
     "content": {
       "text": "Hz. Muhammed (sav), hem peygamberlik görevlerini hem de aile sorumluluklarını yerine getirmiştir."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033969,
+      "nanoseconds": 186000000
+    },
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2025-07-09T04:06:09.186Z"
+    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "jSpO6W5YvGKn38g1keuB",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033969,
+      "nanoseconds": 186000000
+    },
+    "topicId": "wWinK81GaTqLZJXQkUAz",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "content": {
       "text": "Müslümanlar, Peygamberimizi ve Ehlibeyt'ini sevgi ve saygıyla anarlar."
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2025-07-09T04:06:09.186Z"
+    "type": "sentence"
   },
   {
     "id": "mHst7DI06FXycuUloDiN",
-    "type": "definition",
+    "topicId": "wWinK81GaTqLZJXQkUAz",
     "content": {
-      "term": "Aile",
-      "definition": "Bireyin yaşamını şekillendiren, toplumsal hayatın temeli olan ve sevgi ortamının oluştuğu yapı."
+      "definition": "Bireyin yaşamını şekillendiren, toplumsal hayatın temeli olan ve sevgi ortamının oluştuğu yapı.",
+      "term": "Aile"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    },
+    "type": "definition"
   },
   {
     "id": "vw7JIll2JNmnrIHjeCvi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033969,
+      "nanoseconds": 186000000
+    },
     "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Ehlibeyt, Peygamberimizin ailesi ve soyundan gelenleri ifade eder."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2025-07-09T04:06:09.186Z"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "vyYFn853dQCC7xbI5U3T",
+    "topicId": "wWinK81GaTqLZJXQkUAz",
     "type": "definition",
     "content": {
       "term": "Rahmet",
       "definition": "Hz. Peygamber’in tüm âlemlere gönderiliş sebebi olan şefkat ve merhamet kaynağı."
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "xpSoZq6jcQLnqRt3eQrb",
-    "type": "concept",
     "content": {
       "text": "Aile"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276133,
+      "nanoseconds": 529000000
+    },
     "topicId": "wWinK81GaTqLZJXQkUAz",
-    "createdAt": "2026-01-01T14:02:13.529Z"
+    "type": "concept",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   }
 ]

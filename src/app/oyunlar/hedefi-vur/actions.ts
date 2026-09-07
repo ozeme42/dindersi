@@ -72,7 +72,7 @@ export async function getHitTheTargetAction(
             return { error: "Hedefi Vur oynamak için bu konuda en az 2 adet uygun kavram/tanım bulunmalıdır.", data: null };
         }
         
-        const allTargetWords = [...new Set([...pairs.map(p => p.term), ...fallbackTerms])];
+        const allTargetWords = [...new Set([...pairs.map(p => p.term), ...(pairs.length < 4 ? fallbackTerms : [])])];
         const shuffled = [...pairs].sort(() => 0.5 - Math.random());
         const rounds: HitTheTargetRound[] = [];
 

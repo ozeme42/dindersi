@@ -1,48 +1,64 @@
 [
   {
     "id": "1SoRXJ3OdFVaVXlLNAdQ",
-    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672260,
+      "nanoseconds": 265000000
+    },
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "content": {
       "text": "Tevekkül"
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "createdAt": "2025-10-28T17:24:20.265Z"
+    "type": "concept",
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "RQLZrGkiZKzvGQMKWKYd",
     "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "content": {
       "text": "Gitmeye gücü yetenin o evi ziyaret etmesi, Allah’ın insanlar üzerinde bir hakkıdır."
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "createdAt": "2025-10-28T17:24:20.265Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672260,
+      "nanoseconds": 265000000
+    }
   },
   {
     "id": "jD8kef0BDjlEoxIoIqN8",
-    "type": "definition",
-    "content": {
-      "term": "Tevekkül",
-      "definition": "Sıkıntılar karşısında isyan etmek yerine Allah’a (cc) güvenme ve dayanma hali."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672260,
+      "nanoseconds": 265000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "definition",
     "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "createdAt": "2025-10-28T17:24:20.265Z"
+    "content": {
+      "definition": "Sıkıntılar karşısında isyan etmek yerine Allah’a (cc) güvenme ve dayanma hali.",
+      "term": "Tevekkül"
+    },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "nF5rvPhgKhYxvFHSJzkd",
-    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672260,
+      "nanoseconds": 265000000
+    },
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "content": {
       "text": "Hac"
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "createdAt": "2025-10-28T17:24:20.265Z"
+    "type": "concept",
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "ozA3bjzE5dW76MHsOMuk",
@@ -50,32 +66,44 @@
     "content": {
       "text": "Allah tarafından kabul edilmiş haccın karşılığı ancak cennettir."
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672260,
+      "nanoseconds": 265000000
+    },
     "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "createdAt": "2025-10-28T17:24:20.265Z"
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "t1BeaIInD0GrriwZRml1",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "type": "sentence",
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "content": {
       "text": "Hacıların tüm gayret ve çabası, Yüce Allah’ın rızasını kazanmaktır."
     },
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "createdAt": "2025-10-28T17:24:20.265Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672260,
+      "nanoseconds": 265000000
+    }
   },
   {
     "id": "yXHAGjbey07SXgsniuLa",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672260,
+      "nanoseconds": 265000000
+    },
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "content": {
       "term": "Hac",
       "definition": "Bazı özellikleri taşıyan Müslümanların belirli bir vakitte, belirli kutsal mekânları usulüne uygun bir şekilde ziyaret etmesidir."
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "createdAt": "2025-10-28T17:24:20.265Z"
+    }
   }
 ]

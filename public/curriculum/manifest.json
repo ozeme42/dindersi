@@ -439,7 +439,7 @@
                   "title": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
                   "hasOzetContent": true,
                   "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
+                  "hasYazilacaklarContent": true
                 },
                 {
                   "id": "Lo5XBOdDV8gW1cIZh9GU",
@@ -460,7 +460,7 @@
                   "title": "4. Salli ve Barik Duaları ile Anlamları",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
+                  "hasYazilacaklarContent": true
                 }
               ]
             },

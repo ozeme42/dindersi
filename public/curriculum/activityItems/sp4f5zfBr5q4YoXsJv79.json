@@ -2,46 +2,62 @@
   {
     "id": "B3cnB0S4MCuDZripy96T",
     "type": "sentence",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "topicId": "sp4f5zfBr5q4YoXsJv79",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673100,
+      "nanoseconds": 612000000
+    },
     "content": {
       "text": "Hac zamanı dışında her zaman yapılabilir."
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "sp4f5zfBr5q4YoXsJv79",
-    "createdAt": "2025-10-28T17:38:20.612Z"
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "N1rbSXwgwDrbqN3Ts51M",
-    "type": "concept",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673100,
+      "nanoseconds": 612000000
+    },
     "content": {
       "text": "Umre"
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "topicId": "sp4f5zfBr5q4YoXsJv79",
-    "createdAt": "2025-10-28T17:38:20.612Z"
+    "type": "concept"
   },
   {
     "id": "pZ8kMLbvgvwK6Em0cJXp",
-    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Haccı ve umreyi Allah için eksiksiz yerine getirin. İki umre, aralarında işlenen günahlara kefarettir."
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673100,
+      "nanoseconds": 612000000
+    },
     "topicId": "sp4f5zfBr5q4YoXsJv79",
-    "createdAt": "2025-10-28T17:38:20.612Z"
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "sentence"
   },
   {
     "id": "wyh88xgHTzib2QWp2AcC",
-    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Umre",
       "definition": "Hac mevsimi dışında sırasıyla Kâbe’yi tavaf etme, say yapma, tıraş olduktan sonra ihramdan çıkma şeklinde yapılan ibadettir."
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "topicId": "sp4f5zfBr5q4YoXsJv79",
-    "createdAt": "2025-10-28T17:38:20.612Z"
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673100,
+      "nanoseconds": 612000000
+    }
   }
 ]

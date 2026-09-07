@@ -1,376 +1,508 @@
 [
   {
     "id": "2P8Op2BOXZS63UnOZlCP",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "type": "definition",
     "content": {
       "term": "Yetim",
       "definition": "Babası ölmüş olan çocuk"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:37.447Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033457,
+      "nanoseconds": 447000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "42CAd6XnQmInwUb24rne",
-    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033457,
+      "nanoseconds": 447000000
+    },
     "content": {
       "term": "Merhamet",
       "definition": "Bir insanı başka insanlar ve diğer canlıların sıkıntıları karşısında duyarlı olmaya ve yardım etmeye sevk eden acıma duygusu"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:37.447Z"
+    "type": "definition",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "7FMiY3fEL4P7JaYOrWyH",
     "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274459,
+      "nanoseconds": 645000000
+    },
     "content": {
       "text": "Ümame"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2026-01-01T13:34:19.645Z"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "AocIG6WBVlE8ktgIzQp7",
-    "type": "sentence",
-    "content": {
-      "text": "Çocuklara güzel terbiye verilmesini ve onlara şefkatle davranılmasını isterdi."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "type": "sentence",
+    "content": {
+      "text": "Çocuklara güzel terbiye verilmesini ve onlara şefkatle davranılmasını isterdi."
+    }
   },
   {
     "id": "F4NU2Ju3H7yvTW3YXtZk",
     "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274459,
+      "nanoseconds": 645000000
+    },
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Ebu Mahzure"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2026-01-01T13:34:19.645Z"
+    }
   },
   {
     "id": "FKo1YuMSakXu4uCLji07",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274459,
+      "nanoseconds": 645000000
+    },
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "type": "definition",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
       "term": "Ebu Umeyr (Kuş Babası)",
       "definition": "Peygamberimizin kuşu öldüğü için teselli etmeye gittiği çocuk sahabe."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2026-01-01T13:34:19.645Z"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "Hua4kCsKN22qfU30lnhx",
-    "type": "definition",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033457,
+      "nanoseconds": 447000000
+    },
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "term": "Hürmet",
       "definition": "Bir kimseye, bir şeye karşı dikkatli, özenli, ölçülü davranmaya sebep olan sevgi duygusu"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:37.447Z"
+    "type": "definition"
   },
   {
     "id": "IAOl9RKtiyHbxj3aSXSw",
-    "type": "concept",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "İletişim"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    }
   },
   {
     "id": "Knyz8U9lXJdTasARDBE3",
     "type": "concept",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
     "content": {
       "text": "Sevgi"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "OLEWq6Jxy3p9llOiI2pk",
-    "type": "definition",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
-      "term": "Şefkat",
-      "definition": "Koruma ve esirgeme duygusu ile karışık olan sevgi, sevecenlik"
+      "definition": "Koruma ve esirgeme duygusu ile karışık olan sevgi, sevecenlik",
+      "term": "Şefkat"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:37.447Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033457,
+      "nanoseconds": 447000000
+    },
+    "type": "definition",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "RMShZOCNNHAcCNGecguE",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033457,
+      "nanoseconds": 447000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
       "term": "Güven",
       "definition": "Korku, çekinme ve kuşku duymadan inanma ve bağlanma duygusu; emniyet, itimat"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:37.447Z"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "SWa2PUNBckHPRTgrcDmq",
     "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Tevazu"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "Tpk3IRwYWj1zYAM6ORyy",
-    "type": "definition",
-    "content": {
-      "term": "Ümame",
-      "definition": "Peygamberimizin torunu, kendisine hediye edilen kolyeyi taktığı kız çocuğu."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "content": {
+      "definition": "Peygamberimizin torunu, kendisine hediye edilen kolyeyi taktığı kız çocuğu.",
+      "term": "Ümame"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274459,
+      "nanoseconds": 645000000
+    },
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2026-01-01T13:34:19.645Z"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition"
   },
   {
     "id": "Ty7uHTt2QKOpzDTzDwER",
-    "type": "sentence",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Peygamberimiz, kız ve erkek çocukları arasında ayrım yapmazdı."
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
+    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "UE8xPYpfSuAUD9cM8Ex7",
-    "type": "sentence",
     "content": {
       "text": "İnancına bakmaksızın tüm çocuklara sevgisini gösterirdi."
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    }
   },
   {
     "id": "WseOD7gZREgN5BAudiOh",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033457,
+      "nanoseconds": 447000000
+    },
     "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "term": "Adalet",
       "definition": "Hak ve hukuka uygun davranma, hakkı gözetme, herkese kendi hakkı olanı verme"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:37.447Z"
+    }
   },
   {
     "id": "YNIiq1U4kiZxuzAuVxQL",
     "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
       "text": "Şefkat"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    }
   },
   {
     "id": "ZWkd0vc6s1urI9wMYqxX",
-    "type": "definition",
     "content": {
-      "term": "Muhabbet",
-      "definition": "Bir insanı bir şeye veya bir kimseye karşı yakın ilgi ve bağlılık göstermeye yönelten duygu"
+      "definition": "Bir insanı bir şeye veya bir kimseye karşı yakın ilgi ve bağlılık göstermeye yönelten duygu",
+      "term": "Muhabbet"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:37.447Z"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033457,
+      "nanoseconds": 447000000
+    }
   },
   {
     "id": "bmgZR2m72q3CxhaoNu69",
-    "type": "concept",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Adalet"
     },
+    "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    }
   },
   {
     "id": "cq0tGwQ8gMd6Cu7KH9zg",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Çocuklar Peygamberimizi çok sever ve onun mescidinde toplanırlardı."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    }
   },
   {
     "id": "dYF1zoYPoFvMcXxvQg0f",
-    "type": "sentence",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
     "content": {
       "text": "Yetimlerin ve kadınların korunmasını önemserdi."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "type": "sentence",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "gVDRokZITktoKzGP9AKc",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "type": "concept",
     "content": {
       "text": "Ebu Umeyr (Kuş Babası)"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274459,
+      "nanoseconds": 645000000
+    },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2026-01-01T13:34:19.645Z"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "gWWG9lAsT3TQ5gRWcUl1",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
     "type": "concept",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Güven"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "iF779ifnqdiFyyq6mog8",
-    "type": "sentence",
     "content": {
       "text": "Hz. Muhammed (sav) çocuklara sevgi ve merhametle yaklaşırdı."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "sentence",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "iU6tu70ViET9WCvyDnKM",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
     "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Peygamberimiz çocuklarla oyunlar oynar, onlara değer verirdi."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "jwriOMlNNdXMnjkHZ9Iz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033457,
+      "nanoseconds": 447000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "content": {
       "term": "Tevazu",
       "definition": "İnsanın, kendisinin de yaratılmış olduğunu bilerek insanlara karşı büyüklük taslamaması, alçak gönüllü ve yumuşak huylu olması"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:37.447Z"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "mjMMucP9HLhiPDX7ZMaP",
     "type": "sentence",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Peygamberimiz çocuklara nasihatte bulunur, onlara iyi davranışlar öğretirdi."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "o2DYkU6nrYG3RsCieFZp",
     "type": "sentence",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Peygamberimiz, çocukların mescide gelmelerine ve sohbetlere katılmalarına izin verirdi."
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "o9xNju3fUoosg9Ax8sDa",
-    "type": "concept",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Yetim"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "type": "concept",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "q6Q3URTpJoxiYnV8QQqK",
-    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Saygı"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "type": "concept"
   },
   {
     "id": "qkWgltYmZbx70ZLy28IF",
-    "type": "definition",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
-      "term": "Ebu Mahzure",
-      "definition": "Peygamberimizin sesini beğenip kendisine ezanı öğrettiği ve Mekke müezzini yaptığı çocuk."
+      "definition": "Peygamberimizin sesini beğenip kendisine ezanı öğrettiği ve Mekke müezzini yaptığı çocuk.",
+      "term": "Ebu Mahzure"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2026-01-01T13:34:19.645Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767274459,
+      "nanoseconds": 645000000
+    }
   },
   {
     "id": "xkU6l43v87ovYXiMncgf",
-    "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Merhamet"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "concept",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    }
   },
   {
     "id": "z61oTSCty5pQb1YB1YF5",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033436,
+      "nanoseconds": 232000000
+    },
     "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "content": {
       "text": "Hz. Muhammed, çocuklara karşı anlayışlı ve hoşgörülüydü."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "createdAt": "2025-07-09T03:57:16.232Z"
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   }
 ]

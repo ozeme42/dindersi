@@ -7,6 +7,9 @@ import { doc, updateDoc, deleteDoc, serverTimestamp, writeBatch, collection, add
 import { z } from "zod";
 import type { AiActivityDataOutput } from "@/ai/flows/generate-activity-data-flow";
 import type { CategorizationGameData, ActivityItem } from "@/lib/types";
+import fs from 'fs/promises';
+import path from 'path';
+import { clearStaticGameCache } from '@/lib/quiz-actions';
 
 export async function saveGeneratedActivityItems({ courseId, unitId, topicId, content }: { courseId: string; unitId: string; topicId: string; content: AiActivityDataOutput }) {
     if (!courseId || !unitId || !topicId) {
@@ -82,6 +85,25 @@ export async function saveGeneratedActivityItems({ courseId, unitId, topicId, co
         
         if (addedCount > 0) {
             await batch.commit();
+
+            // Önbelleği temizle ki oyunlar yeni kavramları hemen görsün
+            await clearStaticGameCache();
+
+            // Dosya sistemine otomatik senkronizasyon (statik JSON oluştur)
+            try {
+                const allTopicItemsSnap = await getDocs(query(collection(db, "activityItems"), where("topicId", "==", topicId)));
+                const allItems = allTopicItemsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                const jsonStr = JSON.stringify(allItems, null, 2);
+                
+                const dir1 = path.join(process.cwd(), 'public', 'curriculum', 'activities');
+                const dir2 = path.join(process.cwd(), 'public', 'curriculum', 'activityItems');
+                await fs.mkdir(dir1, { recursive: true }).catch(() => {});
+                await fs.mkdir(dir2, { recursive: true }).catch(() => {});
+                await fs.writeFile(path.join(dir1, `${topicId}.json`), jsonStr, 'utf-8').catch(() => {});
+                await fs.writeFile(path.join(dir2, `${topicId}.json`), jsonStr, 'utf-8').catch(() => {});
+            } catch (fsErr) {
+                // Sunucusuz (read-only) ortamlarda sessizce geç
+            }
         }
 
         return { success: true, count: addedCount };
@@ -100,17 +122,37 @@ export async function saveActivityItem(item: Partial<ActivityItem>): Promise<{ s
             dataToSave.content.categories = dataToSave.content.categories.map((cat: any) => (typeof cat === 'object' ? cat?.value : cat));
         }
 
+        let savedId = id;
         if (id && !id.startsWith('new-')) {
             const docRef = doc(db, "activityItems", id);
             await updateDoc(docRef, dataToSave);
-            return { success: true, id };
         } else {
             const docRef = await addDoc(collection(db, "activityItems"), {
                 ...dataToSave,
                 createdAt: serverTimestamp()
             });
-            return { success: true, id: docRef.id };
+            savedId = docRef.id;
         }
+
+        await clearStaticGameCache();
+
+        // Eğer topicId varsa dosya sistemini de güncelle
+        if (dataToSave.topicId) {
+            try {
+                const allTopicItemsSnap = await getDocs(query(collection(db, "activityItems"), where("topicId", "==", dataToSave.topicId)));
+                const allItems = allTopicItemsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                const jsonStr = JSON.stringify(allItems, null, 2);
+                
+                const dir1 = path.join(process.cwd(), 'public', 'curriculum', 'activities');
+                const dir2 = path.join(process.cwd(), 'public', 'curriculum', 'activityItems');
+                await fs.mkdir(dir1, { recursive: true }).catch(() => {});
+                await fs.mkdir(dir2, { recursive: true }).catch(() => {});
+                await fs.writeFile(path.join(dir1, `${dataToSave.topicId}.json`), jsonStr, 'utf-8').catch(() => {});
+                await fs.writeFile(path.join(dir2, `${dataToSave.topicId}.json`), jsonStr, 'utf-8').catch(() => {});
+            } catch (fsErr) {}
+        }
+
+        return { success: true, id: savedId };
     } catch(error: any) {
         console.error("Error saving activity item:", error);
         return { success: false, error: "Veri kaydedilirken bir hata oluştu." };

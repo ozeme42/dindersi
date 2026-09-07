@@ -38,7 +38,7 @@ export async function getKavramDuellosuQuestions(
             return { error: "Bu oyun için en az 1 tanım/soru gereklidir.", questions: [] };
         }
 
-        const allTerms = [...new Set([...pairs.map(p => p.term), ...fallbackPool])];
+        const allTerms = [...new Set([...pairs.map(p => p.term), ...(pairs.length < 4 ? fallbackPool : [])])];
         
         const gameQuestions: KavramDuellosuQuestion[] = pairs.map(item => {
             const correctAnswer = item.term;

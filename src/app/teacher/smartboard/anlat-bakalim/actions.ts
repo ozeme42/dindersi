@@ -15,6 +15,15 @@ export async function getAnlatBakalimWords(
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
         const validWords: string[] = [];
 
+        const cleanWord = (raw: string) => {
+            return raw
+                .replace(/[âÂ]/g, 'A')
+                .replace(/[îÎ]/g, 'İ')
+                .replace(/[ûÛ]/g, 'U')
+                .replace(/['’\-]/g, '')
+                .trim();
+        };
+
         for (const item of allItems || []) {
             if ('type' in item) {
                 let term = '';
@@ -26,8 +35,21 @@ export async function getAnlatBakalimWords(
                     term = String((item as any).correctAnswer).trim();
                 }
 
-                if (term && term.length >= 3 && term.length <= 15 && !term.includes(' ') && turkishAlphabetRegex.test(term)) {
-                    validWords.push(term.toLocaleUpperCase('tr-TR'));
+                if (term) {
+                    const cleaned = cleanWord(term);
+                    const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
+                    if (noSpace.length >= 3 && noSpace.length <= 15 && turkishAlphabetRegex.test(noSpace)) {
+                        validWords.push(noSpace);
+                    }
+                    if (cleaned.includes(' ')) {
+                        const parts = cleaned.split(/\s+/);
+                        for (const part of parts) {
+                            const upperPart = part.toLocaleUpperCase('tr-TR');
+                            if (upperPart.length >= 3 && upperPart.length <= 15 && turkishAlphabetRegex.test(upperPart)) {
+                                validWords.push(upperPart);
+                            }
+                        }
+                    }
                 }
             }
         }
