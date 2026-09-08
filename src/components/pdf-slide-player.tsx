@@ -86,7 +86,7 @@ async function getPdfjs() {
     return pdfjs;
 }
 
-export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock, className }: PdfSlidePlayerProps) {
+export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = false, className }: PdfSlidePlayerProps) {
     const rawUrl = (step.pdfUrl || '').trim();
 
     // Servis tespiti

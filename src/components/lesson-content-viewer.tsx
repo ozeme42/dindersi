@@ -3769,7 +3769,7 @@ export function StepContent({
     isSingleCardMode,
     animationSpeed = 'normal',
     fontSizeScale = 'normal',
-    hideUI
+    hideUI = false
 }: any) {
     const isTeacher = useTeacherMode();
 
@@ -3842,7 +3842,7 @@ export function StepContent({
                  return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} />
 
             case 'pdfSlide':
-                 return <PdfSlidePlayer step={step as PdfSlideStep} isFullscreen={isFullscreen} isTeacher={isTeacher} hasBottomDock={!hideUI} />
+                 return <PdfSlidePlayer step={step as PdfSlideStep} isFullscreen={isFullscreen} isTeacher={isTeacher} hasBottomDock={Boolean(!hideUI)} />
             
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;
@@ -4784,7 +4784,8 @@ export function LessonContentViewer({
                     isSingleCardMode={isSingleCardMode}
                     animationSpeed={animationSpeed}
                     fontSizeScale={fontSizeScale}
-              />
+                    hideUI={hideUI}
+                  />
                 </motion.div>
               </AnimatePresence>
            </div>
