@@ -1,6 +1,19 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    resolveAlias: {
+      canvas: './src/lib/empty-canvas.ts',
+    },
+  },
+  serverExternalPackages: ['pdfjs-dist'],
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      canvas: false,
+    };
+    return config;
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
