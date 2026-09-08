@@ -69,6 +69,8 @@ export interface PdfSlidePlayerProps {
     isTeacher?: boolean;
     hasBottomDock?: boolean;
     className?: string;
+    onNextStep?: () => void;
+    onPrevStep?: () => void;
 }
 
 let pdfjsLibInstance: any = null;
@@ -83,7 +85,15 @@ async function getPdfjs() {
     return pdfjs;
 }
 
-export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = false, className }: PdfSlidePlayerProps) {
+export function PdfSlidePlayer({ 
+    step, 
+    isFullscreen, 
+    isTeacher, 
+    hasBottomDock = false, 
+    className,
+    onNextStep,
+    onPrevStep
+}: PdfSlidePlayerProps) {
     const rawUrl = (step.pdfUrl || '').trim();
 
     // Servis tespiti
@@ -310,12 +320,20 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
 
     // Slayt İlerleme Fonksiyonları
     const goToPrevPage = useCallback(() => {
-        setCurrentPage(p => Math.max(1, p - 1));
-    }, []);
+        if (currentPage > 1) {
+            setCurrentPage(p => Math.max(1, p - 1));
+        } else if (onPrevStep) {
+            onPrevStep();
+        }
+    }, [currentPage, onPrevStep]);
 
     const goToNextPage = useCallback(() => {
-        setCurrentPage(p => Math.min(numPages, p + 1));
-    }, [numPages]);
+        if (currentPage < numPages) {
+            setCurrentPage(p => Math.min(numPages, p + 1));
+        } else if (onNextStep) {
+            onNextStep();
+        }
+    }, [currentPage, numPages, onNextStep]);
 
     const goToFirstPage = useCallback(() => setCurrentPage(1), []);
     const goToLastPage = useCallback(() => setCurrentPage(numPages), [numPages]);

@@ -68,32 +68,67 @@ export function PresentationRemoteModal({
     const [isPhoneConnected, setIsPhoneConnected] = useState<boolean>(false);
     const [lastActionName, setLastActionName] = useState<string>('');
     const [copied, setCopied] = useState<boolean>(false);
+    const [isMounted, setIsMounted] = useState<boolean>(false);
+    const [portalContainer, setPortalContainer] = useState<Element | null>(null);
 
     // ══ SANAL FARE İMLECİ & TIKLAMA STATE'LERİ ══
     const [cursorPos, setCursorPos] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
     const [isCursorVisible, setIsCursorVisible] = useState<boolean>(false);
     const [clickRipplePos, setClickRipplePos] = useState<{ x: number; y: number } | null>(null);
-    const [fullscreenElement, setFullscreenElement] = useState<Element | null>(null);
     const cursorHideTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-    const lastCommandIdRef = useRef<string | number | null>(null);
-    const unsubscribeRef = useRef<(() => void) | null>(null);
+    // Callbacks ref'lerde saklanarak Firestore dinleyicisinin yeniden başlatılması (thrashing) kesinlikle engellenir
+    const callbacksRef = useRef({
+        onNext,
+        onPrev,
+        onJump,
+        onToggleBlackout,
+        onToggleMenu,
+        onStartTimer,
+        isBlackout,
+        currentStepIndex
+    });
 
-    // Tam ekran element takibi (Fullscreen esnasında imlecin görünür kalması için portal)
     useEffect(() => {
-        const handleFullscreenChange = () => {
-            setFullscreenElement(document.fullscreenElement);
+        callbacksRef.current = {
+            onNext,
+            onPrev,
+            onJump,
+            onToggleBlackout,
+            onToggleMenu,
+            onStartTimer,
+            isBlackout,
+            currentStepIndex
         };
-        handleFullscreenChange();
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    });
+
+    const lastCommandIdRef = useRef<string | number | null>(null);
+
+    // 1. Mount kontrolü ve Portal Container Tespiti
+    useEffect(() => {
+        setIsMounted(true);
+
+        const updateContainer = () => {
+            if (typeof document === 'undefined') return;
+            const fs = document.fullscreenElement;
+            // Eğer html etiketi dışında özel bir element (örn: video/iframe) tam ekransa ona ekle, değilse daima document.body
+            if (fs && fs !== document.documentElement) {
+                setPortalContainer(fs);
+            } else {
+                setPortalContainer(document.body);
+            }
+        };
+
+        updateContainer();
+        document.addEventListener('fullscreenchange', updateContainer);
+        document.addEventListener('webkitfullscreenchange', updateContainer);
         return () => {
-            document.removeEventListener('fullscreenchange', handleFullscreenChange);
-            document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('fullscreenchange', updateContainer);
+            document.removeEventListener('webkitfullscreenchange', updateContainer);
         };
     }, []);
 
-    // 1. Oturum Kodunu Başlat / Yükle (Bileşen mount olduğunda arka planda daima çalışır)
+    // 2. Oturum Kodunu Başlat / Yükle
     useEffect(() => {
         let code = '';
         try {
@@ -116,29 +151,23 @@ export function PresentationRemoteModal({
         const url = `${origin}/remote?code=${code}`;
         setRemoteUrl(url);
 
-        // QR Kodu Oluştur
         QRCode.toDataURL(url, {
             width: 320,
             margin: 2,
-            color: {
-                dark: '#0f172a',
-                light: '#ffffff'
-            },
+            color: { dark: '#0f172a', light: '#ffffff' },
             errorCorrectionLevel: 'M'
         }).then(dataUri => {
             setQrDataUrl(dataUri);
         }).catch(err => {
             console.error('QR code generation error:', err);
         });
-
     }, []);
 
-    // 2. Firestore'da Oturumu Oluştur & Güncelle
+    // 3. Firestore'da Oturumu Başlat (Sadece sessionCode ilk oluştuğunda tek sefer çalışır)
     useEffect(() => {
         if (!sessionCode) return;
 
         const docRef = doc(db, 'presentationSessions', sessionCode);
-
         const sessionPayload = {
             sessionCode,
             status: 'active',
@@ -154,17 +183,15 @@ export function PresentationRemoteModal({
                 type: s.type || ''
             })),
             isBlackout,
-            phoneConnected: isPhoneConnected,
             lastBoardUpdate: serverTimestamp()
         };
 
         setDoc(docRef, sessionPayload, { merge: true }).catch(err => {
-            console.error('Failed to create remote session in Firestore:', err);
+            console.error('Failed to create remote session:', err);
         });
+    }, [sessionCode]);
 
-    }, [sessionCode, courseTitle, unitTitle, topicTitle, steps]);
-
-    // 3. Sunum durumu değiştikçe Firestore'a senkronize et
+    // 4. Sunum durumu değiştikçe Firestore'a senkronize et
     useEffect(() => {
         if (!sessionCode) return;
 
@@ -178,7 +205,38 @@ export function PresentationRemoteModal({
         }).catch(() => {});
     }, [sessionCode, currentStepIndex, totalStepsCount, currentStepTitle, isBlackout]);
 
-    // 4. Gerçek Tıklama Simülasyonu
+    // 5. İleri / Geri Klavye Olayı Tetikleyici (PDF ve Tüm Slaytlarla %100 Uyumlu)
+    const dispatchArrowKey = useCallback((direction: 'next' | 'prev') => {
+        const key = direction === 'next' ? 'ArrowRight' : 'ArrowLeft';
+        const code = direction === 'next' ? 'ArrowRight' : 'ArrowLeft';
+        const keyCode = direction === 'next' ? 39 : 37;
+
+        const eventConfig = {
+            key,
+            code,
+            keyCode,
+            which: keyCode,
+            bubbles: true,
+            cancelable: true
+        };
+
+        const winEvt = new KeyboardEvent('keydown', eventConfig);
+        const docEvt = new KeyboardEvent('keydown', eventConfig);
+
+        window.dispatchEvent(winEvt);
+        document.dispatchEvent(docEvt);
+
+        // Eğer aktif sayfa olayı tüketmediyse yedek olarak callback'i tetikle
+        if (!winEvt.defaultPrevented && !docEvt.defaultPrevented) {
+            if (direction === 'next') {
+                callbacksRef.current.onNext();
+            } else {
+                callbacksRef.current.onPrev();
+            }
+        }
+    }, []);
+
+    // 6. Gerçek Tıklama Simülasyonu
     const simulateClick = useCallback((xPercent: number, yPercent: number) => {
         const pxX = (window.innerWidth * xPercent) / 100;
         const pxY = (window.innerHeight * yPercent) / 100;
@@ -187,15 +245,23 @@ export function PresentationRemoteModal({
         setClickRipplePos({ x: pxX, y: pxY });
         setTimeout(() => setClickRipplePos(null), 500);
 
-        // İmleci anlık gizle ki elementFromPoint kendi imlecimize çarpmasın
-        const cursorEl = document.getElementById('remote-board-cursor');
-        if (cursorEl) cursorEl.style.visibility = 'hidden';
-
         const element = document.elementFromPoint(pxX, pxY);
 
-        if (cursorEl) cursorEl.style.visibility = 'visible';
-
         if (element && element instanceof HTMLElement) {
+            // Eğer PDF canvas'ına tıklandıysa: sağ tarafa tıklandıysa ileri, sol tarafa tıklandıysa geri
+            if (element.tagName === 'CANVAS') {
+                if (xPercent > 55) {
+                    dispatchArrowKey('next');
+                    return;
+                } else if (xPercent < 45) {
+                    dispatchArrowKey('prev');
+                    return;
+                }
+            }
+
+            // Tıklanabilir en yakın butonu veya öğeyi bul
+            const target = (element.closest('button, a, input, [role="button"], label, select, [tabindex]') || element) as HTMLElement;
+
             const eventConfig = { 
                 view: window, 
                 bubbles: true, 
@@ -204,20 +270,20 @@ export function PresentationRemoteModal({
                 clientY: pxY 
             };
 
-            element.dispatchEvent(new PointerEvent('pointerdown', eventConfig));
-            element.dispatchEvent(new MouseEvent('mousedown', eventConfig));
-            element.dispatchEvent(new PointerEvent('pointerup', eventConfig));
-            element.dispatchEvent(new MouseEvent('mouseup', eventConfig));
-            element.dispatchEvent(new MouseEvent('click', eventConfig));
+            target.dispatchEvent(new PointerEvent('pointerdown', eventConfig));
+            target.dispatchEvent(new MouseEvent('mousedown', eventConfig));
+            target.dispatchEvent(new PointerEvent('pointerup', eventConfig));
+            target.dispatchEvent(new MouseEvent('mouseup', eventConfig));
+            target.dispatchEvent(new MouseEvent('click', eventConfig));
 
-            // Doğrudan tıklama tetikleyicisi
             try {
-                element.click();
+                target.focus?.();
+                target.click();
             } catch {}
         }
-    }, []);
+    }, [dispatchArrowKey]);
 
-    // 5. Telefondan gelen komutları ve fare hareketlerini dinle
+    // 7. Telefondan Gelen Komutları ve Fareyi Dinleyen Kararlı Dinleyici
     useEffect(() => {
         if (!sessionCode) return;
 
@@ -228,7 +294,6 @@ export function PresentationRemoteModal({
 
             const data = snapshot.data();
 
-            // Telefon bağlantı durumu
             if (data.phoneConnected !== undefined) {
                 setIsPhoneConnected(Boolean(data.phoneConnected));
             }
@@ -238,14 +303,13 @@ export function PresentationRemoteModal({
                 setCursorPos({ x: data.cursor.x, y: data.cursor.y });
                 setIsCursorVisible(true);
 
-                // 8 saniye boyunca hareket olmazsa imleci gizle
                 if (cursorHideTimerRef.current) clearTimeout(cursorHideTimerRef.current);
                 cursorHideTimerRef.current = setTimeout(() => {
                     setIsCursorVisible(false);
-                }, 8000);
+                }, 15000); // 15 saniye hareketsizlikte gizle
             }
 
-            // Komut yürütme
+            // Komut Yürütme
             const cmd = data.command;
             if (cmd && cmd.id && cmd.id !== lastCommandIdRef.current) {
                 lastCommandIdRef.current = cmd.id;
@@ -253,36 +317,36 @@ export function PresentationRemoteModal({
                 switch (cmd.action) {
                     case 'click':
                         simulateClick(
-                            typeof cmd.x === 'number' ? cmd.x : cursorPos.x, 
-                            typeof cmd.y === 'number' ? cmd.y : cursorPos.y
+                            typeof cmd.x === 'number' ? cmd.x : 50, 
+                            typeof cmd.y === 'number' ? cmd.y : 50
                         );
                         setLastActionName('Tıklandı 🔘');
                         break;
                     case 'next':
-                        onNext();
+                        dispatchArrowKey('next');
                         setLastActionName('Sonraki Adım');
                         break;
                     case 'prev':
-                        onPrev();
+                        dispatchArrowKey('prev');
                         setLastActionName('Önceki Adım');
                         break;
                     case 'jump':
                         if (typeof cmd.stepIndex === 'number') {
-                            onJump(cmd.stepIndex);
+                            callbacksRef.current.onJump(cmd.stepIndex);
                             setLastActionName(`Adım ${cmd.stepIndex + 1}'e Atlandı`);
                         }
                         break;
                     case 'blackout':
-                        onToggleBlackout();
-                        setLastActionName(isBlackout ? 'Ekran Açıldı' : 'Tahta Karartıldı');
+                        callbacksRef.current.onToggleBlackout();
+                        setLastActionName(callbacksRef.current.isBlackout ? 'Ekran Açıldı' : 'Tahta Karartıldı');
                         break;
                     case 'toggleMenu':
-                        onToggleMenu?.();
-                        setLastActionName('Alt Menü Geçişi');
+                        callbacksRef.current.onToggleMenu?.();
+                        setLastActionName('Alt Menü');
                         break;
                     case 'timer':
                         if (typeof cmd.seconds === 'number') {
-                            onStartTimer?.(cmd.seconds);
+                            callbacksRef.current.onStartTimer?.(cmd.seconds);
                             setLastActionName(`Sayaç (${cmd.seconds}s)`);
                         }
                         break;
@@ -296,13 +360,11 @@ export function PresentationRemoteModal({
             console.error('Remote session listener error:', error);
         });
 
-        unsubscribeRef.current = unsub;
-
         return () => {
             unsub();
             if (cursorHideTimerRef.current) clearTimeout(cursorHideTimerRef.current);
         };
-    }, [sessionCode, onNext, onPrev, onJump, onToggleBlackout, onToggleMenu, onStartTimer, isBlackout, simulateClick, cursorPos]);
+    }, [sessionCode, simulateClick, dispatchArrowKey]);
 
     const handleCopyLink = async () => {
         if (!remoteUrl) return;
@@ -330,27 +392,29 @@ export function PresentationRemoteModal({
     const cursorElement = isCursorVisible && (
         <div
             id="remote-board-cursor"
-            className="fixed pointer-events-none z-[9999] transition-transform duration-75 ease-out select-none"
+            className="fixed pointer-events-none z-[9999999] select-none transition-[left,top] duration-75 ease-out"
             style={{
-                left: `${cursorPos.x}%`,
-                top: `${cursorPos.y}%`,
-                transform: 'translate(-4px, -2px)'
+                left: `${cursorPos.x}vw`,
+                top: `${cursorPos.y}vh`,
+                transform: 'translate(-3px, -3px)',
+                willChange: 'left, top'
             }}
         >
             <div className="relative">
-                {/* Şık SVG İmleç Oku */}
-                <svg width="34" height="34" viewBox="0 0 24 24" style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.6))' }}>
+                {/* Şık Lazer İmleç Oku */}
+                <svg width="36" height="36" viewBox="0 0 24 24" style={{ filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.85))' }}>
                     <path 
                         d="M4.5 2.5 L4.5 21 L10 15 L14.5 23 L18 21 L13.5 13 L21 13 Z" 
                         fill="#4f46e5" 
                         stroke="#ffffff" 
-                        strokeWidth="1.75" 
+                        strokeWidth="2" 
                         strokeLinejoin="round"
                     />
                 </svg>
 
                 {/* İmleç Ucundaki Kırmızı Lazer Noktası */}
-                <div className="absolute -top-1 -left-1 w-3.5 h-3.5 rounded-full bg-rose-500 border-2 border-white shadow-[0_0_12px_rgba(244,63,94,1)] animate-pulse" />
+                <div className="absolute -top-1.5 -left-1.5 w-4 h-4 rounded-full bg-rose-500 border-2 border-white shadow-[0_0_15px_rgba(244,63,94,1)] animate-ping opacity-75" />
+                <div className="absolute -top-1.5 -left-1.5 w-4 h-4 rounded-full bg-rose-500 border-2 border-white shadow-[0_0_10px_rgba(244,63,94,1)]" />
             </div>
         </div>
     );
@@ -358,7 +422,7 @@ export function PresentationRemoteModal({
     // Tıklama Dalgası (Click Ripple)
     const clickRippleElement = clickRipplePos && (
         <div
-            className="fixed pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full border-4 border-rose-500 bg-rose-500/25 animate-out zoom-out-150 fade-out duration-500 select-none"
+            className="fixed pointer-events-none z-[9999999] -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border-4 border-rose-500 bg-rose-500/30 animate-out zoom-out-150 fade-out duration-500 select-none"
             style={{
                 left: clickRipplePos.x,
                 top: clickRipplePos.y
@@ -366,32 +430,33 @@ export function PresentationRemoteModal({
         />
     );
 
-    // Tam ekrandayken imleci tam ekran elementine portal et
-    const renderCursorAndRipple = (
-        <>
-            {fullscreenElement ? createPortal(cursorElement, fullscreenElement) : cursorElement}
-            {fullscreenElement ? createPortal(clickRippleElement, fullscreenElement) : clickRippleElement}
-        </>
-    );
+    // Portal İçeriği: body veya aktif tam ekran kapsayıcısına ekle
+    const renderPortalContent = isMounted && portalContainer ? (
+        createPortal(
+            <>
+                {cursorElement}
+                {clickRippleElement}
+            </>,
+            portalContainer
+        )
+    ) : null;
 
     return (
         <>
-            {renderCursorAndRipple}
+            {renderPortalContent}
 
             {/* QR Kod Modalı (Sadece isOpen true iken görünür) */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 animate-in fade-in duration-200"
+                    className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 animate-in fade-in duration-200"
                     onClick={onClose}
                 >
                     <div 
                         className="relative w-full max-w-lg bg-slate-900 border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Üst Işıltı Efekti */}
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-rose-500 to-amber-500" />
 
-                        {/* Başlık ve Kapat Butonu */}
                         <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center gap-3">
                                 <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400">
@@ -457,7 +522,6 @@ export function PresentationRemoteModal({
 
                         {/* QR Kod & Kod Alanı */}
                         <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-950/60 p-5 rounded-2xl border border-white/10 mb-6">
-                            {/* QR Kod Kutusu */}
                             <div className="relative p-2.5 bg-white rounded-2xl shadow-xl flex-shrink-0 flex items-center justify-center">
                                 {qrDataUrl ? (
                                     <img 
@@ -472,7 +536,6 @@ export function PresentationRemoteModal({
                                 )}
                             </div>
 
-                            {/* Sağ Taraf: Açıklama ve Kod */}
                             <div className="flex-1 flex flex-col gap-3 text-center sm:text-left w-full">
                                 <div>
                                     <span className="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Oturum Kodu</span>

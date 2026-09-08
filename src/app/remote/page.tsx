@@ -68,8 +68,10 @@ function RemoteControlContent() {
 
     // ══ TOUCHPAD / FARE STATE & REF'LERİ ══
     const [mouseSensitivity, setMouseSensitivity] = useState<number>(1.6);
+    const [padCursor, setPadCursor] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
     const cursorPosRef = useRef<{ x: number; y: number }>({ x: 50, y: 50 });
     const lastTouchRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+    const isTouchingRef = useRef<boolean>(false);
     const touchStartTimeRef = useRef<number>(0);
     const touchTotalDistanceRef = useRef<number>(0);
     const lastSyncTimeRef = useRef<number>(0);
@@ -225,8 +227,12 @@ function RemoteControlContent() {
 
     // Touchpad Dokunma Başladı
     const handleTouchpadStart = (e: React.TouchEvent | React.MouseEvent) => {
-        const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
-        const clientY = 'touches' in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
+        const isTouch = 'touches' in e;
+        if (isTouch) isTouchingRef.current = true;
+        else if (isTouchingRef.current) return; // Touch aktifken sentetik mouse eventlerini yok say
+
+        const clientX = isTouch ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+        const clientY = isTouch ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
         lastTouchRef.current = { x: clientX, y: clientY };
         touchStartTimeRef.current = Date.now();
         touchTotalDistanceRef.current = 0;
@@ -234,10 +240,12 @@ function RemoteControlContent() {
 
     // Touchpad Parmak Kayıyor
     const handleTouchpadMove = (e: React.TouchEvent | React.MouseEvent) => {
+        const isTouch = 'touches' in e;
+        if (!isTouch && isTouchingRef.current) return;
         if ('cancelable' in e && e.cancelable) e.preventDefault();
 
-        const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
-        const clientY = 'touches' in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
+        const clientX = isTouch ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+        const clientY = isTouch ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
 
         const dx = clientX - lastTouchRef.current.x;
         const dy = clientY - lastTouchRef.current.y;
@@ -256,24 +264,41 @@ function RemoteControlContent() {
         nextY = Math.max(1, Math.min(99, Number(nextY.toFixed(2))));
 
         cursorPosRef.current = { x: nextX, y: nextY };
+        setPadCursor({ x: nextX, y: nextY });
 
         if (requestSyncRef.current) cancelAnimationFrame(requestSyncRef.current);
         requestSyncRef.current = requestAnimationFrame(syncCursorToFirestore);
     };
 
     // Touchpad Dokunma Bitti (Hızlı Dokunma = Tıklama)
-    const handleTouchpadEnd = () => {
+    const handleTouchpadEnd = (e?: React.TouchEvent | React.MouseEvent) => {
+        const isTouch = e && 'touches' in e;
+        if (isTouch) isTouchingRef.current = false;
+
+        // Kesin son konumu Firestore'a gönder (hiçbir hareketin kaybolmaması için)
+        if (sessionCode) {
+            updateDoc(doc(db, 'presentationSessions', sessionCode), {
+                cursor: {
+                    x: cursorPosRef.current.x,
+                    y: cursorPosRef.current.y,
+                    lastMoved: Date.now()
+                }
+            }).catch(() => {});
+        }
+
         const duration = Date.now() - touchStartTimeRef.current;
-        // Eğer 250ms'den kısa sürdüyse ve parmak 12px'den az hareket ettiyse TIKLAMA say
-        if (duration < 250 && touchTotalDistanceRef.current < 12) {
+        // Eğer 280ms'den kısa sürdüyse ve parmak 15px'den az hareket ettiyse TIKLAMA say
+        if (duration < 280 && touchTotalDistanceRef.current < 15) {
             handlePerformClick();
         }
     };
 
     // Tıklama Gerçekleştir
     const handlePerformClick = () => {
-        if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) {
-            window.navigator.vibrate(45);
+        if (typeof window !== 'undefined' && window.navigator && (window.navigator as any).vibrate) {
+            try {
+                (window.navigator as any).vibrate(45);
+            } catch {}
         }
         sendCommand('click', {
             x: cursorPosRef.current.x,
@@ -545,7 +570,7 @@ function RemoteControlContent() {
                         />
 
                         {/* Ortadaki Yönlendirme İkonu */}
-                        <div className="flex flex-col items-center gap-2 pointer-events-none opacity-40">
+                        <div className="flex flex-col items-center gap-2 pointer-events-none opacity-30">
                             <Touchpad className="w-12 h-12 text-indigo-400" />
                             <span className="text-xs font-black uppercase tracking-widest text-slate-300">
                                 Dokunmatik Touchpad Alanı
@@ -553,6 +578,17 @@ function RemoteControlContent() {
                             <span className="text-[10px] text-slate-400 text-center px-6">
                                 Parmağınızı kaydırarak tahtadaki fareyi hareket ettirin. Dokunarak veya alttaki butondan tıklayın.
                             </span>
+                        </div>
+
+                        {/* Tahtadaki İmlecin Telefonda Canlı Önizleme Noktası */}
+                        <div 
+                            className="absolute w-7 h-7 rounded-full bg-rose-500/80 border-2 border-white shadow-[0_0_16px_rgba(244,63,94,1)] pointer-events-none -translate-x-1/2 -translate-y-1/2 transition-[left,top] duration-75 flex items-center justify-center z-10"
+                            style={{
+                                left: `${padCursor.x}%`,
+                                top: `${padCursor.y}%`
+                            }}
+                        >
+                            <div className="w-2.5 h-2.5 rounded-full bg-white" />
                         </div>
                     </div>
 

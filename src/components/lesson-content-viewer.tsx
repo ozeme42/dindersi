@@ -3769,7 +3769,9 @@ export function StepContent({
     isSingleCardMode,
     animationSpeed = 'normal',
     fontSizeScale = 'normal',
-    hideUI = false
+    hideUI = false,
+    onNextStep,
+    onPrevStep
 }: any) {
     const isTeacher = useTeacherMode();
 
@@ -3842,7 +3844,14 @@ export function StepContent({
                  return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} />
 
             case 'pdfSlide':
-                 return <PdfSlidePlayer step={step as PdfSlideStep} isFullscreen={isFullscreen} isTeacher={isTeacher} hasBottomDock={Boolean(!hideUI)} />
+                 return <PdfSlidePlayer 
+                     step={step as PdfSlideStep} 
+                     isFullscreen={isFullscreen} 
+                     isTeacher={isTeacher} 
+                     hasBottomDock={Boolean(!hideUI)} 
+                     onNextStep={onNextStep}
+                     onPrevStep={onPrevStep}
+                 />
             
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;
@@ -4603,14 +4612,25 @@ export function LessonContentViewer({
             if ((activeEl as HTMLElement)?.isContentEditable) return;
 
             if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+                if (currentStep?.type === 'pdfSlide') {
+                    // PDF slaytı kendi iç sayfa geçişini yönetir
+                    return;
+                }
                 if (isNextButtonEnabled) {
                     e.preventDefault();
                     handleContinueOrNext();
                 }
             } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                if (currentStep?.type === 'pdfSlide') {
+                    // PDF slaytı kendi iç sayfa geçişini yönetir
+                    return;
+                }
                 e.preventDefault();
                 handlePrev();
             } else if (e.key === ' ' && !['BUTTON', 'A'].includes(activeEl?.tagName || '')) {
+                if (currentStep?.type === 'pdfSlide') {
+                    return;
+                }
                 if (isNextButtonEnabled) {
                     e.preventDefault();
                     handleContinueOrNext();
@@ -4788,6 +4808,8 @@ export function LessonContentViewer({
                     animationSpeed={animationSpeed}
                     fontSizeScale={fontSizeScale}
                     hideUI={hideUI}
+                    onNextStep={handleNext}
+                    onPrevStep={handlePrev}
                   />
                 </motion.div>
               </AnimatePresence>
