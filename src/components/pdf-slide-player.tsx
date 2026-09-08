@@ -593,7 +593,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
             {viewMode === 'slide' && numPages > 0 && (
                 <div className={cn(
                     "absolute left-1/2 -translate-x-1/2 z-30 pointer-events-auto transition-all duration-200 animate-in slide-in-from-bottom-3",
-                    (!isTrulyFullscreen && hasBottomDock) ? "bottom-14 sm:bottom-16" : "bottom-4"
+                    hasBottomDock ? "bottom-14 sm:bottom-16" : "bottom-4"
                 )}>
                     <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-2xl bg-slate-950/85 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
                         {/* İlk Slayt */}

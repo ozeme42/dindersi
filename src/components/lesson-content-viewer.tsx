@@ -3842,7 +3842,7 @@ export function StepContent({
                  return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} />
 
             case 'pdfSlide':
-                 return <PdfSlidePlayer step={step as PdfSlideStep} isFullscreen={isFullscreen} isTeacher={isTeacher} hasBottomDock={Boolean(!hideUI && !isFullscreen)} />
+                 return <PdfSlidePlayer step={step as PdfSlideStep} isFullscreen={isFullscreen} isTeacher={isTeacher} hasBottomDock={Boolean(!hideUI)} />
             
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;
@@ -4792,7 +4792,7 @@ export function LessonContentViewer({
         </div>
         
         {/* AÇMA TUŞU (Bar gizliyken görünür) - isTeacher ve hideUI true ise görünür */}
-        {isTeacher && hideUI && currentStep?.type !== 'pdfSlide' && (
+        {isTeacher && hideUI && (
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-5 fade-in">
                  <Button 
                     onClick={(e) => {
@@ -4810,8 +4810,9 @@ export function LessonContentViewer({
         {/* ══ ALT NAVİGASYON BARI (ŞEFFAF & FLOATING GLASS DOCK) ══ */}
         <div
             className={cn(
-                "flex-shrink-0 z-30 transition-all duration-300 ease-in-out relative px-3 pb-2 pt-1 w-full",
-                (hideUI || (currentStep?.type === 'pdfSlide' && (isDocFullscreen || isFullscreen))) ? "h-0 p-0 overflow-hidden opacity-0 pointer-events-none" : "opacity-100"
+                "z-30 transition-all duration-300 ease-in-out px-3 pb-2 pt-1 w-full",
+                isImmersiveStep ? "absolute bottom-0 left-0 right-0 pointer-events-none" : "flex-shrink-0 relative",
+                hideUI ? "h-0 p-0 overflow-hidden opacity-0 pointer-events-none" : "opacity-100"
             )}
             onClick={(e) => e.stopPropagation()}
         >
