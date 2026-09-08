@@ -5,6 +5,7 @@ import path from 'path';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
+import { clearStaticGameCache } from '@/lib/quiz-actions';
 import { revalidatePath } from 'next/cache';
 
 export interface ConceptItem {
@@ -31,6 +32,8 @@ export interface YazilacaklarTopicItem {
 }
 
 const YAZILACAKLAR_DIR = path.join(process.cwd(), 'public', 'curriculum', 'yazilacaklar');
+const ACTIVITIES_DIR = path.join(process.cwd(), 'public', 'curriculum', 'activities');
+const ACTIVITY_ITEMS_DIR = path.join(process.cwd(), 'public', 'curriculum', 'activityItems');
 const MANIFEST_PATH = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
 const SOURCE_TEXTS_PATH = path.join(process.cwd(), 'public', 'curriculum', 'source-texts.json');
 
@@ -54,10 +57,13 @@ const formatCourseTitle = (title: string): string => {
 
 /**
  * Loads all topics with their existing yazilacaklar (concepts and notes) and textbook source text.
+ * Also checks Etkinlik Veri Bankası (activities / activityItems) for existing definitions.
  */
 export async function loadAllYazilacaklarData(): Promise<{ success: boolean; items: YazilacaklarTopicItem[]; error?: string }> {
     try {
         await fs.mkdir(YAZILACAKLAR_DIR, { recursive: true });
+        await fs.mkdir(ACTIVITIES_DIR, { recursive: true });
+        await fs.mkdir(ACTIVITY_ITEMS_DIR, { recursive: true });
 
         // 1. Manifest
         let manifest: any = { classGroups: [] };
@@ -86,6 +92,13 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
             console.warn('Error reading yazilacaklar dir:', e);
         }
 
+        // 4. Existing Activities JSON files (Etkinlik Veri Bankası)
+        let existingActivityFiles: Set<string> = new Set();
+        try {
+            const actList = await fs.readdir(ACTIVITIES_DIR);
+            existingActivityFiles = new Set(actList.map(f => f.toLowerCase()));
+        } catch (e) {}
+
         const items: YazilacaklarTopicItem[] = [];
 
         for (const cg of manifest.classGroups || []) {
@@ -103,6 +116,7 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                         let notes: string[] = [];
                         let conceptDefinitions: ConceptItem[] = [];
 
+                        // A. Check Yazılacaklar local JSON file
                         if (existingFiles.has(jsonFileName)) {
                             try {
                                 const fileContent = await fs.readFile(path.join(YAZILACAKLAR_DIR, `${topicId}.json`), 'utf-8');
@@ -118,7 +132,26 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                             }
                         }
 
-                        // Fallback from topic object in manifest if empty
+                        // B. Check Etkinlik Veri Bankası (activities/${topicId}.json) for definitions if empty
+                        if (conceptDefinitions.length === 0 && existingActivityFiles.has(jsonFileName)) {
+                            try {
+                                const actContent = await fs.readFile(path.join(ACTIVITIES_DIR, `${topicId}.json`), 'utf-8');
+                                const parsedAct = JSON.parse(actContent);
+                                if (Array.isArray(parsedAct)) {
+                                    const defs = parsedAct.filter((it: any) => it && it.type === 'definition' && it.content?.term);
+                                    if (defs.length > 0) {
+                                        conceptDefinitions = defs.map((d: any) => ({
+                                            concept: d.content.term || d.content.concept,
+                                            definition: d.content.definition || ''
+                                        }));
+                                    }
+                                }
+                            } catch (actErr) {
+                                console.warn(`Error reading activities JSON for topic ${topicId}:`, actErr);
+                            }
+                        }
+
+                        // C. Fallback from topic object in manifest if empty
                         if (notes.length === 0 && topic.writingContent?.notes) {
                             notes = topic.writingContent.notes;
                         }
@@ -158,7 +191,11 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
 }
 
 /**
- * Saves concept definitions and notes for a specific topic to disk and Firestore.
+ * Saves concept definitions and notes for a specific topic.
+ * SYNCHRONIZES WITH BOTH:
+ * 1. Yazılacaklar (public/curriculum/yazilacaklar/*.json + writingContent)
+ * 2. Etkinlik Veri Bankası (public/curriculum/activities/*.json + public/curriculum/activityItems/*.json + Firestore activityItems)
+ * 3. Clears game cache so games (Kavram Düellosu, Anlat Bakalım, Anagram, Çarkıfelek vb.) immediately have the concepts!
  */
 export async function saveTopicYazilacaklarAction(params: {
     courseId: string;
@@ -185,12 +222,12 @@ export async function saveTopicYazilacaklarAction(params: {
             updatedAt: new Date().toISOString()
         };
 
-        // 1. Save to local public/curriculum/yazilacaklar/${topicId}.json
+        // ── 1. Save to Yazılacaklar local JSON ──
         await fs.mkdir(YAZILACAKLAR_DIR, { recursive: true });
-        const filePath = path.join(YAZILACAKLAR_DIR, `${topicId}.json`);
-        await fs.writeFile(filePath, JSON.stringify(dataToSave, null, 2), 'utf-8');
+        const yazilacaklarFilePath = path.join(YAZILACAKLAR_DIR, `${topicId}.json`);
+        await fs.writeFile(yazilacaklarFilePath, JSON.stringify(dataToSave, null, 2), 'utf-8');
 
-        // 2. Save to Firestore if available
+        // ── 2. Save to Firestore topic.writingContent ──
         try {
             const adminDb = getAdminDb();
             if (adminDb && courseId && unitId) {
@@ -203,12 +240,107 @@ export async function saveTopicYazilacaklarAction(params: {
                 }, { merge: true });
             }
         } catch (fsErr) {
-            console.warn('Firestore sync warning in saveTopicYazilacaklarAction:', fsErr);
-            // Non-fatal, local file is already written!
+            console.warn('Firestore writingContent sync warning:', fsErr);
+        }
+
+        // ── 3. SYNC WITH ETKİNLİK VERİ BANKASI (activities & activityItems) ──
+        try {
+            await fs.mkdir(ACTIVITIES_DIR, { recursive: true });
+            await fs.mkdir(ACTIVITY_ITEMS_DIR, { recursive: true });
+
+            const actFilePath = path.join(ACTIVITIES_DIR, `${topicId}.json`);
+            let existingActivityItems: any[] = [];
+            try {
+                const raw = await fs.readFile(actFilePath, 'utf-8');
+                existingActivityItems = JSON.parse(raw);
+                if (!Array.isArray(existingActivityItems)) existingActivityItems = [];
+            } catch (e) {
+                existingActivityItems = [];
+            }
+
+            // Diğer etkinlik tiplerini koru (eşleştirme, bilgi kartı, sıralama vb.)
+            const otherActivityItems = existingActivityItems.filter(
+                item => item.type !== 'definition' && item.type !== 'concept'
+            );
+
+            // Kavram tanımları ve kelime kartları oluştur
+            const syncedDefinitionItems = cleanedConcepts.map((cd, idx) => ({
+                id: `def_${topicId}_${idx}`,
+                type: 'definition',
+                topicId,
+                unitId,
+                courseId,
+                content: {
+                    term: cd.concept,
+                    definition: cd.definition
+                },
+                updatedAt: new Date().toISOString()
+            }));
+
+            const syncedConceptItems = cleanedConcepts.map((cd, idx) => ({
+                id: `concept_${topicId}_${idx}`,
+                type: 'concept',
+                topicId,
+                unitId,
+                courseId,
+                content: {
+                    text: cd.concept
+                },
+                updatedAt: new Date().toISOString()
+            }));
+
+            const allSyncedActivities = [
+                ...otherActivityItems,
+                ...syncedDefinitionItems,
+                ...syncedConceptItems
+            ];
+
+            const jsonStr = JSON.stringify(allSyncedActivities, null, 2);
+            await fs.writeFile(actFilePath, jsonStr, 'utf-8');
+            await fs.writeFile(path.join(ACTIVITY_ITEMS_DIR, `${topicId}.json`), jsonStr, 'utf-8');
+
+            // Firestore activityItems senkronizasyonu
+            try {
+                const adminDb = getAdminDb();
+                if (adminDb) {
+                    const batch = adminDb.batch();
+                    const collRef = adminDb.collection('activityItems');
+
+                    // Mevcut tanımları bul ve güncelle/ekle
+                    const existingSnap = await collRef
+                        .where('topicId', '==', topicId)
+                        .where('type', '==', 'definition')
+                        .get();
+
+                    existingSnap.docs.forEach(d => batch.delete(d.ref));
+
+                    syncedDefinitionItems.forEach(item => {
+                        const newDoc = collRef.doc();
+                        batch.set(newDoc, {
+                            type: 'definition',
+                            content: item.content,
+                            topicId,
+                            unitId,
+                            courseId,
+                            createdAt: new Date().toISOString()
+                        });
+                    });
+
+                    await batch.commit().catch(() => {});
+                }
+            } catch (actDbErr) {
+                console.warn('Firestore activityItems batch sync warning:', actDbErr);
+            }
+
+            // Oyun önbelleğini temizle ki yeni kavramlar oyunlara (Kavram Düellosu, Anlat Bakalım vb.) anında yansısın
+            await clearStaticGameCache().catch(() => {});
+        } catch (syncErr) {
+            console.warn('Etkinlik Veri Bankası sync warning:', syncErr);
         }
 
         revalidatePath('/teacher/smartboard/yazilacaklar');
-        revalidatePath(`/teacher/smartboard/yazilacaklar/oyun`);
+        revalidatePath('/teacher/smartboard/yazilacaklar/oyun');
+        revalidatePath('/teacher/activity-data');
 
         return { success: true };
     } catch (error: any) {
