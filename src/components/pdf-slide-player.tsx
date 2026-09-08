@@ -16,15 +16,9 @@ import {
     Grid,
     Loader2,
     AlertTriangle,
-    Download,
-    Info,
     Layers,
-    Sparkles,
-    RefreshCw,
     X,
-    Maximize,
-    Eye,
-    EyeOff
+    Maximize
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -102,11 +96,17 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
     // Ekranı Kapla / Sığdır Modu ('fill' = Sağ, sol, üst, alt tam dolar sıfır siyah boşluk; 'fit' = Orijinal orana sığdır)
     const [fitMode, setFitMode] = useState<'fill' | 'fit'>('fill');
 
-    // Kontrolleri Göster / Gizle (Temiz tam ekran sunumu için)
-    const [showControls, setShowControls] = useState<boolean>(true);
-
-    // Google Drive bilgi uyarısını kapatma
-    const [showDriveNotice, setShowDriveNotice] = useState<boolean>(true);
+    // Tam Ekran Tespiti (Browser fullscreen veya prop)
+    const [isFs, setIsFs] = useState(false);
+    useEffect(() => {
+        const handleFsChange = () => {
+            setIsFs(!!document.fullscreenElement);
+        };
+        handleFsChange();
+        document.addEventListener('fullscreenchange', handleFsChange);
+        return () => document.removeEventListener('fullscreenchange', handleFsChange);
+    }, []);
+    const isTrulyFullscreen = Boolean(isFullscreen || isFs);
 
     // Slayt Durumu
     const [pdfDoc, setPdfDoc] = useState<any>(null);
@@ -246,7 +246,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
             canvas.width = Math.floor(viewport.width);
             canvas.height = Math.floor(viewport.height);
 
-            // CSS piksel boyutları (dpr'a bölünerek ekranda keskin ve net durur)
+            // CSS piksel boyutları
             canvas.style.width = `${Math.floor(viewport.width / dpr)}px`;
             canvas.style.height = `${Math.floor(viewport.height / dpr)}px`;
 
@@ -428,8 +428,8 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                                 className="block m-0 p-0 bg-black flex-shrink-0 select-none shadow-none rounded-none transition-opacity duration-150"
                             />
 
-                            {/* Akıllı Tahta İçin Büyük Yan Dokunmatik Geçiş Okları */}
-                            {numPages > 1 && (
+                            {/* Akıllı Tahta Yan Dokunmatik Geçiş Okları (Sadece tam ekran DEĞİLKEN görünür) */}
+                            {!isTrulyFullscreen && numPages > 1 && (
                                 <>
                                     <button
                                         type="button"
@@ -484,8 +484,8 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                 </div>
             )}
 
-            {/* ══ 3. YÜZEN ÜST BAŞLIK VE AYARLAR BARI (ŞEFFAF GLASSMORPHISM DOCK) ══ */}
-            {showControls && (
+            {/* ══ 3. YÜZEN ÜST BAŞLIK VE AYARLAR BARI (Sadece Tam Ekran DEĞİLKEN görünür) ══ */}
+            {!isTrulyFullscreen && (
                 <div className="absolute top-3 left-3 right-3 sm:left-6 sm:right-6 z-30 flex items-center justify-between pointer-events-none animate-in fade-in duration-200">
                     {/* Sol Bilgi Kapsülü */}
                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-white/15 shadow-2xl pointer-events-auto max-w-[60%] sm:max-w-md">
@@ -548,7 +548,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                                 title={fitMode === 'fill' ? "Orijinal Orana Sığdır" : "Ekranı Tam Doldur (Sıfır Kenar Boşluğu)"}
                             >
                                 <Maximize className="w-3.5 h-3.5" />
-                                <span className="hidden md:inline">{fitMode === 'fill' ? 'Ekranı Kapla (Aktif)' : 'Ekranı Kapla'}</span>
+                                <span className="hidden md:inline">{fitMode === 'fill' ? 'Ekranı Kapla' : 'Sığdır'}</span>
                             </button>
                         )}
 
@@ -585,23 +585,16 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                                 <span className="hidden lg:inline">Sekmede Aç</span>
                             </a>
                         )}
-
-                        {/* Kontrolleri Gizle */}
-                        <button
-                            type="button"
-                            onClick={() => setShowControls(false)}
-                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
-                            title="Kontrolleri Gizle (Temiz Görünüm)"
-                        >
-                            <EyeOff className="w-3.5 h-3.5" />
-                        </button>
                     </div>
                 </div>
             )}
 
-            {/* ══ 4. YÜZEN ALT SLAYT GEÇİŞ DOCK'U (ŞEFFAF & MERKEZİ) ══ */}
-            {viewMode === 'slide' && numPages > 0 && showControls && (
-                <div className={cn("absolute left-1/2 -translate-x-1/2 z-30 pointer-events-auto transition-all duration-200 animate-in slide-in-from-bottom-3", hasBottomDock ? "bottom-14 sm:bottom-16" : "bottom-4")}>
+            {/* ══ 4. YÜZEN ALT SLAYT GEÇİŞ DOCK'U (ASIL SLAYT ÇUBUĞU - HER ZAMAN ALTTA KALIR) ══ */}
+            {viewMode === 'slide' && numPages > 0 && (
+                <div className={cn(
+                    "absolute left-1/2 -translate-x-1/2 z-30 pointer-events-auto transition-all duration-200 animate-in slide-in-from-bottom-3",
+                    (!isTrulyFullscreen && hasBottomDock) ? "bottom-14 sm:bottom-16" : "bottom-4"
+                )}>
                     <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-2xl bg-slate-950/85 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
                         {/* İlk Slayt */}
                         <button
@@ -689,53 +682,41 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                                 <ZoomIn className="w-3.5 h-3.5" />
                             </button>
                         </div>
-                    </div>
-                </div>
-            )}
 
-            {/* ══ 5. KONTROLLER GİZLENDİĞİNDE AÇMA BUTONU ══ */}
-            {!showControls && (
-                <button
-                    type="button"
-                    onClick={() => setShowControls(true)}
-                    className="absolute bottom-4 right-4 z-30 px-3 py-1.5 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-xl border border-white/20 text-white/90 text-xs font-bold flex items-center gap-2 shadow-2xl transition-all hover:scale-105 cursor-pointer"
-                    title="Kontrolleri Aç"
-                >
-                    <Eye className="w-3.5 h-3.5 text-rose-400" />
-                    <span>Slayt {currentPage} / {numPages}</span>
-                </button>
-            )}
-
-            {/* ══ 6. GOOGLE DRIVE GİZLİ DOSYA UYARISI (KAPATILABİLİR FLOATING TOAST) ══ */}
-            {isGoogleDrive && showDriveNotice && (
-                <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 max-w-xl w-[90%] bg-amber-950/90 border border-amber-500/40 rounded-2xl p-3 shadow-2xl backdrop-blur-xl flex items-center justify-between text-xs text-amber-200">
-                    <div className="flex items-center gap-2 min-w-0 pr-2">
-                        <Info className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                        <span className="text-[11px] sm:text-xs">
-                            <strong>Google Drive İpucu:</strong> Akıllı tahtada açılması için paylaşımın <em>"Bağlantıya sahip olan herkes"</em> olarak ayarlanması gerekir.
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                        <a
-                            href={rawUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[10px] sm:text-xs font-bold underline hover:text-amber-100"
-                        >
-                            Kontrol Et ↗
-                        </a>
+                        {/* Ekranı Kapla / Sığdır Geçiş Butonu */}
                         <button
                             type="button"
-                            onClick={() => setShowDriveNotice(false)}
-                            className="p-1 rounded-lg hover:bg-white/10 text-amber-300 hover:text-white"
+                            onClick={() => setFitMode(m => m === 'fill' ? 'fit' : 'fill')}
+                            className={cn(
+                                "px-2.5 py-1 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer",
+                                fitMode === 'fill' 
+                                    ? "bg-indigo-600 border-indigo-400 text-white shadow-md shadow-indigo-600/30" 
+                                    : "bg-white/10 border-white/15 text-slate-200 hover:bg-white/20"
+                            )}
+                            title={fitMode === 'fill' ? "Orijinal Orana Sığdır" : "Ekranı Tam Doldur (Sıfır Kenar Boşluğu)"}
                         >
-                            <X className="w-3.5 h-3.5" />
+                            <Maximize className="w-3.5 h-3.5" />
+                            <span className="hidden lg:inline">{fitMode === 'fill' ? 'Kapla' : 'Sığdır'}</span>
+                        </button>
+
+                        {/* Tam Ekran / Küçült Butonu */}
+                        <button
+                            type="button"
+                            onClick={toggleFullscreen}
+                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
+                            title={isTrulyFullscreen ? "Tam Ekrandan Çık (Esc)" : "Tam Ekran Yap"}
+                        >
+                            {isTrulyFullscreen ? (
+                                <Minimize2 className="w-4 h-4 text-rose-400" />
+                            ) : (
+                                <Maximize2 className="w-4 h-4" />
+                            )}
                         </button>
                     </div>
                 </div>
             )}
 
-            {/* ══ 7. TÜM SLAYTLAR GRID SEÇİCİ MODAL ══ */}
+            {/* ══ 5. TÜM SLAYTLAR GRID SEÇİCİ MODAL ══ */}
             {showThumbnails && (
                 <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl z-40 p-6 flex flex-col animate-in fade-in duration-200">
                     <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
