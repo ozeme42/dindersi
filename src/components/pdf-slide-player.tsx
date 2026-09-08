@@ -21,7 +21,8 @@ import {
     Layers,
     Sparkles,
     RefreshCw,
-    X
+    X,
+    Maximize
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -180,7 +181,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
         };
     }, [rawUrl, reloadKey, viewMode, isGoogleDrive]);
 
-    // Sayfa Çizimi (Canvas Rendering ile Mutex / Sıralı Kuyruk Koruması)
+    // Sayfa Çizimi (Canvas Rendering ile Mutex / Sıralı Kuyruk Koruması & Kusursuz Ölçekleme)
     const renderPage = useCallback(async (pageNum: number, doc: any) => {
         if (!doc || !canvasRef.current || !containerRef.current) return;
 
@@ -212,24 +213,34 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                 return;
             }
 
-            const containerWidth = Math.max(320, container.clientWidth - 24);
-            const containerHeight = Math.max(240, container.clientHeight - 24);
+            // Kapsayıcı boyutlarını subpixel hassasiyetiyle al
+            const rect = container.getBoundingClientRect();
+            // Yan oklar ve kenarlıklar için temiz nefes payı (padding)
+            const availableWidth = Math.max(280, (rect.width || container.clientWidth) - 48);
+            const availableHeight = Math.max(200, (rect.height || container.clientHeight) - 24);
 
             const unscaledViewport = page.getViewport({ scale: 1 });
-            const scaleX = containerWidth / unscaledViewport.width;
-            const scaleY = containerHeight / unscaledViewport.height;
-            const baseScale = Math.min(scaleX, scaleY);
-            const finalScale = baseScale * scale;
+            const scaleX = availableWidth / unscaledViewport.width;
+            const scaleY = availableHeight / unscaledViewport.height;
 
+            // Math.min ile sayfanın HEM ENİ HEM BOYU ekrana %100 sığdırılır, asla taşmaz/kesilmez
+            const fitScale = Math.min(scaleX, scaleY);
+            const finalScale = fitScale * scale;
+
+            // Yüksek çözünürlüklü ekranlar (Retina / 4K / Akıllı Tahta)
             const dpr = typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1;
             const viewport = page.getViewport({ scale: finalScale * dpr });
 
             canvas.width = Math.floor(viewport.width);
             canvas.height = Math.floor(viewport.height);
+
+            // CSS piksel boyutları (dpr'a bölünerek doğru fiziksel boyuta oturtulur)
             canvas.style.width = `${Math.floor(viewport.width / dpr)}px`;
             canvas.style.height = `${Math.floor(viewport.height / dpr)}px`;
 
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            // KRİTİK: Transform sıfırlanır! PDF.js viewport ölçeğini zaten kendi içinde uyguladığı için
+            // ek olarak setTransform(dpr...) çağrılırsa çift ölçekleme yapıp slaytı kırpar!
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
 
             const renderContext = {
                 canvasContext: ctx,
@@ -460,14 +471,14 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
             )}
 
             {/* ANA OYNATICI ALANI */}
-            <div className="flex-1 w-full relative overflow-hidden bg-slate-950 flex items-center justify-center">
+            <div className="flex-1 min-h-0 w-full relative overflow-hidden bg-slate-950 flex items-center justify-center">
                 {/* 1. SLAYT MODU (CANVAS İLE SAYFA SAYFA SLAYT GEÇİŞİ) */}
                 {viewMode === 'slide' && (
                     <div 
                         ref={containerRef}
                         onTouchStart={handleTouchStart}
                         onTouchEnd={handleTouchEnd}
-                        className="w-full h-full flex items-center justify-center p-2 relative overflow-hidden"
+                        className="w-full h-full flex items-center justify-center p-2 sm:p-4 relative overflow-auto"
                     >
                         {isLoading ? (
                             <div className="flex flex-col items-center justify-center gap-3 text-slate-400">
@@ -505,10 +516,10 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                             </div>
                         ) : (
                             <>
-                                {/* Canvas Slayt Görseli */}
+                                {/* Canvas Slayt Görseli (Hassas Piksel ve Gölge) */}
                                 <canvas 
                                     ref={canvasRef} 
-                                    className="max-w-full max-h-full rounded-xl shadow-2xl transition-transform duration-200 object-contain bg-white"
+                                    className="rounded-xl shadow-2xl transition-all duration-200 bg-white block flex-shrink-0"
                                 />
 
                                 {/* Kenar Dokunmatik/Tıklamalı Slayt Butonları (Akıllı Tahta İçin Büyük) */}
@@ -519,12 +530,12 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                                             onClick={goToPrevPage}
                                             disabled={currentPage <= 1}
                                             className={cn(
-                                                "absolute left-3 top-1/2 -translate-y-1/2 w-12 h-14 md:w-14 md:h-18 rounded-2xl bg-black/60 hover:bg-black/85 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer z-20 shadow-2xl",
+                                                "absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-14 md:w-14 md:h-18 rounded-2xl bg-black/60 hover:bg-black/85 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer z-20 shadow-2xl",
                                                 currentPage <= 1 ? "opacity-20 cursor-not-allowed" : "hover:scale-105 active:scale-95"
                                             )}
                                             title="Önceki Slayt (Sol Ok)"
                                         >
-                                            <ChevronLeft className="w-8 h-8 text-white drop-shadow-md" />
+                                            <ChevronLeft className="w-7 h-7 md:w-8 md:h-8 text-white drop-shadow-md" />
                                         </button>
 
                                         <button
@@ -532,12 +543,12 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                                             onClick={goToNextPage}
                                             disabled={currentPage >= numPages}
                                             className={cn(
-                                                "absolute right-3 top-1/2 -translate-y-1/2 w-12 h-14 md:w-14 md:h-18 rounded-2xl bg-black/60 hover:bg-black/85 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer z-20 shadow-2xl",
+                                                "absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-14 md:w-14 md:h-18 rounded-2xl bg-black/60 hover:bg-black/85 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer z-20 shadow-2xl",
                                                 currentPage >= numPages ? "opacity-20 cursor-not-allowed" : "hover:scale-105 active:scale-95"
                                             )}
                                             title="Sonraki Slayt (Sağ Ok veya Boşluk)"
                                         >
-                                            <ChevronRight className="w-8 h-8 text-white drop-shadow-md" />
+                                            <ChevronRight className="w-7 h-7 md:w-8 md:h-8 text-white drop-shadow-md" />
                                         </button>
                                     </>
                                 )}
@@ -662,10 +673,10 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                             <button
                                 type="button"
                                 onClick={() => setScale(1)}
-                                className="px-1.5 py-0.5 text-[10px] font-bold text-slate-400 hover:text-white cursor-pointer"
-                                title="Sığdır"
+                                className="px-2 py-0.5 text-[10px] font-bold text-slate-300 hover:text-white cursor-pointer"
+                                title="Sayfaya Sığdır (%100)"
                             >
-                                %{Math.round(scale * 100)}
+                                %{Math.round(scale * 100)} Sığdır
                             </button>
                             <button
                                 type="button"
