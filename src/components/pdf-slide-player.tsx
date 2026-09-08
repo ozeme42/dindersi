@@ -20,7 +20,8 @@ import {
     Layers,
     X,
     Maximize,
-    GripHorizontal
+    GripHorizontal,
+    EyeOff
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -111,6 +112,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
     const isTrulyFullscreen = Boolean(isFullscreen || isFs);
 
     // Slayt Durumu
+    const [isSlideBarCollapsed, setIsSlideBarCollapsed] = useState<boolean>(false);
     const [pdfDoc, setPdfDoc] = useState<any>(null);
     const [numPages, setNumPages] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -591,7 +593,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                 </div>
             )}
 
-            {/* ══ 4. YÜZEN & TAŞINABİLİR SLAYT GEÇİŞ DOCK'U (ASIL SLAYT ÇUBUĞU - İSTENDİĞİ YERE TAŞINABİLİR) ══ */}
+            {/* ══ 4. YÜZEN & TAŞINABİLİR SLAYT GEÇİŞ DOCK'U (ASIL SLAYT ÇUBUĞU - İSTENDİĞİ YERE TAŞINABİLİR / TEK SİMGE MODU) ══ */}
             {viewMode === 'slide' && numPages > 0 && (
                 <motion.div
                     drag
@@ -602,131 +604,154 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                         hasBottomDock ? "bottom-14 sm:bottom-15" : "bottom-3 sm:bottom-4"
                     )}
                 >
-                    <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.7)] select-none">
-                        {/* Taşıma Tutamacı */}
-                        <div 
-                            className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-slate-400 hover:text-white transition-colors flex items-center justify-center touch-none"
-                            title="Slayt çubuğunu ekranda istediğin yere sürükle"
+                    {isSlideBarCollapsed ? (
+                        <button
+                            type="button"
+                            onClick={() => setIsSlideBarCollapsed(false)}
+                            className="flex items-center justify-center w-11 h-11 rounded-2xl bg-slate-950/90 hover:bg-slate-900 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.7)] text-rose-400 hover:text-white transition-all backdrop-blur-xl cursor-pointer hover:scale-110 active:scale-95 group select-none"
+                            title="Slayt Çubuğunu Göster"
                         >
-                            <GripHorizontal className="w-4 h-4" />
+                            <Layers className="w-5 h-5 transition-transform group-hover:scale-110" />
+                        </button>
+                    ) : (
+                        <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.7)] select-none">
+                            {/* Taşıma Tutamacı */}
+                            <div 
+                                className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-slate-400 hover:text-white transition-colors flex items-center justify-center touch-none"
+                                title="Slayt çubuğunu ekranda istediğin yere sürükle"
+                            >
+                                <GripHorizontal className="w-4 h-4" />
+                            </div>
+                            {/* İlk Slayt */}
+                            <button
+                                type="button"
+                                onClick={goToFirstPage}
+                                disabled={currentPage <= 1}
+                                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-300 hover:text-white border border-white/10 transition-all cursor-pointer"
+                                title="İlk Slayt (Home)"
+                            >
+                                <ChevronsLeft className="w-4 h-4" />
+                            </button>
+
+                            {/* Önceki Slayt */}
+                            <button
+                                type="button"
+                                onClick={goToPrevPage}
+                                disabled={currentPage <= 1}
+                                className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                                title="Önceki Slayt (Sol Ok)"
+                            >
+                                <ChevronLeft className="w-4 h-4" />
+                                <span className="hidden sm:inline">Önceki</span>
+                            </button>
+
+                            {/* Slayt Seçici Rozet (Grid Listeyi Açar) */}
+                            <button
+                                type="button"
+                                onClick={() => setShowThumbnails(true)}
+                                className="px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs md:text-sm shadow-lg shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95"
+                                title="Tüm Slaytları Görüntüle"
+                            >
+                                <Grid className="w-3.5 h-3.5" />
+                                <span>{currentPage} / {numPages}</span>
+                            </button>
+
+                            {/* Sonraki Slayt */}
+                            <button
+                                type="button"
+                                onClick={goToNextPage}
+                                disabled={currentPage >= numPages}
+                                className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                                title="Sonraki Slayt (Sağ Ok veya Boşluk)"
+                            >
+                                <span className="hidden sm:inline">Sonraki</span>
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
+
+                            {/* Son Slayt */}
+                            <button
+                                type="button"
+                                onClick={goToLastPage}
+                                disabled={currentPage >= numPages}
+                                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-300 hover:text-white border border-white/10 transition-all cursor-pointer"
+                                title="Son Slayt (End)"
+                            >
+                                <ChevronsRight className="w-4 h-4" />
+                            </button>
+
+                            <div className="w-px h-5 bg-white/15 hidden md:block" />
+
+                            {/* Yakınlaştırma & Sığdırma Kontrolleri */}
+                            <div className="hidden md:flex items-center gap-1 bg-black/40 border border-white/10 rounded-xl p-0.5">
+                                <button
+                                    type="button"
+                                    onClick={() => setScale(s => Math.max(0.6, Number((s - 0.15).toFixed(2))))}
+                                    className="p-1 rounded-lg hover:bg-white/15 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                                    title="Uzaklaştır"
+                                >
+                                    <ZoomOut className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setScale(1)}
+                                    className="px-2 py-0.5 text-[11px] font-bold text-slate-300 hover:text-white transition-colors cursor-pointer"
+                                    title="Yakınlaştırmayı Sıfırla (%100)"
+                                >
+                                    %{Math.round(scale * 100)}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setScale(s => Math.min(2.5, Number((s + 0.15).toFixed(2))))}
+                                    className="p-1 rounded-lg hover:bg-white/15 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                                    title="Yakınlaştır"
+                                >
+                                    <ZoomIn className="w-3.5 h-3.5" />
+                                </button>
+                            </div>
+
+                            {/* Ekranı Kapla / Sığdır Geçiş Butonu */}
+                            <button
+                                type="button"
+                                onClick={() => setFitMode(m => m === 'fill' ? 'fit' : 'fill')}
+                                className={cn(
+                                    "px-2.5 py-1 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer",
+                                    fitMode === 'fill' 
+                                        ? "bg-indigo-600 border-indigo-400 text-white shadow-md shadow-indigo-600/30" 
+                                        : "bg-white/10 border-white/15 text-slate-200 hover:bg-white/20"
+                                )}
+                                title={fitMode === 'fill' ? "Orijinal Orana Sığdır" : "Ekranı Tam Doldur (Sıfır Kenar Boşluğu)"}
+                            >
+                                <Maximize className="w-3.5 h-3.5" />
+                                <span className="hidden lg:inline">{fitMode === 'fill' ? 'Kapla' : 'Sığdır'}</span>
+                            </button>
+
+                            {/* Tam Ekran / Küçült Butonu */}
+                            <button
+                                type="button"
+                                onClick={toggleFullscreen}
+                                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
+                                title={isTrulyFullscreen ? "Tam Ekrandan Çık (Esc)" : "Tam Ekran Yap"}
+                            >
+                                {isTrulyFullscreen ? (
+                                    <Minimize2 className="w-4 h-4 text-rose-400" />
+                                ) : (
+                                    <Maximize2 className="w-4 h-4" />
+                                )}
+                            </button>
+
+                            <div className="w-px h-5 bg-white/15" />
+
+                            {/* Slayt Çubuğunu Gizle (Tek Simgeye Küçült) */}
+                            <button
+                                type="button"
+                                onClick={() => setIsSlideBarCollapsed(true)}
+                                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
+                                title="Slayt Çubuğunu Gizle (Tek Simgeye Küçült)"
+                            >
+                                <EyeOff className="w-4 h-4" />
+                            </button>
                         </div>
-                        {/* İlk Slayt */}
-                        <button
-                            type="button"
-                            onClick={goToFirstPage}
-                            disabled={currentPage <= 1}
-                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-300 hover:text-white border border-white/10 transition-all cursor-pointer"
-                            title="İlk Slayt (Home)"
-                        >
-                            <ChevronsLeft className="w-4 h-4" />
-                        </button>
-
-                        {/* Önceki Slayt */}
-                        <button
-                            type="button"
-                            onClick={goToPrevPage}
-                            disabled={currentPage <= 1}
-                            className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
-                            title="Önceki Slayt (Sol Ok)"
-                        >
-                            <ChevronLeft className="w-4 h-4" />
-                            <span className="hidden sm:inline">Önceki</span>
-                        </button>
-
-                        {/* Slayt Seçici Rozet (Grid Listeyi Açar) */}
-                        <button
-                            type="button"
-                            onClick={() => setShowThumbnails(true)}
-                            className="px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs md:text-sm shadow-lg shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95"
-                            title="Tüm Slaytları Görüntüle"
-                        >
-                            <Grid className="w-3.5 h-3.5" />
-                            <span>{currentPage} / {numPages}</span>
-                        </button>
-
-                        {/* Sonraki Slayt */}
-                        <button
-                            type="button"
-                            onClick={goToNextPage}
-                            disabled={currentPage >= numPages}
-                            className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
-                            title="Sonraki Slayt (Sağ Ok veya Boşluk)"
-                        >
-                            <span className="hidden sm:inline">Sonraki</span>
-                            <ChevronRight className="w-4 h-4" />
-                        </button>
-
-                        {/* Son Slayt */}
-                        <button
-                            type="button"
-                            onClick={goToLastPage}
-                            disabled={currentPage >= numPages}
-                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-300 hover:text-white border border-white/10 transition-all cursor-pointer"
-                            title="Son Slayt (End)"
-                        >
-                            <ChevronsRight className="w-4 h-4" />
-                        </button>
-
-                        <div className="w-px h-5 bg-white/15 hidden md:block" />
-
-                        {/* Yakınlaştırma & Sığdırma Kontrolleri */}
-                        <div className="hidden md:flex items-center gap-1 bg-black/40 border border-white/10 rounded-xl p-0.5">
-                            <button
-                                type="button"
-                                onClick={() => setScale(s => Math.max(0.6, Number((s - 0.15).toFixed(2))))}
-                                className="p-1 rounded-lg hover:bg-white/15 text-slate-300 hover:text-white transition-colors cursor-pointer"
-                                title="Uzaklaştır"
-                            >
-                                <ZoomOut className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setScale(1)}
-                                className="px-2 py-0.5 text-[11px] font-bold text-slate-300 hover:text-white transition-colors cursor-pointer"
-                                title="Yakınlaştırmayı Sıfırla (%100)"
-                            >
-                                %{Math.round(scale * 100)}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setScale(s => Math.min(2.5, Number((s + 0.15).toFixed(2))))}
-                                className="p-1 rounded-lg hover:bg-white/15 text-slate-300 hover:text-white transition-colors cursor-pointer"
-                                title="Yakınlaştır"
-                            >
-                                <ZoomIn className="w-3.5 h-3.5" />
-                            </button>
-                        </div>
-
-                        {/* Ekranı Kapla / Sığdır Geçiş Butonu */}
-                        <button
-                            type="button"
-                            onClick={() => setFitMode(m => m === 'fill' ? 'fit' : 'fill')}
-                            className={cn(
-                                "px-2.5 py-1 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer",
-                                fitMode === 'fill' 
-                                    ? "bg-indigo-600 border-indigo-400 text-white shadow-md shadow-indigo-600/30" 
-                                    : "bg-white/10 border-white/15 text-slate-200 hover:bg-white/20"
-                            )}
-                            title={fitMode === 'fill' ? "Orijinal Orana Sığdır" : "Ekranı Tam Doldur (Sıfır Kenar Boşluğu)"}
-                        >
-                            <Maximize className="w-3.5 h-3.5" />
-                            <span className="hidden lg:inline">{fitMode === 'fill' ? 'Kapla' : 'Sığdır'}</span>
-                        </button>
-
-                        {/* Tam Ekran / Küçült Butonu */}
-                        <button
-                            type="button"
-                            onClick={toggleFullscreen}
-                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
-                            title={isTrulyFullscreen ? "Tam Ekrandan Çık (Esc)" : "Tam Ekran Yap"}
-                        >
-                            {isTrulyFullscreen ? (
-                                <Minimize2 className="w-4 h-4 text-rose-400" />
-                            ) : (
-                                <Maximize2 className="w-4 h-4" />
-                            )}
-                        </button>
-                    </div>
+                    )}
                 </motion.div>
             )}
 

@@ -4791,7 +4791,7 @@ export function LessonContentViewer({
            </div>
         </div>
         
-        {/* AÇMA TUŞU (Bar gizliyken görünür) - isTeacher ve hideUI true ise görünür */}
+        {/* AÇMA TUŞU (Bar gizliyken görünür) - isTeacher ve hideUI true ise görünür (Sadece simge) */}
         {isTeacher && hideUI && (
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-5 fade-in pointer-events-auto">
                  <button 
@@ -4799,10 +4799,10 @@ export function LessonContentViewer({
                          e.stopPropagation();
                          setHideUI(false);
                     }}
-                    className="rounded-full px-4 h-9 bg-slate-900/90 shadow-2xl border border-white/20 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 transition-all backdrop-blur-xl cursor-pointer hover:scale-105 active:scale-95"
+                    className="w-10 h-10 rounded-full bg-slate-900/90 shadow-2xl border border-white/20 hover:bg-slate-800 text-white flex items-center justify-center transition-all backdrop-blur-xl cursor-pointer hover:scale-110 active:scale-95"
+                    title="Menüyü Göster"
                  >
-                    <ChevronUp className="w-4 h-4" />
-                    <span>Menüyü Göster</span>
+                    <ChevronUp className="w-5 h-5" />
                  </button>
             </div>
         )}
