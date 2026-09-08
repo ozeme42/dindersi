@@ -1459,15 +1459,20 @@ export const FlashcardItem = ({
 // 7. GÜNCELLENMİŞ AnagramGame
 function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNext, isTeacher, isFullscreen }: { step: AnagramStep, onAnswer: (answer: string) => void, answer: { answer: string, isCorrect: boolean } | null, isAnswerRevealed: boolean, onCorrectAndNext: () => void, isTeacher?: boolean, isFullscreen?: boolean }) {
     
-    const targetWords = useMemo(() => step.correctAnswer.split(' '), [step.correctAnswer]);
-    const targetStringClean = useMemo(() => step.correctAnswer.replace(/\s+/g, '').toLocaleUpperCase('tr-TR'), [step.correctAnswer]);
+    const targetWords = useMemo(() => (step.correctAnswer || '').trim().split(/\s+/).filter(Boolean), [step.correctAnswer]);
+    const targetStringClean = useMemo(() => (step.correctAnswer || '').replace(/\s+/g, '').toLocaleUpperCase('tr-TR'), [step.correctAnswer]);
 
-    const initialLetters = useMemo(() => 
-        step.scrambledWord.toLocaleUpperCase('tr-TR').split('').map((letter, index) => ({ id: index, letter }))
-    , [step.scrambledWord]);
+    type AnagramLetterItem = { id: number; letter: string };
 
-    const [bankLetters, setBankLetters] = useState(initialLetters);
-    const [constructedLetters, setConstructedLetters] = useState<(typeof initialLetters[0])[]>([]);
+    const getLettersFromStep = useCallback((): AnagramLetterItem[] => {
+        const raw = (step.scrambledWord || (step as any).word || step.correctAnswer || '').trim();
+        return raw ? raw.toLocaleUpperCase('tr-TR').split('').map((letter: string, index: number) => ({ id: index, letter })) : [];
+    }, [step.scrambledWord, (step as any).word, step.correctAnswer]);
+
+    const initialLetters = useMemo<AnagramLetterItem[]>(() => getLettersFromStep(), [getLettersFromStep]);
+
+    const [bankLetters, setBankLetters] = useState<AnagramLetterItem[]>(initialLetters);
+    const [constructedLetters, setConstructedLetters] = useState<AnagramLetterItem[]>([]);
     const [shakingLetterId, setShakingLetterId] = useState<number | null>(null);
 
     const letterColors = [
@@ -1482,10 +1487,10 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
     ];
 
     useEffect(() => {
-        setBankLetters(step.scrambledWord.toLocaleUpperCase('tr-TR').split('').map((letter, index) => ({ id: index, letter })));
+        setBankLetters(getLettersFromStep());
         setConstructedLetters([]);
         setShakingLetterId(null);
-    }, [step]);
+    }, [step, getLettersFromStep]);
       
     const handleLetterClick = (clickedLetter: typeof initialLetters[0]) => {
         if (isAnswerRevealed) return;
@@ -1679,9 +1684,26 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
 // 8. SentenceScrambleGame (GÜNCELLENDİ: BİTİŞ KONTROLÜ)
 function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnswerRevealed }: { step: SentenceScrambleStep, onAnswer: (answer: string) => void, onCorrectAndNext: () => void, answer?: { answer: string, isCorrect: boolean } | null, isAnswerRevealed: boolean }) {
     const isTeacher = useTeacherMode();
-    const initialWords = useMemo(() => step.scrambledSentence.split(' ').map((word, index) => ({ id: index, word })), [step.scrambledSentence]);
-    const [bankWords, setBankWords] = useState(initialWords);
-    const [constructedWords, setConstructedWords] = useState<(typeof initialWords[0])[]>([]);
+
+    type ScrambleWordItem = { id: number; word: string };
+
+    const getWordsFromStep = useCallback((): ScrambleWordItem[] => {
+        let text = (step.scrambledSentence || (step as any).sentence || (step as any).scrambled || '').trim();
+        if (!text && step.correctSentence) {
+            const words = step.correctSentence.trim().split(/\s+/).filter(Boolean);
+            if (words.length > 1) {
+                text = [...words].sort(() => Math.random() - 0.5).join(' ');
+            } else {
+                text = step.correctSentence.trim();
+            }
+        }
+        if (!text) return [];
+        return text.split(/\s+/).filter(Boolean).map((word: string, index: number) => ({ id: index, word }));
+    }, [step.scrambledSentence, (step as any).sentence, (step as any).scrambled, step.correctSentence]);
+
+    const initialWords = useMemo<ScrambleWordItem[]>(() => getWordsFromStep(), [getWordsFromStep]);
+    const [bankWords, setBankWords] = useState<ScrambleWordItem[]>(initialWords);
+    const [constructedWords, setConstructedWords] = useState<ScrambleWordItem[]>([]);
     const [mistakenWordId, setMistakenWordId] = useState<number | null>(null);
 
     const wordColors = [
@@ -1696,14 +1718,15 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
     ];
 
     useEffect(() => {
-        setBankWords(step.scrambledSentence.split(' ').map((word, index) => ({ id: index, word })));
+        setBankWords(getWordsFromStep());
         setConstructedWords([]);
         setMistakenWordId(null);
-    }, [step]);
+    }, [step, getWordsFromStep]);
 
     const handleWordClick = (clickedWord: typeof initialWords[0]) => {
         if (isAnswerRevealed || mistakenWordId !== null) return;
-        const correctWordArray = step.correctSentence.split(' ');
+        const correctText = (step.correctSentence || step.scrambledSentence || (step as any).sentence || '').trim();
+        const correctWordArray = correctText ? correctText.split(/\s+/).filter(Boolean) : [];
         const nextCorrectWord = correctWordArray[constructedWords.length];
         if (clickedWord.word === nextCorrectWord) {
             playSound('correct');
