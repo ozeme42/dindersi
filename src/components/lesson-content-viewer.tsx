@@ -12,12 +12,12 @@ import {
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
     PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Palette, Pencil,
     RotateCw, RotateCcw, ZoomIn, ZoomOut, Grid2X2, Grid3X3, HelpCircle, MessageSquare,
-    Play, Pause, Timer, Clock, Compass, BookOpen
+    Play, Pause, Timer, Clock, Compass, BookOpen, FileText, ExternalLink
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
     Topic, ActivityLinkStep, VisualStep, McqStep, TfStep, FlashcardStep, TrueFalseListStep, 
-    HtmlSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, 
+    HtmlSlideStep, PdfSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, 
     ConceptExplanationStep, ObjectiveListStep, VideoStep, Question, AnagramGameStep, HookQuestionStep,
     NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn
 } from "@/lib/types";
@@ -1784,6 +1784,102 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
         </div>
     );
 };
+
+
+// 9.5. PdfSlidePlayer
+function PdfSlidePlayer({ step, isFullscreen }: { step: PdfSlideStep; isFullscreen?: boolean }) {
+    const [reloadKey, setReloadKey] = useState<number>(0);
+
+    const embedUrl = useMemo(() => {
+        let url = (step.pdfUrl || '').trim();
+        if (!url) return '';
+
+        // Google Drive: /view veya /edit -> /preview
+        if (url.includes('drive.google.com')) {
+            url = url.replace(/\/view(\?.*)?$/, '/preview')
+                     .replace(/\/edit(\?.*)?$/, '/preview');
+            if (!url.includes('/preview')) {
+                url = url.replace(/\/file\/d\/([^\/]+).*/, '/file/d/$1/preview');
+            }
+            return url;
+        }
+
+        // Canva: /view veya link -> embed linki
+        if (url.includes('canva.com')) {
+            if (!url.includes('embed')) {
+                const separator = url.includes('?') ? '&' : '?';
+                return `${url}${separator}embed`;
+            }
+            return url;
+        }
+
+        return url;
+    }, [step.pdfUrl]);
+
+    const isDrive = step.pdfUrl?.includes('drive.google.com');
+    const isCanva = step.pdfUrl?.includes('canva.com');
+    const isLocal = step.pdfUrl?.startsWith('/uploads/');
+
+    return (
+        <div className="w-full h-full flex flex-col p-2 md:p-4">
+            {/* Üst Bilgi ve Araç Çubuğu */}
+            <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border border-white/10 rounded-2xl mb-3 backdrop-blur-md flex-shrink-0">
+                <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="p-1.5 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex-shrink-0">
+                        <FileText className="w-4 h-4" />
+                    </span>
+                    <span className="font-black text-xs sm:text-sm text-white truncate max-w-xs sm:max-w-md">
+                        {step.title || 'PDF / Sunu Slaytı'}
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/10 text-slate-400 flex-shrink-0">
+                        {isDrive ? '📁 Google Drive' : isCanva ? '🎨 Canva' : isLocal ? '💾 Yüklenen PDF' : '📄 PDF Sunusu'}
+                    </span>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                        type="button"
+                        onClick={() => setReloadKey(k => k + 1)}
+                        className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors"
+                        title="Yeniden Yükle"
+                    >
+                        <RotateCcw className="w-4 h-4" />
+                    </button>
+                    {step.pdfUrl && (
+                        <a
+                            href={step.pdfUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-colors"
+                            title="Yeni Sekmede Aç"
+                        >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">Yeni Sekmede Aç</span>
+                        </a>
+                    )}
+                </div>
+            </div>
+
+            {/* İçerik / iFrame */}
+            <div className="flex-1 w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-950 relative">
+                {embedUrl ? (
+                    <iframe
+                        key={reloadKey}
+                        src={embedUrl}
+                        title={step.title || 'PDF Sunumu'}
+                        className="w-full h-full border-0 bg-slate-900"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                    />
+                ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-2">
+                        <FileText className="w-12 h-12 text-slate-600" />
+                        <p className="text-sm font-bold">Geçerli bir PDF veya sunum bağlantısı bulunamadı.</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
 
 // 9. HtmlSlidePlayer
 function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, onSlideScrolledToEnd: () => void }) {
@@ -4216,7 +4312,7 @@ export function LessonContentViewer({
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
 
     // Görsel veya HTML Slide adımı mı?
-    const isImmersiveStep = ['visual', 'htmlSlide'].includes(currentStep?.type || '');
+    const isImmersiveStep = ['visual', 'htmlSlide', 'pdfSlide'].includes(currentStep?.type || '');
     const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
 
     useEffect(() => {
@@ -4310,7 +4406,7 @@ export function LessonContentViewer({
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     
-    const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable';
+    const isFullWidthStep = isActivityStep || isHtmlSlideStep || currentStep?.type === 'pdfSlide' || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable';
       
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
@@ -4371,7 +4467,7 @@ export function LessonContentViewer({
             }
         }
 
-        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide'].includes(currentStep.type)) {
+        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide', 'pdfSlide'].includes(currentStep.type)) {
             if (internalProgress.answers[currentStepIndex] === undefined) {
                 const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
                 setInternalProgress(prev => ({...prev, answers: newAnswers }));

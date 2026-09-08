@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import isEqual from 'lodash.isequal';
 import {
     Dialog,
@@ -19,14 +19,15 @@ import {
     Loader2, PlusCircle, Trash2, Save, FileEdit, Database, 
     List, Library, ArrowLeft, ArrowRight, CheckCircle2, XCircle,
     Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles,
-    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye
+    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload
 } from 'lucide-react';
 import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
+import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import type { 
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
     FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, 
-    VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, HookQuestionStep,
+    VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, PdfSlideStep, HookQuestionStep,
     NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -119,6 +120,12 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
         ];
     }
 
+    
+    // pdfSlide normalizasyonu
+    if (normalized.type === 'pdfSlide') {
+        normalized.pdfUrl = normalized.pdfUrl || '';
+    }
+
     return normalized as LessonStep;
 };
 
@@ -139,7 +146,116 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     const [aiRefinePrompt, setAiRefinePrompt] = useState('');
     const [isAiRefining, setIsAiRefining] = useState(false);
     const [isAiRefineOpen, setIsAiRefineOpen] = useState(true);
+    
     const [isHtmlPreviewActive, setIsHtmlPreviewActive] = useState(true);
+    const [isAiGeneratingHtmlSlide, setIsAiGeneratingHtmlSlide] = useState(false);
+    const [isUploadingPdf, setIsUploadingPdf] = useState(false);
+    const pdfFileInputRef = useRef<HTMLInputElement>(null);
+
+    const handlePdfFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
+            toast({ title: "Hata", description: "Lütfen sadece geçerli bir PDF dosyası seçin.", variant: "destructive" });
+            return;
+        }
+
+        setIsUploadingPdf(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const res = await fetch('/api/upload-pdf', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await res.json();
+
+            if (data.success && data.url) {
+                handleValueChange('pdfUrl', data.url);
+                toast({
+                    title: "PDF Yüklendi! 📄",
+                    description: `${file.name} başarıyla sunucuya yüklendi ve bağlandı.`,
+                });
+            } else {
+                toast({
+                    title: "Yükleme Hatası",
+                    description: data.error || "PDF dosyası yüklenemedi.",
+                    variant: "destructive",
+                });
+            }
+        } catch (err: any) {
+            toast({
+                title: "Hata",
+                description: err.message || "Dosya yüklenirken bağlantı hatası oluştu.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsUploadingPdf(false);
+            if (pdfFileInputRef.current) pdfFileInputRef.current.value = '';
+        }
+    };
+
+    const handleAiGenerateMultiSlide = async () => {
+        setIsAiGeneratingHtmlSlide(true);
+        try {
+            const activeKey = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_api_key') : '') || undefined;
+            const activeModel = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_model') : '') || 'gemini-3.6-flash';
+            const topicText = context?.sourceText || context?.topicTitle || editedStep?.title || 'Ders Konusu';
+
+            toast({
+                title: "AI Sunumu Hazırlıyor...",
+                description: "Canva/Gamma kalitesinde, çok sayfalı interaktif sunum motoru üretiliyor...",
+            });
+
+            const res = await generateHtmlSlide({
+                topicSummary: topicText,
+                slideCount: 5,
+                apiKey: activeKey,
+                modelName: activeModel,
+            });
+
+            if (res && res.htmlContent) {
+                handleValueChange('htmlContent', res.htmlContent);
+                setIsHtmlPreviewActive(true);
+                toast({
+                    title: "İnteraktif Slayt Sunumu Hazır! ✨",
+                    description: "5 slaytlık, klavye ok tuşları ve dokunmatik geçiş destekli sunum üretildi.",
+                    className: "bg-purple-950 border-purple-500 text-white"
+                });
+            }
+        } catch (err: any) {
+            toast({
+                title: "Üretim Hatası",
+                description: err.message || "AI slayt sunumunu üretemedi.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsAiGeneratingHtmlSlide(false);
+        }
+    };
+
+    const formatPdfEmbedUrl = (rawUrl: string) => {
+        let url = (rawUrl || '').trim();
+        if (!url) return '';
+        if (url.includes('drive.google.com')) {
+            url = url.replace(/\/view(\?.*)?$/, '/preview').replace(/\/edit(\?.*)?$/, '/preview');
+            if (!url.includes('/preview')) {
+                url = url.replace(/\/file\/d\/([^\/]+).*/, '/file/d/$1/preview');
+            }
+            return url;
+        }
+        if (url.includes('canva.com')) {
+            if (!url.includes('embed')) {
+                const separator = url.includes('?') ? '&' : '?';
+                return `${url}${separator}embed`;
+            }
+            return url;
+        }
+        return url;
+    };
+
     
     const { toast } = useToast();
     const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[]})[]})[]>([]);
@@ -1613,6 +1729,98 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                     )}
                                 </div>
                             )}
+                        </div>
+                    </div>
+                );
+            }
+
+            
+            case 'pdfSlide': {
+                const pdfStep = editedStep as PdfSlideStep;
+                return (
+                    <div className="space-y-4">
+                        {/* Desteklenen Formatlar ve Rehber */}
+                        <div className="p-3.5 bg-slate-900/80 border border-white/10 rounded-2xl space-y-2">
+                            <div className="flex items-center gap-2">
+                                <span className="p-1 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                                    <FileText className="w-4 h-4" />
+                                </span>
+                                <span className="font-bold text-xs text-white">PDF & Sunum Slayt Entegrasyonu</span>
+                            </div>
+                            <p className="text-[11px] text-slate-400 leading-relaxed">
+                                NotebookLM veya Canva'dan aldığınız sunumları, Google Drive bağlantılarını ya da doğrudan PDF linklerini burada akıllı tahta uyumlu olarak görüntüleyebilirsiniz.
+                            </p>
+                            <div className="flex flex-wrap gap-1.5 pt-1">
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-300">
+                                    ✓ Google Drive (Otomatik /preview)
+                                </span>
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-950/60 border border-purple-500/40 text-purple-300">
+                                    ✓ Canva Sunumu (Gömme Linki)
+                                </span>
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/40 text-cyan-300">
+                                    ✓ Doğrudan PDF URL'si
+                                </span>
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-950/60 border border-amber-500/40 text-amber-300">
+                                    ✓ Bilgisayardan PDF Yükle (Ücretsiz)
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* URL Girişi ve Dosya Yükleme Butonu */}
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold text-slate-300">PDF veya Sunum Bağlantısı (URL):</Label>
+                            <div className="flex gap-2">
+                                <Input 
+                                    value={pdfStep.pdfUrl || ''} 
+                                    onChange={e => handleValueChange('pdfUrl', e.target.value)} 
+                                    placeholder="Örn: https://drive.google.com/file/d/.../view veya Canva linki"
+                                    className="bg-slate-900 border-white/10 text-xs rounded-xl text-white placeholder:text-slate-500 focus:border-rose-500 flex-1"
+                                />
+                                <input 
+                                    type="file" 
+                                    ref={pdfFileInputRef} 
+                                    accept=".pdf,application/pdf" 
+                                    className="hidden" 
+                                    onChange={handlePdfFileUpload} 
+                                />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => pdfFileInputRef.current?.click()}
+                                    disabled={isUploadingPdf}
+                                    className="border-white/15 bg-white/5 hover:bg-white/10 text-slate-200 text-xs font-bold rounded-xl h-9 px-3 flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
+                                >
+                                    {isUploadingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin text-rose-400" /> : <Upload className="w-3.5 h-3.5 text-rose-400" />}
+                                    <span>{isUploadingPdf ? "Yükleniyor..." : "PDF Yükle"}</span>
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Canlı Önizleme */}
+                        <div className="space-y-1.5">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
+                                    <Eye className="w-3.5 h-3.5 text-indigo-400" /> Canlı Slayt Önizlemesi:
+                                </Label>
+                                {pdfStep.pdfUrl && (
+                                    <span className="text-[10px] text-emerald-400 font-mono">Bağlantı Hazır</span>
+                                )}
+                            </div>
+                            <div className="w-full h-[360px] rounded-2xl overflow-hidden border border-white/10 bg-slate-950 flex items-center justify-center">
+                                {pdfStep.pdfUrl ? (
+                                    <iframe 
+                                        src={formatPdfEmbedUrl(pdfStep.pdfUrl)} 
+                                        className="w-full h-full border-0 bg-slate-900" 
+                                        title="PDF Önizleme" 
+                                        allowFullScreen
+                                    />
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center text-slate-500 text-xs gap-2">
+                                        <FileText className="w-10 h-10 text-slate-600" />
+                                        <p>Yukarıya bir bağlantı girdiğinizde veya PDF yüklediğinizde önizleme burada belirecektir.</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 );

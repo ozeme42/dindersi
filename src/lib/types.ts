@@ -121,6 +121,14 @@ export type ActivityLinkStep = {
   isPublished?: boolean; 
 };
 export type HtmlSlideStep = { type: 'htmlSlide'; title: string; htmlContent: string; isPublished?: boolean; };
+export type PdfSlideStep = { 
+  type: 'pdfSlide'; 
+  title: string; 
+  pdfUrl: string; 
+  provider?: 'direct' | 'google-drive' | 'canva' | 'custom'; 
+  startPage?: number; 
+  isPublished?: boolean; 
+};
 export type VideoStep = { type: 'video'; title: string; url: string; description?: string; isPublished?: boolean; };
 export type AnagramGameStep = { type: 'anagramGame'; title: string; cards: AnagramCard[]; isPublished?: boolean; };
 
@@ -236,6 +244,7 @@ export type LessonStep =
   | ActivityLinkStep
   | ConceptMapStep
   | HtmlSlideStep
+  | PdfSlideStep
   | ConceptExplanationStep
   | AnagramGameStep
   | VideoStep

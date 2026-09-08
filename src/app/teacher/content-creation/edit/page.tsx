@@ -104,6 +104,7 @@ function StepCard({
             case 'video': return { label: 'Video', color: 'text-red-400 border-red-500/30 bg-red-500/10', icon: <Video className="w-4 h-4 text-red-400" /> };
             case 'activityLink': return { label: 'Oyun', color: 'text-orange-400 border-orange-500/30 bg-orange-500/10', icon: <Gamepad2 className="w-4 h-4 text-orange-400" /> };
             case 'htmlSlide': return { label: 'HTML Slayt', color: 'text-sky-400 border-sky-500/30 bg-sky-500/10', icon: <FileText className="w-4 h-4 text-sky-400" /> };
+            case 'pdfSlide': return { label: 'PDF / Sunum', color: 'text-rose-400 border-rose-500/30 bg-rose-500/10', icon: <FileText className="w-4 h-4 text-rose-400" /> };
             case 'matching':
             case 'conceptMatching': return { label: 'Eşleştirme', color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10', icon: <Shuffle className="w-4 h-4 text-indigo-400" /> };
             case 'accordion': return { label: 'Özet', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <Layers className="w-4 h-4 text-emerald-400" /> };
@@ -411,6 +412,7 @@ function InsertStepDivider({
                             { label: '🖼️ Görsel / Resim', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
                             { label: '🌐 Web Simülasyonu (iFrame)', type: 'iframe' as LessonStep['type'], title: 'İnteraktif Simülasyon' },
                             { label: '💻 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
+                            { label: '📑 PDF / Sunu Slaytı (Drive, Canva, Link)', type: 'pdfSlide' as LessonStep['type'], title: 'PDF / Sunu Slaytı' },
                         ].map(opt => (
                             <DropdownMenuItem 
                                 key={opt.label} 
@@ -721,6 +723,7 @@ export function TopicEditor({
             case 'sentenceScramble': newStep = { type, title: defaultTitle, scrambledSentence: 'bir bu cümledir karışık', correctSentence: 'bu bir karışık cümledir' }; break;
             case 'iframe': newStep = { type, title: defaultTitle, url: 'https://phet.colorado.edu/tr/simulations/list' }; break;
             case 'htmlSlide': newStep = { type: 'htmlSlide', title: 'İnteraktif Sunum', htmlContent: '<div class="p-8 bg-slate-900 rounded-3xl text-white text-center"><h1 class="text-3xl font-black mb-4">Başlık</h1><p class="text-slate-300">İçerik buraya gelecek.</p></div>' }; break;
+            case 'pdfSlide': newStep = { type: 'pdfSlide', title: defaultTitle || 'PDF / Sunu Slaytı', pdfUrl: '' }; break;
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': 
                 newStep = {
@@ -1066,6 +1069,7 @@ export function TopicEditor({
         { label: 'Görsel / Şema', type: 'visual', defaultTitle: 'Görsel' },
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'İnteraktif HTML Slayt', type: 'htmlSlide', defaultTitle: 'İnteraktif Sunum' },
+        { label: 'PDF / Sunu Slaytı', type: 'pdfSlide', defaultTitle: 'PDF / Sunu Slaytı' },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
         { label: 'Veri Bankası: Tanım Kartları', action: () => handleOpenLibrary(['definition'], true, 'keyConcepts') },
         { label: 'Veri Bankası: Bilgi Kartları', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
@@ -1317,6 +1321,7 @@ export function TopicEditor({
                                                 { label: '🖼️ Görsel / Resim', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
                                                 { label: '🌐 Web Simülasyonu (iFrame)', type: 'iframe' as LessonStep['type'], title: 'İnteraktif Simülasyon' },
                                                 { label: '💻 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
+                                                { label: '📑 PDF / Sunu Slaytı (Drive, Canva, Link)', type: 'pdfSlide' as LessonStep['type'], title: 'PDF / Sunu Slaytı' },
                                             ].map(opt => (
                                                 <DropdownMenuItem
                                                     key={opt.label}
