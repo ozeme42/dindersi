@@ -8,7 +8,7 @@ import {
     Loader2, Save, Wand2, ArrowLeft, Download, Plus, Trash2, Maximize,
     Minimize, ExternalLink, RefreshCw, Layers, BookMarked, Eye, LayoutTemplate,
     ListOrdered, FileText, PanelLeftClose, PanelLeftOpen, CheckCircle2, AlertCircle,
-    Tag, HelpCircle, AlignLeft, X, Copy, Zap, Info
+    Tag, HelpCircle, AlignLeft, X, Copy, Zap, Info, AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -223,6 +223,34 @@ function CentralActivityStudioContent() {
         }
     }, [activeTopic]);
 
+    // ── KAVRAM - TANIM EŞLEŞTİRME & EKSİK TANIM HESAPLAMALARI ──
+    // Dolu ve geçerli tanımı olan kavramların haritası
+    const definedConceptsMap = useMemo(() => {
+        const map = new Map<string, string>();
+        editingDefinitions.forEach(d => {
+            const norm = (d.concept || '').toLocaleLowerCase('tr').trim();
+            if (norm && d.definition && d.definition.trim()) {
+                map.set(norm, d.definition.trim());
+            }
+        });
+        return map;
+    }, [editingDefinitions]);
+
+    // Kelime havuzunda (editingConcepts) olup henüz geçerli tanımı yazılmamış olan kavramlar
+    const missingDefinitionConcepts = useMemo(() => {
+        return editingConcepts.filter(c => !definedConceptsMap.has(c.toLocaleLowerCase('tr').trim()));
+    }, [editingConcepts, definedConceptsMap]);
+
+    // Tanımlı kavram adedi
+    const definedConceptsCount = useMemo(() => {
+        return editingConcepts.length - missingDefinitionConcepts.length;
+    }, [editingConcepts, missingDefinitionConcepts]);
+
+    // Tanım kartları arasında tanım metni henüz boş olan kartlar
+    const emptyDefinitionCardCount = useMemo(() => {
+        return editingDefinitions.filter(d => !d.definition || !d.definition.trim()).length;
+    }, [editingDefinitions]);
+
     // Search filtering across all topics
     const searchResults = useMemo(() => {
         if (!searchQuery.trim()) return [];
@@ -298,6 +326,131 @@ function CentralActivityStudioContent() {
     const handleRemoveConcept = (index: number) => {
         setEditingConcepts(prev => prev.filter((_, i) => i !== index));
         setHasUnsavedChanges(true);
+    };
+
+    // Tanımı olmayan kavrama tek tıkla tanım kartı açıp 2. sekmeye geçiş
+    const handleQuickAddDefinitionForConcept = (conceptName: string) => {
+        const trimmed = conceptName.trim();
+        if (!trimmed) return;
+
+        const existingIdx = editingDefinitions.findIndex(
+            d => d.concept.toLocaleLowerCase('tr').trim() === trimmed.toLocaleLowerCase('tr')
+        );
+
+        if (existingIdx === -1) {
+            setEditingDefinitions(prev => [{ concept: trimmed, definition: '' }, ...prev]);
+        }
+
+        setActiveTab('definitions');
+        setHasUnsavedChanges(true);
+        toast({
+            title: "Tanım Kartı Açıldı",
+            description: `"${trimmed}" kavramı için kart hazırlandı. Tanımını yazabilirsiniz.`
+        });
+    };
+
+    // Tüm tanımsız kavramlar için topluca kart açma
+    const handleAddCardsForMissingConcepts = () => {
+        if (missingDefinitionConcepts.length === 0) return;
+
+        const newCards: ConceptItem[] = [];
+        missingDefinitionConcepts.forEach(conceptName => {
+            const exists = editingDefinitions.some(
+                d => d.concept.toLocaleLowerCase('tr').trim() === conceptName.toLocaleLowerCase('tr').trim()
+            );
+            if (!exists) {
+                newCards.push({ concept: conceptName, definition: '' });
+            }
+        });
+
+        if (newCards.length > 0) {
+            setEditingDefinitions(prev => [...newCards, ...prev]);
+            setHasUnsavedChanges(true);
+            toast({
+                title: "Tanım Kartları Eklendi",
+                description: `${newCards.length} adet tanımsız kavram için tanım kartı açıldı.`
+            });
+        }
+    };
+
+    // Yalnızca tanımsız kavramlar için AI ile tanım üretme
+    const handleGenerateAiForMissingDefinitions = async () => {
+        if (!activeTopic || missingDefinitionConcepts.length === 0) return;
+        setIsGeneratingAi(true);
+
+        toast({
+            title: "Eksik Tanımlar Üretiliyor...",
+            description: `${missingDefinitionConcepts.length} adet tanımsız kavram için AI tanım hazırlıyor...`
+        });
+
+        try {
+            const res = await generateCentralActivityAiAction({
+                sourceText: activeTopic.sourceText,
+                topicTitle: activeTopic.title,
+                grade: activeTopic.grade,
+                courseTitle: activeTopic.courseTitle,
+                mode: 'definitions',
+                targetConcepts: missingDefinitionConcepts
+            });
+
+            if (res.success && res.conceptDefinitions && res.conceptDefinitions.length > 0) {
+                let filledCount = 0;
+                setEditingDefinitions(prev => {
+                    const currentMap = new Map<string, string>();
+                    prev.forEach(item => {
+                        currentMap.set(item.concept.toLocaleLowerCase('tr').trim(), item.definition);
+                    });
+
+                    // Yeni tanımları ekle/güncelle
+                    res.conceptDefinitions!.forEach(newDef => {
+                        const norm = (newDef.concept || '').toLocaleLowerCase('tr').trim();
+                        if (norm && newDef.definition && newDef.definition.trim()) {
+                            currentMap.set(norm, newDef.definition.trim());
+                            filledCount++;
+                        }
+                    });
+
+                    // Listeyi yeniden oluştur
+                    const resultList: ConceptItem[] = [];
+                    // Önce mevcutları doldur
+                    prev.forEach(item => {
+                        const norm = item.concept.toLocaleLowerCase('tr').trim();
+                        resultList.push({
+                            concept: item.concept,
+                            definition: currentMap.get(norm) || item.definition
+                        });
+                        currentMap.delete(norm);
+                    });
+
+                    // Kalan yeni eklenenleri ekle
+                    currentMap.forEach((def, conceptNorm) => {
+                        const originalNewDef = res.conceptDefinitions!.find(
+                            d => d.concept.toLocaleLowerCase('tr').trim() === conceptNorm
+                        );
+                        resultList.push({
+                            concept: originalNewDef ? originalNewDef.concept : conceptNorm,
+                            definition: def
+                        });
+                    });
+
+                    return resultList;
+                });
+
+                setHasUnsavedChanges(true);
+                toast({
+                    title: "Eksik Tanımlar Dolduruldu! ✨",
+                    description: `${filledCount} adet kavramın tanımı yapay zeka ile başarıyla oluşturuldu.`,
+                    className: "bg-purple-950 border-purple-500 text-white"
+                });
+            } else {
+                toast({ title: "AI Üretim Hatası", description: res.error || "Tanımlar üretilemedi.", variant: "destructive" });
+            }
+        } catch (err: any) {
+            console.error("AI missing definitions error:", err);
+            toast({ title: "Hata", description: err.message || "Yapay zeka yanıt vermedi.", variant: "destructive" });
+        } finally {
+            setIsGeneratingAi(false);
+        }
     };
 
     // ── 2. KAVRAM-TANIM ÇİFTLERİ HANDLERS ──
@@ -731,6 +884,15 @@ function CentralActivityStudioContent() {
                                         <Columns className="w-4 h-4 text-purple-400" />
                                         <span>Yalnızca Kavram-Tanım Çiftlerini Üret</span>
                                     </button>
+                                    {missingDefinitionConcepts.length > 0 && (
+                                        <button
+                                            onClick={handleGenerateAiForMissingDefinitions}
+                                            className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-amber-300 hover:bg-amber-600/30 flex items-center gap-2 border-t border-white/10"
+                                        >
+                                            <AlertTriangle className="w-4 h-4 text-amber-400" />
+                                            <span>Yalnızca Tanımı Eksikleri Doldur ({missingDefinitionConcepts.length})</span>
+                                        </button>
+                                    )}
                                     <button
                                         onClick={() => handleGenerateAi('notes')}
                                         className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-indigo-300 hover:bg-indigo-600/30 flex items-center gap-2"
@@ -919,6 +1081,7 @@ function CentralActivityStudioContent() {
                                     </div>
                                     {topicsInUnit.map((topic, idx) => {
                                         const isSelected = selectedTopicId === topic.topicId;
+                                        const hasMissingDef = topic.conceptsCount > 0 && topic.definitionsCount < topic.conceptsCount;
                                         return (
                                             <button
                                                 key={topic.topicId}
@@ -945,8 +1108,16 @@ function CentralActivityStudioContent() {
                                                     <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-950/80 border border-blue-800/80 text-blue-300 font-mono" title="Kavramlar">
                                                         K: {topic.conceptsCount}
                                                     </span>
-                                                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-950/80 border border-purple-800/80 text-purple-300 font-mono" title="Tanımlar">
-                                                        T: {topic.definitionsCount}
+                                                    <span
+                                                        className={cn(
+                                                            "text-[9px] px-1.5 py-0.5 rounded font-mono flex items-center gap-0.5",
+                                                            hasMissingDef
+                                                                ? "bg-amber-950/80 border border-amber-600/80 text-amber-300 font-bold"
+                                                                : "bg-purple-950/80 border border-purple-800/80 text-purple-300"
+                                                        )}
+                                                        title={hasMissingDef ? `${topic.conceptsCount - topic.definitionsCount} kavramın tanımı eksik!` : "Tanımlar"}
+                                                    >
+                                                        T: {topic.definitionsCount} {hasMissingDef && "⚠️"}
                                                     </span>
                                                     <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-950/80 border border-indigo-800/80 text-indigo-300 font-mono" title="Defter Notları (Özet)">
                                                         Ö: {topic.notesCount}
@@ -1050,6 +1221,11 @@ function CentralActivityStudioContent() {
                                     <span className="text-[10px] font-mono px-1.5 py-0.2 bg-black/30 rounded font-bold">
                                         {editingConcepts.length}
                                     </span>
+                                    {missingDefinitionConcepts.length > 0 && (
+                                        <span className="text-[9px] font-mono px-1 py-0.2 bg-amber-500/30 text-amber-300 border border-amber-400/40 rounded font-bold" title={`${missingDefinitionConcepts.length} kavramın tanımı eksik!`}>
+                                            ⚠️ {missingDefinitionConcepts.length}
+                                        </span>
+                                    )}
                                 </button>
 
                                 {/* Sekme 2: Kavram-Tanım Eşleşmeli */}
@@ -1067,6 +1243,11 @@ function CentralActivityStudioContent() {
                                     <span className="text-[10px] font-mono px-1.5 py-0.2 bg-black/30 rounded font-bold">
                                         {editingDefinitions.length}
                                     </span>
+                                    {(missingDefinitionConcepts.length > 0 || emptyDefinitionCardCount > 0) && (
+                                        <span className="text-[9px] font-mono px-1 py-0.2 bg-amber-500/30 text-amber-300 border border-amber-400/40 rounded font-bold" title="Tanımı eksik olanlar var!">
+                                            ⚠️ Eksik Var
+                                        </span>
+                                    )}
                                 </button>
 
                                 {/* Sekme 3: Defter Notları (Özet) */}
@@ -1138,7 +1319,9 @@ function CentralActivityStudioContent() {
                                     <span>Toplam:</span>
                                     <span className="text-blue-400 font-bold">{editingConcepts.length} Kelime</span>
                                     <span>•</span>
-                                    <span className="text-purple-400 font-bold">{editingDefinitions.length} Tanım</span>
+                                    <span className={cn("font-bold", missingDefinitionConcepts.length > 0 ? "text-amber-400" : "text-purple-400")}>
+                                        {definedConceptsCount}/{editingConcepts.length} Tanımlı
+                                    </span>
                                     <span>•</span>
                                     <span className="text-indigo-400 font-bold">{editingNotes.length} Not</span>
                                     <span>•</span>
@@ -1161,21 +1344,72 @@ function CentralActivityStudioContent() {
                                                 <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 text-[10px]">
                                                     {editingConcepts.length} Kelime
                                                 </Badge>
+                                                {missingDefinitionConcepts.length > 0 ? (
+                                                    <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/40 text-[10px] font-bold">
+                                                        ⚠️ {missingDefinitionConcepts.length} Tanım Eksik
+                                                    </Badge>
+                                                ) : (
+                                                    <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
+                                                        ✓ Tümü Tanımlı
+                                                    </Badge>
+                                                )}
                                             </h3>
                                             <p className="text-xs text-slate-400 mt-0.5">
                                                 Anlat Bakalım, Anagram Duvarı, Çarkıfelek ve Kelime Avı oyunlarında anahtar terim olarak kullanılır.
                                             </p>
                                         </div>
-                                        <Button
-                                            onClick={() => handleGenerateAi('concepts')}
-                                            disabled={isGeneratingAi || !activeTopic}
-                                            variant="outline"
-                                            size="sm"
-                                            className="border-blue-500/30 text-blue-300 hover:bg-blue-950/50 hover:text-white rounded-xl text-xs"
-                                        >
-                                            <Wand2 className="w-3.5 h-3.5 mr-1" /> AI İle Kelimeleri Çıkar
-                                        </Button>
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            {missingDefinitionConcepts.length > 0 && (
+                                                <Button
+                                                    onClick={handleGenerateAiForMissingDefinitions}
+                                                    disabled={isGeneratingAi || !activeTopic}
+                                                    size="sm"
+                                                    className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold rounded-xl text-xs shadow-md shadow-amber-950/50"
+                                                >
+                                                    <Wand2 className="w-3.5 h-3.5 mr-1" /> Tanımsızları AI İle Tanımla ({missingDefinitionConcepts.length})
+                                                </Button>
+                                            )}
+                                            <Button
+                                                onClick={() => handleGenerateAi('concepts')}
+                                                disabled={isGeneratingAi || !activeTopic}
+                                                variant="outline"
+                                                size="sm"
+                                                className="border-blue-500/30 text-blue-300 hover:bg-blue-950/50 hover:text-white rounded-xl text-xs"
+                                            >
+                                                <Wand2 className="w-3.5 h-3.5 mr-1" /> AI İle Kelimeleri Çıkar
+                                            </Button>
+                                        </div>
                                     </div>
+
+                                    {/* Eksik Tanım Bilgi ve Hızlı Eylem Çubuğu */}
+                                    {missingDefinitionConcepts.length > 0 && (
+                                        <div className="p-3.5 bg-amber-950/30 border border-amber-500/40 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                                            <div className="flex items-center gap-2.5">
+                                                <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 animate-pulse" />
+                                                <div className="text-xs text-amber-200">
+                                                    <span className="font-bold">Eksik Tanım Uyarısı:</span> Aşağıda turuncu ile işaretlenmiş <strong>{missingDefinitionConcepts.length} kavramın</strong> tanımı henüz yazılmamış. Kavram Düellosu ve Eşleştirme oyunları için bu kavramlara tanım gereklidir.
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-2 flex-shrink-0">
+                                                <Button
+                                                    onClick={handleAddCardsForMissingConcepts}
+                                                    size="sm"
+                                                    variant="outline"
+                                                    className="border-amber-500/50 text-amber-300 hover:bg-amber-900/40 hover:text-white text-[11px] h-8 rounded-xl font-bold"
+                                                >
+                                                    <Plus className="w-3.5 h-3.5 mr-1" /> Kart Olarak Ekle
+                                                </Button>
+                                                <Button
+                                                    onClick={handleGenerateAiForMissingDefinitions}
+                                                    disabled={isGeneratingAi}
+                                                    size="sm"
+                                                    className="bg-amber-600 hover:bg-amber-500 text-white text-[11px] h-8 rounded-xl font-bold shadow"
+                                                >
+                                                    <Sparkles className="w-3.5 h-3.5 mr-1 text-amber-200" /> AI İle Tanımla
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {/* Hızlı Ekleme Çubuğu */}
                                     <div className="flex gap-2">
@@ -1200,24 +1434,59 @@ function CentralActivityStudioContent() {
                                         </Button>
                                     </div>
 
-                                    {/* Kelime Etiketleri (Chip Grid) */}
+                                    {/* Kelime Etiketleri (Chip Grid) - TANIMI OLAN / OLMAYAN AYRIŞTIRILMIŞ */}
                                     {editingConcepts.length > 0 ? (
-                                        <div className="flex flex-wrap gap-2 p-4 bg-slate-950/40 rounded-2xl border border-white/5 min-h-[140px]">
-                                            {editingConcepts.map((concept, idx) => (
-                                                <div
-                                                    key={idx}
-                                                    className="inline-flex items-center gap-2 bg-blue-950/50 border border-blue-500/30 text-blue-200 hover:border-blue-400 px-3 py-1.5 rounded-xl text-xs font-medium group transition-all"
-                                                >
-                                                    <span>{concept}</span>
-                                                    <button
-                                                        onClick={() => handleRemoveConcept(idx)}
-                                                        className="text-blue-400 hover:text-red-400 transition-colors"
-                                                        title="Kaldır"
+                                        <div className="flex flex-wrap gap-2.5 p-4 bg-slate-950/40 rounded-2xl border border-white/5 min-h-[140px]">
+                                            {editingConcepts.map((concept, idx) => {
+                                                const hasDefinition = definedConceptsMap.has(concept.toLocaleLowerCase('tr').trim());
+                                                return (
+                                                    <div
+                                                        key={idx}
+                                                        className={cn(
+                                                            "inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium group transition-all border",
+                                                            hasDefinition
+                                                                ? "bg-blue-950/40 border-blue-500/30 text-blue-200 hover:border-blue-400"
+                                                                : "bg-amber-950/50 border-amber-500/70 text-amber-200 shadow-[0_0_12px_rgba(245,158,11,0.2)] ring-1 ring-amber-500/40"
+                                                        )}
                                                     >
-                                                        <X className="w-3 h-3" />
-                                                    </button>
-                                                </div>
-                                            ))}
+                                                        <span className="font-bold">{concept}</span>
+
+                                                        {/* Tanım Durumu Rozeti & Butonu */}
+                                                        {hasDefinition ? (
+                                                            <span
+                                                                className="text-[9px] bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-mono"
+                                                                title="Bu kavramın tanımı mevcut ✓"
+                                                            >
+                                                                <Check className="w-3 h-3 text-emerald-400" /> Tanımlı
+                                                            </span>
+                                                        ) : (
+                                                            <div className="flex items-center gap-1">
+                                                                <span
+                                                                    className="text-[9px] bg-amber-500/30 border border-amber-400/50 text-amber-300 px-1.5 py-0.5 rounded font-black flex items-center gap-0.5"
+                                                                    title="Bu kavramın tanımı henüz yazılmamış!"
+                                                                >
+                                                                    <AlertTriangle className="w-3 h-3 text-amber-400 animate-pulse" /> Tanımsız
+                                                                </span>
+                                                                <button
+                                                                    onClick={() => handleQuickAddDefinitionForConcept(concept)}
+                                                                    className="text-[10px] font-bold text-amber-300 hover:text-white bg-amber-500/20 hover:bg-amber-500/40 border border-amber-500/40 px-1.5 py-0.5 rounded transition-colors"
+                                                                    title="Bu kavrama hemen tanım ekle"
+                                                                >
+                                                                    + Tanım Yaz
+                                                                </button>
+                                                            </div>
+                                                        )}
+
+                                                        <button
+                                                            onClick={() => handleRemoveConcept(idx)}
+                                                            className="text-slate-500 hover:text-red-400 transition-colors ml-0.5"
+                                                            title="Kavramı Kaldır"
+                                                        >
+                                                            <X className="w-3.5 h-3.5" />
+                                                        </button>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     ) : (
                                         <div className="flex flex-col items-center justify-center p-12 bg-slate-950/40 rounded-3xl border border-dashed border-white/10 text-center space-y-4">
@@ -1240,10 +1509,10 @@ function CentralActivityStudioContent() {
                                 </div>
                             )}
 
-                            {/* ── 2. KAVRAM-TANIM EŞLEŞMELİ SEKMESİ ── */}
+                            {/* ── 2. KAVRAM-TANIM EŞLEŞMELİ SEKMESİ (EKSİK TANIM İŞARETLİ) ── */}
                             {activeTab === 'definitions' && (
                                 <div className="space-y-4 max-w-5xl mx-auto">
-                                    <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-2xl border border-purple-500/30">
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-950/60 p-4 rounded-2xl border border-purple-500/30 gap-3">
                                         <div>
                                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
                                                 <Columns className="w-4 h-4 text-purple-400" />
@@ -1251,12 +1520,27 @@ function CentralActivityStudioContent() {
                                                 <Badge className="bg-purple-500/20 text-purple-300 border-purple-400/30 text-[10px]">
                                                     {editingDefinitions.length} Eşleşme
                                                 </Badge>
+                                                {emptyDefinitionCardCount > 0 && (
+                                                    <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/40 text-[10px] font-bold animate-pulse">
+                                                        ⚠️ {emptyDefinitionCardCount} Kartta Tanım Boş
+                                                    </Badge>
+                                                )}
                                             </h3>
-                                            <p className="text-xs text-slate-400">
+                                            <p className="text-xs text-slate-400 mt-0.5">
                                                 Kavram Düellosu, Hafıza Kartları, Eşleştirme oyunları ve Akıllı Tahta Kavram Panosu için kullanılır.
                                             </p>
                                         </div>
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            {missingDefinitionConcepts.length > 0 && (
+                                                <Button
+                                                    onClick={handleGenerateAiForMissingDefinitions}
+                                                    disabled={isGeneratingAi || !activeTopic}
+                                                    size="sm"
+                                                    className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold rounded-xl text-xs shadow-md shadow-amber-950/50"
+                                                >
+                                                    <Wand2 className="w-3.5 h-3.5 mr-1" /> Eksikleri AI İle Tamamla ({missingDefinitionConcepts.length})
+                                                </Button>
+                                            )}
                                             <Button
                                                 onClick={() => handleGenerateAi('definitions')}
                                                 disabled={isGeneratingAi || !activeTopic}
@@ -1264,7 +1548,7 @@ function CentralActivityStudioContent() {
                                                 size="sm"
                                                 className="border-purple-500/30 text-purple-300 hover:bg-purple-950/50 hover:text-white rounded-xl text-xs"
                                             >
-                                                <Wand2 className="w-3.5 h-3.5 mr-1" /> AI İle Tanımları Üret
+                                                <Wand2 className="w-3.5 h-3.5 mr-1" /> AI İle Tümünü Üret
                                             </Button>
                                             <Button
                                                 onClick={handleAddDefinition}
@@ -1276,45 +1560,119 @@ function CentralActivityStudioContent() {
                                         </div>
                                     </div>
 
-                                    {/* Tanımlar Listesi */}
+                                    {/* Tanımı Eksik Kavramlar İçin Uyarı Panosu */}
+                                    {missingDefinitionConcepts.length > 0 && (
+                                        <div className="p-4 bg-amber-950/30 border border-amber-500/50 rounded-2xl space-y-2.5 shadow-xl">
+                                            <div className="flex items-center justify-between flex-wrap gap-2">
+                                                <div className="flex items-center gap-2 text-amber-300 font-bold text-xs">
+                                                    <AlertTriangle className="w-4 h-4 text-amber-400 animate-pulse" />
+                                                    <span>Tanımı Eksik Olan Kavramlar ({missingDefinitionConcepts.length} Adet):</span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        onClick={handleAddCardsForMissingConcepts}
+                                                        variant="outline"
+                                                        className="border-amber-500/50 text-amber-300 hover:bg-amber-900/40 text-[11px] h-7 px-2.5 rounded-lg font-bold"
+                                                    >
+                                                        <Plus className="w-3 h-3 mr-1" /> Boş Kart Olarak Aç
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        onClick={handleGenerateAiForMissingDefinitions}
+                                                        disabled={isGeneratingAi}
+                                                        className="bg-amber-600 hover:bg-amber-500 text-white text-[11px] h-7 px-2.5 rounded-lg font-bold shadow"
+                                                    >
+                                                        <Sparkles className="w-3 h-3 mr-1 text-amber-200" /> AI İle Tanımla
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-wrap gap-1.5 pt-1">
+                                                {missingDefinitionConcepts.map(c => (
+                                                    <button
+                                                        key={c}
+                                                        onClick={() => handleQuickAddDefinitionForConcept(c)}
+                                                        className="px-2.5 py-1 rounded-lg bg-amber-900/50 border border-amber-500/40 hover:border-amber-400 text-amber-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all"
+                                                        title="Tıklayarak bu kavram için tanım yazın"
+                                                    >
+                                                        <span>{c}</span>
+                                                        <span className="text-[10px] text-amber-400 underline font-bold">+ Tanım Yaz</span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Tanımlar Listesi - EKSİK TANIMLAR VURGULANMIŞ */}
                                     {editingDefinitions.length > 0 ? (
                                         <div className="space-y-3">
-                                            {editingDefinitions.map((item, idx) => (
-                                                <div
-                                                    key={idx}
-                                                    className="bg-slate-900/90 border border-white/10 hover:border-purple-500/40 rounded-2xl p-4 transition-all space-y-3 group"
-                                                >
-                                                    <div className="flex items-center justify-between gap-2">
-                                                        <div className="flex items-center gap-2 flex-1">
-                                                            <span className="w-6 h-6 rounded-lg bg-purple-500/20 border border-purple-400/30 text-purple-300 font-mono text-xs flex items-center justify-center font-bold">
-                                                                {idx + 1}
-                                                            </span>
-                                                            <Input
-                                                                placeholder="Kavram Adı (Örn: Tevhid, İhlas, Sıdk)..."
-                                                                value={item.concept}
-                                                                onChange={(e) => handleDefinitionChange(idx, 'concept', e.target.value)}
-                                                                className="bg-slate-950/70 border-white/10 text-xs font-bold text-purple-300 focus:border-purple-400 rounded-xl h-9 max-w-md"
-                                                            />
+                                            {editingDefinitions.map((item, idx) => {
+                                                const isDefEmpty = !item.definition || !item.definition.trim();
+                                                return (
+                                                    <div
+                                                        key={idx}
+                                                        className={cn(
+                                                            "rounded-2xl p-4 transition-all space-y-3 group border",
+                                                            isDefEmpty
+                                                                ? "bg-amber-950/25 border-2 border-amber-500/80 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+                                                                : "bg-slate-900/90 border-white/10 hover:border-purple-500/40"
+                                                        )}
+                                                    >
+                                                        <div className="flex items-center justify-between gap-2 flex-wrap">
+                                                            <div className="flex items-center gap-2 flex-1 min-w-[280px]">
+                                                                <span className={cn(
+                                                                    "w-6 h-6 rounded-lg font-mono text-xs flex items-center justify-center font-bold",
+                                                                    isDefEmpty
+                                                                        ? "bg-amber-500/30 border border-amber-400 text-amber-300"
+                                                                        : "bg-purple-500/20 border border-purple-400/30 text-purple-300"
+                                                                )}>
+                                                                    {idx + 1}
+                                                                </span>
+                                                                <Input
+                                                                    placeholder="Kavram Adı (Örn: Tevhid, İhlas, Sıdk)..."
+                                                                    value={item.concept}
+                                                                    onChange={(e) => handleDefinitionChange(idx, 'concept', e.target.value)}
+                                                                    className={cn(
+                                                                        "text-xs font-bold rounded-xl h-9 max-w-md",
+                                                                        isDefEmpty
+                                                                            ? "bg-slate-950/80 border-amber-500/50 text-amber-200 focus:border-amber-400"
+                                                                            : "bg-slate-950/70 border-white/10 text-purple-300 focus:border-purple-400"
+                                                                    )}
+                                                                />
+                                                                {isDefEmpty && (
+                                                                    <span className="text-[10px] font-black bg-amber-500/30 border border-amber-400 text-amber-200 px-2 py-0.5 rounded-full flex items-center gap-1 animate-pulse flex-shrink-0">
+                                                                        <AlertCircle className="w-3 h-3 text-amber-400" /> TANIM GİRİLMEMİŞ!
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                onClick={() => handleRemoveDefinition(idx)}
+                                                                className="h-8 w-8 text-slate-500 hover:text-red-400 hover:bg-red-950/40 rounded-xl"
+                                                                title="Kartı Sil"
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </Button>
                                                         </div>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            onClick={() => handleRemoveDefinition(idx)}
-                                                            className="h-8 w-8 text-slate-500 hover:text-red-400 hover:bg-red-950/40 rounded-xl"
-                                                            title="Kartı Sil"
-                                                        >
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </Button>
+                                                        <Textarea
+                                                            placeholder={isDefEmpty
+                                                                ? "⚠️ Bu kavramın tanımı henüz yazılmamış! Kavram Düellosu ve Eşleştirme oyunlarında soru olarak sorulması için lütfen bir tanım girin..."
+                                                                : "Kavramın açıklaması ve tanımı (Kavram Düellosu için tanımda kavramın adını geçirmeyin)..."
+                                                            }
+                                                            value={item.definition}
+                                                            onChange={(e) => handleDefinitionChange(idx, 'definition', e.target.value)}
+                                                            rows={2}
+                                                            className={cn(
+                                                                "text-xs rounded-xl leading-relaxed",
+                                                                isDefEmpty
+                                                                    ? "bg-slate-950/80 border-amber-500/60 text-white placeholder:text-amber-400/70 focus:border-amber-400"
+                                                                    : "bg-slate-950/50 border-white/10 text-slate-200 focus:border-purple-400"
+                                                            )}
+                                                        />
                                                     </div>
-                                                    <Textarea
-                                                        placeholder="Kavramın açıklaması ve tanımı (Kavram Düellosu için tanımda kavramın adını geçirmeyin)..."
-                                                        value={item.definition}
-                                                        onChange={(e) => handleDefinitionChange(idx, 'definition', e.target.value)}
-                                                        rows={2}
-                                                        className="bg-slate-950/50 border-white/10 text-xs text-slate-200 focus:border-purple-400 rounded-xl leading-relaxed"
-                                                    />
-                                                </div>
-                                            ))}
+                                                );
+                                            })}
                                         </div>
                                     ) : (
                                         <div className="flex flex-col items-center justify-center p-12 bg-slate-950/40 rounded-3xl border border-dashed border-white/10 text-center space-y-4">

@@ -488,6 +488,7 @@ export async function generateCentralActivityAiAction(params: {
     grade?: string;
     courseTitle?: string;
     mode?: 'all' | 'concepts' | 'definitions' | 'notes' | 'activitySentences';
+    targetConcepts?: string[];
 }): Promise<{
     success: boolean;
     concepts?: string[];
@@ -498,7 +499,7 @@ export async function generateCentralActivityAiAction(params: {
     error?: string;
 }> {
     try {
-        const { sourceText, topicTitle, grade = '5', courseTitle = 'Din Kültürü ve Ahlak Bilgisi', mode = 'all' } = params;
+        const { sourceText, topicTitle, grade = '5', courseTitle = 'Din Kültürü ve Ahlak Bilgisi', mode = 'all', targetConcepts } = params;
         const textToAnalyze = sourceText.trim() || topicTitle.trim();
 
         if (textToAnalyze.length < 10) {
@@ -528,7 +529,10 @@ ${mode === 'all' || mode === 'concepts' ? `
 
 ${mode === 'all' || mode === 'definitions' ? `
 2. **KAVRAM - TANIM ÇİFTLERİ (conceptDefinitions)**:
-- Metindeki önemli kavramların "Ben Kimim?" / "Bu Nedir?" tarzı ipucu tanımlarını çıkar (en az 6, en fazla 15 adet).
+${targetConcepts && targetConcepts.length > 0
+    ? `- ÖZELLİKLE ŞU TANIMI EKSİK OLAN KAVRAMLAR İÇİN NET TANIMLAR YAZ: ${targetConcepts.join(', ')}
+- 'concept' alanında bu kavramların adı tam olarak yer alsın.`
+    : '- Metindeki önemli kavramların "Ben Kimim?" / "Bu Nedir?" tarzı ipucu tanımlarını çıkar (en az 6, en fazla 15 adet).'}
 - 'concept' alanında kavramın adı, 'definition' alanında ise açık, net, anlaşılır tanımı yer almalıdır.
 - Tanım metninde kavramın kendi adı KESİNLİKLE GEÇMEMELİDİR (Kavram Düellosu ve Eşleştirme oyunlarında soru olarak sorulacaktır).
 ` : ''}
