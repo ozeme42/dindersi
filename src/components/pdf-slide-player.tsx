@@ -109,9 +109,22 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
     const containerRef = useRef<HTMLDivElement>(null);
     const playerWrapperRef = useRef<HTMLDivElement>(null);
     const renderTaskRef = useRef<any>(null);
+    const isRenderingRef = useRef<boolean>(false);
+    const nextRenderRef = useRef<{ pageNum: number; doc: any } | null>(null);
 
     // Embed URL (Google Drive / Canva / Google Slides için)
     const embedUrl = useMemo(() => formatPdfEmbedUrl(rawUrl), [rawUrl]);
+
+    // Component unmount cleanup
+    useEffect(() => {
+        return () => {
+            if (renderTaskRef.current) {
+                try {
+                    renderTaskRef.current.cancel();
+                } catch {}
+            }
+        };
+    }, []);
 
     // PDF.js ile PDF Yükleme
     useEffect(() => {
@@ -129,7 +142,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                 const pdfjs = await getPdfjs();
 
                 let sourceUrl = rawUrl;
-                // Google Drive veya harici link ise proxy üzerinden yükle
+                // Google Drive linki ise proxy üzerinden yükle
                 if (isGoogleDrive) {
                     sourceUrl = `/api/proxy-pdf?url=${encodeURIComponent(rawUrl)}`;
                 }
@@ -167,21 +180,38 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
         };
     }, [rawUrl, reloadKey, viewMode, isGoogleDrive]);
 
-    // Sayfa Çizimi (Canvas Rendering)
+    // Sayfa Çizimi (Canvas Rendering ile Mutex / Sıralı Kuyruk Koruması)
     const renderPage = useCallback(async (pageNum: number, doc: any) => {
         if (!doc || !canvasRef.current || !containerRef.current) return;
 
-        try {
+        // Eğer zaten aktif bir çizim varsa, yeni isteği sıraya al ve mevcut işlemi iptal et
+        if (isRenderingRef.current) {
+            nextRenderRef.current = { pageNum, doc };
             if (renderTaskRef.current) {
-                renderTaskRef.current.cancel();
+                try {
+                    renderTaskRef.current.cancel();
+                } catch {}
             }
+            return;
+        }
 
+        isRenderingRef.current = true;
+
+        try {
             const page = await doc.getPage(pageNum);
             const canvas = canvasRef.current;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return;
-
             const container = containerRef.current;
+            if (!canvas || !container) {
+                isRenderingRef.current = false;
+                return;
+            }
+
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                isRenderingRef.current = false;
+                return;
+            }
+
             const containerWidth = Math.max(320, container.clientWidth - 24);
             const containerHeight = Math.max(240, container.clientHeight - 24);
 
@@ -199,6 +229,8 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
             canvas.style.width = `${Math.floor(viewport.width / dpr)}px`;
             canvas.style.height = `${Math.floor(viewport.height / dpr)}px`;
 
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
             const renderContext = {
                 canvasContext: ctx,
                 viewport: viewport,
@@ -211,6 +243,16 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
             if (err?.name !== 'RenderingCancelledException') {
                 console.error('[PdfSlidePlayer] Render error:', err);
             }
+        } finally {
+            isRenderingRef.current = false;
+            renderTaskRef.current = null;
+
+            // Eğer render sürerken yeni bir sayfa veya boyut isteği geldiyse hemen çiz
+            if (nextRenderRef.current) {
+                const next = nextRenderRef.current;
+                nextRenderRef.current = null;
+                renderPage(next.pageNum, next.doc);
+            }
         }
     }, [scale]);
 
@@ -221,16 +263,23 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
         }
     }, [pdfDoc, currentPage, renderPage, viewMode]);
 
-    // Ekran boyutu değiştiğinde yeniden çiz
+    // Ekran boyutu değiştiğinde yeniden çiz (Debounced)
     useEffect(() => {
         if (!containerRef.current || !pdfDoc || viewMode !== 'slide') return;
 
+        let resizeTimer: any;
         const resizeObserver = new ResizeObserver(() => {
-            renderPage(currentPage, pdfDoc);
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                renderPage(currentPage, pdfDoc);
+            }, 100);
         });
 
         resizeObserver.observe(containerRef.current);
-        return () => resizeObserver.disconnect();
+        return () => {
+            clearTimeout(resizeTimer);
+            resizeObserver.disconnect();
+        };
     }, [pdfDoc, currentPage, renderPage, viewMode]);
 
     // Slayt İlerleme Fonksiyonları
@@ -439,7 +488,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                                         type="button"
                                         size="sm"
                                         onClick={() => setViewMode('embed')}
-                                        className="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl"
+                                        className="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl cursor-pointer"
                                     >
                                         Gömülü Modda Dene
                                     </Button>
