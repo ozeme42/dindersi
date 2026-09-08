@@ -29,13 +29,18 @@ export interface YazilacaklarTopicItem {
     concepts: string[];
     // 2. Kavram - Tanım Eşleşmeli (Kavram Düellosu, Hafıza Kartı, Eşleştirme, Kavram Panosu için)
     conceptDefinitions: ConceptItem[];
-    // 3. Özet Cümleler (Doğru-Yanlış, Cümle Kurma, Defter Notları için)
-    sentences: string[];
+    // 3. Deftere Yazılacak Özet Notlar (Akıllı Tahta Yazılacaklar sunumu ve deftere yazma)
+    notes: string[];
+    // 4. Etkinlik / Oyun Cümleleri (Cümle Kurma, Doğru/Yanlış, Tornado vb. için kısa 4-8 kelimelik cümleler)
+    activitySentences: string[];
     // İstatistikler
     conceptsCount: number;
     definitionsCount: number;
-    sentencesCount: number;
+    notesCount: number;
+    activitySentencesCount: number;
     hasContent: boolean;
+    // Geriye dönük uyumluluk takma adı
+    sentences?: string[];
 }
 
 const YAZILACAKLAR_DIR = path.join(process.cwd(), 'public', 'curriculum', 'yazilacaklar');
@@ -66,8 +71,8 @@ const formatCourseTitle = (title: string): string => {
  * Loads all topics with their comprehensive activity bank data:
  * - concepts (kelimeler)
  * - conceptDefinitions (kavram-tanım çiftleri)
- * - sentences (özet cümleler / notlar)
- * Merges data seamlessly from both yazilacaklar and activities.
+ * - notes (deftere yazılacak özet notlar)
+ * - activitySentences (oyunlar için kısa etkinlik cümleleri)
  */
 export async function loadAllYazilacaklarData(): Promise<{ success: boolean; items: YazilacaklarTopicItem[]; error?: string }> {
     try {
@@ -123,7 +128,8 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
 
                         let conceptsSet = new Set<string>();
                         let conceptDefinitionsMap = new Map<string, string>();
-                        let sentencesSet = new Set<string>();
+                        let notesList: string[] = [];
+                        let activitySentencesList: string[] = [];
 
                         // ── A. Read from public/curriculum/yazilacaklar/${topicId}.json ──
                         if (existingYazilacaklarFiles.has(jsonFileName)) {
@@ -132,7 +138,7 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                                 const parsed = JSON.parse(raw);
                                 if (Array.isArray(parsed.notes)) {
                                     parsed.notes.forEach((n: any) => {
-                                        if (typeof n === 'string' && n.trim()) sentencesSet.add(n.trim());
+                                        if (typeof n === 'string' && n.trim()) notesList.push(n.trim());
                                     });
                                 }
                                 if (Array.isArray(parsed.conceptDefinitions)) {
@@ -171,7 +177,9 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                                             }
                                         } else if (it.type === 'sentence' && it.content?.text) {
                                             const sentence = it.content.text.trim();
-                                            if (sentence) sentencesSet.add(sentence);
+                                            if (sentence && !activitySentencesList.includes(sentence)) {
+                                                activitySentencesList.push(sentence);
+                                            }
                                         }
                                     });
                                 }
@@ -181,9 +189,9 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                         }
 
                         // ── C. Fallback from manifest topic writingContent if still empty ──
-                        if (sentencesSet.size === 0 && Array.isArray(topic.writingContent?.notes)) {
+                        if (notesList.length === 0 && Array.isArray(topic.writingContent?.notes)) {
                             topic.writingContent.notes.forEach((n: string) => {
-                                if (n.trim()) sentencesSet.add(n.trim());
+                                if (typeof n === 'string' && n.trim()) notesList.push(n.trim());
                             });
                         }
                         if (conceptDefinitionsMap.size === 0 && Array.isArray(topic.writingContent?.conceptDefinitions)) {
@@ -202,7 +210,6 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                             concept,
                             definition
                         }));
-                        const sentences = Array.from(sentencesSet);
 
                         const sourceText = (sourceTextsMap.topics[topicId] || topic.sourceText || '').trim();
 
@@ -219,11 +226,14 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                             sourceText: sourceText,
                             concepts,
                             conceptDefinitions,
-                            sentences,
+                            notes: notesList,
+                            activitySentences: activitySentencesList,
+                            sentences: activitySentencesList, // alias
                             conceptsCount: concepts.length,
                             definitionsCount: conceptDefinitions.length,
-                            sentencesCount: sentences.length,
-                            hasContent: concepts.length > 0 || conceptDefinitions.length > 0 || sentences.length > 0,
+                            notesCount: notesList.length,
+                            activitySentencesCount: activitySentencesList.length,
+                            hasContent: concepts.length > 0 || conceptDefinitions.length > 0 || notesList.length > 0 || activitySentencesList.length > 0,
                         });
                     }
                 }
@@ -238,11 +248,17 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
 }
 
 /**
- * Saves all 3 activity types (concepts, conceptDefinitions, sentences) to:
- * 1. public/curriculum/yazilacaklar/${topicId}.json
- * 2. public/curriculum/activities/${topicId}.json & activityItems/${topicId}.json
- * 3. Firestore topic.writingContent
- * 4. Firestore activityItems collection
+ * Saves all 4 content types cleanly separated:
+ * - concepts (kelime havuzu)
+ * - conceptDefinitions (kavram-tanım eşleşmeleri)
+ * - notes (deftere yazılacak özet notlar)
+ * - activitySentences (oyunlar için kısa cümleler)
+ *
+ * Simultaneously writes to:
+ * 1. public/curriculum/yazilacaklar/${topicId}.json (notes & conceptDefinitions)
+ * 2. public/curriculum/activities/${topicId}.json & activityItems/${topicId}.json (concepts, definitions, sentences)
+ * 3. Firestore topic.writingContent (notes & conceptDefinitions)
+ * 4. Firestore activityItems collection (all active game items)
  * 5. Clears game cache so all games immediately update!
  */
 export async function saveCentralActivityDataAction(params: {
@@ -251,20 +267,27 @@ export async function saveCentralActivityDataAction(params: {
     topicId: string;
     concepts: string[];
     conceptDefinitions: ConceptItem[];
-    sentences: string[];
+    notes?: string[];
+    activitySentences?: string[];
+    sentences?: string[]; // fallback alias
 }): Promise<{ success: boolean; error?: string }> {
     try {
-        const { courseId, unitId, topicId, concepts, conceptDefinitions, sentences } = params;
+        const { courseId, unitId, topicId, concepts, conceptDefinitions } = params;
         if (!topicId) {
             return { success: false, error: 'Geçersiz konu kimliği.' };
         }
 
         // Clean arrays
-        const cleanedConcepts = concepts.map(c => c.trim()).filter(Boolean);
-        const cleanedDefinitions = conceptDefinitions
+        const cleanedConcepts = (concepts || []).map(c => c.trim()).filter(Boolean);
+        const cleanedDefinitions = (conceptDefinitions || [])
             .map(c => ({ concept: (c.concept || '').trim(), definition: (c.definition || '').trim() }))
             .filter(c => c.concept || c.definition);
-        const cleanedSentences = sentences.map(s => s.trim()).filter(Boolean);
+
+        // Deftere yazılacak notlar (Özet)
+        const cleanedNotes = (params.notes || []).map(n => n.trim()).filter(Boolean);
+
+        // Oyunlar için kısa cümleler (Cümle Kurma, D/Y, Tornado)
+        const cleanedActivitySentences = (params.activitySentences || params.sentences || []).map(s => s.trim()).filter(Boolean);
 
         // Also ensure every concept in conceptDefinitions exists in concepts array
         const allConceptsSet = new Set(cleanedConcepts);
@@ -273,10 +296,10 @@ export async function saveCentralActivityDataAction(params: {
         });
         const finalConcepts = Array.from(allConceptsSet);
 
-        // ── 1. Save to Yazılacaklar JSON ──
+        // ── 1. Save to Yazılacaklar JSON (Defter Notları + Tanımlar) ──
         await fs.mkdir(YAZILACAKLAR_DIR, { recursive: true });
         const yazilacaklarData = {
-            notes: cleanedSentences,
+            notes: cleanedNotes,
             conceptDefinitions: cleanedDefinitions,
             updatedAt: new Date().toISOString()
         };
@@ -293,7 +316,7 @@ export async function saveCentralActivityDataAction(params: {
                 const topicRef = adminDb.collection('courses').doc(courseId).collection('units').doc(unitId).collection('topics').doc(topicId);
                 await topicRef.set({
                     writingContent: {
-                        notes: cleanedSentences,
+                        notes: cleanedNotes,
                         conceptDefinitions: cleanedDefinitions
                     }
                 }, { merge: true });
@@ -346,7 +369,7 @@ export async function saveCentralActivityDataAction(params: {
                 updatedAt: new Date().toISOString()
             }));
 
-            const newSentenceItems = cleanedSentences.map((sentence, idx) => ({
+            const newSentenceItems = cleanedActivitySentences.map((sentence, idx) => ({
                 id: `sentence_${topicId}_${idx}`,
                 type: 'sentence',
                 topicId,
@@ -363,9 +386,20 @@ export async function saveCentralActivityDataAction(params: {
                 ...newSentenceItems
             ];
 
-            const jsonOutput = JSON.stringify(allSyncedItems, null, 2);
-            await fs.writeFile(actFilePath, jsonOutput, 'utf-8');
-            await fs.writeFile(path.join(ACTIVITY_ITEMS_DIR, `${topicId}.json`), jsonOutput, 'utf-8');
+            // activities/${topicId}.json yaz
+            await fs.writeFile(
+                actFilePath,
+                JSON.stringify(allSyncedItems, null, 2),
+                'utf-8'
+            );
+
+            // activityItems/${topicId}.json yaz
+            const actItemsFilePath = path.join(ACTIVITY_ITEMS_DIR, `${topicId}.json`);
+            await fs.writeFile(
+                actItemsFilePath,
+                JSON.stringify(allSyncedItems, null, 2),
+                'utf-8'
+            );
 
             // Firestore activityItems koleksiyonu senkronizasyonu
             try {
@@ -395,11 +429,11 @@ export async function saveCentralActivityDataAction(params: {
                             topicId,
                             unitId,
                             courseId,
-                            createdAt: new Date().toISOString()
+                            createdAt: new Date()
                         });
                     });
 
-                    await batch.commit().catch(() => {});
+                    await batch.commit();
                 }
             } catch (actDbErr) {
                 console.warn('Firestore activityItems batch sync warning:', actDbErr);
@@ -436,27 +470,31 @@ export const saveTopicYazilacaklarAction = async (params: {
         topicId: params.topicId,
         concepts: params.conceptDefinitions.map(c => c.concept).filter(Boolean),
         conceptDefinitions: params.conceptDefinitions,
-        sentences: params.notes
+        notes: params.notes,
+        activitySentences: []
     });
 };
 
 /**
- * Generates all or selective activity bank data from textbook text:
+ * Generates all or selective content from textbook text:
  * - concepts (kelime havuzu)
  * - conceptDefinitions (kavram-tanım çiftleri)
- * - sentences (özet cümleler / defter notları)
+ * - notes (deftere yazılacak maddeli özet notlar)
+ * - activitySentences (oyunlar için 4-8 kelimelik kısa cümleler)
  */
 export async function generateCentralActivityAiAction(params: {
     sourceText: string;
     topicTitle: string;
     grade?: string;
     courseTitle?: string;
-    mode?: 'all' | 'concepts' | 'definitions' | 'sentences';
+    mode?: 'all' | 'concepts' | 'definitions' | 'notes' | 'activitySentences';
 }): Promise<{
     success: boolean;
     concepts?: string[];
     conceptDefinitions?: ConceptItem[];
-    sentences?: string[];
+    notes?: string[];
+    activitySentences?: string[];
+    sentences?: string[]; // alias
     error?: string;
 }> {
     try {
@@ -495,11 +533,19 @@ ${mode === 'all' || mode === 'definitions' ? `
 - Tanım metninde kavramın kendi adı KESİNLİKLE GEÇMEMELİDİR (Kavram Düellosu ve Eşleştirme oyunlarında soru olarak sorulacaktır).
 ` : ''}
 
-${mode === 'all' || mode === 'sentences' ? `
-3. **ÖZET CÜMLELER VE DEFTER NOTLARI (sentences)**:
-- Konunun ana fikrini ve kazanımlarını özetleyen 5 ila 10 adet öz cümle yaz.
-- Cümleler öğrencilerin defterine yazacağı nitelikte ve aynı zamanda Cümle Kurma ve Doğru/Yanlış oyunlarına uygun akıcı cümleler olsun.
-- Mümkünse cümleler çok karmaşık ve uzun olmasın (ortalama 5-10 kelime).
+${mode === 'all' || mode === 'notes' ? `
+3. **DEFTERE YAZILACAK ÖZET NOTLAR (notes)**:
+- Öğrencilerin akıllı tahtadan doğrudan defterlerine yazacakları, konunun ana fikir ve kazanımlarını özetleyen 5 ila 8 adet maddeli ders notu yaz.
+- Bu notlar pedagojik ve açıklayıcı olmalı, konunun can alıcı noktalarını öğretmelidir.
+- Örnek: "1. İslam dininde bilgi kaynakları vahiy, akıl ve salim duyulardır."
+` : ''}
+
+${mode === 'all' || mode === 'activitySentences' ? `
+4. **KISA ETKİNLİK VE OYUN CÜMLELERİ (activitySentences)**:
+- Cümle Kurma (kelimeleri karıştırılıp doğru sıraya dizilen oyun), Doğru-Yanlış Zinciri ve Tornado oyunlarında kullanılmak üzere 6 ila 12 adet KISA, YALIN ve ANLAŞILIR cümle yaz.
+- ÇOK ÖNEMLİ: Bu cümleler ÖZET DEĞİLDİR, oyun cümlesidir! Cümle Kurma oyununda kelimelere ayrılacağı için her cümle KESİNLİKLE 4 ila 8 kelime arasında olmalıdır. Asla uzun ve karmaşık cümle kurma.
+- Örnek: "Allah evrendeki her şeyi bir ölçüye göre yaratmıştır."
+- Örnek: "İhlas ibadetleri sadece Allah rızası için yapmaktır."
 ` : ''}
 
 ÇIKTI FORMATI:
@@ -509,9 +555,13 @@ SADECE geçerli bir JSON döndür:
   "conceptDefinitions": [
     { "concept": "Kavram Adı", "definition": "Kavramın açıklaması ve tanımı" }
   ],
-  "sentences": [
-    "Evrendeki her şey belirli bir amaca ve düzene göre yaratılmıştır.",
-    "İnsan aklı sayesinde çevresini gözlemler ve evrendeki dengeyi fark eder."
+  "notes": [
+    "1. Konu özeti maddesi...",
+    "2. Konu özeti maddesi..."
+  ],
+  "activitySentences": [
+    "Allah evrendeki her şeyi bir ölçüye göre yaratmıştır.",
+    "İhlas ibadetleri sadece Allah rızası için yapmaktır."
   ]
 }
 `;
@@ -529,11 +579,18 @@ SADECE geçerli bir JSON döndür:
         const cleaned = responseText.trim().replace(/^```json\s*/i, '').replace(/\s*```$/i, '');
         const parsed = JSON.parse(cleaned);
 
+        const extractedNotes = Array.isArray(parsed.notes) ? parsed.notes : [];
+        const extractedActivitySentences = Array.isArray(parsed.activitySentences)
+            ? parsed.activitySentences
+            : (Array.isArray(parsed.sentences) ? parsed.sentences : []);
+
         return {
             success: true,
             concepts: Array.isArray(parsed.concepts) ? parsed.concepts : [],
             conceptDefinitions: Array.isArray(parsed.conceptDefinitions) ? parsed.conceptDefinitions : [],
-            sentences: Array.isArray(parsed.sentences) ? parsed.sentences : (Array.isArray(parsed.notes) ? parsed.notes : [])
+            notes: extractedNotes,
+            activitySentences: extractedActivitySentences,
+            sentences: extractedActivitySentences
         };
     } catch (error: any) {
         console.error('generateCentralActivityAiAction error:', error);
@@ -547,7 +604,8 @@ export const generateYazilacaklarAiAction = async (params: any) => {
     return {
         success: res.success,
         conceptDefinitions: res.conceptDefinitions,
-        notes: res.sentences,
+        notes: res.notes,
+        sentences: res.activitySentences,
         error: res.error
     };
 };

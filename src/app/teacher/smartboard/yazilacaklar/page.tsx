@@ -8,7 +8,7 @@ import {
     Loader2, Save, Wand2, ArrowLeft, Download, Plus, Trash2, Maximize,
     Minimize, ExternalLink, RefreshCw, Layers, BookMarked, Eye, LayoutTemplate,
     ListOrdered, FileText, PanelLeftClose, PanelLeftOpen, CheckCircle2, AlertCircle,
-    Tag, HelpCircle, AlignLeft, X, Copy, Zap
+    Tag, HelpCircle, AlignLeft, X, Copy, Zap, Info
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,10 +54,10 @@ function CentralActivityStudioContent() {
     const [selectedUnitId, setSelectedUnitId] = useState<string>('');
     const [selectedTopicId, setSelectedTopicId] = useState<string>('');
 
-    // Studio Tabs: 'concepts' | 'definitions' | 'sentences' | 'smartboard' | 'source'
-    const [activeTab, setActiveTab] = useState<'concepts' | 'definitions' | 'sentences' | 'smartboard' | 'source'>('definitions');
+    // Studio Tabs: 'concepts' | 'definitions' | 'notes' | 'activitySentences' | 'smartboard' | 'source'
+    const [activeTab, setActiveTab] = useState<'concepts' | 'definitions' | 'notes' | 'activitySentences' | 'smartboard' | 'source'>('definitions');
 
-    // ── EDITING STATES FOR ALL 3 ACTIVITY TYPES ──
+    // ── EDITING STATES FOR ALL 4 TYPES (AYRIŞTIRILMIŞ) ──
     // 1. Single Words / Concepts (Kelime Havuzu)
     const [editingConcepts, setEditingConcepts] = useState<string[]>([]);
     const [newConceptInput, setNewConceptInput] = useState<string>('');
@@ -65,8 +65,11 @@ function CentralActivityStudioContent() {
     // 2. Concept - Definition Pairs (Kavram-Tanım Eşleşmeli)
     const [editingDefinitions, setEditingDefinitions] = useState<ConceptItem[]>([]);
 
-    // 3. Sentences / Notes (Özet Cümleler & Defter Notları)
-    const [editingSentences, setEditingSentences] = useState<string[]>([]);
+    // 3. Deftere Yazılacak Özet Notlar (Akıllı Tahta Notları)
+    const [editingNotes, setEditingNotes] = useState<string[]>([]);
+
+    // 4. Kısa Etkinlik Cümleleri (Oyun Havuzu: Cümle Kurma, D/Y, Tornado)
+    const [editingActivitySentences, setEditingActivitySentences] = useState<string[]>([]);
 
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -87,7 +90,7 @@ function CentralActivityStudioContent() {
             if (res.success && res.items) {
                 setItems(res.items);
                 if (showToast) {
-                    toast({ title: "Veriler Güncellendi", description: "Etkinlik Veri Bankası ve Kavram Panosu verileri yüklendi." });
+                    toast({ title: "Veriler Güncellendi", description: "Etkinlik Veri Bankası ve Defter Notları yüklendi." });
                 }
             } else {
                 toast({ title: "Hata", description: res.error || "Veriler yüklenemedi.", variant: "destructive" });
@@ -114,7 +117,7 @@ function CentralActivityStudioContent() {
         const topicParam = params.get('topicId') || params.get('topic');
         const tabParam = params.get('tab');
 
-        if (tabParam === 'concepts' || tabParam === 'definitions' || tabParam === 'sentences' || tabParam === 'smartboard' || tabParam === 'source') {
+        if (['concepts', 'definitions', 'notes', 'activitySentences', 'smartboard', 'source'].includes(tabParam || '')) {
             setActiveTab(tabParam as any);
         }
 
@@ -140,40 +143,36 @@ function CentralActivityStudioContent() {
         }
     }, [availableGrades, selectedGrade]);
 
-    // Courses for selected Grade
-    const availableCourses = useMemo(() => {
+    // Courses in current grade
+    const coursesInGrade = useMemo(() => {
         const map = new Map<string, { id: string; title: string; count: number }>();
-        items.filter(i => i.grade === selectedGrade).forEach(i => {
-            if (!map.has(i.courseId)) {
-                map.set(i.courseId, { id: i.courseId, title: i.courseTitle, count: 0 });
+        items.filter(i => i.grade === selectedGrade).forEach(item => {
+            const existing = map.get(item.courseId);
+            if (existing) {
+                existing.count++;
+            } else {
+                map.set(item.courseId, { id: item.courseId, title: item.courseTitle, count: 1 });
             }
-            map.get(i.courseId)!.count++;
         });
         return Array.from(map.values());
     }, [items, selectedGrade]);
 
     // Ensure selectedCourseId is valid
     useEffect(() => {
-        if (availableCourses.length > 0) {
-            if (!selectedCourseId || !availableCourses.some(c => c.id === selectedCourseId)) {
-                setSelectedCourseId(availableCourses[0].id);
-            }
-        } else {
-            setSelectedCourseId('');
+        if (coursesInGrade.length > 0 && !coursesInGrade.some(c => c.id === selectedCourseId)) {
+            setSelectedCourseId(coursesInGrade[0].id);
         }
-    }, [availableCourses, selectedCourseId]);
+    }, [coursesInGrade, selectedCourseId]);
 
-    // Units for selected Grade & Course
-    const availableUnits = useMemo(() => {
-        const map = new Map<string, { id: string; title: string; count: number; withContentCount: number }>();
-        items.filter(i => i.grade === selectedGrade && i.courseId === selectedCourseId).forEach(i => {
-            if (!map.has(i.unitId)) {
-                map.set(i.unitId, { id: i.unitId, title: i.unitTitle, count: 0, withContentCount: 0 });
-            }
-            const unitObj = map.get(i.unitId)!;
-            unitObj.count++;
-            if (i.hasContent) {
-                unitObj.withContentCount++;
+    // Units in current course
+    const unitsInCourse = useMemo(() => {
+        const map = new Map<string, { id: string; title: string; count: number }>();
+        items.filter(i => i.grade === selectedGrade && i.courseId === selectedCourseId).forEach(item => {
+            const existing = map.get(item.unitId);
+            if (existing) {
+                existing.count++;
+            } else {
+                map.set(item.unitId, { id: item.unitId, title: item.unitTitle, count: 1 });
             }
         });
         return Array.from(map.values());
@@ -181,124 +180,138 @@ function CentralActivityStudioContent() {
 
     // Ensure selectedUnitId is valid
     useEffect(() => {
-        if (availableUnits.length > 0) {
-            if (!selectedUnitId || !availableUnits.some(u => u.id === selectedUnitId)) {
-                setSelectedUnitId(availableUnits[0].id);
-            }
-        } else {
-            setSelectedUnitId('');
+        if (unitsInCourse.length > 0 && !unitsInCourse.some(u => u.id === selectedUnitId)) {
+            setSelectedUnitId(unitsInCourse[0].id);
         }
-    }, [availableUnits, selectedUnitId]);
+    }, [unitsInCourse, selectedUnitId]);
 
-    // Topics for selected Unit
-    const currentUnitTopics = useMemo(() => {
-        return items.filter(i =>
-            i.grade === selectedGrade &&
-            i.courseId === selectedCourseId &&
-            i.unitId === selectedUnitId
-        );
+    // Topics in current unit
+    const topicsInUnit = useMemo(() => {
+        return items.filter(i => i.grade === selectedGrade && i.courseId === selectedCourseId && i.unitId === selectedUnitId);
     }, [items, selectedGrade, selectedCourseId, selectedUnitId]);
 
     // Ensure selectedTopicId is valid
     useEffect(() => {
-        if (currentUnitTopics.length > 0) {
-            if (!selectedTopicId || !currentUnitTopics.some(t => t.topicId === selectedTopicId)) {
-                setSelectedTopicId(currentUnitTopics[0].topicId);
-            }
+        if (topicsInUnit.length > 0 && !topicsInUnit.some(t => t.topicId === selectedTopicId)) {
+            setSelectedTopicId(topicsInUnit[0].topicId);
         }
-    }, [currentUnitTopics, selectedTopicId]);
+    }, [topicsInUnit, selectedTopicId]);
 
-    // Active Selected Topic Item
+    // Currently Active Topic
     const activeTopic = useMemo(() => {
-        return items.find(i => i.topicId === selectedTopicId) || currentUnitTopics[0] || null;
-    }, [items, selectedTopicId, currentUnitTopics]);
+        return items.find(i => i.topicId === selectedTopicId) || null;
+    }, [items, selectedTopicId]);
 
-    // Sync editing state when activeTopic changes
+    // Navigation previous and next topics
+    const { prevTopic, nextTopic } = useMemo(() => {
+        if (!activeTopic) return { prevTopic: null, nextTopic: null };
+        const idx = topicsInUnit.findIndex(t => t.topicId === activeTopic.topicId);
+        return {
+            prevTopic: idx > 0 ? topicsInUnit[idx - 1] : null,
+            nextTopic: idx >= 0 && idx < topicsInUnit.length - 1 ? topicsInUnit[idx + 1] : null
+        };
+    }, [activeTopic, topicsInUnit]);
+
+    // Sync editing state whenever activeTopic changes
     useEffect(() => {
         if (activeTopic) {
             setEditingConcepts(activeTopic.concepts || []);
             setEditingDefinitions(activeTopic.conceptDefinitions || []);
-            setEditingSentences(activeTopic.sentences || []);
+            setEditingNotes(activeTopic.notes || []);
+            setEditingActivitySentences(activeTopic.activitySentences || (activeTopic as any).sentences || []);
             setHasUnsavedChanges(false);
         }
     }, [activeTopic]);
 
-    // Topic Selection Handler with Auto-Collapse
+    // Search filtering across all topics
+    const searchResults = useMemo(() => {
+        if (!searchQuery.trim()) return [];
+        const q = searchQuery.toLocaleLowerCase('tr').trim();
+        return items.filter(i =>
+            i.title.toLocaleLowerCase('tr').includes(q) ||
+            i.courseTitle.toLocaleLowerCase('tr').includes(q) ||
+            i.unitTitle.toLocaleLowerCase('tr').includes(q) ||
+            i.concepts.some(c => c.toLocaleLowerCase('tr').includes(q)) ||
+            i.conceptDefinitions.some(cd => cd.concept.toLocaleLowerCase('tr').includes(q) || cd.definition.toLocaleLowerCase('tr').includes(q)) ||
+            i.notes.some(n => n.toLocaleLowerCase('tr').includes(q)) ||
+            i.activitySentences.some(s => s.toLocaleLowerCase('tr').includes(q))
+        );
+    }, [items, searchQuery]);
+
+    // Handling topic selection (Automatically collapses sidebar on topic select for clean workspace)
     const handleTopicSelect = (topicId: string, autoCollapse = true) => {
-        setSelectedTopicId(topicId);
-        setFocusedColumn('topic');
-        if (autoCollapse) {
-            setIsSidebarOpen(false);
+        const found = items.find(i => i.topicId === topicId);
+        if (found) {
+            setSelectedGrade(found.grade);
+            setSelectedCourseId(found.courseId);
+            setSelectedUnitId(found.unitId);
+            setSelectedTopicId(found.topicId);
+            if (autoCollapse) {
+                setIsSidebarOpen(false);
+            }
         }
     };
 
-    // Sequential Navigation within Unit
-    const currentIndex = useMemo(() => {
-        return currentUnitTopics.findIndex(i => i.topicId === selectedTopicId);
-    }, [currentUnitTopics, selectedTopicId]);
-
-    const prevTopic = currentIndex > 0 ? currentUnitTopics[currentIndex - 1] : null;
-    const nextTopic = currentIndex >= 0 && currentIndex < currentUnitTopics.length - 1 ? currentUnitTopics[currentIndex + 1] : null;
-
-    // Global Search Matches (across all grades, topics, concepts, definitions, sentences)
-    const searchResults = useMemo(() => {
-        if (!searchQuery.trim()) return [];
-        const q = searchQuery.toLowerCase();
-        return items.filter(i =>
-            i.title.toLowerCase().includes(q) ||
-            i.unitTitle.toLowerCase().includes(q) ||
-            i.courseTitle.toLowerCase().includes(q) ||
-            i.className.toLowerCase().includes(q) ||
-            i.concepts.some(c => c.toLowerCase().includes(q)) ||
-            i.conceptDefinitions.some(d => d.concept.toLowerCase().includes(q) || d.definition.toLowerCase().includes(q)) ||
-            i.sentences.some(s => s.toLowerCase().includes(q))
-        ).slice(0, 10);
-    }, [items, searchQuery]);
-
-    const handleSelectSearchResult = (topic: YazilacaklarTopicItem) => {
-        setSelectedGrade(topic.grade);
-        setSelectedCourseId(topic.courseId);
-        setSelectedUnitId(topic.unitId);
-        setSelectedTopicId(topic.topicId);
-        setFocusedColumn('topic');
+    const handleSelectSearchResult = (topicItem: YazilacaklarTopicItem) => {
+        setSelectedGrade(topicItem.grade);
+        setSelectedCourseId(topicItem.courseId);
+        setSelectedUnitId(topicItem.unitId);
+        setSelectedTopicId(topicItem.topicId);
         setSearchQuery('');
         setIsSidebarOpen(false);
     };
 
-    // ── 1. KAVRAMLAR (KELİME HAVUZU) EYLEMLERİ ──
-    const handleAddConceptWord = () => {
-        const trimmed = newConceptInput.trim();
+    // ── 1. KAVRAMLAR (KELİMELER) HANDLERS ──
+    const handleAddConcept = (word: string) => {
+        const trimmed = word.trim();
         if (!trimmed) return;
-        // Virgülle veya satırla ayrılmış çoklu kelime desteği
-        const splitWords = trimmed.split(/[,;\n]+/).map(w => w.trim()).filter(Boolean);
-        setEditingConcepts(prev => {
-            const next = [...prev];
-            splitWords.forEach(w => {
-                if (!next.includes(w)) next.push(w);
-            });
-            return next;
-        });
+        if (editingConcepts.some(c => c.toLocaleLowerCase('tr') === trimmed.toLocaleLowerCase('tr'))) {
+            toast({ title: "Bilgi", description: "Bu kavram zaten listede var.", variant: "default" });
+            return;
+        }
+        setEditingConcepts(prev => [...prev, trimmed]);
         setNewConceptInput('');
         setHasUnsavedChanges(true);
     };
 
-    const handleRemoveConceptWord = (index: number) => {
+    const handleAddMultipleConcepts = (rawText: string) => {
+        if (!rawText.trim()) return;
+        const tokens = rawText.split(/[,;\n]+/).map(t => t.trim()).filter(Boolean);
+        let addedCount = 0;
+        setEditingConcepts(prev => {
+            const next = [...prev];
+            tokens.forEach(tok => {
+                if (!next.some(c => c.toLocaleLowerCase('tr') === tok.toLocaleLowerCase('tr'))) {
+                    next.push(tok);
+                    addedCount++;
+                }
+            });
+            return next;
+        });
+        setNewConceptInput('');
+        if (addedCount > 0) {
+            setHasUnsavedChanges(true);
+            toast({ title: "Eklendi", description: `${addedCount} yeni kelime/kavram havuza eklendi.` });
+        }
+    };
+
+    const handleRemoveConcept = (index: number) => {
         setEditingConcepts(prev => prev.filter((_, i) => i !== index));
         setHasUnsavedChanges(true);
     };
 
-    // ── 2. KAVRAM-TANIM EŞLEŞMELİ EYLEMLERİ ──
-    const handleDefinitionChange = (index: number, field: 'concept' | 'definition', val: string) => {
-        setEditingDefinitions(prev => {
-            const copy = [...prev];
-            copy[index] = { ...copy[index], [field]: val };
-            return copy;
-        });
+    // ── 2. KAVRAM-TANIM ÇİFTLERİ HANDLERS ──
+    const handleAddDefinition = () => {
+        setEditingDefinitions(prev => [...prev, { concept: '', definition: '' }]);
         setHasUnsavedChanges(true);
     };
 
-    const handleAddDefinition = () => {
-        setEditingDefinitions(prev => [...prev, { concept: '', definition: '' }]);
+    const handleDefinitionChange = (index: number, field: 'concept' | 'definition', val: string) => {
+        setEditingDefinitions(prev => {
+            const next = [...prev];
+            next[index] = { ...next[index], [field]: val };
+            return next;
+        });
         setHasUnsavedChanges(true);
     };
 
@@ -307,27 +320,69 @@ function CentralActivityStudioContent() {
         setHasUnsavedChanges(true);
     };
 
-    // ── 3. ÖZET CÜMLELER EYLEMLERİ ──
-    const handleSentenceChange = (index: number, val: string) => {
-        setEditingSentences(prev => {
-            const copy = [...prev];
-            copy[index] = val;
-            return copy;
+    // ── 3. DEFTERE YAZILACAK ÖZET NOTLAR HANDLERS ──
+    const handleAddNote = () => {
+        setEditingNotes(prev => [...prev, '']);
+        setHasUnsavedChanges(true);
+    };
+
+    const handleNoteChange = (index: number, val: string) => {
+        setEditingNotes(prev => {
+            const next = [...prev];
+            next[index] = val;
+            return next;
         });
         setHasUnsavedChanges(true);
     };
 
-    const handleAddSentence = () => {
-        setEditingSentences(prev => [...prev, '']);
+    const handleRemoveNote = (index: number) => {
+        setEditingNotes(prev => prev.filter((_, i) => i !== index));
         setHasUnsavedChanges(true);
     };
 
-    const handleRemoveSentence = (index: number) => {
-        setEditingSentences(prev => prev.filter((_, i) => i !== index));
+    // ── 4. KISA ETKİNLİK CÜMLELERİ HANDLERS ──
+    const handleAddActivitySentence = () => {
+        setEditingActivitySentences(prev => [...prev, '']);
         setHasUnsavedChanges(true);
     };
 
-    // ── MERKEZİ KAYIT (TAM SENKRONİZASYON) ──
+    const handleActivitySentenceChange = (index: number, val: string) => {
+        setEditingActivitySentences(prev => {
+            const next = [...prev];
+            next[index] = val;
+            return next;
+        });
+        setHasUnsavedChanges(true);
+    };
+
+    const handleRemoveActivitySentence = (index: number) => {
+        setEditingActivitySentences(prev => prev.filter((_, i) => i !== index));
+        setHasUnsavedChanges(true);
+    };
+
+    // Defter notlarından oyun cümleleri çıkarma yardımcısı
+    const handleTransferNotesToActivitySentences = () => {
+        if (editingNotes.length === 0) return;
+        let count = 0;
+        setEditingActivitySentences(prev => {
+            const next = [...prev];
+            editingNotes.forEach(note => {
+                const clean = note.replace(/^[0-9]+[\.\-\)]\s*/, '').trim();
+                if (clean && !next.includes(clean)) {
+                    next.push(clean);
+                    count++;
+                }
+            });
+            return next;
+        });
+        setHasUnsavedChanges(true);
+        toast({
+            title: "Cümleler Aktarıldı",
+            description: `${count} adet not maddesi oyun cümleleri havuzuna kopyalandı.`
+        });
+    };
+
+    // ── MERKEZİ KAYDETME & SENKRONİZASYON (4 VERİ TİPİ AYRI) ──
     const handleSave = async () => {
         if (!activeTopic) return;
         setIsSaving(true);
@@ -338,164 +393,166 @@ function CentralActivityStudioContent() {
                 topicId: activeTopic.topicId,
                 concepts: editingConcepts,
                 conceptDefinitions: editingDefinitions,
-                sentences: editingSentences
+                notes: editingNotes,
+                activitySentences: editingActivitySentences
             });
 
             if (res.success) {
+                toast({
+                    title: "Başarıyla Kaydedildi & Senkronize Edildi!",
+                    description: "Kelimeler, Tanımlar, Defter Notları ve Oyun Cümleleri tüm dosya ve oyunlara yansıtıldı.",
+                    className: "bg-emerald-950 border-emerald-500 text-white"
+                });
+                setHasUnsavedChanges(false);
+
                 // Update local items state
                 setItems(prev => prev.map(item => {
                     if (item.topicId === activeTopic.topicId) {
                         return {
                             ...item,
-                            concepts: editingConcepts.filter(c => c.trim().length > 0),
-                            conceptDefinitions: editingDefinitions.filter(d => d.concept.trim() || d.definition.trim()),
-                            sentences: editingSentences.filter(s => s.trim().length > 0),
+                            concepts: editingConcepts,
+                            conceptDefinitions: editingDefinitions,
+                            notes: editingNotes,
+                            activitySentences: editingActivitySentences,
+                            sentences: editingActivitySentences,
                             conceptsCount: editingConcepts.length,
                             definitionsCount: editingDefinitions.length,
-                            sentencesCount: editingSentences.length,
-                            hasContent: editingConcepts.length > 0 || editingDefinitions.length > 0 || editingSentences.length > 0
+                            notesCount: editingNotes.length,
+                            activitySentencesCount: editingActivitySentences.length,
+                            hasContent: true
                         };
                     }
                     return item;
                 }));
-                setHasUnsavedChanges(false);
-                toast({
-                    title: "Tüm Sistemlere Senkronize Kaydedildi! ⚡",
-                    description: `"${activeTopic.title}" konusuna ait ${editingConcepts.length} kavram, ${editingDefinitions.length} tanım ve ${editingSentences.length} cümle; hem Kavram Panosu'na hem Etkinlik Veri Bankası'na ve tüm oyunlara anında aktarıldı.`
-                });
             } else {
-                toast({ title: "Kayıt Başarısız", description: res.error || "Bilinmeyen hata.", variant: "destructive" });
+                toast({ title: "Kaydetme Hatası", description: res.error, variant: "destructive" });
             }
         } catch (err: any) {
-            toast({ title: "Hata", description: err.message || "Kaydedilirken hata oluştu.", variant: "destructive" });
+            console.error("Save error:", err);
+            toast({ title: "Hata", description: err.message || "Kaydedilemedi.", variant: "destructive" });
         } finally {
             setIsSaving(false);
         }
     };
 
-    // ── AI İLE ÜRETİM ──
-    const handleGenerateAi = async (mode: 'all' | 'concepts' | 'definitions' | 'sentences' = 'all') => {
+    // ── YAPAY ZEKA ÜRETİMİ (HER SEKME İÇİN AYRI VEYA HEPSİ) ──
+    const handleGenerateAi = async (mode: 'all' | 'concepts' | 'definitions' | 'notes' | 'activitySentences' = 'all') => {
         if (!activeTopic) return;
         setIsGeneratingAi(true);
         setAiDropdownOpen(false);
+
+        toast({
+            title: "Yapay Zeka Çalışıyor...",
+            description: mode === 'all'
+                ? "Ders kitabı metni taranıyor (Kelimeler, Tanımlar, Defter Notları ve Oyun Cümleleri)..."
+                : `${mode === 'concepts' ? 'Kelimeler' : mode === 'definitions' ? 'Kavram-Tanım Eşleşmeleri' : mode === 'notes' ? 'Defter Notları' : 'Kısa Oyun Cümleleri'} üretiliyor...`,
+        });
+
         try {
             const res = await generateCentralActivityAiAction({
                 sourceText: activeTopic.sourceText,
                 topicTitle: activeTopic.title,
                 grade: activeTopic.grade,
                 courseTitle: activeTopic.courseTitle,
-                mode: mode
+                mode
             });
 
             if (res.success) {
+                let updatedMsg: string[] = [];
+
                 if (mode === 'all' || mode === 'concepts') {
                     if (res.concepts && res.concepts.length > 0) {
                         setEditingConcepts(res.concepts);
+                        updatedMsg.push(`${res.concepts.length} kavram`);
                     }
                 }
                 if (mode === 'all' || mode === 'definitions') {
                     if (res.conceptDefinitions && res.conceptDefinitions.length > 0) {
                         setEditingDefinitions(res.conceptDefinitions);
+                        updatedMsg.push(`${res.conceptDefinitions.length} tanım çifti`);
                     }
                 }
-                if (mode === 'all' || mode === 'sentences') {
-                    if (res.sentences && res.sentences.length > 0) {
-                        setEditingSentences(res.sentences);
+                if (mode === 'all' || mode === 'notes') {
+                    if (res.notes && res.notes.length > 0) {
+                        setEditingNotes(res.notes);
+                        updatedMsg.push(`${res.notes.length} defter notu`);
                     }
                 }
+                if (mode === 'all' || mode === 'activitySentences') {
+                    if (res.activitySentences && res.activitySentences.length > 0) {
+                        setEditingActivitySentences(res.activitySentences);
+                        updatedMsg.push(`${res.activitySentences.length} kısa oyun cümlesi`);
+                    }
+                }
+
                 setHasUnsavedChanges(true);
                 toast({
                     title: "Yapay Zeka İçerikleri Hazırladı! ✨",
-                    description: "Kavramlar, tanımlar ve cümleler çıkarıldı. Beğendiyseniz 'Kaydet' butonuna basarak tüm sistemlere tek tıkla senkronize edebilirsiniz."
+                    description: `${updatedMsg.join(', ')} oluşturuldu. Kontrol edip 'Kaydet' butonuna basabilirsiniz.`,
+                    className: "bg-purple-950 border-purple-500 text-white"
                 });
             } else {
-                toast({ title: "Yapay Zeka Hatası", description: res.error || "İçerik üretilemedi.", variant: "destructive" });
+                toast({ title: "AI Üretim Hatası", description: res.error, variant: "destructive" });
             }
         } catch (err: any) {
-            toast({ title: "Hata", description: err.message || "Yapay zeka çalıştırılırken hata oluştu.", variant: "destructive" });
+            console.error("AI error:", err);
+            toast({ title: "Hata", description: err.message || "Yapay zeka içeriği oluşturamadı.", variant: "destructive" });
         } finally {
             setIsGeneratingAi(false);
         }
     };
 
-    // PDF Download / Print
+    // PDF / Yazdır
     const handleDownloadPdf = () => {
         if (!activeTopic) return;
         setIsDownloadingPdf(true);
-
         const printWindow = window.open('', '_blank');
         if (printWindow) {
             let htmlContent = `
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <meta charset="UTF-8">
-                    <title>${activeTopic.title} - Kavramlar, Tanımlar ve Notlar</title>
+                    <title>${activeTopic.title} - Defter Notları ve Kavramlar</title>
                     <style>
-                        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 40px; color: #1e293b; line-height: 1.6; }
-                        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #6366f1; padding-bottom: 20px; }
-                        .badge { display: inline-block; background: #e0e7ff; color: #4338ca; padding: 4px 12px; border-radius: 9999px; font-weight: 700; font-size: 13px; margin-bottom: 8px; }
-                        h1 { font-size: 26px; font-weight: 800; margin: 0; color: #0f172a; }
-                        .hierarchy { font-size: 14px; color: #64748b; margin-top: 6px; }
-                        h2 { font-size: 20px; font-weight: 700; color: #4338ca; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px; margin-top: 28px; }
-                        .words-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-                        .word-chip { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 4px 12px; border-radius: 8px; font-weight: 700; font-size: 13px; color: #334155; }
-                        .concepts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 14px; }
-                        .concept-card { border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px; background: #f8fafc; page-break-inside: avoid; }
-                        .concept-name { font-weight: 800; font-size: 16px; color: #0f172a; margin-bottom: 4px; text-transform: uppercase; }
-                        .concept-def { font-size: 14px; color: #334155; }
-                        .notes-list { list-style: none; padding: 0; margin-top: 14px; }
-                        .note-item { display: flex; gap: 12px; margin-bottom: 12px; page-break-inside: avoid; background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 10px; }
-                        .note-number { width: 26px; height: 26px; border-radius: 8px; background: #d97706; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
-                        .note-text { font-size: 14px; font-weight: 600; color: #1e293b; }
-                        .footer { text-align: center; margin-top: 40px; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #1e293b; line-height: 1.6; }
+                        h1 { color: #4338ca; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 8px; font-size: 24px; }
+                        .meta { color: #64748b; font-size: 13px; margin-bottom: 24px; font-weight: 500; }
+                        h2 { color: #0f172a; margin-top: 28px; margin-bottom: 14px; font-size: 18px; border-left: 4px solid #6366f1; padding-left: 10px; }
+                        .note-item { margin-bottom: 10px; padding: 8px 12px; background: #f8fafc; border-left: 3px solid #cbd5e1; font-size: 14px; }
+                        .concept-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+                        .concept-card { border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; background: #ffffff; }
+                        .concept-title { font-weight: bold; color: #4338ca; margin-bottom: 4px; font-size: 15px; }
+                        .concept-def { font-size: 13px; color: #334155; }
+                        .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 15px; }
                         @media print { body { padding: 20px; } }
                     </style>
                 </head>
                 <body>
-                    <div class="header">
-                        <span class="badge">${activeTopic.className}</span>
-                        <h1>${activeTopic.title}</h1>
-                        <div class="hierarchy">${activeTopic.courseTitle} › ${activeTopic.unitTitle}</div>
-                    </div>
+                    <h1>${activeTopic.title}</h1>
+                    <div class="meta">${activeTopic.className} • ${activeTopic.courseTitle} • ${activeTopic.unitTitle}</div>
             `;
 
-            if (editingConcepts.length > 0) {
-                htmlContent += `<h2>🏷️ Anahtar Kavramlar / Kelimeler</h2><div class="words-cloud">`;
-                editingConcepts.forEach(w => {
-                    htmlContent += `<span class="word-chip">${w}</span>`;
-                });
-                htmlContent += `</div>`;
-            }
-
             if (editingDefinitions.length > 0) {
-                htmlContent += `<h2>📖 Kavram - Tanım Eşleşmeleri</h2><div class="concepts-grid">`;
-                editingDefinitions.forEach(c => {
-                    if (c.concept || c.definition) {
-                        htmlContent += `
-                            <div class="concept-card">
-                                <div class="concept-name">${c.concept}</div>
-                                <div class="concept-def">${c.definition}</div>
-                            </div>
-                        `;
-                    }
+                htmlContent += `
+                    <h2>📖 Önemli Kavramlar ve Tanımları</h2>
+                    <div class="concept-grid">
+                `;
+                editingDefinitions.forEach(cd => {
+                    htmlContent += `
+                        <div class="concept-card">
+                            <div class="concept-title">${cd.concept}</div>
+                            <div class="concept-def">${cd.definition}</div>
+                        </div>
+                    `;
                 });
                 htmlContent += `</div>`;
             }
 
-            if (editingSentences.length > 0) {
-                htmlContent += `<h2>✍️ Özet Cümleler & Notlar</h2><div class="notes-list">`;
-                editingSentences.forEach((s, idx) => {
-                    if (s.trim()) {
-                        htmlContent += `
-                            <div class="note-item">
-                                <div class="note-number">${idx + 1}</div>
-                                <div class="note-text">${s}</div>
-                            </div>
-                        `;
-                    }
+            if (editingNotes.length > 0) {
+                htmlContent += `<h2>✍️ Deftere Yazılacak Özet Notlar</h2>`;
+                editingNotes.forEach((note, idx) => {
+                    htmlContent += `<div class="note-item"><strong>${idx + 1}.</strong> ${note}</div>`;
                 });
-                htmlContent += `</div>`;
             }
 
             htmlContent += `
@@ -560,7 +617,7 @@ function CentralActivityStudioContent() {
                                 </Badge>
                             </div>
                             <p className="text-xs sm:text-sm text-slate-400 font-medium">
-                                Kelimeleri, kavram-tanım eşleşmelerini ve özet cümleleri tek merkezden yönetin; oyunlara anında yansısın.
+                                Kelimeleri, tanımları, defter notlarını ve oyun cümlelerini tek ekrandan yönetin; oyunlara anında yansısın.
                             </p>
                         </div>
                     </div>
@@ -571,7 +628,7 @@ function CentralActivityStudioContent() {
                         <div className="relative w-full sm:w-64">
                             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                             <Input
-                                placeholder="Kavram, tanım veya cümle ara..."
+                                placeholder="Kavram, tanım, not ara..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="pl-9 h-10 bg-slate-950/70 border-white/10 text-xs rounded-xl focus:border-purple-500 text-white placeholder:text-slate-500"
@@ -598,14 +655,14 @@ function CentralActivityStudioContent() {
                                                         {res.conceptsCount} K.
                                                     </span>
                                                 )}
-                                                {res.definitionsCount > 0 && (
-                                                    <span className="text-[9px] bg-purple-950 border border-purple-800 text-purple-300 px-1.5 py-0.5 rounded font-mono">
-                                                        {res.definitionsCount} T.
+                                                {res.notesCount > 0 && (
+                                                    <span className="text-[9px] bg-indigo-950 border border-indigo-800 text-indigo-300 px-1.5 py-0.5 rounded font-mono">
+                                                        {res.notesCount} Ö.
                                                     </span>
                                                 )}
-                                                {res.sentencesCount > 0 && (
-                                                    <span className="text-[9px] bg-amber-950 border border-amber-800 text-amber-300 px-1.5 py-0.5 rounded font-mono">
-                                                        {res.sentencesCount} C.
+                                                {res.activitySentencesCount > 0 && (
+                                                    <span className="text-[9px] bg-emerald-950 border border-emerald-800 text-emerald-300 px-1.5 py-0.5 rounded font-mono">
+                                                        {res.activitySentencesCount} E.
                                                     </span>
                                                 )}
                                             </div>
@@ -615,68 +672,57 @@ function CentralActivityStudioContent() {
                             )}
                         </div>
 
-                        {/* Yenile Butonu */}
+                        {/* Akıllı Tahta Aç Butonu */}
                         <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => { setIsRefreshing(true); loadData(true); }}
-                            disabled={isRefreshing}
-                            className="border-white/10 hover:bg-white/10 text-slate-300 rounded-xl h-10 px-3"
-                            title="Verileri Yenile"
-                        >
-                            <RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin text-purple-400")} />
-                        </Button>
-
-                        {/* Akıllı Tahta Başlat Butonu */}
-                        <Button
-                            variant="outline"
                             asChild
+                            variant="outline"
+                            className="border-cyan-500/40 text-cyan-300 hover:text-white hover:bg-cyan-950/50 bg-slate-950/70 rounded-xl h-10 px-3.5 text-xs font-bold"
                             disabled={!activeTopic}
-                            className="rounded-xl h-10 px-3.5 text-xs font-bold border-indigo-500/40 bg-indigo-950/40 text-indigo-300 hover:bg-indigo-900/60 hover:text-white transition-all shadow-md"
                         >
                             <Link href={smartboardPlayUrl} target="_blank">
-                                <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
+                                <ExternalLink className="w-4 h-4 mr-1.5 text-cyan-400" />
                                 <span>Akıllı Tahtada Aç</span>
                             </Link>
                         </Button>
 
-                        {/* PDF İndir / Yazdır Butonu */}
+                        {/* PDF Yazdır */}
                         <Button
-                            variant="outline"
                             onClick={handleDownloadPdf}
                             disabled={isDownloadingPdf || !activeTopic}
-                            className="rounded-xl h-10 px-3.5 text-xs font-bold border-white/10 bg-slate-900 text-slate-300 hover:text-white hover:bg-white/10 transition-all"
+                            variant="outline"
+                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950/70 rounded-xl h-10 px-3 text-xs"
+                            title="Yazdır veya PDF olarak kaydet"
                         >
-                            {isDownloadingPdf ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Download className="w-3.5 h-3.5 mr-1.5" />}
-                            <span>PDF Yazdır</span>
+                            <Download className="w-4 h-4 mr-1 text-slate-400" />
+                            <span>PDF</span>
                         </Button>
 
-                        {/* AI İle Doldur (Dropdown Menü) */}
+                        {/* AI İle Üret Dropdown */}
                         <div className="relative">
                             <Button
-                                onClick={() => setAiDropdownOpen(prev => !prev)}
+                                onClick={() => setAiDropdownOpen(v => !v)}
                                 disabled={isGeneratingAi || !activeTopic}
-                                className="rounded-xl h-10 px-3.5 text-xs font-bold bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 hover:opacity-90 text-white shadow-lg shadow-purple-950/50 flex items-center gap-1.5"
+                                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl h-10 px-3.5 text-xs font-bold shadow-lg shadow-purple-900/30 flex items-center gap-1.5"
                             >
-                                {isGeneratingAi ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4 text-pink-200" />}
+                                {isGeneratingAi ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-amber-300" />}
                                 <span>AI İle Üret</span>
                             </Button>
 
                             {aiDropdownOpen && (
-                                <div className="absolute right-0 top-12 bg-slate-900 border border-white/20 rounded-2xl p-2 shadow-2xl z-50 w-60 space-y-1">
+                                <div className="absolute right-0 top-12 bg-slate-900 border border-white/20 rounded-2xl p-2 shadow-2xl z-50 w-72 space-y-1 animate-in fade-in zoom-in-95 duration-150">
                                     <button
                                         onClick={() => handleGenerateAi('all')}
-                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-white hover:bg-purple-600/40 flex items-center gap-2"
+                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-white hover:bg-purple-600/30 flex items-center gap-2"
                                     >
-                                        <Sparkles className="w-4 h-4 text-yellow-400" />
-                                        <span>Tümünü Üret (3'ü 1 Arada)</span>
+                                        <Sparkles className="w-4 h-4 text-amber-400" />
+                                        <span>Tamamı (Kavram, Tanım, Not, Cümle)</span>
                                     </button>
                                     <button
                                         onClick={() => handleGenerateAi('concepts')}
                                         className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-blue-300 hover:bg-blue-600/30 flex items-center gap-2"
                                     >
                                         <Tag className="w-4 h-4 text-blue-400" />
-                                        <span>Yalnızca Kavramları (Kelimeleri) Çıkar</span>
+                                        <span>Yalnızca Kelime / Kavram Havuzunu Üret</span>
                                     </button>
                                     <button
                                         onClick={() => handleGenerateAi('definitions')}
@@ -686,11 +732,18 @@ function CentralActivityStudioContent() {
                                         <span>Yalnızca Kavram-Tanım Çiftlerini Üret</span>
                                     </button>
                                     <button
-                                        onClick={() => handleGenerateAi('sentences')}
-                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-amber-300 hover:bg-amber-600/30 flex items-center gap-2"
+                                        onClick={() => handleGenerateAi('notes')}
+                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-indigo-300 hover:bg-indigo-600/30 flex items-center gap-2"
                                     >
-                                        <ListOrdered className="w-4 h-4 text-amber-400" />
-                                        <span>Yalnızca Özet Cümleleri Üret</span>
+                                        <FileText className="w-4 h-4 text-indigo-400" />
+                                        <span>Yalnızca Deftere Yazılacak Notları Üret</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleGenerateAi('activitySentences')}
+                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-emerald-300 hover:bg-emerald-600/30 flex items-center gap-2"
+                                    >
+                                        <ListOrdered className="w-4 h-4 text-emerald-400" />
+                                        <span>Yalnızca Kısa Oyun Cümlelerini Üret</span>
                                     </button>
                                 </div>
                             )}
@@ -760,261 +813,201 @@ function CentralActivityStudioContent() {
                                     </div>
                                     <Button
                                         variant="ghost"
-                                        size="sm"
+                                        size="icon"
                                         onClick={() => setIsSidebarOpen(false)}
-                                        className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-8 px-2 text-xs flex items-center gap-1 border border-white/10 ml-1"
+                                        className="h-8 w-8 text-slate-400 hover:text-white rounded-xl"
                                         title="Fihristi Gizle"
                                     >
-                                        <PanelLeftClose className="w-4 h-4 text-purple-400" />
-                                        <span className="hidden sm:inline">Gizle</span>
+                                        <PanelLeftClose className="w-4 h-4" />
                                     </Button>
                                 </div>
                             </div>
 
-                            {/* 4 Kolon Konteyneri */}
-                            <div className="flex-1 grid grid-cols-4 divide-x divide-white/10 overflow-hidden text-xs">
+                            {/* Miller Columns Gövdesi */}
+                            <div className="flex-1 grid grid-cols-12 divide-x divide-white/10 overflow-hidden bg-slate-950/40">
                                 
-                                {/* KOLON 1: Sınıflar */}
-                                <div className={cn("flex flex-col h-full bg-slate-950/30 overflow-hidden", focusedColumn === 'grade' && "ring-1 ring-inset ring-purple-500/30")}>
-                                    <div className="p-3 border-b border-white/10 bg-slate-950/40 flex items-center justify-between font-bold text-slate-300">
-                                        <span>Sınıf</span>
-                                        <span className="text-[10px] text-slate-500">{availableGrades.length}</span>
+                                {/* 1. KADEME: SINIFLAR (2 Sütun) */}
+                                <div className="col-span-2 flex flex-col overflow-y-auto p-2 space-y-1.5">
+                                    <div className="px-2 py-1 text-[10px] font-black text-slate-500 uppercase tracking-widest">Sınıf</div>
+                                    {availableGrades.map(grade => {
+                                        const count = items.filter(i => i.grade === grade).length;
+                                        const isSelected = selectedGrade === grade;
+                                        return (
+                                            <button
+                                                key={grade}
+                                                onClick={() => {
+                                                    setSelectedGrade(grade);
+                                                    setFocusedColumn('course');
+                                                }}
+                                                className={cn(
+                                                    "w-full text-left p-2.5 rounded-2xl transition-all flex flex-col items-center justify-center gap-0.5 border text-xs font-bold",
+                                                    isSelected
+                                                        ? "bg-purple-600 border-purple-400 text-white shadow-md shadow-purple-950"
+                                                        : "border-transparent text-slate-400 hover:bg-white/5 hover:text-white"
+                                                )}
+                                            >
+                                                <span className="text-sm font-black">{grade}.</span>
+                                                <span className="text-[10px] opacity-75 font-normal">Sınıf</span>
+                                                <span className="text-[9px] font-mono mt-1 opacity-60">({count})</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* 2. KADEME: DERSLER (3 Sütun) */}
+                                <div className="col-span-3 flex flex-col overflow-y-auto p-2 space-y-1.5">
+                                    <div className="px-2 py-1 text-[10px] font-black text-slate-500 uppercase tracking-widest">Ders</div>
+                                    {coursesInGrade.map(course => {
+                                        const isSelected = selectedCourseId === course.id;
+                                        return (
+                                            <button
+                                                key={course.id}
+                                                onClick={() => {
+                                                    setSelectedCourseId(course.id);
+                                                    setFocusedColumn('unit');
+                                                }}
+                                                className={cn(
+                                                    "w-full text-left p-2.5 rounded-2xl transition-all border text-xs font-bold leading-tight group",
+                                                    isSelected
+                                                        ? "bg-indigo-600 border-indigo-400 text-white shadow-md shadow-indigo-950"
+                                                        : "border-transparent text-slate-300 hover:bg-white/5 hover:text-white"
+                                                )}
+                                            >
+                                                <div className="line-clamp-2">{course.title}</div>
+                                                <div className="text-[10px] opacity-60 font-mono mt-1">
+                                                    {course.count} Konu
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* 3. KADEME: ÜNİTELER (3 Sütun) */}
+                                <div className="col-span-3 flex flex-col overflow-y-auto p-2 space-y-1.5">
+                                    <div className="px-2 py-1 text-[10px] font-black text-slate-500 uppercase tracking-widest">Ünite</div>
+                                    {unitsInCourse.map((unit, idx) => {
+                                        const isSelected = selectedUnitId === unit.id;
+                                        return (
+                                            <button
+                                                key={unit.id}
+                                                onClick={() => {
+                                                    setSelectedUnitId(unit.id);
+                                                    setFocusedColumn('topic');
+                                                }}
+                                                className={cn(
+                                                    "w-full text-left p-2.5 rounded-2xl transition-all border text-xs font-medium leading-tight group",
+                                                    isSelected
+                                                        ? "bg-cyan-600 border-cyan-400 text-white shadow-md shadow-cyan-950 font-bold"
+                                                        : "border-transparent text-slate-300 hover:bg-white/5 hover:text-white"
+                                                )}
+                                            >
+                                                <div className="text-[10px] font-mono opacity-60 mb-0.5">Ünite {idx + 1}</div>
+                                                <div className="line-clamp-2 text-xs">{unit.title}</div>
+                                                <div className="text-[10px] opacity-60 font-mono mt-1">
+                                                    {unit.count} Konu
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* 4. KADEME: KONULAR (4 Sütun - Tıklanınca Otomatik Gizlenir) */}
+                                <div className="col-span-4 flex flex-col overflow-y-auto p-2 space-y-1.5">
+                                    <div className="px-2 py-1 text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center justify-between">
+                                        <span>Konular ({topicsInUnit.length})</span>
+                                        <span className="text-[9px] text-purple-400 font-normal">Seç ve Odaklan</span>
                                     </div>
-                                    <div className="flex-1 overflow-y-auto p-2 space-y-1.5 scrollbar-thin">
-                                        {availableGrades.map(grade => {
-                                            const isSelected = selectedGrade === grade;
-                                            return (
-                                                <button
-                                                    key={grade}
-                                                    onClick={() => {
-                                                        setSelectedGrade(grade);
-                                                        setFocusedColumn('course');
-                                                    }}
-                                                    className={cn(
-                                                        "w-full text-left p-2.5 rounded-xl transition-all flex items-center justify-between font-bold",
-                                                        isSelected
-                                                            ? "bg-purple-600 text-white shadow-lg shadow-purple-900/50"
-                                                            : "text-slate-400 hover:text-white hover:bg-white/5"
+                                    {topicsInUnit.map((topic, idx) => {
+                                        const isSelected = selectedTopicId === topic.topicId;
+                                        return (
+                                            <button
+                                                key={topic.topicId}
+                                                onClick={() => handleTopicSelect(topic.topicId, true)}
+                                                className={cn(
+                                                    "w-full text-left p-2.5 rounded-2xl transition-all border text-xs leading-snug group flex flex-col gap-1.5",
+                                                    isSelected
+                                                        ? "bg-purple-600 border-purple-400 text-white font-bold shadow-lg shadow-purple-950"
+                                                        : "border-white/5 bg-slate-900/50 text-slate-200 hover:bg-white/10 hover:border-white/10"
+                                                )}
+                                            >
+                                                <div className="flex items-start justify-between gap-1">
+                                                    <span className="text-[10px] font-mono opacity-60">#{idx + 1}</span>
+                                                    {topic.hasContent ? (
+                                                        <span className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0 mt-1" title="İçerik mevcut" />
+                                                    ) : (
+                                                        <span className="w-2 h-2 rounded-full bg-slate-600 flex-shrink-0 mt-1" title="Boş" />
                                                     )}
-                                                >
-                                                    <span>{grade}. Sınıf</span>
-                                                    <span className={cn("text-[10px] px-1.5 py-0.5 rounded-md", isSelected ? "bg-purple-800 text-purple-200" : "bg-slate-800 text-slate-500")}>
-                                                        {items.filter(i => i.grade === grade).length}
+                                                </div>
+                                                <div className="line-clamp-2 text-xs font-semibold">{topic.title}</div>
+
+                                                {/* Rozetler: K (Kavram), T (Tanım), Ö (Özet Not), E (Etkinlik Cümlesi) */}
+                                                <div className="flex items-center gap-1 flex-wrap pt-0.5">
+                                                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-950/80 border border-blue-800/80 text-blue-300 font-mono" title="Kavramlar">
+                                                        K: {topic.conceptsCount}
                                                     </span>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
-                                {/* KOLON 2: Dersler */}
-                                <div className={cn("flex flex-col h-full bg-slate-950/20 overflow-hidden", focusedColumn === 'course' && "ring-1 ring-inset ring-purple-500/30")}>
-                                    <div className="p-3 border-b border-white/10 bg-slate-950/40 flex items-center justify-between font-bold text-slate-300">
-                                        <span>Ders</span>
-                                        <span className="text-[10px] text-slate-500">{availableCourses.length}</span>
-                                    </div>
-                                    <div className="flex-1 overflow-y-auto p-2 space-y-1.5 scrollbar-thin">
-                                        {availableCourses.map(course => {
-                                            const isSelected = selectedCourseId === course.id;
-                                            return (
-                                                <button
-                                                    key={course.id}
-                                                    onClick={() => {
-                                                        setSelectedCourseId(course.id);
-                                                        setFocusedColumn('unit');
-                                                    }}
-                                                    className={cn(
-                                                        "w-full text-left p-2.5 rounded-xl transition-all flex flex-col gap-1 font-bold",
-                                                        isSelected
-                                                            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/50"
-                                                            : "text-slate-400 hover:text-white hover:bg-white/5"
-                                                    )}
-                                                >
-                                                    <span className="truncate leading-snug">{course.title}</span>
-                                                    <span className={cn("text-[10px] font-normal", isSelected ? "text-indigo-200" : "text-slate-500")}>
-                                                        {course.count} Konu
+                                                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-950/80 border border-purple-800/80 text-purple-300 font-mono" title="Tanımlar">
+                                                        T: {topic.definitionsCount}
                                                     </span>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
+                                                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-950/80 border border-indigo-800/80 text-indigo-300 font-mono" title="Defter Notları (Özet)">
+                                                        Ö: {topic.notesCount}
+                                                    </span>
+                                                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300 font-mono" title="Kısa Etkinlik Cümleleri">
+                                                        E: {topic.activitySentencesCount}
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
-
-                                {/* KOLON 3: Üniteler */}
-                                <div className={cn("flex flex-col h-full bg-slate-950/30 overflow-hidden", focusedColumn === 'unit' && "ring-1 ring-inset ring-purple-500/30")}>
-                                    <div className="p-3 border-b border-white/10 bg-slate-950/40 flex items-center justify-between font-bold text-slate-300">
-                                        <span>Ünite</span>
-                                        <span className="text-[10px] text-slate-500">{availableUnits.length}</span>
-                                    </div>
-                                    <div className="flex-1 overflow-y-auto p-2 space-y-1.5 scrollbar-thin">
-                                        {availableUnits.map(unit => {
-                                            const isSelected = selectedUnitId === unit.id;
-                                            return (
-                                                <button
-                                                    key={unit.id}
-                                                    onClick={() => {
-                                                        setSelectedUnitId(unit.id);
-                                                        setFocusedColumn('topic');
-                                                    }}
-                                                    className={cn(
-                                                        "w-full text-left p-2.5 rounded-xl transition-all flex flex-col gap-1",
-                                                        isSelected
-                                                            ? "bg-cyan-600 text-white shadow-lg shadow-cyan-900/50 font-bold"
-                                                            : "text-slate-400 hover:text-white hover:bg-white/5"
-                                                    )}
-                                                >
-                                                    <span className="line-clamp-2 leading-snug">{unit.title}</span>
-                                                    <div className="flex items-center justify-between text-[10px]">
-                                                        <span className={isSelected ? "text-cyan-200" : "text-slate-500"}>
-                                                            {unit.count} Konu
-                                                        </span>
-                                                        {unit.withContentCount > 0 && (
-                                                            <span className={cn("px-1 rounded", isSelected ? "bg-cyan-800 text-white" : "bg-emerald-950/70 text-emerald-400")}>
-                                                                {unit.withContentCount}/{unit.count} Hazır
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
-                                {/* KOLON 4: Konular (Seçilince Otomatik Kapanır) */}
-                                <div className={cn("flex flex-col h-full bg-slate-950/40 overflow-hidden", focusedColumn === 'topic' && "ring-1 ring-inset ring-purple-500/30")}>
-                                    <div className="p-3 border-b border-white/10 bg-slate-950/50 flex items-center justify-between font-bold text-slate-300">
-                                        <span>Konular</span>
-                                        <span className="text-[10px] text-slate-500">{currentUnitTopics.length}</span>
-                                    </div>
-                                    <div className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-thin">
-                                        {currentUnitTopics.map(topic => {
-                                            const isSelected = selectedTopicId === topic.topicId;
-                                            return (
-                                                <button
-                                                    key={topic.topicId}
-                                                    onClick={() => handleTopicSelect(topic.topicId, true)}
-                                                    className={cn(
-                                                        "w-full text-left p-2.5 rounded-xl transition-all flex flex-col gap-1.5 group border",
-                                                        isSelected
-                                                            ? "bg-purple-600 border-purple-400 text-white shadow-lg shadow-purple-900/60 font-bold"
-                                                            : "bg-slate-900/60 border-white/5 text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/20"
-                                                    )}
-                                                >
-                                                    <span className="line-clamp-2 leading-snug">{topic.title}</span>
-                                                    <div className="flex items-center gap-1 flex-wrap">
-                                                        {topic.conceptsCount > 0 && (
-                                                            <span className={cn("text-[9px] px-1 py-0.2 rounded font-mono font-bold", isSelected ? "bg-purple-800 text-purple-200" : "bg-blue-950 border border-blue-800 text-blue-300")} title={`${topic.conceptsCount} Kelime Kavram`}>
-                                                                {topic.conceptsCount} K
-                                                            </span>
-                                                        )}
-                                                        {topic.definitionsCount > 0 && (
-                                                            <span className={cn("text-[9px] px-1 py-0.2 rounded font-mono font-bold", isSelected ? "bg-purple-800 text-purple-200" : "bg-purple-950 border border-purple-800 text-purple-300")} title={`${topic.definitionsCount} Tanım`}>
-                                                                {topic.definitionsCount} T
-                                                            </span>
-                                                        )}
-                                                        {topic.sentencesCount > 0 && (
-                                                            <span className={cn("text-[9px] px-1 py-0.2 rounded font-mono font-bold", isSelected ? "bg-purple-800 text-purple-200" : "bg-amber-950 border border-amber-800 text-amber-300")} title={`${topic.sentencesCount} Cümle`}>
-                                                                {topic.sentencesCount} C
-                                                            </span>
-                                                        )}
-                                                        {!topic.hasContent && (
-                                                            <span className="text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-500">
-                                                                Boş
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     )}
 
-                    {/* ── SAĞ PANEL: DİJİTAL ÇALIŞMA MASASI & MERKEZİ STÜDYO ── */}
+                    {/* ── SAĞ PANEL: ÇALIŞMA MASASI & STÜDYO EDİTÖRÜ (SEKMELİ) ── */}
                     <div className={cn(
-                        "flex flex-col h-[820px] xl:h-[880px] rounded-3xl bg-slate-900/75 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl transition-all duration-300",
-                        isSidebarOpen ? "xl:col-span-7 2xl:col-span-7" : "col-span-12 w-full"
+                        "flex flex-col rounded-3xl bg-slate-900/80 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl transition-all duration-300",
+                        isSidebarOpen ? "xl:col-span-7 2xl:col-span-7 min-h-[820px] xl:min-h-[880px]" : "col-span-1 min-h-[820px] xl:min-h-[880px]"
                     )}>
 
-                        {/* Stüdyo Başlık Barı ve Hiyerarşi */}
-                        <div className="p-4 border-b border-white/10 bg-slate-950/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 flex-wrap">
-                            <div className="flex items-center gap-3 min-w-0 flex-1">
-                                {/* Fihrist Aç / Kapat Butonu */}
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => setIsSidebarOpen(prev => !prev)}
-                                    className={cn(
-                                        "rounded-xl h-10 px-3.5 text-xs font-bold transition-all shadow-lg flex items-center gap-2 flex-shrink-0",
-                                        !isSidebarOpen
-                                            ? "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-purple-400/60 shadow-purple-950/60 ring-2 ring-purple-400/30"
-                                            : "border-white/10 text-slate-300 hover:text-white bg-slate-900"
-                                    )}
-                                    title={isSidebarOpen ? "Fihristi Gizle" : "Müfredat Fihristini Aç (Sınıf, Ünite veya Konu Değiştir)"}
-                                >
-                                    {isSidebarOpen ? (
-                                        <>
-                                            <PanelLeftClose className="w-4 h-4 text-purple-300" />
-                                            <span className="hidden sm:inline">Fihristi Gizle</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <PanelLeftOpen className="w-4 h-4 text-white animate-pulse" />
-                                            <span>Fihristi Aç (Konu Değiştir)</span>
-                                        </>
-                                    )}
-                                </Button>
-
-                                {/* Tıklanabilir Ekmek Kırıntısı (Breadcrumbs) */}
-                                <div className="space-y-1 min-w-0 flex-1">
-                                    <div className="flex items-center gap-1.5 flex-wrap text-xs text-slate-400 font-medium">
-                                        <button
-                                            type="button"
-                                            onClick={() => { setIsSidebarOpen(true); setFocusedColumn('grade'); }}
-                                            className="text-purple-400 font-bold hover:underline hover:text-purple-300 transition-colors cursor-pointer"
-                                            title="Sınıf değiştirmek için fihristi aç"
-                                        >
-                                            {selectedGrade}. Sınıf
-                                        </button>
-                                        <span>›</span>
-                                        <button
-                                            type="button"
-                                            onClick={() => { setIsSidebarOpen(true); setFocusedColumn('course'); }}
-                                            className="truncate max-w-[140px] hover:underline hover:text-white transition-colors cursor-pointer"
-                                            title="Ders değiştirmek için fihristi aç"
-                                        >
-                                            {activeTopic?.courseTitle || availableCourses.find(c => c.id === selectedCourseId)?.title || 'Ders'}
-                                        </button>
-                                        <span>›</span>
-                                        <button
-                                            type="button"
-                                            onClick={() => { setIsSidebarOpen(true); setFocusedColumn('unit'); }}
-                                            className="truncate max-w-[140px] hover:underline hover:text-white transition-colors cursor-pointer"
-                                            title="Ünite değiştirmek için fihristi aç"
-                                        >
-                                            {activeTopic?.unitTitle || availableUnits.find(u => u.id === selectedUnitId)?.title || 'Ünite'}
-                                        </button>
-                                        {activeTopic && (
-                                            <Badge
-                                                onClick={() => { setIsSidebarOpen(true); setFocusedColumn('topic'); }}
-                                                className="text-[10px] font-black uppercase px-2 py-0.5 ml-1 cursor-pointer hover:opacity-80 transition-opacity bg-cyan-500/20 text-cyan-300 border-cyan-400/30"
-                                                title="Konu listesini görmek için fihristi aç"
-                                            >
-                                                KONU
-                                            </Badge>
+                        {/* Çalışma Masası Başlığı & Fihrist Aç/Kapa Kontrolü */}
+                        <div className="p-4 sm:p-5 border-b border-white/10 bg-slate-950/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div className="flex items-center gap-3">
+                                {!isSidebarOpen && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setIsSidebarOpen(true)}
+                                        className="border-purple-500/30 text-purple-300 hover:text-white hover:bg-purple-950/50 bg-slate-900/80 rounded-xl h-9 px-3 text-xs font-bold"
+                                    >
+                                        <PanelLeftOpen className="w-4 h-4 mr-1.5" />
+                                        <span>Fihristi Aç</span>
+                                    </Button>
+                                )}
+                                <div>
+                                    <div className="flex items-center gap-2">
+                                        <h2 className="text-lg sm:text-xl font-black text-white">
+                                            {activeTopic ? activeTopic.title : "Lütfen Bir Konu Seçin"}
+                                        </h2>
+                                        {hasUnsavedChanges && (
+                                            <span className="text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded-full animate-pulse">
+                                                Değişiklikler Kaydedilmedi
+                                            </span>
                                         )}
                                     </div>
-                                    <h2 className="text-base sm:text-lg font-black text-white truncate flex items-center gap-2">
-                                        {activeTopic?.title || 'Konu Seçilmedi'}
-                                    </h2>
+                                    {activeTopic && (
+                                        <div className="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+                                            <span>{activeTopic.className}</span>
+                                            <span>•</span>
+                                            <span>{activeTopic.courseTitle}</span>
+                                            <span>•</span>
+                                            <span className="text-slate-300 font-medium">{activeTopic.unitTitle}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
-                            {/* Önceki & Sonraki Konu Gezinmesi */}
-                            <div className="flex items-center gap-2 flex-shrink-0">
+                            {/* Önceki / Sonraki Konu Gezinme Butonları */}
+                            <div className="flex items-center gap-1.5 self-end sm:self-auto">
                                 <Button
                                     variant="outline"
                                     size="sm"
@@ -1038,7 +1031,7 @@ function CentralActivityStudioContent() {
                             </div>
                         </div>
 
-                        {/* ══ STÜDYO 5 TEMEL ÇALIŞMA SEKMESİ ══ */}
+                        {/* ══ STÜDYO 6 TEMEL ÇALIŞMA SEKMESİ (AYRIŞTIRILMIŞ) ══ */}
                         <div className="px-4 py-2.5 bg-slate-950/50 border-b border-white/10 flex items-center justify-between gap-3 flex-wrap">
                             <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-2xl border border-white/10 flex-wrap">
                                 
@@ -1076,24 +1069,41 @@ function CentralActivityStudioContent() {
                                     </span>
                                 </button>
 
-                                {/* Sekme 3: Özet Cümleler */}
+                                {/* Sekme 3: Defter Notları (Özet) */}
                                 <button
-                                    onClick={() => setActiveTab('sentences')}
+                                    onClick={() => setActiveTab('notes')}
                                     className={cn(
                                         "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
-                                        activeTab === 'sentences'
-                                            ? "bg-amber-600 text-white shadow-md shadow-amber-950/40"
-                                            : "text-amber-400 hover:text-white"
+                                        activeTab === 'notes'
+                                            ? "bg-indigo-600 text-white shadow-md shadow-indigo-950/40"
+                                            : "text-indigo-400 hover:text-white"
                                     )}
                                 >
-                                    <ListOrdered className="w-3.5 h-3.5" />
-                                    <span>3. Özet Cümleler & Notlar</span>
+                                    <FileText className="w-3.5 h-3.5" />
+                                    <span>3. Defter Notları (Özet)</span>
                                     <span className="text-[10px] font-mono px-1.5 py-0.2 bg-black/30 rounded font-bold">
-                                        {editingSentences.length}
+                                        {editingNotes.length}
                                     </span>
                                 </button>
 
-                                {/* Sekme 4: Akıllı Tahta Önizleme */}
+                                {/* Sekme 4: Kısa Etkinlik Cümleleri (Oyun Havuzu) */}
+                                <button
+                                    onClick={() => setActiveTab('activitySentences')}
+                                    className={cn(
+                                        "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
+                                        activeTab === 'activitySentences'
+                                            ? "bg-emerald-600 text-white shadow-md shadow-emerald-950/40"
+                                            : "text-emerald-400 hover:text-white"
+                                    )}
+                                >
+                                    <ListOrdered className="w-3.5 h-3.5" />
+                                    <span>4. Kısa Etkinlik Cümleleri</span>
+                                    <span className="text-[10px] font-mono px-1.5 py-0.2 bg-black/30 rounded font-bold">
+                                        {editingActivitySentences.length}
+                                    </span>
+                                </button>
+
+                                {/* Sekme 5: Akıllı Tahta Önizleme */}
                                 <button
                                     onClick={() => setActiveTab('smartboard')}
                                     className={cn(
@@ -1104,54 +1114,56 @@ function CentralActivityStudioContent() {
                                     )}
                                 >
                                     <Eye className="w-3.5 h-3.5" />
-                                    <span>4. Akıllı Tahta Önizleme</span>
+                                    <span>5. Akıllı Tahta Önizleme</span>
                                 </button>
 
-                                {/* Sekme 5: Ders Kitabı Metni */}
+                                {/* Sekme 6: Ders Kitabı Metni */}
                                 <button
                                     onClick={() => setActiveTab('source')}
                                     className={cn(
                                         "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5",
                                         activeTab === 'source'
-                                            ? "bg-emerald-600 text-white shadow-md shadow-emerald-950/40"
-                                            : "text-emerald-400 hover:text-white"
+                                            ? "bg-slate-700 text-white shadow-md"
+                                            : "text-slate-400 hover:text-white"
                                     )}
                                 >
                                     <BookOpen className="w-3.5 h-3.5" />
-                                    <span>5. Ders Kitabı Metni</span>
-                                    {activeTopic?.sourceText && (
-                                        <span className="text-[10px] font-mono px-1.5 py-0.2 bg-black/30 rounded">
-                                            {activeTopic.sourceText.trim().split(/\s+/).length} kelime
-                                        </span>
-                                    )}
+                                    <span>6. Ders Kitabı Metni</span>
                                 </button>
                             </div>
 
-                            {/* Değişiklik Bildirimi */}
-                            {hasUnsavedChanges && (
-                                <div className="flex items-center gap-1.5 text-xs text-amber-400 bg-amber-950/40 border border-amber-800/50 px-3 py-1 rounded-xl">
-                                    <AlertCircle className="w-3.5 h-3.5 animate-pulse" />
-                                    <span>Kaydedilmemiş değişiklikler var</span>
+                            {/* Hızlı İstatistik Rozeti */}
+                            {activeTopic && (
+                                <div className="text-[11px] text-slate-400 font-mono hidden md:flex items-center gap-2">
+                                    <span>Toplam:</span>
+                                    <span className="text-blue-400 font-bold">{editingConcepts.length} Kelime</span>
+                                    <span>•</span>
+                                    <span className="text-purple-400 font-bold">{editingDefinitions.length} Tanım</span>
+                                    <span>•</span>
+                                    <span className="text-indigo-400 font-bold">{editingNotes.length} Not</span>
+                                    <span>•</span>
+                                    <span className="text-emerald-400 font-bold">{editingActivitySentences.length} Oyun Cümlesi</span>
                                 </div>
                             )}
                         </div>
 
-                        {/* ══ SEKME İÇERİKLERİ ══ */}
-                        <div className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-thin">
-
+                        {/* ══ ÇALIŞMA ALANI İÇERİĞİ (SEÇİLİ SEKME) ══ */}
+                        <div className="flex-1 p-4 sm:p-6 overflow-y-auto max-h-[750px]">
+                            
                             {/* ── 1. KAVRAMLAR (KELİME HAVUZU) SEKMESİ ── */}
                             {activeTab === 'concepts' && (
-                                <div className="space-y-5 max-w-5xl mx-auto">
-                                    <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                                <div className="space-y-4 max-w-5xl mx-auto">
+                                    <div className="bg-slate-950/60 p-4 rounded-2xl border border-blue-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                                         <div>
                                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                                                <span>Anahtar Kavramlar & Kelime Havuzu</span>
+                                                <Tag className="w-4 h-4 text-blue-400" />
+                                                <span>Kelime & Kavram Havuzu (Tek Kelimelik Terimler)</span>
                                                 <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30 text-[10px]">
                                                     {editingConcepts.length} Kelime
                                                 </Badge>
                                             </h3>
-                                            <p className="text-xs text-slate-400">
-                                                Anlat Bakalım, Anagram Duvarı, Çarkıfelek ve Kelime Avı gibi oyunlarda doğrudan kullanılan kavramlar.
+                                            <p className="text-xs text-slate-400 mt-0.5">
+                                                Anlat Bakalım, Anagram Duvarı, Çarkıfelek ve Kelime Avı oyunlarında anahtar terim olarak kullanılır.
                                             </p>
                                         </div>
                                         <Button
@@ -1165,61 +1177,64 @@ function CentralActivityStudioContent() {
                                         </Button>
                                     </div>
 
-                                    {/* Hızlı Kelime Ekleme Girişi */}
-                                    <div className="flex items-center gap-2 bg-slate-900/90 p-2.5 rounded-2xl border border-white/10">
+                                    {/* Hızlı Ekleme Çubuğu */}
+                                    <div className="flex gap-2">
                                         <Input
-                                            placeholder="Yeni kavram veya virgülle çoklu kelime yazın (Örn: Tevhid, İhlas, Rahman, Kıble)..."
+                                            placeholder="Yeni kavram veya virgülle birden fazla ekleyin (Örn: Tevhid, İhlas, Sadaka)..."
                                             value={newConceptInput}
                                             onChange={(e) => setNewConceptInput(e.target.value)}
-                                            onKeyDown={(e) => e.key === 'Enter' && handleAddConceptWord()}
-                                            className="bg-slate-950/60 border-white/10 text-xs font-semibold text-white rounded-xl h-10"
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    handleAddMultipleConcepts(newConceptInput);
+                                                }
+                                            }}
+                                            className="bg-slate-950/70 border-white/10 text-xs rounded-xl focus:border-blue-500 text-white placeholder:text-slate-500 flex-1"
                                         />
                                         <Button
-                                            onClick={handleAddConceptWord}
+                                            onClick={() => handleAddMultipleConcepts(newConceptInput)}
                                             disabled={!newConceptInput.trim()}
-                                            className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl h-10 px-4 text-xs font-bold flex-shrink-0"
+                                            className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl px-4"
                                         >
                                             <Plus className="w-4 h-4 mr-1" /> Ekle
                                         </Button>
                                     </div>
 
-                                    {/* Kelime Çipleri / Etiketleri */}
+                                    {/* Kelime Etiketleri (Chip Grid) */}
                                     {editingConcepts.length > 0 ? (
-                                        <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-5 space-y-3">
-                                            <div className="flex items-center justify-between text-xs text-slate-400 border-b border-white/10 pb-2">
-                                                <span>Kayıtlı Kelimeler (Silmek için çarpıya tıklayabilirsiniz):</span>
-                                                <button
-                                                    onClick={() => { setEditingConcepts([]); setHasUnsavedChanges(true); }}
-                                                    className="text-red-400 hover:underline text-[11px]"
+                                        <div className="flex flex-wrap gap-2 p-4 bg-slate-950/40 rounded-2xl border border-white/5 min-h-[140px]">
+                                            {editingConcepts.map((concept, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="inline-flex items-center gap-2 bg-blue-950/50 border border-blue-500/30 text-blue-200 hover:border-blue-400 px-3 py-1.5 rounded-xl text-xs font-medium group transition-all"
                                                 >
-                                                    Tümünü Temizle
-                                                </button>
-                                            </div>
-                                            <div className="flex flex-wrap gap-2.5">
-                                                {editingConcepts.map((word, idx) => (
-                                                    <div
-                                                        key={idx}
-                                                        className="group bg-blue-950/60 border border-blue-500/40 hover:border-blue-400 text-blue-200 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-md"
+                                                    <span>{concept}</span>
+                                                    <button
+                                                        onClick={() => handleRemoveConcept(idx)}
+                                                        className="text-blue-400 hover:text-red-400 transition-colors"
+                                                        title="Kaldır"
                                                     >
-                                                        <span className="text-[10px] text-blue-400/60 font-mono">#{idx + 1}</span>
-                                                        <span>{word}</span>
-                                                        <button
-                                                            onClick={() => handleRemoveConceptWord(idx)}
-                                                            className="text-blue-400/50 hover:text-red-400 transition-colors p-0.5"
-                                                            title="Kavramı Kaldır"
-                                                        >
-                                                            <X className="w-3.5 h-3.5" />
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                                        <X className="w-3 h-3" />
+                                                    </button>
+                                                </div>
+                                            ))}
                                         </div>
                                     ) : (
-                                        <div className="p-12 text-center bg-slate-950/40 rounded-3xl border border-dashed border-white/10 space-y-3">
+                                        <div className="flex flex-col items-center justify-center p-12 bg-slate-950/40 rounded-3xl border border-dashed border-white/10 text-center space-y-4">
                                             <Tag className="w-10 h-10 text-blue-400 mx-auto opacity-40" />
-                                            <p className="text-slate-400 text-xs font-medium">
-                                                Bu konu için henüz tekil kavram kelimesi eklenmemiş. Yukarıdaki giriş alanından ekleyebilir veya AI ile çıkarabilirsiniz.
-                                            </p>
+                                            <div className="space-y-1">
+                                                <h4 className="text-base font-bold text-white">Henüz Kelime/Kavram Eklenmedi</h4>
+                                                <p className="text-xs text-slate-400 max-w-md">
+                                                    Anlat Bakalım ve Anagram oyunlarında kullanılacak kelimeleri yukarıdan yazabilir veya yapay zeka ile otomatik çıkarabilirsiniz.
+                                                </p>
+                                            </div>
+                                            <Button
+                                                onClick={() => handleGenerateAi('concepts')}
+                                                disabled={isGeneratingAi}
+                                                className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl"
+                                            >
+                                                <Wand2 className="w-3.5 h-3.5 mr-1.5" /> AI İle Kelimeleri Çıkar
+                                            </Button>
                                         </div>
                                     )}
                                 </div>
@@ -1228,16 +1243,17 @@ function CentralActivityStudioContent() {
                             {/* ── 2. KAVRAM-TANIM EŞLEŞMELİ SEKMESİ ── */}
                             {activeTab === 'definitions' && (
                                 <div className="space-y-4 max-w-5xl mx-auto">
-                                    <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-2xl border border-white/10">
+                                    <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-2xl border border-purple-500/30">
                                         <div>
                                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                                                <span>Kavram - Tanım Eşleşmeli İçerikler</span>
+                                                <Columns className="w-4 h-4 text-purple-400" />
+                                                <span>Kavram - Tanım Eşleşmeleri</span>
                                                 <Badge className="bg-purple-500/20 text-purple-300 border-purple-400/30 text-[10px]">
-                                                    {editingDefinitions.length} Çift
+                                                    {editingDefinitions.length} Eşleşme
                                                 </Badge>
                                             </h3>
                                             <p className="text-xs text-slate-400">
-                                                Kavram Düellosu, Hafıza Kartları, Eşleştirme ve Akıllı Tahta Kavram Panosu'nda soru-cevap olarak kullanılır.
+                                                Kavram Düellosu, Hafıza Kartları, Eşleştirme oyunları ve Akıllı Tahta Kavram Panosu için kullanılır.
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-2">
@@ -1248,54 +1264,54 @@ function CentralActivityStudioContent() {
                                                 size="sm"
                                                 className="border-purple-500/30 text-purple-300 hover:bg-purple-950/50 hover:text-white rounded-xl text-xs"
                                             >
-                                                <Wand2 className="w-3.5 h-3.5 mr-1" /> AI İle Tanım Üret
+                                                <Wand2 className="w-3.5 h-3.5 mr-1" /> AI İle Tanımları Üret
                                             </Button>
                                             <Button
                                                 onClick={handleAddDefinition}
                                                 size="sm"
                                                 className="bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold"
                                             >
-                                                <Plus className="w-4 h-4 mr-1" /> Yeni Kavram-Tanım Ekle
+                                                <Plus className="w-4 h-4 mr-1" /> Yeni Kart Ekle
                                             </Button>
                                         </div>
                                     </div>
 
-                                    {/* Tanım Kartları */}
+                                    {/* Tanımlar Listesi */}
                                     {editingDefinitions.length > 0 ? (
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                                        <div className="space-y-3">
                                             {editingDefinitions.map((item, idx) => (
                                                 <div
                                                     key={idx}
-                                                    className="bg-slate-900/90 border border-white/10 hover:border-purple-500/40 rounded-2xl p-4 transition-all space-y-2.5 relative group"
+                                                    className="bg-slate-900/90 border border-white/10 hover:border-purple-500/40 rounded-2xl p-4 transition-all space-y-3 group"
                                                 >
                                                     <div className="flex items-center justify-between gap-2">
                                                         <div className="flex items-center gap-2 flex-1">
-                                                            <span className="w-6 h-6 rounded-lg bg-purple-950 text-purple-300 border border-purple-800 flex items-center justify-center text-xs font-mono font-bold">
+                                                            <span className="w-6 h-6 rounded-lg bg-purple-500/20 border border-purple-400/30 text-purple-300 font-mono text-xs flex items-center justify-center font-bold">
                                                                 {idx + 1}
                                                             </span>
                                                             <Input
-                                                                placeholder="Kavram / Terim Adı (Örn: Evren, Tevhid)"
+                                                                placeholder="Kavram Adı (Örn: Tevhid, İhlas, Sıdk)..."
                                                                 value={item.concept}
                                                                 onChange={(e) => handleDefinitionChange(idx, 'concept', e.target.value)}
-                                                                className="h-8 bg-slate-950/70 border-white/10 font-bold text-white text-xs focus:border-purple-400 rounded-lg"
+                                                                className="bg-slate-950/70 border-white/10 text-xs font-bold text-purple-300 focus:border-purple-400 rounded-xl h-9 max-w-md"
                                                             />
                                                         </div>
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
                                                             onClick={() => handleRemoveDefinition(idx)}
-                                                            className="h-7 w-7 text-slate-500 hover:text-red-400 hover:bg-red-950/40 rounded-lg"
-                                                            title="Tanımı Sil"
+                                                            className="h-8 w-8 text-slate-500 hover:text-red-400 hover:bg-red-950/40 rounded-xl"
+                                                            title="Kartı Sil"
                                                         >
-                                                            <Trash2 className="w-3.5 h-3.5" />
+                                                            <Trash2 className="w-4 h-4" />
                                                         </Button>
                                                     </div>
                                                     <Textarea
-                                                        placeholder="Kavramın açıklaması ve tanımı (Tanımda kavramın adı geçmemelidir)..."
+                                                        placeholder="Kavramın açıklaması ve tanımı (Kavram Düellosu için tanımda kavramın adını geçirmeyin)..."
                                                         value={item.definition}
                                                         onChange={(e) => handleDefinitionChange(idx, 'definition', e.target.value)}
                                                         rows={2}
-                                                        className="bg-slate-950/50 border-white/10 text-xs text-slate-300 focus:border-purple-400 rounded-xl leading-relaxed"
+                                                        className="bg-slate-950/50 border-white/10 text-xs text-slate-200 focus:border-purple-400 rounded-xl leading-relaxed"
                                                     />
                                                 </div>
                                             ))}
@@ -1321,65 +1337,74 @@ function CentralActivityStudioContent() {
                                 </div>
                             )}
 
-                            {/* ── 3. ÖZET CÜMLELER & NOTLAR SEKMESİ ── */}
-                            {activeTab === 'sentences' && (
+                            {/* ── 3. DEFTERE YAZILACAK ÖZET NOTLAR SEKMESİ ── */}
+                            {activeTab === 'notes' && (
                                 <div className="space-y-4 max-w-5xl mx-auto">
-                                    <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-2xl border border-white/10">
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-950/70 p-4 rounded-2xl border border-indigo-500/30 gap-3">
                                         <div>
                                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                                                <span>Özet Cümleler & Defter Notları</span>
-                                                <Badge className="bg-amber-500/20 text-amber-300 border-amber-400/30 text-[10px]">
-                                                    {editingSentences.length} Cümle
+                                                <FileText className="w-4 h-4 text-indigo-400" />
+                                                <span>Deftere Yazılacak Özet Notlar (Akıllı Tahta Sunumu)</span>
+                                                <Badge className="bg-indigo-500/20 text-indigo-300 border-indigo-400/30 text-[10px]">
+                                                    {editingNotes.length} Not Maddesi
                                                 </Badge>
                                             </h3>
-                                            <p className="text-xs text-slate-400">
-                                                Doğru-Yanlış Zinciri, Cümle Kurma oyunlarında ve tahtadan deftere yazdırılan notlarda kullanılır.
+                                            <p className="text-xs text-slate-400 mt-0.5">
+                                                Öğrencilerin derste akıllı tahtadan defterlerine geçireceği kazanım özet maddeleridir.
                                             </p>
                                         </div>
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-2 flex-wrap">
                                             <Button
-                                                onClick={() => handleGenerateAi('sentences')}
+                                                onClick={() => handleGenerateAi('notes')}
                                                 disabled={isGeneratingAi || !activeTopic}
                                                 variant="outline"
                                                 size="sm"
-                                                className="border-amber-500/30 text-amber-300 hover:bg-amber-950/50 hover:text-white rounded-xl text-xs"
+                                                className="border-indigo-500/30 text-indigo-300 hover:bg-indigo-950/50 hover:text-white rounded-xl text-xs"
                                             >
-                                                <Wand2 className="w-3.5 h-3.5 mr-1" /> AI İle Cümleleri Doldur
+                                                <Wand2 className="w-3.5 h-3.5 mr-1" /> AI İle Notları Üret
                                             </Button>
                                             <Button
-                                                onClick={handleAddSentence}
+                                                onClick={handleAddNote}
                                                 size="sm"
-                                                className="bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold"
+                                                className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold"
                                             >
-                                                <Plus className="w-4 h-4 mr-1" /> Yeni Cümle Ekle
+                                                <Plus className="w-4 h-4 mr-1" /> Yeni Not Ekle
                                             </Button>
                                         </div>
                                     </div>
 
-                                    {/* Cümleler Listesi */}
-                                    {editingSentences.length > 0 ? (
+                                    {/* Bilgilendirme Kutusu */}
+                                    <div className="p-3.5 bg-indigo-950/20 border border-indigo-500/20 rounded-2xl flex items-center gap-3 text-xs text-indigo-200">
+                                        <Info className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                                        <span>
+                                            Bu maddeler akıllı tahtadaki <strong>"NOTLAR"</strong> sekmesinde numaralandırılarak gösterilir ve öğrencilerin defterine yazacağı pedagojik ders özetleridir.
+                                        </span>
+                                    </div>
+
+                                    {/* Notlar Listesi */}
+                                    {editingNotes.length > 0 ? (
                                         <div className="space-y-3">
-                                            {editingSentences.map((sentence, idx) => (
+                                            {editingNotes.map((note, idx) => (
                                                 <div
                                                     key={idx}
-                                                    className="bg-slate-900/90 border border-white/10 hover:border-amber-500/40 rounded-2xl p-3.5 transition-all flex items-start gap-3 group"
+                                                    className="bg-slate-900/90 border border-white/10 hover:border-indigo-500/40 rounded-2xl p-3.5 transition-all flex items-start gap-3 group"
                                                 >
-                                                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white font-black text-sm flex items-center justify-center flex-shrink-0 shadow-md mt-1">
+                                                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black text-sm flex items-center justify-center flex-shrink-0 shadow-md mt-1">
                                                         {idx + 1}
                                                     </div>
                                                     <Textarea
-                                                        placeholder={`Özet cümle maddesi ${idx + 1}...`}
-                                                        value={sentence}
-                                                        onChange={(e) => handleSentenceChange(idx, e.target.value)}
+                                                        placeholder={`Deftere yazılacak ders notu maddesi ${idx + 1}...`}
+                                                        value={note}
+                                                        onChange={(e) => handleNoteChange(idx, e.target.value)}
                                                         rows={2}
-                                                        className="bg-slate-950/60 border-white/10 text-xs font-medium text-slate-200 focus:border-amber-400 rounded-xl leading-relaxed flex-1"
+                                                        className="bg-slate-950/60 border-white/10 text-xs font-medium text-slate-200 focus:border-indigo-400 rounded-xl leading-relaxed flex-1"
                                                     />
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        onClick={() => handleRemoveSentence(idx)}
+                                                        onClick={() => handleRemoveNote(idx)}
                                                         className="h-8 w-8 text-slate-500 hover:text-red-400 hover:bg-red-950/40 rounded-xl flex-shrink-0 mt-1"
-                                                        title="Cümleyi Sil"
+                                                        title="Notu Sil"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </Button>
@@ -1388,36 +1413,164 @@ function CentralActivityStudioContent() {
                                         </div>
                                     ) : (
                                         <div className="flex flex-col items-center justify-center p-12 bg-slate-950/40 rounded-3xl border border-dashed border-white/10 text-center space-y-4">
-                                            <ListOrdered className="w-10 h-10 text-amber-400 mx-auto opacity-40" />
+                                            <FileText className="w-10 h-10 text-indigo-400 mx-auto opacity-40" />
                                             <div className="space-y-1">
-                                                <h4 className="text-base font-bold text-white">Henüz Özet Cümle Eklenmedi</h4>
+                                                <h4 className="text-base font-bold text-white">Henüz Defter Notu Eklenmedi</h4>
                                                 <p className="text-xs text-slate-400 max-w-md">
-                                                    Öğrencilerin deftere yazacağı veya oyunlarda kullanılacak özet cümleleri yapay zeka ile çıkarabilirsiniz.
+                                                    Öğrencilerin akıllı tahtadan defterlerine yazacakları özet notları yapay zeka ile tek tıkla oluşturabilirsiniz.
                                                 </p>
                                             </div>
                                             <Button
-                                                onClick={() => handleGenerateAi('sentences')}
+                                                onClick={() => handleGenerateAi('notes')}
                                                 disabled={isGeneratingAi}
-                                                className="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-xl"
+                                                className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl"
                                             >
-                                                <Wand2 className="w-3.5 h-3.5 mr-1.5" /> AI İle Cümleleri Üret
+                                                <Wand2 className="w-3.5 h-3.5 mr-1.5" /> AI İle Defter Notlarını Üret
                                             </Button>
                                         </div>
                                     )}
                                 </div>
                             )}
 
-                            {/* ── 4. AKILLI TAHTA CANLI ÖNİZLEME SEKMESİ ── */}
+                            {/* ── 4. KISA ETKİNLİK CÜMLELERİ (OYUN HAVUZU) SEKMESİ ── */}
+                            {activeTab === 'activitySentences' && (
+                                <div className="space-y-4 max-w-5xl mx-auto">
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-950/70 p-4 rounded-2xl border border-emerald-500/30 gap-3">
+                                        <div>
+                                            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                                <ListOrdered className="w-4 h-4 text-emerald-400" />
+                                                <span>Kısa Etkinlik Cümleleri (Oyun Motoru Havuzu)</span>
+                                                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px]">
+                                                    {editingActivitySentences.length} Oyun Cümlesi
+                                                </Badge>
+                                            </h3>
+                                            <p className="text-xs text-slate-400 mt-0.5">
+                                                Cümle Kurma (kelimelerin sıraya dizildiği oyun), Doğru-Yanlış Zinciri ve Tornado oyunlarında kullanılır.
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            {editingNotes.length > 0 && (
+                                                <Button
+                                                    onClick={handleTransferNotesToActivitySentences}
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl text-xs"
+                                                    title="Defter notlarındaki maddeleri buraya kopyala"
+                                                >
+                                                    <Copy className="w-3.5 h-3.5 mr-1" /> Notlardan Aktar
+                                                </Button>
+                                            )}
+                                            <Button
+                                                onClick={() => handleGenerateAi('activitySentences')}
+                                                disabled={isGeneratingAi || !activeTopic}
+                                                variant="outline"
+                                                size="sm"
+                                                className="border-emerald-500/30 text-emerald-300 hover:bg-emerald-950/50 hover:text-white rounded-xl text-xs"
+                                            >
+                                                <Wand2 className="w-3.5 h-3.5 mr-1" /> AI İle Kısa Cümle Üret
+                                            </Button>
+                                            <Button
+                                                onClick={handleAddActivitySentence}
+                                                size="sm"
+                                                className="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold"
+                                            >
+                                                <Plus className="w-4 h-4 mr-1" /> Yeni Cümle Ekle
+                                            </Button>
+                                        </div>
+                                    </div>
+
+                                    {/* Oyun Motoru İpucu Uyarısı */}
+                                    <div className="p-3.5 bg-emerald-950/20 border border-emerald-500/30 rounded-2xl flex items-center gap-3 text-xs text-emerald-200">
+                                        <AlertCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                                        <span>
+                                            <strong>Oyun İpucu:</strong> Cümle Kurma oyununda cümleler kelime kelime parçalanıp öğrencilere dizdirilir. Bu yüzden buradaki cümleler <strong>4 ila 8 kelimelik KISA ve YALIN</strong> olmalıdır. Uzun paragraflar oyunlarda oynanışı bozar.
+                                        </span>
+                                    </div>
+
+                                    {/* Oyun Cümleleri Listesi */}
+                                    {editingActivitySentences.length > 0 ? (
+                                        <div className="space-y-3">
+                                            {editingActivitySentences.map((sentence, idx) => {
+                                                const wordCount = sentence.trim().split(/\s+/).filter(Boolean).length;
+                                                const isIdealLength = wordCount >= 4 && wordCount <= 9;
+                                                const isTooLong = wordCount >= 10;
+                                                return (
+                                                    <div
+                                                        key={idx}
+                                                        className="bg-slate-900/90 border border-white/10 hover:border-emerald-500/40 rounded-2xl p-3.5 transition-all flex items-start gap-3 group"
+                                                    >
+                                                        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-black text-sm flex items-center justify-center flex-shrink-0 shadow-md mt-1">
+                                                            {idx + 1}
+                                                        </div>
+                                                        <div className="flex-1 space-y-1.5">
+                                                            <Textarea
+                                                                placeholder={`Kısa etkinlik cümlesi ${idx + 1} (4-8 kelime)...`}
+                                                                value={sentence}
+                                                                onChange={(e) => handleActivitySentenceChange(idx, e.target.value)}
+                                                                rows={2}
+                                                                className="bg-slate-950/60 border-white/10 text-xs font-medium text-slate-200 focus:border-emerald-400 rounded-xl leading-relaxed"
+                                                            />
+                                                            <div className="flex items-center gap-2">
+                                                                {sentence.trim() && (
+                                                                    <span className={cn(
+                                                                        "text-[10px] font-mono px-2 py-0.5 rounded-full border",
+                                                                        isIdealLength
+                                                                            ? "bg-emerald-950/60 border-emerald-500/40 text-emerald-300"
+                                                                            : isTooLong
+                                                                                ? "bg-amber-950/60 border-amber-500/40 text-amber-300"
+                                                                                : "bg-slate-950 border-white/10 text-slate-400"
+                                                                    )}>
+                                                                        {wordCount} kelime {isIdealLength ? "• İdeal Oyun Boyutu ✓" : isTooLong ? "• Oyun için biraz uzun!" : ""}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleRemoveActivitySentence(idx)}
+                                                            className="h-8 w-8 text-slate-500 hover:text-red-400 hover:bg-red-950/40 rounded-xl flex-shrink-0 mt-1"
+                                                            title="Cümleyi Sil"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </Button>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col items-center justify-center p-12 bg-slate-950/40 rounded-3xl border border-dashed border-white/10 text-center space-y-4">
+                                            <ListOrdered className="w-10 h-10 text-emerald-400 mx-auto opacity-40" />
+                                            <div className="space-y-1">
+                                                <h4 className="text-base font-bold text-white">Henüz Kısa Oyun Cümlesi Eklenmedi</h4>
+                                                <p className="text-xs text-slate-400 max-w-md">
+                                                    Cümle Kurma ve Doğru-Yanlış oyunları için 4-8 kelimelik kısa cümleleri yapay zeka ile otomatik üretebilirsiniz.
+                                                </p>
+                                            </div>
+                                            <Button
+                                                onClick={() => handleGenerateAi('activitySentences')}
+                                                disabled={isGeneratingAi}
+                                                className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl"
+                                            >
+                                                <Wand2 className="w-3.5 h-3.5 mr-1.5" /> AI İle Kısa Oyun Cümlelerini Üret
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* ── 5. AKILLI TAHTA CANLI ÖNİZLEME SEKMESİ ── */}
                             {activeTab === 'smartboard' && (
-                                <div ref={previewContainerRef} className="space-y-6 max-w-6xl mx-auto">
-                                    <div className="flex items-center justify-between bg-slate-950/80 p-3 rounded-2xl border border-white/10 flex-wrap gap-3">
-                                        <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-white/10">
+                                <div className="space-y-4 max-w-5xl mx-auto">
+                                    {/* Önizleme Kontrol Çubuğu */}
+                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-950/80 p-3.5 rounded-2xl border border-white/10">
+                                        <div className="flex items-center gap-2">
                                             <button
                                                 onClick={() => setPreviewSubTab('kavramlar')}
                                                 className={cn(
-                                                    "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all",
+                                                    "px-3 py-1.5 rounded-xl text-xs font-bold transition-all",
                                                     previewSubTab === 'kavramlar'
-                                                        ? "bg-cyan-600 text-white shadow-md"
+                                                        ? "bg-purple-600 text-white shadow"
                                                         : "text-slate-400 hover:text-white"
                                                 )}
                                             >
@@ -1426,118 +1579,117 @@ function CentralActivityStudioContent() {
                                             <button
                                                 onClick={() => setPreviewSubTab('notlar')}
                                                 className={cn(
-                                                    "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all",
+                                                    "px-3 py-1.5 rounded-xl text-xs font-bold transition-all",
                                                     previewSubTab === 'notlar'
-                                                        ? "bg-amber-600 text-white shadow-md"
+                                                        ? "bg-indigo-600 text-white shadow"
                                                         : "text-slate-400 hover:text-white"
                                                 )}
                                             >
-                                                ÖNEMLİ NOTLAR ({editingSentences.length})
+                                                NOTLAR ({editingNotes.length})
                                             </button>
                                         </div>
 
                                         <div className="flex items-center gap-2">
-                                            <div className="flex items-center bg-slate-900 rounded-xl p-1 border border-white/10">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onClick={() => setFontSize(s => Math.max(1.0, s - 0.15))}
-                                                    className="h-8 w-8 text-slate-400 hover:text-white"
-                                                    title="Yazı Boyutunu Küçült"
+                                            <div className="flex items-center gap-1 bg-slate-900 px-2 py-1 rounded-xl border border-white/10 text-xs">
+                                                <span className="text-slate-400 text-[11px]">Yazı Boyutu:</span>
+                                                <button
+                                                    onClick={() => setFontSize(f => Math.max(0.9, f - 0.1))}
+                                                    className="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-white font-bold text-center"
                                                 >
-                                                    A-
-                                                </Button>
-                                                <span className="text-[11px] font-mono font-bold text-slate-400 px-2">
-                                                    {Math.round(fontSize * 100)}%
-                                                </span>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onClick={() => setFontSize(s => Math.min(3.0, s + 0.15))}
-                                                    className="h-8 w-8 text-slate-400 hover:text-white"
-                                                    title="Yazı Boyutunu Büyüt"
+                                                    -
+                                                </button>
+                                                <span className="font-mono text-cyan-300 w-8 text-center">{fontSize.toFixed(1)}x</span>
+                                                <button
+                                                    onClick={() => setFontSize(f => Math.min(2.2, f + 0.1))}
+                                                    className="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-white font-bold text-center"
                                                 >
-                                                    A+
-                                                </Button>
+                                                    +
+                                                </button>
                                             </div>
 
                                             <Button
-                                                variant="outline"
                                                 asChild
                                                 size="sm"
-                                                className="border-indigo-500/40 bg-indigo-950/40 text-indigo-300 hover:bg-indigo-900/60 hover:text-white rounded-xl text-xs font-bold"
+                                                className="bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-bold"
                                             >
                                                 <Link href={smartboardPlayUrl} target="_blank">
-                                                    <ExternalLink className="w-3.5 h-3.5 mr-1" /> Tahtada Tam Ekran Aç
+                                                    <Maximize className="w-3.5 h-3.5 mr-1" /> Tahtada Başlat
                                                 </Link>
                                             </Button>
                                         </div>
                                     </div>
 
-                                    {/* Canlı Simülasyon */}
-                                    <div className="p-6 md:p-8 rounded-3xl bg-slate-950 border border-white/10 shadow-2xl relative min-h-[500px]">
-                                        <h2 className="text-center font-black text-2xl md:text-3xl text-cyan-400 mb-6 uppercase tracking-wider drop-shadow-md">
-                                            {activeTopic?.title || 'Kavram Panosu'}
-                                        </h2>
+                                    {/* Simüle Edilen Akıllı Tahta Ekranı */}
+                                    <div
+                                        ref={previewContainerRef}
+                                        className="bg-slate-950 rounded-3xl border-4 border-slate-800 p-6 sm:p-8 min-h-[480px] shadow-2xl relative overflow-hidden"
+                                    >
+                                        {/* Tahta Üst Başlığı */}
+                                        <div className="text-center pb-6 border-b border-white/10 mb-6">
+                                            <span className="text-xs uppercase tracking-widest text-purple-400 font-bold">
+                                                {activeTopic ? activeTopic.unitTitle : ''}
+                                            </span>
+                                            <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
+                                                {activeTopic ? activeTopic.title : 'Konu Başlığı'}
+                                            </h2>
+                                        </div>
 
+                                        {/* KAVRAMLAR GÖRÜNÜMÜ */}
                                         {previewSubTab === 'kavramlar' && (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 {editingDefinitions.length > 0 ? (
-                                                    editingDefinitions.map((item, idx) => (
+                                                    editingDefinitions.map((cd, idx) => (
                                                         <div
                                                             key={idx}
+                                                            style={{ fontSize: `${fontSize}rem` }}
                                                             className={cn(
-                                                                "relative overflow-hidden rounded-2xl border p-5 flex flex-col transition-all hover:scale-[1.02] shadow-xl backdrop-blur-md",
+                                                                "p-5 rounded-2xl border transition-all duration-300 backdrop-blur-md flex flex-col justify-between gap-3 shadow-lg",
                                                                 COLOR_CLASSES[idx % COLOR_CLASSES.length]
                                                             )}
                                                         >
-                                                            <div className="absolute top-1 right-2 text-white/10 font-black text-6xl pointer-events-none select-none">
-                                                                {idx + 1}
+                                                            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                                                                <h3 className="font-black tracking-wide text-white uppercase" style={{ fontSize: `${fontSize * 1.15}rem` }}>
+                                                                    {cd.concept || 'Kavram Adı'}
+                                                                </h3>
+                                                                <span className="text-xs font-mono opacity-60">#{idx + 1}</span>
                                                             </div>
-                                                            <h3
-                                                                className="font-black text-white mb-2 border-b border-white/10 pb-2 uppercase tracking-wide relative z-10"
-                                                                style={{ fontSize: `${fontSize * 1.15}rem` }}
-                                                            >
-                                                                {item.concept || 'Kavram Adı'}
-                                                            </h3>
-                                                            <p
-                                                                className="font-medium text-white/90 leading-relaxed relative z-10 flex-1"
-                                                                style={{ fontSize: `${fontSize * 0.95}rem` }}
-                                                            >
-                                                                {item.definition || 'Tanım açıklaması...'}
+                                                            <p className="font-semibold leading-relaxed text-slate-100 opacity-95">
+                                                                {cd.definition || 'Kavram tanımı henüz girilmedi...'}
                                                             </p>
                                                         </div>
                                                     ))
                                                 ) : (
-                                                    <div className="col-span-full py-16 text-center text-slate-500 font-bold">
-                                                        Kayıtlı tanım bulunamadı.
+                                                    <div className="col-span-2 text-center py-16 text-slate-500 font-medium">
+                                                        Bu konu için henüz kavram-tanım eklenmedi.
                                                     </div>
                                                 )}
                                             </div>
                                         )}
 
+                                        {/* NOTLAR GÖRÜNÜMÜ */}
                                         {previewSubTab === 'notlar' && (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {editingSentences.length > 0 ? (
-                                                    editingSentences.map((sentence, idx) => (
+                                            <div className="space-y-4">
+                                                {editingNotes.length > 0 ? (
+                                                    editingNotes.map((note, idx) => (
                                                         <div
                                                             key={idx}
-                                                            className="flex items-start gap-4 p-5 rounded-2xl border-2 bg-slate-900/80 border-slate-700/60 shadow-xl transition-all hover:bg-slate-800/80"
+                                                            style={{ fontSize: `${fontSize}rem` }}
+                                                            className={cn(
+                                                                "p-4 rounded-2xl border transition-all duration-300 backdrop-blur-md flex items-start gap-4 shadow-lg",
+                                                                COLOR_CLASSES[idx % COLOR_CLASSES.length]
+                                                            )}
                                                         >
-                                                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white font-black text-lg flex items-center justify-center flex-shrink-0 shadow-lg border border-amber-400/30 mt-0.5">
+                                                            <span className="w-8 h-8 rounded-xl bg-black/40 border border-white/20 flex items-center justify-center font-black text-sm text-white flex-shrink-0 mt-0.5">
                                                                 {idx + 1}
-                                                            </div>
-                                                            <p
-                                                                className="font-medium text-slate-200 leading-relaxed flex-1"
-                                                                style={{ fontSize: `${fontSize}rem` }}
-                                                            >
-                                                                {sentence}
+                                                            </span>
+                                                            <p className="font-bold leading-relaxed text-slate-100 flex-1">
+                                                                {note}
                                                             </p>
                                                         </div>
                                                     ))
                                                 ) : (
-                                                    <div className="col-span-full py-16 text-center text-slate-500 font-bold">
-                                                        Kayıtlı özet cümle bulunamadı.
+                                                    <div className="text-center py-16 text-slate-500 font-medium">
+                                                        Bu konu için henüz deftere yazılacak özet not girilmedi.
                                                     </div>
                                                 )}
                                             </div>
@@ -1546,39 +1698,37 @@ function CentralActivityStudioContent() {
                                 </div>
                             )}
 
-                            {/* ── 5. DERS KİTABI KAYNAK METNİ SEKMESİ ── */}
+                            {/* ── 6. DERS KİTABI METNİ SEKMESİ ── */}
                             {activeTab === 'source' && (
-                                <div className="space-y-4 max-w-5xl mx-auto">
+                                <div className="space-y-4 max-w-4xl mx-auto">
                                     <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex items-center justify-between">
                                         <div>
                                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                                                <span>Ders Kitabı Orijinal Kaynak Metni</span>
-                                                {activeTopic?.sourceText && (
-                                                    <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px]">
-                                                        {activeTopic.sourceText.trim().split(/\s+/).length} Kelime
-                                                    </Badge>
-                                                )}
+                                                <BookOpen className="w-4 h-4 text-emerald-400" />
+                                                <span>MEB Ders Kitabı Kaynak Metni</span>
                                             </h3>
                                             <p className="text-xs text-slate-400">
-                                                Kavramlar, tanımlar ve cümleler bu orijinal ders kitabı metninden beslenir.
+                                                Yapay zekanın analiz ettiği ve kavramları çıkardığı orijinal ders kitabı metni.
                                             </p>
                                         </div>
-                                        <Button
-                                            onClick={() => handleGenerateAi('all')}
-                                            disabled={isGeneratingAi || !activeTopic?.sourceText}
-                                            className="bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 hover:opacity-90 text-white text-xs font-bold rounded-xl"
-                                        >
-                                            <Wand2 className="w-3.5 h-3.5 mr-1.5" /> Metinden Hepsini Üret (3'ü 1 Arada)
-                                        </Button>
+                                        {activeTopic?.sourceText && (
+                                            <Badge className="bg-emerald-950 border-emerald-500 text-emerald-300 font-mono text-[11px]">
+                                                {activeTopic.sourceText.trim().split(/\s+/).length} Kelime
+                                            </Badge>
+                                        )}
                                     </div>
 
                                     {activeTopic?.sourceText ? (
-                                        <div className="p-6 rounded-2xl bg-slate-900/80 border border-white/10 text-slate-200 text-sm leading-relaxed whitespace-pre-line font-sans select-text">
+                                        <div className="bg-slate-950/80 p-6 rounded-3xl border border-white/10 text-slate-300 font-serif leading-loose text-sm sm:text-base whitespace-pre-wrap selection:bg-purple-600 selection:text-white">
                                             {activeTopic.sourceText}
                                         </div>
                                     ) : (
-                                        <div className="p-12 text-center text-slate-500 bg-slate-950/30 rounded-2xl border border-dashed border-white/10">
-                                            Bu konu için henüz ders kitabı kaynak metni girilmemiş.
+                                        <div className="flex flex-col items-center justify-center p-12 bg-slate-950/40 rounded-3xl border border-dashed border-white/10 text-center space-y-3">
+                                            <BookMarked className="w-10 h-10 text-slate-600 mx-auto" />
+                                            <h4 className="text-base font-bold text-slate-300">Kaynak Metin Bulunamadı</h4>
+                                            <p className="text-xs text-slate-500 max-w-md">
+                                                Bu konuya ait ders kitabı metni henüz sisteme kaydedilmemiş. Konu başlığı üzerinden de AI üretimi yapabilirsiniz.
+                                            </p>
                                         </div>
                                     )}
                                 </div>
@@ -1586,7 +1736,6 @@ function CentralActivityStudioContent() {
 
                         </div>
                     </div>
-
                 </div>
 
             </div>
@@ -1594,13 +1743,20 @@ function CentralActivityStudioContent() {
     );
 }
 
+function StudioLoadingScreen() {
+    return (
+        <div className="flex h-screen items-center justify-center bg-slate-950 text-white">
+            <div className="flex flex-col items-center gap-4">
+                <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
+                <p className="text-slate-400 font-bold text-lg">Merkezi Etkinlik & Kavram Stüdyosu Yükleniyor...</p>
+            </div>
+        </div>
+    );
+}
+
 export default function CentralActivityStudioPage() {
     return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center bg-slate-950 text-white">
-                <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
-            </div>
-        }>
+        <Suspense fallback={<StudioLoadingScreen />}>
             <CentralActivityStudioContent />
         </Suspense>
     );
