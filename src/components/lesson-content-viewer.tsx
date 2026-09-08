@@ -4615,6 +4615,9 @@ export function LessonContentViewer({
                     e.preventDefault();
                     handleContinueOrNext();
                 }
+            } else if ((e.key === 'm' || e.key === 'M') && !['INPUT', 'TEXTAREA'].includes(activeEl?.tagName || '')) {
+                e.preventDefault();
+                setHideUI(prev => !prev);
             }
         };
 
@@ -4791,20 +4794,28 @@ export function LessonContentViewer({
            </div>
         </div>
         
-        {/* AÇMA TUŞU (Bar gizliyken görünür) - isTeacher ve hideUI true ise görünür (Sadece simge) */}
-        {isTeacher && hideUI && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-5 fade-in pointer-events-auto">
-                 <button 
-                    onClick={(e) => {
-                         e.stopPropagation();
-                         setHideUI(false);
-                    }}
-                    className="w-10 h-10 rounded-full bg-slate-900/90 shadow-2xl border border-white/20 hover:bg-slate-800 text-white flex items-center justify-center transition-all backdrop-blur-xl cursor-pointer hover:scale-110 active:scale-95"
-                    title="Menüyü Göster"
-                 >
-                    <ChevronUp className="w-5 h-5" />
-                 </button>
-            </div>
+        {/* AÇMA TUŞU (Bar gizliyken görünür - HİÇBİR KOŞULDA KAYBOLMAZ) */}
+        {hideUI && (
+            <>
+                <div 
+                    onClick={() => setHideUI(false)} 
+                    className="absolute bottom-0 left-0 right-0 h-3 cursor-pointer z-[99] pointer-events-auto hover:bg-indigo-500/20 transition-colors" 
+                    title="Alt Menüyü Aç (M)"
+                />
+                <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-3 fade-in pointer-events-auto select-none">
+                     <button 
+                        type="button"
+                        onClick={(e) => {
+                             e.stopPropagation();
+                             setHideUI(false);
+                        }}
+                        className="w-11 h-11 rounded-full bg-slate-950/95 hover:bg-slate-900 text-white shadow-[0_6px_30px_rgba(0,0,0,0.8)] border-2 border-white/30 flex items-center justify-center transition-all backdrop-blur-2xl cursor-pointer hover:scale-110 active:scale-95 group ring-2 ring-black/30"
+                        title="Alt Menüyü Aç (M)"
+                     >
+                        <ChevronUp className="w-6 h-6 text-white transition-transform group-hover:-translate-y-0.5" />
+                     </button>
+                </div>
+            </>
         )}
 
         {/* ══ ALT NAVİGASYON BARI (ŞEFFAF & FLOATING GLASS DOCK) ══ */}
@@ -4816,8 +4827,8 @@ export function LessonContentViewer({
             )}
             onClick={(e) => e.stopPropagation()}
         >
-            {/* Öğretmen gizle butonu */}
-            {isTeacher && !hideUI && (
+            {/* Alt Menüyü Gizle Butonu */}
+            {!hideUI && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-auto">
                     <button
                         type="button"
@@ -4893,16 +4904,14 @@ export function LessonContentViewer({
                     </button>
 
                     {/* Alt Menüyü Gizle Butonu */}
-                    {isTeacher && (
-                        <button
-                            onClick={() => setHideUI(true)}
-                            className="h-8 px-2 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
-                            title="Alt Menüyü Gizle"
-                        >
-                            <EyeOff className="w-3.5 h-3.5 text-slate-700" />
-                            <span className="hidden sm:inline">Gizle</span>
-                        </button>
-                    )}
+                    <button
+                        onClick={() => setHideUI(true)}
+                        className="h-8 px-2 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
+                        title="Alt Menüyü Gizle"
+                    >
+                        <EyeOff className="w-3.5 h-3.5 text-slate-700" />
+                        <span className="hidden sm:inline">Gizle</span>
+                    </button>
                 </div>
 
                 {/* ORTA: İlerleme noktaları + sayfa seçici */}

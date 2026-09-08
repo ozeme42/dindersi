@@ -601,7 +601,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                     dragConstraints={playerWrapperRef}
                     className={cn(
                         "absolute left-1/2 -translate-x-1/2 z-30 pointer-events-auto",
-                        hasBottomDock ? "bottom-14 sm:bottom-15" : "bottom-3 sm:bottom-4"
+                        hasBottomDock ? "bottom-16 sm:bottom-18" : "bottom-15 sm:bottom-16"
                     )}
                 >
                     {isSlideBarCollapsed ? (
