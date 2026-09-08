@@ -1,10 +1,12 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import type { LessonStep, YazilacaklarContent } from "@/lib/types";
 import { revalidatePath, revalidateTag } from "next/cache";
+import fs from 'fs/promises';
+import path from 'path';
+import { clearFlowDataCache } from "@/app/teacher/ders-akisi/actions";
 
 export async function updateTopicContent({ 
     courseId, 
@@ -34,8 +36,47 @@ export async function updateTopicContent({
             itemCount: plainSteps.length,
         }, { merge: true });
 
-        // Anında tüm sayfalarda önbelleği yenile
+        // Manifest dosyasını (manifest.json) anında güncelle
+        // Böylece /teacher/ders-akisi sayfasında eklenen akış anında görünür
         try {
+            const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+            const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+            const manifest = JSON.parse(manifestContent);
+
+            let modified = false;
+            for (const cg of manifest.classGroups || []) {
+                for (const c of cg.courses || []) {
+                    if (c.id === courseId || !courseId) {
+                        for (const u of c.units || []) {
+                            if (u.id === unitId || !unitId) {
+                                for (const t of u.topics || []) {
+                                    if (t.id === topicId) {
+                                        t.hasFlowContent = plainSteps.length > 0;
+                                        if (sourceText) t.hasYazilacaklarContent = true;
+                                        if (htmlContent) t.hasOzetContent = true;
+                                        modified = true;
+                                    }
+                                }
+                                if (plainSteps.length > 0) {
+                                    u.hasFlowContent = true;
+                                    modified = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (modified) {
+                await fs.writeFile(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8');
+            }
+        } catch (manifestErr) {
+            console.warn("Could not auto-sync manifest in updateTopicContent:", manifestErr);
+        }
+
+        // Bellek içi önbelleği sıfırla ve sayfaları yeniden doğrula
+        try {
+            clearFlowDataCache();
             (revalidateTag as any)('curriculum');
             revalidatePath('/teacher/ders-akisi');
             revalidatePath('/curriculum');

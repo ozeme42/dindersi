@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import type { Topic, Unit, Course, SchoolClass } from "@/lib/types";
@@ -49,9 +47,13 @@ function compareTitlesByLeadingNumber(titleA: string = '', titleB: string = ''):
     return titleA.localeCompare(titleB, 'tr', { numeric: true, sensitivity: 'base' });
 }
 
-// 30 saniyelik bellek içi önbellek (Next.js 2MB unstable_cache sınır hatasını önler)
+// 30 saniyelik bellek içi önbellek
 let memoryCache: { data: EnrichedClass[]; timestamp: number } | null = null;
 const CACHE_TTL_MS = 30 * 1000;
+
+export async function clearFlowDataCache() {
+    memoryCache = null;
+}
 
 export async function getFlowData(): Promise<EnrichedClass[]> {
     const now = Date.now();

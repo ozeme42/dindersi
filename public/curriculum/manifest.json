@@ -11,7 +11,7 @@
               "id": "jjotqKbHyi504QHH40ko",
               "title": "1.Allah İnancı",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "QS6SmMl5nG9VgWL9LNEy",
@@ -47,7 +47,7 @@
               "id": "vjkkjfl8lYIiW2miv1RF",
               "title": "2.Namaz",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "5LOROWuGZ4Shxt6HvN87",
@@ -83,7 +83,7 @@
               "id": "GzKsyNP1xTvEqZ7JwosQ",
               "title": "3.Kur’an-ı Kerim",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "nCSko3vdCppLSNyxo3oV",
@@ -119,7 +119,7 @@
               "id": "jKPXTstW3xKf0wa4VOiO",
               "title": "4.Peygamber Kıssaları",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "lPpHsRG92kNHJU0MoMWv",
@@ -155,7 +155,7 @@
               "id": "GBVRETHGn5BmIihw6Hfb",
               "title": "5.Mimarimizde Dinî Motifler",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "neFq24AqTtndRKqm5P8B",
@@ -190,7 +190,7 @@
               "id": "yz1rOJf7uA0eS6BRYJN7",
               "title": "1. Çocukluk Yıllarında Peygamberimiz",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "H3jmr9SzfiEk77swWSlj",
@@ -219,7 +219,7 @@
               "id": "cUF2X2vchdqDFkcWMNkj",
               "title": "2. Peygamberimizin Çevresindeki Çocuklar",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "p8jo7Z4fqVDN86bfhDlH",
@@ -248,7 +248,7 @@
               "id": "KXaDVYOgeUiDEerxQ7jR",
               "title": "3. Rehberim Peygamberim",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "Up7BoYzq04i66X9yHLJE",
@@ -277,7 +277,7 @@
               "id": "g5vZnJOuq1Bg3hSVaYGZ",
               "title": "4. Aile Hayatında Peygamberimiz",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "wWinK81GaTqLZJXQkUAz",
@@ -324,7 +324,7 @@
               "id": "0M2x5SEKuVmzS3qhwvPk",
               "title": "1. Ünite: Gençlik Yıllarında Peygamberimiz",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "ZpSlPFDrP0e9PXiVO8j3",
@@ -404,7 +404,7 @@
               "id": "03lmGqXTa8ejb174SiHt",
               "title": "4. Ünite: Toplumsal Hayatta Peygamberimiz",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "s1RCsv1AmmHznus7cQKJ",
@@ -459,7 +459,7 @@
                   "id": "DmQe81iBqwQN4tj4Ti4e",
                   "title": "4. Salli ve Barik Duaları ile Anlamları",
                   "hasOzetContent": false,
-                  "hasFlowContent": false,
+                  "hasFlowContent": true,
                   "hasYazilacaklarContent": true
                 }
               ]
@@ -596,7 +596,7 @@
               "id": "wUVGPKdq7yagCGD7wtRK",
               "title": "3️⃣ Ahlaki Davranışlar",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "flcDmSUgs68wkQNPIi58",
@@ -639,7 +639,7 @@
               "id": "Hkzo15hb37oOcwf2WDHq",
               "title": "4️⃣ Peygamberliğinden Önce Hz. Muhammed",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "BPKtRX6eve1zlZ0svzbX",
@@ -675,7 +675,7 @@
               "id": "bYhBIoJ6Fe9QnpweyMtk",
               "title": "5️⃣ Kültürümüzdeki Dinî Motifler",
               "hasUnitOzet": true,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "uu0Uh2HmlXjWXYBrujL7",
@@ -822,7 +822,7 @@
               "id": "S4vHNS7w2VUuvZqbVTT6",
               "title": "3. ÜNİTE: AHLAKİ DAVRANIŞLAR",
               "hasUnitOzet": false,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "KCTvfHs1RNT4knKoIZMY",
@@ -1029,7 +1029,7 @@
               "id": "PqkYDI0IbvELcbK6ooNX",
               "title": "2. Ünite: Peygamberimizin Evrensel Mesajları",
               "hasUnitOzet": false,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "tt4v21i5nr1gWUL0aTmf",
