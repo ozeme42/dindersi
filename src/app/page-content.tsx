@@ -9,7 +9,7 @@ import {
     Gamepad2, LayoutGrid, Library, ArrowRight, LogOut, MonitorPlay,
     CheckCircle2, Layers, Sparkles,
     LogIn, UserPlus, Download, Youtube, Quote,
-    MoreHorizontal, FileText, Globe, LayoutTemplate
+    MoreHorizontal, FileText, Globe, LayoutTemplate, Columns
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -226,14 +226,15 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         leaderboard: { key: 'leaderboard', href: "/leaderboard", title: "Liderlik", icon: <Trophy />, color: "from-yellow-400 to-amber-500" },
         scoreEvents: { key: 'scoreEvents', href: '/teacher/score-events', title: 'Puan Hareketleri', icon: <DollarSign />, color: "from-teal-400 to-emerald-500" },
         veriEditoru: { key: 'veriEditoru', href: '/teacher/veri-editoru', title: 'Veri Editörü', icon: <Settings />, color: "from-slate-600 to-slate-800" },
+        kavramPanosu: { key: 'kavramPanosu', href: '/teacher/smartboard/yazilacaklar', title: 'Kavram & Notlar Stüdyosu', icon: <Columns />, color: "from-amber-500 to-orange-600" },
     };
 
     const getManagementButtons = () => {
         if (user.role === 'teacher') {
-            return [managementButtons.activitiesTeacher, managementButtons.studioTeacher, managementButtons.studentsTeacher, managementButtons.leaderboard, managementButtons.evaluationScales];
+            return [managementButtons.activitiesTeacher, managementButtons.studioTeacher, managementButtons.kavramPanosu, managementButtons.studentsTeacher, managementButtons.leaderboard, managementButtons.evaluationScales];
         }
         const buttons = [
-            managementButtons.activitiesTeacher, managementButtons.contentTeacher, managementButtons.studioTeacher, managementButtons.extraPages, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
+            managementButtons.activitiesTeacher, managementButtons.contentTeacher, managementButtons.studioTeacher, managementButtons.kavramPanosu, managementButtons.extraPages, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
             managementButtons.examQuestions, managementButtons.activityDataBank, managementButtons.exams,
             managementButtons.evaluationScales, managementButtons.leaderboard, managementButtons.statsTeacher,
             managementButtons.imageLibrary, managementButtons.gameSettingsTeacher, managementButtons.scoreEvents,
