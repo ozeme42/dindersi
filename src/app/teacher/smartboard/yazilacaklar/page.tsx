@@ -23,6 +23,7 @@ import {
     type YazilacaklarTopicItem,
     type ConceptItem
 } from './actions';
+import { normalizeConcept } from '@/lib/concept-utils';
 
 const COLOR_CLASSES = [
     'bg-indigo-950/60 border-indigo-500/50 text-indigo-100 hover:border-indigo-400',
@@ -224,11 +225,11 @@ function CentralActivityStudioContent() {
     }, [activeTopic]);
 
     // ── KAVRAM - TANIM EŞLEŞTİRME & EKSİK TANIM HESAPLAMALARI ──
-    // Dolu ve geçerli tanımı olan kavramların haritası
+    // Dolu ve geçerli tanımı olan kavramların haritası (NFD normalizasyonu ile Semî' / Semi eşleştirilir)
     const definedConceptsMap = useMemo(() => {
         const map = new Map<string, string>();
         editingDefinitions.forEach(d => {
-            const norm = (d.concept || '').toLocaleLowerCase('tr').trim();
+            const norm = normalizeConcept(d.concept);
             if (norm && d.definition && d.definition.trim()) {
                 map.set(norm, d.definition.trim());
             }
@@ -237,14 +238,36 @@ function CentralActivityStudioContent() {
     }, [editingDefinitions]);
 
     // Kelime havuzunda (editingConcepts) olup henüz geçerli tanımı yazılmamış olan kavramlar
+    // normalizeConcept ile deduplicate edilir, Semî' ve Semi tek kavram sayılır
     const missingDefinitionConcepts = useMemo(() => {
-        return editingConcepts.filter(c => !definedConceptsMap.has(c.toLocaleLowerCase('tr').trim()));
+        const seenNorms = new Set<string>();
+        const missing: string[] = [];
+        editingConcepts.forEach(c => {
+            const norm = normalizeConcept(c);
+            if (!norm || seenNorms.has(norm)) return;
+            seenNorms.add(norm);
+            if (!definedConceptsMap.has(norm)) {
+                missing.push(c);
+            }
+        });
+        return missing;
     }, [editingConcepts, definedConceptsMap]);
 
-    // Tanımlı kavram adedi
+    // Tanımlı kavram adedi (Tekil kavramlar üzerinden)
     const definedConceptsCount = useMemo(() => {
-        return editingConcepts.length - missingDefinitionConcepts.length;
-    }, [editingConcepts, missingDefinitionConcepts]);
+        const seen = new Set<string>();
+        let count = 0;
+        editingConcepts.forEach(c => {
+            const norm = normalizeConcept(c);
+            if (norm && !seen.has(norm)) {
+                seen.add(norm);
+                if (definedConceptsMap.has(norm)) {
+                    count++;
+                }
+            }
+        });
+        return count;
+    }, [editingConcepts, definedConceptsMap]);
 
     // Tanım kartları arasında tanım metni henüz boş olan kartlar
     const emptyDefinitionCardCount = useMemo(() => {
@@ -255,12 +278,13 @@ function CentralActivityStudioContent() {
     const searchResults = useMemo(() => {
         if (!searchQuery.trim()) return [];
         const q = searchQuery.toLocaleLowerCase('tr').trim();
+        const normQ = normalizeConcept(searchQuery);
         return items.filter(i =>
             i.title.toLocaleLowerCase('tr').includes(q) ||
             i.courseTitle.toLocaleLowerCase('tr').includes(q) ||
             i.unitTitle.toLocaleLowerCase('tr').includes(q) ||
-            i.concepts.some(c => c.toLocaleLowerCase('tr').includes(q)) ||
-            i.conceptDefinitions.some(cd => cd.concept.toLocaleLowerCase('tr').includes(q) || cd.definition.toLocaleLowerCase('tr').includes(q)) ||
+            i.concepts.some(c => c.toLocaleLowerCase('tr').includes(q) || (normQ && normalizeConcept(c).includes(normQ))) ||
+            i.conceptDefinitions.some(cd => cd.concept.toLocaleLowerCase('tr').includes(q) || (normQ && normalizeConcept(cd.concept).includes(normQ)) || cd.definition.toLocaleLowerCase('tr').includes(q)) ||
             i.notes.some(n => n.toLocaleLowerCase('tr').includes(q)) ||
             i.activitySentences.some(s => s.toLocaleLowerCase('tr').includes(q))
         );
@@ -293,7 +317,8 @@ function CentralActivityStudioContent() {
     const handleAddConcept = (word: string) => {
         const trimmed = word.trim();
         if (!trimmed) return;
-        if (editingConcepts.some(c => c.toLocaleLowerCase('tr') === trimmed.toLocaleLowerCase('tr'))) {
+        const norm = normalizeConcept(trimmed);
+        if (editingConcepts.some(c => normalizeConcept(c) === norm)) {
             toast({ title: "Bilgi", description: "Bu kavram zaten listede var.", variant: "default" });
             return;
         }
@@ -309,7 +334,8 @@ function CentralActivityStudioContent() {
         setEditingConcepts(prev => {
             const next = [...prev];
             tokens.forEach(tok => {
-                if (!next.some(c => c.toLocaleLowerCase('tr') === tok.toLocaleLowerCase('tr'))) {
+                const norm = normalizeConcept(tok);
+                if (norm && !next.some(c => normalizeConcept(c) === norm)) {
                     next.push(tok);
                     addedCount++;
                 }
@@ -332,9 +358,10 @@ function CentralActivityStudioContent() {
     const handleQuickAddDefinitionForConcept = (conceptName: string) => {
         const trimmed = conceptName.trim();
         if (!trimmed) return;
+        const norm = normalizeConcept(trimmed);
 
         const existingIdx = editingDefinitions.findIndex(
-            d => d.concept.toLocaleLowerCase('tr').trim() === trimmed.toLocaleLowerCase('tr')
+            d => normalizeConcept(d.concept) === norm
         );
 
         if (existingIdx === -1) {
@@ -355,8 +382,9 @@ function CentralActivityStudioContent() {
 
         const newCards: ConceptItem[] = [];
         missingDefinitionConcepts.forEach(conceptName => {
+            const norm = normalizeConcept(conceptName);
             const exists = editingDefinitions.some(
-                d => d.concept.toLocaleLowerCase('tr').trim() === conceptName.toLocaleLowerCase('tr').trim()
+                d => normalizeConcept(d.concept) === norm
             );
             if (!exists) {
                 newCards.push({ concept: conceptName, definition: '' });
@@ -396,41 +424,47 @@ function CentralActivityStudioContent() {
             if (res.success && res.conceptDefinitions && res.conceptDefinitions.length > 0) {
                 let filledCount = 0;
                 setEditingDefinitions(prev => {
-                    const currentMap = new Map<string, string>();
+                    const currentMap = new Map<string, { concept: string; definition: string }>();
                     prev.forEach(item => {
-                        currentMap.set(item.concept.toLocaleLowerCase('tr').trim(), item.definition);
+                        const norm = normalizeConcept(item.concept);
+                        if (norm) currentMap.set(norm, { concept: item.concept, definition: item.definition });
                     });
 
                     // Yeni tanımları ekle/güncelle
                     res.conceptDefinitions!.forEach(newDef => {
-                        const norm = (newDef.concept || '').toLocaleLowerCase('tr').trim();
+                        const norm = normalizeConcept(newDef.concept);
                         if (norm && newDef.definition && newDef.definition.trim()) {
-                            currentMap.set(norm, newDef.definition.trim());
+                            const existing = currentMap.get(norm);
+                            if (existing) {
+                                existing.definition = newDef.definition.trim();
+                                if (newDef.concept.length > existing.concept.length || /[îâû'’]/i.test(newDef.concept)) {
+                                    existing.concept = newDef.concept;
+                                }
+                            } else {
+                                currentMap.set(norm, { concept: newDef.concept, definition: newDef.definition.trim() });
+                            }
                             filledCount++;
                         }
                     });
 
-                    // Listeyi yeniden oluştur
+                    // Listeyi yeniden oluştur: önce mevcut kartlar, sonra yeniler
                     const resultList: ConceptItem[] = [];
-                    // Önce mevcutları doldur
+                    const usedKeys = new Set<string>();
+
                     prev.forEach(item => {
-                        const norm = item.concept.toLocaleLowerCase('tr').trim();
-                        resultList.push({
-                            concept: item.concept,
-                            definition: currentMap.get(norm) || item.definition
-                        });
-                        currentMap.delete(norm);
+                        const norm = normalizeConcept(item.concept);
+                        if (norm && currentMap.has(norm)) {
+                            resultList.push(currentMap.get(norm)!);
+                            usedKeys.add(norm);
+                        } else {
+                            resultList.push(item);
+                        }
                     });
 
-                    // Kalan yeni eklenenleri ekle
-                    currentMap.forEach((def, conceptNorm) => {
-                        const originalNewDef = res.conceptDefinitions!.find(
-                            d => d.concept.toLocaleLowerCase('tr').trim() === conceptNorm
-                        );
-                        resultList.push({
-                            concept: originalNewDef ? originalNewDef.concept : conceptNorm,
-                            definition: def
-                        });
+                    currentMap.forEach((val, key) => {
+                        if (!usedKeys.has(key)) {
+                            resultList.push(val);
+                        }
                     });
 
                     return resultList;
@@ -1438,7 +1472,7 @@ function CentralActivityStudioContent() {
                                     {editingConcepts.length > 0 ? (
                                         <div className="flex flex-wrap gap-2.5 p-4 bg-slate-950/40 rounded-2xl border border-white/5 min-h-[140px]">
                                             {editingConcepts.map((concept, idx) => {
-                                                const hasDefinition = definedConceptsMap.has(concept.toLocaleLowerCase('tr').trim());
+                                                const hasDefinition = definedConceptsMap.has(normalizeConcept(concept));
                                                 return (
                                                     <div
                                                         key={idx}

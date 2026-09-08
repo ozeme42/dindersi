@@ -7,6 +7,9 @@ import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 import { clearStaticGameCache } from '@/lib/quiz-actions';
 import { revalidatePath } from 'next/cache';
+import { normalizeConcept } from '@/lib/concept-utils';
+
+export { normalizeConcept };
 
 export interface ConceptItem {
     id?: string;
@@ -67,6 +70,8 @@ const formatCourseTitle = (title: string): string => {
     return title;
 };
 
+
+
 /**
  * Loads all topics with their comprehensive activity bank data:
  * - concepts (kelimeler)
@@ -126,10 +131,47 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                         const topicId = topic.id;
                         const jsonFileName = `${topicId}.json`.toLowerCase();
 
-                        let conceptsSet = new Set<string>();
-                        let conceptDefinitionsMap = new Map<string, string>();
+                        // Store unique concepts and definitions by normalized key
+                        const conceptsMap = new Map<string, string>(); // normKey -> bestDisplayName
+                        const conceptDefinitionsMap = new Map<string, { concept: string; definition: string }>(); // normKey -> item
                         let notesList: string[] = [];
                         let activitySentencesList: string[] = [];
+
+                        const registerConcept = (term: string) => {
+                            const clean = (term || '').trim();
+                            if (!clean) return;
+                            const key = normalizeConcept(clean);
+                            if (!key) return;
+                            if (!conceptsMap.has(key)) {
+                                conceptsMap.set(key, clean);
+                            } else {
+                                const existing = conceptsMap.get(key)!;
+                                // Keep the richer/longer version (e.g. Semî' over Semi)
+                                if (clean.length > existing.length || /[îâû'’]/i.test(clean)) {
+                                    conceptsMap.set(key, clean);
+                                }
+                            }
+                        };
+
+                        const registerDefinition = (term: string, def: string) => {
+                            const cleanTerm = (term || '').trim();
+                            const cleanDef = (def || '').trim();
+                            if (!cleanTerm) return;
+                            const key = normalizeConcept(cleanTerm);
+                            if (!key) return;
+                            registerConcept(cleanTerm);
+                            if (!conceptDefinitionsMap.has(key)) {
+                                conceptDefinitionsMap.set(key, { concept: cleanTerm, definition: cleanDef });
+                            } else {
+                                const existing = conceptDefinitionsMap.get(key)!;
+                                if (!existing.definition && cleanDef) {
+                                    existing.definition = cleanDef;
+                                }
+                                if (cleanTerm.length > existing.concept.length || /[îâû'’]/i.test(cleanTerm)) {
+                                    existing.concept = cleanTerm;
+                                }
+                            }
+                        };
 
                         // ── A. Read from public/curriculum/yazilacaklar/${topicId}.json ──
                         if (existingYazilacaklarFiles.has(jsonFileName)) {
@@ -144,9 +186,7 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                                 if (Array.isArray(parsed.conceptDefinitions)) {
                                     parsed.conceptDefinitions.forEach((c: any) => {
                                         if (c && c.concept && c.concept.trim()) {
-                                            const term = c.concept.trim();
-                                            conceptDefinitionsMap.set(term, (c.definition || '').trim());
-                                            conceptsSet.add(term);
+                                            registerDefinition(c.concept, c.definition || '');
                                         }
                                     });
                                 }
@@ -164,17 +204,9 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                                     parsedAct.forEach((it: any) => {
                                         if (!it) return;
                                         if (it.type === 'concept' && it.content?.text) {
-                                            const term = it.content.text.trim();
-                                            if (term) conceptsSet.add(term);
+                                            registerConcept(it.content.text);
                                         } else if (it.type === 'definition' && it.content?.term) {
-                                            const term = it.content.term.trim();
-                                            const def = (it.content.definition || '').trim();
-                                            if (term) {
-                                                if (!conceptDefinitionsMap.has(term)) {
-                                                    conceptDefinitionsMap.set(term, def);
-                                                }
-                                                conceptsSet.add(term);
-                                            }
+                                            registerDefinition(it.content.term, it.content.definition || '');
                                         } else if (it.type === 'sentence' && it.content?.text) {
                                             const sentence = it.content.text.trim();
                                             if (sentence && !activitySentencesList.includes(sentence)) {
@@ -197,21 +229,19 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                         if (conceptDefinitionsMap.size === 0 && Array.isArray(topic.writingContent?.conceptDefinitions)) {
                             topic.writingContent.conceptDefinitions.forEach((c: any) => {
                                 if (c && c.concept) {
-                                    const term = c.concept.trim();
-                                    conceptDefinitionsMap.set(term, (c.definition || '').trim());
-                                    conceptsSet.add(term);
+                                    registerDefinition(c.concept, c.definition || '');
                                 }
                             });
                         }
 
-                        // Convert maps/sets to arrays
-                        const concepts = Array.from(conceptsSet);
-                        const conceptDefinitions: ConceptItem[] = Array.from(conceptDefinitionsMap.entries()).map(([concept, definition]) => ({
-                            concept,
-                            definition
-                        }));
+                        // Convert maps to arrays
+                        const concepts = Array.from(conceptsMap.values());
+                        const conceptDefinitions: ConceptItem[] = Array.from(conceptDefinitionsMap.values());
 
                         const sourceText = (sourceTextsMap.topics[topicId] || topic.sourceText || '').trim();
+
+                        // Count definitions that actually have a non-empty explanation
+                        const validDefinitionsCount = conceptDefinitions.filter(d => d.definition && d.definition.trim()).length;
 
                         items.push({
                             id: topicId,
@@ -230,7 +260,7 @@ export async function loadAllYazilacaklarData(): Promise<{ success: boolean; ite
                             activitySentences: activitySentencesList,
                             sentences: activitySentencesList, // alias
                             conceptsCount: concepts.length,
-                            definitionsCount: conceptDefinitions.length,
+                            definitionsCount: validDefinitionsCount,
                             notesCount: notesList.length,
                             activitySentencesCount: activitySentencesList.length,
                             hasContent: concepts.length > 0 || conceptDefinitions.length > 0 || notesList.length > 0 || activitySentencesList.length > 0,
@@ -277,24 +307,63 @@ export async function saveCentralActivityDataAction(params: {
             return { success: false, error: 'Geçersiz konu kimliği.' };
         }
 
-        // Clean arrays
-        const cleanedConcepts = (concepts || []).map(c => c.trim()).filter(Boolean);
-        const cleanedDefinitions = (conceptDefinitions || [])
-            .map(c => ({ concept: (c.concept || '').trim(), definition: (c.definition || '').trim() }))
-            .filter(c => c.concept || c.definition);
+        // Clean arrays & deduplicate concepts using normalizeConcept
+        const conceptMap = new Map<string, string>();
+        (concepts || []).forEach(c => {
+            const trimmed = c.trim();
+            if (!trimmed) return;
+            const key = normalizeConcept(trimmed);
+            if (!key) return;
+            if (!conceptMap.has(key)) {
+                conceptMap.set(key, trimmed);
+            } else {
+                const existing = conceptMap.get(key)!;
+                if (trimmed.length > existing.length || /[îâû'’]/i.test(trimmed)) {
+                    conceptMap.set(key, trimmed);
+                }
+            }
+        });
+
+        // Clean definitions and deduplicate using normalizeConcept
+        const defMap = new Map<string, ConceptItem>();
+        (conceptDefinitions || []).forEach(cd => {
+            const term = (cd.concept || '').trim();
+            const def = (cd.definition || '').trim();
+            if (!term && !def) return;
+            const key = normalizeConcept(term);
+            if (!key) return;
+
+            // Also ensure concept is registered in conceptMap
+            if (!conceptMap.has(key)) {
+                conceptMap.set(key, term);
+            } else {
+                const existing = conceptMap.get(key)!;
+                if (term.length > existing.length || /[îâû'’]/i.test(term)) {
+                    conceptMap.set(key, term);
+                }
+            }
+
+            if (!defMap.has(key)) {
+                defMap.set(key, { concept: term, definition: def });
+            } else {
+                const existing = defMap.get(key)!;
+                if (!existing.definition && def) {
+                    existing.definition = def;
+                }
+                if (term.length > existing.concept.length || /[îâû'’]/i.test(term)) {
+                    existing.concept = term;
+                }
+            }
+        });
+
+        const finalConcepts = Array.from(conceptMap.values());
+        const cleanedDefinitions = Array.from(defMap.values());
 
         // Deftere yazılacak notlar (Özet)
         const cleanedNotes = (params.notes || []).map(n => n.trim()).filter(Boolean);
 
         // Oyunlar için kısa cümleler (Cümle Kurma, D/Y, Tornado)
         const cleanedActivitySentences = (params.activitySentences || params.sentences || []).map(s => s.trim()).filter(Boolean);
-
-        // Also ensure every concept in conceptDefinitions exists in concepts array
-        const allConceptsSet = new Set(cleanedConcepts);
-        cleanedDefinitions.forEach(d => {
-            if (d.concept) allConceptsSet.add(d.concept);
-        });
-        const finalConcepts = Array.from(allConceptsSet);
 
         // ── 1. Save to Yazılacaklar JSON (Defter Notları + Tanımlar) ──
         await fs.mkdir(YAZILACAKLAR_DIR, { recursive: true });
