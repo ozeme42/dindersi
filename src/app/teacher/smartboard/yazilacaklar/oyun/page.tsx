@@ -2,15 +2,13 @@
 
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Wand2, ArrowLeft, Download, Plus, Minus, Maximize, Minimize } from 'lucide-react';
+import { Loader2, Wand2, ArrowLeft, Download, Plus, Minus } from 'lucide-react';
 import type { Topic, YazilacaklarContent, ActivityItem } from '@/lib/types';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 
@@ -27,7 +25,7 @@ async function getDefinitionsForTopic(topicId: string): Promise<{ concept: strin
             };
         }).filter(item => item.concept && item.definition);
     } catch (error) {
-        console.error("Error fetching definitions for topic:", error);
+        console.warn("Error fetching definitions from Firestore:", error);
         return [];
     }
 }
@@ -58,14 +56,9 @@ function YazilacaklarDisplayPage() {
         'bg-fuchsia-900/40 border-fuchsia-500/50 text-fuchsia-100'
     ];
 
-     useEffect(() => {
+    useEffect(() => {
         const handleFullscreenChange = () => {
-            const isCurrentlyFullscreen = !!document.fullscreenElement;
-            setIsFullscreen(isCurrentlyFullscreen);
-             if (!isCurrentlyFullscreen) {
-                // Opsiyonel: Tam ekrandan çıkınca fontu resetlemek isterseniz burayı açın
-                // setFontSize(1.5); 
-            }
+            setIsFullscreen(!!document.fullscreenElement);
         };
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
@@ -80,31 +73,81 @@ function YazilacaklarDisplayPage() {
         setIsLoading(true);
         setError(null);
         try {
-            const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-            const topicSnap = await getDoc(topicRef);
-            
-            if (topicSnap.exists()) {
-                const topicData = topicSnap.data() as Topic;
-                setTopic(topicData);
-                
-                const definitions = await getDefinitionsForTopic(topicId);
-                const notes = topicData.writingContent?.notes || [];
+            let topicData: Topic | null = null;
+            let definitions: { concept: string; definition: string }[] = [];
+            let notes: string[] = [];
 
-                if (definitions.length === 0 && notes.length === 0) {
-                     router.push(`/teacher/ders-akisi/ozet/${topicId}?courseId=${courseId}&unitId=${unitId}`);
-                } else {
-                    setContent({ conceptDefinitions: definitions, notes: notes });
+            // 1. Try Firestore
+            try {
+                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+                const topicSnap = await getDoc(topicRef);
+                if (topicSnap.exists()) {
+                    topicData = topicSnap.data() as Topic;
+                    definitions = await getDefinitionsForTopic(topicId);
+                    notes = topicData.writingContent?.notes || [];
+                    if (definitions.length === 0 && topicData.writingContent?.conceptDefinitions) {
+                        definitions = topicData.writingContent.conceptDefinitions;
+                    }
                 }
-
-            } else {
-                 setError('Konu bulunamadı.');
+            } catch (fsErr) {
+                console.warn("Firestore fetch error, falling back to static:", fsErr);
             }
+
+            // 2. Static JSON fallback (/curriculum/yazilacaklar/${topicId}.json)
+            if (definitions.length === 0 && notes.length === 0) {
+                try {
+                    const staticRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
+                    if (staticRes.ok) {
+                        const staticJson = await staticRes.json();
+                        if (Array.isArray(staticJson.conceptDefinitions)) {
+                            definitions = staticJson.conceptDefinitions;
+                        }
+                        if (Array.isArray(staticJson.notes)) {
+                            notes = staticJson.notes;
+                        }
+                    }
+                } catch (staticErr) {
+                    console.warn("Static json fetch error:", staticErr);
+                }
+            }
+
+            // 3. Fallback for Topic Title if topicData wasn't found in Firestore
+            if (!topicData) {
+                let foundTitle = '';
+                try {
+                    const mRes = await fetch('/curriculum/manifest.json');
+                    if (mRes.ok) {
+                        const mData = await mRes.json();
+                        for (const cg of mData.classGroups || []) {
+                            for (const c of cg.courses || []) {
+                                for (const u of c.units || []) {
+                                    for (const t of u.topics || []) {
+                                        if (t.id === topicId) {
+                                            foundTitle = t.title;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (mErr) {}
+                topicData = {
+                    id: topicId,
+                    title: foundTitle || 'Konu Kavram Panosu',
+                    courseId,
+                    unitId,
+                } as Topic;
+            }
+
+            setTopic(topicData);
+            setContent({ conceptDefinitions: definitions, notes: notes });
         } catch (e: any) {
             setError('İçerik alınırken bir hata oluştu.');
         } finally {
             setIsLoading(false);
         }
-    }, [topicId, courseId, unitId, router]);
+    }, [topicId, courseId, unitId]);
 
     useEffect(() => {
         fetchContent();
@@ -119,13 +162,13 @@ function YazilacaklarDisplayPage() {
             let htmlContent = `
                 <html>
                 <head>
-                    <title>${topic.title} - Yazılacaklar</title>
+                    <title>${topic.title} - Yazılacaklar & Kavramlar</title>
                     <style>
-                        body { font-family: sans-serif; padding: 40px; font-size: 18px; }
-                        h1 { text-align: center; font-size: 32px; margin-bottom: 30px; }
-                        h2 { border-bottom: 2px solid #000; padding-bottom: 10px; margin-top: 30px; }
+                        body { font-family: sans-serif; padding: 40px; font-size: 18px; color: #1e293b; }
+                        h1 { text-align: center; font-size: 32px; margin-bottom: 30px; color: #0f172a; }
+                        h2 { border-bottom: 2px solid #000; padding-bottom: 10px; margin-top: 30px; color: #334155; }
                         .concept-item { margin-bottom: 15px; page-break-inside: avoid; }
-                        .concept-term { font-weight: bold; font-size: 20px; }
+                        .concept-term { font-weight: bold; font-size: 20px; color: #0f172a; }
                         .note-item { margin-bottom: 15px; page-break-inside: avoid; display: flex; }
                         .bullet { margin-right: 10px; font-weight: bold; }
                     </style>
@@ -145,7 +188,7 @@ function YazilacaklarDisplayPage() {
                 });
             }
 
-             if (content.notes.length > 0) {
+            if (content.notes.length > 0) {
                 htmlContent += `<h2>Önemli Notlar</h2>`;
                 content.notes.forEach(note => {
                     htmlContent += `
@@ -171,7 +214,8 @@ function YazilacaklarDisplayPage() {
         setIsDownloading(false);
     };
     
-    const backUrl = `/teacher/smartboard/yazilacaklar`;
+    const studioUrl = `/teacher/smartboard/yazilacaklar?courseId=${courseId || ''}&unitId=${unitId || ''}&topicId=${topicId || ''}`;
+    const backUrl = studioUrl;
     
     const increaseFontSize = () => setFontSize(fs => Math.min(fs + 0.2, 5.0));
     const decreaseFontSize = () => setFontSize(fs => Math.max(1.0, fs - 0.2));
@@ -189,15 +233,23 @@ function YazilacaklarDisplayPage() {
             </div>
         );
     }
-    if (!content) {
+    if (!content || (content.conceptDefinitions.length === 0 && content.notes.length === 0)) {
         return (
              <div className="flex h-screen items-center justify-center text-center p-8 bg-slate-950 text-white">
-                <div>
-                    <p className="text-slate-400 text-2xl mb-8">Bu konu için içerik bulunamadı.</p>
-                     <Button asChild size="lg" className="text-xl px-8 py-6 bg-slate-800 hover:bg-slate-700 border border-slate-600"><Link href={backUrl}>Geri Dön</Link></Button>
+                <div className="max-w-md space-y-4">
+                    <h2 className="text-2xl font-bold text-slate-200">{topic?.title || 'Kavram Panosu'}</h2>
+                    <p className="text-slate-400 text-base">Bu konu için henüz kayıtlı kavram veya özet not bulunamadı.</p>
+                    <div className="flex justify-center gap-3 pt-2">
+                        <Button asChild variant="outline" className="border-white/10 text-slate-300">
+                            <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
+                        </Button>
+                        <Button asChild className="bg-purple-600 hover:bg-purple-500 text-white font-bold">
+                            <Link href={studioUrl}><Wand2 className="mr-2 h-4 w-4" /> Stüdyoda Oluştur</Link>
+                        </Button>
+                    </div>
                 </div>
             </div>
-        )
+        );
     }
 
     // --- KAVRAMLAR İÇERİĞİ ---
@@ -269,7 +321,7 @@ function YazilacaklarDisplayPage() {
                     </div>
                 )) : (
                      <div className="col-span-full flex items-center justify-center h-64 text-slate-500 text-2xl">
-                        Yapay zeka not üretemedi.
+                        Kayıtlı özet not bulunamadı.
                     </div>
                 )}
             </div>
@@ -289,7 +341,7 @@ function YazilacaklarDisplayPage() {
                  <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-900/20 rounded-full blur-[150px]" />
              </div>
 
-             {/* Üst Menü (Fullscreen veya Embedded değilken görünür) */}
+             {/* Üst Menü */}
              <header className={cn(
                  "flex-shrink-0 p-4 border-b border-white/10 bg-slate-900/80 backdrop-blur-md z-20 transition-all duration-300",
                  (isFullscreen || isEmbedded) ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-auto opacity-100"
@@ -310,8 +362,8 @@ function YazilacaklarDisplayPage() {
                             </Link>
                         </Button>
                          <Button variant="outline" asChild className="border-white/10 hover:bg-white/10 hover:text-white text-slate-300 hidden sm:flex">
-                            <Link href={`/teacher/ders-akisi/ozet/${topicId}?courseId=${courseId}&unitId=${unitId}`}>
-                                <Wand2 className="mr-2 h-5 w-5" /> Düzenle
+                            <Link href={studioUrl}>
+                                <Wand2 className="mr-2 h-5 w-5" /> Stüdyoda Düzenle
                             </Link>
                         </Button>
                         <Button variant="secondary" onClick={handleDownloadPDF} disabled={isDownloading} className="hidden sm:flex">
@@ -323,18 +375,18 @@ function YazilacaklarDisplayPage() {
                 </div>
             </header>
             
-            {/* Ana İçerik - Native Scroll */}
+            {/* Ana İçerik */}
             <main className="flex-grow overflow-y-auto relative z-10 p-4 md:p-8 scroll-smooth pb-0">
                 <Tabs defaultValue="kavramlar" className="w-full flex flex-col items-center">
                     
-                    {/* Sekme Butonları (Sabit Değil, En Üstte) */}
+                    {/* Sekme Butonları */}
                     <div className="flex justify-center mb-8 w-full">
                          <TabsList className="grid grid-cols-2 w-full max-w-lg bg-slate-900/90 border border-white/20 p-1.5 rounded-full h-16 shadow-2xl backdrop-blur-xl">
                             <TabsTrigger value="kavramlar" className="rounded-full text-lg font-bold data-[state=active]:bg-cyan-600 data-[state=active]:text-white text-slate-400 transition-all">
-                                KAVRAMLAR
+                                KAVRAMLAR ({content.conceptDefinitions.length})
                             </TabsTrigger>
                             <TabsTrigger value="notlar" className="rounded-full text-lg font-bold data-[state=active]:bg-amber-600 data-[state=active]:text-white text-slate-400 transition-all">
-                                ÖNEMLİ NOTLAR
+                                ÖNEMLİ NOTLAR ({content.notes.length})
                             </TabsTrigger>
                         </TabsList>
                     </div>
@@ -348,7 +400,7 @@ function YazilacaklarDisplayPage() {
                 </Tabs>
             </main>
 
-            {/* FLOATING ACTION BAR (ŞEFFAF VE ŞIK) */}
+            {/* FLOATING ACTION BAR */}
             <div className={cn(
                 "fixed bottom-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500",
                 (isFullscreen || isEmbedded) ? "translate-y-0 opacity-100" : "translate-y-32 opacity-0 pointer-events-none"
@@ -376,11 +428,10 @@ function YazilacaklarDisplayPage() {
     );
 }
 
-
 export default function Page() {
     return (
         <Suspense fallback={<div className="flex justify-center items-center h-screen bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500"/></div>}>
             <YazilacaklarDisplayPage />
         </Suspense>
-    )
+    );
 }
