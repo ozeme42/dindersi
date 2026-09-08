@@ -8,7 +8,7 @@ import {
     Loader2, Save, Wand2, ArrowLeft, Download, Plus, Trash2, Maximize,
     Minimize, ExternalLink, RefreshCw, Layers, BookMarked, Eye, LayoutTemplate,
     ListOrdered, FileText, PanelLeftClose, PanelLeftOpen, CheckCircle2, AlertCircle,
-    Tag, HelpCircle, AlignLeft, X, Copy, Zap, Info, AlertTriangle
+    Tag, HelpCircle, AlignLeft, X, Copy, Zap, Info, AlertTriangle, Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -788,9 +788,75 @@ function CentralActivityStudioContent() {
 
             <div className="relative z-10 flex-1 flex flex-col max-w-[1720px] w-full mx-auto p-3 sm:p-5 md:p-6 space-y-4">
                 
+                {/* ══ BREADCRUMB & GERİ DÖN NAVİGASYON BARI ══ */}
+                <div className="flex items-center justify-between gap-3 px-1 flex-wrap">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 flex-wrap">
+                        <Link 
+                            href="/teacher" 
+                            className="hover:text-purple-300 transition-colors flex items-center gap-1.5 py-1 px-2.5 rounded-lg bg-slate-900/60 border border-white/5 hover:border-purple-500/30"
+                            title="Öğretmen Ana Paneli"
+                        >
+                            <Home className="w-3.5 h-3.5 text-purple-400" />
+                            <span>Öğretmen Paneli</span>
+                        </Link>
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+                        <Link 
+                            href="/teacher/smartboard" 
+                            className="hover:text-purple-300 transition-colors py-1 px-2.5 rounded-lg bg-slate-900/60 border border-white/5 hover:border-purple-500/30"
+                            title="Akıllı Tahta Hub"
+                        >
+                            Akıllı Tahta
+                        </Link>
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+                        <span className="text-slate-200 font-bold py-1 px-2">Merkezi Etkinlik Stüdyosu</span>
+                        {activeTopic && (
+                            <>
+                                <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+                                <span className="text-purple-300 font-bold bg-purple-950/50 border border-purple-500/30 px-2 py-0.5 rounded-md text-[11px] truncate max-w-xs">
+                                    {activeTopic.className} • {activeTopic.title}
+                                </span>
+                            </>
+                        )}
+                    </div>
+
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                            if (typeof window !== 'undefined' && window.history.length > 1) {
+                                router.back();
+                            } else {
+                                router.push('/teacher/smartboard');
+                            }
+                        }}
+                        className="h-8 px-3 rounded-xl bg-slate-900/80 border-white/15 hover:bg-purple-950/40 text-slate-300 hover:text-white flex items-center gap-1.5 text-xs font-bold transition-all shadow hover:border-purple-500/40 group cursor-pointer"
+                        title="Önceki Sayfaya Geri Dön"
+                    >
+                        <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1 text-purple-400 group-hover:text-purple-300" />
+                        <span>Geri Dön</span>
+                    </Button>
+                </div>
+
                 {/* ══ ÜST HEADER: BAŞLIK, ARAMA, EYLEMLER ══ */}
                 <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-slate-900/80 border border-white/10 rounded-3xl p-4 md:p-5 backdrop-blur-xl shadow-2xl">
                     <div className="flex items-center gap-3.5">
+                        {/* Geri Dön Butonu */}
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                if (typeof window !== 'undefined' && window.history.length > 1) {
+                                    router.back();
+                                } else {
+                                    router.push('/teacher/smartboard');
+                                }
+                            }}
+                            className="h-12 px-3.5 rounded-2xl bg-slate-950/90 border-white/15 hover:bg-purple-950/40 hover:border-purple-500/60 text-slate-300 hover:text-white flex items-center gap-2 transition-all shadow-lg group flex-shrink-0 cursor-pointer"
+                            title="Önceki Sayfaya Geri Dön"
+                        >
+                            <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1 text-purple-400 group-hover:text-purple-300" />
+                            <span className="text-xs font-bold hidden sm:inline">Geri</span>
+                        </Button>
+
                         <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-600 flex items-center justify-center shadow-lg shadow-purple-900/40 border border-purple-400/30 flex-shrink-0">
                             <Columns className="w-6 h-6 text-white" />
                         </div>

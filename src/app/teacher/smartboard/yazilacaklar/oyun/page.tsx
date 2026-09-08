@@ -215,7 +215,7 @@ function YazilacaklarDisplayPage() {
     };
     
     const studioUrl = `/teacher/smartboard/yazilacaklar?courseId=${courseId || ''}&unitId=${unitId || ''}&topicId=${topicId || ''}`;
-    const backUrl = studioUrl;
+    const backUrl = '/teacher/smartboard';
     
     const increaseFontSize = () => setFontSize(fs => Math.min(fs + 0.2, 5.0));
     const decreaseFontSize = () => setFontSize(fs => Math.max(1.0, fs - 0.2));
@@ -356,10 +356,19 @@ function YazilacaklarDisplayPage() {
                             <Button variant="ghost" size="icon" onClick={increaseFontSize} className="h-10 w-10 text-slate-300 hover:text-white hover:bg-white/10"><Plus className="h-6 w-6"/></Button>
                         </div>
 
-                        <Button variant="outline" asChild className="border-white/10 hover:bg-white/10 hover:text-white text-slate-300">
-                            <Link href={backUrl}>
-                                <ArrowLeft className="mr-2 h-5 w-5"/> Geri
-                            </Link>
+                        <Button 
+                            variant="outline" 
+                            onClick={() => {
+                                if (typeof window !== 'undefined' && window.history.length > 1) {
+                                    router.back();
+                                } else {
+                                    router.push(backUrl);
+                                }
+                            }}
+                            className="border-white/10 hover:bg-white/10 hover:text-white text-slate-300 cursor-pointer"
+                            title="Önceki Sayfaya Geri Dön"
+                        >
+                            <ArrowLeft className="mr-2 h-5 w-5"/> Geri
                         </Button>
                          <Button variant="outline" asChild className="border-white/10 hover:bg-white/10 hover:text-white text-slate-300 hidden sm:flex">
                             <Link href={studioUrl}>
