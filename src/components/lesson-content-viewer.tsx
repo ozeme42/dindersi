@@ -10,7 +10,7 @@ import {
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
-    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, Palette, Pencil,
+    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, EyeOff, Palette, Pencil,
     RotateCw, RotateCcw, ZoomIn, ZoomOut, Grid2X2, Grid3X3, HelpCircle, MessageSquare,
     Play, Pause, Timer, Clock, Compass, BookOpen, FileText, ExternalLink
 } from 'lucide-react';
@@ -4793,17 +4793,17 @@ export function LessonContentViewer({
         
         {/* AÇMA TUŞU (Bar gizliyken görünür) - isTeacher ve hideUI true ise görünür */}
         {isTeacher && hideUI && (
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-5 fade-in">
-                 <Button 
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-5 fade-in pointer-events-auto">
+                 <button 
                     onClick={(e) => {
                          e.stopPropagation();
                          setHideUI(false);
                     }}
-                    size="icon"
-                    className="rounded-full w-12 h-12 bg-slate-900/90 shadow-xl border border-white/15 hover:bg-slate-800 text-white hover:scale-110 transition-all backdrop-blur-xl"
+                    className="rounded-full px-4 h-9 bg-slate-900/90 shadow-2xl border border-white/20 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 transition-all backdrop-blur-xl cursor-pointer hover:scale-105 active:scale-95"
                  >
-                    <ChevronUp className="w-6 h-6" />
-                 </Button>
+                    <ChevronUp className="w-4 h-4" />
+                    <span>Menüyü Göster</span>
+                 </button>
             </div>
         )}
 
@@ -4818,18 +4818,20 @@ export function LessonContentViewer({
         >
             {/* Öğretmen gizle butonu */}
             {isTeacher && !hideUI && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-40">
-                    <Button
-                        onClick={() => setHideUI(true)}
-                        size="sm"
-                        className="h-3.5 w-8 rounded-t-md rounded-b-none bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 border-t border-x border-black/10 dark:border-white/10 text-slate-600 dark:text-white shadow-none backdrop-blur-md transition-all p-0"
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-auto">
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setHideUI(true);
+                        }}
+                        className="h-5 px-3 rounded-t-xl bg-slate-900/85 hover:bg-slate-800 text-white/80 hover:text-white border-t border-x border-white/20 shadow-md backdrop-blur-md transition-all flex items-center justify-center cursor-pointer"
+                        title="Alt Menüyü Gizle"
                     >
-                        <ChevronDown className="h-2.5 w-2.5" />
-                    </Button>
+                        <ChevronDown className="h-3.5 w-3.5" />
+                    </button>
                 </div>
             )}
-
-            {/* Şeffaf & Floating Cam Efekti Container */}
             <div className="w-full max-w-5xl mx-auto rounded-2xl bg-white/25 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.06)] flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto">
 
                 {/* SOL: Geri + Tam Ekran / Küçült + Yenile */}
@@ -4889,6 +4891,18 @@ export function LessonContentViewer({
                             </>
                         )}
                     </button>
+
+                    {/* Alt Menüyü Gizle Butonu */}
+                    {isTeacher && (
+                        <button
+                            onClick={() => setHideUI(true)}
+                            className="h-8 px-2 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
+                            title="Alt Menüyü Gizle"
+                        >
+                            <EyeOff className="w-3.5 h-3.5 text-slate-700" />
+                            <span className="hidden sm:inline">Gizle</span>
+                        </button>
+                    )}
                 </div>
 
                 {/* ORTA: İlerleme noktaları + sayfa seçici */}
