@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 import QRCode from 'qrcode';
 import { 
     Smartphone, X, Check, Copy, ExternalLink, RefreshCw, 
-    Wifi, Moon, ChevronRight, MousePointer2 
+    Wifi, Moon, ChevronRight, ListFilter, Timer 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { db } from '@/lib/firebase';
@@ -68,16 +67,8 @@ export function PresentationRemoteModal({
     const [isPhoneConnected, setIsPhoneConnected] = useState<boolean>(false);
     const [lastActionName, setLastActionName] = useState<string>('');
     const [copied, setCopied] = useState<boolean>(false);
-    const [isMounted, setIsMounted] = useState<boolean>(false);
-    const [portalContainer, setPortalContainer] = useState<Element | null>(null);
 
-    // ══ SANAL FARE İMLECİ & TIKLAMA STATE'LERİ ══
-    const [cursorPos, setCursorPos] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
-    const [isCursorVisible, setIsCursorVisible] = useState<boolean>(false);
-    const [clickRipplePos, setClickRipplePos] = useState<{ x: number; y: number } | null>(null);
-    const cursorHideTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-    // Callbacks ref'lerde saklanarak Firestore dinleyicisinin yeniden başlatılması (thrashing) kesinlikle engellenir
+    // Callbacks ref'lerde saklanarak Firestore dinleyicisinin yeniden başlatılması (thrashing) engellenir
     const callbacksRef = useRef({
         onNext,
         onPrev,
@@ -104,31 +95,7 @@ export function PresentationRemoteModal({
 
     const lastCommandIdRef = useRef<string | number | null>(null);
 
-    // 1. Mount kontrolü ve Portal Container Tespiti
-    useEffect(() => {
-        setIsMounted(true);
-
-        const updateContainer = () => {
-            if (typeof document === 'undefined') return;
-            const fs = document.fullscreenElement;
-            // Eğer html etiketi dışında özel bir element (örn: video/iframe) tam ekransa ona ekle, değilse daima document.body
-            if (fs && fs !== document.documentElement) {
-                setPortalContainer(fs);
-            } else {
-                setPortalContainer(document.body);
-            }
-        };
-
-        updateContainer();
-        document.addEventListener('fullscreenchange', updateContainer);
-        document.addEventListener('webkitfullscreenchange', updateContainer);
-        return () => {
-            document.removeEventListener('fullscreenchange', updateContainer);
-            document.removeEventListener('webkitfullscreenchange', updateContainer);
-        };
-    }, []);
-
-    // 2. Oturum Kodunu Başlat / Yükle
+    // 1. Oturum Kodunu Başlat / Yükle
     useEffect(() => {
         let code = '';
         try {
@@ -163,7 +130,7 @@ export function PresentationRemoteModal({
         });
     }, []);
 
-    // 3. Firestore'da Oturumu Başlat (Sadece sessionCode ilk oluştuğunda tek sefer çalışır)
+    // 2. Firestore'da Oturumu Başlat (Sadece sessionCode ilk oluştuğunda tek sefer çalışır)
     useEffect(() => {
         if (!sessionCode) return;
 
@@ -191,7 +158,7 @@ export function PresentationRemoteModal({
         });
     }, [sessionCode]);
 
-    // 4. Sunum durumu değiştikçe Firestore'a senkronize et
+    // 3. Sunum durumu değiştikçe Firestore'a senkronize et
     useEffect(() => {
         if (!sessionCode) return;
 
@@ -205,7 +172,7 @@ export function PresentationRemoteModal({
         }).catch(() => {});
     }, [sessionCode, currentStepIndex, totalStepsCount, currentStepTitle, isBlackout]);
 
-    // 5. İleri / Geri Klavye Olayı Tetikleyici (PDF ve Tüm Slaytlarla %100 Uyumlu)
+    // 4. İleri / Geri Klavye Olayı Tetikleyici (PDF ve Tüm Slaytlarla %100 Uyumlu)
     const dispatchArrowKey = useCallback((direction: 'next' | 'prev') => {
         const key = direction === 'next' ? 'ArrowRight' : 'ArrowLeft';
         const code = direction === 'next' ? 'ArrowRight' : 'ArrowLeft';
@@ -236,54 +203,7 @@ export function PresentationRemoteModal({
         }
     }, []);
 
-    // 6. Gerçek Tıklama Simülasyonu
-    const simulateClick = useCallback((xPercent: number, yPercent: number) => {
-        const pxX = (window.innerWidth * xPercent) / 100;
-        const pxY = (window.innerHeight * yPercent) / 100;
-
-        // Tıklama dalgası efektini göster
-        setClickRipplePos({ x: pxX, y: pxY });
-        setTimeout(() => setClickRipplePos(null), 500);
-
-        const element = document.elementFromPoint(pxX, pxY);
-
-        if (element && element instanceof HTMLElement) {
-            // Eğer PDF canvas'ına tıklandıysa: sağ tarafa tıklandıysa ileri, sol tarafa tıklandıysa geri
-            if (element.tagName === 'CANVAS') {
-                if (xPercent > 55) {
-                    dispatchArrowKey('next');
-                    return;
-                } else if (xPercent < 45) {
-                    dispatchArrowKey('prev');
-                    return;
-                }
-            }
-
-            // Tıklanabilir en yakın butonu veya öğeyi bul
-            const target = (element.closest('button, a, input, [role="button"], label, select, [tabindex]') || element) as HTMLElement;
-
-            const eventConfig = { 
-                view: window, 
-                bubbles: true, 
-                cancelable: true, 
-                clientX: pxX, 
-                clientY: pxY 
-            };
-
-            target.dispatchEvent(new PointerEvent('pointerdown', eventConfig));
-            target.dispatchEvent(new MouseEvent('mousedown', eventConfig));
-            target.dispatchEvent(new PointerEvent('pointerup', eventConfig));
-            target.dispatchEvent(new MouseEvent('mouseup', eventConfig));
-            target.dispatchEvent(new MouseEvent('click', eventConfig));
-
-            try {
-                target.focus?.();
-                target.click();
-            } catch {}
-        }
-    }, [dispatchArrowKey]);
-
-    // 7. Telefondan Gelen Komutları ve Fareyi Dinleyen Kararlı Dinleyici
+    // 5. Telefondan Gelen Komutları Dinleyen Kararlı Dinleyici
     useEffect(() => {
         if (!sessionCode) return;
 
@@ -298,30 +218,12 @@ export function PresentationRemoteModal({
                 setIsPhoneConnected(Boolean(data.phoneConnected));
             }
 
-            // Fare İmleci Pozisyonu
-            if (data.cursor && typeof data.cursor.x === 'number' && typeof data.cursor.y === 'number') {
-                setCursorPos({ x: data.cursor.x, y: data.cursor.y });
-                setIsCursorVisible(true);
-
-                if (cursorHideTimerRef.current) clearTimeout(cursorHideTimerRef.current);
-                cursorHideTimerRef.current = setTimeout(() => {
-                    setIsCursorVisible(false);
-                }, 15000); // 15 saniye hareketsizlikte gizle
-            }
-
             // Komut Yürütme
             const cmd = data.command;
             if (cmd && cmd.id && cmd.id !== lastCommandIdRef.current) {
                 lastCommandIdRef.current = cmd.id;
 
                 switch (cmd.action) {
-                    case 'click':
-                        simulateClick(
-                            typeof cmd.x === 'number' ? cmd.x : 50, 
-                            typeof cmd.y === 'number' ? cmd.y : 50
-                        );
-                        setLastActionName('Tıklandı 🔘');
-                        break;
                     case 'next':
                         dispatchArrowKey('next');
                         setLastActionName('Sonraki Adım');
@@ -362,9 +264,8 @@ export function PresentationRemoteModal({
 
         return () => {
             unsub();
-            if (cursorHideTimerRef.current) clearTimeout(cursorHideTimerRef.current);
         };
-    }, [sessionCode, simulateClick, dispatchArrowKey]);
+    }, [sessionCode, dispatchArrowKey]);
 
     const handleCopyLink = async () => {
         if (!remoteUrl) return;
@@ -388,216 +289,159 @@ export function PresentationRemoteModal({
         toast({ title: "Yenilendi", description: "Yeni kumanda kodu oluşturuldu." });
     };
 
-    // ══ SANAL FARE İMLECİ & LAZER GÖRÜNÜMÜ ══
-    const cursorElement = isCursorVisible && (
-        <div
-            id="remote-board-cursor"
-            className="fixed pointer-events-none z-[9999999] select-none transition-[left,top] duration-75 ease-out"
-            style={{
-                left: `${cursorPos.x}vw`,
-                top: `${cursorPos.y}vh`,
-                transform: 'translate(-3px, -3px)',
-                willChange: 'left, top'
-            }}
-        >
-            <div className="relative">
-                {/* Şık Lazer İmleç Oku */}
-                <svg width="36" height="36" viewBox="0 0 24 24" style={{ filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.85))' }}>
-                    <path 
-                        d="M4.5 2.5 L4.5 21 L10 15 L14.5 23 L18 21 L13.5 13 L21 13 Z" 
-                        fill="#4f46e5" 
-                        stroke="#ffffff" 
-                        strokeWidth="2" 
-                        strokeLinejoin="round"
-                    />
-                </svg>
-
-                {/* İmleç Ucundaki Kırmızı Lazer Noktası */}
-                <div className="absolute -top-1.5 -left-1.5 w-4 h-4 rounded-full bg-rose-500 border-2 border-white shadow-[0_0_15px_rgba(244,63,94,1)] animate-ping opacity-75" />
-                <div className="absolute -top-1.5 -left-1.5 w-4 h-4 rounded-full bg-rose-500 border-2 border-white shadow-[0_0_10px_rgba(244,63,94,1)]" />
-            </div>
-        </div>
-    );
-
-    // Tıklama Dalgası (Click Ripple)
-    const clickRippleElement = clickRipplePos && (
-        <div
-            className="fixed pointer-events-none z-[9999999] -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border-4 border-rose-500 bg-rose-500/30 animate-out zoom-out-150 fade-out duration-500 select-none"
-            style={{
-                left: clickRipplePos.x,
-                top: clickRipplePos.y
-            }}
-        />
-    );
-
-    // Portal İçeriği: body veya aktif tam ekran kapsayıcısına ekle
-    const renderPortalContent = isMounted && portalContainer ? (
-        createPortal(
-            <>
-                {cursorElement}
-                {clickRippleElement}
-            </>,
-            portalContainer
-        )
-    ) : null;
+    // Modal kapalıysa hiçbir şey çizme (arka planda listener çalışmaya devam eder)
+    if (!isOpen) return null;
 
     return (
-        <>
-            {renderPortalContent}
+        <div 
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 animate-in fade-in duration-200"
+            onClick={onClose}
+        >
+            <div 
+                className="relative w-full max-w-lg bg-slate-900 border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-rose-500 to-amber-500" />
 
-            {/* QR Kod Modalı (Sadece isOpen true iken görünür) */}
-            {isOpen && (
-                <div 
-                    className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 animate-in fade-in duration-200"
-                    onClick={onClose}
-                >
-                    <div 
-                        className="relative w-full max-w-lg bg-slate-900 border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-rose-500 to-amber-500" />
-
-                        <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400">
-                                    <Smartphone className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h3 className="text-xl font-black text-white flex items-center gap-2">
-                                        Mobil Kumanda & Fare
-                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-300 font-bold border border-indigo-400/40">
-                                            Canlı
-                                        </span>
-                                    </h3>
-                                    <p className="text-xs text-slate-400">Telefondan sunumu ve fareyi uzaktan yönetin</p>
-                                </div>
-                            </div>
-
-                            <button 
-                                onClick={onClose}
-                                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                                title="Kapat"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400">
+                            <Smartphone className="w-6 h-6" />
                         </div>
+                        <div>
+                            <h3 className="text-xl font-black text-white flex items-center gap-2">
+                                Mobil Sunum Kumandası
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-300 font-bold border border-indigo-400/40">
+                                    Canlı
+                                </span>
+                            </h3>
+                            <p className="text-xs text-slate-400">Telefondan sunumu uzaktan yönetin</p>
+                        </div>
+                    </div>
 
-                        {/* Bağlantı Durumu Rozeti */}
-                        <div className="mb-6">
-                            {isPhoneConnected ? (
-                                <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                                    <div className="flex items-center gap-2.5">
-                                        <span className="relative flex h-3 w-3">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                                        </span>
-                                        <span className="text-sm font-bold">Telefon Bağlandı! Kumanda & Fare Aktif</span>
-                                    </div>
-                                    {lastActionName && (
-                                        <span className="text-xs bg-emerald-500/20 px-2 py-0.5 rounded-md font-mono font-bold text-emerald-200">
-                                            {lastActionName}
-                                        </span>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-amber-300">
-                                    <div className="flex items-center gap-2.5">
-                                        <span className="relative flex h-2.5 w-2.5">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
-                                        </span>
-                                        <span className="text-xs sm:text-sm font-semibold">Telefon Bekleniyor... QR kodu okutun</span>
-                                    </div>
-                                    <button
-                                        onClick={handleRegenerateCode}
-                                        className="text-xs text-amber-400/80 hover:text-amber-200 flex items-center gap-1 cursor-pointer"
-                                        title="Yeni Kod Üret"
-                                    >
-                                        <RefreshCw className="w-3 h-3" />
-                                        <span>Yenile</span>
-                                    </button>
-                                </div>
+                    <button 
+                        onClick={onClose}
+                        className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                        title="Kapat"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                {/* Bağlantı Durumu Rozeti */}
+                <div className="mb-6">
+                    {isPhoneConnected ? (
+                        <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                            <div className="flex items-center gap-2.5">
+                                <span className="relative flex h-3 w-3">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                </span>
+                                <span className="text-sm font-bold">Telefon Bağlandı! Kumanda Aktif</span>
+                            </div>
+                            {lastActionName && (
+                                <span className="text-xs bg-emerald-500/20 px-2 py-0.5 rounded-md font-mono font-bold text-emerald-200">
+                                    {lastActionName}
+                                </span>
                             )}
                         </div>
-
-                        {/* QR Kod & Kod Alanı */}
-                        <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-950/60 p-5 rounded-2xl border border-white/10 mb-6">
-                            <div className="relative p-2.5 bg-white rounded-2xl shadow-xl flex-shrink-0 flex items-center justify-center">
-                                {qrDataUrl ? (
-                                    <img 
-                                        src={qrDataUrl} 
-                                        alt="Kumanda QR Kodu" 
-                                        className="w-44 h-44 sm:w-48 sm:h-48 object-contain rounded-lg"
-                                    />
-                                ) : (
-                                    <div className="w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center text-slate-400 text-xs">
-                                        QR Kod Hazırlanıyor...
-                                    </div>
-                                )}
+                    ) : (
+                        <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-amber-300">
+                            <div className="flex items-center gap-2.5">
+                                <span className="relative flex h-2.5 w-2.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+                                </span>
+                                <span className="text-xs sm:text-sm font-semibold">Telefon Bekleniyor... QR kodu okutun</span>
                             </div>
+                            <button
+                                onClick={handleRegenerateCode}
+                                className="text-xs text-amber-400/80 hover:text-amber-200 flex items-center gap-1 cursor-pointer"
+                                title="Yeni Kod Üret"
+                            >
+                                <RefreshCw className="w-3 h-3" />
+                                <span>Yenile</span>
+                            </button>
+                        </div>
+                    )}
+                </div>
 
-                            <div className="flex-1 flex flex-col gap-3 text-center sm:text-left w-full">
-                                <div>
-                                    <span className="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Oturum Kodu</span>
-                                    <div className="mt-1 flex items-center justify-center sm:justify-start gap-2">
-                                        <span className="font-mono text-3xl sm:text-4xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-rose-300 to-amber-300">
-                                            {sessionCode}
-                                        </span>
-                                    </div>
-                                </div>
+                {/* QR Kod & Kod Alanı */}
+                <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-950/60 p-5 rounded-2xl border border-white/10 mb-6">
+                    <div className="relative p-2.5 bg-white rounded-2xl shadow-xl flex-shrink-0 flex items-center justify-center">
+                        {qrDataUrl ? (
+                            <img 
+                                src={qrDataUrl} 
+                                alt="Kumanda QR Kodu" 
+                                className="w-44 h-44 sm:w-48 sm:h-48 object-contain rounded-lg"
+                            />
+                        ) : (
+                            <div className="w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center text-slate-400 text-xs">
+                                QR Kod Hazırlanıyor...
+                            </div>
+                        )}
+                    </div>
 
-                                <p className="text-xs text-slate-300 leading-relaxed">
-                                    Telefonunuzun kamerasını QR koda tutarak anında bağlanabilirsiniz. Slayt geçişi ve dokunmatik fare modu kullanıma hazır olacaktır.
-                                </p>
-
-                                <div className="flex flex-wrap items-center gap-2 pt-1 justify-center sm:justify-start">
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={handleCopyLink}
-                                        className="h-8 px-3 rounded-xl border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-bold gap-1.5 cursor-pointer"
-                                    >
-                                        {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                                        {copied ? 'Kopyalandı' : 'Linki Kopyala'}
-                                    </Button>
-
-                                    <a
-                                        href={remoteUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="h-8 px-3 rounded-xl border border-indigo-500/40 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                                        title="Bu Cihazda Kumandayı Test Et"
-                                    >
-                                        <ExternalLink className="w-3.5 h-3.5" />
-                                        <span>Test Et</span>
-                                    </a>
-                                </div>
+                    <div className="flex-1 flex flex-col gap-3 text-center sm:text-left w-full">
+                        <div>
+                            <span className="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Oturum Kodu</span>
+                            <div className="mt-1 flex items-center justify-center sm:justify-start gap-2">
+                                <span className="font-mono text-3xl sm:text-4xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-rose-300 to-amber-300">
+                                    {sessionCode}
+                                </span>
                             </div>
                         </div>
 
-                        {/* Özellikler Özeti */}
-                        <div className="grid grid-cols-3 gap-2 text-center">
-                            <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center gap-1">
-                                <ChevronRight className="w-4 h-4 text-indigo-400" />
-                                <span className="text-[11px] font-bold text-slate-200">Slayt Kumandası</span>
-                                <span className="text-[9px] text-slate-400">Büyük İleri / Geri tuşları</span>
-                            </div>
+                        <p className="text-xs text-slate-300 leading-relaxed">
+                            Telefonunuzun kamerasını QR koda tutarak anında bağlanabilirsiniz. İleri/geri slayt geçişleri ve akıllı araçlar hazır olacaktır.
+                        </p>
 
-                            <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center gap-1">
-                                <MousePointer2 className="w-4 h-4 text-rose-400" />
-                                <span className="text-[11px] font-bold text-slate-200">Dokunmatik Fare</span>
-                                <span className="text-[9px] text-slate-400">Touchpad & Tıklama</span>
-                            </div>
+                        <div className="flex flex-wrap items-center gap-2 pt-1 justify-center sm:justify-start">
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={handleCopyLink}
+                                className="h-8 px-3 rounded-xl border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-bold gap-1.5 cursor-pointer"
+                            >
+                                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                                {copied ? 'Kopyalandı' : 'Linki Kopyala'}
+                            </Button>
 
-                            <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center gap-1">
-                                <Moon className="w-4 h-4 text-amber-400" />
-                                <span className="text-[11px] font-bold text-slate-200">Tahtayı Karart</span>
-                                <span className="text-[9px] text-slate-400">Dikkat çekme modu</span>
-                            </div>
+                            <a
+                                href={remoteUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="h-8 px-3 rounded-xl border border-indigo-500/40 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                                title="Bu Cihazda Kumandayı Test Et"
+                            >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                                <span>Test Et</span>
+                            </a>
                         </div>
                     </div>
                 </div>
-            )}
-        </>
+
+                {/* Özellikler Özeti */}
+                <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center gap-1">
+                        <ChevronRight className="w-4 h-4 text-indigo-400" />
+                        <span className="text-[11px] font-bold text-slate-200">Slayt Geçişi</span>
+                        <span className="text-[9px] text-slate-400">Büyük İleri / Geri tuşları</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center gap-1">
+                        <Moon className="w-4 h-4 text-amber-400" />
+                        <span className="text-[11px] font-bold text-slate-200">Tahtayı Karart</span>
+                        <span className="text-[9px] text-slate-400">Dikkat çekme modu</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center gap-1">
+                        <ListFilter className="w-4 h-4 text-emerald-400" />
+                        <span className="text-[11px] font-bold text-slate-200">Adım Listesi</span>
+                        <span className="text-[9px] text-slate-400">Doğrudan slayta atla</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

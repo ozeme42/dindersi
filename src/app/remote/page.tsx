@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { 
     Smartphone, ChevronRight, ChevronLeft, Moon, Sun, 
-    Eye, EyeOff, Timer, ListFilter, Wifi, WifiOff, 
-    RefreshCw, Sparkles, Check, ArrowRight, ArrowLeft,
-    Sliders, LogOut, CheckCircle2, AlertCircle, Layers,
-    MousePointer2, Touchpad, SlidersHorizontal
+    Eye, Timer, ListFilter, Wifi, 
+    RefreshCw, Sparkles, ArrowRight,
+    LogOut, AlertCircle, Layers
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { db } from '@/lib/firebase';
@@ -38,9 +37,6 @@ function RemoteControlContent() {
     const [isLoading, setIsLoading] = useState(Boolean(initialCode));
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    // Aktif Mod: 'slides' (Büyük İleri/Geri tuşları) veya 'touchpad' (Fare & Tıklama)
-    const [activeMode, setActiveMode] = useState<'slides' | 'touchpad'>('slides');
-
     // Oturum Verileri
     const [sessionData, setSessionData] = useState<{
         courseTitle: string;
@@ -65,17 +61,6 @@ function RemoteControlContent() {
     const [isStepDrawerOpen, setIsStepDrawerOpen] = useState(false);
     const [wakeLockActive, setWakeLockActive] = useState(false);
     const wakeLockRef = useRef<any>(null);
-
-    // ══ TOUCHPAD / FARE STATE & REF'LERİ ══
-    const [mouseSensitivity, setMouseSensitivity] = useState<number>(1.6);
-    const [padCursor, setPadCursor] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
-    const cursorPosRef = useRef<{ x: number; y: number }>({ x: 50, y: 50 });
-    const lastTouchRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-    const isTouchingRef = useRef<boolean>(false);
-    const touchStartTimeRef = useRef<number>(0);
-    const touchTotalDistanceRef = useRef<number>(0);
-    const lastSyncTimeRef = useRef<number>(0);
-    const requestSyncRef = useRef<number | null>(null);
 
     // 1. Ekranın Kapanmasını Engelle (WakeLock API)
     useEffect(() => {
@@ -186,8 +171,10 @@ function RemoteControlContent() {
     const sendCommand = async (action: string, extra: Record<string, any> = {}) => {
         if (!sessionCode) return;
 
-        if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) {
-            window.navigator.vibrate(35);
+        if (typeof window !== 'undefined' && window.navigator && (window.navigator as any).vibrate) {
+            try {
+                (window.navigator as any).vibrate(35);
+            } catch {}
         }
 
         try {
@@ -205,105 +192,6 @@ function RemoteControlContent() {
         } catch (err) {
             console.error('Komut gönderilemedi:', err);
         }
-    };
-
-    // 4. Fare İmleci Pozisyonunu Firestore'a Senkronize Et (Throttled)
-    const syncCursorToFirestore = useCallback(() => {
-        if (!sessionCode) return;
-
-        const now = Date.now();
-        if (now - lastSyncTimeRef.current < 40) return; // 40ms throttle (~25 fps)
-        lastSyncTimeRef.current = now;
-
-        const docRef = doc(db, 'presentationSessions', sessionCode);
-        updateDoc(docRef, {
-            cursor: {
-                x: cursorPosRef.current.x,
-                y: cursorPosRef.current.y,
-                lastMoved: now
-            }
-        }).catch(() => {});
-    }, [sessionCode]);
-
-    // Touchpad Dokunma Başladı
-    const handleTouchpadStart = (e: React.TouchEvent | React.MouseEvent) => {
-        const isTouch = 'touches' in e;
-        if (isTouch) isTouchingRef.current = true;
-        else if (isTouchingRef.current) return; // Touch aktifken sentetik mouse eventlerini yok say
-
-        const clientX = isTouch ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
-        const clientY = isTouch ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
-        lastTouchRef.current = { x: clientX, y: clientY };
-        touchStartTimeRef.current = Date.now();
-        touchTotalDistanceRef.current = 0;
-    };
-
-    // Touchpad Parmak Kayıyor
-    const handleTouchpadMove = (e: React.TouchEvent | React.MouseEvent) => {
-        const isTouch = 'touches' in e;
-        if (!isTouch && isTouchingRef.current) return;
-        if ('cancelable' in e && e.cancelable) e.preventDefault();
-
-        const clientX = isTouch ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
-        const clientY = isTouch ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
-
-        const dx = clientX - lastTouchRef.current.x;
-        const dy = clientY - lastTouchRef.current.y;
-
-        touchTotalDistanceRef.current += Math.hypot(dx, dy);
-        lastTouchRef.current = { x: clientX, y: clientY };
-
-        // Ekran boyutuna oranla yüzdeye çevir
-        const winW = typeof window !== 'undefined' ? window.innerWidth : 360;
-        const winH = typeof window !== 'undefined' ? window.innerHeight : 640;
-
-        let nextX = cursorPosRef.current.x + (dx / winW) * 100 * mouseSensitivity;
-        let nextY = cursorPosRef.current.y + (dy / winH) * 100 * mouseSensitivity;
-
-        nextX = Math.max(1, Math.min(99, Number(nextX.toFixed(2))));
-        nextY = Math.max(1, Math.min(99, Number(nextY.toFixed(2))));
-
-        cursorPosRef.current = { x: nextX, y: nextY };
-        setPadCursor({ x: nextX, y: nextY });
-
-        if (requestSyncRef.current) cancelAnimationFrame(requestSyncRef.current);
-        requestSyncRef.current = requestAnimationFrame(syncCursorToFirestore);
-    };
-
-    // Touchpad Dokunma Bitti (Hızlı Dokunma = Tıklama)
-    const handleTouchpadEnd = (e?: React.TouchEvent | React.MouseEvent) => {
-        const isTouch = e && 'touches' in e;
-        if (isTouch) isTouchingRef.current = false;
-
-        // Kesin son konumu Firestore'a gönder (hiçbir hareketin kaybolmaması için)
-        if (sessionCode) {
-            updateDoc(doc(db, 'presentationSessions', sessionCode), {
-                cursor: {
-                    x: cursorPosRef.current.x,
-                    y: cursorPosRef.current.y,
-                    lastMoved: Date.now()
-                }
-            }).catch(() => {});
-        }
-
-        const duration = Date.now() - touchStartTimeRef.current;
-        // Eğer 280ms'den kısa sürdüyse ve parmak 15px'den az hareket ettiyse TIKLAMA say
-        if (duration < 280 && touchTotalDistanceRef.current < 15) {
-            handlePerformClick();
-        }
-    };
-
-    // Tıklama Gerçekleştir
-    const handlePerformClick = () => {
-        if (typeof window !== 'undefined' && window.navigator && (window.navigator as any).vibrate) {
-            try {
-                (window.navigator as any).vibrate(45);
-            } catch {}
-        }
-        sendCommand('click', {
-            x: cursorPosRef.current.x,
-            y: cursorPosRef.current.y
-        });
     };
 
     const handleConnectSubmit = (e: React.FormEvent) => {
@@ -340,7 +228,7 @@ function RemoteControlContent() {
                             <Smartphone className="w-5 h-5" />
                         </div>
                         <div>
-                            <h1 className="text-base font-black tracking-tight text-white">Akıllı Kumanda & Fare</h1>
+                            <h1 className="text-base font-black tracking-tight text-white">Akıllı Sunum Kumandası</h1>
                             <p className="text-[11px] text-slate-400">Din Dersi Atölyesi</p>
                         </div>
                     </div>
@@ -411,294 +299,165 @@ function RemoteControlContent() {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // EKRAN 2: AKTİF KUMANDA VE FARE EKRANI
+    // EKRAN 2: AKTİF SUNUM KUMANDASI EKRANI
     // ══════════════════════════════════════════════════════════════
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-3 sm:p-4 select-none font-sans touch-manipulation overflow-hidden">
+        <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-4 sm:p-5 select-none font-sans touch-manipulation overflow-hidden">
             
-            {/* ══ 1. ÜST BAŞLIK, MOD SEÇİCİ & DURUM BARI ══ */}
-            <div className="flex-shrink-0 space-y-2.5">
-                {/* Durum & Bilgi Kartı */}
-                <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur-xl">
-                    <div className="flex items-center gap-2 min-w-0">
-                        <span className="relative flex h-2.5 w-2.5 flex-shrink-0">
+            {/* ══ 1. ÜST BİLGİ & DURUM BARI ══ */}
+            <div className="flex-shrink-0 space-y-3">
+                <div className="flex items-center justify-between gap-2 px-4 py-3 rounded-2xl bg-slate-900/90 border border-white/10 backdrop-blur-xl shadow-lg">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="relative flex h-3 w-3 flex-shrink-0">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                         </span>
                         <div className="min-w-0">
-                            <h2 className="text-xs font-black text-white truncate">
+                            <h2 className="text-sm font-black text-white truncate">
                                 {sessionData.topicTitle || sessionData.courseTitle || 'Sunum'}
                             </h2>
-                            <p className="text-[10px] text-slate-400 truncate">
+                            <p className="text-xs text-slate-400 truncate">
                                 Adım {sessionData.currentStepIndex + 1} / {sessionData.totalStepsCount || 1}
                             </p>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <div className="flex items-center gap-2 flex-shrink-0">
                         <button
                             onClick={() => sendCommand('blackout')}
                             className={cn(
-                                "h-8 px-2.5 rounded-xl border text-[11px] font-bold flex items-center gap-1 transition-all active:scale-90 cursor-pointer",
+                                "h-9 px-3 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all active:scale-90 cursor-pointer",
                                 sessionData.isBlackout
                                     ? "bg-amber-500 border-amber-400 text-slate-950 shadow-md shadow-amber-500/40"
                                     : "bg-white/5 border-white/10 text-slate-300 hover:text-white"
                             )}
-                            title="Tahtayı Karart"
+                            title="Tahtayı Karart / Aç"
                         >
-                            <Moon className="w-3.5 h-3.5" />
-                            <span className="text-[10px]">{sessionData.isBlackout ? 'Aç' : 'Karart'}</span>
+                            <Moon className="w-4 h-4" />
+                            <span>{sessionData.isBlackout ? 'Aç' : 'Karart'}</span>
                         </button>
 
                         <button
                             onClick={handleDisconnect}
-                            className="w-8 h-8 rounded-xl bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
+                            className="w-9 h-9 rounded-xl bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
                             title="Bağlantıyı Kes"
                         >
-                            <LogOut className="w-3.5 h-3.5" />
+                            <LogOut className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
 
-                {/* MOD SEÇİCİ SEKMELER: Slayt Kumandası vs Dokunmatik Fare */}
-                <div className="grid grid-cols-2 p-1 rounded-2xl bg-slate-900 border border-white/10 shadow-inner">
-                    <button
-                        onClick={() => setActiveMode('slides')}
-                        className={cn(
-                            "h-10 rounded-xl font-black text-xs flex items-center justify-center gap-2 transition-all cursor-pointer",
-                            activeMode === 'slides'
-                                ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30"
-                                : "text-slate-400 hover:text-white"
-                        )}
-                    >
-                        <Smartphone className="w-4 h-4" />
-                        <span>Slayt Kumandası</span>
-                    </button>
-
-                    <button
-                        onClick={() => setActiveMode('touchpad')}
-                        className={cn(
-                            "h-10 rounded-xl font-black text-xs flex items-center justify-center gap-2 transition-all cursor-pointer",
-                            activeMode === 'touchpad'
-                                ? "bg-gradient-to-r from-rose-600 to-indigo-600 text-white shadow-md shadow-rose-600/30"
-                                : "text-slate-400 hover:text-white"
-                        )}
-                    >
-                        <Touchpad className="w-4 h-4" />
-                        <span>Dokunmatik Fare</span>
-                    </button>
+                {/* İlerleme Çubuğu */}
+                <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-white/5">
+                    <div 
+                        className="bg-gradient-to-r from-indigo-500 to-rose-500 h-full transition-all duration-300 rounded-full"
+                        style={{ width: `${progressPercent}%` }}
+                    />
                 </div>
             </div>
 
-            {/* ══════════════════════════════════════════════════════════ */}
-            {/* GÖRÜNÜM A: SLAYT KUMANDASI MODU (BÜYÜK TUŞLAR)             */}
-            {/* ══════════════════════════════════════════════════════════ */}
-            {activeMode === 'slides' && (
-                <>
-                    {/* Orta Alan: Aktif Adım Bilgisi */}
-                    <div className="flex-shrink-0 my-auto py-2 text-center">
-                        <button
-                            onClick={() => setIsStepDrawerOpen(true)}
-                            className="w-full p-4 rounded-3xl bg-slate-900/60 border border-white/10 hover:border-indigo-500/40 transition-all text-center group cursor-pointer active:scale-98"
-                        >
-                            <span className="inline-block text-[10px] uppercase font-black tracking-widest text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 mb-2">
-                                Tahtada Gösterilen Adım
-                            </span>
-                            <h3 className="text-base sm:text-lg font-black text-white leading-snug line-clamp-2">
-                                {sessionData.currentStepTitle || `Adım ${sessionData.currentStepIndex + 1}`}
-                            </h3>
-                            <div className="mt-2 flex items-center justify-center gap-1 text-[11px] text-slate-400 group-hover:text-indigo-300 transition-colors">
-                                <Layers className="w-3.5 h-3.5" />
-                                <span>Tüm adımları açmak için dokunun (%{progressPercent})</span>
-                            </div>
-                        </button>
+            {/* ══ 2. ORTA ALAN: AKTİF ADIM BİLGİSİ ══ */}
+            <div className="flex-shrink-0 my-auto py-3 text-center">
+                <button
+                    onClick={() => setIsStepDrawerOpen(true)}
+                    className="w-full p-5 rounded-3xl bg-slate-900/80 border border-white/15 hover:border-indigo-500/50 transition-all text-center group cursor-pointer active:scale-98 shadow-xl backdrop-blur-xl"
+                >
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                        <span className="text-[11px] uppercase font-black tracking-widest text-indigo-400 bg-indigo-500/15 px-3 py-1 rounded-full border border-indigo-500/30">
+                            Tahtada Gösterilen Adım ({sessionData.currentStepIndex + 1} / {sessionData.totalStepsCount || 1})
+                        </span>
                     </div>
-
-                    {/* Ana Kumanda Butonları: İleri & Geri */}
-                    <div className="flex-1 flex flex-col justify-end gap-3 pb-2">
-                        {/* DEV SONRAKİ BUTONU */}
-                        <button
-                            onClick={() => sendCommand('next')}
-                            className="w-full h-32 sm:h-36 rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-500 to-rose-600 hover:from-indigo-500 hover:to-rose-500 text-white font-black text-2xl shadow-[0_10px_35px_rgba(79,70,229,0.4)] border-2 border-indigo-300/30 flex flex-col items-center justify-center gap-1 active:scale-[0.97] transition-all cursor-pointer select-none ring-4 ring-indigo-500/20"
-                        >
-                            <div className="flex items-center gap-3">
-                                <span className="tracking-wide">SONRAKİ</span>
-                                <ChevronRight className="w-8 h-8 stroke-[3]" />
-                            </div>
-                            <span className="text-xs font-bold text-indigo-100 opacity-80">
-                                {sessionData.currentStepIndex + 1 < sessionData.totalStepsCount ? 'Bir sonraki adıma geç' : 'Son adım'}
-                            </span>
-                        </button>
-
-                        {/* ÖNCEKİ BUTONU */}
-                        <button
-                            onClick={() => sendCommand('prev')}
-                            disabled={sessionData.currentStepIndex <= 0}
-                            className="w-full h-16 rounded-2xl bg-slate-900 hover:bg-slate-800 disabled:opacity-30 text-slate-200 hover:text-white font-bold text-base border border-white/15 flex items-center justify-center gap-2 active:scale-98 transition-all cursor-pointer select-none"
-                        >
-                            <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
-                            <span>Önceki Adım</span>
-                        </button>
+                    <h3 className="text-lg sm:text-xl font-black text-white leading-snug line-clamp-3">
+                        {sessionData.currentStepTitle || `Adım ${sessionData.currentStepIndex + 1}`}
+                    </h3>
+                    <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-slate-400 group-hover:text-indigo-300 transition-colors">
+                        <Layers className="w-4 h-4" />
+                        <span>Tüm adımları açmak için dokunun (%{progressPercent})</span>
                     </div>
-                </>
-            )}
+                </button>
+            </div>
 
-            {/* ══════════════════════════════════════════════════════════ */}
-            {/* GÖRÜNÜM B: DOKUNMATİK FARE MODU (TOUCHPAD & TIKLAMA)      */}
-            {/* ══════════════════════════════════════════════════════════ */}
-            {activeMode === 'touchpad' && (
-                <div className="flex-1 flex flex-col justify-between my-2 gap-2 min-h-0">
-                    
-                    {/* TOUCHPAD YÜZEYİ */}
-                    <div
-                        onTouchStart={handleTouchpadStart}
-                        onTouchMove={handleTouchpadMove}
-                        onTouchEnd={handleTouchpadEnd}
-                        onMouseDown={handleTouchpadStart}
-                        onMouseMove={handleTouchpadMove}
-                        onMouseUp={handleTouchpadEnd}
-                        style={{ touchAction: 'none' }}
-                        className="flex-1 bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-indigo-500/40 rounded-3xl relative overflow-hidden flex flex-col items-center justify-center touch-none select-none shadow-[inset_0_0_40px_rgba(0,0,0,0.8)] active:border-rose-500 transition-colors cursor-crosshair min-h-[220px]"
-                    >
-                        {/* Arka Plan Izgara Çizgileri */}
-                        <div 
-                            className="absolute inset-0 opacity-10 pointer-events-none" 
-                            style={{ 
-                                backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', 
-                                backgroundSize: '24px 24px' 
-                            }} 
-                        />
-
-                        {/* Ortadaki Yönlendirme İkonu */}
-                        <div className="flex flex-col items-center gap-2 pointer-events-none opacity-30">
-                            <Touchpad className="w-12 h-12 text-indigo-400" />
-                            <span className="text-xs font-black uppercase tracking-widest text-slate-300">
-                                Dokunmatik Touchpad Alanı
-                            </span>
-                            <span className="text-[10px] text-slate-400 text-center px-6">
-                                Parmağınızı kaydırarak tahtadaki fareyi hareket ettirin. Dokunarak veya alttaki butondan tıklayın.
-                            </span>
-                        </div>
-
-                        {/* Tahtadaki İmlecin Telefonda Canlı Önizleme Noktası */}
-                        <div 
-                            className="absolute w-7 h-7 rounded-full bg-rose-500/80 border-2 border-white shadow-[0_0_16px_rgba(244,63,94,1)] pointer-events-none -translate-x-1/2 -translate-y-1/2 transition-[left,top] duration-75 flex items-center justify-center z-10"
-                            style={{
-                                left: `${padCursor.x}%`,
-                                top: `${padCursor.y}%`
-                            }}
-                        >
-                            <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                        </div>
+            {/* ══ 3. ANA KUMANDA BUTONLARI: DEV SONRAKİ & ÖNCEKİ ══ */}
+            <div className="flex-shrink-0 flex flex-col justify-end gap-3 pb-2">
+                {/* DEV SONRAKİ BUTONU */}
+                <button
+                    onClick={() => sendCommand('next')}
+                    className="w-full h-36 sm:h-44 rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-3xl sm:text-4xl shadow-[0_12px_40px_rgba(79,70,229,0.45)] border-2 border-indigo-300/40 flex flex-col items-center justify-center gap-2 active:scale-[0.97] transition-all cursor-pointer select-none ring-4 ring-indigo-500/25"
+                >
+                    <div className="flex items-center gap-3">
+                        <span className="tracking-wider">SONRAKİ</span>
+                        <ChevronRight className="w-10 h-10 sm:w-12 sm:h-12 stroke-[3]" />
                     </div>
+                    <span className="text-xs sm:text-sm font-bold text-indigo-100 opacity-90">
+                        {sessionData.currentStepIndex + 1 < sessionData.totalStepsCount ? 'Bir sonraki adıma / sayfaya geç' : 'Son adımdasınız'}
+                    </span>
+                </button>
 
-                    {/* BÜYÜK SOL TIKLA BUTONU */}
-                    <div className="flex-shrink-0 flex gap-2">
-                        <button
-                            onClick={handlePerformClick}
-                            className="flex-1 h-20 rounded-2xl bg-gradient-to-r from-rose-600 via-rose-500 to-indigo-600 hover:from-rose-500 hover:to-indigo-500 text-white font-black text-xl border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 transition-all shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 cursor-pointer select-none"
-                        >
-                            <MousePointer2 className="w-6 h-6 fill-white stroke-slate-950" />
-                            <span>SOL TIKLA 🔘</span>
-                        </button>
+                {/* ÖNCEKİ BUTONU */}
+                <button
+                    onClick={() => sendCommand('prev')}
+                    disabled={sessionData.currentStepIndex <= 0}
+                    className="w-full h-16 sm:h-18 rounded-2xl bg-slate-900 hover:bg-slate-800 disabled:opacity-30 text-slate-200 hover:text-white font-bold text-base sm:text-lg border border-white/15 flex items-center justify-center gap-2 active:scale-98 transition-all cursor-pointer select-none shadow-md"
+                >
+                    <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+                    <span>Önceki Adım / Sayfa</span>
+                </button>
+            </div>
 
-                        {/* Hızlı İleri/Geri Mini Tuşları (Touchpad modundayken de slayt değiştirebilmek için) */}
-                        <div className="flex flex-col gap-1 w-28">
-                            <button
-                                onClick={() => sendCommand('next')}
-                                className="flex-1 rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/15 text-xs font-bold text-white flex items-center justify-center gap-1 active:scale-95"
-                            >
-                                <span>İleri</span>
-                                <ChevronRight className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                                onClick={() => sendCommand('prev')}
-                                disabled={sessionData.currentStepIndex <= 0}
-                                className="flex-1 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-30 border border-white/15 text-xs font-bold text-slate-300 flex items-center justify-center gap-1 active:scale-95"
-                            >
-                                <ChevronLeft className="w-3.5 h-3.5" />
-                                <span>Geri</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Hassasiyet Ayarı */}
-                    <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-900/60 border border-white/10 text-[11px]">
-                        <span className="text-slate-400 font-bold">Fare Hızı:</span>
-                        <div className="flex items-center gap-1">
-                            {[1.2, 1.6, 2.2].map((sens) => (
-                                <button
-                                    key={sens}
-                                    onClick={() => setMouseSensitivity(sens)}
-                                    className={cn(
-                                        "px-2.5 py-0.5 rounded-lg font-bold transition-all cursor-pointer",
-                                        mouseSensitivity === sens 
-                                            ? "bg-indigo-600 text-white" 
-                                            : "text-slate-400 hover:text-white"
-                                    )}
-                                >
-                                    {sens === 1.2 ? 'Yavaş' : sens === 1.6 ? 'Normal' : 'Hızlı'}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* ══ ALT HIZLI ARAÇLAR DOCK'U ══ */}
-            <div className="flex-shrink-0 pt-2 border-t border-white/10">
-                <div className="grid grid-cols-4 gap-2">
+            {/* ══ 4. ALT HIZLI ARAÇLAR DOCK'U ══ */}
+            <div className="flex-shrink-0 pt-3 border-t border-white/10">
+                <div className="grid grid-cols-4 gap-2.5">
                     <button
                         onClick={() => sendCommand('blackout')}
                         className={cn(
-                            "h-11 rounded-2xl border flex flex-col items-center justify-center gap-0.5 transition-all active:scale-95 cursor-pointer",
+                            "h-12 rounded-2xl border flex flex-col items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer shadow-sm",
                             sessionData.isBlackout
                                 ? "bg-amber-500/30 border-amber-400 text-amber-200"
                                 : "bg-slate-900/90 border-white/10 text-slate-300 hover:text-white"
                         )}
                         title="Tahtayı Karart"
                     >
-                        <Moon className="w-3.5 h-3.5" />
-                        <span className="text-[9px] font-bold">Karart</span>
+                        <Moon className="w-4 h-4" />
+                        <span className="text-[10px] font-bold">Karart</span>
                     </button>
 
                     <button
                         onClick={() => sendCommand('toggleMenu')}
-                        className="h-11 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 text-slate-300 hover:text-white flex flex-col items-center justify-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                        className="h-12 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 text-slate-300 hover:text-white flex flex-col items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer shadow-sm"
                         title="Alt Menüyü Gizle / Aç"
                     >
-                        <Eye className="w-3.5 h-3.5" />
-                        <span className="text-[9px] font-bold">Menü</span>
+                        <Eye className="w-4 h-4" />
+                        <span className="text-[10px] font-bold">Menü</span>
                     </button>
 
                     <button
                         onClick={() => sendCommand('timer', { seconds: 60 })}
-                        className="h-11 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 text-slate-300 hover:text-white flex flex-col items-center justify-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                        className="h-12 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 text-slate-300 hover:text-white flex flex-col items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer shadow-sm"
                         title="1 Dakikalık Sayaç Başlat"
                     >
-                        <Timer className="w-3.5 h-3.5 text-emerald-400" />
-                        <span className="text-[9px] font-bold">1 Dk Sayaç</span>
+                        <Timer className="w-4 h-4 text-emerald-400" />
+                        <span className="text-[10px] font-bold">1 Dk Sayaç</span>
                     </button>
 
                     <button
                         onClick={() => setIsStepDrawerOpen(true)}
-                        className="h-11 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 text-slate-300 hover:text-white flex flex-col items-center justify-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                        className="h-12 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 text-slate-300 hover:text-white flex flex-col items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer shadow-sm"
                         title="Slayt Listesini Aç"
                     >
-                        <ListFilter className="w-3.5 h-3.5 text-indigo-400" />
-                        <span className="text-[9px] font-bold">Adımlar</span>
+                        <ListFilter className="w-4 h-4 text-indigo-400" />
+                        <span className="text-[10px] font-bold">Adımlar</span>
                     </button>
                 </div>
             </div>
 
-            {/* ══ TÜM ADIMLAR / SLAYTLAR ÇEKMECESİ ══ */}
+            {/* ══ 5. TÜM ADIMLAR / SLAYTLAR ÇEKMECESİ ══ */}
             {isStepDrawerOpen && (
                 <div 
                     className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col justify-end p-3 animate-in fade-in duration-200"
                     onClick={() => setIsStepDrawerOpen(false)}
                 >
                     <div 
-                        className="w-full max-h-[80vh] bg-slate-900 border border-white/20 rounded-3xl p-5 flex flex-col shadow-2xl animate-in slide-in-from-bottom-5 duration-300"
+                        className="w-full max-h-[82vh] bg-slate-900 border border-white/20 rounded-3xl p-5 flex flex-col shadow-2xl animate-in slide-in-from-bottom-5 duration-300"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
@@ -708,7 +467,7 @@ function RemoteControlContent() {
                             </div>
                             <button
                                 onClick={() => setIsStepDrawerOpen(false)}
-                                className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center cursor-pointer"
+                                className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center cursor-pointer hover:bg-white/20 transition-colors"
                             >
                                 ✕
                             </button>
@@ -724,7 +483,7 @@ function RemoteControlContent() {
                                             setIsStepDrawerOpen(false);
                                         }}
                                         className={cn(
-                                            "w-full p-3 rounded-2xl text-left flex items-center justify-between transition-all border cursor-pointer",
+                                            "w-full p-3.5 rounded-2xl text-left flex items-center justify-between transition-all border cursor-pointer",
                                             idx === sessionData.currentStepIndex
                                                 ? "bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-600/30"
                                                 : "bg-white/5 border-white/5 hover:bg-white/10 text-slate-200"
@@ -742,7 +501,7 @@ function RemoteControlContent() {
                                             </span>
                                         </div>
                                         {idx === sessionData.currentStepIndex && (
-                                            <span className="text-[10px] font-black bg-white/20 px-2 py-0.5 rounded-full">
+                                            <span className="text-[10px] font-black bg-white/20 px-2.5 py-0.5 rounded-full">
                                                 Aktif
                                             </span>
                                         )}
