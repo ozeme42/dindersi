@@ -551,14 +551,25 @@ export const saveTopicYazilacaklarAction = async (params: {
  * - notes (deftere yazılacak maddeli özet notlar)
  * - activitySentences (oyunlar için 4-8 kelimelik kısa cümleler)
  */
-export async function generateCentralActivityAiAction(params: {
+export interface GenerateCentralActivityAiParams {
     sourceText: string;
     topicTitle: string;
     grade?: string;
     courseTitle?: string;
-    mode?: 'all' | 'concepts' | 'definitions' | 'notes' | 'activitySentences';
+    mode?: 'all' | 'concepts' | 'definitions' | 'notes' | 'activitySentences' | 'custom';
     targetConcepts?: string[];
-}): Promise<{
+    activeModules?: {
+        concepts?: boolean;
+        definitions?: boolean;
+        notes?: boolean;
+        activitySentences?: boolean;
+    };
+    customPrompt?: string;
+    apiKey?: string;
+    modelName?: string;
+}
+
+export async function generateCentralActivityAiAction(params: GenerateCentralActivityAiParams): Promise<{
     success: boolean;
     concepts?: string[];
     conceptDefinitions?: ConceptItem[];
@@ -568,17 +579,42 @@ export async function generateCentralActivityAiAction(params: {
     error?: string;
 }> {
     try {
-        const { sourceText, topicTitle, grade = '5', courseTitle = 'Din Kültürü ve Ahlak Bilgisi', mode = 'all', targetConcepts } = params;
+        const {
+            sourceText,
+            topicTitle,
+            grade = '5',
+            courseTitle = 'Din Kültürü ve Ahlak Bilgisi',
+            mode = 'all',
+            targetConcepts,
+            activeModules,
+            customPrompt,
+            apiKey: userApiKey,
+            modelName: userModelName
+        } = params;
+
         const textToAnalyze = sourceText.trim() || topicTitle.trim();
 
         if (textToAnalyze.length < 10) {
             return { success: false, error: 'Yapay zeka analizi için yeterli kaynak metin veya konu başlığı bulunamadı.' };
         }
 
-        const { apiKey, modelName } = await resolveActiveGeminiConfig();
+        let apiKey = userApiKey?.trim();
+        let modelName = userModelName?.trim();
+
+        if (!apiKey) {
+            const resolved = await resolveActiveGeminiConfig();
+            apiKey = resolved.apiKey;
+            if (!modelName) modelName = resolved.modelName;
+        }
+
         if (!apiKey) {
             return { success: false, error: 'Gemini API anahtarı bulunamadı. Lütfen AI Ayarlarından API anahtarınızı girin.' };
         }
+
+        const includeConcepts = activeModules ? !!activeModules.concepts : (mode === 'all' || mode === 'concepts');
+        const includeDefinitions = activeModules ? !!activeModules.definitions : (mode === 'all' || mode === 'definitions');
+        const includeNotes = activeModules ? !!activeModules.notes : (mode === 'all' || mode === 'notes');
+        const includeSentences = activeModules ? !!activeModules.activitySentences : (mode === 'all' || mode === 'activitySentences');
 
         const prompt = `Sen MEB Din Kültürü ve Ahlak Bilgisi müfredatında uzman, pedagojik formasyona sahip kıdemli bir ders kitabı ve eğitim oyunu yazarısın.
 Aşağıda verilen ${grade}. Sınıf "${courseTitle}" dersi ve "${topicTitle}" konusuna ait ders kitabı metnini analiz et.
@@ -587,16 +623,23 @@ DERS KİTABI METNİ:
 """
 ${textToAnalyze}
 """
+${customPrompt?.trim() ? `
+ÖĞRETMENİN ÖZEL TALİMATI:
+"""
+${customPrompt.trim()}
+"""
+Yukarıdaki özel talimata KESİNLİKLE öncelik ver ve içerikleri buna göre hazırla.
+` : ''}
 
 GÖREVLER:
-${mode === 'all' || mode === 'concepts' ? `
+${includeConcepts ? `
 1. **KELİME / KAVRAM HAVUZU (concepts)**:
 - Metindeki kilit dinî terimleri, ahlaki kavramları, isimleri ve anahtar kelimeleri belirle (en az 8, en fazla 20 kelime).
 - Bunlar tek kelimelik veya kısa tamlamalar olmalıdır (Örn: "Tevhid", "İhlas", "Rahman", "Sadaka").
 - Anlat Bakalım, Anagram Duvarı ve Çarkıfelek oyunlarında kelime olarak kullanılacaktır.
 ` : ''}
 
-${mode === 'all' || mode === 'definitions' ? `
+${includeDefinitions ? `
 2. **KAVRAM - TANIM ÇİFTLERİ (conceptDefinitions)**:
 ${targetConcepts && targetConcepts.length > 0
     ? `- ÖZELLİKLE ŞU TANIMI EKSİK OLAN KAVRAMLAR İÇİN NET TANIMLAR YAZ: ${targetConcepts.join(', ')}
@@ -606,14 +649,14 @@ ${targetConcepts && targetConcepts.length > 0
 - Tanım metninde kavramın kendi adı KESİNLİKLE GEÇMEMELİDİR (Kavram Düellosu ve Eşleştirme oyunlarında soru olarak sorulacaktır).
 ` : ''}
 
-${mode === 'all' || mode === 'notes' ? `
+${includeNotes ? `
 3. **DEFTERE YAZILACAK ÖZET NOTLAR (notes)**:
 - Öğrencilerin akıllı tahtadan doğrudan defterlerine yazacakları, konunun ana fikir ve kazanımlarını özetleyen 5 ila 8 adet maddeli ders notu yaz.
 - Bu notlar pedagojik ve açıklayıcı olmalı, konunun can alıcı noktalarını öğretmelidir.
 - Örnek: "1. İslam dininde bilgi kaynakları vahiy, akıl ve salim duyulardır."
 ` : ''}
 
-${mode === 'all' || mode === 'activitySentences' ? `
+${includeSentences ? `
 4. **KISA ETKİNLİK VE OYUN CÜMLELERİ (activitySentences)**:
 - Cümle Kurma (kelimeleri karıştırılıp doğru sıraya dizilen oyun), Doğru-Yanlış Zinciri ve Tornado oyunlarında kullanılmak üzere 6 ila 12 adet KISA, YALIN ve ANLAŞILIR cümle yaz.
 - ÇOK ÖNEMLİ: Bu cümleler ÖZET DEĞİLDİR, oyun cümlesidir! Cümle Kurma oyununda kelimelere ayrılacağı için her cümle KESİNLİKLE 4 ila 8 kelime arasında olmalıdır. Asla uzun ve karmaşık cümle kurma.

@@ -24,6 +24,7 @@ import {
     type ConceptItem
 } from './actions';
 import { normalizeConcept } from '@/lib/concept-utils';
+import { AiActivityStudioDialog } from './ai-activity-studio-dialog';
 
 const COLOR_CLASSES = [
     'bg-indigo-950/60 border-indigo-500/50 text-indigo-100 hover:border-indigo-400',
@@ -76,6 +77,7 @@ function CentralActivityStudioContent() {
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [isGeneratingAi, setIsGeneratingAi] = useState<boolean>(false);
     const [aiDropdownOpen, setAiDropdownOpen] = useState<boolean>(false);
+    const [isAiDialogOpen, setIsAiDialogOpen] = useState<boolean>(false);
 
     // Smartboard Preview state
     const [previewSubTab, setPreviewSubTab] = useState<'kavramlar' | 'notlar'>('kavramlar');
@@ -689,6 +691,64 @@ function CentralActivityStudioContent() {
         }
     };
 
+
+    // ── AI STÜDYO DIALOGUNDAN GELEN VERİLERİ MERGE ETME ──
+    const handleAiDataGenerated = (data: {
+        concepts?: string[];
+        conceptDefinitions?: ConceptItem[];
+        notes?: string[];
+        activitySentences?: string[];
+    }) => {
+        if (data.concepts && data.concepts.length > 0) {
+            setEditingConcepts(data.concepts);
+        }
+        if (data.conceptDefinitions && data.conceptDefinitions.length > 0) {
+            setEditingDefinitions(prev => {
+                const currentMap = new Map<string, { concept: string; definition: string }>();
+                prev.forEach(item => {
+                    const norm = normalizeConcept(item.concept);
+                    if (norm) currentMap.set(norm, { concept: item.concept, definition: item.definition });
+                });
+                data.conceptDefinitions!.forEach(newDef => {
+                    const norm = normalizeConcept(newDef.concept);
+                    if (norm && newDef.definition && newDef.definition.trim()) {
+                        const existing = currentMap.get(norm);
+                        if (existing) {
+                            existing.definition = newDef.definition.trim();
+                            if (newDef.concept.length > existing.concept.length || /[îâû'’]/i.test(newDef.concept)) {
+                                existing.concept = newDef.concept;
+                            }
+                        } else {
+                            currentMap.set(norm, { concept: newDef.concept, definition: newDef.definition.trim() });
+                        }
+                    }
+                });
+                const resultList: ConceptItem[] = [];
+                const usedKeys = new Set<string>();
+                prev.forEach(item => {
+                    const norm = normalizeConcept(item.concept);
+                    if (norm && currentMap.has(norm)) {
+                        resultList.push(currentMap.get(norm)!);
+                        usedKeys.add(norm);
+                    } else {
+                        resultList.push(item);
+                    }
+                });
+                currentMap.forEach((val, key) => {
+                    if (!usedKeys.has(key)) resultList.push(val);
+                });
+                return resultList;
+            });
+        }
+        if (data.notes && data.notes.length > 0) {
+            setEditingNotes(data.notes);
+        }
+        if (data.activitySentences && data.activitySentences.length > 0) {
+            setEditingActivitySentences(data.activitySentences);
+        }
+        setHasUnsavedChanges(true);
+    };
+
     // PDF / Yazdır
     const handleDownloadPdf = () => {
         if (!activeTopic) return;
@@ -950,66 +1010,16 @@ function CentralActivityStudioContent() {
                             <span>PDF</span>
                         </Button>
 
-                        {/* AI İle Üret Dropdown */}
-                        <div className="relative">
-                            <Button
-                                onClick={() => setAiDropdownOpen(v => !v)}
-                                disabled={isGeneratingAi || !activeTopic}
-                                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl h-10 px-3.5 text-xs font-bold shadow-lg shadow-purple-900/30 flex items-center gap-1.5"
-                            >
-                                {isGeneratingAi ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-amber-300" />}
-                                <span>AI İle Üret</span>
-                            </Button>
-
-                            {aiDropdownOpen && (
-                                <div className="absolute right-0 top-12 bg-slate-900 border border-white/20 rounded-2xl p-2 shadow-2xl z-50 w-72 space-y-1 animate-in fade-in zoom-in-95 duration-150">
-                                    <button
-                                        onClick={() => handleGenerateAi('all')}
-                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-white hover:bg-purple-600/30 flex items-center gap-2"
-                                    >
-                                        <Sparkles className="w-4 h-4 text-amber-400" />
-                                        <span>Tamamı (Kavram, Tanım, Not, Cümle)</span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleGenerateAi('concepts')}
-                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-blue-300 hover:bg-blue-600/30 flex items-center gap-2"
-                                    >
-                                        <Tag className="w-4 h-4 text-blue-400" />
-                                        <span>Yalnızca Kelime / Kavram Havuzunu Üret</span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleGenerateAi('definitions')}
-                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-purple-300 hover:bg-purple-600/30 flex items-center gap-2"
-                                    >
-                                        <Columns className="w-4 h-4 text-purple-400" />
-                                        <span>Yalnızca Kavram-Tanım Çiftlerini Üret</span>
-                                    </button>
-                                    {missingDefinitionConcepts.length > 0 && (
-                                        <button
-                                            onClick={handleGenerateAiForMissingDefinitions}
-                                            className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-amber-300 hover:bg-amber-600/30 flex items-center gap-2 border-t border-white/10"
-                                        >
-                                            <AlertTriangle className="w-4 h-4 text-amber-400" />
-                                            <span>Yalnızca Tanımı Eksikleri Doldur ({missingDefinitionConcepts.length})</span>
-                                        </button>
-                                    )}
-                                    <button
-                                        onClick={() => handleGenerateAi('notes')}
-                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-indigo-300 hover:bg-indigo-600/30 flex items-center gap-2"
-                                    >
-                                        <FileText className="w-4 h-4 text-indigo-400" />
-                                        <span>Yalnızca Deftere Yazılacak Notları Üret</span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleGenerateAi('activitySentences')}
-                                        className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-emerald-300 hover:bg-emerald-600/30 flex items-center gap-2"
-                                    >
-                                        <ListOrdered className="w-4 h-4 text-emerald-400" />
-                                        <span>Yalnızca Kısa Oyun Cümlelerini Üret</span>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+                        {/* AI İle Üret Butonu (Sunum Stüdyosu Tasarımı) */}
+                        <Button
+                            onClick={() => setIsAiDialogOpen(true)}
+                            disabled={!activeTopic}
+                            className="bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-xl h-10 px-4 text-xs font-black shadow-lg shadow-purple-900/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02]"
+                            title="Yapay Zekâ Stüdyosu (Sunum Stüdyosu Tasarımı)"
+                        >
+                            <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
+                            <span>AI İle Üret ✨</span>
+                        </Button>
 
                         {/* Kaydet Butonu (Merkezi Senkron) */}
                         <Button
@@ -2195,6 +2205,21 @@ function CentralActivityStudioContent() {
                         </div>
                     </div>
                 </div>
+
+    
+            {/* AI Stüdyosu Modalı (Sunum Stüdyosu Tasarımı) */}
+            {activeTopic && (
+                <AiActivityStudioDialog
+                    isOpen={isAiDialogOpen}
+                    onOpenChange={setIsAiDialogOpen}
+                    topicTitle={activeTopic.title}
+                    sourceText={activeTopic.sourceText || ''}
+                    grade={activeTopic.grade}
+                    courseTitle={activeTopic.courseTitle}
+                    missingConcepts={missingDefinitionConcepts}
+                    onGenerated={handleAiDataGenerated}
+                />
+            )}
 
             </div>
         </div>
