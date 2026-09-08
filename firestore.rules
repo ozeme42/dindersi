@@ -124,5 +124,10 @@ service cloud.firestore {
         allow read: if true;
         allow write: if isTeacher(request.auth.uid);
     }
+    
+    // Live Presentation Remote Sessions (Akıllı Tahta Telefon Kumandası)
+    match /presentationSessions/{sessionId} {
+        allow read, write: if true;
+    }
   }
 }

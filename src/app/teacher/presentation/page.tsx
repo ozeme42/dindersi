@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { 
-    Loader2, ArrowLeft, Presentation, Settings, Sun, Moon, LayoutList, 
+    Loader2, ArrowLeft, Presentation, Settings, Smartphone, Sun, Moon, LayoutList, 
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
     ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil, Minus, Plus,
@@ -17,6 +17,7 @@ import { LessonContentViewer } from '@/components/lesson-content-viewer';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { PresentationDrawingBoard } from '@/components/presentation-drawing-board';
 import { PresentationWheelModal } from '@/components/presentation-wheel-modal';
+import { PresentationRemoteModal } from '@/components/presentation-remote-modal';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
@@ -169,6 +170,9 @@ function PresentationPageContent() {
     // 6. Ses Efektleri Açık/Kapalı
     const [isSoundEnabled, setIsSoundEnabled] = useState(true);
 
+    // 7. Mobil Kumanda (QR Kod Oturumu)
+    const [isRemoteModalOpen, setIsRemoteModalOpen] = useState(false);
+
     // Timer Effect
     useEffect(() => {
         if (isTimerRunning && timerSeconds > 0) {
@@ -234,7 +238,11 @@ function PresentationPageContent() {
             } else if (e.key === 'k' || e.key === 'K') {
                 e.preventDefault();
                 setIsSourceTextOpen(prev => !prev);
+            } else if (e.key === 'q' || e.key === 'Q') {
+                e.preventDefault();
+                setIsRemoteModalOpen(prev => !prev);
             } else if (e.key === 'Escape') {
+                setIsRemoteModalOpen(false);
                 setIsBlackout(false);
                 setIsTimerOpen(false);
                 setIsPickerOpen(false);
@@ -530,6 +538,23 @@ function PresentationPageContent() {
                             <BookOpen className="w-3.5 h-3.5 text-teal-400" />
                             <span className="hidden sm:inline">Kaynak Metin (K)</span>
                         </Button>
+
+                        {/* Hızlı Mobil Kumanda Butonu (Q) */}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setIsRemoteModalOpen(prev => !prev)}
+                            className={cn(
+                                "h-9 px-3 rounded-xl font-bold text-xs gap-1.5 transition-all border cursor-pointer",
+                                isRemoteModalOpen 
+                                    ? "bg-indigo-500/20 text-indigo-400 border-indigo-500/50 shadow-md shadow-indigo-500/20" 
+                                    : "bg-white/5 hover:bg-white/10 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10"
+                            )}
+                            title="Telefondan Yönet (Q)"
+                        >
+                            <Smartphone className="w-3.5 h-3.5 text-indigo-400" />
+                            <span className="hidden sm:inline">Kumanda (Q)</span>
+                        </Button>
                     </div>
                 </header>
             )}
@@ -608,6 +633,22 @@ function PresentationPageContent() {
                                 <div className="space-y-1.5">
                                     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tahta Araçları</span>
                                     <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => { setIsRemoteModalOpen(true); setIsToolsOpen(false); }}
+                                            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 transition-all text-left group cursor-pointer"
+                                        >
+                                            <div className="p-2 rounded-lg bg-indigo-500/20 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                                                <Smartphone className="w-4 h-4" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="font-bold text-xs flex items-center gap-1">
+                                                    Mobil Kumanda (Q)
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                                                </span>
+                                                <span className="text-[10px] opacity-75">QR ile telefondan yönet</span>
+                                            </div>
+                                        </button>
+
                                         <button
                                             onClick={() => { setIsDrawingOpen(true); setIsToolsOpen(false); }}
                                             className="flex items-center gap-2.5 p-2.5 rounded-xl border border-cyan-500/20 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 transition-all text-left group cursor-pointer"
@@ -1132,6 +1173,30 @@ function PresentationPageContent() {
                 isOpen={isDrawingOpen}
                 onClose={() => setIsDrawingOpen(false)}
                 isDarkMode={isDarkMode}
+            />
+
+            {/* ══ 6. MOBİL KUMANDA & QR KOD MODALI ══ */}
+            <PresentationRemoteModal
+                isOpen={isRemoteModalOpen}
+                onClose={() => setIsRemoteModalOpen(false)}
+                courseTitle={courseName || ''}
+                unitTitle={unitName || ''}
+                topicTitle={(content as any)?.title || ''}
+                currentStepIndex={currentStepIndex}
+                totalStepsCount={totalStepsCount}
+                currentStepTitle={(content as any)?.steps?.[currentStepIndex]?.title || ''}
+                steps={(content as any)?.steps || []}
+                onNext={() => setJumpToStep(Math.min((totalStepsCount || 1) - 1, currentStepIndex + 1))}
+                onPrev={() => setJumpToStep(Math.max(0, currentStepIndex - 1))}
+                onJump={(idx) => setJumpToStep(idx)}
+                isBlackout={isBlackout}
+                onToggleBlackout={() => setIsBlackout(prev => !prev)}
+                onStartTimer={(secs) => {
+                    setTimerSeconds(secs);
+                    setInitialTimerSeconds(secs);
+                    setIsTimerRunning(true);
+                    setIsTimerOpen(true);
+                }}
             />
         </main>
     );
