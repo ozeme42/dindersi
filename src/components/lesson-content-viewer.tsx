@@ -3768,7 +3768,8 @@ export function StepContent({
     onToggleVisualMaximize,
     isSingleCardMode,
     animationSpeed = 'normal',
-    fontSizeScale = 'normal'
+    fontSizeScale = 'normal',
+    hideUI
 }: any) {
     const isTeacher = useTeacherMode();
 
@@ -3841,7 +3842,7 @@ export function StepContent({
                  return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} />
 
             case 'pdfSlide':
-                 return <PdfSlidePlayer step={step as PdfSlideStep} isFullscreen={isFullscreen} isTeacher={isTeacher} />
+                 return <PdfSlidePlayer step={step as PdfSlideStep} isFullscreen={isFullscreen} isTeacher={isTeacher} hasBottomDock={!hideUI} />
             
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;
@@ -4827,7 +4828,7 @@ export function LessonContentViewer({
             )}
 
             {/* Şeffaf & Floating Cam Efekti Container */}
-            <div className="w-full max-w-5xl mx-auto rounded-2xl bg-white/25 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.06)] flex items-center justify-between gap-2 px-3 py-1.5">
+            <div className="w-full max-w-5xl mx-auto rounded-2xl bg-white/25 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.06)] flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto">
 
                 {/* SOL: Geri + Tam Ekran / Küçült + Yenile */}
                 <div className="flex items-center gap-1.5">

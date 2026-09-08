@@ -22,7 +22,9 @@ import {
     Sparkles,
     RefreshCw,
     X,
-    Maximize
+    Maximize,
+    Eye,
+    EyeOff
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -68,6 +70,7 @@ export interface PdfSlidePlayerProps {
     step: PdfSlideStep;
     isFullscreen?: boolean;
     isTeacher?: boolean;
+    hasBottomDock?: boolean;
     className?: string;
 }
 
@@ -83,7 +86,7 @@ async function getPdfjs() {
     return pdfjs;
 }
 
-export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: PdfSlidePlayerProps) {
+export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock, className }: PdfSlidePlayerProps) {
     const rawUrl = (step.pdfUrl || '').trim();
 
     // Servis tespiti
@@ -95,6 +98,15 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
     // Görünüm Modu: Canva ve Google Slides doğrudan embed ile çalışır; PDF dosyaları varsayılan olarak "slide" modunda açılır.
     const initialMode = (isCanva || isGoogleSlides) ? 'embed' : 'slide';
     const [viewMode, setViewMode] = useState<'slide' | 'embed'>(initialMode);
+
+    // Ekranı Kapla / Sığdır Modu ('fill' = Sağ, sol, üst, alt tam dolar sıfır siyah boşluk; 'fit' = Orijinal orana sığdır)
+    const [fitMode, setFitMode] = useState<'fill' | 'fit'>('fill');
+
+    // Kontrolleri Göster / Gizle (Temiz tam ekran sunumu için)
+    const [showControls, setShowControls] = useState<boolean>(true);
+
+    // Google Drive bilgi uyarısını kapatma
+    const [showDriveNotice, setShowDriveNotice] = useState<boolean>(true);
 
     // Slayt Durumu
     const [pdfDoc, setPdfDoc] = useState<any>(null);
@@ -181,7 +193,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
         };
     }, [rawUrl, reloadKey, viewMode, isGoogleDrive]);
 
-    // Sayfa Çizimi (Canvas Rendering ile Mutex / Sıralı Kuyruk Koruması & Kusursuz Ölçekleme)
+    // Sayfa Çizimi (Canvas Rendering ile Mutex / Sıralı Kuyruk Koruması & Tam Ekran Kenardan Kenara Yayılma)
     const renderPage = useCallback(async (pageNum: number, doc: any) => {
         if (!doc || !canvasRef.current || !containerRef.current) return;
 
@@ -213,19 +225,19 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                 return;
             }
 
-            // Kapsayıcı boyutlarını subpixel hassasiyetiyle al
+            // Kapsayıcı boyutlarını sıfır kenar boşluğu ile tam al
             const rect = container.getBoundingClientRect();
-            // Yan oklar ve kenarlıklar için temiz nefes payı (padding)
-            const availableWidth = Math.max(280, (rect.width || container.clientWidth) - 48);
-            const availableHeight = Math.max(200, (rect.height || container.clientHeight) - 24);
+            const availableWidth = rect.width || container.clientWidth || (typeof window !== 'undefined' ? window.innerWidth : 1920);
+            const availableHeight = rect.height || container.clientHeight || (typeof window !== 'undefined' ? window.innerHeight : 1080);
 
             const unscaledViewport = page.getViewport({ scale: 1 });
             const scaleX = availableWidth / unscaledViewport.width;
             const scaleY = availableHeight / unscaledViewport.height;
 
-            // Math.min ile sayfanın HEM ENİ HEM BOYU ekrana %100 sığdırılır, asla taşmaz/kesilmez
-            const fitScale = Math.min(scaleX, scaleY);
-            const finalScale = fitScale * scale;
+            // 'fill': Sağ, sol, üst, alt tüm ekranı kaplasın (Math.max) - Sıfır siyah kenar
+            // 'fit': Slayt içeriğini bozmadan sınıra kadar sığdırsın (Math.min)
+            const baseScale = fitMode === 'fill' ? Math.max(scaleX, scaleY) : Math.min(scaleX, scaleY);
+            const finalScale = baseScale * scale;
 
             // Yüksek çözünürlüklü ekranlar (Retina / 4K / Akıllı Tahta)
             const dpr = typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1;
@@ -234,12 +246,11 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
             canvas.width = Math.floor(viewport.width);
             canvas.height = Math.floor(viewport.height);
 
-            // CSS piksel boyutları (dpr'a bölünerek doğru fiziksel boyuta oturtulur)
+            // CSS piksel boyutları (dpr'a bölünerek ekranda keskin ve net durur)
             canvas.style.width = `${Math.floor(viewport.width / dpr)}px`;
             canvas.style.height = `${Math.floor(viewport.height / dpr)}px`;
 
-            // KRİTİK: Transform sıfırlanır! PDF.js viewport ölçeğini zaten kendi içinde uyguladığı için
-            // ek olarak setTransform(dpr...) çağrılırsa çift ölçekleme yapıp slaytı kırpar!
+            // Transform sıfırlanır (çift ölçeklemeyi önler)
             ctx.setTransform(1, 0, 0, 1, 0, 0);
 
             const renderContext = {
@@ -265,16 +276,16 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                 renderPage(next.pageNum, next.doc);
             }
         }
-    }, [scale]);
+    }, [scale, fitMode]);
 
-    // Sayfa değiştikçe çiz
+    // Sayfa, ölçek veya mod değiştikçe çiz
     useEffect(() => {
         if (pdfDoc && viewMode === 'slide') {
             renderPage(currentPage, pdfDoc);
         }
-    }, [pdfDoc, currentPage, renderPage, viewMode]);
+    }, [pdfDoc, currentPage, renderPage, viewMode, fitMode, scale]);
 
-    // Ekran boyutu değiştiğinde yeniden çiz (Debounced)
+    // Ekran boyutu değiştiğinde yeniden çiz (Debounced ResizeObserver)
     useEffect(() => {
         if (!containerRef.current || !pdfDoc || viewMode !== 'slide') return;
 
@@ -283,7 +294,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
                 renderPage(currentPage, pdfDoc);
-            }, 100);
+            }, 80);
         });
 
         resizeObserver.observe(containerRef.current);
@@ -305,7 +316,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
     const goToFirstPage = useCallback(() => setCurrentPage(1), []);
     const goToLastPage = useCallback(() => setCurrentPage(numPages), [numPages]);
 
-    // Klavye Kısayolları (Sağ/Sol Ok, Boşluk Tuşu)
+    // Klavye Kısayolları (Sağ/Sol Ok, Boşluk Tuşu, Home, End)
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
@@ -339,9 +350,9 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
         if (touchStartX.current === null) return;
         const touchEndX = e.changedTouches[0].clientX;
         const diff = touchStartX.current - touchEndX;
-        if (diff > 60) {
+        if (diff > 50) {
             goToNextPage(); // Sola kaydırıldı -> Sonraki slayt
-        } else if (diff < -60) {
+        } else if (diff < -50) {
             goToPrevPage(); // Sağa kaydırıldı -> Önceki slayt
         }
         touchStartX.current = null;
@@ -363,309 +374,300 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
         <div 
             ref={playerWrapperRef}
             className={cn(
-                "w-full h-full flex flex-col bg-slate-950 text-white rounded-2xl overflow-hidden border border-white/10 relative select-none",
+                "w-full h-full relative overflow-hidden bg-black text-white select-none flex items-center justify-center",
                 className
             )}
         >
-            {/* Üst Başlık ve Kontrol Çubuğu */}
-            <div className="flex items-center justify-between px-3 md:px-5 py-2.5 bg-slate-900/90 border-b border-white/10 backdrop-blur-md flex-shrink-0 z-30">
-                <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="p-1.5 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex-shrink-0">
-                        <FileText className="w-4 h-4" />
-                    </span>
-                    <span className="font-black text-xs sm:text-sm text-white truncate max-w-xs sm:max-w-md">
-                        {step.title || 'PDF / Sunu Slaytı'}
-                    </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/10 text-slate-400 flex-shrink-0">
-                        {isGoogleDrive ? '📁 Google Drive' : isCanva ? '🎨 Canva' : isDirectPdf ? '📄 PDF Slaytları' : '🔗 Bağlantı'}
-                    </span>
-                </div>
-
-                <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                    {/* Görünüm Modu Değiştirici (Slayt vs Embed) */}
-                    {(isGoogleDrive || isDirectPdf) && (
-                        <div className="hidden sm:flex items-center bg-black/40 border border-white/10 rounded-xl p-0.5 text-xs font-bold">
-                            <button
-                                type="button"
-                                onClick={() => setViewMode('slide')}
-                                className={cn(
-                                    "px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer",
-                                    viewMode === 'slide' 
-                                        ? "bg-rose-600 text-white shadow-sm" 
-                                        : "text-slate-400 hover:text-white"
-                                )}
-                            >
-                                <Layers className="w-3.5 h-3.5" />
-                                <span>Slayt Modu</span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setViewMode('embed')}
-                                className={cn(
-                                    "px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer",
-                                    viewMode === 'embed' 
-                                        ? "bg-rose-600 text-white shadow-sm" 
-                                        : "text-slate-400 hover:text-white"
-                                )}
-                            >
-                                <ExternalLink className="w-3.5 h-3.5" />
-                                <span>Gömülü Belge</span>
-                            </button>
+            {/* ══ 1. SLAYT ÇİZİM ALANI (TAM EKRAN KENARDAN KENARA KAPLAYAN CANVAS) ══ */}
+            {viewMode === 'slide' && (
+                <div 
+                    ref={containerRef}
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                    className="w-full h-full absolute inset-0 flex items-center justify-center overflow-hidden bg-black p-0 m-0 select-none"
+                >
+                    {isLoading ? (
+                        <div className="flex flex-col items-center justify-center gap-3 text-slate-300 z-10">
+                            <Loader2 className="w-10 h-10 animate-spin text-rose-500" />
+                            <p className="text-sm font-bold tracking-wide">Slaytlar hazırlanıyor...</p>
                         </div>
+                    ) : loadError ? (
+                        <div className="max-w-md p-6 bg-slate-900/90 border border-rose-500/30 rounded-3xl text-center flex flex-col items-center gap-3 z-10 backdrop-blur-xl">
+                            <AlertTriangle className="w-10 h-10 text-rose-400" />
+                            <h3 className="font-black text-sm text-white">Slayt Modunda Açılamadı</h3>
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                                {isGoogleDrive 
+                                    ? "Bu Google Drive dosyası gizli olabilir veya doğrudan görüntüleme engellendi." 
+                                    : loadError}
+                            </p>
+                            <div className="flex gap-2 mt-2">
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    onClick={() => setViewMode('embed')}
+                                    className="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl cursor-pointer"
+                                >
+                                    Gömülü Modda Aç
+                                </Button>
+                                <a
+                                    href={rawUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 bg-white/10 hover:bg-white/20 text-xs font-bold text-slate-200"
+                                >
+                                    <ExternalLink className="w-3.5 h-3.5" />
+                                    Bağlantıyı Aç
+                                </a>
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            {/* Canvas Slayt (Kenarlık ve yuvarlak köşe olmadan tam ekran) */}
+                            <canvas 
+                                ref={canvasRef} 
+                                className="block m-0 p-0 bg-black flex-shrink-0 select-none shadow-none rounded-none transition-opacity duration-150"
+                            />
+
+                            {/* Akıllı Tahta İçin Büyük Yan Dokunmatik Geçiş Okları */}
+                            {numPages > 1 && (
+                                <>
+                                    <button
+                                        type="button"
+                                        onClick={goToPrevPage}
+                                        disabled={currentPage <= 1}
+                                        className={cn(
+                                            "absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-12 h-20 md:w-16 md:h-28 rounded-2xl bg-black/40 hover:bg-black/80 text-white/70 hover:text-white border border-white/15 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer z-20 shadow-2xl",
+                                            currentPage <= 1 ? "opacity-0 pointer-events-none" : "hover:scale-105 active:scale-95"
+                                        )}
+                                        title="Önceki Slayt (Sol Ok)"
+                                    >
+                                        <ChevronLeft className="w-8 h-8 md:w-10 md:h-10 text-white drop-shadow-md" />
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        onClick={goToNextPage}
+                                        disabled={currentPage >= numPages}
+                                        className={cn(
+                                            "absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-12 h-20 md:w-16 md:h-28 rounded-2xl bg-black/40 hover:bg-black/80 text-white/70 hover:text-white border border-white/15 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer z-20 shadow-2xl",
+                                            currentPage >= numPages ? "opacity-0 pointer-events-none" : "hover:scale-105 active:scale-95"
+                                        )}
+                                        title="Sonraki Slayt (Sağ Ok veya Boşluk)"
+                                    >
+                                        <ChevronRight className="w-8 h-8 md:w-10 md:h-10 text-white drop-shadow-md" />
+                                    </button>
+                                </>
+                            )}
+                        </>
                     )}
-
-                    {/* Yeniden Yükle */}
-                    <button
-                        type="button"
-                        onClick={() => setReloadKey(k => k + 1)}
-                        className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
-                        title="Yeniden Yükle"
-                    >
-                        <RotateCcw className="w-4 h-4" />
-                    </button>
-
-                    {/* Tam Ekran */}
-                    <button
-                        type="button"
-                        onClick={toggleFullscreen}
-                        className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
-                        title="Tam Ekran"
-                    >
-                        <Maximize2 className="w-4 h-4" />
-                    </button>
-
-                    {/* Yeni Sekmede Aç */}
-                    {rawUrl && (
-                        <a
-                            href={rawUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-colors cursor-pointer"
-                            title="Yeni Sekmede Aç"
-                        >
-                            <ExternalLink className="w-3.5 h-3.5" />
-                            <span className="hidden md:inline">Sekmede Aç</span>
-                        </a>
-                    )}
-                </div>
-            </div>
-
-            {/* Google Drive Kısıtlı/Gizli Dosya Rehber Uyarısı */}
-            {isGoogleDrive && (
-                <div className="bg-amber-950/40 border-b border-amber-500/30 px-4 py-1.5 flex items-center justify-between text-xs text-amber-200 z-20">
-                    <div className="flex items-center gap-2">
-                        <Info className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                        <span className="text-[11px] sm:text-xs">
-                            <strong>Google Drive İpucu:</strong> Dosyanın akıllı tahtada açılması için Drive paylaşımının <em>"Bağlantıya sahip olan herkes"</em> olarak ayarlanması gerekir.
-                        </span>
-                    </div>
-                    <a
-                        href={rawUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[10px] sm:text-xs font-bold underline hover:text-amber-100 flex-shrink-0 ml-2"
-                    >
-                        Paylaşımı Kontrol Et ↗
-                    </a>
                 </div>
             )}
 
-            {/* ANA OYNATICI ALANI */}
-            <div className="flex-1 min-h-0 w-full relative overflow-hidden bg-slate-950 flex items-center justify-center">
-                {/* 1. SLAYT MODU (CANVAS İLE SAYFA SAYFA SLAYT GEÇİŞİ) */}
-                {viewMode === 'slide' && (
-                    <div 
-                        ref={containerRef}
-                        onTouchStart={handleTouchStart}
-                        onTouchEnd={handleTouchEnd}
-                        className="w-full h-full flex items-center justify-center p-2 sm:p-4 relative overflow-auto"
-                    >
-                        {isLoading ? (
-                            <div className="flex flex-col items-center justify-center gap-3 text-slate-400">
-                                <Loader2 className="w-8 h-8 animate-spin text-rose-500" />
-                                <p className="text-xs font-bold">Slaytlar hazırlanıyor...</p>
-                            </div>
-                        ) : loadError ? (
-                            <div className="max-w-md p-6 bg-slate-900 border border-rose-500/30 rounded-3xl text-center flex flex-col items-center gap-3">
-                                <AlertTriangle className="w-10 h-10 text-rose-400" />
-                                <h3 className="font-black text-sm text-white">Slayt Modunda Yüklenemedi</h3>
-                                <p className="text-xs text-slate-400 leading-relaxed">
-                                    {isGoogleDrive 
-                                        ? "Bu Google Drive dosyası kısıtlı olabilir veya tarayıcı güvenlik politikası nedeniyle doğrudan okunamadı." 
-                                        : loadError}
-                                </p>
-                                <div className="flex gap-2 mt-2">
-                                    <Button
-                                        type="button"
-                                        size="sm"
-                                        onClick={() => setViewMode('embed')}
-                                        className="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl cursor-pointer"
-                                    >
-                                        Gömülü Modda Dene
-                                    </Button>
-                                    <a
-                                        href={rawUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-200"
-                                    >
-                                        <ExternalLink className="w-3.5 h-3.5" />
-                                        Drive'da Aç
-                                    </a>
-                                </div>
-                            </div>
-                        ) : (
-                            <>
-                                {/* Canvas Slayt Görseli (Hassas Piksel ve Gölge) */}
-                                <canvas 
-                                    ref={canvasRef} 
-                                    className="rounded-xl shadow-2xl transition-all duration-200 bg-white block flex-shrink-0"
-                                />
-
-                                {/* Kenar Dokunmatik/Tıklamalı Slayt Butonları (Akıllı Tahta İçin Büyük) */}
-                                {numPages > 1 && (
-                                    <>
-                                        <button
-                                            type="button"
-                                            onClick={goToPrevPage}
-                                            disabled={currentPage <= 1}
-                                            className={cn(
-                                                "absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-14 md:w-14 md:h-18 rounded-2xl bg-black/60 hover:bg-black/85 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer z-20 shadow-2xl",
-                                                currentPage <= 1 ? "opacity-20 cursor-not-allowed" : "hover:scale-105 active:scale-95"
-                                            )}
-                                            title="Önceki Slayt (Sol Ok)"
-                                        >
-                                            <ChevronLeft className="w-7 h-7 md:w-8 md:h-8 text-white drop-shadow-md" />
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            onClick={goToNextPage}
-                                            disabled={currentPage >= numPages}
-                                            className={cn(
-                                                "absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-14 md:w-14 md:h-18 rounded-2xl bg-black/60 hover:bg-black/85 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer z-20 shadow-2xl",
-                                                currentPage >= numPages ? "opacity-20 cursor-not-allowed" : "hover:scale-105 active:scale-95"
-                                            )}
-                                            title="Sonraki Slayt (Sağ Ok veya Boşluk)"
-                                        >
-                                            <ChevronRight className="w-7 h-7 md:w-8 md:h-8 text-white drop-shadow-md" />
-                                        </button>
-                                    </>
-                                )}
-                            </>
-                        )}
-                    </div>
-                )}
-
-                {/* 2. GÖMÜLÜ MOD (IFRAME İLE CANVA / GOOGLE DRIVE / SLIDES) */}
-                {viewMode === 'embed' && (
-                    <div className="w-full h-full relative">
-                        {embedUrl ? (
-                            <iframe
-                                key={reloadKey}
-                                src={embedUrl}
-                                title={step.title || 'Sunum'}
-                                className="w-full h-full border-0 bg-slate-900"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                            />
-                        ) : (
-                            <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-2">
-                                <FileText className="w-12 h-12 text-slate-600" />
-                                <p className="text-sm font-bold">Geçerli bir PDF veya sunum bağlantısı bulunamadı.</p>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {/* Küçük Resimler / Slayt Seçici Modal */}
-                {showThumbnails && (
-                    <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-xl z-40 p-6 flex flex-col animate-in fade-in duration-200">
-                        <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
-                            <div className="flex items-center gap-2">
-                                <Grid className="w-5 h-5 text-rose-400" />
-                                <h3 className="font-black text-sm text-white">Tüm Slaytlar ({numPages} Sayfa)</h3>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => setShowThumbnails(false)}
-                                className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white cursor-pointer"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
+            {/* ══ 2. GÖMÜLÜ MOD (IFRAME İLE CANVA / DRIVE / SLIDES) ══ */}
+            {viewMode === 'embed' && (
+                <div className="w-full h-full absolute inset-0 bg-black">
+                    {embedUrl ? (
+                        <iframe
+                            key={reloadKey}
+                            src={embedUrl}
+                            title={step.title || 'Sunum'}
+                            className="w-full h-full border-0 bg-black block"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                        />
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-2">
+                            <FileText className="w-12 h-12 text-slate-600" />
+                            <p className="text-sm font-bold">Geçerli bir PDF veya sunum bağlantısı bulunamadı.</p>
                         </div>
-                        <div className="flex-1 overflow-y-auto grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 pr-1">
-                            {Array.from({ length: numPages }, (_, i) => i + 1).map(pageNum => (
+                    )}
+                </div>
+            )}
+
+            {/* ══ 3. YÜZEN ÜST BAŞLIK VE AYARLAR BARI (ŞEFFAF GLASSMORPHISM DOCK) ══ */}
+            {showControls && (
+                <div className="absolute top-3 left-3 right-3 sm:left-6 sm:right-6 z-30 flex items-center justify-between pointer-events-none animate-in fade-in duration-200">
+                    {/* Sol Bilgi Kapsülü */}
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-white/15 shadow-2xl pointer-events-auto max-w-[60%] sm:max-w-md">
+                        <span className="p-1 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex-shrink-0">
+                            <FileText className="w-3.5 h-3.5" />
+                        </span>
+                        <span className="font-black text-xs text-white truncate">
+                            {step.title || 'PDF Sunumu'}
+                        </span>
+                        <span className="hidden sm:inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/10 text-slate-400 flex-shrink-0">
+                            {isGoogleDrive ? '📁 Drive' : isCanva ? '🎨 Canva' : isDirectPdf ? '📄 PDF' : '🔗 Sunu'}
+                        </span>
+                    </div>
+
+                    {/* Sağ Kontrol Araçları */}
+                    <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-white/15 shadow-2xl pointer-events-auto">
+                        {/* Görünüm Modu Değiştirici */}
+                        {(isGoogleDrive || isDirectPdf) && (
+                            <div className="hidden sm:flex items-center bg-black/40 border border-white/10 rounded-xl p-0.5 text-xs font-bold mr-1">
                                 <button
-                                    key={pageNum}
                                     type="button"
-                                    onClick={() => {
-                                        setCurrentPage(pageNum);
-                                        setShowThumbnails(false);
-                                    }}
+                                    onClick={() => setViewMode('slide')}
                                     className={cn(
-                                        "p-4 rounded-2xl border flex flex-col items-center justify-center gap-2 font-black transition-all cursor-pointer",
-                                        currentPage === pageNum 
-                                            ? "border-rose-500 bg-rose-500/20 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.3)] scale-105" 
-                                            : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:border-white/20"
+                                        "px-2 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer text-[11px]",
+                                        viewMode === 'slide' 
+                                            ? "bg-rose-600 text-white shadow-sm" 
+                                            : "text-slate-400 hover:text-white"
                                     )}
                                 >
-                                    <FileText className="w-6 h-6 text-slate-400" />
-                                    <span className="text-xs">Slayt {pageNum}</span>
+                                    <Layers className="w-3 h-3" />
+                                    <span>Slayt</span>
                                 </button>
-                            ))}
-                        </div>
-                    </div>
-                )}
-            </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setViewMode('embed')}
+                                    className={cn(
+                                        "px-2 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer text-[11px]",
+                                        viewMode === 'embed' 
+                                            ? "bg-rose-600 text-white shadow-sm" 
+                                            : "text-slate-400 hover:text-white"
+                                    )}
+                                >
+                                    <ExternalLink className="w-3 h-3" />
+                                    <span>Gömülü</span>
+                                </button>
+                            </div>
+                        )}
 
-            {/* ALT SLAYT KONTROL ÇUBUĞU (AKILLI TAHTA UYUMLU) */}
-            {viewMode === 'slide' && numPages > 0 && (
-                <div className="flex items-center justify-between px-4 py-2 bg-slate-900/95 border-t border-white/10 backdrop-blur-md flex-shrink-0 z-30">
-                    {/* Hızlı Sayfa Seçici / Butonlar */}
-                    <div className="flex items-center gap-1.5">
+                        {/* Ekranı Kapla / Sığdır Geçiş Butonu */}
+                        {viewMode === 'slide' && (
+                            <button
+                                type="button"
+                                onClick={() => setFitMode(m => m === 'fill' ? 'fit' : 'fill')}
+                                className={cn(
+                                    "px-2.5 py-1 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer",
+                                    fitMode === 'fill' 
+                                        ? "bg-indigo-600 border-indigo-400 text-white shadow-md shadow-indigo-600/30" 
+                                        : "bg-white/10 border-white/15 text-slate-200 hover:bg-white/20"
+                                )}
+                                title={fitMode === 'fill' ? "Orijinal Orana Sığdır" : "Ekranı Tam Doldur (Sıfır Kenar Boşluğu)"}
+                            >
+                                <Maximize className="w-3.5 h-3.5" />
+                                <span className="hidden md:inline">{fitMode === 'fill' ? 'Ekranı Kapla (Aktif)' : 'Ekranı Kapla'}</span>
+                            </button>
+                        )}
+
+                        {/* Yeniden Yükle */}
+                        <button
+                            type="button"
+                            onClick={() => setReloadKey(k => k + 1)}
+                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
+                            title="Yeniden Yükle"
+                        >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                        </button>
+
+                        {/* Tam Ekran */}
+                        <button
+                            type="button"
+                            onClick={toggleFullscreen}
+                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
+                            title="Tam Ekran"
+                        >
+                            <Maximize2 className="w-3.5 h-3.5" />
+                        </button>
+
+                        {/* Yeni Sekmede Aç */}
+                        {rawUrl && (
+                            <a
+                                href={rawUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-colors cursor-pointer"
+                                title="Yeni Sekmede Aç"
+                            >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                                <span className="hidden lg:inline">Sekmede Aç</span>
+                            </a>
+                        )}
+
+                        {/* Kontrolleri Gizle */}
+                        <button
+                            type="button"
+                            onClick={() => setShowControls(false)}
+                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
+                            title="Kontrolleri Gizle (Temiz Görünüm)"
+                        >
+                            <EyeOff className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* ══ 4. YÜZEN ALT SLAYT GEÇİŞ DOCK'U (ŞEFFAF & MERKEZİ) ══ */}
+            {viewMode === 'slide' && numPages > 0 && showControls && (
+                <div className={cn("absolute left-1/2 -translate-x-1/2 z-30 pointer-events-auto transition-all duration-200 animate-in slide-in-from-bottom-3", hasBottomDock ? "bottom-14 sm:bottom-16" : "bottom-4")}>
+                    <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-2xl bg-slate-950/85 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+                        {/* İlk Slayt */}
                         <button
                             type="button"
                             onClick={goToFirstPage}
                             disabled={currentPage <= 1}
-                            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 text-slate-300 hover:text-white border border-white/10 cursor-pointer"
-                            title="İlk Slayt"
+                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-300 hover:text-white border border-white/10 transition-all cursor-pointer"
+                            title="İlk Slayt (Home)"
                         >
                             <ChevronsLeft className="w-4 h-4" />
                         </button>
+
+                        {/* Önceki Slayt */}
                         <button
                             type="button"
                             onClick={goToPrevPage}
                             disabled={currentPage <= 1}
-                            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1 cursor-pointer"
-                            title="Önceki Slayt"
+                            className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                            title="Önceki Slayt (Sol Ok)"
                         >
                             <ChevronLeft className="w-4 h-4" />
                             <span className="hidden sm:inline">Önceki</span>
                         </button>
-                    </div>
 
-                    {/* Slayt Rozeti & Doğrudan Sayfa Seçici */}
-                    <div className="flex items-center gap-2">
+                        {/* Slayt Seçici Rozet (Grid Listeyi Açar) */}
                         <button
                             type="button"
                             onClick={() => setShowThumbnails(true)}
-                            className="px-4 py-1.5 rounded-full bg-rose-950/60 border border-rose-500/40 text-rose-300 hover:bg-rose-900/60 font-black text-xs md:text-sm shadow-sm flex items-center gap-2 cursor-pointer transition-all hover:scale-105"
-                            title="Slayt Listesi"
+                            className="px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs md:text-sm shadow-lg shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95"
+                            title="Tüm Slaytları Görüntüle"
                         >
                             <Grid className="w-3.5 h-3.5" />
-                            <span>Slayt {currentPage} / {numPages}</span>
+                            <span>{currentPage} / {numPages}</span>
                         </button>
-                    </div>
 
-                    {/* İlerle & Yakınlaştır */}
-                    <div className="flex items-center gap-1.5">
-                        {/* Yakınlaştırma */}
-                        <div className="hidden md:flex items-center gap-1 bg-white/5 border border-white/10 rounded-xl p-0.5">
+                        {/* Sonraki Slayt */}
+                        <button
+                            type="button"
+                            onClick={goToNextPage}
+                            disabled={currentPage >= numPages}
+                            className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                            title="Sonraki Slayt (Sağ Ok veya Boşluk)"
+                        >
+                            <span className="hidden sm:inline">Sonraki</span>
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+
+                        {/* Son Slayt */}
+                        <button
+                            type="button"
+                            onClick={goToLastPage}
+                            disabled={currentPage >= numPages}
+                            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 disabled:opacity-20 text-slate-300 hover:text-white border border-white/10 transition-all cursor-pointer"
+                            title="Son Slayt (End)"
+                        >
+                            <ChevronsRight className="w-4 h-4" />
+                        </button>
+
+                        <div className="w-px h-5 bg-white/15 hidden md:block" />
+
+                        {/* Yakınlaştırma & Sığdırma Kontrolleri */}
+                        <div className="hidden md:flex items-center gap-1 bg-black/40 border border-white/10 rounded-xl p-0.5">
                             <button
                                 type="button"
-                                onClick={() => setScale(s => Math.max(0.6, s - 0.2))}
-                                className="p-1 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white cursor-pointer"
+                                onClick={() => setScale(s => Math.max(0.6, Number((s - 0.15).toFixed(2))))}
+                                className="p-1 rounded-lg hover:bg-white/15 text-slate-300 hover:text-white transition-colors cursor-pointer"
                                 title="Uzaklaştır"
                             >
                                 <ZoomOut className="w-3.5 h-3.5" />
@@ -673,40 +675,102 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, className }: Pdf
                             <button
                                 type="button"
                                 onClick={() => setScale(1)}
-                                className="px-2 py-0.5 text-[10px] font-bold text-slate-300 hover:text-white cursor-pointer"
-                                title="Sayfaya Sığdır (%100)"
+                                className="px-2 py-0.5 text-[11px] font-bold text-slate-300 hover:text-white transition-colors cursor-pointer"
+                                title="Yakınlaştırmayı Sıfırla (%100)"
                             >
-                                %{Math.round(scale * 100)} Sığdır
+                                %{Math.round(scale * 100)}
                             </button>
                             <button
                                 type="button"
-                                onClick={() => setScale(s => Math.min(2.5, s + 0.2))}
-                                className="p-1 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white cursor-pointer"
+                                onClick={() => setScale(s => Math.min(2.5, Number((s + 0.15).toFixed(2))))}
+                                className="p-1 rounded-lg hover:bg-white/15 text-slate-300 hover:text-white transition-colors cursor-pointer"
                                 title="Yakınlaştır"
                             >
                                 <ZoomIn className="w-3.5 h-3.5" />
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
 
+            {/* ══ 5. KONTROLLER GİZLENDİĞİNDE AÇMA BUTONU ══ */}
+            {!showControls && (
+                <button
+                    type="button"
+                    onClick={() => setShowControls(true)}
+                    className="absolute bottom-4 right-4 z-30 px-3 py-1.5 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-xl border border-white/20 text-white/90 text-xs font-bold flex items-center gap-2 shadow-2xl transition-all hover:scale-105 cursor-pointer"
+                    title="Kontrolleri Aç"
+                >
+                    <Eye className="w-3.5 h-3.5 text-rose-400" />
+                    <span>Slayt {currentPage} / {numPages}</span>
+                </button>
+            )}
+
+            {/* ══ 6. GOOGLE DRIVE GİZLİ DOSYA UYARISI (KAPATILABİLİR FLOATING TOAST) ══ */}
+            {isGoogleDrive && showDriveNotice && (
+                <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 max-w-xl w-[90%] bg-amber-950/90 border border-amber-500/40 rounded-2xl p-3 shadow-2xl backdrop-blur-xl flex items-center justify-between text-xs text-amber-200">
+                    <div className="flex items-center gap-2 min-w-0 pr-2">
+                        <Info className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                        <span className="text-[11px] sm:text-xs">
+                            <strong>Google Drive İpucu:</strong> Akıllı tahtada açılması için paylaşımın <em>"Bağlantıya sahip olan herkes"</em> olarak ayarlanması gerekir.
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                        <a
+                            href={rawUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[10px] sm:text-xs font-bold underline hover:text-amber-100"
+                        >
+                            Kontrol Et ↗
+                        </a>
                         <button
                             type="button"
-                            onClick={goToNextPage}
-                            disabled={currentPage >= numPages}
-                            className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:opacity-30 text-white text-xs font-black flex items-center gap-1 cursor-pointer shadow-md"
-                            title="Sonraki Slayt"
+                            onClick={() => setShowDriveNotice(false)}
+                            className="p-1 rounded-lg hover:bg-white/10 text-amber-300 hover:text-white"
                         >
-                            <span className="hidden sm:inline">Sonraki</span>
-                            <ChevronRight className="w-4 h-4" />
+                            <X className="w-3.5 h-3.5" />
                         </button>
+                    </div>
+                </div>
+            )}
+
+            {/* ══ 7. TÜM SLAYTLAR GRID SEÇİCİ MODAL ══ */}
+            {showThumbnails && (
+                <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl z-40 p-6 flex flex-col animate-in fade-in duration-200">
+                    <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+                        <div className="flex items-center gap-2">
+                            <Grid className="w-5 h-5 text-rose-400" />
+                            <h3 className="font-black text-sm text-white">Tüm Slaytlar ({numPages} Sayfa)</h3>
+                        </div>
                         <button
                             type="button"
-                            onClick={goToLastPage}
-                            disabled={currentPage >= numPages}
-                            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 text-slate-300 hover:text-white border border-white/10 cursor-pointer"
-                            title="Son Slayt"
+                            onClick={() => setShowThumbnails(false)}
+                            className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white cursor-pointer"
                         >
-                            <ChevronsRight className="w-4 h-4" />
+                            <X className="w-5 h-5" />
                         </button>
+                    </div>
+                    <div className="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 pr-1">
+                        {Array.from({ length: numPages }, (_, i) => i + 1).map(pageNum => (
+                            <button
+                                key={pageNum}
+                                type="button"
+                                onClick={() => {
+                                    setCurrentPage(pageNum);
+                                    setShowThumbnails(false);
+                                }}
+                                className={cn(
+                                    "p-4 rounded-2xl border flex flex-col items-center justify-center gap-2 font-black transition-all cursor-pointer",
+                                    currentPage === pageNum 
+                                        ? "border-rose-500 bg-rose-500/20 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.3)] scale-105" 
+                                        : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:border-white/20"
+                                )}
+                            >
+                                <FileText className="w-6 h-6 text-slate-400" />
+                                <span className="text-xs">Slayt {pageNum}</span>
+                            </button>
+                        ))}
                     </div>
                 </div>
             )}
