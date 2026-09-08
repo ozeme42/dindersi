@@ -696,9 +696,40 @@ export default function ActivityDataManagementPage() {
                   <Badge className="ml-3 bg-pink-500/20 text-pink-300 border-pink-500/30">CANLI VERİTABANI</Badge>
                 </div>
             </h1>
-            <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
-                <Link href="/teacher">
-                    <Home className="mr-2 h-4 w-4" /> Panele Dön
+            <div className="flex items-center gap-3">
+                <Button asChild className="bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white font-bold shadow-lg shadow-teal-500/20 border-0">
+                    <Link href="/teacher/smartboard/yazilacaklar">
+                        <Sparkles className="mr-2 h-4 w-4 text-amber-300" />
+                        Yeni Merkezi Stüdyo 🚀
+                    </Link>
+                </Button>
+                <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
+                    <Link href="/teacher">
+                        <Home className="mr-2 h-4 w-4" /> Panele Dön
+                    </Link>
+                </Button>
+            </div>
+        </div>
+
+        {/* Central Studio Recommendation Banner */}
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-950/60 via-teal-950/40 to-purple-950/60 border border-teal-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+            <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-5 h-5 text-teal-400" />
+                </div>
+                <div>
+                    <div className="text-white font-bold text-sm sm:text-base flex items-center gap-2">
+                        Yeni: Merkezi Etkinlik & Kavram Stüdyosu
+                        <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px]">Tavsiye Edilen</Badge>
+                    </div>
+                    <div className="text-xs text-slate-400">
+                        Kavramlar, Kavram-Tanım eşleşmeleri, Özet Cümleler ve Akıllı Tahta sunumunu Miller sütunları ile tek ekrandan yönetin.
+                    </div>
+                </div>
+            </div>
+            <Button asChild size="sm" className="bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs shrink-0 shadow-md">
+                <Link href="/teacher/smartboard/yazilacaklar">
+                    Stüdyoya Git <ChevronRight className="w-3.5 h-3.5 ml-1" />
                 </Link>
             </Button>
         </div>
