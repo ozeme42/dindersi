@@ -30,6 +30,7 @@ import Link from 'next/link';
 import { playSound } from "@/lib/audio-service";
 import { useAuth } from "@/context/auth-context";
 import { PresentationDrawingBoard } from "@/components/presentation-drawing-board";
+import { PdfSlidePlayer } from "@/components/pdf-slide-player";
 
 // --- TİP TANIMLAMALARI ---
 type LocalProgress = {
@@ -1808,101 +1809,6 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
     );
 };
 
-
-// 9.5. PdfSlidePlayer
-function PdfSlidePlayer({ step, isFullscreen }: { step: PdfSlideStep; isFullscreen?: boolean }) {
-    const [reloadKey, setReloadKey] = useState<number>(0);
-
-    const embedUrl = useMemo(() => {
-        let url = (step.pdfUrl || '').trim();
-        if (!url) return '';
-
-        // Google Drive: /view veya /edit -> /preview
-        if (url.includes('drive.google.com')) {
-            url = url.replace(/\/view(\?.*)?$/, '/preview')
-                     .replace(/\/edit(\?.*)?$/, '/preview');
-            if (!url.includes('/preview')) {
-                url = url.replace(/\/file\/d\/([^\/]+).*/, '/file/d/$1/preview');
-            }
-            return url;
-        }
-
-        // Canva: /view veya link -> embed linki
-        if (url.includes('canva.com')) {
-            if (!url.includes('embed')) {
-                const separator = url.includes('?') ? '&' : '?';
-                return `${url}${separator}embed`;
-            }
-            return url;
-        }
-
-        return url;
-    }, [step.pdfUrl]);
-
-    const isDrive = step.pdfUrl?.includes('drive.google.com');
-    const isCanva = step.pdfUrl?.includes('canva.com');
-    const isLocal = step.pdfUrl?.startsWith('/uploads/');
-
-    return (
-        <div className="w-full h-full flex flex-col p-2 md:p-4">
-            {/* Üst Bilgi ve Araç Çubuğu */}
-            <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border border-white/10 rounded-2xl mb-3 backdrop-blur-md flex-shrink-0">
-                <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="p-1.5 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex-shrink-0">
-                        <FileText className="w-4 h-4" />
-                    </span>
-                    <span className="font-black text-xs sm:text-sm text-white truncate max-w-xs sm:max-w-md">
-                        {step.title || 'PDF / Sunu Slaytı'}
-                    </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/10 text-slate-400 flex-shrink-0">
-                        {isDrive ? '📁 Google Drive' : isCanva ? '🎨 Canva' : isLocal ? '💾 Yüklenen PDF' : '📄 PDF Sunusu'}
-                    </span>
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                    <button
-                        type="button"
-                        onClick={() => setReloadKey(k => k + 1)}
-                        className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition-colors"
-                        title="Yeniden Yükle"
-                    >
-                        <RotateCcw className="w-4 h-4" />
-                    </button>
-                    {step.pdfUrl && (
-                        <a
-                            href={step.pdfUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-colors"
-                            title="Yeni Sekmede Aç"
-                        >
-                            <ExternalLink className="w-3.5 h-3.5" />
-                            <span className="hidden sm:inline">Yeni Sekmede Aç</span>
-                        </a>
-                    )}
-                </div>
-            </div>
-
-            {/* İçerik / iFrame */}
-            <div className="flex-1 w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-950 relative">
-                {embedUrl ? (
-                    <iframe
-                        key={reloadKey}
-                        src={embedUrl}
-                        title={step.title || 'PDF Sunumu'}
-                        className="w-full h-full border-0 bg-slate-900"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                    />
-                ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-2">
-                        <FileText className="w-12 h-12 text-slate-600" />
-                        <p className="text-sm font-bold">Geçerli bir PDF veya sunum bağlantısı bulunamadı.</p>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-}
 
 // 9. HtmlSlidePlayer
 function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, onSlideScrolledToEnd: () => void }) {
@@ -3933,6 +3839,9 @@ export function StepContent({
             
             case 'htmlSlide':
                  return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} />
+
+            case 'pdfSlide':
+                 return <PdfSlidePlayer step={step as PdfSlideStep} isFullscreen={isFullscreen} isTeacher={isTeacher} />
             
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;

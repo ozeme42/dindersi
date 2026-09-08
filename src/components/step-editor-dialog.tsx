@@ -33,6 +33,7 @@ import type {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram } from "@/lib/utils";
 import { LibraryImportDialog } from './library-import-dialog';
+import { PdfSlidePlayer, formatPdfEmbedUrl } from '@/components/pdf-slide-player';
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "./ui/checkbox";
 import { db } from "@/lib/firebase";
@@ -1806,18 +1807,16 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                     <span className="text-[10px] text-emerald-400 font-mono">Bağlantı Hazır</span>
                                 )}
                             </div>
-                            <div className="w-full h-[360px] rounded-2xl overflow-hidden border border-white/10 bg-slate-950 flex items-center justify-center">
+                            <div className="w-full h-[400px] rounded-2xl overflow-hidden border border-white/10 bg-slate-950 flex items-center justify-center">
                                 {pdfStep.pdfUrl ? (
-                                    <iframe 
-                                        src={formatPdfEmbedUrl(pdfStep.pdfUrl)} 
-                                        className="w-full h-full border-0 bg-slate-900" 
-                                        title="PDF Önizleme" 
-                                        allowFullScreen
-                                    />
+                                    <PdfSlidePlayer step={pdfStep} className="h-full" />
                                 ) : (
-                                    <div className="flex flex-col items-center justify-center text-slate-500 text-xs gap-2">
-                                        <FileText className="w-10 h-10 text-slate-600" />
-                                        <p>Yukarıya bir bağlantı girdiğinizde veya PDF yüklediğinizde önizleme burada belirecektir.</p>
+                                    <div className="flex flex-col items-center justify-center text-slate-500 text-xs gap-2 p-6 text-center">
+                                        <FileText className="w-12 h-12 text-slate-600 mb-1" />
+                                        <p className="font-bold text-slate-400">Canlı Slayt Önizlemesi</p>
+                                        <p className="text-[11px] text-slate-500 max-w-sm">
+                                            Yukarıya bir bağlantı girdiğinizde veya "PDF Yükle" ile dosya seçtiğinizde akıllı tahta uyumlu slayt oynatıcı burada belirecektir.
+                                        </p>
                                     </div>
                                 )}
                             </div>
