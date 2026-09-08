@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import {
     ChevronLeft,
     ChevronRight,
@@ -18,7 +19,8 @@ import {
     AlertTriangle,
     Layers,
     X,
-    Maximize
+    Maximize,
+    GripHorizontal
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -429,7 +431,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                             />
 
                             {/* Akıllı Tahta Yan Dokunmatik Geçiş Okları (Sadece tam ekran DEĞİLKEN görünür) */}
-                            {!isTrulyFullscreen && numPages > 1 && (
+                            {numPages > 1 && (
                                 <>
                                     <button
                                         type="button"
@@ -589,13 +591,25 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                 </div>
             )}
 
-            {/* ══ 4. YÜZEN ALT SLAYT GEÇİŞ DOCK'U (ASIL SLAYT ÇUBUĞU - HER ZAMAN ALTTA KALIR) ══ */}
+            {/* ══ 4. YÜZEN & TAŞINABİLİR SLAYT GEÇİŞ DOCK'U (ASIL SLAYT ÇUBUĞU - İSTENDİĞİ YERE TAŞINABİLİR) ══ */}
             {viewMode === 'slide' && numPages > 0 && (
-                <div className={cn(
-                    "absolute left-1/2 -translate-x-1/2 z-30 pointer-events-auto transition-all duration-200 animate-in slide-in-from-bottom-3",
-                    hasBottomDock ? "bottom-14 sm:bottom-16" : "bottom-4"
-                )}>
-                    <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-2xl bg-slate-950/85 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+                <motion.div
+                    drag
+                    dragMomentum={false}
+                    dragConstraints={playerWrapperRef}
+                    className={cn(
+                        "absolute left-1/2 -translate-x-1/2 z-30 pointer-events-auto",
+                        hasBottomDock ? "bottom-24 sm:bottom-28" : "bottom-12"
+                    )}
+                >
+                    <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.7)] select-none">
+                        {/* Taşıma Tutamacı */}
+                        <div 
+                            className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-slate-400 hover:text-white transition-colors flex items-center justify-center touch-none"
+                            title="Slayt çubuğunu ekranda istediğin yere sürükle"
+                        >
+                            <GripHorizontal className="w-4 h-4" />
+                        </div>
                         {/* İlk Slayt */}
                         <button
                             type="button"
@@ -713,7 +727,7 @@ export function PdfSlidePlayer({ step, isFullscreen, isTeacher, hasBottomDock = 
                             )}
                         </button>
                     </div>
-                </div>
+                </motion.div>
             )}
 
             {/* ══ 5. TÜM SLAYTLAR GRID SEÇİCİ MODAL ══ */}
