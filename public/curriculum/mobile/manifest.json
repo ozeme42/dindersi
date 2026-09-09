@@ -1,0 +1,1315 @@
+{
+  "classGroups": [
+    {
+      "name": "5",
+      "courses": [
+        {
+          "id": "9UqFYq2nwNkjBcq1mJ3o",
+          "title": "DKAB",
+          "units": [
+            {
+              "id": "jjotqKbHyi504QHH40ko",
+              "title": "1.Allah İnancı",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "QS6SmMl5nG9VgWL9LNEy",
+                  "title": "1.Evrendeki Mükemmel Düzen",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "swndbszog1ziSH0ODMbD",
+                  "title": "2.Allah’ın Varlığı ve Birliği",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "IEYZkuHJ4QovQfzCb0rK",
+                  "title": "3.Allah’ın Güzel İsimleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "o3LstHaGSpErMgGzE6s7",
+                  "title": "4. Bir Sure Öğreniyorum: İhlas Suresi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "vjkkjfl8lYIiW2miv1RF",
+              "title": "2.Namaz",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "5LOROWuGZ4Shxt6HvN87",
+                  "title": "1. Allah’ın Huzurunda Olmak: Namaz İbadeti",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "3RMHlR5ZxiP7uXQGRzFF",
+                  "title": "2. Namazın Kılınışı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "mu3fdrEPVeQCgTTaE1FY",
+                  "title": "3. Namaz İbadetinin İnsana Kazandırdıkları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "4fgyq1e8tIlXt8HCELq5",
+                  "title": "4. Bir Dua Öğreniyorum: Tahiyyat Duası",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "GzKsyNP1xTvEqZ7JwosQ",
+              "title": "3.Kur’an-ı Kerim",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "nCSko3vdCppLSNyxo3oV",
+                  "title": "1. Kur’an-ı Kerim’in İç Düzeni",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "L9tgWvrjwwQ0ZiP1I9fM",
+                  "title": "2. Kur’an-ı Kerim’in Temel Özellikleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "cM5YjYzqHJZRElEqUC7P",
+                  "title": "3. Kur’an-ı Kerim’in Ana Konuları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "pJmdJ5QVZnQnPTR6EBbp",
+                  "title": "4. Bir Sure Öğreniyorum: Kevser Suresi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "jKPXTstW3xKf0wa4VOiO",
+              "title": "4.Peygamber Kıssaları",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "lPpHsRG92kNHJU0MoMWv",
+                  "title": "1. Allah’ın Elçileri: Peygamberler",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "6tPpBFsPCP0obdMWwxEt",
+                  "title": "2. Kur’an-ı Kerim’den Öğütler: Peygamber Kıssaları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "dzpNubRRCP01y0JkK4iP",
+                  "title": "3. Peygamber Kıssalarında Verilen Mesajlar",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "cFr0dFbZJakpm1Sf8ywP",
+                  "title": "4. Bir Sure Öğreniyorum: Kureyş Suresi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "GBVRETHGn5BmIihw6Hfb",
+              "title": "5.Mimarimizde Dinî Motifler",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "neFq24AqTtndRKqm5P8B",
+                  "title": "1. Dinin Mimarimize Etkisi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "Cf0qsMqn6XmlV9TqDFRn",
+                  "title": "2. Camileri Tanıyalım",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "gz5AMuhk1t97DCN0J1zz",
+                  "title": "3. Kültürümüzden Cami Örnekleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "OgnmTvY8rxVpEIP45iq4",
+          "title": "SİYER",
+          "units": [
+            {
+              "id": "yz1rOJf7uA0eS6BRYJN7",
+              "title": "1. Çocukluk Yıllarında Peygamberimiz",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "H3jmr9SzfiEk77swWSlj",
+                  "title": "1. Peygamberimizin Doğduğu Çevre",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "6tZqy926Ef08vFzF22NE",
+                  "title": "2. Peygamberimizin Doğumu",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "ngCKnAHYPnDqAsGhMhPb",
+                  "title": "3. Peygamberimizin Çocukluğu",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "cUF2X2vchdqDFkcWMNkj",
+              "title": "2. Peygamberimizin Çevresindeki Çocuklar",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "p8jo7Z4fqVDN86bfhDlH",
+                  "title": "1. Peygamberimizin Çocuklarla İletişimi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "5leSpbBjVtIBxyaVqSZM",
+                  "title": "2. Çocukların Dünyasında Peygamberimiz",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "W0oWMb2NmbPD9loOa99m",
+                  "title": "3. Peygamberimizin Yanında Yetişen Çocuklar",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "KXaDVYOgeUiDEerxQ7jR",
+              "title": "3. Rehberim Peygamberim",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "Up7BoYzq04i66X9yHLJE",
+                  "title": "1. Peygamberimizin Temizlik Adabı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "B9ZrNo6WzlfdvpyRvYun",
+                  "title": "2. Peygamberimizin Yeme İçme Adabı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "E9N2CrvEzfymGt1ZUdQN",
+                  "title": "3. Peygamberimizin Giyim Kuşam Adabı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "g5vZnJOuq1Bg3hSVaYGZ",
+              "title": "4. Aile Hayatında Peygamberimiz",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "wWinK81GaTqLZJXQkUAz",
+                  "title": "1.Aile Hayatında Peygamberimiz",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "ZbuhKsMwd4wNNdqKjmix",
+                  "title": "2. Eş Olarak Peygamberimiz",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "z1YDBRrCZCGKowz4eKSv",
+                  "title": "3. Baba Olarak Peygamberimiz",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "2y9CiJBiSgoDWpVW9zjL",
+                  "title": "4. Dede Olarak Peygamberimiz",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6",
+      "courses": [
+        {
+          "id": "e6sa39FUi02TyzJpvQ89",
+          "title": "SİYER",
+          "units": [
+            {
+              "id": "0M2x5SEKuVmzS3qhwvPk",
+              "title": "1. Ünite: Gençlik Yıllarında Peygamberimiz",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "ZpSlPFDrP0e9PXiVO8j3",
+                  "title": "1. Ahlaki Özellikleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "E0COJoAYyPcafu6f6Fv8",
+                  "title": "2. Vahyin Gelişi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "t9HH1JF2D3UIsCnmUkWa",
+              "title": "2. Ünite: Peygamberimizin Çevresindeki Gençler",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "CABMw8YASITwhLjQfkh3",
+                  "title": "1. Peygamberimizin Gençlerle İletişimi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "7NysIGMqjCFARRJ9K4iZ",
+                  "title": "2. Gençlerin Dünyasında Peygamberimiz",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "PCxPOaMuvmnHDJoVXttx",
+                  "title": "3. Peygamberimizin Yanında Yetişen Gençler",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "ARSRniTfx324ZswltLyy",
+              "title": "3. Ünite: Rehberim Peygamberim",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "LuhvCsCnnHRijECrewoN",
+                  "title": "1. Peygamberimizin Allah'a Bağlılığı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "avEzguf40OWvPgXJgHcz",
+                  "title": "2. Peygamberimizin Hayatında Namaz",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "olwWE2RkQXNg6J31Lnjh",
+                  "title": "3. Peygamberimizin Hayatında Şükür",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "03lmGqXTa8ejb174SiHt",
+              "title": "4. Ünite: Toplumsal Hayatta Peygamberimiz",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "s1RCsv1AmmHznus7cQKJ",
+                  "title": "1. Peygamberimizin Toplumsal İlişkileri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "OrffTi3elMwxMs0kmH7Z",
+                  "title": "2. Peygamberimiz ve Çevre Bilinci",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "jNuWVWjo3Mq4RegZIVVH",
+          "title": "Kuran-ı Kerim",
+          "units": [
+            {
+              "id": "waqliNVrLS4mJP6QVbBS",
+              "title": "1. KUR'AN-I KERİM'İ TANIYORUM",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "ZlTdsHQ6o8sWDNd5Qz9I",
+                  "title": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "Lo5XBOdDV8gW1cIZh9GU",
+                  "title": "2. Peltek Harfler",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "cONSl3a3UxrS7TmLpCcQ",
+                  "title": "3. Bakara Suresinin 84-105. Ayetleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "DmQe81iBqwQN4tj4Ti4e",
+                  "title": "4. Salli ve Barik Duaları ile Anlamları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "yDwjSO7M7Ot3msZAAqLc",
+              "title": "2. KUR'AN-I KERİM'İ OKUMAYA GİRİŞ",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "rSisRECCjZf50AVCcHcS",
+                  "title": "1. Med Çeşitleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "2p8trwfp4ILtZcaUHV2v",
+                  "title": "2. Bakara Suresinin 106-134. Ayetleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "w3PVzw9mjwTTX7wpkqjR",
+                  "title": "3. Kur'an Kıssalarından Hayata: Hz. Yunus",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "c8qmRrGpY6sMSlNz6gVI",
+                  "title": "4. Kureyş Suresi ve Anlamı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "KrENViMJXNS0NcEGA9NA",
+              "title": "3. KUR'AN-I KERİM'İ ÖĞRENİYORUM",
+              "hasUnitOzet": true,
+              "hasFlowContent": false,
+              "topics": []
+            },
+            {
+              "id": "ACNDvhlmgWO1ai3MBYxa",
+              "title": "4. KUR'AN-I KERİM'İ OKUYORUM",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": []
+            }
+          ]
+        },
+        {
+          "id": "r5TWTCIlp018sP37lPL3",
+          "title": "DKAB",
+          "units": [
+            {
+              "id": "JiPLN1sC9hQG8PF6us3G",
+              "title": "1️⃣ Peygamber ve İlahi Kitap İnancı",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "dUlyD8ZkXXJV4GUNBPnO",
+                  "title": "1.İnsanlara Rehber: Peygamber",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "2TAyt6nuUy6IshR4FOJD",
+                  "title": "2.Peygamberlerin İlettiği Mesaj: Vahiy",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "E2aSkPn1Md3Hzk5HN0Pw",
+                  "title": "3.İlahi Kitaplar",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "sKQLddYwFN48D7kA4yPd",
+                  "title": "4.Bir Sure Öğreniyorum: Felak Suresi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "HaG39Z2i3AIE1XQznLZw",
+              "title": "2️⃣ Ramazan ve Oruç",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "lqcPizeedgkmT1jt4Dll",
+                  "title": "1.Oruç ve Kur’an Ayı Ramazan",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "xFJRrKv6Pu6LK0Exwgjz",
+                  "title": "2.Oruç İbadeti",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "ywfC564wdaGrMXDQYOiX",
+                  "title": "3.Oruç İbadetinin İnsana Kazandırdıkları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "5kqDLUxuero8jzCSE6Ao",
+                  "title": "4.Bir Dua Öğreniyorum: İftar Duası",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "wUVGPKdq7yagCGD7wtRK",
+              "title": "3️⃣ Ahlaki Davranışlar",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "flcDmSUgs68wkQNPIi58",
+                  "title": "1.Doğru Sözlü Olmak",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "oqBiWJeIxUHCq4hogKQc",
+                  "title": "2.Merhametli Olmak",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "vRXPNsriVkZKk9ndhOw2",
+                  "title": "3.Adap ve Nezaket Kurallarına Uymak",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "KE5H7oRL74FA4s1l7FTg",
+                  "title": "4.Vatanımızı Sevmek",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "DponYCF3at5EHJaPRi0q",
+                  "title": "5.Bir Dua Öğreniyorum: Kunut Duaları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "Hkzo15hb37oOcwf2WDHq",
+              "title": "4️⃣ Peygamberliğinden Önce Hz. Muhammed",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "BPKtRX6eve1zlZ0svzbX",
+                  "title": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "nrV3kdiYM7TKs46bppjl",
+                  "title": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "x0Rh2GtQ42SgI3h5C0EG",
+                  "title": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "TW2PjrNJipIWPFqo8hKO",
+                  "title": "4.Bir Sure Öğreniyorum: Fil Suresi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "bYhBIoJ6Fe9QnpweyMtk",
+              "title": "5️⃣ Kültürümüzdeki Dinî Motifler",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "uu0Uh2HmlXjWXYBrujL7",
+                  "title": "1.Geleneğimizde Dinin İzleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "RUvgcUXaGIA7uEnogtbA",
+                  "title": "2.Edebiyatımızda Dinin İzleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "lzNigntTSFsCjjVPD7JY",
+                  "title": "3.Musikimizde Dinin İzleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "7",
+      "courses": [
+        {
+          "id": "134DwgMfh8VYogm3gDyh",
+          "title": "DKAB",
+          "units": [
+            {
+              "id": "UxthoHWEf7GS47946uOO",
+              "title": "1. ÜNİTE: MELEK VE AHİRET İNANCI",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "Ukyvqbloj0GtGTMJy69q",
+                  "title": "1.Görülen ve Görülemeyen Varlıklar",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "tfeCAQG5i7TZqRzT709w",
+                  "title": "2.Melekler ve Özellikleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "Q0Ge0ZTKzF62Iz45j0bC",
+                  "title": "3.Dünya ve Ahiret Hayatı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "58Th1CNKsmeQCwKM4Gvn",
+                  "title": "4.Ahiret Hayatının Aşamaları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "9ndR1mzheXltaAN9NyzF",
+                  "title": "5.Ahiret İnancının İnsan Davranışlarına Etkisi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "yaJy98B8g4yl7BnE1em6",
+                  "title": "6.Bir Peygamber Tanıyorum: Hz. İsa (as)",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "AH9q9qkeNckz79kv2nny",
+                  "title": "7.Bir Sure Tanıyorum: Nas Suresi ve Anlamı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "cl2EvUjXPPI922VAJMbq",
+              "title": "2. ÜNİTE: HAC VE KURBAN",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "I7Vz4s8Jx5JUdgawb9xV",
+                  "title": "1.İslam'da Hac İbadeti ve Önemi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "dc04iAknMgyOChAQ2VLc",
+                  "title": "2.Haccın Yapılışı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "sp4f5zfBr5q4YoXsJv79",
+                  "title": "3.Umre ve Önemi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "hfO1uzccryKQEoeNuJve",
+                  "title": "4.Kurban İbadeti ve Önemi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "LfcwYoVtQ6gG2awjlmgp",
+                  "title": "5.Bir Peygamber Tanıyorum: Hz. İsmail (as)",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "ATyIH6b4IH4jIoJPFBag",
+                  "title": "6.Bir Ayet Tanıyorum: Enam Suresi 162. Ayet ve Anlamı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "S4vHNS7w2VUuvZqbVTT6",
+              "title": "3. ÜNİTE: AHLAKİ DAVRANIŞLAR",
+              "hasUnitOzet": false,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "KCTvfHs1RNT4knKoIZMY",
+                  "title": "1.Güzel Ahlaki Tutum ve Davranışlar",
+                  "hasOzetContent": false,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "8FMpkTiJDwoz2umSkwV0",
+                  "title": "2.Bir Peygamber Tanıyorum: Hz. Salih (as)",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "odxVS39Y2izeqEWdHTrc",
+                  "title": "3.Bir Sure Tanıyorum: Felak Suresi ve Anlamı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "R6ulkTTFVnsPd764qowc",
+              "title": "4. ÜNİTE: ALLAH'IN KULU VE ELÇİSİ: HZ. MUHAMMED",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "lvfdJ9wBRN0Iq79Aq64I",
+                  "title": "1.Allah'ın (cc) Kulu Hz. Muhammed (sav)",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "AihejxFunV1NY7Ovqbxz",
+                  "title": "2.Allah'ın (cc) Elçisi Hz. Muhammed (sav)",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "q8MBLUpjdz79Tsxp3sQg",
+                  "title": "3.Bir Sure Tanıyorum: Kâfirun Suresi ve Anlamı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "MqW1hqa13Xs1eazQdLz8",
+              "title": "5. ÜNİTE: İSLAM DÜŞÜNCESİNDE YORUMLAR",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "IE0lbIBjejbHV1wpGXq8",
+                  "title": "1.Din Anlayışındaki Yorum Farklılıklarının Sebepleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "fIf8S6WYfRzOAF8pUKJP",
+                  "title": "2.İslam Düşüncesinde Yorum Biçimleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "yAitkNPFLaQUEP5eO0i4",
+                  "title": "3.İslam Düşüncesinde Tasavvufi Yorumlar",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4avHLZ3cLvZA9baoT3vh",
+          "title": "Temel Dini Bilgiler 2",
+          "units": [
+            {
+              "id": "SodNyPtywUPtDCuMJjGy",
+              "title": "3. ÜNİTE İSLAM’IN DİREĞİ NAMAZ",
+              "hasUnitOzet": true,
+              "hasFlowContent": false,
+              "topics": []
+            },
+            {
+              "id": "e5TNkkij3WOXadlPI4jC",
+              "title": "4. ÜNİTE İSLAM VE GÜNLÜK HAYAT",
+              "hasUnitOzet": true,
+              "hasFlowContent": false,
+              "topics": []
+            }
+          ]
+        },
+        {
+          "id": "XboyC5jGWhYxh8RHYtrC",
+          "title": "SİYER",
+          "units": [
+            {
+              "id": "C0M499utiLGh647x2cnp",
+              "title": "1. Ünite: Peygamberimizin Mekke Yılları",
+              "hasUnitOzet": false,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "T326A9OOHtWd4mU6bN2r",
+                  "title": "1. Peygamberimizin Çocukluk ve Gençlik Yılları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "6FQTyaJFs3bjPjAa2OwO",
+                  "title": "2. Peygamberimizin Mekke Yılları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "SOxu0mWeXh96N3t9qo6a",
+                  "title": "3. Peygamberimizin Medine Yılları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "CLRnK4WzxcZiHtBctLdJ",
+              "title": "4. Ünite: En Güzel Örnek Peygamberimiz",
+              "hasUnitOzet": true,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "JeAHyFFh3qHp3xqqBmon",
+                  "title": "1. Peygamberimizin İbadet Hayatı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "UoalPl5R9L171dTN77Wj",
+                  "title": "2. Peygamberimizin Hayatında Ramazan ve Oruç",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "ZwMkO3aWUOCdqbxmJsfb",
+                  "title": "3. Peygamberimizin Giyim Kuşam Adabı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "VEWFY0LgLVp8G2RpXtn2",
+                  "title": "4. Peygamberimizin Nezaketi ve Hilmi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "3yBH0rGtnkkWFijmZn5h",
+              "title": "5. Ünite: Sahabeden Örnek Davranışlar",
+              "hasUnitOzet": true,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "Zg3pqvcjkb84lYwys9cK",
+                  "title": "1. Sahabenin Cesaret ve Sadakati",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "RvvZOsI8Vu8juxnufoGV",
+                  "title": "2. Sahabenin Yardımlaşma ve Dayanışması",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "I3cxlwVaU0XovoGuzR7Z",
+                  "title": "3. Sahabenin Azmi ve Fedakârlığı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "PqkYDI0IbvELcbK6ooNX",
+              "title": "2. Ünite: Peygamberimizin Evrensel Mesajları",
+              "hasUnitOzet": false,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "tt4v21i5nr1gWUL0aTmf",
+                  "title": "1. İnsanların Dokunulmazlıklarının Gözetilmesi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "YX3z80lliabfu86zXY0S",
+                  "title": "2. Adaletin Gözetilmesi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "lhsjMp5YQn1mVuxMGjxT",
+                  "title": "3. Kul Hakkının Gözetilmesi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "fxcdLENmB3QrRrZQN89p",
+                  "title": "4. Emanetin Gözetilmesi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "UiDbII92rXdWkFHhp5i7",
+              "title": "3. Ünite: Peygamberimiz ve Yakın Çevresi",
+              "hasUnitOzet": false,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "1tlWbYxDctomiuwNtCNS",
+                  "title": "1. Peygamberimizin Ehlibeyti",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "uJPG1H7YhrF8dGx9LGgs",
+                  "title": "2. İdeal Bir Eş Olarak Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "oN6xMOGO1pIDIVl3kMAi",
+                  "title": "3. Şefkatli Bir Baba Olarak Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "okvbNhNzAHZ5n76LuXql",
+                  "title": "4. Vefalı Bir Akraba Olarak Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "4OQHc69ENUrmTlPfnRSk",
+                  "title": "5. Hayırlı Bir Komşu Olarak Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gpq2vTVj1bGDx7rcFJaY",
+          "title": "Kuran-ı Kerim",
+          "units": [
+            {
+              "id": "msqJYw3ckVTRyYuf9ss5",
+              "title": "1. ÜNİTE: KUR'AN-I KERİM'İ TANIYALIM",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "boS1oBIqIGLq1IabkWbQ",
+                  "title": "1. Kur'an-ı Kerim'in İslam Dinindeki Yeri ve Önemi",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "6d0INrzlzU8uzwQgrYTM",
+                  "title": "2. Kur'an'ın Mesajını Anlıyorum",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "NslHDgkQ00RYFdUMEIiq",
+              "title": "2. ÜNİTE: KUR'AN-I KERİM'İ GÜZEL OKUMA",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "DfiS046CJeUxpxjkjnMH",
+                  "title": "1. Okunacak Sure ve Ayetler",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "8XclbJO7kh9xMa9neqF6",
+                  "title": "2. Tecvit Bilgisi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "o35jyAnmlpnbctae84RV",
+                  "title": "3. Ezberlenecek Dualar, Sureler ve Anlamları",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "8",
+      "courses": [
+        {
+          "id": "A7wqX0KGBXmjOjmousTW",
+          "title": "SİYER",
+          "units": [
+            {
+              "id": "SNRLm7EECvhhjiBUXsNH",
+              "title": "1. ÜNİTE Peygamberimizin Medine Yılları",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "JbuNTNSHvYAlwDZqqo6Q",
+                  "title": "1. Peygamberimizin Çocukluk ve Gençlik Yılları",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "hW1cysRnSTzDimYTupHG",
+                  "title": "2. Peygamberimizin Mekke Yılları ve Hicret",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "Ldxz2qifEx1ZJqkIGu49",
+                  "title": "3. Peygamberimizin Medine Yılları",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "N1edCY8qTCmVKZTIvNz1",
+              "title": "3. ÜNİTE Peygamberimiz ve Sosyal Hayat",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "G7frpSqgQdJj7Le5lv1o",
+                  "title": "1. Adil Bir Yönetici Olarak Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "ivtx5tobjomiuTBDedJC",
+                  "title": "2. Sosyal Sorunların Çözümünde Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "UfJbkQbczrlK8FlXbQNo",
+                  "title": "3. Çalışma Hayatı ve Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "j6SRG6k46LEhS3ZKt29J",
+                  "title": "4. Çevre Bilinci ve Peygamberimiz",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "KzTOrQApRKClLZ2mlrym",
+              "title": "4. ÜNİTE En Güzel Örnek Peygamberimiz",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "ixIaFvMyOiNuPqrnY3dO",
+                  "title": "1. Peygamberimizin Hayatında Dünya ve Ahiret Dengesi",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "M2T6RqQGXC65WATAec3S",
+                  "title": "2. Peygamberimizin Hayatında İnfak ve Sadaka",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "TaupJyMOyIY7Q54BAIH2",
+                  "title": "3. Peygamberimizin Hayatında Sadelik",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "Aiy4sHDxGjfQo6JZri0h",
+                  "title": "4. Peygamberimizin Affedici Olması",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "qkdbhUvaCfWKVJaii9iN",
+              "title": "5. ÜNİTE İslam Daveti ve Sahabe",
+              "hasUnitOzet": true,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "QQ0f6BPz1Lz7hEI1dBMV",
+                  "title": "1. İslam Davetinde Sahabenin Rolü",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "gMqEN3OhsAJCWAxnQWYI",
+                  "title": "2. Âlim Sahabiler",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "1MKwSn3XOYYEs1THjF9e",
+                  "title": "3. Şehit Sahabiler",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "8h7JwF3M909ZeOTKqbrA",
+          "title": "DKAB",
+          "units": []
+        }
+      ]
+    }
+  ]
+}

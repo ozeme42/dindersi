@@ -112,6 +112,14 @@ async function syncAll() {
   }
   console.log(`✅ ${qCount} farklı konu için soru dosyaları güncellendi.`);
 
+  // version.json güncelle
+  const versionPath = path.join(curriculumDir, 'version.json');
+  fs.writeFileSync(versionPath, JSON.stringify({
+    version: Date.now(),
+    updatedAt: new Date().toISOString(),
+  }, null, 2), 'utf8');
+  console.log(`✅ version.json güncellendi.`);
+
   console.log('\n🎉 Tüm Akıllı Tahta verileri başarıyla yerel dosyalara aktarıldı!');
   process.exit(0);
 }
