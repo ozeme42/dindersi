@@ -460,7 +460,7 @@ export default function ExamQuestionBankPage() {
                 console.warn("Firestore query error:", queryErr);
             }
 
-            if (fetchedQuestions.length === 0) {
+            if (fetchedQuestions.length === 0 && (topicCounts[topicId] || 0) > 0) {
                 try {
                     const staticRes = await fetch(`/curriculum/questions/${topicId}.json`);
                     if (staticRes.ok) {

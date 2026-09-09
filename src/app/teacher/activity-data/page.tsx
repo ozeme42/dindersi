@@ -489,7 +489,7 @@ export default function ActivityDataManagementPage() {
                 console.warn("Firestore query error for topic items:", queryErr);
             }
 
-            if (fetchedItems.length === 0) {
+            if (fetchedItems.length === 0 && (topicCounts[topicId] || 0) > 0) {
                 try {
                     const staticRes = await fetch(`/curriculum/activityItems/${topicId}.json`);
                     if (staticRes.ok) {

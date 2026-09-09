@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -105,6 +106,9 @@ export function QuestionEditorDialog({
              </div>
              {editedQuestion.id.startsWith('new-') ? 'Yeni Soru Oluştur' : `Soru ${editingState.index + 1} Düzenle`}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+             Soru düzenleme ve oluşturma formu
+          </DialogDescription>
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">

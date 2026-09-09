@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. Sınıf Kur'an-ı Kerim - Salli ve Barik Duaları</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .font-arabic { font-family: 'Amiri', serif; }
+        .tab-btn.active { background-color: #0d9488; color: white; border-color: #0d9488; shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- ÜST BİLGİ DOKUSU / HEADER -->
+    <header class="bg-emerald-900 text-white shadow-xl border-b-4 border-amber-400 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-4">
+                <div class="bg-amber-400 text-emerald-950 p-3 rounded-2xl shadow-lg font-black text-xl flex items-center justify-center w-12 h-12">
+                    6
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-300">
+                        <span>1. TEMA: KUR'AN-I KERİM'İ TANIYORUM</span>
+                        <span>•</span>
+                        <span>DERS ÖZETİ</span>
+                    </div>
+                    <h1 class="text-2xl font-extrabold text-white tracking-tight">1.4. Salli ve Barik Duaları ile Anlamları</h1>
+                </div>
+            </div>
+            
+            <div class="flex items-center bg-emerald-800/80 px-4 py-2 rounded-xl border border-emerald-700/50 text-xs font-medium text-emerald-100">
+                <i class="fa-solid fa-graduation-cap text-amber-300 mr-2 text-base"></i>
+                MEB Akıllı Tahta İnteraktif Ders Materyali
+            </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK KONTROL PANELİ (TABS) -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+        
+        <!-- NAVİGASYON SEKMELERİ -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6 bg-slate-200/80 p-1.5 rounded-2xl border border-slate-300">
+            <button onclick="switchTab('ozet')" id="tab-ozet" class="tab-btn active py-3 px-4 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Konu Özet & Kavramlar</span>
+            </button>
+            <button onclick="switchTab('dualar')" id="tab-dualar" class="tab-btn py-3 px-4 bg-white text-slate-700 rounded-xl font-bold text-sm sm:text-base hover:bg-slate-50 transition-all duration-200 flex items-center justify-center gap-2 border border-slate-200">
+                <i class="fa-solid fa-hands-praying"></i>
+                <span>Dualar ve Okunuşları</span>
+            </button>
+            <button onclick="switchTab('grafik')" id="tab-grafik" class="tab-btn py-3 px-4 bg-white text-slate-700 rounded-xl font-bold text-sm sm:text-base hover:bg-slate-50 transition-all duration-200 flex items-center justify-center gap-2 border border-slate-200">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Okunduğu Yerler</span>
+            </button>
+            <button onclick="switchTab('etkinlik')" id="tab-etkinlik" class="tab-btn py-3 px-4 bg-white text-slate-700 rounded-xl font-bold text-sm sm:text-base hover:bg-slate-50 transition-all duration-200 flex items-center justify-center gap-2 border border-slate-200">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Etkinlik ve Ölçme</span>
+            </button>
+        </div>
+
+        <!-- SEKME 1: KONU ÖZETİ VE KAVRAMLAR -->
+        <div id="content-ozet" class="tab-content space-y-6">
+            
+            <!-- KAVRAM KUTULARI -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-2xl p-5 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg font-bold shadow-md">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <h3 class="font-extrabold text-lg text-emerald-900">Salavat Nedir?</h3>
+                    </div>
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        Sözlükte <strong>Hz. Muhammed'e (sav) saygı bildirmek</strong> için okunan dua anlamına gelir. Peygamber'i sevme, onun için rahmet ve bereket dilemeyi, manevi şahsiyetini selamlamayı ifade eder.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-5 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg font-bold shadow-md">
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+                        </div>
+                        <h3 class="font-extrabold text-lg text-amber-900">Dua Nedir?</h3>
+                    </div>
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        Kavram kutusu tanımına göre dua; <strong>saygı gösterme, önem verme ve rahmet</strong> gibi anlamlara gelmektedir. (bk. Mertoğlu, "Salâtü Selâm")
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-5 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg font-bold shadow-md">
+                            <i class="fa-solid fa-users text-base"></i>
+                        </div>
+                        <h3 class="font-extrabold text-lg text-blue-900">Salli & Barik Duaları</h3>
+                    </div>
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        Yüce Allah'tan Peygamber Efendimiz ve ailesine <strong>rahmet ve bereket</strong> verilmesi istenir. Müslümanlar bu dualarla <strong>Hz. İbrahim ve ailesini</strong> de hatırlar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- AYET VE HADİSLER KUTUSU -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden">
+                <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-quran text-amber-400 text-xl"></i>
+                        <h2 class="font-extrabold text-lg tracking-wide">Ayet ve Hadis-i Şerifler</h2>
+                    </div>
+                    <span class="text-xs bg-slate-800 text-amber-300 px-3 py-1 rounded-full font-semibold border border-amber-400/30">Metinde Geçen Kaynaklar</span>
+                </div>
+
+                <div class="p-6 space-y-6">
+                    <!-- Kur'an Ayeti -->
+                    <div class="p-5 bg-emerald-50/70 border-l-4 border-emerald-600 rounded-r-2xl">
+                        <div class="flex items-center gap-2 text-emerald-800 font-bold text-xs uppercase tracking-wider mb-2">
+                            <i class="fa-solid fa-book-quran"></i> Kur'an-ı Kerim
+                        </div>
+                        <p class="text-slate-800 font-medium text-base sm:text-lg italic leading-relaxed">
+                            "Şüphesiz Allah (cc) ve melekleri Hz. Peygamber'e salat ediyorlar. Ey iman edenler! Siz de ona salat edin, selam edin."
+                        </p>
+                    </div>
+
+                    <!-- Hadisler Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <span class="inline-block text-xs font-bold text-teal-700 bg-teal-100 px-2 py-0.5 rounded mb-2">Hadis-i Şerif (Yakınlık)</span>
+                                <p class="text-xs text-slate-700 italic">"Kıyamet günü insanların bana en yakını, bana en çok salavat getirendir."</p>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-3 font-semibold">— Hz. Muhammed (sav)</span>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <span class="inline-block text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded mb-2">Hadis-i Şerif (Dua Adabı)</span>
+                                <p class="text-xs text-slate-700 italic">"Biriniz dua edeceği zaman önce Yüce Rabb'ine hamd ve sena etmekle başlasın, sonra Hz. Peygamber'e salat getirsin. Daha sonra da dilediği şekilde dua etsin."</p>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-3 font-semibold">— Hz. Muhammed (sav)</span>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <span class="inline-block text-xs font-bold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded mb-2">Hadis-i Şerif (Cuma Günü)</span>
+                                <p class="text-xs text-slate-700 italic">"...O günde bana çok salavat getirin çünkü sizin salavatınız bana arz olunur."</p>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-3 font-semibold">— Hz. Muhammed (sav)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AKILDA KALICI PÜF NOKTA -->
+            <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-5 text-white shadow-lg flex items-center gap-4">
+                <div class="bg-white/20 p-4 rounded-xl text-2xl flex-shrink-0">
+                    <i class="fa-solid fa-lightbulb text-amber-200"></i>
+                </div>
+                <div>
+                    <h4 class="font-extrabold text-lg text-amber-100">🎯 Sınav & Ders İpucu: Hz. Peygamber’in Örnekliği</h4>
+                    <p class="text-sm text-white/90 leading-relaxed">
+                        Sahabe nasıl salavat getireceklerini sorduğunda Peygamberimiz onlara <strong>Salli ve Barik dualarını</strong> öğretmiştir. Ayrıca mescide girerken ve çıkarken salavat getirerek <em>"Rabbim günahlarımı bağışla, bana rahmet kapılarını aç."</em> diye dua etmiş ve ümmetine örnek olmuştur.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SEKME 2: DUALAR VE OKUNUŞLARI (EZBER ETKİNLİKLİ) -->
+        <div id="content-dualar" class="tab-content hidden space-y-6">
+            
+            <!-- ALLAHÜMME SALLİ -->
+            <div class="bg-white rounded-3xl border-2 border-emerald-300 shadow-md overflow-hidden">
+                <div class="bg-emerald-700 text-white px-6 py-4 flex justify-between items-center">
+                    <h2 class="font-extrabold text-xl flex items-center gap-2">
+                        <i class="fa-solid fa-star-and-crescent text-amber-300"></i> Allahümme Salli Duası
+                    </h2>
+                    <span class="text-xs bg-emerald-800 px-3 py-1 rounded-full text-emerald-200 border border-emerald-600">Kaynak: Müslim, "Salât", 65</span>
+                </div>
+                
+                <div class="p-6 space-y-6">
+                    <!-- Arapça Metin -->
+                    <div class="bg-emerald-50/50 p-6 rounded-2xl text-center border border-emerald-100">
+                        <p class="font-arabic text-2xl sm:text-3xl md:text-4xl text-emerald-950 font-bold leading-loose tracking-wide dir-rtl" dir="rtl">
+                            اَللَّهُمَّ صَلِّ عَلٰى مُحَمَّدٍ وَعَلٰى اٰلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلٰى اِبْرَاهِيمَ وَعَلٰى اٰلِ اِبْرَاهِيمَ اِنَّكَ حَمِيدٌ مَجِيدٌ
+                        </p>
+                    </div>
+
+                    <!-- Türkçe Anlamı -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Türkçe Anlamı:</h4>
+                        <p class="text-slate-800 font-medium text-base">
+                            "Allah'ım! Hz. Muhammed'e ve ailesine, Hz. İbrahim'e ve ailesine rahmet eylediğin gibi rahmet et. Şüphesiz sen, övgüye en layık ve şanı en yüce olansın."
+                        </p>
+                    </div>
+
+                    <!-- Ezber Etkinliği 3 Bölüm -->
+                    <div class="border-t border-slate-200 pt-4">
+                        <h4 class="text-sm font-bold text-emerald-800 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group"></i> Etkinlik 9: Adım Adım Ezberleme Yöntemi
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="p-3 bg-white border border-slate-200 rounded-xl">
+                                <span class="text-[11px] font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded">1. Bölüm</span>
+                                <p class="font-arabic text-lg text-right text-slate-800 my-2" dir="rtl">اَللَّهُمَّ صَلِّ عَلٰى مُحَمَّدٍ وَعَلٰى اٰلِ مُحَمَّدٍ</p>
+                            </div>
+                            <div class="p-3 bg-white border border-slate-200 rounded-xl">
+                                <span class="text-[11px] font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded">2. Bölüm</span>
+                                <p class="font-arabic text-lg text-right text-slate-800 my-2" dir="rtl">كَمَا صَلَّيْتَ عَلٰى اِبْرَاهِيمَ وَعَلٰى اٰلِ اِبْرَاهِيمَ</p>
+                            </div>
+                            <div class="p-3 bg-white border border-slate-200 rounded-xl">
+                                <span class="text-[11px] font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded">3. Bölüm</span>
+                                <p class="font-arabic text-lg text-right text-slate-800 my-2" dir="rtl">اِنَّكَ حَمِيدٌ مَجِيدٌ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALLAHÜMME BARİK -->
+            <div class="bg-white rounded-3xl border-2 border-teal-300 shadow-md overflow-hidden">
+                <div class="bg-teal-700 text-white px-6 py-4 flex justify-between items-center">
+                    <h2 class="font-extrabold text-xl flex items-center gap-2">
+                        <i class="fa-solid fa-star-and-crescent text-amber-300"></i> Allahümme Barik Duası
+                    </h2>
+                    <span class="text-xs bg-teal-800 px-3 py-1 rounded-full text-teal-200 border border-teal-600">Kaynak: Müslim, "Salât", 65</span>
+                </div>
+                
+                <div class="p-6 space-y-6">
+                    <!-- Arapça Metin -->
+                    <div class="bg-teal-50/50 p-6 rounded-2xl text-center border border-teal-100">
+                        <p class="font-arabic text-2xl sm:text-3xl md:text-4xl text-teal-950 font-bold leading-loose tracking-wide dir-rtl" dir="rtl">
+                            اَللَّهُمَّ بَارِكْ عَلٰى مُحَمَّدٍ وَعَلٰى اٰلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلٰى اِبْرَاهِيمَ وَعَلٰى اٰلِ اِبْرَاهِيمَ اِنَّكَ حَمِيدٌ مَجِيدٌ
+                        </p>
+                    </div>
+
+                    <!-- Türkçe Anlamı -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Türkçe Anlamı:</h4>
+                        <p class="text-slate-800 font-medium text-base">
+                            "Allah'ım! Hz. Muhammed'e ve ailesine, Hz. İbrahim'in ailesine bereket ihsan ettiğin gibi bereket ihsan eyle! Şüphesiz sen, övgüye en layık ve şanı en yüce olansın."
+                        </p>
+                    </div>
+
+                    <!-- Ezber Etkinliği 3 Bölüm -->
+                    <div class="border-t border-slate-200 pt-4">
+                        <h4 class="text-sm font-bold text-teal-800 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group"></i> Etkinlik 9: Adım Adım Ezberleme Yöntemi
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="p-3 bg-white border border-slate-200 rounded-xl">
+                                <span class="text-[11px] font-bold text-teal-600 bg-teal-100 px-2 py-0.5 rounded">1. Bölüm</span>
+                                <p class="font-arabic text-lg text-right text-slate-800 my-2" dir="rtl">اَللَّهُمَّ بَارِكْ عَلٰى مُحَمَّدٍ وَعَلٰى اٰلِ مُحَمَّدٍ</p>
+                            </div>
+                            <div class="p-3 bg-white border border-slate-200 rounded-xl">
+                                <span class="text-[11px] font-bold text-teal-600 bg-teal-100 px-2 py-0.5 rounded">2. Bölüm</span>
+                                <p class="font-arabic text-lg text-right text-slate-800 my-2" dir="rtl">كَمَا بَارَكْتَ عَلٰى اِبْرَاهِيمَ وَعَلٰى اٰلِ اِبْرَاهِيمَ</p>
+                            </div>
+                            <div class="p-3 bg-white border border-slate-200 rounded-xl">
+                                <span class="text-[11px] font-bold text-teal-600 bg-teal-100 px-2 py-0.5 rounded">3. Bölüm</span>
+                                <p class="font-arabic text-lg text-right text-slate-800 my-2" dir="rtl">اِنَّكَ حَمِيدٌ مَجِيدٌ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SEKME 3: BİLGİ GRAFİĞİ - OKUNDUĞU YERLER -->
+        <div id="content-grafik" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-md">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="text-xs font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full uppercase tracking-wider">Bilgi Grafiği 1.2</span>
+                    <h2 class="text-2xl font-black text-slate-900 mt-2">Salli ve Barik Dualarının Okunduğu Bazı Yerler</h2>
+                    <p class="text-sm text-slate-600 mt-1">Ders kitabında belirtilen salavat ve Salli-Barik dualarının okunduğu özel anlar:</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                    <!-- Kart 1 -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 p-5 rounded-2xl flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl mb-3 shadow-md">
+                            <i class="fa-solid fa-person-praying"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-800">Vakit Namazlarında</h4>
+                        <p class="text-xs text-slate-500 mt-1">Namazların son oturuşunda Tahiyyat'tan sonra</p>
+                    </div>
+
+                    <!-- Kart 2 -->
+                    <div class="bg-gradient-to-br from-teal-50 to-white border-2 border-teal-200 p-5 rounded-2xl flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+                        <div class="w-14 h-14 rounded-2xl bg-teal-600 text-white flex items-center justify-center text-2xl mb-3 shadow-md">
+                            <i class="fa-solid fa-mosque"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-800">Mescide Girerken / Çıkarken</h4>
+                        <p class="text-xs text-slate-500 mt-1">Mescide giriş ve çıkış dualarında</p>
+                    </div>
+
+                    <!-- Kart 3 -->
+                    <div class="bg-gradient-to-br from-blue-50 to-white border-2 border-blue-200 p-5 rounded-2xl flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl mb-3 shadow-md">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-800">Ezan Dinlerken</h4>
+                        <p class="text-xs text-slate-500 mt-1">Ezan okunduktan sonra veya dinlerken</p>
+                    </div>
+
+                    <!-- Kart 4 -->
+                    <div class="bg-gradient-to-br from-purple-50 to-white border-2 border-purple-200 p-5 rounded-2xl flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-600 text-white flex items-center justify-center text-2xl mb-3 shadow-md">
+                            <i class="fa-solid fa-hands-holding"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-800">Cenaze Namazında</h4>
+                        <p class="text-xs text-slate-500 mt-1">Cenaze namazı ibadeti esnasında</p>
+                    </div>
+
+                    <!-- Kart 5 -->
+                    <div class="bg-gradient-to-br from-amber-50 to-white border-2 border-amber-200 p-5 rounded-2xl flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl mb-3 shadow-md">
+                            <i class="fa-solid fa-comment-dots"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-800">Hz. Muhammed'in (sav) Adı Anılınca</h4>
+                        <p class="text-xs text-slate-500 mt-1">İsmi her geçtiğinde sevgi ve saygı ile</p>
+                    </div>
+
+                    <!-- Kart 6 -->
+                    <div class="bg-gradient-to-br from-rose-50 to-white border-2 border-rose-200 p-5 rounded-2xl flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+                        <div class="w-14 h-14 rounded-2xl bg-rose-600 text-white flex items-center justify-center text-2xl mb-3 shadow-md">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-800">Cuma Günlerinde</h4>
+                        <p class="text-xs text-slate-500 mt-1">Mübarek cuma gününde bolca</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKME 4: ÖLÇME & ETKİNLİK DOKUMANI -->
+        <div id="content-etkinlik" class="tab-content hidden space-y-6">
+            
+            <!-- ÖLÇME DEĞERLENDİRME ŞEMA ETKİNLİĞİ -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-md">
+                <div class="mb-4 pb-3 border-b border-slate-200 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-md">Ölçme ve Değerlendirme</span>
+                        <h3 class="text-lg font-extrabold text-slate-800 mt-1">Şemaya Göre Ulaşılabilecek İfadeler</h3>
+                    </div>
+                    <button onclick="checkQuiz()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm">
+                        Cevapları Kontrol Et
+                    </button>
+                </div>
+
+                <p class="text-xs text-slate-600 mb-4">
+                    Salli ve Barik dualarının içeriği ve mesajlarına göre aşağıdaki yargılardan hangilerine ulaşılabilir? Doğru olanları işaretleyiniz:
+                </p>
+
+                <div class="space-y-3" id="quiz-list">
+                    <!-- Soru 1 -->
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors">
+                        <input type="checkbox" data-correct="true" class="quiz-check mt-1 w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+                        <span class="text-sm font-medium text-slate-800">1. Salli ve Barik duaları salavat cümlelerinden oluşur.</span>
+                    </label>
+
+                    <!-- Soru 2 -->
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors">
+                        <input type="checkbox" data-correct="false" class="quiz-check mt-1 w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+                        <span class="text-sm font-medium text-slate-800">2. Salli ve Barik dualarında Allah’ın (cc) tek ilah olduğu vurgulanır.</span>
+                    </label>
+
+                    <!-- Soru 3 -->
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors">
+                        <input type="checkbox" data-correct="true" class="quiz-check mt-1 w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+                        <span class="text-sm font-medium text-slate-800">3. Salli ve Barik dualarında övgüye en layık olanın Allah (cc) olduğu belirtilir.</span>
+                    </label>
+
+                    <!-- Soru 4 -->
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors">
+                        <input type="checkbox" data-correct="true" class="quiz-check mt-1 w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+                        <span class="text-sm font-medium text-slate-800">4. Salli ve Barik dualarıyla Hz. Muhammed’e (sav) olan sevgi, saygı ve bağlılık ifade edilir.</span>
+                    </label>
+
+                    <!-- Soru 5 -->
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors">
+                        <input type="checkbox" data-correct="false" class="quiz-check mt-1 w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+                        <span class="text-sm font-medium text-slate-800">5. Salli ve Barik dualarında Müslümanlar kendileri için rahmet ve bereket dilerler.</span>
+                    </label>
+                </div>
+
+                <div id="quiz-result" class="hidden mt-4 p-4 rounded-xl text-xs font-bold text-center"></div>
+            </div>
+
+            <!-- KONTROL NOKTASI SORULARI -->
+            <div class="bg-emerald-950 text-white rounded-3xl p-6 shadow-md">
+                <h3 class="text-lg font-black text-amber-300 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-question"></i> Kontrol Noktası Soruları
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-emerald-900/60 border border-emerald-800 p-4 rounded-2xl">
+                        <span class="text-xs font-bold text-amber-300">Soru 1</span>
+                        <p class="text-sm font-semibold text-white mt-1">Salli ve Barik duaları namazın hangi bölümünde okunur?</p>
+                        <p class="text-xs text-emerald-200 mt-2 border-t border-emerald-800 pt-2"><strong>Cevap:</strong> Namazların son oturuşunda Tahiyyat duasından sonra okunur.</p>
+                    </div>
+
+                    <div class="bg-emerald-900/60 border border-emerald-800 p-4 rounded-2xl">
+                        <span class="text-xs font-bold text-amber-300">Soru 2</span>
+                        <p class="text-sm font-semibold text-white mt-1">Hangi durumlarda Hz. Peygamber'e salavat getirilir?</p>
+                        <p class="text-xs text-emerald-200 mt-2 border-t border-emerald-800 pt-2"><strong>Cevap:</strong> Namazda, mescide girip çıkarken, ezan dinlerken, cenaze namazında, ismi anılınca ve cuma günlerinde.</p>
+                    </div>
+
+                    <div class="bg-emerald-900/60 border border-emerald-800 p-4 rounded-2xl">
+                        <span class="text-xs font-bold text-amber-300">Soru 3</span>
+                        <p class="text-sm font-semibold text-white mt-1">Müslümanlar neden Hz. Peygamber'e salavat getirirler?</p>
+                        <p class="text-xs text-emerald-200 mt-2 border-t border-emerald-800 pt-2"><strong>Cevap:</strong> Onu sevmek, ona saygı ve bağlılıklarını ifade etmek, onun için rahmet ve bereket dilemek amacıyla.</p>
+                    </div>
+
+                    <div class="bg-emerald-900/60 border border-emerald-800 p-4 rounded-2xl">
+                        <span class="text-xs font-bold text-amber-300">Soru 4</span>
+                        <p class="text-sm font-semibold text-white mt-1">Salavatın anlamını bilerek okumak ne kazandırır?</p>
+                        <p class="text-xs text-emerald-200 mt-2 border-t border-emerald-800 pt-2"><strong>Cevap:</strong> Okunan duanın mesajını hissetmeyi, Hz. Peygamber ve Hz. İbrahim'in hâtırasını daha bilinçli anmayı sağlar.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ALT BİLGİ / FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-4 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs flex flex-col md:flex-row justify-between items-center gap-2">
+            <span>MEB Kur'an-ı Kerim Ders Kitabı Metnine %100 Sadık Kalınarak Hazırlanmıştır.</span>
+            <span class="text-slate-500">6. Sınıf • 1. Tema: Kur'an-ı Kerim'i Tanıyorum</span>
+        </div>
+    </footer>
+
+    <!-- INTERAKTIF MANTIKSAL SCRIPT -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            // Deactivate all tab buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active', 'bg-emerald-600', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-700');
+            });
+
+            // Show selected tab content
+            const activeContent = document.getElementById('content-' + tabId);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+            }
+
+            // Activate selected tab button
+            const activeBtn = document.getElementById('tab-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.classList.remove('bg-white', 'text-slate-700');
+            }
+        }
+
+        function checkQuiz() {
+            const checkboxes = document.querySelectorAll('.quiz-check');
+            let isCorrect = true;
+
+            checkboxes.forEach(cb => {
+                const correct = cb.getAttribute('data-correct') === 'true';
+                const parent = cb.closest('label');
+
+                if (cb.checked === correct) {
+                    parent.classList.remove('border-red-300', 'bg-red-50');
+                    parent.classList.add('border-emerald-300', 'bg-emerald-50');
+                } else {
+                    isCorrect = false;
+                    parent.classList.remove('border-emerald-300', 'bg-emerald-50');
+                    parent.classList.add('border-red-300', 'bg-red-50');
+                }
+            });
+
+            const resultDiv = document.getElementById('quiz-result');
+            resultDiv.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-rose-100', 'text-rose-800');
+
+            if (isCorrect) {
+                resultDiv.classList.add('bg-emerald-100', 'text-emerald-800');
+                resultDiv.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i> Tebrikler! Tüm seçimler kitaptaki şemaya tam uygun.';
+            } else {
+                resultDiv.classList.add('bg-rose-100', 'text-rose-800');
+                resultDiv.innerHTML = '<i class="fa-solid fa-circle-xmark mr-2"></i> Bazı seçimler hatalı. Lütfen kırmızı ile işaretlenen maddeleri kontrol ediniz. (Doğru Maddeler: 1, 3 ve 4)';
+            }
+        }
+    </script>
+</body>
+</html>

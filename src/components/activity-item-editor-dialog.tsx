@@ -7,6 +7,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogFooter,
     DialogClose,
 } from '@/components/ui/dialog';
@@ -137,6 +138,9 @@ export function ActivityItemEditorDialog({ isOpen, onOpenChange, item, onSave, i
                         </div>
                         {item?.id && !item.id.startsWith('new-') ? 'Veri Öğesini Düzenle' : 'Yeni Veri Öğesi Ekle'}
                     </DialogTitle>
+                    <DialogDescription className="sr-only">
+                        Etkinlik veri öğesi düzenleme formu
+                    </DialogDescription>
                 </DialogHeader>
 
                 <ScrollArea className="flex-1 overflow-y-auto">

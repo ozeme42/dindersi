@@ -215,6 +215,9 @@ export function BulkActivityImportDialog({
                         </div>
                         Toplu Veri Ekleme
                     </DialogTitle>
+                    <DialogDescription className="sr-only">
+                        Metinleri yapıştırarak toplu kavram, tanım veya cümle ekleyin
+                    </DialogDescription>
                 </DialogHeader>
                 {renderContent()}
             </DialogContent>
