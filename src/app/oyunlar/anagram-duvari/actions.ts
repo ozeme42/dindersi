@@ -31,8 +31,13 @@ export async function getAnagramWallWords(
                     term = String((item as any).content.term).trim();
                 } else if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.text) {
                     term = String((item as any).content.text).trim();
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
-                    term = String((item as any).correctAnswer).trim();
+                } else if (item.type === 'concept' && (item as any).text) {
+                    term = String((item as any).text).trim();
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer) {
+                    const ans = String((item as any).correctAnswer).trim();
+                    if (ans.length >= 3 && ans.length <= 25 && ans.split(/\s+/).length <= 2) {
+                        term = ans;
+                    }
                 }
 
                 if (term) {
@@ -41,8 +46,8 @@ export async function getAnagramWallWords(
                     if (noSpace.length >= 3 && noSpace.length <= 15 && turkishAlphabetRegex.test(noSpace)) {
                         validWords.push(noSpace);
                     }
-                    if (cleaned.includes(' ')) {
-                        const parts = cleaned.split(/\s+/);
+                    const parts = cleaned.split(/\s+/);
+                    if (parts.length === 2) {
                         for (const part of parts) {
                             const upperPart = part.toLocaleUpperCase('tr-TR');
                             if (upperPart.length >= 3 && upperPart.length <= 15 && turkishAlphabetRegex.test(upperPart)) {

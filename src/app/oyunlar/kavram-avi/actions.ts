@@ -48,26 +48,35 @@ export async function getConceptHuntAction({
                 let rawTerm = '';
                 let definition = '';
 
-                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term) {
+                if (item.type === 'definition' && (item as any).content?.term) {
                     rawTerm = String((item as any).content.term).trim();
-                    definition = String((item as any).content.definition || (item as any).content.text || `${rawTerm} kavramı`).trim();
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
-                    rawTerm = String((item as any).correctAnswer).trim();
-                    definition = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${rawTerm} kavramı`).trim();
+                    definition = String((item as any).content.definition || `${rawTerm} kavramı`).trim();
+                } else if (item.type === 'concept') {
+                    rawTerm = String((item as any).content?.term || (item as any).content?.text || (item as any).text || '').trim();
+                    definition = String((item as any).content?.definition || (item as any).content?.meaning || `${rawTerm} kavramı`).trim();
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer) {
+                    const ans = String((item as any).correctAnswer).trim();
+                    // Yalnızca 1 veya 2 kelimelik net kavram cevaplarını al
+                    if (ans.length >= 3 && ans.length <= 25 && ans.split(/\s+/).length <= 2) {
+                        rawTerm = ans;
+                        definition = String((item as any).sentenceWithBlank || (item as any).text || `${rawTerm} kavramı`).trim();
+                    }
                 }
 
                 if (rawTerm) {
                     const cleaned = cleanWord(rawTerm);
                     const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
-                    if (noSpace.length > 2 && noSpace.length < 16 && !seenTerms.has(noSpace)) {
+                    const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
+                    if (noSpace.length > 2 && noSpace.length < 16 && turkishAlphabetRegex.test(noSpace) && !seenTerms.has(noSpace)) {
                         seenTerms.add(noSpace);
                         validItems.push({ term: noSpace, definition });
                     }
-                    if (cleaned.includes(' ')) {
-                        const parts = cleaned.split(/\s+/);
+                    // Eğer kavram 2 kelimeden oluşuyorsa parçaları da ekle
+                    const parts = cleaned.split(/\s+/);
+                    if (parts.length === 2) {
                         for (const part of parts) {
                             const upperPart = part.toLocaleUpperCase('tr-TR');
-                            if (upperPart.length > 2 && upperPart.length < 16 && !seenTerms.has(upperPart)) {
+                            if (upperPart.length > 2 && upperPart.length < 16 && turkishAlphabetRegex.test(upperPart) && !seenTerms.has(upperPart)) {
                                 seenTerms.add(upperPart);
                                 validItems.push({ term: upperPart, definition: `${rawTerm}: ${definition}` });
                             }

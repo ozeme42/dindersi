@@ -85,7 +85,7 @@ export async function getEslestirmeAction(
             return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
         }
 
-        // 2. Statik dosyalarda tanım azsa, çoktan seçmeli ve boşluk doldurma sorularının kısa olanlarından kavram-tanım üret
+        // 2. Statik dosyalarda tanım azsa, boşluk doldurma sorularının kısa olanlarından kavram-tanım üret
         try {
             const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
             for (const item of allItems) {
@@ -94,15 +94,7 @@ export async function getEslestirmeAction(
                         const term = String((item as any).correctAnswer).trim();
                         const definition = String((item as any).sentenceWithBlank || (item as any).text).trim();
                         const key = term.toLocaleLowerCase('tr-TR');
-                        if (term.length > 0 && term.length <= 30 && definition.length > 0 && definition.length <= 120 && !seenTerms.has(key)) {
-                            seenTerms.add(key);
-                            uniquePairs.push({ term, definition });
-                        }
-                    } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).question || (item as any).text)) {
-                        const term = String((item as any).correctAnswer).trim();
-                        const definition = String((item as any).question || (item as any).text).trim();
-                        const key = term.toLocaleLowerCase('tr-TR');
-                        if (term.length > 0 && term.length <= 25 && definition.length > 0 && definition.length <= 100 && !seenTerms.has(key)) {
+                        if (term.length >= 3 && term.length <= 25 && term.split(/\s+/).length <= 2 && definition.length > 0 && definition.length <= 120 && !seenTerms.has(key)) {
                             seenTerms.add(key);
                             uniquePairs.push({ term, definition });
                         }

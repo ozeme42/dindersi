@@ -54,12 +54,19 @@ export async function getAdamAsmacaAction(
                 let rawTerm = '';
                 let hint = '';
 
-                if ((itemType === 'definition' || itemType === 'concept') && (item as any).content?.term) {
+                if (itemType === 'definition' && (item as any).content?.term) {
                     rawTerm = String((item as any).content.term).trim();
-                    hint = String((item as any).content.definition || (item as any).content.text || `${rawTerm} kavramı`).trim();
-                } else if ((itemType === 'Boşluk Doldurma' || itemType === 'fitb' || itemType === 'Çoktan Seçmeli' || itemType === 'mcq') && (item as any).correctAnswer) {
-                    rawTerm = String((item as any).correctAnswer).trim();
-                    hint = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${rawTerm} kavramı`).trim();
+                    hint = String((item as any).content.definition || `${rawTerm} kavramı`).trim();
+                } else if (itemType === 'concept') {
+                    rawTerm = String((item as any).content?.term || (item as any).content?.text || (item as any).text || '').trim();
+                    hint = String((item as any).content?.definition || (item as any).content?.meaning || `${rawTerm} kavramı`).trim();
+                } else if ((itemType === 'Boşluk Doldurma' || itemType === 'fitb') && (item as any).correctAnswer) {
+                    const ans = String((item as any).correctAnswer).trim();
+                    // Yalnızca 1 veya 2 kelimelik net kavram cevaplarını al, cümleleri ASLA alma
+                    if (ans.length >= 3 && ans.length <= 25 && ans.split(/\s+/).length <= 2) {
+                        rawTerm = ans;
+                        hint = String((item as any).sentenceWithBlank || (item as any).text || `${rawTerm} kavramı`).trim();
+                    }
                 }
 
                 if (rawTerm) {
@@ -69,13 +76,14 @@ export async function getAdamAsmacaAction(
                         seenWords.add(noSpace);
                         validWords.push({ word: noSpace, hint });
                     }
-                    if (cleaned.includes(' ')) {
-                        const parts = cleaned.split(/\s+/);
+                    // Eğer kavram 2 kelimeden oluşuyorsa parçaları da geçerli kabul et (örn: "Meddi Tabii" -> "MEDDİ", "TABİİ")
+                    const parts = cleaned.split(/\s+/);
+                    if (parts.length === 2) {
                         for (const part of parts) {
                             const upperPart = part.toLocaleUpperCase('tr-TR');
                             if (upperPart.length >= 3 && upperPart.length <= 16 && turkishAlphabetRegex.test(upperPart) && !seenWords.has(upperPart)) {
                                 seenWords.add(upperPart);
-                                validWords.push({ word: upperPart, hint });
+                                validWords.push({ word: upperPart, hint: `${rawTerm}: ${hint}` });
                             }
                         }
                     }

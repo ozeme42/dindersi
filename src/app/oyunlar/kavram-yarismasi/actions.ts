@@ -38,14 +38,18 @@ export async function getConceptQuizAction(
 
         for (const item of itemsForTopic || []) {
             if ('type' in item) {
-                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && (item as any).content?.definition) {
+                if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
                     const t = String((item as any).content.term).trim();
                     const d = String((item as any).content.definition).trim();
-                    if (t.length >= 2 && t.length <= 35) pairs.push({ term: t, definition: d });
-                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
+                    if (t.length >= 2 && t.length <= 35 && t.split(/\s+/).length <= 3) pairs.push({ term: t, definition: d });
+                } else if (item.type === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
+                    const t = String((item as any).content?.term || (item as any).content?.text).trim();
+                    const d = String((item as any).content?.definition || (item as any).content?.meaning).trim();
+                    if (t.length >= 2 && t.length <= 35 && t.split(/\s+/).length <= 3) pairs.push({ term: t, definition: d });
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer && ((item as any).sentenceWithBlank || (item as any).text)) {
                     const t = String((item as any).correctAnswer).trim();
-                    const d = String((item as any).text || (item as any).question).trim();
-                    if (t.length >= 2 && t.length <= 35) pairs.push({ term: t, definition: d });
+                    const d = String((item as any).sentenceWithBlank || (item as any).text).trim();
+                    if (t.length >= 2 && t.length <= 25 && t.split(/\s+/).length <= 2) pairs.push({ term: t, definition: d });
                 }
             }
         }

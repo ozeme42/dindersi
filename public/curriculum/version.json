@@ -1,13 +1,13 @@
 {
-  "version": 1788966460342,
-  "updatedAt": "2026-09-09T15:07:40.342Z",
+  "version": 1788968687817,
+  "updatedAt": "2026-09-09T15:44:47.817Z",
   "stats": {
     "questions": 5643,
     "steps": 2206,
     "ozetler": 122,
     "notes": 577,
-    "activities": 5167,
-    "definitions": 1742
+    "activities": 5446,
+    "definitions": 1826
   },
   "files": {
     "manifest": "/curriculum/manifest.json",

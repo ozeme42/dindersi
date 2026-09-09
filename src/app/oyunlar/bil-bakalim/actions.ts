@@ -35,7 +35,7 @@ export async function getBilBakalimAction(
 
         for (const item of allItems || []) {
             if ('type' in item) {
-                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && (item as any).content?.definition) {
+                if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
                     validDefinitions.push({
                         id: item.id || `def-${Math.random()}`,
                         text: (item as any).content.definition.trim(),
@@ -43,14 +43,25 @@ export async function getBilBakalimAction(
                         correctAnswer: (item as any).content.term.trim(),
                         difficulty: 'Orta',
                     });
-                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
+                } else if (item.type === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
                     validDefinitions.push({
-                        id: item.id || `mcq-${Math.random()}`,
-                        text: ((item as any).text || (item as any).question).trim(),
+                        id: item.id || `concept-${Math.random()}`,
+                        text: ((item as any).content?.definition || (item as any).content?.meaning).trim(),
                         type: 'Bil Bakalım',
-                        correctAnswer: String((item as any).correctAnswer).trim(),
+                        correctAnswer: ((item as any).content?.term || (item as any).content?.text).trim(),
                         difficulty: 'Orta',
                     });
+                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer && ((item as any).sentenceWithBlank || (item as any).text)) {
+                    const ans = String((item as any).correctAnswer).trim();
+                    if (ans.length >= 3 && ans.length <= 25 && ans.split(/\s+/).length <= 2) {
+                        validDefinitions.push({
+                            id: item.id || `fitb-${Math.random()}`,
+                            text: String((item as any).sentenceWithBlank || (item as any).text).trim(),
+                            type: 'Bil Bakalım',
+                            correctAnswer: ans,
+                            difficulty: 'Orta',
+                        });
+                    }
                 }
             }
         }
