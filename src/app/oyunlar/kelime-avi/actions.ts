@@ -56,20 +56,10 @@ export async function getKelimeAviAction(
 
                 if (term) {
                     const cleaned = cleanWord(term);
-                    // 1. Boşluksuz tam ifade (örn: "Meddi Tabii" -> "MEDDİTABİİ")
+                    // Boşlukları kaldırarak tek kelime olarak ekle (örn: "Su döngüsü" → "SUDÖNGÜSÜ")
                     const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
                     if (noSpace.length >= 3 && noSpace.length <= 14 && turkishAlphabetRegex.test(noSpace)) {
                         validTerms.push(noSpace);
-                    }
-                    // 2. 2 kelimeli kavram ise parçaları da ekle (örn: "MEDDİ", "TABİİ")
-                    const parts = cleaned.split(/\s+/);
-                    if (parts.length === 2) {
-                        for (const part of parts) {
-                            const upperPart = part.toLocaleUpperCase('tr-TR');
-                            if (upperPart.length >= 3 && upperPart.length <= 14 && turkishAlphabetRegex.test(upperPart)) {
-                                validTerms.push(upperPart);
-                            }
-                        }
                     }
                 }
             }
