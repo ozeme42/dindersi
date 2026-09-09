@@ -43,17 +43,9 @@ export async function getIlimHazinesiAction(
 
         for (const item of allItems || []) {
             if ('type' in item) {
-                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term) {
+                if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && ((item as any).content?.definition || (item as any).content?.meaning)) {
                     const t = String((item as any).content.term).trim();
-                    const d = String((item as any).content.definition || (item as any).content.text || `${t} kavramı`).trim();
-                    const cleaned = cleanForAnagram(t).replace(/\s/g, '');
-                    if (cleaned.length >= 3 && cleaned.length <= 14 && !seenWords.has(cleaned)) {
-                        seenWords.add(cleaned);
-                        validItems.push({ term: t, definition: d });
-                    }
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
-                    const t = String((item as any).correctAnswer).trim();
-                    const d = String((item as any).text || (item as any).question || (item as any).sentenceWithBlank || `${t} kavramı`).trim();
+                    const d = String((item as any).content.definition || (item as any).content.meaning).trim();
                     const cleaned = cleanForAnagram(t).replace(/\s/g, '');
                     if (cleaned.length >= 3 && cleaned.length <= 14 && !seenWords.has(cleaned)) {
                         seenWords.add(cleaned);

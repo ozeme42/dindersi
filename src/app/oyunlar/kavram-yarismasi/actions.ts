@@ -46,10 +46,6 @@ export async function getConceptQuizAction(
                     const t = String((item as any).content?.term || (item as any).content?.text).trim();
                     const d = String((item as any).content?.definition || (item as any).content?.meaning).trim();
                     if (t.length >= 2 && t.length <= 35 && t.split(/\s+/).length <= 3) pairs.push({ term: t, definition: d });
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer && ((item as any).sentenceWithBlank || (item as any).text)) {
-                    const t = String((item as any).correctAnswer).trim();
-                    const d = String((item as any).sentenceWithBlank || (item as any).text).trim();
-                    if (t.length >= 2 && t.length <= 25 && t.split(/\s+/).length <= 2) pairs.push({ term: t, definition: d });
                 }
             }
         }

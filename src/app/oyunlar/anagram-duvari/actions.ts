@@ -27,17 +27,10 @@ export async function getAnagramWallWords(
         for (const item of allItems || []) {
             if ('type' in item) {
                 let term = '';
-                if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.term) {
+                if ((item.type === 'definition') && (item as any).content?.term && (item as any).content?.definition) {
                     term = String((item as any).content.term).trim();
-                } else if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.text) {
-                    term = String((item as any).content.text).trim();
-                } else if (item.type === 'concept' && (item as any).text) {
-                    term = String((item as any).text).trim();
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer) {
-                    const ans = String((item as any).correctAnswer).trim();
-                    if (ans.length >= 3 && ans.length <= 25 && ans.split(/\s+/).length <= 2) {
-                        term = ans;
-                    }
+                } else if (item.type === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
+                    term = String((item as any).content?.term || (item as any).content?.text).trim();
                 }
 
                 if (term) {

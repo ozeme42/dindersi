@@ -54,12 +54,12 @@ export async function getAdamAsmacaAction(
                 let rawTerm = '';
                 let hint = '';
 
-                if (itemType === 'definition' && (item as any).content?.term) {
+                if (itemType === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
                     rawTerm = String((item as any).content.term).trim();
-                    hint = String((item as any).content.definition || `${rawTerm} kavramı`).trim();
-                } else if (itemType === 'concept') {
-                    rawTerm = String((item as any).content?.term || (item as any).content?.text || (item as any).text || '').trim();
-                    hint = String((item as any).content?.definition || (item as any).content?.meaning || `${rawTerm} kavramı`).trim();
+                    hint = String((item as any).content.definition).trim();
+                } else if (itemType === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
+                    rawTerm = String((item as any).content?.term || (item as any).content?.text || '').trim();
+                    hint = String((item as any).content?.definition || (item as any).content?.meaning).trim();
                 }
 
                 if (rawTerm) {
