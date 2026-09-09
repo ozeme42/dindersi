@@ -43,25 +43,32 @@ export async function getHitTheTargetAction(
 
         const pairs: { term: string; definition: string }[] = [];
         const fallbackTerms = ['İman', 'İslam', 'Ahlak', 'İbadet', 'Tevhit', 'Nübüvvet', 'Kuran', 'Sünnet', 'Adalet', 'Merhamet', 'Sabır', 'Şükür', 'İhlas', 'Takva', 'Furkan'];
+        const seenTerms = new Set<string>();
 
         for (const item of allItems || []) {
             if ('type' in item) {
                 if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
                     const t = String((item as any).content.term).trim();
                     const d = String((item as any).content.definition).trim();
-                    if (t.length >= 2 && t.length <= 30) {
+                    const tKey = t.toLowerCase();
+                    if (t.length >= 2 && t.length <= 30 && d.length >= 10 && !d.toLowerCase().includes(tKey) && !seenTerms.has(tKey)) {
+                        seenTerms.add(tKey);
                         pairs.push({ term: t, definition: d });
                     }
                 } else if (item.type === 'concept' && (item as any).content?.term && (item as any).content?.definition) {
                     const t = String((item as any).content.term).trim();
                     const d = String((item as any).content.definition).trim();
-                    if (t.length >= 2 && t.length <= 30) {
+                    const tKey = t.toLowerCase();
+                    if (t.length >= 2 && t.length <= 30 && d.length >= 10 && !d.toLowerCase().includes(tKey) && !seenTerms.has(tKey)) {
+                        seenTerms.add(tKey);
                         pairs.push({ term: t, definition: d });
                     }
                 } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
                     const t = String((item as any).correctAnswer).trim();
                     const d = String((item as any).text || (item as any).question).trim();
-                    if (t.length >= 2 && t.length <= 30) {
+                    const tKey = t.toLowerCase();
+                    if (t.length >= 2 && t.length <= 30 && d.length >= 10 && !d.toLowerCase().includes(tKey) && !seenTerms.has(tKey)) {
+                        seenTerms.add(tKey);
                         pairs.push({ term: t, definition: d });
                     }
                 }

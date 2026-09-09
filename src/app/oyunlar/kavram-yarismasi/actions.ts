@@ -57,10 +57,20 @@ export async function getConceptQuizAction(
         const allTermsFromDefinitions = [...new Set([...pairs.map(p => p.term), ...(pairs.length < 4 ? fallbackTerms : [])])];
         
         const gameQuestions: ConceptQuizQuestion[] = [];
+        const seenAnswers = new Set<string>();
 
         for (const item of pairs) {
             const correctAnswer = item.term;
             const definition = item.definition;
+
+            // Tanım boş veya çok kısa ise atla
+            if (definition.length < 10) continue;
+            // Tanım metni içinde cevap kelimesi geçiyorsa atla (cevabı ele veriyor)
+            if (definition.toLowerCase().includes(correctAnswer.toLowerCase())) continue;
+            // Aynı cevap için birden fazla soru üretme
+            const answerKey = correctAnswer.toLowerCase().trim();
+            if (seenAnswers.has(answerKey)) continue;
+            seenAnswers.add(answerKey);
 
             let distractors = allTermsFromDefinitions
                 .filter(term => term.toLocaleLowerCase('tr-TR') !== correctAnswer.toLocaleLowerCase('tr-TR'))

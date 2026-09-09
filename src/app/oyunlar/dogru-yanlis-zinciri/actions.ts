@@ -32,6 +32,8 @@ export async function getDogruYanlisZinciriAction(
                 definitions.forEach((dItem, idx) => {
                     const term = (dItem as any).content.term.trim();
                     const def = (dItem as any).content.definition.trim();
+                    // Boş veya çok kısa tanımlar ile yapay soru üretme
+                    if (term.length < 2 || def.length < 10) return;
                     const isTrue = idx % 2 === 0;
                     let statement = `${term}, ${def}`;
                     if (!isTrue && definitions.length > 1) {
