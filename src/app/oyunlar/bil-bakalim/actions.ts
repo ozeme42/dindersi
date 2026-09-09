@@ -35,6 +35,8 @@ export async function getBilBakalimAction(
 
         for (const item of allItems || []) {
             if ('type' in item) {
+                // Sadece definition ve concept tiplerini al — fitb/boşluk doldurma soruları
+                // soru metninde cevabı açıkça gösterdiği için Bil Bakalım'a uygun değil
                 if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
                     validDefinitions.push({
                         id: item.id || `def-${Math.random()}`,
@@ -51,17 +53,6 @@ export async function getBilBakalimAction(
                         correctAnswer: ((item as any).content?.term || (item as any).content?.text).trim(),
                         difficulty: 'Orta',
                     });
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer && ((item as any).sentenceWithBlank || (item as any).text)) {
-                    const ans = String((item as any).correctAnswer).trim();
-                    if (ans.length >= 3 && ans.length <= 25 && ans.split(/\s+/).length <= 2) {
-                        validDefinitions.push({
-                            id: item.id || `fitb-${Math.random()}`,
-                            text: String((item as any).sentenceWithBlank || (item as any).text).trim(),
-                            type: 'Bil Bakalım',
-                            correctAnswer: ans,
-                            difficulty: 'Orta',
-                        });
-                    }
                 }
             }
         }
