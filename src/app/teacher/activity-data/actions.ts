@@ -11,6 +11,36 @@ import fs from 'fs/promises';
 import path from 'path';
 import { clearStaticGameCache } from '@/lib/quiz-actions';
 
+export async function syncTopicActivityFiles(topicId?: string | null) {
+    if (!topicId) return;
+    try {
+        const allTopicItemsSnap = await getDocs(query(collection(db, "activityItems"), where("topicId", "==", topicId)));
+        const allItems = allTopicItemsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const jsonStr = JSON.stringify(allItems, null, 2);
+        
+        const dir1 = path.join(process.cwd(), 'public', 'curriculum', 'activities');
+        const dir2 = path.join(process.cwd(), 'public', 'curriculum', 'activityItems');
+        await fs.mkdir(dir1, { recursive: true }).catch(() => {});
+        await fs.mkdir(dir2, { recursive: true }).catch(() => {});
+        await fs.writeFile(path.join(dir1, `${topicId}.json`), jsonStr, 'utf-8').catch(() => {});
+        await fs.writeFile(path.join(dir2, `${topicId}.json`), jsonStr, 'utf-8').catch(() => {});
+
+        // activity-counts.json dosyasını da güncelle
+        try {
+            const countsFilePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-counts.json');
+            let counts: Record<string, number> = {};
+            try {
+                const existing = await fs.readFile(countsFilePath, 'utf-8');
+                counts = JSON.parse(existing);
+            } catch {}
+            counts[topicId] = allItems.length;
+            await fs.writeFile(countsFilePath, JSON.stringify(counts, null, 2), 'utf-8').catch(() => {});
+        } catch {}
+    } catch (fsErr) {
+        console.warn("Could not sync activity files:", fsErr);
+    }
+}
+
 export async function saveGeneratedActivityItems({ courseId, unitId, topicId, content }: { courseId: string; unitId: string; topicId: string; content: AiActivityDataOutput }) {
     if (!courseId || !unitId || !topicId) {
         return { success: false, error: "Konu bağlamı eksik." };
@@ -89,21 +119,8 @@ export async function saveGeneratedActivityItems({ courseId, unitId, topicId, co
             // Önbelleği temizle ki oyunlar yeni kavramları hemen görsün
             await clearStaticGameCache();
 
-            // Dosya sistemine otomatik senkronizasyon (statik JSON oluştur)
-            try {
-                const allTopicItemsSnap = await getDocs(query(collection(db, "activityItems"), where("topicId", "==", topicId)));
-                const allItems = allTopicItemsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-                const jsonStr = JSON.stringify(allItems, null, 2);
-                
-                const dir1 = path.join(process.cwd(), 'public', 'curriculum', 'activities');
-                const dir2 = path.join(process.cwd(), 'public', 'curriculum', 'activityItems');
-                await fs.mkdir(dir1, { recursive: true }).catch(() => {});
-                await fs.mkdir(dir2, { recursive: true }).catch(() => {});
-                await fs.writeFile(path.join(dir1, `${topicId}.json`), jsonStr, 'utf-8').catch(() => {});
-                await fs.writeFile(path.join(dir2, `${topicId}.json`), jsonStr, 'utf-8').catch(() => {});
-            } catch (fsErr) {
-                // Sunucusuz (read-only) ortamlarda sessizce geç
-            }
+            // Dosya sistemine ve sayaca otomatik senkronizasyon
+            await syncTopicActivityFiles(topicId);
         }
 
         return { success: true, count: addedCount };
@@ -136,20 +153,9 @@ export async function saveActivityItem(item: Partial<ActivityItem>): Promise<{ s
 
         await clearStaticGameCache();
 
-        // Eğer topicId varsa dosya sistemini de güncelle
+        // Eğer topicId varsa dosya sistemini ve sayacı da güncelle
         if (dataToSave.topicId) {
-            try {
-                const allTopicItemsSnap = await getDocs(query(collection(db, "activityItems"), where("topicId", "==", dataToSave.topicId)));
-                const allItems = allTopicItemsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-                const jsonStr = JSON.stringify(allItems, null, 2);
-                
-                const dir1 = path.join(process.cwd(), 'public', 'curriculum', 'activities');
-                const dir2 = path.join(process.cwd(), 'public', 'curriculum', 'activityItems');
-                await fs.mkdir(dir1, { recursive: true }).catch(() => {});
-                await fs.mkdir(dir2, { recursive: true }).catch(() => {});
-                await fs.writeFile(path.join(dir1, `${dataToSave.topicId}.json`), jsonStr, 'utf-8').catch(() => {});
-                await fs.writeFile(path.join(dir2, `${dataToSave.topicId}.json`), jsonStr, 'utf-8').catch(() => {});
-            } catch (fsErr) {}
+            await syncTopicActivityFiles(dataToSave.topicId);
         }
 
         return { success: true, id: savedId };
@@ -160,7 +166,7 @@ export async function saveActivityItem(item: Partial<ActivityItem>): Promise<{ s
 }
 
 
-export async function deleteBulkActivityItems(itemIds: string[]): Promise<{ success: boolean; error?: string; count?: number }> {
+export async function deleteBulkActivityItems(itemIds: string[], topicId?: string | null): Promise<{ success: boolean; error?: string; count?: number }> {
     if (!itemIds || itemIds.length === 0) {
         return { success: false, error: "Silinecek veri seçilmedi." };
     }
@@ -178,6 +184,11 @@ export async function deleteBulkActivityItems(itemIds: string[]): Promise<{ succ
                 batch.delete(docRef);
             });
             await batch.commit();
+        }
+
+        if (topicId) {
+            await syncTopicActivityFiles(topicId);
+            await clearStaticGameCache();
         }
 
         return { success: true, count: itemIds.length };
@@ -290,6 +301,8 @@ export async function importBulkActivityData(
         }
 
         await batch.commit();
+        await syncTopicActivityFiles(topicId);
+        await clearStaticGameCache();
 
         return { success: true, count: totalCount };
 

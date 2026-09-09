@@ -644,7 +644,8 @@ export default function ActivityDataManagementPage() {
     // Delete single item
     const handleDelete = async (itemId: string) => {
         try {
-            await deleteDoc(doc(db, "activityItems", itemId));
+            const result = await deleteBulkActivityItems([itemId], selectedTopicId);
+            if (!result.success) throw new Error(result.error);
             toast({ title: "Başarılı", description: "Veri öğesi başarıyla silindi." });
             setActivityItems(prev => prev.filter(i => i.id !== itemId));
             setSelectedItemIds(prev => {
@@ -668,7 +669,7 @@ export default function ActivityDataManagementPage() {
     const handleBulkDelete = async () => {
         setIsDeleting(true);
         const idsToDelete = Array.from(selectedItemIds);
-        const result = await deleteBulkActivityItems(idsToDelete);
+        const result = await deleteBulkActivityItems(idsToDelete, selectedTopicId);
         if (result.success) {
             toast({ title: "Başarılı", description: `${result.count} veri seti silindi.` });
             setSelectedItemIds(new Set());

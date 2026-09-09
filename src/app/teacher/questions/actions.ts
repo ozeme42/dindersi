@@ -2,30 +2,73 @@
 
 'use server';
 
+import fs from 'fs/promises';
+import path from 'path';
 import { db } from "@/lib/firebase";
-import { doc, writeBatch, collection, addDoc, updateDoc, deleteDoc, serverTimestamp, Timestamp } from "firebase/firestore";
+import { doc, writeBatch, collection, addDoc, updateDoc, deleteDoc, serverTimestamp, Timestamp, getDocs, query, where } from "firebase/firestore";
 import type { Question } from "@/lib/types";
 import { z } from "zod";
 import { generateQuestions } from "@/ai/flows/generate-questions-flow";
 import type { GenerateQuestionsInput } from "@/ai/flows/generate-questions-flow";
 
+export async function syncTopicQuestionsFiles(topicId?: string | null) {
+    if (!topicId) return;
+    try {
+        const qSnap = await getDocs(query(collection(db, "questions"), where("topicId", "==", topicId)));
+        const allQuestions = qSnap.docs.map(d => {
+            const data = d.data();
+            return {
+                ...data,
+                id: d.id,
+                createdAt: (data.createdAt as Timestamp)?.toDate?.()?.toISOString?.() || 
+                    (typeof data.createdAt === 'string' ? data.createdAt : new Date(0).toISOString())
+            };
+        });
+        const jsonStr = JSON.stringify(allQuestions, null, 2);
+
+        const dir = path.join(process.cwd(), 'public', 'curriculum', 'questions');
+        await fs.mkdir(dir, { recursive: true }).catch(() => {});
+        await fs.writeFile(path.join(dir, `${topicId}.json`), jsonStr, 'utf-8').catch(() => {});
+
+        // question-counts.json dosyasını da güncelle
+        try {
+            const countsFilePath = path.join(process.cwd(), 'public', 'curriculum', 'question-counts.json');
+            let counts: Record<string, number> = {};
+            try {
+                const existing = await fs.readFile(countsFilePath, 'utf-8');
+                counts = JSON.parse(existing);
+            } catch {}
+            counts[topicId] = allQuestions.length;
+            await fs.writeFile(countsFilePath, JSON.stringify(counts, null, 2), 'utf-8').catch(() => {});
+        } catch {}
+    } catch (err) {
+        console.warn('Questions static file sync warning:', err);
+    }
+}
 
 export async function saveQuestion(questionToSave: Question): Promise<{ success: boolean; error?: string; question?: Question }> {
     const { id, ...questionData } = questionToSave;
     try {
+        let savedQuestion: Question;
         if (id && id.startsWith('new-')) {
             const newDocRef = await addDoc(collection(db, "questions"), {
                 ...questionData,
                 createdAt: serverTimestamp(),
             });
             const createdDate = new Date().toISOString();
-            return { success: true, question: { ...questionData, id: newDocRef.id, createdAt: createdDate } };
+            savedQuestion = { ...questionData, id: newDocRef.id, createdAt: createdDate } as Question;
         } else if (id) {
             await updateDoc(doc(db, "questions", id), questionData);
-            return { success: true, question: { ...questionToSave, createdAt: new Date().toISOString() } };
+            savedQuestion = { ...questionToSave, createdAt: new Date().toISOString() };
         } else {
             return { success: false, error: "Geçersiz Soru ID'si" };
         }
+
+        if (questionData.topicId) {
+            await syncTopicQuestionsFiles(questionData.topicId);
+        }
+
+        return { success: true, question: savedQuestion };
     } catch (error: any) {
         console.error("Error saving question:", error);
         return { success: false, error: "Soru kaydedilirken bir hata oluştu." };
@@ -47,7 +90,7 @@ export async function updateQuestionDifficulty(questionId: string, difficulty: Q
     }
 }
 
-export async function deleteBulkQuestions(questionIds: string[]): Promise<{ success: boolean; error?: string; count?: number }> {
+export async function deleteBulkQuestions(questionIds: string[], topicId?: string | null): Promise<{ success: boolean; error?: string; count?: number }> {
     if (!questionIds || questionIds.length === 0) {
         return { success: false, error: "Silinecek soru seçilmedi." };
     }
@@ -65,6 +108,10 @@ export async function deleteBulkQuestions(questionIds: string[]): Promise<{ succ
                 batch.delete(docRef);
             });
             await batch.commit();
+        }
+
+        if (topicId) {
+            await syncTopicQuestionsFiles(topicId);
         }
 
         return { success: true, count: questionIds.length };
@@ -110,6 +157,10 @@ export async function saveBulkQuestions(input: unknown, context: { classId?: str
         });
         
         await batch.commit();
+
+        if (context.topicId) {
+            await syncTopicQuestionsFiles(context.topicId);
+        }
 
         return { success: true, count: validation.data.questions.length };
 
@@ -161,6 +212,11 @@ export async function saveGeneratedQuestions(input: unknown, context: { classId?
         });
 
         await batch.commit();
+
+        if (context.topicId) {
+            await syncTopicQuestionsFiles(context.topicId);
+        }
+
         return { success: true, count: questions.length };
 
     } catch (error: any) {

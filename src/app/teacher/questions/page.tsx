@@ -699,7 +699,7 @@ export default function ExamQuestionBankPage() {
     const handleBulkDelete = async () => {
         setIsDeleting(true);
         const idsToDelete = Array.from(selectedQuestions);
-        const result = await deleteBulkQuestions(idsToDelete);
+        const result = await deleteBulkQuestions(idsToDelete, selectedTopicId);
         if (result.success) {
             toast({ title: "Başarılı", description: `${result.count} soru silindi.` });
             setQuestions(prev => prev.filter(q => !selectedQuestions.has(q.id)));
@@ -717,7 +717,7 @@ export default function ExamQuestionBankPage() {
     };
 
     const handleDeleteSingleQuestion = async (questionId: string) => {
-        const result = await deleteBulkQuestions([questionId]);
+        const result = await deleteBulkQuestions([questionId], selectedTopicId);
         if (result.success) {
             toast({ title: "Başarılı", description: "Soru silindi." });
             setQuestions(prev => prev.filter(q => q.id !== questionId));
