@@ -43,6 +43,8 @@ export async function getBilBakalimAction(
                     // Tanım, cevabın kendisi olamaz ve en az 10 karakter olmalı
                     if (definition.toLowerCase() === term.toLowerCase()) continue;
                     if (definition.length < 10) continue;
+                    // Tanım metni içinde kavramın adı geçiyorsa eleniyor ("mevsimler ... mevsimler" gibi)
+                    if (definition.toLowerCase().includes(term.toLowerCase())) continue;
                     validDefinitions.push({
                         id: item.id || `def-${Math.random()}`,
                         text: definition,
@@ -56,6 +58,8 @@ export async function getBilBakalimAction(
                     // Tanım, cevabın kendisi olamaz ve en az 10 karakter olmalı
                     if (clue.toLowerCase() === answer.toLowerCase()) continue;
                     if (clue.length < 10) continue;
+                    // Tanım metni içinde cevap kelimesi geçiyorsa eleniyor
+                    if (clue.toLowerCase().includes(answer.toLowerCase())) continue;
                     validDefinitions.push({
                         id: item.id || `concept-${Math.random()}`,
                         text: clue,
@@ -66,12 +70,21 @@ export async function getBilBakalimAction(
                 }
             }
         }
+
+        // Her correctAnswer için sadece 1 soru al (tekrar tekrar aynı soru önleme)
+        const seenAnswers = new Set<string>();
+        const uniqueDefinitions = validDefinitions.filter(q => {
+            const key = (q.correctAnswer || '').toLowerCase().trim();
+            if (!key || seenAnswers.has(key)) return false;
+            seenAnswers.add(key);
+            return true;
+        });
         
-        if (validDefinitions.length < 2) {
+        if (uniqueDefinitions.length < 2) {
             return { questions: [], error: "Bil Bakalım oynamak için bu konuda en az 2 farklı tanım veya soru bulunmalıdır." };
         }
 
-        const shuffled = [...validDefinitions].sort(() => 0.5 - Math.random());
+        const shuffled = [...uniqueDefinitions].sort(() => 0.5 - Math.random());
         return { questions: JSON.parse(JSON.stringify(shuffled.slice(0, 20))) };
 
     } catch (error: any) {
