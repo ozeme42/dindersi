@@ -76,7 +76,7 @@ export async function getStudentCurriculum(classId: string, className?: string) 
       courses.push({ ...courseData, units });
     }
 
-    return courses;
+    return JSON.parse(JSON.stringify(courses));
   } catch (error) {
     console.error("Müfredat hatası:", error);
     return [];
@@ -84,13 +84,43 @@ export async function getStudentCurriculum(classId: string, className?: string) 
 }
 
 // 2. Öğrencinin genel konu ilerlemesini getir
-export async function getUserTopicProgress(userId: string) {
+export async function getUserTopicProgress(userId: string): Promise<UserProgress> {
   try {
     const docRef = doc(db, "userProgress", userId);
     const docSnap = await getDoc(docRef);
     
     if (docSnap.exists()) {
-      return docSnap.data() as UserProgress;
+      const data = docSnap.data();
+      const sanitized: Record<string, any> = {};
+
+      for (const [key, value] of Object.entries(data)) {
+        if (value && typeof value === 'object') {
+          const item = { ...value } as any;
+          if (item.lastCompletedAt) {
+            if (typeof item.lastCompletedAt.toDate === 'function') {
+              item.lastCompletedAt = item.lastCompletedAt.toDate().toISOString();
+            } else if (typeof item.lastCompletedAt === 'object' && 'seconds' in item.lastCompletedAt) {
+              item.lastCompletedAt = new Date(item.lastCompletedAt.seconds * 1000).toISOString();
+            } else if (typeof item.lastCompletedAt !== 'string') {
+              delete item.lastCompletedAt;
+            }
+          }
+          if (item.lastCompleted) {
+            if (typeof item.lastCompleted.toDate === 'function') {
+              item.lastCompleted = item.lastCompleted.toDate().toISOString();
+            } else if (typeof item.lastCompleted === 'object' && 'seconds' in item.lastCompleted) {
+              item.lastCompleted = new Date(item.lastCompleted.seconds * 1000).toISOString();
+            } else if (typeof item.lastCompleted !== 'string') {
+              delete item.lastCompleted;
+            }
+          }
+          sanitized[key] = item;
+        } else {
+          sanitized[key] = value;
+        }
+      }
+
+      return JSON.parse(JSON.stringify(sanitized)) as UserProgress;
     }
     return {};
   } catch (error) {
