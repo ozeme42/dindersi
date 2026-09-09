@@ -8,6 +8,12 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { 
   Sparkles, Settings2, Key, Eye, EyeOff, Save, Check, 
   ChevronUp, ChevronDown, FileText, Loader2, X, Trash2, 
@@ -439,15 +445,13 @@ export function AiActivityGenerationPanel({
 
   const estimatedTotal = countPerType === 0 ? 'Tüm İçerikler' : selectedTypes.length * countPerType;
 
-  // Erken çıkış ifadesi TÜM hook'lardan sonra, JSX return satırının hemen öncesinde yer alır!
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in-0 duration-200">
-      <div 
-        className="relative w-full max-w-4xl max-h-[94vh] flex flex-col bg-slate-950 border border-white/15 text-slate-100 shadow-2xl rounded-3xl overflow-hidden animate-in zoom-in-95 duration-200"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-4xl w-[96vw] max-h-[94vh] flex flex-col gap-0 bg-slate-950 border-white/15 text-slate-100 shadow-2xl rounded-3xl overflow-hidden p-0 z-[70] [&>button:last-child]:hidden">
+        <DialogTitle className="sr-only">Yapay Zekâ Etkinlik Veri Stüdyosu</DialogTitle>
+        <DialogDescription className="sr-only">
+          {context?.topicTitle ? `"${context.topicTitle}" konusu için akıllı oyun ve etkinlik verileri üretin.` : 'Konu için akıllı etkinlik verileri üretin.'}
+        </DialogDescription>
         {/* ══ 1. ÜST BAŞLIK & AYARLAR ÇUBUĞU ══ */}
         <div className="p-3.5 sm:p-4 px-4 sm:px-6 border-b border-white/10 bg-slate-900/90 backdrop-blur-md flex flex-row items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
@@ -639,13 +643,17 @@ export function AiActivityGenerationPanel({
                             {wordCount} Kelime • {localSourceText.length} Karakter
                           </Badge>
                         ) : (
-                          <Badge variant="outline" className="bg-rose-500/20 text-rose-300 border-rose-500/30 text-[10px]">
-                            Kaynak Metin Yok
+                          <Badge variant="outline" className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px]">
+                            Müfredat Bilgisiyle Üretilecek
                           </Badge>
                         )}
                       </div>
                       <p className="text-[11px] text-slate-400">
-                        {context?.topicTitle ? `"${context.topicTitle}" konusu için veritabanında kayıtlı metin.` : 'Yapay zekanın veri türeteceği temel kaynak.'}
+                        {context?.topicTitle 
+                          ? (localSourceText.trim().length > 0 
+                              ? `"${context.topicTitle}" konusu için veritabanında kayıtlı metin.` 
+                              : `"${context.topicTitle}" için kayıtlı metin yok; MEB müfredat kazanımları esas alınarak üretilecek. Dilerseniz aşağıya özel metin de yapıştırabilirsiniz.`)
+                          : 'Yapay zekanın veri türeteceği temel kaynak.'}
                       </p>
                     </div>
                   </div>
@@ -1112,7 +1120,7 @@ export function AiActivityGenerationPanel({
               <Button
                 type="button"
                 onClick={handleGenerate}
-                disabled={localSourceText.trim().length < 3 || isFetchingRemoteText || selectedTypes.length === 0}
+                disabled={isFetchingRemoteText || selectedTypes.length === 0}
                 className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs h-10 px-6 rounded-xl shadow-lg shadow-purple-900/30 transition-all hover:scale-[1.02] disabled:opacity-50"
               >
                 <Sparkles className="w-4 h-4 mr-2 text-yellow-300 animate-pulse" />
@@ -1160,7 +1168,7 @@ export function AiActivityGenerationPanel({
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

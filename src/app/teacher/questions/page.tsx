@@ -1086,6 +1086,9 @@ export default function ExamQuestionBankPage() {
                                                             onClick={() => {
                                                                 setSelectedUnitId(unit.id);
                                                                 setSelectedTopicId(topic.id);
+                                                                if (selectedCourseId) {
+                                                                    fetchTopicSourceText(selectedCourseId, unit.id, topic.id);
+                                                                }
                                                                 setIsAIGenOpen(true);
                                                             }}
                                                             title="Yapay Zeka ile Soru Üret"

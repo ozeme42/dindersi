@@ -10,6 +10,12 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { 
   Sparkles, Settings2, Key, Eye, EyeOff, Save, Check, 
   ChevronUp, ChevronDown, FileText, Loader2, X, Trash2, 
@@ -321,20 +327,13 @@ export function AIGenerationDialog({
 
   // ══ ÜRETİMİ BAŞLAT ══
   const handleGenerate = async () => {
-    const trimmedContext = localSourceText.trim();
-    if (!trimmedContext) {
-      toast({ 
-        title: "Kaynak Metin Eksik", 
-        description: "Yapay zekânın soru üretebilmesi için lütfen kaynak konu metnini girin veya veritabanından çekilmesini bekleyin.", 
-        variant: "destructive" 
-      });
-      return;
-    }
-
     if (selectedTypes.length === 0) {
       toast({ title: "Uyarı", description: "Lütfen en az bir soru tipi seçin.", variant: "destructive" });
       return;
     }
+
+    const topicName = context?.selectionNames?.topicName || 'Din Kültürü ve Ahlak Bilgisi';
+    const effectiveContext = localSourceText.trim() || `${topicName} konusu kapsamında MEB Din Kültürü ve Ahlak Bilgisi müfredatı ders kitabı kazanımları ve anahtar bilgileri.`;
 
     setStep('generating');
     try {
@@ -342,11 +341,11 @@ export function AIGenerationDialog({
       const activeModel = activeModelId || 'gemini-3.7-flash';
 
       const result = await generateQuestionsWithAI({
-        contextText: trimmedContext,
+        contextText: effectiveContext,
         questionTypes: selectedTypes,
         difficulty: selectedDifficulties,
         questionCountPerType: countPerType,
-        topicName: context?.selectionNames?.topicName || 'Din Kültürü ve Ahlak Bilgisi',
+        topicName: topicName,
         apiKey: activeKey,
         modelName: activeModel,
         customPrompt: customPrompt.trim() || undefined,
@@ -429,14 +428,15 @@ export function AIGenerationDialog({
     return generatedQuestions.filter(q => q.type === reviewFilter);
   }, [generatedQuestions, reviewFilter]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in-0 duration-200">
-      <div 
-        className="relative w-full max-w-4xl max-h-[94vh] flex flex-col bg-slate-950 border border-white/15 text-slate-100 shadow-2xl rounded-3xl overflow-hidden animate-in zoom-in-95 duration-200"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-4xl w-[96vw] max-h-[94vh] flex flex-col gap-0 bg-slate-950 border-white/15 text-slate-100 shadow-2xl rounded-3xl overflow-hidden p-0 z-[70] [&>button:last-child]:hidden">
+        <DialogTitle className="sr-only">Yapay Zekâ Soru Stüdyosu</DialogTitle>
+        <DialogDescription className="sr-only">
+          {context?.selectionNames?.topicName 
+            ? `${context.selectionNames.topicName} konusu için akıllı soru üretim stüdyosu` 
+            : 'Soru Bankası için akıllı soru üretim stüdyosu'}
+        </DialogDescription>
         {/* ══ 1. ÜST BAŞLIK & AYARLAR ÇUBUĞU ══ */}
         <div className="p-3.5 sm:p-4 px-4 sm:px-6 border-b border-white/10 bg-slate-900/90 backdrop-blur-md flex flex-row items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
@@ -561,9 +561,13 @@ export function AIGenerationDialog({
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-amber-300 bg-amber-950/60 border border-amber-500/30 px-2 py-0.5 rounded-full">
                   <Loader2 className="w-3 h-3 animate-spin" /> Veritabanından Getiriliyor...
                 </span>
-              ) : (
+              ) : localSourceText.trim().length > 0 ? (
                 <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/70 border border-indigo-500/30 px-2 py-0.5 rounded-full">
                   {localSourceText.length.toLocaleString('tr-TR')} karakter • {wordCount.toLocaleString('tr-TR')} kelime
+                </span>
+              ) : (
+                <span className="text-[10px] font-bold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded-full">
+                  Müfredat Bilgisiyle Üretilecek
                 </span>
               )}
             </div>
@@ -990,7 +994,7 @@ export function AIGenerationDialog({
               <Button
                 type="button"
                 onClick={handleGenerate}
-                disabled={localSourceText.trim().length < 3 || isFetchingRemoteText}
+                disabled={isFetchingRemoteText || selectedTypes.length === 0}
                 className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs h-10 px-6 rounded-xl shadow-lg shadow-purple-900/30 transition-all hover:scale-[1.02]"
               >
                 <Sparkles className="w-4 h-4 mr-2 text-yellow-300 animate-pulse" />
@@ -1038,7 +1042,7 @@ export function AIGenerationDialog({
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

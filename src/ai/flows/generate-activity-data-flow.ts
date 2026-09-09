@@ -115,6 +115,12 @@ Lütfen SADECE geçerli bir JSON nesnesi döndür:
       }
     }
 
+    if (input.generateConcepts && (!finalOutput.concepts || finalOutput.concepts.length === 0)) {
+      if (Array.isArray(output.concepts)) {
+        finalOutput.concepts = output.concepts.map((c: any) => typeof c === 'string' ? c : (c.concept || c.text || String(c)));
+      }
+    }
+
     if (output.summarySentences && Array.isArray(output.summarySentences)) {
       finalOutput.summarySentences = output.summarySentences;
     }
