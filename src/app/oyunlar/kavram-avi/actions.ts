@@ -29,7 +29,7 @@ export async function getConceptHuntAction({
 }): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
 
         const validItems: { term: string; definition: string }[] = [];
         const seenTerms = new Set<string>();
@@ -39,7 +39,7 @@ export async function getConceptHuntAction({
                 .replace(/[âÂ]/g, 'A')
                 .replace(/[îÎ]/g, 'İ')
                 .replace(/[ûÛ]/g, 'U')
-                .replace(/['’\-]/g, '')
+                .replace(/[''\\-]/g, '')
                 .trim();
         };
 
@@ -50,17 +50,14 @@ export async function getConceptHuntAction({
 
                 if (item.type === 'definition' && (item as any).content?.term) {
                     rawTerm = String((item as any).content.term).trim();
-                    definition = String((item as any).content.definition || `${rawTerm} kavramı`).trim();
+                    definition = String((item as any).content.definition || '').trim();
+                    // Definition yoksa bu item'ı atla
+                    if (!definition) continue;
                 } else if (item.type === 'concept') {
                     rawTerm = String((item as any).content?.term || (item as any).content?.text || (item as any).text || '').trim();
-                    definition = String((item as any).content?.definition || (item as any).content?.meaning || `${rawTerm} kavramı`).trim();
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer) {
-                    const ans = String((item as any).correctAnswer).trim();
-                    // Yalnızca 1 veya 2 kelimelik net kavram cevaplarını al
-                    if (ans.length >= 3 && ans.length <= 25 && ans.split(/\s+/).length <= 2) {
-                        rawTerm = ans;
-                        definition = String((item as any).sentenceWithBlank || (item as any).text || `${rawTerm} kavramı`).trim();
-                    }
+                    definition = String((item as any).content?.definition || (item as any).content?.meaning || '').trim();
+                    // Definition yoksa concept item'ını Kavram Avı'na ekleme
+                    if (!definition) continue;
                 }
 
                 if (rawTerm) {
@@ -70,17 +67,6 @@ export async function getConceptHuntAction({
                     if (noSpace.length > 2 && noSpace.length < 16 && turkishAlphabetRegex.test(noSpace) && !seenTerms.has(noSpace)) {
                         seenTerms.add(noSpace);
                         validItems.push({ term: noSpace, definition });
-                    }
-                    // Eğer kavram 2 kelimeden oluşuyorsa parçaları da ekle
-                    const parts = cleaned.split(/\s+/);
-                    if (parts.length === 2) {
-                        for (const part of parts) {
-                            const upperPart = part.toLocaleUpperCase('tr-TR');
-                            if (upperPart.length > 2 && upperPart.length < 16 && turkishAlphabetRegex.test(upperPart) && !seenTerms.has(upperPart)) {
-                                seenTerms.add(upperPart);
-                                validItems.push({ term: upperPart, definition: `${rawTerm}: ${definition}` });
-                            }
-                        }
                     }
                 }
             }
