@@ -36,6 +36,51 @@ export async function updateTopicContent({
             itemCount: plainSteps.length,
         }, { merge: true });
 
+        // Statik dosya sistemine otomatik senkronizasyon (/curriculum/flows/{topicId}.json)
+        try {
+            const flowsDir = path.join(process.cwd(), 'public', 'curriculum', 'flows');
+            await fs.mkdir(flowsDir, { recursive: true }).catch(() => {});
+            await fs.writeFile(
+                path.join(flowsDir, `${topicId}.json`),
+                JSON.stringify(plainSteps, null, 2),
+                'utf-8'
+            );
+        } catch (flowFsErr) {
+            console.warn("Could not sync flow to static file:", flowFsErr);
+        }
+
+        // Özet içeriği varsa statik ozetler dosyasına senkronize et (/curriculum/ozetler/{topicId}.html)
+        if (htmlContent) {
+            try {
+                const ozetlerDir = path.join(process.cwd(), 'public', 'curriculum', 'ozetler');
+                await fs.mkdir(ozetlerDir, { recursive: true }).catch(() => {});
+                await fs.writeFile(
+                    path.join(ozetlerDir, `${topicId}.html`),
+                    htmlContent,
+                    'utf-8'
+                );
+            } catch (ozetFsErr) {
+                console.warn("Could not sync ozet to static file:", ozetFsErr);
+            }
+        }
+
+        // Kaynak metin varsa statik source-texts.json dosyasına senkronize et
+        if (sourceText) {
+            try {
+                const sourceTextsPath = path.join(process.cwd(), 'public', 'curriculum', 'source-texts.json');
+                let sourceData: any = { topics: {}, units: {} };
+                try {
+                    const raw = await fs.readFile(sourceTextsPath, 'utf-8');
+                    sourceData = JSON.parse(raw);
+                } catch {}
+                if (!sourceData.topics) sourceData.topics = {};
+                sourceData.topics[topicId] = sourceText;
+                await fs.writeFile(sourceTextsPath, JSON.stringify(sourceData, null, 2), 'utf-8');
+            } catch (srcFsErr) {
+                console.warn("Could not sync source text to static file:", srcFsErr);
+            }
+        }
+
         // Manifest dosyasını (manifest.json) anında güncelle
         // Böylece /teacher/ders-akisi sayfasında eklenen akış anında görünür
         try {
