@@ -38,19 +38,29 @@ export async function getBilBakalimAction(
                 // Sadece definition ve concept tiplerini al — fitb/boşluk doldurma soruları
                 // soru metninde cevabı açıkça gösterdiği için Bil Bakalım'a uygun değil
                 if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
+                    const term = (item as any).content.term.trim();
+                    const definition = (item as any).content.definition.trim();
+                    // Tanım, cevabın kendisi olamaz ve en az 10 karakter olmalı
+                    if (definition.toLowerCase() === term.toLowerCase()) continue;
+                    if (definition.length < 10) continue;
                     validDefinitions.push({
                         id: item.id || `def-${Math.random()}`,
-                        text: (item as any).content.definition.trim(),
+                        text: definition,
                         type: 'Bil Bakalım',
-                        correctAnswer: (item as any).content.term.trim(),
+                        correctAnswer: term,
                         difficulty: 'Orta',
                     });
                 } else if (item.type === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
+                    const answer = ((item as any).content?.term || (item as any).content?.text).trim();
+                    const clue = ((item as any).content?.definition || (item as any).content?.meaning).trim();
+                    // Tanım, cevabın kendisi olamaz ve en az 10 karakter olmalı
+                    if (clue.toLowerCase() === answer.toLowerCase()) continue;
+                    if (clue.length < 10) continue;
                     validDefinitions.push({
                         id: item.id || `concept-${Math.random()}`,
-                        text: ((item as any).content?.definition || (item as any).content?.meaning).trim(),
+                        text: clue,
                         type: 'Bil Bakalım',
-                        correctAnswer: ((item as any).content?.term || (item as any).content?.text).trim(),
+                        correctAnswer: answer,
                         difficulty: 'Orta',
                     });
                 }
