@@ -39,7 +39,7 @@ export async function getEslestirmeAction(
 
         // 1. Statik dosyalardan (activities, questions, flows) öncelikli hızlı veri çekimi (0ms)
         try {
-            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
             for (const item of allItems) {
                 if ('type' in item) {
                     if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
@@ -85,23 +85,7 @@ export async function getEslestirmeAction(
             return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
         }
 
-        // 2. Statik dosyalarda tanım azsa, boşluk doldurma sorularının kısa olanlarından kavram-tanım üret
-        try {
-            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
-            for (const item of allItems) {
-                if ('type' in item) {
-                    if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer && ((item as any).sentenceWithBlank || (item as any).text)) {
-                        const term = String((item as any).correctAnswer).trim();
-                        const definition = String((item as any).sentenceWithBlank || (item as any).text).trim();
-                        const key = term.toLocaleLowerCase('tr-TR');
-                        if (term.length >= 3 && term.length <= 25 && term.split(/\s+/).length <= 2 && definition.length > 0 && definition.length <= 120 && !seenTerms.has(key)) {
-                            seenTerms.add(key);
-                            uniquePairs.push({ term, definition });
-                        }
-                    }
-                }
-            }
-        } catch (e) {}
+
 
         if (uniquePairs.length >= 2) {
             const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 6);

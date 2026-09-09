@@ -230,11 +230,13 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
     const activityItemsDashPath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', `${topicIdToFetch}.json`);
     const questionPath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicIdToFetch}.json`);
     const flowPath = path.join(process.cwd(), 'public', 'curriculum', 'flows', `${topicIdToFetch}.json`);
+    const yazilacaklarPath = path.join(process.cwd(), 'public', 'curriculum', 'yazilacaklar', `${topicIdToFetch}.json`);
 
-    let [activityData, questionData, flowData] = await Promise.all([
+    let [activityData, questionData, flowData, yazilacaklarRaw] = await Promise.all([
         readJsonFile(activityPath),
         readJsonFile(questionPath),
-        readJsonFile(flowPath)
+        readJsonFile(flowPath),
+        readJsonFile(yazilacaklarPath),
     ]);
 
     if (!activityData || activityData.length === 0) {
@@ -264,6 +266,36 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
             dbQuestions = snap.docs.map(d => ({ id: d.id, ...d.data() } as Question));
         } catch (err) {
             console.warn(`Firestore questions fallback warning for ${topicIdToFetch}:`, err);
+        }
+    }
+
+    // Yazılacaklar → ActivityItem dönüşümü
+    const yazilacaklarItems: (ActivityItem | Question)[] = [];
+    if (yazilacaklarRaw && !Array.isArray(yazilacaklarRaw)) {
+        const wr = yazilacaklarRaw as any;
+        if (Array.isArray(wr.conceptDefinitions)) {
+            wr.conceptDefinitions.forEach((cd: any, idx: number) => {
+                if (cd.concept && cd.definition) {
+                    yazilacaklarItems.push({
+                        id: `yaz-def-${topicIdToFetch}-${idx}`,
+                        type: 'definition',
+                        content: { term: String(cd.concept).trim(), definition: String(cd.definition).trim() },
+                        topicId: topicIdToFetch
+                    } as any);
+                }
+            });
+        }
+        if (Array.isArray(wr.notes)) {
+            wr.notes.forEach((note: string, idx: number) => {
+                if (note && note.trim()) {
+                    yazilacaklarItems.push({
+                        id: `yaz-note-${topicIdToFetch}-${idx}`,
+                        type: 'sentence',
+                        content: { text: String(note).trim() },
+                        topicId: topicIdToFetch
+                    } as any);
+                }
+            });
         }
     }
 
@@ -319,6 +351,7 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
     const allCombined = [
         ...(activityData || []),
         ...dbActivityItems,
+        ...yazilacaklarItems,
         ...(questionData || []),
         ...dbQuestions,
         ...flowItems
@@ -411,13 +444,14 @@ export async function getStaticQuestionsForGame(params: {
         return allData;
     }
     
+    const QUESTION_TYPES = new Set(['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma', 'mcq', 'tf', 'fitb', 'Açık Uçlu']);
+    const ACTIVITY_TYPES = new Set(['concept', 'definition', 'sentence', 'categorization', 'sorting']);
+
     return allData.filter(item => {
-        if ('text' in item && typeof item.text === 'string') { // Likely a Question
-             if (dataType === 'questions') return true;
-        } else { // Likely an ActivityItem
-             if (dataType === 'activities') return true;
-        }
-        return false;
+        const itemType = (item as any).type;
+        if (dataType === 'questions') return QUESTION_TYPES.has(itemType) || ('options' in item && !ACTIVITY_TYPES.has(itemType));
+        if (dataType === 'activities') return ACTIVITY_TYPES.has(itemType);
+        return true;
     });
 }
 

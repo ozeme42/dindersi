@@ -27,7 +27,7 @@ export async function getKelimeAviAction(
             courseId, 
             unitId, 
             topicId, 
-            dataType: 'all' 
+            dataType: 'activities' 
         });
         
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
@@ -52,11 +52,6 @@ export async function getKelimeAviAction(
                     term = String((item as any).content.text).trim();
                 } else if (item.type === 'concept' && (item as any).text) {
                     term = String((item as any).text).trim();
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb') && (item as any).correctAnswer) {
-                    const ans = String((item as any).correctAnswer).trim();
-                    if (ans.length >= 3 && ans.length <= 25 && ans.split(/\s+/).length <= 2) {
-                        term = ans;
-                    }
                 }
 
                 if (term) {

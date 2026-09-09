@@ -20,7 +20,7 @@ export async function getAnagramWallWords(
     try {
         let allItems: any[] = [];
         try {
-            allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' }) || [];
+            allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' }) || [];
         } catch (e) {
             console.warn("Static questions fetch warning in anagram:", e);
         }
@@ -33,7 +33,7 @@ export async function getAnagramWallWords(
                 .replace(/[âÂ]/g, 'A')
                 .replace(/[îÎ]/g, 'İ')
                 .replace(/[ûÛ]/g, 'U')
-                .replace(/['’-]/g, '')
+                .replace(/[''-]/g, '')
                 .trim();
         };
 
@@ -44,8 +44,6 @@ export async function getAnagramWallWords(
                     term = String((item as any).content.term).trim();
                 } else if ((item.type === 'concept' || item.type === 'definition') && (item as any).content?.text) {
                     term = String((item as any).content.text).trim();
-                } else if ((item.type === 'Boşluk Doldurma' || item.type === 'fitb' || item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer) {
-                    term = String((item as any).correctAnswer).trim();
                 }
 
                 if (term) {

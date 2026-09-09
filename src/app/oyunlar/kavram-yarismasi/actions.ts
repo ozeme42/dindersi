@@ -31,7 +31,7 @@ export async function getConceptQuizAction(
 ): Promise<{ questions: ConceptQuizQuestion[] | null; error?: string }> {
     noStore();
     try {
-        let itemsForTopic = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        let itemsForTopic = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
 
         const pairs: { term: string; definition: string }[] = [];
         const fallbackTerms = ['İman', 'İslam', 'Ahlak', 'İbadet', 'Tevhit', 'Nübüvvet', 'Kuran', 'Sünnet', 'Adalet', 'Merhamet', 'Sabır', 'Şükür', 'İhlas', 'Takva', 'Furkan'];

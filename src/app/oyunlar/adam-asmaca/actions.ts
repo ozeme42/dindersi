@@ -29,7 +29,7 @@ export async function getAdamAsmacaAction(
 ): Promise<{ data: HangmanData[] | null; error?: string }> {
     noStore();
     try {
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
         
         if (!allItems || allItems.length === 0) {
             return { error: "Bu konu için oynanabilir veri bulunamadı.", data: null };
@@ -44,7 +44,7 @@ export async function getAdamAsmacaAction(
                 .replace(/[âÂ]/g, 'A')
                 .replace(/[îÎ]/g, 'İ')
                 .replace(/[ûÛ]/g, 'U')
-                .replace(/['’\-]/g, '')
+                .replace(/[''\-]/g, '')
                 .trim();
         };
 
@@ -60,13 +60,6 @@ export async function getAdamAsmacaAction(
                 } else if (itemType === 'concept') {
                     rawTerm = String((item as any).content?.term || (item as any).content?.text || (item as any).text || '').trim();
                     hint = String((item as any).content?.definition || (item as any).content?.meaning || `${rawTerm} kavramı`).trim();
-                } else if ((itemType === 'Boşluk Doldurma' || itemType === 'fitb') && (item as any).correctAnswer) {
-                    const ans = String((item as any).correctAnswer).trim();
-                    // Yalnızca 1 veya 2 kelimelik net kavram cevaplarını al, cümleleri ASLA alma
-                    if (ans.length >= 3 && ans.length <= 25 && ans.split(/\s+/).length <= 2) {
-                        rawTerm = ans;
-                        hint = String((item as any).sentenceWithBlank || (item as any).text || `${rawTerm} kavramı`).trim();
-                    }
                 }
 
                 if (rawTerm) {

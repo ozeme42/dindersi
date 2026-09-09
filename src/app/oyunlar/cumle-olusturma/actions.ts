@@ -27,7 +27,7 @@ export async function getCumleOlusturmaAction(
 ): Promise<{ data: ScrambledSentenceData[] | null; error?: string }> {
     noStore();
     try {
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
         
         if (!allItems || allItems.length === 0) {
             return { error: "Bu konu için oynanabilir veri bulunamadı.", data: null };
@@ -45,9 +45,6 @@ export async function getCumleOlusturmaAction(
                     const d = String((item as any).content.definition).trim();
                     const s = `${t}, ${d}`;
                     if (s.split(' ').length >= 3 && s.length <= 150) extractedSentences.push(s);
-                } else if ((item.type === 'Doğru/Yanlış' || item.type === 'tf') && ((item as any).text || (item as any).statement)) {
-                    const txt = String((item as any).text || (item as any).statement).trim();
-                    if (txt.split(' ').length >= 3 && txt.length <= 150) extractedSentences.push(txt);
                 }
             }
         }

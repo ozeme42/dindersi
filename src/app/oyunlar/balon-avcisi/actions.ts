@@ -20,7 +20,7 @@ export async function getBalloonHunterDataAction(
 ): Promise<{ questions: BalloonHunterQuestion[]; error?: string }> {
     noStore();
     try {
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
 
         if (!allItems || allItems.length === 0) {
              return { error: "Oyun oynamak için veri bulunamadı.", questions: [] };
@@ -41,16 +41,6 @@ export async function getBalloonHunterDataAction(
                     const d = (item as any).content.definition.trim();
                     pairs.push({ term: t, definition: d });
                     termsPool.push(t);
-                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
-                    const t = String((item as any).correctAnswer).trim();
-                    const d = String((item as any).text || (item as any).question).trim();
-                    if (t.length <= 25) {
-                        pairs.push({ term: t, definition: d });
-                        termsPool.push(t);
-                    }
-                    if (Array.isArray((item as any).options)) {
-                        termsPool.push(...(item as any).options.map((o: any) => String(o).trim()));
-                    }
                 }
             }
         }

@@ -15,7 +15,7 @@ export async function getKavramDuellosuQuestions(
 ): Promise<{ questions: KavramDuellosuQuestion[]; error?: string }> {
     noStore();
     try {
-        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
         
         const pairs: { term: string; definition: string }[] = [];
         const fallbackPool = ['İman', 'İslam', 'Ahlak', 'İbadet', 'Tevhit', 'Nübüvvet', 'Kuran', 'Sünnet', 'Adalet', 'Merhamet', 'Sabır', 'Şükür', 'İhlas', 'Takva', 'Furkan'];
@@ -25,10 +25,6 @@ export async function getKavramDuellosuQuestions(
                 if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && (item as any).content?.definition) {
                     const t = String((item as any).content.term).trim();
                     const d = String((item as any).content.definition).trim();
-                    if (t.length >= 2 && t.length <= 30) pairs.push({ term: t, definition: d });
-                } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
-                    const t = String((item as any).correctAnswer).trim();
-                    const d = String((item as any).text || (item as any).question).trim();
                     if (t.length >= 2 && t.length <= 30) pairs.push({ term: t, definition: d });
                 }
             }
