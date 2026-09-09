@@ -348,13 +348,9 @@ export default function ContentCreationPage() {
         }
     };
 
-    // Ders değiştikçe tüm üniteleri varsayılan olarak açık tut
+    // Ders değiştikçe veya sayfa açıldığında üniteler varsayılan olarak kapalı gelsin
     useEffect(() => {
-        if (selectedCourse?.units && selectedCourse.units.length > 0) {
-            setExpandedUnitIds(selectedCourse.units.map(u => u.id));
-        } else {
-            setExpandedUnitIds([]);
-        }
+        setExpandedUnitIds([]);
     }, [selectedCourse?.id]);
 
     // Sıralı ve Arama Filtreli Üniteler & Konular
