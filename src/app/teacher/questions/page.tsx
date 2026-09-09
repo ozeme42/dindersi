@@ -1145,9 +1145,12 @@ export default function ExamQuestionBankPage() {
                                         {activeUnitObj?.title}
                                     </span>
                                 </div>
-                                <h2 className="text-base sm:text-lg font-black text-white truncate mt-0.5">
-                                    {activeTopicObj?.title}
-                                </h2>
+                                <DialogTitle className="text-base sm:text-lg font-black text-white truncate mt-0.5">
+                                    {activeTopicObj?.title || "Soru Bankası Stüdyosu"}
+                                </DialogTitle>
+                                <DialogDescription className="sr-only">
+                                    {activeTopicObj?.title || "Seçilen konu"} soruları yönetim masası
+                                </DialogDescription>
                             </div>
                         </div>
 
@@ -1559,6 +1562,9 @@ export default function ExamQuestionBankPage() {
                         <DialogTitle className="text-xl font-black text-white">
                             {activeTopicObj?.title} - Kaynak Metin
                         </DialogTitle>
+                        <DialogDescription className="sr-only">
+                            {activeTopicObj?.title} konusu kaynak metni
+                        </DialogDescription>
                         <div className="flex items-center gap-3 text-xs text-slate-400 pt-1">
                             <span>{topicSourceText ? topicSourceText.trim().split(/\s+/).filter(Boolean).length : 0} kelime</span>
                             <span>•</span>

@@ -1249,6 +1249,9 @@ export default function OzetlerManagementPage() {
                             <DialogTitle className="text-lg sm:text-xl font-black text-white truncate flex items-center gap-2">
                                 {activeSelectedItem?.title}
                             </DialogTitle>
+                            <DialogDescription className="sr-only">
+                                {activeSelectedItem?.title} konusu ders kitabı ve özet stüdyosu
+                            </DialogDescription>
                         </div>
 
                         {/* Önceki & Sonraki Butonları ve Akıllı Tahtada Başlat */}

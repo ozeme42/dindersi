@@ -1328,6 +1328,9 @@ function CentralActivityStudioContent() {
                             <DialogTitle className="text-lg sm:text-xl font-black text-white truncate flex items-center gap-2">
                                 {activeTopic?.title}
                             </DialogTitle>
+                            <DialogDescription className="sr-only">
+                                {activeTopic?.title} konusu kavram ve notlar stüdyosu
+                            </DialogDescription>
                         </div>
 
                         {/* Önceki & Sonraki Butonları ve Eylemler */}
