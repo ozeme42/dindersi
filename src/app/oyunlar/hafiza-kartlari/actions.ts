@@ -66,7 +66,12 @@ export async function getHafizaKartlariAction(
         let uniquePairs: { term: string; definition: string }[] = [];
         for (const p of rawPairs) {
             const key = p.term.toLocaleLowerCase('tr-TR');
-            if (p.term.length > 0 && p.definition.length > 0 && !seenTerms.has(key)) {
+            if (
+                p.term.length > 0 &&
+                p.definition.length >= 10 &&
+                !p.definition.toLocaleLowerCase('tr-TR').includes(p.term.toLocaleLowerCase('tr-TR')) &&
+                !seenTerms.has(key)
+            ) {
                 seenTerms.add(key);
                 uniquePairs.push(p);
             }
@@ -116,20 +121,32 @@ export async function getHafizaKartlariAction(
                             if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
                                 for (const it of step.items) {
                                     if (it.concept && it.definition) {
-                                        const key = String(it.concept).trim().toLocaleLowerCase('tr-TR');
-                                        if (!seenTerms.has(key)) {
+                                        const term = String(it.concept).trim();
+                                        const definition = String(it.definition).trim();
+                                        const key = term.toLocaleLowerCase('tr-TR');
+                                        if (
+                                            definition.length >= 10 &&
+                                            !definition.toLocaleLowerCase('tr-TR').includes(key) &&
+                                            !seenTerms.has(key)
+                                        ) {
                                             seenTerms.add(key);
-                                            uniquePairs.push({ term: String(it.concept).trim(), definition: String(it.definition).trim() });
+                                            uniquePairs.push({ term, definition });
                                         }
                                     }
                                 }
                             } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
                                 for (const cd of step.cards) {
                                     if (cd.term && cd.definition) {
-                                        const key = String(cd.term).trim().toLocaleLowerCase('tr-TR');
-                                        if (!seenTerms.has(key)) {
+                                        const term = String(cd.term).trim();
+                                        const definition = String(cd.definition).trim();
+                                        const key = term.toLocaleLowerCase('tr-TR');
+                                        if (
+                                            definition.length >= 10 &&
+                                            !definition.toLocaleLowerCase('tr-TR').includes(key) &&
+                                            !seenTerms.has(key)
+                                        ) {
                                             seenTerms.add(key);
-                                            uniquePairs.push({ term: String(cd.term).trim(), definition: String(cd.definition).trim() });
+                                            uniquePairs.push({ term, definition });
                                         }
                                     }
                                 }
