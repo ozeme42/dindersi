@@ -1260,6 +1260,30 @@ export const FlashcardItem = ({
     isTeacher?: boolean,
     cardScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }) => {
+    const defContainerRef = useRef<HTMLDivElement>(null);
+    const defTextRef = useRef<HTMLParagraphElement>(null);
+
+    // JS tabanlı otomatik font sıkıştırma — tanım her zaman kaydırmasız sığar
+    useEffect(() => {
+        const container = defContainerRef.current;
+        const text = defTextRef.current;
+        if (!container || !text) return;
+
+        // CSS font boyutunu sıfırla (önceki inline style varsa temizle)
+        text.style.fontSize = '';
+
+        // CSS'ten başlangıç font boyutunu oku
+        let fs = parseFloat(window.getComputedStyle(text).fontSize);
+        const minFs = 7; // minimum 7px — okunabilirlik sınırı
+        let iterations = 0;
+
+        // scrollHeight > clientHeight ise metin taşıyor demektir; küçültmeye devam et
+        while (text.scrollHeight > container.clientHeight + 2 && fs > minFs && iterations < 80) {
+            fs -= 0.5;
+            text.style.fontSize = `${fs}px`;
+            iterations++;
+        }
+    }, [definition, cardScale, isFlipped]);
     const getTermFontSize = (termText: string) => {
         const words = (termText || '').trim().split(/\s+/);
         const maxWordLen = Math.max(...words.map(w => w.length));
@@ -1436,8 +1460,8 @@ export const FlashcardItem = ({
                     </div>
 
                     {/* Doğrudan Kart Üzerinde Yazılan Tanım (Tam metin, dinamik punto, sıfır kaydırma) */}
-                    <div className="my-auto py-1 px-0.5 sm:px-2 text-center w-full flex-1 flex items-center justify-center overflow-y-auto scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent">
-                        <p className={cn(
+                    <div ref={defContainerRef} className="my-auto py-1 px-0.5 sm:px-2 text-center w-full flex-1 flex items-center justify-center overflow-hidden">
+                        <p ref={defTextRef} className={cn(
                             "font-bold tracking-normal sm:tracking-wide text-white drop-shadow-md break-words whitespace-normal [overflow-wrap:break-word] hyphens-auto max-w-full text-center my-auto",
                             getDefFontSize(definition)
                         )}>
