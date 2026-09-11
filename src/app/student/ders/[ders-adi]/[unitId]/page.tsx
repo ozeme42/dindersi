@@ -87,12 +87,33 @@ function PageContent() {
         // 0. Check client-side memory/localStorage cache (0ms latency, 0 database reads)
         const cached = getCachedSteps(contentId);
         if (cached && cached.length > 0) {
+            // Stale-While-Revalidate: Arka planda statik dosyada değişiklik olup olmadığını sessizce kontrol et (0 Firestore read)
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(`/curriculum/flows/${contentId}.json?v=${Date.now()}`, { cache: 'no-cache' });
+                    if (res.ok) {
+                        const freshSteps = await res.json();
+                        if (Array.isArray(freshSteps) && freshSteps.length > 0) {
+                            if (JSON.stringify(freshSteps) !== JSON.stringify(cached)) {
+                                setCachedSteps(contentId, freshSteps);
+                                setActiveContent(curr => {
+                                    if (curr && curr.id === contentId) {
+                                        return { ...curr, steps: freshSteps };
+                                    }
+                                    return curr;
+                                });
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }, 60);
+
             return cached;
         }
 
         // 1. STATİK ÖNCELİK: /curriculum/flows/${contentId}.json (0ms, 0 Firestore reads)
         try {
-            const res = await fetch(`/curriculum/flows/${contentId}.json`);
+            const res = await fetch(`/curriculum/flows/${contentId}.json?v=${Date.now()}`, { cache: 'no-cache' });
             if (res.ok) {
                 const steps = await res.json();
                 if (Array.isArray(steps) && steps.length > 0) {

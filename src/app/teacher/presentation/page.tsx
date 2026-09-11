@@ -318,48 +318,83 @@ function PresentationPageContent() {
                     setContent({ id: topicId, title: topicName || 'Konu Sunumu', steps: finalSteps });
                     setTotalStepsCount(finalSteps.length);
                     setIsLoading(false);
+
+                    // Stale-While-Revalidate: Arka planda statik dosyadaki yenilikleri kontrol et (0 Firestore read)
+                    setTimeout(async () => {
+                        try {
+                            const flowRes = await fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`, { cache: 'no-cache' });
+                            if (flowRes.ok) {
+                                const freshSteps = await flowRes.json();
+                                if (Array.isArray(freshSteps) && freshSteps.length > 0) {
+                                    if (JSON.stringify(freshSteps) !== JSON.stringify(cached)) {
+                                        setCachedSteps(topicId, freshSteps);
+                                        let freshFinal = freshSteps;
+                                        if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
+                                            freshFinal = freshSteps.filter((s: any) => s.isPublished ?? true);
+                                        }
+                                        setContent(prev => prev ? { ...prev, steps: freshFinal } : prev);
+                                        setTotalStepsCount(freshFinal.length);
+                                    }
+                                }
+                            }
+                        } catch (e) {}
+                    }, 60);
+
                     return;
                 }
             }
 
-            const contentSnap = await getDoc(contentRef);
-            
-            if (contentSnap.exists()) {
-                 const data = contentSnap.data();
-                 const contentId = contentSnap.id;
-                 const loadedSourceText = data.sourceText || '';
-                 setSourceText(loadedSourceText);
-                 setEditableSourceText(loadedSourceText);
-                 let steps = data.steps || [];
+            // 1. STATİK ÖNCELİK: /curriculum/flows/${targetId}.json (0ms, 0 Firestore reads)
+            let steps: LessonStep[] = [];
+            let loadedTitle = topicName || (topicId ? 'Konu Sunumu' : 'Ünite Sunumu');
+            let loadedSourceText = '';
 
-                 if (!topicId && steps.length === 0) {
-                     const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseId}/units/${unitId}/topics`), orderBy("title")));
-                     steps = topicsSnapshot.docs.flatMap(doc => (doc.data().steps || []));
-                 }
-                 
-                 if (steps.length === 0) {
-                     try {
-                         const flowRes = await fetch(`/curriculum/flows/${contentId}.json`);
-                         if (flowRes.ok) {
-                             const staticSteps = await flowRes.json();
-                             if (staticSteps.length > 0) {
-                                 steps = staticSteps;
-                             }
-                         }
-                     } catch (e) {}
-                 }
-                
-                 if (topicId && steps.length > 0) {
-                     setCachedSteps(topicId, steps);
-                 }
+            try {
+                const flowRes = await fetch(`/curriculum/flows/${targetId}.json?v=${Date.now()}`, { cache: 'no-cache' });
+                if (flowRes.ok) {
+                    const staticSteps = await flowRes.json();
+                    if (Array.isArray(staticSteps) && staticSteps.length > 0) {
+                        steps = staticSteps;
+                        if (topicId) setCachedSteps(topicId, steps);
+                    }
+                }
+            } catch (e) {}
 
-                 let finalSteps = steps;
+            // 2. FIRESTORE FALLBACK (Statik dosya yoksa veya ünite genel akışıysa çalışır)
+            if (steps.length === 0) {
+                const contentSnap = await getDoc(contentRef);
+                if (contentSnap.exists()) {
+                    const data = contentSnap.data();
+                    loadedSourceText = data.sourceText || '';
+                    steps = data.steps || [];
+                    if (data.title) loadedTitle = data.title;
+
+                    if (!topicId && steps.length === 0) {
+                        const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseId}/units/${unitId}/topics`), orderBy("title")));
+                        steps = topicsSnapshot.docs.flatMap(doc => (doc.data().steps || []));
+                    }
+                    if (topicId && steps.length > 0) {
+                        setCachedSteps(topicId, steps);
+                    }
+                }
+            } else {
+                // Statik dosya bulunduysa sourceText'i arka planda sessizce çek
+                getDoc(contentRef).then(snap => {
+                    if (snap.exists() && snap.data()?.sourceText) {
+                        const txt = snap.data().sourceText;
+                        setSourceText(txt);
+                        setEditableSourceText(txt);
+                    }
+                }).catch(() => {});
+            }
+
+            if (steps.length > 0) {
+                let finalSteps = steps;
                 if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
                     finalSteps = steps.filter((s: any) => s.isPublished ?? true);
                 }
-
-                 setContent({ id: contentId, title: data.title || topicName || 'Sunum', steps: finalSteps });
-                 setTotalStepsCount(finalSteps.length);
+                setContent({ id: targetId, title: loadedTitle, steps: finalSteps });
+                setTotalStepsCount(finalSteps.length);
             } else {
                 // Fallback: Static Manifest & Flow JSON
                 try {

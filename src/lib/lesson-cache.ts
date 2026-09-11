@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import type { LessonStep } from '@/lib/types';
 
@@ -11,9 +11,9 @@ interface CacheEntry<T = any> {
 // In-memory cache for ultra-fast same-session navigation (0ms, no JSON.parse cost)
 const memoryCache = new Map<string, CacheEntry>();
 
-// Default cache duration: 12 hours (refreshes if older or if explicitly invalidated)
-const DEFAULT_TTL_MS = 12 * 60 * 60 * 1000;
-const CACHE_PREFIX = 'dd_cache_v2_';
+// Default cache duration: 1 hour (refreshes if older or if explicitly invalidated)
+const DEFAULT_TTL_MS = 60 * 60 * 1000;
+const CACHE_PREFIX = 'dd_cache_v3_';
 
 /**
  * Generic getter for cached data from in-memory or localStorage cache.
@@ -150,8 +150,15 @@ function pruneOldCaches(): void {
   const keys: string[] = [];
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (k && k.startsWith(CACHE_PREFIX)) {
-      keys.push(k);
+    if (k && k.startsWith('dd_cache_')) {
+      // Clean up legacy cache versions immediately
+      if (k.startsWith('dd_cache_v1_') || k.startsWith('dd_cache_v2_')) {
+        localStorage.removeItem(k);
+        continue;
+      }
+      if (k.startsWith(CACHE_PREFIX)) {
+        keys.push(k);
+      }
     }
   }
 

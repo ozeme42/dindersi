@@ -66,14 +66,16 @@ async function getAllDefinitionsForTopic(topicId: string, topicData?: any): Prom
         }
     } catch (e) {}
 
-    // 4. Statik flows dosyası (/curriculum/flows/${topicId}.json - conceptExplanation adımları)
+    // 4. Statik flows dosyası (/curriculum/flows/${topicId}.json - conceptExplanation ve notebookNote adımları)
     try {
-        const flowRes = await fetch(`/curriculum/flows/${topicId}.json`);
+        const flowRes = await fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`, { cache: 'no-cache' });
         if (flowRes.ok) {
             const steps = await flowRes.json();
             for (const step of steps || []) {
                 if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
                     step.items.forEach((itm: any) => addDef(itm.concept || itm.term, itm.definition));
+                } else if (step.type === 'notebookNote' && Array.isArray(step.conceptDefinitions)) {
+                    step.conceptDefinitions.forEach((itm: any) => addDef(itm.concept || itm.term, itm.definition));
                 }
             }
         }
@@ -130,7 +132,7 @@ async function getAllNotesForTopic(topicId: string, topicData?: any): Promise<st
     // Statik flows
     if (notesSet.size === 0) {
         try {
-            const flowRes = await fetch(`/curriculum/flows/${topicId}.json`);
+            const flowRes = await fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`, { cache: 'no-cache' });
             if (flowRes.ok) {
                 const steps = await flowRes.json();
                 for (const step of steps || []) {
@@ -140,6 +142,11 @@ async function getAllNotesForTopic(topicId: string, topicData?: any): Promise<st
                     } else if (step.type === 'contentList' && Array.isArray(step.sentences)) {
                         step.sentences.forEach((s: string) => {
                             const trimmed = (s || '').trim();
+                            if (trimmed) notesSet.add(trimmed);
+                        });
+                    } else if (step.type === 'notebookNote' && Array.isArray(step.notes)) {
+                        step.notes.forEach((n: string) => {
+                            const trimmed = (n || '').trim();
                             if (trimmed) notesSet.add(trimmed);
                         });
                     }
