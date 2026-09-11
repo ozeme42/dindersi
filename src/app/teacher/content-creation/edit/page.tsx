@@ -1351,6 +1351,12 @@ export function TopicEditor({
                                             >
                                                 <ImageIcon className="w-3.5 h-3.5 mr-2 text-teal-400" /> Arşivden Görsel Ekle...
                                             </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={handleImportSavedTopicNotes}
+                                                className="text-xs font-bold text-violet-300 focus:bg-violet-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                            >
+                                                <span className="mr-2">✏️</span> Yazılacaklar → Defter Notu Adımı
+                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
 
