@@ -1327,9 +1327,10 @@ export const FlashcardItem = ({
         }
 
         // Student mode (Compact, Auto-fitting, zero-scroll)
-        if (len > 350) return "text-[8.5px] xs:text-[9.5px] sm:text-[11px] md:text-xs leading-tight sm:leading-snug";
-        if (len > 220) return "text-[9.5px] xs:text-[10.5px] sm:text-xs md:text-sm leading-tight sm:leading-snug";
-        if (len > 130) return "text-[11px] xs:text-xs sm:text-sm md:text-base leading-tight sm:leading-snug";
+        if (len > 500) return "text-[7px] xs:text-[7.5px] sm:text-[8.5px] md:text-[9.5px] leading-tight";
+        if (len > 350) return "text-[8px] xs:text-[8.5px] sm:text-[10px] md:text-[11px] leading-tight sm:leading-snug";
+        if (len > 220) return "text-[9px] xs:text-[10px] sm:text-[11px] md:text-xs leading-tight sm:leading-snug";
+        if (len > 130) return "text-[10.5px] xs:text-[11px] sm:text-xs md:text-sm leading-tight sm:leading-snug";
         if (len > 70) return "text-xs xs:text-sm sm:text-base md:text-lg leading-snug";
         return "text-sm xs:text-base sm:text-lg md:text-xl leading-relaxed";
     };
@@ -1435,9 +1436,9 @@ export const FlashcardItem = ({
                     </div>
 
                     {/* Doğrudan Kart Üzerinde Yazılan Tanım (Tam metin, dinamik punto, sıfır kaydırma) */}
-                    <div className="my-auto py-1 px-0.5 sm:px-2 text-center w-full flex-1 flex items-center justify-center overflow-hidden">
+                    <div className="my-auto py-1 px-0.5 sm:px-2 text-center w-full flex-1 flex items-center justify-center overflow-y-auto scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent">
                         <p className={cn(
-                            "font-bold tracking-normal sm:tracking-wide text-white drop-shadow-md break-normal whitespace-normal [overflow-wrap:break-word] hyphens-none max-w-full text-center my-auto",
+                            "font-bold tracking-normal sm:tracking-wide text-white drop-shadow-md break-words whitespace-normal [overflow-wrap:break-word] hyphens-auto max-w-full text-center my-auto",
                             getDefFontSize(definition)
                         )}>
                             {definition}
