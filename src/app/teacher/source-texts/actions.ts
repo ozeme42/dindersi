@@ -99,13 +99,20 @@ import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
  * MEB Ders Kitapları için Özel Yapay Zeka Formatlama ve Ayet/Hadis İyileştirici.
  * Kitap metnini eksiltmeden, özetlemeden; ayetleri doğru Arapça hat ve meal düzeninde yapılandırır.
  */
-export async function cleanAndFormatSourceTextWithAi(rawText: string, topicTitle?: string) {
+export async function cleanAndFormatSourceTextWithAi(
+    rawText: string, 
+    topicTitle?: string,
+    apiKeyInput?: string,
+    modelNameInput?: string
+) {
     if (!rawText || !rawText.trim()) {
         return { success: false, error: 'Metin boş.' };
     }
 
     try {
-        const { apiKey, modelName } = await resolveActiveGeminiConfig();
+        const resolved = await resolveActiveGeminiConfig();
+        const apiKey = apiKeyInput?.trim() || resolved.apiKey;
+        const modelName = modelNameInput?.trim() || resolved.modelName || 'gemini-3.7-flash';
         if (!apiKey) {
             return { 
                 success: false, 
@@ -150,7 +157,7 @@ Sadece düzenlenmiş nihai ders kitabı kaynak metnini döndür. Başında veya 
 
         const cleanedText = await runGeminiWithFallback({
             apiKey,
-            primaryModel: modelName || 'gemini-3.6-flash',
+            primaryModel: modelName,
             prompt,
         });
 

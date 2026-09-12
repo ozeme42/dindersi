@@ -11,12 +11,14 @@ import {
     SlidersHorizontal, ArrowUpDown, BookMarked, Sparkle,
     Zap, Columns, ExternalLink, CheckCircle, HelpCircle,
     FileUp, Eraser, FileCheck, Edit3, Save, RotateCcw,
-    Book as BookIcon, FolderPlus, Library
+    Book as BookIcon, FolderPlus, Library,
+    Key, Settings2, EyeOff, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
     Dialog, DialogContent, DialogDescription, 
     DialogFooter, DialogHeader, DialogTitle 
@@ -44,7 +46,48 @@ import {
     cleanAndFormatSourceTextWithAi,
     type OzetItem 
 } from './actions';
+import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
 import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
+
+// ══ GEMINI MODELLERİ ══
+const FREE_GEMINI_MODELS = [
+  {
+    id: 'gemini-3.7-flash',
+    name: 'Gemini 3.7 Flash',
+    tag: '🚀 En Yeni Nesil (2026)',
+    desc: 'Google’ın en gelişmiş hibrit akıl yürütme ve zengin içerik sentezi modeli.',
+    badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+  },
+  {
+    id: 'gemini-3.5-flash',
+    name: 'Gemini 3.5 Flash',
+    tag: '💡 Yüksek Performans',
+    desc: 'Pedagojik içerik ve kaliteli özet üretimi için dengeli model.',
+    badge: 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+  },
+  {
+    id: 'gemini-3.5-flash-lite',
+    name: 'Gemini 3.5 Flash-Lite',
+    tag: '⚡ Ultra Düşük Gecikme',
+    desc: 'Hızlı özet üretimi için optimize edilmiş hafif model.',
+    badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+  },
+  {
+    id: 'gemini-flash-latest',
+    name: 'Gemini Flash Latest',
+    tag: '🔄 Otomatik Güncel',
+    desc: 'Her zaman en son kararlı Flash sürümünü otomatik çalıştırır.',
+    badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
+  },
+  {
+    id: 'gemini-3.1-pro-preview',
+    name: 'Gemini 3.1 Pro',
+    tag: '🧠 Derin Muhakeme & Analiz',
+    desc: 'Akademik ve derinlikli ders kitabı sentezi ve kavram haritası için.',
+    badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+  }
+];
+
 
 // Sınıflara Özel Canlı Renk Temaları (İçerik Yönetimi ile %100 Birebir)
 const classBadgeThemes: Record<string, { active: string; idle: string; border: string }> = {
@@ -117,6 +160,91 @@ export default function OzetlerManagementPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [items, setItems] = useState<OzetItem[]>([]);
+
+    // Model ve API Ayarları
+    const [showModelSettings, setShowModelSettings] = useState(false);
+    const [apiKey, setApiKey] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('custom_gemini_api_key') || '';
+        }
+        return '';
+    });
+    const [selectedModel, setSelectedModel] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('custom_gemini_model') || 'gemini-3.7-flash';
+        }
+        return 'gemini-3.7-flash';
+    });
+    const [customModelInput, setCustomModelInput] = useState('');
+    const [isCustomModel, setIsCustomModel] = useState(false);
+    const [showApiKeyText, setShowApiKeyText] = useState(false);
+    const [isSavingSystemKey, setIsSavingSystemKey] = useState(false);
+    const [isKeySaved, setIsKeySaved] = useState(false);
+
+    const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.7-flash') : selectedModel;
+
+    // Load saved system AI config if localStorage is empty
+    useEffect(() => {
+        getSystemAiConfigAction().then((cfg) => {
+            if (cfg) {
+                if (typeof window !== 'undefined' && !localStorage.getItem('custom_gemini_api_key') && cfg.apiKey) {
+                    setApiKey(cfg.apiKey);
+                }
+                if (typeof window !== 'undefined' && !localStorage.getItem('custom_gemini_model') && cfg.modelName) {
+                    setSelectedModel(cfg.modelName);
+                }
+            }
+        }).catch(() => {});
+    }, []);
+
+    const handleUpdateApiKey = (newKey: string) => {
+        setApiKey(newKey);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('custom_gemini_api_key', newKey.trim());
+        }
+    };
+
+    const handleUpdateModel = (modelId: string) => {
+        setSelectedModel(modelId);
+        setIsCustomModel(false);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('custom_gemini_model', modelId);
+        }
+    };
+
+    const handleSaveAiConfigGlobally = async () => {
+        setIsSavingSystemKey(true);
+        try {
+            const trimmedKey = apiKey.trim();
+            const trimmedModel = activeModelId;
+
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('custom_gemini_api_key', trimmedKey);
+                localStorage.setItem('custom_gemini_model', trimmedModel);
+            }
+
+            const result = await saveSystemAiConfigAction({
+                apiKey: trimmedKey,
+                modelName: trimmedModel,
+            });
+
+            setIsKeySaved(true);
+            setTimeout(() => setIsKeySaved(false), 3000);
+
+            toast({
+                title: "Sisteme Kalıcı Kaydedildi",
+                description: result.message,
+            });
+        } catch (error: any) {
+            toast({
+                title: "Kayıt Hatası",
+                description: error.message || "API ayarları kaydedilemedi.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsSavingSystemKey(false);
+        }
+    };
 
     // Cockpit Selections
     const [selectedGrade, setSelectedGrade] = useState<string>('5');
@@ -485,7 +613,12 @@ export default function OzetlerManagementPage() {
         });
 
         try {
-            const res = await cleanAndFormatSourceTextWithAi(textToClean, activeSelectedItem?.title);
+            const res = await cleanAndFormatSourceTextWithAi(
+                textToClean, 
+                activeSelectedItem?.title,
+                apiKey.trim() || undefined,
+                activeModelId
+            );
             if (res.success && res.cleanedText) {
                 setSourceEditText(res.cleanedText);
                 setIsEditingSource(true);
@@ -669,7 +802,9 @@ export default function OzetlerManagementPage() {
                 grade: item.grade,
                 courseTitle: item.courseTitle,
                 unitTitle: item.unitTitle,
-                topicTitles: unitTopics
+                topicTitles: unitTopics,
+                apiKey: apiKey.trim() || undefined,
+                modelName: activeModelId
             });
 
             if (res.success && res.htmlContent) {
@@ -700,7 +835,12 @@ export default function OzetlerManagementPage() {
                 description: `${unitTitle} ünitesindeki kaynak metni hazır konular taranıyor ve yapay zeka ile özetler oluşturuluyor...`
             });
 
-            const res = await batchGenerateUnitTopicSummaries(selectedCourseId, unitId);
+            const res = await batchGenerateUnitTopicSummaries(
+                selectedCourseId, 
+                unitId,
+                apiKey.trim() || undefined,
+                activeModelId
+            );
 
             if (res.success) {
                 toast({
@@ -808,6 +948,26 @@ export default function OzetlerManagementPage() {
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap self-start md:self-center">
+                        {/* AI Model & API Ayarları Tetikleyici */}
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setShowModelSettings(prev => !prev)}
+                            className={cn(
+                                "h-9 rounded-xl text-xs font-bold transition-all border cursor-pointer",
+                                showModelSettings
+                                    ? "bg-purple-600 text-white border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                                    : "border-purple-500/30 text-purple-300 hover:text-white hover:bg-purple-950/40 bg-slate-900/60"
+                            )}
+                        >
+                            <Sparkles className="h-3.5 w-3.5 mr-1.5 text-purple-400" />
+                            <span className="hidden sm:inline">AI Model:</span>
+                            <span className="font-mono text-white bg-purple-950/80 px-1.5 py-0.5 rounded border border-purple-500/30 text-[11px]">
+                                {FREE_GEMINI_MODELS.find(m => m.id === activeModelId)?.name || activeModelId}
+                            </span>
+                            {showModelSettings ? <ChevronUp className="h-3.5 w-3.5 ml-1" /> : <ChevronDown className="h-3.5 w-3.5 ml-1" />}
+                        </Button>
+
                         <Button 
                             asChild
                             variant="outline"
@@ -831,6 +991,158 @@ export default function OzetlerManagementPage() {
                         </Button>
                     </div>
                 </div>
+
+                {/* ══ AI MODEL & API KEY AYAR PANELİ (AÇILIR/KAPANIR) ══ */}
+                {showModelSettings && (
+                    <div className="rounded-2xl border border-purple-500/40 bg-slate-900/95 backdrop-blur-2xl p-4 shadow-2xl space-y-3.5 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+                            <div className="flex items-center gap-2">
+                                <div className="p-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                                    <Settings2 className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                        Yapay Zeka API & Model Yapılandırması
+                                    </h3>
+                                    <p className="text-[11px] text-slate-400">
+                                        Özet üretimi ve ders kitabı metin analizi için kullanılacak Gemini modelini ve API anahtarınızı belirleyin.
+                                    </p>
+                                </div>
+                            </div>
+                            <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => setShowModelSettings(false)}
+                                className="h-7 w-7 p-0 text-slate-400 hover:text-white rounded-lg cursor-pointer"
+                            >
+                                <X className="w-4 h-4" />
+                            </Button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                            {/* API Key Girişi */}
+                            <div className="space-y-1.5">
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-xs text-slate-300 flex items-center gap-1.5">
+                                        <Key className="w-3.5 h-3.5 text-amber-400" />
+                                        Gemini API Key (İsteğe Bağlı)
+                                    </Label>
+                                    <a
+                                        href="https://aistudio.google.com/app/apikey"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-[10px] text-indigo-400 hover:underline flex items-center gap-0.5"
+                                    >
+                                        Ücretsiz Key Al <ExternalLink className="w-2.5 h-2.5" />
+                                    </a>
+                                </div>
+                                <div className="relative">
+                                    <Input
+                                        type={showApiKeyText ? "text" : "password"}
+                                        value={apiKey}
+                                        onChange={(e) => handleUpdateApiKey(e.target.value)}
+                                        placeholder="AIzaSy... (Boşsa sistemdeki anahtar kullanılır)"
+                                        className="bg-slate-950 border-white/10 text-xs text-white placeholder:text-slate-600 pr-8 h-9 rounded-xl"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowApiKeyText(!showApiKeyText)}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1 cursor-pointer"
+                                    >
+                                        {showApiKeyText ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Model Seçimi */}
+                            <div className="space-y-1.5">
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-xs text-slate-300 flex items-center gap-1.5">
+                                        <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                                        Aktif Model
+                                    </Label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsCustomModel(!isCustomModel)}
+                                        className="text-[10px] text-indigo-400 hover:underline cursor-pointer"
+                                    >
+                                        {isCustomModel ? "Listeden Seç" : "Özel Model Yaz"}
+                                    </button>
+                                </div>
+
+                                {isCustomModel ? (
+                                    <Input
+                                        value={customModelInput}
+                                        onChange={(e) => {
+                                            setCustomModelInput(e.target.value);
+                                            if (typeof window !== 'undefined') {
+                                                localStorage.setItem('custom_gemini_model', e.target.value);
+                                            }
+                                        }}
+                                        placeholder="Örn: gemini-2.5-pro, gemini-1.5-pro"
+                                        className="bg-slate-950 border-white/10 text-xs text-white placeholder:text-slate-600 h-9 rounded-xl"
+                                    />
+                                ) : (
+                                    <select
+                                        value={selectedModel}
+                                        onChange={(e) => handleUpdateModel(e.target.value)}
+                                        className="w-full bg-slate-950 border border-white/10 rounded-xl text-xs text-white px-3 h-9 focus:outline-none focus:ring-1 focus:ring-purple-500 cursor-pointer"
+                                    >
+                                        {FREE_GEMINI_MODELS.map(m => (
+                                            <option key={m.id} value={m.id}>
+                                                {m.name} — {m.tag}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Model Hızlı Seçim Hapları */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 pt-1">
+                            {FREE_GEMINI_MODELS.map(m => (
+                                <div 
+                                    key={m.id} 
+                                    onClick={() => handleUpdateModel(m.id)}
+                                    className={cn(
+                                        "p-2.5 rounded-xl border text-left cursor-pointer transition-all",
+                                        selectedModel === m.id && !isCustomModel
+                                            ? "bg-purple-950/60 border-purple-500 shadow-md ring-1 ring-purple-500/50" 
+                                            : "bg-slate-950/60 border-white/5 hover:border-white/15"
+                                    )}
+                                >
+                                    <div className="flex items-center justify-between mb-1">
+                                        <span className="text-[11px] font-bold text-white">{m.name}</span>
+                                        <Badge variant="outline" className={cn("text-[8px] px-1 py-0", m.badge)}>{m.tag.split(' ')[0]}</Badge>
+                                    </div>
+                                    <p className="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">{m.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs flex-wrap gap-2">
+                            <span className="text-slate-400 text-[11px]">
+                                Tarayıcıda saklanan ayarlar tüm özet üretimlerinde ve kaynak metin iyileştirmelerinde kullanılır.
+                            </span>
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                onClick={handleSaveAiConfigGlobally}
+                                disabled={isSavingSystemKey || !apiKey.trim()}
+                                className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold border-none h-8 px-3 rounded-xl shadow-md cursor-pointer"
+                            >
+                                {isSavingSystemKey ? (
+                                    <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Kaydediliyor...</>
+                                ) : isKeySaved ? (
+                                    <><Check className="w-3.5 h-3.5 mr-1.5 text-emerald-300" /> Sisteme Kaydedildi!</>
+                                ) : (
+                                    <><Save className="w-3.5 h-3.5 mr-1.5" /> Sisteme Kalıcı Kaydet</>
+                                )}
+                            </Button>
+                        </div>
+                    </div>
+                )}
 
                 {/* ══ SEÇİM KOKPİTİ: SINIF VE DERS SEÇİCİ (İÇERİK YÖNETİMİ BİREBİR TASARIMI) ══ */}
                 <div className="rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-2xl p-4 shadow-2xl space-y-3.5">

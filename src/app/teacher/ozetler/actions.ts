@@ -347,15 +347,19 @@ export async function generateOzetWithAi(params: {
     courseTitle?: string;
     unitTitle?: string;
     topicTitles?: string[];
+    apiKey?: string;
+    modelName?: string;
 }): Promise<{ success: boolean; htmlContent?: string; error?: string }> {
-    const { title, type, sourceText, grade, courseTitle, unitTitle, topicTitles } = params;
+    const { title, type, sourceText, grade, courseTitle, unitTitle, topicTitles, apiKey: customKey, modelName: customModel } = params;
 
     try {
-        const { apiKey, modelName } = await resolveActiveGeminiConfig();
+        const resolved = await resolveActiveGeminiConfig();
+        const apiKey = customKey?.trim() || resolved.apiKey;
+        const modelName = customModel?.trim() || resolved.modelName || 'gemini-3.7-flash';
         if (!apiKey) {
             return {
                 success: false,
-                error: 'Gemini API anahtarı sistemde tanımlı değil. Lütfen Ayarlar sayfasından API anahtarınızı giriniz.'
+                error: 'Gemini API anahtarı sistemde tanımlı değil. Lütfen Ayarlar sayfasından veya üst menüden API anahtarınızı giriniz.'
             };
         }
 
@@ -434,7 +438,7 @@ KESİN KURALLAR:
 
         const generatedRaw = await runGeminiWithFallback({
             apiKey,
-            primaryModel: modelName || 'gemini-2.5-flash',
+            primaryModel: modelName,
             prompt
         });
 
@@ -461,7 +465,9 @@ KESİN KURALLAR:
  */
 export async function batchGenerateUnitTopicSummaries(
     courseId: string, 
-    unitId: string
+    unitId: string,
+    apiKey?: string,
+    modelName?: string
 ): Promise<{ success: boolean; generatedCount: number; errors: string[] }> {
     try {
         const dataRes = await loadAllOzetlerData();
@@ -492,7 +498,9 @@ export async function batchGenerateUnitTopicSummaries(
                     sourceText: topic.sourceText,
                     grade: topic.grade,
                     courseTitle: topic.courseTitle,
-                    unitTitle: topic.unitTitle
+                    unitTitle: topic.unitTitle,
+                    apiKey,
+                    modelName
                 });
 
                 if (aiRes.success && aiRes.htmlContent) {
@@ -596,6 +604,11 @@ export async function saveItemSourceText(
 
 import { cleanAndFormatSourceTextWithAi as cleanAndFormatAi } from '@/app/teacher/source-texts/actions';
 
-export async function cleanAndFormatSourceTextWithAi(rawText: string, topicTitle?: string) {
-    return cleanAndFormatAi(rawText, topicTitle);
+export async function cleanAndFormatSourceTextWithAi(
+    rawText: string, 
+    topicTitle?: string,
+    apiKey?: string,
+    modelName?: string
+) {
+    return cleanAndFormatAi(rawText, topicTitle, apiKey, modelName);
 }
