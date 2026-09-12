@@ -75,8 +75,8 @@ export default function SmartboardTopluTestPage() {
     const [aiCustomPrompt, setAiCustomPrompt] = useState('');
     const [aiTopicName, setAiTopicName] = useState('');
     const [aiClassName, setAiClassName] = useState('5. Sınıf');
-    const [aiMcqCount, setAiMcqCount] = useState(3);
-    const [aiOpenEndedCount, setAiOpenEndedCount] = useState(2);
+    const [aiMcqCount, setAiMcqCount] = useState(10);
+    const [aiOpenEndedCount, setAiOpenEndedCount] = useState(3);
     const [aiDifficulty, setAiDifficulty] = useState<'Kolay' | 'Orta' | 'Zor' | 'Karışık'>('Orta');
     const [isGeneratingAi, setIsGeneratingAi] = useState(false);
     const [generatedAiQuestions, setGeneratedAiQuestions] = useState<ClassTestQuestion[]>([]);
@@ -1143,52 +1143,90 @@ export default function SmartboardTopluTestPage() {
                                 </TabsContent>
                             </Tabs>
 
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-                                <div>
-                                    <Label className="text-xs font-bold text-slate-300">Çoktan Seçmeli Adedi</Label>
-                                    <Select value={String(aiMcqCount)} onValueChange={(v) => setAiMcqCount(parseInt(v))}>
-                                        <SelectTrigger className="bg-slate-950 border-slate-800 mt-1">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-slate-800 text-white">
-                                            <SelectItem value="0">0 (Yok)</SelectItem>
-                                            <SelectItem value="1">1 Soru</SelectItem>
-                                            <SelectItem value="2">2 Soru</SelectItem>
-                                            <SelectItem value="3">3 Soru</SelectItem>
-                                            <SelectItem value="5">5 Soru</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                                <div className="space-y-1.5">
+                                    <div className="flex justify-between items-center">
+                                        <Label className="text-xs font-bold text-slate-300">Çoktan Seçmeli (Test)</Label>
+                                        <span className="text-xs font-black text-blue-400">{aiMcqCount} Soru</span>
+                                    </div>
+                                    <Input 
+                                        type="number"
+                                        min={0}
+                                        max={30}
+                                        value={aiMcqCount}
+                                        onChange={(e) => setAiMcqCount(Math.max(0, Math.min(30, parseInt(e.target.value) || 0)))}
+                                        className="h-10 bg-slate-950 border-slate-800 text-white font-bold text-center rounded-xl"
+                                    />
+                                    <div className="flex gap-1 flex-wrap">
+                                        {[0, 3, 5, 10, 15, 20].map(n => (
+                                            <button
+                                                key={n}
+                                                type="button"
+                                                onClick={() => setAiMcqCount(n)}
+                                                className={cn(
+                                                    "px-2 py-0.5 rounded-md text-[11px] font-bold border transition-colors",
+                                                    aiMcqCount === n 
+                                                        ? "bg-blue-600 border-blue-400 text-white" 
+                                                        : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white"
+                                                )}
+                                            >
+                                                {n}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <Label className="text-xs font-bold text-slate-300">Açık Uçlu Adedi</Label>
-                                    <Select value={String(aiOpenEndedCount)} onValueChange={(v) => setAiOpenEndedCount(parseInt(v))}>
-                                        <SelectTrigger className="bg-slate-950 border-slate-800 mt-1">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-slate-800 text-white">
-                                            <SelectItem value="0">0 (Yok)</SelectItem>
-                                            <SelectItem value="1">1 Soru</SelectItem>
-                                            <SelectItem value="2">2 Soru</SelectItem>
-                                            <SelectItem value="3">3 Soru</SelectItem>
-                                            <SelectItem value="5">5 Soru</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                <div className="space-y-1.5">
+                                    <div className="flex justify-between items-center">
+                                        <Label className="text-xs font-bold text-slate-300">Açık Uçlu (Klasik)</Label>
+                                        <span className="text-xs font-black text-amber-400">{aiOpenEndedCount} Soru</span>
+                                    </div>
+                                    <Input 
+                                        type="number"
+                                        min={0}
+                                        max={20}
+                                        value={aiOpenEndedCount}
+                                        onChange={(e) => setAiOpenEndedCount(Math.max(0, Math.min(20, parseInt(e.target.value) || 0)))}
+                                        className="h-10 bg-slate-950 border-slate-800 text-white font-bold text-center rounded-xl"
+                                    />
+                                    <div className="flex gap-1 flex-wrap">
+                                        {[0, 2, 3, 5, 8, 10].map(n => (
+                                            <button
+                                                key={n}
+                                                type="button"
+                                                onClick={() => setAiOpenEndedCount(n)}
+                                                className={cn(
+                                                    "px-2 py-0.5 rounded-md text-[11px] font-bold border transition-colors",
+                                                    aiOpenEndedCount === n 
+                                                        ? "bg-amber-600 border-amber-400 text-white" 
+                                                        : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white"
+                                                )}
+                                            >
+                                                {n}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
 
-                                <div>
+                                <div className="space-y-1.5">
                                     <Label className="text-xs font-bold text-slate-300">Zorluk Seviyesi</Label>
                                     <Select value={aiDifficulty} onValueChange={(v: any) => setAiDifficulty(v)}>
-                                        <SelectTrigger className="bg-slate-950 border-slate-800 mt-1">
+                                        <SelectTrigger className="bg-slate-950 border-slate-800 h-10 rounded-xl text-white">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent className="bg-slate-900 border-slate-800 text-white">
-                                            <SelectItem value="Kolay">Kolay</SelectItem>
+                                            <SelectItem value="Kolay">Kolay Seviye</SelectItem>
                                             <SelectItem value="Orta">Orta (Standart)</SelectItem>
                                             <SelectItem value="Zor">Zor / Muhakeme</SelectItem>
-                                            <SelectItem value="Karışık">Karışık</SelectItem>
+                                            <SelectItem value="Karışık">Karışık Zorluk</SelectItem>
                                         </SelectContent>
                                     </Select>
+                                    <div className="pt-2 text-[11px] text-slate-400 flex items-center justify-between font-medium">
+                                        <span>Hedef Toplam:</span>
+                                        <Badge className="bg-indigo-600/30 text-indigo-200 border-indigo-500/40 text-xs font-black">
+                                            {aiMcqCount + aiOpenEndedCount} Soru
+                                        </Badge>
+                                    </div>
                                 </div>
                             </div>
 

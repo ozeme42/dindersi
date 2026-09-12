@@ -739,7 +739,7 @@ export function AIGenerationDialog({
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {[2, 3, 5, 10].map(cnt => (
+                    {[3, 5, 10, 15, 20].map(cnt => (
                       <button
                         key={cnt}
                         type="button"
@@ -758,9 +758,9 @@ export function AIGenerationDialog({
                       <Input
                         type="number"
                         min={1}
-                        max={20}
+                        max={30}
                         value={countPerType}
-                        onChange={(e) => setCountPerType(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))}
+                        onChange={(e) => setCountPerType(Math.max(1, Math.min(30, parseInt(e.target.value) || 1)))}
                         className="h-9 bg-slate-950 border-white/10 text-center text-xs font-bold text-white"
                       />
                     </div>

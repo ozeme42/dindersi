@@ -369,6 +369,7 @@ SADECE aşağıdaki JSON formatında geçerli bir JSON çıktısı üret. Başı
       generationConfig: {
         temperature: 0.4,
         topP: 0.9,
+        maxOutputTokens: 8192,
       }
     });
 
