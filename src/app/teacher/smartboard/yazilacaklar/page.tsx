@@ -1277,7 +1277,7 @@ function CentralActivityStudioContent() {
                                                                         size="icon"
                                                                         variant="ghost"
                                                                         onClick={() => {
-                                                                            setSelectedTopicId(topic.topicId);
+                                                                            openTopicStudio(topic);
                                                                             setIsAiDialogOpen(true);
                                                                         }}
                                                                         className="h-8 w-8 text-slate-400 hover:text-yellow-300 hover:bg-yellow-950/30 rounded-xl cursor-pointer"

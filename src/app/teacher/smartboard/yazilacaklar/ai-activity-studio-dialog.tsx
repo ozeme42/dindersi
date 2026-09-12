@@ -14,6 +14,12 @@ import {
 } from 'lucide-react';
 import { saveSystemAiConfigAction } from '@/ai/ai-config-service';
 import { 
+    Dialog, 
+    DialogContent, 
+    DialogTitle, 
+    DialogDescription 
+} from '@/components/ui/dialog';
+import { 
     generateCentralActivityAiAction, 
     type ConceptItem 
 } from './actions';
@@ -275,14 +281,15 @@ export function AiActivityStudioDialog({
     };
 
     return (
-        <div 
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
-            onClick={handleClose}
-        >
-            <div 
-                className="relative w-full max-w-4xl max-h-[92vh] flex flex-col bg-slate-950 border border-white/15 text-slate-100 shadow-2xl rounded-3xl overflow-hidden animate-in zoom-in-95 duration-200"
-                onClick={(e) => e.stopPropagation()}
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent 
+                overlayClassName="z-[110]"
+                className="max-w-4xl w-[96vw] max-h-[94vh] flex flex-col gap-0 bg-slate-950 border border-white/15 text-slate-100 shadow-2xl rounded-3xl overflow-hidden p-0 z-[120] [&>button:last-child]:hidden"
             >
+                <DialogTitle className="sr-only">✨ Yapay Zekâ Etkinlik & İçerik Stüdyosu</DialogTitle>
+                <DialogDescription className="sr-only">
+                    {topicTitle ? `"${topicTitle}" konusu için kavram, tanım, not ve oyun cümleleri üretin.` : 'Konu için akıllı içerikler üretin.'}
+                </DialogDescription>
                 {/* ══ 1. ÜST BAŞLIK & AYARLAR ÇUBUĞU ══ */}
                 <div className="p-3.5 sm:p-4.5 px-4 sm:px-6 border-b border-white/10 bg-slate-900/90 backdrop-blur-md flex flex-row items-center justify-between flex-shrink-0">
                     <div className="flex items-center gap-3">
@@ -772,7 +779,7 @@ export function AiActivityStudioDialog({
                         </Button>
                     </div>
                 </div>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     );
 }
