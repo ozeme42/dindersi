@@ -1,0 +1,76 @@
+{
+  "id": "ornek-5-sinif-peygamber",
+  "title": "5. Sınıf - Peygamber İnancı Karma Alıştırma Testi",
+  "description": "Öğrencilerin defterlerine cevaplayacağı 3 çoktan seçmeli ve 2 açık uçlu örnek sınıf testi.",
+  "className": "5. Sınıf",
+  "courseName": "Din Kültürü ve Ahlak Bilgisi",
+  "unitName": "1. İnsan ve Din",
+  "topicName": "Peygamber ve Peygamberlere İman",
+  "defaultDurationSeconds": 60,
+  "createdAt": "2026-09-12T20:00:00.000Z",
+  "questions": [
+    {
+      "id": "q-sample-1",
+      "type": "mcq",
+      "text": "Peygamberlerin Allah’tan (c.c.) aldıkları vahiyleri ve emirleri insanlara eksiksiz ve olduğu gibi ulaştırmalarına ne ad verilir?",
+      "options": [
+        "Sıdk",
+        "Tebliğ",
+        "Fetanet",
+        "İsmet"
+      ],
+      "correctAnswer": "Tebliğ",
+      "explanation": "Tebliğ, peygamberlerin vahiyleri eksiksiz insanlara bildirmesi sıfatıdır.",
+      "difficulty": "Kolay",
+      "source": "manual"
+    },
+    {
+      "id": "q-sample-2",
+      "type": "mcq",
+      "text": "Aşağıdakilerden hangisi peygamberlerin ortak sıfatlarından biri olan \"Emanet\" kelimesinin anlamıdır?",
+      "options": [
+        "Doğru sözlü olmak",
+        "Güvenilir olmak",
+        "Akıllı ve zeki olmak",
+        "Günahtan korunmuş olmak"
+      ],
+      "correctAnswer": "Güvenilir olmak",
+      "explanation": "Emanet, peygamberlerin her konuda güvenilir ve dürüst olmalarını ifade eder.",
+      "difficulty": "Kolay",
+      "source": "manual"
+    },
+    {
+      "id": "q-sample-3",
+      "type": "open_ended",
+      "text": "Peygamberlerin insanlara örnek olması neden önemlidir? Bir insanın melek yerine peygamber olarak gönderilmesinin hikmetini iki maddeyle açıklayınız.",
+      "correctAnswer": "Model Cevap:\n1. İnsan peygamberler bizim gibi yaşar, yer, içer, sevinir, üzülür; dolayısıyla ibadetlerin ve ahlakın pratikte nasıl uygulanacağını bizzat göstererek en gerçekçi örneği (üsve-i hasene) oluşturur.\n2. Melekler insanüstü varlıklar olduğu için insanlar 'onlar melek, biz onların yaptıklarını yapamayız' diyerek mazeret öne sürebilirdi; insan olması bu mazereti ortadan kaldırır.",
+      "explanation": "Öğrencinin; örneklik (rol model), insan fıtratına uygunluk ve bahaneleri ortadan kaldırma noktalarına değinmesi yeterlidir.",
+      "difficulty": "Orta",
+      "source": "manual"
+    },
+    {
+      "id": "q-sample-4",
+      "type": "mcq",
+      "text": "Peygamberlerin Allah’ın izniyle peygamberliklerini ispatlamak için gösterdikleri, insanların benzerini yapmaktan aciz kaldığı olağanüstü olaylara ne denir?",
+      "options": [
+        "Keramet",
+        "Mucize",
+        "İlham",
+        "Rüya"
+      ],
+      "correctAnswer": "Mucize",
+      "explanation": "Mucize, sadece peygamberlere has ve Allah’ın izniyle gerçekleşen harikulade olaylardır.",
+      "difficulty": "Kolay",
+      "source": "manual"
+    },
+    {
+      "id": "q-sample-5",
+      "type": "open_ended",
+      "text": "\"Sıdk\" ve \"İsmet\" kavramlarını tanımlayarak bu iki sıfatın bir peygamberde bulunmasının insanlara güven vermedeki etkisini kısaca yazınız.",
+      "correctAnswer": "Model Cevap:\n- Sıdk: Peygamberlerin her zaman doğru sözlü olması, asla yalan söylememesidir.\n- İsmet: Peygamberlerin her türlü günahtan ve kötülükten korunmuş olmasıdır.\n- Etkisi: İnsanlar ancak sözünde duran ve ahlakı temiz olan bir elçinin getirdiği dine ve vahye tereddüt etmeden inanır ve itaat eder.",
+      "explanation": "Sıdk ve İsmet tanımları doğru yapılmalı ve güven duygusuyla olan bağı açıklanmalıdır.",
+      "difficulty": "Orta",
+      "source": "manual"
+    }
+  ]
+}

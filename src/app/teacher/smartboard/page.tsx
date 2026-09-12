@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useState, type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
-  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Megaphone, Puzzle, Database, Loader2 
+  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Megaphone, Puzzle, Database, Loader2, FileText 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -175,6 +175,14 @@ export default function SmartboardPage() {
     
     // Sunum & Araç Modları
     const sunumlar = [
+        {
+            key: 'toplu_test',
+            href: "/teacher/smartboard/toplu-test",
+            title: "Toplu Soru Çözümü",
+            description: "Soruları tahtaya sırayla yansıtın, öğrenciler kağıda yazsın; AI ve soru bankasıyla test oluşturun.",
+            icon: <FileText />,
+            colorClass: "bg-indigo-600 border-indigo-800 hover:bg-indigo-500",
+        },
         {
             key: 'ozetler',
             href: "/teacher/smartboard/ozetler",

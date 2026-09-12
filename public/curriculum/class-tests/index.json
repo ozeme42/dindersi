@@ -1,0 +1,14 @@
+[
+  {
+    "id": "ornek-5-sinif-peygamber",
+    "title": "5. Sınıf - Peygamber İnancı Karma Alıştırma Testi",
+    "description": "Öğrencilerin defterlerine cevaplayacağı 3 çoktan seçmeli ve 2 açık uçlu örnek sınıf testi.",
+    "className": "5. Sınıf",
+    "courseName": "Din Kültürü ve Ahlak Bilgisi",
+    "defaultDurationSeconds": 60,
+    "questionCount": 5,
+    "mcqCount": 3,
+    "openEndedCount": 2,
+    "createdAt": "2026-09-12T20:00:00.000Z"
+  }
+]
