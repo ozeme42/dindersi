@@ -36,20 +36,30 @@ const SOURCE_TEXTS_PATH = path.join(process.cwd(), 'public', 'curriculum', 'sour
 
 const formatCourseTitle = (title: string): string => {
     if (!title) return '';
-    const lower = title.toLocaleLowerCase('tr').trim();
+    const cleanTitle = title.trim();
+    const lower = cleanTitle.toLocaleLowerCase('tr');
+
+    // Sonda veya metin içinde 1 veya 2 (veya Roma rakamı I, II) sayı eki varsa tespit et
+    let suffix = '';
+    const numMatch = cleanTitle.match(/(?:[\s\-\(\_]+)(1|2|I{1,2})[\)]?$/i) || cleanTitle.match(/\b(1|2)\b/);
+    if (numMatch) {
+        const val = numMatch[1].toUpperCase();
+        suffix = ` ${val === 'I' ? '1' : (val === 'II' ? '2' : val)}`;
+    }
+
+    if (lower.includes('temel dini') || lower === 'tdb' || lower.startsWith('tdb') || lower.includes('temel dinî')) {
+        return `Temel Dini Bilgiler${suffix}`;
+    }
     if (lower === 'dkab' || lower.includes('dkab') || lower === 'din' || lower.includes('din kültürü')) {
-        return 'Din Kültürü ve Ahlak Bilgisi';
+        return `Din Kültürü ve Ahlak Bilgisi${suffix}`;
     }
     if (lower === 'siyer' || lower.includes('siyer') || lower.includes('peygamber')) {
-        return 'Peygamberimizin Hayatı';
+        return `Peygamberimizin Hayatı${suffix}`;
     }
     if (lower.includes('kuran') || lower.includes('kur’an') || lower.includes('kur-an')) {
-        return "Kur'an-ı Kerim";
+        return `Kur'an-ı Kerim${suffix}`;
     }
-    if (lower.includes('temel dini')) {
-        return 'Temel Dini Bilgiler';
-    }
-    return title;
+    return cleanTitle;
 };
 
 function getHtmlWordCount(html: string): number {
