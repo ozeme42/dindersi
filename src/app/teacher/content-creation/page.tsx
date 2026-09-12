@@ -676,7 +676,11 @@ export default function ContentCreationPage() {
                                 <Button
                                     size="sm"
                                     variant="outline"
-                                    onClick={() => openBulkAddDialog('Konu', selectedCourse.units?.[0]?.id, selectedCourse.units?.[0]?.title, selectedCourse.id)}
+                                    onClick={() => {
+                                        const activeUnitId = expandedUnitIds.find(id => selectedCourse.units?.some(u => u.id === id)) || selectedCourse.units?.[0]?.id;
+                                        const activeUnit = selectedCourse.units?.find(u => u.id === activeUnitId) || selectedCourse.units?.[0];
+                                        openBulkAddDialog('Konu', activeUnit?.id, activeUnit?.title, selectedCourse.id);
+                                    }}
                                     disabled={!selectedCourse.units || selectedCourse.units.length === 0}
                                     className="border-white/10 text-slate-300 hover:text-white hover:bg-white/10 bg-slate-950/40 text-xs font-bold h-8 rounded-lg disabled:opacity-40"
                                 >
@@ -886,6 +890,17 @@ export default function ContentCreationPage() {
                                                     className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs h-8 px-3 rounded-xl shadow-md shadow-indigo-950/40 cursor-pointer"
                                                 >
                                                     <Plus className="h-3.5 w-3.5 mr-1" /> Konu Ekle
+                                                </Button>
+
+                                                {/* Bu Üniteye Toplu Konu Ekle Butonu */}
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    onClick={() => openBulkAddDialog('Konu', unit.id, unit.title, selectedCourse.id)}
+                                                    className="border-teal-500/30 text-teal-300 hover:bg-teal-600/20 hover:text-white bg-teal-950/30 text-xs font-bold h-8 px-2.5 rounded-xl cursor-pointer"
+                                                    title="Bu üniteye toplu konu ekle"
+                                                >
+                                                    <ListTodo className="h-3.5 w-3.5 mr-1 text-teal-400" /> Toplu Konu
                                                 </Button>
 
                                                 {/* Ünite Akışı / Sunumu Düzenle */}
@@ -1196,12 +1211,40 @@ export default function ContentCreationPage() {
                             Her satıra bir {bulkAddDialogState.type} ismi gelecek şekilde yapıştırın.
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="py-3">
+                    <div className="py-3 space-y-3">
+                        {bulkAddDialogState.type === 'Konu' && selectedCourse?.units && selectedCourse.units.length > 0 && (
+                            <div>
+                                <label className="text-xs font-bold text-slate-300 mb-1.5 flex items-center gap-1.5">
+                                    <BookOpen className="w-3.5 h-3.5 text-purple-400" /> Hangi Üniteye Eklensin?
+                                </label>
+                                <select
+                                    value={bulkAddDialogState.parentId || selectedCourse.units[0]?.id}
+                                    onChange={(e) => {
+                                        const targetUnit = selectedCourse.units?.find(u => u.id === e.target.value);
+                                        setBulkAddDialogState(prev => ({
+                                            ...prev,
+                                            parentId: e.target.value,
+                                            parentName: targetUnit?.title || ''
+                                        }));
+                                    }}
+                                    className="w-full bg-slate-950 border border-white/20 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
+                                >
+                                    {selectedCourse.units.map(u => (
+                                        <option key={u.id} value={u.id} className="bg-slate-900 text-white">
+                                            {u.title}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
                         <Textarea
-                            className="min-h-[260px] font-mono bg-slate-950 border-white/10 text-white text-xs leading-relaxed rounded-xl"
+                            className="min-h-[240px] font-mono bg-slate-950 border-white/10 text-white text-xs leading-relaxed rounded-xl"
                             value={bulkText}
                             onChange={(e) => setBulkText(e.target.value)}
-                            placeholder={`Örnek:\n1. Ünite: Allah İnancı\n2. Ünite: Ramazan ve Oruç\n3. Ünite: Ahlaki Davranışlar`}
+                            placeholder={bulkAddDialogState.type === 'Konu'
+                                ? `Örnek:\n1. İslam İnanç Esasları\n2. İmanın Şartları\n3. Tevhid İnancı`
+                                : `Örnek:\n1. Ünite: Allah İnancı\n2. Ünite: Ramazan ve Oruç\n3. Ünite: Ahlaki Davranışlar`
+                            }
                         />
                     </div>
                     <DialogFooter>
